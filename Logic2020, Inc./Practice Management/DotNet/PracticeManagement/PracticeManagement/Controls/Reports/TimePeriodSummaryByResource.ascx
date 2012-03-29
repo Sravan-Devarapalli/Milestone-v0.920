@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByResource" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom:5px !important;" id="tbHeader" runat="server">
+<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom:5px !important; height:90px;" id="tbHeader" runat="server">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
             <table>
@@ -19,73 +19,73 @@
         <td style="text-align: right; width: 610px; padding-bottom:10px;">
             <table style="table-layout: fixed; width: 100%;">
                 <tr>
-                    <td style="width: 7%;">
-                        <table>
+                    <td style="width: 21%;text-align: center;">
+                        <table width="100%">
                             <tr>
-                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                <td style="font-size: 15px;padding-bottom: 3px;">
                                     Total Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px; text-align: center;">
+                                <td style="font-size: 25px;">
                                     <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 7%;">
-                        <table>
+                    <td style="width: 21%;text-align: center;">
+                       <table width="100%">
                             <tr>
-                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                <td style="font-size: 15px;padding-bottom: 3px;">
                                     Avg Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px; text-align: center;">
+                                <td style="font-size: 25px;">
                                     <asp:Literal ID="ltrlAvgHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 7%;">
-                        <table>
+                    <td style="width: 21%;text-align: center;">
+                        <table width="100%">
                             <tr>
-                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                <td style="font-size: 15px;padding-bottom: 3px;">
                                     Avg Utilization
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px; text-align: center;">
+                                <td style="font-size: 25px; ">
                                     <asp:Literal ID="ltrlAvgUtilization" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 7%; vertical-align: bottom;">
-                        <table>
+                    <td style="width: 23%; vertical-align: bottom;text-align: center;">
+                        <table width="100%">
                             <tr>
-                                <td style="text-align: center;">
+                                <td>
                                     BILLABLE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding-bottom: 5px; text-align: center;">
+                                <td style="padding-bottom: 5px;">
                                     <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align: center;">
+                                <td>
                                     NON-BILLABLE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align: center;">
+                                <td>
                                     <asp:Literal ID="ltrlNonBillableHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 2%; padding: 0px !important;">
+                    <td style="vertical-align: bottom; width: 6%; padding: 0px !important;">
                         <table width="100%">
                             <tr>
                                 <td style="padding: 0px !important;">
@@ -106,7 +106,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 2%; padding: 0px;">
+                    <td style="vertical-align: bottom; width: 6%; padding: 0px;">
                         <table width="100%">
                             <tr>
                                 <td style="padding: 0px !important;">
@@ -160,7 +160,7 @@
     </table>
     <asp:Repeater ID="repResource" runat="server">
         <HeaderTemplate>
-            <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
+            <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth zebra">
                 <thead>
                     <tr>
                         <th style="width: 210px; text-align: left;" class="padLeft5">
