@@ -263,12 +263,12 @@
                     </td>
                 </tr>
             </table>
-            <table width="100%">
+            <table width="100%" style="height:120px;">
                 <tr>
                     <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px; text-align:center;">
-                        <table width="100%" align="center" >
+                    <td style="padding-bottom: 10px; text-align:center">
+                        <table width="100%" align="center" style="vertical-align:top;">
                             <tr>
                                 <td style="width: 30%; text-align: right; font-weight: bold;">
                                     Person:&nbsp;
@@ -325,7 +325,7 @@
                             <tr>
                                 <td style="width: 30%;">
                                 </td>
-                                <td style="text-align: left;">
+                                <td style="text-align: left;height:15px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
@@ -373,15 +373,20 @@
             <div id="divWholePage" runat="server">
                 <table class="PaddingTenPx" style="width: 100%;">
                     <tr>
-                        <td style="font-size: 18px; font-weight: bold;">
-                        <table height="100%" >
+                        <td style="font-size: 18px; font-weight: bold;padding-bottom:10px;">
+                        <table>
                         <tr>
-                        <td style="padding-bottom:10px; vertical-align:top;">
+                        <td style="vertical-align:top;">
                             <asp:Label ID="lblPersonname" runat="server"></asp:Label>
                         </td>
                         </tr>
                         <tr>
-                        <td style="padding-top:10px;vertical-align:bottom;">
+                        <td style="vertical-align:top;font-size: 13px">
+                            <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td style="padding-top:5px;vertical-align:bottom;">
                             <asp:Label ID="lbRange" runat="server"></asp:Label>
                         </td>
                         </tr>
