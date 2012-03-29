@@ -38,7 +38,22 @@ namespace PraticeManagement.Reporting
 
         protected void txtProjectNumber_OnTextChanged(object sender, EventArgs e)
         {
+            var list = ServiceCallers.Custom.Report(r => r.GetMilestonesForProject(ProjectNumber));
+
+            ddlPeriod.Items.Clear();
+            var listItem = new ListItem("Entire Project", "*");
+            ddlPeriod.Items.Add(listItem);
+
+            foreach (var milestone in list)
+            {
+                ddlPeriod.Items.Add(new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() });
+            }
+
+            ddlPeriod.SelectedValue = "*";
+
             LoadActiveView();
+
+
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -49,34 +64,14 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        protected void btnView_Command(object sender, CommandEventArgs e)
-        {
-            int viewIndex = int.Parse((string)e.CommandArgument);
-            SelectView((Control)sender, viewIndex);
-            LoadActiveView();
-        }
 
-        private void SelectView(Control sender, int viewIndex)
-        {
-            mvProjectSummaryReport.ActiveViewIndex = viewIndex;
-
-            SetCssClassEmpty();
-
-            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
-        }
-
-        private void SetCssClassEmpty()
-        {
-            foreach (TableCell cell in tblProjectsummaryReportViewSwitch.Rows[0].Cells)
-            {
-                cell.CssClass = string.Empty;
-            }
-        }
 
         private void LoadActiveView()
         {
-            if (!string.IsNullOrEmpty(ProjectNumber))
+            if (!string.IsNullOrEmpty(ProjectNumber) && ddlView.SelectedValue != string.Empty)
             {
+                mvProjectSummaryReport.ActiveViewIndex = Convert.ToInt32(ddlView.SelectedValue);
+
                 divWholePage.Style.Remove("display");
                 if (mvProjectSummaryReport.ActiveViewIndex == 0)
                 {
@@ -95,13 +90,28 @@ namespace PraticeManagement.Reporting
 
 
 
+        protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadActiveView();
+        }
+
+
+        protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            LoadActiveView();
+
+        }
+
+
+
         private void PopulateByResourceData()
         {
             try
             {
                 msgError.ClearMessage();
                 divWholePage.Style.Remove("display");
-                var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber));
+                var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber, ddlPeriod.SelectedValue != "*" ? (int?)Convert.ToInt32(ddlPeriod.SelectedValue) : null));
                 ucByResource.DataBindResource(data);
             }
             catch (Exception ex)
