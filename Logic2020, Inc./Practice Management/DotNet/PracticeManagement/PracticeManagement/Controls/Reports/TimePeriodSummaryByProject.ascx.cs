@@ -144,8 +144,6 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
                         sb.Append("\t");
-                        sb.Append(GetBillableValue(projectLevelGroupedHours.BillableValue, projectLevelGroupedHours.IsFixedProject));
-                        sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Variance);
                         sb.Append("\t");
                         sb.AppendLine();
