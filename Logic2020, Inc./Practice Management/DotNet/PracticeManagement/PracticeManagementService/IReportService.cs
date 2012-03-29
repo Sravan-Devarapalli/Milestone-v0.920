@@ -32,7 +32,7 @@ namespace PracticeManagementService
         List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate, string timeTypeCategoryIds, string orderByCerteria);
 
         [OperationContract]
-        List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber);
+        List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? mileStoneId);
 
         [OperationContract]
         List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria);
@@ -42,6 +42,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Project> ProjectSearchByName(string name);
+
+        [OperationContract]
+        List<Milestone> GetMilestonesForProject(string projectNumber);
 
     }
 }
