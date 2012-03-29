@@ -283,7 +283,6 @@
             public const string BillableHours = "BillableHours";
             public const string NonBillableHours = "NonBillableHours";
             public const string GroupByCerteria = "GroupByCerteria";
-            public const string BillableValue = "BillableValue";
             public const string Category = "Category";
             public const string UtlizationPercent = "UtlizationPercent";
             public const string ProjectRoleName = "ProjectRoleName";
@@ -299,6 +298,7 @@
             public const string InternalHours = "InternalHours";
             public const string AdminstrativeHours = "AdminstrativeHours";
             public const string TimescaleColumn = "Timescale";
+            public const string BillingType = "BillingType";
             
         }
 
@@ -747,6 +747,8 @@
                 public const string TimePeriodSummaryReportByWorkType = "dbo.TimePeriodSummaryReportByWorkType";
                 public const string ProjectSummaryReportByResource = "dbo.ProjectSummaryReportByResource";
                 public const string ProjectSummaryReportByWorkType = "dbo.ProjectSummaryReportByWorkType";
+                public const string GetMilestonesForProject = "dbo.GetMilestonesForProject";
+                
             }
 
             public class Calendar
