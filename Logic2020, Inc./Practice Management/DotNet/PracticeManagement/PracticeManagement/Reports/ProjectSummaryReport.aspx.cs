@@ -235,6 +235,19 @@ namespace PraticeManagement.Reporting
         private void PopulateControls(string projectNumber)
         {
             txtProjectNumber.Text = projectNumber;
+            var list = ServiceCallers.Custom.Report(r => r.GetMilestonesForProject(ProjectNumber));
+
+            ddlPeriod.Items.Clear();
+            var listItem = new ListItem("Entire Project", "*");
+            ddlPeriod.Items.Add(listItem);
+
+            foreach (var milestone in list)
+            {
+                ddlPeriod.Items.Add(new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() });
+            }
+
+            ddlPeriod.SelectedValue = "*";
+
             LoadActiveView();
             ClearFilters();
         }
