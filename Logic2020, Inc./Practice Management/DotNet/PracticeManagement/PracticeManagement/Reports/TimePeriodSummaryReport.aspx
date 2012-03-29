@@ -147,14 +147,24 @@
                     </td>
                 </tr>
             </table>
-            <table width="100%">
+            <table width="100%" style="height:120px;">
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 10px; padding-top: 10px; padding-left: 5px;text-align:center;">
+                    <td style="padding-bottom: 8px; text-align: center;">
+                        <asp:CheckBox ID="chkIncludePersons" runat="server" Checked="false" Text="Include persons with no time entered in report output"
+                            AutoPostBack="true" OnCheckedChanged="chkIncludePersons_CheckedChanged" />
+                    </td>
+                    <td style="width: 65%">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 5%;">
+                    </td>
+                    <td style="padding-bottom: 10px; padding-left: 5px; text-align: center;">
                         <table width="100%" align="center">
                             <tr>
-                                <td style="font-weight: bold; width: 30%; text-align:right;">
+                                <td style="font-weight: bold; width: 30%; text-align: right;padding-right:10px;">
                                     Range:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
@@ -162,6 +172,8 @@
                                         Width="150px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
                                         <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
                                         <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
                                         <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
@@ -184,13 +196,36 @@
                             <tr>
                                 <td style="width: 30%;">
                                 </td>
-                                <td style="text-align: left;height:15px;">
+                                <td style="text-align: left; height: 15px;padding-right:10px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
                                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width: 65%">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 5%;">
+                    </td>
+                    <td style="padding-bottom: 10px; text-align: center;">
+                        <table width="100%" align="center">
+                            <tr>
+                                <td style="font-weight: bold; width: 30%; text-align: right;padding-right:10px;">
+                                    View:&nbsp;
+                                </td>
+                                <td style="text-align: left;">
+                                    <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
+                                        Width="150px">
+                                        <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
+                                        <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
+                                        <asp:ListItem Text="By Project" Value="1"></asp:ListItem>
+                                    </asp:DropDownList>
                                 </td>
                             </tr>
                         </table>
@@ -231,59 +266,24 @@
                 </table>
             </asp:Panel>
             <br />
-            <div id="divWholePage" runat="server">
-                <table style="width: 100%;">
-                    <tr>
-                        <td align="center" style="padding: 10px;">
-                            <uc:BillableAndNonBillableGraph ID="ucBillableAndNonBillable" runat="server"></uc:BillableAndNonBillableGraph>
-                        </td>
-                    </tr>
-                </table>
-                <table class="WholeWidth">
-                    <tr>
-                        <td align="center">
-                            <asp:Table ID="tblTimePeriodReportViewSwitch" runat="server" CssClass="CustomTabStyle">
-                                <asp:TableRow ID="rowSwitcher" runat="server">
-                                    <asp:TableCell ID="cellResource" CssClass="SelectedSwitch" runat="server">
-                                        <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnResource" runat="server" Text="By Resource" CausesValidation="false"
-                                                ToolTip="By Resource" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
-                                        </span>
-                                    </asp:TableCell>
-                                    <asp:TableCell ID="cellProject" runat="server">
-                                        <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnProject" runat="server" Text="By Project" CausesValidation="false"
-                                                ToolTip="By Project" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
-                                        </span>
-                                    </asp:TableCell>
-                                    <asp:TableCell ID="cellWorkType" runat="server">
-                                        <span class="bg"><span>
-                                            <asp:LinkButton ID="lnkbtnWorkType" runat="server" Text="By Work Type" CausesValidation="false"
-                                                ToolTip="By Work Type" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
-                                        </span>
-                                    </asp:TableCell>
-                                </asp:TableRow>
-                            </asp:Table>
-                        </td>
-                    </tr>
-                </table>
+            <div id="divWholePage" runat="server" style="display:none;">
                 <asp:MultiView ID="mvTimePeriodReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwResourceReport" runat="server">
-                        <asp:Panel ID="pnlResourceReport" runat="server" CssClass="tab-pane WholeWidth">
+                        <asp:Panel ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
                             <uc:ByResource ID="tpByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
                     </asp:View>
                     <asp:View ID="vwProjectReport" runat="server">
-                        <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
+                        <asp:Panel ID="pnlProjectReport" runat="server" CssClass="WholeWidth">
                             <uc:Byproject ID="tpByProject" runat="server"></uc:Byproject>
                         </asp:Panel>
                     </asp:View>
-                    <asp:View ID="vwWorkTypeReport" runat="server">
+<%--                    <asp:View ID="vwWorkTypeReport" runat="server">
                         <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
                             <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
                         </asp:Panel>
                     </asp:View>
-                </asp:MultiView>
+--%>                </asp:MultiView>
             </div>
         </ContentTemplate>
         <Triggers>
