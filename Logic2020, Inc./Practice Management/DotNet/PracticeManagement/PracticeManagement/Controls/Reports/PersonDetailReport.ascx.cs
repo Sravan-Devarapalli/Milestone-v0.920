@@ -76,33 +76,25 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                CollapsiblePanelExtenderClientIds = new List<KeyValuePair<string, string>>();
+                CollapsiblePanelDateExtenderClientIds = new List<string>();
 
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var repDate = e.Item.FindControl("repDate") as Repeater;
                 TimeEntriesGroupByClientAndProject dataitem = (TimeEntriesGroupByClientAndProject)e.Item.DataItem;
-                var cpeProject = e.Item.FindControl("cpeProject") as CollapsiblePanelExtender;
-                cpeProject.BehaviorID = cpeProject.ClientID + e.Item.ItemIndex.ToString();
-
+             
                 repDate.DataSource = dataitem.DayTotalHours;
                 repDate.DataBind();
-
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
-
-                KeyValuePair<string, string> kvPair = new KeyValuePair<string, string>(cpeProject.BehaviorID, output);
-                CollapsiblePanelExtenderClientIds.Add(kvPair);
 
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
                 JavaScriptSerializer jss = new JavaScriptSerializer();
-                var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
                 hdncpeExtendersIds.Value = output;
-                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Collapse All";
-                hdnCollapsed.Value = "false";
+                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+                hdnCollapsed.Value = "true";
             }
         }
 
@@ -110,7 +102,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                CollapsiblePanelDateExtenderClientIds = new List<string>();
+                
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
