@@ -76,6 +76,24 @@ namespace PraticeManagement.Reporting {
         protected global::PraticeManagement.Controls.MessageLabel msgError;
         
         /// <summary>
+        /// ddlPeriod control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
+        
+        /// <summary>
+        /// ddlView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlView;
+        
+        /// <summary>
         /// mpeProjectSearch control.
         /// </summary>
         /// <remarks>
@@ -173,42 +191,6 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divWholePage;
-        
-        /// <summary>
-        /// tblProjectsummaryReportViewSwitch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblProjectsummaryReportViewSwitch;
-        
-        /// <summary>
-        /// rowSwitcher control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableRow rowSwitcher;
-        
-        /// <summary>
-        /// cellResource control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellResource;
-        
-        /// <summary>
-        /// lnkbtnResource control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnResource;
         
         /// <summary>
         /// mvProjectSummaryReport control.
