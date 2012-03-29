@@ -172,18 +172,64 @@ namespace PraticeManagement.Controls.Reports
             TimeEntriesGroupByProject = reportData.ToList();
             if (TimeEntriesGroupByProject.Count > 0)
             {
-                HostingPage.SetGraphVisibility(true);
                 divEmptyMessage.Style["display"] = "none";
+                tbHeader.Style["display"] = "";
                 repProject.Visible = true;
                 repProject.DataSource = reportData;
                 repProject.DataBind();
+                PopulateHeaderSection();
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
+                tbHeader.Style["display"] = "none";
                 repProject.Visible = false;
-                HostingPage.SetGraphVisibility(false);
             }
+        }
+
+        private void PopulateHeaderSection()
+        {
+            double billableHours = TimeEntriesGroupByProject.Sum(p => p.BillableHours);
+            double nonBillableHours = TimeEntriesGroupByProject.Sum(p => p.NonBillableHours);
+            int noOfEmployees = TimeEntriesGroupByProject.Count;
+            var billablePercent = 0;
+            var nonBillablePercent = 0;
+            if (billableHours != 0 || nonBillableHours != 0)
+            {
+                billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(billableHours, nonBillableHours);
+                nonBillablePercent = (100 - billablePercent);
+            }
+            ltProjectCount.Text = noOfEmployees + " Projects";
+            lbRange.Text = HostingPage.Range;
+            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
+            ltrlAvgHours.Text = ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
+            ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlBillablePercent.Text = billablePercent.ToString();
+            ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+
+            if (billablePercent == 0 && nonBillablePercent == 0)
+            {
+                trBillable.Height = "1px";
+                trNonBillable.Height = "1px";
+            }
+            else if (billablePercent == 100)
+            {
+                trBillable.Height = "80px";
+                trNonBillable.Height = "1px";
+            }
+            else if (billablePercent == 0 && nonBillablePercent == 100)
+            {
+                trBillable.Height = "1px";
+                trNonBillable.Height = "80px";
+            }
+            else
+            {
+                int billablebarHeight = (int)(((float)80 / (float)100) * billablePercent);
+                trBillable.Height = billablebarHeight.ToString() + "px";
+                trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
+            }
+
         }
 
     }
