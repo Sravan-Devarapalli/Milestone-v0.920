@@ -1,6 +1,6 @@
 ﻿-- =============================================
 -- Updated by : Sainath.CH
--- Update Date: 03-29-2012
+-- Update Date: 03-30-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonFirstLastNameById]
 	@PersonId int
@@ -15,7 +15,7 @@ BEGIN
 			TS.Name AS Timescale
 	FROM dbo.Person P
 	LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
-							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate,dbo.GetFutureDate()) 
+							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
 	LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
 	WHERE PersonId = @PersonId
 END
