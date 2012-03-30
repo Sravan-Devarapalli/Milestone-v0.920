@@ -64,7 +64,6 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
 
@@ -80,7 +79,10 @@ namespace PraticeManagement.Controls.Reports
             sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
             sb.Append("\t");
             sb.AppendLine();
-            sb.Append(string.Format("{0} - {1}", project.StartDate.HasValue ? project.StartDate.Value.ToString("MM/dd/yyyy") : "", project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : ""));
+            sb.Append(project.Status.Name);
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(HostingPage.ProjectRange);
             sb.Append("\t");
             sb.AppendLine();
             sb.AppendLine();
@@ -126,12 +128,10 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-
         public string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
         }
-
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
