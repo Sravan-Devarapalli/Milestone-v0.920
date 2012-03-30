@@ -50,7 +50,14 @@ namespace PraticeManagement.Reporting
                             }
                             else if (selectedVal == -15)
                             {
-                                return Utils.Calendar.LastMonthSecondHalfStartDate(now);
+                                if (now.Day < 16)
+                                {
+                                    return Utils.Calendar.LastMonthSecondHalfStartDate(now);
+                                }
+                                else
+                                {
+                                    return Utils.Calendar.CurrentMonthSecondHalfStartDate(now);
+                                }
                             }
                             else if (selectedVal == -30)
                             {
@@ -89,6 +96,7 @@ namespace PraticeManagement.Reporting
                         if (selectedVal > 0)
                         {
                             //7
+                            //15
                             //30
                             //365
                             if (selectedVal == 7)
@@ -97,7 +105,9 @@ namespace PraticeManagement.Reporting
                             }
                             else if (selectedVal == 15)
                             {
-                                return Utils.Calendar.MonthFirstHalfEndDate(now);
+                              
+                              return Utils.Calendar.MonthFirstHalfEndDate(now);
+                              
                             }
                             else if (selectedVal == 30)
                             {
@@ -114,7 +124,18 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.LastWeekEndDate(now);
                             }
-                            else if (selectedVal == -30 || selectedVal == -15)
+                            else if (selectedVal == -15)
+                            {
+                                if (now.Day < 16)
+                                {
+                                    return Utils.Calendar.LastMonthEndDate(now);
+                                }
+                                else
+                                {
+                                    return now;
+                                }
+                            }
+                            else if (selectedVal == -30)
                             {
                                 return Utils.Calendar.LastMonthEndDate(now);
                             }
@@ -142,11 +163,11 @@ namespace PraticeManagement.Reporting
                 {
                     if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
                     {
-                        range = StartDate.Value.ToString("MMMM - yyyy");
+                        range = StartDate.Value.ToString("MMMM yyyy");
                     }
                     else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
                     {
-                        range = StartDate.Value.ToString("Year, yyyy");
+                        range = StartDate.Value.ToString("yyyy");
                     }
                     else
                     {
