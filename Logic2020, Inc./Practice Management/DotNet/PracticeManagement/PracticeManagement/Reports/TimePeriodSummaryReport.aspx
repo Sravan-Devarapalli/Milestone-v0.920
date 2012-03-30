@@ -16,27 +16,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script language="javascript" type="text/javascript">
-
-        function ReAssignStartDateEndDates() {
-            var hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
-            var hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
-            var hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
-            var hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
-
-            var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
-            var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
-            if (startDateCalExtender != null) {
-                startDateCalExtender.set_selectedDate(hdnStartDate.value);
-            }
-            if (endDateCalExtender != null) {
-                endDateCalExtender.set_selectedDate(hdnEndDate.value);
-            }
-
-            var valSummary = document.getElementById('<%= valSumDateRange.ClientID %>');
-            valSummary.style.display = 'none';
-        }
-    </script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
         
@@ -199,8 +178,6 @@
                                 <td style="text-align: left; height: 15px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                                    <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
-                                    <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
                                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
@@ -239,8 +216,8 @@
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
-                CancelControlID="btnCustDatesCancel" BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates"
-                BehaviorID="bhCustomDates" DropShadow="false" OnCancelScript="ReAssignStartDateEndDates();" />
+                 BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates"
+                BehaviorID="bhCustomDates" DropShadow="false"  />
             <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
                 CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
                 <table class="WholeWidth">
@@ -255,7 +232,7 @@
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
                                 Style="float: none !Important;" CausesValidation="true" />
                             &nbsp; &nbsp;
-                            <asp:Button ID="btnCustDatesCancel" runat="server" Text="Cancel" Style="float: none !Important;" />
+                            <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel" Style="float: none !Important;" OnClick="btnCustDatesCancel_OnClick" />
                         </td>
                     </tr>
                     <tr>
