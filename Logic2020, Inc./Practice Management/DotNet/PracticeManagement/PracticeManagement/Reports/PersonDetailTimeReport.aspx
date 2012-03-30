@@ -246,8 +246,16 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript">
-
+    <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblPersonSearchResult").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
+            });
+   
         function pageLoad() {
             SetTooltipsForallDropDowns();
             intializeExpandAll();
@@ -283,6 +291,11 @@
                 lblCustomDateRange.style.display = "none";
             }
             SetTooltipsForallDropDowns();
+            $("#tblPersonSearchResult").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
         }
 
     </script>
@@ -405,7 +418,7 @@
             </asp:Panel>
             <br />
             <div id="divWholePage" runat="server">
-                <table class="PaddingTenPx" style="width: 100%;">
+                <table class="PaddingTenPx" style="width: 100%; height: 90px;">
                     <tr>
                         <td style="font-size: 18px; font-weight: bold; padding-bottom: 10px;">
                             <table>
@@ -426,11 +439,11 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="text-align: right; width: 610px">
+                        <td style="text-align: right; width: 470px">
                             <table style="table-layout: fixed; width: 100%;">
                                 <tr>
-                                    <td style="width: 7%;">
-                                        <table>
+                                    <td style="width: 27%;">
+                                        <table width="100%">
                                             <tr>
                                                 <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
                                                     Total Hours
@@ -443,8 +456,8 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 7%;">
-                                        <table>
+                                    <td style="width: 27%;">
+                                        <table width="100%">
                                             <tr>
                                                 <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
                                                     Utilization
@@ -457,22 +470,8 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 7%;">
-                                        <table>
-                                            <tr>
-                                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
-                                                    Total Value
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 25px; text-align: center;">
-                                                    <asp:Literal ID="ltrlTotalValue" runat="server"></asp:Literal>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td style="width: 7%;">
-                                        <table>
+                                    <td style="width: 27%; vertical-align: bottom;">
+                                        <table width="100%">
                                             <tr>
                                                 <td style="text-align: center;">
                                                     BILLABLE
@@ -495,7 +494,7 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="vertical-align: bottom; width: 2%; padding: 0px !important;">
+                                    <td style="vertical-align: bottom; width: 8%; padding: 0px !important;">
                                         <table width="100%">
                                             <tr>
                                                 <td style="padding: 0px !important;">
@@ -516,7 +515,7 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="vertical-align: bottom; width: 2%; padding: 0px;">
+                                    <td style="vertical-align: bottom; width: 8%; padding: 0px;">
                                         <table width="100%">
                                             <tr>
                                                 <td style="padding: 0px !important;">
@@ -603,53 +602,53 @@
                     </tr>
                     <tr>
                         <td style="padding: 10px; width: 100%;" colspan="2">
-                            <div id="dlPersonDiv" class="searchResult" runat="server">
-                                <asp:GridView ID="gvPerson" runat="server" Width="100%" OnSorting="gvPerson_Sorting"
-                                    AutoGenerateColumns="false" AllowSorting="true" CssClass="CompPerfTable WholeWidth"
-                                    EmptyDataText="No Results found." HeaderStyle-CssClass="CompPerfHeader" HeaderStyle-HorizontalAlign="Center">
-                                    <AlternatingRowStyle BackColor="#F9FAFF" />
-                                    <Columns>
-                                        <asp:TemplateField>
-                                            <HeaderTemplate>
-                                                <div class="ie-bg">
-                                                    <asp:LinkButton ID="lnkPersonName" CommandName="Sort" CommandArgument="PersonName"
-                                                        runat="server">Person Name</asp:LinkButton>
-                                                </div>
-                                            </HeaderTemplate>
-                                            <HeaderStyle Width="50%" />
-                                            <ItemTemplate>
-                                                <asp:LinkButton ID="lnkPerson" OnClick="lnkPerson_OnClick" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
-                                                    PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
+                            <div id="dlPersonDiv" class="searchResult" runat="server" style="display:none;">
+                                <asp:Repeater ID="repPersons" runat="server">
+                                    <HeaderTemplate>
+                                        <table id="tblPersonSearchResult" class="tablesorter CompPerfTable WholeWidth">
+                                            <thead>
+                                                <tr class="CompPerfHeader">
+                                                    <th style="width: 50%; text-align: center;">
+                                                        <div class="ie-bg">
+                                                            Person Name
+                                                        </div>
+                                                    </th>
+                                                    <th style="text-align: center;">
+                                                        <div class="ie-bg">
+                                                            Status
+                                                        </div>
+                                                    </th>
+                                                    <th style="text-align: center;">
+                                                        <div class="ie-bg">
+                                                            PayType
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td style="width: 50%;">
+                                                <asp:LinkButton ID="lnkPerson" Text="<%# GetPersonFirstLastName(((DataTransferObjects.Person)Container.DataItem))  %>"
+                                                    OnClick="lnkPerson_OnClick" PersonId='<%# ((DataTransferObjects.Person)Container.DataItem).Id.ToString() %>'
                                                     runat="server"></asp:LinkButton>
-                                            </ItemTemplate>
-                                            <ItemStyle CssClass="padLeft5" />
-                                        </asp:TemplateField>
-                                        <asp:TemplateField>
-                                            <HeaderTemplate>
-                                                <div class="ie-bg">
-                                                    <asp:LinkButton ID="lnkStatus" CommandName="Sort" CommandArgument="Status" runat="server">Status</asp:LinkButton>
-                                                </div>
-                                            </HeaderTemplate>
-                                            <HeaderStyle Width="25%" />
-                                            <ItemTemplate>
+                                            </td>
+                                            <td style="text-align: center;">
                                                 <asp:Label Text='<%# Eval("CurrentPay.TimescaleName") %>' ID="lbTimescale" runat="server"></asp:Label>
-                                            </ItemTemplate>
-                                            <ItemStyle CssClass="textCenter" />
-                                        </asp:TemplateField>
-                                        <asp:TemplateField>
-                                            <HeaderTemplate>
-                                                <div class="ie-bg">
-                                                    <asp:LinkButton ID="lnkPayType" CommandName="Sort" CommandArgument="PayType" runat="server">PayType</asp:LinkButton>
-                                                </div>
-                                            </HeaderTemplate>
-                                            <HeaderStyle Width="25%" />
-                                            <ItemTemplate>
+                                            </td>
+                                            <td style="text-align: center;">
                                                 <asp:Label Text='<%# Eval("Status.Name")%>' ID="lbStatus" runat="server"></asp:Label>
-                                            </ItemTemplate>
-                                            <ItemStyle CssClass="textCenter" />
-                                        </asp:TemplateField>
-                                    </Columns>
-                                </asp:GridView>
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                    </tbody></table>
+                                    </FooterTemplate>
+                                </asp:Repeater>
+                                <div id="divEmptyResults" runat="server" style="display:none;">
+                                    No Results found.
+                                </div>
                             </div>
                         </td>
                     </tr>
