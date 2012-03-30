@@ -202,7 +202,7 @@
                     <td style="padding-bottom: 10px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="width: 45%; text-align: right; font-weight: bold;">
+                                <td style="width: 40%; text-align: right; font-weight: bold;">
                                     Project Number:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
@@ -236,7 +236,7 @@
                     <td style="padding-bottom: 10px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="width: 45%; text-align: right; font-weight: bold;">
+                                <td style="width: 40%; text-align: right; font-weight: bold;">
                                     Range:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
@@ -259,7 +259,7 @@
                     <td style="padding-bottom: 10px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="width: 45%; text-align: right; font-weight: bold;">
+                                <td style="width: 40%; text-align: right; font-weight: bold;">
                                     View:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
