@@ -14,34 +14,6 @@ namespace PraticeManagement.Reporting
     public partial class PersonDetailTimeReport : System.Web.UI.Page
     {
 
-        private const string ViewStateSortColumnId = "SortColumnId";
-        private const string ViewStateSortExpression = "SortExpression";
-        private const string ViewStateSortDirection = "SortDirection";
-
-        private string PrevGridViewSortExpression
-        {
-            get
-            {
-                return (string)ViewState[ViewStateSortExpression];
-            }
-            set
-            {
-                ViewState[ViewStateSortExpression] = value;
-            }
-        }
-
-        private string GridViewSortDirection
-        {
-            get
-            {
-                return (string)ViewState[ViewStateSortDirection];
-            }
-            set
-            {
-                ViewState[ViewStateSortDirection] = value;
-            }
-        }
-
         public DateTime? StartDate
         {
             get
@@ -186,12 +158,11 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            dlPersonDiv.Style.Add("display", "none");
             if (!IsPostBack)
             {
                 DataHelper.FillPersonList(ddlPerson, null, 1, false);
                 ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
-
-                dlPersonDiv.Visible = false;
             }
         }
 
@@ -311,8 +282,8 @@ namespace PraticeManagement.Reporting
             if (StartDate.HasValue && EndDate.HasValue)
             {
                 divWholePage.Style.Remove("display");
-                Quadruple<double, double, double, double> result = ServiceCallers.Custom.Report(r => r.GetPersonTimeEntriesTotalsByPeriod(SelectedPersonId, StartDate.Value, EndDate.Value));
-                PopulateTotalSection(result.First, result.Second, result.Third, result.Fourth);
+                Triple<double, double, double> result = ServiceCallers.Custom.Report(r => r.GetPersonTimeEntriesTotalsByPeriod(SelectedPersonId, StartDate.Value, EndDate.Value));
+                PopulateTotalSection(result.First, result.Second, result.Third);
                 if (mvPersonDetailReport.ActiveViewIndex == 0)
                 {
                     PopulateSummaryDetails();
@@ -340,7 +311,7 @@ namespace PraticeManagement.Reporting
             ucpersonSummaryReport.DatabindRepepeaterSummary(list);
         }
 
-        private void PopulateTotalSection(double billableHours, double nonBillableHours, double totalValue, double utlizationPercentage)
+        private void PopulateTotalSection(double billableHours, double nonBillableHours, double utlizationPercentage)
         {
             var billablePercent = 0;
             var nonBillablePercent = 0;
@@ -356,7 +327,6 @@ namespace PraticeManagement.Reporting
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
-            ltrlTotalValue.Text = totalValue < 0 ? "Fixed" : totalValue == 0 ? "$0" : totalValue.ToString(Constants.Formatting.CurrencyFormat);
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
@@ -416,41 +386,24 @@ namespace PraticeManagement.Reporting
             if (!string.IsNullOrEmpty(looked))
             {
                 var personList = ServiceCallers.Custom.Person(p => p.GetPersonListBySearchKeyword(looked));
-                dlPersonDiv.Visible = true;
-                gvPerson.DataSource = personList;
-                gvPerson.DataBind();
+                dlPersonDiv.Style.Add("display", "");
+                if (personList.Length > 0)
+                {
+                    repPersons.Visible = true;
+                    divEmptyResults.Style.Add("display","none");
+                }
+                else
+                {
+                    repPersons.Visible = false;
+                    divEmptyResults.Style.Add("display", "");
+                }
+                repPersons.DataSource = personList;
+                repPersons.DataBind();
                 btnSearch.Attributes.Remove("disabled");
             }
             mpePersonSearch.Show();
         }
 
-        private string GetSortDirection()
-        {
-            switch (GridViewSortDirection)
-            {
-                case "Ascending":
-                    GridViewSortDirection = "Descending";
-                    break;
-                case "Descending":
-                    GridViewSortDirection = "Ascending";
-                    break;
-            }
-            return GridViewSortDirection;
-        }
-
-        protected void gvPerson_Sorting(object sender, GridViewSortEventArgs e)
-        {
-            if (PrevGridViewSortExpression != e.SortExpression)
-            {
-                PrevGridViewSortExpression = e.SortExpression;
-                GridViewSortDirection = e.SortDirection.ToString();
-            }
-            else
-            {
-                GridViewSortDirection = GetSortDirection();
-            }
-            mpePersonSearch.Show();
-        }
     }
 }
 
