@@ -43,14 +43,20 @@ namespace DataAccess
             {
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
 
 
                 while (reader.Read())
                 {
-                    Project project = new Project();
-
-                    project.Name = reader.GetString(projectNameIndex);
-                    project.ProjectNumber = reader.GetString(projectNumberIndex);
+                    Project project = new Project()
+                    {
+                        Name = reader.GetString(projectNameIndex),
+                        ProjectNumber = reader.GetString(projectNumberIndex),
+                        Client = new Client()
+                        {
+                            Name = reader.GetString(clientNameIndex)
+                        }
+                    };
 
                     result.Add(project);
                 }
@@ -98,6 +104,8 @@ namespace DataAccess
                 int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
                 int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
                 int timeTypeCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeCodeColumn);
+                int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
 
                 while (reader.Read())
                 {
@@ -134,6 +142,10 @@ namespace DataAccess
                             {
                                 Name = reader.GetString(groupNameIndex),
                                 Code = reader.GetString(groupCodeIndex)
+                            },
+                            Status = new ProjectStatus
+                            {
+                                Name = reader.GetString(projectStatusNameIndex)
                             }
                         }
                         ,
@@ -146,7 +158,8 @@ namespace DataAccess
                         DayTotalHours = new List<TimeEntriesGroupByDate>() 
                         {
                             dt
-                        }
+                        },
+                        BillableType = reader.GetString(billingTypeIndex)
 
                     };
 
@@ -201,7 +214,7 @@ namespace DataAccess
                 int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                 int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
                 int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
-                int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+                int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
 
                 while (reader.Read())
@@ -220,7 +233,7 @@ namespace DataAccess
                                 Code = reader.GetString(groupCodeIndex)
                             },
                             Status = new ProjectStatus {
-                                Name = reader.GetString(personStatusNameIndex)
+                                Name = reader.GetString(projectStatusNameIndex)
                             }
                         },
 
@@ -668,11 +681,14 @@ namespace DataAccess
 
                     int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
                     int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
-
+                    int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                    int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
                     var milestone = new Milestone
                     {
                         Description = reader.GetString(mileStoneNameIndex),
-                        Id = reader.GetInt32(mileStoneIdIndex)
+                        Id = reader.GetInt32(mileStoneIdIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        ProjectedDeliveryDate = reader.GetDateTime(endDateIndex)
                     };
 
                     result.Add(milestone);
