@@ -147,7 +147,7 @@
     </table>
     <asp:Repeater ID="repProject" runat="server">
         <HeaderTemplate>
-            <table id="tblProjectSummaryByProject" class="tablesorter PersonSummaryReport WholeWidth">
+            <table id="tblProjectSummaryByProject" class="tablesorter TimePeriodByproject WholeWidth">
                 <thead>
                     <tr>
                         <th class="t-left padLeft5" style="width: 500px;height:30px;">
