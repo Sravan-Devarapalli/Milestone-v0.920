@@ -25,7 +25,7 @@
 </table>
 <asp:Repeater ID="repSummary" runat="server">
     <HeaderTemplate>
-        <table class="PersonSummaryReport" style="width: 100%;">
+        <table class="TimePeriodByproject" style="width: 100%;">
             <tr>
                 <th style="text-align: left; width: 550px;">
                     Project Name
