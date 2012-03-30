@@ -3,7 +3,7 @@
 -- Create date: 03-15-2012
 -- Description:  Time Entries grouped by workType and Resource for a Project.
 -- Updated by : Sainath.CH
--- Update Date: 03-29-2012
+-- Update Date: 03-30-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectSummaryReportByResource]
 (
@@ -90,7 +90,7 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		RAISERROR('There is no Project exist with this Project Number.', 16, 1)
+		RAISERROR('There is no Project with this Project Number.', 16, 1)
 	END
 END
 
