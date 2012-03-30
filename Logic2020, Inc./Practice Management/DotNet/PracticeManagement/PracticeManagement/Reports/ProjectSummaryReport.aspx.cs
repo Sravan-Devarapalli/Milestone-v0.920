@@ -34,7 +34,6 @@ namespace PraticeManagement.Reporting
             }
         }
 
-
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -231,12 +230,14 @@ namespace PraticeManagement.Reporting
 
             ddlPeriod.Items.Clear();
             var listItem = new ListItem("Entire Project", "*");
-            DateTime projectStartDate = list.Min(m => m.StartDate);
-            DateTime projectEndDate = list.Max(m => m.ProjectedDeliveryDate);
-            listItem.Attributes.Add("startdate", projectStartDate.ToString("MM/dd/yyyy"));
-            listItem.Attributes.Add("enddate", projectEndDate.ToString("MM/dd/yyyy"));
+            if (list.Length > 0)
+            {
+                DateTime projectStartDate = list.Min(m => m.StartDate);
+                DateTime projectEndDate = list.Max(m => m.ProjectedDeliveryDate);
+                listItem.Attributes.Add("startdate", projectStartDate.ToString("MM/dd/yyyy"));
+                listItem.Attributes.Add("enddate", projectEndDate.ToString("MM/dd/yyyy"));
+            }
             ddlPeriod.Items.Add(listItem);
-
             foreach (var milestone in list)
             {
                 ListItem li = new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() };
