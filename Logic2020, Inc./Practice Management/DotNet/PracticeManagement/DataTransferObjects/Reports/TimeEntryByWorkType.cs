@@ -34,6 +34,14 @@ namespace DataTransferObjects.Reports
             }
         }
 
+        public string NoteForExport
+        {
+            get 
+            {
+                return Note.Replace("\n", " ");
+            }
+        }
+
 
     }
 }
