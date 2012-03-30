@@ -209,7 +209,6 @@ namespace PraticeManagement.Reporting
 
         protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ddlPeriod.SelectedValue = "Please Select";
             SwitchView(lnkbtnSummary, 0);
         }
 
