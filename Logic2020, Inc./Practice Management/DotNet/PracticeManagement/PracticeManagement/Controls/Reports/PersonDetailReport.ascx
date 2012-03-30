@@ -34,13 +34,13 @@
     <ItemTemplate>
         <table class="WholeWidthWithHeight">
             <tr style="text-align: left;">
-                <td colspan="4" class="ProjectAccountName" style="width: 95%;">
+                <td colspan="4" class="ProjectAccountName" style="width: 95%;white-space:nowrap;">
                     <%# Eval("Client.Name") %>
                     >
                     <%# Eval("Project.ProjectNumber")%>
                     -
                     <%# Eval("Project.Name")%>
-                    <p style="font-style:normal;"><%# GetProjectStatus((string)Eval("Project.Status.Name"))%></p>
+                    <b style="font-style:normal;"><%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
                 </td>
                 <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
