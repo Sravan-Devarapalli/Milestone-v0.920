@@ -161,10 +161,10 @@
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 10px; padding-left: 5px; text-align: center;">
+                    <td style="padding-bottom: 10px;text-align: center;">
                         <table width="100%" align="center">
                             <tr>
-                                <td style="font-weight: bold; width: 30%; text-align: right;padding-right:10px;">
+                                <td style="text-align: right; width: 30%; font-weight: bold;">
                                     Range:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
@@ -196,7 +196,7 @@
                             <tr>
                                 <td style="width: 30%;">
                                 </td>
-                                <td style="text-align: left; height: 15px;padding-right:10px;">
+                                <td style="text-align: left; height: 15px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
@@ -216,7 +216,7 @@
                     <td style="padding-bottom: 10px; text-align: center;">
                         <table width="100%" align="center">
                             <tr>
-                                <td style="font-weight: bold; width: 30%; text-align: right;padding-right:10px;">
+                                <td style="text-align: right; width: 30%; font-weight: bold;">
                                     View:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
