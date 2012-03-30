@@ -30,7 +30,7 @@ namespace PraticeManagement.Reporting
                 string startDate = li.Attributes["startdate"];
                 string endDate = li.Attributes["enddate"];
                 string milestoneName = li.Text;
-                return milestoneName + "( " + startDate + " - " + endDate + " )";
+                return milestoneName + " (" + startDate + " - " + endDate + ")";
             }
         }
 
