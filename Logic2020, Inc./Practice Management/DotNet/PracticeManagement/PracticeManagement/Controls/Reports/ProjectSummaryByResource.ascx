@@ -23,6 +23,11 @@
                         <asp:Literal ID="ltrlProjectStatus" runat="server"></asp:Literal>
                     </td>
                 </tr>
+                 <tr>
+                    <td style="padding-top: 5px; vertical-align: bottom;">
+                        <asp:Literal ID="ltrlProjectRange" runat="server"></asp:Literal>
+                    </td>
+                </tr>
             </table>
         </td>
         <td style="text-align: right; width: 470px; padding-bottom: 10px;">
@@ -51,7 +56,7 @@
                             </tr>
                             <tr>
                                 <td style="font-size: 25px;">
-                                    <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
+                                    <asp:Literal ID="ltrlTotalHours" runat="server" ></asp:Literal>
                                 </td>
                             </tr>
                         </table>
