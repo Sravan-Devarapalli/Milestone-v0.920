@@ -196,60 +196,92 @@
             </table>
             <table style="width: 100%; height: 120px;">
                 <tr>
-                    <td style="width: 34%;">
+                    <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="width: 32%; vertical-align: top;" align="center">
-                        <table class="WholeWidth CustomViewStyle">
+                    <td style="padding-bottom: 10px; text-align: center">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="font-weight: bold; text-align: right; width: 110px;">
-                                    Project Number:
+                                <td style="width: 45%; text-align: right; font-weight: bold;">
+                                    Project Number:&nbsp;
                                 </td>
-                                <td style="width: 150px;">
-                                    <asp:TextBox ID="txtProjectNumber" Width="96%" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
-                                        runat="server"></asp:TextBox>
-                                    <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
-                                        TargetControlID="txtProjectNumber" BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext"
-                                        WatermarkText="Ex: P1234767">
-                                    </ajaxToolkit:TextBoxWatermarkExtender>
-                                </td>
-                                <td style="width: 40px;">
-                                    <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
+                                <td style="text-align: left;">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <asp:TextBox ID="txtProjectNumber" Width="150px" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                                    runat="server"></asp:TextBox>
+                                                <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
+                                                    TargetControlID="txtProjectNumber" BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext"
+                                                    WatermarkText="Ex: P1234767">
+                                                </ajaxToolkit:TextBoxWatermarkExtender>
+                                            </td>
+                                            <td>
+                                                <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                         </table>
-                        <table class="WholeWidth CustomViewStyle">
+                    </td>
+                    <td style="width: 35%;">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 35%;">
+                        &nbsp;
+                    </td>
+                    <td style="padding-bottom: 10px; text-align: center">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="font-weight: bold; text-align: right; width: 110px;">
-                                    Range:
+                                <td style="width: 45%; text-align: right; font-weight: bold;">
+                                    Range:&nbsp;
                                 </td>
-                                <td style="width: 150px;">
-                                    <cc2:customdropdown id="ddlPeriod" runat="server" autopostback="true" onselectedindexchanged="ddlPeriod_SelectedIndexChanged"
-                                        width="100%">
+                                <td style="text-align: left;">
+                                    <cc2:CustomDropDown ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
+                                        Width="160px">
                                         <asp:ListItem Selected="True" Text="Entire Project" Value="*"></asp:ListItem>
-                                    </cc2:customdropdown>
-                                </td>
-                                <td style="width: 40px;">
+                                    </cc2:CustomDropDown>
                                 </td>
                             </tr>
                         </table>
-                        <table class="WholeWidth CustomViewStyle">
+                    </td>
+                    <td style="width: 35%;">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 35%;">
+                        &nbsp;
+                    </td>
+                    <td style="padding-bottom: 10px; text-align: center">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="font-weight: bold; text-align: right; width: 110px;">
-                                    View:
+                                <td style="width: 45%; text-align: right; font-weight: bold;">
+                                    View:&nbsp;
                                 </td>
-                                <td style="width: 150px;">
+                                <td style="text-align: left;">
                                     <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
-                                        Width="100%">
+                                        Width="160px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value=""></asp:ListItem>
                                         <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
-                                <td style="width: 40px;">
-                                </td>
                             </tr>
                         </table>
-                        <table class="WholeWidth CustomViewStyle">
+                    </td>
+                    <td style="width: 35%;">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 35%;">
+                        &nbsp;
+                    </td>
+                    <td style="padding-bottom: 10px; text-align: center">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 300px;" colspan="3">
                                     <uc:MessageLabel ID="msgError" runat="server" ErrorColor="Red" InfoColor="Green"
@@ -258,7 +290,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 34%;">
+                    <td style="width: 35%;">
                         &nbsp;
                     </td>
                 </tr>
