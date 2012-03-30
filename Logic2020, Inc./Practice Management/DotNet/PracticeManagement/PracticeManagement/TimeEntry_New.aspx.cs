@@ -499,23 +499,25 @@ namespace PraticeManagement
             int administrativeTECount = administrativeXdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count;
             lbAdministrativeSection.Attributes[RowsCountAttribute] = administrativeTECount.ToString();
 
-            DataBindSectionHeader(repProjectSections, pnlProjectSectionHeader, repProjectSectionHeader);
-            DataBindSectionHeader(repInternalSections, pnlInternalSectionHeader, repInternalSectionHeader);
-            DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader);
+            DataBindSectionHeader(repProjectSections, pnlProjectSectionHeader, repProjectSectionHeader, btnExpandCollapseFilter);
+            DataBindSectionHeader(repInternalSections, pnlInternalSectionHeader, repInternalSectionHeader, Image2);
+            DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader, Image1);
 
         }
 
-        private void DataBindSectionHeader(Repeater sectionRepeater, Panel sectionHeaderPanel, Repeater sectionHeaderRepeater)
+        private void DataBindSectionHeader(Repeater sectionRepeater, Panel sectionHeaderPanel, Repeater sectionHeaderRepeater,System.Web.UI.WebControls.Image collapseImage)
         {
             if (sectionRepeater.Items.Count > 0)
             {
                 sectionHeaderPanel.Visible = true;
                 sectionHeaderRepeater.DataSource = SelectedDates;
                 sectionHeaderRepeater.DataBind();
+                collapseImage.Style.Add("display", "");
             }
             else
             {
                 sectionHeaderPanel.Visible = false;
+                collapseImage.Style.Add("display", "none");
             }
         }
 
