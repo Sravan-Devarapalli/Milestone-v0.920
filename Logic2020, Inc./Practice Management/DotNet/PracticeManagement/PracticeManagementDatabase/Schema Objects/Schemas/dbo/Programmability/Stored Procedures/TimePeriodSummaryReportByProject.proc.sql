@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
 -- Updated by : Sainath.CH
--- Update Date: 03-29-2012
+-- Update Date: 03-30-2012
 -- Description:  Time Entries grouped by Project for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
@@ -13,9 +13,9 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
 AS
 BEGIN
 
-	DECLARE @Today DATETIME
-	SET @StartDate = CONVERT(DATE,@StartDate)
-	SET @EndDate = CONVERT(DATE,@EndDate)
+	DECLARE @Today DATETIME,@StartDateLocal DATETIME,@EndDateLocal   DATETIME
+	SET @StartDateLocal = CONVERT(DATE,@StartDate)
+	SET @EndDateLocal = CONVERT(DATE,@EndDate)
 	SET @Today = dbo.GettingPMTime(GETUTCDATE())
 
 	;WITH ProjectForeCastedHoursUntilToday AS
@@ -29,7 +29,7 @@ BEGIN
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 	  INNER JOIN dbo.v_PersonCalendar PC ON PC.PersonId = MP.PersonId 
 											AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
-											AND PC.Date BETWEEN @StartDate AND CASE WHEN @EndDate > @Today THEN @Today ELSE  @EndDate END
+											AND PC.Date BETWEEN @StartDateLocal AND CASE WHEN @EndDateLocal > @Today THEN @Today ELSE  @EndDateLocal END
 											AND ( 
 													(PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()) 
 													OR ( PC.CompanyDayOff =1 AND PC.SubstituteDate IS NOT NULL)
@@ -65,7 +65,7 @@ BEGIN
 					Round(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours ELSE 0 END),2) AS NonBillableHours,
 					ROUND(SUM(CASE WHEN (TEH.IsChargeable = 1 AND TE.ChargeCodeDate <= @Today) THEN TEH.ActualHours ELSE 0 END),2) AS BillableHoursUntilToday
 			FROM dbo.TimeEntry TE
-				INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
+				INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal 
 				INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
 				INNER JOIN dbo.Person AS P ON P.PersonId = TE.PersonId 
 			GROUP BY CC.TimeEntrySectionId,
