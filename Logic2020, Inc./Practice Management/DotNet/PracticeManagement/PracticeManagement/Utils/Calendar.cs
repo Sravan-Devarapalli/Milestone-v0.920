@@ -84,6 +84,11 @@ namespace PraticeManagement.Utils
         {
             return now.AddMonths(-1).AddDays(16 - now.AddMonths(-1).Day);
         }
+        //return 16th of the Current month
+        public static DateTime CurrentMonthSecondHalfStartDate(DateTime now)
+        {
+            return now.AddDays(16 - now.AddMonths(-1).Day);
+        }
         //returns 15th of the current month
         public static DateTime MonthFirstHalfEndDate(DateTime now)
         {
