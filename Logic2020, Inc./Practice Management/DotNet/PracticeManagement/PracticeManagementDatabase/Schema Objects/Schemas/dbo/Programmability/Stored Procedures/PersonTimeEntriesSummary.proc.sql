@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
 -- Updated by : Sainath.CH
--- Update Date: 03-29-2012
+-- Update Date: 03-30-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -40,7 +40,7 @@ BEGIN
 			PRO.ProjectId,
 			PRO.Name AS ProjectName, 
 			PRO.ProjectNumber,
-			(CASE WHEN (CC.TimeEntrySectionId <> 1 ) THEN '' ELSE PS.Name  END ) AS PersonStatusName,
+			(CASE WHEN (CC.TimeEntrySectionId <> 1 ) THEN '' ELSE PS.Name  END ) AS ProjectStatusName,
 			(CASE WHEN (PDBR.MinimumValue IS NULL OR CC.TimeEntrySectionId <> 1 ) THEN '' 
 			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 0) THEN 'Fixed'
 			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 1) THEN 'Hourly'
