@@ -2,6 +2,7 @@
     AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
     TagName="TimeEntryReportsHeader" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
@@ -112,6 +113,11 @@
             }
 
             );
+            $("#tblProjectSearchResult").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
         });
 
 
@@ -135,6 +141,12 @@
                     sortForce: [[0, 0]]
                 }
 
+                );
+
+            $("#tblProjectSearchResult").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
                 );
         }
 
@@ -212,10 +224,10 @@
                                     Range:
                                 </td>
                                 <td style="width: 150px;">
-                                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="100%">
+                                    <cc2:customdropdown id="ddlPeriod" runat="server" autopostback="true" onselectedindexchanged="ddlPeriod_SelectedIndexChanged"
+                                        width="100%">
                                         <asp:ListItem Selected="True" Text="Entire Project" Value="*"></asp:ListItem>
-                                    </asp:DropDownList>
+                                    </cc2:customdropdown>
                                 </td>
                                 <td style="width: 40px;">
                                 </td>
@@ -322,30 +334,50 @@
                     </tr>
                     <tr>
                         <td class="WholeWidth">
-                            <asp:Repeater ID="repProjectNamesList" runat="server">
-                                <HeaderTemplate>
-                                    <table class="WholeWidth">
+                            <div style="max-height: 200px; overflow-y: auto;">
+                                <asp:Repeater ID="repProjectNamesList" runat="server">
+                                    <HeaderTemplate>
+                                        <table id="tblProjectSearchResult" class="tablesorter CompPerfTable WholeWidth">
+                                            <thead>
+                                                <tr class="CompPerfHeader">
+                                                    <th style="width: 20%; text-align: center;">
+                                                        <div class="ie-bg">
+                                                            Project
+                                                        </div>
+                                                    </th>
+                                                    <th style="width: 50%; text-align: center;">
+                                                        <div class="ie-bg">
+                                                            Project Name
+                                                        </div>
+                                                    </th>
+                                                    <th style="text-align: center;">
+                                                        <div class="ie-bg">
+                                                            Account
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
                                         <tr>
-                                            <td style="font-weight: bold; padding: 2px;">
-                                                Projects List:
+                                            <td style="text-align: center;">
+                                                <asp:LinkButton ID="lnkProjectNumber" ProjectNumber='<%# Eval("ProjectNumber")%>'
+                                                    OnClick="lnkProjectNumber_OnClick" runat="server"><%# Eval("ProjectNumber")%></asp:LinkButton>
+                                            </td>
+                                            <td>
+                                                <%# Eval("Name")%>
+                                            </td>
+                                            <td>
+                                                <%# Eval("Client.Name")%>
                                             </td>
                                         </tr>
-                                    </table>
-                                    <div style="max-height: 200px; overflow-y: auto;">
-                                        <table class="WholeWidth">
-                                </HeaderTemplate>
-                                <ItemTemplate>
-                                    <tr>
-                                        <td style="padding: 2px;">
-                                            <asp:LinkButton ID="lnkProjectNumber" ProjectNumber='<%# Eval("ProjectNumber")%>'
-                                                OnClick="lnkProjectNumber_OnClick" runat="server"><%# Eval("Name")%></asp:LinkButton>
-                                        </td>
-                                    </tr>
-                                </ItemTemplate>
-                                <FooterTemplate>
-                                    </table></div>
-                                </FooterTemplate>
-                            </asp:Repeater>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        </tbody></table>
+                                    </FooterTemplate>
+                                </asp:Repeater>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -358,7 +390,7 @@
             <div id="divWholePage" runat="server">
                 <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwResourceReport" runat="server">
-                        <asp:Panel style="padding-top:10px;" ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
+                        <asp:Panel Style="padding-top: 10px;" ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
                             <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
                     </asp:View>
