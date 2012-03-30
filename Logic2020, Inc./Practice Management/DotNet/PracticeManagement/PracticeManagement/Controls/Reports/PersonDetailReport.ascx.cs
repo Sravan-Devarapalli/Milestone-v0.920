@@ -155,7 +155,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append(person.CurrentPay.TimescaleName);
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                sb.Append(HostingPage.Range);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.AppendLine();
