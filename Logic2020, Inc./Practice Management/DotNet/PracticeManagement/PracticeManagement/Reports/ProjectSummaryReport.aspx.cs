@@ -233,15 +233,15 @@ namespace PraticeManagement.Reporting
             var listItem = new ListItem("Entire Project", "*");
             DateTime projectStartDate = list.Min(m => m.StartDate);
             DateTime projectEndDate = list.Max(m => m.ProjectedDeliveryDate);
-            listItem.Attributes.Add("startdate", projectStartDate.ToString("MM/dd/YYYY"));
-            listItem.Attributes.Add("enddate", projectEndDate.ToString("MM/dd/YYYY"));
+            listItem.Attributes.Add("startdate", projectStartDate.ToString("MM/dd/yyyy"));
+            listItem.Attributes.Add("enddate", projectEndDate.ToString("MM/dd/yyyy"));
             ddlPeriod.Items.Add(listItem);
 
             foreach (var milestone in list)
             {
                 ListItem li = new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() };
-                li.Attributes.Add("startdate", milestone.StartDate.ToString("MM/dd/YYYY"));
-                li.Attributes.Add("enddate", milestone.StartDate.ToString("MM/dd/YYYY"));
+                li.Attributes.Add("startdate", milestone.StartDate.ToString("MM/dd/yyyy"));
+                li.Attributes.Add("enddate", milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"));
                 ddlPeriod.Items.Add(li);
             }
             ddlPeriod.SelectedValue = "*";
