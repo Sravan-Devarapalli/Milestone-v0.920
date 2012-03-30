@@ -20,12 +20,6 @@
             }
             return true;
         }
-
-        function rbtn_OnClick(rbtn, adminCheckBoxId, value) {
-            var chb = document.getElementById(adminCheckBoxId);
-            chb.disabled = value;
-            chb.checked = false;
-        }
     </script>
     <asp:UpdatePanel ID="upnlTimeTypes" runat="server">
         <ContentTemplate>
@@ -107,7 +101,7 @@
                             <asp:RadioButton ID="rbIsInternal" runat="server" Checked='<%# Bind("IsInternal") %>'
                                 Enabled="false" />
                             <asp:CustomValidator ID="cvIsDefaultOrInternalEdit" runat="server" Display="Dynamic"
-                                ToolTip="WorkType should be Isdefalult Or IsInternal" ErrorMessage="WorkType should be Isdefalult Or IsInternal"
+                                ToolTip="WorkType should be Isdefalult Or IsInternal Or IsAdministrative." ErrorMessage="WorkType should be Isdefalult Or IsInternal Or IsAdministrative."
                                 ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternalEdit_Servervalidate"
                                 Text="*" />
                         </EditItemTemplate>
@@ -120,11 +114,11 @@
                         </HeaderTemplate>
                         <ItemStyle HorizontalAlign="Center" />
                         <ItemTemplate>
-                            <asp:CheckBox ID="chbIsAdministrative" runat="server" Checked='<%# Eval("IsAdministrative") %>'
+                            <asp:RadioButton ID="rbIsAdministrative" runat="server" Checked='<%# Eval("IsAdministrative") %>'
                                 Enabled="false" />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:CheckBox ID="chbIsAdministrative" runat="server" Checked='<%# Bind("IsAdministrative") %>'
+                            <asp:RadioButton ID="rbIsAdministrative" runat="server" Checked='<%# Bind("IsAdministrative") %>'
                                 Enabled="false" />
                         </EditItemTemplate>
                     </asp:TemplateField>
@@ -190,12 +184,12 @@
                     <td align="center" style="width: 10%">
                         <asp:RadioButton ID="rbIsInternal" runat="server" Visible="false" GroupName="rbNewTimeType" />
                         <asp:CustomValidator ID="cvIsDefaultOrInternal" runat="server" Display="Dynamic"
-                            ToolTip="WorkType should be Isdefalult Or IsInternal" ErrorMessage="WorkType should be Isdefalult Or IsInternal"
+                            ToolTip="WorkType should be Isdefalult Or IsInternal Or IsAdministrative." ErrorMessage="WorkType should be Isdefalult Or IsInternal Or IsAdministrative."
                             ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternal_Servervalidate"
                             Text="*" />
                     </td>
                     <td align="center" style="width: 14%">
-                        <asp:CheckBox ID="chbIsAdministrative" runat="server" Visible="false" />
+                        <asp:RadioButton ID="rbIsAdministrative" runat="server" Visible="false" GroupName="rbNewTimeType"/>
                     </td>
                     <td align="center" style="width: 10%">
                         <asp:CheckBox ID="rbIsActive" runat="server" Visible="false" />
