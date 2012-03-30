@@ -2,6 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 02-27-2012
 -- Description:	Gets Salaried Consultants Assigned Days By Projects
+-- Updated by : Sainath.CH
+-- Update Date: 03-30-2012
 -- =============================================
 
 CREATE PROCEDURE [dbo].[GetSalariedConsultantsAssignedDaysByProjects]
@@ -22,7 +24,7 @@ BEGIN
 		JOIN Person Pers ON Pers.PersonId = MP.PersonId AND Pers.IsStrawman = 0
 		JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
 		JOIN Calendar C  ON C.Date Between MPE.StartDate AND MPE.EndDate
-		JOIN Pay pay ON pay.Person = MP.PersonId AND pay.Timescale = 2 AND C.Date Between pay.StartDate AND ISNULL(pay.EndDate,dbo.GetFutureDate())
+		JOIN Pay pay ON pay.Person = MP.PersonId AND pay.Timescale = 2 AND C.Date Between pay.StartDate AND ISNULL(pay.EndDate-1,dbo.GetFutureDate())
 
 		WHERE P.ProjectStatusId = 3 AND PerS.PersonStatusId =1  AND P.ProjectId !=174 AND P.EndDate >= CAST('20120101' AS DATETIME)
 		GROUP BY P.ProjectId,P.ProjectNumber,Pers.LastName ,Pers.FirstName ,C.Date,P.Name,Pers.PersonId 
