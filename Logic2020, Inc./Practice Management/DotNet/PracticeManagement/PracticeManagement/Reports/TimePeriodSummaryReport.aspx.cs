@@ -215,10 +215,6 @@ namespace PraticeManagement.Reporting
 
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
-            var clFromDate = diRange.FindControl("clFromDate") as CalendarExtender;
-            var clToDate = diRange.FindControl("clToDate") as CalendarExtender;
-            hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
-            hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
 
             if (!IsPostBack)
             {
@@ -266,6 +262,12 @@ namespace PraticeManagement.Reporting
             {
                 mpeCustomDates.Show();
             }
+        }
+
+        protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
+        {
+            diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
+            diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
         }
 
         protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
