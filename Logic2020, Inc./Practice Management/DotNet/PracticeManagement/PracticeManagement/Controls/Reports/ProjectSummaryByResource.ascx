@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.ProjectSummaryByResource" %>
 <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
-    height: 90px;" id="tbHeader" runat="server">
+    height: 115px;" id="tbHeader" runat="server">
     <tr>
         <td style="font-size: 14px; font-weight: bold;">
             <table>
@@ -150,7 +150,7 @@
                                 UseSubmitBehavior="false" ToolTip="Export To Excel" />
                         </td>
                         <td>
-                            <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                            <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick" Enabled="false"
                                 UseSubmitBehavior="false" ToolTip="Export To PDF" />
                         </td>
                     </tr>
@@ -163,7 +163,7 @@
             <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
                 <thead>
                     <tr>
-                        <th class="t-left padLeft5" style="width: 300px;">
+                        <th class="t-left padLeft5" style="width: 300px;background-color:White;">
                             Resource
                         </th>
                         <th style="width: 140px;">
