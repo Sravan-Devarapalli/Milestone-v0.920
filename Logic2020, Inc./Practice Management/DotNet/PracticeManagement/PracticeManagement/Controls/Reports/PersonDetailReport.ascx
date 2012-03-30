@@ -34,12 +34,13 @@
     <ItemTemplate>
         <table class="WholeWidthWithHeight">
             <tr style="text-align: left;">
-                <td colspan="4" class="ProjectAccountName" style="width: 95%">
+                <td colspan="4" class="ProjectAccountName" style="width: 95%;">
                     <%# Eval("Client.Name") %>
                     >
                     <%# Eval("Project.ProjectNumber")%>
                     -
                     <%# Eval("Project.Name")%>
+                    <p style="font-style:normal;"><%# GetProjectStatus((string)Eval("Project.Status.Name"))%></p>
                 </td>
                 <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
@@ -68,10 +69,6 @@
                                     <tr>
                                         <td style="text-align: right; font-weight: bold;">
                                             <%# GetDoubleFormat((double)Eval("TotalHours"))%>
-                                        </td>
-                                        <td style="width: 20px">
-                                            <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
-                                                ToolTip="Non-Billable hours are included." Visible='<%# GetNonBillableImageVisibility((double)Eval("NonBillableHours"))%>' />
                                         </td>
                                     </tr>
                                 </table>
