@@ -20,7 +20,7 @@ namespace PraticeManagement.Config
                 if (ViewState["AllTimeTypes"] == null)
                 {
                     System.Collections.Generic.List<TimeTypeRecord> _AllTimeTypes = ServiceCallers.Custom.TimeType(t => t.GetAllTimeTypes()).ToList();
-                    _AllTimeTypes = _AllTimeTypes.AsQueryable().Where(t => t.IsDefault || t.IsInternal).ToList();
+                    _AllTimeTypes = _AllTimeTypes.AsQueryable().Where(t => t.IsDefault || t.IsInternal || t.IsAdministrative).ToList();
                     ViewState["AllTimeTypes"] = _AllTimeTypes;
                 }
                 return (System.Collections.Generic.List<TimeTypeRecord>)ViewState["AllTimeTypes"];
@@ -47,12 +47,11 @@ namespace PraticeManagement.Config
         protected void Page_Load(object sender, EventArgs e)
         {
             mlInsertStatus.ClearMessage();
-            SetAttributesForRbtns(chbIsAdministrative, rbIsInternal, rbIsDefault);
         }
 
         protected void ibtnInsertTimeType_Click(object sender, EventArgs e)
         {
-            rbIsDefault.Checked = false;
+            rbIsDefault.Checked = true;
             showPlusIcon(false);
         }
 
@@ -61,7 +60,7 @@ namespace PraticeManagement.Config
             tbNewTimeType.Text = "New work type";
             ibtnInsertTimeType.Visible = showPlus;
             ibtnInsert.Visible = ibtnCancel.Visible = tbNewTimeType.Visible = rbIsDefault.Visible =
-                rbIsInternal.Visible = chbIsAdministrative.Visible = rbIsActive.Visible = !showPlus;
+            rbIsInternal.Visible = rbIsAdministrative.Visible = rbIsActive.Visible = !showPlus;
             rbIsDefault.Checked = rbIsInternal.Checked = rbIsActive.Checked = !showPlus;
 
             if (!showPlus)
@@ -72,7 +71,7 @@ namespace PraticeManagement.Config
 
         protected void cvIsDefaultOrInternal_Servervalidate(object sender, ServerValidateEventArgs e)
         {
-            if (rbIsDefault.Checked || rbIsInternal.Checked)
+            if (rbIsDefault.Checked || rbIsInternal.Checked || rbIsAdministrative.Checked)
             {
                 e.IsValid = true;
             }
@@ -89,7 +88,8 @@ namespace PraticeManagement.Config
             var gvTimeTypesItem = cvIsDefaultOrInternalEdit.NamingContainer as GridViewRow;
             var rbIsDefault = gvTimeTypesItem.FindControl("rbIsDefault") as RadioButton;
             var rbIsInternal = gvTimeTypesItem.FindControl("rbIsInternal") as RadioButton;
-            if (rbIsDefault.Checked || rbIsInternal.Checked)
+            var rbIsAdministrative = gvTimeTypesItem.FindControl("rbIsAdministrative") as RadioButton;
+            if (rbIsDefault.Checked || rbIsInternal.Checked || rbIsAdministrative.Checked)
             {
                 e.IsValid = true;
             }
@@ -111,7 +111,7 @@ namespace PraticeManagement.Config
                     newTimeType.IsDefault = rbIsDefault.Checked;
                     newTimeType.IsInternal = rbIsInternal.Checked;
                     newTimeType.IsActive = rbIsActive.Checked;
-                    newTimeType.IsAdministrative = chbIsAdministrative.Checked;
+                    newTimeType.IsAdministrative = rbIsAdministrative.Checked;
                     using (var serviceClient = new TimeTypeServiceClient())
                     {
                         serviceClient.AddTimeType(newTimeType);
@@ -148,21 +148,12 @@ namespace PraticeManagement.Config
 
                 var rbIsDefault = e.Row.FindControl("rbIsDefault") as RadioButton;
                 var rbIsInternal = e.Row.FindControl("rbIsInternal") as RadioButton;
-                var chbIsAdministrativerow = e.Row.FindControl("chbIsAdministrative") as CheckBox;
-                SetAttributesForRbtns(chbIsAdministrativerow, rbIsInternal, rbIsDefault);
-
+                var rbIsAdministrativerow = e.Row.FindControl("rbIsAdministrative") as RadioButton;
                 rbIsDefault.GroupName = tt.Name + "GroupName";
                 rbIsInternal.GroupName = tt.Name + "GroupName";
-
+                rbIsAdministrativerow.GroupName = tt.Name + "GroupName";
 
             }
-        }
-
-        private void SetAttributesForRbtns(CheckBox chbIsAdministrativerow, RadioButton rbtnIsInternal, RadioButton rbtnIsDefault)
-        {
-            rbtnIsInternal.Attributes["AdministrativeCheckBoxId"] = chbIsAdministrativerow.ClientID;
-            rbtnIsDefault.Attributes["onclick"] = "rbtn_OnClick(this.id," + "'" + chbIsAdministrativerow.ClientID + "',true);";
-            rbtnIsInternal.Attributes["onclick"] = "rbtn_OnClick(this.id," + "'" + chbIsAdministrativerow.ClientID + "',false);";
         }
 
         protected void imgEdit_OnClick(object sender, EventArgs e)
@@ -220,11 +211,11 @@ namespace PraticeManagement.Config
                         var rbIsDefault = row.FindControl("rbIsDefault") as RadioButton;
                         var rbIsInternal = row.FindControl("rbIsInternal") as RadioButton;
                         var rbIsActive = row.FindControl("rbIsActive") as CheckBox;
-                        var chbIsAdministrativerow = row.FindControl("chbIsAdministrative") as CheckBox;
+                        var rbIsAdministrativerow = row.FindControl("rbIsAdministrative") as CheckBox;
                         timeType.IsDefault = rbIsDefault.Checked;
                         timeType.IsInternal = rbIsInternal.Checked;
                         timeType.IsActive = rbIsActive.Checked;
-                        timeType.IsAdministrative = chbIsAdministrativerow.Checked;
+                        timeType.IsAdministrative = rbIsAdministrativerow.Checked;
                         serviceClient.UpdateTimeType(timeType);
                     }
                     ViewState.Remove("AllTimeTypes");
