@@ -1,109 +1,109 @@
 /*
- * 
- * TableSorter 2.0 - Client-side table sorting with ease!
- * Version 2.0.5b
- * @requires jQuery v1.2.3
- * 
- * Copyright (c) 2007 Christian Bach
- * Examples and docs at: http://tablesorter.com
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- * 
- */
+* 
+* TableSorter 2.0 - Client-side table sorting with ease!
+* Version 2.0.5b
+* @requires jQuery v1.2.3
+* 
+* Copyright (c) 2007 Christian Bach
+* Examples and docs at: http://tablesorter.com
+* Dual licensed under the MIT and GPL licenses:
+* http://www.opensource.org/licenses/mit-license.php
+* http://www.gnu.org/licenses/gpl.html
+* 
+*/
 /**
- * 
- * @description Create a sortable table with multi-column sorting capabilitys
- * 
- * @example $('table').tablesorter();
- * @desc Create a simple tablesorter interface.
- * 
- * @example $('table').tablesorter({ sortList:[[0,0],[1,0]] });
- * @desc Create a tablesorter interface and sort on the first and secound column column headers.
- * 
- * @example $('table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
- *          
- * @desc Create a tablesorter interface and disableing the first and second  column headers.
- *      
- * 
- * @example $('table').tablesorter({ headers: { 0: {sorter:"integer"}, 1: {sorter:"currency"} } });
- * 
- * @desc Create a tablesorter interface and set a column parser for the first
- *       and second column.
- * 
- * 
- * @param Object
- *            settings An object literal containing key/value pairs to provide
- *            optional settings.
- * 
- * 
- * @option String cssHeader (optional) A string of the class name to be appended
- *         to sortable tr elements in the thead of the table. Default value:
- *         "header"
- * 
- * @option String cssAsc (optional) A string of the class name to be appended to
- *         sortable tr elements in the thead on a ascending sort. Default value:
- *         "headerSortUp"
- * 
- * @option String cssDesc (optional) A string of the class name to be appended
- *         to sortable tr elements in the thead on a descending sort. Default
- *         value: "headerSortDown"
- * 
- * @option String sortInitialOrder (optional) A string of the inital sorting
- *         order can be asc or desc. Default value: "asc"
- * 
- * @option String sortMultisortKey (optional) A string of the multi-column sort
- *         key. Default value: "shiftKey"
- * 
- * @option String textExtraction (optional) A string of the text-extraction
- *         method to use. For complex html structures inside td cell set this
- *         option to "complex", on large tables the complex option can be slow.
- *         Default value: "simple"
- * 
- * @option Object headers (optional) An array containing the forces sorting
- *         rules. This option let's you specify a default sorting rule. Default
- *         value: null
- * 
- * @option Array sortList (optional) An array containing the forces sorting
- *         rules. This option let's you specify a default sorting rule. Default
- *         value: null
- * 
- * @option Array sortForce (optional) An array containing forced sorting rules.
- *         This option let's you specify a default sorting rule, which is
- *         prepended to user-selected rules. Default value: null
- * 
- * @option Boolean sortLocaleCompare (optional) Boolean flag indicating whatever
- *         to use String.localeCampare method or not. Default set to true.
- * 
- * 
- * @option Array sortAppend (optional) An array containing forced sorting rules.
- *         This option let's you specify a default sorting rule, which is
- *         appended to user-selected rules. Default value: null
- * 
- * @option Boolean widthFixed (optional) Boolean flag indicating if tablesorter
- *         should apply fixed widths to the table columns. This is usefull when
- *         using the pager companion plugin. This options requires the dimension
- *         jquery plugin. Default value: false
- * 
- * @option Boolean cancelSelection (optional) Boolean flag indicating if
- *         tablesorter should cancel selection of the table headers text.
- *         Default value: true
- * 
- * @option Boolean debug (optional) Boolean flag indicating if tablesorter
- *         should display debuging information usefull for development.
- * 
- * @type jQuery
- * 
- * @name tablesorter
- * 
- * @cat Plugins/Tablesorter
- * 
- * @author Christian Bach/christian.bach@polyester.se
- */
+* 
+* @description Create a sortable table with multi-column sorting capabilitys
+* 
+* @example $('table').tablesorter();
+* @desc Create a simple tablesorter interface.
+* 
+* @example $('table').tablesorter({ sortList:[[0,0],[1,0]] });
+* @desc Create a tablesorter interface and sort on the first and secound column column headers.
+* 
+* @example $('table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
+*          
+* @desc Create a tablesorter interface and disableing the first and second  column headers.
+*      
+* 
+* @example $('table').tablesorter({ headers: { 0: {sorter:"integer"}, 1: {sorter:"currency"} } });
+* 
+* @desc Create a tablesorter interface and set a column parser for the first
+*       and second column.
+* 
+* 
+* @param Object
+*            settings An object literal containing key/value pairs to provide
+*            optional settings.
+* 
+* 
+* @option String cssHeader (optional) A string of the class name to be appended
+*         to sortable tr elements in the thead of the table. Default value:
+*         "header"
+* 
+* @option String cssAsc (optional) A string of the class name to be appended to
+*         sortable tr elements in the thead on a ascending sort. Default value:
+*         "headerSortUp"
+* 
+* @option String cssDesc (optional) A string of the class name to be appended
+*         to sortable tr elements in the thead on a descending sort. Default
+*         value: "headerSortDown"
+* 
+* @option String sortInitialOrder (optional) A string of the inital sorting
+*         order can be asc or desc. Default value: "asc"
+* 
+* @option String sortMultisortKey (optional) A string of the multi-column sort
+*         key. Default value: "shiftKey"
+* 
+* @option String textExtraction (optional) A string of the text-extraction
+*         method to use. For complex html structures inside td cell set this
+*         option to "complex", on large tables the complex option can be slow.
+*         Default value: "simple"
+* 
+* @option Object headers (optional) An array containing the forces sorting
+*         rules. This option let's you specify a default sorting rule. Default
+*         value: null
+* 
+* @option Array sortList (optional) An array containing the forces sorting
+*         rules. This option let's you specify a default sorting rule. Default
+*         value: null
+* 
+* @option Array sortForce (optional) An array containing forced sorting rules.
+*         This option let's you specify a default sorting rule, which is
+*         prepended to user-selected rules. Default value: null
+* 
+* @option Boolean sortLocaleCompare (optional) Boolean flag indicating whatever
+*         to use String.localeCampare method or not. Default set to true.
+* 
+* 
+* @option Array sortAppend (optional) An array containing forced sorting rules.
+*         This option let's you specify a default sorting rule, which is
+*         appended to user-selected rules. Default value: null
+* 
+* @option Boolean widthFixed (optional) Boolean flag indicating if tablesorter
+*         should apply fixed widths to the table columns. This is usefull when
+*         using the pager companion plugin. This options requires the dimension
+*         jquery plugin. Default value: false
+* 
+* @option Boolean cancelSelection (optional) Boolean flag indicating if
+*         tablesorter should cancel selection of the table headers text.
+*         Default value: true
+* 
+* @option Boolean debug (optional) Boolean flag indicating if tablesorter
+*         should display debuging information usefull for development.
+* 
+* @type jQuery
+* 
+* @name tablesorter
+* 
+* @cat Plugins/Tablesorter
+* 
+* @author Christian Bach/christian.bach@polyester.se
+*/
 
 (function ($) {
     $.extend({
-        tablesorter: new
+        tablesorter: new 
         function () {
 
             var parsers = [],
@@ -133,6 +133,28 @@
                 selectorHeaders: 'thead th',
                 debug: false
             };
+
+            function setAlternateRows(tableObj) {
+
+                var rows = tableObj.getElementsByTagName("tr");
+                var i = 0;
+
+                for (var j = 0; j < rows.length; j++)//alternates bg color
+                {
+                    if (rows[j].parentNode.parentNode.id == tableObj.id && rows[j].style.display != "none" && rows[j].parentNode.tagName.toUpperCase() == "TBODY") {
+                        if (i == 0) {
+                            rows[j].style.backgroundColor = "white";
+                            i = 1;
+                        }
+                        else {
+                            rows[j].style.backgroundColor = "#F5FAFF";
+                            i = 0;
+                        }
+                    }
+                }
+
+
+            }
 
             /* debuging utils */
 
@@ -313,7 +335,7 @@
                         }
                     }
                 } else {
-                    if (typeof(config.textExtraction) == "function") {
+                    if (typeof (config.textExtraction) == "function") {
                         text = config.textExtraction(node);
                     } else {
                         text = $(node).text();
@@ -375,6 +397,9 @@
                     $(table).trigger("sortEnd");
                 }, 0);
 
+
+                setAlternateRows(table);
+
             };
 
             function buildHeaders(table) {
@@ -384,7 +409,7 @@
                 }
 
                 var meta = ($.metadata) ? true : false;
-                
+
                 var header_index = computeTableHeaderCellIndexes(table);
 
                 $tableHeaders = $(table.config.selectorHeaders, table).each(function (index) {
@@ -392,12 +417,12 @@
                     this.column = header_index[this.parentNode.rowIndex + "-" + this.cellIndex];
                     // this.column = index;
                     this.order = formatSortingOrder(table.config.sortInitialOrder);
-                    
-					
-					this.count = this.order;
+
+
+                    this.count = this.order;
 
                     if (checkHeaderMetadata(this) || checkHeaderOptions(table, index)) this.sortDisabled = true;
-					if (checkHeaderOptionsSortingLocked(table, index)) this.order = this.lockedOrder = checkHeaderOptionsSortingLocked(table, index);
+                    if (checkHeaderOptionsSortingLocked(table, index)) this.order = this.lockedOrder = checkHeaderOptionsSortingLocked(table, index);
 
                     if (!this.sortDisabled) {
                         var $th = $(this).addClass(table.config.cssHeader);
@@ -438,19 +463,19 @@
                         var rowSpan = c.rowSpan || 1;
                         var colSpan = c.colSpan || 1
                         var firstAvailCol;
-                        if (typeof(matrix[rowIndex]) == "undefined") {
+                        if (typeof (matrix[rowIndex]) == "undefined") {
                             matrix[rowIndex] = [];
                         }
                         // Find first available column in the first row
                         for (var k = 0; k < matrix[rowIndex].length + 1; k++) {
-                            if (typeof(matrix[rowIndex][k]) == "undefined") {
+                            if (typeof (matrix[rowIndex][k]) == "undefined") {
                                 firstAvailCol = k;
                                 break;
                             }
                         }
                         lookup[cellId] = firstAvailCol;
                         for (var k = rowIndex; k < rowIndex + rowSpan; k++) {
-                            if (typeof(matrix[k]) == "undefined") {
+                            if (typeof (matrix[k]) == "undefined") {
                                 matrix[k] = [];
                             }
                             var matrixrow = matrix[k];
@@ -496,12 +521,12 @@
                 };
                 return false;
             }
-			
-			 function checkHeaderOptionsSortingLocked(table, i) {
+
+            function checkHeaderOptionsSortingLocked(table, i) {
                 if ((table.config.headers[i]) && (table.config.headers[i].lockedOrder)) return table.config.headers[i].lockedOrder;
                 return false;
             }
-			
+
             function applyWidget(table) {
                 var c = table.config.widgets;
                 var l = c.length;
@@ -522,7 +547,7 @@
             };
 
             function formatSortingOrder(v) {
-                if (typeof(v) != "Number") {
+                if (typeof (v) != "Number") {
                     return (v.toLowerCase() == "desc") ? 1 : 0;
                 } else {
                     return (v == 1) ? 1 : 0;
@@ -712,6 +737,7 @@
                     var sortCSS = [config.cssDesc, config.cssAsc];
                     // fixate columns if the users supplies the fixedWidth option
                     fixColumnWidth(this);
+
                     // apply event handling to headers
                     // this is to big, perhaps break it out?
                     $headers.click(
@@ -728,10 +754,10 @@
                             var i = this.column;
                             // get current column sort order
                             this.order = this.count++ % 2;
-							// always sort on the locked order.
-							if(this.lockedOrder) this.order = this.lockedOrder;
-							
-							// user only wants to sort on one
+                            // always sort on the locked order.
+                            if (this.lockedOrder) this.order = this.lockedOrder;
+
+                            // user only wants to sort on one
                             // column
                             if (!e[config.sortMultiSortKey]) {
                                 // flush the sort list
@@ -748,7 +774,7 @@
                                         }
                                     }
                                 }
-                               
+
                                 // multi column sorting
                             } else {
                                 // the user has clicked on an all
@@ -778,9 +804,13 @@
 	                                $this[0], config.sortList, cache)
 								);
                             }, 1);
+
+
                             // stop normal event by returning false
                             return false;
                         }
+
+
                         // cancel selection
                     }).mousedown(function () {
                         if (config.cancelSelection) {
@@ -868,7 +898,7 @@
                 if ($.browser.msie) {
                     function empty() {
                         while (this.firstChild)
-                        this.removeChild(this.firstChild);
+                            this.removeChild(this.firstChild);
                     }
                     empty.apply(table.tBodies[0]);
                 } else {
