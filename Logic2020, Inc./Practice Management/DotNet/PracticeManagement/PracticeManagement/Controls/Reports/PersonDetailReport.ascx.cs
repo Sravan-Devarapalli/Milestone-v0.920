@@ -146,10 +146,13 @@ namespace PraticeManagement.Controls.Reports
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 int personId = HostingPage.SelectedPersonId;
-                var person = ServiceCallers.Custom.Person(p => p.GetPersonById(personId));
+                var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append(person.FirstName + ", " + person.LastName);
+                sb.Append(person.FirstName + " " + person.LastName);
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(person.CurrentPay.TimescaleName);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
@@ -235,7 +238,7 @@ namespace PraticeManagement.Controls.Reports
                                 sb.Append("\t");
                                 sb.Append(byWorkType.TotalHours);
                                 sb.Append("\t");
-                                sb.Append(byWorkType.Note);
+                                sb.Append(byWorkType.NoteForExport);
                                 sb.Append("\t");
                                 sb.AppendLine();
                             }
