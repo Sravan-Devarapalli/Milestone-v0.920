@@ -2593,7 +2593,7 @@ TABLE.TimePeriodByproject TD
   padding: 2px 2px 2px 2px;
   border-bottom:1px solid black;
   text-align:center;
-  height:20px;
+  height:16px;
   vertical-align:middle;
 }
 TABLE.TimePeriodByproject TH
@@ -2606,7 +2606,7 @@ TABLE.TimePeriodByproject TH
  font-size:14px;
  text-align:center;
  width:8%;
- height:20px;
+ height:16px;
  vertical-align:middle;
 }
 
