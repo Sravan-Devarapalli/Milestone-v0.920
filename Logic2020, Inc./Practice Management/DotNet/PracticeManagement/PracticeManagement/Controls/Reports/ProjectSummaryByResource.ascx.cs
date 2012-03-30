@@ -127,7 +127,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
 
-        protected string GetDoubleFormat(double value)
+        public string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
         }
@@ -161,6 +161,7 @@ namespace PraticeManagement.Controls.Reports
             ltrlProjectName.Text = project.Name;
             ltrlProjectNumber.Text = project.ProjectNumber;
             ltrlProjectStatus.Text = project.Status.Name;
+            ltrlProjectRange.Text = HostingPage.ProjectRange;
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
