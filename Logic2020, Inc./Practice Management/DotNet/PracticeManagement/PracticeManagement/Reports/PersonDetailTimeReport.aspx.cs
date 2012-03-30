@@ -133,11 +133,11 @@ namespace PraticeManagement.Reporting
                 {
                     if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
                     {
-                        range = StartDate.Value.ToString("MMMM - yyyy");
+                        range = StartDate.Value.ToString("MMMM yyyy");
                     }
                     else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
                     {
-                        range = StartDate.Value.ToString("Year, yyyy");
+                        range = StartDate.Value.ToString("yyyy");
                     }
                     else
                     {
