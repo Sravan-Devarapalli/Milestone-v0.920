@@ -321,6 +321,7 @@ namespace PraticeManagement
         /// <param name="e"></param>
         protected void btnSave_Click(object sender, EventArgs e)
         {
+           
             int viewindex = mvPerson.ActiveViewIndex;
             TableCell CssSelectCell = null;
             foreach (TableCell item in tblPersonViewSwitch.Rows[0].Cells)
@@ -347,6 +348,7 @@ namespace PraticeManagement
                 var person = GetPerson(PersonId);
                 if (person != null)
                 {
+                    gvCompensationHistory.EditIndex = -1;
                     lblEmployeeNumber.Visible = true;
                     txtEmployeeNumber.Visible = true;
                     PayHistory = person.PaymentHistory;
