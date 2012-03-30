@@ -73,7 +73,7 @@ namespace PraticeManagement.Reporting {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlPeriod;
         
         /// <summary>
         /// ddlView control.
