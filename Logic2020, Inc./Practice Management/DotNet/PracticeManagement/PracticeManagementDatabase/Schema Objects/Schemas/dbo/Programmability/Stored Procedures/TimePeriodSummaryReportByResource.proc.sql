@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
 -- Updated by : Sainath.CH
--- Update Date: 03-29-2012
+-- Update Date: 03-30-2012
 -- Description:  Time Entries grouped by Resource for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
@@ -82,7 +82,7 @@ BEGIN
 		INNER JOIN dbo.Person P ON (P.PersonId = Data.PersonId OR AP.PersonId = P.PersonId) AND p.IsStrawman = 0
 		INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
 		LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
-							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate,dbo.GetFutureDate()) 
+							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
 		LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
 		LEFT JOIN PersonDefaultHoursWithInPeriod PDH ON PDH.PersonId = P.PersonId AND PA.Person = PDH.PersonId 
 		ORDER BY P.LastName,P.FirstName
