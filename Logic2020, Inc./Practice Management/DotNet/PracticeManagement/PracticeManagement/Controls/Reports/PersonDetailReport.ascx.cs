@@ -125,9 +125,9 @@ namespace PraticeManagement.Controls.Reports
             return value.ToString(Constants.Formatting.DoubleValue);
         }
 
-        protected bool GetNonBillableImageVisibility(double nonBillableHours)
+        protected string GetProjectStatus(string status)
         {
-            return nonBillableHours > 0;
+            return string.IsNullOrEmpty(status) ? "" : "(" + status + ")";
         }
 
         protected bool GetNoteVisibility(String note)
@@ -173,6 +173,10 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Project Name");
                     sb.Append("\t");
+                    sb.Append("Status");
+                    sb.Append("\t");
+                    sb.Append("Billing");
+                    sb.Append("\t");
                     sb.Append("Phase");
                     sb.Append("\t");
                     sb.Append("Work Type");
@@ -213,6 +217,10 @@ namespace PraticeManagement.Controls.Reports
                                 sb.Append("\t");
                                 sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
                                 sb.Append("\t");
+                                sb.Append(timeEntriesGroupByClientAndProject.Project.Status.Name);
+                                sb.Append("\t");
+                                sb.Append(timeEntriesGroupByClientAndProject.BillableType);
+                                sb.Append("\t");
                                 sb.Append("01");//phase
                                 sb.Append("\t");
                                 sb.Append(byWorkType.TimeType.Code);
@@ -235,9 +243,6 @@ namespace PraticeManagement.Controls.Reports
                     }
                 }
                 else
-                {
-
-                }
                 {
                     sb.Append("This person has not entered Time Entries for the selected period.");
                 }
