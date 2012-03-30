@@ -229,15 +229,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Literal ltrlUtilization;
         
         /// <summary>
-        /// ltrlTotalValue control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlTotalValue;
-        
-        /// <summary>
         /// ltrlBillableHours control.
         /// </summary>
         /// <remarks>
@@ -472,13 +463,22 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl dlPersonDiv;
         
         /// <summary>
-        /// gvPerson control.
+        /// repPersons control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvPerson;
+        protected global::System.Web.UI.WebControls.Repeater repPersons;
+        
+        /// <summary>
+        /// divEmptyResults control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyResults;
     }
 }
 
