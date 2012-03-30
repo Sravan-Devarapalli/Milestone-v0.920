@@ -14,24 +14,6 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <script language="javascript" type="text/javascript">
 
-        function ReAssignStartDateEndDates() {
-            hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
-            hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
-            hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
-            hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= hdnEndDateCalExtenderBehaviourId.ClientID %>');
-
-            var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
-            var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
-            if (startDateCalExtender != null) {
-                startDateCalExtender.set_selectedDate(hdnStartDate.value);
-            }
-            if (endDateCalExtender != null) {
-                endDateCalExtender.set_selectedDate(hdnEndDate.value);
-            }
-
-            var valSummary = document.getElementById('<%= valSumDateRange.ClientID %>');
-            valSummary.style.display = 'none';
-        }
         function btnClose_OnClientClick(popup) {
             var dlPersonDiv = document.getElementById('<%= dlPersonDiv.ClientID %>');
             var txtSearch = document.getElementById('<%= txtSearch.ClientID %>');
@@ -254,8 +236,8 @@
                     sortList: [[0, 0]]
                 }
                 );
-            });
-   
+        });
+
         function pageLoad() {
             SetTooltipsForallDropDowns();
             intializeExpandAll();
@@ -375,8 +357,6 @@
                                 <td style="text-align: left; height: 15px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                                    <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
-                                    <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
                                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
@@ -390,8 +370,8 @@
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
-                CancelControlID="btnCustDatesCancel" BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates"
-                BehaviorID="bhCustomDates" DropShadow="false" OnCancelScript="ReAssignStartDateEndDates();" />
+                BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"  OnClick="btnCustDatesCancel_OnClick" 
+                DropShadow="false" />
             <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
                 CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
                 <table class="WholeWidth">
@@ -602,7 +582,7 @@
                     </tr>
                     <tr>
                         <td style="padding: 10px; width: 100%;" colspan="2">
-                            <div id="dlPersonDiv" class="searchResult" runat="server" style="display:none;">
+                            <div id="dlPersonDiv" class="searchResult" runat="server" style="display: none;">
                                 <asp:Repeater ID="repPersons" runat="server">
                                     <HeaderTemplate>
                                         <table id="tblPersonSearchResult" class="tablesorter CompPerfTable WholeWidth">
@@ -643,10 +623,10 @@
                                         </tr>
                                     </ItemTemplate>
                                     <FooterTemplate>
-                                    </tbody></table>
+                                        </tbody></table>
                                     </FooterTemplate>
                                 </asp:Repeater>
-                                <div id="divEmptyResults" runat="server" style="display:none;">
+                                <div id="divEmptyResults" runat="server" style="display: none;">
                                     No Results found.
                                 </div>
                             </div>
