@@ -22,6 +22,18 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public string ProjectRange
+        {
+            get
+            {
+                ListItem li =  ddlPeriod.SelectedItem;
+                string startDate = li.Attributes["startdate"];
+                string endDate = li.Attributes["enddate"];
+                string milestoneName = li.Text;
+                return milestoneName + "( " + startDate + " - " + endDate + " )";
+            }
+        }
+
 
         #endregion
 
@@ -35,25 +47,10 @@ namespace PraticeManagement.Reporting
 
         }
 
-
         protected void txtProjectNumber_OnTextChanged(object sender, EventArgs e)
-        {
-            var list = ServiceCallers.Custom.Report(r => r.GetMilestonesForProject(ProjectNumber));
-
-            ddlPeriod.Items.Clear();
-            var listItem = new ListItem("Entire Project", "*");
-            ddlPeriod.Items.Add(listItem);
-
-            foreach (var milestone in list)
-            {
-                ddlPeriod.Items.Add(new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() });
-            }
-
-            ddlPeriod.SelectedValue = "*";
-
+        {   
+            PopulateddlPeriod(ProjectNumber);
             LoadActiveView();
-
-
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -63,8 +60,6 @@ namespace PraticeManagement.Reporting
                 LoadActiveView();
             }
         }
-
-
 
         private void LoadActiveView()
         {
@@ -88,13 +83,10 @@ namespace PraticeManagement.Reporting
             }
         }
 
-
-
         protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadActiveView();
         }
-
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -102,8 +94,6 @@ namespace PraticeManagement.Reporting
             LoadActiveView();
 
         }
-
-
 
         private void PopulateByResourceData()
         {
@@ -119,11 +109,7 @@ namespace PraticeManagement.Reporting
                 msgError.ShowErrorMessage(ex.Message);
                 divWholePage.Style.Add("display", "none");
             }
-            //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileHours).ToString() : "0";
-            //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableHours).ToString() : "0";
-
         }
-
 
         protected void btnclose_OnClick(object sender, EventArgs e)
         {
@@ -161,7 +147,6 @@ namespace PraticeManagement.Reporting
             mpeProjectSearch.Show();
 
         }
-
 
         protected void lnkProjectNumber_OnClick(object sender, EventArgs e)
         {
@@ -235,21 +220,31 @@ namespace PraticeManagement.Reporting
         private void PopulateControls(string projectNumber)
         {
             txtProjectNumber.Text = projectNumber;
+            PopulateddlPeriod(projectNumber);
+            LoadActiveView();
+            ClearFilters();
+        }
+
+        private void PopulateddlPeriod(string projectNumber)
+        {
             var list = ServiceCallers.Custom.Report(r => r.GetMilestonesForProject(ProjectNumber));
 
             ddlPeriod.Items.Clear();
             var listItem = new ListItem("Entire Project", "*");
+            DateTime projectStartDate = list.Min(m => m.StartDate);
+            DateTime projectEndDate = list.Max(m => m.ProjectedDeliveryDate);
+            listItem.Attributes.Add("startdate", projectStartDate.ToString("MM/dd/YYYY"));
+            listItem.Attributes.Add("enddate", projectEndDate.ToString("MM/dd/YYYY"));
             ddlPeriod.Items.Add(listItem);
 
             foreach (var milestone in list)
             {
-                ddlPeriod.Items.Add(new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() });
+                ListItem li = new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() };
+                li.Attributes.Add("startdate", milestone.StartDate.ToString("MM/dd/YYYY"));
+                li.Attributes.Add("enddate", milestone.StartDate.ToString("MM/dd/YYYY"));
+                ddlPeriod.Items.Add(li);
             }
-
             ddlPeriod.SelectedValue = "*";
-
-            LoadActiveView();
-            ClearFilters();
         }
     }
 }
