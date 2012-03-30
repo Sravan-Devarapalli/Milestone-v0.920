@@ -121,13 +121,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.CustomValidator cvIsDefaultOrInternal;
         
         /// <summary>
-        /// chbIsAdministrative control.
+        /// rbIsAdministrative control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbIsAdministrative;
+        protected global::System.Web.UI.WebControls.RadioButton rbIsAdministrative;
         
         /// <summary>
         /// rbIsActive control.
