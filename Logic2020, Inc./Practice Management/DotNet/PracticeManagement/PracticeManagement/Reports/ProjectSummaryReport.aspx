@@ -372,17 +372,17 @@
                                         <table id="tblProjectSearchResult" class="tablesorter CompPerfTable WholeWidth">
                                             <thead>
                                                 <tr class="CompPerfHeader">
-                                                    <th style="width: 20%; text-align: center;">
+                                                    <th style="width: 20%; text-align: center;background:url(../images/cp-header-bg.png) repeat-x 0px 0px;">
                                                         <div class="ie-bg">
                                                             Project
                                                         </div>
                                                     </th>
-                                                    <th style="width: 50%; text-align: center;">
+                                                    <th style="width: 50%; text-align: center;background:url(../images/cp-header-bg.png) repeat-x 0px 0px;">
                                                         <div class="ie-bg">
                                                             Project Name
                                                         </div>
                                                     </th>
-                                                    <th style="text-align: center;">
+                                                    <th style="text-align: center;background:url(../images/cp-header-bg.png) repeat-x 0px 0px;">
                                                         <div class="ie-bg">
                                                             Account
                                                         </div>
