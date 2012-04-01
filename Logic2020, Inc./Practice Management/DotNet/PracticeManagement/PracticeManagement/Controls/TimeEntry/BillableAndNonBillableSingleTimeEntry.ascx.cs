@@ -278,8 +278,8 @@ namespace PraticeManagement.Controls.TimeEntry
         private void FillNonBillableControls()
         {
             EnsureChildControls();
-            tbNotes.Text = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
-            hdnNotes.Value = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
+            tbNotes.Text = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value.Trim();
+            hdnNotes.Value = TimeEntryRecordNonBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value.Trim();
             imgNote.ImageUrl
                 = string.IsNullOrEmpty(tbNotes.Text)
                       ? Constants.ApplicationResources.AddCommentIcon
@@ -333,14 +333,14 @@ namespace PraticeManagement.Controls.TimeEntry
             if (element.HasAttributes && element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)) != null)
             {
                 element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value = tbBillableHours.Text;
-                element.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value = tbNotes.Text;
+                element.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value = tbNotes.Text.Trim();
                 element.Attribute(XName.Get(TimeEntry_New.IsDirtyXname)).Value = hfDirtyBillableHours.Value;
             }
             else
             {
                 var time = SettingsHelper.GetCurrentPMTime();
                 element.SetAttributeValue(XName.Get(TimeEntry_New.ActualHoursXname), tbBillableHours.Text);
-                element.SetAttributeValue(XName.Get(TimeEntry_New.NoteXname), tbNotes.Text);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.NoteXname), tbNotes.Text.Trim());
                 element.SetAttributeValue(XName.Get(TimeEntry_New.EntryDateXname), time.ToString(Constants.Formatting.EntryDateFormat));
                 element.SetAttributeValue(XName.Get(TimeEntry_New.IsDirtyXname), hfDirtyBillableHours.Value);
             }
@@ -351,14 +351,14 @@ namespace PraticeManagement.Controls.TimeEntry
             if (element.HasAttributes && element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)) != null)
             {
                 element.Attribute(XName.Get(TimeEntry_New.ActualHoursXname)).Value = tbNonBillableHours.Text;
-                element.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value = tbNotes.Text;
+                element.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value = tbNotes.Text.Trim();
                 element.Attribute(XName.Get(TimeEntry_New.IsDirtyXname)).Value = hfDirtyNonBillableHours.Value;
             }
             else
             {
                 var time = SettingsHelper.GetCurrentPMTime();
                 element.SetAttributeValue(XName.Get(TimeEntry_New.ActualHoursXname), tbNonBillableHours.Text);
-                element.SetAttributeValue(XName.Get(TimeEntry_New.NoteXname), tbNotes.Text);
+                element.SetAttributeValue(XName.Get(TimeEntry_New.NoteXname), tbNotes.Text.Trim());
                 element.SetAttributeValue(XName.Get(TimeEntry_New.EntryDateXname), time.ToString(Constants.Formatting.EntryDateFormat));
                 element.SetAttributeValue(XName.Get(TimeEntry_New.IsDirtyXname), hfDirtyNonBillableHours.Value);
             }
@@ -405,11 +405,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private bool IsValidNote()
         {
-            imgNote.ImageUrl = string.IsNullOrEmpty(tbNotes.Text) ?
+            imgNote.ImageUrl = string.IsNullOrEmpty(tbNotes.Text.Trim()) ?
                         PraticeManagement.Constants.ApplicationResources.AddCommentIcon :
                         PraticeManagement.Constants.ApplicationResources.RecentCommentIcon;
 
-            var note = tbNotes.Text;
+            var note = tbNotes.Text.Trim();
 
             if (hdnIsNoteRequired.Value.ToLowerInvariant() == "true" && (!string.IsNullOrEmpty(tbBillableHours.Text) || !string.IsNullOrEmpty(tbNonBillableHours.Text)))
             {
