@@ -85,24 +85,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.HiddenField hdnEndDate;
         
         /// <summary>
-        /// hdnStartDateCalExtenderBehaviourId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnStartDateCalExtenderBehaviourId;
-        
-        /// <summary>
-        /// hdnEndDateCalExtenderBehaviourId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnEndDateCalExtenderBehaviourId;
-        
-        /// <summary>
         /// lblCustomDateRange control.
         /// </summary>
         /// <remarks>
