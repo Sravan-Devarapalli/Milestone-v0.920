@@ -54,6 +54,7 @@ BEGIN
 	INNER JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
 	LEFT JOIN PersonCalendar PC ON PC.PersonId = @PersonId AND PC.Date = TE.ChargeCodeDate AND PC.TimeTypeId = CC.TimeTypeId AND PC.TimeTypeId = @ORTTimeTypeId
 	LEFT JOIN Person AP ON AP.PersonId = PC.ApprovedBy
+	WHERE  ((@EndDateLocal < '20120401') OR  ((@EndDateLocal >= '20120401') AND CC.ProjectId != 174 ))
 
 	
 	--List of Charge codes with recursive flag.
@@ -75,7 +76,10 @@ BEGIN
 	INNER JOIN Client C ON C.ClientId = ISNULL(CC.ClientId, PTRS.ClientId)
 	LEFT JOIN ProjectGroup PG ON PG.GroupId = ISNULL(CC.ProjectGroupId, PTRS.ProjectGroupId)
 	INNER JOIN Project P ON P.ProjectId = ISNULL(CC.ProjectId, PTRS.ProjectId)
-	WHERE ISNULL(PTRS.PersonId, @PersonId) = @PersonId AND (CC.Id IS NULL AND PTRS.StartDate < @EndDateLocal AND ISNULL(PTRS.EndDate,dbo.GetFutureDate()) > @StartDateLocal) OR CC.Id IS NOT NULL
+	WHERE (ISNULL(PTRS.PersonId, @PersonId) = @PersonId 
+			AND (CC.Id IS NULL AND PTRS.StartDate < @EndDateLocal AND ISNULL(PTRS.EndDate,dbo.GetFutureDate()) > @StartDateLocal) 
+			OR CC.Id IS NOT NULL)
+			AND ((@EndDateLocal < '20120401') OR  ((@EndDateLocal >= '20120401') AND ISNULL(CC.ProjectId, PTRS.ProjectId) != 174 ))
 	UNION
 	SELECT CC.TimeEntrySectionId AS 'TimeEntrySectionId',
 		CC.Id AS 'ChargeCodeId', 
