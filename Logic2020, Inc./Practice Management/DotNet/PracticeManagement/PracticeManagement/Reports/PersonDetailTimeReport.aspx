@@ -370,7 +370,7 @@
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
-                BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" 
+                BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
                 DropShadow="false" />
             <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
                 CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
@@ -386,7 +386,8 @@
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
                                 Style="float: none !Important;" CausesValidation="true" />
                             &nbsp; &nbsp;
-                            <asp:Button ID="btnCustDatesCancel" runat="server" CausesValidation="false" Text="Cancel"  OnClick="btnCustDatesCancel_OnClick"  Style="float: none !Important;" />
+                            <asp:Button ID="btnCustDatesCancel" runat="server" CausesValidation="false" Text="Cancel"
+                                OnClick="btnCustDatesCancel_OnClick" Style="float: none !Important;" />
                         </td>
                     </tr>
                     <tr>
@@ -595,12 +596,12 @@
                                                     </th>
                                                     <th style="text-align: center;">
                                                         <div class="ie-bg">
-                                                            Status
+                                                            Pay Type
                                                         </div>
                                                     </th>
                                                     <th style="text-align: center;">
                                                         <div class="ie-bg">
-                                                            PayType
+                                                            Status
                                                         </div>
                                                     </th>
                                                 </tr>
