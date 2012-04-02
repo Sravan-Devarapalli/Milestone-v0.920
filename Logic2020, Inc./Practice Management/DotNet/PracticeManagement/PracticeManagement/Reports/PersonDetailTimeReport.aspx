@@ -334,12 +334,15 @@
                                         Width="150px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
                                         <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
                                         <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
                                         <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
                                         <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
                                         <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                                        <asp:ListItem Text="Total Employment" Value="-1"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                             </tr>
