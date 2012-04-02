@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
 -- Updated by : Sainath.CH
--- Update Date: 03-30-2012
+-- Update Date: 04-02-2012
 -- Description:  Time Entries grouped by Resource for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
@@ -61,7 +61,7 @@ BEGIN
 			ISNULL(Data.InternalHours,0) AS InternalHours,
 			ISNULL(Data.AdminstrativeHours,0) AS AdminstrativeHours,
 			ISNULL(ROUND(CASE WHEN ISNULL(PDH.DefaultHours,0) = 0 THEN 0 ELSE (Data.ActualHours * 100 )/PDH.DefaultHours END,0),0) AS UtlizationPercent,
-			TS.Name AS Timescale
+			CASE WHEN P.PersonStatusId = 2 THEN 'Terminated' ELSE TS.Name END AS Timescale
 	FROM  
 		(
 			SELECT  TE.PersonId,
@@ -76,6 +76,8 @@ BEGIN
 															AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
 						INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
 						INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
+						INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
+					WHERE Pro.ProjectNumber != 'P031000' AND TE.ChargeCodeDate < ISNULL(P.TerminationDate,dbo.GetFutureDate())	
 					GROUP BY TE.PersonId
 		) Data
 		FULL JOIN AssignedPersons AP ON AP.PersonId = Data.PersonId 
@@ -84,6 +86,7 @@ BEGIN
 		LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
 							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
 		LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
-		LEFT JOIN PersonDefaultHoursWithInPeriod PDH ON PDH.PersonId = P.PersonId AND PA.Person = PDH.PersonId 
+		LEFT JOIN PersonDefaultHoursWithInPeriod PDH ON PDH.PersonId = P.PersonId 
 		ORDER BY P.LastName,P.FirstName
 END
+
