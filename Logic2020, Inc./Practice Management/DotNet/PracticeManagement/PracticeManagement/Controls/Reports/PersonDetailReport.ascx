@@ -70,6 +70,10 @@
                                         <td style="text-align: right; font-weight: bold;">
                                             <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                                         </td>
+                                        <td style="width: 20px">
+                                            <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                                ToolTip="Non-Billable hours are included." Visible='<%# GetNonBillableImageVisibility((double)Eval("NonBillableHours"))%>' />
+                                        </td>
                                     </tr>
                                 </table>
                             </td>
