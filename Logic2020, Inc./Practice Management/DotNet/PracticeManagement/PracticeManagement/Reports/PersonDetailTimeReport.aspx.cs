@@ -34,7 +34,7 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.WeekStartDate(now);
                             }
-                            else if (selectedVal == 30)
+                            else if (selectedVal == 30 || selectedVal == 15)
                             {
                                 return Utils.Calendar.MonthStartDate(now);
                             }
@@ -50,13 +50,28 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.LastWeekStartDate(now);
                             }
+                            else if (selectedVal == -15)
+                            {
+                                if (now.Day < 16)
+                                {
+                                    return Utils.Calendar.LastMonthSecondHalfStartDate(now);
+                                }
+                                else
+                                {
+                                    return Utils.Calendar.CurrentMonthSecondHalfStartDate(now);
+                                }
+                            }
                             else if (selectedVal == -30)
                             {
                                 return Utils.Calendar.LastMonthStartDate(now);
                             }
-                            else
+                            else if (selectedVal == -365)
                             {
                                 return Utils.Calendar.LastYearStartDate(now);
+                            }
+                            else if (selectedVal == -1)
+                            {
+                                return SelectedPerson.HireDate;
                             }
                         }
                         else
@@ -86,15 +101,23 @@ namespace PraticeManagement.Reporting
                         DateTime firstDay = new DateTime(now.Year, now.Month, 1);
                         if (selectedVal > 0)
                         {
+                            //7
+                            //15
+                            //30
+                            //365
                             if (selectedVal == 7)
                             {
                                 return Utils.Calendar.WeekEndDate(now);
+                            }
+                            else if (selectedVal == 15)
+                            {
+                                return Utils.Calendar.MonthFirstHalfEndDate(now);
                             }
                             else if (selectedVal == 30)
                             {
                                 return Utils.Calendar.MonthEndDate(now);
                             }
-                            else
+                            else if (selectedVal == 365)
                             {
                                 return Utils.Calendar.YearEndDate(now);
                             }
@@ -105,13 +128,36 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.LastWeekEndDate(now);
                             }
+                            else if (selectedVal == -15)
+                            {
+                                if (now.Day < 16)
+                                {
+                                    return Utils.Calendar.LastMonthEndDate(now);
+                                }
+                                else
+                                {
+                                    return now;
+                                }
+                            }
                             else if (selectedVal == -30)
                             {
                                 return Utils.Calendar.LastMonthEndDate(now);
                             }
-                            else
+                            else if (selectedVal == -365)
                             {
                                 return Utils.Calendar.LastYearEndDate(now);
+                            }
+                            else if (selectedVal == -1)
+                            {
+                                if (SelectedPerson.TerminationDate.HasValue)
+                                {
+                                    return SelectedPerson.TerminationDate;
+                                }
+                                else
+                                {
+                                    return now;
+                                }
+
                             }
                         }
                         else
@@ -129,19 +175,27 @@ namespace PraticeManagement.Reporting
             get
             {
                 string range = string.Empty;
-                if (StartDate.HasValue && EndDate.HasValue)
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal) && StartDate.HasValue && EndDate.HasValue)
                 {
-                    if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
+                    if (selectedVal == -1)
                     {
-                        range = StartDate.Value.ToString("MMMM yyyy");
-                    }
-                    else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
-                    {
-                        range = StartDate.Value.ToString("yyyy");
+                        range = "Total Employment (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
                     }
                     else
                     {
-                        range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                        if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
+                        {
+                            range = StartDate.Value.ToString("MMMM yyyy");
+                        }
+                        else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
+                        {
+                            range = StartDate.Value.ToString("yyyy");
+                        }
+                        else
+                        {
+                            range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                        }
                     }
                 }
                 return range;
@@ -153,6 +207,29 @@ namespace PraticeManagement.Reporting
             get
             {
                 return Convert.ToInt32(ddlPerson.SelectedValue);
+            }
+        }
+
+        public Person SelectedPerson
+        {
+            get
+            {
+                Person person;
+                if (ViewState["SelectedPerson"] == null)
+                {
+                    person = ServiceCallers.Custom.Person(p => p.GetPersonById(SelectedPersonId));
+                    ViewState["SelectedPerson"] = person;
+                }
+                else
+                {
+                    person = (Person)ViewState["SelectedPerson"];
+                    if (person.Id != SelectedPersonId)
+                    {
+                        person = ServiceCallers.Custom.Person(p => p.GetPersonById(SelectedPersonId));
+                        ViewState["SelectedPerson"] = person;
+                    }
+                }
+                return person;
             }
         }
 
@@ -222,7 +299,6 @@ namespace PraticeManagement.Reporting
                 mpeCustomDates.Show();
             }
         }
-
 
         protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
         {
