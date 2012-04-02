@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
 -- Updated by : Sainath.CH
--- Update Date: 03-30-2012
+-- Update Date: 04-02-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -61,6 +61,7 @@ BEGIN
 	LEFT JOIN PersonByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId 
 	WHERE TE.PersonId = @PersonId 
 		AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+		AND Pro.ProjectNumber != 'P031000'
 	GROUP BY CC.TimeEntrySectionId,
 			C.Name,
 			C.Code,
