@@ -18,7 +18,6 @@ namespace PraticeManagement.Controls.Reports
             get { return ((PraticeManagement.Reporting.PersonDetailTimeReport)Page); }
         }
 
-
         public List<TimeEntriesGroupByClientAndProject> TimeEntriesGroupByClientAndProjectList
         {
             get
@@ -30,7 +29,6 @@ namespace PraticeManagement.Controls.Reports
                 ViewState["TimeEntriesGroupByClientAndProjectList_Key_Detail"] = value;
             }
         }
-
 
         private List<KeyValuePair<string, string>> CollapsiblePanelExtenderClientIds
         {
@@ -140,6 +138,10 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
+        protected bool GetNonBillableImageVisibility(double nonBillableHours)
+        {
+            return nonBillableHours > 0;
+        }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
