@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Details By Period.
 -- Updated by : Sainath.CH
--- Update Date: 03-30-2012
+-- Update Date: 04-02-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesDetails]
 (
@@ -75,7 +75,9 @@ BEGIN
 	  INNER JOIN dbo.ProjectStatus PS ON PRO.ProjectStatusId = PS.ProjectStatusId
 	  INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
 	  LEFT JOIN PersonDayWiseByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId  AND PDBR.Date = TE.ChargeCodeDate
-	  WHERE TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+	  WHERE TE.PersonId = @PersonId 
+			AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+			AND Pro.ProjectNumber != 'P031000'
 	  GROUP BY	CC.TimeEntrySectionId,
 				C.ClientId,
 				C.Name,
