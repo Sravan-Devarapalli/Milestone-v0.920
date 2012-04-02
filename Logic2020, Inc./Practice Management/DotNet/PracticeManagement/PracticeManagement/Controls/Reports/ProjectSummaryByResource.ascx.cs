@@ -50,6 +50,7 @@ namespace PraticeManagement.Controls.Reports
             if (reportData.Count() > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
+                tbHeader.Style["display"] = "";
                 repResource.Visible = true;
                 repResource.DataSource = reportData;
                 repResource.DataBind();
@@ -58,6 +59,7 @@ namespace PraticeManagement.Controls.Reports
             else
             {
                 divEmptyMessage.Style["display"] = "";
+                tbHeader.Style["display"] = "none";
                 repResource.Visible = false;
             }
 
@@ -122,8 +124,8 @@ namespace PraticeManagement.Controls.Reports
                 sb.AppendLine();
             }
 
-
             var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByResource");
+            filename = filename.Replace(' ', '_');
             GridViewExportUtil.Export(filename, sb);
 
         }
@@ -162,7 +164,7 @@ namespace PraticeManagement.Controls.Reports
             ltrlProjectNumber.Text = project.ProjectNumber;
             ltrlProjectStatus.Text = project.Status.Name;
             ltrlProjectRange.Text = HostingPage.ProjectRange;
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
+            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
