@@ -1,16 +1,18 @@
-﻿
--- =============================================
+﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 8-04-2008
--- Updated by:	Anatoliy Lokshin
--- Update date: 9-09-2008
+-- Updated by:	SainathC
+-- Update date: 04-03-2012
 -- Description:	Verifies the UserName uniquness for the dbo.Person table.
 -- =============================================
 CREATE VIEW dbo.v_Person
 AS
+BEGIN
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
+		   P.IsOffshore,
+		   p.PaychexID,
 	       p.PTODaysPerAnnum,
 	       p.HireDate,
 	       p.TerminationDate,
@@ -44,4 +46,4 @@ AS
 	       LEFT JOIN dbo.Seniority AS e ON p.SeniorityId = e.SeniorityId
 	       LEFT JOIN dbo.Person AS manager ON p.ManagerId = manager.PersonId
 
-
+END
