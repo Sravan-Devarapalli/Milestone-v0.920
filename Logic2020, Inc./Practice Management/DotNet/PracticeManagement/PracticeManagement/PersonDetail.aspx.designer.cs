@@ -337,6 +337,42 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custIsDefautManager;
         
         /// <summary>
+        /// ddlPersonType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlPersonType;
+        
+        /// <summary>
+        /// lbPayChexID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbPayChexID;
+        
+        /// <summary>
+        /// txtPayCheckId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPayCheckId;
+        
+        /// <summary>
+        /// ftePayCheckId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender ftePayCheckId;
+        
+        /// <summary>
         /// txtTelephoneNumber control.
         /// </summary>
         /// <remarks>
