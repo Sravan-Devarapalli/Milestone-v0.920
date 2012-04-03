@@ -402,7 +402,7 @@ namespace PraticeManagement.Reporting
             ltrlUtilization.Text = ((int)utlizationPercentage).ToString() + "%";
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
+            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
 
