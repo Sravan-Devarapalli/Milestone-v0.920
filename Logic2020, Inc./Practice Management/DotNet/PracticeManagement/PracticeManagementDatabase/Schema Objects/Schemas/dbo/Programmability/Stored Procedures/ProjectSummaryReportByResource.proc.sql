@@ -3,16 +3,24 @@
 -- Create date: 03-15-2012
 -- Description:  Time Entries grouped by workType and Resource for a Project.
 -- Updated by : Sainath.CH
--- Update Date: 03-30-2012
+-- Update Date: 04-03-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectSummaryReportByResource]
 (
 	@ProjectNumber NVARCHAR(12),
-	@MilestoneId   INT = NULL
+	@MilestoneId   INT = NULL,
+	@StartDate DATETIME = NULL,
+	@EndDate   DATETIME = NULL
 )
 AS
 BEGIN
 
+	IF(@StartDate IS NOT NULL AND @EndDate IS NOT NULL)
+	BEGIN
+		SET @StartDate = CONVERT(DATE,@StartDate)
+		SET @EndDate = CONVERT(DATE,@EndDate)
+	END
+	
 	DECLARE @ProjectId INT = NULL, @Today DATETIME,@MilestoneStartDate DATETIME = NULL,@MilestoneEndDate DATETIME = NULL
 
 	SELECT @ProjectId = P.ProjectId
@@ -43,8 +51,10 @@ BEGIN
 	  FROM  dbo.MilestonePersonEntry AS MPE 
 	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+	  INNER JOIN dbo.Calendar AS C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate AND C.DayOff = 0  
 	  LEFT  JOIN dbo.PersonRole AS PR ON PR.PersonRoleId = MPE.PersonRoleId
 	  WHERE  M.ProjectId = @ProjectId AND (@MilestoneId IS NULL OR M.MilestoneId = @MilestoneId)
+	   AND ((@StartDate IS NULL AND @EndDate IS NULL) OR (C.Date BETWEEN  @StartDate AND @EndDate))
 	  GROUP BY MP.PersonId
 	)
 	,PersonForeCastedHours AS
@@ -57,6 +67,7 @@ BEGIN
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 	  INNER JOIN dbo.Calendar AS C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate AND C.DayOff = 0  
 	  WHERE  M.ProjectId = @ProjectId  AND (@MilestoneId IS NULL OR M.MilestoneId = @MilestoneId)
+	  AND ((@StartDate IS NULL AND @EndDate IS NULL) OR (C.Date BETWEEN  @StartDate AND @EndDate))
 	  GROUP BY MP.PersonId
 	)
 
@@ -74,7 +85,9 @@ BEGIN
 		   ROUND(MAX(ISNULL(PFH.ForecastedHoursUntilToday,0)),2) AS ForecastedHoursUntilToday,
 		   ROUND(MAX(ISNULL(PFH.ForecastedHours,0)),2) AS ForecastedHours
 	FROM dbo.TimeEntry AS TE
-	INNER JOIN dbo.TimeEntryHours AS TEH ON TEH.TimeEntryId = TE.TimeEntryId AND ((@MilestoneId IS NULL) OR (TE.ChargeCodeDate BETWEEN @MilestoneStartDate AND @MilestoneEndDate))
+	INNER JOIN dbo.TimeEntryHours AS TEH ON TEH.TimeEntryId = TE.TimeEntryId 
+										AND ((@MilestoneId IS NULL) OR (TE.ChargeCodeDate BETWEEN @MilestoneStartDate AND @MilestoneEndDate))
+										AND ((@StartDate IS NULL AND @EndDate IS NULL) OR (TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate))
 	INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TE.ChargeCodeId AND CC.ProjectId = @ProjectId
 	FULL  JOIN PersonMaxRoleValues AS PMRV ON PMRV.PersonId = TE.PersonId 
 	INNER JOIN dbo.Person AS P ON (P.PersonId = TE.PersonId OR  PMRV.PersonId = P.PersonId) AND p.IsStrawman = 0
