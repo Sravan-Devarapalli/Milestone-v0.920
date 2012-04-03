@@ -225,6 +225,14 @@ namespace PraticeManagement
                 PersonStatusId = PersonStatusType.Projected;
             }
             recruiterInfo.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
+            if (UserIsAdministrator)
+            {
+                lbPayChexID.Visible = txtPayCheckId.Visible = true;
+            }
+            else
+            {
+                lbPayChexID.Visible = txtPayCheckId.Visible = false;
+            }
 
             //if (!UserIsAdministrator)
             //{
@@ -881,6 +889,8 @@ namespace PraticeManagement
                 person.TerminationDate.HasValue ? person.TerminationDate.Value : DateTime.MinValue;
             txtEmailAddress.Text = person.Alias;
             txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
+            ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
+            txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
 
             PopulatePracticeDropDown(person);
 
@@ -936,6 +946,8 @@ namespace PraticeManagement
             person.LastName = txtLastName.Text;
             person.HireDate = dtpHireDate.DateValue;
 
+            person.IsOffshore = ddlPersonType.SelectedValue == "1";
+            person.PaychexID = txtPayCheckId.Text;
             person.TerminationDate = dtpTerminationDate.DateValue != DateTime.MinValue ? (DateTime?)dtpTerminationDate.DateValue : null;
 
             person.Alias = txtEmailAddress.Text;
