@@ -19,7 +19,9 @@
 	MiddleName		   NVARCHAR (40)  NULL,
 	ImageUrl		   NVARCHAR (MAX) NULL,
 	ModifiedDate	   DATETIME		  NULL,
-	IsStrawman		   BIT			  NOT NULL
+	IsStrawman		   BIT			  NOT NULL,
+	IsOffshore		   BIT			  NOT NULL CONSTRAINT DF_Person_IsOffshore DEFAULT(0),
+	PaychexID		   NVARCHAR (MAX) NULL
 );
 
 
