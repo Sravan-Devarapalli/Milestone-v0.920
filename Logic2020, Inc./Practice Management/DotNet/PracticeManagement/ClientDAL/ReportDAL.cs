@@ -739,6 +739,7 @@ namespace DataAccess
                 int juryDutyHoursIndex = reader.GetOrdinal(Constants.ColumnNames.JuryDutyHours);
                 int bereavementHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BereavementHours);
                 int oRTHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ORTHours);
+                int paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
 
                 while (reader.Read())
                 {
@@ -752,7 +753,8 @@ namespace DataAccess
                         CurrentPay = new Pay
                         {
                             TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
-                        }
+                        },
+                        PaychexID = reader.IsDBNull(paychexIDIndex) ? string.Empty : reader.GetString(paychexIDIndex)
                     };
                     PLPC.Person = person;
                     PLPC.BranchID = reader.GetInt32(branchIDIndex);
