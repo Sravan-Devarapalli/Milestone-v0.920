@@ -150,9 +150,9 @@
                                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
                                         Width="150px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
-                                        <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
+                                        <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
                                         <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
                                         <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
                                         <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
@@ -265,6 +265,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="tpByResource$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpByResource$btnPayCheckExport" />
             <asp:PostBackTrigger ControlID="tpByProject$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
