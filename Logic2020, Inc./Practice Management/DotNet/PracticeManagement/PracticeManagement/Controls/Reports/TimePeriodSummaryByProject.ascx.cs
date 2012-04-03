@@ -63,7 +63,10 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("TimePeriod_ByProject Report");
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                sb.Append(TimeEntriesGroupByProject.Count + " Projects");
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(HostingPage.Range);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.AppendLine();
@@ -149,18 +152,16 @@ namespace PraticeManagement.Controls.Reports
             if (TimeEntriesGroupByProject.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
-                tbHeader.Style["display"] = "";
                 repProject.Visible = true;
                 repProject.DataSource = reportData;
                 repProject.DataBind();
-                PopulateHeaderSection();
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
-                tbHeader.Style["display"] = "none";
                 repProject.Visible = false;
             }
+            PopulateHeaderSection();
         }
 
         private void PopulateHeaderSection()
@@ -177,8 +178,8 @@ namespace PraticeManagement.Controls.Reports
             }
             ltProjectCount.Text = noOfEmployees + " Projects";
             lbRange.Text = HostingPage.Range;
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
-            ltrlAvgHours.Text = ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
+            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
+            ltrlAvgHours.Text = noOfEmployees > 0 ? ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValue):"0.00";
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
