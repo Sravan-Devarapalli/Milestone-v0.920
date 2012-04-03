@@ -18,6 +18,8 @@ namespace PraticeManagement.Controls.Reports
             get { return ((PraticeManagement.Reporting.PersonDetailTimeReport)Page); }
         }
 
+        private int SectionId;
+
         public List<TimeEntriesGroupByClientAndProject> TimeEntriesGroupByClientAndProjectList
         {
             get
@@ -81,7 +83,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 var repDate = e.Item.FindControl("repDate") as Repeater;
                 TimeEntriesGroupByClientAndProject dataitem = (TimeEntriesGroupByClientAndProject)e.Item.DataItem;
-             
+                SectionId = dataitem.Project.TimeEntrySectionId;
                 repDate.DataSource = dataitem.DayTotalHours;
                 repDate.DataBind();
 
@@ -140,7 +142,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected bool GetNonBillableImageVisibility(double nonBillableHours)
         {
-            return nonBillableHours > 0;
+            return SectionId == 1 && nonBillableHours > 0;
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
