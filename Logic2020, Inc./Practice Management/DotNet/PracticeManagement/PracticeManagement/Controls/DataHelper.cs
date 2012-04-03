@@ -1937,7 +1937,7 @@ namespace PraticeManagement.Controls
             {
                 foreach (var person in persons)
                 {
-                    var itemText = person.FirstName + ", " + person.LastName;
+                    var itemText = person.LastName + ", " + person.FirstName;
                     var item = new ListItem(itemText, person.Id.Value.ToString());
 
                     control.Items.Add(item);
