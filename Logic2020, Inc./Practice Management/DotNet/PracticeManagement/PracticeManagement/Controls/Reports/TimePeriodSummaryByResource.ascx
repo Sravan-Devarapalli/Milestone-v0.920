@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByResource" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom:5px !important; height:90px;" id="tbHeader" runat="server">
+<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom:5px !important; height:90px;">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
             <table>
@@ -152,6 +152,10 @@
                         <td>
                             <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
                                 Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
+                        </td>
+                          <td>
+                            <asp:Button ID="btnPayCheckExport" runat="server" Text="PayChex" OnClick="btnPayCheckExport_OnClick"
+                               UseSubmitBehavior="false" ToolTip="Export PayChex" />
                         </td>
                     </tr>
                 </table>
