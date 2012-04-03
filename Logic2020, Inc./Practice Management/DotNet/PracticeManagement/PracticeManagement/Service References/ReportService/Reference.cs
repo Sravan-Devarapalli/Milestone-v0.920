@@ -34,7 +34,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] TimePeriodSummaryReportByWorkType(System.DateTime startDate, System.DateTime endDate, string timeTypeCategoryIds, string orderByCerteria);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByResource", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByResourceResponse")]
-        DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, System.Nullable<int> mileStoneId);
+        DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse")]
         DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria);
@@ -47,6 +47,9 @@ namespace PraticeManagement.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetMilestonesForProject", ReplyAction="http://tempuri.org/IReportService/GetMilestonesForProjectResponse")]
         DataTransferObjects.Milestone[] GetMilestonesForProject(string projectNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheck", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheckResponse")]
+        DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -58,7 +61,6 @@ namespace PraticeManagement.ReportService {
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
        
-        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -99,8 +101,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.TimePeriodSummaryReportByWorkType(startDate, endDate, timeTypeCategoryIds, orderByCerteria);
         }
         
-        public DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, System.Nullable<int> mileStoneId) {
-            return base.Channel.ProjectSummaryReportByResource(projectNumber, mileStoneId);
+        public DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate) {
+            return base.Channel.ProjectSummaryReportByResource(projectNumber, mileStoneId, startDate, endDate);
         }
         
         public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria) {
@@ -117,6 +119,10 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Milestone[] GetMilestonesForProject(string projectNumber) {
             return base.Channel.GetMilestonesForProject(projectNumber);
+        }
+        
+        public DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.TimePeriodSummaryByResourcePayCheck(startDate, endDate);
         }
     }
 }
