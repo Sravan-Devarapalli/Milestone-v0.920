@@ -7,7 +7,7 @@
 -- =============================================
 CREATE VIEW dbo.v_Person
 AS
-BEGIN
+
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
@@ -46,4 +46,4 @@ BEGIN
 	       LEFT JOIN dbo.Seniority AS e ON p.SeniorityId = e.SeniorityId
 	       LEFT JOIN dbo.Person AS manager ON p.ManagerId = manager.PersonId
 
-END
+
