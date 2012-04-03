@@ -88,6 +88,8 @@ namespace DataAccess
         private const string CounselorIdParam = "@CounselorId";
         private const string TimeScaleIdsParam = "@TimescaleIds";
         private const string PersonStatusIdsParam = "@PersonStatusIds";
+        private const string IsOffshoreParam = "@IsOffshore";
+        private const string PaychexIDParam = "@PaychexID";
 
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
@@ -843,6 +845,8 @@ namespace DataAccess
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(UserLoginParam,
                                                 !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+                command.Parameters.AddWithValue(IsOffshoreParam,person.IsOffshore);
+                command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(
@@ -952,6 +956,8 @@ namespace DataAccess
                                                 !string.IsNullOrEmpty(person.EmployeeNumber)
                                                     ? (object)person.EmployeeNumber
                                                     : DBNull.Value);
+                command.Parameters.AddWithValue(IsOffshoreParam, person.IsOffshore);
+                command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(
@@ -2308,6 +2314,26 @@ namespace DataAccess
                     int isDefManagerIndex;
                     int IsWelcomeEmailSentIndex;
                     int isStrawManIndex;
+                    int isOffshoreIndex;
+                    int paychexIDIndex;
+
+                    try
+                    {
+                        isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+                    }
+                    catch
+                    {
+                        isOffshoreIndex = -1;
+                    }
+                    
+                    try
+                    {
+                        paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
+                    }
+                    catch
+                    {
+                        paychexIDIndex = -1;
+                    }
 
                     try
                     {
@@ -2424,6 +2450,16 @@ namespace DataAccess
                         if (isStrawManIndex > -1)
                         {
                             person.IsStrawMan = reader.GetBoolean(isStrawManIndex);
+                        }
+
+                        if (isOffshoreIndex > -1)
+                        {
+                            person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
+                        }
+
+                        if (paychexIDIndex > -1)
+                        {
+                            person.PaychexID = reader.IsDBNull(paychexIDIndex) ? null : reader.GetString(paychexIDIndex);
                         }
 
                         if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
