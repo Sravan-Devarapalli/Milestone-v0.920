@@ -106,6 +106,7 @@ namespace DataAccess
                 int timeTypeCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeCodeColumn);
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
+                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
 
                 while (reader.Read())
                 {
@@ -146,7 +147,8 @@ namespace DataAccess
                             Status = new ProjectStatus
                             {
                                 Name = reader.GetString(projectStatusNameIndex)
-                            }
+                            },
+                            TimeEntrySectionId = reader.GetInt32(timeEntrySectionIdIndex)
                         }
                         ,
                         Client = new Client()
@@ -516,7 +518,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? milestoneId)
+        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByResource, connection))
@@ -524,6 +526,8 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
                 command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
 
                 command.CommandTimeout = connection.ConnectionTimeout;
 
@@ -692,6 +696,76 @@ namespace DataAccess
                     };
 
                     result.Add(milestone);
+                }
+            }
+        }
+
+        public static List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryByResourcePayCheck, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<PersonLevelPayCheck>();
+                    ReadTimePeriodSummaryByResourcePayCheck(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadTimePeriodSummaryByResourcePayCheck(SqlDataReader reader, List<PersonLevelPayCheck> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int timeScaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+                int branchIDIndex = reader.GetOrdinal(Constants.ColumnNames.BranchID);
+                int deptIDIndex = reader.GetOrdinal(Constants.ColumnNames.DeptID);
+                int totalHoursIndex = reader.GetOrdinal(Constants.ColumnNames.TotalHours);
+                //time-off Worktypes i.e. adminstrative worktypes
+                int pTOHoursIndex = reader.GetOrdinal(Constants.ColumnNames.PTOHours);
+                int holidayHoursIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayHours);
+                int juryDutyHoursIndex = reader.GetOrdinal(Constants.ColumnNames.JuryDutyHours);
+                int bereavementHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BereavementHours);
+                int oRTHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ORTHours);
+
+                while (reader.Read())
+                {
+                    PersonLevelPayCheck PLPC = new PersonLevelPayCheck();
+                    Person person = new Person
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        EmployeeNumber = reader.GetString(employeeNumberIndex),
+                        CurrentPay = new Pay
+                        {
+                            TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                        }
+                    };
+                    PLPC.Person = person;
+                    PLPC.BranchID = reader.GetInt32(branchIDIndex);
+                    PLPC.DeptID = reader.GetInt32(deptIDIndex);
+                    PLPC.TotalHoursExcludingTimeOff = reader.GetDouble(totalHoursIndex);
+                    Dictionary<string, double> workTypeLevelTimeOffHours = new Dictionary<string, double>();
+                    workTypeLevelTimeOffHours.Add("PTO", reader.GetDouble(pTOHoursIndex));
+                    workTypeLevelTimeOffHours.Add("Holiday", reader.GetDouble(holidayHoursIndex));
+                    workTypeLevelTimeOffHours.Add("JuryDuty", reader.GetDouble(juryDutyHoursIndex));
+                    workTypeLevelTimeOffHours.Add("Bereavement", reader.GetDouble(bereavementHoursIndex));
+                    workTypeLevelTimeOffHours.Add("ORT", reader.GetDouble(oRTHoursIndex));
+                    PLPC.WorkTypeLevelTimeOffHours = workTypeLevelTimeOffHours;
+                    result.Add(PLPC);
                 }
             }
         }
