@@ -207,9 +207,9 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(personLevelPayCheck.TotalHoursExcludingTimeOff));
                         sb.Append("\t");
-                        foreach (double worTypeHours in workTypeLevelTimeOffHours.Values)
+                        foreach (string worktype in workTypeLevelTimeOffHours.Keys)
                         {
-                            sb.Append(worTypeHours);
+                            sb.Append(personLevelPayCheck.WorkTypeLevelTimeOffHours[worktype]);
                             sb.Append("\t");
                         }
                         sb.Append(GetDoubleFormat(personLevelPayCheck.TotalHoursIncludingTimeOff));
