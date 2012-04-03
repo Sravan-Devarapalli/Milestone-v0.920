@@ -14,6 +14,53 @@ namespace PraticeManagement.Reporting
     {
         #region Properties
 
+
+        public DateTime? StartDate
+        {
+            get
+            {
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal) && selectedVal == 0)
+                {
+                    return diRange.FromDate.Value;
+                }
+                else 
+                {
+                    ListItem li = ddlPeriod.SelectedItem;
+                    string startDateString = li.Attributes["startdate"];
+                    DateTime startDate ;
+                    if (DateTime.TryParse(startDateString, out startDate))
+                    {
+                        return startDate;
+                    }
+                }
+                return null;
+            }
+        }
+
+        public DateTime? EndDate
+        {
+            get
+            {
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal) && selectedVal == 0)
+                {
+                    return diRange.ToDate.Value;
+                }
+                else
+                {
+                    ListItem li = ddlPeriod.SelectedItem;
+                    string enddateString = li.Attributes["enddate"];
+                    DateTime enddate;
+                    if (DateTime.TryParse(enddateString, out enddate))
+                    {
+                        return enddate;
+                    }
+                }
+                return null;
+            }
+        }
+
         public String ProjectNumber
         {
             get
@@ -27,10 +74,15 @@ namespace PraticeManagement.Reporting
             get
             {
                 ListItem li =  ddlPeriod.SelectedItem;
-                string startDate = li.Attributes["startdate"];
-                string endDate = li.Attributes["enddate"];
                 string milestoneName = li.Text;
-                return milestoneName + " (" + startDate + " - " + endDate + ")";
+                if (li.Value != "0")
+                {
+                    return milestoneName + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
+                }
+                else
+                {
+                    return StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                }
             }
         }
 
@@ -54,6 +106,28 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            var now = Utils.Generic.GetNowWithTimeZone();
+            diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
+            diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
+            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
+                    diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
+                    );
+
+            if (ddlPeriod.SelectedValue == "0")
+            {
+                lblCustomDateRange.Attributes.Add("class", "");
+                imgCalender.Attributes.Add("class", "");
+            }
+            else
+            {
+                lblCustomDateRange.Attributes.Add("class", "displayNone");
+                imgCalender.Attributes.Add("class", "displayNone");
+            }
+
+            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+
             if (!IsPostBack)
             {
                 LoadActiveView();
@@ -89,8 +163,15 @@ namespace PraticeManagement.Reporting
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            LoadActiveView();
+            if (ddlPeriod.SelectedValue != "0")
+            {
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+            
 
         }
 
@@ -100,7 +181,8 @@ namespace PraticeManagement.Reporting
             {
                 msgError.ClearMessage();
                 divWholePage.Style.Remove("display");
-                var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber, ddlPeriod.SelectedValue != "*" ? (int?)Convert.ToInt32(ddlPeriod.SelectedValue) : null));
+                int? milestoneId = (ddlPeriod.SelectedValue != "*" && ddlPeriod.SelectedValue != "0") ? (int?)Convert.ToInt32(ddlPeriod.SelectedValue) : null;
+                var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber, milestoneId, ddlPeriod.SelectedValue == "0" ? StartDate : null, ddlPeriod.SelectedValue == "0" ? EndDate : null));
                 ucByResource.DataBindResource(data);
             }
             catch (Exception ex)
@@ -108,6 +190,27 @@ namespace PraticeManagement.Reporting
                 msgError.ShowErrorMessage(ex.Message);
                 divWholePage.Style.Add("display", "none");
             }
+        }
+
+        protected void btnCustDatesOK_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumDateRange.ValidationGroup);
+            if (Page.IsValid)
+            {
+                hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
+                hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
+        protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
+        {
+            diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
+            diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
         }
 
         protected void btnclose_OnClick(object sender, EventArgs e)
@@ -245,6 +348,8 @@ namespace PraticeManagement.Reporting
                 li.Attributes.Add("enddate", milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"));
                 ddlPeriod.Items.Add(li);
             }
+            var customListItem = new ListItem("Custom Dates", "0");
+            ddlPeriod.Items.Add(customListItem);
             ddlPeriod.SelectedValue = "*";
         }
     }
