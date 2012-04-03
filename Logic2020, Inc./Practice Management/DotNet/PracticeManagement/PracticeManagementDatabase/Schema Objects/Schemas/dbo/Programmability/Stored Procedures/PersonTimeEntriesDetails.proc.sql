@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Details By Period.
 -- Updated by : Sainath.CH
--- Update Date: 04-02-2012
+-- Update Date: 04-03-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesDetails]
 (
@@ -39,7 +39,8 @@ BEGIN
 	  GROUP BY M.ProjectId,C.Date
 	)
 
-	  SELECT    C.ClientId,
+	  SELECT    CC.TimeEntrySectionId,
+				C.ClientId,
 				C.Name AS  ClientName,
 				C.Code AS ClientCode,
 				BU.Name AS GroupName,
