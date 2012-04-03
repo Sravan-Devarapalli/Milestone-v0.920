@@ -44,10 +44,9 @@ namespace PracticeManagementService
             return ReportDAL.TimePeriodSummaryReportByWorkType(startDate, endDate, timeTypeCategoryIds, orderByCerteria);
         }
 
-
-        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber,int? mileStoneId)
+        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate)
         {
-            return ReportDAL.ProjectSummaryReportByResource(projectNumber, mileStoneId);
+            return ReportDAL.ProjectSummaryReportByResource(projectNumber, mileStoneId, startDate, endDate);
         }
 
         public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria)
@@ -55,12 +54,10 @@ namespace PracticeManagementService
             return ReportDAL.ProjectSummaryReportByWorkType(projectNumber, timeTypeCategoryIds, orderByCerteria);
         }
 
-
         public List<Project> GetProjectsByClientId(int clientId)
         {
             return ReportDAL.GetProjectsByClientId(clientId);
         }
-
 
         public List<Project> ProjectSearchByName(string name)
         {
@@ -74,7 +71,6 @@ namespace PracticeManagementService
             }
         }
 
-
         public List<Milestone> GetMilestonesForProject(string projectNumber)
         {
             try
@@ -85,6 +81,11 @@ namespace PracticeManagementService
             {
                 throw e;
             }
+        }
+
+        public List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.TimePeriodSummaryByResourcePayCheck(startDate, endDate);
         }
 
     }
