@@ -102,6 +102,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -167,6 +169,21 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonesForProjectResult" nillable="true" type="q11:ArrayOfMilestone" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryByResourcePayCheck">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryByResourcePayCheckResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryByResourcePayCheckResult" nillable="true" type="q12:ArrayOfPersonLevelPayCheck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
