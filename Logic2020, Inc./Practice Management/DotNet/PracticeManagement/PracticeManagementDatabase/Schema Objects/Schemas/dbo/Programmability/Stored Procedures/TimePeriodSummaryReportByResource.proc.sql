@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
 -- Updated by : Sainath.CH
--- Update Date: 04-02-2012
+-- Update Date: 04-03-2012
 -- Description:  Time Entries grouped by Resource for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
@@ -61,14 +61,15 @@ BEGIN
 			ISNULL(Data.InternalHours,0) AS InternalHours,
 			ISNULL(Data.AdminstrativeHours,0) AS AdminstrativeHours,
 			ISNULL(ROUND(CASE WHEN ISNULL(PDH.DefaultHours,0) = 0 THEN 0 ELSE (Data.ActualHours * 100 )/PDH.DefaultHours END,0),0) AS UtlizationPercent,
-			CASE WHEN P.PersonStatusId = 2 THEN 'Terminated' ELSE TS.Name END AS Timescale
+			--CASE WHEN P.PersonStatusId = 2 THEN 'Terminated' ELSE TS.Name END AS Timescale
+			TS.Name AS Timescale
 	FROM  
 		(
 			SELECT  TE.PersonId,
-					ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours ELSE 0 END),2) AS BillableHours,
-					ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 AND CC.TimeEntrySectionId =1 THEN TEH.ActualHours ELSE 0 END),2) AS ProjectNonBillableHours,
+					ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND Pro.ProjectNumber != 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS BillableHours,
+					ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 AND CC.TimeEntrySectionId =1 AND Pro.ProjectNumber != 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS ProjectNonBillableHours,
 					ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 2 THEN TEH.ActualHours ELSE 0 END),2) AS BusinessDevelopmentHours,
-					ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 3 THEN TEH.ActualHours ELSE 0 END),2) AS InternalHours,
+					ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 3 OR Pro.ProjectNumber = 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS InternalHours,
 					ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 THEN TEH.ActualHours ELSE 0 END),2) AS AdminstrativeHours,
 					ROUND (SUM(CASE WHEN ( CC.TimeEntrySectionId = 1 OR CC.TimeEntrySectionId = 2) AND @NOW >= TE.ChargeCodeDate THEN TEH.ActualHours ELSE 0 END),2) AS ActualHours
 					FROM dbo.TimeEntry TE
@@ -77,7 +78,7 @@ BEGIN
 						INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
 						INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 						INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
-					WHERE Pro.ProjectNumber != 'P031000' AND TE.ChargeCodeDate < ISNULL(P.TerminationDate,dbo.GetFutureDate())	
+					--WHERE  TE.ChargeCodeDate < ISNULL(P.TerminationDate,dbo.GetFutureDate())	
 					GROUP BY TE.PersonId
 		) Data
 		FULL JOIN AssignedPersons AP ON AP.PersonId = Data.PersonId 
