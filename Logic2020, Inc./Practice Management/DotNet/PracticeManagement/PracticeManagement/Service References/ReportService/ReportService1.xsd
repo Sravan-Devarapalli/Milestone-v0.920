@@ -2,6 +2,7 @@
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:complexType name="ArrayOfTimeEntriesGroupByClientAndProject">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="TimeEntriesGroupByClientAndProject" nillable="true" type="tns:TimeEntriesGroupByClientAndProject" />
@@ -115,4 +116,20 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GroupedHours" nillable="true" type="tns:GroupedHours" />
+  <xs:complexType name="ArrayOfPersonLevelPayCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonLevelPayCheck" nillable="true" type="tns:PersonLevelPayCheck" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPersonLevelPayCheck" nillable="true" type="tns:ArrayOfPersonLevelPayCheck" />
+  <xs:complexType name="PersonLevelPayCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BranchID" type="xs:int" />
+      <xs:element minOccurs="0" name="DeptID" type="xs:int" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q7:Person" />
+      <xs:element minOccurs="0" name="TotalHoursExcludingTimeOff" type="xs:double" />
+      <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="WorkTypeLevelTimeOffHours" nillable="true" type="q8:ArrayOfKeyValueOfstringdouble" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonLevelPayCheck" nillable="true" type="tns:PersonLevelPayCheck" />
 </xs:schema>
