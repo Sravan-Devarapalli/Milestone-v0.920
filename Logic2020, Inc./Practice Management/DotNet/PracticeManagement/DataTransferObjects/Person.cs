@@ -386,6 +386,12 @@ namespace DataTransferObjects
         [DataMember]
         public double UtlizationPercent{ get; set; }
 
+        [DataMember]
+        public bool IsOffshore { get; set; }
+
+        [DataMember]
+        public string PaychexID { get; set; }
+
         #endregion
 
         #region Properties - calculated
