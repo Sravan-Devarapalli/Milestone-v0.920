@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
 using System.Text;
+using System.Web.Security;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -62,7 +63,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append(PersonLevelGroupedHoursList.Count + " Employees");
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(HostingPage.StartDate.Value.ToString("MM/dd/yyyy") + " - " + HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                sb.Append(HostingPage.Range);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.AppendLine();
@@ -123,8 +124,8 @@ namespace PraticeManagement.Controls.Reports
                 {
                     sb.Append("There are no Time Entries by any Employee  for the selected range.");
                 }
-                //“TimePeriod_ByResource_Excel.xls”.  
-                var filename = "TimePeriod_ByResource_Excel.xls";
+                //“TimePeriod_ByResource_[StartOfRange]_[EndOfRange].xls”.  
+                var filename = string.Format("{0}_{1}-{2}.xls", "TimePeriod_ByResource", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
                 GridViewExportUtil.Export(filename, sb);
             }
         }
@@ -132,6 +133,99 @@ namespace PraticeManagement.Controls.Reports
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
 
+        }
+
+        protected void btnPayCheckExport_OnClick(object sender, EventArgs e)
+        {
+            
+            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+            {
+                List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
+                StringBuilder sb = new StringBuilder();
+                sb.Append(" Paychex ");
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(personLevelPayCheckList.Count.ToString() + " Employees");
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(HostingPage.Range);
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.AppendLine();
+                bool IsUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                Dictionary<string, double> workTypeLevelTimeOffHours = personLevelPayCheckList[0].WorkTypeLevelTimeOffHours;
+                if (PersonLevelGroupedHoursList.Count > 0)
+                {
+                    //Header
+                    sb.Append("BranchID");
+                    sb.Append("\t");
+                    sb.Append("DeptID");
+                    sb.Append("\t");
+                    sb.Append("EmployeeID");
+                    sb.Append("\t");
+                    if (IsUserAdminstrator)
+                    {
+                        sb.Append("PaychexID");
+                        sb.Append("\t");
+                    }
+                    sb.Append("Last Name");
+                    sb.Append("\t");
+                    sb.Append("First Name");
+                    sb.Append("\t");
+                    sb.Append("Pay Types");
+                    sb.Append("\t");
+                    sb.Append("Hours");
+                    sb.Append("\t");
+                    foreach (string worktype in workTypeLevelTimeOffHours.Keys)
+                    {
+                        sb.Append(worktype);
+                        sb.Append("\t");
+                    }
+                    sb.Append("Total");
+                    sb.Append("\t");
+                    sb.AppendLine();
+
+                    //Data
+                    foreach (var personLevelPayCheck in personLevelPayCheckList)
+                    {
+                        sb.Append(personLevelPayCheck.BranchID);
+                        sb.Append("\t");
+                        sb.Append(personLevelPayCheck.DeptID);
+                        sb.Append("\t");
+                        sb.Append(personLevelPayCheck.Person.EmployeeNumber);
+                        sb.Append("\t");
+                        if (IsUserAdminstrator)
+                        {
+                            sb.Append("");
+                            sb.Append("\t");
+                        }
+                        sb.Append(personLevelPayCheck.Person.LastName);
+                        sb.Append("\t");
+                        sb.Append(personLevelPayCheck.Person.FirstName);
+                        sb.Append("\t");
+                        sb.Append(personLevelPayCheck.Person.CurrentPay.TimescaleName);
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(personLevelPayCheck.TotalHoursExcludingTimeOff));
+                        sb.Append("\t");
+                        foreach (double worTypeHours in workTypeLevelTimeOffHours.Values)
+                        {
+                            sb.Append(worTypeHours);
+                            sb.Append("\t");
+                        }
+                        sb.Append(GetDoubleFormat(personLevelPayCheck.TotalHoursIncludingTimeOff));
+                        sb.Append("\t");
+                        sb.AppendLine();
+                    }
+
+                }
+                else
+                {
+                    sb.Append("There are no Time Entries by any Employee  for the selected range.");
+                }
+                //“Paychex_[StartOfRange]_[EndOfRange].xls”.  
+                var filename = string.Format("{0}_{1}-{2}.xls", "Paychex", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                GridViewExportUtil.Export(filename, sb);
+            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -145,18 +239,16 @@ namespace PraticeManagement.Controls.Reports
             if (PersonLevelGroupedHoursList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
-                tbHeader.Style["display"] = "";
                 repResource.Visible = true;
                 repResource.DataSource = PersonLevelGroupedHoursList;
                 repResource.DataBind();
-                PopulateHeaderSection();
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
                 repResource.Visible = false;
-                tbHeader.Style["display"] = "none";
             }
+            PopulateHeaderSection();
         }
 
         private void PopulateHeaderSection()
@@ -174,9 +266,9 @@ namespace PraticeManagement.Controls.Reports
             }
             ltPersonCount.Text = noOfEmployees + " Employees";
             lbRange.Text = HostingPage.Range;
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
-            ltrlAvgHours.Text = ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValueWithZeroPadding);
-            ltrlAvgUtilization.Text = Math.Round((totalUtlization / noOfEmployees), 0).ToString() + "%";
+            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
+            ltrlAvgHours.Text = noOfEmployees > 0 ? ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValue) : "0.00";
+            ltrlAvgUtilization.Text = noOfEmployees > 0 ? Math.Round((totalUtlization / noOfEmployees), 0).ToString() + "%" : "0%";
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
