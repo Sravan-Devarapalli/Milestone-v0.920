@@ -299,7 +299,18 @@
             public const string AdminstrativeHours = "AdminstrativeHours";
             public const string TimescaleColumn = "Timescale";
             public const string BillingType = "BillingType";
-            
+            public const string EmployeeNumber = "EmployeeNumber";
+            public const string BranchID = "BranchID";
+            public const string DeptID = "DeptID";
+            public const string TotalHours = "TotalHours";
+            public const string PTOHours = "PTOHours";
+            public const string HolidayHours = "HolidayHours";
+            public const string JuryDutyHours = "JuryDutyHours";
+            public const string BereavementHours = "BereavementHours";
+            public const string ORTHours = "ORTHours";
+            public const string PaychexID = "PaychexID";
+            public const string IsOffshore = "IsOffshore";
+
         }
 
         #endregion
@@ -748,6 +759,8 @@
                 public const string ProjectSummaryReportByResource = "dbo.ProjectSummaryReportByResource";
                 public const string ProjectSummaryReportByWorkType = "dbo.ProjectSummaryReportByWorkType";
                 public const string GetMilestonesForProject = "dbo.GetMilestonesForProject";
+                public const string TimePeriodSummaryByResourcePayCheck = "dbo.TimePeriodSummaryByResourcePayCheck";
+
                 
             }
 
