@@ -4080,6 +4080,9 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimePeriodSummaryByResourcePayCheck.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
