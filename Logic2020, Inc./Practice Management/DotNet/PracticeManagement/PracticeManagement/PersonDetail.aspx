@@ -623,6 +623,29 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td nowrap="nowrap">
+                                        Offshore Resource
+                                    </td>
+                                    <td class="info-field">
+                                        <asp:DropDownList ID="ddlPersonType" runat="server" CssClass="info-field" onchange="setDirty();" Width="158px">
+                                            <asp:ListItem Text="NO" Value="0" Selected="True"></asp:ListItem>
+                                            <asp:ListItem Text="YES" Value="1"></asp:ListItem>
+                                        </asp:DropDownList>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <asp:Label id="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
+                                    </td>
+                                    <td class="info-field">
+                                        <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="info-field" onchange="setDirty();" Visible="false"></asp:TextBox>
+                                        <ajaxToolkit:FilteredTextBoxExtender ID="ftePayCheckId" TargetControlID="txtPayCheckId"
+                                            FilterType="Numbers" FilterMode="ValidChars" runat="server" />
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         Telephone number
                                     </td>
@@ -873,7 +896,7 @@
                                                     <span style="float: left; width: 85%;">
                                                         <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                    </span><span style="width: 15%; vertical-align: middle">
                                                         <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
                                                             ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -889,7 +912,7 @@
                                                     <span style="float: left; width: 85%;">
                                                         <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                    </span><span style="width: 15%; vertical-align: middle">
                                                         <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
                                                             ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -915,7 +938,7 @@
                                                     <span style="float: left; width: 85%;">
                                                         <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                    </span><span style="width: 15%; vertical-align: middle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
                                                             ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
@@ -931,7 +954,7 @@
                                                     <span style="float: left; width: 85%;">
                                                         <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                    </span><span style="width: 15%; vertical-align: middle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
                                                             ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
@@ -1057,7 +1080,7 @@
                                                     <span style="width: 85%; float: left;">
                                                         <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" Width="80%"
                                                             Style="text-align: right;"></asp:TextBox>
-                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                    </span><span style="width: 15%; vertical-align: middle">
                                                         <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
                                                             Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -1083,7 +1106,7 @@
                                                     <span style="width: 85%; float: left;">
                                                         <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
                                                             Width="80%" Text="0"></asp:TextBox>
-                                                    </span><span style="width: 15%;vertical-align:middle">
+                                                    </span><span style="width: 15%; vertical-align: middle">
                                                         <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
                                                             ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
@@ -1097,7 +1120,7 @@
                                                     <span style="width: 85%; float: left;">
                                                         <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
                                                             Width="80%" Text="0"></asp:TextBox>
-                                                    </span><span style="width: 15%;vertical-align:middle"">
+                                                    </span><span style="width: 15%; vertical-align: middle">
                                                         <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
                                                             ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
