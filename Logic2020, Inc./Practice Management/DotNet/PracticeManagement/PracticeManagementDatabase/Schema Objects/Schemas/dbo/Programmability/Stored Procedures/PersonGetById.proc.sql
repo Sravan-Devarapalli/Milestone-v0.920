@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 8-04-2008
--- Updated by:	Anatoliy Lokshin
--- Update date: 9-09-2008
+-- Updated by:	sainathc
+-- Update date: 04-03-2012
 -- Description:	Retrives the Person by its ID.
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonGetById]
@@ -10,6 +10,7 @@ CREATE PROCEDURE [dbo].[PersonGetById]
 	@PersonId	INT
 )
 AS
+BEGIN
 	SET NOCOUNT ON
 
 	SELECT p.PersonId,
@@ -36,7 +37,9 @@ AS
 		   p.TelephoneNumber,
 		   p.IsDefaultManager,
 		   p.IsWelcomeEmailSent,
-		   p.IsStrawman AS IsStrawman
+		   p.IsStrawman AS IsStrawman,
+		   p.IsOffshore,
+		   p.PaychexID
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
-
+END
