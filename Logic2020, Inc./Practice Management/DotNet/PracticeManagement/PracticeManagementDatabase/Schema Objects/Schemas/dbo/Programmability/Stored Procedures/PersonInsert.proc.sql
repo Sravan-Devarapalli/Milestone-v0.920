@@ -1,4 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[PersonInsert]
+﻿-- =============================================
+-- Author:		
+-- Create date: 
+-- Updated by : Sainath.CH
+-- Update Date: 04-03-2012
+-- =============================================
+CREATE PROCEDURE [dbo].[PersonInsert]
 (
 	@FirstName       NVARCHAR(40),
 	@LastName        NVARCHAR(40),
@@ -13,7 +19,9 @@
 	@ManagerId		 INT = NULL,
 	@PracticeOwnedId INT = NULL,
 	@PersonId        INT OUTPUT,
-	@TelephoneNumber NVARCHAR(20) = NULL
+	@TelephoneNumber NVARCHAR(20) = NULL,
+	@PaychexID		 NVARCHAR(20),
+	@IsOffshore	     BIT
 )
 AS
 	SET NOCOUNT ON
@@ -81,10 +89,10 @@ AS
 		-- Inserting Person
 		INSERT dbo.Person
 			(FirstName, LastName, PTODaysPerAnnum,  HireDate,  Alias, DefaultPractice, 
-		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman)
+		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID)
 		VALUES
 			(@FirstName, @LastName, @PTODaysPerAnnum, @HireDate, @Alias, @DefaultPractice, 
-		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0)
+		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID)
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
