@@ -1,7 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByProject.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByProject" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;"
-    id="tbHeader" runat="server">
+<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
             <table>
