@@ -196,7 +196,7 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         if (IsUserAdminstrator)
                         {
-                            sb.Append("");
+                            sb.Append(personLevelPayCheck.Person.PaychexID);
                             sb.Append("\t");
                         }
                         sb.Append(personLevelPayCheck.Person.LastName);
