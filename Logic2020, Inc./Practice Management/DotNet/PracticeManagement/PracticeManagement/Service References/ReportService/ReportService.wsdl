@@ -77,6 +77,12 @@
   <wsdl:message name="IReportService_GetMilestonesForProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetMilestonesForProjectResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryByResourcePayCheck_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryByResourcePayCheck" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryByResourcePayCheck_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryByResourcePayCheckResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
@@ -121,6 +127,10 @@
     <wsdl:operation name="GetMilestonesForProject">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetMilestonesForProject" message="tns:IReportService_GetMilestonesForProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetMilestonesForProjectResponse" message="tns:IReportService_GetMilestonesForProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryByResourcePayCheck">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheck" message="tns:IReportService_TimePeriodSummaryByResourcePayCheck_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheckResponse" message="tns:IReportService_TimePeriodSummaryByResourcePayCheck_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -217,6 +227,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetMilestonesForProject">
       <soap:operation soapAction="http://tempuri.org/IReportService/GetMilestonesForProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryByResourcePayCheck">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheck" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
