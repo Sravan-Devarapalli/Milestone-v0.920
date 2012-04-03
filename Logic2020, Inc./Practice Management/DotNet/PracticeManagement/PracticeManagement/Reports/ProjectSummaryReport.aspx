@@ -195,7 +195,7 @@
                     </td>
                 </tr>
             </table>
-            <table style="width: 100%; height: 120px;">
+            <table style="width: 100%; height: 150px;">
                 <tr>
                     <td style="width: 35%;">
                         &nbsp;
