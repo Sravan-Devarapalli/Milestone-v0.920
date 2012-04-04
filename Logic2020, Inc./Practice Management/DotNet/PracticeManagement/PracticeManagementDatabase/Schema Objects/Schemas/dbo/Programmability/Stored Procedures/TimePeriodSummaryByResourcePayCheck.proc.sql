@@ -1,6 +1,6 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
--- Create date: 04-02-2012
+-- Create date: 04-03-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
 (
@@ -81,7 +81,7 @@ BEGIN
 						INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 						INNER JOIN dbo.TimeType TT ON CC.TimeTypeId = TT.TimeTypeId
 						INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
-					WHERE Pro.ProjectNumber != 'P031000' AND TE.ChargeCodeDate < ISNULL(P.TerminationDate,dbo.GetFutureDate())
+					WHERE TE.ChargeCodeDate < ISNULL(P.TerminationDate,dbo.GetFutureDate())
 					GROUP BY TE.PersonId
 		) Data
 		FULL JOIN AssignedPersons AP ON AP.PersonId = Data.PersonId 
