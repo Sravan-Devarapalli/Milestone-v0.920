@@ -34,8 +34,8 @@ BEGIN
 	  INNER JOIN dbo.Calendar AS C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate 
 									AND C.Date BETWEEN @StartDate AND @EndDate 
 	  WHERE MP.PersonId = @PersonId 
-			AND M.StartDate BETWEEN @StartDate AND @EndDate 
-			AND M.ProjectedDeliveryDate  BETWEEN @StartDate AND @EndDate 
+			AND M.StartDate < @EndDate 
+			AND @StartDate  < M.ProjectedDeliveryDate
 	  GROUP BY M.ProjectId,C.Date
 	)
 
@@ -78,7 +78,7 @@ BEGIN
 	  LEFT JOIN PersonDayWiseByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId  AND PDBR.Date = TE.ChargeCodeDate
 	  WHERE TE.PersonId = @PersonId 
 			AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
-			AND Pro.ProjectNumber != 'P031000'
+			--AND Pro.ProjectNumber != 'P031000'
 	  GROUP BY	CC.TimeEntrySectionId,
 				C.ClientId,
 				C.Name,
