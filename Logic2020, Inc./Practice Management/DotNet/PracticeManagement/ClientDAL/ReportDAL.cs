@@ -578,9 +578,112 @@ namespace DataAccess
                     PLGH.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
                     PLGH.BillingType = reader.GetString(billingTypeIndex);
                     PLGH.Person = person;
-                    PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
+                    PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);
 
                     result.Add(PLGH);
+                }
+            }
+        }
+
+        public static List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectDetailReportByResource, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
+
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<PersonLevelGroupedHours>();
+                    ReadProjectDetailReportByResource(reader, result);
+                    return result;
+                }
+            }
+
+        }
+
+        private static void ReadProjectDetailReportByResource(SqlDataReader reader, List<PersonLevelGroupedHours> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                int projectRoleNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectRoleName);
+                int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
+                int timeTypeCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeCodeColumn);
+                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
+                int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+
+                while (reader.Read())
+                {
+                    TimeEntriesGroupByDate dt = null;
+                    if (!reader.IsDBNull(chargeCodeDateIndex))
+                    {
+                        var dayTotalHoursbyWorkType = new TimeEntryByWorkType()
+                        {
+                            Note = !reader.IsDBNull(noteIndex) ? reader.GetString(noteIndex) : string.Empty,
+                            BillableHours = reader.GetDouble(billableHoursIndex),
+                            NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
+                            TimeType = new TimeTypeRecord()
+                            {
+                                Name = reader.GetString(timeTypeNameIndex),
+                                Code = reader.GetString(timeTypeCodeIndex)
+                            }
+                        };
+
+                        dt = new TimeEntriesGroupByDate()
+                        {
+                            Date = reader.GetDateTime(chargeCodeDateIndex),
+                            DayTotalHoursList = new List<TimeEntryByWorkType>()
+                                                {
+                                                    dayTotalHoursbyWorkType
+                                                }
+                        };
+                    }
+
+                    int personId = reader.GetInt32(personIdIndex);
+                    PersonLevelGroupedHours PLGH;
+                    if (result.Any(r => r.Person.Id == personId))
+                    {
+                        PLGH = result.First(r => r.Person.Id == personId);
+                        if(dt != null)
+                            PLGH.AddDayTotalHours(dt);
+                    }
+                    else
+                    {
+                        PLGH = new PersonLevelGroupedHours();
+                        Person person = new Person
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            ProjectRoleName = reader.GetString(projectRoleNameIndex)
+                        };
+                        PLGH.Person = person;
+                        PLGH.TimeEntrySectionId = !reader.IsDBNull(timeEntrySectionIdIndex) ? reader.GetInt32(timeEntrySectionIdIndex):0;
+                        PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);
+                        if (dt != null)
+                        {
+                            PLGH.DayTotalHours = new List<TimeEntriesGroupByDate>() 
+                        {
+                            dt
+                        };
+                        }
+                        result.Add(PLGH);
+                    }
                 }
             }
         }
