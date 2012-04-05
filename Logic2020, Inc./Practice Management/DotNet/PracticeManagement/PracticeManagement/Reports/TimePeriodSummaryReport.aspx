@@ -126,11 +126,11 @@
                     </td>
                 </tr>
             </table>
-            <table width="100%" style="height:150px;">
+            <table width="100%" style="height:130px;">
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 8px; text-align: center;">
+                    <td style="padding-bottom: 5px; text-align: center;vertical-align: top;">
                         <asp:CheckBox ID="chkIncludePersons" runat="server" Checked="false" Text="Include persons with no time entered in report output"
                             AutoPostBack="true" OnCheckedChanged="chkIncludePersons_CheckedChanged" />
                     </td>
@@ -140,8 +140,8 @@
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 10px;text-align: center;">
-                        <table width="100%" align="center">
+                    <td style="padding-bottom: 5px;text-align: center;">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="text-align: right; width: 30%; font-weight: bold;">
                                     Range:&nbsp;
@@ -170,8 +170,8 @@
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center;">
-                        <table width="100%" align="center">
+                    <td style="padding-bottom: 5px; text-align: center;">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 30%;">
                                 </td>
@@ -190,8 +190,8 @@
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center;">
-                        <table width="100%" align="center">
+                    <td style=" text-align: center;padding-bottom: 5px;">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="text-align: right; width: 30%; font-weight: bold;">
                                     View:&nbsp;
@@ -208,6 +208,10 @@
                         </table>
                     </td>
                     <td style="width: 65%">
+                    </td>
+                </tr>
+                <tr>
+                 <td colspan="3" style="padding-bottom: 5px;"> &nbsp;
                     </td>
                 </tr>
                 <tr>
