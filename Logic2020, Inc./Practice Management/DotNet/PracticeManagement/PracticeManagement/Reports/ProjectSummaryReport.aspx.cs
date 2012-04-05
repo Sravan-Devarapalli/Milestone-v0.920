@@ -65,7 +65,7 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                return txtProjectNumber.Text;
+                return txtProjectNumber.Text.ToUpper();
             }
         }
 
