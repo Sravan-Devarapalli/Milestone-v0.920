@@ -53,6 +53,12 @@
   <wsdl:message name="IReportService_ProjectSummaryReportByResource_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectSummaryReportByResourceResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_ProjectDetailReportByResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectDetailReportByResource" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectDetailReportByResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectDetailReportByResourceResponse" />
+  </wsdl:message>
   <wsdl:message name="IReportService_ProjectSummaryReportByWorkType_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectSummaryReportByWorkType" />
   </wsdl:message>
@@ -111,6 +117,10 @@
     <wsdl:operation name="ProjectSummaryReportByResource">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResource" message="tns:IReportService_ProjectSummaryReportByResource_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResourceResponse" message="tns:IReportService_ProjectSummaryReportByResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectDetailReportByResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectDetailReportByResource" message="tns:IReportService_ProjectDetailReportByResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectDetailReportByResourceResponse" message="tns:IReportService_ProjectDetailReportByResource_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectSummaryReportByWorkType">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType" message="tns:IReportService_ProjectSummaryReportByWorkType_InputMessage" />
@@ -191,6 +201,15 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectSummaryReportByResource">
       <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSummaryReportByResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectDetailReportByResource">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectDetailReportByResource" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
