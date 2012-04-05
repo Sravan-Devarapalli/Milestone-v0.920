@@ -75,7 +75,11 @@ namespace PraticeManagement.Reporting
             {
                 ListItem li =  ddlPeriod.SelectedItem;
                 string milestoneName = li.Text;
-                if (li.Value != "0")
+                if (!StartDate.HasValue || !EndDate.HasValue)
+                {
+                    return string.Empty;
+                }
+                else if (li.Value != "0")
                 {
                     return milestoneName + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
                 }
@@ -86,6 +90,21 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public int? MilestoneId
+        {
+            get
+            {
+                return (ddlPeriod.SelectedValue != "*" && ddlPeriod.SelectedValue != "0") ? (int?)Convert.ToInt32(ddlPeriod.SelectedValue) : null;
+            }
+        }
+
+        public string PeriodSelected
+        {
+            get
+            {
+                return ddlPeriod.SelectedValue;
+            }
+        }
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -181,9 +200,7 @@ namespace PraticeManagement.Reporting
             {
                 msgError.ClearMessage();
                 divWholePage.Style.Remove("display");
-                int? milestoneId = (ddlPeriod.SelectedValue != "*" && ddlPeriod.SelectedValue != "0") ? (int?)Convert.ToInt32(ddlPeriod.SelectedValue) : null;
-                var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber, milestoneId, ddlPeriod.SelectedValue == "0" ? StartDate : null, ddlPeriod.SelectedValue == "0" ? EndDate : null));
-                ucByResource.DataBindResource(data);
+                ucByResource.LoadActiveTabInByResource();
             }
             catch (Exception ex)
             {
