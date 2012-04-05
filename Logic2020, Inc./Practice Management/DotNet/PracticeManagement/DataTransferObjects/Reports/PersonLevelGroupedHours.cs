@@ -26,11 +26,14 @@ namespace DataTransferObjects.Reports
 
         }
 
+        [DataMember]
+        public int TimeEntrySectionId { get; set; }
+
         public double NonBillableHours
         {
             get
             {
-                return ProjectNonBillableHours + BusinessDevelopmentHours + InternalHours + AdminstrativeHours;
+                return DayTotalHours != null ? DayTotalHours.Sum(d=>d.NonBillableHours) : ProjectNonBillableHours + BusinessDevelopmentHours + InternalHours + AdminstrativeHours;
             }
         }
 
@@ -46,6 +49,12 @@ namespace DataTransferObjects.Reports
             }
         }
 
+        [DataMember]
+        public List<TimeEntriesGroupByDate> DayTotalHours
+        {
+            get;
+            set;
+        }
 
         [DataMember]
         public double ProjectNonBillableHours
@@ -89,19 +98,17 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double BillableHoursUntilToday { get; set; }
 
-
         [DataMember]
         public string BillingType { get; set; }
 
         [DataMember]
         public double ForecastedHours { get; set; }
 
-
         public double TotalHours
         {
             get
             {
-                return BillableHours + NonBillableHours;
+                return DayTotalHours != null ? DayTotalHours.Sum(t => t.TotalHours) : (BillableHours + NonBillableHours);
             }
         }
 
@@ -255,9 +262,20 @@ namespace DataTransferObjects.Reports
             }
         }
 
+        public void AddDayTotalHours(TimeEntriesGroupByDate dt)
+        {
+            if (DayTotalHours.Any(dth => dth.Date == dt.Date))
+            {
+                var workType = dt.DayTotalHoursList[0];
+                dt = DayTotalHours.First(dth => dth.Date == dt.Date);
+                dt.DayTotalHoursList.Add(workType);
+            }
+            else
+            {
+                DayTotalHours.Add(dt);
+            }
 
-
-
+        }
     }
 }
 
