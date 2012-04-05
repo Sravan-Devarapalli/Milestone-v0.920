@@ -13,15 +13,6 @@ namespace PraticeManagement.Controls.Reports {
     public partial class ProjectSummaryByResource {
         
         /// <summary>
-        /// divHeader control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divHeader;
-        
-        /// <summary>
         /// tbHeader control.
         /// </summary>
         /// <remarks>
@@ -157,40 +148,121 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.HtmlControls.HtmlTableRow trNonBillable;
         
         /// <summary>
-        /// btnExportToExcel control.
+        /// tblProjectViewSwitch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        protected global::System.Web.UI.WebControls.Table tblProjectViewSwitch;
         
         /// <summary>
-        /// btnExportToPDF control.
+        /// rowSwitcher control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportToPDF;
+        protected global::System.Web.UI.WebControls.TableRow rowSwitcher;
         
         /// <summary>
-        /// repResource control.
+        /// cellSummary control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repResource;
+        protected global::System.Web.UI.WebControls.TableCell cellSummary;
         
         /// <summary>
-        /// divEmptyMessage control.
+        /// lnkbtnSummary control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyMessage;
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnSummary;
+        
+        /// <summary>
+        /// cellDetail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellDetail;
+        
+        /// <summary>
+        /// lnkbtnDetail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnDetail;
+        
+        /// <summary>
+        /// mvProjectReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.MultiView mvProjectReport;
+        
+        /// <summary>
+        /// vwProjectSummaryReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwProjectSummaryReport;
+        
+        /// <summary>
+        /// pnlProjectSummaryReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProjectSummaryReport;
+        
+        /// <summary>
+        /// ucProjectSummaryReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ProjectSummaryTabByResource ucProjectSummaryReport;
+        
+        /// <summary>
+        /// vwProjectDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwProjectDetailReport;
+        
+        /// <summary>
+        /// pnlProjectDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProjectDetailReport;
+        
+        /// <summary>
+        /// ucProjectDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ProjectDetailTabByResource ucProjectDetailReport;
     }
 }
 
