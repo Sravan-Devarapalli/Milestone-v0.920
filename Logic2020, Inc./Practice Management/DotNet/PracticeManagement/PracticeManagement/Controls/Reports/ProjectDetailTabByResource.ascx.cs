@@ -140,6 +140,11 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
+        protected string GetDateFormat(DateTime date)
+        {
+            return date.ToString(Constants.Formatting.ReportDateFormat);
+        }   
+
         protected bool GetNonBillableImageVisibility(double nonBillableHours)
         {
             return sectionId == 1 && nonBillableHours > 0;
