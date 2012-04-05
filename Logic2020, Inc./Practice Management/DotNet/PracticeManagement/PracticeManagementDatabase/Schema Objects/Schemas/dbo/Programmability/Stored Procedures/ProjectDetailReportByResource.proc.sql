@@ -1,6 +1,8 @@
 ﻿-- =========================================================================
--- Author:		SainathC
+-- Author:		Sainath.CH
 -- Create date: 04-05-2012
+-- Updated by : Sainath.CH
+-- Update Date: 04-05-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectDetailReportByResource]
 (
@@ -19,7 +21,7 @@ BEGIN
 
 	SELECT @ProjectId = P.ProjectId
 	FROM dbo.Project AS P
-	WHERE P.ProjectNumber = @ProjectNumber 
+	WHERE P.ProjectNumber = @ProjectNumber AND @ProjectNumber != 'P999918' --Business Development Project 
 
 	IF(@ProjectId IS NOT NULL)
 	BEGIN
