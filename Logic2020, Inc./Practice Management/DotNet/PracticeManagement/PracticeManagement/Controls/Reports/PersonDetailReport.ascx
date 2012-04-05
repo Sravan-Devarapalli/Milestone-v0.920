@@ -133,7 +133,8 @@
                                         <td colspan="2" style="width: 12%">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: #F0F0F1;">
+                                    <tr style="text-align: left; background-color: #F0F0F1;" id="trNote" runat="server"
+                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
                                         <td style="padding-left: 55px;" class="wrapword">
                                             <table>
                                                 <tr>
