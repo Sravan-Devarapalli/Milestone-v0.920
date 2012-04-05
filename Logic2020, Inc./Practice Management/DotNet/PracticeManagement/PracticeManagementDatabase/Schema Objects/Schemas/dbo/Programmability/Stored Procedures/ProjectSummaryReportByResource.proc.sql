@@ -3,7 +3,7 @@
 -- Create date: 03-15-2012
 -- Description:  Time Entries grouped by workType and Resource for a Project.
 -- Updated by : Sainath.CH
--- Update Date: 04-03-2012
+-- Update Date: 04-05-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectSummaryReportByResource]
 (
@@ -25,7 +25,7 @@ BEGIN
 
 	SELECT @ProjectId = P.ProjectId
 	FROM dbo.Project AS P
-	WHERE P.ProjectNumber = @ProjectNumber 
+	WHERE P.ProjectNumber = @ProjectNumber AND @ProjectNumber != 'P999918' --Business Development Project 
 
 
 
