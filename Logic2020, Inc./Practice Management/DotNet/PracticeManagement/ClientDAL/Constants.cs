@@ -757,6 +757,7 @@
                 public const string TimePeriodSummaryReportByProject = "dbo.TimePeriodSummaryReportByProject";
                 public const string TimePeriodSummaryReportByWorkType = "dbo.TimePeriodSummaryReportByWorkType";
                 public const string ProjectSummaryReportByResource = "dbo.ProjectSummaryReportByResource";
+                public const string ProjectDetailReportByResource = "dbo.ProjectDetailReportByResource";
                 public const string ProjectSummaryReportByWorkType = "dbo.ProjectSummaryReportByWorkType";
                 public const string GetMilestonesForProject = "dbo.GetMilestonesForProject";
                 public const string TimePeriodSummaryByResourcePayCheck = "dbo.TimePeriodSummaryByResourcePayCheck";
