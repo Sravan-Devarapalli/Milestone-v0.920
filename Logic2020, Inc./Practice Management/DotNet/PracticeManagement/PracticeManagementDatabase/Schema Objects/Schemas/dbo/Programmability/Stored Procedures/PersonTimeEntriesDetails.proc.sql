@@ -3,7 +3,7 @@
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Details By Period.
 -- Updated by : Sainath.CH
--- Update Date: 04-03-2012
+-- Update Date: 04-05-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesDetails]
 (
@@ -53,7 +53,6 @@ BEGIN
 				TT.Name  AS TimeTypeName,
 				TT.Code AS TimeTypeCode,
 				TE.ChargeCodeDate,
-				TE.Note,
 			(CASE WHEN (PDBR.MinimumValue IS NULL OR CC.TimeEntrySectionId <> 1 ) THEN '' 
 			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 0) THEN 'Fixed'
 			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 1) THEN 'Hourly'
