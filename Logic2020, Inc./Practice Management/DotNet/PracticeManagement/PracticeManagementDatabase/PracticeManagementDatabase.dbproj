@@ -4083,6 +4083,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimePeriodSummaryByResourcePayCheck.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ProjectDetailReportByResource.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
