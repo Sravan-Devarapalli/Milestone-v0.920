@@ -49,6 +49,11 @@ namespace PracticeManagementService
             return ReportDAL.ProjectSummaryReportByResource(projectNumber, mileStoneId, startDate, endDate);
         }
 
+        public List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate)
+        {
+            return ReportDAL.ProjectDetailReportByResource(projectNumber, mileStoneId, startDate, endDate);
+        }
+
         public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria)
         {
             return ReportDAL.ProjectSummaryReportByWorkType(projectNumber, timeTypeCategoryIds, orderByCerteria);
