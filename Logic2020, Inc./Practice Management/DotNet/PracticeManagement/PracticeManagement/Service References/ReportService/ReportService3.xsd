@@ -114,6 +114,23 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ProjectDetailReportByResource">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectDetailReportByResourceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectDetailReportByResourceResult" nillable="true" type="q8:ArrayOfPersonLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ProjectSummaryReportByWorkType">
     <xs:complexType>
       <xs:sequence>
@@ -126,7 +143,7 @@
   <xs:element name="ProjectSummaryReportByWorkTypeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q8:ArrayOfWorkTypeLevelGroupedHours" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q9:ArrayOfWorkTypeLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -140,7 +157,7 @@
   <xs:element name="GetProjectsByClientIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsByClientIdResult" nillable="true" type="q9:ArrayOfProject" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsByClientIdResult" nillable="true" type="q10:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -154,7 +171,7 @@
   <xs:element name="ProjectSearchByNameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchByNameResult" nillable="true" type="q10:ArrayOfProject" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchByNameResult" nillable="true" type="q11:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -168,7 +185,7 @@
   <xs:element name="GetMilestonesForProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonesForProjectResult" nillable="true" type="q11:ArrayOfMilestone" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonesForProjectResult" nillable="true" type="q12:ArrayOfMilestone" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -183,7 +200,7 @@
   <xs:element name="TimePeriodSummaryByResourcePayCheckResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryByResourcePayCheckResult" nillable="true" type="q12:ArrayOfPersonLevelPayCheck" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryByResourcePayCheckResult" nillable="true" type="q13:ArrayOfPersonLevelPayCheck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
