@@ -451,6 +451,7 @@ namespace PraticeManagement.Reporting
 
             ddlPeriod.SelectedValue = "Please Select";
             LoadActiveView();
+            txtSearch.Text = "";
         }
 
         protected String GetPersonFirstLastName(Person person)
