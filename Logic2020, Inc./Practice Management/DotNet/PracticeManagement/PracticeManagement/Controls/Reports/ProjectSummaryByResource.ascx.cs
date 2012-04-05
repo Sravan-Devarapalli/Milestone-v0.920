@@ -12,186 +12,123 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class ProjectSummaryByResource : System.Web.UI.UserControl
     {
-
-        public List<PersonLevelGroupedHours> TimeEntriesGroupByPerson
-        {
-            get
-            {
-                return ViewState["ProjectSummaryByResourceTimeEntries"] as List<PersonLevelGroupedHours>;
-            }
-            set
-            {
-                ViewState["ProjectSummaryByResourceTimeEntries"] = value;
-            }
-        }
-
         private PraticeManagement.Reporting.ProjectSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.ProjectSummaryReport)Page); }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
+        protected void btnView_Command(object sender, CommandEventArgs e)
         {
-
+            int viewIndex = int.Parse((string)e.CommandArgument);
+            SwitchView((Control)sender, viewIndex);
         }
 
-        protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        private void SwitchView(Control control, int viewIndex)
         {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
+            SelectView(control, viewIndex);
+            LoadActiveTabInByResource();
+        }
 
+        private void SetCssClassEmpty()
+        {
+            foreach (TableCell cell in tblProjectViewSwitch.Rows[0].Cells)
+            {
+                cell.CssClass = string.Empty;
             }
         }
 
-        public void DataBindResource(PersonLevelGroupedHours[] reportData)
+        private void SelectView(Control sender, int viewIndex)
         {
-            TimeEntriesGroupByPerson = reportData.ToList();
+            mvProjectReport.ActiveViewIndex = viewIndex;
 
-            if (reportData.Count() > 0)
+            SetCssClassEmpty();
+
+            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
+        }
+
+        public void LoadActiveTabInByResource()
+        {
+            if (mvProjectReport.ActiveViewIndex == 0)
             {
-                divEmptyMessage.Style["display"] = "none";
-                tbHeader.Style["display"] = "";
-                repResource.Visible = true;
-                repResource.DataSource = reportData;
-                repResource.DataBind();
-                PopulateHeaderSection(reportData.ToList());
+                PopulateByResourceSummaryReport();
             }
             else
             {
-                divEmptyMessage.Style["display"] = "";
-                tbHeader.Style["display"] = "none";
-                repResource.Visible = false;
+                PopulateByResourceDetailReport();
             }
-
-
         }
 
-        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
+        private void PopulateByResourceSummaryReport()
         {
-
-            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber));
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append(project.Client.Name);
-            sb.Append("\t");
-            sb.Append(project.Group.Name);
-            sb.Append("\t");
-            sb.AppendLine();
-            //P081003 - [ProjectName]
-            sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(project.Status.Name);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(HostingPage.ProjectRange);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.AppendLine();
-
-            //Header
-            sb.Append("Resource");
-            sb.Append("\t");
-            sb.Append("Project Role");
-            sb.Append("\t");
-            sb.Append("Billable");
-            sb.Append("\t");
-            sb.Append("Non-Billable");
-            sb.Append("\t");
-            sb.Append("Total");
-            sb.Append("\t");
-            sb.Append("Person Variance (in Hours)");
-            sb.Append("\t");
-            sb.AppendLine();
-
-            var list = TimeEntriesGroupByPerson.OrderBy(p => p.Person.PersonLastFirstName);
-
-            //Data
-            foreach (var byPerson in list)
-            {
-                sb.Append(byPerson.Person.PersonLastFirstName);
-                sb.Append("\t");
-                sb.Append(byPerson.Person.ProjectRoleName);
-                sb.Append("\t");
-                sb.Append(GetDoubleFormat(byPerson.BillableHours));
-                sb.Append("\t");
-                sb.Append(GetDoubleFormat(byPerson.NonBillableHours));
-                sb.Append("\t");
-                sb.Append(GetDoubleFormat(byPerson.TotalHours));
-                sb.Append("\t");
-                sb.Append(byPerson.Variance);
-                sb.Append("\t");
-                sb.AppendLine();
-            }
-
-            var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByResource");
-            filename = filename.Replace(' ', '_');
-            GridViewExportUtil.Export(filename, sb);
-
+            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null));
+            ucProjectSummaryReport.DataBindByResourceSummary(data);
+            PopulateHeaderSection(data.ToList());
         }
 
-        public string GetDoubleFormat(double value)
+        private void PopulateByResourceDetailReport()
         {
-            return value.ToString(Constants.Formatting.DoubleValue);
-        }
-
-        protected void btnExportToPDF_OnClick(object sender, EventArgs e)
-        {
-
+            var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null));
+            ucProjectDetailReport.DataBindByResourceDetail(data);
+            PopulateHeaderSection(data.ToList());
         }
 
         private void PopulateHeaderSection(List<PersonLevelGroupedHours> personLevelGroupedHoursList)
         {
-
-            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber)); 
-
-            double billableHours = personLevelGroupedHoursList.Sum(p => p.BillableHours);
-            double nonBillableHours = personLevelGroupedHoursList.Sum(p => p.NonBillableHours);
-            double projectedHours = personLevelGroupedHoursList.Sum(p => p.ForecastedHours);
-
-            var billablePercent = 0;
-            var nonBillablePercent = 0;
-            if (billableHours != 0 || nonBillableHours != 0)
+            if (personLevelGroupedHoursList.Count > 0)
             {
-                billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(billableHours, nonBillableHours);
-                nonBillablePercent = (100 - billablePercent);
-            }
+                tbHeader.Style["display"] = "";
+                var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber));
+                double billableHours = personLevelGroupedHoursList.Sum(p => p.DayTotalHours != null ?  p.DayTotalHours.Sum(d => d.BillableHours) : p.BillableHours);
+                double nonBillableHours = personLevelGroupedHoursList.Sum(p => p.NonBillableHours);
+                double projectedHours = personLevelGroupedHoursList.Sum(p => p.ForecastedHours);
 
-            ltrlAccount.Text = project.Client.Name;
-            ltrlBusinessUnit.Text = project.Group.Name;
-            ltrlProjectedHours.Text = projectedHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlProjectName.Text = project.Name;
-            ltrlProjectNumber.Text = project.ProjectNumber;
-            ltrlProjectStatus.Text = project.Status.Name;
-            ltrlProjectRange.Text = HostingPage.ProjectRange;
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
-            ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlBillablePercent.Text = billablePercent.ToString();
-            ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+                var billablePercent = 0;
+                var nonBillablePercent = 0;
+                if (billableHours != 0 || nonBillableHours != 0)
+                {
+                    billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(billableHours, nonBillableHours);
+                    nonBillablePercent = (100 - billablePercent);
+                }
 
-            if (billablePercent == 0 && nonBillablePercent == 0)
-            {
-                trBillable.Height = "1px";
-                trNonBillable.Height = "1px";
-            }
-            else if (billablePercent == 100)
-            {
-                trBillable.Height = "80px";
-                trNonBillable.Height = "1px";
-            }
-            else if (billablePercent == 0 && nonBillablePercent == 100)
-            {
-                trBillable.Height = "1px";
-                trNonBillable.Height = "80px";
+                ltrlAccount.Text = project.Client.Name;
+                ltrlBusinessUnit.Text = project.Group.Name;
+                ltrlProjectedHours.Text = projectedHours.ToString(Constants.Formatting.DoubleValue);
+                ltrlProjectName.Text = project.Name;
+                ltrlProjectNumber.Text = project.ProjectNumber;
+                ltrlProjectStatus.Text = project.Status.Name;
+                ltrlProjectRange.Text = HostingPage.ProjectRange;
+                ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
+                ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
+                ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
+                ltrlBillablePercent.Text = billablePercent.ToString();
+                ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+
+                if (billablePercent == 0 && nonBillablePercent == 0)
+                {
+                    trBillable.Height = "1px";
+                    trNonBillable.Height = "1px";
+                }
+                else if (billablePercent == 100)
+                {
+                    trBillable.Height = "80px";
+                    trNonBillable.Height = "1px";
+                }
+                else if (billablePercent == 0 && nonBillablePercent == 100)
+                {
+                    trBillable.Height = "1px";
+                    trNonBillable.Height = "80px";
+                }
+                else
+                {
+                    int billablebarHeight = (int)(((float)80 / (float)100) * billablePercent);
+                    trBillable.Height = billablebarHeight.ToString() + "px";
+                    trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
+                }
             }
             else
             {
-                int billablebarHeight = (int)(((float)80 / (float)100) * billablePercent);
-                trBillable.Height = billablebarHeight.ToString() + "px";
-                trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
+                tbHeader.Style["display"] = "none";
             }
-
         }
 
     }
