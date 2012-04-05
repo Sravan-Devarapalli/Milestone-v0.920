@@ -61,6 +61,7 @@
       <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BusinessDevelopmentHours" type="xs:double" />
+      <xs:element minOccurs="0" name="DayTotalHours" nillable="true" type="tns:ArrayOfTimeEntriesGroupByDate" />
       <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
       <xs:element minOccurs="0" name="ForecastedHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="InternalHours" type="xs:double" />
