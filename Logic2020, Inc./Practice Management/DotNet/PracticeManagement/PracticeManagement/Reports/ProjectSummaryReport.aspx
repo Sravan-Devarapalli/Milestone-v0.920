@@ -17,6 +17,87 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+  <script language="javascript" type="text/javascript">
+
+      function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
+          var btn = btnExpandOrCollapseAllClientId;
+          var hdnCollapsed = hdnCollapsedClientId;
+          var isExpand = false;
+          if (btn != null) {
+              if (btn.value == "Expand All") {
+                  isExpand = true;
+                  btn.value = "Collapse All";
+                  btn.title = "Collapse All";
+                  hdnCollapsed.value = 'false';
+              }
+              else {
+                  btn.value = "Expand All";
+                  btn.title = "Expand All";
+                  hdnCollapsed.value = 'true';
+              }
+              var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
+              ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
+          }
+          return false;
+      }
+
+
+      function setAutoOrZeroHeight() {
+
+          var pnlDateDetailsList = $("[id$='pnlDateDetails']");
+
+          var pnlProjectDetailsList = $("[id$='pnlProjectDetails']");
+
+          for (var i = 0; i < pnlProjectDetailsList.length; i++) {
+
+              if (pnlProjectDetailsList[i].style.height != "0px") {
+                  pnlProjectDetailsList[i].style.height = "auto";
+              }
+
+          }
+
+          for (var i = 0; i < pnlDateDetailsList.length; i++) {
+
+              if (pnlDateDetailsList[i].style.height != "0px") {
+                  pnlDateDetailsList[i].style.height = "auto";
+              }
+
+          }
+      }
+
+      function ExpandOrcollapseExtender(cpe, isExpand) {
+          if (cpe != null) {
+              if (isExpand) {
+                  ExpandPanel(cpe)
+              }
+              else {
+                  var isCollapsed = cpe.get_Collapsed();
+                  if (!isCollapsed)
+                      cpe._doClose();
+              }
+          }
+      }
+
+
+      function ExpandPanel(cpe) {
+          var isCollapsed = cpe.get_Collapsed();
+          if (isCollapsed) {
+              cpe.expandPanel();
+          }
+      }
+
+
+      function ExpandOrCollapsePanels(datePanels, isExpand) {
+
+          for (var j = 0; j < datePanels.length; j++) {
+              var cpeDate = $find(datePanels[j]);
+              ExpandOrcollapseExtender(cpeDate, isExpand);
+          }
+
+      }
+
+    
+    </script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
         
@@ -195,12 +276,12 @@
                     </td>
                 </tr>
             </table>
-            <table style="width: 100%; height: 150px;">
+            <table style="width: 100%; height: 130px;">
                 <tr>
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center">
+                    <td style="padding-bottom: 5px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -234,7 +315,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center">
+                    <td style="padding-bottom: 5px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -258,7 +339,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center">
+                    <td style="padding-bottom: 5px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%;">
@@ -281,7 +362,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center">
+                    <td style="padding-bottom: 5px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -305,7 +386,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center">
+                    <td style="padding-bottom: 2px; text-align: center">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 300px;" colspan="3">
@@ -488,7 +569,8 @@
             </div>
         </ContentTemplate>
         <Triggers>
-            <asp:PostBackTrigger ControlID="ucByResource$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="ucByResource$ucProjectSummaryReport$btnExportToExcel" />    
+            <asp:PostBackTrigger ControlID="ucByResource$ucProjectDetailReport$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
