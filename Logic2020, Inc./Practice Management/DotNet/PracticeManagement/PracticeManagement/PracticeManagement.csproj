@@ -371,8 +371,10 @@
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
     <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
+    <Content Include="Controls\Reports\ProjectDetailTabByResource.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryByMatrix.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryByResource.ascx" />
+    <Content Include="Controls\Reports\ProjectSummaryTabByResource.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
     <Content Include="Controls\Reports\TimeEntryReportsHeader.ascx" />
     <Content Include="Controls\Reports\TimePeriodSummaryByProject.ascx" />
@@ -1130,7 +1132,6 @@
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
-    <Content Include="TimeEntrySetting.aspx" />
     <Content Include="TimeEnteredHoursHandler.ashx" />
     <Content Include="TimeEntryHandler.ashx" />
     <None Include="Service References\TimeTypeService\TimeTypeService.wsdl" />
@@ -1271,6 +1272,13 @@
     <Compile Include="Controls\Reports\PersonSummaryReport.ascx.designer.cs">
       <DependentUpon>PersonSummaryReport.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\ProjectDetailTabByResource.ascx.cs">
+      <DependentUpon>ProjectDetailTabByResource.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectDetailTabByResource.ascx.designer.cs">
+      <DependentUpon>ProjectDetailTabByResource.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\ProjectSummaryByMatrix.ascx.cs">
       <DependentUpon>ProjectSummaryByMatrix.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1284,6 +1292,13 @@
     </Compile>
     <Compile Include="Controls\Reports\ProjectSummaryByResource.ascx.designer.cs">
       <DependentUpon>ProjectSummaryByResource.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectSummaryTabByResource.ascx.cs">
+      <DependentUpon>ProjectSummaryTabByResource.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectSummaryTabByResource.ascx.designer.cs">
+      <DependentUpon>ProjectSummaryTabByResource.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\TimeEntriesByPerson.ascx.cs">
       <DependentUpon>TimeEntriesByPerson.ascx</DependentUpon>
@@ -2165,13 +2180,6 @@
     </Compile>
     <Compile Include="TimeEntryHandler.ashx.cs">
       <DependentUpon>TimeEntryHandler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="TimeEntrySetting.aspx.cs">
-      <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TimeEntrySetting.aspx.designer.cs">
-      <DependentUpon>TimeEntrySetting.aspx</DependentUpon>
     </Compile>
     <Compile Include="TimeEntry_New.aspx.cs">
       <DependentUpon>TimeEntry_New.aspx</DependentUpon>
