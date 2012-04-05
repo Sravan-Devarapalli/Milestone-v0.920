@@ -240,6 +240,7 @@
       <xs:element minOccurs="0" name="ImageUrl" nillable="true" type="xs:string" />
       <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q5:ArrayOfPersonIndustry" />
       <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsOffshore" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsStrawMan" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsWelcomeEmailSent" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
@@ -249,6 +250,7 @@
       <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ModifiedDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="OverheadList" nillable="true" type="tns:ArrayOfPersonOverhead" />
+      <xs:element minOccurs="0" name="PaychexID" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PaymentHistory" nillable="true" type="tns:ArrayOfPay" />
       <xs:element minOccurs="0" name="PracticesOwned" nillable="true" type="tns:ArrayOfPractice" />
       <xs:element minOccurs="0" name="ProjectRoleName" nillable="true" type="xs:string" />
