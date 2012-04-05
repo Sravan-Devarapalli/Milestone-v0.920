@@ -60,6 +60,7 @@ namespace PraticeManagement.Controls.Reports
 
             if (TimeEntriesGroupByPersonDetailList.Count > 0)
             {
+                TimeEntriesGroupByPersonDetailList = TimeEntriesGroupByPersonDetailList.OrderBy(p => p.TotalHours > 0 ? 0 : 1).ThenBy(p => p.Person.PersonLastFirstName).ToList();
                 divEmptyMessage.Style["display"] = "none";
                 repPersons.Visible = btnExpandOrCollapseAll.Visible = true;
                 repPersons.DataSource = TimeEntriesGroupByPersonDetailList;
@@ -152,117 +153,112 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+
+            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber));
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(project.Client.Name);
+            sb.Append("\t");
+            sb.Append(project.Group.Name);
+            sb.Append("\t");
+            sb.AppendLine();
+            //P081003 - [ProjectName]
+            sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(project.Status.Name);
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(HostingPage.ProjectRange);
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.AppendLine();
+            if (TimeEntriesGroupByPersonDetailList.Count > 0)
             {
-                var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber));
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append(project.Client.Name);
+                //Header
+                /* Person Name 
+                Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
+                sb.Append("Resource");
                 sb.Append("\t");
-                sb.Append(project.Group.Name);
+                sb.Append("Project Role");
                 sb.Append("\t");
-                sb.AppendLine();
-                //P081003 - [ProjectName]
-                sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
+                sb.Append("Date");
                 sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(project.Status.Name);
+                sb.Append("WorkType");
                 sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(HostingPage.ProjectRange);
+                sb.Append("WorkType Name");
                 sb.Append("\t");
+                sb.Append("Billable");
+                sb.Append("\t");
+                sb.Append("Non-Billable");
+                sb.Append("\t");
+                sb.Append("Total");
+                sb.Append("\t");
+                sb.Append("Note");
                 sb.AppendLine();
-                sb.AppendLine();
-                if (TimeEntriesGroupByPersonDetailList.Count > 0)
+                //Data
+                foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByPersonDetailList)
                 {
-                    //Header
-                    /* Person Name 
-                    Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
-                    sb.Append("Resource");
-                    sb.Append("\t");
-                    sb.Append("Project Role");
-                    sb.Append("\t");
-                    sb.Append("Date");
-                    sb.Append("\t");
-                    sb.Append("WorkType");
-                    sb.Append("\t");
-                    sb.Append("WorkType Name");
-                    sb.Append("\t");
-                    sb.Append("Billable");
-                    sb.Append("\t");
-                    sb.Append("Non-Billable");
-                    sb.Append("\t");
-                    sb.Append("Total");
-                    sb.Append("\t");
-                    sb.Append("Note");
-                    sb.AppendLine();
-
-                    //Data
-                    foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByPersonDetailList)
+                    if (timeEntriesGroupByClientAndProject.DayTotalHours != null)
                     {
-                        if (timeEntriesGroupByClientAndProject.DayTotalHours != null)
+                        foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
                         {
-                            foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
+                            foreach (var byWorkType in byDateList.DayTotalHoursList)
                             {
-
-                                foreach (var byWorkType in byDateList.DayTotalHoursList)
-                                {
-                                    sb.Append(timeEntriesGroupByClientAndProject.Person.PersonLastFirstName);
-                                    sb.Append("\t");
-                                    sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
-                                    sb.Append("\t");
-                                    sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
-                                    sb.Append("\t");
-                                    sb.Append(byWorkType.TimeType.Code);
-                                    sb.Append("\t");
-                                    sb.Append(byWorkType.TimeType.Name);
-                                    sb.Append("\t");
-                                    sb.Append(byWorkType.BillableHours);
-                                    sb.Append("\t");
-                                    sb.Append(byWorkType.NonBillableHours);
-                                    sb.Append("\t");
-                                    sb.Append(byWorkType.TotalHours);
-                                    sb.Append("\t");
-                                    sb.Append(byWorkType.NoteForExport);
-                                    sb.Append("\t");
-                                    sb.AppendLine();
-                                }
+                                sb.Append(timeEntriesGroupByClientAndProject.Person.PersonLastFirstName);
+                                sb.Append("\t");
+                                sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
+                                sb.Append("\t");
+                                sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
+                                sb.Append("\t");
+                                sb.Append(byWorkType.TimeType.Code);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.TimeType.Name);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.BillableHours);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.NonBillableHours);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.TotalHours);
+                                sb.Append("\t");
+                                sb.Append(byWorkType.NoteForExport);
+                                sb.Append("\t");
+                                sb.AppendLine();
                             }
                         }
-                        else
-                        {
-                            sb.Append(timeEntriesGroupByClientAndProject.Person.PersonLastFirstName);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
-                            sb.Append("\t");
-                            sb.Append("");
-                            sb.Append("\t");
-                            sb.Append("");
-                            sb.Append("\t");
-                            sb.Append("");
-                            sb.Append("\t");
-                            sb.Append("0");
-                            sb.Append("\t");
-                            sb.Append("0");
-                            sb.Append("\t");
-                            sb.Append("0");
-                            sb.Append("\t");
-                            sb.Append("");
-                            sb.Append("\t");
-                            sb.AppendLine();
-                        }
-
+                    }
+                    else
+                    {
+                        sb.Append(timeEntriesGroupByClientAndProject.Person.PersonLastFirstName);
+                        sb.Append("\t");
+                        sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
+                        sb.Append("\t");
+                        sb.Append("");
+                        sb.Append("\t");
+                        sb.Append("");
+                        sb.Append("\t");
+                        sb.Append("");
+                        sb.Append("\t");
+                        sb.Append("0");
+                        sb.Append("\t");
+                        sb.Append("0");
+                        sb.Append("\t");
+                        sb.Append("0");
+                        sb.Append("\t");
+                        sb.Append("");
+                        sb.Append("\t");
+                        sb.AppendLine();
                     }
                 }
-                else
-                {
-                    sb.Append("There are no Time Entries towards this project.");
-                }
-                var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByResourceDetail");
-                filename = filename.Replace(' ', '_');
-                GridViewExportUtil.Export(filename, sb);
-
             }
+            else
+            {
+                sb.Append("There are no Time Entries towards this project.");
+            }
+            var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByResourceDetail");
+            filename = filename.Replace(' ', '_');
+            GridViewExportUtil.Export(filename, sb);
+
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
@@ -272,3 +268,4 @@ namespace PraticeManagement.Controls.Reports
 
     }
 }
+
