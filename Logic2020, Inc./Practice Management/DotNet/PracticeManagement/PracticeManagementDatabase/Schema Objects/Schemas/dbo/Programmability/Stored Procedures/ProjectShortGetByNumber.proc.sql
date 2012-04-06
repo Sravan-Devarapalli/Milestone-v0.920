@@ -6,12 +6,21 @@
 -- =============================================
 CREATE PROCEDURE dbo.ProjectShortGetByNumber
 (
-	@ProjectNumber NVARCHAR(12)
+	@ProjectNumber NVARCHAR(12),
+	@MilestoneId   INT = NULL,
+	@StartDate DATETIME = NULL,
+	@EndDate   DATETIME = NULL
 )
 AS
 BEGIN
 
 	SET NOCOUNT ON;
+
+	IF(@StartDate IS NOT NULL AND @EndDate IS NOT NULL)
+	BEGIN
+		SET @StartDate = CONVERT(DATE,@StartDate)
+		SET @EndDate = CONVERT(DATE,@EndDate)
+	END
 
 	DECLARE @ProjectBilling NVARCHAR(12)
 	SET @ProjectBilling = ''
@@ -24,6 +33,11 @@ BEGIN
 	  INNER JOIN dbo.Project AS P ON M.ProjectId = P.ProjectId
 	  INNER JOIN dbo.ChargeCode CC ON CC.ProjectId = P.ProjectId 
 	  WHERE P.ProjectNumber = @ProjectNumber  
+			AND (@MilestoneId IS NULL OR M.MilestoneId = @MilestoneId)
+			AND (
+					(@StartDate IS NULL AND @EndDate IS NULL) 
+					OR (M.StartDate < @EndDate AND @StartDate  < M.ProjectedDeliveryDate)
+				)
 
 	SELECT P.ProjectId,
 		   P.StartDate,
