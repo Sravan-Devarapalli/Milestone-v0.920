@@ -77,22 +77,32 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                CollapsiblePanelDateExtenderClientIds = new List<string>();
+                CollapsiblePanelExtenderClientIds = new List<KeyValuePair<string, string>>();
 
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var repDate = e.Item.FindControl("repDate") as Repeater;
                 PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
+
+                var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
+                cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
+
                 sectionId = dataitem.TimeEntrySectionId;
                 repDate.DataSource = dataitem.DayTotalHours;
                 repDate.DataBind();
+
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
+
+                KeyValuePair<string, string> kvPair = new KeyValuePair<string, string>(cpePerson.BehaviorID, output);
+                CollapsiblePanelExtenderClientIds.Add(kvPair);
 
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
                 JavaScriptSerializer jss = new JavaScriptSerializer();
-                var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
+                var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
                 hdncpeExtendersIds.Value = output;
                 btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
                 hdnCollapsed.Value = "true";
@@ -103,7 +113,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-
+                CollapsiblePanelDateExtenderClientIds = new List<string>();
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -112,7 +122,7 @@ namespace PraticeManagement.Controls.Reports
                 var rep = sender as Repeater;
 
                 var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
-                cpeDate.BehaviorID = Guid.NewGuid().ToString();
+                cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
                 CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
 
 
@@ -144,7 +154,7 @@ namespace PraticeManagement.Controls.Reports
         protected string GetDateFormat(DateTime date)
         {
             return date.ToString(Constants.Formatting.ReportDateFormat);
-        }   
+        }
 
         protected bool GetNonBillableImageVisibility(double nonBillableHours)
         {
