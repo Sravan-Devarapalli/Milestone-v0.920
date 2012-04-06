@@ -370,7 +370,7 @@ namespace PracticeManagementService
         Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        Project GetProjectShortByProjectNumber(string projectNumber);
+        Project GetProjectShortByProjectNumber(string projectNumber,int? milestoneId, DateTime? startDate, DateTime? endDate);
 
     }
 }
