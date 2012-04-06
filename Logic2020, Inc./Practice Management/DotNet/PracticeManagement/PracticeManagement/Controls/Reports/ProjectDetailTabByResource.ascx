@@ -1,4 +1,5 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectDetailTabByResource.ascx.cs" Inherits="PraticeManagement.Controls.Reports.ProjectDetailTabByResource" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectDetailTabByResource.ascx.cs"
+    Inherits="PraticeManagement.Controls.Reports.ProjectDetailTabByResource" %>
 <%@ Import Namespace="DataTransferObjects.Reports" %>
 <asp:HiddenField ID="hdncpeExtendersIds" runat="server" Value="" />
 <asp:HiddenField ID="hdnCollapsed" runat="server" Value="true" />
@@ -19,8 +20,8 @@
                             UseSubmitBehavior="false" ToolTip="Export To Excel" />
                     </td>
                     <td>
-                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick" Enabled="false"
-                            UseSubmitBehavior="false" ToolTip="Export To PDF" />
+                        <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                            Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
                     </td>
                 </tr>
             </table>
@@ -33,9 +34,17 @@
     <ItemTemplate>
         <table class="WholeWidthWithHeight">
             <tr style="text-align: left;">
-                <td colspan="4" class="ProjectAccountName" style="width: 95%;white-space:nowrap;">
+                <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;">
+                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpePerson" runat="Server" CollapsedText="Expand Person Details"
+                        ExpandedText="Collapse Person Details" EnableViewState="false" BehaviorID="cpePerson"
+                        Collapsed="true" TargetControlID="pnlProjectDetails" ImageControlID="imgProject"
+                        CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgProject"
+                        ExpandControlID="imgProject" TextLabelID="lbProject" />
+                    <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
+                    <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
                     <%# Eval("Person.PersonLastFirstName")%>
-                    <b style="font-style:normal;"><%# GetPersonRole((string)Eval("Person.ProjectRoleName"))%></b>
+                    <b style="font-style: normal;">
+                        <%# GetPersonRole((string)Eval("Person.ProjectRoleName"))%></b>
                 </td>
                 <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
@@ -59,7 +68,7 @@
                                 <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                                 <%# GetDateFormat((DateTime)Eval("Date"))%>
                             </td>
-                            <td style="width: 10%; text-align: right;vertical-align: middle;">
+                            <td style="width: 10%; text-align: right; vertical-align: middle;">
                                 <table width="100%">
                                     <tr>
                                         <td style="text-align: right; font-weight: bold;">
@@ -72,7 +81,8 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width:80px;"> </td>
+                            <td style="width: 80px;">
+                            </td>
                         </tr>
                     </table>
                     <asp:Panel ID="pnlDateDetails" runat="server">
@@ -163,7 +173,7 @@
                                 <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                                 <%# GetDateFormat((DateTime)Eval("Date"))%>
                             </td>
-                            <td style="width: 10%; text-align: right;vertical-align: middle;">
+                            <td style="width: 10%; text-align: right; vertical-align: middle;">
                                 <table width="100%">
                                     <tr>
                                         <td style="text-align: right; font-weight: bold;">
@@ -176,7 +186,8 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width:80px;"> </td>
+                            <td style="width: 80px;">
+                            </td>
                         </tr>
                     </table>
                     <asp:Panel ID="pnlDateDetails" runat="server">
@@ -232,7 +243,8 @@
                                         <td colspan="2" style="width: 12%">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: #F0F0F1;" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>' >
+                                    <tr style="text-align: left; background-color: #F0F0F1;" id="trNote" runat="server"
+                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
                                         <td style="padding-left: 55px;" class="wrapword">
                                             <table>
                                                 <tr>
