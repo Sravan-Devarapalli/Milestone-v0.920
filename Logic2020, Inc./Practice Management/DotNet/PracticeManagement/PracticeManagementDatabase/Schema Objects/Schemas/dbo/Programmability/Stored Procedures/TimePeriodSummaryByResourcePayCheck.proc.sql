@@ -1,6 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 04-03-2012
+-- Updated by : Sainath.CH
+-- Update Date: 04-06-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
 (
@@ -21,8 +23,8 @@ BEGIN
 	  SELECT MP.PersonId
 	  FROM  dbo.MilestonePersonEntry AS MPE 
 	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
-											AND ( MPE.StartDate BETWEEN @StartDate AND @EndDate
-													OR MPE.EndDate BETWEEN @StartDate AND @EndDate )
+											AND MPE.StartDate < @EndDate 
+											AND @StartDate  < MPE.EndDate
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId AND p.IsStrawman = 0
 	  GROUP BY MP.PersonId
@@ -81,7 +83,7 @@ BEGIN
 						INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 						INNER JOIN dbo.TimeType TT ON CC.TimeTypeId = TT.TimeTypeId
 						INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
-					WHERE TE.ChargeCodeDate < ISNULL(P.TerminationDate,dbo.GetFutureDate())
+					WHERE TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())
 					GROUP BY TE.PersonId
 		) Data
 		FULL JOIN AssignedPersons AP ON AP.PersonId = Data.PersonId 
