@@ -7,9 +7,6 @@ using DataTransferObjects.TimeEntry;
 
 namespace DataTransferObjects.Reports
 {
-    /// <summary>
-    /// Represents TimeEntries grouped (i.e. day/week/month/year) based on the particular WorkType
-    /// </summary>
     [DataContract]
     [Serializable]
     public class WorkTypeLevelGroupedHours
@@ -22,14 +19,14 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public double BillabileHours
+        public double BillableHours
         {
             get;
             set;
         }
 
         [DataMember]
-        public double NonBillabileHours
+        public double NonBillableHours
         {
             get;
             set;
@@ -40,66 +37,16 @@ namespace DataTransferObjects.Reports
         {
             get 
             {
-                return BillabileHours + NonBillabileHours;
+                return BillableHours + NonBillableHours;
             }
         }
 
-
-        [DataMember]
-        public List<GroupedHours> GroupedHoursList
+        public int WorkTypeTotalHoursPercent
         {
             get;
             set;
         }
 
-
-
-        public double BillabileTotal
-        {
-            get
-            {
-                if (GroupedHoursList != null)
-                {
-                    return GroupedHoursList.Sum(G => G.BillabileTotal);
-                }
-                else
-                {
-                    return 0d;
-                }
-
-
-            }
-        }
-
-        public double NonBillableTotal
-        {
-            get
-            {
-                if (GroupedHoursList != null)
-                {
-                    return GroupedHoursList.Sum(G => G.NonBillableTotal);
-                }
-                else
-                {
-                    return 0d;
-                }
-            }
-        }
-
-        public double CombinedTotal
-        {
-            get
-            {
-                if (GroupedHoursList != null)
-                {
-                    return GroupedHoursList.Sum(G => G.CombinedTotal);
-                }
-                else
-                {
-                    return 0d;
-                }
-            }
-        }
     }
 }
 
