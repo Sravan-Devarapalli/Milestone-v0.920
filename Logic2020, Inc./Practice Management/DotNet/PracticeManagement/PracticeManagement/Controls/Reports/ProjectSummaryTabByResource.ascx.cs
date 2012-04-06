@@ -76,7 +76,7 @@ namespace PraticeManagement.Controls.Reports
             sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
             sb.Append("\t");
             sb.AppendLine();
-            sb.Append(project.Status.Name);
+            sb.Append(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType);
             sb.Append("\t");
             sb.AppendLine();
             sb.Append(HostingPage.ProjectRange);
