@@ -61,7 +61,7 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectShortByProjectNumber", ReplyAction="http://tempuri.org/IProjectService/GetProjectShortByProjectNumberResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
-        DataTransferObjects.Project GetProjectShortByProjectNumber(string projectNumber);
+        DataTransferObjects.Project GetProjectShortByProjectNumber(string projectNumber, System.Nullable<int> milestoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
@@ -196,6 +196,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
+       
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -260,8 +261,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate);
         }
         
-        public DataTransferObjects.Project GetProjectShortByProjectNumber(string projectNumber) {
-            return base.Channel.GetProjectShortByProjectNumber(projectNumber);
+        public DataTransferObjects.Project GetProjectShortByProjectNumber(string projectNumber, System.Nullable<int> milestoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate) {
+            return base.Channel.GetProjectShortByProjectNumber(projectNumber, milestoneId, startDate, endDate);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
