@@ -77,7 +77,7 @@ namespace PraticeManagement.Controls.Reports
             if (personLevelGroupedHoursList.Count > 0)
             {
                 tbHeader.Style["display"] = "";
-                var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber));
+                var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber,HostingPage.MilestoneId,HostingPage.StartDate,HostingPage.EndDate));
                 double billableHours = personLevelGroupedHoursList.Sum(p => p.DayTotalHours != null ?  p.DayTotalHours.Sum(d => d.BillableHours) : p.BillableHours);
                 double nonBillableHours = personLevelGroupedHoursList.Sum(p => p.NonBillableHours);
                 double projectedHours = personLevelGroupedHoursList.Sum(p => p.ForecastedHours);
