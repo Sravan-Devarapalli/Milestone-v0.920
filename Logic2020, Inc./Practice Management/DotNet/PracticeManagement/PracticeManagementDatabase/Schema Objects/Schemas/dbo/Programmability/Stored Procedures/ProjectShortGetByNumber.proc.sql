@@ -32,13 +32,13 @@ BEGIN
 	DECLARE @ProjectBilling NVARCHAR(12)
 	SET @ProjectBilling = ''
 
-	  SELECT @ProjectBilling = CASE WHEN MIN(CAST(M.IsHourlyAmount AS INT)) IS NULL OR MIN(CC.TimeEntrySectionId) <> 1 THEN ''
+	  SELECT @ProjectBilling = CASE WHEN MIN(CAST(M.IsHourlyAmount AS INT)) IS NULL OR MIN(ISNULL(CC.TimeEntrySectionId,1)) <> 1 THEN ''
 									WHEN (MIN(CAST(M.IsHourlyAmount AS INT)) = MAX(CAST(M.IsHourlyAmount AS INT)) AND MAX(CAST(M.IsHourlyAmount AS INT)) = 0) THEN 'Fixed'
 									WHEN (MIN(CAST(M.IsHourlyAmount AS INT)) = MAX(CAST(M.IsHourlyAmount AS INT)) AND MAX(CAST(M.IsHourlyAmount AS INT)) = 1) THEN 'Hourly'
 									ELSE 'Both' END 
 	  FROM  dbo.Milestone AS M 
 	  INNER JOIN dbo.Project AS P ON M.ProjectId = P.ProjectId
-	  INNER JOIN dbo.ChargeCode CC ON CC.ProjectId = P.ProjectId 
+	  LEFT JOIN dbo.ChargeCode CC ON CC.ProjectId = P.ProjectId 
 	  WHERE P.ProjectNumber = @ProjectNumberLocal  
 			AND (@MilestoneIdLocal IS NULL OR M.MilestoneId = @MilestoneIdLocal)
 			AND (
