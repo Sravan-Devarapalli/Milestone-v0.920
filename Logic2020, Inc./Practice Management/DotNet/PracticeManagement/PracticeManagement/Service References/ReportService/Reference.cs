@@ -31,7 +31,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.ProjectLevelGroupedHours[] TimePeriodSummaryReportByProject(System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkType", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkTypeResponse")]
-        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] TimePeriodSummaryReportByWorkType(System.DateTime startDate, System.DateTime endDate, string timeTypeCategoryIds, string orderByCerteria);
+        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] TimePeriodSummaryReportByWorkType(System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByResource", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByResourceResponse")]
         DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
@@ -40,7 +40,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectDetailReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse")]
-        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria);
+        DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetProjectsByClientId", ReplyAction="http://tempuri.org/IReportService/GetProjectsByClientIdResponse")]
         DataTransferObjects.Project[] GetProjectsByClientId(int clientId);
@@ -63,7 +63,8 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-     
+      
+        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -100,8 +101,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.TimePeriodSummaryReportByProject(startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] TimePeriodSummaryReportByWorkType(System.DateTime startDate, System.DateTime endDate, string timeTypeCategoryIds, string orderByCerteria) {
-            return base.Channel.TimePeriodSummaryReportByWorkType(startDate, endDate, timeTypeCategoryIds, orderByCerteria);
+        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] TimePeriodSummaryReportByWorkType(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.TimePeriodSummaryReportByWorkType(startDate, endDate);
         }
         
         public DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate) {
@@ -112,8 +113,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.ProjectDetailReportByResource(projectNumber, mileStoneId, startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria) {
-            return base.Channel.ProjectSummaryReportByWorkType(projectNumber, timeTypeCategoryIds, orderByCerteria);
+        public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate) {
+            return base.Channel.ProjectSummaryReportByWorkType(projectNumber, mileStoneId, startDate, endDate);
         }
         
         public DataTransferObjects.Project[] GetProjectsByClientId(int clientId) {
