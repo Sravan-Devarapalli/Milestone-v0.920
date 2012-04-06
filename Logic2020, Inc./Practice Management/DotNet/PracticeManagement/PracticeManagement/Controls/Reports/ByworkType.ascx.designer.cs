@@ -13,31 +13,112 @@ namespace PraticeManagement.Controls.Reports {
     public partial class ByworkType {
         
         /// <summary>
-        /// rbBillable control.
+        /// ltWorkTypeCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputRadioButton rbBillable;
+        protected global::System.Web.UI.WebControls.Literal ltWorkTypeCount;
         
         /// <summary>
-        /// rbNonBillable control.
+        /// lbRange control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputRadioButton rbNonBillable;
+        protected global::System.Web.UI.WebControls.Literal lbRange;
         
         /// <summary>
-        /// rbCombined control.
+        /// ltrlTotalHours control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputRadioButton rbCombined;
+        protected global::System.Web.UI.WebControls.Literal ltrlTotalHours;
+        
+        /// <summary>
+        /// ltrlAvgHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlAvgHours;
+        
+        /// <summary>
+        /// ltrlBillableHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlBillableHours;
+        
+        /// <summary>
+        /// ltrlNonBillableHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlNonBillableHours;
+        
+        /// <summary>
+        /// ltrlBillablePercent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlBillablePercent;
+        
+        /// <summary>
+        /// trBillable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trBillable;
+        
+        /// <summary>
+        /// ltrlNonBillablePercent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlNonBillablePercent;
+        
+        /// <summary>
+        /// trNonBillable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trNonBillable;
+        
+        /// <summary>
+        /// btnExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        
+        /// <summary>
+        /// btnExportToPDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToPDF;
         
         /// <summary>
         /// repWorkType control.
@@ -49,22 +130,13 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Repeater repWorkType;
         
         /// <summary>
-        /// lblTotalHours control.
+        /// divEmptyMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblTotalHours;
-        
-        /// <summary>
-        /// extBillableNonBillableAndTotalExtender control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.BillableNonBillableAndTotal.BillableNonBillableAndTotalExtender extBillableNonBillableAndTotalExtender;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyMessage;
     }
 }
 
