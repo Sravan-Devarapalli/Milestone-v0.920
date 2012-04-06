@@ -2649,6 +2649,7 @@ namespace DataAccess
                             int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
                             int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
                             int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                            int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
                             
 
                             var project = new Project
@@ -2661,8 +2662,8 @@ namespace DataAccess
                                   EndDate =
                                       !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
                                   ProjectNumber = projectNumber,
+                                  BillableType = !reader.IsDBNull(billingTypeIndex) ? reader.GetString(billingTypeIndex) : string.Empty
                               };
-
 
                             project.Status = new ProjectStatus
                             {
