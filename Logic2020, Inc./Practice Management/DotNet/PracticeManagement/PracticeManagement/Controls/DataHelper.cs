@@ -1935,6 +1935,7 @@ namespace PraticeManagement.Controls
             }
             else
             {
+                persons = persons.OrderBy(p => p.PersonLastFirstName).ToArray();
                 foreach (var person in persons)
                 {
                     var itemText = person.LastName + ", " + person.FirstName;
