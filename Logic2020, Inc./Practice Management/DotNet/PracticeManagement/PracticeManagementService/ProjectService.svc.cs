@@ -874,15 +874,15 @@ namespace PracticeManagementService
 
         }
 
-        public Project GetProjectShortByProjectNumber(string projectNumber)
+        public Project GetProjectShortByProjectNumber(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
         {
             try
             {
-                return ProjectDAL.GetProjectShortByProjectNumber(projectNumber);
+                return ProjectDAL.GetProjectShortByProjectNumber(projectNumber, milestoneId, startDate, endDate);
             }
             catch (Exception e)
             {
-                
+
                 throw e;
             }
 
@@ -1116,9 +1116,9 @@ namespace PracticeManagementService
 
         }
 
-        public List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal,int personId,DateTime startDate, DateTime endDate)
+        public List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, DateTime startDate, DateTime endDate)
         {
-            return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate,  endDate);
+            return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
 
 
@@ -1139,7 +1139,7 @@ namespace PracticeManagementService
 
         public void SetProjectTimeTypes(int projectId, string projectTimeTypesList)
         {
-            ProjectDAL.SetProjectTimeTypes(projectId,projectTimeTypesList,null,null);
+            ProjectDAL.SetProjectTimeTypes(projectId, projectTimeTypesList, null, null);
         }
 
         public Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate)
