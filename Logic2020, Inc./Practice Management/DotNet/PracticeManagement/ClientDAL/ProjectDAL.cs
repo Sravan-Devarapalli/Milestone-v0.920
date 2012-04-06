@@ -2626,7 +2626,7 @@ namespace DataAccess
 
 
 
-        public static Project GetProjectShortByProjectNumber(string projectNumber)
+        public static Project GetProjectShortByProjectNumber(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -2636,6 +2636,9 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(Constants.ColumnNames.ProjectNumberColumn, projectNumber);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
 
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
