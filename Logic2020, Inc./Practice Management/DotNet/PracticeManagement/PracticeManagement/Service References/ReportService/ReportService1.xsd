@@ -67,6 +67,7 @@
       <xs:element minOccurs="0" name="InternalHours" type="xs:double" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q4:Person" />
       <xs:element minOccurs="0" name="ProjectNonBillableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="TimeEntrySectionId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonLevelGroupedHours" nillable="true" type="tns:PersonLevelGroupedHours" />
@@ -96,27 +97,11 @@
   <xs:complexType name="WorkTypeLevelGroupedHours">
     <xs:sequence>
       <xs:element minOccurs="0" name="BillabileHours" type="xs:double" />
-      <xs:element minOccurs="0" name="GroupedHoursList" nillable="true" type="tns:ArrayOfGroupedHours" />
       <xs:element minOccurs="0" name="NonBillabileHours" type="xs:double" />
       <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="WorkType" nillable="true" type="q6:TimeTypeRecord" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="WorkTypeLevelGroupedHours" nillable="true" type="tns:WorkTypeLevelGroupedHours" />
-  <xs:complexType name="ArrayOfGroupedHours">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupedHours" nillable="true" type="tns:GroupedHours" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfGroupedHours" nillable="true" type="tns:ArrayOfGroupedHours" />
-  <xs:complexType name="GroupedHours">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BillabileTotal" type="xs:double" />
-      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="NonBillableTotal" type="xs:double" />
-      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="GroupedHours" nillable="true" type="tns:GroupedHours" />
   <xs:complexType name="ArrayOfPersonLevelPayCheck">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonLevelPayCheck" nillable="true" type="tns:PersonLevelPayCheck" />
