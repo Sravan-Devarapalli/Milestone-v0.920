@@ -58,13 +58,13 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Literal ltrlProjectName;
         
         /// <summary>
-        /// ltrlProjectStatus control.
+        /// ltrlProjectStatusAndBillingType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlProjectStatus;
+        protected global::System.Web.UI.WebControls.Literal ltrlProjectStatusAndBillingType;
         
         /// <summary>
         /// ltrlProjectRange control.
