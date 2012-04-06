@@ -49,30 +49,6 @@
             return false;
         }
 
-
-        function setAutoOrZeroHeight() {
-
-            var pnlDateDetailsList = $("[id$='pnlDateDetails']");
-
-            var pnlProjectDetailsList = $("[id$='pnlProjectDetails']");
-
-            for (var i = 0; i < pnlProjectDetailsList.length; i++) {
-
-                if (pnlProjectDetailsList[i].style.height != "0px") {
-                    pnlProjectDetailsList[i].style.height = "auto";
-                }
-
-            }
-
-            for (var i = 0; i < pnlDateDetailsList.length; i++) {
-
-                if (pnlDateDetailsList[i].style.height != "0px") {
-                    pnlDateDetailsList[i].style.height = "auto";
-                }
-
-            }
-        }
-
         function ExpandOrcollapseExtender(cpe, isExpand) {
             if (cpe != null) {
                 if (isExpand) {
