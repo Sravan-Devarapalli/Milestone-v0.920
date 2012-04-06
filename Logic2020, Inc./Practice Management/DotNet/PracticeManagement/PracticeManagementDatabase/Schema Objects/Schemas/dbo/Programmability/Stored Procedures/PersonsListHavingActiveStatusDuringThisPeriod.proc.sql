@@ -29,9 +29,10 @@ BEGIN
 		WHERE 
 		p.IsStrawman = 0
 		AND PSH.PersonStatusId = 1 -- ACTIVE Status
-		AND P.HireDate < @StartDate 
+		AND (P.HireDate - (DATEPART(dw,P.HireDate) -1 )) <= @StartDate 
 		AND  ( @StartDate < ISNULL(PSH.EndDate,dbo.GetFutureDate()) AND @EndDate > PSH.StartDate ) OR
 		     ( minSD.statusId = 1 AND  P.HireDate < minSD.minStartDate AND @StartDate < minSD.minStartDate AND @EndDate > P.HireDate )
 		ORDER BY p.LastName, p.FirstName
 
 END
+
