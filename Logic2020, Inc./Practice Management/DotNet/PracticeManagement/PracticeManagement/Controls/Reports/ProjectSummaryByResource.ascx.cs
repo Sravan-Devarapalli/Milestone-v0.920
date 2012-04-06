@@ -95,7 +95,7 @@ namespace PraticeManagement.Controls.Reports
                 ltrlProjectedHours.Text = projectedHours.ToString(Constants.Formatting.DoubleValue);
                 ltrlProjectName.Text = project.Name;
                 ltrlProjectNumber.Text = project.ProjectNumber;
-                ltrlProjectStatus.Text = project.Status.Name;
+                ltrlProjectStatusAndBillingType.Text = string.IsNullOrEmpty(project.BillableType) ? project.Status.Name  : project.Status.Name + ", " + project.BillableType;
                 ltrlProjectRange.Text = HostingPage.ProjectRange;
                 ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
                 ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
