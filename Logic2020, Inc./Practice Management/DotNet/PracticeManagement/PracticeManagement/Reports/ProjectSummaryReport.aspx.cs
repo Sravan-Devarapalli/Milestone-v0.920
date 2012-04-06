@@ -118,7 +118,9 @@ namespace PraticeManagement.Reporting
         }
 
         protected void txtProjectNumber_OnTextChanged(object sender, EventArgs e)
-        {   
+        {
+            ddlView.SelectedValue = "";
+            ddlPeriod.SelectedValue = "*";
             PopulateddlPeriod(ProjectNumber);
             LoadActiveView();
         }
@@ -338,6 +340,8 @@ namespace PraticeManagement.Reporting
 
         private void PopulateControls(string projectNumber)
         {
+            ddlView.SelectedValue = "";
+            ddlPeriod.SelectedValue = "*";
             txtProjectNumber.Text = projectNumber;
             PopulateddlPeriod(projectNumber);
             LoadActiveView();
