@@ -440,7 +440,7 @@ namespace DataAccess
             }
         }
 
-        public static List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate, string timeTypeCategoryIds, string orderByCerteria)
+        public static List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByWorkType, connection))
@@ -448,8 +448,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeCategoryIdsParam, !string.IsNullOrEmpty(timeTypeCategoryIds) ? timeTypeCategoryIds : (Object)DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, !string.IsNullOrEmpty(orderByCerteria) ? orderByCerteria : (Object)DBNull.Value);
+
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
@@ -467,12 +466,10 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
-                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
                 int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
-                int groupByCerteriaIndex = reader.GetOrdinal(Constants.ColumnNames.GroupByCerteria);
                 int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
                 int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
                 int isAdministrativeColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAdministrativeColumn);
@@ -482,38 +479,22 @@ namespace DataAccess
                 {
                     int workTypeId = reader.GetInt32(timeTypeIdIndex);
 
-                    GroupedHours GH = new GroupedHours();
-                    GH.StartDate = reader.GetDateTime(startDateIndex);
-                    GH.SetEnddate(reader.GetString(groupByCerteriaIndex));
-                    GH.BillabileTotal = reader.GetDouble(billableHoursIndex);
-                    GH.NonBillableTotal = reader.GetDouble(nonBillableHoursIndex);
-
-
-                    if (!result.Any(p => p.WorkType.Id == workTypeId))
+                    var tt = new TimeTypeRecord
                     {
+                        Id = workTypeId,
+                        Name = reader.GetString(timeTypeNameIndex),
+                        IsDefault = reader.GetBoolean(isDefaultIndex),
+                        IsInternal = reader.GetBoolean(isInternalColumnIndex),
+                        IsAdministrative = reader.GetBoolean(isAdministrativeColumnIndex),
+                        Category = reader.GetString(categoryIndex)
+                    };
 
-                        WorkTypeLevelGroupedHours worktypeLGH = new WorkTypeLevelGroupedHours();
+                    WorkTypeLevelGroupedHours worktypeLGH = new WorkTypeLevelGroupedHours();
+                    worktypeLGH.BillableHours= reader.GetDouble(billableHoursIndex);
+                    worktypeLGH.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
+                    worktypeLGH.WorkType = tt;
+                    result.Add(worktypeLGH);
 
-                        var tt = new TimeTypeRecord
-                        {
-                            Id = workTypeId,
-                            Name = reader.GetString(timeTypeNameIndex),
-                            IsDefault = reader.GetBoolean(isDefaultIndex),
-                            IsInternal = reader.GetBoolean(isInternalColumnIndex),
-                            IsAdministrative = reader.GetBoolean(isAdministrativeColumnIndex),
-                            Category = reader.GetString(categoryIndex)
-                        };
-
-                        worktypeLGH.WorkType = tt;
-                        worktypeLGH.GroupedHoursList = new List<GroupedHours>();
-                        worktypeLGH.GroupedHoursList.Add(GH);
-                        result.Add(worktypeLGH);
-                    }
-                    else
-                    {
-                        WorkTypeLevelGroupedHours worktypeLGH = result.First(w => w.WorkType.Id == workTypeId);
-                        worktypeLGH.GroupedHoursList.Add(GH);
-                    }
                 }
             }
         }
@@ -688,13 +669,16 @@ namespace DataAccess
             }
         }
 
-        public static List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, string timeTypeCategoryIds, string orderByCerteria)
+        public static List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByWorkType, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber);
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
