@@ -3,7 +3,8 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
-<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc" TagName="DateInterval" %>
+<%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
+    TagName="DateInterval" %>
 <%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
     TagName="TimeEntryReportsHeader" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
@@ -17,84 +18,67 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-  <script language="javascript" type="text/javascript">
+    <script language="javascript" type="text/javascript">
 
-      function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
-          var btn = btnExpandOrCollapseAllClientId;
-          var hdnCollapsed = hdnCollapsedClientId;
-          var isExpand = false;
-          if (btn != null) {
-              if (btn.value == "Expand All") {
-                  isExpand = true;
-                  btn.value = "Collapse All";
-                  btn.title = "Collapse All";
-                  hdnCollapsed.value = 'false';
-              }
-              else {
-                  btn.value = "Expand All";
-                  btn.title = "Expand All";
-                  hdnCollapsed.value = 'true';
-              }
-              var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
-              ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
-          }
-          return false;
-      }
-
-
-      function setAutoOrZeroHeight() {
-
-          var pnlDateDetailsList = $("[id$='pnlDateDetails']");
-
-          var pnlProjectDetailsList = $("[id$='pnlProjectDetails']");
-
-          for (var i = 0; i < pnlProjectDetailsList.length; i++) {
-
-              if (pnlProjectDetailsList[i].style.height != "0px") {
-                  pnlProjectDetailsList[i].style.height = "auto";
-              }
-
-          }
-
-          for (var i = 0; i < pnlDateDetailsList.length; i++) {
-
-              if (pnlDateDetailsList[i].style.height != "0px") {
-                  pnlDateDetailsList[i].style.height = "auto";
-              }
-
-          }
-      }
-
-      function ExpandOrcollapseExtender(cpe, isExpand) {
-          if (cpe != null) {
-              if (isExpand) {
-                  ExpandPanel(cpe)
-              }
-              else {
-                  var isCollapsed = cpe.get_Collapsed();
-                  if (!isCollapsed)
-                      cpe._doClose();
-              }
-          }
-      }
+        function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
+            var btn = btnExpandOrCollapseAllClientId;
+            var hdnCollapsed = hdnCollapsedClientId;
+            var isExpand = false;
+            if (btn != null) {
+                if (btn.value == "Expand All") {
+                    isExpand = true;
+                    btn.value = "Collapse All";
+                    btn.title = "Collapse All";
+                    hdnCollapsed.value = 'false';
+                }
+                else {
+                    btn.value = "Expand All";
+                    btn.title = "Expand All";
+                    hdnCollapsed.value = 'true';
+                }
+                
+                var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
+                ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
+            }
+            return false;
+        }
 
 
-      function ExpandPanel(cpe) {
-          var isCollapsed = cpe.get_Collapsed();
-          if (isCollapsed) {
-              cpe.expandPanel();
-          }
-      }
 
 
-      function ExpandOrCollapsePanels(datePanels, isExpand) {
+        function ExpandOrcollapseExtender(cpe, isExpand) {
+            if (cpe != null) {
+                if (isExpand) {
+                    ExpandPanel(cpe)
+                }
+                else {
+                    var isCollapsed = cpe.get_Collapsed();
+                    if (!isCollapsed)
+                        cpe._doClose();
+                }
+            }
+        }
 
-          for (var j = 0; j < datePanels.length; j++) {
-              var cpeDate = $find(datePanels[j]);
-              ExpandOrcollapseExtender(cpeDate, isExpand);
-          }
 
-      }
+        function ExpandPanel(cpe) {
+            var isCollapsed = cpe.get_Collapsed();
+            if (isCollapsed) {
+                cpe.expandPanel();
+            }
+        }
+
+
+        function ExpandOrCollapsePanels(ids, isExpand) {
+            for (var i = 0; i < ids.length; i++) {
+                var cpe = $find(ids[i].Key);
+                //var datePanels = jQuery.parseJSON(ids[i].Value);
+                ExpandOrcollapseExtender(cpe, isExpand);
+                //                for (var j = 0; j < datePanels.length; j++) {
+                //                    var cpeDate = $find(datePanels[j]);
+                //                    ExpandOrcollapseExtender(cpeDate, isExpand);
+                //                }
+            }
+        }
 
     
     </script>
@@ -506,17 +490,17 @@
                                         <table id="tblProjectSearchResult" class="tablesorter CompPerfTable WholeWidth">
                                             <thead>
                                                 <tr class="CompPerfHeader">
-                                                    <th style="width: 20%; text-align: center;background:url(../images/cp-header-bg.png) repeat-x 0px 0px;">
+                                                    <th style="width: 20%; text-align: center; background: url(../images/cp-header-bg.png) repeat-x 0px 0px;">
                                                         <div class="ie-bg">
                                                             Project
                                                         </div>
                                                     </th>
-                                                    <th style="width: 50%; text-align: center;background:url(../images/cp-header-bg.png) repeat-x 0px 0px;">
+                                                    <th style="width: 50%; text-align: center; background: url(../images/cp-header-bg.png) repeat-x 0px 0px;">
                                                         <div class="ie-bg">
                                                             Project Name
                                                         </div>
                                                     </th>
-                                                    <th style="text-align: center;background:url(../images/cp-header-bg.png) repeat-x 0px 0px;">
+                                                    <th style="text-align: center; background: url(../images/cp-header-bg.png) repeat-x 0px 0px;">
                                                         <div class="ie-bg">
                                                             Account
                                                         </div>
@@ -569,7 +553,7 @@
             </div>
         </ContentTemplate>
         <Triggers>
-            <asp:PostBackTrigger ControlID="ucByResource$ucProjectSummaryReport$btnExportToExcel" />    
+            <asp:PostBackTrigger ControlID="ucByResource$ucProjectSummaryReport$btnExportToExcel" />
             <asp:PostBackTrigger ControlID="ucByResource$ucProjectDetailReport$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
