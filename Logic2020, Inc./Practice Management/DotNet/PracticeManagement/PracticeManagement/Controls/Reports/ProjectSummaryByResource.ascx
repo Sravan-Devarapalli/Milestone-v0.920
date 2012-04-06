@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <td style="padding-top: 5px; vertical-align: bottom;">
-                        <asp:Literal ID="ltrlProjectStatus" runat="server"></asp:Literal>
+                        <asp:Literal ID="ltrlProjectStatusAndBillingType" runat="server"></asp:Literal>
                     </td>
                 </tr>
                  <tr>
