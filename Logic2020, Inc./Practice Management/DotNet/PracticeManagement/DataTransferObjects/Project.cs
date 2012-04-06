@@ -382,6 +382,9 @@ namespace DataTransferObjects
         [DataMember]
         public int TimeEntrySectionId { get; set; }
 
+        [DataMember]
+        public string BillableType { get; set; }
+
         #endregion
 
         #region Formatting
