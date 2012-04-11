@@ -1,8 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
--- Updated by : Sainath.CH
--- Update Date: 03-30-2012
+-- Last Updated by : ThulasiRam.P
+-- Last Updated Date: 04-10-2012
 -- Description:  Time Entries grouped by Project for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
@@ -61,13 +61,15 @@ BEGIN
 					CC.ProjectId,
 					CC.ProjectGroupId,
 					CC.TimeEntrySectionId,
-					Round(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours ELSE 0 END),2) AS BillableHours,
-					Round(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours ELSE 0 END),2) AS NonBillableHours,
-					ROUND(SUM(CASE WHEN (TEH.IsChargeable = 1 AND TE.ChargeCodeDate <= @Today) THEN TEH.ActualHours ELSE 0 END),2) AS BillableHoursUntilToday
+					ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS [BillableHours],
+			        ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 OR PRO.ProjectNumber = 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS   [NonBillableHours],
+					ROUND(SUM(CASE WHEN (TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' AND TE.ChargeCodeDate <= @Today) THEN TEH.ActualHours ELSE 0 END),2) AS BillableHoursUntilToday
 			FROM dbo.TimeEntry TE
 				INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal 
 				INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
+				INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 				INNER JOIN dbo.Person AS P ON P.PersonId = TE.PersonId 
+		    WHERE  TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())
 			GROUP BY CC.TimeEntrySectionId,
 					 CC.ClientId,
 					 CC.ProjectGroupId,
