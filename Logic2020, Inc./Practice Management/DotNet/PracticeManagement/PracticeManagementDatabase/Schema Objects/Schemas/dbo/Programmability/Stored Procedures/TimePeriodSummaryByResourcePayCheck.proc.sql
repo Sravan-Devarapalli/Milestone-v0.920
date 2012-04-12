@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 04-03-2012
 -- Updated by : Sainath.CH
--- Update Date: 04-06-2012
+-- Update Date: 04-12-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
 (
@@ -12,21 +12,27 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
 AS
 BEGIN
 
-	SET @StartDate = CONVERT(DATE,@StartDate)
-	SET @EndDate = CONVERT(DATE,@EndDate)
+	DECLARE @StartDateLocal DATETIME,
+			@EndDateLocal   DATETIME
 
-	DECLARE @NOW DATE
+	SET @StartDateLocal = CONVERT(DATE,@StartDate)
+	SET @EndDateLocal = CONVERT(DATE,@EndDate)
+
+	DECLARE @NOW DATE, @HolidayTimeType INT 
 	SET @NOW = dbo.GettingPMTime(GETUTCDATE())
+	SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
 
 	;WITH AssignedPersons AS
 	(
 	  SELECT MP.PersonId
 	  FROM  dbo.MilestonePersonEntry AS MPE 
 	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
-											AND MPE.StartDate < @EndDate 
-											AND @StartDate  < MPE.EndDate
+											AND MPE.StartDate < @EndDateLocal 
+											AND @StartDateLocal  < MPE.EndDate
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId AND p.IsStrawman = 0
+	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId 
+									AND p.IsStrawman = 0
+									AND @StartDateLocal < ISNULL(P.TerminationDate,dbo.GetFutureDate()) 
 	  GROUP BY MP.PersonId
 	),
 	PersonWithLatestPay AS
@@ -34,7 +40,7 @@ BEGIN
 		SELECT P.PersonId,
 			MAX(PA.StartDate) AS RecentStartDate
 		FROM  dbo.Person P
-			LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
+			LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
 		WHERE P.IsStrawman = 0
 		GROUP BY P.PersonId
 	),
@@ -51,6 +57,27 @@ BEGIN
 									)
 			LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
 		WHERE P.IsStrawman = 0
+	),
+	PersonTotalStatusHistory
+	AS
+	(
+		SELECT PSH.PersonId,
+				CASE WHEN PSH.StartDate = MinPayStartDate THEN PS.HireDate ELSE PSH.StartDate END AS StartDate,
+				ISNULL(PSH.EndDate,dbo.GetFutureDate()) AS EndDate,
+				PSH.PersonStatusId
+		FROM dbo.PersonStatusHistory PSH 
+		LEFT JOIN (
+					SELECT PSH.PersonId
+								,P.HireDate 
+								,MIN(PSH.StartDate) AS MinPayStartDate
+					FROM dbo.PersonStatusHistory PSH
+					INNER JOIN dbo.Person P ON PSH.PersonId = P.PersonId
+					WHERE P.IsStrawman = 0
+					GROUP BY PSH.PersonId,P.HireDate
+					HAVING P.HireDate < MIN(PSH.StartDate)
+				) AS PS ON PS.PersonId = PSH.PersonId
+		WHERE  PSH.StartDate < @EndDateLocal 
+				AND @StartDateLocal  < ISNULL(PSH.EndDate,dbo.GetFutureDate())
 	)
 
 	SELECT	1 AS BranchID,
@@ -78,12 +105,18 @@ BEGIN
 					ROUND(SUM(CASE WHEN TT.Code = 'W9300' THEN TEH.ActualHours ELSE 0 END),2) AS ORTHours
 					FROM dbo.TimeEntry TE
 						INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId 
-															AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
+															AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal 
 						INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
 						INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 						INNER JOIN dbo.TimeType TT ON CC.TimeTypeId = TT.TimeTypeId
 						INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
-					WHERE TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())
+						INNER JOIN PersonTotalStatusHistory PTSH ON PTSH.PersonId = P.PersonId 
+															AND TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
+				WHERE  TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())
+						AND (
+								CC.timeTypeId != @HolidayTimeType
+								OR (CC.timeTypeId = @HolidayTimeType AND PTSH.PersonStatusId = 1 )
+							)
 					GROUP BY TE.PersonId
 		) Data
 		FULL JOIN AssignedPersons AP ON AP.PersonId = Data.PersonId 
