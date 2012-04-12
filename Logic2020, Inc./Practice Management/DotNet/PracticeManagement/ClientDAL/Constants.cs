@@ -310,6 +310,7 @@
             public const string ORTHours = "ORTHours";
             public const string PaychexID = "PaychexID";
             public const string IsOffshore = "IsOffshore";
+            public const string IsNoteRequired = "IsNoteRequired";
 
         }
 
@@ -579,6 +580,7 @@
             public const string SeniorityIdsParam = "@SeniorityIds";
             public const string TimeTypeCategoryIdsParam = "@TimeTypeCategoryIds";
             public const string PersonRoleIdsParam = "@PersonRoleIds";
+            public const string IsNoteRequiredParam = "@IsNoteRequired";
 
 
 
