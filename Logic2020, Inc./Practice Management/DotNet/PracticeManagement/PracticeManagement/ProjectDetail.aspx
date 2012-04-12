@@ -679,14 +679,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        Note Required
-                                    </td>
-                                    <td>
+                                    <td colspan="3">
                                         <asp:CheckBox ID="chbNoteRequired" runat="server" Checked="true" onclick="setDirty();"
-                                            Text="" />
-                                    </td>
-                                    <td>
+                                            Text="Time entry notes required" />
                                     </td>
                                     <td>
                                     </td>
