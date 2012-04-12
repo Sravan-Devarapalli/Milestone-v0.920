@@ -1,4 +1,8 @@
-﻿
+﻿-- =============================================
+-- Description:	Get project Details.
+-- Updated by:	ThulasiRam.P
+-- Update date:	04-12-2012
+-- =============================================
 CREATE PROCEDURE [dbo].[ProjectGetById]
 (
 	@ProjectId	         INT,
@@ -45,7 +49,8 @@ AS
 				FROM dbo.ChargeCode CC 
 				INNER JOIN TimeEntry TE ON TE.ChargeCodeId = CC.Id AND CC.ProjectId = p.ProjectId) 
 			WHEN 0 THEN CAST(0 AS BIT)
-			ELSE CAST(1 AS BIT) END AS 'HasTimeEntries'
+			ELSE CAST(1 AS BIT) END AS [HasTimeEntries],
+			p.IsNoteRequired
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  INNER JOIN Person AS person ON p.PracticeManagerId = person.PersonId
