@@ -61,7 +61,7 @@
 
                 optionList[i].title = optionList[i].innerHTML;
             }
-             
+
         }
 
         function SetFocus(modalExId, tbNotesId, tbBillableHoursId, btnSaveNotesId, tbNonBillableHoursId) {
@@ -187,7 +187,7 @@
                     <div class="clear0">
                     </div>
                     <div style="text-align: center;">
-                        <span style="color: Red;">ALERT</span><asp:Label ID="lblAlertNote" runat="server"></asp:Label></div>
+                    </div>
                 </div>
             </ContentTemplate>
             <Triggers>
@@ -264,6 +264,7 @@
                         }
                     }
 
+
                     function ReplaceHTML(imgPlusList) {
                         for (var i = 0; i < imgPlusList.length; i++) {
 
@@ -274,6 +275,7 @@
                     }
 
                     function setFooterPlacementinLastItemTemplate() {
+
                         var imgPlusProjectSectionList = $("[id$='imgPlusProjectSection']");
                         ReplaceHTML(imgPlusProjectSectionList);
 
@@ -286,6 +288,19 @@
                         var imgPlusAdministrativeSectionList = $("[id$='imgPlusAdministrativeSection']");
                         ReplaceHTML(imgPlusAdministrativeSectionList);
 
+                        var divProjectSectionList = $("[id$='divProjectSection']");
+
+                        for (var i = 0; i < divProjectSectionList.length; i++) {
+                            var hdnList = $(divProjectSectionList[i]).find("[id$='hdnIsNoteRequired']");
+                            var imgNoteRequiredOrOptional = $(divProjectSectionList[i]).find("[id$='imgNoteRequiredOrOptional']")[0];
+                            for (var j = 0; j < hdnList.length; j++) {
+                                if (hdnList[j].value.toLowerCase() == "true") {
+                                    imgNoteRequiredOrOptional.src = "Images/notes_required.png";
+                                    imgNoteRequiredOrOptional.title = 'Notes Required';
+                                    break;
+                                }
+                            }
+                        }
                     }
 
                     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
@@ -347,7 +362,6 @@
                                     <td class="DeleteWidth">
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        
                                     </td>
                                     <asp:Repeater ID="repProjectSectionHeader" runat="server">
                                         <ItemTemplate>
@@ -357,7 +371,8 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div style="float:right; padding-right:5px;">TOTAL</div>
+                                        <div style="float: right; padding-right: 5px;">
+                                            TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -366,10 +381,11 @@
                         </asp:Panel>
                         <asp:Repeater ID="repProjectSections" runat="server" OnItemDataBound="repProjectSections_OnItemDataBound">
                             <ItemTemplate>
-                                <div class="WholeWidth White">
+                                <div id="divProjectSection" runat="server" class="WholeWidth White">
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
+                                                <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -408,10 +424,11 @@
                                 </div>
                             </ItemTemplate>
                             <AlternatingItemTemplate>
-                                <div class="WholeWidth f0f0f1">
+                                <div id="divProjectSection" runat="server" class="WholeWidth f0f0f1">
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
+                                                   <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -480,7 +497,6 @@
                                     <td class="DeleteWidth">
                                     </td>
                                     <td class="time-entry-bar-time-typesNewHeader">
-                                        
                                     </td>
                                     <asp:Repeater ID="repBusinessDevelopmentSectionHeader" runat="server">
                                         <ItemTemplate>
@@ -490,7 +506,8 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div style="float:right; padding-right:5px;">TOTAL</div>
+                                        <div style="float: right; padding-right: 5px;">
+                                            TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -504,6 +521,7 @@
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
+                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
@@ -546,6 +564,7 @@
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
+                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
@@ -622,7 +641,8 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div style="float:right; padding-right:5px;">TOTAL</div>
+                                        <div style="float: right; padding-right: 5px;">
+                                            TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
                                     </td>
@@ -636,6 +656,7 @@
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
+                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -678,6 +699,7 @@
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
+                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -747,7 +769,6 @@
                                         <td class="DeleteWidth">
                                         </td>
                                         <td class="time-entry-bar-time-typesNewHeader">
-                                            
                                         </td>
                                         <asp:Repeater ID="repAdministrativeTesHeader" runat="server">
                                             <ItemTemplate>
@@ -757,7 +778,8 @@
                                             </ItemTemplate>
                                         </asp:Repeater>
                                         <td class="time-entry-bar-total-hoursNew">
-                                           <div style="float:right; padding-right:5px;"> TOTAL</div>
+                                            <div style="float: right; padding-right: 5px;">
+                                                TOTAL</div>
                                         </td>
                                         <td class="DeleteWidth">
                                         </td>
@@ -788,7 +810,8 @@
                         <label id="lblDupilcateOptionsRemoveExtenderAdministrative" runat="server" />
                     </asp:Panel>
                     <div class="buttons-block">
-                        <div style="font-size: 14px; font-weight:bold; margin-left:16px;">TOTAL HOURS</div>
+                        <div style="font-size: 14px; font-weight: bold; margin-left: 16px;">
+                            TOTAL HOURS</div>
                     </div>
                     <asp:Panel ID="pnlTotalSection" runat="server" Style="padding: 10px 0px 10px 0px"
                         CssClass="cp bg-white">
@@ -843,7 +866,9 @@
                                     BILLABLE TOTAL :
                                 </td>
                                 <td class="time-entry-total-hoursNew-totalColoum">
-                                    <div style="float:right; padding-right:10px;"><label id="lblBillableGrandTotal" runat="server" /></div>
+                                    <div style="float: right; padding-right: 10px;">
+                                        <label id="lblBillableGrandTotal" runat="server" />
+                                    </div>
                                     <ext:TotalCalculatorExtender ID="extBillableGrandTotal" runat="server" TargetControlID="lblBillableGrandTotal" />
                                 </td>
                                 <td class="DeleteWidth">
@@ -858,7 +883,9 @@
                                     NON-BILLABLE TOTAL :
                                 </td>
                                 <td class="time-entry-total-hoursNew-totalColoum">
-                                    <div style="float:right; padding-right:10px;"><label id="lblNonBillableGrandTotal" runat="server" /></div>
+                                    <div style="float: right; padding-right: 10px;">
+                                        <label id="lblNonBillableGrandTotal" runat="server" />
+                                    </div>
                                     <ext:TotalCalculatorExtender ID="extNonBillableGrandTotal" runat="server" TargetControlID="lblNonBillableGrandTotal" />
                                 </td>
                                 <td class="DeleteWidth">
@@ -873,7 +900,9 @@
                                     TIME PERIOD GRAND TOTAL:
                                 </td>
                                 <td style="padding-top: 15px;" class="time-entry-total-hoursNew-totalColoum">
-                                    <div style="float:right; padding-right:10px;"><label id="lbltimePeriodGrandTotal" runat="server" /></div>
+                                    <div style="float: right; padding-right: 10px;">
+                                        <label id="lbltimePeriodGrandTotal" runat="server" />
+                                    </div>
                                     <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lbltimePeriodGrandTotal" />
                                 </td>
                                 <td class="DeleteWidth">
@@ -887,7 +916,7 @@
                                 <td colspan="3" class="textRight">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td class = "textRight font12Px padRight15">
+                                            <td class="textRight font12Px padRight15">
                                                 I certify that the time entered represents a true and accurate record of my time.
                                                 I am responsible for any changes made using my Practice Management Login.
                                             </td>
@@ -919,8 +948,8 @@
                                         OnServerValidate="cvDayTotal_ServerValidate" EnableClientScript="false" Text="*"
                                         Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Day Total hours must be lessthan or equals to 24." />
                                     <asp:CustomValidator ID="cvApprovedManager" runat="server" ErrorMessage="You must select an approving Manager from the drop-down in notes entry for the highlighted entries."
-                                        OnServerValidate="cvApprovedManager_ServerValidate" EnableClientScript="false" Text="*"
-                                        Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="You must select an approving Manager from the drop-down in notes entry for the highlighted entries." />
+                                        OnServerValidate="cvApprovedManager_ServerValidate" EnableClientScript="false"
+                                        Text="*" Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="You must select an approving Manager from the drop-down in notes entry for the highlighted entries." />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
                             </tr>
@@ -928,7 +957,8 @@
                     </div>
                 </asp:Panel>
                 <div class="TimeEntry_New_Legend">
-                <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" /></div>
+                    <uc2:CalendarLegend ID="CalendarLegend" runat="server" disableChevron="true" />
+                </div>
                 <asp:HiddenField ID="hdnAddProject" runat="server" />
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSectionPopup" runat="server"
                     TargetControlID="hdnAddProject" CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup"
