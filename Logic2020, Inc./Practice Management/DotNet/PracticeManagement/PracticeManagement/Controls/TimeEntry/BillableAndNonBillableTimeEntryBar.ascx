@@ -11,14 +11,22 @@
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
-        <td id="tdplusProjectSection" runat="server" class="DeleteWidth">
+        <td class="DeleteWidth">
         </td>
-        <td class="time-entry-bar-time-typesNew textCenter">
-            <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
-                OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
-                ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
-            <ext:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
-                ExtendedCssClass="time-entry-bar-time-typesNew-select-Extended" TargetControlID="ddlTimeTypes" />
+        <td class="time-entry-bar-time-typesNewst">
+            <table class="WholeWidth">
+                <tr>
+                    <td style="width: 10%;padding-left:4px;" id="tdplusProjectSection" runat="server">
+                    </td>
+                    <td style="width: 90%;">
+                        <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
+                            OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
+                            ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
+                        <ext:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
+                            ExtendedCssClass="time-entry-bar-time-typesNew-select-Extended" TargetControlID="ddlTimeTypes" />
+                    </td>
+                </tr>
+            </table>
         </td>
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
             <ItemTemplate>
@@ -34,7 +42,9 @@
             </ItemTemplate>
         </asp:Repeater>
         <td class="time-entry-total-hoursNew-totalColoum">
-            <div style="float:right; padding-right:10px;"><label id="lblTotalHours" runat="server" /></div>
+            <div style="float: right; padding-right: 10px;">
+                <label id="lblTotalHours" runat="server" />
+            </div>
             <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
             <ext2:EnableDisableExtender ID="extEnableDisable" runat="server" TargetControlID="ddlTimeTypes" />
         </td>
