@@ -70,13 +70,8 @@
 
         function ExpandOrCollapsePanels(ids, isExpand) {
             for (var i = 0; i < ids.length; i++) {
-                var cpe = $find(ids[i].Key);
-                //var datePanels = jQuery.parseJSON(ids[i].Value);
+                var cpe = $find(ids[i]);
                 ExpandOrcollapseExtender(cpe, isExpand);
-                //                for (var j = 0; j < datePanels.length; j++) {
-                //                    var cpeDate = $find(datePanels[j]);
-                //                    ExpandOrcollapseExtender(cpeDate, isExpand);
-                //                }
             }
         }
 
