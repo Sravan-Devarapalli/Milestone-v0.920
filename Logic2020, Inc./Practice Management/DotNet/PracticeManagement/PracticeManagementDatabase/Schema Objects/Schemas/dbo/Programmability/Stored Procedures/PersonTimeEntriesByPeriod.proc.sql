@@ -1,4 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[PersonTimeEntriesByPeriod]
+﻿-- =============================================
+-- Description:	Get PersonTimeEntriesByPeriod.
+-- Updated by:	ThulasiRam.P
+-- Update date:	04-12-2012
+-- =============================================
+CREATE PROCEDURE [dbo].[PersonTimeEntriesByPeriod]
 	@PersonId	INT,
 	@StartDate	DATETIME,
 	@EndDate	DATETIME
@@ -68,7 +73,8 @@ BEGIN
 		p.ProjectNumber, 
 		P.Name 'ProjectName',
 		ISNULL(CONVERT(NVARCHAR(1), PTRS.IsRecursive), 0) AS 'IsRecursive',
-		P.EndDate
+		P.EndDate,
+		P.IsNoteRequired
 	FROM dbo.TimeEntry TE
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
 	FULL JOIN dbo.PersonTimeEntryRecursiveSelection PTRS 
@@ -91,7 +97,8 @@ BEGIN
 		p.ProjectNumber,
 		P.Name 'ProjectName',
 		0 AS 'IsRecursive',
-		P.EndDate
+		P.EndDate,
+		P.IsNoteRequired
 	FROM ChargeCode CC
 	INNER JOIN Client C ON C.ClientId = CC.ClientId AND CC.TimeEntrySectionId = 4 --Administrative Section 
 						   AND ((CC.TimeTypeId = @HolidayTimeTypeId AND @IsW2SalaryPerson = 1) OR CC.TimeTypeId = @PTOTimeTypeId)
