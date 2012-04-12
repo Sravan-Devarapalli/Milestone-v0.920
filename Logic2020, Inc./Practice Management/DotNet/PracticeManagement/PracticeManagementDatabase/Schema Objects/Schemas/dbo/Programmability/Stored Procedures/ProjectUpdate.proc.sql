@@ -1,4 +1,7 @@
-﻿
+﻿---------------------------
+-- Updated by:	ThulasiRam.P
+-- Update date:	04-12-2012
+---------------------------
 CREATE PROCEDURE dbo.ProjectUpdate
 (
 	@ProjectId          INT,
@@ -16,7 +19,8 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@ProjectManagerIdsList	NVARCHAR(MAX),
 	@Description           NVARCHAR(MAX),
 	@CanCreateCustomWorkTypes BIT,
-	@IsInternal			BIT  
+	@IsInternal			BIT,
+	@IsNoteRequired     BIT = 1  
 )
 AS
 BEGIN
@@ -100,7 +104,8 @@ BEGIN
 				DirectorId		= @DirectorId,
 				Description		=@Description,
 				CanCreateCustomWorkTypes = @CanCreateCustomWorkTypes,
-				IsInternal		=@IsInternal
+				IsInternal		=@IsInternal,
+				IsNoteRequired  = @IsNoteRequired
 			WHERE ProjectId = @ProjectId
 
 		DECLARE @OpportunityId INT = NULL
