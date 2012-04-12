@@ -260,8 +260,8 @@ namespace PraticeManagement.Controls.TimeEntry
         private void FillControls()
         {
             EnsureChildControls();
-            tbNotes.Text = TimeEntryRecordElement.Attribute(XName.Get("Note")).Value.Replace("\\r\\n", "\r\n");
-            hdnNotes.Value = TimeEntryRecordElement.Attribute(XName.Get("Note")).Value.Replace("\\r\\n", "\r\n");
+            tbNotes.Text = TimeEntryRecordElement.Attribute(XName.Get("Note")).Value;
+            hdnNotes.Value = TimeEntryRecordElement.Attribute(XName.Get("Note")).Value;
             imgNote.ImageUrl
                 = string.IsNullOrEmpty(tbNotes.Text)
                       ? Constants.ApplicationResources.AddCommentIcon
