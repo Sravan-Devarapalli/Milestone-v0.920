@@ -396,6 +396,8 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\desc.gif" />
     <Content Include="Images\Non-Billable-Icon.png" />
+    <Content Include="Images\notes_optional.png" />
+    <Content Include="Images\notes_required.png" />
     <Content Include="Images\Not_recursive.png" />
     <Content Include="Images\People_Icon_Large.png" />
     <Content Include="Images\printer.png" />
@@ -2337,30 +2339,9 @@
     </Compile>
     <Compile Include="Controls\SerializationHelper.cs" />
     <Compile Include="Controls\TimeEntry\ReadyToUpdateTeArguments.cs" />
-    <Compile Include="Controls\TimeEntry\SingleTimeEntry.ascx.cs">
-      <DependentUpon>SingleTimeEntry.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\TimeEntry\SingleTimeEntry.ascx.designer.cs">
-      <DependentUpon>SingleTimeEntry.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\TimeEntry\TeGrid.cs" />
     <Compile Include="Controls\TimeEntry\TeGridCell.cs" />
     <Compile Include="Controls\TimeEntry\TeGridRow.cs" />
-    <Compile Include="Controls\TimeEntry\TimeEntries.ascx.cs">
-      <DependentUpon>TimeEntries.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\TimeEntry\TimeEntries.ascx.designer.cs">
-      <DependentUpon>TimeEntries.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\TimeEntry\TimeEntryBar.ascx.cs">
-      <DependentUpon>TimeEntryBar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\TimeEntry\TimeEntryBar.ascx.designer.cs">
-      <DependentUpon>TimeEntryBar.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\TimeEntry\TimeEntryBarHeader.ascx.cs">
       <DependentUpon>TimeEntryBarHeader.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2376,13 +2357,6 @@
       <DependentUpon>TimeEntryManagement.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\TimeEntry\WeekChangedEventArguments.cs" />
-    <Compile Include="Controls\TimeEntry\WeekSelector.ascx.cs">
-      <DependentUpon>WeekSelector.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\TimeEntry\WeekSelector.ascx.designer.cs">
-      <DependentUpon>WeekSelector.ascx</DependentUpon>
-    </Compile>
     <Compile Include="DefaultRecruitingCommissionDetail.aspx.cs">
       <DependentUpon>DefaultRecruitingCommissionDetail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2878,13 +2852,6 @@
     <Compile Include="set_user.aspx.designer.cs">
       <DependentUpon>set_user.aspx</DependentUpon>
     </Compile>
-    <Compile Include="TimeEntry.aspx.cs">
-      <DependentUpon>TimeEntry.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TimeEntry.aspx.designer.cs">
-      <DependentUpon>TimeEntry.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reports\TimeEntryReport.aspx.cs">
       <DependentUpon>TimeEntryReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3011,12 +2978,8 @@
     <Content Include="Controls\Reports\ConsultantsWeeklyReport.ascx" />
     <Content Include="Controls\Reports\PersonStats.ascx" />
     <Content Include="Controls\RestrictionPanel.ascx" />
-    <Content Include="Controls\TimeEntry\SingleTimeEntry.ascx" />
-    <Content Include="Controls\TimeEntry\TimeEntries.ascx" />
-    <Content Include="Controls\TimeEntry\TimeEntryBar.ascx" />
     <Content Include="Controls\TimeEntry\TimeEntryBarHeader.ascx" />
     <Content Include="Controls\TimeEntry\TimeEntryManagement.ascx" />
-    <Content Include="Controls\TimeEntry\WeekSelector.ascx" />
     <Content Include="Css\BrowserSpecific\IEMenu6.css" />
     <Content Include="Css\DetailsView.css" />
     <Content Include="Css\Menu.css" />
@@ -3534,7 +3497,6 @@
     <Content Include="Service References\PracticeService\PracticeService.disco" />
     <Content Include="set_user.aspx" />
     <Content Include="Third Party Tools\Css Adapters\CSSFriendly.dll" />
-    <Content Include="TimeEntry.aspx" />
     <Content Include="Reports\TimeEntryReport.aspx" />
     <Content Include="Config\GeneralConfiguration.aspx" />
   </ItemGroup>
@@ -3619,3 +3581,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
