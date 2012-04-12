@@ -253,8 +253,8 @@ namespace PraticeManagement.Controls.TimeEntry
         private void FillBillableControls()
         {
             EnsureChildControls();
-            tbNotes.Text = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
-            hdnNotes.Value = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
+            tbNotes.Text = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value.Replace("\\r\\n","\r\n");
+            hdnNotes.Value = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value.Replace("\\r\\n", "\r\n");
             imgNote.ImageUrl
                 = string.IsNullOrEmpty(tbNotes.Text)
                       ? Constants.ApplicationResources.AddCommentIcon
