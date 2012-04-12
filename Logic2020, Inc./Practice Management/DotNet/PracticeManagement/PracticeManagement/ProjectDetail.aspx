@@ -313,7 +313,7 @@
             $find("mpeTimetypeAlertMessage").hide();
             return false;
         }
-        
+
         function UnAssignTimeType_Click() {
             var cblTimeTypesNotAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesNotAssignedToProject") as CheckBoxList).ClientID%>');
             var cblTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("cblTimeTypesAssignedToProject") as CheckBoxList).ClientID%>');
@@ -640,8 +640,7 @@
                                         &nbsp;
                                     </td>
                                     <td colspan="4">
-                                        <asp:CheckBox ID="chbIsChargeable" runat="server" runat="server" onclick="setDirty();"
-                                            Text="Milestones in this project are billable by default" />
+                                        <asp:CheckBox ID="chbIsChargeable" runat="server" onclick="setDirty();" Text="Milestones in this project are billable by default" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -677,6 +676,27 @@
                                             ErrorMessage="Can not change project status as some work types are already in use."
                                             ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
                                         <asp:HiddenField ID="hdIsInternal" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Note Required
+                                    </td>
+                                    <td>
+                                        <asp:CheckBox ID="chbNoteRequired" runat="server" Checked="true" onclick="setDirty();"
+                                            Text="" />
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="3">
+                                    </td>
+                                    <td>
                                     </td>
                                 </tr>
                                 <tr>
