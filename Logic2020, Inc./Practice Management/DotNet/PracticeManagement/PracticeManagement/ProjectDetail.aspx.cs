@@ -1014,11 +1014,12 @@ namespace PraticeManagement
 
         private void PopulateControls(Project project)
         {
-            
+
             txtProjectName.Text = project.Name;
             txtDescription.Text = project.Description;
             lblProjectNumber.Text = project.ProjectNumber;
             chbIsChargeable.Checked = project.IsChargeable;
+            chbNoteRequired.Checked = project.IsNoteRequired;
 
             PopulateClientDropDown(project);
             FillAndSelectProjectGroupList(project);
@@ -1270,8 +1271,8 @@ namespace PraticeManagement
             project.IsChargeable = chbIsChargeable.Checked;
 
             project.IsInternal = false; //AS per Matt Reilly MattR@logic2020.com  
-                                        //date: Sat, Mar 17, 2012 at 1:53 AM
-                                        //subject: RE: Time Entry conversion - deployment step
+            //date: Sat, Mar 17, 2012 at 1:53 AM
+            //subject: RE: Time Entry conversion - deployment step
 
 
             project.CanCreateCustomWorkTypes = true;
@@ -1280,6 +1281,8 @@ namespace PraticeManagement
             PopulatePracticeManagementCommission(project);
             project.BillingInfo = billingInfo.Info;
             project.Description = txtDescription.Text;
+
+            project.IsNoteRequired = chbNoteRequired.Checked;
 
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
