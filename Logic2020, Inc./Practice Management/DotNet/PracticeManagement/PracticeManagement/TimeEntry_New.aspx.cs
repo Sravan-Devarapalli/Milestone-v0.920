@@ -1380,7 +1380,7 @@ namespace PraticeManagement
             {
                 var teSection = new TimeEntrySection()
                 {
-                    Project = new Project() { Id = projectId, Name = project.Name, ProjectNumber = project.ProjectNumber },
+                    Project = new Project() { Id = projectId, Name = project.Name, ProjectNumber = project.ProjectNumber,IsNoteRequired = project.IsNoteRequired },
                     Account = new Client() { Id = accountId, Name = ddlAccountProjectSection.SelectedItem.Text },
                     BusinessUnit = new ProjectGroup() { Id = project.Group.Id, Name = project.Group.Name },
                     SectionId = TimeEntrySectionType.Project,
@@ -1874,7 +1874,7 @@ namespace PraticeManagement
                         }
 
                         if (nbterecord != null)
-                        {
+                         {
                             if (nbterecord.ApprovedBy == null)
                             {
                                 xml.Append(string.Format(nonBillableXmlOpen, nbterecord.ActualHours.ToString(Constants.Formatting.DoubleFormat), nbterecord.HtmlEncodedNote, nbterecord.IsChargeable, nbterecord.EntryDate.ToString(Constants.Formatting.EntryDateFormat), nbterecord.IsReviewed.ToString(), "none", string.Empty, string.Empty));
