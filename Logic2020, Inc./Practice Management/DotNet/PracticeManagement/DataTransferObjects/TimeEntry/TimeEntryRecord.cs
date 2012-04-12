@@ -97,7 +97,7 @@ namespace DataTransferObjects.TimeEntry
         {
             get
             {
-                return HttpUtility.HtmlEncode(Note).Replace("\r\n","\\r\\n");
+                return HttpUtility.HtmlEncode(Note);
             }
         }
 
