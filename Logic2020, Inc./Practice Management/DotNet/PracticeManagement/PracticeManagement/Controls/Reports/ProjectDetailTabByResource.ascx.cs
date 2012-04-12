@@ -32,13 +32,7 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        private List<KeyValuePair<string, string>> CollapsiblePanelExtenderClientIds
-        {
-            get;
-            set;
-        }
-
-        private List<string> CollapsiblePanelDateExtenderClientIds
+        private List<string> CollapsiblePanelExtenderClientIds
         {
             get;
             set;
@@ -77,7 +71,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                CollapsiblePanelExtenderClientIds = new List<KeyValuePair<string, string>>();
+                CollapsiblePanelExtenderClientIds = new List<string>();
 
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -91,12 +85,7 @@ namespace PraticeManagement.Controls.Reports
                 sectionId = dataitem.TimeEntrySectionId;
                 repDate.DataSource = dataitem.DayTotalHours;
                 repDate.DataBind();
-
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
-
-                KeyValuePair<string, string> kvPair = new KeyValuePair<string, string>(cpePerson.BehaviorID, output);
-                CollapsiblePanelExtenderClientIds.Add(kvPair);
+                CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
 
             }
             else if (e.Item.ItemType == ListItemType.Footer)
@@ -113,7 +102,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                CollapsiblePanelDateExtenderClientIds = new List<string>();
+               
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -121,9 +110,9 @@ namespace PraticeManagement.Controls.Reports
                 TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
                 var rep = sender as Repeater;
 
-                var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
-                cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
-                CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
+                //var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
+                //cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
+               // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
 
 
                 repWorktype.DataSource = dataitem.DayTotalHoursList;
