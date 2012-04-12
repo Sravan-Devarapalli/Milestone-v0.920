@@ -153,7 +153,7 @@ namespace PraticeManagement.Controls
             lbdateSingleDay.Text = date.ToString(Constants.Formatting.EntryDateFormat);
             hdnDateSingleDay.Value = date.ToString();
             ddlTimeTypesSingleDay.SelectedValue = timeTypeId;
-            txtHoursSingleDay.Text = Convert.ToDouble(hours).ToString(HoursFormat);
+            txtHoursSingleDay.Text = string.IsNullOrEmpty(hours) ? "0.00" : Convert.ToDouble(hours).ToString(HoursFormat);
             hdIsSingleDayPopDirty.Value = false.ToString();
             btnDeleteSingleDay.Enabled = true;
             var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
@@ -194,7 +194,7 @@ namespace PraticeManagement.Controls
             dtpStartDateTimeOff.DateValue = startDate;
             dtpEndDateTimeOff.DateValue = endDate;
             ddlTimeTypesTimeOff.SelectedValue = timeTypeId;
-            txthoursTimeOff.Text = Convert.ToDouble(hours).ToString(HoursFormat);
+            txthoursTimeOff.Text = string.IsNullOrEmpty(hours) ? "0.00" : Convert.ToDouble(hours).ToString(HoursFormat);
             btnDeleteTimeOff.Visible = btnDeleteTimeOff.Enabled = true;
             hdIsTimeOffPopUpDirty.Value = false.ToString();
 
@@ -495,7 +495,7 @@ namespace PraticeManagement.Controls
                     double hours = Convert.ToDouble(txthoursTimeOff.Text);
                     if (hours % 0.25 < 0.125)
                     {
-                       hours = hours - hours % 0.25;
+                        hours = hours - hours % 0.25;
                     }
                     else
                     {
