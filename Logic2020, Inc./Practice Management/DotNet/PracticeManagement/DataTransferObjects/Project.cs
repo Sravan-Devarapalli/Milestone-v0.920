@@ -63,6 +63,10 @@ namespace DataTransferObjects
             set;
         }
 
+
+        [DataMember]
+        public bool IsNoteRequired { get; set; }
+
         /// <summary>
         /// Gets or sets an OpportunityId of the related Opportunity.
         /// </summary>
@@ -427,6 +431,8 @@ namespace DataTransferObjects
         }
 
         #endregion
+
+       
     }
 }
 
