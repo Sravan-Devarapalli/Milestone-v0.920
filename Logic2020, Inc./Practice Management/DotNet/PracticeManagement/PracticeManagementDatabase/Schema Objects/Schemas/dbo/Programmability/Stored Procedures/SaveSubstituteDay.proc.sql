@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		ThulasiRam.P
 -- Create date: 02-17-2012
--- Updated by:	Srinivas.M
--- Update date:	02-28-2012
+-- Updated by:	ThulasiRam.P
+-- Update date:	04-12-2012
 -- Description: Insert/Update Substitute Day for company holiday.
 -- =============================================
 CREATE PROCEDURE [dbo].[SaveSubstituteDay]
@@ -64,7 +64,7 @@ BEGIN
 	SELECT @HolidayDescription = c.HolidayDescription
 	FROM Calendar c WHERE c.[Date] = @Date
 
-	SET @Note = 'Substitute for '+ CONVERT(NVARCHAR(10), @Date, 101) +' - ' +@HolidayDescription +'.'
+	SET @Note = 'Substitute for '+ CONVERT(NVARCHAR(10), @Date, 101) +' - ' +ISNULL(@HolidayDescription,'') +'.'
 
 
 	IF EXISTS (SELECT 1 
