@@ -1,8 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
--- Last Updated by : ThulasiRam.P
--- Last Updated Date: 04-10-2012
+-- Updated by : Sainath.CH
+-- Update Date: 04-12-2012
 -- Description:  Time Entries grouped by Project for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
@@ -13,10 +13,14 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
 AS
 BEGIN
 
-	DECLARE @Today DATETIME,@StartDateLocal DATETIME,@EndDateLocal   DATETIME
+	DECLARE @Today DATE,
+			@StartDateLocal DATETIME,
+			@EndDateLocal   DATETIME,
+			@HolidayTimeType INT 
 	SET @StartDateLocal = CONVERT(DATE,@StartDate)
 	SET @EndDateLocal = CONVERT(DATE,@EndDate)
 	SET @Today = dbo.GettingPMTime(GETUTCDATE())
+	SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
 
 	;WITH ProjectForeCastedHoursUntilToday AS
 	(
@@ -35,6 +39,27 @@ BEGIN
 													OR ( PC.CompanyDayOff =1 AND PC.SubstituteDate IS NOT NULL)
 												)
 	  GROUP BY M.ProjectId 
+	)
+	,PersonTotalStatusHistory
+	AS
+	(
+		SELECT PSH.PersonId,
+				CASE WHEN PSH.StartDate = MinPayStartDate THEN PS.HireDate ELSE PSH.StartDate END AS StartDate,
+				ISNULL(PSH.EndDate,dbo.GetFutureDate()) AS EndDate,
+				PSH.PersonStatusId
+		FROM dbo.PersonStatusHistory PSH 
+		LEFT JOIN (
+					SELECT PSH.PersonId
+								,P.HireDate 
+								,MIN(PSH.StartDate) AS MinPayStartDate
+					FROM dbo.PersonStatusHistory PSH
+					INNER JOIN dbo.Person P ON PSH.PersonId = P.PersonId
+					WHERE P.IsStrawman = 0
+					GROUP BY PSH.PersonId,P.HireDate
+					HAVING P.HireDate < MIN(PSH.StartDate)
+				) AS PS ON PS.PersonId = PSH.PersonId
+		WHERE  PSH.StartDate < @EndDateLocal 
+				AND @StartDateLocal  < ISNULL(PSH.EndDate,dbo.GetFutureDate())
 	)
 
 	SELECT  C.ClientId,
@@ -63,13 +88,19 @@ BEGIN
 					CC.TimeEntrySectionId,
 					ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS [BillableHours],
 			        ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 OR PRO.ProjectNumber = 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS   [NonBillableHours],
-					ROUND(SUM(CASE WHEN (TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' AND TE.ChargeCodeDate <= @Today) THEN TEH.ActualHours ELSE 0 END),2) AS BillableHoursUntilToday
+				ROUND(SUM(CASE WHEN (TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' AND TE.ChargeCodeDate < @Today) THEN TEH.ActualHours ELSE 0 END),2) AS BillableHoursUntilToday
 			FROM dbo.TimeEntry TE
 				INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal 
 				INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
 				INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 				INNER JOIN dbo.Person AS P ON P.PersonId = TE.PersonId 
-		    WHERE  TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())
+				INNER JOIN PersonTotalStatusHistory PTSH ON PTSH.PersonId = P.PersonId 
+															AND TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
+				WHERE  TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())
+					AND (
+							CC.timeTypeId != @HolidayTimeType
+							OR (CC.timeTypeId = @HolidayTimeType AND PTSH.PersonStatusId = 1 )
+						)
 			GROUP BY CC.TimeEntrySectionId,
 					 CC.ClientId,
 					 CC.ProjectGroupId,
@@ -84,3 +115,4 @@ BEGIN
 	
 END
 	
+
