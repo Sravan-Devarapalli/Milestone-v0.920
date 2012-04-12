@@ -1,10 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 6-05-2008
--- Updated by:	Anton Kramarenko
--- Update date: 02-20-2009
--- Updated by:	Anton Kolesnikov
--- Update date: 07-16-2009
+-- Updated by:	ThulasiRam.P
+-- Update date:	04-12-2012
 -- Description:	List projects with their details
 -- =============================================
 CREATE VIEW dbo.v_Project
@@ -37,7 +35,8 @@ AS
 		   p.CanCreateCustomWorkTypes,
 		   p.IsAllowedToShow,
 		   p.IsInternal,
-		   c.IsInternal AS 'ClientIsInternal'
+		   c.IsInternal AS 'ClientIsInternal',
+		   p.IsNoteRequired
 	  FROM dbo.Project AS p
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
