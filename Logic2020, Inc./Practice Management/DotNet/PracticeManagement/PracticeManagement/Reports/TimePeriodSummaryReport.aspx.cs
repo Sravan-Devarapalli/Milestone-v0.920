@@ -244,6 +244,7 @@ namespace PraticeManagement.Reporting
             {
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
+                divWholePage.Style.Remove("display");
                 LoadActiveView();
             }
             else
