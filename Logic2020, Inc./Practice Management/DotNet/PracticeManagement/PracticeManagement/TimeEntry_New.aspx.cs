@@ -74,7 +74,7 @@ namespace PraticeManagement
         private const string internalSectionXmlClose = "</Section>";
         private const string administrativeSectionXmlOpen = "<Section Id=\"4\">";
         private const string administrativeSectionXmlClose = "</Section>";
-        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsORT=\"{10}\" >";
+        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsORT=\"{10}\" IsNoteRequired=\"{11}\" >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
         private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
@@ -190,6 +190,8 @@ namespace PraticeManagement
         public bool IsSaving { get; set; }
 
         public bool IsValidNote { get; set; }
+
+        public bool IsNoteRequiredBecauseOfNonBillable { get; set; }
 
         public bool IsValidHours { get; set; }
 
@@ -505,7 +507,7 @@ namespace PraticeManagement
 
         }
 
-        private void DataBindSectionHeader(Repeater sectionRepeater, Panel sectionHeaderPanel, Repeater sectionHeaderRepeater,System.Web.UI.WebControls.Image collapseImage)
+        private void DataBindSectionHeader(Repeater sectionRepeater, Panel sectionHeaderPanel, Repeater sectionHeaderRepeater, System.Web.UI.WebControls.Image collapseImage)
         {
             if (sectionRepeater.Items.Count > 0)
             {
@@ -552,6 +554,15 @@ namespace PraticeManagement
 
         protected void custNote_ServerValidate(object source, ServerValidateEventArgs args)
         {
+            if (IsNoteRequiredBecauseOfNonBillable)
+            {
+                custNote.ErrorMessage = custNote.ToolTip = "For any Non-Billable time Note should be 3-1000 characters long. Invalid entries are highlighted in red.";
+            }
+            else
+            {
+                custNote.ErrorMessage = custNote.ToolTip = "Note should be 3-1000 characters long. Invalid entries are highlighted in red.";
+            }
+
             args.IsValid = IsValidNote;
         }
 
@@ -1035,6 +1046,8 @@ namespace PraticeManagement
 
             var xelem = xlist.First(element => element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId && element.Attribute(XName.Get(AccountIdXname)).Value == accountId && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId);
 
+
+
             int ttypeId = xelem.Descendants(XName.Get(WorkTypeXname)).ToList().Min(k => Convert.ToInt32(k.Attribute(XName.Get(IdXname)).Value));
 
             StringBuilder xml = new StringBuilder();
@@ -1046,9 +1059,11 @@ namespace PraticeManagement
                                                               );
 
 
-            IsNoteRequiredList = IsNoteRequiredList ??
-                              DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-            ;
+            /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
+            //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+            //IsNoteRequiredList = IsNoteRequiredList ??
+            //                  DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+            //;
 
             int _projectId = Convert.ToInt32(projectId);
             int personId = SelectedPerson.Id.Value;
@@ -1060,7 +1075,9 @@ namespace PraticeManagement
             foreach (CalendarItem day in CalendarItems)
             {
                 var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
-                xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, IsNoteRequiredList[day.Date], IsHourlyRevenueList[day.Date], false));
+                xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass,
+                                                                                true,//(IsNoteRequiredList[day.Date] || isNoteRequiredForProject),
+                                                                                IsHourlyRevenueList[day.Date], false));
                 xml.Append(calendarItemXmlClose);
             }
             xml.Append(workTypeXmlClose);
@@ -1089,7 +1106,7 @@ namespace PraticeManagement
 
 
             var xelem = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId);
-
+            var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
             int ttypeId = xelem.Descendants(XName.Get(WorkTypeXname)).ToList().Min(k => Convert.ToInt32(k.Attribute(XName.Get(IdXname)).Value));
 
             StringBuilder xml = new StringBuilder();
@@ -1114,7 +1131,10 @@ namespace PraticeManagement
             foreach (CalendarItem day in CalendarItems)
             {
                 var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
-                xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, IsNoteRequiredList[day.Date], IsHourlyRevenueList[day.Date], false));
+                xml.Append(string.Format(calendarItemXmlOpen, day.Date,
+                                                              cssClass,
+                                                              (IsNoteRequiredList[day.Date] || isNoteRequiredForProject)
+                                                            , IsHourlyRevenueList[day.Date], false));
                 xml.Append(calendarItemXmlClose);
             }
             xml.Append(workTypeXmlClose);
@@ -1152,9 +1172,13 @@ namespace PraticeManagement
                                ServiceCallers.Custom.Calendar(
                                                                 c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                               );
-            IsNoteRequiredList = IsNoteRequiredList ??
-                                DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-            ;
+
+            /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
+            //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+
+            //IsNoteRequiredList = IsNoteRequiredList ??
+            //                    DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+            //;
 
             int _projectId = Convert.ToInt32(projectId);
             int personId = SelectedPerson.Id.Value;
@@ -1166,7 +1190,9 @@ namespace PraticeManagement
             foreach (CalendarItem day in CalendarItems)
             {
                 var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
-                xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, IsNoteRequiredList[day.Date], IsHourlyRevenueList[day.Date], false));
+                xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass,
+                                                                                    true,//(IsNoteRequiredList[day.Date] || isNoteRequiredForProject), 
+                                                                                    IsHourlyRevenueList[day.Date], false));
                 xml.Append(calendarItemXmlClose);
             }
             xml.Append(workTypeXmlClose);
@@ -1562,6 +1588,7 @@ namespace PraticeManagement
 
         private void ValidateAll()
         {
+            IsNoteRequiredBecauseOfNonBillable = false;
             IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidAdminstrativeHours = IsValidApprovedManager = true;
 
             foreach (RepeaterItem barItem in repProjectSections.Items)
@@ -1783,7 +1810,7 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString()));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
@@ -1802,9 +1829,13 @@ namespace PraticeManagement
                                    ServiceCallers.Custom.Calendar(
                                                                     c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
-                IsNoteRequiredList = IsNoteRequiredList ??
-                                  DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-                ;
+
+                if (teSection.SectionId == TimeEntrySectionType.Project)
+                {
+                    IsNoteRequiredList = IsNoteRequiredList ??
+                                      DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+                    ;
+                }
 
                 IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate));
                 Dictionary<DateTime, bool> isChargeCodeTurnOffList = ServiceCallers.Custom.TimeEntry(p => p.GetIsChargeCodeTurnOffByPeriod(personId, accountId, businessUnitId, projectId, timeTypeId, startDate, endDate));
@@ -1816,7 +1847,20 @@ namespace PraticeManagement
 
                     var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
 
-                    xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, IsNoteRequiredList[day.Date], IsHourlyRevenueList[day.Date], isChargeCodeTurnOffList[day.Date]));
+                    if (teSection.SectionId == TimeEntrySectionType.Project)
+                    {
+                        xml.Append(
+                                    string.Format(calendarItemXmlOpen, day.Date,
+                                                                      cssClass,
+                                                                      (IsNoteRequiredList[day.Date] || teSection.Project.IsNoteRequired),
+                                                                      IsHourlyRevenueList[day.Date],
+                                                                      isChargeCodeTurnOffList[day.Date])
+                                  );
+                    }
+                    else
+                    {
+                        xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, true, IsHourlyRevenueList[day.Date], isChargeCodeTurnOffList[day.Date]));
+                    }
 
                     if (filterByDateTeRecords != null)
                     {
@@ -1989,18 +2033,9 @@ namespace PraticeManagement
 
             IsNoteRequiredList = isNoteRequiredList;
 
-            var result = true;
-
-            if (SelectedPerson.TerminationDate.HasValue)
-                result = isNoteRequiredList.Any(p => p.Value == true && SelectedPerson.TerminationDate >= p.Key);
-
-            lblAlertNote.Text = string.Format(AlertTextFormat, isNoteRequiredList.Any(p => p.Value == true
-                                                                    && SelectedPerson.HireDate <= p.Key
-                                                                    && result
-                                                                    ) ? "REQUIRED" : "OPTIONAL");
-
             var showGrid = isSelectedActive || currentIsAdmin;
             pnlShowTimeEntries.Visible = showGrid;
+
             if (showGrid)
             {
                 if (SelectedDates.Length > 0 && SelectedPerson != null)
@@ -2106,6 +2141,8 @@ namespace PraticeManagement
             var accountAndProjectSelectionElement = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId.ToString() && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId.ToString());
             var workTypeElements = accountAndProjectSelectionElement.Descendants(XName.Get(WorkTypeXname)).ToList();
             var workTypeElement = workTypeElements.ElementAt(workTypeindex);
+            var isNoteRequiredForProject = Convert.ToBoolean(accountAndProjectSelectionElement.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+
             workTypeElement.Remove();
             if (workTypeElements.Count == 1)
             {
@@ -2128,7 +2165,7 @@ namespace PraticeManagement
                 foreach (CalendarItem day in CalendarItems)
                 {
                     var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
-                    xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, IsNoteRequiredList[day.Date], IsHourlyRevenueList[day.Date], false));
+                    xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, (IsNoteRequiredList[day.Date] || isNoteRequiredForProject), IsHourlyRevenueList[day.Date], false));
                     xml.Append(calendarItemXmlClose);
                 }
                 xml.Append(workTypeXmlClose);
@@ -2162,9 +2199,13 @@ namespace PraticeManagement
                                    ServiceCallers.Custom.Calendar(
                                                                     c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
-                IsNoteRequiredList = IsNoteRequiredList ??
-                            DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-                ;
+                /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
+                //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+
+
+                //IsNoteRequiredList = IsNoteRequiredList ??
+                //            DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+                //;
 
                 int personId = SelectedPerson.Id.Value;
                 DateTime startDate = SelectedDates[0];
@@ -2174,7 +2215,9 @@ namespace PraticeManagement
                 foreach (CalendarItem day in CalendarItems)
                 {
                     var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
-                    xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, IsNoteRequiredList[day.Date], IsHourlyRevenueList[day.Date], false));
+                    xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass,
+                                                                            true,//(IsNoteRequiredList[day.Date] || isNoteRequiredForProject), 
+                                                                            IsHourlyRevenueList[day.Date], false));
                     xml.Append(calendarItemXmlClose);
                 }
                 xml.Append(workTypeXmlClose);
@@ -2211,7 +2254,7 @@ namespace PraticeManagement
         public void UpdateCalendarItemAndBind(CalendarItem[] calendarItems)
         {
             CalendarItems = calendarItems;
-            var projectSectionXdoc =  UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
+            var projectSectionXdoc = UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
             var businessDevelopmentSectionXdoc = UpdateCalendarItems(PrePareXmlForBusinessDevelopmentSectionFromRepeater());
             var internalSectionXdoc = UpdateCalendarItems(PrePareXmlForInternalSectionFromRepeater());
             var administrativeSectionXdoc = UpdateCalendarItems(XDocument.Parse(AdministrativeSectionXml));
