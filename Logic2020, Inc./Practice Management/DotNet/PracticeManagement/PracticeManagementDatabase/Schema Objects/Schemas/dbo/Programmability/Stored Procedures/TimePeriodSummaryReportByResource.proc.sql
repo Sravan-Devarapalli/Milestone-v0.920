@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
 -- Updated by : Sainath.CH
--- Update Date: 04-06-2012
+-- Update Date: 04-12-2012
 -- Description:  Time Entries grouped by Resource for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
@@ -12,12 +12,16 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
 )
 AS
 BEGIN
+	SET NOCOUNT ON;
+	DECLARE @StartDateLocal DATETIME,
+			@EndDateLocal   DATETIME,
+			@NOW			DATE,
+			@HolidayTimeType INT
 
-	SET @StartDate = CONVERT(DATE,@StartDate)
-	SET @EndDate = CONVERT(DATE,@EndDate)
-
-	DECLARE @NOW DATE
+	SET @StartDateLocal = CONVERT(DATE,@StartDate)
+	SET @EndDateLocal = CONVERT(DATE,@EndDate)
 	SET @NOW = dbo.GettingPMTime(GETUTCDATE())
+	SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
 
 	-- Get person level Default hours in between the StartDate and EndDate
 	--1.Day should not be company holiday and also not converted to substitute day.
@@ -27,11 +31,20 @@ BEGIN
 	(
 	SELECT Pc.Personid,
 		(COUNT(PC.Date) * 8) AS DefaultHours --Estimated working hours per day is 8.
-	FROM [dbo].[v_PersonCalendar] PC 
+	FROM (
+			SELECT CAL.Date,
+				   P.PersonId,
+				   CAL.DayOff AS CompanyDayOff,
+				   PCAL.TimeTypeId,
+				   PCAL.SubstituteDate
+			  FROM dbo.Calendar AS CAL
+				   INNER JOIN dbo.Person AS P ON CAL.Date >= P.HireDate AND CAL.Date <= ISNULL(P.TerminationDate, dbo.GetFutureDate())
+				   LEFT JOIN dbo.PersonCalendar AS PCAL ON PCAL.Date = CAL.Date AND PCAL.PersonId = P.PersonId
+		) AS PC 
 	WHERE PC.Date BETWEEN 
 						@StartDate
 						AND 
-						CASE WHEN @EndDate > @NOW THEN @NOW ELSE  @EndDate END
+						CASE WHEN @EndDate > DATEADD(day,-1,@NOW) THEN DATEADD(day,-1,@NOW) ELSE  @EndDate END
 			AND ( 
 					(PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()) 
 					OR ( PC.CompanyDayOff =1 AND PC.SubstituteDate IS NOT NULL)
@@ -43,11 +56,35 @@ BEGIN
 	  SELECT MP.PersonId
 	  FROM  dbo.MilestonePersonEntry AS MPE 
 	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
-											AND MPE.StartDate < @EndDate 
-											AND @StartDate  < MPE.EndDate
+											AND MPE.StartDate < @EndDateLocal 
+											AND @StartDateLocal  < MPE.EndDate
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId AND p.IsStrawman = 0
+	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId 
+									AND p.IsStrawman = 0
+									AND @StartDateLocal < ISNULL(P.TerminationDate,dbo.GetFutureDate()) 
+		INNER JOIN dbo.Project PRO ON PRO.ProjectId = M.ProjectId AND Pro.ProjectNumber != 'P031000'
 	  GROUP BY MP.PersonId
+	),
+	PersonTotalStatusHistory
+	AS
+	(
+		SELECT PSH.PersonId,
+				CASE WHEN PSH.StartDate = MinPayStartDate THEN PS.HireDate ELSE PSH.StartDate END AS StartDate,
+				ISNULL(PSH.EndDate,dbo.GetFutureDate()) AS EndDate,
+				PSH.PersonStatusId
+		FROM dbo.PersonStatusHistory PSH 
+		LEFT JOIN (
+					SELECT PSH.PersonId
+								,P.HireDate 
+								,MIN(PSH.StartDate) AS MinPayStartDate
+					FROM dbo.PersonStatusHistory PSH
+					INNER JOIN dbo.Person P ON PSH.PersonId = P.PersonId
+					WHERE P.IsStrawman = 0
+					GROUP BY PSH.PersonId,P.HireDate
+					HAVING P.HireDate < MIN(PSH.StartDate)
+				) AS PS ON PS.PersonId = PSH.PersonId
+		WHERE  PSH.StartDate < @EndDateLocal 
+				AND @StartDateLocal  < ISNULL(PSH.EndDate,dbo.GetFutureDate())
 	)
 
 	SELECT	P.PersonId,
@@ -70,15 +107,21 @@ BEGIN
 					ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 2 THEN TEH.ActualHours ELSE 0 END),2) AS BusinessDevelopmentHours,
 					ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 3 OR Pro.ProjectNumber = 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS InternalHours,
 					ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 THEN TEH.ActualHours ELSE 0 END),2) AS AdminstrativeHours,
-					ROUND (SUM(CASE WHEN ( CC.TimeEntrySectionId = 1 OR CC.TimeEntrySectionId = 2) AND @NOW >= TE.ChargeCodeDate AND Pro.ProjectNumber != 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS ActualHours
-					FROM dbo.TimeEntry TE
-						INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId 
-															AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate 
-						INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
-						INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
-						INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
-					WHERE  TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())	
-					GROUP BY TE.PersonId
+					ROUND (SUM(CASE WHEN ( CC.TimeEntrySectionId = 1 OR CC.TimeEntrySectionId = 2) AND @NOW > TE.ChargeCodeDate AND Pro.ProjectNumber != 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS ActualHours
+			FROM dbo.TimeEntry TE
+				INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId 
+													AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal 
+				INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
+				INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
+				INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
+				INNER JOIN PersonTotalStatusHistory PTSH ON PTSH.PersonId = P.PersonId 
+															AND TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
+			WHERE  TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())
+					AND (
+							CC.timeTypeId != @HolidayTimeType
+							OR (CC.timeTypeId = @HolidayTimeType AND PTSH.PersonStatusId = 1 )
+						)	
+			GROUP BY TE.PersonId
 		) Data
 		FULL JOIN AssignedPersons AP ON AP.PersonId = Data.PersonId 
 		INNER JOIN dbo.Person P ON (P.PersonId = Data.PersonId OR AP.PersonId = P.PersonId) AND p.IsStrawman = 0
