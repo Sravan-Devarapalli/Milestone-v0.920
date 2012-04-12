@@ -842,6 +842,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.TermsParam, project.Terms);
                 command.Parameters.AddWithValue(Constants.ParameterNames.NameParam, project.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, project.IsChargeable);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, project.IsNoteRequired);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIdsList, project.ProjectManagerIdsList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam,
                     project.Practice != null ? (object)project.Practice.Id : DBNull.Value);
@@ -909,6 +910,7 @@ namespace DataAccess
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam, !string.IsNullOrEmpty(project.Description) ? (object)project.Description : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, project.IsChargeable);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, project.IsNoteRequired);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
 
@@ -1021,6 +1023,16 @@ namespace DataAccess
                     int IsInternalIndex = -1;
                     int ClientIsInternalIndex = -1;
                     int hasTimeEntriesIndex = -1;
+                    int isNoteRequiredIndex = -1;
+
+                    try
+                    {
+                        isNoteRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNoteRequired);
+                    }
+                    catch
+                    {
+                        isNoteRequiredIndex = -1;
+                    }
 
                     try
                     {
@@ -1134,6 +1146,11 @@ namespace DataAccess
                             ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
 
                         };
+
+                        if (isNoteRequiredIndex > -1)
+                        {
+                            project.IsNoteRequired = reader.GetBoolean(isNoteRequiredIndex);
+                        }
 
                         if (descriptionIndex > -1)
                         {
@@ -2484,7 +2501,25 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
+                        int isNoteRequiredIndex = -1; 
+
                         project = ReadProjectShort(reader);
+
+                        try
+                        {
+                            isNoteRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNoteRequired);
+                        }
+                        catch
+                        {
+                            isNoteRequiredIndex = -1;
+                        }
+
+
+                        if (isNoteRequiredIndex > -1)
+                        {
+                            project.IsNoteRequired = reader.GetBoolean(isNoteRequiredIndex);
+                        }
+
                     }
                 }
             }
