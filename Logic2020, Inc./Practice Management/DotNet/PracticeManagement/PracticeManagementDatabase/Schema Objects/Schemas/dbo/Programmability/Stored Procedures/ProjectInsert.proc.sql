@@ -1,7 +1,7 @@
 ﻿-- =============================================
--- Description:	Inserts a Milestone
--- Updated by:	Ravi Narsini
--- Update date:	10-26-2010 : Changes: Added default milestone logic (#2600)
+-- Description:	Inserts a Project
+-- Updated by:	ThulasiRam.P
+-- Update date:	04-12-2012
 -- =============================================
 CREATE PROCEDURE dbo.ProjectInsert
 (
@@ -21,7 +21,8 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@OpportunityId		INT = NULL,
 	@Description        NVARCHAR(MAX),
 	@CanCreateCustomWorkTypes BIT,
-	@IsInternal			BIT 
+	@IsInternal			BIT,
+	@IsNoteRequired     BIT = 1
 )
 AS
 BEGIN
@@ -41,9 +42,9 @@ BEGIN
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Discount, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes,IsInternal)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes,IsInternal,IsNoteRequired)
 	     VALUES (@ClientId, @Discount, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes,@IsInternal)
+	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes,@IsInternal,@IsNoteRequired)
 	
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
