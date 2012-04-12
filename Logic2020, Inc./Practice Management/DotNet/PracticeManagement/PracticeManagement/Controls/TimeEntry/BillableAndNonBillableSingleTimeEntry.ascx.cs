@@ -253,8 +253,8 @@ namespace PraticeManagement.Controls.TimeEntry
         private void FillBillableControls()
         {
             EnsureChildControls();
-            tbNotes.Text = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value.Replace("\\r\\n","\r\n");
-            hdnNotes.Value = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value.Replace("\\r\\n", "\r\n");
+            tbNotes.Text = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
+            hdnNotes.Value = TimeEntryRecordBillableElement.Attribute(XName.Get(TimeEntry_New.NoteXname)).Value;
             imgNote.ImageUrl
                 = string.IsNullOrEmpty(tbNotes.Text)
                       ? Constants.ApplicationResources.AddCommentIcon
@@ -376,7 +376,15 @@ namespace PraticeManagement.Controls.TimeEntry
             var isValidNonBillableHours = IsValidNonBillableHours();
 
             if (!isValidNote)
+            {
                 HostingPage.IsValidNote = isValidNote;
+
+                if (IsNoteRequired.ToLower() == "false")
+                {
+                    HostingPage.IsNoteRequiredBecauseOfNonBillable = true;
+                }
+              
+            }
 
             if (!(isValidBillableHours && isValidNonBillableHours))
                 HostingPage.IsValidHours = isValidBillableHours && isValidNonBillableHours;
@@ -411,7 +419,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
             var note = tbNotes.Text.Trim();
 
-            if (hdnIsNoteRequired.Value.ToLowerInvariant() == "true" && (!string.IsNullOrEmpty(tbBillableHours.Text) || !string.IsNullOrEmpty(tbNonBillableHours.Text)))
+           
+            if (!string.IsNullOrEmpty(tbNonBillableHours.Text) //For Non-Billable Note is Mandatory
+                || (hdnIsNoteRequired.Value.ToLowerInvariant() == "true" && (!string.IsNullOrEmpty(tbBillableHours.Text)))
+                
+                )
             {
                 if (string.IsNullOrEmpty(note) || note.Length < 3 || note.Length > 1000)
                 {
