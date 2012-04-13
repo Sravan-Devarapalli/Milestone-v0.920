@@ -12,16 +12,24 @@
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
-        <td id="tdPlusSection" runat="server" class="DeleteWidth">
+        <td class="DeleteWidth">
         </td>
-        <td id="tdTimeTypes" runat="server">
-            <uc:CustomDropDown ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
-                OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
-                ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
-            <ext3:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
-                ExtendedCssClass="time-entry-bar-time-typesNew-select-Extended" TargetControlID="ddlTimeTypes" />
-            <asp:Label ID="lblTimeType" runat="server"></asp:Label>
-            <asp:HiddenField ID="hdnworkTypeId" runat="server" />
+        <td class="time-entry-bar-time-typesNewst" id="tdTimeTypes" runat="server" style="padding-left:3px !important;">
+            <table class="WholeWidth">
+                <tr>
+                    <td style="width: 10%; padding-left: 4px;" id="tdPlusSection" runat="server">
+                    </td>
+                    <td style="width: 90%;text-align:left;">
+                        <uc:CustomDropDown ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
+                            OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
+                            ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
+                        <ext3:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
+                            ExtendedCssClass="time-entry-bar-time-typesNew-select-Extended" TargetControlID="ddlTimeTypes" />
+                        <asp:Label ID="lblTimeType" runat="server"></asp:Label>
+                        <asp:HiddenField ID="hdnworkTypeId" runat="server" />
+                    </td>
+                </tr>
+            </table>
         </td>
         <asp:Repeater ID="tes" runat="server" OnItemDataBound="repEntries_ItemDataBound">
             <HeaderTemplate>
