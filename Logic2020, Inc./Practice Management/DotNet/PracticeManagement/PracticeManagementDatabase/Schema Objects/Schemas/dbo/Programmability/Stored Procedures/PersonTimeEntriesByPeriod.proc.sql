@@ -78,7 +78,7 @@ BEGIN
 	FROM dbo.TimeEntry TE
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
 	FULL JOIN dbo.PersonTimeEntryRecursiveSelection PTRS 
-		ON PTRS.ClientId = CC.ClientId AND ISNULL(PTRS.ProjectGroupId, 0) = ISNULL(CC.ProjectGroupId, 0) AND PTRS.ProjectId = CC.ProjectId AND StartDate < @EndDateLocal AND EndDate > @StartDateLocal 
+		ON PTRS.ClientId = CC.ClientId AND ISNULL(PTRS.ProjectGroupId, 0) = ISNULL(CC.ProjectGroupId, 0) AND PTRS.ProjectId = CC.ProjectId AND StartDate < @EndDateLocal AND EndDate > @StartDateLocal AND PTRS.PersonId = TE.PersonId
 	INNER JOIN Client C ON C.ClientId = ISNULL(CC.ClientId, PTRS.ClientId)
 	LEFT JOIN ProjectGroup PG ON PG.GroupId = ISNULL(CC.ProjectGroupId, PTRS.ProjectGroupId)
 	INNER JOIN Project P ON P.ProjectId = ISNULL(CC.ProjectId, PTRS.ProjectId)
