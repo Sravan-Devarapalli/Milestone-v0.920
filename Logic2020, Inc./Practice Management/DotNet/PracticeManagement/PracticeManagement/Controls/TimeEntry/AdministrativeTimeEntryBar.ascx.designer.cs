@@ -13,15 +13,6 @@ namespace PraticeManagement.Controls.TimeEntry {
     public partial class AdministrativeTimeEntryBar {
         
         /// <summary>
-        /// tdPlusSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdPlusSection;
-        
-        /// <summary>
         /// tdTimeTypes control.
         /// </summary>
         /// <remarks>
@@ -29,6 +20,15 @@ namespace PraticeManagement.Controls.TimeEntry {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTimeTypes;
+        
+        /// <summary>
+        /// tdPlusSection control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdPlusSection;
         
         /// <summary>
         /// ddlTimeTypes control.
