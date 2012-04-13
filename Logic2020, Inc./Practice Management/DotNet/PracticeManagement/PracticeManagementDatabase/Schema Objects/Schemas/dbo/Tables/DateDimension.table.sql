@@ -1,0 +1,28 @@
+﻿CREATE TABLE [dbo].[DateDimension](
+	[DateKey] [int] IDENTITY(1,1) NOT NULL,
+	[CalendarDate] [datetime] NOT NULL,
+	[Day] [char](2) NOT NULL,
+	[DaySuffix] [varchar](4) NOT NULL,
+	[DayOfWeek] [varchar](9) NOT NULL,
+	[DOWInMonth] [tinyint] NOT NULL,
+	[DayOfYear] [int] NOT NULL,
+	[WeekOfMonth] [tinyint] NOT NULL,
+	[WeekOfYear] [tinyint] NOT NULL,
+	[Month] [char](2) NOT NULL,
+	[MonthName] [varchar](9) NOT NULL,
+	[Quarter] [varchar](1) NOT NULL,
+	[QuarterName] [varchar](6) NOT NULL,
+	[Year] [char](4) NOT NULL,
+	[MonthYear] [varchar](10) NULL,
+	[MMYYY] [varchar](6) NULL,
+	[FirstDayOfMonth] [date] NULL,
+	[LastDayOfMonth] [date] NULL,
+	[FirstDayOfQuarter] [date] NULL,
+	[LastDayOfQuarter] [date] NULL,
+	[FirstDayOfYear] [date] NULL,
+	[LastDayOfYear] [date] NULL,
+	[HolidayText] [varchar](50) NULL,
+	[IsBusinessDay] [bit] NULL,
+
+	 CONSTRAINT PK_DateDimension_DateKey PRIMARY KEY CLUSTERED(DateKey)
+)
