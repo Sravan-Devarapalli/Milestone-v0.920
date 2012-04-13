@@ -347,7 +347,7 @@ namespace PraticeManagement.Controls.TimeEntry
             }
 
             hdnworkTypeId.Value = SelectedTimeType.Id.ToString();
-            lblTimeType.Text = lblTimeType.ToolTip = SelectedTimeType.Name;
+            lblTimeType.Text = lblTimeType.ToolTip = "&nbsp;" + SelectedTimeType.Name;
             tes.DataSource = TeBarDataSource;
             tes.DataBind();
         }
