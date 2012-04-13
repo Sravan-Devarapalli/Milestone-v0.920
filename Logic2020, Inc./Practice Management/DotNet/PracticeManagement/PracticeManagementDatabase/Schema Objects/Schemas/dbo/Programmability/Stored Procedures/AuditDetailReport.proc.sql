@@ -2,14 +2,29 @@
 -- Author:		ThulasiRam.P
 -- Create date: 04-09-2012
 -- Description:  Time Entries for a particular period.
+/*
+Person		Date		Change
+----------- ----------- --------------------------------------------------------
+Mike Inman	2012/04/10	split first name and last name
+						changed output column from status to EmpStatus
+						Parameters made optional with default startdate 16 Months in past and end three weeks into future.
+						Added CTE to show one row for each day that person is active employee.
+						Removed several columns and tables
+*/
 -- =========================================================================
 CREATE PROCEDURE [dbo].[AuditDetailReport]
 (
-	@StartDate DATETIME,
-	@EndDate   DATETIME
+	@StartDate DATETIME = NULL,
+	@EndDate   DATETIME = NULL
 )
 AS
 BEGIN
+-- set default startdate
+IF @StartDate IS NULL
+	SET @StartDate =DATEADD(MM,-16,GETDATE())
+IF @EndDate IS NULL
+	SET @EndDate = DATEADD(ww,3,GETDATE())
+SET NOCOUNT ON
 
 /*
  Employee Name	Employee ID	Pay Type	IsOffshore	Status	Account	Account Name	
@@ -43,52 +58,80 @@ DECLARE @StartDateLocal DATETIME,
 			AND @StartDate  < M.ProjectedDeliveryDate
 	  GROUP BY M.ProjectId,C.Date,MP.PersonId
 	)
-
-	SELECT	P.LastName + ' ' + P.FirstName AS [Employee Name],
+	--MAKE LIST OF EACH EMPLOYEE AND EACH DAY THAT THEY WERE EMPLOYED AND THREE WEEKS INTO FUTURE.
+	,PersonByTime as
+	(
+	SELECT p.PersonId,
+			P.LastName,
+			P.FirstName,
 			P.EmployeeNumber AS [Employee ID],
-			TS.Name AS [Pay Type],
 			CASE WHEN P.IsOffshore = 1 THEN 'Yes' ELSE 'No' END AS [IsOffshore],
 			PerStatus.Name AS  [Status],
+			dd.[CalendarDate],
+			cast([Year] as char(4)) + ' - ' + 'Week ' + Cast(dd.[WeekOfYear] as char(2))  as [WeekOfYear],
+			 cast([Year] as char(4)) + ' - ' + Cast(dd.[MonthName] as varchar(10)) as MonthOfYear,
+			dd.[DayOfWeek],
+			dd.[QuarterName],
+			dd.[Year]
+	FROM		dbo.Person P
+	INNER JOIN [dbo].[PersonStatusHistory] psh ON P.PersonId = psh.PersonId
+	INNER JOIN [dbo].[DateDimension] dd ON dd.[CalendarDate] between psh.StartDate and COALESCE(psh.EndDate, p.[TerminationDate], DATEADD(ww,3,GETDATE()))
+	INNER JOIN dbo.PersonStatus AS PerStatus ON PerStatus.PersonStatusId = P.PersonStatusId 	
+	WHERE		dd.[CalendarDate] BETWEEN @StartDateLocal AND @EndDateLocal 
+	)
+	--select * from PersonByTime
+	SELECT	
+			pbt.PersonId,
+			pbt.LastName,
+			pbt.FirstName,
+			pbt.[Employee ID],
+			pbt.[IsOffshore],
+			pbt.[CalendarDate],
+			pbt.[DayOfWeek],
+			pbt.[WeekOfYear],
+			pbt.[MonthOfYear],
+			pbt.[QuarterName],
+			pbt.[Year],
 			C.Code AS [Account],
 			C.Name AS [Account Name],
 			PG.Code AS [Business Unit],
 			PG.Name AS [Business Unit Name],
 			PRO.ProjectNumber AS [Project],
 			PRO.Name AS [Project Name],
-			PS.Name AS  [Status],
-			(CASE WHEN (PDBR.MinimumValue IS NULL OR CC.TimeEntrySectionId <> 1 ) THEN '' 
-			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 0) THEN 'Fixed'
-			WHEN (PDBR.MinimumValue = PDBR.MaximumValue AND PDBR.MinimumValue = 1) THEN 'Hourly'
-			ELSE 'Both' END) AS [Billing],
+			PS.Name AS  [EmpStatus],
 			'1' AS [Phase],
 			TT.Code AS [Work Type],
 			TT.Name AS [Work Type Name],
 			TE.ChargeCodeDate AS [Date],
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND Pro.ProjectNumber != 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS [Billable Hours],
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 OR Pro.ProjectNumber = 'P031000' THEN TEH.ActualHours ELSE 0 END),2) AS  [Non-Billable Hours],
-			ROUND(SUM(TEH.ActualHours),2) AS [Total Hours],
+			COALESCE(ROUND(SUM(TEH.ActualHours),2),0) AS [Total Hours],
 			TE.Note AS [Note]
-			FROM       dbo.TimeEntry TE 
-			INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId 
-												 AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal 
-			INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
-			INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
-			INNER JOIN dbo.ProjectStatus AS PS ON PS.ProjectStatusId = Pro.ProjectStatusId  
-			INNER JOIN dbo.Client C ON C.ClientId = CC.ClientId
-			INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId
-			INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
-			INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
-			INNER JOIN dbo.PersonStatus AS PerStatus ON PerStatus.PersonStatusId = P.PersonStatusId  
-			LEFT JOIN  dbo.Pay PA ON PA.Person = P.PersonId AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate())
-			LEFT JOIN  dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
-			LEFT JOIN ProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId  AND PDBR.Date = TE.ChargeCodeDate AND TE.PersonId = PDBR.PersonId
-			WHERE  TE.ChargeCodeDate <= ISNULL(P.TerminationDate,dbo.GetFutureDate())	
-			GROUP BY	P.LastName,
-						P.FirstName,
+			FROM    PersonByTime pbt   
+			LEFT JOIN  dbo.TimeEntry TE ON pbt.PersonId = te.PersonId 
+										AND pbt.CalendarDate = TE.ChargeCodeDate 
+			LEFT JOIN  dbo.TimeEntryHours TEH	ON TEH.TimeEntryId = te.TimeEntryId
+			LEFT JOIN  dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
+			LEFT JOIN  dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
+			LEFT JOIN  dbo.ProjectStatus AS PS ON PS.ProjectStatusId = Pro.ProjectStatusId  
+			LEFT JOIN dbo.Client C ON C.ClientId = CC.ClientId
+			LEFT JOIN  dbo.ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId
+			LEFT JOIN  dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
+
+			WHERE  1=1
+			GROUP BY	
+						pbt.PersonId,
+						pbt.LastName,
+						pbt.FirstName,
+						pbt.[Employee ID],
+						pbt.[IsOffshore],
+						pbt.[CalendarDate],
+						pbt.[DayOfWeek],
+						pbt.[WeekOfYear],
+						pbt.[MonthOfYear],
+						pbt.[QuarterName],
+						pbt.[Year],
 						TE.ChargeCodeDate,
-						P.EmployeeNumber,
-						TS.Name,
-						P.IsOffshore,
 						C.Code,
 						C.Name,
 						PG.Code,
@@ -98,11 +141,8 @@ DECLARE @StartDateLocal DATETIME,
 						PS.Name,
 						TT.Code,
 						TT.Name,
-						PDBR.MinimumValue,
-						PDBR.MaximumValue,
 						CC.TimeEntrySectionId,
-						TE.Note,
-						PerStatus.Name
-			ORDER BY P.LastName,P.FirstName,C.Name,PG.Name,PRO.Name,TT.Name
+						TE.Note
+			ORDER BY Pbt.LastName,CalendarDate
 END
 
