@@ -33,7 +33,7 @@ BEGIN
 	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 	  INNER JOIN dbo.v_PersonCalendar PC ON PC.PersonId = MP.PersonId 
 											AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
-											AND PC.Date BETWEEN @StartDateLocal AND CASE WHEN @EndDateLocal > @Today THEN @Today ELSE  @EndDateLocal END
+											AND PC.Date BETWEEN @StartDateLocal AND CASE WHEN @EndDate > DATEADD(day,-1,@Today) THEN DATEADD(day,-1,@Today) ELSE  @EndDate END 
 											AND ( 
 													(PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()) 
 													OR ( PC.CompanyDayOff =1 AND PC.SubstituteDate IS NOT NULL)
