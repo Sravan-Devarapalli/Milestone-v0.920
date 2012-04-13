@@ -22,20 +22,7 @@ BEGIN
 	SET @NOW = dbo.GettingPMTime(GETUTCDATE())
 	SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
 
-	;WITH AssignedPersons AS
-	(
-	  SELECT MP.PersonId
-	  FROM  dbo.MilestonePersonEntry AS MPE 
-	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
-											AND MPE.StartDate < @EndDateLocal 
-											AND @StartDateLocal  < MPE.EndDate
-	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId 
-									AND p.IsStrawman = 0
-									AND @StartDateLocal < ISNULL(P.TerminationDate,dbo.GetFutureDate()) 
-	  GROUP BY MP.PersonId
-	),
-	PersonWithLatestPay AS
+	;WITH PersonWithLatestPay AS
 	(
 		SELECT P.PersonId,
 			MAX(PA.StartDate) AS RecentStartDate
@@ -78,6 +65,25 @@ BEGIN
 				) AS PS ON PS.PersonId = PSH.PersonId
 		WHERE  PSH.StartDate < @EndDateLocal 
 				AND @StartDateLocal  < ISNULL(PSH.EndDate,dbo.GetFutureDate())
+	),
+	AssignedPersons AS
+	(
+	  SELECT DISTINCT MP.PersonId
+	  FROM  dbo.MilestonePersonEntry AS MPE 
+	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
+											AND MPE.StartDate < @EndDateLocal 
+											AND @StartDateLocal  < MPE.EndDate
+	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId 
+									AND p.IsStrawman = 0
+									AND @StartDateLocal < ISNULL(P.TerminationDate,dbo.GetFutureDate()) 
+	  INNER JOIN dbo.Project PRO ON PRO.ProjectId = M.ProjectId AND Pro.ProjectNumber != 'P031000'
+	  INNER JOIN PersonTotalStatusHistory PTSH ON PTSH.PersonId = P.PersonId 
+												AND PTSH.StartDate < @EndDateLocal 
+												AND @StartDateLocal  < PTSH.EndDate
+												AND PTSH.PersonStatusId = 1 --ACTIVE STATUS
+
+	  GROUP BY MP.PersonId
 	)
 
 	SELECT	1 AS BranchID,
