@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[PayDelete]
+﻿-- =========================================================================
+-- Updated by : Sainath.CH
+-- Update Date: 04-16-2012
+-- =========================================================================
+CREATE PROCEDURE [dbo].[PayDelete]
 	@PersonId INT, 
 	@StartDate DATETIME
 AS
@@ -67,9 +71,11 @@ BEGIN
 			
 			DELETE FROM dbo.Pay
 			WHERE Person = @PersonId AND StartDate = @StartDate
-
-			COMMIT TRAN tran_PayDelete
+			
 		END
+
+		COMMIT TRAN tran_PayDelete
+
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN tran_PayDelete
