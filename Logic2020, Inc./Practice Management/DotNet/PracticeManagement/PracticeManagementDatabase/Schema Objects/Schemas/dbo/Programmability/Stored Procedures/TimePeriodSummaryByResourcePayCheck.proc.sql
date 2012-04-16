@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 04-03-2012
 -- Updated by : Sainath.CH
--- Update Date: 04-12-2012
+-- Update Date: 04-16-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
 (
@@ -63,27 +63,16 @@ BEGIN
 					GROUP BY PSH.PersonId,P.HireDate
 					HAVING P.HireDate < MIN(PSH.StartDate)
 				) AS PS ON PS.PersonId = PSH.PersonId
-		WHERE  PSH.StartDate < @EndDateLocal 
+		WHERE  CASE WHEN PSH.StartDate = MinPayStartDate THEN PS.HireDate ELSE PSH.StartDate END < @EndDateLocal 
 				AND @StartDateLocal  < ISNULL(PSH.EndDate,dbo.GetFutureDate())
 	),
 	AssignedPersons AS
 	(
-	  SELECT DISTINCT MP.PersonId
-	  FROM  dbo.MilestonePersonEntry AS MPE 
-	  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
-											AND MPE.StartDate < @EndDateLocal 
-											AND @StartDateLocal  < MPE.EndDate
-	  INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-	  INNER JOIN dbo.Person AS P ON MP.PersonId = P.PersonId 
-									AND p.IsStrawman = 0
-									AND @StartDateLocal < ISNULL(P.TerminationDate,dbo.GetFutureDate()) 
-	  INNER JOIN dbo.Project PRO ON PRO.ProjectId = M.ProjectId AND Pro.ProjectNumber != 'P031000'
-	  INNER JOIN PersonTotalStatusHistory PTSH ON PTSH.PersonId = P.PersonId 
-												AND PTSH.StartDate < @EndDateLocal 
-												AND @StartDateLocal  < PTSH.EndDate
-												AND PTSH.PersonStatusId = 1 --ACTIVE STATUS
-
-	  GROUP BY MP.PersonId
+	  SELECT DISTINCT PTSH.PersonId
+	  FROM  PersonTotalStatusHistory PTSH 
+	  WHERE PTSH.StartDate < @EndDateLocal 
+			AND @StartDateLocal  < PTSH.EndDate
+			AND PTSH.PersonStatusId = 1 --ACTIVE STATUS
 	)
 
 	SELECT	1 AS BranchID,
