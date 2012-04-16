@@ -6,8 +6,6 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Register Src="~/Controls/CalendarLegend.ascx" TagName="CalendarLegend" TagPrefix="uc2" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
-<%@ Register Src="~/Controls/TimeEntry/WeekSelector.ascx" TagName="WeekSelector"
-    TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
@@ -36,7 +34,7 @@
             var hdnSaveReportText = document.getElementById('<%= hdnSaveReportText.ClientID %>');
             var html = ""; if (divPersonListSummary != null && divPersonListSummary.length > 0) {
                 for (var i = 0; i < divPersonListSummary.length; i++) {
-                    html += divPersonListSummary[i].innerHTML + hdnGuid.value
+                    html += divPersonListSummary[i].innerHTML + hdnGuid.value;
                 }
             }
             hdnSaveReportText.value = html
