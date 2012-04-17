@@ -8,46 +8,31 @@ AS
 BEGIN
 
 	DECLARE @IsPersonHasActiveStatus BIT
-	DECLARE @FutureDate DATETIME , @MinStartDate DATETIME ,@NOW DATETIME,@MinStartDateStatusId INT,@PersonHireDate DATETIME
-	
-	
-	SELECT @MinStartDate = MIN(PSH.StartDate) FROM dbo.PersonStatusHistory PSH
-					   WHERE PSH.PersonId = @PersonId
-
-	SELECT @MinStartDateStatusId = PSH.PersonStatusId FROM dbo.PersonStatusHistory PSH
-					   WHERE PSH.PersonId = @PersonId AND PSH.StartDate = @MinStartDate
-
-	SELECT @PersonHireDate = P.HireDate FROM dbo.Person P WHERE P.PersonId = @PersonId
-
-	SET  @FutureDate = dbo.GetFutureDate()
-	SET  @NOW = dbo.GettingPMTime(GETUTCDATE())
-	
 	SET @IsPersonHasActiveStatus = 0
 	
-	IF EXISTS(SELECT 1 	FROM dbo.PersonStatusHistory PSH
-				WHERE PSH.PersonId = @PersonId AND PSH.PersonStatusId = 1 
-						AND ( PSH.StartDate <=  ISNULL(@EndDate,@FutureDate) 
-						AND ISNULL(PSH.EndDate,@FutureDate) >= @StartDate))
-	BEGIN
-		SET @IsPersonHasActiveStatus  = 1
-	END
-	ELSE 
-		BEGIN
-			IF (@MinStartDateStatusId = 1 
-				AND @PersonHireDate < @StartDate  
-				AND @PersonHireDate  < @MinStartDate 
-				AND @StartDate < @MinStartDate 
-				AND @PersonHireDate < ISNULL(@EndDate,@FutureDate))
-			BEGIN
-					SET @IsPersonHasActiveStatus  = 1
-				END
-			ELSE
-				BEGIN
-					SET @IsPersonHasActiveStatus = 0
-				END
-		END
-
+	DECLARE @MinStartdates TABLE (PersonId INT ,MinStartDate DATETIME,StatusId INT)
 		
-	SELECT @IsPersonHasActiveStatus
+	INSERT INTO @MinStartdates (PersonId ,MinStartDate)
+	SELECT @PersonId,MIN(PSH.StartDate) 
+	FROM dbo.PersonStatusHistory PSH
+	WHERE PSH.PersonId = @PersonId
+		
+	UPDATE minSD
+	SET StatusId = PSH.PersonStatusId
+	FROM @MinStartdates minSD
+	INNER JOIN dbo.PersonStatusHistory PSH ON PSH.PersonId = minSD.personId AND minSD.MinStartDate = PSH.StartDate
 
+
+	SELECT @IsPersonHasActiveStatus = 1
+	FROM dbo.Person AS p
+	INNER JOIN dbo.PersonStatusHistory PSH ON PSH.PersonId = p.PersonId 
+	INNER JOIN @MinStartdates minSD ON minSD.personId = p.PersonId
+	WHERE 
+	p.IsStrawman = 0
+	AND PSH.PersonStatusId = 1 -- ACTIVE Status
+	AND (P.HireDate - (DATEPART(dw,P.HireDate) -1 )) <= @StartDate 
+	AND  ( @StartDate < ISNULL(PSH.EndDate,dbo.GetFutureDate()) AND @EndDate > PSH.StartDate ) OR
+		    ( minSD.StatusId = 1 AND  P.HireDate < minSD.MinStartDate AND @StartDate < minSD.MinStartDate AND @EndDate > P.HireDate )
+
+    SELECT @IsPersonHasActiveStatus 
 END
