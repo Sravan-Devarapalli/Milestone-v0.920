@@ -289,7 +289,14 @@
                         ReplaceHTML(imgPlusAdministrativeSectionList);
 
                         var divProjectSectionList = $("[id$='divProjectSection']");
+                        var divBusinessDevelopmentSectionList = $("[id$='divBusinessDevelopmentSection']");
+                        var divInternalSectionList = $("[id$='divInternalSection']");
+                        ChangeIsNoteRequiredImage(divProjectSectionList);
+                        ChangeIsNoteRequiredImage(divBusinessDevelopmentSectionList);
+                        ChangeIsNoteRequiredImage(divInternalSectionList);
+                    }
 
+                    function ChangeIsNoteRequiredImage(divProjectSectionList) {
                         for (var i = 0; i < divProjectSectionList.length; i++) {
                             var hdnList = $(divProjectSectionList[i]).find("[id$='hdnIsNoteRequired']");
                             var imgNoteRequiredOrOptional = $(divProjectSectionList[i]).find("[id$='imgNoteRequiredOrOptional']")[0];
@@ -517,11 +524,11 @@
                         <asp:Repeater ID="repBusinessDevelopmentSections" OnItemDataBound="repBusinessDevelopmentSections_OnItemDataBound"
                             runat="server">
                             <ItemTemplate>
-                                <div class="WholeWidth White">
+                                <div id="divBusinessDevelopmentSection" runat="server" class="WholeWidth White">
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
-                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
+                                                <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
@@ -560,11 +567,11 @@
                                 </div>
                             </ItemTemplate>
                             <AlternatingItemTemplate>
-                                <div class="WholeWidth f0f0f1">
+                                <div id="divBusinessDevelopmentSection" runat="server" class="WholeWidth f0f0f1">
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
-                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
+                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
@@ -652,11 +659,11 @@
                         <asp:Repeater ID="repInternalSections" OnItemDataBound="repInternalSections_ItemDataBound"
                             runat="server">
                             <ItemTemplate>
-                                <div class="WholeWidth White">
+                                <div id="divInternalSection" runat="server" class="WholeWidth White">
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
-                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
+                                                <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -695,11 +702,11 @@
                                 </div>
                             </ItemTemplate>
                             <AlternatingItemTemplate>
-                                <div class="WholeWidth f0f0f1">
+                                <div id="divInternalSection" runat="server" class="WholeWidth f0f0f1">
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
-                                                <img alt="Note ?" id="imgNoteRequired" title="Notes Required" src="Images/notes_required.png" />
+                                                <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
