@@ -3376,6 +3376,7 @@ namespace DataAccess
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
                 int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
                 int timeScaleIndex = reader.GetOrdinal(TimescaleColumn);
+                int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
 
                 while (reader.Read())
                 {
@@ -3386,6 +3387,7 @@ namespace DataAccess
                                 {
                                     TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
                                 };
+                    person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
                     if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
                     {
                         break;
