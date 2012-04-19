@@ -148,7 +148,9 @@
     <Compile Include="Reports\PersonLevelGroupedHours.cs" />
     <Compile Include="Reports\PersonLevelPayCheck.cs" />
     <Compile Include="Reports\ProjectLevelGroupedHours.cs" />
+    <Compile Include="Reports\GroupByClientAndProject.cs" />
     <Compile Include="Reports\TimeEntriesGroupByDate.cs" />
+    <Compile Include="Reports\GroupByDate.cs" />
     <Compile Include="Reports\TimeEntryByWorkType.cs" />
     <Compile Include="Reports\TimeEntriesGroupByClientAndProject.cs" />
     <Compile Include="Reports\WorkTypeLevelGroupedHours.cs" />
