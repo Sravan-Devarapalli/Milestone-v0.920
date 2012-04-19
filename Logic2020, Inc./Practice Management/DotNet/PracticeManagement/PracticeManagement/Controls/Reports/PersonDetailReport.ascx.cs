@@ -52,6 +52,11 @@ namespace PraticeManagement.Controls.Reports
                                                             ");";
 
             btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
+
+            if (!IsPostBack)
+            {
+                hdnGroupBy.Value = "project";
+            }
         }
 
         public void DatabindRepepeaterProjectDetails(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
@@ -61,14 +66,29 @@ namespace PraticeManagement.Controls.Reports
             if (timeEntriesGroupByClientAndProjectList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
-                repProjects.Visible = btnExpandOrCollapseAll.Visible = true;
-                repProjects.DataSource = timeEntriesGroupByClientAndProjectList;
-                repProjects.DataBind();
+                btnExpandOrCollapseAll.Visible = btnGroupBy.Visible = true;
+                string groupby = hdnGroupBy.Value;
+                if (groupby == "date")
+                {
+                    repProjects.Visible = false;
+                    repDate2.Visible = true;
+                    List<GroupByDate> GroupByDateList = DataTransferObjects.Utils.Generic.GetGroupByDateList(TimeEntriesGroupByClientAndProjectList);
+                    GroupByDateList = GroupByDateList.OrderByDescending(p => p.Date).ToList();
+                    repDate2.DataSource = GroupByDateList;
+                    repDate2.DataBind();
+                }
+                else if (groupby == "project")
+                {
+                    repDate2.Visible = false;
+                    repProjects.Visible = true;
+                    repProjects.DataSource = TimeEntriesGroupByClientAndProjectList;
+                    repProjects.DataBind();
+                }
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
-                repProjects.Visible = btnExpandOrCollapseAll.Visible = false;
+                repDate2.Visible = repProjects.Visible = btnExpandOrCollapseAll.Visible = btnGroupBy.Visible = false;
             }
         }
 
@@ -86,7 +106,6 @@ namespace PraticeManagement.Controls.Reports
                 SectionId = dataitem.Project.TimeEntrySectionId;
                 repDate.DataSource = dataitem.DayTotalHours;
                 repDate.DataBind();
-
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -108,14 +127,55 @@ namespace PraticeManagement.Controls.Reports
             {
                 var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
                 TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
+                repWorktype.DataSource = dataitem.DayTotalHoursList;
                 var rep = sender as Repeater;
-
                 var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
                 cpeDate.BehaviorID = Guid.NewGuid().ToString();
                 CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
+                repWorktype.DataBind();
+            }
+        }
 
+        protected void repDate2_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                CollapsiblePanelDateExtenderClientIds = new List<string>();
 
-                repWorktype.DataSource = dataitem.DayTotalHoursList;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var repProject2 = e.Item.FindControl("repProject2") as Repeater;
+                GroupByDate dataitem = (GroupByDate)e.Item.DataItem;
+                repProject2.DataSource = dataitem.ProjectTotalHours;
+                repProject2.DataBind();
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
+                hdncpeExtendersIds.Value = output;
+                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+                hdnCollapsed.Value = "true";
+            }
+        }
+
+        protected void repProject2_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
+                GroupByClientAndProject dataitem = (GroupByClientAndProject)e.Item.DataItem;
+                SectionId = dataitem.Project.TimeEntrySectionId;
+                repWorktype.DataSource = dataitem.ProjectTotalHoursList;
+                var rep = sender as Repeater;
+                var cpeProject = e.Item.FindControl("cpeProject") as CollapsiblePanelExtender;
+                cpeProject.BehaviorID = Guid.NewGuid().ToString();
+                CollapsiblePanelDateExtenderClientIds.Add(cpeProject.BehaviorID);
                 repWorktype.DataBind();
             }
         }
@@ -123,6 +183,11 @@ namespace PraticeManagement.Controls.Reports
         protected string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
+        protected string GetDateFormat(DateTime date)
+        {
+            return date.ToString(Constants.Formatting.ReportDateFormat);
         }
 
         protected string GetProjectStatus(string status)
@@ -140,9 +205,14 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-        protected bool GetNonBillableImageVisibility(double nonBillableHours)
+        protected string GetNoteFormated(String note)
         {
-            return SectionId == 1 && nonBillableHours > 0;
+            return note.Replace("\n", "<br/>");
+        }
+
+        protected bool GetNonBillableImageVisibility(int sectionId, double nonBillableHours)
+        {
+            return sectionId == -1 ? SectionId == 1 && nonBillableHours > 0 : sectionId == 1 && nonBillableHours > 0;
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
@@ -153,10 +223,16 @@ namespace PraticeManagement.Controls.Reports
                 var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
 
                 StringBuilder sb = new StringBuilder();
+                string personType = person.IsOffshore ? "Offshore" : string.Empty;
+                string payType = person.CurrentPay.TimescaleName;
+                string personStatusAndType = string.IsNullOrEmpty(personType) && string.IsNullOrEmpty(payType) ? string.Empty :
+                                                                                 string.IsNullOrEmpty(payType) ? personType :
+                                                                                 string.IsNullOrEmpty(personType) ? payType :
+                                                                                                                     payType + ", " + personType;
                 sb.Append(person.FirstName + " " + person.LastName);
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(person.CurrentPay.TimescaleName);
+                sb.Append(personStatusAndType);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
@@ -264,6 +340,22 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
+        protected void btnGroupBy_OnClick(object sender, EventArgs e)
+        {
+
+            string groupby = hdnGroupBy.Value;
+            if (groupby == "date")
+            {
+                btnGroupBy.ToolTip = btnGroupBy.Text = "Group By Date";
+                hdnGroupBy.Value = "project";
+            }
+            else if (groupby == "project")
+            {
+                btnGroupBy.ToolTip = btnGroupBy.Text = "Group By Project";
+                hdnGroupBy.Value = "date";
+            }
+            DatabindRepepeaterProjectDetails(TimeEntriesGroupByClientAndProjectList);
+        }
     }
 }
 
