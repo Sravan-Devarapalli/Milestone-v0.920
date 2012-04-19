@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DataTransferObjects.TimeEntry;
+using DataTransferObjects.Reports;
 
 namespace DataTransferObjects.Utils
 {
@@ -114,6 +115,60 @@ namespace DataTransferObjects.Utils
         public static int GetBillablePercentage(double billableHours, double nonBillableHours)
         {
             return (int)(100 * billableHours / (billableHours + nonBillableHours));
+        }
+
+        public static List<GroupByDate> GetGroupByDateList(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
+        {
+            List<GroupByDate> groupByDateList = new List<GroupByDate>();
+            if (timeEntriesGroupByClientAndProjectList.Count > 0)
+            {
+                foreach (var timeEntriesGroupByClientAndProject in timeEntriesGroupByClientAndProjectList)
+                {
+
+                    foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
+                    {
+
+                        foreach (var byWorkType in byDateList.DayTotalHoursList)
+                        {
+                            GroupByDate groupByDate;
+                            if (!groupByDateList.Any(g => g.Date == byDateList.Date))
+                            {
+                                groupByDate = new GroupByDate();
+                                groupByDate.Date = byDateList.Date;
+                                groupByDateList.Add(groupByDate);
+                            }
+                            else
+                            {
+                                groupByDate = groupByDateList.First(g => g.Date == byDateList.Date);
+                            }
+
+                            GroupByClientAndProject groupByClientAndProject;
+                            if (groupByDate.ProjectTotalHours == null)
+                            {
+                                groupByDate.ProjectTotalHours = new List<GroupByClientAndProject>();
+                            }
+                            if (!groupByDate.ProjectTotalHours.Any(g => g.Project.ProjectNumber == timeEntriesGroupByClientAndProject.Project.ProjectNumber))
+                            {
+                                groupByClientAndProject = new GroupByClientAndProject();
+                                groupByClientAndProject.Client = timeEntriesGroupByClientAndProject.Client;
+                                groupByClientAndProject.Project = timeEntriesGroupByClientAndProject.Project;
+                                groupByDate.ProjectTotalHours.Add(groupByClientAndProject);
+                            }
+                            else
+                            {
+                                groupByClientAndProject = groupByDate.ProjectTotalHours.First(g => g.Project.ProjectNumber == timeEntriesGroupByClientAndProject.Project.ProjectNumber);
+                            }
+
+                            if (groupByClientAndProject.ProjectTotalHoursList == null)
+                            {
+                                groupByClientAndProject.ProjectTotalHoursList = new List<TimeEntryByWorkType>();
+                            }
+                            groupByClientAndProject.ProjectTotalHoursList.Add(byWorkType);
+                        }
+                    }
+                }
+            }
+            return groupByDateList;
         }
     }
 }
