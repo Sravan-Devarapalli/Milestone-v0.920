@@ -38,9 +38,18 @@ namespace DataTransferObjects.Reports
         {
             get 
             {
-                return Note.Replace("\n", " ");
+                return Note.Replace("\n", " ").Replace("\r"," ");
             }
         }
+
+        public string HTMLNote
+        {
+            get
+            {
+                return Note.Replace("\n", "<br/>");
+            }
+        }
+
 
 
     }
