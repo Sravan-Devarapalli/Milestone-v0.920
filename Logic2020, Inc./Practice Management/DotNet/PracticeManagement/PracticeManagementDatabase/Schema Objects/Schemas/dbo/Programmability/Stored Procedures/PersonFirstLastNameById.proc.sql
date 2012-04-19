@@ -12,7 +12,8 @@ BEGIN
 	SELECT	P.FirstName,
 			P.LastName,
 			P.IsStrawman,
-			TS.Name AS Timescale
+			TS.Name AS Timescale,
+			P.IsOffshore
 	FROM dbo.Person P
 	LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
 							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
