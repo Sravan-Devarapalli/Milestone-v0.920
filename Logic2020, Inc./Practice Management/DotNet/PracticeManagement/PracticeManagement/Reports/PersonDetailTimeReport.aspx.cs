@@ -249,7 +249,13 @@ namespace PraticeManagement.Reporting
             int personId = int.Parse(ddlPerson.SelectedItem.Value);
             Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
             lblPersonname.ToolTip = lblPersonname.Text = ddlPerson.SelectedItem.Text;
-            lblPersonStatus.ToolTip = lblPersonStatus.Text = person.CurrentPay.TimescaleName;
+            string personType = person.IsOffshore ? "Offshore" : string.Empty; 
+            string payType = person.CurrentPay.TimescaleName;
+            string personStatusAndType = string.IsNullOrEmpty(personType) && string.IsNullOrEmpty(payType)    ? string.Empty : 
+                                                                             string.IsNullOrEmpty(payType)    ? personType :
+                                                                             string.IsNullOrEmpty(personType) ? payType :
+                                                                                                                 payType  + ", " + personType;
+            lblPersonStatus.ToolTip = lblPersonStatus.Text = personStatusAndType;
             lbRange.ToolTip = lbRange.Text = Range;
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
