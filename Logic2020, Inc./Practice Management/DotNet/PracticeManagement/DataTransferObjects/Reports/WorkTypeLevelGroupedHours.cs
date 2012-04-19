@@ -32,6 +32,12 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        [DataMember]
+        public double ForecastedHours
+        {
+            get;
+            set;
+        }
         
         public double TotalHours
         {
