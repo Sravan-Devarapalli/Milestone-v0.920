@@ -74,12 +74,17 @@ namespace PraticeManagement.Controls.Reports
 
                 int personId = HostingPage.SelectedPersonId;
                 var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
-
+                string personType = person.IsOffshore ? "Offshore" : string.Empty;
+                string payType = person.CurrentPay.TimescaleName;
+                string personStatusAndType = string.IsNullOrEmpty(personType) && string.IsNullOrEmpty(payType) ? string.Empty :
+                                                                                 string.IsNullOrEmpty(payType) ? personType :
+                                                                                 string.IsNullOrEmpty(personType) ? payType :
+                                                                                                                     payType + ", " + personType;
                 StringBuilder sb = new StringBuilder();
                 sb.Append(person.FirstName + " " + person.LastName);
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(person.CurrentPay.TimescaleName);
+                sb.Append(personStatusAndType);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
