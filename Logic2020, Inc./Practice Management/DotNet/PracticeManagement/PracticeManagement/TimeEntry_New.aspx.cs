@@ -1060,7 +1060,7 @@ namespace PraticeManagement
 
 
             /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
-            var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+            //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
             IsNoteRequiredList = IsNoteRequiredList ??
                               DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
             ;
@@ -1117,9 +1117,9 @@ namespace PraticeManagement
                                                                 c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                               );
 
-            IsNoteRequiredList = IsNoteRequiredList ??
-                                 DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-            ;
+            //IsNoteRequiredList = IsNoteRequiredList ??
+            //                     DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+            //;
 
             int _projectId = Convert.ToInt32(projectId);
             int personId = SelectedPerson.Id.Value;
@@ -1133,7 +1133,7 @@ namespace PraticeManagement
                 var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
                 xml.Append(string.Format(calendarItemXmlOpen, day.Date,
                                                               cssClass,
-                                                              (IsNoteRequiredList[day.Date] || isNoteRequiredForProject)
+                                                              isNoteRequiredForProject
                                                             , IsHourlyRevenueList[day.Date], false));
                 xml.Append(calendarItemXmlClose);
             }
@@ -1174,7 +1174,7 @@ namespace PraticeManagement
                                                               );
 
             /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
-            var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+            //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
 
             IsNoteRequiredList = IsNoteRequiredList ??
                                 DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
@@ -1191,7 +1191,7 @@ namespace PraticeManagement
             {
                 var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
                 xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass,
-                                                                                    (IsNoteRequiredList[day.Date] || isNoteRequiredForProject),
+                                                                                    (IsNoteRequiredList[day.Date]),
                                                                                     IsHourlyRevenueList[day.Date], false));
                 xml.Append(calendarItemXmlClose);
             }
@@ -1830,10 +1830,12 @@ namespace PraticeManagement
                                                                     c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
 
-
-                IsNoteRequiredList = IsNoteRequiredList ??
-                                      DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-                ;
+                if (teSection.SectionId == TimeEntrySectionType.Internal || teSection.SectionId == TimeEntrySectionType.BusinessDevelopment)
+                {
+                    IsNoteRequiredList = IsNoteRequiredList ??
+                                          DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+                    ;
+                }
 
 
                 IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate));
@@ -1846,15 +1848,26 @@ namespace PraticeManagement
 
                     var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
 
-
-                    xml.Append(
-                                string.Format(calendarItemXmlOpen, day.Date,
-                                                                  cssClass,
-                                                                  (IsNoteRequiredList[day.Date] || teSection.Project.IsNoteRequired),
-                                                                  IsHourlyRevenueList[day.Date],
-                                                                  isChargeCodeTurnOffList[day.Date])
-                              );
-
+                    if (teSection.SectionId == TimeEntrySectionType.Internal || teSection.SectionId == TimeEntrySectionType.BusinessDevelopment)
+                    {
+                        xml.Append(
+                                   string.Format(calendarItemXmlOpen, day.Date,
+                                                                     cssClass,
+                                                                     IsNoteRequiredList[day.Date],
+                                                                     IsHourlyRevenueList[day.Date],
+                                                                     isChargeCodeTurnOffList[day.Date])
+                                 );
+                    }
+                    else
+                    {
+                        xml.Append(
+                                    string.Format(calendarItemXmlOpen, day.Date,
+                                                                      cssClass,
+                                                                      teSection.Project.IsNoteRequired,
+                                                                      IsHourlyRevenueList[day.Date],
+                                                                      isChargeCodeTurnOffList[day.Date])
+                                  );
+                    }
 
                     if (filterByDateTeRecords != null)
                     {
@@ -2147,9 +2160,9 @@ namespace PraticeManagement
                                    ServiceCallers.Custom.Calendar(
                                                                     c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
-                IsNoteRequiredList = IsNoteRequiredList ??
-                            DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-                ;
+                //IsNoteRequiredList = IsNoteRequiredList ??
+                //            DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+                //;
 
                 int personId = SelectedPerson.Id.Value;
                 DateTime startDate = SelectedDates[0];
@@ -2159,7 +2172,7 @@ namespace PraticeManagement
                 foreach (CalendarItem day in CalendarItems)
                 {
                     var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
-                    xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, (IsNoteRequiredList[day.Date] || isNoteRequiredForProject), IsHourlyRevenueList[day.Date], false));
+                    xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass, (isNoteRequiredForProject), IsHourlyRevenueList[day.Date], false));
                     xml.Append(calendarItemXmlClose);
                 }
                 xml.Append(workTypeXmlClose);
@@ -2194,7 +2207,7 @@ namespace PraticeManagement
                                                                     c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
                 /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
-                var isNoteRequiredForProject = Convert.ToBoolean(accountAndProjectSelectionElement.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+                //var isNoteRequiredForProject = Convert.ToBoolean(accountAndProjectSelectionElement.Attribute(XName.Get(IsNoteRequiredXname)).Value);
 
 
                 IsNoteRequiredList = IsNoteRequiredList ??
@@ -2210,7 +2223,7 @@ namespace PraticeManagement
                 {
                     var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
                     xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass,
-                                                                            (IsNoteRequiredList[day.Date] || isNoteRequiredForProject),
+                                                                            (IsNoteRequiredList[day.Date]),
                                                                             IsHourlyRevenueList[day.Date], false));
                     xml.Append(calendarItemXmlClose);
                 }
