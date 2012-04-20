@@ -1,6 +1,7 @@
 ﻿-- =============================================
 -- Author:		ThulasiRam.P
 -- Modified date: 2012-02-14
+-- Last Updated date:2012-04-20
 -- Description:	Insert new time type
 -- =============================================
 CREATE PROCEDURE [dbo].[TimeTypeInsert]
@@ -35,8 +36,14 @@ BEGIN
 						 @LowerLimitRange		 INT ,
 						 @HigherLimitRange		 INT ,
 						 @NextTimeTypeNumber	 INT
-		
-			IF (@IsDefault = 1)
+
+			IF (@IsInternal = 1)
+			BEGIN
+				SET @LowerLimitRange = 7000
+				SET @HigherLimitRange = 9999
+				SET @Error = 'Internal worktype code not avaliable'
+			END
+			ELSE IF (@IsDefault = 1)
 			BEGIN
 				SET @LowerLimitRange = 6000
 				SET @HigherLimitRange = 6999
@@ -52,9 +59,9 @@ BEGIN
 			DECLARE @TimeTypeRanksList TABLE (TimeTypeNumber INT,TimeTypeNumberRank INT)
 			INSERT INTO @TimeTypeRanksList 
 			SELECT Convert(INT,SUBSTRING(Code,2,5)) as TimeTypeNumber ,
-					RANK() OVER (ORDER BY Convert(INT,SUBSTRING(Code,2,5))) + @LowerLimitRange - 1 AS  TimeTypeNumberRank
-			FROM dbo.TimeType 
-			WHERE IsDefault = @IsDefault AND ISNUMERIC( SUBSTRING(Code,2,5)) = 1
+					RANK() OVER (ORDER BY CONVERT(INT,SUBSTRING(Code,2,5))) + @LowerLimitRange - 1 AS  TimeTypeNumberRank
+			FROM dbo.TimeType AS TT
+			WHERE TT.IsDefault = @IsDefault AND TT.IsInternal = @IsInternal AND ISNUMERIC( SUBSTRING(Code,2,5)) = 1
 
 
 			INSERT INTO @TimeTypeRanksList 
