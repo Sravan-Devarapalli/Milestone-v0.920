@@ -99,12 +99,14 @@
 				DECLARE @WeekDayOfTerminationDate DATETIME
 				SELECT @WeekDayOfTerminationDate = @TerminationDate +(7-DATEPART(weekday,@TerminationDate))
 
-				DELETE dbo.PersonTimeEntryRecursiveSelection
-				WHERE StartDate > @WeekDayOfTerminationDate
+				DELETE PTRS
+				FROM dbo.PersonTimeEntryRecursiveSelection AS PTRS
+				WHERE PTRS.StartDate > @WeekDayOfTerminationDate AND PTRS.PersonId = @PersonId
 
-				UPDATE dbo.PersonTimeEntryRecursiveSelection
-				SET EndDate = @WeekDayOfTerminationDate
-				WHERE @WeekDayOfTerminationDate BETWEEN StartDate AND ISNULL(EndDate,dbo.GetFutureDate())
+				UPDATE PTRS
+				SET PTRS.EndDate = @WeekDayOfTerminationDate
+				FROM dbo.PersonTimeEntryRecursiveSelection AS PTRS
+				WHERE @WeekDayOfTerminationDate BETWEEN PTRS.StartDate AND ISNULL(PTRS.EndDate,dbo.GetFutureDate()) AND PTRS.PersonId = @PersonId
 
 			END
 
