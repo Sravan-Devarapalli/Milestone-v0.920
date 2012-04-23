@@ -33,6 +33,7 @@
     <script type="text/javascript">
 
         function pageLoad() {
+            document.onkeypress = enterPressed;
             SetTooltipsForallDropDowns();
             setFooterPlacementinLastItemTemplate();
 
@@ -54,6 +55,14 @@
             }
         }
 
+        function enterPressed(evn) {
+            if (window.event && window.event.keyCode == 13) {
+                return false;
+            } else if (evn && evn.keyCode == 13) {
+                return false;
+                }
+            }
+        
         function SetTooltipsForallDropDowns() {
             var optionList = document.getElementsByTagName('option');
 
