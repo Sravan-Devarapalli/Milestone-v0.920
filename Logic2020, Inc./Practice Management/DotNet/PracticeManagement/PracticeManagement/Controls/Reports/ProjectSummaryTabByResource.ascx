@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectSummaryTabByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.ProjectSummaryTabByResource" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <table class="WholeWidthWithHeight">
     <tr>
         <td colspan="4" style="width: 90%;">
@@ -23,8 +24,15 @@
         </td>
     </tr>
 </table>
+<asp:Panel ID="pnlFilterProjectRoles" Style="display: none;" runat="server">
+    <cc2:CheckBoxListFilter ID="cblProjectRoles" runat="server" BorderColor="#aaaaaa"
+        AllSelectedReturnType="Null" Height="150px" BackColor="White" CellPadding="3"
+        NoItemsType="All" SetDirty="False" Width="150px"  BorderWidth="0" />
+</asp:Panel>
+<asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Style="display: none;" />
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
     <HeaderTemplate>
+      <div style="min-height:200px;">
         <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
             <thead>
                 <tr>
@@ -35,6 +43,10 @@
                     </th>
                     <th style="width: 130px;">
                         Project Role
+                        <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectRoleFilter" />
+                        <AjaxControlToolkit:PopupControlExtender ID="pceProjectRole" runat="server" TargetControlID="imgProjectRoleFilter"
+                            PopupControlID="pnlFilterProjectRoles" Position="Bottom">
+                        </AjaxControlToolkit:PopupControlExtender>
                     </th>
                     <th style="width: 100px;">
                         Billable
@@ -119,7 +131,7 @@
         </tr>
     </ItemTemplate>
     <FooterTemplate>
-        </tbody></table>
+        </tbody></table></div>
     </FooterTemplate>
 </asp:Repeater>
 <br />
