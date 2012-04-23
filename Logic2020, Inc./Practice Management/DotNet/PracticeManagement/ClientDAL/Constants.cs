@@ -344,6 +344,7 @@
             public const string ExcludeInternalPractices = "@ExcludeInternalPractices";
             public const string IsSampleReport = "@IsSampleReport";
             public const string TimescaleIds = "TimescaleIds";
+            public const string TimescaleNamesListParam = "@TimeScaleNamesList";
             public const string ActivePersons = "ActivePersons";
             public const string TerminationDate = "@TerminationDate";
             public const string ProjectedPersons = "ProjectedPersons";
@@ -458,6 +459,7 @@
             public const string MilestoneIdParam = "@MilestoneId";
             public const string PersonIdParam = "@PersonId";
             public const string PersonIdListParam = "@PersonIdList";
+            public const string PersonIdsParam = "@PersonIds";
             public const string StrawManListParam = "@StrawManList";
             public const string OutSideResourcesParam = "@OutSideResources";
             public const string RelationTypeIdParam = "@RelationTypeId";
@@ -578,9 +580,11 @@
             public const string PersonStatusIdsParam = "@PersonStatusIds";
             public const string OrderByCerteriaParam = "@OrderByCerteria";
             public const string SeniorityIdsParam = "@SeniorityIds";
-            public const string TimeTypeCategoryIdsParam = "@TimeTypeCategoryIds";
-            public const string PersonRoleIdsParam = "@PersonRoleIds";
+            public const string CategoryNamesParam = "@CategoryNames";
+            public const string PersonRoleNamesParam = "@PersonRoleNames";
             public const string IsNoteRequiredParam = "@IsNoteRequired";
+            public const string IncludePersonsWithNoTimeEntriesParam = "@IncludePersonsWithNoTimeEntries";
+            
 
 
 
