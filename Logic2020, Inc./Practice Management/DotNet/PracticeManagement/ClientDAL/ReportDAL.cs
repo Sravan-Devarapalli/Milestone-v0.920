@@ -291,7 +291,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate)
+        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate,bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByResource, connection))
@@ -299,6 +299,23 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludePersonsWithNoTimeEntriesParam, includePersonsWithNoTimeEntries);
+                
+
+                if (personIds != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdsParam, personIds);
+                }
+
+                if (seniorityIds != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
+                }
+
+                if (timescaleNames != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleNamesListParam, timescaleNames);
+                }
 
                 command.CommandTimeout = connection.ConnectionTimeout;
 
@@ -363,7 +380,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate)
+        public static List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByProject, connection))
@@ -371,6 +388,8 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIds != null ? clientIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds != null ? personStatusIds : (Object)DBNull.Value);
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
@@ -476,7 +495,15 @@ namespace DataAccess
                 int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
                 int isAdministrativeColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAdministrativeColumn);
                 int categoryIndex = reader.GetOrdinal(Constants.ColumnNames.Category);
-
+                int forecastedHoursIndex = -1;
+                try
+                {
+                    forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+                }
+                catch (Exception ex)
+                {
+                    forecastedHoursIndex = -1;
+                }
                 while (reader.Read())
                 {
                     int workTypeId = reader.GetInt32(timeTypeIdIndex);
@@ -495,13 +522,17 @@ namespace DataAccess
                     worktypeLGH.BillableHours= reader.GetDouble(billableHoursIndex);
                     worktypeLGH.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
                     worktypeLGH.WorkType = tt;
+                    if (forecastedHoursIndex > 0)
+                    {
+                        worktypeLGH.ForecastedHours = reader.GetDouble(forecastedHoursIndex);
+                    }
                     result.Add(worktypeLGH);
 
                 }
             }
         }
 
-        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
+        public static List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate, string personRoleNames)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByResource, connection))
@@ -511,7 +542,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
-
+                if (personRoleNames != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonRoleNamesParam, personRoleNames);
+                }
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
@@ -568,7 +602,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
+        public static List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate, string personRoleNames)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectDetailReportByResource, connection))
@@ -578,7 +612,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
-
+                if (personRoleNames != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonRoleNamesParam, personRoleNames);
+                }
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
@@ -671,7 +708,7 @@ namespace DataAccess
             }
         }
 
-        public static List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
+        public static List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate, string categoryNames)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectSummaryReportByWorkType, connection))
@@ -681,6 +718,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CategoryNamesParam, categoryNames != null ? categoryNames : (Object)DBNull.Value);
+
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
