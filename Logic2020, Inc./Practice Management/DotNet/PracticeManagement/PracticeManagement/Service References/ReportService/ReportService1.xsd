@@ -96,8 +96,9 @@
   <xs:element name="ArrayOfWorkTypeLevelGroupedHours" nillable="true" type="tns:ArrayOfWorkTypeLevelGroupedHours" />
   <xs:complexType name="WorkTypeLevelGroupedHours">
     <xs:sequence>
-      <xs:element minOccurs="0" name="BillabileHours" type="xs:double" />
-      <xs:element minOccurs="0" name="NonBillabileHours" type="xs:double" />
+      <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
+      <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
       <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="WorkType" nillable="true" type="q6:TimeTypeRecord" />
     </xs:sequence>
   </xs:complexType>
