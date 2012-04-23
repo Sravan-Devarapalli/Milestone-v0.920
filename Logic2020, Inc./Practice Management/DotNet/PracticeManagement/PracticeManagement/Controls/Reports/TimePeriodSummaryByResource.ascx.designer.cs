@@ -139,6 +139,69 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Button btnPayCheckExport;
         
         /// <summary>
+        /// pnlFilterResource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterResource;
+        
+        /// <summary>
+        /// cblResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.CheckBoxListFilter cblResources;
+        
+        /// <summary>
+        /// pnlFilterPayType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterPayType;
+        
+        /// <summary>
+        /// cblPayTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.CheckBoxListFilter cblPayTypes;
+        
+        /// <summary>
+        /// pnlFilterSeniority control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterSeniority;
+        
+        /// <summary>
+        /// cblSeniorities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.CheckBoxListFilter cblSeniorities;
+        
+        /// <summary>
+        /// btnFilterOK control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFilterOK;
+        
+        /// <summary>
         /// repResource control.
         /// </summary>
         /// <remarks>
