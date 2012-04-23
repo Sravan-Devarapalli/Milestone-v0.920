@@ -6,53 +6,74 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Text;
+using System.Web.UI.HtmlControls;
 
 namespace PraticeManagement.Controls.Reports
 {
     public partial class ProjectSummaryTabByResource : System.Web.UI.UserControl
     {
+        private HtmlImage ImgProjectRoleFilter { get; set; }
+
+        public CheckBoxListFilter cblProjectRolesControl
+        {
+            get
+            {
+                return cblProjectRoles;
+            }
+        }
+
         private PraticeManagement.Reporting.ProjectSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.ProjectSummaryReport)Page.Page); }
         }
 
-        public List<PersonLevelGroupedHours> TimeEntriesGroupByPersonSummaryList
+        private PraticeManagement.Controls.Reports.ProjectSummaryByResource HostingControl
         {
-            get
-            {
-                return ViewState["ProjectSummaryByResourceTimeEntries"] as List<PersonLevelGroupedHours>;
-            }
-            set
-            {
-                ViewState["ProjectSummaryByResourceTimeEntries"] = value;
-            }
+            get { return (PraticeManagement.Controls.Reports.ProjectSummaryByResource)HostingPage.ByResourceControl; }
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                HtmlImage img = e.Item.FindControl("imgProjectRoleFilter") as HtmlImage;
+
+                ImgProjectRoleFilter = img;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
 
             }
         }
 
-        public void DataBindByResourceSummary(PersonLevelGroupedHours[] reportData)
+        public void DataBindByResourceSummary(PersonLevelGroupedHours[] reportData, bool isFirstTime)
         {
-            TimeEntriesGroupByPersonSummaryList = reportData.ToList();
-
-            if (reportData.Count() > 0)
+            if (isFirstTime)
+            {
+                PopulateProjectRoleFilter(reportData.ToList());
+            }
+            if (reportData.Count() > 0 || cblProjectRoles.Items.Count > 1)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repResource.Visible = true;
                 repResource.DataSource = reportData;
                 repResource.DataBind();
-
+                ImgProjectRoleFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblProjectRoles.FilterPopupId,
+                    cblProjectRoles.SelectedIndexes, cblProjectRoles.ClientID);
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
                 repResource.Visible = false;
             }
+        }
+
+        private void PopulateProjectRoleFilter(List<PersonLevelGroupedHours> reportData)
+        {
+            var projectRoles = reportData.Select(r => new { Name = r.Person.ProjectRoleName }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblProjectRoles, "All ProjectRoles", projectRoles.ToArray(), false, "Name", "Name");
+            cblProjectRoles.SelectAllItems(true);
+            cblProjectRoles.OKButtonId = btnUpdate.ClientID;
         }
 
         public string GetDoubleFormat(double value)
@@ -63,8 +84,8 @@ namespace PraticeManagement.Controls.Reports
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
 
-            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber,HostingPage.MilestoneId,HostingPage.StartDate,HostingPage.EndDate));
-
+            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
+            List<PersonLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, cblProjectRoles.SelectedItemsXmlFormat)).ToList();
 
             StringBuilder sb = new StringBuilder();
             sb.Append(project.Client.Name);
@@ -84,7 +105,7 @@ namespace PraticeManagement.Controls.Reports
             sb.AppendLine();
             sb.AppendLine();
 
-            if (TimeEntriesGroupByPersonSummaryList.Count > 0)
+            if (data.Count > 0)
             {
                 //Header
                 sb.Append("Resource");
@@ -101,7 +122,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.AppendLine();
 
-                var list = TimeEntriesGroupByPersonSummaryList.OrderBy(p => p.Person.PersonLastFirstName);
+                var list = data.OrderBy(p => p.Person.PersonLastFirstName);
 
                 //Data
                 foreach (var byPerson in list)
@@ -137,5 +158,11 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
+        protected void btnUpdate_OnClick(object sender, EventArgs e)
+        {
+            HostingControl.PopulateByResourceSummaryReport();
+        }
+
     }
 }
+
