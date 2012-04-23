@@ -77,6 +77,8 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Pay Types");
                     sb.Append("\t");
+                    sb.Append("IsOffshore");
+                    sb.Append("\t");
                     sb.Append("Billable");
                     sb.Append("\t");
                     sb.Append("Non-Billable");
@@ -101,6 +103,8 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append(personLevelGroupedHours.Person.Seniority.Name);
                         sb.Append("\t");
                         sb.Append(personLevelGroupedHours.Person.CurrentPay.TimescaleName);
+                        sb.Append("\t");
+                        sb.Append(personLevelGroupedHours.Person.IsOffshore ? "Yes" : "No");
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(personLevelGroupedHours.BillableHours));
                         sb.Append("\t");
@@ -137,7 +141,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnPayCheckExport_OnClick(object sender, EventArgs e)
         {
-            
+
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
