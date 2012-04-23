@@ -17,6 +17,14 @@ namespace PraticeManagement.Controls.Reports
             get { return ((PraticeManagement.Reporting.ProjectSummaryReport)Page); }
         }
 
+        public CheckBoxListFilter cblProjectRolesControl
+        {
+            get
+            {
+                return ucProjectSummaryReport.cblProjectRolesControl;
+            }
+        }
+
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
@@ -46,11 +54,11 @@ namespace PraticeManagement.Controls.Reports
             ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
         }
 
-        public void LoadActiveTabInByResource()
+        public void LoadActiveTabInByResource(bool isFirstTime = false)
         {
             if (mvProjectReport.ActiveViewIndex == 0)
             {
-                PopulateByResourceSummaryReport();
+                PopulateByResourceSummaryReport(isFirstTime);
             }
             else
             {
@@ -58,25 +66,33 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        private void PopulateByResourceSummaryReport()
+        public void PopulateByResourceSummaryReport(bool isFirstTime = false)
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null));
-            ucProjectSummaryReport.DataBindByResourceSummary(data);
+            PersonLevelGroupedHours[] data;
+            if (isFirstTime)
+            {
+                data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, null));
+            }
+            else
+            {
+                data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, ucProjectSummaryReport.cblProjectRolesControl.SelectedItemsXmlFormat));
+            }
+            ucProjectSummaryReport.DataBindByResourceSummary(data,isFirstTime);
             PopulateHeaderSection(data.ToList());
         }
 
-        private void PopulateByResourceDetailReport()
+        public void PopulateByResourceDetailReport()
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, ucProjectSummaryReport.cblProjectRolesControl.SelectedItemsXmlFormat));
             ucProjectDetailReport.DataBindByResourceDetail(data);
             PopulateHeaderSection(data.ToList());
         }
 
         private void PopulateHeaderSection(List<PersonLevelGroupedHours> personLevelGroupedHoursList)
         {
-            if (personLevelGroupedHoursList.Count > 0)
-            {
-                tbHeader.Style["display"] = "";
+            //if (personLevelGroupedHoursList.Count > 0)
+            //{
+                //tbHeader.Style["display"] = "";
                 var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber,HostingPage.MilestoneId,HostingPage.StartDate,HostingPage.EndDate));
                 double billableHours = personLevelGroupedHoursList.Sum(p => p.DayTotalHours != null ?  p.DayTotalHours.Sum(d => d.BillableHours) : p.BillableHours);
                 double nonBillableHours = personLevelGroupedHoursList.Sum(p => p.NonBillableHours);
@@ -124,11 +140,11 @@ namespace PraticeManagement.Controls.Reports
                     trBillable.Height = billablebarHeight.ToString() + "px";
                     trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
                 }
-            }
-            else
-            {
-                tbHeader.Style["display"] = "none";
-            }
+            //}
+            //else
+            //{
+            //    tbHeader.Style["display"] = "none";
+            //}
         }
 
     }
