@@ -1,11 +1,13 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByResource" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom:5px !important; height:90px;">
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
+    height: 90px;">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
             <table>
                 <tr>
-                    <td style="vertical-align: top; padding-bottom:10px;">
+                    <td style="vertical-align: top; padding-bottom: 10px;">
                         <asp:Literal ID="ltPersonCount" runat="server"></asp:Literal>
                     </td>
                 </tr>
@@ -16,13 +18,13 @@
                 </tr>
             </table>
         </td>
-        <td style="text-align: right; width: 610px; padding-bottom:10px;">
+        <td style="text-align: right; width: 610px; padding-bottom: 10px;">
             <table style="table-layout: fixed; width: 100%;">
                 <tr>
-                    <td style="width: 21%;text-align: center;">
+                    <td style="width: 21%; text-align: center;">
                         <table width="100%">
                             <tr>
-                                <td style="font-size: 15px;padding-bottom: 3px;">
+                                <td style="font-size: 15px; padding-bottom: 3px;">
                                     Total Hours
                                 </td>
                             </tr>
@@ -33,10 +35,10 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 21%;text-align: center;">
-                       <table width="100%">
+                    <td style="width: 21%; text-align: center;">
+                        <table width="100%">
                             <tr>
-                                <td style="font-size: 15px;padding-bottom: 3px;">
+                                <td style="font-size: 15px; padding-bottom: 3px;">
                                     Avg Hours
                                 </td>
                             </tr>
@@ -47,21 +49,21 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 21%;text-align: center;">
+                    <td style="width: 21%; text-align: center;">
                         <table width="100%">
                             <tr>
-                                <td style="font-size: 15px;padding-bottom: 3px;">
+                                <td style="font-size: 15px; padding-bottom: 3px;">
                                     Avg Utilization
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px; ">
+                                <td style="font-size: 25px;">
                                     <asp:Literal ID="ltrlAvgUtilization" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 23%; vertical-align: bottom;text-align: center;">
+                    <td style="width: 23%; vertical-align: bottom; text-align: center;">
                         <table width="100%">
                             <tr>
                                 <td>
@@ -153,28 +155,57 @@
                             <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
                                 Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
                         </td>
-                          <td>
+                        <td>
                             <asp:Button ID="btnPayCheckExport" runat="server" Text="PayChex" OnClick="btnPayCheckExport_OnClick"
-                               UseSubmitBehavior="false" ToolTip="Export PayChex" />
+                                UseSubmitBehavior="false" ToolTip="Export PayChex" />
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
     </table>
-    <asp:Repeater ID="repResource" runat="server">
+    <asp:Panel ID="pnlFilterResource" style="display:none;left:13px !important;" runat="server">
+        <cc2:CheckBoxListFilter ID="cblResources" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"   
+            Height="150px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
+            Width="200px" BorderWidth="0" />
+    </asp:Panel>
+    <asp:Panel ID="pnlFilterPayType" style="display:none;"  runat="server">
+        <cc2:CheckBoxListFilter ID="cblPayTypes" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
+            Height="120px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
+            Width="150px" BorderWidth="0" />
+    </asp:Panel>
+    <asp:Panel ID="pnlFilterSeniority" style="display:none;"  runat="server">
+        <cc2:CheckBoxListFilter ID="cblSeniorities" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
+            Height="150px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
+            Width="160px" BorderWidth="0" />
+    </asp:Panel>
+    <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" style="display:none;" />
+    <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
         <HeaderTemplate>
-            <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth zebra">
+        <div style="min-height:200px;">
+            <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth zebra" >
                 <thead>
                     <tr>
                         <th style="width: 210px; text-align: left;" class="padLeft5">
                             Resource
+                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgResourceFilter" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pceResource" runat="server" TargetControlID="imgResourceFilter" BehaviorID="pceResource"
+                                PopupControlID="pnlFilterResource" Position="Bottom">
+                            </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th style="width: 130px;">
                             Seniority
+                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgSeniorityFilter" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter" BehaviorID="pceSeniorityFilter"
+                                PopupControlID="pnlFilterSeniority" Position="Bottom">
+                            </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th style="width: 110px;">
                             Pay Type
+                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgPayTypeFilter" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter" BehaviorID="pcePayTypeFilter"
+                                PopupControlID="pnlFilterPayType" Position="Bottom">
+                            </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th style="width: 100px">
                             Billable
@@ -204,7 +235,8 @@
         <ItemTemplate>
             <tr class="ReportItemTemplate">
                 <td class="padLeft5" style="text-align: left;">
-                    <%# Eval("Person.PersonLastFirstName")%>
+                 <%--<asp:HyperLink ID="btnPersonName" runat="server"  Text='<%# Eval("Person.PersonLastFirstName")%>' NavigateUrl='<%# GetPersonDetailReportUrl((int?)Eval("Person.Id")) %>' />--%>
+                 <%# Eval("Person.PersonLastFirstName")%>
                 </td>
                 <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.PersonLastFirstName")%>'>
                     <%# Eval("Person.Seniority.Name")%>
@@ -256,7 +288,7 @@
             </tr>
         </ItemTemplate>
         <FooterTemplate>
-            </tbody></table>
+            </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
     <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
