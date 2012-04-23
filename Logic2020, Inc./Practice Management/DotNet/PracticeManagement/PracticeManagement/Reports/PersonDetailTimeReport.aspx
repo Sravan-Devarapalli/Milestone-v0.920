@@ -533,6 +533,13 @@
                         </asp:Panel>
                     </asp:View>
                 </asp:MultiView>
+                 <table width="100%">
+                    <tr>
+                        <td style="text-align: center; padding-top: 5px;">
+                            <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" Text="Return To Pervious Report" />
+                        </td>
+                    </tr>
+                </table>
             </div>
             <AjaxControlToolkit:ModalPopupExtender ID="mpePersonSearch" runat="server" TargetControlID="imgSearch"
                 CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlPersonSearch"
