@@ -11,7 +11,7 @@ using DataTransferObjects;
 
 namespace PraticeManagement.Reporting
 {
-    public partial class PersonDetailTimeReport : System.Web.UI.Page
+    public partial class PersonDetailTimeReport : PracticeManagementPageBase
     {
 
         public DateTime? StartDate
@@ -233,13 +233,50 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        protected override void Display()
+        {
+            if (SelectedId.HasValue)
+            {
+                if (ddlPerson.Items.FindByValue(SelectedId.Value.ToString()) != null)
+                {
+                    ddlPerson.SelectedValue = SelectedId.Value.ToString();
+                }
+                else
+                {
+                    ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+                }
+            }
+            else
+            {
+                ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+            }
+
+            int? rangeSelected = GetArgumentInt32(Constants.QueryStringParameterNames.RangeArgument);
+            if (rangeSelected.HasValue)
+            {
+                if (ddlPeriod.Items.FindByValue(rangeSelected.Value.ToString()) != null)
+                {
+                    ddlPeriod.SelectedValue = rangeSelected.Value.ToString();
+                }
+                if (ddlPeriod.SelectedValue == "0")
+                {
+                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
+                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
+                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
+                }
+
+            }
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             dlPersonDiv.Style.Add("display", "none");
             if (!IsPostBack)
             {
                 DataHelper.FillPersonList(ddlPerson, null, 1, false);
-                ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
             }
         }
 
@@ -278,6 +315,9 @@ namespace PraticeManagement.Reporting
 
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+
+            string url = Request.Url.AbsoluteUri;
+            btnCancelAndReturn.Visible = url.Contains("returnTo=");
 
             if (!IsPostBack)
             {
