@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByProject.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByProject" %>
+<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
@@ -144,35 +145,55 @@
             </td>
         </tr>
     </table>
-    <asp:Repeater ID="repProject" runat="server">
+    <asp:Panel ID="pnlFilterResource" Style="display: none;" runat="server">
+        <cc2:CheckBoxListFilter ID="cblClients" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
+            Height="150px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
+            Width="200px" BorderWidth="0" />
+    </asp:Panel>
+    <asp:Panel ID="pnlFilterProjectStatus" Style="display: none;" runat="server">
+        <cc2:CheckBoxListFilter ID="cblProjectStatus" runat="server" BorderColor="#aaaaaa"
+            AllSelectedReturnType="Null" Height="125px" BackColor="White" CellPadding="3"
+            NoItemsType="All" SetDirty="False" Width="150px" BorderWidth="0" />
+    </asp:Panel>
+    <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
+    <asp:Repeater ID="repProject" runat="server" OnItemDataBound="repProject_ItemDataBound">
         <HeaderTemplate>
-            <table id="tblProjectSummaryByProject" class="tablesorter TimePeriodByproject WholeWidth">
-                <thead>
-                    <tr>
-                        <th class="t-left padLeft5" style="width: 500px;height:30px;">
-                            Project
-                        </th>
-                        <th style="width: 110px;height:30px;">
-                            Status
-                        </th>
-                        <th style="width: 110px;height:30px;">
-                            Billing
-                        </th>
-                        <th style="width: 100px;height:30px;">
-                            Billable
-                        </th>
-                        <th style="width: 100px;height:30px;">
-                            Non-Billable
-                        </th>
-                        <th style="width: 100px;height:30px;">
-                            Total
-                        </th>
-                        <th style="width: 325px;height:30px;">
-                            Project Variance (in Hours)
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div style="min-height: 200px;">
+                <table id="tblProjectSummaryByProject" class="tablesorter TimePeriodByproject WholeWidth">
+                    <thead>
+                        <tr>
+                            <th class="t-left padLeft5" style="width: 500px; height: 30px;">
+                                Project
+                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceClient" runat="server" TargetControlID="imgClientFilter"
+                                    PopupControlID="pnlFilterResource" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                            </th>
+                            <th style="width: 110px; height: 30px;">
+                                Status
+                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
+                                    PopupControlID="pnlFilterProjectStatus" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                            </th>
+                            <th style="width: 110px; height: 30px;">
+                                Billing
+                            </th>
+                            <th style="width: 100px; height: 30px;">
+                                Billable
+                            </th>
+                            <th style="width: 100px; height: 30px;">
+                                Non-Billable
+                            </th>
+                            <th style="width: 100px; height: 30px;">
+                                Total
+                            </th>
+                            <th style="width: 325px; height: 30px;">
+                                Project Variance (in Hours)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
@@ -187,6 +208,8 @@
                         </tr>
                         <tr>
                             <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px; text-align: left;">
+                               <%-- <asp:HyperLink ID="btnProjectNumber" runat="server" Text='<%# Eval("Project.ProjectNumber")%>'
+                                    NavigateUrl='<%# GetProjectSummaryReportUrl((string)Eval("Project.ProjectNumber")) %>' />--%>
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
                                 <%# Eval("Project.Name")%>
@@ -249,7 +272,7 @@
                                     </tr>
                                 </table>
                             </td>
-                             <td style="width: 5%;">
+                            <td style="width: 5%;">
                             </td>
                         </tr>
                     </table>
@@ -257,7 +280,7 @@
             </tr>
         </ItemTemplate>
         <FooterTemplate>
-            </tbody></table>
+            </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
     <br />
