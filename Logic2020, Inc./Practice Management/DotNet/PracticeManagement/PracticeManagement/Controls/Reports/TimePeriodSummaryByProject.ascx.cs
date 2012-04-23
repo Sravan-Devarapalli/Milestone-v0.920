@@ -12,17 +12,9 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class TimePeriodSummaryByProject : System.Web.UI.UserControl
     {
-        public List<ProjectLevelGroupedHours> TimeEntriesGroupByProject
-        {
-            get
-            {
-                return ViewState["TimeEntriesGroupByProject"] as List<ProjectLevelGroupedHours>;
-            }
-            set
-            {
-                ViewState["TimeEntriesGroupByProject"] = value;
-            }
-        }
+        private HtmlImage imgClientFilter { get; set; }
+
+        private HtmlImage imgProjectStatusFilter { get; set; }
 
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
@@ -31,7 +23,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            cblClients.OKButtonId = cblProjectStatus.OKButtonId = btnFilterOK.ClientID;
         }
 
         protected string GetDoubleFormat(double value)
@@ -55,15 +47,14 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-
+                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblClients.SelectedItems, cblProjectStatus.SelectedItems));
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByProject Report");
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(TimeEntriesGroupByProject.Count + " Projects");
+                sb.Append(data.Length + " Projects");
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
@@ -71,7 +62,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.AppendLine();
                 sb.AppendLine();
 
-                if (TimeEntriesGroupByProject.Count > 0)
+                if (data.Length > 0)
                 {
                     //Header
                     sb.Append("Account");
@@ -101,7 +92,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.AppendLine();
 
                     //Data
-                    foreach (var projectLevelGroupedHours in TimeEntriesGroupByProject)
+                    foreach (var projectLevelGroupedHours in data)
                     {
                         sb.Append(projectLevelGroupedHours.Project.Client.Code);
                         sb.Append("\t");
@@ -136,7 +127,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("There are no Time Entries towards this range selected.");
                 }
                 //“TimePeriod_ByProject_DateRange.xls”.  
-                var filename = string.Format("TimePeriod_ByProject_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy") , HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                var filename = string.Format("TimePeriod_ByProject_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy"), HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
                 GridViewExportUtil.Export(filename, sb);
             }
         }
@@ -146,29 +137,86 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-        public void DataBindProject(ProjectLevelGroupedHours[] reportData)
+        public void PopulateByProjectData(bool isPopulateFilters = true)
         {
-            TimeEntriesGroupByProject = reportData.ToList();
-            if (TimeEntriesGroupByProject.Count > 0)
+            ProjectLevelGroupedHours[] data;
+            if (isPopulateFilters)
+            {
+                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
+            }
+            else
+            {
+                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblClients.SelectedItems, cblProjectStatus.SelectedItems));
+            }
+            DataBindProject(data, isPopulateFilters);
+        }
+
+        protected void repProject_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                imgClientFilter = e.Item.FindControl("imgClientFilter") as HtmlImage;
+                imgProjectStatusFilter = e.Item.FindControl("imgProjectStatusFilter") as HtmlImage;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+
+            }
+        }
+
+        public void DataBindProject(ProjectLevelGroupedHours[] reportData, bool isPopulateFilters)
+        {
+            if (isPopulateFilters)
+            {
+                PopulateFilterPanels(reportData);
+            }
+            if (reportData.Length > 0 || cblClients.Items.Count > 1 || cblProjectStatus.Items.Count > 1)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repProject.Visible = true;
                 repProject.DataSource = reportData;
                 repProject.DataBind();
+                imgClientFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblClients.FilterPopupId,
+                    cblClients.SelectedIndexes, cblClients.ClientID);
+                imgProjectStatusFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblProjectStatus.FilterPopupId,
+                   cblProjectStatus.SelectedIndexes, cblProjectStatus.ClientID);
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
                 repProject.Visible = false;
             }
-            PopulateHeaderSection();
+            PopulateHeaderSection(reportData);
         }
 
-        private void PopulateHeaderSection()
+        private void PopulateFilterPanels(ProjectLevelGroupedHours[] reportData)
         {
-            double billableHours = TimeEntriesGroupByProject.Sum(p => p.BillableHours);
-            double nonBillableHours = TimeEntriesGroupByProject.Sum(p => p.NonBillableHours);
-            int noOfEmployees = TimeEntriesGroupByProject.Count;
+            PopulateClientFilter(reportData);
+            PopulateProjectStatusFilter(reportData);
+        }
+
+        private void PopulateClientFilter(ProjectLevelGroupedHours[] reportData)
+        {
+            var clients = reportData.Select(r => new { Id = r.Project.Client.Id, Name = r.Project.Client.Name }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
+            int height = 17 * clients.Length;
+            Unit unitHeight = new Unit((height + 17) > 50 ? 50 : height + 17);
+            DataHelper.FillListDefault(cblClients, "All Clients", clients, false, "Id", "Name");
+            cblClients.Height = unitHeight;
+            cblClients.SelectAllItems(true);
+        }
+
+        private void PopulateProjectStatusFilter(ProjectLevelGroupedHours[] reportData)
+        {
+            var projectStatusIds = reportData.Select(r => new { Id = r.Project.Status.Id, Name = r.Project.Status.Name }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblProjectStatus, "All Status", projectStatusIds.ToArray(), false, "Id", "Name");
+            cblProjectStatus.SelectAllItems(true);
+        }
+
+        private void PopulateHeaderSection(ProjectLevelGroupedHours[] reportData)
+        {
+            double billableHours = reportData.Sum(p => p.BillableHours);
+            double nonBillableHours = reportData.Sum(p => p.NonBillableHours);
+            int noOfEmployees = reportData.Length;
             var billablePercent = 0;
             var nonBillablePercent = 0;
             if (billableHours != 0 || nonBillableHours != 0)
@@ -179,7 +227,7 @@ namespace PraticeManagement.Controls.Reports
             ltProjectCount.Text = noOfEmployees + " Projects";
             lbRange.Text = HostingPage.Range;
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
-            ltrlAvgHours.Text = noOfEmployees > 0 ? ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValue):"0.00";
+            ltrlAvgHours.Text = noOfEmployees > 0 ? ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValue) : "0.00";
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
@@ -208,6 +256,25 @@ namespace PraticeManagement.Controls.Reports
             }
 
         }
+
+        protected string GetProjectSummaryReportUrl(string projectNumber)
+        {
+            string projectSummaryReportUrl = string.Format(Constants.ApplicationPages.RedirectProjectSummaryReportIdFormat, projectNumber, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"), "0");
+            string timePeriodReportUrl = string.Format(Constants.ApplicationPages.RedirectTimePeriodSummaryReportFormat, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"), HostingPage.SelectedView, HostingPage.IncludePersonWithNoTimeEntries);
+            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(projectSummaryReportUrl, timePeriodReportUrl);
+        }
+
+        protected void btnFilterOK_OnClick(object sender, EventArgs e)
+        {
+            PopulateByProjectData(false);
+        }
+
+        protected void btnFilterCancel_OnClick(object sender, EventArgs e)
+        {
+
+        }
+
+
 
     }
 }
