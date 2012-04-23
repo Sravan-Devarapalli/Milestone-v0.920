@@ -405,6 +405,7 @@
     <Content Include="Images\save24.png" />
     <Content Include="Images\saveToDisk.png" />
     <Content Include="Images\search_24.png" />
+    <Content Include="Images\search_filter.png" />
     <Content Include="Images\Strawman.png" />
     <Content Include="Images\StrawMan_Large.png" />
     <Content Include="Images\Team_Icon.jpg" />
@@ -1214,6 +1215,7 @@
     <Compile Include="Controls\Calendar.ascx.designer.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CheckBoxListFilter.cs" />
     <Compile Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.cs" />
     <Compile Include="Controls\Generic\CustomCheckBoxList.cs" />
     <Compile Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.cs" />
@@ -3581,4 +3583,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
