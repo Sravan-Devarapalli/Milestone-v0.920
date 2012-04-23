@@ -11,10 +11,10 @@
 <%@ Register Src="~/Controls/Reports/ProjectSummaryByResource.ascx" TagPrefix="uc"
     TagName="ByResource" %>
 <%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
-<%@ Register Src="~/Controls/Reports/BillableAndNonBillableGraph.ascx" TagPrefix="uc"
-    TagName="BillableAndNonBillableGraph" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <%@ Register TagPrefix="cc3" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
+    Assembly="PraticeManagement" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -36,7 +36,7 @@
                     btn.title = "Expand All";
                     hdnCollapsed.value = 'true';
                 }
-                
+
                 var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
                 ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
             }
@@ -171,9 +171,13 @@
                 },
                 sortList: [[0, 0]],
                 sortForce: [[0, 0]]
-            }
+            });
 
-            );
+            $("#tblProjectSummaryByWorkType").tablesorter({
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
+
             $("#tblProjectSearchResult").tablesorter(
                 {
                     sortList: [[0, 0]]
@@ -200,9 +204,12 @@
                     },
                     sortList: [[0, 0]],
                     sortForce: [[0, 0]]
-                }
+                });
 
-                );
+            $("#tblProjectSummaryByWorkType").tablesorter({
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
 
             $("#tblProjectSearchResult").tablesorter(
                 {
@@ -539,17 +546,26 @@
                             <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
                     </asp:View>
-                    <%--<asp:View ID="vwProjectReport" runat="server">
-                        <asp:Panel ID="pnlProjectReport" runat="server" CssClass="tab-pane WholeWidth">
-                           <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
+                    <asp:View ID="vwProjectReport" runat="server">
+                        <asp:Panel ID="pnlProjectReport" runat="server" CssClass="WholeWidth">
+                            <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
                         </asp:Panel>
-                    </asp:View>--%>
+                    </asp:View>
                 </asp:MultiView>
+                <table width="100%">
+                    <tr>
+                        <td style="text-align: center; padding-top: 5px;">
+                            <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" Text="Return To Pervious Report" />
+                        </td>
+                    </tr>
+                </table>
             </div>
+
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="ucByResource$ucProjectSummaryReport$btnExportToExcel" />
             <asp:PostBackTrigger ControlID="ucByResource$ucProjectDetailReport$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="ucByWorktype$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
