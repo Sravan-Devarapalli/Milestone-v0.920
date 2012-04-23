@@ -55,6 +55,10 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="includePersonsWithNoTimeEntries" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="seniorityIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="timescaleNames" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -70,6 +74,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="clientIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -102,6 +108,7 @@
         <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="personRoleNames" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -119,6 +126,7 @@
         <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="personRoleNames" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -136,6 +144,7 @@
         <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="categoryNames" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
