@@ -121,6 +121,51 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Button btnExportToPDF;
         
         /// <summary>
+        /// pnlFilterResource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterResource;
+        
+        /// <summary>
+        /// cblClients control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.CheckBoxListFilter cblClients;
+        
+        /// <summary>
+        /// pnlFilterProjectStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterProjectStatus;
+        
+        /// <summary>
+        /// cblProjectStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.CheckBoxListFilter cblProjectStatus;
+        
+        /// <summary>
+        /// btnFilterOK control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFilterOK;
+        
+        /// <summary>
         /// repProject control.
         /// </summary>
         /// <remarks>
