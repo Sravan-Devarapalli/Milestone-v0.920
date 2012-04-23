@@ -29,14 +29,14 @@ namespace PracticeManagementService
             return ReportDAL.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
 
-        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate)
+        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate,bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames)
         {
-            return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate);
+            return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate,includePersonsWithNoTimeEntries , personIds, seniorityIds, timescaleNames);
         }
 
-        public List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate)
+        public List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds)
         {
-            return ReportDAL.TimePeriodSummaryReportByProject(startDate, endDate);
+            return ReportDAL.TimePeriodSummaryReportByProject(startDate, endDate, clientIds,personStatusIds);
         }
 
         public List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate)
@@ -44,19 +44,19 @@ namespace PracticeManagementService
             return ReportDAL.TimePeriodSummaryReportByWorkType(startDate, endDate);
         }
 
-        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate)
+        public List<PersonLevelGroupedHours> ProjectSummaryReportByResource(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate, string personRoleNames)
         {
-            return ReportDAL.ProjectSummaryReportByResource(projectNumber, mileStoneId, startDate, endDate);
+            return ReportDAL.ProjectSummaryReportByResource(projectNumber, mileStoneId, startDate, endDate, personRoleNames);
         }
 
-        public List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate)
+        public List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate, string personRoleNames)
         {
-            return ReportDAL.ProjectDetailReportByResource(projectNumber, mileStoneId, startDate, endDate);
+            return ReportDAL.ProjectDetailReportByResource(projectNumber, mileStoneId, startDate, endDate, personRoleNames);
         }
 
-        public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate)
+        public List<WorkTypeLevelGroupedHours> ProjectSummaryReportByWorkType(string projectNumber, int? mileStoneId, DateTime? startDate, DateTime? endDate, string categoryNames)
         {
-            return ReportDAL.ProjectSummaryReportByWorkType(projectNumber, mileStoneId, startDate, endDate);
+            return ReportDAL.ProjectSummaryReportByWorkType(projectNumber, mileStoneId, startDate, endDate, categoryNames);
         }
 
         public List<Project> GetProjectsByClientId(int clientId)
