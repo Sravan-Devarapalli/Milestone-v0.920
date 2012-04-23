@@ -329,6 +329,7 @@ namespace DataAccess
                 int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
                 int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
                 int timeScaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
 
                 while (reader.Read())
                 {
@@ -338,6 +339,7 @@ namespace DataAccess
                                                 Id = reader.GetInt32(personIdIndex),
                                                 FirstName = reader.GetString(firstNameIndex),
                                                 LastName = reader.GetString(lastNameIndex),
+                                                IsOffshore = reader.GetBoolean(isOffShoreIndex),
                                                 Seniority = new Seniority
                                                 {
                                                     Id = reader.GetInt32(personSeniorityIdIndex),
