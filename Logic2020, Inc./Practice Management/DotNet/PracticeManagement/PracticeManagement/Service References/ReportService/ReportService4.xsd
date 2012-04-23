@@ -64,6 +64,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
       <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
+      <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BillingInfo" nillable="true" type="tns:BillingInfo" />
       <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CanCreateCustomWorkTypes" type="xs:boolean" />
@@ -81,6 +82,7 @@
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHolidayProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsORTProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsPTOProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="ManagementCommission" nillable="true" type="tns:Commission" />
