@@ -10,7 +10,7 @@ using DataTransferObjects;
 
 namespace PraticeManagement.Reporting
 {
-    public partial class ProjectSummaryReport : System.Web.UI.Page
+    public partial class ProjectSummaryReport : PracticeManagementPageBase
     {
         #region Properties
 
@@ -105,7 +105,46 @@ namespace PraticeManagement.Reporting
                 return ddlPeriod.SelectedValue;
             }
         }
+
+        public PraticeManagement.Controls.Reports.ProjectSummaryByResource ByResourceControl
+        {
+            get { return (PraticeManagement.Controls.Reports.ProjectSummaryByResource)ucByResource; }
+        }
+
         #endregion
+
+        protected override void Display()
+        {
+            string projectNumber = Request.QueryString[Constants.QueryStringParameterNames.ProjectNumberArgument];
+            if (!string.IsNullOrEmpty(projectNumber))
+            {
+                txtProjectNumber.Text = projectNumber;
+            }
+            string rangeSelected = Request.QueryString[Constants.QueryStringParameterNames.RangeArgument];
+            if (!string.IsNullOrEmpty(rangeSelected))
+            {
+                if (ddlPeriod.Items.FindByValue(rangeSelected) != null)
+                {
+                    ddlPeriod.SelectedValue = rangeSelected;
+                }
+                if (ddlPeriod.SelectedValue == "0")
+                {
+                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
+                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
+                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
+                }
+            }
+            int? viewSelected = GetArgumentInt32(Constants.QueryStringParameterNames.ViewArgument);
+            if (viewSelected.HasValue)
+            {
+                if (ddlView.Items.FindByValue(viewSelected.Value.ToString()) != null)
+                {
+                    ddlView.SelectedValue = viewSelected.Value.ToString();
+                }
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -148,6 +187,8 @@ namespace PraticeManagement.Reporting
 
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            string url = Request.Url.AbsoluteUri;
+            btnCancelAndReturn.Visible = url.Contains("returnTo=");
 
             if (!IsPostBack)
             {
@@ -168,7 +209,7 @@ namespace PraticeManagement.Reporting
                 }
                 else if (mvProjectSummaryReport.ActiveViewIndex == 1)
                 {
-                    PopulateByWorkTypeData();
+                    ucByWorktype.PopulateByWorkTypeData(true);
                 }
             }
             else
@@ -202,7 +243,7 @@ namespace PraticeManagement.Reporting
             {
                 msgError.ClearMessage();
                 divWholePage.Style.Remove("display");
-                ucByResource.LoadActiveTabInByResource();
+                ucByResource.LoadActiveTabInByResource(true);
             }
             catch (Exception ex)
             {
@@ -273,17 +314,6 @@ namespace PraticeManagement.Reporting
         {
             var lnkProjectNumber = sender as LinkButton;
             PopulateControls(lnkProjectNumber.Attributes["ProjectNumber"]);
-        }
-
-        private void PopulateByWorkTypeData()
-        {
-            //var data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(ProjectNumber, string.Empty, string.Empty));
-
-
-            //ucByWorktype.DataBindResource(data, null);
-            //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
-            //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
-
         }
 
         protected void ddlClients_OnSelectedIndexChanged(object sender, EventArgs e)
