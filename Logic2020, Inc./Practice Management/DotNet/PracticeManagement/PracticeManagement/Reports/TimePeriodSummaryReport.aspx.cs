@@ -5,10 +5,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
+using PraticeManagement.Controls;
 
 namespace PraticeManagement.Reporting
 {
-    public partial class TimePeriodSummaryReport : System.Web.UI.Page
+    public partial class TimePeriodSummaryReport : PracticeManagementPageBase
     {
         #region Properties
 
@@ -154,6 +155,14 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public String RangeSelected
+        {
+            get
+            {
+                return ddlPeriod.SelectedValue;
+            }
+        }
+
         public String Range
         {
             get
@@ -178,6 +187,14 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public string SelectedView
+        {
+            get
+            {
+                return ddlView.SelectedValue;
+            }
+        }
+
         public bool IncludePersonWithNoTimeEntries
         {
             get
@@ -187,7 +204,40 @@ namespace PraticeManagement.Reporting
         }
 
         #endregion
+        
+        protected override void Display()
+        {
+            string includeAll = Request.QueryString[Constants.QueryStringParameterNames.IncludeAllArgument];
+            bool includeAllBoolean = false;
+            bool.TryParse(includeAll, out includeAllBoolean);
+            chkIncludePersons.Checked = includeAllBoolean;
 
+            string rangeSelected = Request.QueryString[Constants.QueryStringParameterNames.RangeArgument];
+            if (!string.IsNullOrEmpty(rangeSelected))
+            {
+                if (ddlPeriod.Items.FindByValue(rangeSelected) != null)
+                {
+                    ddlPeriod.SelectedValue = rangeSelected;
+                }
+                if (ddlPeriod.SelectedValue == "0")
+                {
+                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
+                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
+                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
+                }
+            }
+            int? viewSelected = GetArgumentInt32(Constants.QueryStringParameterNames.ViewArgument);
+            if (viewSelected.HasValue)
+            {
+                if (ddlView.Items.FindByValue(viewSelected.Value.ToString()) != null)
+                {
+                    ddlView.SelectedValue = viewSelected.Value.ToString();
+                }
+            }
+        }
+       
         protected void Page_Load(object sender, EventArgs e)
         {
         }
@@ -218,7 +268,7 @@ namespace PraticeManagement.Reporting
 
             if (!IsPostBack)
             {
-                LoadActiveView();
+                SelectView();
             }
         }
 
@@ -244,8 +294,7 @@ namespace PraticeManagement.Reporting
             {
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
-                divWholePage.Style.Remove("display");
-                LoadActiveView();
+                SelectView();
             }
             else
             {
@@ -279,7 +328,7 @@ namespace PraticeManagement.Reporting
             }
             else if (ddlView.SelectedValue == "1")
             {
-                chkIncludePersons.Enabled = false;
+                chkIncludePersons.Checked = chkIncludePersons.Enabled = false;
             }
             SelectView();
         }
@@ -292,32 +341,20 @@ namespace PraticeManagement.Reporting
         private void LoadActiveView()
         {
             if (StartDate.HasValue && EndDate.HasValue)
-            {                
+            {
                 if (mvTimePeriodReport.ActiveViewIndex == 0)
                 {
-                    PopulateByResourceData();
+                    tpByResource.PopulateByResourceData();
                 }
                 else if (mvTimePeriodReport.ActiveViewIndex == 1)
                 {
-                    PopulateByProjectData();
+                    tpByProject.PopulateByProjectData();
                 }
                 else
                 {
                     PopulateByWorkTypeData();
                 }
-            }          
-        }
-
-        private void PopulateByResourceData()
-        {
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(StartDate.Value, EndDate.Value));
-            tpByResource.DataBindResource(data);
-        }
-
-        private void PopulateByProjectData()
-        {
-            var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(StartDate.Value, EndDate.Value));
-            tpByProject.DataBindProject(data);
+            }
         }
 
         private void PopulateByWorkTypeData()
