@@ -13,27 +13,15 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class TimePeriodSummaryByResource : System.Web.UI.UserControl
     {
+        private HtmlImage imgSeniorityFilter { get; set; }
+
+        private HtmlImage imgPayTypeFilter { get; set; }
+
+        private HtmlImage imgResourceFilter { get; set; }
+
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page); }
-        }
-
-        public List<PersonLevelGroupedHours> PersonLevelGroupedHoursList
-        {
-            get
-            {
-                List<PersonLevelGroupedHours> personLevelGroupedHoursList = ViewState["PersonLevelGroupedHoursList_Key"] as List<PersonLevelGroupedHours>;
-                if (!HostingPage.IncludePersonWithNoTimeEntries)
-                {
-                    personLevelGroupedHoursList = personLevelGroupedHoursList.Where(p => p.IsPersonTimeEntered).ToList();
-                }
-                return personLevelGroupedHoursList;
-            }
-            set
-            {
-                ViewState["PersonLevelGroupedHoursList_Key"] = value;
-            }
-
         }
 
         protected string GetDoubleFormat(double value)
@@ -56,11 +44,13 @@ namespace PraticeManagement.Controls.Reports
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
 
+                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblResources.SelectedItems, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat)).ToList();
+
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByResource Report");
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(PersonLevelGroupedHoursList.Count + " Employees");
+                sb.Append(data.Count + " Employees");
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
@@ -68,7 +58,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.AppendLine();
                 sb.AppendLine();
 
-                if (PersonLevelGroupedHoursList.Count > 0)
+                if (data.Count > 0)
                 {
                     //Header
                     sb.Append("Resource");
@@ -96,7 +86,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.AppendLine();
 
                     //Data
-                    foreach (var personLevelGroupedHours in PersonLevelGroupedHoursList)
+                    foreach (var personLevelGroupedHours in data)
                     {
                         sb.Append(personLevelGroupedHours.Person.PersonLastFirstName);
                         sb.Append("\t");
@@ -144,6 +134,7 @@ namespace PraticeManagement.Controls.Reports
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
+
                 List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(" Paychex ");
@@ -158,7 +149,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.AppendLine();
                 bool IsUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 Dictionary<string, double> workTypeLevelTimeOffHours = personLevelPayCheckList[0].WorkTypeLevelTimeOffHours;
-                if (PersonLevelGroupedHoursList.Count > 0)
+                if (personLevelPayCheckList.Count > 0)
                 {
                     //Header
                     sb.Append("BranchID");
@@ -232,35 +223,108 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
+        protected void btnFilterOK_OnClick(object sender, EventArgs e)
         {
-
+            PopulateByResourceData(false);
         }
 
-        public void DataBindResource(PersonLevelGroupedHours[] reportData)
+        protected void Page_Load(object sender, EventArgs e)
         {
-            PersonLevelGroupedHoursList = reportData.ToList();
-            if (PersonLevelGroupedHoursList.Count > 0)
+            cblSeniorities.OKButtonId = cblPayTypes.OKButtonId = cblResources.OKButtonId = btnFilterOK.ClientID;
+        }
+
+        protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                imgSeniorityFilter = e.Item.FindControl("imgSeniorityFilter") as HtmlImage;
+                imgPayTypeFilter = e.Item.FindControl("imgPayTypeFilter") as HtmlImage;
+                imgResourceFilter = e.Item.FindControl("imgResourceFilter") as HtmlImage;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+
+            }
+        }
+
+        public void PopulateByResourceData(bool isPopulateFilters = true)
+        {
+            PersonLevelGroupedHours[] data;
+            if (isPopulateFilters)
+            {
+                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, null, null));
+            }
+            else
+            {
+                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblResources.SelectedItems, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat));
+            }
+            DataBindResource(data, isPopulateFilters);
+        }
+
+        public void DataBindResource(PersonLevelGroupedHours[] reportData, bool isPopulateFilters)
+        {
+            var reportDataList = reportData.ToList();
+            if (isPopulateFilters)
+            {
+                PopulateFilterPanels(reportDataList);
+            }
+            if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblResources.Items.Count > 1)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repResource.Visible = true;
-                repResource.DataSource = PersonLevelGroupedHoursList;
+                repResource.DataSource = reportDataList;
                 repResource.DataBind();
+                imgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblSeniorities.FilterPopupId,
+                  cblSeniorities.SelectedIndexes, cblSeniorities.ClientID);
+                imgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblPayTypes.FilterPopupId,
+                   cblPayTypes.SelectedIndexes, cblPayTypes.ClientID);
+                imgResourceFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblResources.FilterPopupId,
+                   cblResources.SelectedIndexes, cblResources.ClientID);
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
                 repResource.Visible = false;
             }
-            PopulateHeaderSection();
+
+            PopulateHeaderSection(reportDataList);
         }
 
-        private void PopulateHeaderSection()
+        private void PopulateFilterPanels(List<PersonLevelGroupedHours> reportData)
         {
-            double billableHours = PersonLevelGroupedHoursList.Sum(p => p.BillableHours);
-            double nonBillableHours = PersonLevelGroupedHoursList.Sum(p => p.NonBillableHours);
-            int noOfEmployees = PersonLevelGroupedHoursList.Count;
-            double totalUtlization = PersonLevelGroupedHoursList.Sum(p => p.Person.UtlizationPercent);
+            PopulateResourceFilter(reportData);
+            PopulateSeniorityFilter(reportData);
+            PopulatePayTypeFilter(reportData);
+
+        }
+
+        private void PopulateSeniorityFilter(List<PersonLevelGroupedHours> reportData)
+        {
+            var seniorities = reportData.Select(r => new { Id = r.Person.Seniority.Id, Name = r.Person.Seniority.Name }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblSeniorities, "All Seniorities", seniorities.ToArray(), false, "Id", "Name");
+            SelectAllItems(cblSeniorities);
+        }
+
+        private void PopulatePayTypeFilter(List<PersonLevelGroupedHours> reportData)
+        {
+            var payTypes = reportData.Select(r => new { Name = r.Person.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Name);
+            DataHelper.FillListDefault(cblPayTypes, "All Pay Types", payTypes.ToArray(), false, "Name", "Name");
+            SelectAllItems(cblPayTypes);
+        }
+
+        private void PopulateResourceFilter(List<PersonLevelGroupedHours> reportData)
+        {
+            var persons = reportData.Select(r => new { Id = r.Person.Id, Name = r.Person.PersonLastFirstName }).ToList().OrderBy(r => r.Name); ;
+            DataHelper.FillListDefault(cblResources, "All Resources", persons.ToArray(), false, "Id", "Name");
+            SelectAllItems(cblResources);
+        }
+
+        private void PopulateHeaderSection(List<PersonLevelGroupedHours> reportData)
+        {
+            double billableHours = reportData.Sum(p => p.BillableHours);
+            double nonBillableHours = reportData.Sum(p => p.NonBillableHours);
+            int noOfEmployees = reportData.Count;
+            double totalUtlization = reportData.Sum(p => p.Person.UtlizationPercent);
             var billablePercent = 0;
             var nonBillablePercent = 0;
             if (billableHours != 0 || nonBillableHours != 0)
@@ -301,6 +365,23 @@ namespace PraticeManagement.Controls.Reports
             }
 
         }
+
+        private void SelectAllItems(ScrollingDropDown cbl)
+        {
+            foreach (ListItem item in cbl.Items)
+            {
+                item.Selected = true;
+            }
+        }
+
+        protected string GetPersonDetailReportUrl(int? personId)
+        {
+            string personDetailReportUrl = string.Format(Constants.ApplicationPages.RedirectPersonDetailReportIdFormat, personId, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"));
+            string timePeriodReportUrl = string.Format(Constants.ApplicationPages.RedirectTimePeriodSummaryReportFormat, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"), HostingPage.SelectedView, HostingPage.IncludePersonWithNoTimeEntries);
+            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(personDetailReportUrl, timePeriodReportUrl);
+        }
+
+
     }
 }
 
