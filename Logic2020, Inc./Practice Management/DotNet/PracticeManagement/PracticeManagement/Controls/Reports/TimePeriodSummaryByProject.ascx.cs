@@ -12,9 +12,9 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class TimePeriodSummaryByProject : System.Web.UI.UserControl
     {
-        private HtmlImage imgClientFilter { get; set; }
+        private HtmlImage ImgClientFilter { get; set; }
 
-        private HtmlImage imgProjectStatusFilter { get; set; }
+        private HtmlImage ImgProjectStatusFilter { get; set; }
 
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
@@ -155,8 +155,8 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                imgClientFilter = e.Item.FindControl("imgClientFilter") as HtmlImage;
-                imgProjectStatusFilter = e.Item.FindControl("imgProjectStatusFilter") as HtmlImage;
+                ImgClientFilter = e.Item.FindControl("imgClientFilter") as HtmlImage;
+                ImgProjectStatusFilter = e.Item.FindControl("imgProjectStatusFilter") as HtmlImage;
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -176,10 +176,10 @@ namespace PraticeManagement.Controls.Reports
                 repProject.Visible = true;
                 repProject.DataSource = reportData;
                 repProject.DataBind();
-                imgClientFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblClients.FilterPopupId,
-                    cblClients.SelectedIndexes, cblClients.ClientID);
-                imgProjectStatusFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblProjectStatus.FilterPopupId,
-                   cblProjectStatus.SelectedIndexes, cblProjectStatus.ClientID);
+                ImgClientFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblClients.FilterPopupId,
+                    cblClients.SelectedIndexes, cblClients.ClientID, cblClients.SearchTextBoxId);
+                ImgProjectStatusFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblProjectStatus.FilterPopupId,
+                   cblProjectStatus.SelectedIndexes, cblProjectStatus.ClientID, cblProjectStatus.SearchTextBoxId);
             }
             else
             {
