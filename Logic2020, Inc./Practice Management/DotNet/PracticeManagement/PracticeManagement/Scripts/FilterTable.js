@@ -25,7 +25,7 @@
             var rowText = '';
             if (isCheckBoxList) {
                 var checkBox = trControls[i].children[0].getElementsByTagName('input')[0];
-                rowText = checkBox.parentNode.children[1].innerHTML.toLowerCase();
+                rowText = checkBox.parentNode.children.length > 1 ? checkBox.parentNode.children[1].innerHTML.toLowerCase():'';
             }
             else {
                 rowText = trControls[i].children[0].innerHTML.toLowerCase();
