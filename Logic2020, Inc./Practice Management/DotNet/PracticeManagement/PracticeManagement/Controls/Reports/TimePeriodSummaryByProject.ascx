@@ -147,7 +147,7 @@
     </table>
     <asp:Panel ID="pnlFilterResource" Style="display: none;" runat="server">
         <cc2:CheckBoxListFilter ID="cblClients" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
-            Height="150px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
+            Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
             Width="200px" BorderWidth="0" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterProjectStatus" Style="display: none;" runat="server">
@@ -158,20 +158,20 @@
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repProject" runat="server" OnItemDataBound="repProject_ItemDataBound">
         <HeaderTemplate>
-            <div style="min-height: 200px;">
+            <div style="min-height: 250px;">
                 <table id="tblProjectSummaryByProject" class="tablesorter TimePeriodByproject WholeWidth">
                     <thead>
                         <tr>
                             <th class="t-left padLeft5" style="width: 500px; height: 30px;">
                                 Project
-                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter" />
+                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter" style="float: right;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceClient" runat="server" TargetControlID="imgClientFilter"
                                     PopupControlID="pnlFilterResource" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 110px; height: 30px;">
                                 Status
-                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter" />
+                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter" style="float: right;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
