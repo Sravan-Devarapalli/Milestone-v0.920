@@ -6,7 +6,7 @@
 <table class="WholeWidthWithHeight">
     <tr>
         <td colspan="4" style="width: 90%;">
-            <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
+            <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false" Width="100px"
                 ToolTip="Collapse All" />
         </td>
         <td style="text-align: right; width: 10%; padding-right: 5px;">
@@ -113,7 +113,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td style="vertical-align: top;">
-                                                        <%# Eval("Note")%>
+                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -147,7 +147,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td style="vertical-align: top;">
-                                                        <%# Eval("Note")%>
+                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -218,7 +218,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td style="vertical-align: top;">
-                                                        <%# Eval("Note")%>
+                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -252,7 +252,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td style="vertical-align: top;">
-                                                        <%# Eval("Note")%>
+                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
