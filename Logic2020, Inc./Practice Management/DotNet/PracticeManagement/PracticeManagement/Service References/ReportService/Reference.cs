@@ -52,7 +52,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Milestone[] GetMilestonesForProject(string projectNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheck", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheckResponse")]
-        DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate);
+        DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -62,8 +62,7 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-        
-      
+       
         
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -129,8 +128,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.GetMilestonesForProject(projectNumber);
         }
         
-        public DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.TimePeriodSummaryByResourcePayCheck(startDate, endDate);
+        public DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames) {
+            return base.Channel.TimePeriodSummaryByResourcePayCheck(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames);
         }
     }
 }
