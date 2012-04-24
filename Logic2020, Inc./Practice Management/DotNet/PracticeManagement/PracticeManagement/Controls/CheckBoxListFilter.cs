@@ -22,6 +22,7 @@ namespace PraticeManagement.Controls
         private const string FilterButtonIdKey = "FilterButtonIdKey";
         private const string GeneralScriptSource =
           @"
+         <script src=""Scripts/FilterTable.js"" type=""text/javascript""></script>
          <script type=""text/javascript"">
             function btnOk_Click(okButton) {
                 okButton.click();
@@ -70,16 +71,12 @@ namespace PraticeManagement.Controls
                                                         </td>
                                                     </tr></table>";
 
-        private const string sortButtonsScript = @"<table class='WholeWidth'>
-                                                        <tr><td align='right' style='padding:3px;'>
-                                                           <img onclick='imgSort_Click(this,{0});' sort='asc' title='Ascending' style='width:100%;height:20px;' src='../Images/add_16.png'/>    
-                                                        </td></tr>
-                                                        <tr><td align='right' style='padding:3px;'>
-                                                           <img onclick='imgSort_Click(this,{1});' sort='desc' title='Descending' style='width:100%;height:20px;' src='../Images/add_16.png' />    
+
+        private const string searchScript = @"<table class='WholeWidth'>
+                                                        <tr><td align='right' style='padding:3px; text-align:left;'>
+                                                           <input type='text' id='{0}'  style='width:90%;text-align:left;' />
                                                         </td></tr>
                                                     </table>";
-
-
         #endregion
 
         public string FilterPopupId
@@ -126,7 +123,7 @@ namespace PraticeManagement.Controls
         public override void RenderControl(HtmlTextWriter writer)
         {
             writer.WriteLine(string.Format("<div id='{0}' style='border:2px solid black;background-color:white;'>", FilterPopupId));
-           // writer.WriteLine(string.Format(sortButtonsScript,this.ClientID,this.ClientID));
+            writer.WriteLine(string.Format(searchScript, this.ClientID+"_txtSearch","\""+this.ClientID+"_txtSearch\"", "\""+this.ClientID+"\""));
             base.RenderControl(writer);
             writer.WriteLine(string.Format(submitButtonsScript, OKButtonId, FilterPopupId));
             writer.WriteLine("</div>");
