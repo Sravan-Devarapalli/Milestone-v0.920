@@ -154,7 +154,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.CheckBoxListFilter cblPayTypes;
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblPayTypes;
         
         /// <summary>
         /// pnlFilterSeniority control.
@@ -172,7 +172,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.CheckBoxListFilter cblSeniorities;
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblSeniorities;
         
         /// <summary>
         /// btnFilterOK control.
