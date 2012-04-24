@@ -1,6 +1,22 @@
 ﻿function filterTableRows(searchtextBoxId, tblControlId, isCheckBoxList) {
-    var searchtextBox = document.getElementById(searchtextBoxId);
-    var tblControl = document.getElementById(tblControlId);
+
+    var searchtextBox = null;
+    var tblControl = null;
+
+    if (typeof (searchtextBoxId) == "string") {
+        searchtextBox = document.getElementById(searchtextBoxId);
+    }
+    else {
+        searchtextBox = searchtextBoxId;
+    }
+
+    if (typeof (tblControlId) == "string") {
+        tblControl = document.getElementById(tblControlId);
+    }
+    else {
+        tblControl = tblControlId;
+    }
+
     if (tblControl != null && searchtextBox != null) {
         var trControls = tblControl.getElementsByTagName('tr');
         var searchText = searchtextBox.value.toLowerCase();
