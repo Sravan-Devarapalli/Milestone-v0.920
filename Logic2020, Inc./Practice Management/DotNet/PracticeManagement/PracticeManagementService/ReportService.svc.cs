@@ -88,9 +88,9 @@ namespace PracticeManagementService
             }
         }
 
-        public List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate)
+        public List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames)
         {
-            return ReportDAL.TimePeriodSummaryByResourcePayCheck(startDate, endDate);
+            return ReportDAL.TimePeriodSummaryByResourcePayCheck(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames);
         }
 
     }
