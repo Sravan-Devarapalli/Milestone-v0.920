@@ -22,14 +22,17 @@ namespace PraticeManagement.Controls
         private const string FilterButtonIdKey = "FilterButtonIdKey";
         private const string GeneralScriptSource =
           @"
-         <script src=""Scripts/FilterTable.js"" type=""text/javascript""></script>
+         <script src=""../Scripts/FilterTable.js"" type=""text/javascript""></script>
          <script type=""text/javascript"">
+
             function btnOk_Click(okButton) {
                 okButton.click();
             }
+
             function btnCancel_Click(filterdiv) {
               filterdiv.style.display = 'none';
             }
+
             function uncheckAllCheckBoxes(cblList)
             {
              for (var i = 0; i < cblList.length; i++)
@@ -38,16 +41,7 @@ namespace PraticeManagement.Controls
 			 }
               
             }
-            function imgSort_Click(button)
-            {
-                alert(button.getAttribute('sort'));
-                var cblList = document.getElementById(cbl).getElementsByTagName('input');
-                for (var i = 0; i < indexesArray.length; i++)
-			      {
-                   if(indexesArray[i] != '')
-			       cblList[indexesArray[i]].checked = true;
-			      }
-            }
+
             function Filter_Click(filterdiv, selectedIndexes, cbl) {
                 filterdiv.style.display = '';
                 var indexesArray = selectedIndexes.split('_');
@@ -74,7 +68,7 @@ namespace PraticeManagement.Controls
 
         private const string searchScript = @"<table class='WholeWidth'>
                                                         <tr><td align='right' style='padding:3px; text-align:left;'>
-                                                           <input type='text' id='{0}'  style='width:90%;text-align:left;' />
+                                                           <input type='text' id='{0}' onkeyup='filterTableRows({0},{1},{2});'  style='width:90%;text-align:left;' />
                                                         </td></tr>
                                                     </table>";
         #endregion
@@ -86,6 +80,7 @@ namespace PraticeManagement.Controls
                 return "div" + ClientID;
             }
         }
+
         public string OKButtonId
         {
             get
@@ -123,10 +118,11 @@ namespace PraticeManagement.Controls
         public override void RenderControl(HtmlTextWriter writer)
         {
             writer.WriteLine(string.Format("<div id='{0}' style='border:2px solid black;background-color:white;'>", FilterPopupId));
-            writer.WriteLine(string.Format(searchScript, this.ClientID+"_txtSearch","\""+this.ClientID+"_txtSearch\"", "\""+this.ClientID+"\""));
+            writer.WriteLine(string.Format(searchScript, (this.ClientID + "_txtSearch"), this.ClientID, "true"));
             base.RenderControl(writer);
             writer.WriteLine(string.Format(submitButtonsScript, OKButtonId, FilterPopupId));
             writer.WriteLine("</div>");
+
         }
 
         protected override void OnInit(EventArgs e)
