@@ -164,11 +164,6 @@
             </td>
         </tr>
     </table>
-    <asp:Panel ID="pnlFilterResource" Style="display: none; left: 13px !important;" runat="server">
-        <cc2:CheckBoxListFilter ID="cblResources" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
-            Height="150px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-            Width="200px" BorderWidth="0" />
-    </asp:Panel>
     <asp:Panel ID="pnlFilterPayType" Style="display: none;" runat="server">
         <cc2:CheckBoxListFilter ID="cblPayTypes" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
             Height="120px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
@@ -176,23 +171,18 @@
     </asp:Panel>
     <asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
         <cc2:CheckBoxListFilter ID="cblSeniorities" runat="server" BorderColor="#aaaaaa"
-            AllSelectedReturnType="Null" Height="150px" BackColor="White" CellPadding="3"
+            AllSelectedReturnType="Null" Height="155px" BackColor="White" CellPadding="3"
             NoItemsType="All" SetDirty="False" Width="160px" BorderWidth="0" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
         <HeaderTemplate>
-            <div style="min-height: 200px;">
+            <div style="min-height: 250px;">
                 <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
                             <th style="width: 210px; text-align: left;" class="padLeft5">
                                 Resource
-                                <img alt="Filter" src="../../Images/search_filter.png" style="float: right;" runat="server"
-                                    id="imgResourceFilter" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceResourceFilter" runat="server" TargetControlID="imgResourceFilter"
-                                    BehaviorID="pceResourceFilter" PopupControlID="pnlFilterResource" Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 130px;">
                                 Seniority
