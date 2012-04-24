@@ -18,19 +18,12 @@ namespace PraticeManagement.Controls.Reports
             get { return ((PraticeManagement.Reporting.ProjectSummaryReport)Page.Page); }
         }
 
-        private int sectionId;
-
-        public List<PersonLevelGroupedHours> TimeEntriesGroupByPersonDetailList
+        private PraticeManagement.Controls.Reports.ProjectSummaryByResource HostingControl
         {
-            get
-            {
-                return ViewState["ProjectDetailByResourceTimeEntries"] as List<PersonLevelGroupedHours>;
-            }
-            set
-            {
-                ViewState["ProjectDetailByResourceTimeEntries"] = value;
-            }
+            get { return (PraticeManagement.Controls.Reports.ProjectSummaryByResource)HostingPage.ByResourceControl; }
         }
+
+        private int sectionId;
 
         private List<string> CollapsiblePanelExtenderClientIds
         {
@@ -50,14 +43,12 @@ namespace PraticeManagement.Controls.Reports
 
         public void DataBindByResourceDetail(PersonLevelGroupedHours[] reportData)
         {
-            TimeEntriesGroupByPersonDetailList = reportData.ToList();
-
-            if (TimeEntriesGroupByPersonDetailList.Count > 0)
+            if (reportData.Length > 0)
             {
-                TimeEntriesGroupByPersonDetailList = TimeEntriesGroupByPersonDetailList.OrderBy(p => p.Person.PersonLastFirstName).ToList();
+                reportData = reportData.OrderBy(p => p.Person.PersonLastFirstName).ToArray();
                 divEmptyMessage.Style["display"] = "none";
                 repPersons.Visible = btnExpandOrCollapseAll.Visible = true;
-                repPersons.DataSource = TimeEntriesGroupByPersonDetailList;
+                repPersons.DataSource = reportData;
                 repPersons.DataBind();
             }
             else
@@ -154,7 +145,7 @@ namespace PraticeManagement.Controls.Reports
         {
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
-
+            PersonLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, HostingControl.cblProjectRolesControl.SelectedItems));
             StringBuilder sb = new StringBuilder();
             sb.Append(project.Client.Name);
             sb.Append("\t");
@@ -172,7 +163,7 @@ namespace PraticeManagement.Controls.Reports
             sb.Append("\t");
             sb.AppendLine();
             sb.AppendLine();
-            if (TimeEntriesGroupByPersonDetailList.Count > 0)
+            if (data.Length > 0)
             {
                 //Header
                 /* Person Name 
@@ -196,7 +187,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("Note");
                 sb.AppendLine();
                 //Data
-                foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByPersonDetailList)
+                foreach (var timeEntriesGroupByClientAndProject in data)
                 {
                     if (timeEntriesGroupByClientAndProject.DayTotalHours != null)
                     {
