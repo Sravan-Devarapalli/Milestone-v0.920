@@ -364,6 +364,7 @@
     <EmbeddedResource Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.js" />
     <EmbeddedResource Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.js" />
     <EmbeddedResource Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.js" />
+    <Content Include="Controls\FilteredCheckBoxList.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\BillableAndNonBillableGraph.ascx" />
@@ -1216,6 +1217,13 @@
       <DependentUpon>Calendar.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\CheckBoxListFilter.cs" />
+    <Compile Include="Controls\FilteredCheckBoxList.ascx.cs">
+      <DependentUpon>FilteredCheckBoxList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\FilteredCheckBoxList.ascx.designer.cs">
+      <DependentUpon>FilteredCheckBoxList.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.cs" />
     <Compile Include="Controls\Generic\CustomCheckBoxList.cs" />
     <Compile Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.cs" />
