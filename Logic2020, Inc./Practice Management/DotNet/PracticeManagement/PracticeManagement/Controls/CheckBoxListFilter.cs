@@ -42,8 +42,10 @@ namespace PraticeManagement.Controls
               
             }
 
-            function Filter_Click(filterdiv, selectedIndexes, cbl) {
+            function Filter_Click(filterdiv, selectedIndexes, cbl,txtSearchBox) {
                 filterdiv.style.display = '';
+                txtSearchBox.value = '';
+                filterTableRows(txtSearchBox, cbl, true);
                 var indexesArray = selectedIndexes.split('_');
                 var cblList = document.getElementById(cbl).getElementsByTagName('input');
 
@@ -78,6 +80,14 @@ namespace PraticeManagement.Controls
             get
             {
                 return "div" + ClientID;
+            }
+        }
+
+        public string SearchTextBoxId
+        {
+            get
+            {
+                return (this.ClientID + "_txtSearch");
             }
         }
 
@@ -118,7 +128,7 @@ namespace PraticeManagement.Controls
         public override void RenderControl(HtmlTextWriter writer)
         {
             writer.WriteLine(string.Format("<div id='{0}' style='border:2px solid black;background-color:white;'>", FilterPopupId));
-            writer.WriteLine(string.Format(searchScript, (this.ClientID + "_txtSearch"), this.ClientID, "true"));
+            writer.WriteLine(string.Format(searchScript, SearchTextBoxId, this.ClientID, "true"));
             base.RenderControl(writer);
             writer.WriteLine(string.Format(submitButtonsScript, OKButtonId, FilterPopupId));
             writer.WriteLine("</div>");
