@@ -271,10 +271,10 @@ namespace PraticeManagement.Controls.Reports
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
-                ImgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblSeniorities.FilterPopupId,
-                  cblSeniorities.SelectedIndexes, cblSeniorities.ClientID,cblSeniorities.SearchTextBoxId);
-                ImgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblPayTypes.FilterPopupId,
-                   cblPayTypes.SelectedIndexes, cblPayTypes.ClientID, cblPayTypes.SearchTextBoxId);
+                ImgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblSeniorities.FilterPopupId,
+                  cblSeniorities.SelectedIndexes, cblSeniorities.CheckBoxListObject.ClientID, cblSeniorities.SearchTextBoxId);
+                ImgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblPayTypes.FilterPopupId,
+                   cblPayTypes.SelectedIndexes, cblPayTypes.CheckBoxListObject.ClientID, cblPayTypes.SearchTextBoxId);
               
             }
             else
@@ -296,15 +296,15 @@ namespace PraticeManagement.Controls.Reports
         private void PopulateSeniorityFilter(List<PersonLevelGroupedHours> reportData)
         {
             var seniorities = reportData.Select(r => new { Id = r.Person.Seniority.Id, Name = r.Person.Seniority.Name }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblSeniorities, "All Seniorities", seniorities.ToArray(), false, "Id", "Name");
-            SelectAllItems(cblSeniorities);
+            DataHelper.FillListDefault(cblSeniorities.CheckBoxListObject, "All Seniorities", seniorities.ToArray(), false, "Id", "Name");
+            SelectAllItems(cblSeniorities.CheckBoxListObject);
         }
 
         private void PopulatePayTypeFilter(List<PersonLevelGroupedHours> reportData)
         {
             var payTypes = reportData.Select(r => new { Name = r.Person.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Name);
-            DataHelper.FillListDefault(cblPayTypes, "All Pay Types", payTypes.ToArray(), false, "Name", "Name");
-            SelectAllItems(cblPayTypes);
+            DataHelper.FillListDefault(cblPayTypes.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Name", "Name");
+            SelectAllItems(cblPayTypes.CheckBoxListObject);
         }
 
         private void PopulateHeaderSection(List<PersonLevelGroupedHours> reportData)
