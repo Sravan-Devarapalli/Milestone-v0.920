@@ -274,12 +274,12 @@ namespace PraticeManagement.Controls.Reports
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
-                imgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblSeniorities.FilterPopupId,
-                  cblSeniorities.SelectedIndexes, cblSeniorities.ClientID);
-                imgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblPayTypes.FilterPopupId,
-                   cblPayTypes.SelectedIndexes, cblPayTypes.ClientID);
-                imgResourceFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblResources.FilterPopupId,
-                   cblResources.SelectedIndexes, cblResources.ClientID);
+                imgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblSeniorities.FilterPopupId,
+                  cblSeniorities.SelectedIndexes, cblSeniorities.ClientID,cblSeniorities.SearchTextBoxId);
+                imgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblPayTypes.FilterPopupId,
+                   cblPayTypes.SelectedIndexes, cblPayTypes.ClientID, cblPayTypes.SearchTextBoxId);
+                imgResourceFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblResources.FilterPopupId,
+                   cblResources.SelectedIndexes, cblResources.ClientID, cblResources.SearchTextBoxId);
             }
             else
             {
