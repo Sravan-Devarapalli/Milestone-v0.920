@@ -1,6 +1,8 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByResource" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
+    TagPrefix="uc" %>
 <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
     height: 90px;">
     <tr>
@@ -165,14 +167,14 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterPayType" Style="display: none;" runat="server">
-        <cc2:CheckBoxListFilter ID="cblPayTypes" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
+        <uc:FilteredCheckBoxList ID="cblPayTypes" runat="server" AllSelectedReturnType="Null"
             Height="120px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
             Width="150px" BorderWidth="0" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
-        <cc2:CheckBoxListFilter ID="cblSeniorities" runat="server" BorderColor="#aaaaaa"
-            AllSelectedReturnType="Null" Height="155px" BackColor="White" CellPadding="3"
-            NoItemsType="All" SetDirty="False" Width="160px" BorderWidth="0" />
+        <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" AllSelectedReturnType="Null"
+            Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
+            Width="160px" BorderWidth="0" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
