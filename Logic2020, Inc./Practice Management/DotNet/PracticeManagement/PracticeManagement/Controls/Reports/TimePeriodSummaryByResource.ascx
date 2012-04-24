@@ -164,79 +164,82 @@
             </td>
         </tr>
     </table>
-    <asp:Panel ID="pnlFilterResource" style="display:none;left:13px !important;" runat="server">
-        <cc2:CheckBoxListFilter ID="cblResources" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"   
+    <asp:Panel ID="pnlFilterResource" Style="display: none; left: 13px !important;" runat="server">
+        <cc2:CheckBoxListFilter ID="cblResources" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
             Height="150px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
             Width="200px" BorderWidth="0" />
     </asp:Panel>
-    <asp:Panel ID="pnlFilterPayType" style="display:none;"  runat="server">
+    <asp:Panel ID="pnlFilterPayType" Style="display: none;" runat="server">
         <cc2:CheckBoxListFilter ID="cblPayTypes" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
             Height="120px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
             Width="150px" BorderWidth="0" />
     </asp:Panel>
-    <asp:Panel ID="pnlFilterSeniority" style="display:none;"  runat="server">
-        <cc2:CheckBoxListFilter ID="cblSeniorities" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
-            Height="150px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-            Width="160px" BorderWidth="0" />
+    <asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
+        <cc2:CheckBoxListFilter ID="cblSeniorities" runat="server" BorderColor="#aaaaaa"
+            AllSelectedReturnType="Null" Height="150px" BackColor="White" CellPadding="3"
+            NoItemsType="All" SetDirty="False" Width="160px" BorderWidth="0" />
     </asp:Panel>
-    <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" style="display:none;" />
+    <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
         <HeaderTemplate>
-        <div style="min-height:200px;">
-            <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth zebra" >
-                <thead>
-                    <tr>
-                        <th style="width: 210px; text-align: left;" class="padLeft5">
-                            Resource
-                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgResourceFilter" />
-                            <AjaxControlToolkit:PopupControlExtender ID="pceResource" runat="server" TargetControlID="imgResourceFilter" BehaviorID="pceResource"
-                                PopupControlID="pnlFilterResource" Position="Bottom">
-                            </AjaxControlToolkit:PopupControlExtender>
-                        </th>
-                        <th style="width: 130px;">
-                            Seniority
-                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgSeniorityFilter" />
-                            <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter" BehaviorID="pceSeniorityFilter"
-                                PopupControlID="pnlFilterSeniority" Position="Bottom">
-                            </AjaxControlToolkit:PopupControlExtender>
-                        </th>
-                        <th style="width: 110px;">
-                            Pay Type
-                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgPayTypeFilter" />
-                            <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter" BehaviorID="pcePayTypeFilter"
-                                PopupControlID="pnlFilterPayType" Position="Bottom">
-                            </AjaxControlToolkit:PopupControlExtender>
-                        </th>
-                        <th style="width: 100px">
-                            Billable
-                        </th>
-                        <th style="width: 100px;">
-                            Non-Billable
-                        </th>
-                        <th style="width: 100px;">
-                            BD
-                        </th>
-                        <th style="width: 100px;">
-                            Internal
-                        </th>
-                        <th style="width: 100px;">
-                            Time-Off
-                        </th>
-                        <th style="width: 100px;">
-                            Total
-                        </th>
-                        <th style="width: 295px;">
-                            Utilization Percent this Period
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div style="min-height: 200px;">
+                <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth zebra">
+                    <thead>
+                        <tr>
+                            <th style="width: 210px; text-align: left;" class="padLeft5">
+                                Resource
+                                <img alt="Filter" src="../../Images/search_filter.png" style="float: right;" runat="server"
+                                    id="imgResourceFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceResourceFilter" runat="server" TargetControlID="imgResourceFilter"
+                                    BehaviorID="pceResourceFilter" PopupControlID="pnlFilterResource" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                            </th>
+                            <th style="width: 130px;">
+                                Seniority
+                                <img alt="Filter" src="../../Images/search_filter.png" style="float: right;" runat="server"
+                                    id="imgSeniorityFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
+                                    BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                            </th>
+                            <th style="width: 110px;">
+                                Pay Type
+                                <img alt="Filter" src="../../Images/search_filter.png" style="float: right;" runat="server"
+                                    id="imgPayTypeFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter"
+                                    BehaviorID="pcePayTypeFilter" PopupControlID="pnlFilterPayType" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                            </th>
+                            <th style="width: 100px">
+                                Billable
+                            </th>
+                            <th style="width: 100px;">
+                                Non-Billable
+                            </th>
+                            <th style="width: 100px;">
+                                BD
+                            </th>
+                            <th style="width: 100px;">
+                                Internal
+                            </th>
+                            <th style="width: 100px;">
+                                Time-Off
+                            </th>
+                            <th style="width: 100px;">
+                                Total
+                            </th>
+                            <th style="width: 295px;">
+                                Utilization Percent this Period
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
                 <td class="padLeft5" style="text-align: left;">
-                 <%--<asp:HyperLink ID="btnPersonName" runat="server"  Text='<%# Eval("Person.PersonLastFirstName")%>' NavigateUrl='<%# GetPersonDetailReportUrl((int?)Eval("Person.Id")) %>' />--%>
-                 <%# Eval("Person.PersonLastFirstName")%>
+                    <%--<asp:HyperLink ID="btnPersonName" runat="server"  Text='<%# Eval("Person.PersonLastFirstName")%>' NavigateUrl='<%# GetPersonDetailReportUrl((int?)Eval("Person.Id")) %>' />--%>
+                    <%# Eval("Person.PersonLastFirstName")%>
                 </td>
                 <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.PersonLastFirstName")%>'>
                     <%# Eval("Person.Seniority.Name")%>
