@@ -36,9 +36,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                HtmlImage img = e.Item.FindControl("imgProjectRoleFilter") as HtmlImage;
-
-                ImgProjectRoleFilter = img;
+                ImgProjectRoleFilter = e.Item.FindControl("imgProjectRoleFilter") as HtmlImage;
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -58,8 +56,8 @@ namespace PraticeManagement.Controls.Reports
                 repResource.Visible = true;
                 repResource.DataSource = reportData;
                 repResource.DataBind();
-                ImgProjectRoleFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\');", cblProjectRoles.FilterPopupId,
-                    cblProjectRoles.SelectedIndexes, cblProjectRoles.ClientID);
+                ImgProjectRoleFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblProjectRoles.FilterPopupId,
+                    cblProjectRoles.SelectedIndexes, cblProjectRoles.ClientID, cblProjectRoles.SearchTextBoxId);
             }
             else
             {
