@@ -13,11 +13,9 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class TimePeriodSummaryByResource : System.Web.UI.UserControl
     {
-        private HtmlImage imgSeniorityFilter { get; set; }
+        private HtmlImage ImgSeniorityFilter { get; set; }
 
-        private HtmlImage imgPayTypeFilter { get; set; }
-
-        private HtmlImage imgResourceFilter { get; set; }
+        private HtmlImage ImgPayTypeFilter { get; set; }
 
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
@@ -44,7 +42,7 @@ namespace PraticeManagement.Controls.Reports
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
 
-                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblResources.SelectedItems, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat)).ToList();
+                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat)).ToList();
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByResource Report");
@@ -135,7 +133,7 @@ namespace PraticeManagement.Controls.Reports
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
 
-                List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
+                List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat)).ToList();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(" Paychex ");
                 sb.Append("\t");
@@ -230,16 +228,15 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            cblSeniorities.OKButtonId = cblPayTypes.OKButtonId = cblResources.OKButtonId = btnFilterOK.ClientID;
+            cblSeniorities.OKButtonId = cblPayTypes.OKButtonId = btnFilterOK.ClientID;
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                imgSeniorityFilter = e.Item.FindControl("imgSeniorityFilter") as HtmlImage;
-                imgPayTypeFilter = e.Item.FindControl("imgPayTypeFilter") as HtmlImage;
-                imgResourceFilter = e.Item.FindControl("imgResourceFilter") as HtmlImage;
+                ImgSeniorityFilter = e.Item.FindControl("imgSeniorityFilter") as HtmlImage;
+                ImgPayTypeFilter = e.Item.FindControl("imgPayTypeFilter") as HtmlImage;
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -256,7 +253,7 @@ namespace PraticeManagement.Controls.Reports
             }
             else
             {
-                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblResources.SelectedItems, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat));
+                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat));
             }
             DataBindResource(data, isPopulateFilters);
         }
@@ -268,18 +265,17 @@ namespace PraticeManagement.Controls.Reports
             {
                 PopulateFilterPanels(reportDataList);
             }
-            if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblResources.Items.Count > 1)
+            if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
-                imgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblSeniorities.FilterPopupId,
+                ImgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblSeniorities.FilterPopupId,
                   cblSeniorities.SelectedIndexes, cblSeniorities.ClientID,cblSeniorities.SearchTextBoxId);
-                imgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblPayTypes.FilterPopupId,
+                ImgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblPayTypes.FilterPopupId,
                    cblPayTypes.SelectedIndexes, cblPayTypes.ClientID, cblPayTypes.SearchTextBoxId);
-                imgResourceFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblResources.FilterPopupId,
-                   cblResources.SelectedIndexes, cblResources.ClientID, cblResources.SearchTextBoxId);
+              
             }
             else
             {
@@ -292,7 +288,6 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulateFilterPanels(List<PersonLevelGroupedHours> reportData)
         {
-            PopulateResourceFilter(reportData);
             PopulateSeniorityFilter(reportData);
             PopulatePayTypeFilter(reportData);
 
@@ -310,13 +305,6 @@ namespace PraticeManagement.Controls.Reports
             var payTypes = reportData.Select(r => new { Name = r.Person.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Name);
             DataHelper.FillListDefault(cblPayTypes, "All Pay Types", payTypes.ToArray(), false, "Name", "Name");
             SelectAllItems(cblPayTypes);
-        }
-
-        private void PopulateResourceFilter(List<PersonLevelGroupedHours> reportData)
-        {
-            var persons = reportData.Select(r => new { Id = r.Person.Id, Name = r.Person.PersonLastFirstName }).ToList().OrderBy(r => r.Name); ;
-            DataHelper.FillListDefault(cblResources, "All Resources", persons.ToArray(), false, "Id", "Name");
-            SelectAllItems(cblResources);
         }
 
         private void PopulateHeaderSection(List<PersonLevelGroupedHours> reportData)
