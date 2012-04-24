@@ -116,7 +116,10 @@ namespace PraticeManagement.Controls
                     return;
                 }
 
-                anCheckbox.checked = false;
+                if(src.type == 'checkbox')
+                {
+                                anCheckbox.checked = false;
+                }
             }
 
             function addListenersToAllCheckBoxes(ControlClientID) {
