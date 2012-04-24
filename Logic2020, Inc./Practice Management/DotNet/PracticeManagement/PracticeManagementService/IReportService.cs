@@ -50,7 +50,7 @@ namespace PracticeManagementService
         List<Milestone> GetMilestonesForProject(string projectNumber);
 
         [OperationContract]
-        List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate);
+        List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames);
 
     }
 }
