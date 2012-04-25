@@ -89,8 +89,14 @@ namespace PraticeManagement.Controls
                 cbl.Height = value;
             }
 
+        }
 
-
+        public Unit Width
+        {
+            set
+            {
+                cbl.Width = value;
+            }
         }
 
         public PraticeManagement.Controls.ScrollingDropDown.NoItemsBehaviour NoItemsType
