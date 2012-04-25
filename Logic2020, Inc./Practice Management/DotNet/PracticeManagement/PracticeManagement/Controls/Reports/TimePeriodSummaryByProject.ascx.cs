@@ -176,10 +176,10 @@ namespace PraticeManagement.Controls.Reports
                 repProject.Visible = true;
                 repProject.DataSource = reportData;
                 repProject.DataBind();
-                ImgClientFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblClients.FilterPopupId,
-                    cblClients.SelectedIndexes, cblClients.ClientID, cblClients.SearchTextBoxId);
-                ImgProjectStatusFilter.Attributes["onclick"] = string.Format("Filter_Click({0},\'{1}\',\'{2}\',{3});", cblProjectStatus.FilterPopupId,
-                   cblProjectStatus.SelectedIndexes, cblProjectStatus.ClientID, cblProjectStatus.SearchTextBoxId);
+                ImgClientFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblClients.FilterPopupId,
+                  cblClients.SelectedIndexes, cblClients.CheckBoxListObject.ClientID, cblClients.SearchTextBoxId);
+                ImgProjectStatusFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblProjectStatus.FilterPopupId,
+                  cblProjectStatus.SelectedIndexes, cblProjectStatus.CheckBoxListObject.ClientID, cblProjectStatus.SearchTextBoxId);
             }
             else
             {
