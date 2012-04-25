@@ -1,10 +1,20 @@
 ﻿function filterTableRows(searchtextBoxId, tblControlId, isCheckBoxList) {
-
     var searchtextBox = null;
     var tblControl = null;
 
+    var isWaterMarkTxtbox = false; 
+
     if (typeof (searchtextBoxId) == "string") {
-        searchtextBox = document.getElementById(searchtextBoxId);
+        if (searchtextBoxId.startsWith("w")) {
+            isWaterMarkTxtbox = true;
+        }
+        if (isWaterMarkTxtbox) {
+            searchtextBox = $find(searchtextBoxId);
+        }
+        else {
+            searchtextBox = document.getElementById(searchtextBoxId);
+        }
+
     }
     else {
         searchtextBox = searchtextBoxId;
@@ -19,7 +29,7 @@
 
     if (tblControl != null && searchtextBox != null) {
         var trControls = tblControl.getElementsByTagName('tr');
-        var searchText = searchtextBox.value.toLowerCase();
+        var searchText = isWaterMarkTxtbox ? searchtextBox.get_Text() : searchtextBox.value.toLowerCase();
         for (var i = 0; i < trControls.length; i++) {
 
             var rowText = '';
