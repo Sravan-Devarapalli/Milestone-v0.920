@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProjectSummaryTabByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.ProjectSummaryTabByResource" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
+    TagPrefix="uc" %>
 <table class="WholeWidthWithHeight">
     <tr>
         <td colspan="4" style="width: 90%;">
@@ -25,46 +26,46 @@
     </tr>
 </table>
 <asp:Panel ID="pnlFilterProjectRoles" Style="display: none;" runat="server">
-    <cc2:CheckBoxListFilter ID="cblProjectRoles" runat="server" BorderColor="#aaaaaa"
-        AllSelectedReturnType="Null" Height="155px" BackColor="White" CellPadding="3"
-        NoItemsType="All" SetDirty="False" Width="175px"  BorderWidth="0" />
+    <uc:FilteredCheckBoxList ID="cblProjectRoles" runat="server" AllSelectedReturnType="Null"
+        Height="155px" NoItemsType="All" SetDirty="False" width="175px" />
 </asp:Panel>
 <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Style="display: none;" />
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
     <HeaderTemplate>
-      <div style="min-height:250px;">
-        <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
-            <thead>
-                <tr>
-                    <th class="t-left padLeft5" style="width: 300px; background-color: White;">
-                        Resource
-                    </th>
-                    <th style="width: 140px;">
-                    </th>
-                    <th style="width: 130px;">
-                        Project Role
-                        <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectRoleFilter" style="float: right;" />
-                        <AjaxControlToolkit:PopupControlExtender ID="pceProjectRole" runat="server" TargetControlID="imgProjectRoleFilter"
-                            PopupControlID="pnlFilterProjectRoles" Position="Bottom">
-                        </AjaxControlToolkit:PopupControlExtender>
-                    </th>
-                    <th style="width: 100px;">
-                        Billable
-                    </th>
-                    <th style="width: 100px;">
-                        Non-Billable
-                    </th>
-                    <th style="width: 100px;">
-                        Total
-                    </th>
-                    <th style="width: 140px;">
-                    </th>
-                    <th style="width: 325px;">
-                        Project Variance (in Hours)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
+        <div style="min-height: 250px;">
+            <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
+                <thead>
+                    <tr>
+                        <th class="t-left padLeft5" style="width: 300px; background-color: White;">
+                            Resource
+                        </th>
+                        <th style="width: 140px;">
+                        </th>
+                        <th style="width: 130px;">
+                            Project Role
+                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectRoleFilter"
+                                style="float: right;" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pceProjectRole" runat="server" TargetControlID="imgProjectRoleFilter"
+                                PopupControlID="pnlFilterProjectRoles" Position="Bottom">
+                            </AjaxControlToolkit:PopupControlExtender>
+                        </th>
+                        <th style="width: 100px;">
+                            Billable
+                        </th>
+                        <th style="width: 100px;">
+                            Non-Billable
+                        </th>
+                        <th style="width: 100px;">
+                            Total
+                        </th>
+                        <th style="width: 140px;">
+                        </th>
+                        <th style="width: 325px;">
+                            Project Variance (in Hours)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
     </HeaderTemplate>
     <ItemTemplate>
         <tr class="ReportItemTemplate">
