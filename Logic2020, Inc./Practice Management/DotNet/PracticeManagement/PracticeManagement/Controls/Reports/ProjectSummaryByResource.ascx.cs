@@ -17,7 +17,7 @@ namespace PraticeManagement.Controls.Reports
             get { return ((PraticeManagement.Reporting.ProjectSummaryReport)Page); }
         }
 
-        public CheckBoxListFilter cblProjectRolesControl
+        public FilteredCheckBoxList cblProjectRolesControl
         {
             get
             {
