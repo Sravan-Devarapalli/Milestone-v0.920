@@ -13,17 +13,8 @@ namespace PraticeManagement.Controls
         #region Fields
 
         private const string OKButtonIdKey = "OKButtonIdKey";
-        private const string GeneralScriptKey = "CheckBoxListFilterScriptKey";
-        private const string FilterButtonIdKey = "FilterButtonIdKey";
-
-
+       
         #endregion
-
-
-        //<cc2:CheckBoxListFilter ID="cblSeniorities" runat="server" BorderColor="#aaaaaa"
-        // AllSelectedReturnType="Null" Height="155px" BackColor="White" CellPadding="3"
-        // NoItemsType="All" SetDirty="False" Width="160px" BorderWidth="0" />
-
 
 
         public string OKButtonId
@@ -38,18 +29,27 @@ namespace PraticeManagement.Controls
             }
         }
 
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
         protected void Page_PreRender(object sender, EventArgs e)
         {
             btnOk.Attributes["onclick"] = string.Format("return btnOk_Click({0});", OKButtonId);
-            btnCancel.Attributes["onclick"] = string.Format("return btnCancelButton_Click(\'{0}\');", FilterPopupId);
-            txtSearchBox.Attributes["onkeyup"] = string.Format("filterTableRows(\'{0}\',\'{1}\',\'{2}\');", SearchTextBoxId, cbl.ClientID, "true");
+            btnCancel.Attributes["onclick"] = string.Format("return btnCancelButton_Click(\'{0}\');", FilterPopupClientID);
+            txtSearchBox.Attributes["onkeyup"] = string.Format("filterTableRows(\'{0}\',\'{1}\',\'{2}\');", txtSearchBox.ClientID, cbl.ClientID, "true");
+
+            AddAttributesToCheckBoxList();
         }
 
-        public bool SetDirty
+        private void AddAttributesToCheckBoxList()
         {
-
-            set { cbl.SetDirty = value; }
+            foreach (ListItem item in cbl.Items)
+            {
+                item.Attributes["title"] = item.Text;
+            }
         }
+
 
         public string SelectedItemsXmlFormat
         {
@@ -75,12 +75,6 @@ namespace PraticeManagement.Controls
         }
 
 
-        public PraticeManagement.Controls.ScrollingDropDown.AllSelectedType AllSelectedReturnType
-        {
-
-            set { cbl.AllSelectedReturnType = value; }
-        }
-
         public Unit Height
         {
 
@@ -89,20 +83,6 @@ namespace PraticeManagement.Controls
                 cbl.Height = value;
             }
 
-        }
-
-        public Unit Width
-        {
-            set
-            {
-                cbl.Width = value;
-            }
-        }
-
-        public PraticeManagement.Controls.ScrollingDropDown.NoItemsBehaviour NoItemsType
-        {
-
-            set { cbl.NoItemsType = value; }
         }
 
 
@@ -146,7 +126,7 @@ namespace PraticeManagement.Controls
         }
 
 
-        public string FilterPopupId
+        public string FilterPopupClientID
         {
             get
             {
@@ -154,13 +134,14 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public string SearchTextBoxId
+        public string WaterMarkTextBoxBehaviorID
         {
             get
             {
-                return txtSearchBox.ClientID;
+                return wmSearch.BehaviorID;
             }
         }
+
 
         public string SelectedItems { get { return cbl.SelectedItems; } }
     }
