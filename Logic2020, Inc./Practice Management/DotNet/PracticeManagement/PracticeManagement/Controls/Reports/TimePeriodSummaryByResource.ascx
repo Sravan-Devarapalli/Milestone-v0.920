@@ -167,14 +167,10 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterPayType" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblPayTypes" runat="server" AllSelectedReturnType="Null"
-            Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-            Width="175px" BorderWidth="0" />
+        <uc:FilteredCheckBoxList ID="cblPayTypes" runat="server" Height="155px" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" AllSelectedReturnType="Null"
-            Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-            Width="150px" BorderWidth="0" />
+        <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" Height="155px" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
@@ -188,7 +184,7 @@
                             </th>
                             <th style="width: 130px;">
                                 Seniority
-                                <img alt="Filter" src="../../Images/search_filter.png" style="float: right;" runat="server"
+                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute; padding-left: 2px;" runat="server"
                                     id="imgSeniorityFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
                                     BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
@@ -196,7 +192,7 @@
                             </th>
                             <th style="width: 110px;">
                                 Pay Type
-                                <img alt="Filter" src="../../Images/search_filter.png" style="float: right;" runat="server"
+                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute; padding-left: 2px;" runat="server"
                                     id="imgPayTypeFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter"
                                     BehaviorID="pcePayTypeFilter" PopupControlID="pnlFilterPayType" Position="Bottom">
