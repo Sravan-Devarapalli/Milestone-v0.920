@@ -60,19 +60,20 @@ namespace PraticeManagement.Controls
         </script>
         ";
 
-        private const string submitButtonsScript = @"<table class='WholeWidth'><tr>
-                                                        <td align='right' style='padding:3px;'>
+        private const string submitButtonsScript = @"<table style='width:{2}'><tr>
+                                                        <td align='right' style='padding:6px 0px 6px 0px;'>
                                                            <input onclick='btnOk_Click({0});' type='button' value='OK' title='OK' style='width:60px;' />    
-                                                           <input runat='server' onclick='btnCancel_Click({1});'  type='button' value='Cancel' title='Cancel' style='width:60px;' />
+                                                           <input onclick='btnCancel_Click({1});'  type='button' value='Cancel' title='Cancel' style='width:60px;' />
                                                         </td>
                                                     </tr></table>";
 
 
-        private const string searchScript = @"<table class='WholeWidth'>
-                                                        <tr><td align='right' style='padding:3px; text-align:left;'>
-                                                           <input type='text' id='{0}' onkeyup='filterTableRows({0},{1},{2});'  style='width:90%;text-align:left;' />
+        private const string searchScript = @"<table style='width:{3}'>
+                                                        <tr><td align='right' style='padding:6px 0px 6px 0px; text-align:left;'>
+                                                           <input type='text' id='{0}' onkeyup='filterTableRows({0},{1},{2});'  style='width:100%;text-align:left;border-color:black;' />
                                                         </td></tr>
                                                     </table>";
+      
         #endregion
 
         public string FilterPopupId
@@ -103,7 +104,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         public string SelectedItemsXmlFormat
         {
             get
@@ -127,12 +127,14 @@ namespace PraticeManagement.Controls
 
         public override void RenderControl(HtmlTextWriter writer)
         {
-            writer.WriteLine(string.Format("<div id='{0}' style='border:2px solid black;background-color:white;'>", FilterPopupId));
-            writer.WriteLine(string.Format(searchScript, SearchTextBoxId, this.ClientID, "true"));
+            writer.WriteLine(string.Format("<div id='{0}' style='border:2px solid black;background-color:#d4dff8;width:175px;'>", FilterPopupId));
+            writer.WriteLine("<table style='text-align:center;width:100%;' ><tr><td align='center'>");
+            writer.WriteLine(string.Format(searchScript, SearchTextBoxId, this.ClientID, "true", Width.IsEmpty ? "150px" : Width.ToString()));
+            writer.WriteLine("</td></tr><tr><td style='width:100%'>");
             base.RenderControl(writer);
-            writer.WriteLine(string.Format(submitButtonsScript, OKButtonId, FilterPopupId));
-            writer.WriteLine("</div>");
-
+            writer.WriteLine("</td></tr><tr><td style='width:100%' align='center'>");
+            writer.WriteLine(string.Format(submitButtonsScript, OKButtonId, FilterPopupId,Width.IsEmpty ? "150px" : Width.ToString()));
+            writer.WriteLine("</table></div>");
         }
 
         protected override void OnInit(EventArgs e)
