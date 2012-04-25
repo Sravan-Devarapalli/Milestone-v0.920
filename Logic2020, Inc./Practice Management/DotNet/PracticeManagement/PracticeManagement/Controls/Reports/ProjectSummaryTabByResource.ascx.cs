@@ -56,6 +56,7 @@ namespace PraticeManagement.Controls.Reports
                 repResource.Visible = true;
                 repResource.DataSource = reportData;
                 repResource.DataBind();
+                cblProjectRoles.SaveSelectedIndexesInViewState();
                 ImgProjectRoleFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblProjectRoles.FilterPopupClientID,
                   cblProjectRoles.SelectedIndexes, cblProjectRoles.CheckBoxListObject.ClientID, cblProjectRoles.WaterMarkTextBoxBehaviorID);
             }
@@ -83,7 +84,9 @@ namespace PraticeManagement.Controls.Reports
         {
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
-            List<PersonLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, cblProjectRoles.SelectedItemsXmlFormat)).ToList();
+            List<PersonLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, 
+                HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, 
+                HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, cblProjectRoles.ActualSelectedItemsXmlFormat)).ToList();
 
             StringBuilder sb = new StringBuilder();
             sb.Append(project.Client.Name);
