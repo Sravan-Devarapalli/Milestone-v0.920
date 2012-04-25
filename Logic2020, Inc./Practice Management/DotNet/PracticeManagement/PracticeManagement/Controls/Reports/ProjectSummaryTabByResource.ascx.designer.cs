@@ -46,7 +46,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.CheckBoxListFilter cblProjectRoles;
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblProjectRoles;
         
         /// <summary>
         /// btnUpdate control.
