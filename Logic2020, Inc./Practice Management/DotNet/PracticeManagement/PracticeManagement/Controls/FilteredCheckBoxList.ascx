@@ -25,8 +25,8 @@
 
         var divObject = document.getElementById(filterdiv);
         divObject.style.display = '';
-        var txtSearchBoxObject = document.getElementById(txtSearchBox);
-        txtSearchBoxObject.value = '';
+        var watermark = $find(txtSearchBox);
+        watermark.set_Text("");
         filterTableRows(txtSearchBox, cbl, true);
         var indexesArray = selectedIndexes.split('_');
         var cblList = document.getElementById(cbl).getElementsByTagName('input');
@@ -40,7 +40,7 @@
     }
 </script>
 <div id='divFilterPopUp' runat="server" style='border: 2px solid black; background-color: #d4dff8;
-    width: 175px;'>
+    width: 170px;'>
     <table style='text-align: center; width: 100%;'>
         <tr>
             <td align='center'>
@@ -49,7 +49,7 @@
                         <td style='padding: 6px 0px 6px 0px;'>
                             <asp:TextBox ID="txtSearchBox" runat="server" Style='width: 155px;' MaxLength="50"></asp:TextBox>
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
-                                WatermarkText="Search" WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
+                                WatermarkText="Search" WatermarkCssClass="watermarkedtext"  BehaviorID="wmSearch" />
                         </td>
                     </tr>
                 </table>
@@ -59,7 +59,7 @@
             <td style='width: 100%'>
                 <cc2:ScrollingDropDown ID="cbl" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null" style="text-align:left;"
                     Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-                    Width="160px" BorderWidth="0" />
+                    Width="158px" BorderWidth="0" />
             </td>
         </tr>
         <tr>
