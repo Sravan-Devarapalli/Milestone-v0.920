@@ -200,7 +200,7 @@ namespace PraticeManagement.Controls.Reports
             var clients = reportData.Select(r => new { Id = r.Project.Client.Id, Name = r.Project.Client.Name }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
             int height = 17 * clients.Length;
             Unit unitHeight = new Unit((height + 17) > 50 ? 50 : height + 17);
-            DataHelper.FillListDefault(cblClients, "All Clients", clients, false, "Id", "Name");
+            DataHelper.FillListDefault(cblClients.CheckBoxListObject, "All Clients", clients, false, "Id", "Name");
             cblClients.Height = unitHeight;
             cblClients.SelectAllItems(true);
         }
@@ -208,7 +208,7 @@ namespace PraticeManagement.Controls.Reports
         private void PopulateProjectStatusFilter(ProjectLevelGroupedHours[] reportData)
         {
             var projectStatusIds = reportData.Select(r => new { Id = r.Project.Status.Id, Name = r.Project.Status.Name }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblProjectStatus, "All Status", projectStatusIds.ToArray(), false, "Id", "Name");
+            DataHelper.FillListDefault(cblProjectStatus.CheckBoxListObject, "All Status", projectStatusIds.ToArray(), false, "Id", "Name");
             cblProjectStatus.SelectAllItems(true);
         }
 
