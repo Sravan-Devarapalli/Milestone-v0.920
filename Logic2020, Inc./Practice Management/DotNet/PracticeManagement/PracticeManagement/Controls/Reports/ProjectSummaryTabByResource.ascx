@@ -26,8 +26,7 @@
     </tr>
 </table>
 <asp:Panel ID="pnlFilterProjectRoles" Style="display: none;" runat="server">
-    <uc:FilteredCheckBoxList ID="cblProjectRoles" runat="server" AllSelectedReturnType="Null"
-        Height="155px" NoItemsType="All" SetDirty="False" width="175px" />
+    <uc:FilteredCheckBoxList ID="cblProjectRoles" runat="server" Height="155px" />
 </asp:Panel>
 <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Style="display: none;" />
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
@@ -44,7 +43,7 @@
                         <th style="width: 130px;">
                             Project Role
                             <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectRoleFilter"
-                                style="float: right;" />
+                                style="position: absolute; padding-left: 2px;" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceProjectRole" runat="server" TargetControlID="imgProjectRoleFilter"
                                 PopupControlID="pnlFilterProjectRoles" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
