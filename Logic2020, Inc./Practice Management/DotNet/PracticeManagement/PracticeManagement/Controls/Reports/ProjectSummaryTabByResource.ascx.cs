@@ -14,7 +14,7 @@ namespace PraticeManagement.Controls.Reports
     {
         private HtmlImage ImgProjectRoleFilter { get; set; }
 
-        public CheckBoxListFilter cblProjectRolesControl
+        public FilteredCheckBoxList cblProjectRolesControl
         {
             get
             {
@@ -69,7 +69,7 @@ namespace PraticeManagement.Controls.Reports
         private void PopulateProjectRoleFilter(List<PersonLevelGroupedHours> reportData)
         {
             var projectRoles = reportData.Select(r => new { Name = r.Person.ProjectRoleName }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblProjectRoles, "All ProjectRoles", projectRoles.ToArray(), false, "Name", "Name");
+            DataHelper.FillListDefault(cblProjectRoles.CheckBoxListObject, "All ProjectRoles", projectRoles.ToArray(), false, "Name", "Name");
             cblProjectRoles.SelectAllItems(true);
             cblProjectRoles.OKButtonId = btnUpdate.ClientID;
         }
