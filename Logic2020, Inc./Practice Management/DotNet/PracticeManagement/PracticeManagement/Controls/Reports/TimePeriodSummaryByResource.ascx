@@ -168,13 +168,13 @@
     </table>
     <asp:Panel ID="pnlFilterPayType" Style="display: none;" runat="server">
         <uc:FilteredCheckBoxList ID="cblPayTypes" runat="server" AllSelectedReturnType="Null"
-            Height="120px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-            Width="150px" BorderWidth="0" />
+            Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
+            Width="175px" BorderWidth="0" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
         <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" AllSelectedReturnType="Null"
             Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-            Width="160px" BorderWidth="0" />
+            Width="150px" BorderWidth="0" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
