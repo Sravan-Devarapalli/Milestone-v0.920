@@ -1216,7 +1216,6 @@
     <Compile Include="Controls\Calendar.ascx.designer.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CheckBoxListFilter.cs" />
     <Compile Include="Controls\FilteredCheckBoxList.ascx.cs">
       <DependentUpon>FilteredCheckBoxList.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
