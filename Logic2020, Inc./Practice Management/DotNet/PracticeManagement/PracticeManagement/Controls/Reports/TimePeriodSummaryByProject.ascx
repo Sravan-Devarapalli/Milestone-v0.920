@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByProject.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByProject" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
+    TagPrefix="uc" %>
 <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
@@ -146,14 +147,12 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterResource" Style="display: none;" runat="server">
-        <cc2:CheckBoxListFilter ID="cblClients" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
-            Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-            Width="200px" BorderWidth="0" />
+        <uc:FilteredCheckBoxList ID="cblClients" runat="server" AllSelectedReturnType="Null"
+            Height="155px" NoItemsType="All" SetDirty="False" Width="200px" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterProjectStatus" Style="display: none;" runat="server">
-        <cc2:CheckBoxListFilter ID="cblProjectStatus" runat="server" BorderColor="#aaaaaa"
-            AllSelectedReturnType="Null" Height="155px" BackColor="White" CellPadding="3"
-            NoItemsType="All" SetDirty="False" Width="175px" BorderWidth="0" />
+        <uc:FilteredCheckBoxList ID="cblProjectStatus" runat="server" AllSelectedReturnType="Null"
+            Height="125px" NoItemsType="All" SetDirty="False" width="150px" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repProject" runat="server" OnItemDataBound="repProject_ItemDataBound">
@@ -164,14 +163,16 @@
                         <tr>
                             <th class="t-left padLeft5" style="width: 500px; height: 30px;">
                                 Project
-                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter" style="float: right;" />
+                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter"
+                                    style="float: right;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceClient" runat="server" TargetControlID="imgClientFilter"
                                     PopupControlID="pnlFilterResource" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 110px; height: 30px;">
                                 Status
-                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter" style="float: right;" />
+                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter"
+                                    style="float: right;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
@@ -208,7 +209,7 @@
                         </tr>
                         <tr>
                             <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px; text-align: left;">
-                               <%-- <asp:HyperLink ID="btnProjectNumber" runat="server" Text='<%# Eval("Project.ProjectNumber")%>'
+                                <%-- <asp:HyperLink ID="btnProjectNumber" runat="server" Text='<%# Eval("Project.ProjectNumber")%>'
                                     NavigateUrl='<%# GetProjectSummaryReportUrl((string)Eval("Project.ProjectNumber")) %>' />--%>
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
