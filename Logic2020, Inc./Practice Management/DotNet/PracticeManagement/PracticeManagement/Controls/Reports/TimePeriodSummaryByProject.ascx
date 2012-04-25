@@ -147,12 +147,10 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterResource" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblClients" runat="server" AllSelectedReturnType="Null"
-            Height="155px" NoItemsType="All" SetDirty="False" Width="200px" />
+        <uc:FilteredCheckBoxList ID="cblClients" runat="server" Height="155px" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterProjectStatus" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblProjectStatus" runat="server" AllSelectedReturnType="Null"
-            Height="125px" NoItemsType="All" SetDirty="False" width="150px" />
+        <uc:FilteredCheckBoxList ID="cblProjectStatus" runat="server" Height="125px" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repProject" runat="server" OnItemDataBound="repProject_ItemDataBound">
@@ -161,35 +159,35 @@
                 <table id="tblProjectSummaryByProject" class="tablesorter TimePeriodByproject WholeWidth">
                     <thead>
                         <tr>
-                            <th class="t-left padLeft5" style="width: 500px; height: 30px;">
+                            <th class="t-left padLeft5" style="width: 500px; height: 20px;">
                                 Project
                                 <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter"
-                                    style="float: right;" />
+                                    style="position: absolute; padding-left: 2px;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceClient" runat="server" TargetControlID="imgClientFilter"
                                     PopupControlID="pnlFilterResource" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 110px; height: 30px;">
+                            <th style="width: 110px; height: 20px;">
                                 Status
                                 <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter"
-                                    style="float: right;" />
+                                    style="position: absolute; padding-left: 2px;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 110px; height: 30px;">
+                            <th style="width: 110px; height: 20px;">
                                 Billing
                             </th>
-                            <th style="width: 100px; height: 30px;">
+                            <th style="width: 100px; height: 20px;">
                                 Billable
                             </th>
-                            <th style="width: 100px; height: 30px;">
+                            <th style="width: 100px; height: 20px;">
                                 Non-Billable
                             </th>
-                            <th style="width: 100px; height: 30px;">
+                            <th style="width: 100px; height: 20px;">
                                 Total
                             </th>
-                            <th style="width: 325px; height: 30px;">
+                            <th style="width: 325px; height: 20px;">
                                 Project Variance (in Hours)
                             </th>
                         </tr>
