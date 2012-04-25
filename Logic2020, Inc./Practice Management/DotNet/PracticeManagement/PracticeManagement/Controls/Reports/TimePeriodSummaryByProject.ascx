@@ -152,8 +152,8 @@
     </asp:Panel>
     <asp:Panel ID="pnlFilterProjectStatus" Style="display: none;" runat="server">
         <cc2:CheckBoxListFilter ID="cblProjectStatus" runat="server" BorderColor="#aaaaaa"
-            AllSelectedReturnType="Null" Height="125px" BackColor="White" CellPadding="3"
-            NoItemsType="All" SetDirty="False" Width="150px" BorderWidth="0" />
+            AllSelectedReturnType="Null" Height="155px" BackColor="White" CellPadding="3"
+            NoItemsType="All" SetDirty="False" Width="175px" BorderWidth="0" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repProject" runat="server" OnItemDataBound="repProject_ItemDataBound">
