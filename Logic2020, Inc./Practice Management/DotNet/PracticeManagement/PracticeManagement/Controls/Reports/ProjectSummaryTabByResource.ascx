@@ -26,8 +26,8 @@
 </table>
 <asp:Panel ID="pnlFilterProjectRoles" Style="display: none;" runat="server">
     <cc2:CheckBoxListFilter ID="cblProjectRoles" runat="server" BorderColor="#aaaaaa"
-        AllSelectedReturnType="Null" Height="150px" BackColor="White" CellPadding="3"
-        NoItemsType="All" SetDirty="False" Width="155px"  BorderWidth="0" />
+        AllSelectedReturnType="Null" Height="155px" BackColor="White" CellPadding="3"
+        NoItemsType="All" SetDirty="False" Width="175px"  BorderWidth="0" />
 </asp:Panel>
 <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Style="display: none;" />
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
