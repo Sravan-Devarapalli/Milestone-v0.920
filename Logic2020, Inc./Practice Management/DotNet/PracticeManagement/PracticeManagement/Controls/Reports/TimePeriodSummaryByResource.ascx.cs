@@ -42,7 +42,10 @@ namespace PraticeManagement.Controls.Reports
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
 
-                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat)).ToList();
+                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value,
+                    HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null,
+                    cblSeniorities.ActualSelectedItems,
+                    cblPayTypes.ActualSelectedItemsXmlFormat)).ToList();
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByResource Report");
@@ -133,7 +136,8 @@ namespace PraticeManagement.Controls.Reports
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
 
-                List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat)).ToList();
+                List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value,
+                    HostingPage.IncludePersonWithNoTimeEntries, null, cblSeniorities.ActualSelectedItems, cblPayTypes.ActualSelectedItemsXmlFormat)).ToList();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(" Paychex ");
                 sb.Append("\t");
@@ -145,10 +149,12 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.AppendLine();
-                bool IsUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-                Dictionary<string, double> workTypeLevelTimeOffHours = personLevelPayCheckList[0].WorkTypeLevelTimeOffHours;
+                bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+               
                 if (personLevelPayCheckList.Count > 0)
                 {
+                    Dictionary<string, double> workTypeLevelTimeOffHours = personLevelPayCheckList[0].WorkTypeLevelTimeOffHours;
+
                     //Header
                     sb.Append("BranchID");
                     sb.Append("\t");
@@ -156,7 +162,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("EmployeeID");
                     sb.Append("\t");
-                    if (IsUserAdminstrator)
+                    if (isUserAdminstrator)
                     {
                         sb.Append("PaychexID");
                         sb.Append("\t");
@@ -187,7 +193,7 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(personLevelPayCheck.Person.EmployeeNumber);
                         sb.Append("\t");
-                        if (IsUserAdminstrator)
+                        if (isUserAdminstrator)
                         {
                             sb.Append(personLevelPayCheck.Person.PaychexID);
                             sb.Append("\t");
@@ -271,8 +277,11 @@ namespace PraticeManagement.Controls.Reports
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
+                cblSeniorities.SaveSelectedIndexesInViewState();
+                cblPayTypes.SaveSelectedIndexesInViewState();
                 ImgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblSeniorities.FilterPopupClientID,
                   cblSeniorities.SelectedIndexes, cblSeniorities.CheckBoxListObject.ClientID, cblSeniorities.WaterMarkTextBoxBehaviorID);
+
                 ImgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblPayTypes.FilterPopupClientID,
                    cblPayTypes.SelectedIndexes, cblPayTypes.CheckBoxListObject.ClientID, cblPayTypes.WaterMarkTextBoxBehaviorID);
               
