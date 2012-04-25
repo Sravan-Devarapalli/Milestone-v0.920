@@ -49,7 +49,8 @@ namespace PraticeManagement.Controls.Reports
         {
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblClients.SelectedItems, cblProjectStatus.SelectedItems));
+                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value,
+                    cblClients.ActualSelectedItems, cblProjectStatus.ActualSelectedItems));
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByProject Report");
                 sb.Append("\t");
@@ -176,6 +177,8 @@ namespace PraticeManagement.Controls.Reports
                 repProject.Visible = true;
                 repProject.DataSource = reportData;
                 repProject.DataBind();
+                cblClients.SaveSelectedIndexesInViewState();
+                cblProjectStatus.SaveSelectedIndexesInViewState();
                 ImgClientFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblClients.FilterPopupClientID,
                   cblClients.SelectedIndexes, cblClients.CheckBoxListObject.ClientID, cblClients.WaterMarkTextBoxBehaviorID);
                 ImgProjectStatusFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblProjectStatus.FilterPopupClientID,
@@ -268,12 +271,6 @@ namespace PraticeManagement.Controls.Reports
         {
             PopulateByProjectData(false);
         }
-
-        protected void btnFilterCancel_OnClick(object sender, EventArgs e)
-        {
-
-        }
-
 
 
     }
