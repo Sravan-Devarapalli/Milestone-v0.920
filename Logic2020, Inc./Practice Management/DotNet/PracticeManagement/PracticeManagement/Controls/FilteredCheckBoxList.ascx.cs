@@ -13,7 +13,7 @@ namespace PraticeManagement.Controls
         #region Fields
 
         private const string OKButtonIdKey = "OKButtonIdKey";
-       
+
         #endregion
 
 
@@ -85,25 +85,102 @@ namespace PraticeManagement.Controls
 
         }
 
-
         public string SelectedIndexes
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
+                return ViewState["SelectedInsexes" + this.ClientID] as string;
+            }
+        }
 
-                for (int i = 0; i < cbl.Items.Count; i++)
+
+        public List<int> SelectedIndexesList
+        {
+           
+            get
+            {
+                List<int> result = new List<int>();
+                var list = SelectedIndexes.Split('_');
+
+                foreach (var item in list)
                 {
-                    if (cbl.Items[i].Selected)
+                    if (!string.IsNullOrEmpty(item))
                     {
-                        sb.Append(i);
-                        sb.Append('_');
+                        result.Add(Convert.ToInt32(item));
                     }
                 }
 
+                return result;
+            }
+        }
+
+
+        public string ActualSelectedItems
+        {
+            get
+            {
+                if (SelectedIndexesList.Count == 0)
+                    return "";
+
+                // Check if All checkbox is checked
+                if (SelectedIndexesList.Any(s => s == 0))
+                    return null;
+
+                // If not, build comma separated list of values
+                var sb = new StringBuilder();
+
+                for (int i = 0; i < SelectedIndexesList.Count; i++)
+                {
+                    sb.Append(cbl.Items[SelectedIndexesList[i]].Value).Append(',');
+                }
+
+                return sb.ToString();
+            }   
+        }
+
+
+        public string ActualSelectedItemsXmlFormat
+        {
+            get
+            {
+                if (SelectedIndexesList.Count == 0)
+                    return "";
+
+                // Check if All checkbox is checked
+                if (SelectedIndexesList.Any(s => s == 0))
+                    return null;
+
+                // If not, build comma separated list of values
+                var sb = new StringBuilder();
+                sb.Append("<Names>");
+                for (int i = 0; i < SelectedIndexesList.Count; i++)
+                {
+                    sb.Append("<Name>" + cbl.Items[SelectedIndexesList[i]].Text + "</Name>");
+                }
+                sb.Append("</Names>");
 
                 return sb.ToString();
             }
+
+        }
+
+
+
+
+        public void SaveSelectedIndexesInViewState()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < cbl.Items.Count; i++)
+            {
+                if (cbl.Items[i].Selected)
+                {
+                    sb.Append(i);
+                    sb.Append('_');
+                }
+            }
+
+            ViewState["SelectedInsexes" + this.ClientID] = sb.ToString();
         }
 
         public void SelectAllItems(bool selectAll)
