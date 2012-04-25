@@ -56,8 +56,8 @@ namespace PraticeManagement.Controls.Reports
                 repResource.Visible = true;
                 repResource.DataSource = reportData;
                 repResource.DataBind();
-                ImgProjectRoleFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblProjectRoles.FilterPopupId,
-                  cblProjectRoles.SelectedIndexes, cblProjectRoles.CheckBoxListObject.ClientID, cblProjectRoles.SearchTextBoxId);
+                ImgProjectRoleFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblProjectRoles.FilterPopupClientID,
+                  cblProjectRoles.SelectedIndexes, cblProjectRoles.CheckBoxListObject.ClientID, cblProjectRoles.WaterMarkTextBoxBehaviorID);
             }
             else
             {
