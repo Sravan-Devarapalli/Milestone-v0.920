@@ -136,7 +136,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.CheckBoxListFilter cblClients;
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblClients;
         
         /// <summary>
         /// pnlFilterProjectStatus control.
@@ -154,7 +154,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.CheckBoxListFilter cblProjectStatus;
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblProjectStatus;
         
         /// <summary>
         /// btnFilterOK control.
