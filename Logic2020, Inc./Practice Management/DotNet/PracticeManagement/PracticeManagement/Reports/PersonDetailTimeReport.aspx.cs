@@ -426,7 +426,7 @@ namespace PraticeManagement.Reporting
         private void PopulatePersonDetailReportDetails()
         {
             var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(SelectedPersonId, StartDate.Value, EndDate.Value)).ToList();
-            ucpersonDetailReport.DatabindRepepeaterProjectDetails(list);
+            ucpersonDetailReport.DatabindRepepeaterPersonDetails(list);
         }
 
         private void PopulateSummaryDetails()
