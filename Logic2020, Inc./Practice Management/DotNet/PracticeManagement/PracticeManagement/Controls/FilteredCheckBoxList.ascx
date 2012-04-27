@@ -49,7 +49,7 @@
                         <td style='padding: 6px 0px 6px 0px;'>
                             <asp:TextBox ID="txtSearchBox" runat="server" Style='width: 155px;' MaxLength="50"></asp:TextBox>
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
-                                WatermarkText="Search" WatermarkCssClass="watermarkedtext"  BehaviorID="wmSearch" />
+                                WatermarkText="Search" WatermarkCssClass="watermarkedtext" BehaviorID="wmSearch" />
                         </td>
                     </tr>
                 </table>
@@ -57,9 +57,9 @@
         </tr>
         <tr>
             <td style='width: 100%'>
-                <cc2:ScrollingDropDown ID="cbl" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null" style="text-align:left;"
-                    Height="155px" BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False"
-                    Width="158px" BorderWidth="0" />
+                <cc2:ScrollingDropDown ID="cbl" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
+                    Style="text-align: left;" Height="155px" BackColor="White" CellPadding="3" NoItemsType="All"
+                    SetDirty="False" Width="158px" BorderWidth="0" />
             </td>
         </tr>
         <tr>
