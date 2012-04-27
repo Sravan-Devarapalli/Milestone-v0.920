@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimePeriodSummaryByResource.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByResource" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
     TagPrefix="uc" %>
 <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
@@ -172,6 +171,9 @@
     <asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
         <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" Height="155px" />
     </asp:Panel>
+    <asp:Panel ID="pnlFilterOffshore" Style="display: none;" runat="server">
+        <uc:FilteredCheckBoxList ID="cblOffShore" runat="server" Height="155px" />
+    </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
         <HeaderTemplate>
@@ -181,19 +183,24 @@
                         <tr>
                             <th style="width: 210px; text-align: left;" class="padLeft5">
                                 Resource
+                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute;
+                                    padding-left: 2px;" runat="server" id="imgOffShoreFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceOffshoreFilter" runat="server" TargetControlID="imgOffShoreFilter"
+                                    BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterOffshore" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 130px;">
                                 Seniority
-                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute; padding-left: 2px;" runat="server"
-                                    id="imgSeniorityFilter" />
+                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute;
+                                    padding-left: 2px;" runat="server" id="imgSeniorityFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
                                     BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 110px;">
                                 Pay Type
-                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute; padding-left: 2px;" runat="server"
-                                    id="imgPayTypeFilter" />
+                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute;
+                                    padding-left: 2px;" runat="server" id="imgPayTypeFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter"
                                     BehaviorID="pcePayTypeFilter" PopupControlID="pnlFilterPayType" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
@@ -228,6 +235,8 @@
                 <td class="padLeft5" style="text-align: left;">
                     <%--<asp:HyperLink ID="btnPersonName" runat="server"  Text='<%# Eval("Person.PersonLastFirstName")%>' NavigateUrl='<%# GetPersonDetailReportUrl((int?)Eval("Person.Id")) %>' />--%>
                     <%# Eval("Person.PersonLastFirstName")%>
+                    <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
+                        ToolTip="Resource is an offshore employee" Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
                 </td>
                 <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.PersonLastFirstName")%>'>
                     <%# Eval("Person.Seniority.Name")%>
