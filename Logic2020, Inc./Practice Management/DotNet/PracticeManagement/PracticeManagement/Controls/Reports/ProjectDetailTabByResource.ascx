@@ -45,6 +45,8 @@
                     <%# Eval("Person.PersonLastFirstName")%>
                     <b style="font-style: normal;">
                         <%# GetPersonRole((string)Eval("Person.ProjectRoleName"))%></b>
+                    <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
+                        ToolTip="Resource is an offshore employee" Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
                 </td>
                 <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
