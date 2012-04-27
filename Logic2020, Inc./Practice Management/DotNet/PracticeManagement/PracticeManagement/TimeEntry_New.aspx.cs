@@ -2261,7 +2261,7 @@ namespace PraticeManagement
         public void UpdateCalendarItemAndBind(CalendarItem[] calendarItems)
         {
             CalendarItems = calendarItems;
-            var projectSectionXdoc = UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
+            var projectSectionXdoc =  UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
             var businessDevelopmentSectionXdoc = UpdateCalendarItems(PrePareXmlForBusinessDevelopmentSectionFromRepeater());
             var internalSectionXdoc = UpdateCalendarItems(PrePareXmlForInternalSectionFromRepeater());
             var administrativeSectionXdoc = UpdateCalendarItems(XDocument.Parse(AdministrativeSectionXml));
