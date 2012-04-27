@@ -46,6 +46,11 @@ namespace PraticeManagement.Controls
         {
             foreach (ListItem item in cbl.Items)
             {
+                if (item.Value == string.Empty)
+                {
+                    item.Attributes["style"] = "font-style: italic;";
+                }
+
                 item.Attributes["title"] = item.Text;
             }
         }
@@ -67,7 +72,7 @@ namespace PraticeManagement.Controls
                 foreach (ListItem item in cbl.Items)
                 {
                     if (item.Selected)
-                        sb.Append("<Name>" + item.Text + "</Name>");
+                        sb.Append("<Name>" + item.Value + "</Name>");
                 }
                 sb.Append("</Names>");
                 return sb.ToString();
@@ -155,7 +160,7 @@ namespace PraticeManagement.Controls
                 sb.Append("<Names>");
                 for (int i = 0; i < SelectedIndexesList.Count; i++)
                 {
-                    sb.Append("<Name>" + cbl.Items[SelectedIndexesList[i]].Text + "</Name>");
+                    sb.Append("<Name>" + cbl.Items[SelectedIndexesList[i]].Value + "</Name>");
                 }
                 sb.Append("</Names>");
 
