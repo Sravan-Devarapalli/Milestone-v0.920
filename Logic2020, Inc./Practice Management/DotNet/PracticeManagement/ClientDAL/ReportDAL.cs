@@ -291,7 +291,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate,bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames)
+        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByResource, connection))
@@ -302,9 +302,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludePersonsWithNoTimeEntriesParam, includePersonsWithNoTimeEntries);
                 
 
-                if (personIds != null)
+                if (personTypes != null)
                 {
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdsParam, personIds);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonTypesParam, personTypes);
                 }
 
                 if (seniorityIds != null)
@@ -574,6 +574,7 @@ namespace DataAccess
                 int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
                 int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
                 int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
+                int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
 
                 while (reader.Read())
                 {
@@ -586,7 +587,8 @@ namespace DataAccess
                         Id = reader.GetInt32(personIdIndex),
                         FirstName = reader.GetString(firstNameIndex),
                         LastName = reader.GetString(lastNameIndex),
-                        ProjectRoleName = reader.GetString(projectRoleNameIndex)
+                        ProjectRoleName = reader.GetString(projectRoleNameIndex),
+                        IsOffshore = reader.GetBoolean(isOffShoreIndex)
                     };
 
                     PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
@@ -646,6 +648,7 @@ namespace DataAccess
                 int timeTypeCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeCodeColumn);
                 int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
                 int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+                int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
 
                 while (reader.Read())
                 {
@@ -690,7 +693,8 @@ namespace DataAccess
                             Id = reader.GetInt32(personIdIndex),
                             FirstName = reader.GetString(firstNameIndex),
                             LastName = reader.GetString(lastNameIndex),
-                            ProjectRoleName = reader.GetString(projectRoleNameIndex)
+                            ProjectRoleName = reader.GetString(projectRoleNameIndex),
+                            IsOffshore = reader.GetBoolean(isOffShoreIndex)
                         };
                         PLGH.Person = person;
                         PLGH.TimeEntrySectionId = !reader.IsDBNull(timeEntrySectionIdIndex) ? reader.GetInt32(timeEntrySectionIdIndex):0;
@@ -828,7 +832,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate,bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames)
+        public static List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryByResourcePayCheck, connection))
@@ -841,9 +845,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludePersonsWithNoTimeEntriesParam, includePersonsWithNoTimeEntries);
 
 
-                if (personIds != null)
+                if (personTypes != null)
                 {
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdsParam, personIds);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonTypesParam, personTypes);
                 }
 
                 if (seniorityIds != null)
