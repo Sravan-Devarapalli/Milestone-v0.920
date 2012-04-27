@@ -4089,6 +4089,10 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\DateDimension.table.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\ConvertXmlStringInToStringTable.function.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
