@@ -384,13 +384,22 @@ namespace DataTransferObjects
         public bool IsStrawMan { get; set; }
 
         [DataMember]
-        public double UtlizationPercent{ get; set; }
+        public double UtlizationPercent { get; set; }
 
         [DataMember]
         public bool IsOffshore { get; set; }
 
         [DataMember]
         public string PaychexID { get; set; }
+
+
+        public string OffshoreText
+        {
+            get
+            {
+                return IsOffshore ? "Offshore" : "Domestic";
+            }
+        }
 
         #endregion
 
