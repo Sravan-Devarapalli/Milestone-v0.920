@@ -4,7 +4,7 @@
 
 <%@ Register Src="Controls/BillingInfo.ascx" TagName="BillingInfo" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
-<%@ Register TagPrefix="ext" Namespace="PraticeManagement.Controls.Generic.ElementDisabler"
+<%@ Register TagPrefix="extDisable" Namespace="PraticeManagement.Controls.Generic.ElementDisabler"
     Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
@@ -965,7 +965,7 @@
                                             <td>
                                                 <span style="color: Gray">* You will be redirected to the cloned project after you click
                                                     the button.</span>
-                                                <ext:ElementDisablerExtender ID="edeCloneButton" runat="server" TargetControlID="lnkClone"
+                                                <extDisable:ElementDisablerExtender ID="edeCloneButton" runat="server" TargetControlID="lnkClone"
                                                     ControlToDisableID="lnkClone" />
                                             </td>
                                         </tr>
@@ -1003,10 +1003,10 @@
                 </tr>
             </table>
             <asp:Panel ID="pnlAttachSOW" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none" BorderWidth="2px">
+                Style="display: none" BorderWidth="2px" Width="465px">
                 <table width="100%" style="padding: 5px;">
                     <tr style="background-color: Gray; height: 27px;">
-                        <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
+                        <td align="center" style="white-space: nowrap; font-size: 14px;">
                             Attach SOW to Existing Project
                         </td>
                     </tr>
@@ -1018,7 +1018,7 @@
                     <tr>
                         <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
                             <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" BackColor="White"
-                                runat="server" Width="375px" Size="56" />
+                                runat="server" Width="435px" Size="68" />
                             <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
                                 EnableClientScript="true" ClientValidationFunction="cvProjectAttachment_ClientValidationFunction"
                                 SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvProjectAttachment_OnServerValidate"
