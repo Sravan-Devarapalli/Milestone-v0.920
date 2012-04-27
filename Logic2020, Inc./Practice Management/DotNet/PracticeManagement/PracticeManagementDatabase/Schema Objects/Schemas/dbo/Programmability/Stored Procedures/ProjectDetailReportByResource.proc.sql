@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 04-05-2012
 -- Updated by : Sainath.CH
--- Update Date: 04-12-2012
+-- Update Date: 04-27-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectDetailReportByResource]
     (
@@ -212,6 +212,10 @@ AS
                             PR.Name ,
                             TE.Note ,
                             CC.TimeEntrySectionId
+					ORDER BY  P.LastName ,
+							  P.FirstName ,
+							  TE.ChargeCodeDate,
+							   TT.Name
 
             END
         ELSE 
