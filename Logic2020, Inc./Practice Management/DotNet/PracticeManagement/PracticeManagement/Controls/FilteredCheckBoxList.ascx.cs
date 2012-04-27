@@ -164,9 +164,6 @@ namespace PraticeManagement.Controls
 
         }
 
-
-
-
         public void SaveSelectedIndexesInViewState()
         {
             StringBuilder sb = new StringBuilder();
@@ -193,7 +190,6 @@ namespace PraticeManagement.Controls
 
         public ListItemCollection Items { get { return cbl.Items; } }
 
-
         public ScrollingDropDown CheckBoxListObject
         {
             get
@@ -219,7 +215,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         public string SelectedItems { get { return cbl.SelectedItems; } }
     }
 }
+
