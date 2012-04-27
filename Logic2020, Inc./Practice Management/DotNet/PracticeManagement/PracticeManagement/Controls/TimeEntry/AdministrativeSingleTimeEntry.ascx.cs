@@ -216,11 +216,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
             }
 
-            if (IsPTO)
-            {
-                tbNotes.Enabled = false;
-                btnSaveNotes.Enabled = false;
-            }
+            //if (IsPTO)
+            //{
+            //    tbNotes.Enabled = false;
+            //    btnSaveNotes.Enabled = false;
+            //}
 
             if (IsHoliday)
             {
