@@ -6,7 +6,7 @@
     TagPrefix="ext" %>
 <table cellpadding="0" cellspacing="0px">
     <tr>
-        <td>
+        <td title="Billable">
             &nbsp;B
         </td>
         <td>
@@ -18,7 +18,7 @@
         </td>
         <td>
             &nbsp;
-        </td>
+        </td> 
         <td valign="middle" rowspan="2">
             <table>
                 <tr>
