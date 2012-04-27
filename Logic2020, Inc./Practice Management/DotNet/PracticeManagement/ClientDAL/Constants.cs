@@ -460,6 +460,7 @@
             public const string PersonIdParam = "@PersonId";
             public const string PersonIdListParam = "@PersonIdList";
             public const string PersonIdsParam = "@PersonIds";
+            public const string PersonTypesParam = "@PersonTypes";
             public const string StrawManListParam = "@StrawManList";
             public const string OutSideResourcesParam = "@OutSideResources";
             public const string RelationTypeIdParam = "@RelationTypeId";
