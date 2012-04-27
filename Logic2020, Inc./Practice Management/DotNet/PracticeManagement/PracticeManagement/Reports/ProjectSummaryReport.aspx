@@ -262,12 +262,12 @@
                     </td>
                 </tr>
             </table>
-            <table style="width: 100%; height: 130px;">
+            <table style="width: 100%; height: 160px;">
                 <tr>
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 5px; text-align: center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -277,7 +277,7 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                <asp:TextBox ID="txtProjectNumber" Width="150px" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                                <asp:TextBox ID="txtProjectNumber" Width="157px" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
                                                     runat="server"></asp:TextBox>
                                                 <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
                                                     TargetControlID="txtProjectNumber" BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext"
@@ -301,7 +301,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 5px; text-align: center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -325,7 +325,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 5px; text-align: center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%;">
@@ -348,7 +348,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 5px; text-align: center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -372,7 +372,7 @@
                     <td style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="padding-bottom: 2px; text-align: center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 300px;" colspan="3">
@@ -387,7 +387,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; padding-top: 10px;">
+                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; height:10px">
                     </td>
                 </tr>
             </table>
