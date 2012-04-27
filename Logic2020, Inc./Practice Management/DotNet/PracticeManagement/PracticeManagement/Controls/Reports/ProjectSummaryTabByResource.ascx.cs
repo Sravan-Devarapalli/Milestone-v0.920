@@ -69,8 +69,8 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulateProjectRoleFilter(List<PersonLevelGroupedHours> reportData)
         {
-            var projectRoles = reportData.Select(r => new { Name = r.Person.ProjectRoleName }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblProjectRoles.CheckBoxListObject, "All ProjectRoles", projectRoles.ToArray(), false, "Name", "Name");
+            var projectRoles = reportData.Select(r => new { Text = string.IsNullOrEmpty(r.Person.ProjectRoleName) ? "Unassigned" : r.Person.ProjectRoleName, Value = r.Person.ProjectRoleName }).Distinct().ToList().OrderBy(s => s.Value);
+            DataHelper.FillListDefault(cblProjectRoles.CheckBoxListObject, "All Project Roles", projectRoles.ToArray(), false, "Value", "Text");
             cblProjectRoles.SelectAllItems(true);
             cblProjectRoles.OKButtonId = btnUpdate.ClientID;
         }
