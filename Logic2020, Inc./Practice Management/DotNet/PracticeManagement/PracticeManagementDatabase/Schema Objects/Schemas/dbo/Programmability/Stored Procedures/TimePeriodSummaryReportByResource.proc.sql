@@ -8,7 +8,11 @@
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
     (
       @StartDate DATETIME ,
-      @EndDate DATETIME
+      @EndDate DATETIME ,
+      @IncludePersonsWithNoTimeEntries BIT ,
+      @PersonTypes NVARCHAR(MAX) = NULL ,
+      @SeniorityIds NVARCHAR(MAX) = NULL ,
+      @TimeScaleNamesList XML = NULL
     )
 AS 
     BEGIN
@@ -22,6 +26,13 @@ AS
         SET @EndDateLocal = CONVERT(DATE, @EndDate)
         SET @NOW = dbo.GettingPMTime(GETUTCDATE())
         SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+
+
+        DECLARE @TimeScaleNames TABLE ( Name NVARCHAR(1024) )
+	
+        INSERT  INTO @TimeScaleNames
+                SELECT  ResultString
+                FROM    [dbo].[ConvertXmlStringInToStringTable](@TimeScaleNamesList)
 
 	-- Get person level Default hours in between the StartDate and EndDate
 	--1.Day should not be company holiday and also not converted to substitute day.
@@ -42,12 +53,12 @@ AS
                                             LEFT JOIN dbo.PersonCalendar AS PCAL ON PCAL.Date = CAL.Date
                                                               AND PCAL.PersonId = P.PersonId
                                 ) AS PC
-                       WHERE    PC.Date BETWEEN @StartDate
-                                        AND     CASE WHEN @EndDate > DATEADD(day,
+                       WHERE    PC.Date BETWEEN @StartDateLocal
+                                        AND     CASE WHEN @EndDateLocal > DATEADD(day,
                                                               -1, @NOW)
                                                      THEN DATEADD(day, -1,
                                                               @NOW)
-                                                     ELSE @EndDate
+                                                     ELSE @EndDateLocal
                                                 END
                                 AND ( ( PC.CompanyDayOff = 0
                                         AND ISNULL(PC.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()
@@ -110,7 +121,7 @@ AS
                                            / PDH.DefaultHours
                                  END, 0), 0) AS UtlizationPercent ,
                     CASE WHEN P.PersonStatusId = 2 THEN 'Terminated'
-                         ELSE TS.Name
+                         ELSE ISNULL(TS.Name, '')
                     END AS Timescale
             FROM    ( SELECT    TE.PersonId ,
                                 ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
@@ -177,6 +188,31 @@ AS
                                                               dbo.GetFutureDate())
                     LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
                     LEFT JOIN PersonDefaultHoursWithInPeriod PDH ON PDH.PersonId = P.PersonId
+            WHERE   ( @IncludePersonsWithNoTimeEntries = 1
+                      OR ( @IncludePersonsWithNoTimeEntries = 0
+                           AND Data.PersonId IS NOT NULL
+                         )
+                    )
+                    AND ( ( @PersonTypes IS NULL
+                            OR ( CASE WHEN P.IsOffshore = 1 THEN 'Offshore'
+                                      ELSE 'Domestic'
+                                 END ) IN (
+                            SELECT  ResultString
+                            FROM    [dbo].[ConvertXmlStringInToStringTable](@PersonTypes) )
+                          )
+                          AND ( @SeniorityIds IS NULL
+                                OR S.SeniorityId IN (
+                                SELECT  ResultId
+                                FROM    dbo.ConvertStringListIntoTable(@SeniorityIds) )
+                              )
+                          AND ( @TimeScaleNamesList IS NULL
+                                OR ( CASE WHEN P.PersonStatusId = 2
+                                          THEN 'Terminated'
+                                          ELSE ISNULL(TS.Name, '')
+                                     END ) IN ( SELECT  Name
+                                                FROM    @TimeScaleNames )
+                              )
+                        )
             ORDER BY P.LastName ,
                     P.FirstName
     END
