@@ -175,6 +175,24 @@ namespace PraticeManagement.Controls.Reports {
         protected global::PraticeManagement.Controls.FilteredCheckBoxList cblSeniorities;
         
         /// <summary>
+        /// pnlFilterOffshore control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterOffshore;
+        
+        /// <summary>
+        /// cblOffShore control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblOffShore;
+        
+        /// <summary>
         /// btnFilterOK control.
         /// </summary>
         /// <remarks>
