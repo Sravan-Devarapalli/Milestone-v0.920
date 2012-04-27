@@ -20,18 +20,6 @@ namespace PraticeManagement.Controls.Reports
 
         private int SectionId;
 
-        public List<TimeEntriesGroupByClientAndProject> TimeEntriesGroupByClientAndProjectList
-        {
-            get
-            {
-                return ViewState["TimeEntriesGroupByClientAndProjectList_Key_Detail"] as List<TimeEntriesGroupByClientAndProject>;
-            }
-            set
-            {
-                ViewState["TimeEntriesGroupByClientAndProjectList_Key_Detail"] = value;
-            }
-        }
-
         private List<KeyValuePair<string, string>> CollapsiblePanelExtenderClientIds
         {
             get;
@@ -59,9 +47,8 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        public void DatabindRepepeaterProjectDetails(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
+        public void DatabindRepepeaterPersonDetails(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
         {
-            TimeEntriesGroupByClientAndProjectList = timeEntriesGroupByClientAndProjectList;
 
             if (timeEntriesGroupByClientAndProjectList.Count > 0)
             {
@@ -72,16 +59,16 @@ namespace PraticeManagement.Controls.Reports
                 {
                     repProjects.Visible = false;
                     repDate2.Visible = true;
-                    List<GroupByDate> GroupByDateList = DataTransferObjects.Utils.Generic.GetGroupByDateList(TimeEntriesGroupByClientAndProjectList);
-                    GroupByDateList = GroupByDateList.OrderByDescending(p => p.Date).ToList();
-                    repDate2.DataSource = GroupByDateList;
+                    List<GroupByDate> groupByDateList = DataTransferObjects.Utils.Generic.GetGroupByDateList(timeEntriesGroupByClientAndProjectList);
+                    groupByDateList = groupByDateList.OrderBy(p => p.Date).ToList();
+                    repDate2.DataSource = groupByDateList;
                     repDate2.DataBind();
                 }
                 else if (groupby == "project")
                 {
                     repDate2.Visible = false;
                     repProjects.Visible = true;
-                    repProjects.DataSource = TimeEntriesGroupByClientAndProjectList;
+                    repProjects.DataSource = timeEntriesGroupByClientAndProjectList;
                     repProjects.DataBind();
                 }
             }
@@ -219,6 +206,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
+                var reportData = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(HostingPage.SelectedPersonId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
                 int personId = HostingPage.SelectedPersonId;
                 var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
 
@@ -239,7 +227,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.AppendLine();
-                if (TimeEntriesGroupByClientAndProjectList.Count > 0)
+                if (reportData.Count > 0)
                 {
                     //Header
                     /* Account	Account Name	Business Unit	Business Unit Name	Project	Project Name	Phase	
@@ -279,7 +267,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.AppendLine();
 
                     //Data
-                    foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
+                    foreach (var timeEntriesGroupByClientAndProject in reportData)
                     {
 
                         foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
@@ -354,7 +342,8 @@ namespace PraticeManagement.Controls.Reports
                 btnGroupBy.ToolTip = btnGroupBy.Text = "Group By Project";
                 hdnGroupBy.Value = "date";
             }
-            DatabindRepepeaterProjectDetails(TimeEntriesGroupByClientAndProjectList);
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(HostingPage.SelectedPersonId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
+            DatabindRepepeaterPersonDetails(list);
         }
     }
 }
