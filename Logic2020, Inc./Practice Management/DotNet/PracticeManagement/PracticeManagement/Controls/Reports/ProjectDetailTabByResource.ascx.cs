@@ -74,7 +74,7 @@ namespace PraticeManagement.Controls.Reports
                 cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
 
                 sectionId = dataitem.TimeEntrySectionId;
-                repDate.DataSource = dataitem.DayTotalHours;
+                repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
                 repDate.DataBind();
                 CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
 
@@ -93,7 +93,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-               
+
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -103,7 +103,7 @@ namespace PraticeManagement.Controls.Reports
 
                 //var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
                 //cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
-               // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
+                // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
 
 
                 repWorktype.DataSource = dataitem.DayTotalHoursList;
@@ -147,7 +147,7 @@ namespace PraticeManagement.Controls.Reports
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
             PersonLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId,
                 HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null,
-                HostingControl.cblProjectRolesControl.ActualSelectedItems));
+                HostingControl.cblProjectRolesControl.ActualSelectedItemsXmlFormat));
             StringBuilder sb = new StringBuilder();
             sb.Append(project.Client.Name);
             sb.Append("\t");
