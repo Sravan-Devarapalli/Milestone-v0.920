@@ -270,11 +270,11 @@
                     </td>
                 </tr>
             </table>
-            <table width="100%" style="height: 130px;">
+            <table width="100%" style="height: 160px;">
                 <tr>
                     <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 30%; text-align: right; font-weight: bold;">
@@ -285,7 +285,7 @@
                                         <tr>
                                             <td>
                                                 <asp:DropDownList ID="ddlPerson" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPerson_SelectedIndexChanged"
-                                                    Width="150px">
+                                                    Width="160px">
                                                 </asp:DropDownList>
                                             </td>
                                             <td>
@@ -301,15 +301,15 @@
                 <tr>
                     <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center;">
-                        <table width="100%" align="center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="text-align: right; width: 30%; font-weight: bold;">
                                     Range:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
                                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="150px">
+                                        Width="160px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
@@ -330,12 +330,12 @@
                 <tr>
                     <td style="width: 65%">
                     </td>
-                    <td style="padding-bottom: 10px; text-align: center;">
-                        <table width="100%" align="center">
+                    <td style="text-align: center;height:30px;vertical-align: top;">
+                        <table width="100%" align="center" style="vertical-align: top;" >
                             <tr>
                                 <td style="width: 30%;">
                                 </td>
-                                <td style="text-align: left; height: 15px;">
+                                <td style="text-align: left;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
@@ -346,7 +346,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="border-bottom: 3px solid black; width: 100%;">
+                    <td colspan="2" style="height:30px;">
+                        &nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:30px;">
+                        &nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border-bottom: 3px solid black; width: 100%; height:10px">
                     </td>
                 </tr>
             </table>
@@ -533,7 +543,7 @@
                         </asp:Panel>
                     </asp:View>
                 </asp:MultiView>
-                 <table width="100%">
+                <table width="100%">
                     <tr>
                         <td style="text-align: center; padding-top: 5px;">
                             <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" Text="Return To Pervious Report" />
