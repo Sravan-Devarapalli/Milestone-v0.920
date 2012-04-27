@@ -44,15 +44,17 @@ namespace PraticeManagement.Controls
 
         private void AddAttributesToCheckBoxList()
         {
-            foreach (ListItem item in cbl.Items)
+            for (int i = 0; i < cbl.Items.Count; i++)
             {
-                if (item.Value == string.Empty)
+                if (cbl.Items[i].Value == string.Empty && i != 0)
                 {
-                    item.Attributes["style"] = "font-style: italic;";
+                    cbl.Items[i].Attributes["style"] = "font-style: italic;";
                 }
 
-                item.Attributes["title"] = item.Text;
+                cbl.Items[i].Attributes["title"] = cbl.Items[i].Text;
             }
+
+
         }
 
 
@@ -101,7 +103,7 @@ namespace PraticeManagement.Controls
 
         public List<int> SelectedIndexesList
         {
-           
+
             get
             {
                 List<int> result = new List<int>();
@@ -140,7 +142,7 @@ namespace PraticeManagement.Controls
                 }
 
                 return sb.ToString();
-            }   
+            }
         }
 
 
