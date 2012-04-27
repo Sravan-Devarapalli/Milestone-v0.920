@@ -70,6 +70,8 @@
         <tr class="ReportItemTemplate">
             <td class="t-left padLeft5">
                 <%# Eval("Person.PersonLastFirstName")%>
+                <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
+                        ToolTip="Resource is an offshore employee" Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
             </td>
             <td>
             </td>
