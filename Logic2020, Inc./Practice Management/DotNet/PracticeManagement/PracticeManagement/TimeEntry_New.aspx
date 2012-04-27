@@ -30,7 +30,7 @@
     <title>Time Entry | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript">
+    <script type="text/javascript"> 
 
         function pageLoad() {
             document.onkeypress = enterPressed;
@@ -86,10 +86,8 @@
                 btnSaveNotes.disabled = 'disabled';
             }
             else {
-                if (!(tbBillableHours.getAttribute('IsPTO') != null && tbBillableHours.getAttribute('IsPTO').toString().toLowerCase() == "true")) {
                     tbNotes.disabled = '';
                     btnSaveNotes.disabled = '';
-                }
             }
 
             if (tbNotes && !tbNotes.disabled) tbNotes.focus();
