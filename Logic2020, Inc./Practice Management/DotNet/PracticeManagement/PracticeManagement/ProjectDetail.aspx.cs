@@ -31,7 +31,7 @@ namespace PraticeManagement
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
-        private const string AttachSOWMessage = "File must be in PDF format and no larger than {0}kb";
+        private const string AttachSOWMessage = "File must be in PDF or Word format, and be no larger than {0} KB";
         private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         public const string AllTimeTypesKey = "AllTimeTypesKey";
