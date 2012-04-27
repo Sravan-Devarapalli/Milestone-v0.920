@@ -126,11 +126,11 @@
                     </td>
                 </tr>
             </table>
-            <table width="100%" style="height:130px;">
+            <table width="100%" style="height:160px;">
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 5px; text-align: center;vertical-align: top;">
+                    <td style="text-align: center;vertical-align: top;height:30px;">
                         <asp:CheckBox ID="chkIncludePersons" runat="server" Checked="false" Text="Include persons with no time entered in report output"
                             AutoPostBack="true" OnCheckedChanged="chkIncludePersons_CheckedChanged" />
                     </td>
@@ -140,7 +140,7 @@
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 5px;text-align: center;">
+                    <td style="height:30px;text-align: center;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="text-align: right; width: 30%; font-weight: bold;">
@@ -148,7 +148,7 @@
                                 </td>
                                 <td style="text-align: left;">
                                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="150px">
+                                        Width="160px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
@@ -170,7 +170,7 @@
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style="padding-bottom: 5px; text-align: center;">
+                    <td style="height:30px;text-align: center;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 30%;">
@@ -190,7 +190,7 @@
                 <tr>
                     <td style="width: 5%;">
                     </td>
-                    <td style=" text-align: center;padding-bottom: 5px;">
+                    <td style=" text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="text-align: right; width: 30%; font-weight: bold;">
@@ -198,7 +198,7 @@
                                 </td>
                                 <td style="text-align: left;">
                                     <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
-                                        Width="150px">
+                                        Width="160px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
                                         <asp:ListItem Text="By Project" Value="1"></asp:ListItem>
@@ -211,11 +211,11 @@
                     </td>
                 </tr>
                 <tr>
-                 <td colspan="3" style="padding-bottom: 5px;"> &nbsp;
+                 <td colspan="3" style="height:30px;"> &nbsp;
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%;">
+                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%;height:10px;">
                     </td>
                 </tr>
             </table>
