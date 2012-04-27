@@ -6,7 +6,7 @@
     TagPrefix="ext" %>
 <table cellpadding="0" cellspacing="0px" >
     <tr>
-        <td>
+        <td title="Non Billable">
             &nbsp;N
         </td>
         <td>
