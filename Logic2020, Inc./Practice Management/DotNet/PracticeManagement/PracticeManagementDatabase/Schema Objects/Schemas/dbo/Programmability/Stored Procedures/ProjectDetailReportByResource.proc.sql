@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 04-05-2012
 -- Updated by : Sainath.CH
--- Update Date: 04-27-2012
+-- Update Date: 05-01-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectDetailReportByResource]
     (
@@ -146,11 +146,11 @@ AS
                                                               P.PersonId)
                                    ELSE TE.Note
                               END ) AS Note ,
-                            ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
+                            ROUND(SUM(CASE WHEN TEH.IsChargeable = 1  AND @ProjectNumberLocal != 'P031000'
                                            THEN TEH.ActualHours
                                            ELSE 0
                                       END), 2) AS BillableHours ,
-                            ROUND(SUM(CASE WHEN TEH.IsChargeable = 0
+                            ROUND(SUM(CASE WHEN TEH.IsChargeable = 0  OR @ProjectNumberLocal = 'P031000'
                                            THEN TEH.ActualHours
                                            ELSE 0
                                       END), 2) AS NonBillableHours ,
