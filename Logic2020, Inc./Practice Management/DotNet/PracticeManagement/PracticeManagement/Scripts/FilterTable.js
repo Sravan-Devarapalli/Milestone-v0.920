@@ -1,8 +1,9 @@
-﻿function filterTableRows(searchtextBoxId, tblControlId, isCheckBoxList) {
+﻿function filterTableRows(searchtextBoxId, tblControlId, isCheckBoxList, useCustomAttribute, customAttributeName) {
+
     var searchtextBox = null;
     var tblControl = null;
 
-    var isWaterMarkTxtbox = false; 
+    var isWaterMarkTxtbox = false;
 
     if (typeof (searchtextBoxId) == "string") {
         if (searchtextBoxId.startsWith("w")) {
@@ -33,9 +34,12 @@
         for (var i = 0; i < trControls.length; i++) {
 
             var rowText = '';
-            if (isCheckBoxList) {
+            if (useCustomAttribute) {
+                rowText = trControls[i].attributes[customAttributeName].value.toLowerCase();
+            }
+            else if (isCheckBoxList) {
                 var checkBox = trControls[i].children[0].getElementsByTagName('input')[0];
-                rowText = checkBox.parentNode.children.length > 1 ? checkBox.parentNode.children[1].innerHTML.toLowerCase():'';
+                rowText = checkBox.parentNode.children.length > 1 ? checkBox.parentNode.children[1].innerHTML.toLowerCase() : '';
             }
             else {
                 rowText = trControls[i].children[0].innerHTML.toLowerCase();
@@ -69,3 +73,4 @@ function changeAlternateitemsForTable(trControls) {
     }
 
 }
+
