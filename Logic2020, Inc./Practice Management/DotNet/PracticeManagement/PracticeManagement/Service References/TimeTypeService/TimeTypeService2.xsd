@@ -46,7 +46,7 @@
   <xs:element name="RemoveTimeType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q4:TimeTypeRecord" />
+        <xs:element minOccurs="0" name="timeTypeId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -58,7 +58,7 @@
   <xs:element name="UpdateTimeType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q5:TimeTypeRecord" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q4:TimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -70,7 +70,7 @@
   <xs:element name="AddTimeType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q6:TimeTypeRecord" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="timeType" nillable="true" type="q5:TimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
