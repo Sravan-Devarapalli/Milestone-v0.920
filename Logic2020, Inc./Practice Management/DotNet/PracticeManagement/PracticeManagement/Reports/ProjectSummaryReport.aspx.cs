@@ -201,15 +201,23 @@ namespace PraticeManagement.Reporting
             if (!string.IsNullOrEmpty(ProjectNumber) && ddlView.SelectedValue != string.Empty)
             {
                 mvProjectSummaryReport.ActiveViewIndex = Convert.ToInt32(ddlView.SelectedValue);
-
-                divWholePage.Style.Remove("display");
-                if (mvProjectSummaryReport.ActiveViewIndex == 0)
+                try
                 {
-                    PopulateByResourceData();
+                    msgError.ClearMessage();
+                    divWholePage.Style.Remove("display");
+                    if (mvProjectSummaryReport.ActiveViewIndex == 0)
+                    {
+                        ucByResource.LoadActiveTabInByResource(true);
+                    }
+                    else if (mvProjectSummaryReport.ActiveViewIndex == 1)
+                    {
+                        ucByWorktype.PopulateByWorkTypeData(true);
+                    }
                 }
-                else if (mvProjectSummaryReport.ActiveViewIndex == 1)
+                catch (Exception ex)
                 {
-                   // ucByWorktype.PopulateByWorkTypeData(true);
+                    msgError.ShowErrorMessage(ex.Message);
+                    divWholePage.Style.Add("display", "none");
                 }
             }
             else
@@ -235,21 +243,6 @@ namespace PraticeManagement.Reporting
             }
             
 
-        }
-
-        private void PopulateByResourceData()
-        {
-            try
-            {
-                msgError.ClearMessage();
-                divWholePage.Style.Remove("display");
-                ucByResource.LoadActiveTabInByResource(true);
-            }
-            catch (Exception ex)
-            {
-                msgError.ShowErrorMessage(ex.Message);
-                divWholePage.Style.Add("display", "none");
-            }
         }
 
         protected void btnCustDatesOK_Click(object sender, EventArgs e)
