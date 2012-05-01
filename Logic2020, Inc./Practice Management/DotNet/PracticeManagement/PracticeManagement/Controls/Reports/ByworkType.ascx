@@ -1,27 +1,58 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ByworkType.ascx.cs" Inherits="PraticeManagement.Controls.Reports.ByworkType" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom:5px !important; height:90px;">
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ByworkType.ascx.cs"
+    Inherits="PraticeManagement.Controls.Reports.ByworkType" %>
+<%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
+    TagPrefix="uc" %>
+<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
+    height: 115px;" id="tbHeader" runat="server">
     <tr>
-        <td style="font-size: 16px; font-weight: bold;">
+        <td style="font-size: 14px; font-weight: bold;">
             <table>
                 <tr>
-                    <td style="vertical-align: top; padding-bottom:10px;">
-                        <asp:Literal ID="ltWorkTypeCount" runat="server"></asp:Literal>
+                    <td style="vertical-align: top; color: Gray; padding-bottom: 5px;">
+                        <asp:Literal ID="ltrlAccount" runat="server"></asp:Literal>
+                        >
+                        <asp:Literal ID="ltrlBusinessUnit" runat="server"></asp:Literal>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 10px; vertical-align: bottom;">
-                        <asp:Literal ID="lbRange" runat="server"></asp:Literal>
+                    <td style="padding-top: 5px; vertical-align: bottom;">
+                        <asp:Literal ID="ltrlProjectNumber" runat="server"></asp:Literal>-
+                        <asp:Literal ID="ltrlProjectName" runat="server"></asp:Literal>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 5px; vertical-align: bottom;">
+                        <asp:Literal ID="ltrlProjectStatusAndBillingType" runat="server"></asp:Literal>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 5px; vertical-align: bottom;">
+                        <asp:Literal ID="ltrlProjectRange" runat="server"></asp:Literal>
                     </td>
                 </tr>
             </table>
         </td>
-        <td style="text-align: right; width: 610px; padding-bottom:10px;">
+        <td style="text-align: right; width: 470px; padding-bottom: 10px;">
             <table style="table-layout: fixed; width: 100%;">
                 <tr>
-                    <td style="width: 21%;text-align: center;">
+                    <td style="width: 27%; text-align: center;">
                         <table width="100%">
                             <tr>
-                                <td style="font-size: 15px;padding-bottom: 3px;">
+                                <td style="font-size: 15px; padding-bottom: 3px;">
+                                    Projected Hours
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 25px;">
+                                    <asp:Literal ID="ltrlProjectedHours" runat="server"></asp:Literal>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="width: 27%; text-align: center;">
+                        <table width="100%">
+                            <tr>
+                                <td style="font-size: 15px; padding-bottom: 3px;">
                                     Total Hours
                                 </td>
                             </tr>
@@ -32,21 +63,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 21%;text-align: center;">
-                       <table width="100%">
-                            <tr>
-                                <td style="font-size: 15px;padding-bottom: 3px;">
-                                    Avg Hours
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-size: 25px;">
-                                    <asp:Literal ID="ltrlAvgHours" runat="server"></asp:Literal>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="width: 23%; vertical-align: bottom;text-align: center;">
+                    <td style="width: 27%; vertical-align: bottom; text-align: center;">
                         <table width="100%">
                             <tr>
                                 <td>
@@ -70,7 +87,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 6%; padding: 0px !important;">
+                    <td style="vertical-align: bottom; width: 8%; padding: 0px !important;">
                         <table width="100%">
                             <tr>
                                 <td style="padding: 0px !important;">
@@ -91,7 +108,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 6%; padding: 0px;">
+                    <td style="vertical-align: bottom; width: 8%; padding: 0px;">
                         <table width="100%">
                             <tr>
                                 <td style="padding: 0px !important;">
@@ -143,39 +160,49 @@
             </td>
         </tr>
     </table>
-    <asp:Repeater ID="repWorkType" runat="server">
+    <asp:Panel ID="pnlFilterCategory" Style="display: none;" runat="server">
+        <uc:FilteredCheckBoxList ID="cblCategory" runat="server" Height="155px" />
+    </asp:Panel>
+    <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
+    <asp:Repeater ID="repWorkType" runat="server" OnItemDataBound="repWorkType_ItemDataBound">
         <HeaderTemplate>
-            <table id="tblTimePeriodSummaryByWorkType" class="tablesorter PersonSummaryReport WholeWidth zebra">
-                <thead>
-                    <tr>
-                        <th style="width: 210px; text-align: left;" class="padLeft5">
-                            WorkType
-                        </th>
-                        <th style="width: 130px;">
-                            Category
-                        </th>
-                        <th style="width: 100px">
-                            Billable
-                        </th>
-                        <th style="width: 100px;">
-                            Non-Billable
-                        </th>
-                        <th style="width: 100px;">
-                            Total
-                        </th>
-                        <th style="width: 295px;">
-                            Percent of Total Hours
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div style="min-height: 250px;">
+                <table id="tblProjectSummaryByWorkType" class="tablesorter PersonSummaryReport WholeWidth zebra">
+                    <thead>
+                        <tr>
+                            <th style="width: 210px; text-align: left;" class="padLeft5">
+                                WorkType
+                            </th>
+                            <th style="width: 130px;">
+                                Category
+                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgCategoryFilter"
+                                    style="position: absolute; padding-left: 2px;" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceCategory" runat="server" TargetControlID="imgCategoryFilter"
+                                    PopupControlID="pnlFilterCategory" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                            </th>
+                            <th style="width: 100px">
+                                Billable
+                            </th>
+                            <th style="width: 100px;">
+                                Non-Billable
+                            </th>
+                            <th style="width: 100px;">
+                                Total
+                            </th>
+                            <th style="width: 295px;">
+                                Percent of Total Hours
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
                 <td class="padLeft5" style="text-align: left;">
                     <%# Eval("WorkType.Name")%>
                 </td>
-                <td>
+                <td class="t-center padLeft5">
                     <%# Eval("WorkType.Category")%>
                 </td>
                 <td>
@@ -213,7 +240,7 @@
             </tr>
         </ItemTemplate>
         <FooterTemplate>
-            </tbody></table>
+            </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
     <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
@@ -221,3 +248,4 @@
         There are no Time Entries by any Employee for the selected range.
     </div>
 </div>
+
