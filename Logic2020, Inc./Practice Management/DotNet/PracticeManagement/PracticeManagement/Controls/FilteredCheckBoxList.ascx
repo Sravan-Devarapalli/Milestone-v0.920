@@ -4,8 +4,18 @@
 <script src="../Scripts/FilterTable.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-    function btnOk_Click(okButton) {
-        okButton.click();
+    function btnOk_Click(okButton, hdnSelectedIndexes, cbl) {
+        var str = "";
+        var cblList = document.getElementById(cbl).getElementsByTagName('input');
+
+        for (var i = 0; i < cblList.length; i++) {
+            if (cblList[i].checked) {
+                str += i.toString() + "_";
+            }
+        }
+
+        document.getElementById(hdnSelectedIndexes).value = str;
+        document.getElementById(okButton).click();
     }
 
     function btnCancelButton_Click(filterdiv) {
@@ -76,5 +86,6 @@
             </td>
         </tr>
     </table>
+    <asp:HiddenField ID="hdnSelectedIndexes" runat="server" />
 </div>
 
