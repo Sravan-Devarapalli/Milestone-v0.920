@@ -145,13 +145,13 @@ namespace DataAccess
         /// Removes given time type
         /// </summary>
         /// <param name="timeType">Time type to remove</param>
-        public static void RemoveTimeType(TimeTypeRecord timeType)
+        public static void RemoveTimeType(int timeTypeId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.Delete, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeType.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, timeTypeId);
 
                 connection.Open();
 
