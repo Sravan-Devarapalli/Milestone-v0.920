@@ -30,14 +30,14 @@
         <td align="left" valign="middle" style="width: 75%; vertical-align: middle;">
             <table class="WholeWidth">
                 <tr style="padding-top: 2px;">
-                    <td align="center" style="padding-left: 6px; padding-right: 6px; padding-top: 2px; padding-bottom:3px;
-                        vertical-align: top; text-align: center; width: 44%">
+                    <td align="center" style="padding-left: 6px; padding-right: 6px; padding-top: 2px;
+                        padding-bottom: 3px; vertical-align: top; text-align: center; width: 44%">
                         <b>Work Types Not Assigned to Project</b>
                     </td>
                     <td valign="middle" align="center" style="width: 12%">
                     </td>
-                    <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center; padding-bottom:3px;
-                        padding-top: 2px; width: 44%">
+                    <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center;
+                        padding-bottom: 3px; padding-top: 2px; width: 44%">
                         <b>Work Types Assigned to Project</b>
                         <asp:CustomValidator ID="cvTimetype" runat="server" ValidationGroup="Project" OnServerValidate="cvTimetype_OnServerValidate"
                             Display="Dynamic" ErrorMessage="Atleast one WorkType should be assigned to the project."
@@ -49,8 +49,8 @@
                 <tr>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
                         vertical-align: middle;">
-                        <asp:TextBox ID="txtTimeTypesNotAssignedToProject" runat="server" Width="100%" 
-                            Style="border: 1px solid black; padding-left: 1px; padding-right: 1px;"></asp:TextBox>
+                        <asp:TextBox ID="txtTimeTypesNotAssignedToProject" runat="server" Width="100%" Style="border: 1px solid black;
+                            padding-left: 1px; padding-right: 1px;"></asp:TextBox>
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmTimeTypesNotAssignedToProject"
                             runat="server" TargetControlID="txtTimeTypesNotAssignedToProject" WatermarkText="Begin typing to sort list below..."
                             WatermarkCssClass="watermarkedtext" />
@@ -69,13 +69,31 @@
                 <tr>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
                         line-height: 19px; vertical-align: middle;">
-                        <div id="divTimeTypesNotAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
+                        <div id="divTimeTypesNotAssignedToProject" class="cbfloatRight" runat="server" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             padding: 1px;">
-                            <uc:CustomCheckBoxList ID="cblTimeTypesNotAssignedToProject" runat="server" AutoPostBack="false"
-                                BackColor="White" CssClass="WholeWidth" Width="100%" DataTextField="Name" DataValueField="id"
-                                CellPadding="0" CellSpacing="0">
-                            </uc:CustomCheckBoxList>
+                            <table id="tblTimeTypesNotAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <asp:Repeater ID="repTimeTypesNotAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <tr timetypename='<%# Eval("Name") %>'>
+                                                <td style="padding-top: 2px;">
+                                                    <label id="lblTimeTypesNotAssignedToProject" for="cbTimeTypesNotAssignedToProject"
+                                                        title='<%# Eval("Name") %>' runat="server">
+                                                        <%# Eval("Name") %>
+                                                    </label>
+                                                    <input type="image" id="imgDeleteWorkType" runat="server" alt="Delete Work Type"
+                                                        style="padding-top: 2px;" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                    <input type="checkbox" style="height: 16px;" id="cbTimeTypesNotAssignedToProject"
+                                                        runat="server" />
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </tbody>
+                            </table>
                         </div>
                     </td>
                     <td valign="middle" align="center" style="width: 12%">
@@ -96,10 +114,26 @@
                         <div id="divTimeTypesAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             line-height: 19px; vertical-align: middle; padding: 1px;">
-                            <uc:CustomCheckBoxList ID="cblTimeTypesAssignedToProject" runat="server" Width="100%"
-                                BackColor="White" CssClass="WholeWidth" AutoPostBack="false" DataTextField="Name"
-                                DataValueField="id" CellSpacing="0" CellPadding="0">
-                            </uc:CustomCheckBoxList>
+                            <table id="tblTimeTypesAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <asp:Repeater ID="repTimeTypesAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <tr timetypename='<%# Eval("Name") %>'>
+                                                <td style="padding-top: 2px;">
+                                                    <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server">
+                                                        <%# Eval("Name") %>
+                                                    </label>
+                                                    <input id="imgDeleteWorkType" type="image" runat="server" alt="Delete Work Type"
+                                                        style="padding-top: 2px;" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                    <input id="cbTimeTypesAssignedToProject" style="height: 16px;" type="checkbox" runat="server" />
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </tbody>
+                            </table>
                         </div>
                     </td>
                 </tr>
