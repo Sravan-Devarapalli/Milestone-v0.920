@@ -716,11 +716,26 @@ namespace PracticeManagementService
                         ProjectBillingInfoDAL.ProjectBillingInfoDelete(project.Id.Value, connection, currentTransaction);
                     }
 
-                    //Save ProjectTimetypes
+                    //Save ProjectTimetypes 
                     if (!String.IsNullOrEmpty(project.ProjectWorkTypesList))
                     {
-                        ProjectDAL.SetProjectTimeTypes(project.Id.Value, project.ProjectWorkTypesList, connection, currentTransaction);
+                        try
+                        {
+                            ProjectDAL.SetProjectTimeTypes(project.Id.Value, project.ProjectWorkTypesList, connection, currentTransaction);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.Message.Contains("Time has already been entered for the following Work Type(s). The Work Type(s) cannot be unassigned from this project.") ||
+                            ex.InnerException.Message.Contains("Time has already been entered for the following Work Type(s). The Work Type(s) cannot be unassigned from this project."))
+                            {
+                                var message = ex.Message.Contains("Time has already been entered for the following Work Type(s). The Work Type(s) cannot be unassigned from this project.") ? ex.Message : ex.InnerException.Message;
+                                currentTransaction.Rollback();
+                                throw new Exception(message);
+                            }
+                            throw ex;
+                        }
                     }
+
                     currentTransaction.Commit();
                 }
 
@@ -728,9 +743,6 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SaveProjectDetail", "ProjectService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
 
