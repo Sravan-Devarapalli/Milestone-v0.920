@@ -35,7 +35,7 @@ namespace PraticeManagement.Controls
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            btnOk.Attributes["onclick"] = string.Format("return btnOk_Click({0});", OKButtonId);
+            btnOk.Attributes["onclick"] = string.Format("return btnOk_Click(\'{0}\',\'{1}\',\'{2}\');", OKButtonId, hdnSelectedIndexes.ClientID, cbl.ClientID);
             btnCancel.Attributes["onclick"] = string.Format("return btnCancelButton_Click(\'{0}\');", FilterPopupClientID);
             txtSearchBox.Attributes["onkeyup"] = string.Format("filterTableRows(\'{0}\',\'{1}\',\'{2}\');", txtSearchBox.ClientID, cbl.ClientID, "true");
 
@@ -64,20 +64,7 @@ namespace PraticeManagement.Controls
             get
             {
 
-                if (cbl == null)
-                {
-                    return null;
-                }
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append("<Names>");
-                foreach (ListItem item in cbl.Items)
-                {
-                    if (item.Selected)
-                        sb.Append("<Name>" + item.Value + "</Name>");
-                }
-                sb.Append("</Names>");
-                return sb.ToString();
+                return ActualSelectedItemsXmlFormat;
             }
         }
 
@@ -96,7 +83,7 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                return ViewState["SelectedInsexes" + this.ClientID] as string;
+                return hdnSelectedIndexes.Value;
             }
         }
 
@@ -107,13 +94,17 @@ namespace PraticeManagement.Controls
             get
             {
                 List<int> result = new List<int>();
-                var list = SelectedIndexes.Split('_');
 
-                foreach (var item in list)
+                if (!string.IsNullOrEmpty(SelectedIndexes))
                 {
-                    if (!string.IsNullOrEmpty(item))
+                    var list = SelectedIndexes.Split('_');
+
+                    foreach (var item in list)
                     {
-                        result.Add(Convert.ToInt32(item));
+                        if (!string.IsNullOrEmpty(item))
+                        {
+                            result.Add(Convert.ToInt32(item));
+                        }
                     }
                 }
 
@@ -126,6 +117,8 @@ namespace PraticeManagement.Controls
         {
             get
             {
+                SetSelectedIndexesForCBL();
+
                 if (SelectedIndexesList.Count == 0)
                     return "";
 
@@ -150,6 +143,8 @@ namespace PraticeManagement.Controls
         {
             get
             {
+                SetSelectedIndexesForCBL();
+
                 if (SelectedIndexesList.Count == 0)
                     return "";
 
@@ -171,6 +166,7 @@ namespace PraticeManagement.Controls
 
         }
 
+
         public void SaveSelectedIndexesInViewState()
         {
             StringBuilder sb = new StringBuilder();
@@ -184,7 +180,7 @@ namespace PraticeManagement.Controls
                 }
             }
 
-            ViewState["SelectedInsexes" + this.ClientID] = sb.ToString();
+            hdnSelectedIndexes.Value = sb.ToString();
         }
 
         public void SelectAllItems(bool selectAll)
@@ -222,7 +218,27 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public string SelectedItems { get { return cbl.SelectedItems; } }
+        public string SelectedItems
+        {
+            get
+            {
+
+                return ActualSelectedItems;
+            }
+        }
+
+        private void SetSelectedIndexesForCBL()
+        {
+            for (int i = 0; i < cbl.Items.Count; i++)
+            {
+                cbl.Items[i].Selected = false;
+
+                if (SelectedIndexesList.Any(indexVal => i == indexVal))
+                {
+                    cbl.Items[i].Selected = true;
+                }
+            }
+        }
     }
 }
 
