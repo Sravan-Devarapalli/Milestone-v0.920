@@ -103,13 +103,13 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesNotAssignedToProject;
         
         /// <summary>
-        /// cblTimeTypesNotAssignedToProject control.
+        /// repTimeTypesNotAssignedToProject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.CustomCheckBoxList cblTimeTypesNotAssignedToProject;
+        protected global::System.Web.UI.WebControls.Repeater repTimeTypesNotAssignedToProject;
         
         /// <summary>
         /// divTimeTypesAssignedToProject control.
@@ -121,13 +121,13 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesAssignedToProject;
         
         /// <summary>
-        /// cblTimeTypesAssignedToProject control.
+        /// repTimeTypesAssignedToProject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.CustomCheckBoxList cblTimeTypesAssignedToProject;
+        protected global::System.Web.UI.WebControls.Repeater repTimeTypesAssignedToProject;
         
         /// <summary>
         /// pnlAddNewTimeType control.
