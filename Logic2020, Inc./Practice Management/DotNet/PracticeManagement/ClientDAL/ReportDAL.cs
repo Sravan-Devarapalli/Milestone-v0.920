@@ -234,7 +234,8 @@ namespace DataAccess
                                 Name = reader.GetString(groupNameIndex),
                                 Code = reader.GetString(groupCodeIndex)
                             },
-                            Status = new ProjectStatus {
+                            Status = new ProjectStatus
+                            {
                                 Name = reader.GetString(projectStatusNameIndex)
                             }
                         },
@@ -300,7 +301,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludePersonsWithNoTimeEntriesParam, includePersonsWithNoTimeEntries);
-                
 
                 if (personTypes != null)
                 {
@@ -519,8 +519,8 @@ namespace DataAccess
                     };
 
                     WorkTypeLevelGroupedHours worktypeLGH = new WorkTypeLevelGroupedHours();
-                    worktypeLGH.BillableHours= reader.GetDouble(billableHoursIndex);
-                    worktypeLGH.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
+                    worktypeLGH.BillableHours = !reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d;
+                    worktypeLGH.NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d;
                     worktypeLGH.WorkType = tt;
                     if (forecastedHoursIndex > 0)
                     {
@@ -591,9 +591,9 @@ namespace DataAccess
                         IsOffshore = reader.GetBoolean(isOffShoreIndex)
                     };
 
-                    PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
-                    PLGH.ProjectNonBillableHours = reader.GetDouble(nonBillableHoursIndex);
-                    PLGH.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
+                    PLGH.BillableHours = !reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d;
+                    PLGH.ProjectNonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d;
+                    PLGH.BillableHoursUntilToday = !reader.IsDBNull(billableHoursUntilTodayIndex) ? reader.GetDouble(billableHoursUntilTodayIndex) : 0d;
                     PLGH.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
                     PLGH.BillingType = reader.GetString(billingTypeIndex);
                     PLGH.Person = person;
@@ -658,8 +658,8 @@ namespace DataAccess
                         var dayTotalHoursbyWorkType = new TimeEntryByWorkType()
                         {
                             Note = !reader.IsDBNull(noteIndex) ? reader.GetString(noteIndex) : string.Empty,
-                            BillableHours = reader.GetDouble(billableHoursIndex),
-                            NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
+                            BillableHours = !reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d,
+                            NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
                             TimeType = new TimeTypeRecord()
                             {
                                 Name = reader.GetString(timeTypeNameIndex),
@@ -682,7 +682,7 @@ namespace DataAccess
                     if (result.Any(r => r.Person.Id == personId))
                     {
                         PLGH = result.First(r => r.Person.Id == personId);
-                        if(dt != null)
+                        if (dt != null)
                             PLGH.AddDayTotalHours(dt);
                     }
                     else
@@ -697,7 +697,7 @@ namespace DataAccess
                             IsOffshore = reader.GetBoolean(isOffShoreIndex)
                         };
                         PLGH.Person = person;
-                        PLGH.TimeEntrySectionId = !reader.IsDBNull(timeEntrySectionIdIndex) ? reader.GetInt32(timeEntrySectionIdIndex):0;
+                        PLGH.TimeEntrySectionId = !reader.IsDBNull(timeEntrySectionIdIndex) ? reader.GetInt32(timeEntrySectionIdIndex) : 0;
                         PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);
                         if (dt != null)
                         {
