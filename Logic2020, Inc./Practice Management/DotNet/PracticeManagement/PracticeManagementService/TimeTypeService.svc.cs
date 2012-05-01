@@ -58,13 +58,13 @@ namespace PracticeManagementService
         /// Removes given time type
         /// </summary>
         /// <param name="timeType">Time type to remove</param>
-        public void RemoveTimeType(TimeTypeRecord timeType)
+        public void RemoveTimeType(int timeTypeId)
         {
             try
             {
-                TimeTypeDAL.RemoveTimeType(timeType);
+                TimeTypeDAL.RemoveTimeType(timeTypeId);
             }
-            catch (Exception e)
+            catch (Exception e) 
             {
                 throw e;
             }
