@@ -25,7 +25,7 @@ namespace PraticeManagement.TimeTypeService {
         DataTransferObjects.Triple<int, int, int> GetAdministrativeChargeCodeValues(int timeTypeId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeTypeService/RemoveTimeType", ReplyAction="http://tempuri.org/ITimeTypeService/RemoveTimeTypeResponse")]
-        void RemoveTimeType(DataTransferObjects.TimeEntry.TimeTypeRecord timeType);
+        void RemoveTimeType(int timeTypeId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeTypeService/UpdateTimeType", ReplyAction="http://tempuri.org/ITimeTypeService/UpdateTimeTypeResponse")]
         void UpdateTimeType(DataTransferObjects.TimeEntry.TimeTypeRecord timeType);
@@ -44,7 +44,7 @@ namespace PraticeManagement.TimeTypeService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeTypeServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeTypeService.ITimeTypeService>, PraticeManagement.TimeTypeService.ITimeTypeService {
-       
+        
         public TimeTypeServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -73,8 +73,8 @@ namespace PraticeManagement.TimeTypeService {
             return base.Channel.GetAdministrativeChargeCodeValues(timeTypeId);
         }
         
-        public void RemoveTimeType(DataTransferObjects.TimeEntry.TimeTypeRecord timeType) {
-            base.Channel.RemoveTimeType(timeType);
+        public void RemoveTimeType(int timeTypeId) {
+            base.Channel.RemoveTimeType(timeTypeId);
         }
         
         public void UpdateTimeType(DataTransferObjects.TimeEntry.TimeTypeRecord timeType) {
