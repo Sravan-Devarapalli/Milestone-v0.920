@@ -359,6 +359,7 @@
                                         Width="160px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value=""></asp:ListItem>
                                         <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
+                                        <asp:ListItem Text="By WorkType" Value="1"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                             </tr>
