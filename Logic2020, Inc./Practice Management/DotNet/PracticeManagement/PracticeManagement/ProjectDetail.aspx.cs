@@ -445,6 +445,9 @@ namespace PraticeManagement
 
             if (Page.IsValid && ProjectId.HasValue)
             {
+                ucProjectTimeTypes.AllTimeTypes = null;
+                ucProjectTimeTypes.ProjectTimetypes = null;
+
                 Project = GetCurrentProject(ProjectId);
                 if (Project != null)
                     PopulateControls(Project);
@@ -453,6 +456,10 @@ namespace PraticeManagement
             {
                 if (!cvIsInternal.IsValid)
                     mlConfirmation.ShowErrorMessage(IsInternalChangeErrorMessage);
+                if (!cvWorkTypesAssigned.IsValid)
+                {
+                    mlConfirmation.ClearMessage();
+                }
             }
         }
 
@@ -513,6 +520,51 @@ namespace PraticeManagement
                     }
                 }
             }
+        }
+
+        protected void btnDeleteWorkType_OnClick(object sender, EventArgs e)
+        {
+            var workTypeId = Convert.ToInt32(hdnWorkTypeId.Value);
+
+            try
+            {
+                ServiceCallers.Custom.TimeType(tt => tt.RemoveTimeType(workTypeId));
+
+                ucProjectTimeTypes.AllTimeTypes = ucProjectTimeTypes.AllTimeTypes.Where(tt => tt.Id != workTypeId).ToArray();
+                ucProjectTimeTypes.ProjectTimetypes = ucProjectTimeTypes.ProjectTimetypes.Where(tt => tt.Id != workTypeId).ToArray();
+                var ids = ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue;
+
+                List<string> idsList = ids.Split(',').ToList();
+
+                var sb = new StringBuilder();
+
+                foreach (string id in idsList)
+                {
+                    int timeTypeId = 0;
+
+                    int.TryParse(id, out timeTypeId);
+
+                    if (workTypeId != timeTypeId)
+                    {
+                        sb.Append(timeTypeId);
+                        sb.Append(",");
+                    }
+                }
+
+                ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "You cannot delete this Work type.Because, there are some time entries related to it.")
+                {
+                    mpeTimeEntriesRelatedToitPopup.Show();
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+
         }
 
         /// <summary>
@@ -924,11 +976,23 @@ namespace PraticeManagement
                     {
                         cvIsInternal.IsValid = false;
                     }
+                    else if (ex.Message.Contains("Time has already been entered for the following Work Type(s). The Work Type(s) cannot be unassigned from this project."))
+                    {
+                        var message = ex.Message;
+                        message = message.Replace("Time has already been entered for the following Work Type(s). The Work Type(s) cannot be unassigned from this project.", "");
+                        cvWorkTypesAssigned.IsValid = false;
+                        ucProjectTimeTypes.ShowAlert(message);
+                    }
                     else
                     {
-                        throw;
+                        throw ex;
                     }
                 }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+
             }
 
             if (AttachmentsForNewProject != null && result != -1)
@@ -940,10 +1004,6 @@ namespace PraticeManagement
                 }
                 ViewState.Remove(ProjectAttachmentsKey);
             }
-
-            ucProjectTimeTypes.AllTimeTypes = null;
-            ucProjectTimeTypes.ProjectTimetypes = null;
-
 
             return result;
 
