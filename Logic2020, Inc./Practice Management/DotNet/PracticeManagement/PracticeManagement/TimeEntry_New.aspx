@@ -57,11 +57,15 @@
 
         function enterPressed(evn) {
             if (window.event && window.event.keyCode == 13) {
-                return false;
+                if (window.event.srcElement.tagName != "TEXTAREA") {
+                    return false;
+                }
             } else if (evn && evn.keyCode == 13) {
-                return false;
+                if (evn.originalTarget.type != "textarea") {
+                    return false;
                 }
             }
+        }
         
         function SetTooltipsForallDropDowns() {
             var optionList = document.getElementsByTagName('option');
