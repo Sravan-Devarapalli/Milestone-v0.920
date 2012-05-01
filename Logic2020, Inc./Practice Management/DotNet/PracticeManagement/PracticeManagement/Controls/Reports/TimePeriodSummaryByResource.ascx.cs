@@ -327,8 +327,8 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulatePayTypeFilter(List<PersonLevelGroupedHours> reportData)
         {
-            var payTypes = reportData.Select(r => new { Name = r.Person.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Name);
-            DataHelper.FillListDefault(cblPayTypes.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Name", "Name");
+            var payTypes = reportData.Select(r => new { Text = string.IsNullOrEmpty(r.Person.CurrentPay.TimescaleName) ? "Unassigned" : r.Person.CurrentPay.TimescaleName, Value = r.Person.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Value);
+            DataHelper.FillListDefault(cblPayTypes.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Value", "Text");
             cblPayTypes.SelectAllItems(true);
         }
 
