@@ -13,22 +13,76 @@ namespace PraticeManagement.Controls.Reports {
     public partial class ByworkType {
         
         /// <summary>
-        /// ltWorkTypeCount control.
+        /// tbHeader control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltWorkTypeCount;
+        protected global::System.Web.UI.HtmlControls.HtmlTable tbHeader;
         
         /// <summary>
-        /// lbRange control.
+        /// ltrlAccount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lbRange;
+        protected global::System.Web.UI.WebControls.Literal ltrlAccount;
+        
+        /// <summary>
+        /// ltrlBusinessUnit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlBusinessUnit;
+        
+        /// <summary>
+        /// ltrlProjectNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlProjectNumber;
+        
+        /// <summary>
+        /// ltrlProjectName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlProjectName;
+        
+        /// <summary>
+        /// ltrlProjectStatusAndBillingType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlProjectStatusAndBillingType;
+        
+        /// <summary>
+        /// ltrlProjectRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlProjectRange;
+        
+        /// <summary>
+        /// ltrlProjectedHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlProjectedHours;
         
         /// <summary>
         /// ltrlTotalHours control.
@@ -38,15 +92,6 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltrlTotalHours;
-        
-        /// <summary>
-        /// ltrlAvgHours control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlAvgHours;
         
         /// <summary>
         /// ltrlBillableHours control.
@@ -119,6 +164,33 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnExportToPDF;
+        
+        /// <summary>
+        /// pnlFilterCategory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterCategory;
+        
+        /// <summary>
+        /// cblCategory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblCategory;
+        
+        /// <summary>
+        /// btnFilterOK control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFilterOK;
         
         /// <summary>
         /// repWorkType control.
