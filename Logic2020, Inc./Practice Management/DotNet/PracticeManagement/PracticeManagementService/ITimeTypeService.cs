@@ -34,7 +34,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="timeType">Time type to remove</param>
         [OperationContract]
-        void RemoveTimeType(TimeTypeRecord timeType);
+        void RemoveTimeType(int timeTypeId);
 
         /// <summary>
         /// Updates given time type
