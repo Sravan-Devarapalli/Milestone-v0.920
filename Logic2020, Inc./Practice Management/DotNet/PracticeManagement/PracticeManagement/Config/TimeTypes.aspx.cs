@@ -176,15 +176,30 @@ namespace PraticeManagement.Config
         protected void imgDelete_OnClick(object sender, EventArgs e)
         {
             var imgDelete = sender as ImageButton;
-            string timetypeId = imgDelete.Attributes["timetypeId"];
-            TimeTypeRecord tt = AllTimeTypes.AsQueryable().First(t => t.Id.ToString() == timetypeId);
-            using (var serviceClient = new TimeTypeServiceClient())
+            var timetypeId = Convert.ToInt32(imgDelete.Attributes["timetypeId"]);
+            try
             {
-                serviceClient.RemoveTimeType(tt);
+                using (var serviceClient = new TimeTypeServiceClient())
+                {
+                    serviceClient.RemoveTimeType(timetypeId);
+                }
+
+                ViewState.Remove("AllTimeTypes");
+                mlInsertStatus.ShowInfoMessage("WorkType Deleted Sucessfully");
+                populatecontrols();
             }
-            ViewState.Remove("AllTimeTypes");
-            mlInsertStatus.ShowInfoMessage("WorkType Deleted Sucessfully");
-            populatecontrols();
+            catch(Exception ex)
+            {
+                if (ex.Message == "You cannot delete this Work type.Because, there are some time entries related to it.")
+                {
+                    mlInsertStatus.ShowErrorMessage("You cannot delete this Work type.Because, there are some time entries related to it.");
+                }
+                else
+                {
+                    throw ex;
+                }
+          
+            }
         }
 
         protected void imgUpdate_OnClick(object sender, EventArgs e)
