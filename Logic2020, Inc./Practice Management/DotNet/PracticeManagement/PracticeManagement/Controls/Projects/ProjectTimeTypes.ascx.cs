@@ -13,6 +13,7 @@ using System.Web.Security;
 using DataTransferObjects;
 using PraticeManagement.TimeTypeService;
 using System.Web.UI.HtmlControls;
+using System.Text;
 
 namespace PraticeManagement.Controls.Projects
 {
@@ -65,13 +66,14 @@ namespace PraticeManagement.Controls.Projects
         {
             if (AllTimeTypes == null && ProjectTimetypes == null)
             {
-                AllTimeTypes = ServiceCallers.Invoke<TimeTypeServiceClient, TimeTypeRecord[]>(TimeType => TimeType.GetAllTimeTypes());
-                TimeTypeRecord[] notIncludedTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsAdministrative).ToArray();
-                AllTimeTypes = AllTimeTypes.AsQueryable().Except(notIncludedTimeTypes).ToArray();
+                var allTimeTypes = ServiceCallers.Invoke<TimeTypeServiceClient, TimeTypeRecord[]>(tt => tt.GetAllTimeTypes());
+
+                AllTimeTypes = allTimeTypes.Where(t => t.IsAdministrative == false).ToArray();
 
                 if (Page is ProjectDetail && ((ProjectDetail)Page).ProjectId != null)
                 {
                     Project project = ((ProjectDetail)Page).Project;
+
                     if (project.IsInternal) //default and internal time types for all internal projects
                     {
                         AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || T.IsInternal).ToArray();
@@ -80,54 +82,33 @@ namespace PraticeManagement.Controls.Projects
                     {
                         AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || !T.IsInternal).ToArray();
                     }
+
                     int projectId = ((ProjectDetail)Page).ProjectId.Value;
-                    ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(Project => Project.GetTimeTypesByProjectId(projectId, false, null, null));
+                    ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(proj => proj.GetTimeTypesByProjectId(projectId, false, null, null));
 
-                    string projectTimeTypesInUseIds = "";
-                    string projectTimetypesIds = "";
-
-                    foreach (TimeTypeRecord ptt in ProjectTimetypes)
-                    {
-                        projectTimetypesIds = projectTimetypesIds + ptt.Id + ',';
-                        if (ptt.InUse)
-                        {
-                            projectTimeTypesInUseIds = projectTimeTypesInUseIds + ptt.Id + ',';
-                        }
-                    }
-
-                    ProjectTimetypes = GetSelectedList(AllTimeTypes.ToList(), projectTimetypesIds).ToArray();
-                    hdnProjectTimeTypesInUse.Value = projectTimeTypesInUseIds;
-                }
-                else
-                {
-                    ProjectTimetypes = AllTimeTypes.Where(t => t.IsDefault).ToArray();
-                    AllTimeTypes = new List<TimeTypeRecord>().ToArray();//remove all
                 }
 
-                AllTimeTypes = AllTimeTypes.AsQueryable().Except(ProjectTimetypes).ToArray();
+                AllTimeTypes = AllTimeTypes.Where(tt => ProjectTimetypes.Any(t => tt.Id != t.Id)).ToArray();
 
-                /* initially hdnTimeTypesAssignedToProject value will be empty if there is is 
-                any change in the work types hidden field will be assigned the work type id's in javascript */
-                hdnTimeTypesAssignedToProject.Value = "";
             }
 
+            DataBindAllRepeaters();
+        }
 
-            if (!String.IsNullOrEmpty(hdnTimeTypesAssignedToProject.Value))
-            {
-                string timeTypesAssignedToProject = hdnTimeTypesAssignedToProject.Value;
-                List<TimeTypeRecord> combinedList = new List<TimeTypeRecord>();
-                combinedList.AddRange(ProjectTimetypes);
-                combinedList.AddRange(AllTimeTypes);
-                combinedList = combinedList.Distinct().ToList();
+        public void DataBindAllRepeaters()
+        {
 
-                ProjectTimetypes = GetSelectedList(combinedList, timeTypesAssignedToProject).ToArray();
-                AllTimeTypes = combinedList.Except(ProjectTimetypes).ToArray();
-            }
-            repTimeTypesAssignedToProject.DataSource = ProjectTimetypes.OrderBy(t => t.Name);
-            repTimeTypesAssignedToProject.DataBind();
-            repTimeTypesNotAssignedToProject.DataSource = AllTimeTypes.OrderBy(t => t.Name);
-            repTimeTypesNotAssignedToProject.DataBind();
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTimeTypesAssignedToProject", "SetTimeTypesAssignedToProject();changeAlternateitemscolrsForCBL();", true);
+            repDefaultTimeTypesAssignedToProject.DataSource = ProjectTimetypes.OrderBy(t => t.Name).Where(t => t.IsDefault == true);
+            repDefaultTimeTypesAssignedToProject.DataBind();
+
+            repCustomTimeTypesAssignedToProject.DataSource = ProjectTimetypes.OrderBy(t => t.Name).Where(t => t.IsDefault == false);
+            repCustomTimeTypesAssignedToProject.DataBind();
+
+            repDefaultTimeTypesNotAssignedToProject.DataSource = AllTimeTypes.OrderBy(t => t.Name).Where(t => t.IsDefault == true);
+            repDefaultTimeTypesNotAssignedToProject.DataBind();
+
+            repCustomTimeTypesNotAssignedToProject.DataSource = AllTimeTypes.OrderBy(t => t.Name).Where(t => t.IsDefault == false);
+            repCustomTimeTypesNotAssignedToProject.DataBind();
         }
 
         private List<TimeTypeRecord> GetSelectedList(List<TimeTypeRecord> combinedList, string ids)
@@ -162,11 +143,8 @@ namespace PraticeManagement.Controls.Projects
 
         protected void cvTimetype_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
-            e.IsValid = true;
-            if (hdnTimeTypesAssignedToProject.Value == ",")
-            {
-                e.IsValid = false;
-            }
+            e.IsValid = ProjectTimetypes.Count() > 0;
+
         }
 
 
@@ -190,26 +168,29 @@ namespace PraticeManagement.Controls.Projects
                 {
                     TimeTypeRecord customTimeType = new TimeTypeRecord();
                     customTimeType.IsDefault = false;
+
                     if (Page is ProjectDetail && ((ProjectDetail)Page).ProjectId != null)
                     {
                         Project project = ((ProjectDetail)Page).Project;
                         customTimeType.IsInternal = project.IsInternal;
                     }
+
                     customTimeType.Name = txtNewTimeType.Text;
                     customTimeType.IsActive = true;
                     customTimeType.IsAllowedToEdit = true;
                     int customTimeTypeId = ServiceCallers.Invoke<TimeTypeServiceClient, int>(TimeType => TimeType.AddTimeType(customTimeType));
                     customTimeType.Id = customTimeTypeId;
 
-                    hdnTimeTypesAssignedToProject.Value += customTimeType.Id;
-
-                    var att = AllTimeTypes.ToList();
+                    var att = ProjectTimetypes.ToList();
                     att.Add(customTimeType);
-                    AllTimeTypes = att.ToArray();
+                    ProjectTimetypes = att.ToArray();
+
+                    repCustomTimeTypesAssignedToProject.DataSource = ProjectTimetypes.OrderBy(t => t.Name).Where(t => t.IsDefault == false);
+                    repCustomTimeTypesAssignedToProject.DataBind();
 
                     txtNewTimeType.Text = "";
                 }
-                catch (Exception e1)
+                catch
                 {
                     cvNewTimeTypeName.ToolTip = "Error Occurred.";
                     cvNewTimeTypeName.IsValid = false;
@@ -252,19 +233,128 @@ namespace PraticeManagement.Controls.Projects
         {
             get
             {
-                return hdnTimeTypesAssignedToProject.Value;
+                return ProjectTimetypes.Select(tt => tt.Id.ToString()).Aggregate(((name, next) => next + "," + name));
             }
 
-            set
-            {
-                hdnTimeTypesAssignedToProject.Value = value;
-            }
+
         }
 
         internal void ShowAlert(string message)
         {
             lbAlertMessage.Text = message;
             mpeTimetypeAlertMessage.Show();
+        }
+
+
+        protected void btnAssignAll_OnClick(object sender, EventArgs e)
+        {
+            var timeTypesList = AllTimeTypes.ToList();
+            timeTypesList.AddRange(ProjectTimetypes);
+            ProjectTimetypes = timeTypesList.ToArray();
+            AllTimeTypes = AllTimeTypes.Where(t => 1 == 0).ToArray();
+
+        }
+
+        protected void btnUnAssignAll_OnClick(object sender, EventArgs e)
+        {
+            var timeTypesList = AllTimeTypes.ToList();
+            timeTypesList.AddRange(ProjectTimetypes);
+            AllTimeTypes = timeTypesList.ToArray();
+            ProjectTimetypes = ProjectTimetypes.Where(t => 1 == 0).ToArray();
+        }
+
+        protected void btnUnAssign_OnClick(object sender, EventArgs e)
+        {
+            StringBuilder timeTypeIds = new StringBuilder();
+            List<int> ttIds = new List<int>();
+
+            foreach (RepeaterItem row in repDefaultTimeTypesAssignedToProject.Items)
+            {
+                var cb = row.FindControl("cbTimeTypesNotAssignedToProject") as HtmlInputCheckBox;
+                var imgDeleteWorkType = row.FindControl("imgDeleteWorkType") as HtmlImage;
+
+                if (cb.Checked)
+                {
+                    var timeTypeId = Convert.ToInt32(imgDeleteWorkType.Attributes["timetypeid"]);
+                    timeTypeIds.Append(timeTypeId);
+                    timeTypeIds.Append(",");
+
+                    ttIds.Add(timeTypeId);
+                }
+            }
+
+            foreach (RepeaterItem row in repCustomTimeTypesAssignedToProject.Items)
+            {
+                var cb = row.FindControl("cbTimeTypesNotAssignedToProject") as HtmlInputCheckBox;
+                var imgDeleteWorkType = row.FindControl("imgDeleteWorkType") as HtmlImage;
+
+                if (cb.Checked)
+                {
+                    var timeTypeId = Convert.ToInt32(imgDeleteWorkType.Attributes["timetypeid"]);
+                    timeTypeIds.Append(timeTypeId);
+                    timeTypeIds.Append(",");
+
+                    ttIds.Add(timeTypeId);
+                }
+            }
+
+            var timeTypesList = ProjectTimetypes.Where(ptt => ttIds.Any(tt => tt == ptt.Id)).ToList();
+
+            ProjectTimetypes = ProjectTimetypes.Where(ptt => ttIds.Any(tt => tt == ptt.Id) == false).ToArray();
+
+            AllTimeTypes.ToList().AddRange(timeTypesList);
+
+            AllTimeTypes = AllTimeTypes;
+
+            DataBindAllRepeaters();
+
+        }
+
+        protected void btnAssign_OnClick(object sender, EventArgs e)
+        {
+            StringBuilder timeTypeIds = new StringBuilder();
+            List<int> ttIds = new List<int>();
+
+            foreach (RepeaterItem row in repDefaultTimeTypesNotAssignedToProject.Items)
+            {
+                var cb = row.FindControl("cbTimeTypesAssignedToProject") as HtmlInputCheckBox;
+                var imgDeleteWorkType = row.FindControl("imgDeleteWorkType") as HtmlImage;
+
+                if (cb.Checked)
+                {
+                    var timeTypeId = Convert.ToInt32(imgDeleteWorkType.Attributes["timetypeid"]);
+                    timeTypeIds.Append(timeTypeId);
+                    timeTypeIds.Append(",");
+
+                    ttIds.Add(timeTypeId);
+                }
+            }
+
+            foreach (RepeaterItem row in repCustomTimeTypesNotAssignedToProject.Items)
+            {
+                var cb = row.FindControl("cbTimeTypesAssignedToProject") as HtmlInputCheckBox;
+                var imgDeleteWorkType = row.FindControl("imgDeleteWorkType") as HtmlImage;
+
+                if (cb.Checked)
+                {
+                    var timeTypeId = Convert.ToInt32(imgDeleteWorkType.Attributes["timetypeid"]);
+                    timeTypeIds.Append(timeTypeId);
+                    timeTypeIds.Append(",");
+
+                    ttIds.Add(timeTypeId);
+                }
+            }
+
+
+            var timeTypesList = AllTimeTypes.Where(ptt => ttIds.Any(tt => tt == ptt.Id)).ToList();
+
+            AllTimeTypes = AllTimeTypes.Where(ptt => ttIds.Any(tt => tt == ptt.Id) == false).ToArray();
+
+            ProjectTimetypes.ToList().AddRange(timeTypesList);
+
+            ProjectTimetypes = ProjectTimetypes;
+
+            DataBindAllRepeaters();
         }
     }
 }
