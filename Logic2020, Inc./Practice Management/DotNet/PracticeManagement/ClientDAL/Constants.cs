@@ -585,10 +585,7 @@
             public const string PersonRoleNamesParam = "@PersonRoleNames";
             public const string IsNoteRequiredParam = "@IsNoteRequired";
             public const string IncludePersonsWithNoTimeEntriesParam = "@IncludePersonsWithNoTimeEntries";
-            
-
-
-
+            public const string TimeTypeIdsParam = "@TimeTypeIds";
         }
 
         #endregion
@@ -701,7 +698,7 @@
                 public const string GetPersonTimeEnteredHoursByDay = "dbo.GetPersonTimeEnteredHoursByDay";
                 public const string PersonTimeEntriesByPeriod = "dbo.PersonTimeEntriesByPeriod";
                 public const string GetWorkTypeNameByIdProcedure = "dbo.GetWorkTypeNameById";
-
+                public const string GetWorkTypesInUseDetailsProcedure = "dbo.GetWorkTypesInUseDetails";
                 public const string ToggleIsReviewed = "dbo.TimeEntryToggleIsReviewed";
                 public const string ToggleIsCorrect = "dbo.TimeEntryToggleIsCorrect";
                 public const string ToggleIsChargeable = "dbo.TimeEntryToggleIsChargeable";
@@ -788,6 +785,8 @@
                 public const string GetTimeOffSeriesPeriod = "dbo.GetTimeOffSeriesPeriod";
                 public const string GetSubstituteDate = "dbo.GetSubstituteDate";
                 public const string GetSubstituteDayDetails = "dbo.GetSubstituteDayDetails";
+                public const string CalendarGetWithBasicInfo = "dbo.CalendarGetWithBasicInfo";
+                
             }
 
             public class ProjectGroup
