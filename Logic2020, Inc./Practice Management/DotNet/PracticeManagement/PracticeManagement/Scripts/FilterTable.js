@@ -35,7 +35,7 @@
 
             var rowText = '';
             if (useCustomAttribute) {
-                rowText = trControls[i].attributes[customAttributeName].value.toLowerCase();
+                rowText = (trControls[i].attributes[customAttributeName] != null && trControls[i].attributes[customAttributeName] != "undefined") ? trControls[i].attributes[customAttributeName].value.toLowerCase() : "";
             }
             else if (isCheckBoxList) {
                 var checkBox = trControls[i].children[0].getElementsByTagName('input')[0];
@@ -50,8 +50,12 @@
                 trControls[i].style.display = "";
             }
             else {
-
-                trControls[i].style.display = "none";
+                if ((trControls[i].attributes["isfilteredrow"] != null && trControls[i].attributes["isfilteredrow"] != "undefined") == false) {
+                    trControls[i].style.display = "none";
+                }
+                else {
+                    trControls[i].style.display = "";
+                }
             }
         }
         changeAlternateitemsForTable(trControls);
