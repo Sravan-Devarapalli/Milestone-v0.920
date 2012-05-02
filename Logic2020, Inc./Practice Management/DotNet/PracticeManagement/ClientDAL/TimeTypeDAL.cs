@@ -257,6 +257,41 @@ namespace DataAccess
 
         }
 
+        public static List<TimeTypeRecord> GetWorkTypesInUseDetails(string timeTypeIds)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetWorkTypesInUseDetailsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeIdsParam, timeTypeIds);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<TimeTypeRecord> result = new List<TimeTypeRecord>();
+                    ReadTimeTypes(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadTimeTypes(SqlDataReader reader, List<TimeTypeRecord> result)
+        {
+            if (reader.HasRows)
+            {
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+                while (reader.Read())
+                {
+                    var tt = new TimeTypeRecord
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        InUse = Convert.ToBoolean(reader.GetInt32(inUseIndex))
+                    };
+                    result.Add(tt);
+                }
+            }
+        }
 
     }
 }
