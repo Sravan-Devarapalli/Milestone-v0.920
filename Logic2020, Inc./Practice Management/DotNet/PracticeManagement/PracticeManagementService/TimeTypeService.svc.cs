@@ -117,6 +117,12 @@ namespace PracticeManagementService
             }
         }
 
+        public List<TimeTypeRecord> GetWorkTypesInUseDetails(string timeTypeIds)
+        {
+            return TimeTypeDAL.GetWorkTypesInUseDetails(timeTypeIds);
+        }
+
     }
 }
+
 
