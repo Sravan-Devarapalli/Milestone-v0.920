@@ -160,11 +160,7 @@
             </td>
         </tr>
     </table>
-    <asp:Panel ID="pnlFilterCategory" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblCategory" runat="server" Height="155px" />
-    </asp:Panel>
-    <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
-    <asp:Repeater ID="repWorkType" runat="server" OnItemDataBound="repWorkType_ItemDataBound">
+    <asp:Repeater ID="repWorkType" runat="server">
         <HeaderTemplate>
             <div style="min-height: 250px;">
                 <table id="tblProjectSummaryByWorkType" class="tablesorter PersonSummaryReport WholeWidth zebra">
@@ -173,22 +169,16 @@
                             <th style="width: 210px; text-align: left;" class="padLeft5">
                                 WorkType
                             </th>
-                            <th style="width: 130px;">
-                                Category
-                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgCategoryFilter"
-                                    style="position: absolute; padding-left: 2px;" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceCategory" runat="server" TargetControlID="imgCategoryFilter"
-                                    PopupControlID="pnlFilterCategory" Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
-                            </th>
-                            <th style="width: 100px">
+                            <th style="width: 120px">
                                 Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th style="width: 120px;">
                                 Non-Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th style="width: 120px;">
                                 Total
+                            </th>
+                            <th style="width: 40px;">
                             </th>
                             <th style="width: 295px;">
                                 Percent of Total Hours
@@ -202,9 +192,6 @@
                 <td class="padLeft5" style="text-align: left;">
                     <%# Eval("WorkType.Name")%>
                 </td>
-                <td class="t-center padLeft5">
-                    <%# Eval("WorkType.Category")%>
-                </td>
                 <td>
                     <%# GetDoubleFormat((double)Eval("BillableHours"))%>
                 </td>
@@ -214,6 +201,7 @@
                 <td>
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
+                <td></td>
                 <td sorttable_customkey='<%# Eval("WorkTypeTotalHoursPercent")%>'>
                     <table class="TdLevelNoBorder" width="100%">
                         <tr>
