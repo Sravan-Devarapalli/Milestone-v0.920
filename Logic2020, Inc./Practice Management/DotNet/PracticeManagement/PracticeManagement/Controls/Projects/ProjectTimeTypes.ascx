@@ -7,12 +7,6 @@
 <table width="100%" class="WholeWidth">
     <tr>
         <td style="padding-top: 5px;">
-            <asp:HiddenField ID="hdnTimeTypesAssignedToProject" runat="server" Value="" EnableViewState="true" />
-            <asp:HiddenField ID="hdnProjectTimeTypesInUse" runat="server" Value="" EnableViewState="true" />
-        </td>
-    </tr>
-    <tr>
-        <td style="padding-top: 5px;">
             <asp:ShadowedTextButton ID="btnAddNewTimeType" ToolTip="Add Work Type" runat="server"
                 CausesValidation="false" CssClass="add-btn" Text="Add Work Type" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeType" runat="server" TargetControlID="btnAddNewTimeType"
@@ -74,7 +68,35 @@
                             padding: 1px;">
                             <table id="tblTimeTypesNotAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
                                 <tbody>
-                                    <asp:Repeater ID="repTimeTypesNotAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
+                                    <tr isfilteredrow="false" >
+                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                            Default
+                                        </td>
+                                    </tr>
+                                    <asp:Repeater ID="repDefaultTimeTypesNotAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <tr timetypename='<%# Eval("Name") %>'>
+                                                <td style="padding-top: 2px;">
+                                                    <label id="lblTimeTypesNotAssignedToProject" for="cbTimeTypesNotAssignedToProject"
+                                                        title='<%# Eval("Name") %>' runat="server">
+                                                        <%# Eval("Name") %>
+                                                    </label>
+                                                    <input type="image" id="imgDeleteWorkType" runat="server" alt="Delete Work Type"
+                                                        style="padding-top: 2px;" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                    <input type="checkbox" style="height: 16px;" id="cbTimeTypesNotAssignedToProject"
+                                                        runat="server" />
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <tr isfilteredrow="false" >
+                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                            Custom
+                                        </td>
+                                    </tr>
+                                    <asp:Repeater ID="repCustomTimeTypesNotAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
                                         runat="server">
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>'>
@@ -97,18 +119,18 @@
                         </div>
                     </td>
                     <td valign="middle" align="center" style="width: 12%">
-                        <input id="btnAssignAll" type="button" onclick="AssignAllTimeTypes_Click();SetTimeTypesAssignedToProject();"
-                            title="Add All" value=">>" />
+                        <asp:Button ID="btnAssignAll" UseSubmitBehavior="false" Text=">>" ToolTip="Add All"
+                            OnClick="btnAssignAll_OnClick" runat="server" />
                         <br />
-                        <input id="btnAssign" type="button" onclick="AssignTimeType_Click();SetTimeTypesAssignedToProject();"
-                            title="Add Selected" value=">" />
+                        <asp:Button ID="btnAssign" UseSubmitBehavior="false" Text=">" ToolTip="Add Selected"
+                            OnClick="btnAssign_OnClick" runat="server" />
                         <br />
                         <br />
-                        <input id="btnUnAssign" type="button" onclick="UnAssignTimeType_Click();SetTimeTypesAssignedToProject();"
-                            title="Remove Selected" value="<" />
+                        <asp:Button ID="btnUnAssign" UseSubmitBehavior="false" Text="<" ToolTip="Remove Selected"
+                            OnClick="btnUnAssign_OnClick" runat="server" />
                         <br />
-                        <input id="btnUnAssignAll" type="button" onclick="UnAssignAllTimeTypes_Click();SetTimeTypesAssignedToProject();"
-                            title="Remove All" value="<<" />
+                        <asp:Button ID="btnUnAssignAll" UseSubmitBehavior="false" Text="<<" ToolTip="Remove All"
+                            OnClick="btnUnAssignAll_OnClick" runat="server" />
                     </td>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;">
                         <div id="divTimeTypesAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
@@ -116,7 +138,33 @@
                             line-height: 19px; vertical-align: middle; padding: 1px;">
                             <table id="tblTimeTypesAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
                                 <tbody>
-                                    <asp:Repeater ID="repTimeTypesAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
+                                    <tr isfilteredrow="false" >
+                                        <td  style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                            Default
+                                            </td>
+                                    </tr>
+                                    <asp:Repeater ID="repDefaultTimeTypesAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
+                                        runat="server">
+                                        <ItemTemplate>
+                                            <tr timetypename='<%# Eval("Name") %>'>
+                                                <td style="padding-top: 2px;">
+                                                    <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server">
+                                                        <%# Eval("Name") %>
+                                                    </label>
+                                                    <input id="imgDeleteWorkType" type="image" runat="server" alt="Delete Work Type"
+                                                        style="padding-top: 2px;" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                    <input id="cbTimeTypesAssignedToProject" style="height: 16px;" type="checkbox" runat="server" />
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <tr isfilteredrow="false" >
+                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                            Custom
+                                        </td>
+                                    </tr>
+                                    <asp:Repeater ID="repCustomTimeTypesAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
                                         runat="server">
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>'>
