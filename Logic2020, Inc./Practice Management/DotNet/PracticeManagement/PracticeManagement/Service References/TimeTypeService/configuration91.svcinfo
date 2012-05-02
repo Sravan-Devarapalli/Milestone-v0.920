@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="Dv8f6qLYmTtAotE1+1C6jDxRXIQ=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="JkizLQjlzzZDgbWRd79FTExhvWQ=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_ITimeTypeService">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_ITimeTypeService" contract="TimeTypeService.ITimeTypeService" bindingType="basicHttpBinding" address="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc" bindingConfiguration="BasicHttpBinding_ITimeTypeService">
+    <endpoint name="BasicHttpBinding_ITimeTypeService" contract="TimeTypeService.ITimeTypeService" bindingType="basicHttpBinding" address="http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc" bindingConfiguration="BasicHttpBinding_ITimeTypeService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc</serializedValue>
+          <serializedValue>http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
