@@ -2420,13 +2420,6 @@
     <Compile Include="Objects\DetailedUtilizationReportBaseItem.cs" />
     <Compile Include="Objects\DetailedUtilizationReportMilestoneItem.cs" />
     <Compile Include="Objects\DetailedUtilizationReportOpportunityItem.cs" />
-    <Compile Include="OldAndObsoleteCompanyCalendar.aspx.cs">
-      <DependentUpon>OldAndObsoleteCompanyCalendar.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="OldAndObsoleteCompanyCalendar.aspx.designer.cs">
-      <DependentUpon>OldAndObsoleteCompanyCalendar.aspx</DependentUpon>
-    </Compile>
     <Compile Include="CompanyPerformance.aspx.cs">
       <DependentUpon>CompanyPerformance.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2619,13 +2612,6 @@
     </Compile>
     <Compile Include="PersonList.aspx.designer.cs">
       <DependentUpon>PersonList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="OldAndObsoletePersonMargin.aspx.cs">
-      <DependentUpon>OldAndObsoletePersonMargin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="OldAndObsoletePersonMargin.aspx.designer.cs">
-      <DependentUpon>OldAndObsoletePersonMargin.aspx</DependentUpon>
     </Compile>
     <Compile Include="PracticeManagement.Master.cs">
       <DependentUpon>PracticeManagement.Master</DependentUpon>
@@ -2900,7 +2886,6 @@
     <Content Include="MilestoneDetail.aspx" />
     <Content Include="PersonDetail.aspx" />
     <Content Include="PersonList.aspx" />
-    <Content Include="OldAndObsoletePersonMargin.aspx" />
     <Content Include="PracticeManagement.Master" />
     <Content Include="ProjectDetail.aspx" />
     <Content Include="MilestonePersonDetail.aspx" />
@@ -3013,7 +2998,6 @@
     <Content Include="Images\top-menu-bg-h-25.png" />
     <Content Include="Images\top-menu-bg-h-40.png" />
     <Content Include="Images\top-menu-bg-h-50.png" />
-    <Content Include="OldAndObsoleteCompanyCalendar.aspx" />
     <Content Include="CompensationDetail.aspx" />
     <Content Include="Controls\CalendarLegend.ascx" />
     <Content Include="Controls\GrossMarginComputing.ascx" />
