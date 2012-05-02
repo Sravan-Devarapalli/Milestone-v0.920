@@ -37,7 +37,7 @@
         </td>
     </tr>
     <tr>
-        <td>
+        <td title="Non Billable" >
             &nbsp;N
         </td>
         <td>
