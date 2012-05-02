@@ -172,6 +172,7 @@
                 }
             }
         }
+
         function ReAssignStartDateEndDates() {
             hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
             hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
@@ -205,93 +206,9 @@
                 }
             }
 
-        }
+        } 
 
         //region project time types script
-
-        function changeAlternateitemscolrsForCBL() {
-            var cblTimeTypesAssignedToProjectItemsCount = 0;
-            var cblTimeTypesNotAssignedToProjectItemsCount = 0;
-            var tblTimeTypesAssignedToProject = document.getElementById('tblTimeTypesAssignedToProject');
-            if (tblTimeTypesAssignedToProject != null) {
-                SetAlternateColors(tblTimeTypesAssignedToProject);
-                cblTimeTypesAssignedToProjectItemsCount = tblTimeTypesAssignedToProject.children[0].children.length;
-            }
-
-            var tblTimeTypesNotAssignedToProject = document.getElementById('tblTimeTypesNotAssignedToProject');
-            if (tblTimeTypesNotAssignedToProject != null) {
-                SetAlternateColors(tblTimeTypesNotAssignedToProject);
-                cblTimeTypesNotAssignedToProjectItemsCount = tblTimeTypesNotAssignedToProject.children[0].children.length;
-            }
-
-            var divTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("divTimeTypesAssignedToProject") as HtmlGenericControl).ClientID%>');
-            var divTimeTypesNotAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("divTimeTypesNotAssignedToProject") as HtmlGenericControl).ClientID%>');
-
-        }
-
-        function SetAlternateColors(chkboxList) {
-
-            var trs = chkboxList.getElementsByTagName('tr');
-            var index = 0;
-            for (var i = 0; i < trs.length; i++) {
-                if (trs[i].style.display != "none") {
-                    index++;
-
-                    if ((index) % 2 == 0) {
-                        trs[i].style.backgroundColor = "#f9faff";
-
-                    }
-                    else {
-                        trs[i].style.backgroundColor = "";
-                    }
-                }
-            }
-        }
-
-        function UnAssignAllTimeTypes_Click() {
-            var tblTimeTypesAssignedToProjectCheckboxes = $('#tblTimeTypesAssignedToProject tr td :input[type=checkbox]');
-            for (var i = 0; i < tblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
-                tblTimeTypesAssignedToProjectCheckboxes[i].checked = true;
-            }
-            UnAssignTimeType_Click();
-        }
-
-        function AssignAllTimeTypes_Click() {
-            var tblTimeTypesNotAssignedToProjectCheckboxes = $('#tblTimeTypesNotAssignedToProject tr td :input[type=checkbox]');
-            for (var i = 0; i < tblTimeTypesNotAssignedToProjectCheckboxes.length; ++i) {
-                tblTimeTypesNotAssignedToProjectCheckboxes[i].checked = true;
-            }
-            AssignTimeType_Click();
-        }
-
-        function AssignTimeType_Click() {
-
-            var tblTimeTypesAssignedToProject = document.getElementById('tblTimeTypesAssignedToProject');
-            var tblTimeTypesNotAssignedToProjectCheckboxes = $('#tblTimeTypesNotAssignedToProject tr td :input[type=checkbox]');
-            var tblTimeTypesNotAssignedToProjectTrs = $('#tblTimeTypesNotAssignedToProject tr');
-
-            for (var i = 0; i < tblTimeTypesNotAssignedToProjectCheckboxes.length; ++i) {
-
-                if (tblTimeTypesNotAssignedToProjectCheckboxes[i].checked) {
-                    tblTimeTypesNotAssignedToProjectCheckboxes[i].checked = false;
-                    tblTimeTypesAssignedToProject.children[0].appendChild(tblTimeTypesNotAssignedToProjectTrs[i]);
-                    setDirty();
-                }
-            }
-            changeAlternateitemscolrsForCBL();
-        }
-
-        function IsTimeTypeHasAnyTimeEntriesForTheProject(timetypeId) {
-            var hdnProjectTimeTypesInUse = document.getElementById('<%= (ucProjectTimeTypes.FindControl("hdnProjectTimeTypesInUse") as HiddenField).ClientID%>');
-            //check weather the timetypeId is in hdnProjectTimeTypesInUse if yes return true else return false
-            var ids = hdnProjectTimeTypesInUse.value.split(',');
-            for (var i = 0; i < ids.length; ++i) {
-                if (ids[i] == timetypeId) {
-                    return true
-                }
-            }
-            return false;
-        }
 
         function btnClose_OnClientClick() {
             $find("mpeTimetypeAlertMessage").hide();
@@ -308,55 +225,6 @@
             }
 
             return false;
-        }
-
-        function UnAssignTimeType_Click() {
-            var tblTimeTypesNotAssignedToProject = document.getElementById('tblTimeTypesNotAssignedToProject');
-            var tblTimeTypesAssignedToProjectCheckboxes = $('#tblTimeTypesAssignedToProject tr td :input[type=checkbox]');
-            var tblTimeTypesAssignedToProjectImages = $('#tblTimeTypesAssignedToProject tr td :input[type=image]');
-            var tblTimeTypesAssignedToProjectTrs = $('#tblTimeTypesAssignedToProject tr');
-
-            var timeTypesHavingTimeEntries = "<br/>";
-
-            for (var i = 0; i < tblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
-                if (tblTimeTypesAssignedToProjectCheckboxes[i].checked) {
-                    if (IsTimeTypeHasAnyTimeEntriesForTheProject(tblTimeTypesAssignedToProjectImages[i].attributes['timeTypeid'].value)) {
-                        //format alert message here
-                        timeTypesHavingTimeEntries = timeTypesHavingTimeEntries + '-' + tblTimeTypesAssignedToProjectTrs[i].attributes['timeTypename'].value + '<br/>';
-                    }
-                }
-            }
-
-            if (timeTypesHavingTimeEntries != "<br/>") {
-                var lbAlertMessage = document.getElementById('<%= (ucProjectTimeTypes.FindControl("lbAlertMessage") as Label).ClientID%>');
-                lbAlertMessage.innerHTML = timeTypesHavingTimeEntries;
-                $find("mpeTimetypeAlertMessage").show();
-            }
-            else {
-                for (var i = 0; i < tblTimeTypesAssignedToProjectCheckboxes.length; ++i) {
-                    if (tblTimeTypesAssignedToProjectCheckboxes[i].checked) {
-                        tblTimeTypesAssignedToProjectCheckboxes[i].checked = false;
-                        tblTimeTypesNotAssignedToProject.children[0].appendChild(tblTimeTypesAssignedToProjectTrs[i]);
-                        setDirty();
-                    }
-                }
-
-                changeAlternateitemscolrsForCBL();
-            }
-        }
-
-        function SetTimeTypesAssignedToProject() {
-            var hdnTimeTypesAssignedToProject = document.getElementById('<%= (ucProjectTimeTypes.FindControl("hdnTimeTypesAssignedToProject") as HiddenField).ClientID%>');
-            if (hdnTimeTypesAssignedToProject != null) {
-                var timeTypesAssignedToProject = ',';
-                var images = $('#tblTimeTypesAssignedToProject tr td :input[type=image]');
-                for (var i = 0; i < images.length; ++i) {
-
-                    timeTypesAssignedToProject += images[i].attributes['timeTypeId'].value + ',';
-                }
-
-                hdnTimeTypesAssignedToProject.value = timeTypesAssignedToProject;
-            }
         }
 
         // End Region projecttimetypes script
