@@ -13,24 +13,6 @@ namespace PraticeManagement.Controls.Projects {
     public partial class ProjectTimeTypes {
         
         /// <summary>
-        /// hdnTimeTypesAssignedToProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnTimeTypesAssignedToProject;
-        
-        /// <summary>
-        /// hdnProjectTimeTypesInUse control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnProjectTimeTypesInUse;
-        
-        /// <summary>
         /// btnAddNewTimeType control.
         /// </summary>
         /// <remarks>
@@ -103,13 +85,58 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesNotAssignedToProject;
         
         /// <summary>
-        /// repTimeTypesNotAssignedToProject control.
+        /// repDefaultTimeTypesNotAssignedToProject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repTimeTypesNotAssignedToProject;
+        protected global::System.Web.UI.WebControls.Repeater repDefaultTimeTypesNotAssignedToProject;
+        
+        /// <summary>
+        /// repCustomTimeTypesNotAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repCustomTimeTypesNotAssignedToProject;
+        
+        /// <summary>
+        /// btnAssignAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAssignAll;
+        
+        /// <summary>
+        /// btnAssign control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAssign;
+        
+        /// <summary>
+        /// btnUnAssign control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUnAssign;
+        
+        /// <summary>
+        /// btnUnAssignAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUnAssignAll;
         
         /// <summary>
         /// divTimeTypesAssignedToProject control.
@@ -121,13 +148,22 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesAssignedToProject;
         
         /// <summary>
-        /// repTimeTypesAssignedToProject control.
+        /// repDefaultTimeTypesAssignedToProject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repTimeTypesAssignedToProject;
+        protected global::System.Web.UI.WebControls.Repeater repDefaultTimeTypesAssignedToProject;
+        
+        /// <summary>
+        /// repCustomTimeTypesAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repCustomTimeTypesAssignedToProject;
         
         /// <summary>
         /// pnlAddNewTimeType control.
