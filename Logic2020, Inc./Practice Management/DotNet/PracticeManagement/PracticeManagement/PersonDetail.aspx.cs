@@ -275,19 +275,6 @@ namespace PraticeManagement
             IsDirty = true;
         }
 
-        /// <summary>
-        /// Navigates to teh person margin page.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void btnPersonMargin_Click(object sender, EventArgs e)
-        {
-            Redirect(
-                string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-                              Constants.ApplicationPages.PersonMargin,
-                              PersonId));
-        }
-
         public static byte[] ConvertStringToBytes(string input)
         {
             var stream = new System.IO.MemoryStream();
