@@ -25,6 +25,15 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+
+        public TableCell CellSummaryObject
+        {
+            get
+            {
+                return cellSummary;
+            }
+        }
+
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
@@ -45,7 +54,7 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        private void SelectView(Control sender, int viewIndex)
+        public void SelectView(Control sender, int viewIndex)
         {
             mvProjectReport.ActiveViewIndex = viewIndex;
 
