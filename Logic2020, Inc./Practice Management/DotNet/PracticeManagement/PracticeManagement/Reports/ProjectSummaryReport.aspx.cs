@@ -211,7 +211,7 @@ namespace PraticeManagement.Reporting
                     }
                     else if (mvProjectSummaryReport.ActiveViewIndex == 1)
                     {
-                        ucByWorktype.PopulateByWorkTypeData(true);
+                        ucByWorktype.PopulateByWorkTypeData();
                     }
                 }
                 catch (Exception ex)
