@@ -21,12 +21,12 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/TimeTypeService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="TimeTypeService3.xsd" MetadataType="Schema" ID="ff36259c-5a89-427d-b2ca-d397a662cad7" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd3" />
-    <MetadataFile FileName="TimeTypeService.disco" MetadataType="Disco" ID="6829e190-04a6-4b90-979b-140b067138f0" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?disco" />
-    <MetadataFile FileName="TimeTypeService2.xsd" MetadataType="Schema" ID="19c9ac43-5901-48c5-a1e4-6e3fb4e3fa89" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd2" />
-    <MetadataFile FileName="TimeTypeService.wsdl" MetadataType="Wsdl" ID="a4b195bb-96cc-4cd8-b7d0-6b56eafc8ca7" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?wsdl" />
-    <MetadataFile FileName="TimeTypeService.xsd" MetadataType="Schema" ID="733a332c-eb3d-47a5-8b26-110570ad9f9c" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd0" />
-    <MetadataFile FileName="TimeTypeService1.xsd" MetadataType="Schema" ID="e6ee0a36-74c5-4bcd-a70d-4fe8cdc03a21" SourceId="1" SourceUrl="http://system66.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd1" />
+    <MetadataFile FileName="TimeTypeService14.disco" MetadataType="Disco" ID="8ac2dabb-63f4-41f3-8309-5dcf571c122b" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc?disco" />
+    <MetadataFile FileName="TimeTypeService14.wsdl" MetadataType="Wsdl" ID="b5337252-522c-495a-b381-325dcf6b7519" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc?wsdl" />
+    <MetadataFile FileName="TimeTypeService416.xsd" MetadataType="Schema" ID="35e7c956-d6db-43dd-a11e-4810122ebf5b" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd2" />
+    <MetadataFile FileName="TimeTypeService417.xsd" MetadataType="Schema" ID="2e63f8ce-e4e4-4968-93fb-94073cbf737c" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd3" />
+    <MetadataFile FileName="TimeTypeService418.xsd" MetadataType="Schema" ID="5dba1b32-a6bf-4bfa-9ba4-6919f12ec9b2" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd0" />
+    <MetadataFile FileName="TimeTypeService419.xsd" MetadataType="Schema" ID="f1c51f3e-01ba-4d31-95f4-34424f96e4ad" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/TimeTypeService.svc?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
