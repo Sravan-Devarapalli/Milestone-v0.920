@@ -166,33 +166,6 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Button btnExportToPDF;
         
         /// <summary>
-        /// pnlFilterCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlFilterCategory;
-        
-        /// <summary>
-        /// cblCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblCategory;
-        
-        /// <summary>
-        /// btnFilterOK control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnFilterOK;
-        
-        /// <summary>
         /// repWorkType control.
         /// </summary>
         /// <remarks>
