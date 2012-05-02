@@ -13,16 +13,10 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class ByworkType : System.Web.UI.UserControl
     {
-        private HtmlImage ImgCategoryFilter { get; set; }
 
         private PraticeManagement.Reporting.ProjectSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.ProjectSummaryReport)Page); }
-        }
-
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            cblCategory.OKButtonId = btnFilterOK.ClientID;
         }
 
         protected string GetDoubleFormat(double value)
@@ -30,11 +24,24 @@ namespace PraticeManagement.Controls.Reports
             return value.ToString(Constants.Formatting.DoubleValue);
         }
 
+        private void PopulateWorkTypeTotalHoursPercent(WorkTypeLevelGroupedHours[] reportData)
+        {
+            double grandTotal = reportData.Sum(t => t.TotalHours);
+            grandTotal = Math.Round(grandTotal, 2);
+            if (grandTotal > 0)
+            {
+                foreach (WorkTypeLevelGroupedHours workTypeLevelGroupedHours in reportData)
+                {
+                    workTypeLevelGroupedHours.WorkTypeTotalHoursPercent = Convert.ToInt32((workTypeLevelGroupedHours.TotalHours / grandTotal) * 100);
+                }
+            }
+        }
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
-            WorkTypeLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, cblCategory.ActualSelectedItemsXmlFormat));
-
+            WorkTypeLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, null));
+            data = data.OrderBy(p => p.WorkType.Name).ToArray();
+            PopulateWorkTypeTotalHoursPercent(data);
             StringBuilder sb = new StringBuilder();
             sb.Append(project.Client.Name);
             sb.Append("\t");
@@ -58,8 +65,6 @@ namespace PraticeManagement.Controls.Reports
                 //Header
                 sb.Append("WorkType");
                 sb.Append("\t");
-                sb.Append("Category");
-                sb.Append("\t");
                 sb.Append("Billable");
                 sb.Append("\t");
                 sb.Append("Non-Billable");
@@ -74,8 +79,6 @@ namespace PraticeManagement.Controls.Reports
                 foreach (var workTypeLevelGroupedHours in data)
                 {
                     sb.Append(workTypeLevelGroupedHours.WorkType.Name);
-                    sb.Append("\t");
-                    sb.Append(workTypeLevelGroupedHours.WorkType.Category);
                     sb.Append("\t");
                     sb.Append(GetDoubleFormat(workTypeLevelGroupedHours.BillableHours));
                     sb.Append("\t");
@@ -103,42 +106,15 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-        protected void repWorkType_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        public void DataBindResource(WorkTypeLevelGroupedHours[] reportData)
         {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-                ImgCategoryFilter = e.Item.FindControl("imgCategoryFilter") as HtmlImage;
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-
-            }
-        }
-
-        public void DataBindResource(WorkTypeLevelGroupedHours[] reportData, bool isFirstTime)
-        {
-            if (isFirstTime)
-            {
-                PopulateCategoryFilter(reportData);
-            }
-            if (reportData.Length > 0 || cblCategory.Items.Count > 1)
+            if (reportData.Length > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repWorkType.Visible = true;
-                double grandTotal = reportData.Sum(t => t.TotalHours);
-                grandTotal = Math.Round(grandTotal, 2);
-                if (grandTotal > 0)
-                {
-                    foreach (WorkTypeLevelGroupedHours workTypeLevelGroupedHours in reportData)
-                    {
-                        workTypeLevelGroupedHours.WorkTypeTotalHoursPercent = Convert.ToInt32((workTypeLevelGroupedHours.TotalHours / grandTotal) * 100);
-                    }
-                }
+                PopulateWorkTypeTotalHoursPercent(reportData);
                 repWorkType.DataSource = reportData;
                 repWorkType.DataBind();
-                cblCategory.SaveSelectedIndexesInViewState();
-                ImgCategoryFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblCategory.FilterPopupClientID,
-                cblCategory.SelectedIndexes, cblCategory.CheckBoxListObject.ClientID, cblCategory.WaterMarkTextBoxBehaviorID);
             }
             else
             {
@@ -148,26 +124,11 @@ namespace PraticeManagement.Controls.Reports
             PopulateHeaderSection(reportData);
         }
 
-        public void PopulateByWorkTypeData(bool isFirstTime = false)
+        public void PopulateByWorkTypeData()
         {
             WorkTypeLevelGroupedHours[] data;
-            if (isFirstTime)
-            {
-                data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, null));
-            }
-            else
-            {
-                data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, cblCategory.SelectedItemsXmlFormat));
-            }
-            DataBindResource(data, isFirstTime);
-        }
-
-        private void PopulateCategoryFilter(WorkTypeLevelGroupedHours[] reportData)
-        {
-            var categories = reportData.Select(r => new { Name = r.WorkType.Category }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblCategory.CheckBoxListObject, "All Categories", categories.ToArray(), false, "Name", "Name");
-            cblCategory.SelectAllItems(true);
-            cblCategory.OKButtonId = btnFilterOK.ClientID;
+            data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, null));
+            DataBindResource(data);
         }
 
         private void PopulateHeaderSection(WorkTypeLevelGroupedHours[] reportData)
@@ -219,11 +180,6 @@ namespace PraticeManagement.Controls.Reports
                 trBillable.Height = billablebarHeight.ToString() + "px";
                 trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
             }
-        }
-
-        protected void btnFilterOK_OnClick(object sender, EventArgs e)
-        {
-            PopulateByWorkTypeData();
         }
     }
 }
