@@ -240,10 +240,6 @@ namespace PraticeManagement
             if (ddlProjectGroup.Items.Count > 0)
                 ddlProjectGroup.SortByText();
 
-            if (tblProjectDetailTabViewSwitch_ActiveViewIndex == 2)
-            {
-                ucProjectTimeTypes.PopulateControls();
-            }
         }
 
         /// <summary>
@@ -532,26 +528,7 @@ namespace PraticeManagement
 
                 ucProjectTimeTypes.AllTimeTypes = ucProjectTimeTypes.AllTimeTypes.Where(tt => tt.Id != workTypeId).ToArray();
                 ucProjectTimeTypes.ProjectTimetypes = ucProjectTimeTypes.ProjectTimetypes.Where(tt => tt.Id != workTypeId).ToArray();
-                var ids = ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue;
-
-                List<string> idsList = ids.Split(',').ToList();
-
-                var sb = new StringBuilder();
-
-                foreach (string id in idsList)
-                {
-                    int timeTypeId = 0;
-
-                    int.TryParse(id, out timeTypeId);
-
-                    if (workTypeId != timeTypeId)
-                    {
-                        sb.Append(timeTypeId);
-                        sb.Append(",");
-                    }
-                }
-
-                ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue = sb.ToString();
+                ucProjectTimeTypes.DataBindAllRepeaters();
             }
             catch (Exception ex)
             {
