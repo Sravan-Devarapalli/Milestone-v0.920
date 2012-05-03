@@ -207,7 +207,6 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
-
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
@@ -253,7 +252,12 @@ namespace DataAccess
                     };
 
                     result.Add(ptd);
-
+                }
+                double grandTotal = result.Sum(t => t.TotalHours);
+                grandTotal = Math.Round(grandTotal, 2);
+                foreach (TimeEntriesGroupByClientAndProject cp in result)
+                {
+                    cp.GrandTotal = grandTotal;
                 }
             }
         }
