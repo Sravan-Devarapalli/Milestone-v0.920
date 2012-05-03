@@ -147,7 +147,7 @@ namespace PraticeManagement.Controls.Projects
 
         protected void cvTimetype_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
-            e.IsValid = ProjectTimetypes.Count() > 0;
+            e.IsValid = ProjectTimetypes.Count() > 0 ;
 
         }
 
@@ -227,16 +227,16 @@ namespace PraticeManagement.Controls.Projects
                 var row = e.Item;
                 var tt = e.Item.DataItem as TimeTypeRecord;
                 var imgDeleteWorkType = row.FindControl("imgDeleteWorkType") as HtmlInputImage;
-               if(tt.InUse || tt.IsDefault || tt.IsInternal || tt.IsAdministrative)
-               {
-                   imgDeleteWorkType.Src= "~/Images/close_16.png";
-                   imgDeleteWorkType.Attributes["onclick"] = "return DeleteWorkType(this.getAttribute('timetypeid'));";
-               }
-               else
-               {
-                   imgDeleteWorkType.Src = "~/Images/close_inactive16.png";
-                   imgDeleteWorkType.Attributes["onclick"] = "return false;";
-               }
+                if (!(tt.InUse || tt.IsDefault || tt.IsInternal || tt.IsAdministrative))
+                {
+                    imgDeleteWorkType.Src = "~/Images/close_16.png";
+                    imgDeleteWorkType.Attributes["onclick"] = "return DeleteWorkType(this.getAttribute('timetypeid'));";
+                }
+                else
+                {
+                    imgDeleteWorkType.Src = "~/Images/close_inactive16.png";
+                    imgDeleteWorkType.Attributes["onclick"] = "return false;";
+                }
             }
         }
 
@@ -244,7 +244,7 @@ namespace PraticeManagement.Controls.Projects
         {
             get
             {
-                return ProjectTimetypes.Select(tt => tt.Id.ToString()).Aggregate(((name, next) => next + "," + name));
+                return ProjectTimetypes != null ? ProjectTimetypes.Select(tt => tt.Id.ToString()).Aggregate(((name, next) => next + "," + name)) : string.Empty;
             }
 
 
