@@ -1113,6 +1113,7 @@ namespace PraticeManagement
             PopulateAttachmentControl(project);
 
             ucProjectTimeTypes.ResetSearchTextFilters();
+            ucProjectTimeTypes.PopulateControls();
         }
 
         private void PopulateAttachmentControl(Project project)
