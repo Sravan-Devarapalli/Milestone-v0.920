@@ -68,7 +68,7 @@
                             padding: 1px;">
                             <table id="tblTimeTypesNotAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
                                 <tbody>
-                                    <tr isfilteredrow="false" >
+                                    <tr isfilteredrow="false" id="tblTimeTypesNotAssignedToProjectDefault" runat="server">
                                         <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
                                             Default
                                         </td>
@@ -79,7 +79,7 @@
                                             <tr timetypename='<%# Eval("Name") %>'>
                                                 <td style="padding-top: 2px;">
                                                     <label id="lblTimeTypesNotAssignedToProject" for="cbTimeTypesNotAssignedToProject"
-                                                        title='<%# Eval("Name") %>' runat="server">
+                                                        title='<%# Eval("Name") %>' runat="server" style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
                                                     </label>
                                                     <input type="image" id="imgDeleteWorkType" runat="server" alt="Delete Work Type"
@@ -91,7 +91,7 @@
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
-                                    <tr isfilteredrow="false" >
+                                    <tr isfilteredrow="false" id="tblTimeTypesNotAssignedToProjectCustom" runat="server">
                                         <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
                                             Custom
                                         </td>
@@ -102,7 +102,7 @@
                                             <tr timetypename='<%# Eval("Name") %>'>
                                                 <td style="padding-top: 2px;">
                                                     <label id="lblTimeTypesNotAssignedToProject" for="cbTimeTypesNotAssignedToProject"
-                                                        title='<%# Eval("Name") %>' runat="server">
+                                                        title='<%# Eval("Name") %>' runat="server" style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
                                                     </label>
                                                     <input type="image" id="imgDeleteWorkType" runat="server" alt="Delete Work Type"
@@ -138,17 +138,18 @@
                             line-height: 19px; vertical-align: middle; padding: 1px;">
                             <table id="tblTimeTypesAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
                                 <tbody>
-                                    <tr isfilteredrow="false" >
-                                        <td  style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                    <tr isfilteredrow="false" id="tblTimeTypesAssignedToProjectDefault" runat="server">
+                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
                                             Default
-                                            </td>
+                                        </td>
                                     </tr>
                                     <asp:Repeater ID="repDefaultTimeTypesAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
                                         runat="server">
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>'>
                                                 <td style="padding-top: 2px;">
-                                                    <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server">
+                                                    <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server"
+                                                        style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
                                                     </label>
                                                     <input id="imgDeleteWorkType" type="image" runat="server" alt="Delete Work Type"
@@ -159,7 +160,7 @@
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
-                                    <tr isfilteredrow="false" >
+                                    <tr isfilteredrow="false" id="tblTimeTypesAssignedToProjectCustom" runat="server">
                                         <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
                                             Custom
                                         </td>
@@ -169,7 +170,8 @@
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>'>
                                                 <td style="padding-top: 2px;">
-                                                    <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server">
+                                                    <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server"
+                                                        style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
                                                     </label>
                                                     <input id="imgDeleteWorkType" type="image" runat="server" alt="Delete Work Type"
