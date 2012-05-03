@@ -73,8 +73,7 @@
                                             Default
                                         </td>
                                     </tr>
-                                    <asp:Repeater ID="repDefaultTimeTypesNotAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
-                                        runat="server">
+                                    <asp:Repeater ID="repDefaultTimeTypesNotAssignedToProject" runat="server">
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>'>
                                                 <td style="padding-top: 2px;">
@@ -82,9 +81,9 @@
                                                         title='<%# Eval("Name") %>' runat="server" style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
                                                     </label>
-                                                    <input type="image" id="imgDeleteWorkType" runat="server" alt="Delete Work Type"
-                                                        style="padding-top: 2px;" src="~/Images/close_16.png" title="Delete Work Type"
-                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                    <input type="image" id="imgDeleteWorkType" alt="Delete Work Type" style="padding-top: 2px;
+                                                        visibility: hidden;" runat="server" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' />
                                                     <input type="checkbox" style="height: 16px;" id="cbTimeTypesNotAssignedToProject"
                                                         runat="server" />
                                                 </td>
@@ -143,8 +142,7 @@
                                             Default
                                         </td>
                                     </tr>
-                                    <asp:Repeater ID="repDefaultTimeTypesAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
-                                        runat="server">
+                                    <asp:Repeater ID="repDefaultTimeTypesAssignedToProject" runat="server">
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>'>
                                                 <td style="padding-top: 2px;">
@@ -152,9 +150,9 @@
                                                         style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
                                                     </label>
-                                                    <input id="imgDeleteWorkType" type="image" runat="server" alt="Delete Work Type"
-                                                        style="padding-top: 2px;" src="~/Images/close_16.png" title="Delete Work Type"
-                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                    <input type="image" id="imgDeleteWorkType" alt="Delete Work Type" style="padding-top: 2px;
+                                                        visibility: hidden;" runat="server" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' />
                                                     <input id="cbTimeTypesAssignedToProject" style="height: 16px;" type="checkbox" runat="server" />
                                                 </td>
                                             </tr>
