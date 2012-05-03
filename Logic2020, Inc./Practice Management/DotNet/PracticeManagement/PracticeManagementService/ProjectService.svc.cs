@@ -1159,6 +1159,11 @@ namespace PracticeManagementService
             return ProjectDAL.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate);
         }
 
+        public List<TimeTypeRecord> GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds)
+        {
+            return ProjectDAL.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
+        }
+
 
         #endregion
     }
