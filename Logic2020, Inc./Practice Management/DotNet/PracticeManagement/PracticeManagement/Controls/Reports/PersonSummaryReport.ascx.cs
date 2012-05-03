@@ -17,40 +17,12 @@ namespace PraticeManagement.Controls.Reports
             get { return ((PraticeManagement.Reporting.PersonDetailTimeReport)Page); }
         }
 
-        public List<TimeEntriesGroupByClientAndProject> TimeEntriesGroupByClientAndProjectList
-        {
-            get
-            {
-                return ViewState["TimeEntriesGroupByClientAndProjectList_Key"] as List<TimeEntriesGroupByClientAndProject>;
-            }
-            set
-            {
-                ViewState["TimeEntriesGroupByClientAndProjectList_Key"] = value;
-            }
-        }
-
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
         public void DatabindRepepeaterSummary(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
         {
-            TimeEntriesGroupByClientAndProjectList = timeEntriesGroupByClientAndProjectList;
-
             if (timeEntriesGroupByClientAndProjectList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
                 repSummary.Visible = true;
-                double grandTotal = timeEntriesGroupByClientAndProjectList.Sum(t => t.TotalHours);
-                grandTotal = Math.Round(grandTotal, 2);
-                if (grandTotal > 0)
-                {
-                    foreach (TimeEntriesGroupByClientAndProject timeEntries in timeEntriesGroupByClientAndProjectList)
-                    {
-                        timeEntries.ProjectTotalHoursPercent = Convert.ToInt32((timeEntries.TotalHours / grandTotal) * 100);
-                    }
-                }
                 repSummary.DataSource = timeEntriesGroupByClientAndProjectList;
                 repSummary.DataBind();
             }
@@ -71,6 +43,7 @@ namespace PraticeManagement.Controls.Reports
             // mso-number-format:"0\.00"
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
+                var timeEntriesGroupByClientAndProjectList = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesSummary(HostingPage.SelectedPersonId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
 
                 int personId = HostingPage.SelectedPersonId;
                 var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
@@ -91,7 +64,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.AppendLine();
-                if (TimeEntriesGroupByClientAndProjectList.Count > 0)
+                if (timeEntriesGroupByClientAndProjectList.Count > 0)
                 {
                     //Header
                     sb.Append("Account");
@@ -122,7 +95,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.AppendLine();
 
                     //Data
-                    foreach (var timeEntriesGroupByClientAndProject in TimeEntriesGroupByClientAndProjectList)
+                    foreach (var timeEntriesGroupByClientAndProject in timeEntriesGroupByClientAndProjectList)
                     {
                         sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
                         sb.Append("\t");
@@ -162,11 +135,11 @@ namespace PraticeManagement.Controls.Reports
                 GridViewExportUtil.Export(filename, sb);
             }
         }
+
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
 
         }
-
 
     }
 }
