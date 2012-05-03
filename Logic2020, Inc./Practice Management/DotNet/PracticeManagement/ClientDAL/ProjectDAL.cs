@@ -2733,7 +2733,7 @@ namespace DataAccess
         public static List<TimeTypeRecord> GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectTimeTypeTypesInUseDetailsProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetTimeTypesInUseDetailsByProjectProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
