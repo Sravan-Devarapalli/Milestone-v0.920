@@ -1,4 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[GetProjectTimeTypes]
+﻿-- ==================================================================================================================================================
+-- Author:		Sainath.CH
+-- Updated date: 03-05-2012
+-- Description:  Gets the WorkType List for Given ProjectId in between the given startdate and enddate  
+-- ==================================================================================================================================================
+CREATE PROCEDURE [dbo].[GetProjectTimeTypes]
 	@ProjectId		INT,
 	@IsOnlyActive	BIT,
 	@StartDate		DATETIME = NULL,
@@ -29,9 +34,10 @@ BEGIN
 		)
 
 		--Configure select columns.
-		SELECT DISTINCT ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) AS 'TimeTypeId'
-			, ISNULL(PTT.Name, DTT.Name) AS 'Name'
-			, CASE WHEN ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) IN (SELECT * FROM ProjectTimeTypesInUse) THEN 1 ELSE 0 END AS 'InUse'
+		SELECT DISTINCT ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) AS [TimeTypeId],
+						ISNULL(PTT.Name, DTT.Name) AS [Name],
+						CASE WHEN ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) IN (SELECT * FROM ProjectTimeTypesInUse) THEN 1 ELSE 0 END AS [InUse],
+						CONVERT(BIT,CASE WHEN DTT.TimeTypeId IS NOT NULL THEN 1 ELSE 0 END) AS [IsDefault]
 		FROM ProjectTimeTypes PTT 
 		FULL JOIN DefaultTimeTypes DTT ON DTT.TimeTypeId = PTT.TimeTypeId
 		LEFT JOIN dbo.ChargeCode CC  ON CC.ProjectId = @ProjectId AND ISNULL(PTT.TimeTypeId, DTT.TimeTypeId) = CC.TimeTypeId 
