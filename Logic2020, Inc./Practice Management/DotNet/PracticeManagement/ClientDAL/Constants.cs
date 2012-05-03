@@ -698,7 +698,6 @@
                 public const string GetPersonTimeEnteredHoursByDay = "dbo.GetPersonTimeEnteredHoursByDay";
                 public const string PersonTimeEntriesByPeriod = "dbo.PersonTimeEntriesByPeriod";
                 public const string GetWorkTypeNameByIdProcedure = "dbo.GetWorkTypeNameById";
-                public const string GetWorkTypesInUseDetailsProcedure = "dbo.GetWorkTypesInUseDetails";
                 public const string ToggleIsReviewed = "dbo.TimeEntryToggleIsReviewed";
                 public const string ToggleIsCorrect = "dbo.TimeEntryToggleIsCorrect";
                 public const string ToggleIsChargeable = "dbo.TimeEntryToggleIsChargeable";
@@ -848,7 +847,10 @@
                 public const string GetIsHourlyRevenueByPeriod = "dbo.GetIsHourlyRevenueByPeriod";
                 public const string ListProjectsByClientAndPersonInPeriod = "dbo.ListProjectsByClientAndPersonInPeriod";
                 public const string ProjectSearchByName = "dbo.ProjectSearchByName";
-
+                public const string GetProjectTimeTypeTypesInUseDetailsProcedure = "dbo.GetProjectTimeTypeTypesInUseDetails";
+                public const string GetOwnerProjectsAfterTerminationDateProcedure = "dbo.GetOwnerProjectsAfterTerminationDate";
+                public const string GetTimeTypesByProjectIdProcedure = "dbo.GetProjectTimeTypes";
+                public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
 
             }
 
