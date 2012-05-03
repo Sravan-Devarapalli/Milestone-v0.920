@@ -864,6 +864,10 @@ namespace PraticeManagement
             {
                 int activeIndex = mvProjectDetailTab.ActiveViewIndex;
                 mvProjectDetailTab.ActiveViewIndex = 2;
+                if (ucProjectTimeTypes.ProjectTimetypes == null)
+                {
+                    ucProjectTimeTypes.PopulateControls();
+                }
                 Page.Validate(vsumProject.ValidationGroup);
                 if (!Page.IsValid)
                 {
