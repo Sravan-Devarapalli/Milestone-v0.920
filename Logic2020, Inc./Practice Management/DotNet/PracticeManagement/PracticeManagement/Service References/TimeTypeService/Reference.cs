@@ -35,9 +35,6 @@ namespace PraticeManagement.TimeTypeService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeTypeService/GetWorkTypeNameById", ReplyAction="http://tempuri.org/ITimeTypeService/GetWorkTypeNameByIdResponse")]
         string GetWorkTypeNameById(int worktypeId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeTypeService/GetWorkTypesInUseDetails", ReplyAction="http://tempuri.org/ITimeTypeService/GetWorkTypesInUseDetailsResponse")]
-        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetWorkTypesInUseDetails(string timeTypeIds);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -47,7 +44,6 @@ namespace PraticeManagement.TimeTypeService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeTypeServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeTypeService.ITimeTypeService>, PraticeManagement.TimeTypeService.ITimeTypeService {
-        
     
         
         public TimeTypeServiceClient(string endpointConfigurationName) : 
@@ -92,10 +88,6 @@ namespace PraticeManagement.TimeTypeService {
         
         public string GetWorkTypeNameById(int worktypeId) {
             return base.Channel.GetWorkTypeNameById(worktypeId);
-        }
-        
-        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetWorkTypesInUseDetails(string timeTypeIds) {
-            return base.Channel.GetWorkTypesInUseDetails(timeTypeIds);
         }
     }
 }
