@@ -372,6 +372,10 @@ namespace PracticeManagementService
         [OperationContract]
         Project GetProjectShortByProjectNumber(string projectNumber,int? milestoneId, DateTime? startDate, DateTime? endDate);
 
+        [OperationContract]
+        List<TimeTypeRecord> GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds);
+
+
     }
 }
 
