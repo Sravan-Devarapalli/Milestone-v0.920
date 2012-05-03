@@ -55,10 +55,6 @@ namespace PracticeManagementService
         [OperationContract]
         string GetWorkTypeNameById(int worktypeId);
 
-        [OperationContract]
-        List<TimeTypeRecord> GetWorkTypesInUseDetails(string timeTypeIds);
-
-
         #endregion
 
 
