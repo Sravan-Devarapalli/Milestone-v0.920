@@ -93,7 +93,9 @@
                         <td style="text-align: right; width: 65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
-                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercent")%>%">
+                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%"  title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
+                                    </td>
+                                    <td style="background-color: #BEBEBE; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
                                     </td>
                                     <td style="background-color: White; height: 18px;" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
                                     </td>
@@ -153,7 +155,9 @@
                         <td style="text-align: right; width: 65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
-                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercent")%>%">
+                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
+                                    </td>
+                                    <td style="background-color: #BEBEBE; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
                                     </td>
                                     <td style="background-color: White; height: 18px;" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
                                     </td>
