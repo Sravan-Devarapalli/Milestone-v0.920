@@ -18,9 +18,7 @@ namespace DataAccess
     /// </summary>
     public class ProjectDAL
     {
-        public const string GetOwnerProjectsAfterTerminationDateProcedure = "dbo.GetOwnerProjectsAfterTerminationDate";
-        public const string GetTimeTypesByProjectIdProcedure = "dbo.GetProjectTimeTypes";
-        public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
+      
         /// <summary>
         /// Retrieves the list of projects which intended for the specific client.
         /// </summary>
@@ -2233,8 +2231,7 @@ namespace DataAccess
             }
             return projectList;
         }
-
-
+        
         public static List<Project> GetProjectListByDateRange(bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, DateTime periodStart, DateTime periodEnd)
         {
             var projectList = new List<Project>();
@@ -2367,8 +2364,7 @@ namespace DataAccess
                 }
             }
         }
-
-
+        
         public static bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2390,13 +2386,12 @@ namespace DataAccess
                 }
             }
         }
-
-
+        
         public static List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate)
         {
 
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(GetOwnerProjectsAfterTerminationDateProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetOwnerProjectsAfterTerminationDateProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2414,8 +2409,7 @@ namespace DataAccess
                 }
             }
         }
-
-
+        
         private static void ReadProjectsAfterTermination(SqlDataReader reader, List<Project> result)
         {
             if (reader.HasRows)
@@ -2501,7 +2495,7 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int isNoteRequiredIndex = -1; 
+                        int isNoteRequiredIndex = -1;
 
                         project = ReadProjectShort(reader);
 
@@ -2548,7 +2542,7 @@ namespace DataAccess
         public static List<TimeTypeRecord> GetTimeTypesByProjectId(int projectId, bool IsOnlyActive, DateTime? startDate, DateTime? endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(GetTimeTypesByProjectIdProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetTimeTypesByProjectIdProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2579,15 +2573,24 @@ namespace DataAccess
             if (reader.HasRows)
             {
                 int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
                 int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
-
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int isDefaultIndex;
+                try
+                {
+                    isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+                }
+                catch (Exception ex)
+                {
+                    isDefaultIndex = -1;
+                }
                 while (reader.Read())
                 {
                     var tt = new TimeTypeRecord
                     {
                         Id = reader.GetInt32(timeTypeIdIndex),
                         Name = reader.GetString(nameIndex),
+                        IsDefault = isDefaultIndex > -1 ? reader.GetBoolean(isDefaultIndex) : false,
                         InUse = Convert.ToBoolean(reader.GetInt32(inUseIndex))
                     };
 
@@ -2602,7 +2605,7 @@ namespace DataAccess
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
-            using (SqlCommand command = new SqlCommand(SetProjectTimeTypesProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.SetProjectTimeTypesProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2623,8 +2626,7 @@ namespace DataAccess
                 }
             }
         }
-
-
+        
         public static Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2659,8 +2661,6 @@ namespace DataAccess
             }
         }
 
-
-
         public static Project GetProjectShortByProjectNumber(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2688,7 +2688,7 @@ namespace DataAccess
                             int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
                             int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                             int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
-                            
+
 
                             var project = new Project
                               {
@@ -2729,6 +2729,26 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<TimeTypeRecord> GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectTimeTypeTypesInUseDetailsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeIdsParam, timeTypeIds);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<TimeTypeRecord> result = new List<TimeTypeRecord>();
+                    ReadTimeTypes(reader, result);
+                    return result;
+                }
+            }
+        }
     }
 }
+
 
