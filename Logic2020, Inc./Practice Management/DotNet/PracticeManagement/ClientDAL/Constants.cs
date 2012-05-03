@@ -847,7 +847,7 @@
                 public const string GetIsHourlyRevenueByPeriod = "dbo.GetIsHourlyRevenueByPeriod";
                 public const string ListProjectsByClientAndPersonInPeriod = "dbo.ListProjectsByClientAndPersonInPeriod";
                 public const string ProjectSearchByName = "dbo.ProjectSearchByName";
-                public const string GetProjectTimeTypeTypesInUseDetailsProcedure = "dbo.GetProjectTimeTypeTypesInUseDetails";
+                public const string GetTimeTypesInUseDetailsByProjectProcedure = "dbo.GetTimeTypesInUseDetailsByProject";
                 public const string GetOwnerProjectsAfterTerminationDateProcedure = "dbo.GetOwnerProjectsAfterTerminationDate";
                 public const string GetTimeTypesByProjectIdProcedure = "dbo.GetProjectTimeTypes";
                 public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
