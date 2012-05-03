@@ -41,7 +41,36 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+
         public int ProjectTotalHoursPercent
+        {
+            get
+            {
+                return ProjectTotalHoursPercentBillable + ProjectTotalHoursPercentNonBillable;
+            }
+
+        }
+
+
+        public int ProjectTotalHoursPercentBillable
+        {
+            get
+            {
+                return Convert.ToInt32((BillableHours / GrandTotal) * 100);
+            }
+        }
+
+        public int ProjectTotalHoursPercentNonBillable
+        {
+            get
+            {
+                return Convert.ToInt32((NonBillableHours / GrandTotal) * 100);
+            }
+
+        }
+
+        [DataMember]
+        public double GrandTotal
         {
             get;
             set;
@@ -63,7 +92,7 @@ namespace DataTransferObjects.Reports
             }
         }
 
-        
+
 
         public void AddDayTotalHours(TimeEntriesGroupByDate dt)
         {
