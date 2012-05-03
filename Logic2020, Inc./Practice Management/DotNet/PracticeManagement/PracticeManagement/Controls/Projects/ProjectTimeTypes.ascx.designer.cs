@@ -85,6 +85,15 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesNotAssignedToProject;
         
         /// <summary>
+        /// tblTimeTypesNotAssignedToProjectDefault control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow tblTimeTypesNotAssignedToProjectDefault;
+        
+        /// <summary>
         /// repDefaultTimeTypesNotAssignedToProject control.
         /// </summary>
         /// <remarks>
@@ -92,6 +101,15 @@ namespace PraticeManagement.Controls.Projects {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repDefaultTimeTypesNotAssignedToProject;
+        
+        /// <summary>
+        /// tblTimeTypesNotAssignedToProjectCustom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow tblTimeTypesNotAssignedToProjectCustom;
         
         /// <summary>
         /// repCustomTimeTypesNotAssignedToProject control.
@@ -148,6 +166,15 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTimeTypesAssignedToProject;
         
         /// <summary>
+        /// tblTimeTypesAssignedToProjectDefault control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow tblTimeTypesAssignedToProjectDefault;
+        
+        /// <summary>
         /// repDefaultTimeTypesAssignedToProject control.
         /// </summary>
         /// <remarks>
@@ -155,6 +182,15 @@ namespace PraticeManagement.Controls.Projects {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repDefaultTimeTypesAssignedToProject;
+        
+        /// <summary>
+        /// tblTimeTypesAssignedToProjectCustom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow tblTimeTypesAssignedToProjectCustom;
         
         /// <summary>
         /// repCustomTimeTypesAssignedToProject control.
