@@ -206,9 +206,9 @@
                 <td sorttable_customkey='<%# Eval("WorkTypeTotalHoursPercent")%>'>
                     <table class="TdLevelNoBorder" width="100%">
                         <tr>
-                            <td style="width: 4%">
+                            <td style="width: 1%">
                             </td>
-                            <td style="text-align: right; width: 79%">
+                            <td style="text-align: right; width: 80%">
                                 <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                     <tr>
                                         <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("WorkTypeTotalHoursPercent")%>%">
@@ -218,7 +218,7 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 15%; text-align: left; padding-left: 10px;">
+                            <td style="width: 17%; text-align: left; padding-left: 10px;">
                                 <%# Eval("WorkTypeTotalHoursPercent")%>%
                             </td>
                             <td style="width: 2%;">
