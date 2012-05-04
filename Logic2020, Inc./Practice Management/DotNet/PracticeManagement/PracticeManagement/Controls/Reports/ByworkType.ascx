@@ -166,10 +166,10 @@
                 <table id="tblProjectSummaryByWorkType" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
-                            <th style="width: 200px; text-align: left;" class="padLeft5">
+                            <th style="width: 500px; text-align: left;" class="padLeft5">
                                 WorkType
                             </th>
-                            <th style="width: 100px">
+                            <th style="width: 110px">
                                 Billable
                             </th>
                             <th style="width: 100px;">
@@ -178,9 +178,9 @@
                             <th style="width: 100px;">
                                 Total
                             </th>
-                            <th style="width: 100px;">
+                            <th style="width: 210px;">
                             </th>
-                            <th style="width: 295px;">
+                            <th style="width: 325px;">
                                 Percent of Total Hours
                             </th>
                         </tr>
@@ -201,7 +201,8 @@
                 <td>
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
-                <td></td>
+                <td>
+                </td>
                 <td sorttable_customkey='<%# Eval("WorkTypeTotalHoursPercent")%>'>
                     <table class="TdLevelNoBorder" width="100%">
                         <tr>
