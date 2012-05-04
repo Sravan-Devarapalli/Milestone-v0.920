@@ -166,19 +166,19 @@
                 <table id="tblProjectSummaryByWorkType" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
-                            <th style="width: 500px; text-align: left;" class="padLeft5">
+                            <th style="width: 460px; text-align: left;" class="padLeft5">
                                 WorkType
                             </th>
-                            <th style="width: 110px">
+                            <th style="width: 150px">
                                 Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th style="width: 150px;">
                                 Non-Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th style="width: 140px;">
                                 Total
                             </th>
-                            <th style="width: 210px;">
+                            <th style="width: 160px;">
                             </th>
                             <th style="width: 325px;">
                                 Percent of Total Hours
@@ -206,9 +206,9 @@
                 <td sorttable_customkey='<%# Eval("WorkTypeTotalHoursPercent")%>'>
                     <table class="TdLevelNoBorder" width="100%">
                         <tr>
-                            <td style="width: 1%">
+                            <td style="width: 4%">
                             </td>
-                            <td style="text-align: right; width: 88%">
+                            <td style="text-align: right; width: 79%">
                                 <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                     <tr>
                                         <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("WorkTypeTotalHoursPercent")%>%">
@@ -218,10 +218,10 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 10%; text-align: left; padding-left: 10px;">
+                            <td style="width: 15%; text-align: left; padding-left: 10px;">
                                 <%# Eval("WorkTypeTotalHoursPercent")%>%
                             </td>
-                            <td style="width: 1%;">
+                            <td style="width: 2%;">
                             </td>
                         </tr>
                     </table>
