@@ -53,6 +53,12 @@ namespace PraticeManagement.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheck", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheckResponse")]
         DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimeEntryAuditReportByPerson", ReplyAction="http://tempuri.org/IReportService/TimeEntryAuditReportByPersonResponse")]
+        DataTransferObjects.Reports.PersonLevelTimeEntriesHistory[] TimeEntryAuditReportByPerson(System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimeEntryAuditReportByProject", ReplyAction="http://tempuri.org/IReportService/TimeEntryAuditReportByProjectResponse")]
+        DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory[] TimeEntryAuditReportByProject(System.DateTime startDate, System.DateTime endDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -62,7 +68,8 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-       
+        
+     
         
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -130,6 +137,14 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Reports.PersonLevelPayCheck[] TimePeriodSummaryByResourcePayCheck(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames) {
             return base.Channel.TimePeriodSummaryByResourcePayCheck(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames);
+        }
+        
+        public DataTransferObjects.Reports.PersonLevelTimeEntriesHistory[] TimeEntryAuditReportByPerson(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.TimeEntryAuditReportByPerson(startDate, endDate);
+        }
+        
+        public DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory[] TimeEntryAuditReportByProject(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.TimeEntryAuditReportByProject(startDate, endDate);
         }
     }
 }
