@@ -96,7 +96,6 @@ namespace PraticeManagement
             public const string ProjectDetail = "~/ProjectDetail.aspx";
             public const string ClientList = "~/Config/Clients.aspx";
             public const string ClientDetails = "~/ClientDetails.aspx";
-            public const string Reports = "~/Reports.aspx";
             public const string ConsultantsUtilizationReport = "~/Reports/UtilizationTable.aspx";
             public const string ConsTimelineReport = "~/Reports/UtilizationTimeline.aspx";
             public const string ConsTimelineReportDetails = "~/Reports/UtilizationTimeline.aspx#details";
