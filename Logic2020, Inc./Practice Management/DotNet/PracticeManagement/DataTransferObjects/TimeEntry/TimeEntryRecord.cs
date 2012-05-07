@@ -31,7 +31,8 @@ namespace DataTransferObjects.TimeEntry
         public int? ChargeCodeId { get; set; }
 
         /// <summary>
-        /// Date that this time entry is about
+        /// Date that this time entry is about . 
+        /// ChargeCodeDate
         /// </summary>
         [DataMember]
         public DateTime MilestoneDate { get; set; }
@@ -77,6 +78,28 @@ namespace DataTransferObjects.TimeEntry
 
         [DataMember]
         public Person ApprovedBy { get; set; }
+
+        [DataMember]
+        public ChargeCode ChargeCode
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public double OldHours
+        {
+            get;
+            set;
+        }
+
+        public double NetChange
+        {
+            get
+            {
+                return OldHours - ActualHours;
+            }
+        }
 
         #endregion
 
