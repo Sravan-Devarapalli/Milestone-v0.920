@@ -24,6 +24,33 @@ AS
         SET @StartDateLocal = CONVERT(DATE, @StartDate)
         SET @EndDateLocal = CONVERT(DATE, @EndDate);
 
+		  WITH    EffectedPersons
+                  AS ( SELECT   TE.PersonId
+                       FROM     dbo.TimeEntry AS TE
+                                INNER JOIN dbo.TimeEntryHours AS TEH ON TE.TimeEntryId = TEH.TimeEntryId
+                       WHERE    TEH.ModifiedDate > @EndDateLocal
+                                AND TE.ChargeCodeDate BETWEEN @StartDateLocal
+                                                      AND     @EndDateLocal
+                       UNION
+                       SELECT   TH.PersonId
+                       FROM     dbo.TimeEntryHistory AS TH
+                       WHERE    TH.ModifiedDate > @EndDateLocal
+                                AND TH.OldHours <> TH.ActualHours
+                                AND TH.ChargeCodeDate BETWEEN @StartDateLocal
+                                                      AND     @EndDateLocal
+                     )
+            SELECT  P.PersonId ,
+                    P.LastName ,
+                    P.FirstName ,
+                    P.PersonStatusId ,
+                    PS.Name AS PersonStatusName,
+                    TSC.TimescaleId AS Timescale ,
+                    TSC.Name AS TimescaleName
+            FROM    EffectedPersons AS EP
+                    INNER JOIN dbo.Person AS P ON EP.PersonId = P.PersonId
+                    INNER JOIN dbo.PersonStatus AS PS ON P.PersonStatusId = PS.PersonStatusId
+                    INNER JOIN dbo.Timescale AS TSC ON TSC.TimescaleId = dbo.GetCurrentPayType(P.PersonId);
+
 
         WITH    TimeEntriesHistory
                   AS ( SELECT   TE.PersonId ,
@@ -61,7 +88,7 @@ AS
                     CLNT.ClientId ,
                     CLNT.Name AS ClientName ,
                     Pg.GroupId ,
-                    Pg.Name AS ProjectGroupName ,
+                    Pg.Name AS GroupName ,
                     TT.TimeTypeId ,
                     TT.Name AS TimeTypeName ,
                     TH.ChargeCodeDate ,
@@ -77,34 +104,9 @@ AS
                     INNER JOIN dbo.Project AS PROJ ON PROJ.ProjectId = CC.ProjectId
                     INNER JOIN dbo.Client AS CLNT ON CC.ClientId = CLNT.ClientId
                     INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = CC.ProjectGroupId
-                    INNER JOIN dbo.TimeType AS TT ON TT.TimeTypeId = CC.TimeTypeId;
+                    INNER JOIN dbo.TimeType AS TT ON TT.TimeTypeId = CC.TimeTypeId
 
-        WITH    EffectedPersons
-                  AS ( SELECT   TE.PersonId
-                       FROM     dbo.TimeEntry AS TE
-                                INNER JOIN dbo.TimeEntryHours AS TEH ON TE.TimeEntryId = TEH.TimeEntryId
-                       WHERE    TEH.ModifiedDate > @EndDateLocal
-                                AND TE.ChargeCodeDate BETWEEN @StartDateLocal
-                                                      AND     @EndDateLocal
-                       UNION
-                       SELECT   TH.PersonId
-                       FROM     dbo.TimeEntryHistory AS TH
-                       WHERE    TH.ModifiedDate > @EndDateLocal
-                                AND TH.OldHours <> TH.ActualHours
-                                AND TH.ChargeCodeDate BETWEEN @StartDateLocal
-                                                      AND     @EndDateLocal
-                     )
-            SELECT  P.PersonId ,
-                    P.LastName ,
-                    P.FirstName ,
-                    P.PersonStatusId ,
-                    PS.Name ,
-                    TSC.TimescaleId ,
-                    TSC.Name AS TimescaleName
-            FROM    EffectedPersons AS EP
-                    INNER JOIN dbo.Person AS P ON EP.PersonId = P.PersonId
-                    INNER JOIN dbo.PersonStatus AS PS ON P.PersonStatusId = PS.PersonStatusId
-                    INNER JOIN dbo.Timescale AS TSC ON TSC.TimescaleId = dbo.GetCurrentPayType(P.PersonId)
+      
      
     END
 
