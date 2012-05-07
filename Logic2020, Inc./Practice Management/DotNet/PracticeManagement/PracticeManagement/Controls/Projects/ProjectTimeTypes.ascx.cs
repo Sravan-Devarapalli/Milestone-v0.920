@@ -236,6 +236,7 @@ namespace PraticeManagement.Controls.Projects
                 {
                     imgDeleteWorkType.Src = "~/Images/close_inactive16.png";
                     imgDeleteWorkType.Attributes["onclick"] = "return false;";
+                    imgDeleteWorkType.Attributes["title"] = "";
                 }
             }
         }
