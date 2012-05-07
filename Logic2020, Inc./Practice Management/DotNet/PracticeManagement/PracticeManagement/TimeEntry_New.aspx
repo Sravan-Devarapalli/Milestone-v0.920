@@ -166,6 +166,32 @@
             imgNoteClientId.title = tbnote.value;
             changeIcon(tbnote.id, imgNoteClientId.id);
         }
+
+        function ChangeTooltip(tbnoteClientID, ddlApprovedManagersClientID) {
+            var tbnote = document.getElementById(tbnoteClientID);
+            var imgNoteClientId = document.getElementById(tbnote.attributes["imgNoteClientId"].value);
+            var ddlApprovedManagers = document.getElementById(ddlApprovedManagersClientID);
+            var approvedBy = '';
+            if (ddlApprovedManagers != null || ddlApprovedManagers != undefined) {
+                if (ddlApprovedManagers.length > 0 && ddlApprovedManagers.value != '') {
+                    for (var i = 0; i < ddlApprovedManagers.length; i++) {
+                        if (ddlApprovedManagers[i].value == ddlApprovedManagers.value) {
+                            approvedBy = ddlApprovedManagers[i].text;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (approvedBy != '') {
+                imgNoteClientId.title = tbnote.value + ' Approved By ' + approvedBy + '.';
+            }
+            else {
+                imgNoteClientId.title = tbnote.value;
+            }
+
+            changeIcon(tbnote.id, imgNoteClientId.id);
+        }
+
         function btnClose_OnClientClick(popup) {
             $find(popup).hide();
             return false;
