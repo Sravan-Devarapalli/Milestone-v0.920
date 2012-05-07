@@ -2375,13 +2375,6 @@
     <Compile Include="GuestPages\PageHasBeenRemoved.aspx.designer.cs">
       <DependentUpon>PageHasBeenRemoved.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ClientList.aspx.cs">
-      <DependentUpon>ClientList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ClientList.aspx.designer.cs">
-      <DependentUpon>ClientList.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Objects\DetailedUtilizationReportBaseItem.cs" />
     <Compile Include="Objects\DetailedUtilizationReportMilestoneItem.cs" />
     <Compile Include="Objects\DetailedUtilizationReportOpportunityItem.cs" />
@@ -2829,7 +2822,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClientList.aspx" />
     <Content Include="CompanyPerformance.aspx" />
     <Content Include="Controls\PersonnelCompensation.ascx" />
     <Content Include="Controls\PracticeFilter.ascx" />
