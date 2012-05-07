@@ -311,7 +311,11 @@
             public const string PaychexID = "PaychexID";
             public const string IsOffshore = "IsOffshore";
             public const string IsNoteRequired = "IsNoteRequired";
-
+            public const string OriginalHours = "OriginalHours";
+            public const string Phase = "Phase";
+            public const string TimescaleName = "TimescaleName";
+            
+            
         }
 
         #endregion
@@ -764,6 +768,7 @@
                 public const string ProjectSummaryReportByWorkType = "dbo.ProjectSummaryReportByWorkType";
                 public const string GetMilestonesForProject = "dbo.GetMilestonesForProject";
                 public const string TimePeriodSummaryByResourcePayCheck = "dbo.TimePeriodSummaryByResourcePayCheck";
+                public const string TimeEntryAuditReport = "dbo.TimeEntryAuditReport";
 
                 
             }
@@ -922,7 +927,7 @@
                 public const string GetOpportunityStatusChangeCount = "dbo.GetOpportunityStatusChangeCount";
                 public const string OpportunitySearchText = "dbo.OpportunitySearchText";
                 public const string AttachProjectToOpportunity = "dbo.AttachProjectToOpportunity";
-
+                
             }
 
             public class OverHeads
