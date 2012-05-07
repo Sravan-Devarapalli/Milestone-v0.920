@@ -15,6 +15,7 @@
       <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Client" nillable="true" type="q1:Client" />
       <xs:element minOccurs="0" name="DayTotalHours" nillable="true" type="tns:ArrayOfTimeEntriesGroupByDate" />
+      <xs:element minOccurs="0" name="GrandTotal" type="xs:double" />
       <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q2:Project" />
     </xs:sequence>
@@ -119,4 +120,30 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonLevelPayCheck" nillable="true" type="tns:PersonLevelPayCheck" />
+  <xs:complexType name="ArrayOfPersonLevelTimeEntriesHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonLevelTimeEntriesHistory" nillable="true" type="tns:PersonLevelTimeEntriesHistory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPersonLevelTimeEntriesHistory" nillable="true" type="tns:ArrayOfPersonLevelTimeEntriesHistory" />
+  <xs:complexType name="PersonLevelTimeEntriesHistory">
+    <xs:sequence>
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q9:Person" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="TimeEntryRecords" nillable="true" type="q10:ArrayOfTimeEntryRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonLevelTimeEntriesHistory" nillable="true" type="tns:PersonLevelTimeEntriesHistory" />
+  <xs:complexType name="ArrayOfProjectLevelTimeEntriesHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectLevelTimeEntriesHistory" nillable="true" type="tns:ProjectLevelTimeEntriesHistory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectLevelTimeEntriesHistory" nillable="true" type="tns:ArrayOfProjectLevelTimeEntriesHistory" />
+  <xs:complexType name="ProjectLevelTimeEntriesHistory">
+    <xs:sequence>
+      <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q11:Project" />
+      <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="TimeEntryRecords" nillable="true" type="q12:ArrayOfTimeEntryRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectLevelTimeEntriesHistory" nillable="true" type="tns:ProjectLevelTimeEntriesHistory" />
 </xs:schema>
