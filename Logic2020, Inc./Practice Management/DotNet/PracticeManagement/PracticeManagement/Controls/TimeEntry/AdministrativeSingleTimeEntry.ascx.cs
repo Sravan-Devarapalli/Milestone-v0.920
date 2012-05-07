@@ -293,15 +293,21 @@ namespace PraticeManagement.Controls.TimeEntry
                 ddlApprovedManagers.SelectedValue = selectedVal;
             }
 
+            if (selectedVal != string.Empty)
+            {
+                imgNote.ToolTip = tbNotes.Text + " Approved By " + ddlApprovedManagers.SelectedItem.Text + ".";
+            }
+            else
+            {
+                imgNote.ToolTip = tbNotes.Text;
+            }
+
 
             var isReviewd = TimeEntryRecordElement.Attribute(XName.Get("IsReviewed")).Value;
             lblReview.Text = isReviewd;
 
 
             hfDirtyHours.Value = TimeEntryRecordElement.Attribute(XName.Get("IsDirty")).Value;
-
-            imgNote.ToolTip = tbNotes.Text;
-
 
         }
 
@@ -470,7 +476,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
             return true;
         }
-
 
         internal void AddAttributeToPTOTextBox(string clientId)
         {
