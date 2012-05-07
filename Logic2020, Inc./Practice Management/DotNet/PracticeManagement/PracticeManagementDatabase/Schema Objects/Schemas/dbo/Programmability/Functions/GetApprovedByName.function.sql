@@ -5,16 +5,26 @@
 -- Updated By : ThulasiRam.P
 -- Modified Date : 03-21-2012
 -- =========================================================================
-CREATE FUNCTION [dbo].[GetApprovedByName](@Date DATETIME,@ORTTimeTypeId INT,@PersonId INT)
+CREATE FUNCTION [dbo].[GetApprovedByName]
+    (
+      @Date DATETIME ,
+      @TimeTypeId INT ,
+      @PersonId INT
+    )
 RETURNS NVARCHAR(1000)
-AS
-BEGIN
-	DECLARE  @ApprovedBy NVARCHAR(1000)
-	
-	SELECT @ApprovedBy = ' Approved by ' + P.FirstName + ' '+p.LastName + '.'
-	FROM dbo.PersonCalendar AS PC
-	INNER JOIN  dbo.Person AS P ON P.PersonId = PC.ApprovedBy
-	WHERE PC.Date= @Date AND PC.TimeTypeId = @ORTTimeTypeId AND Pc.PersonId = @PersonId
+AS 
+    BEGIN
+        DECLARE @ApprovedBy NVARCHAR(1000)
+        SET @ApprovedBy = ''
 
-	RETURN @ApprovedBy
-END
+        SELECT  @ApprovedBy = ' Approved by ' + P.FirstName + ' ' + p.LastName
+                + '.'
+        FROM    dbo.PersonCalendar AS PC
+                INNER JOIN dbo.Person AS P ON P.PersonId = PC.ApprovedBy
+        WHERE   PC.Date = @Date
+                AND PC.TimeTypeId = @TimeTypeId
+                AND Pc.PersonId = @PersonId
+
+        RETURN @ApprovedBy
+    END
+
