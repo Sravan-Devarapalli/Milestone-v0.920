@@ -89,7 +89,6 @@ namespace PraticeManagement
         {
             public const string AppRootUrl = "~/";
             public const string LoginPage = "~/Login.aspx";
-            public const string PersonList = "~/PersonList.aspx";
             public const string PersonDetail = "~/PersonDetail.aspx";
             public const string StrawManDetail = "~/StrawManDetails.aspx";
             public const string PersonMargin = "~/PersonMargin.aspx";
