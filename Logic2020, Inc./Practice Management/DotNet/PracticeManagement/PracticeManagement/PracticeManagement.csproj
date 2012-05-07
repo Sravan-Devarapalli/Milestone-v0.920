@@ -2557,13 +2557,6 @@
     <Compile Include="PersonDetail.aspx.designer.cs">
       <DependentUpon>PersonDetail.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PersonList.aspx.cs">
-      <DependentUpon>PersonList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PersonList.aspx.designer.cs">
-      <DependentUpon>PersonList.aspx</DependentUpon>
-    </Compile>
     <Compile Include="PracticeManagementMain.Master.cs">
       <DependentUpon>PracticeManagementMain.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2814,7 +2807,6 @@
     <Content Include="Css\PracticeManagement.css" />
     <Content Include="MilestoneDetail.aspx" />
     <Content Include="PersonDetail.aspx" />
-    <Content Include="PersonList.aspx" />
     <Content Include="ProjectDetail.aspx" />
     <Content Include="MilestonePersonDetail.aspx" />
     <Content Include="PersonOverheadCalculation.aspx" />
