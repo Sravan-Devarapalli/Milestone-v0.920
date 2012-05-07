@@ -480,7 +480,6 @@
     <Content Include="Controls\DefaultMilestoneSettingControl.ascx" />
     <Content Include="Controls\ExpenseCategoryListControl.ascx" />
     <Content Include="Controls\ExpenseListControl.ascx" />
-    <Content Include="Controls\Generic\Filtering\OpportunityFilter.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\Generic\RecentNotes.ascx" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelGroupedHours2.datasource" />
@@ -1867,13 +1866,6 @@
     <Compile Include="Controls\Generic\Buttons\IsChargeableImageButton.cs" />
     <Compile Include="Controls\Generic\Buttons\ShadowedHyperlink.cs" />
     <Compile Include="Controls\Generic\Buttons\ShadowedTextButton.cs" />
-    <Compile Include="Controls\Generic\Filtering\OpportunityFilter.ascx.cs">
-      <DependentUpon>OpportunityFilter.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Generic\Filtering\OpportunityFilter.ascx.designer.cs">
-      <DependentUpon>OpportunityFilter.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Generic\Filtering\OpportunityFilterObject.cs" />
     <Compile Include="Controls\Generic\Filtering\PersonReportFilter.ascx.cs">
       <DependentUpon>PersonReportFilter.ascx</DependentUpon>
@@ -2528,13 +2520,6 @@
     <Compile Include="OpportunityDetail.aspx.designer.cs">
       <DependentUpon>OpportunityDetail.aspx</DependentUpon>
     </Compile>
-    <Compile Include="OpportunityList.aspx.cs">
-      <DependentUpon>OpportunityList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="OpportunityList.aspx.designer.cs">
-      <DependentUpon>OpportunityList.aspx</DependentUpon>
-    </Compile>
     <Compile Include="OpportunityNumberHandler.cs" />
     <Compile Include="OverheadDetail.aspx.cs">
       <DependentUpon>OverheadDetail.aspx</DependentUpon>
@@ -2994,7 +2979,6 @@
     <Content Include="MarginTest.aspx" />
     <Content Include="Mobile\CompanyPerformance.aspx" />
     <Content Include="OpportunityDetail.aspx" />
-    <Content Include="OpportunityList.aspx" />
     <Content Include="OverheadDetail.aspx" />
     <Content Include="GuestPages\PageNotFound.aspx" />
     <Content Include="Projects.aspx" />
