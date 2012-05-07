@@ -93,6 +93,16 @@ namespace PracticeManagementService
             return ReportDAL.TimePeriodSummaryByResourcePayCheck(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames);
         }
 
+        public List<PersonLevelTimeEntriesHistory> TimeEntryAuditReportByPerson(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.TimeEntryAuditReportByPerson(startDate, endDate);
+        }
+
+        public List<ProjectLevelTimeEntriesHistory> TimeEntryAuditReportByProject(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.TimeEntryAuditReportByProject(startDate, endDate);
+        }
+
     }
 }
 
