@@ -69,7 +69,7 @@ namespace PraticeManagement.Controls
             _argumentList = new XsltArgumentList();
             _argumentList.AddParam("currentUrl", string.Empty, _currentUrl);
         }
-        
+
         #endregion
 
         #region Properties
@@ -329,7 +329,7 @@ namespace PraticeManagement.Controls
                 ddlPeriod.Attributes["onchange"] = "CheckAndShowCustomDatesPoup(this);";
             }
 
-            if (!Request.Url.AbsolutePath.Contains("DiscussionReview1.aspx") && !Request.Url.AbsolutePath.Contains("PersonDetail.aspx"))
+            if (!Request.Url.AbsolutePath.Contains("PersonDetail.aspx"))
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "SetTooltipsForallDropDowns", "SetTooltipsForallDropDowns();ModifyInnerTextToWrapText();", true);
             }
