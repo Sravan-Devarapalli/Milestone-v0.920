@@ -924,6 +924,146 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<PersonLevelTimeEntriesHistory> TimeEntryAuditReport(DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimeEntryAuditReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<PersonLevelTimeEntriesHistory>();
+                    var persons = new List<Person>();
+                    ReadPersons(reader, persons);
+                    ReadPersonLevelTimeEntriesHistory(reader, result, persons);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadPersonLevelTimeEntriesHistory(SqlDataReader reader, List<PersonLevelTimeEntriesHistory> result, List<Person> persons)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                int groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                int modifiedDateIndex = reader.GetOrdinal(Constants.ColumnNames.ModifiedDate);
+                int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
+                int isChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeable);
+                int originalHoursIndex = reader.GetOrdinal(Constants.ColumnNames.OriginalHours);
+                int actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
+                int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
+                int phaseIndex = reader.GetOrdinal(Constants.ColumnNames.Phase);
+
+                while (reader.Read())
+                {
+                    var personId = reader.GetInt32(personIdIndex);
+                    PersonLevelTimeEntriesHistory personLevelTimeEntriesHistory = new PersonLevelTimeEntriesHistory();
+                    var timeEntryRecord = new TimeEntryRecord
+                    {
+                        ChargeCode = new ChargeCode
+                        {
+                            ChargeCodeId = reader.GetInt32(chargeCodeIdIndex),
+                            Client = new Client
+                            {
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex)
+                            },
+                            Phase = reader.GetInt32(phaseIndex),
+                            Project = new Project
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                ProjectNumber = reader.GetString(projectNumberIndex)
+                            },
+                            ProjectGroup = new ProjectGroup
+                            {
+                                Id = reader.GetInt32(groupIdIndex),
+                                Name = reader.GetString(groupNameIndex)
+                            },
+                            TimeType = new TimeTypeRecord
+                            {
+                                Id = reader.GetInt32(timeTypeIdIndex),
+                                Name = reader.GetString(timeTypeNameIndex)
+                            }
+                        },
+                        MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
+                        IsChargeable = reader.GetBoolean(isChargeableIndex),
+                        ActualHours = reader.GetInt32(actualHoursIndex),
+                        Note = reader.GetString(noteIndex),
+                        ModifiedDate = reader.GetDateTime(modifiedDateIndex),
+                        OldHours = reader.GetInt32(originalHoursIndex)
+                    };
+
+                    if (result.Any(p => p.Person.Id == personId))
+                    {
+                        personLevelTimeEntriesHistory = result.First(p => p.Person.Id == personId);
+
+                        personLevelTimeEntriesHistory.TimeEntryRecords.Add(timeEntryRecord);
+                    }
+                    else
+                    {
+                        personLevelTimeEntriesHistory = new PersonLevelTimeEntriesHistory
+                        {
+                            Person = persons.First(p => p.Id == personId),
+                            TimeEntryRecords = { timeEntryRecord }
+                        };
+                    }
+                    result.Add(personLevelTimeEntriesHistory);
+                }
+            }
+        }
+
+        private static void ReadPersons(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int personStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
+                int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+                int timeScaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+
+                while (reader.Read())
+                {
+                    var person = new Person
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        Status = new PersonStatus
+                        {
+                            Id = reader.GetInt32(personStatusIdIndex),
+                            Name = reader.GetString(personStatusNameIndex)
+                        },
+                        CurrentPay = new Pay
+                        {
+                            Timescale = (TimescaleType)reader.GetInt32(timeScaleIndex),
+                            TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                        }
+                    };
+                    result.Add(person);
+                }
+            }
+        }
     }
 }
 
