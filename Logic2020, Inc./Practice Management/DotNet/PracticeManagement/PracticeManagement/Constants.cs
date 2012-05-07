@@ -110,7 +110,7 @@ namespace PraticeManagement
             public const string ExpenseDetail = "~/ExpenseDetail.aspx";
             public const string ExpenseCategoryList = "~/ExpenseCategoryList.aspx";
             public const string OpportunityDetail = "~/OpportunityDetail.aspx";
-            public const string OpportunityList = "~/OpportunityList.aspx";
+            public const string OpportunityList = "~/DiscussionReview2.aspx";
             public const string TimeEntryForAdmin = "~/TimeEntry.aspx?day={0}&SelectedPersonId={1}";
             public const string TimeEntry = "~/TimeEntry.aspx?day={0}";
             public const string TimeEntry_NewForAdmin = "~/TimeEntry_New.aspx?day={0}&SelectedPersonId={1}";
