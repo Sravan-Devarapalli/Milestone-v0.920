@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/PracticeManagement.Master" AutoEventWireup="true"
+<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="CompanyPerformance.aspx.cs" Inherits="PraticeManagement.CompanyPerformance"
     Title="Performance Grid (roll-off) | Practice Management" %>
 
@@ -10,7 +10,7 @@
     <title>Performance Grid (roll-off) | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-    Projected Project Profit & Loss&nbsp; 
+    Projected Project Profit & Loss&nbsp;
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <table>
@@ -45,8 +45,7 @@
                                 EnableViewState="False" />
                         </td>
                         <td align="right" style="width: 110px">
-                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" 
-                                OnClick="btnUpdateView_Click"
+                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdateView_Click"
                                 ValidationGroup="Filter" EnableViewState="False" />
                         </td>
                         <td align="right" valign="middle" style="width: 92px; white-space: nowrap;">
@@ -59,9 +58,10 @@
                 <asp:Panel ID="pnlAdvancedFilter" runat="server">
                     <ajaxToolkit:TabContainer ID="tcFilters" runat="server">
                         <ajaxToolkit:TabPanel ID="tpProjectType" runat="server">
-                            <HeaderTemplate>Project Type</HeaderTemplate>
+                            <HeaderTemplate>
+                                Project Type</HeaderTemplate>
                             <ContentTemplate>
-                                 <table class="WholeWidth" cellpadding="5">
+                                <table class="WholeWidth" cellpadding="5">
                                     <tr>
                                         <td>
                                             <asp:CheckBox ID="chbActive" runat="server" Text="Active Projects" Checked="True"
@@ -76,17 +76,19 @@
                                                 EnableViewState="False" />
                                         </td>
                                         <td>
-                                            <asp:CheckBox ID="chbInternal" runat="server" Text="Internal Projects" EnableViewState="False" Checked="true" />
+                                            <asp:CheckBox ID="chbInternal" runat="server" Text="Internal Projects" EnableViewState="False"
+                                                Checked="true" />
                                         </td>
                                         <td>
                                             <asp:CheckBox ID="chbExperimental" runat="server" Text="Experimental Projects" EnableViewState="False" />
                                         </td>
                                     </tr>
                                 </table>
-                           </ContentTemplate>
-                        </ajaxToolkit:TabPanel>                    
+                            </ContentTemplate>
+                        </ajaxToolkit:TabPanel>
                         <ajaxToolkit:TabPanel ID="tpProjectFilters" runat="server">
-                            <HeaderTemplate>Project Filters</HeaderTemplate>
+                            <HeaderTemplate>
+                                Project Filters</HeaderTemplate>
                             <ContentTemplate>
                                 <table class="WholeWidth" cellpadding="5">
                                     <tr>
@@ -130,9 +132,10 @@
                                     </tr>
                                 </table>
                             </ContentTemplate>
-                        </ajaxToolkit:TabPanel>                    
+                        </ajaxToolkit:TabPanel>
                         <ajaxToolkit:TabPanel ID="tpMoreOptions" runat="server">
-                            <HeaderTemplate>Project Search</HeaderTemplate>
+                            <HeaderTemplate>
+                                Project Search</HeaderTemplate>
                             <ContentTemplate>
                                 <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSearch">
                                     <table class="WholeWidth" cellpadding="5">
@@ -151,9 +154,10 @@
                                     </table>
                                 </asp:Panel>
                             </ContentTemplate>
-                        </ajaxToolkit:TabPanel>                    
+                        </ajaxToolkit:TabPanel>
                         <ajaxToolkit:TabPanel ID="tpProjectSearch" runat="server">
-                            <HeaderTemplate>More Options</HeaderTemplate>
+                            <HeaderTemplate>
+                                More Options</HeaderTemplate>
                             <ContentTemplate>
                                 <table class="WholeWidth" cellpadding="5">
                                     <tr>
@@ -171,7 +175,7 @@
                                     </tr>
                                 </table>
                             </ContentTemplate>
-                        </ajaxToolkit:TabPanel>                    
+                        </ajaxToolkit:TabPanel>
                     </ajaxToolkit:TabContainer>
                 </asp:Panel>
                 <AjaxControlToolkit:CollapsiblePanelExtender ID="pnlAdvancedFilter_CollapsiblePanelExtender"
@@ -271,7 +275,8 @@
                                     </asp:TableCell>
                                 </asp:TableRow>
                             </asp:Table>
-                            <asp:MultiView ID="mvProjectTab" runat="server"> <%--ActiveViewIndex="0"--%>
+                            <asp:MultiView ID="mvProjectTab" runat="server">
+                                <%--ActiveViewIndex="0"--%>
                                 <asp:View ID="vwReportDescription" runat="server">
                                     <h3>
                                         Reports.</h3>
@@ -398,7 +403,7 @@
                     </asp:UpdatePanel>
                     <%--                <asp:LinkButton ID="btnExportBenchListToExcel" runat="server" 
                         onclick="btnExportBenchListToExcel_Click">Export Bench List</asp:LinkButton>
---%>
+                    --%>
                 </div>
                 <ajaxToolkit:UpdatePanelAnimationExtender ID="ae" runat="server" TargetControlID="upnlBody">
                     <Animations>
@@ -429,6 +434,7 @@
 </asp:Content>
 <asp:Content ID="cntFooter" runat="server" ContentPlaceHolderID="footer">
     <h6>
-        Version. <asp:Label ID="lblCurrentVersion" runat="server"></asp:Label></h6>
+        Version.
+        <asp:Label ID="lblCurrentVersion" runat="server"></asp:Label></h6>
 </asp:Content>
 
