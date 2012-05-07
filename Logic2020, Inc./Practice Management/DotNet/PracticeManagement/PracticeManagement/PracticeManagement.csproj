@@ -446,7 +446,6 @@
     <Content Include="Controls\Opportunities\ProposedResources.ascx" />
     <Content Include="Controls\PersonsFilter.ascx" />
     <Content Include="Css\DynamicMenu.css" />
-    <Content Include="DiscussionReview1.aspx" />
     <Content Include="DiscussionReview2.aspx" />
     <Content Include="GuestPages\ChangePasswordError.aspx" />
     <Content Include="Images\alert_Icon.png" />
@@ -1653,13 +1652,6 @@
     </Compile>
     <Compile Include="Controls\Projects\ProjectAttachmentHandler.ashx.cs">
       <DependentUpon>ProjectAttachmentHandler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="DiscussionReview1.aspx.cs">
-      <DependentUpon>DiscussionReview1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DiscussionReview1.aspx.designer.cs">
-      <DependentUpon>DiscussionReview1.aspx</DependentUpon>
     </Compile>
     <Compile Include="DiscussionReview2.aspx.cs">
       <DependentUpon>DiscussionReview2.aspx</DependentUpon>
