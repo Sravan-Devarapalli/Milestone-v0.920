@@ -925,7 +925,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelTimeEntriesHistory> TimeEntryAuditReport(DateTime startDate, DateTime endDate)
+        public static List<PersonLevelTimeEntriesHistory> TimeEntryAuditReportByPerson(DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimeEntryAuditReport, connection))
@@ -1026,6 +1026,115 @@ namespace DataAccess
                         };
                     }
                     result.Add(personLevelTimeEntriesHistory);
+                }
+            }
+        }
+
+        public static List<ProjectLevelTimeEntriesHistory> TimeEntryAuditReportByProject(DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimeEntryAuditReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<ProjectLevelTimeEntriesHistory>();
+                    var persons = new List<Person>();
+                    ReadPersons(reader, persons);
+                    ReadProjectLevelTimeEntriesHistory(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadProjectLevelTimeEntriesHistory(SqlDataReader reader, List<ProjectLevelTimeEntriesHistory> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                int groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                int modifiedDateIndex = reader.GetOrdinal(Constants.ColumnNames.ModifiedDate);
+                int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
+                int isChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeable);
+                int originalHoursIndex = reader.GetOrdinal(Constants.ColumnNames.OriginalHours);
+                int actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
+                int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
+                int phaseIndex = reader.GetOrdinal(Constants.ColumnNames.Phase);
+
+                while (reader.Read())
+                {
+                    var projectId = reader.GetInt32(projectIdIndex);
+                    ProjectLevelTimeEntriesHistory projectLevelTimeEntriesHistory = new ProjectLevelTimeEntriesHistory();
+
+                    var timeEntryRecord = new TimeEntryRecord
+                    {
+                        ChargeCode = new ChargeCode
+                        {
+                            ChargeCodeId = reader.GetInt32(chargeCodeIdIndex),
+                            Client = new Client
+                            {
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex)
+                            },
+                            Phase = reader.GetInt32(phaseIndex),
+                            Project = new Project
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                ProjectNumber = reader.GetString(projectNumberIndex)
+                            },
+                            ProjectGroup = new ProjectGroup
+                            {
+                                Id = reader.GetInt32(groupIdIndex),
+                                Name = reader.GetString(groupNameIndex)
+                            },
+                            TimeType = new TimeTypeRecord
+                            {
+                                Id = reader.GetInt32(timeTypeIdIndex),
+                                Name = reader.GetString(timeTypeNameIndex)
+                            }
+                        },
+                        MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
+                        IsChargeable = reader.GetBoolean(isChargeableIndex),
+                        ActualHours = reader.GetInt32(actualHoursIndex),
+                        Note = reader.GetString(noteIndex),
+                        ModifiedDate = reader.GetDateTime(modifiedDateIndex),
+                        OldHours = reader.GetInt32(originalHoursIndex)
+                    };
+
+                    if (result.Any(p => p.Project.Id == projectId))
+                    {
+                        projectLevelTimeEntriesHistory = result.First(p => p.Project.Id == projectId);
+                        projectLevelTimeEntriesHistory.TimeEntryRecords.Add(timeEntryRecord);
+                    }
+                    else
+                    {
+                        projectLevelTimeEntriesHistory = new ProjectLevelTimeEntriesHistory
+                        {
+                            Project = new Project
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                ProjectNumber = reader.GetString(projectNumberIndex)
+                            },
+                            TimeEntryRecords = { timeEntryRecord }
+                        };
+                    }
+                    result.Add(projectLevelTimeEntriesHistory);
                 }
             }
         }
