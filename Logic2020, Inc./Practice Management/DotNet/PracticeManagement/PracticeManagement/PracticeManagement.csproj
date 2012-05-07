@@ -477,7 +477,6 @@
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\BudgetEntries.ascx" />
-    <Content Include="Controls\ClientListControl.ascx" />
     <Content Include="Controls\DefaultMilestoneSettingControl.ascx" />
     <Content Include="Controls\ExpenseCategoryListControl.ascx" />
     <Content Include="Controls\ExpenseListControl.ascx" />
@@ -645,7 +644,6 @@
     <EmbeddedResource Include="Controls\Generic\SearchHighlighting\SearchHighlightingExtender.js" />
     <EmbeddedResource Include="Controls\Generic\ScrollableDropdown\ScrollableDropdownExtender.js" />
     <Content Include="Controls\MilestonePersons\MilestonePersonFinancials.ascx" />
-    <Content Include="Controls\PersonListControl.ascx" />
     <Content Include="Controls\PersonOverheadCalculationControl.ascx" />
     <Content Include="Controls\Reports\UTilTimelineFilter.ascx" />
     <Content Include="Controls\TimeEntry\TimeEntriesByProject.ascx" />
@@ -669,7 +667,6 @@
     <Content Include="Images\trash-icon.gif" />
     <Content Include="Images\wrapper-left-bg-wide.png" />
     <Content Include="Images\wrapper-right-bg-20.png" />
-    <Content Include="Practices.aspx" />
     <Content Include="ReportsPage.aspx" />
     <Content Include="Reports\ConsultantUtilTimeLineReport.aspx" />
     <Content Include="Reports\TimeEntriesByPerson.aspx" />
@@ -1793,13 +1790,6 @@
       <DependentUpon>BudgetEntries.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\CascadingMsdd.cs" />
-    <Compile Include="Controls\ClientListControl.ascx.cs">
-      <DependentUpon>ClientListControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\ClientListControl.ascx.designer.cs">
-      <DependentUpon>ClientListControl.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Clients\ClientGroups.ascx.cs">
       <DependentUpon>ClientGroups.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1832,20 +1822,6 @@
     </Compile>
     <Compile Include="Controls\Configuration\EmailTemplates.ascx.designer.cs">
       <DependentUpon>EmailTemplates.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Configuration\PracticeItem.ascx.cs">
-      <DependentUpon>PracticeItem.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Configuration\PracticeItem.ascx.designer.cs">
-      <DependentUpon>PracticeItem.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Configuration\Practices.ascx.cs">
-      <DependentUpon>Practices.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Configuration\Practices.ascx.designer.cs">
-      <DependentUpon>Practices.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Configuration\PracticesHelper.cs" />
     <Compile Include="Controls\DatePicker.ascx.cs">
@@ -2032,13 +2008,6 @@
       <DependentUpon>MilestonePersonList.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\NavigatingEventArgs.cs" />
-    <Compile Include="Controls\PersonListControl.ascx.cs">
-      <DependentUpon>PersonListControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\PersonListControl.ascx.designer.cs">
-      <DependentUpon>PersonListControl.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PersonOverheadCalculationControl.ascx.cs">
       <DependentUpon>PersonOverheadCalculationControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2090,13 +2059,6 @@
     </Compile>
     <Compile Include="GroupBy.aspx.designer.cs">
       <DependentUpon>GroupBy.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Practices.aspx.cs">
-      <DependentUpon>Practices.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Practices.aspx.designer.cs">
-      <DependentUpon>Practices.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReportsPage.aspx.cs">
       <DependentUpon>ReportsPage.aspx</DependentUpon>
@@ -2849,13 +2811,6 @@
     <Compile Include="Reports\TimeEntryReport.aspx.designer.cs">
       <DependentUpon>TimeEntryReport.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Config\GeneralConfiguration.aspx.cs">
-      <DependentUpon>GeneralConfiguration.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Config\GeneralConfiguration.aspx.designer.cs">
-      <DependentUpon>GeneralConfiguration.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Utils\Calendar.cs" />
     <Compile Include="Utils\Coloring.cs" />
     <Compile Include="Utils\Generic.cs" />
@@ -2924,8 +2879,6 @@
     <Content Include="Controls\Clients\ClientProjects.ascx" />
     <Content Include="Controls\Configuration\DefaultUser.ascx" />
     <Content Include="Controls\Configuration\EmailTemplates.ascx" />
-    <Content Include="Controls\Configuration\PracticeItem.ascx" />
-    <Content Include="Controls\Configuration\Practices.ascx" />
     <Content Include="Controls\DatePicker.ascx" />
     <EmbeddedResource Include="Controls\Generic\DirtyState\DirtyExtender.js" />
     <EmbeddedResource Include="Controls\Generic\ElementDisabler\ElementDisablerExtender.js" />
@@ -3485,7 +3438,6 @@
     <Content Include="set_user.aspx" />
     <Content Include="Third Party Tools\Css Adapters\CSSFriendly.dll" />
     <Content Include="Reports\TimeEntryReport.aspx" />
-    <Content Include="Config\GeneralConfiguration.aspx" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ActivityLogService\" />
