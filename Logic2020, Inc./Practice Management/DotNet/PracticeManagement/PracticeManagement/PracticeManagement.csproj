@@ -2168,13 +2168,6 @@
     <Compile Include="Utils\ActivityLogHelper.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />
     <Compile Include="Utils\OpportunitiesHelper.cs" />
-    <Compile Include="Controls\Opportunities\OpportunityTransitionEditor.ascx.cs">
-      <DependentUpon>OpportunityTransitionEditor.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Opportunities\OpportunityTransitionEditor.ascx.designer.cs">
-      <DependentUpon>OpportunityTransitionEditor.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Opportunities\PrevNextOpportunity.ascx.cs">
       <DependentUpon>PrevNextOpportunity.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2615,13 +2608,6 @@
     <Compile Include="PersonOverheadCalculation.aspx.designer.cs">
       <DependentUpon>PersonOverheadCalculation.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reports.aspx.cs">
-      <DependentUpon>Reports.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reports.aspx.designer.cs">
-      <DependentUpon>Reports.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reports\Bench.aspx.cs">
       <DependentUpon>Bench.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2893,7 +2879,6 @@
     <Content Include="Controls\MilestonePersons\CumulativeDailyActivity.ascx" />
     <Content Include="Controls\MilestonePersons\MilestonePersonActivity.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonList.ascx" />
-    <Content Include="Controls\Opportunities\OpportunityTransitionEditor.ascx" />
     <Content Include="Controls\Opportunities\PrevNextOpportunity.ascx" />
     <EmbeddedResource Include="Controls\Opportunities\ViewProjectExtender\ViewProjectExtender.js" />
     <Content Include="Controls\PersonInfo.ascx" />
@@ -3022,7 +3007,6 @@
     <Content Include="GuestPages\PageNotFound.aspx" />
     <Content Include="Projects.aspx" />
     <Content Include="ProjectSearch.aspx" />
-    <Content Include="Reports.aspx" />
     <Content Include="Reports\Bench.aspx" />
     <Content Include="Reports\BenchCosts.aspx" />
     <Content Include="Reports\CommissionsAndRates.aspx" />
