@@ -486,7 +486,9 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelTimeEntriesHistory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelGroupedHours2.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
     <None Include="Service References\CalendarService\CalendarService1.wsdl" />
