@@ -32,9 +32,6 @@ namespace DataTransferObjects.Reports
                 return TimeEntryRecords.Sum(t => t.NetChange);
             }
         }
-
-
-
     }
 }
 
