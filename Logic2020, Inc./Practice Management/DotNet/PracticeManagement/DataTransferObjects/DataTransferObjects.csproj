@@ -144,6 +144,7 @@
     <Compile Include="EmailData.cs" />
     <Compile Include="EmailTemplate.cs" />
     <Compile Include="OpurtunityPerson.cs" />
+    <Compile Include="Reports\GroupByPersonAuditReport.cs" />
     <Compile Include="Reports\GroupedHours.cs" />
     <Compile Include="Reports\PersonLevelGroupedHours.cs" />
     <Compile Include="Reports\PersonLevelPayCheck.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Reports\GroupByClientAndProject.cs" />
     <Compile Include="Reports\TimeEntriesGroupByDate.cs" />
     <Compile Include="Reports\GroupByDate.cs" />
+    <Compile Include="Reports\TimeEntryAudit.cs" />
     <Compile Include="Reports\TimeEntryByWorkType.cs" />
     <Compile Include="Reports\TimeEntriesGroupByClientAndProject.cs" />
     <Compile Include="Reports\WorkTypeLevelGroupedHours.cs" />
@@ -225,6 +227,7 @@
     <Compile Include="Seniority.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SMTPSettings.cs" />
+    <Compile Include="TimeEntry\ChargeCode.cs" />
     <Compile Include="TimeEntry\ReviewStatus.cs" />
     <Compile Include="TimeEntry\TimeEntryHours.cs" />
     <Compile Include="TimeEntry\TimeEntryRecord.cs" />
