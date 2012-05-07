@@ -468,6 +468,7 @@
     <Content Include="Images\People_icon.png" />
     <Content Include="Images\right_icon.png" />
     <Content Include="Images\trash-icon-Large.png" />
+    <Content Include="Reports\Audit.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\Expenses.aspx" />
@@ -1680,6 +1681,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Audit.aspx.cs">
+      <DependentUpon>Audit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Audit.aspx.designer.cs">
+      <DependentUpon>Audit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\ConsultingCapacity.aspx.cs">
       <DependentUpon>ConsultingCapacity.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2614,13 +2622,6 @@
     <Compile Include="PersonList.aspx.designer.cs">
       <DependentUpon>PersonList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PracticeManagement.Master.cs">
-      <DependentUpon>PracticeManagement.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PracticeManagement.Master.designer.cs">
-      <DependentUpon>PracticeManagement.Master</DependentUpon>
-    </Compile>
     <Compile Include="PracticeManagementMain.Master.cs">
       <DependentUpon>PracticeManagementMain.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2887,7 +2888,6 @@
     <Content Include="MilestoneDetail.aspx" />
     <Content Include="PersonDetail.aspx" />
     <Content Include="PersonList.aspx" />
-    <Content Include="PracticeManagement.Master" />
     <Content Include="ProjectDetail.aspx" />
     <Content Include="MilestonePersonDetail.aspx" />
     <Content Include="PersonOverheadCalculation.aspx" />
