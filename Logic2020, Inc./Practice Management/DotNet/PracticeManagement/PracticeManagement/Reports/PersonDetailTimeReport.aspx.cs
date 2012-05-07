@@ -243,7 +243,9 @@ namespace PraticeManagement.Reporting
                 }
                 else
                 {
-                    ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+                    var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(SelectedId.Value));
+                    ddlPerson.Items.Add(new ListItem(person.PersonLastFirstName, SelectedId.Value.ToString()));
+                    ddlPerson.SelectedValue = SelectedId.Value.ToString();
                 }
             }
             else
@@ -325,7 +327,7 @@ namespace PraticeManagement.Reporting
             }
 
         }
-
+        
         protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
         {
             SwitchView(lnkbtnSummary, 0);
