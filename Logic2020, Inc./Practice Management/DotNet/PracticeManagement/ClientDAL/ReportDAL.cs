@@ -942,6 +942,7 @@ namespace DataAccess
                     var result = new List<PersonLevelTimeEntriesHistory>();
                     var persons = new List<Person>();
                     ReadPersons(reader, persons);
+                    reader.NextResult();
                     ReadPersonLevelTimeEntriesHistory(reader, result, persons);
                     return result;
                 }
@@ -1005,10 +1006,10 @@ namespace DataAccess
                         },
                         MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
-                        ActualHours = reader.GetInt32(actualHoursIndex),
+                        ActualHours = Convert.ToDouble(reader[actualHoursIndex]),
                         Note = reader.GetString(noteIndex),
                         ModifiedDate = reader.GetDateTime(modifiedDateIndex),
-                        OldHours = reader.GetInt32(originalHoursIndex)
+                        OldHours = Convert.ToDouble(reader[originalHoursIndex])
                     };
 
                     if (result.Any(p => p.Person.Id == personId))
@@ -1022,7 +1023,7 @@ namespace DataAccess
                         personLevelTimeEntriesHistory = new PersonLevelTimeEntriesHistory
                         {
                             Person = persons.First(p => p.Id == personId),
-                            TimeEntryRecords = { timeEntryRecord }
+                            TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
                         };
                     }
                     result.Add(personLevelTimeEntriesHistory);
@@ -1045,8 +1046,7 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<ProjectLevelTimeEntriesHistory>();
-                    var persons = new List<Person>();
-                    ReadPersons(reader, persons);
+                    reader.NextResult();
                     ReadProjectLevelTimeEntriesHistory(reader, result);
                     return result;
                 }
@@ -1110,10 +1110,10 @@ namespace DataAccess
                         },
                         MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
-                        ActualHours = reader.GetInt32(actualHoursIndex),
+                        ActualHours = Convert.ToDouble(reader[actualHoursIndex]),
                         Note = reader.GetString(noteIndex),
                         ModifiedDate = reader.GetDateTime(modifiedDateIndex),
-                        OldHours = reader.GetInt32(originalHoursIndex)
+                        OldHours = Convert.ToDouble(reader[originalHoursIndex])
                     };
 
                     if (result.Any(p => p.Project.Id == projectId))
@@ -1131,7 +1131,7 @@ namespace DataAccess
                                 Name = reader.GetString(projectNameIndex),
                                 ProjectNumber = reader.GetString(projectNumberIndex)
                             },
-                            TimeEntryRecords = { timeEntryRecord }
+                            TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
                         };
                     }
                     result.Add(projectLevelTimeEntriesHistory);
@@ -1166,7 +1166,7 @@ namespace DataAccess
                         CurrentPay = new Pay
                         {
                             Timescale = (TimescaleType)reader.GetInt32(timeScaleIndex),
-                            TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                            TimescaleName = reader.IsDBNull(timescaleNameIndex) ? String.Empty : reader.GetString(timescaleNameIndex)
                         }
                     };
                     result.Add(person);
