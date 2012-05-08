@@ -25,6 +25,22 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        public double BillableNetChange
+        {
+            get
+            {
+                return TimeEntryRecords.Sum(t => t.IsChargeable ? t.NetChange : 0);
+            }
+        }
+
+        public double NonBillableNetChange
+        {
+            get
+            {
+                return TimeEntryRecords.Sum(t => !t.IsChargeable ? t.NetChange : 0);
+            }
+        }
+
         public double NetChange
         {
             get
