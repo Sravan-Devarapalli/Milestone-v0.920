@@ -4,6 +4,8 @@
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
+<%@ Register Src="~/Controls/Reports/AuditByPerson.ascx" TagPrefix="uc" TagName="ByResource" %>
+<%@ Register Src="~/Controls/Reports/AuditByProject.ascx" TagPrefix="uc" TagName="Byproject" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -66,66 +68,79 @@
             </tr>
         </table>
     </asp:Panel>
-    <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
-        height: 90px;">
-        <tr>
-            <td style="font-size: 16px; font-weight: bold;">
-                <table>
-                    <tr>
-                        <td style="vertical-align: top; padding-bottom: 10px;">
-                            <asp:Literal ID="ltrCount" runat="server"></asp:Literal>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-top: 10px; vertical-align: bottom;">
-                            <asp:Literal ID="lbRange" runat="server"></asp:Literal>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td style="width: 23%; vertical-align: bottom; text-align: center;">
-                <table width="100%">
-                    <tr>
-                        <td>
-                            BILLABLE
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-bottom: 5px;">
-                            <asp:Literal ID="ltrlBillableNetChange" runat="server"></asp:Literal>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            NON-BILLABLE
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <asp:Literal ID="ltrlNonBillableNetChange" runat="server"></asp:Literal>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td style="width: 21%; text-align: center;">
-                <table width="100%">
-                    <tr>
-                        <td style="font-size: 15px; padding-bottom: 3px;">
-                            Net Change
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="font-size: 25px;">
-                            <asp:Literal ID="ltrlNetChange" runat="server"></asp:Literal>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td style="width: 2%;">
-            </td>
-        </tr>
-        </table> </td> </tr>
-    </table>
+    <div id="divWholePage" runat="server" style="display: none;">
+        <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
+            height: 90px;">
+            <tr>
+                <td style="font-size: 16px; font-weight: bold;">
+                    <table>
+                        <tr>
+                            <td style="vertical-align: top; padding-bottom: 10px;">
+                                <asp:Literal ID="ltrCount" runat="server"></asp:Literal>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 10px; vertical-align: bottom;">
+                                <asp:Literal ID="lbRange" runat="server"></asp:Literal>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 23%; vertical-align: bottom; text-align: center;">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                BILLABLE
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-bottom: 5px;">
+                                <asp:Literal ID="ltrlBillableNetChange" runat="server"></asp:Literal>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                NON-BILLABLE
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:Literal ID="ltrlNonBillableNetChange" runat="server"></asp:Literal>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 21%; text-align: center;">
+                    <table width="100%">
+                        <tr>
+                            <td style="font-size: 15px; padding-bottom: 3px;">
+                                Net Change
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 25px;">
+                                <asp:Literal ID="ltrlNetChange" runat="server"></asp:Literal>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 2%;">
+                </td>
+            </tr>
+        </table>
+        <asp:MultiView ID="mvTimePeriodReport" runat="server" ActiveViewIndex="0">
+            <asp:View ID="vwResourceReport" runat="server">
+                <asp:Panel ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
+                    <uc:ByResource ID="tpByResource" runat="server"></uc:ByResource>
+                </asp:Panel>
+            </asp:View>
+            <asp:View ID="vwProjectReport" runat="server">
+                <asp:Panel ID="pnlProjectReport" runat="server" CssClass="WholeWidth">
+                    <uc:Byproject ID="tpByProject" runat="server"></uc:Byproject>
+                </asp:Panel>
+            </asp:View>
+        </asp:MultiView>
+    </div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footer" runat="server">
 </asp:Content>
