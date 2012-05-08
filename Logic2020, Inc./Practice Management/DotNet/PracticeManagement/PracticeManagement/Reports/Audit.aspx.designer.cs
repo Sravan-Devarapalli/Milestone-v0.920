@@ -40,6 +40,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
         
         /// <summary>
+        /// hdnperiodValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnperiodValue;
+        
+        /// <summary>
         /// hdnStartDate control.
         /// </summary>
         /// <remarks>
