@@ -121,6 +121,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.ValidationSummary valSumDateRange;
         
         /// <summary>
+        /// divWholePage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divWholePage;
+        
+        /// <summary>
         /// ltrCount control.
         /// </summary>
         /// <remarks>
@@ -164,6 +173,69 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltrlNetChange;
+        
+        /// <summary>
+        /// mvTimePeriodReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.MultiView mvTimePeriodReport;
+        
+        /// <summary>
+        /// vwResourceReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwResourceReport;
+        
+        /// <summary>
+        /// pnlResourceReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlResourceReport;
+        
+        /// <summary>
+        /// tpByResource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.AuditByPerson tpByResource;
+        
+        /// <summary>
+        /// vwProjectReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwProjectReport;
+        
+        /// <summary>
+        /// pnlProjectReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProjectReport;
+        
+        /// <summary>
+        /// tpByProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.AuditByProject tpByProject;
     }
 }
 
