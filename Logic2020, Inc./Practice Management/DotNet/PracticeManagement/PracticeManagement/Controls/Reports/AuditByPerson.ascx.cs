@@ -27,6 +27,11 @@ namespace PraticeManagement.Controls.Reports
             return value.ToString(Constants.Formatting.DoubleValue);
         }
 
+        protected string GetDateFormat(DateTime date)
+        {
+            return date.ToString(Constants.Formatting.ReportDateFormat);
+        }
+
         public void PopulateByResourceData(PersonLevelTimeEntriesHistory[] reportDataByPerson)
         {
             var reportDataList = reportDataByPerson.ToList();
@@ -47,7 +52,6 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var data = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByPerson(HostingPage.StartDate.Value,HostingPage.EndDate.Value)).ToList();
