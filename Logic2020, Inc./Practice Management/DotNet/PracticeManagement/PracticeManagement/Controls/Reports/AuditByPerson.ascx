@@ -45,40 +45,40 @@
             <asp:Repeater ID="repPersonTimeEntriesHistory" DataSource='<%# Eval("TimeEntryRecords") %>'
                 runat="server">
                 <HeaderTemplate>
-                    <table class="WholeWidthWithHeight">
-                        <tr>
-                            <td>
+                    <table class="WholeWidthWithHeight CompPerfTable TextCenter">
+                        <tr class="CompPerfHeader">
+                            <th>
                                 Affected Date
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 Modified Date
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 Project-Project Name
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 Work Type
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 Original Hours
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 New Hours
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 Net Change
-                            </td>
-                            <td>
-                            </td>
+                            </th>
+                            <th>
+                            </th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr style="text-align: left; background-color: #D4D0C9;">
                         <td>
-                            <%# Eval("MilestoneDate")%>
+                            <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
                         <td>
-                            <%# Eval("ModifiedDate")%>
+                            <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
                         <td title='<%# Eval("ChargeCode.ChargeCodeName")%>'>
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
@@ -89,25 +89,26 @@
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
                         <td>
-                            <%# Eval("ActualHours")%>
+                            <%# GetDoubleFormat((double)Eval("ActualHours"))%>
                         </td>
                         <td>
-                            <%# Eval("OldHours")%>
+                            <%# GetDoubleFormat((double)Eval("OldHours"))%>
                         </td>
                         <td>
-                            <%# Eval("NetChange")%>
+                            <%# GetDoubleFormat((double)Eval("NetChange"))%>
                         </td>
                         <td>
+                            <img src="Images/balloon-ellipsis.png" alt="Note" title='<%# Eval("Note")%>' id="imgNote"  />
                         </td>
                     </tr>
                 </ItemTemplate>
                 <AlternatingItemTemplate>
                     <tr style="text-align: left; background-color: #ECE9D9;">
                         <td>
-                            <%# Eval("MilestoneDate")%>
+                            <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
                         <td>
-                            <%# Eval("ModifiedDate")%>
+                            <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
                         <td title='<%# Eval("ChargeCode.ChargeCodeName")%>'>
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
@@ -118,15 +119,16 @@
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
                         <td>
-                            <%# Eval("ActualHours")%>
+                            <%# GetDoubleFormat((double)Eval("ActualHours"))%>
                         </td>
                         <td>
-                            <%# Eval("OldHours")%>
+                            <%# GetDoubleFormat((double)Eval("OldHours"))%>
                         </td>
                         <td>
-                            <%# Eval("NetChange")%>
+                            <%# GetDoubleFormat((double)Eval("NetChange"))%>
                         </td>
                         <td>
+                            <img src="Images/balloon-ellipsis.png" alt="Note" title='<%# Eval("Note")%>' id="imgNote" />
                         </td>
                     </tr>
                 </AlternatingItemTemplate>
