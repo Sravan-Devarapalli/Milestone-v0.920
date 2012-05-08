@@ -148,7 +148,7 @@ namespace PraticeManagement.Reporting
             SelectView(0);
         }
 
-        private void SelectView(int viewIndex)
+        public void SelectView(int viewIndex)
         {
             if (ddlPeriod.SelectedValue != "Please Select")
             {
