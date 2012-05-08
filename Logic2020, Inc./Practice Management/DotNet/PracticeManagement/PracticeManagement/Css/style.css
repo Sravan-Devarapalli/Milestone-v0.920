@@ -2536,6 +2536,16 @@ end pixcel
     padding-left :5px;
 }
 
+.TextCenter th
+{
+    text-align:center;
+}
+
+.TextCenter td
+{
+    text-align:center;
+}
+
 .ReportAlternateItemTemplate
 {
     background-color: #f9faff;
