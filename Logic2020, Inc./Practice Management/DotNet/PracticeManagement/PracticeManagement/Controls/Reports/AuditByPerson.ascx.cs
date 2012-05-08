@@ -54,7 +54,8 @@ namespace PraticeManagement.Controls.Reports
         {
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByPerson(HostingPage.StartDate.Value,HostingPage.EndDate.Value)).ToList();
+                List<PersonLevelTimeEntriesHistory> data = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByPerson(HostingPage.StartDate.Value,HostingPage.EndDate.Value)).ToList();
+                data = data.OrderBy(p => p.Person.PersonLastFirstName).ToList();
                 StringBuilder sb = new StringBuilder();
                 sb.Append("Time Entry Audit");
                 sb.Append("\t");
@@ -146,7 +147,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 else
                 {
-                    sb.Append("There are no Time Entries by any Employee  for the selected range.");
+                    sb.Append("There are no Time Entries that were changed afterwards by any Employee for the selected range.");
                 }
                 //“Time_Entry_Audit_[StartOfRange]_[EndOfRange].xls”.  
                 var filename = string.Format("{0}_{1}-{2}.xls", "Time_Entry_Audit", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
