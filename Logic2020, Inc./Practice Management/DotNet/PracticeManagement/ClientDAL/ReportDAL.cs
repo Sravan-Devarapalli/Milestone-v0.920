@@ -1025,8 +1025,8 @@ namespace DataAccess
                             Person = persons.First(p => p.Id == personId),
                             TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
                         };
+                        result.Add(personLevelTimeEntriesHistory);
                     }
-                    result.Add(personLevelTimeEntriesHistory);
                 }
             }
         }
@@ -1046,17 +1046,20 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<ProjectLevelTimeEntriesHistory>();
+                    var persons = new List<Person>();
+                    ReadPersons(reader, persons);
                     reader.NextResult();
-                    ReadProjectLevelTimeEntriesHistory(reader, result);
+                    ReadProjectLevelTimeEntriesHistory(reader, result, persons);
                     return result;
                 }
             }
         }
 
-        private static void ReadProjectLevelTimeEntriesHistory(SqlDataReader reader, List<ProjectLevelTimeEntriesHistory> result)
+        private static void ReadProjectLevelTimeEntriesHistory(SqlDataReader reader, List<ProjectLevelTimeEntriesHistory> result, List<Person> persons)
         {
             if (reader.HasRows)
             {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
@@ -1079,6 +1082,8 @@ namespace DataAccess
                 {
                     var projectId = reader.GetInt32(projectIdIndex);
                     ProjectLevelTimeEntriesHistory projectLevelTimeEntriesHistory = new ProjectLevelTimeEntriesHistory();
+                    var personId = reader.GetInt32(personIdIndex);
+                    
 
                     var timeEntryRecord = new TimeEntryRecord
                     {
@@ -1119,7 +1124,21 @@ namespace DataAccess
                     if (result.Any(p => p.Project.Id == projectId))
                     {
                         projectLevelTimeEntriesHistory = result.First(p => p.Project.Id == projectId);
-                        projectLevelTimeEntriesHistory.TimeEntryRecords.Add(timeEntryRecord);
+                        PersonLevelTimeEntriesHistory personLevelTimeEntriesHistory ;
+                        if (projectLevelTimeEntriesHistory.PersonLevelTimeEntries.Any(p => p.Person.Id == personId))
+                        {
+                            personLevelTimeEntriesHistory = projectLevelTimeEntriesHistory.PersonLevelTimeEntries.First(p => p.Person.Id == personId);
+                            personLevelTimeEntriesHistory.TimeEntryRecords.Add(timeEntryRecord);
+                        }
+                        else
+                        {
+                            personLevelTimeEntriesHistory = new PersonLevelTimeEntriesHistory
+                             {
+                                 Person = persons.First(p => p.Id == personId),
+                                 TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
+                             };
+                            projectLevelTimeEntriesHistory.PersonLevelTimeEntries.Add(personLevelTimeEntriesHistory);
+                        }
                     }
                     else
                     {
@@ -1131,10 +1150,18 @@ namespace DataAccess
                                 Name = reader.GetString(projectNameIndex),
                                 ProjectNumber = reader.GetString(projectNumberIndex)
                             },
-                            TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
+                            PersonLevelTimeEntries = new List<PersonLevelTimeEntriesHistory>
+                            {
+                                new PersonLevelTimeEntriesHistory
+                                {
+                                    Person = persons.First(p => p.Id == personId),
+                                    TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
+                                }
+                            }
                         };
+                        result.Add(projectLevelTimeEntriesHistory);
                     }
-                    result.Add(projectLevelTimeEntriesHistory);
+                    
                 }
             }
         }
