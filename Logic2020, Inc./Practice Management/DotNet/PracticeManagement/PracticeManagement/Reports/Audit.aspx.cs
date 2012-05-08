@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using DataTransferObjects.Reports;
 
 namespace PraticeManagement.Reporting
 {
@@ -179,5 +180,28 @@ namespace PraticeManagement.Reporting
                 mpeCustomDates.Show();
             }
         }
+
+        private void PopulateHeaderSection(List<PersonLevelTimeEntriesHistory> reportDataByPerson, List<ProjectLevelTimeEntriesHistory> reportDataByProject)
+        {
+            if (reportDataByPerson != null)
+            {
+                int noOfEmployees = reportDataByPerson.Count;
+                ltrCount.Text = noOfEmployees + " Person(s) Affected";
+                lbRange.Text = Range;
+                ltrlBillableNetChange.Text = reportDataByPerson.Sum(p => p.BillableNetChange).ToString(Constants.Formatting.DoubleValue);
+                ltrlNonBillableNetChange.Text = reportDataByPerson.Sum(p => p.NonBillableNetChange).ToString(Constants.Formatting.DoubleValue);
+                ltrlNetChange.Text = reportDataByPerson.Sum(p => p.NetChange).ToString(Constants.Formatting.DoubleValue);
+            }
+            else
+            {
+                int noOfProjects = reportDataByProject.Count;
+                ltrCount.Text = noOfProjects + " Project(s) Affected";
+                lbRange.Text = Range;
+                ltrlBillableNetChange.Text = reportDataByProject.Sum(p => p.BillableNetChange).ToString(Constants.Formatting.DoubleValue);
+                ltrlNonBillableNetChange.Text = reportDataByProject.Sum(p => p.NonBillableNetChange).ToString(Constants.Formatting.DoubleValue);
+                ltrlNetChange.Text = reportDataByProject.Sum(p => p.NetChange).ToString(Constants.Formatting.DoubleValue);
+            }
+        }
+
     }
 }
