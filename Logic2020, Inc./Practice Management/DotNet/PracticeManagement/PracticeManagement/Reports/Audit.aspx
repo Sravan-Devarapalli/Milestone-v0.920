@@ -18,23 +18,39 @@
         <ContentTemplate>
             <table class="WholeWidth" style="background-color: #e2ebff;">
                 <tr>
-                    <td style="width: 90%;">
-                        Display all time entries in
-                        <asp:DropDownList ID="ddlPeriod" runat="server" Width="160px" AutoPostBack="true"
-                            OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
-                            <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
-                            <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
-                            <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
-                            <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
-                        <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                        <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
-                        <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
-                        that were changed afterwards.
+                    <td style="width: 90%; font-size: 13px; padding: 5px; font-weight: bold;">
+                        <table>
+                            <tr>
+                                <td>
+                                    Display all time entries in&nbsp;
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlPeriod" runat="server" Width="160px" AutoPostBack="true"
+                                        OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
+                                        <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
+                                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                                    </asp:DropDownList>
+                                    <asp:HiddenField ID="hdnperiodValue" runat="server" Value="Please Select"/>
+                                    &nbsp;
+                                    that were changed afterwards.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td style="padding-top: 5px;">
+                                    <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                                    <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
-                    <td style="width: 10%;">
-                        <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Text="Run Report"
+                    <td style="width: 10%;text-align:right;padding:5px;vertical-align:top;">
+                        <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Text="Run Report" Width="150px" Enabled="false"
                             ToolTip="Run Report" />
                     </td>
                 </tr>
@@ -91,7 +107,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 10%; vertical-align: bottom; text-align: center;">
+                        <td style="width: 10%; vertical-align: middle; text-align: center;">
                             <table width="100%">
                                 <tr>
                                     <td>
@@ -115,7 +131,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 10%; text-align: center;">
+                        <td style="width: 10%; text-align: center;vertical-align: middle;">
                             <table width="100%">
                                 <tr>
                                     <td style="font-size: 15px; padding-bottom: 3px;">
@@ -149,6 +165,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="tpByResource$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpByProject$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
