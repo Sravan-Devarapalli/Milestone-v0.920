@@ -35,6 +35,8 @@
                     ToolTip="Run Report" />
             </td>
         </tr>
+        </table>
+        <table class="WholeWidth">
         <tr>
             <td colspan="2" style="border-bottom: 3px solid black; width: 100%; height: 15px;">
             </td>
@@ -68,7 +70,7 @@
             </tr>
         </table>
     </asp:Panel>
-    <div id="divWholePage" runat="server" style="display: none;">
+    <div id="divWholePage" runat="server" style="display: none;background-color: #e2ebff;">
         <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
             height: 90px;">
             <tr>
@@ -86,7 +88,7 @@
                         </tr>
                     </table>
                 </td>
-                <td style="width: 23%; vertical-align: bottom; text-align: center;">
+                <td style="width: 10%; vertical-align: bottom; text-align: center;">
                     <table width="100%">
                         <tr>
                             <td>
@@ -110,7 +112,7 @@
                         </tr>
                     </table>
                 </td>
-                <td style="width: 21%; text-align: center;">
+                <td style="width: 10%; text-align: center;">
                     <table width="100%">
                         <tr>
                             <td style="font-size: 15px; padding-bottom: 3px;">
