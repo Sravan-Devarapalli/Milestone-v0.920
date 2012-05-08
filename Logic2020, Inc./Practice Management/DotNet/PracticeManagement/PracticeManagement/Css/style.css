@@ -2536,12 +2536,32 @@ end pixcel
     padding-left :5px;
 }
 
-.TextCenter th
+.WidthWithHeightAndBorders
+{
+    width:99%;
+    border-bottom:1px solid Gray;
+    border-top:1px solid Gray;
+    border-left:1px solid Gray;
+    border-right:1px solid Gray;   
+}
+.WidthWithHeightAndBorders td
+{
+    height:30px;
+    padding-left :5px;
+}
+
+.WidthWithHeightAndBorders th
+{
+    padding-left :5px;
+    font-size:12px;
+}
+
+.TableTextCenter th
 {
     text-align:center;
 }
 
-.TextCenter td
+.TableTextCenter td
 {
     text-align:center;
 }
