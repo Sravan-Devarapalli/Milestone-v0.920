@@ -109,4 +109,8 @@
     <FooterTemplate>
     </FooterTemplate>
 </asp:Repeater>
+<div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
+    runat="server">
+    There are no Time Entries by any Employee for the selected range.
+</div>
 
