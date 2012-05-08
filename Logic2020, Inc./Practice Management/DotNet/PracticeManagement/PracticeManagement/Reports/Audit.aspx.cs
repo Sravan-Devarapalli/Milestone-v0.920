@@ -145,7 +145,8 @@ namespace PraticeManagement.Reporting
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
-            SelectView(0);
+            SelectView(1);
+            btnUpdate.Enabled = false;
         }
 
         public void SelectView(int viewIndex)
@@ -177,7 +178,7 @@ namespace PraticeManagement.Reporting
                 {
                     var reportDataByProject = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByProject(StartDate.Value, EndDate.Value));
                     PopulateHeaderSection(null, reportDataByProject);
-                    //tpByProject.PopulateByProjectData(reportDataByProject);
+                    tpByProject.PopulateByProjectData(reportDataByProject);
                 }
             }
         }
@@ -188,10 +189,17 @@ namespace PraticeManagement.Reporting
             {
                 mpeCustomDates.Show();
             }
+            else
+            {
+                hdnperiodValue.Value = ddlPeriod.SelectedValue;
+                btnUpdate.Enabled = true;
+                divWholePage.Style.Add("display", "none");
+            }
         }
 
         protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
         {
+            ddlPeriod.SelectedValue = hdnperiodValue.Value;
             diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
             diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
         }
@@ -201,8 +209,11 @@ namespace PraticeManagement.Reporting
             Page.Validate(valSumDateRange.ValidationGroup);
             if (Page.IsValid)
             {
+                hdnperiodValue.Value = ddlPeriod.SelectedValue;
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
+                btnUpdate.Enabled = true;
+                divWholePage.Style.Add("display", "none");
             }
             else
             {
