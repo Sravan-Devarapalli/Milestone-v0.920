@@ -3,11 +3,11 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;">
+            <td colspan="4" style="width: 90%;padding-top:5px;">
                 <asp:Button ID="btnGroupBy" runat="server" Text="Group By Project" UseSubmitBehavior="false"
                     Width="130px" OnClick="btnGroupBy_OnClick" ToolTip="Group By Project" />
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;">
+            <td style="text-align: right; width: 10%; padding-right: 5px;padding-top:5px;">
                 <table width="100%" style="text-align: right;">
                     <tr>
                         <td>
@@ -45,7 +45,7 @@
             <asp:Repeater ID="repPersonTimeEntriesHistory" DataSource='<%# Eval("TimeEntryRecords") %>'
                 runat="server">
                 <HeaderTemplate>
-                    <table class="WholeWidthWithHeight CompPerfTable TextCenter">
+                    <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
                         <tr class="CompPerfHeader">
                             <th>
                                 Affected Date
@@ -53,7 +53,7 @@
                             <th>
                                 Modified Date
                             </th>
-                            <th>
+                            <th style="width: 20%;">
                                 Project-Project Name
                             </th>
                             <th>
@@ -98,7 +98,7 @@
                             <%# GetDoubleFormat((double)Eval("NetChange"))%>
                         </td>
                         <td>
-                            <img src="Images/balloon-ellipsis.png" alt="Note" title='<%# Eval("Note")%>' id="imgNote"  />
+                            <img src="../Images/balloon-ellipsis.png" title='<%# Eval("Note")%>' />
                         </td>
                     </tr>
                 </ItemTemplate>
@@ -128,7 +128,7 @@
                             <%# GetDoubleFormat((double)Eval("NetChange"))%>
                         </td>
                         <td>
-                            <img src="Images/balloon-ellipsis.png" alt="Note" title='<%# Eval("Note")%>' id="imgNote" />
+                            <img src="../Images/balloon-ellipsis.png" title='<%# Eval("Note")%>' />
                         </td>
                     </tr>
                 </AlternatingItemTemplate>
@@ -140,6 +140,7 @@
 </div>
 <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
     runat="server">
-    There are no Time Entries by any Employee for the selected range.
+    There are no Time Entries that were changed afterwards by any Employee for the selected
+    range.
 </div>
 
