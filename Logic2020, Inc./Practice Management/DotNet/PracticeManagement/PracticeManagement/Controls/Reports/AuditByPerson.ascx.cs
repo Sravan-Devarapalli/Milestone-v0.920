@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using DataTransferObjects.Reports;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -19,7 +20,23 @@ namespace PraticeManagement.Controls.Reports
             return value.ToString(Constants.Formatting.DoubleValue);
         }
 
-
+        public void PopulateByResourceData(PersonLevelTimeEntriesHistory[] reportDataByPerson)
+        {
+            var reportDataList = reportDataByPerson.ToList();
+           
+            if (reportDataList.Count > 0)
+            {
+                divEmptyMessage.Style["display"] = "none";
+                repPersons.Visible = true;
+                repPersons.DataSource = reportDataList;
+                repPersons.DataBind();
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+                repPersons.Visible = false;
+            }
+        }
        
     }
 }
