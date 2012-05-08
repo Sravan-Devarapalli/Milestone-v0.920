@@ -19,7 +19,7 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public List<TimeEntryRecord> TimeEntryRecords
+        public List<PersonLevelTimeEntriesHistory> PersonLevelTimeEntries
         {
             get;
             set;
@@ -29,7 +29,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return TimeEntryRecords.Sum(t => t.IsChargeable ? t.NetChange : 0);
+                return PersonLevelTimeEntries.Sum(t => t.BillableNetChange);
             }
         }
 
@@ -37,7 +37,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return TimeEntryRecords.Sum(t => !t.IsChargeable ? t.NetChange : 0);
+                return PersonLevelTimeEntries.Sum(t => t.NonBillableNetChange);
             }
         }
 
@@ -45,7 +45,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return TimeEntryRecords.Sum(t => t.NetChange);
+                return PersonLevelTimeEntries.Sum(t => t.NetChange);
             }
         }
     }
