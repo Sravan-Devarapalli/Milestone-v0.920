@@ -124,6 +124,13 @@ namespace DataTransferObjects.TimeEntry
             }
         }
 
+        public string NoteForExport
+        {
+            get
+            {
+                return Note.Replace("\n", " ").Replace("\r", " ");
+            }
+        }
 
         #endregion
 
