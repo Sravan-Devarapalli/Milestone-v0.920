@@ -145,16 +145,46 @@ namespace PraticeManagement.Reporting
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
+            SelectView(0);
+        }
 
+        private void SelectView(int viewIndex)
+        {
+            if (ddlPeriod.SelectedValue != "Please Select")
+            {
+                divWholePage.Style.Remove("display");
+                mvTimePeriodReport.ActiveViewIndex = viewIndex;
+                LoadActiveView();
+            }
+            else
+            {
+                divWholePage.Style.Add("display", "none");
+            }
+
+        }
+
+        private void LoadActiveView()
+        {
+            if (StartDate.HasValue && EndDate.HasValue)
+            {
+                if (mvTimePeriodReport.ActiveViewIndex == 0)
+                {
+                    var reportDataByPerson = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByPerson(StartDate.Value, EndDate.Value));
+                    PopulateHeaderSection(reportDataByPerson, null);
+                    tpByResource.PopulateByResourceData(reportDataByPerson);
+                }
+                else if (mvTimePeriodReport.ActiveViewIndex == 1)
+                {
+                    var reportDataByProject = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByProject(StartDate.Value, EndDate.Value));
+                    PopulateHeaderSection(null, reportDataByProject);
+                    //tpByProject.PopulateByProjectData(reportDataByProject);
+                }
+            }
         }
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlPeriod.SelectedValue != "0")
-            {
-               // SelectView();
-            }
-            else
+            if (ddlPeriod.SelectedValue == "0")
             {
                 mpeCustomDates.Show();
             }
@@ -173,7 +203,6 @@ namespace PraticeManagement.Reporting
             {
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
-                //SelectView();
             }
             else
             {
@@ -181,11 +210,11 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        private void PopulateHeaderSection(List<PersonLevelTimeEntriesHistory> reportDataByPerson, List<ProjectLevelTimeEntriesHistory> reportDataByProject)
+        private void PopulateHeaderSection(PersonLevelTimeEntriesHistory[] reportDataByPerson, ProjectLevelTimeEntriesHistory[] reportDataByProject)
         {
             if (reportDataByPerson != null)
             {
-                int noOfEmployees = reportDataByPerson.Count;
+                int noOfEmployees = reportDataByPerson.Count();
                 ltrCount.Text = noOfEmployees + " Person(s) Affected";
                 lbRange.Text = Range;
                 ltrlBillableNetChange.Text = reportDataByPerson.Sum(p => p.BillableNetChange).ToString(Constants.Formatting.DoubleValue);
@@ -194,7 +223,7 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                int noOfProjects = reportDataByProject.Count;
+                int noOfProjects = reportDataByProject.Count();
                 ltrCount.Text = noOfProjects + " Project(s) Affected";
                 lbRange.Text = Range;
                 ltrlBillableNetChange.Text = reportDataByProject.Sum(p => p.BillableNetChange).ToString(Constants.Formatting.DoubleValue);
