@@ -367,6 +367,8 @@
     <Content Include="Controls\FilteredCheckBoxList.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
+    <Content Include="Controls\Reports\AuditByPerson.ascx" />
+    <Content Include="Controls\Reports\AuditByProject.ascx" />
     <Content Include="Controls\Reports\BillableAndNonBillableGraph.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
@@ -1247,6 +1249,18 @@
     </Compile>
     <Compile Include="Controls\Projects\ProjectTimeTypes.ascx.designer.cs">
       <DependentUpon>ProjectTimeTypes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\AuditByPerson.ascx.cs">
+      <DependentUpon>AuditByPerson.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\AuditByPerson.ascx.designer.cs">
+      <DependentUpon>AuditByPerson.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\AuditByProject.ascx.cs">
+      <DependentUpon>AuditByProject.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\AuditByProject.ascx.designer.cs">
+      <DependentUpon>AuditByProject.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.cs">
       <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
