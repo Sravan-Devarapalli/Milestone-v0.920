@@ -25,14 +25,8 @@ AS
         SET @EndDateLocal = CONVERT(DATE, @EndDate);
 
 		  WITH    EffectedPersons
-                  AS ( SELECT   TE.PersonId
-                       FROM     dbo.TimeEntry AS TE
-                                INNER JOIN dbo.TimeEntryHours AS TEH ON TE.TimeEntryId = TEH.TimeEntryId
-                       WHERE    TEH.ModifiedDate > @EndDateLocal
-                                AND TE.ChargeCodeDate BETWEEN @StartDateLocal
-                                                      AND     @EndDateLocal
-                       UNION
-                       SELECT   TH.PersonId
+                  AS ( 
+                       SELECT  Distinct TH.PersonId
                        FROM     dbo.TimeEntryHistory AS TH
                        WHERE    TH.ModifiedDate > @EndDateLocal
                                 AND TH.OldHours <> TH.ActualHours
@@ -53,20 +47,7 @@ AS
 
 
         WITH    TimeEntriesHistory
-                  AS ( SELECT   TE.PersonId ,
-                                TE.ChargeCodeDate ,
-                                TEH.ModifiedDate ,
-                                TE.ChargeCodeId ,
-                                TEH.IsChargeable ,
-                                0 AS OriginalHours ,
-                                TEH.ActualHours ,
-                                TE.Note
-                       FROM     dbo.TimeEntry AS TE
-                                INNER JOIN dbo.TimeEntryHours AS TEH ON TE.TimeEntryId = TEH.TimeEntryId
-                       WHERE    TEH.ModifiedDate > @EndDateLocal
-                                AND TE.ChargeCodeDate BETWEEN @StartDateLocal
-                                                      AND     @EndDateLocal
-                       UNION
+                  AS ( 
                        SELECT   TH.PersonId ,
                                 TH.ChargeCodeDate ,
                                 TH.ModifiedDate ,
@@ -98,15 +79,13 @@ AS
                     TH.OriginalHours ,
                     TH.ActualHours ,
                     TH.Note ,
-                    '1' AS Phase
+                    1 AS Phase
             FROM    TimeEntriesHistory AS TH
                     INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TH.ChargeCodeId
                     INNER JOIN dbo.Project AS PROJ ON PROJ.ProjectId = CC.ProjectId
                     INNER JOIN dbo.Client AS CLNT ON CC.ClientId = CLNT.ClientId
                     INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = CC.ProjectGroupId
                     INNER JOIN dbo.TimeType AS TT ON TT.TimeTypeId = CC.TimeTypeId
-
-      
-     
+			ORDER BY ChargeCodeDate
     END
 
