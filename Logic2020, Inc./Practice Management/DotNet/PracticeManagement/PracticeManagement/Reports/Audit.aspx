@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="Audit" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="Audit.aspx.cs" Inherits="PraticeManagement.Reporting.Audit" %>
+
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
@@ -10,11 +11,12 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <table class="WholeWidth" style="background-color:#e2ebff;">
+    <table class="WholeWidth" style="background-color: #e2ebff;">
         <tr>
             <td style="width: 90%;">
                 Display all time entries in
-                <asp:DropDownList ID="ddlPeriod" runat="server" Width="160px" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
+                <asp:DropDownList ID="ddlPeriod" runat="server" Width="160px" AutoPostBack="true"
+                    OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                     <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                     <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
                     <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
@@ -27,7 +29,12 @@
                 that were changed afterwards.
             </td>
             <td style="width: 10%;">
-                <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Text="Run Report" ToolTip="Run Report"/>
+                <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Text="Run Report"
+                    ToolTip="Run Report" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-bottom: 3px solid black; width: 100%; height: 15px;">
             </td>
         </tr>
     </table>
@@ -59,6 +66,66 @@
             </tr>
         </table>
     </asp:Panel>
+    <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
+        height: 90px;">
+        <tr>
+            <td style="font-size: 16px; font-weight: bold;">
+                <table>
+                    <tr>
+                        <td style="vertical-align: top; padding-bottom: 10px;">
+                            <asp:Literal ID="ltrCount" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 10px; vertical-align: bottom;">
+                            <asp:Literal ID="lbRange" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 23%; vertical-align: bottom; text-align: center;">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            BILLABLE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-bottom: 5px;">
+                            <asp:Literal ID="ltrlBillableNetChange" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            NON-BILLABLE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Literal ID="ltrlNonBillableNetChange" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 21%; text-align: center;">
+                <table width="100%">
+                    <tr>
+                        <td style="font-size: 15px; padding-bottom: 3px;">
+                            Net Change
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 25px;">
+                            <asp:Literal ID="ltrlNetChange" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 2%;">
+            </td>
+        </tr>
+        </table> </td> </tr>
+    </table>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footer" runat="server">
 </asp:Content>
