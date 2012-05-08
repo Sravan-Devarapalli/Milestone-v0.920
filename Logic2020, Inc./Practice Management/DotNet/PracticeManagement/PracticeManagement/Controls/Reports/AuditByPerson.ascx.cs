@@ -13,5 +13,13 @@ namespace PraticeManagement.Controls.Reports
         {
 
         }
+
+        protected string GetDoubleFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
+
+       
     }
 }
