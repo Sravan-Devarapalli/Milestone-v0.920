@@ -37,7 +37,7 @@
                         <%# Eval("Person.PersonLastFirstName")%>
                         (<%# Eval("Person.Status.Name")%>,<%# Eval("Person.CurrentPay.TimescaleName")%>)
                     </td>
-                    <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
+                    <td style="width: 10%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
                     </td>
                 </tr>
@@ -47,40 +47,40 @@
                 <HeaderTemplate>
                     <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
                         <tr class="CompPerfHeader">
-                            <th>
+                            <th style="width: 15%;text-align:left;padding-left:10px;">
                                 Affected Date
                             </th>
-                            <th>
+                            <th style="width: 13%;">
                                 Modified Date
                             </th>
-                            <th style="width: 20%;">
+                            <th style="width: 32%;">
                                 Project-Project Name
                             </th>
-                            <th>
+                            <th style="width: 13%;">
                                 Work Type
                             </th>
-                            <th>
+                            <th style="width: 8%;">
                                 Original Hours
                             </th>
-                            <th>
+                            <th style="width: 8%;">
                                 New Hours
                             </th>
-                            <th>
+                            <th style="width: 8%;">
                                 Net Change
                             </th>
-                            <th>
+                            <th style="width: 3%;">
                             </th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr style="text-align: left; background-color: #D4D0C9;">
-                        <td>
+                        <td style="text-align: left;padding-left:5px;">
                             <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
-                        <td>
+                        <td style="text-align: left;padding-left:5px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
-                        <td title='<%# Eval("ChargeCode.ChargeCodeName")%>'>
+                        <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' >
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
                             -
                             <%# Eval("ChargeCode.Project.Name")%>
@@ -88,14 +88,14 @@
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
-                        <td style="text-align: right; vertical-align: middle;">
+                        <td style="vertical-align: middle;">
                             <table width="100%">
                                 <tr>
-                                    <td style="text-align: right; font-weight: bold;">
+                                    <td style="text-align: right; width: 60%">
                                         <%# GetDoubleFormat((double)Eval("OldHours"))%>
                                     </td>
-                                    <td style="width: 20px">
-                                        <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                    <td style="text-align: left; padding-left: 5px;">
+                                        <asp:Image ID="imgNonBillableOldHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                             ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
                                     </td>
                                 </tr>
@@ -104,12 +104,12 @@
                         <td>
                             <table width="100%">
                                 <tr>
-                                    <td style="text-align: right; font-weight: bold;">
+                                    <td style="text-align: right; width: 60%">
                                         <%# GetDoubleFormat((double)Eval("ActualHours"))%>
                                     </td>
-                                    <td style="width: 20px">
-                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png" ToolTip="Non-Billable hours."
-                                            Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
+                                    <td style="text-align: left; padding-left: 5px;">
+                                        <asp:Image ID="imgNonBillableActualHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                            ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
                                     </td>
                                 </tr>
                             </table>
@@ -118,16 +118,16 @@
                             <%# GetDoubleFormat((double)Eval("NetChange"))%>
                         </td>
                         <td>
-                            <img src="../Images/balloon-ellipsis.png" title='<%# Eval("Note")%>' />
+                            <img src="../Images/notes.png" title='<%# Eval("Note")%>' />
                         </td>
                     </tr>
                 </ItemTemplate>
                 <AlternatingItemTemplate>
                     <tr style="text-align: left; background-color: #ECE9D9;">
-                        <td>
+                        <td style="text-align: left;padding-left:5px;">
                             <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
-                        <td>
+                        <td style="text-align: left;padding-left:5px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
                         <td title='<%# Eval("ChargeCode.ChargeCodeName")%>'>
@@ -138,14 +138,14 @@
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
-                        <td style="text-align: right; vertical-align: middle;">
+                        <td style="vertical-align: middle;">
                             <table width="100%">
                                 <tr>
-                                    <td style="text-align: right; font-weight: bold;">
+                                    <td style="text-align: right; width: 60%">
                                         <%# GetDoubleFormat((double)Eval("OldHours"))%>
                                     </td>
-                                    <td style="width: 20px">
-                                        <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                    <td style="text-align: left; padding-left: 5px;">
+                                        <asp:Image ID="imgNonBillableOldHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                             ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
                                     </td>
                                 </tr>
@@ -154,12 +154,12 @@
                         <td>
                             <table width="100%">
                                 <tr>
-                                    <td style="text-align: right; font-weight: bold;">
+                                    <td style="text-align: right; width: 60%">
                                         <%# GetDoubleFormat((double)Eval("ActualHours"))%>
                                     </td>
-                                    <td style="width: 20px">
-                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png" ToolTip="Non-Billable hours."
-                                            Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
+                                    <td style="text-align: left; padding-left: 5px;">
+                                        <asp:Image ID="imgNonBillableActualHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                            ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
                                     </td>
                                 </tr>
                             </table>
@@ -168,7 +168,7 @@
                             <%# GetDoubleFormat((double)Eval("NetChange"))%>
                         </td>
                         <td>
-                            <img src="../Images/balloon-ellipsis.png" title='<%# Eval("Note")%>' />
+                            <img src="../Images/notes.png" title='<%# Eval("Note")%>' />
                         </td>
                     </tr>
                 </AlternatingItemTemplate>
