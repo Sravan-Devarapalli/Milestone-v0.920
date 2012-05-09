@@ -24,18 +24,11 @@ namespace PraticeManagement.Reporting
                     }
                     else if (selectedVal == 15)
                     {
-                        return Utils.Calendar.MonthStartDate(now);
+                        return Utils.Calendar.PayrollCurrentStartDate(now);
                     }
                     else if (selectedVal == -15)
                     {
-                        if (now.Day < 16)
-                        {
-                            return Utils.Calendar.LastMonthSecondHalfStartDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.CurrentMonthSecondHalfStartDate(now);
-                        }
+                        return Utils.Calendar.PayrollPerviousStartDate(now);
                     }
                 }
                 return null;
@@ -56,20 +49,11 @@ namespace PraticeManagement.Reporting
                     }
                     else if (selectedVal == 15)
                     {
-
-                        return Utils.Calendar.MonthFirstHalfEndDate(now);
-
+                        return Utils.Calendar.PayrollCurrentEndDate(now);
                     }
                     else if (selectedVal == -15)
                     {
-                        if (now.Day < 16)
-                        {
-                            return Utils.Calendar.LastMonthEndDate(now);
-                        }
-                        else
-                        {
-                            return Utils.Calendar.MonthEndDate(now);
-                        }
+                        return Utils.Calendar.PayrollPerviousEndDate(now);
                     }
                 }
                 return null;
@@ -128,19 +112,6 @@ namespace PraticeManagement.Reporting
 
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
-            if (!IsPostBack)
-            {
-                var payrollP2Item = ddlPeriod.Items.FindByValue("-15");
-                if (now.Day < 16)
-                {
-                    payrollP2Item.Text = "Payroll - Previous";
-                }
-                else
-                {
-                    payrollP2Item.Text = "Payroll - Current";
-                }
-            }
-
         }
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
