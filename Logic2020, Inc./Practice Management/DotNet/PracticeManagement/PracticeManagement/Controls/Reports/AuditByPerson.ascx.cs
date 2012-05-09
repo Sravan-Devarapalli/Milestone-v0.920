@@ -114,7 +114,7 @@ namespace PraticeManagement.Controls.Reports
                             sb.Append("\t");
                             sb.Append(personLevelTimeEntriesHistory.Person.Status.Name);
                             sb.Append("\t");
-                            sb.Append(personLevelTimeEntriesHistory.Person.CurrentPay.TimescaleName);
+                            sb.Append(personLevelTimeEntriesHistory.Person.CurrentPay != null ? personLevelTimeEntriesHistory.Person.CurrentPay.TimescaleName:string.Empty);
                             sb.Append("\t");
                             sb.Append(timeEntryRecord.MilestoneDate.ToString("MM/dd/yyyy"));
                             sb.Append("\t");
