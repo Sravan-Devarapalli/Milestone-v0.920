@@ -79,7 +79,8 @@ AS
                     TH.OriginalHours ,
                     TH.ActualHours ,
                     TH.Note ,
-                    1 AS Phase
+                    1 AS Phase,
+					CC.TimeEntrySectionId
             FROM    TimeEntriesHistory AS TH
                     INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TH.ChargeCodeId
                     INNER JOIN dbo.Project AS PROJ ON PROJ.ProjectId = CC.ProjectId
