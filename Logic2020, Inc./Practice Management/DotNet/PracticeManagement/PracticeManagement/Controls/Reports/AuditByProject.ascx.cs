@@ -33,6 +33,11 @@ namespace PraticeManagement.Controls.Reports
             return date.ToString(Constants.Formatting.ReportDateFormat);
         }
 
+        protected bool GetNonBillableImageVisibility(int timeEntrySection, bool isChargeable)
+        {
+            return !isChargeable && timeEntrySection == (int)TimeEntrySectionType.Project;
+        }
+
         public void PopulateByProjectData(ProjectLevelTimeEntriesHistory[] reportDataByPerson)
         {
             var reportDataList = reportDataByPerson.ToList();
