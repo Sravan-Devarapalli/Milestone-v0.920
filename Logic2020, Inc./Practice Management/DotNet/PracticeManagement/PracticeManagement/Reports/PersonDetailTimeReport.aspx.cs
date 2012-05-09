@@ -34,9 +34,13 @@ namespace PraticeManagement.Reporting
                             {
                                 return Utils.Calendar.WeekStartDate(now);
                             }
-                            else if (selectedVal == 30 || selectedVal == 15)
+                            else if (selectedVal == 30)
                             {
                                 return Utils.Calendar.MonthStartDate(now);
+                            }
+                            else if (selectedVal == 15)
+                            {
+                                return Utils.Calendar.PayrollCurrentStartDate(now);
                             }
                             else
                             {
@@ -52,14 +56,7 @@ namespace PraticeManagement.Reporting
                             }
                             else if (selectedVal == -15)
                             {
-                                if (now.Day < 16)
-                                {
-                                    return Utils.Calendar.LastMonthSecondHalfStartDate(now);
-                                }
-                                else
-                                {
-                                    return Utils.Calendar.CurrentMonthSecondHalfStartDate(now);
-                                }
+                                return Utils.Calendar.PayrollPerviousStartDate(now);
                             }
                             else if (selectedVal == -30)
                             {
@@ -111,7 +108,7 @@ namespace PraticeManagement.Reporting
                             }
                             else if (selectedVal == 15)
                             {
-                                return Utils.Calendar.MonthFirstHalfEndDate(now);
+                                return Utils.Calendar.PayrollCurrentEndDate(now);
                             }
                             else if (selectedVal == 30)
                             {
@@ -130,14 +127,7 @@ namespace PraticeManagement.Reporting
                             }
                             else if (selectedVal == -15)
                             {
-                                if (now.Day < 16)
-                                {
-                                    return Utils.Calendar.LastMonthEndDate(now);
-                                }
-                                else
-                                {
-                                    return now;
-                                }
+                                return Utils.Calendar.PayrollPerviousEndDate(now);
                             }
                             else if (selectedVal == -30)
                             {
