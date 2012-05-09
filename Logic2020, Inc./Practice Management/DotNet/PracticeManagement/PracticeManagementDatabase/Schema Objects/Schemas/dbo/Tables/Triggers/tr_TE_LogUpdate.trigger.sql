@@ -11,12 +11,15 @@ BEGIN
 
 		;WITH UALog AS
 		(
-		    SELECT RANK() OVER(PARTITION BY  CAST(u.Data as XML).value('(/TimeEntry/NEW_VALUES/@TimeEntryId)[1]', 'int')  ORDER BY ActivityId DESC) AS RANKnO,
+		    SELECT RANK() OVER(PARTITION BY  
+							CAST(u.Data as XML).value('(/TimeEntry/NEW_VALUES/@TimeEntryId)[1]', 'int'),
+							CAST(u.Data as XML).value('(/TimeEntry/NEW_VALUES/@IsBillable)[1]', 'VARCHAR(1000)')  ORDER BY ActivityId DESC) AS RANKnO,
 			       CAST(u.Data as XML) as XmlData,
 				   CAST(u.Data as XML).value('(/TimeEntry/NEW_VALUES/@TimeEntryId)[1]', 'int') TimeEntryId,
+				   CAST(u.Data as XML).value('(/TimeEntry/NEW_VALUES/@IsBillable)[1]', 'VARCHAR(1000)') AS 'IsBillable',
 				   u.ActivityID
 			 FROM dbo.UserActivityLog AS u 
-			 INNER JOIN inserted i ON  u.ActivityTypeID = 4 AND i.TimeEntryId = CAST(u.Data as XML).value('(/TimeEntry/NEW_VALUES/@TimeEntryId)[1]', 'int')
+			 INNER JOIN inserted i ON  u.ActivityTypeID = 4 AND i.TimeEntryId = CAST(u.Data as XML).value('(/TimeEntry/NEW_VALUES/@TimeEntryId)[1]', 'int') 
 			 INNER JOIN dbo.SessionLogData  AS l ON l.SessionID = @@SPID and l.SessionID = u.SessionID 
 		)
 		,NEW_VALUES AS
@@ -83,8 +86,8 @@ BEGIN
 		UPDATE u
 		SET Data = CONVERT(NVARCHAR(MAX),(SELECT *
 							FROM NEW_VALUES
-							INNER JOIN OLD_VALUES ON NEW_VALUES.TimeEntryId = OLD_VALUES.TimeEntryId
-						   WHERE NEW_VALUES.TimeEntryId = ualog.TimeEntryId
+							INNER JOIN OLD_VALUES ON NEW_VALUES.TimeEntryId = OLD_VALUES.TimeEntryId AND NEW_VALUES.IsBillable = OLD_VALUES.IsBillable
+						   WHERE NEW_VALUES.TimeEntryId = ualog.TimeEntryId  AND NEW_VALUES.IsBillable = ualog.IsBillable
 						  FOR XML AUTO, ROOT('TimeEntry'))),
 			LogData = (SELECT NEW_VALUES.Parent, 
 									NEW_VALUES.TimeEntryId,
@@ -109,16 +112,39 @@ BEGIN
 									OLD_VALUES.ProjectGroupId,
 									OLD_VALUES.ProjectId
 							FROM NEW_VALUES
-							INNER JOIN OLD_VALUES ON NEW_VALUES.TimeEntryId = OLD_VALUES.TimeEntryId
-						   WHERE NEW_VALUES.TimeEntryId = ualog.TimeEntryId
+							INNER JOIN OLD_VALUES ON NEW_VALUES.TimeEntryId = OLD_VALUES.TimeEntryId AND NEW_VALUES.IsBillable = OLD_VALUES.IsBillable
+						   WHERE NEW_VALUES.TimeEntryId = ualog.TimeEntryId AND NEW_VALUES.IsBillable = ualog.IsBillable
 						  FOR XML AUTO, ROOT('TimeEntry'), TYPE)
 		  FROM UALog AS ualog
 		  INNER JOIN dbo.UserActivityLog AS u ON  u.ActivityID = ualog.ActivityID AND  UALog.RANKnO = 1 
 	 
+	 ;WITH UALog AS
+		(
+		    SELECT RANK() OVER(PARTITION BY  TEH.TimeEntryId,TEH.IsChargeable ORDER BY Id DESC) AS RANKnO,
+				   TEH.TimeEntryId,
+				   TEH.IsChargeable,
+				   TEH.Id
+			 FROM dbo.[TimeEntryHistory] AS TEH 
+			 INNER JOIN inserted i ON  TEH.ActivityTypeID = 4 AND i.TimeEntryId = TEH.TimeEntryId
+			 INNER JOIN dbo.SessionLogData  AS l ON l.SessionID = @@SPID and l.SessionID = TEH.SessionID 
+		)
+		,NEW_VALUES AS
+		(
+			SELECT  i.[TimeEntryId] AS 'TimeEntryId',
+  					i.[Note] AS 'Note',
+					UALog.IsChargeable
+			FROM inserted AS i
+			INNER JOIN UALog ON i.TimeEntryId = uaLog.TimeEntryId and UALog.RANKnO = 1 
+		)
+
+		
+		UPDATE TEH 
+		SET Note = NEW_VALUES.Note
+		  FROM UALog AS ualog
+		  INNER JOIN  dbo.TimeEntryHistory AS TEH ON  TEH.Id = ualog.Id AND  UALog.RANKnO = 1 
+		  INNER JOIN NEW_VALUES ON NEW_VALUES.TimeEntryId = ualog.TimeEntryId  AND NEW_VALUES.IsChargeable = ualog.IsChargeable  
+
 	 END
 END
 
 GO
-
-
-
