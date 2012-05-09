@@ -40,7 +40,7 @@
                             <tr>
                                 <td>
                                 </td>
-                                <td style="padding-top: 5px;">
+                                <td style="padding-top: 5px;height:20px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
