@@ -97,7 +97,7 @@ namespace DataTransferObjects.TimeEntry
         {
             get
             {
-                return OldHours - ActualHours;
+                return ActualHours - OldHours;
             }
         }
 
