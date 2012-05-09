@@ -32,12 +32,12 @@
         <ItemTemplate>
             <table class="WholeWidthWithHeight">
                 <tr style="text-align: left;">
-                    <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;
+                    <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;padding-left:15px;
                         font-weight: bold;">
                         <%# Eval("Person.PersonLastFirstName")%>
                         (<%# Eval("Person.Status.Name")%>,<%# Eval("Person.CurrentPay.TimescaleName")%>)
                     </td>
-                    <td style="width: 10%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
+                    <td style="width: 10%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 15px;">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
                     </td>
                 </tr>
@@ -45,36 +45,37 @@
             <asp:Repeater ID="repPersonTimeEntriesHistory" DataSource='<%# Eval("TimeEntryRecords") %>'
                 runat="server">
                 <HeaderTemplate>
-                    <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
-                        <tr class="CompPerfHeader">
-                            <th style="width: 18%; text-align: left; padding-left: 10px;">
-                                Affected Date
-                            </th>
-                            <th style="width: 13%;">
-                                Modified Date
-                            </th>
-                            <th style="width: 5%;">
-                            </th>
-                            <th style="width: 16%;">
-                                Project-Project Name
-                            </th>
-                            <th style="width: 8%;">
-                            </th>
-                            <th style="width: 13%;">
-                                Work Type
-                            </th>
-                            <th style="width: 8%;">
-                                Original Hours
-                            </th>
-                            <th style="width: 8%;">
-                                New Hours
-                            </th>
-                            <th style="width: 8%;">
-                                Net Change
-                            </th>
-                            <th style="width: 3%;">
-                            </th>
-                        </tr>
+                    <div style="padding-left: 5px; padding-right: 5px;">
+                        <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
+                            <tr class="CompPerfHeader">
+                                <th style="width: 18%; text-align: left; padding-left: 10px;">
+                                    Affected Date
+                                </th>
+                                <th style="width: 13%;">
+                                    Modified Date
+                                </th>
+                                <th style="width: 5%;">
+                                </th>
+                                <th style="width: 16%;">
+                                    Project-Project Name
+                                </th>
+                                <th style="width: 8%;">
+                                </th>
+                                <th style="width: 13%;">
+                                    Work Type
+                                </th>
+                                <th style="width: 8%;">
+                                    Original Hours
+                                </th>
+                                <th style="width: 8%;">
+                                    New Hours
+                                </th>
+                                <th style="width: 8%;">
+                                    Net Change
+                                </th>
+                                <th style="width: 3%;">
+                                </th>
+                            </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr style="text-align: left; background-color: #D4D0C9;">
@@ -84,13 +85,15 @@
                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
-                        <td></td>
+                        <td>
+                        </td>
                         <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' style="text-align: left; padding-left: 5px;">
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
                             -
                             <%# Eval("ChargeCode.Project.Name")%>
                         </td>
-                        <td></td>
+                        <td>
+                        </td>
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
@@ -136,13 +139,15 @@
                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
-                        <td></td>
+                        <td>
+                        </td>
                         <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' style="text-align: left; padding-left: 5px;">
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
                             -
                             <%# Eval("ChargeCode.Project.Name")%>
                         </td>
-                        <td></td>
+                        <td>
+                        </td>
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
@@ -180,6 +185,9 @@
                         </td>
                     </tr>
                 </AlternatingItemTemplate>
+                <FooterTemplate>
+                    </table> </div>
+                </FooterTemplate>
             </asp:Repeater>
         </ItemTemplate>
         <FooterTemplate>
