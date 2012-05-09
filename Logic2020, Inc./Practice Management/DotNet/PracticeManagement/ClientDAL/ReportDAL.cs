@@ -1201,13 +1201,17 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(personStatusIdIndex),
                             Name = reader.GetString(personStatusNameIndex)
-                        },
-                        CurrentPay = new Pay
-                        {
-                            Timescale = (TimescaleType)reader.GetInt32(timeScaleIndex),
-                            TimescaleName = reader.IsDBNull(timescaleNameIndex) ? String.Empty : reader.GetString(timescaleNameIndex)
                         }
                     };
+                    if (!reader.IsDBNull(timeScaleIndex))
+                    {
+                        Pay currentPay = new Pay
+                            {
+                                Timescale = (TimescaleType)reader.GetInt32(timeScaleIndex),
+                                TimescaleName = reader.GetString(timescaleNameIndex)
+                            };
+                        person.CurrentPay = currentPay;
+                    }
                     result.Add(person);
                 }
             }
