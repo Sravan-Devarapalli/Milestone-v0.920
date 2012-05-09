@@ -52,14 +52,18 @@
                 <HeaderTemplate>
                     <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
                         <tr class="CompPerfHeader">
-                            <th style="width: 15%; text-align: left; padding-left: 10px;">
+                            <th style="width: 18%; text-align: left; padding-left: 10px;">
                                 Affected Date
                             </th>
                             <th style="width: 13%;">
                                 Modified Date
                             </th>
-                            <th style="width: 32%;">
+                            <th style="width: 5%;">
+                            </th>
+                            <th style="width: 16%;">
                                 Person Name
+                            </th>
+                            <th style="width: 8%;">
                             </th>
                             <th style="width: 13%;">
                                 Work Type
@@ -85,9 +89,11 @@
                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("Value.ModifiedDate"))%>
                         </td>
-                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>'>
+                        <td></td>
+                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>' style="text-align: left;padding-left:5px;">
                             <%# Eval("Key.PersonLastFirstName")%>
                         </td>
+                        <td></td>
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
@@ -133,9 +139,11 @@
                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("Value.ModifiedDate"))%>
                         </td>
-                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>'>
+                        <td></td>
+                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>' style="text-align: left;padding-left:5px;">
                             <%# Eval("Key.PersonLastFirstName")%>
                         </td>
+                        <td></td>
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
