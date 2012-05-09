@@ -47,14 +47,18 @@
                 <HeaderTemplate>
                     <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
                         <tr class="CompPerfHeader">
-                            <th style="width: 15%;text-align:left;padding-left:10px;">
+                            <th style="width: 18%; text-align: left; padding-left: 10px;">
                                 Affected Date
                             </th>
                             <th style="width: 13%;">
                                 Modified Date
                             </th>
-                            <th style="width: 32%;">
+                            <th style="width: 5%;">
+                            </th>
+                            <th style="width: 16%;">
                                 Project-Project Name
+                            </th>
+                            <th style="width: 8%;">
                             </th>
                             <th style="width: 13%;">
                                 Work Type
@@ -74,17 +78,19 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr style="text-align: left; background-color: #D4D0C9;">
-                        <td style="text-align: left;padding-left:5px;">
+                        <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
-                        <td style="text-align: left;padding-left:5px;">
+                        <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
-                        <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' >
+                        <td></td>
+                        <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' style="text-align: left; padding-left: 5px;">
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
                             -
                             <%# Eval("ChargeCode.Project.Name")%>
                         </td>
+                        <td></td>
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
@@ -124,17 +130,19 @@
                 </ItemTemplate>
                 <AlternatingItemTemplate>
                     <tr style="text-align: left; background-color: #ECE9D9;">
-                        <td style="text-align: left;padding-left:5px;">
+                        <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
-                        <td style="text-align: left;padding-left:5px;">
+                        <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
-                        <td title='<%# Eval("ChargeCode.ChargeCodeName")%>'>
+                        <td></td>
+                        <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' style="text-align: left; padding-left: 5px;">
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
                             -
                             <%# Eval("ChargeCode.Project.Name")%>
                         </td>
+                        <td></td>
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
