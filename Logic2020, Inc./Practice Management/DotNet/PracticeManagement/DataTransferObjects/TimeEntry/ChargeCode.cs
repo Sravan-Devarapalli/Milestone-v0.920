@@ -76,6 +76,13 @@ namespace DataTransferObjects.TimeEntry
         }
 
         [DataMember]
+        public TimeEntrySectionType TimeEntrySection
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public TimeTypeRecord TimeType
         {
             get;
