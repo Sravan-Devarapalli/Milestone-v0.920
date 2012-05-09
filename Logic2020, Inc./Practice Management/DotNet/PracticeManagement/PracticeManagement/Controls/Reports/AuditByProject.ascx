@@ -32,7 +32,7 @@
         <ItemTemplate>
             <table class="WholeWidthWithHeight">
                 <tr style="text-align: left;">
-                    <td colspan="4" class="ProjectAccountName" style="width: 90%; white-space: nowrap;
+                    <td colspan="4" class="ProjectAccountName" style="width: 90%; white-space: nowrap;padding-left:15px;
                         font-size: 15px; font-weight: 1500;">
                         <%# Eval("Project.ProjectNumber")%>
                         -
@@ -42,7 +42,7 @@
                         >
                         <%# Eval("Project.Group.Name")%>)
                     </td>
-                    <td style="width: 10%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
+                    <td style="width: 10%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 15px;">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
                     </td>
                 </tr>
@@ -50,36 +50,37 @@
             <asp:Repeater ID="repProjectTimeEntriesHistory" DataSource='<%# GetModifiedDatasource(DataBinder.Eval(Container.DataItem, "PersonLevelTimeEntries")) %>'
                 runat="server">
                 <HeaderTemplate>
-                    <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
-                        <tr class="CompPerfHeader">
-                            <th style="width: 18%; text-align: left; padding-left: 10px;">
-                                Affected Date
-                            </th>
-                            <th style="width: 13%;">
-                                Modified Date
-                            </th>
-                            <th style="width: 5%;">
-                            </th>
-                            <th style="width: 16%;">
-                                Person Name
-                            </th>
-                            <th style="width: 8%;">
-                            </th>
-                            <th style="width: 13%;">
-                                Work Type
-                            </th>
-                            <th style="width: 8%;">
-                                Original Hours
-                            </th>
-                            <th style="width: 8%;">
-                                New Hours
-                            </th>
-                            <th style="width: 8%;">
-                                Net Change
-                            </th>
-                            <th style="width: 3%;">
-                            </th>
-                        </tr>
+                    <div style="padding-left: 5px; padding-right: 5px;">
+                        <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
+                            <tr class="CompPerfHeader">
+                                <th style="width: 18%; text-align: left; padding-left: 10px;">
+                                    Affected Date
+                                </th>
+                                <th style="width: 13%;">
+                                    Modified Date
+                                </th>
+                                <th style="width: 5%;">
+                                </th>
+                                <th style="width: 16%;">
+                                    Person Name
+                                </th>
+                                <th style="width: 8%;">
+                                </th>
+                                <th style="width: 13%;">
+                                    Work Type
+                                </th>
+                                <th style="width: 8%;">
+                                    Original Hours
+                                </th>
+                                <th style="width: 8%;">
+                                    New Hours
+                                </th>
+                                <th style="width: 8%;">
+                                    Net Change
+                                </th>
+                                <th style="width: 3%;">
+                                </th>
+                            </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr style="text-align: left; background-color: #D4D0C9;">
@@ -89,11 +90,14 @@
                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("Value.ModifiedDate"))%>
                         </td>
-                        <td></td>
-                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>' style="text-align: left;padding-left:5px;">
+                        <td>
+                        </td>
+                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>'
+                            style="text-align: left; padding-left: 5px;">
                             <%# Eval("Key.PersonLastFirstName")%>
                         </td>
-                        <td></td>
+                        <td>
+                        </td>
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
@@ -139,11 +143,14 @@
                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("Value.ModifiedDate"))%>
                         </td>
-                        <td></td>
-                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>' style="text-align: left;padding-left:5px;">
+                        <td>
+                        </td>
+                        <td title='<%# Eval("Key.Status.Name")%>,<%# Eval("Key.CurrentPay.TimescaleName")%>'
+                            style="text-align: left; padding-left: 5px;">
                             <%# Eval("Key.PersonLastFirstName")%>
                         </td>
-                        <td></td>
+                        <td>
+                        </td>
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
@@ -181,6 +188,9 @@
                         </td>
                     </tr>
                 </AlternatingItemTemplate>
+                <FooterTemplate>
+                    </table> </div>
+                </FooterTemplate>
             </asp:Repeater>
         </ItemTemplate>
         <FooterTemplate>
