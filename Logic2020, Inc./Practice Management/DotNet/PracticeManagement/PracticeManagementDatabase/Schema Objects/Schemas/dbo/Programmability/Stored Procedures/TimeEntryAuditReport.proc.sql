@@ -19,10 +19,14 @@ AS
 				*/
 
         DECLARE @StartDateLocal DATETIME ,
-            @EndDateLocal DATETIME 
+            @EndDateLocal DATETIME,
+		    @HolidayTimeType INT ,
+            @ORTTimeTypeId INT
 
         SET @StartDateLocal = CONVERT(DATE, @StartDate)
-        SET @EndDateLocal = CONVERT(DATE, @EndDate);
+        SET @EndDateLocal = CONVERT(DATE, @EndDate)
+		SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+        SET @ORTTimeTypeId = dbo.GetORTTimeTypeId();
 
 		  WITH    EffectedPersons
                   AS ( 
@@ -78,7 +82,15 @@ AS
                     TH.IsChargeable ,
                     TH.OriginalHours ,
                     TH.ActualHours ,
-                    TH.Note ,
+                    ( CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
+                                        OR TT.TimeTypeId = @HolidayTimeType
+                                    )
+                                THEN TH.Note
+                                    + dbo.GetApprovedByName(TH.ChargeCodeDate,
+                                                            TT.TimeTypeId,
+                                                            TH.PersonId)
+                                ELSE TH.Note
+                            END ) AS Note ,
                     1 AS Phase,
 					CC.TimeEntrySectionId
             FROM    TimeEntriesHistory AS TH
