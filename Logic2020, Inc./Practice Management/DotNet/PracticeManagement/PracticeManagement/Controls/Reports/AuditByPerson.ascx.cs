@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Text;
 using DataTransferObjects.TimeEntry;
+using DataTransferObjects;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -163,6 +164,11 @@ namespace PraticeManagement.Controls.Reports
         protected void btnGroupBy_OnClick(object sender, EventArgs e)
         {
             HostingPage.SelectView(1);
+        }
+
+        protected bool GetNonBillableImageVisibility(int timeEntrySection, bool isChargeable)
+        {
+            return !isChargeable && timeEntrySection == (int)TimeEntrySectionType.Project;
         }
        
     }
