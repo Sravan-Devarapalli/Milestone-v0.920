@@ -26,7 +26,7 @@ namespace DataTransferObjects.TimeEntry
                 sb.Append(seperator);
                 sb.Append(Project.Name);
                 sb.Append(seperator);
-                sb.Append(Phase);
+                sb.Append("Phase"+Phase);
                 sb.Append(seperator);
                 sb.Append(TimeType.Name);
 
