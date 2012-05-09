@@ -3,11 +3,11 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;padding-top:5px;">
+            <td colspan="4" style="width: 90%; padding-top: 5px;">
                 <asp:Button ID="btnGroupBy" runat="server" Text="Group By Project" UseSubmitBehavior="false"
                     Width="130px" OnClick="btnGroupBy_OnClick" ToolTip="Group By Project" />
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;padding-top:5px;">
+            <td style="text-align: right; width: 10%; padding-right: 5px; padding-top: 5px;">
                 <table width="100%" style="text-align: right;">
                     <tr>
                         <td>
@@ -88,11 +88,31 @@
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
-                        <td>
-                            <%# GetDoubleFormat((double)Eval("ActualHours"))%>
+                        <td style="text-align: right; vertical-align: middle;">
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("OldHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                            ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            <%# GetDoubleFormat((double)Eval("OldHours"))%>
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("ActualHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png" ToolTip="Non-Billable hours."
+                                            Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             <%# GetDoubleFormat((double)Eval("NetChange"))%>
@@ -118,11 +138,31 @@
                         <td>
                             <%# Eval("ChargeCode.TimeType.Name")%>
                         </td>
-                        <td>
-                            <%# GetDoubleFormat((double)Eval("ActualHours"))%>
+                        <td style="text-align: right; vertical-align: middle;">
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("OldHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                            ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            <%# GetDoubleFormat((double)Eval("OldHours"))%>
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("ActualHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png" ToolTip="Non-Billable hours."
+                                            Visible='<%# GetNonBillableImageVisibility((int)Eval("ChargeCode.TimeEntrySection"),(bool)Eval("IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             <%# GetDoubleFormat((double)Eval("NetChange"))%>
