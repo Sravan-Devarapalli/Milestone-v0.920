@@ -1152,7 +1152,15 @@ namespace DataAccess
                             {
                                 Id = reader.GetInt32(projectIdIndex),
                                 Name = reader.GetString(projectNameIndex),
-                                ProjectNumber = reader.GetString(projectNumberIndex)
+                                ProjectNumber = reader.GetString(projectNumberIndex),
+                                Client = new Client
+                                {
+                                    Name = reader.GetString(clientNameIndex)
+                                },
+                                Group = new ProjectGroup
+                                {
+                                    Name = reader.GetString(groupNameIndex)
+                                }
                             },
                             PersonLevelTimeEntries = new List<PersonLevelTimeEntriesHistory>
                             {
