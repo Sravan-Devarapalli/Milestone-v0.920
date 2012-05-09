@@ -47,7 +47,7 @@ AS
             FROM    EffectedPersons AS EP
                     INNER JOIN dbo.Person AS P ON EP.PersonId = P.PersonId
                     INNER JOIN dbo.PersonStatus AS PS ON P.PersonStatusId = PS.PersonStatusId
-                    INNER JOIN dbo.Timescale AS TSC ON TSC.TimescaleId = dbo.GetCurrentPayType(P.PersonId);
+                    LEFT JOIN dbo.Timescale AS TSC ON TSC.TimescaleId = dbo.GetCurrentPayType(P.PersonId);
 
 
         WITH    TimeEntriesHistory
