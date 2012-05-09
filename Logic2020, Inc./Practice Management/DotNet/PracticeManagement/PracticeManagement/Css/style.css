@@ -2538,7 +2538,7 @@ end pixcel
 
 .WidthWithHeightAndBorders
 {
-    width:99%;
+    width:100%;
     border-bottom:1px solid Gray;
     border-top:1px solid Gray;
     border-left:1px solid Gray;
