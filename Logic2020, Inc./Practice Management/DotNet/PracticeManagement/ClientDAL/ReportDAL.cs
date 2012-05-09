@@ -971,6 +971,7 @@ namespace DataAccess
                 int actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
                 int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
                 int phaseIndex = reader.GetOrdinal(Constants.ColumnNames.Phase);
+                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
 
                 while (reader.Read())
                 {
@@ -1002,7 +1003,8 @@ namespace DataAccess
                             {
                                 Id = reader.GetInt32(timeTypeIdIndex),
                                 Name = reader.GetString(timeTypeNameIndex)
-                            }
+                            },
+                            TimeEntrySection = (TimeEntrySectionType)reader.GetInt32(timeEntrySectionIdIndex)
                         },
                         MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
@@ -1077,6 +1079,7 @@ namespace DataAccess
                 int actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
                 int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
                 int phaseIndex = reader.GetOrdinal(Constants.ColumnNames.Phase);
+                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
 
                 while (reader.Read())
                 {
@@ -1111,7 +1114,8 @@ namespace DataAccess
                             {
                                 Id = reader.GetInt32(timeTypeIdIndex),
                                 Name = reader.GetString(timeTypeNameIndex)
-                            }
+                            },
+                            TimeEntrySection = (TimeEntrySectionType)reader.GetInt32(timeEntrySectionIdIndex)
                         },
                         MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
