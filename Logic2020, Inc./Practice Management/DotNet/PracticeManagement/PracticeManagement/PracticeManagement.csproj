@@ -400,6 +400,7 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\desc.gif" />
     <Content Include="Images\Non-Billable-Icon.png" />
+    <Content Include="Images\notes.png" />
     <Content Include="Images\notes_optional.png" />
     <Content Include="Images\notes_required.png" />
     <Content Include="Images\Not_recursive.png" />
@@ -1252,12 +1253,14 @@
     </Compile>
     <Compile Include="Controls\Reports\AuditByPerson.ascx.cs">
       <DependentUpon>AuditByPerson.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\Reports\AuditByPerson.ascx.designer.cs">
       <DependentUpon>AuditByPerson.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\AuditByProject.ascx.cs">
       <DependentUpon>AuditByProject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\Reports\AuditByProject.ascx.designer.cs">
       <DependentUpon>AuditByProject.ascx</DependentUpon>
