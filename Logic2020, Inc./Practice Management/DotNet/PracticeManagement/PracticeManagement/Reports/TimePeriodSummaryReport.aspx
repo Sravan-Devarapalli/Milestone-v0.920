@@ -150,8 +150,8 @@
                                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
                                         Width="160px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
-                                        <asp:ListItem Text="Payroll – P1" Value="15"></asp:ListItem>
-                                        <asp:ListItem Text="Payroll – P2" Value="-15"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – Pervious" Value="-15"></asp:ListItem>
                                         <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
                                         <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
                                         <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
