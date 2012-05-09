@@ -50,6 +50,55 @@ namespace PraticeManagement.Utils
             return now.AddDays(1 - now.Day);
         }
 
+        public static DateTime PayrollCurrentStartDate(DateTime now)
+        {
+            if (now.Day < 16)
+            {
+                return MonthStartDate(now);
+            }
+            else
+            {
+                return CurrentMonthSecondHalfStartDate(now);
+            }
+        }
+
+        public static DateTime PayrollCurrentEndDate(DateTime now)
+        {
+            if (now.Day < 16)
+            {
+                return CurrentMonthFirstHalfEndDate(now);
+            }
+            else
+            {
+                return MonthEndDate(now);
+            }
+        }
+
+        public static DateTime PayrollPerviousStartDate(DateTime now)
+        {
+            if (now.Day < 16)
+            {
+                return LastMonthSecondHalfStartDate(now);
+            }
+            else
+            {
+                return MonthStartDate(now);
+            }
+        }
+
+        public static DateTime PayrollPerviousEndDate(DateTime now)
+        {
+            if (now.Day < 16)
+            {
+                return LastMonthEndDate(now);
+            }
+            else
+            {
+                return CurrentMonthFirstHalfEndDate(now);
+            }
+        }
+
+
         public static DateTime MonthEndDate(DateTime now)
         {
             return now.AddMonths(1).AddDays(-now.AddMonths(1).Day);
@@ -90,7 +139,7 @@ namespace PraticeManagement.Utils
             return now.AddDays(16 - now.AddMonths(-1).Day);
         }
         //returns 15th of the current month
-        public static DateTime MonthFirstHalfEndDate(DateTime now)
+        public static DateTime CurrentMonthFirstHalfEndDate(DateTime now)
         {
             return now.AddDays(15 - now.Day);
         }
