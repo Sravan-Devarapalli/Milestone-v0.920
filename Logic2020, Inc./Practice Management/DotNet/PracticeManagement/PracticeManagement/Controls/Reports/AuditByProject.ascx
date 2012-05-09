@@ -3,11 +3,11 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;padding-top:5px;">
+            <td colspan="4" style="width: 90%; padding-top: 5px;">
                 <asp:Button ID="btnGroupBy" runat="server" Text="Group By Person" UseSubmitBehavior="false"
                     Width="130px" OnClick="btnGroupBy_OnClick" ToolTip="Group By Person" />
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;padding-top:5px;">
+            <td style="text-align: right; width: 10%; padding-right: 5px; padding-top: 5px;">
                 <table width="100%" style="text-align: right;">
                     <tr>
                         <td>
@@ -32,13 +32,13 @@
         <ItemTemplate>
             <table class="WholeWidthWithHeight">
                 <tr style="text-align: left;">
-                    <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;
+                    <td colspan="4" class="ProjectAccountName" style="width: 90%; white-space: nowrap;
                         font-size: 15px; font-weight: 1500;">
                         <%# Eval("Project.ProjectNumber")%>
                         -
                         <%# Eval("Project.Name")%>
                     </td>
-                    <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
+                    <td style="width: 10%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
                     </td>
                 </tr>
@@ -87,11 +87,31 @@
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
-                        <td>
-                            <%# GetDoubleFormat((double)Eval("Value.ActualHours"))%>
+                        <td style="text-align: right; vertical-align: middle;">
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("Value.OldHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                            ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            <%# GetDoubleFormat((double)Eval("Value.OldHours"))%>
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("Value.ActualHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png" ToolTip="Non-Billable hours."
+                                            Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             <%# GetDoubleFormat((double)Eval("Value.NetChange"))%>
@@ -116,11 +136,31 @@
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
-                        <td>
-                            <%# GetDoubleFormat((double)Eval("Value.ActualHours"))%>
+                       <td style="text-align: right; vertical-align: middle;">
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("Value.OldHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
+                                            ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            <%# GetDoubleFormat((double)Eval("Value.OldHours"))%>
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <%# GetDoubleFormat((double)Eval("Value.ActualHours"))%>
+                                    </td>
+                                    <td style="width: 20px">
+                                        <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png" ToolTip="Non-Billable hours."
+                                            Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             <%# GetDoubleFormat((double)Eval("Value.NetChange"))%>
