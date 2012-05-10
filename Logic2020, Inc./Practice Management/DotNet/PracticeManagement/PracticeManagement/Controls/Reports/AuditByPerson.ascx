@@ -32,12 +32,12 @@
         <ItemTemplate>
             <table class="WholeWidthWithHeight">
                 <tr style="text-align: left;">
-                    <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;
+                    <td colspan="4" class="ProjectAccountName" style="width: 85%; white-space: nowrap;
                         padding-left: 15px; font-weight: bold;">
                         <%# Eval("Person.PersonLastFirstName")%>
                         (<%# Eval("Person.Status.Name")%>,<%# Eval("Person.CurrentPay.TimescaleName")%>)
                     </td>
-                    <td style="width: 10%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 15px;">
+                    <td style="width: 15%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 15px;">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
                     </td>
                 </tr>
@@ -56,12 +56,12 @@
                                 </th>
                                 <th style="width: 5%;">
                                 </th>
-                                <th style="width: 16%;">
+                                <th style="width: 20%;">
                                     Project-Project Name
                                 </th>
-                                <th style="width: 8%;">
+                                <th style="width: 5%;">
                                 </th>
-                                <th style="width: 13%;">
+                                <th style="width: 12%;">
                                     Work Type
                                 </th>
                                 <th style="width: 8%;">
