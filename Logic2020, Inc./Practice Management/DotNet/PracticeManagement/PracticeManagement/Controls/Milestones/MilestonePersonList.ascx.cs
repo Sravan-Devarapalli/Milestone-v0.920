@@ -1265,9 +1265,10 @@ namespace PraticeManagement.Controls.Milestones
                     if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
                     {
                         if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
+                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName)
                             || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead)//added Project Lead as per #2941.
                             || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)// #2817: DirectorRoleName is added as per the requirement.
-                             || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName))// #2913: userIsSeniorLeadership is added as per the requirement.
+                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName))// #2913: userIsSeniorLeadership is added as per the requirement.
                         {
 
                             if (imgMilestonePersonEntryEdit != null)
@@ -1383,6 +1384,7 @@ namespace PraticeManagement.Controls.Milestones
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) &&
+                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead) &&//added Project Lead as per #2941.
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) &&// #2817: DirectorRoleName is added as per the requirement.
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName); // #2913: userIsSeniorLeadership is added as per the requirement.
@@ -1751,9 +1753,9 @@ namespace PraticeManagement.Controls.Milestones
 
             lblResultMessage.ClearMessage();
 
-            var PersonEntries = MilestonePersonsEntries.FindAll(m=>m.MilestonePersonId == deleteEntry.MilestonePersonId);
+            var PersonEntries = MilestonePersonsEntries.FindAll(m => m.MilestonePersonId == deleteEntry.MilestonePersonId);
 
-            int? milestonePersonEntryRoleId = deleteEntry.Role != null ?  (int?)deleteEntry.Role.Id  : null;
+            int? milestonePersonEntryRoleId = deleteEntry.Role != null ? (int?)deleteEntry.Role.Id : null;
 
             //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
             if (CheckTimeEntriesForMilestonePersonWithGivenRoleId(deleteEntry.MilestonePersonId, milestonePersonEntryRoleId))
@@ -1765,7 +1767,7 @@ namespace PraticeManagement.Controls.Milestones
             //delete all mPersonEntries
             foreach (MilestonePersonEntry entry in PersonEntries)
             {
-                if ((entry.Role == null && milestonePersonEntryRoleId == null) || (entry.Role != null && milestonePersonEntryRoleId != null && entry.Role.Id == milestonePersonEntryRoleId ))
+                if ((entry.Role == null && milestonePersonEntryRoleId == null) || (entry.Role != null && milestonePersonEntryRoleId != null && entry.Role.Id == milestonePersonEntryRoleId))
                 {
                     // Delete mPersonEntry 
                     ServiceCallers.Custom.MilestonePerson(mp => mp.DeleteMilestonePersonEntry(entry.Id, Context.User.Identity.Name));
@@ -1784,7 +1786,7 @@ namespace PraticeManagement.Controls.Milestones
 
 
         }
-        
+
         protected void imgMilestonePersonDelete_OnClick(object sender, EventArgs e)
         {
             ImageButton imgDelete = sender as ImageButton;
@@ -1793,7 +1795,7 @@ namespace PraticeManagement.Controls.Milestones
 
             mpeDeleteMileStonePersons.Show();
         }
-      
+
         public void OnEditClick(int editRowIndex)
         {
             var entries = MilestonePersonsEntries;
