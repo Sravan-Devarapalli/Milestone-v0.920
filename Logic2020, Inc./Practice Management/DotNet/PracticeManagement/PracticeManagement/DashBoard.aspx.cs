@@ -22,6 +22,7 @@ namespace PraticeManagement
         private bool _userIsClientDirector;
         private bool _userIsConsultant;
         private bool _userIsPracticeAreaManger;
+        private bool _userIsBusinessUnitManager;
         private bool _userIsProjectLead;
         private bool _userIsRecruiter;
         private bool _userIsHR;
@@ -89,7 +90,7 @@ namespace PraticeManagement
                                     _userIsSeniorLeadership ? DashBoardType.SeniorLeadership.ToString() :
                                     _userIsClientDirector ? DashBoardType.ClientDirector.ToString() :
                                     _userIsSalesperson ? DashBoardType.BusinessDevelopment.ToString() :
-                                    (_userIsPracticeAreaManger) ? DashBoardType.Manager.ToString() :
+                                    (_userIsPracticeAreaManger || _userIsBusinessUnitManager) ? DashBoardType.Manager.ToString() :
                                     _userIsProjectLead ? DashBoardType.ProjectLead.ToString() :
                                     _userIsConsultant ? DashBoardType.Consulant.ToString() :
                                     string.Empty;
@@ -249,7 +250,7 @@ namespace PraticeManagement
                     listOfItems.Add("Opportunity", "Opportunity");
                 }
             }
-            else if (_userIsPracticeAreaManger || _userIsProjectLead)
+            else if (_userIsPracticeAreaManger || _userIsProjectLead || _userIsBusinessUnitManager)
             {
                 if (!listOfItems.Any(k => k.Key == "Project"))
                 {
@@ -293,6 +294,8 @@ namespace PraticeManagement
             _userIsHR = roles.Contains(DataTransferObjects.Constants.RoleNames.HRRoleName);
             _userIsPracticeAreaManger =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
+            _userIsBusinessUnitManager =
+                roles.Contains(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
             _userIsConsultant =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.ConsultantRoleName);
         }
@@ -425,7 +428,7 @@ namespace PraticeManagement
 
         protected bool IsShowSearchSection()
         {
-            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger || _userIsProjectLead || _userIsRecruiter || _userIsHR || _userIsSalesperson;
+            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger  || _userIsBusinessUnitManager || _userIsProjectLead || _userIsRecruiter || _userIsHR || _userIsSalesperson;
 
             return result;
         }
