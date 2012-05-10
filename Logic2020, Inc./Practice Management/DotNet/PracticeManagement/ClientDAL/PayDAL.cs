@@ -19,6 +19,7 @@ namespace DataAccess
 
         private const string PayGetCurrentByPersonProcedure = "dbo.PayGetCurrentByPerson";
         private const string PayGetHistoryByPersonProcedure = "dbo.PayGetHistoryByPerson";
+        private const string GetPayHistoryShortByPersonProcedure = "dbo.GetPayHistoryShortByPerson";
         private const string PayGetByPersonStartDateProcedure = "dbo.PayGetByPersonStartDate";
         private const string PaySaveProcedure = "dbo.PaySave";
         private const string PayDeleteProcedure = "dbo.PayDelete";
@@ -128,6 +129,28 @@ namespace DataAccess
             }
         }
 
+        public static List<Pay> GetPayHistoryShortByPerson(int personId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(GetPayHistoryShortByPersonProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(PersonIdParam, personId);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    List<Pay> result = new List<Pay>();
+                    ReadPayShort(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
         /// <summary>
         /// Pertieves a payment for the specified person.
         /// </summary>
@@ -229,7 +252,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(PersonIdParam, personId);
                 command.Parameters.AddWithValue(StartDateParam, startDate);
-                
+
                 try
                 {
                     if (connection.State != ConnectionState.Open)
@@ -245,6 +268,29 @@ namespace DataAccess
             }
         }
 
+        private static void ReadPayShort(DbDataReader reader, List<Pay> result)
+        {
+            if (reader.HasRows)
+            {
+                int startDateIndex = reader.GetOrdinal(StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(EndDateColumn);
+                int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
+
+
+                while (reader.Read())
+                {
+                    Pay pay = new Pay();
+
+                    pay.Timescale = (TimescaleType)reader.GetInt32(timescaleIndex);
+
+                    pay.StartDate = reader.GetDateTime(startDateIndex);
+                    pay.EndDate =
+                        !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
+
+                    result.Add(pay);
+                }
+            }
+        }
 
         private static void ReadPay(DbDataReader reader, List<Pay> result)
         {
