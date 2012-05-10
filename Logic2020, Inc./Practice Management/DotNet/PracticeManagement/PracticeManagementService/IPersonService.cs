@@ -561,7 +561,7 @@ namespace PracticeManagementService
         List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        bool IsPersonHaveActiveStatusDuringThisPeriod(int personId, DateTime startDate,DateTime? endDate);
+        bool IsPersonHaveActiveStatusDuringThisPeriod(int personId, DateTime startDate, DateTime? endDate);
 
         [OperationContract]
         List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate, DateTime endDate);
@@ -574,6 +574,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Timescale> GetAllPayTypes();
+
+        [OperationContract]
+        Person GetPayHistoryShortByPerson(int personId);
 
     }
 }
