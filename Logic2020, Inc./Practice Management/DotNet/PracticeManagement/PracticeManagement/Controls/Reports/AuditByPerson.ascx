@@ -32,8 +32,8 @@
         <ItemTemplate>
             <table class="WholeWidthWithHeight">
                 <tr style="text-align: left;">
-                    <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;padding-left:15px;
-                        font-weight: bold;">
+                    <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;
+                        padding-left: 15px; font-weight: bold;">
                         <%# Eval("Person.PersonLastFirstName")%>
                         (<%# Eval("Person.Status.Name")%>,<%# Eval("Person.CurrentPay.TimescaleName")%>)
                     </td>
@@ -124,7 +124,15 @@
                             </table>
                         </td>
                         <td>
-                            <%# GetDoubleFormat((double)Eval("NetChange"))%>
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; width: 60%">
+                                        <%# GetDoubleFormat((double)Eval("NetChange"))%>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             <img src="../Images/notes.png" title='<%# Eval("Note")%>' />
@@ -177,8 +185,16 @@
                                 </tr>
                             </table>
                         </td>
-                        <td>
-                            <%# GetDoubleFormat((double)Eval("NetChange"))%>
+                         <td>
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align: right; width: 60%">
+                                        <%# GetDoubleFormat((double)Eval("NetChange"))%>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             <img src="../Images/notes.png" title='<%# Eval("Note")%>' />
