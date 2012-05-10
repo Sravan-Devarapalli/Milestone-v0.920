@@ -897,6 +897,7 @@ namespace PracticeManagementService
             PayDAL.DeletePay(personId, startDate);
         }
 
+       
         /// <summary>
         /// Selects a list of the seniorities.
         /// </summary>
@@ -1049,6 +1050,17 @@ namespace PracticeManagementService
         {
             var person = PersonDAL.GetPersonFirstLastNameById(personId);
             person.PaymentHistory = PayDAL.GetHistoryByPerson(personId);
+            return person;
+        }
+
+
+        public Person GetPayHistoryShortByPerson(int personId)
+        {
+            var person = new Person()
+            {
+                Id  = personId
+            };
+            person.PaymentHistory = PayDAL.GetPayHistoryShortByPerson(personId);
             return person;
         }
 
