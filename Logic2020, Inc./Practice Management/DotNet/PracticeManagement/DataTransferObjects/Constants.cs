@@ -10,6 +10,7 @@ namespace DataTransferObjects
         {
             public const string AdministratorRoleName = "Administrator";
             public const string PracticeManagerRoleName = "Practice Area Manager";
+            public const string BusinessUnitManagerRoleName = "Business Unit Manager";
             public const string SalespersonRoleName = "Salesperson";
             public const string RecruiterRoleName = "Recruiter";
             public const string ConsultantRoleName = "Consultant";
