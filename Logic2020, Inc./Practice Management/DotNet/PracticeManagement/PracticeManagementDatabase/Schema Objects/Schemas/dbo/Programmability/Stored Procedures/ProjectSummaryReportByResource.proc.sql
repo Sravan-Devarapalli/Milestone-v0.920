@@ -85,9 +85,9 @@ AS
                                             )
                                GROUP BY MP.PersonId
                              ),
-                        PersonForeCastedHours
+                       PersonForeCastedHours
                           AS ( SELECT   MP.PersonId ,
-                                        SUM(CASE WHEN c.Date < @Today
+                                        SUM(CASE WHEN CAL.Date < @Today
                                                  THEN MPE.HoursPerDay
                                                  ELSE 0
                                             END) AS ForecastedHoursUntilToday ,
@@ -97,8 +97,12 @@ AS
                                         INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
                                         INNER JOIN dbo.person AS P ON P.personId = MP.PersonId
                                                               AND P.IsStrawman = 0
-                                        INNER JOIN dbo.Calendar AS C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate
-                                                              AND C.DayOff = 0
+										INNER JOIN dbo.Calendar AS CAL ON CAL.Date BETWEEN MPE.StartDate AND MPE.EndDate 
+																		AND CAL.Date >= P.HireDate
+																		AND CAL.Date <= ISNULL(P.TerminationDate,
+																		dbo.GetFutureDate())
+										LEFT JOIN dbo.PersonCalendar AS PCAL ON PCAL.Date = CAL.Date
+																		AND PCAL.PersonId = P.PersonId
                                WHERE    M.ProjectId = @ProjectId
                                         AND ( @MilestoneIdLocal IS NULL
                                               OR M.MilestoneId = @MilestoneIdLocal
@@ -106,8 +110,15 @@ AS
                                         AND ( ( @StartDateLocal IS NULL
                                                 AND @EndDateLocal IS NULL
                                               )
-                                              OR ( C.Date BETWEEN @StartDateLocal AND @EndDateLocal )
+                                              OR ( CAL.Date BETWEEN @StartDateLocal AND @EndDateLocal )
                                             )
+										AND ( ( CAL.DayOff = 0
+												AND ISNULL(PCAL.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()
+											  )
+											  OR ( CAL.DayOff = 1
+												   AND PCAL.SubstituteDate IS NOT NULL
+												 )
+											)
                                GROUP BY MP.PersonId
                              ),
                         PersonTotalStatusHistory
