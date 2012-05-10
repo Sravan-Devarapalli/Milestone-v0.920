@@ -33,6 +33,7 @@ namespace PraticeManagement.Controls
 
         private CalendarItem[] days;
         private bool userIsPracticeManager;
+        private bool userIsBusinessUnitManager;
         private bool userIsSalesperson;
         private bool userIsRecruiter;
         private bool userIsAdministrator;
@@ -283,6 +284,8 @@ namespace PraticeManagement.Controls
             SetMailToContactSupport();
             userIsPracticeManager =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
+            userIsBusinessUnitManager =
+                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
             userIsDirector =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
             userIsSeniorLeadership =
@@ -318,7 +321,7 @@ namespace PraticeManagement.Controls
                         string HasPermissionToEditCalender = false.ToString();
                         if (!userIsAdministrator)
                         {
-                            if (userIsPracticeManager || userIsDirector || userIsRecruiter || userIsSalesperson || userIsProjectLead || userIsConsultant && current != null)// #2817: userIsDirector is added as per the requirement.
+                            if (userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsRecruiter || userIsSalesperson || userIsProjectLead || userIsConsultant && current != null)// #2817: userIsDirector is added as per the requirement.
                             {
                                 HasPermissionToEditCalender = personsList.Any(p => p.Id == personId) ? true.ToString() : false.ToString();
                             }
@@ -848,6 +851,7 @@ namespace PraticeManagement.Controls
             {
                 int? practiceManagerId = null;
                 if ((!userIsAdministrator && userIsPracticeManager) ||
+                    (!userIsAdministrator && userIsBusinessUnitManager) ||
                     (!userIsAdministrator && userIsDirector) ||
                     (!userIsAdministrator && userIsSeniorLeadership)
                     )// #2817:(!userIsAdministrator && userIsDirector) is added as per the requirement.
@@ -877,7 +881,7 @@ namespace PraticeManagement.Controls
                 }
             }
 
-            if (days != null && !userIsAdministrator && !userIsPracticeManager && !userIsDirector && !userIsSeniorLeadership &&     // #2817: userIsDirector is added as per the requirement.
+            if (days != null && !userIsAdministrator && !userIsPracticeManager && !userIsBusinessUnitManager && !userIsDirector && !userIsSeniorLeadership &&     // #2817: userIsDirector is added as per the requirement.
                 (userIsConsultant || userIsRecruiter || userIsSalesperson || userIsHR))                 // #2817: userIsHR is added as per the requirement.
             {
                 // Security
