@@ -231,36 +231,6 @@ namespace PraticeManagement.Utils
 
         #endregion
 
-        #region Data - Time Entry Roles
-
-        /// <summary>
-        /// Gets person's TE role (see TE.BR-3) for details
-        /// </summary>
-        /// <param name="person">Person to check role for</param>
-        /// <returns>TE role</returns>
-        public static TimeEntryRole GetPersonsTeRole(Person person)
-        {
-            if (
-                Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
-               )
-            {
-                return TimeEntryRole.AccountingAdministrator;
-            }
-
-            if (
-                 Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) ||
-                 Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.DirectorRoleName) ||
-                Roles.IsUserInRole(person.Alias, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName)
-
-               )
-            {
-                return TimeEntryRole.ManagementUser;
-            }
-
-            return TimeEntryRole.StandardUser;
-        }
-
-        #endregion
 
         #region Grouping
 
