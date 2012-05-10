@@ -339,7 +339,7 @@ namespace PraticeManagement
 
             if (!IsPostBack)
             {
-               
+
             }
             else
             {
@@ -349,7 +349,7 @@ namespace PraticeManagement
             //custPeriodLengthLimit.ErrorMessage = custPeriodLengthLimit.ToolTip = string.Format(custPeriodLengthLimit.ErrorMessage, MaxPeriodLength);
         }
 
-       
+
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
@@ -363,17 +363,20 @@ namespace PraticeManagement
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
                 bool userIsPracticeManager =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
+                bool userIsBusinessUnitManager =
+                    Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
+
                 bool userIsDirector =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
                 bool userIsSeniorLeadership =
                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
 
                 SelectItemInControl(userIsSalesperson, cblSalesperson, personId);
-                SelectItemInControl((userIsPracticeManager || userIsDirector || userIsSeniorLeadership), cblProjectOwner, personId);// #2817: userIsDirector is added as per the requirement.
+                SelectItemInControl((userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsSeniorLeadership), cblProjectOwner, personId);// #2817: userIsDirector is added as per the requirement.
 
                 bool userIsProjectLead =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);
-                if (userIsProjectLead && !(userIsSalesperson || userIsPracticeManager || userIsDirector || userIsSeniorLeadership))
+                if (userIsProjectLead && !(userIsSalesperson || userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsSeniorLeadership))
                 {
                     lnkAddProject.Visible = false;//as per #2941 .
                 }
@@ -1233,7 +1236,7 @@ namespace PraticeManagement
                                      HttpUtility.HtmlEncode(person.FirstName)
                                      );
             }
-           
+
 
             return string.Format(ToolTipView,
                  project.StartDate.HasValue ? project.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
