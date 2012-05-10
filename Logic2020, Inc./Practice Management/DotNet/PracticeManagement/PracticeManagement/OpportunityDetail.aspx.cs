@@ -534,7 +534,6 @@ namespace PraticeManagement
 
             _userIsAdministrator =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-            roles.Contains(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
             _userIsSalesperson =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
             _userIsRecruiter =
