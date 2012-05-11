@@ -35,7 +35,7 @@
                     <td colspan="4" class="ProjectAccountName" style="width: 85%; white-space: nowrap;
                         padding-left: 15px; font-weight: bold;">
                         <%# Eval("Person.PersonLastFirstName")%>
-                        (<%# Eval("Person.Status.Name")%>,<%# Eval("Person.CurrentPay.TimescaleName")%>)
+                        <b style="font-style:normal;"> (<%# Eval("Person.Status.Name")%>, <%# Eval("Person.CurrentPay.TimescaleName")%>)</b>
                     </td>
                     <td style="width: 15%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 15px;">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
@@ -48,18 +48,18 @@
                     <div style="padding-left: 5px; padding-right: 5px;">
                         <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
                             <tr class="CompPerfHeader">
-                                <th style="width: 18%; text-align: left; padding-left: 10px;">
+                                <th style="width: 13%;">
                                     Affected Date
                                 </th>
                                 <th style="width: 13%;">
                                     Modified Date
                                 </th>
-                                <th style="width: 5%;">
+                                <th style="width: 2%;">
                                 </th>
-                                <th style="width: 20%;">
-                                    Project-Project Name
+                                <th style="width: 31%;">
+                                    Project - Project Name
                                 </th>
-                                <th style="width: 5%;">
+                                <th style="width: 2%;">
                                 </th>
                                 <th style="width: 12%;">
                                     Work Type
@@ -82,7 +82,7 @@
                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
-                        <td style="text-align: left; padding-left: 5px;">
+                        <td style="text-align: left; padding-left: 10px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
                         <td>
@@ -141,10 +141,10 @@
                 </ItemTemplate>
                 <AlternatingItemTemplate>
                     <tr style="text-align: left; background-color: #ECE9D9;">
-                        <td style="text-align: left; padding-left: 5px;">
+                         <td style="text-align: left; padding-left: 5px;">
                             <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
                         </td>
-                        <td style="text-align: left; padding-left: 5px;">
+                        <td style="text-align: left; padding-left: 10px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
                         </td>
                         <td>
@@ -185,7 +185,7 @@
                                 </tr>
                             </table>
                         </td>
-                         <td>
+                        <td>
                             <table width="100%">
                                 <tr>
                                     <td style="text-align: right; width: 60%">
