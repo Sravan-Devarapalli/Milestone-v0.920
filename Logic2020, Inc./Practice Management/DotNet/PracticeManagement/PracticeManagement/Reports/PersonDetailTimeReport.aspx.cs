@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using PraticeManagement.Controls;
 using DataTransferObjects;
+using System.Web.Security;
 
 
 namespace PraticeManagement.Reporting
@@ -268,7 +269,19 @@ namespace PraticeManagement.Reporting
             dlPersonDiv.Style.Add("display", "none");
             if (!IsPostBack)
             {
-                DataHelper.FillPersonList(ddlPerson, null, 1, false);
+                bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                bool userIsDirector = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
+                if (userIsAdministrator || userIsDirector)
+                {
+                    DataHelper.FillPersonList(ddlPerson, null, 1, false);
+                }
+                else
+                {
+                    ddlPerson.Items.Clear();
+                    var logInPerson = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(DataHelper.CurrentPerson.Id.Value));
+                    ddlPerson.Items.Add(new ListItem(logInPerson.PersonLastFirstName, DataHelper.CurrentPerson.Id.Value.ToString()));
+                    ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+                }
             }
         }
 
@@ -278,12 +291,12 @@ namespace PraticeManagement.Reporting
             int personId = int.Parse(ddlPerson.SelectedItem.Value);
             Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
             lblPersonname.ToolTip = lblPersonname.Text = ddlPerson.SelectedItem.Text;
-            string personType = person.IsOffshore ? "Offshore" : string.Empty; 
+            string personType = person.IsOffshore ? "Offshore" : string.Empty;
             string payType = person.CurrentPay.TimescaleName;
-            string personStatusAndType = string.IsNullOrEmpty(personType) && string.IsNullOrEmpty(payType)    ? string.Empty : 
-                                                                             string.IsNullOrEmpty(payType)    ? personType :
+            string personStatusAndType = string.IsNullOrEmpty(personType) && string.IsNullOrEmpty(payType) ? string.Empty :
+                                                                             string.IsNullOrEmpty(payType) ? personType :
                                                                              string.IsNullOrEmpty(personType) ? payType :
-                                                                                                                 payType  + ", " + personType;
+                                                                                                                 payType + ", " + personType;
             lblPersonStatus.ToolTip = lblPersonStatus.Text = personStatusAndType;
             lbRange.ToolTip = lbRange.Text = Range;
             var now = Utils.Generic.GetNowWithTimeZone();
@@ -317,7 +330,7 @@ namespace PraticeManagement.Reporting
             }
 
         }
-        
+
         protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
         {
             SwitchView(lnkbtnSummary, 0);
@@ -507,7 +520,7 @@ namespace PraticeManagement.Reporting
                 if (personList.Length > 0)
                 {
                     repPersons.Visible = true;
-                    divEmptyResults.Style.Add("display","none");
+                    divEmptyResults.Style.Add("display", "none");
                 }
                 else
                 {
