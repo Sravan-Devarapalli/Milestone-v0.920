@@ -6,7 +6,7 @@ namespace PraticeManagement
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			lnkAppRoot.NavigateUrl = ResolveClientUrl(Constants.ApplicationPages.AppRootUrl);
+            lnkAppRoot.NavigateUrl = ResolveClientUrl(Constants.ApplicationPages.DashboardPage);
 		}
 	}
 }
