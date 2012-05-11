@@ -15,7 +15,7 @@ BEGIN
 	       P.EndDate,
 	       P.Timescale
 	  FROM dbo.Pay AS P
-	  WHERE p.PersonId = @PersonId
+	  WHERE p.Person = @PersonId
 	  ORDER BY p.StartDate
 
 END
