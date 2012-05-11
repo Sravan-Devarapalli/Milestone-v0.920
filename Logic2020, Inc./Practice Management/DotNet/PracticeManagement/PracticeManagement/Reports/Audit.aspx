@@ -28,8 +28,7 @@
                                     <asp:DropDownList ID="ddlPeriod" runat="server" Width="160px" AutoPostBack="true"
                                         OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
-                                        <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
-                                        <asp:ListItem Text="Payroll – Pervious" Value="-15"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                     </asp:DropDownList>
                                     <asp:HiddenField ID="hdnperiodValue" runat="server" Value="Please Select"/>
