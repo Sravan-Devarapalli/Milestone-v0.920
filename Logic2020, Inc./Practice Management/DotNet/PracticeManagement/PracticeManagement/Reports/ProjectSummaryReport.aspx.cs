@@ -228,6 +228,11 @@ namespace PraticeManagement.Reporting
 
         protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mvProjectSummaryReport.ActiveViewIndex == 0)
+            {
+                ucByResource.SelectView(ucByResource.LnkbtnSummaryObject, 0);
+            }
+
             LoadActiveView();
         }
 
