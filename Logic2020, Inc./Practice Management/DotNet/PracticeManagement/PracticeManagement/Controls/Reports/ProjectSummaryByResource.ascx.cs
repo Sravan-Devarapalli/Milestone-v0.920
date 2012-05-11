@@ -25,12 +25,11 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-
-        public TableCell CellSummaryObject
+        public LinkButton LnkbtnSummaryObject
         {
             get
             {
-                return cellSummary;
+                return lnkbtnSummary;
             }
         }
 
@@ -156,6 +155,8 @@ namespace PraticeManagement.Controls.Reports
             //}
         }
 
+
+    
     }
 }
 
