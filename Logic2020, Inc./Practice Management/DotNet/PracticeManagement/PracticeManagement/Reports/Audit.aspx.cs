@@ -22,10 +22,6 @@ namespace PraticeManagement.Reporting
                     {
                         return diRange.FromDate.Value;
                     }
-                    else if (selectedVal == 15)
-                    {
-                        return Utils.Calendar.PayrollCurrentStartDate(now);
-                    }
                     else if (selectedVal == -15)
                     {
                         return Utils.Calendar.PayrollPerviousStartDate(now);
@@ -46,10 +42,6 @@ namespace PraticeManagement.Reporting
                     if (selectedVal == 0)
                     {
                         return diRange.ToDate.Value;
-                    }
-                    else if (selectedVal == 15)
-                    {
-                        return Utils.Calendar.PayrollCurrentEndDate(now);
                     }
                     else if (selectedVal == -15)
                     {
