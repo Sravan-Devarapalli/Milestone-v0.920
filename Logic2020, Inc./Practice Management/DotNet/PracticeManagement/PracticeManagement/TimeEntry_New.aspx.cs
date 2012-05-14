@@ -213,6 +213,21 @@ namespace PraticeManagement
 
         public Dictionary<DateTime, bool> IsNoteRequiredList { get; set; }
 
+        private Dictionary<DateTime, bool> _isPersonSalaryTypeList;
+
+        public Dictionary<DateTime, bool> IsPersonSalaryTypeList
+        {
+            get
+            {
+                if (_isPersonSalaryTypeList == null)
+                {
+                    _isPersonSalaryTypeList = ServiceCallers.Custom.Person(p => p.IsPersonSalaryTypeListByPeriod(SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]));
+
+                }
+                return _isPersonSalaryTypeList;
+            }
+        }
+
         public Dictionary<DateTime, bool> IsHourlyRevenueList { get; set; }
 
         public Dictionary<DateTime, HiddenField> AdminstratorSectionTargetNotes
@@ -429,7 +444,7 @@ namespace PraticeManagement
             {
                 if (ViewState[ApprovedManagersViewState] == null)
                 {
-                    Person[] persons = ServiceCallers.Custom.Person(p => p.GetCurrentActivePracticeAreaManagerList());
+                    Person[] persons = ServiceCallers.Custom.Person(p => p.GetApprovedByManagerList());
                     ViewState[ApprovedManagersViewState] = persons;
                     return persons;
                 }
@@ -504,6 +519,7 @@ namespace PraticeManagement
             DataBindSectionHeader(repProjectSections, pnlProjectSectionHeader, repProjectSectionHeader, btnExpandCollapseFilter);
             DataBindSectionHeader(repInternalSections, pnlInternalSectionHeader, repInternalSectionHeader, Image2);
             DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader, Image1);
+            DataBindSectionHeader(repAdministrativeTes, pnlAdministrativeSection, repAdministrativeTesHeader, btnAdmistrativeExpandCollapseFilter);
 
         }
 
@@ -845,9 +861,6 @@ namespace PraticeManagement
             if (e.Item.ItemType == ListItemType.Header)
             {
                 DdlWorkTypeIdsList = string.Empty;
-                var repProjectTesHeader = e.Item.FindControl(repAdministrativeTesHeaderRepeater) as Repeater;
-                repProjectTesHeader.DataSource = SelectedDates;
-                repProjectTesHeader.DataBind();
                 AdminstratorSectionTargetHours = new Dictionary<DateTime, HiddenField>();
                 AdminstratorSectionTargetNotes = new Dictionary<DateTime, HiddenField>();
                 AdminstratorSectionTargetApprovedMangers = new Dictionary<DateTime, HiddenField>();
@@ -1566,7 +1579,6 @@ namespace PraticeManagement
             mpeProjectSectionPopup.Show();
         }
 
-
         protected string GetDayOffCssCalss(CalendarItem calendarItem)
         {
             return Utils.Calendar.GetCssClassByCalendarItem(calendarItem);
@@ -2061,8 +2073,11 @@ namespace PraticeManagement
 
                     DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
                     DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
-                    DatabindRepeater(repInternalSections, xinternalSectionlist, false);
-                    DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
+                    DatabindRepeater(repInternalSections, xinternalSectionlist, true);
+                    if (IsPersonSalaryTypeList.Any(p => p.Value))
+                    {
+                        DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist,false);
+                    }
 
                 }
             }
@@ -2277,8 +2292,10 @@ namespace PraticeManagement
             DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
             DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
             DatabindRepeater(repInternalSections, xinternalSectionlist, false);
-            DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
-
+            if (IsPersonSalaryTypeList.Any(p => p.Value))
+            {
+                DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
+            }
             ProjectSectionXml = projectSectionXdoc.ToString();
             BusinessDevelopmentSectionXml = businessDevelopmentSectionXdoc.ToString();
             InternalSectionXml = internalSectionXdoc.ToString();
