@@ -3439,10 +3439,10 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> GetCurrentActivePracticeAreaManagerList()
+        public static List<Person> GetApprovedByManagerList()
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetCurrentActivePracticeAreaManagerListProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetApprovedByManagerListProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
