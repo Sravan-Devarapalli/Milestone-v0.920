@@ -366,6 +366,8 @@
     <EmbeddedResource Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.js" />
     <Content Include="Controls\FilteredCheckBoxList.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
+    <Content Include="Controls\PersonCalendar.ascx" />
+    <Content Include="Controls\PersonMonthCalendar.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
@@ -1241,6 +1243,20 @@
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\OpportunityFilterSettings.cs" />
+    <Compile Include="Controls\PersonCalendar.ascx.cs">
+      <DependentUpon>PersonCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonCalendar.ascx.designer.cs">
+      <DependentUpon>PersonCalendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonMonthCalendar.ascx.cs">
+      <DependentUpon>PersonMonthCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonMonthCalendar.ascx.designer.cs">
+      <DependentUpon>PersonMonthCalendar.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PracticeManagementExtendedPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
