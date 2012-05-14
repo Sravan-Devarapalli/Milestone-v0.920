@@ -30,7 +30,7 @@
     <title>Time Entry | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript"> 
+    <script type="text/javascript">
 
         function pageLoad() {
             document.onkeypress = enterPressed;
@@ -50,8 +50,10 @@
                 pnlInternalSection.style.height = "auto";
             }
             var pnlAdministrativeSection = document.getElementById("<%=pnlAdministrativeSection.ClientID %>");
-            if (pnlAdministrativeSection.style.height != "0px") {
-                pnlAdministrativeSection.style.height = "auto";
+            if (pnlAdministrativeSection != null && pnlAdministrativeSection != undefined) {
+                if (pnlAdministrativeSection.style.height != "0px") {
+                    pnlAdministrativeSection.style.height = "auto";
+                }
             }
         }
 
@@ -66,7 +68,7 @@
                 }
             }
         }
-        
+
         function SetTooltipsForallDropDowns() {
             var optionList = document.getElementsByTagName('option');
 
@@ -90,8 +92,8 @@
                 btnSaveNotes.disabled = 'disabled';
             }
             else {
-                    tbNotes.disabled = '';
-                    btnSaveNotes.disabled = '';
+                tbNotes.disabled = '';
+                btnSaveNotes.disabled = '';
             }
 
             if (tbNotes && !tbNotes.disabled) tbNotes.focus();
@@ -472,7 +474,7 @@
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
-                                                   <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
+                                                <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
@@ -608,7 +610,7 @@
                                     <table cellpadding="0" cellspacing="0" class="Section WholeWidth">
                                         <tr>
                                             <td class="DeleteWidth">
-                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
+                                                <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
                                                 <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
@@ -805,30 +807,32 @@
                         </table>
                     </div>
                     <asp:Panel ID="pnlAdministrativeSection" runat="server" CssClass="cp bg-white">
+                        <asp:Panel ID="pnlAdministrativeSectionHeader" runat="server" CssClass="WholeWidth">
+                            <table class="CompPerfTable WholeWidth">
+                                <tr class="CompPerfHeader WholeWidth">
+                                    <td class="DeleteWidth">
+                                    </td>
+                                    <td class="time-entry-bar-time-typesNewHeader">
+                                    </td>
+                                    <asp:Repeater ID="repAdministrativeTesHeader" runat="server">
+                                        <ItemTemplate>
+                                            <td class="time-entry-bar-single-teNew">
+                                                <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%>
+                                            </td>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <td class="time-entry-bar-total-hoursNew">
+                                        <div style="float: right; padding-right: 5px;">
+                                            TOTAL</div>
+                                    </td>
+                                    <td class="DeleteWidth">
+                                    </td>
+                                </tr>
+                            </table>
+                        </asp:Panel>
                         <asp:Repeater ID="repAdministrativeTes" OnItemDataBound="repAdministrativeTes_ItemDataBound"
                             runat="server">
                             <HeaderTemplate>
-                                <table class="CompPerfTable WholeWidth">
-                                    <tr class="CompPerfHeader WholeWidth">
-                                        <td class="DeleteWidth">
-                                        </td>
-                                        <td class="time-entry-bar-time-typesNewHeader">
-                                        </td>
-                                        <asp:Repeater ID="repAdministrativeTesHeader" runat="server">
-                                            <ItemTemplate>
-                                                <td class="time-entry-bar-single-teNew">
-                                                    <%# DataBinder.Eval(Container.DataItem, "Date", "{0:ddd MMM d}")%>
-                                                </td>
-                                            </ItemTemplate>
-                                        </asp:Repeater>
-                                        <td class="time-entry-bar-total-hoursNew">
-                                            <div style="float: right; padding-right: 5px;">
-                                                TOTAL</div>
-                                        </td>
-                                        <td class="DeleteWidth">
-                                        </td>
-                                    </tr>
-                                </table>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <uc:AdministrativeTimeEntryBar runat="server" ID="bar" />
