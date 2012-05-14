@@ -369,7 +369,7 @@
 <table width="98%">
     <tr>
         <td style="width: 100%; text-align: center;">
-            <asp:UpdatePanel ID="pnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
+            <asp:UpdatePanel ID="upnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
                     <uc3:LoadingProgress ID="ldProgress" runat="server" />
                     <table width="98%" align="center" style="text-align: center;" class="CalendarTable">
@@ -497,7 +497,7 @@
                                             <uc1:MonthCalendar ID="mcJune" runat="server" Year="2008" Month="6" OnPreRender="calendar_PreRender" />
                                         </td>
                                     </tr>
-                                    <tr class="HeadRow">
+                                    <tr class="HeadRow"> 
                                         <td class="setColorToCalendar">
                                             July
                                         </td>
