@@ -19,7 +19,7 @@ namespace PraticeManagement {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Calendar calendar;
+        protected global::PraticeManagement.Controls.PersonCalendar calendar;
         
         /// <summary>
         /// CalendarLegend control.
