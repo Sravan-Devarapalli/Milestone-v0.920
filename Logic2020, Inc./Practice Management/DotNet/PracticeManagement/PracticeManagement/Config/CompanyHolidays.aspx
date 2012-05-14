@@ -10,6 +10,6 @@
     Company Holidays
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <uc:PMCalendar ID="calendar" runat="server" CompanyHolidays="true" />
+    <uc:PMCalendar ID="calendar" runat="server"  />
 </asp:Content>
 
