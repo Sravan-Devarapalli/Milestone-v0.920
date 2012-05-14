@@ -24,26 +24,15 @@ namespace PraticeManagement.Controls
 
         #endregion
 
-        #region Fields
-
-        private bool wasChanged;
-
-        #endregion
 
         #region Properties
 
-        public PraticeManagement.Controls.PersonCalendar HostingControl
+
+        public PraticeManagement.Controls.Calendar HostingControl
         {
             get
             {
-                if (Page is PraticeManagement.Calendar)
-                {
-                    var control = ((PraticeManagement.Calendar)Page).CalendarControl as PraticeManagement.Controls.PersonCalendar;
-                    return control;
-
-                }
-               
-                return null;
+                return ((PraticeManagement.Config.CompanyHolidays)Page).CalendarControl;
             }
         }
 
@@ -54,21 +43,7 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                return Convert.ToInt32(ViewState[YearKey]);
-            }
-            set
-            {
-                if (value < DateTime.MinValue.Year || value > DateTime.MaxValue.Year)
-                {
-                    throw new ArgumentException(
-                        string.Format(Resources.Messages.InvalidYearNumber,
-                        DateTime.MinValue.Year,
-                        DateTime.MaxValue.Year),
-                        ValueArgument);
-                }
-
-                wasChanged = wasChanged || Year != value;
-                ViewState[YearKey] = value;
+                return HostingControl.SelectedYear;
             }
         }
 
@@ -77,35 +52,9 @@ namespace PraticeManagement.Controls
         /// </summary>
         public int Month
         {
-            get
-            {
-                return Convert.ToInt32(ViewState[MonthKey]);
-            }
-            set
-            {
-                if (value < 1 || value > 12)
-                {
-                    throw new ArgumentException(
-                        string.Format(Resources.Messages.InvalidMonthNumber, 1, 12),
-                        ValueArgument);
-                }
+            get;
+            set;
 
-                wasChanged = wasChanged || Month != value;
-                ViewState[MonthKey] = value;
-            }
-        }
-
-        public int? PersonId
-        {
-            get
-            {
-                return (int?)ViewState[PersonIdKey];
-            }
-            set
-            {
-                wasChanged = wasChanged || PersonId != value;
-                ViewState[PersonIdKey] = value;
-            }
         }
 
         public CalendarItem[] CalendarItems
@@ -118,32 +67,23 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                return ViewState["IsReadOnly"] == null ? true : (bool)ViewState["IsReadOnly"];
-            }
-            set
-            {
-                ViewState["IsReadOnly"] = value;
-            }
-        }
-
-        public bool IsPersonCalendar
-        {
-            get
-            {
                 return false;
             }
         }
 
+
         #endregion
 
         #region Methods
+
         protected string GetExtenderBehaviourId()
         {
             return "";
         }
+
         protected string DayOnClientClick(DateTime dateValue)
         {
-            if (dateValue.Date >= SettingsHelper.GetCurrentPMTime().Date || IsPersonCalendar)
+            if (dateValue.Date >= SettingsHelper.GetCurrentPMTime().Date)
             {
                 return string.Format(@"updatingCalendarContainer = $get('{0}');
                 return ShowPopup(this,'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}');"
@@ -159,7 +99,7 @@ namespace PraticeManagement.Controls
                     , lblDate.ClientID
                     , lblValidationMessage.ClientID
                     , btnDayOK.ClientID
-                    , PersonId
+                    , ""
                     , txtActualHours.ClientID
                     , lblActualHours.ClientID
                     , rbPTO.ClientID
@@ -174,52 +114,9 @@ namespace PraticeManagement.Controls
 
         protected void btnDay_OnClick(object sender, EventArgs e)
         {
-
-            var btnDay = (LinkButton)sender;
-            var date = (DateTime)Convert.ToDateTime(btnDay.Attributes["Date"]);
-
-            if (btnDay.Attributes["CompanyDayOff"].ToLower() == "false" && btnDay.Attributes["IsWeekEnd"].ToLower() == "false")
-            {
-                string hours = btnDay.Attributes["ActualHours"];
-                string timeTypeId = btnDay.Attributes["TimeTypeId"];
-                Quadruple<DateTime, DateTime, int?, string> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
-
-                HostingControl.PopulateSingleDayPopupControls(date, timeTypeId, hours, series.Third, series.Fourth);
-
-                if (series.First == series.Second)
-                {
-                    HostingControl.mpeEditSingleDayPopUp.Show();
-                }
-                else
-                {
-                    HostingControl.PopulateEditConditionPopupControls(series.First, series.Second, date);
-                    HostingControl.PopulateSeriesPopupControls(series.First, series.Second, timeTypeId, hours, series.Third, series.Fourth);
-                    HostingControl.mpeSelectEditCondtionPopUp.Show();
-                }
-
-                HostingControl.pnlBodyUpdatePanel.Update();
-            }
-            else if (hndDayOff.Value.ToLower() == "true" && btnDay.Attributes["CompanyDayOff"] == "true")
-            {
-                HostingControl.ShowHolidayAndSubStituteDay(date, btnDay.Attributes["HolidayDescription"]);
-            }
-            else if (hndDayOff.Value.ToLower() == "false" && btnDay.Attributes["CompanyDayOff"] == "true")
-            {
-                HostingControl.ShowModifySubstituteDay(date, btnDay.Attributes["HolidayDescription"]);
-            }
         }
 
-        protected override void OnPreRender(EventArgs e)
-        {
-            base.OnPreRender(e);
-
-            if (!IsPostBack || wasChanged)
-            {
-                UpdateMonthCalendar();
-            }
-        }
-
-        private void UpdateMonthCalendar()
+        public void UpdateMonthCalendar()
         {
             if (CalendarItems != null)
             {
@@ -230,7 +127,7 @@ namespace PraticeManagement.Controls
                 DateTime lastDisplayedDay = lastMonthDay.AddDays(6.0 - (double)lastMonthDay.DayOfWeek);
 
                 var itemsToDisplay = CalendarItems.Where(ci => ci.Date >= firstDisplayedDay && ci.Date <= lastDisplayedDay);
-                    
+
                 lstCalendar.DataSource = itemsToDisplay;
                 lstCalendar.DataBind();
                 mpeHoliday.BehaviorID = mpeHoliday.BehaviorID + Month;
@@ -242,7 +139,6 @@ namespace PraticeManagement.Controls
             CalendarItem item = new CalendarItem();
             item.Date = DateTime.Parse(hdnDate.Value);
             item.DayOff = !(bool.Parse(hndDayOff.Value));//Here Changing dayOff value.
-            item.PersonId = PersonId;
             item.IsRecurringHoliday = chkMakeRecurringHoliday.Checked;
             item.IsFloatingHoliday = rbFloatingHoliday.Checked;
             item.HolidayDescription = txtHolidayDescription.Text;
@@ -250,7 +146,7 @@ namespace PraticeManagement.Controls
             item.RecurringHolidayId = string.IsNullOrEmpty(hdnRecurringHolidayId.Value) ? null : (int?)Convert.ToInt32(hdnRecurringHolidayId.Value);
             item.RecurringHolidayDate = (item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue) ? (DateTime?)(item.DayOff ? item.Date : GetRecurringHolidayDate()) : null;
             SaveDate(item);
-            UpdateMonthCalendar();
+            HostingControl.UpdateCalendar();
         }
 
         private DateTime? GetRecurringHolidayDate()
@@ -281,66 +177,27 @@ namespace PraticeManagement.Controls
 
             return result;
         }
+
         protected string GetDoubleFormat(double? hours)
         {
             return hours.HasValue ? hours.Value.ToString("0.00") : "";
         }
 
-        protected string GetToolTip(string holidayDescription, double? actualHours, bool isFloatingHoliday)
+        protected string GetToolTip(string holidayDescription)
         {
-            string toolTip = holidayDescription;
-
-            if (actualHours.HasValue && IsPersonCalendar && !isFloatingHoliday)
-            {
-                toolTip = holidayDescription + " - " + actualHours.Value.ToString("0.00") + " hr(s)";
-            }
-
-            return toolTip;
+            return holidayDescription;
         }
 
         protected bool NeedToEnable(DateTime dateValue)
         {
-            if (!IsPersonCalendar)
-            {
-                var currentDate = SettingsHelper.GetCurrentPMTime();
-
-                var result = (dateValue.Date >= currentDate.Date);
-                return result;
-            }
-            return true;
+            var currentDate = SettingsHelper.GetCurrentPMTime();
+            var result = (dateValue.Date >= currentDate.Date);
+            return result;
         }
 
         public bool GetIsReadOnly(bool dateLevelReadonly, bool dayOff, bool companyDayOff, DateTime date)
         {
-            if (IsPersonCalendar)
-            {
-                bool isReadOnly = dayOff
-                    ? (companyDayOff
-                        ? (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? true : false)
-                        : (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? true : false)
-                      )
-                    : (companyDayOff
-                        ? (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? false : false)
-                        : (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday ? false : true)
-                      );
-
-                if (!isReadOnly)
-                {
-                    if (IsReadOnly)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return dateLevelReadonly;
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                return dateLevelReadonly;
-            }
+            return dateLevelReadonly;
         }
 
         #endregion
