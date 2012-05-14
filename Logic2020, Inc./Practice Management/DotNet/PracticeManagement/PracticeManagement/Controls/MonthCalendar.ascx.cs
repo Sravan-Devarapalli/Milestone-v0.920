@@ -7,6 +7,7 @@ using System.Web;
 using PraticeManagement.Utils;
 using System.Collections.Generic;
 using System.Web.UI;
+using System.Linq;
 
 namespace PraticeManagement.Controls
 {
@@ -31,16 +32,17 @@ namespace PraticeManagement.Controls
 
         #region Properties
 
-        public PraticeManagement.Controls.Calendar HostingControl
+        public PraticeManagement.Controls.PersonCalendar HostingControl
         {
             get
             {
                 if (Page is PraticeManagement.Calendar)
                 {
-                    var control = ((PraticeManagement.Calendar)Page).CalendarControl as PraticeManagement.Controls.Calendar;
+                    var control = ((PraticeManagement.Calendar)Page).CalendarControl as PraticeManagement.Controls.PersonCalendar;
                     return control;
 
                 }
+               
                 return null;
             }
         }
@@ -111,6 +113,7 @@ namespace PraticeManagement.Controls
             private get;
             set;
         }
+
         public bool IsReadOnly
         {
             get
@@ -127,11 +130,7 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                return ViewState["PersonCalendarKey"] == null ? false : (bool)ViewState["PersonCalendarKey"];
-            }
-            set
-            {
-                ViewState["PersonCalendarKey"] = value;
+                return false;
             }
         }
 
@@ -216,11 +215,11 @@ namespace PraticeManagement.Controls
 
             if (!IsPostBack || wasChanged)
             {
-                Display();
+                UpdateMonthCalendar();
             }
         }
 
-        private void Display()
+        private void UpdateMonthCalendar()
         {
             if (CalendarItems != null)
             {
@@ -230,11 +229,8 @@ namespace PraticeManagement.Controls
                 DateTime firstDisplayedDay = firstMonthDay.AddDays(-(double)firstMonthDay.DayOfWeek);
                 DateTime lastDisplayedDay = lastMonthDay.AddDays(6.0 - (double)lastMonthDay.DayOfWeek);
 
-                CalendarItem[] itemsToDisplay = Array.FindAll<CalendarItem>(CalendarItems, delegate(CalendarItem item)
-                {
-                    return item.Date >= firstDisplayedDay && item.Date <= lastDisplayedDay;
-                });
-
+                var itemsToDisplay = CalendarItems.Where(ci => ci.Date >= firstDisplayedDay && ci.Date <= lastDisplayedDay);
+                    
                 lstCalendar.DataSource = itemsToDisplay;
                 lstCalendar.DataBind();
                 mpeHoliday.BehaviorID = mpeHoliday.BehaviorID + Month;
@@ -254,7 +250,7 @@ namespace PraticeManagement.Controls
             item.RecurringHolidayId = string.IsNullOrEmpty(hdnRecurringHolidayId.Value) ? null : (int?)Convert.ToInt32(hdnRecurringHolidayId.Value);
             item.RecurringHolidayDate = (item.IsRecurringHoliday && !item.RecurringHolidayId.HasValue) ? (DateTime?)(item.DayOff ? item.Date : GetRecurringHolidayDate()) : null;
             SaveDate(item);
-            Display();
+            UpdateMonthCalendar();
         }
 
         private DateTime? GetRecurringHolidayDate()
@@ -314,7 +310,7 @@ namespace PraticeManagement.Controls
             return true;
         }
 
-        public bool GetIsReadOnly(bool DateLevelReadonly, bool dayOff, bool companyDayOff, DateTime date)
+        public bool GetIsReadOnly(bool dateLevelReadonly, bool dayOff, bool companyDayOff, DateTime date)
         {
             if (IsPersonCalendar)
             {
@@ -336,14 +332,14 @@ namespace PraticeManagement.Controls
                     }
                     else
                     {
-                        return DateLevelReadonly;
+                        return dateLevelReadonly;
                     }
                 }
                 return true;
             }
             else
             {
-                return DateLevelReadonly;
+                return dateLevelReadonly;
             }
         }
 
