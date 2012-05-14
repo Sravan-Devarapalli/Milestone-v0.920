@@ -314,8 +314,7 @@
             public const string OriginalHours = "OriginalHours";
             public const string Phase = "Phase";
             public const string TimescaleName = "TimescaleName";
-            
-            
+            public const string IsSalaryType = "IsSalaryType";
         }
 
         #endregion
@@ -601,6 +600,9 @@
         /// </summary>
         public class ProcedureNames
         {
+
+            #region Nested type: ActivityLog
+
             public class ActivityLog
             {
                 public const string ActivityLogListByPeriodProcedure = "dbo.ActivityLogListByPeriod";
@@ -608,6 +610,7 @@
                 public const string UserActivityLogInsertProcedure = "dbo.UserActivityLogInsert";
                 public const string GetDatabaseVersionFunction = "SELECT dbo.GetDatabaseVersion()";
             }
+            #endregion
 
             #region Nested type: ComputedFinancials
 
@@ -667,7 +670,7 @@
                 public const string IsHavingCustomRolePermission = "dbo.IsHavingCustomRolePermission";
                 public const string SaveCustomRolePagePermissions = "dbo.SaveCustomRolePagePermissions";
                 public const string PersonsListHavingActiveStatusDuringThisPeriodProcedure = "dbo.PersonsListHavingActiveStatusDuringThisPeriod";
-                public const string GetCurrentActivePracticeAreaManagerListProcedure = "dbo.GetCurrentActivePracticeAreaManagerList";
+                public const string GetApprovedByManagerListProcedure = "dbo.GetApprovedByManagerList";
                 public const string GetPersonListBySearchKeywordProcedure = "dbo.GetPersonListBySearchKeyword";
                 public const string GetAllPayTypesProcedure = "dbo.GetAllPayTypes";
 
@@ -746,6 +749,23 @@
 
             #endregion
 
+            #region Nested type: Pay
+
+            public class Pay
+            {
+                public const string PayGetCurrentByPersonProcedure = "dbo.PayGetCurrentByPerson";
+                public const string PayGetHistoryByPersonProcedure = "dbo.PayGetHistoryByPerson";
+                public const string GetPayHistoryShortByPersonProcedure = "dbo.GetPayHistoryShortByPerson";
+                public const string PayGetByPersonStartDateProcedure = "dbo.PayGetByPersonStartDate";
+                public const string PaySaveProcedure = "dbo.PaySave";
+                public const string PayDeleteProcedure = "dbo.PayDelete";
+                public const string IsPersonSalaryTypeListByPeriodProcedure = "dbo.IsPersonSalaryTypeListByPeriod";
+            }
+
+            #endregion
+
+            #region Nested type: Practices
+
             public class Practices
             {
                 public const string GetAll = "dbo.PracticeListAll";
@@ -754,6 +774,9 @@
                 public const string Insert = "dbo.PracticeInsert";
                 public const string Delete = "dbo.PracticeDelete";
             }
+            #endregion
+
+            #region Nested type: Reports
 
             public class Reports
             {
@@ -770,8 +793,11 @@
                 public const string TimePeriodSummaryByResourcePayCheck = "dbo.TimePeriodSummaryByResourcePayCheck";
                 public const string TimeEntryAuditReport = "dbo.TimeEntryAuditReport";
 
-                
+
             }
+            #endregion
+
+            #region Nested type: Calendar
 
             public class Calendar
             {
@@ -790,8 +816,11 @@
                 public const string GetSubstituteDate = "dbo.GetSubstituteDate";
                 public const string GetSubstituteDayDetails = "dbo.GetSubstituteDayDetails";
                 public const string CalendarGetWithBasicInfo = "dbo.CalendarGetWithBasicInfo";
-                
+
             }
+            #endregion
+
+            #region Nested type: ProjectGroup
 
             public class ProjectGroup
             {
@@ -804,6 +833,9 @@
                 public const string GetClientsGroups = "dbo.GetClientsGroups";
 
             }
+            #endregion
+
+            #region Nested type: Note
 
             public class Note
             {
@@ -812,6 +844,9 @@
                 public const string NoteUpdate = "dbo.NoteUpdate";
                 public const string NoteDelete = "dbo.NoteDelete";
             }
+            #endregion
+
+            #region Nested type: Project
 
             public class Project
             {
@@ -834,8 +869,8 @@
                 public const string ProjectGetByNumber = "dbo.ProjectGetByNumber";
                 public const string ProjectShortGetByNumber = "dbo.ProjectShortGetByNumber";
                 public const string ProjectMilestonesFinancials = "dbo.ProjectMilestonesFinancials";
-                public static string GetProjectListWithFinancials = "dbo.GetProjectListWithFinancials";
-                public static string GetProjectListForGroupingPracticeManagers = "dbo.GetProjectListForGroupingPracticeManagers";
+                public const string GetProjectListWithFinancials = "dbo.GetProjectListWithFinancials";
+                public const string GetProjectListForGroupingPracticeManagers = "dbo.GetProjectListForGroupingPracticeManagers";
                 public const string CategoryItemBudgetSave = "dbo.CategoryItemBudgetSave";
                 public const string CategoryItemListByCategoryType = "dbo.CategoryItemListByCategoryType";
                 public const string CalculateBudgetForCategoryItems = "dbo.CalculateBudgetForCategoryItems";
@@ -858,6 +893,9 @@
                 public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
 
             }
+            #endregion
+
+            #region Nested type: MilestonePerson
 
             public class MilestonePerson
             {
@@ -883,6 +921,9 @@
                 public const string UpdateMilestonePersonEntry = "dbo.UpdateMilestonePersonEntry";
                 public const string MilestoneResourceUpdateProcedure = "dbo.MilestoneResourceUpdate";
             }
+            #endregion
+
+            #region Nested type: ProjectExpenses
 
             public class ProjectExpenses
             {
@@ -893,6 +934,9 @@
                 public const string Insert = "dbo.ProjectExpenseInsert";
                 public const string Delete = "dbo.ProjectExpenseDelete";
             }
+            #endregion
+
+            #region Nested type: Opportunitites
 
             public class Opportunitites
             {
@@ -927,13 +971,46 @@
                 public const string GetOpportunityStatusChangeCount = "dbo.GetOpportunityStatusChangeCount";
                 public const string OpportunitySearchText = "dbo.OpportunitySearchText";
                 public const string AttachProjectToOpportunity = "dbo.AttachProjectToOpportunity";
-                
+
             }
+            #endregion
+
+            #region Nested type: OverHeads
 
             public class OverHeads
             {
                 public const string GetMLFHistory = "dbo.GetMLFHistory";
             }
+            #endregion
+
+            #region Nested type: Client
+
+            public class Client
+            {
+                public const string ClientInsertProcedure = "dbo.ClientInsert";
+                public const string ClientUpdateProcedure = "dbo.ClientUpdate";
+                public const string ClientListAllProcedure = "dbo.ClientListAll";
+                public const string ClientGetByIdProcedure = "dbo.ClientGetById";
+                public const string ClientListAllForProjectProcedure = "dbo.ClientListAllForProject";
+                public const string UpdateIsChargableForClientProcedure = "dbo.UpdateIsChargableForClient";
+                public const string ColorsListAllProcedure = "dbo.ColorsListAll";
+                public const string GetClientMarginColorInfoProcedure = "dbo.GetClientMarginColorInfo";
+                public const string ClientMarginColorInfoInsertProcedure = "dbo.ClientMarginColorInfoInsert";
+                public const string ClientListAllWithoutPermissionsProcedure = "dbo.ClientListAllWithoutPermissions";
+                public const string GetInternalAccountProcedure = "dbo.GetInternalAccount";
+            }
+
+            #endregion
+
+            #region Nested type: Commission
+
+            public class Commission
+            {
+                public const string CommissionGetByProjectTypeProcedure = "dbo.CommissionGetByProjectType";
+                public const string CommissionSetProcedure = "dbo.CommissionSet";
+            }
+            #endregion
+
         }
 
         #endregion
