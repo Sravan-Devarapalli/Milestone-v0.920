@@ -286,13 +286,13 @@
                                     </tr>
                                     <tr>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcJanuary" runat="server" Year="2008" Month="1"  />
+                                            <uc1:MonthCalendar ID="mcJanuary" runat="server"  Month="1"  />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcFebruary" runat="server" Year="2008" Month="2"  />
+                                            <uc1:MonthCalendar ID="mcFebruary" runat="server"  Month="2"  />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcMarch" runat="server" Year="2008" Month="3"  />
+                                            <uc1:MonthCalendar ID="mcMarch" runat="server"  Month="3"  />
                                         </td>
                                     </tr>
                                     <tr class="HeadRow">
@@ -308,13 +308,13 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcApril" runat="server" Year="2008" Month="4"  />
+                                            <uc1:MonthCalendar ID="mcApril" runat="server"  Month="4"  />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcMay" runat="server" Year="2008" Month="5"  />
+                                            <uc1:MonthCalendar ID="mcMay" runat="server"  Month="5"  />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcJune" runat="server" Year="2008" Month="6"  />
+                                            <uc1:MonthCalendar ID="mcJune" runat="server"  Month="6"  />
                                         </td>
                                     </tr>
                                     <tr class="HeadRow">
@@ -330,13 +330,13 @@
                                     </tr>
                                     <tr>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcJuly" runat="server" Year="2008" Month="7"  />
+                                            <uc1:MonthCalendar ID="mcJuly" runat="server"  Month="7"  />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcAugust" runat="server" Year="2008" Month="8"  />
+                                            <uc1:MonthCalendar ID="mcAugust" runat="server"  Month="8"  />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcSeptember" runat="server" Year="2008" Month="9"  />
+                                            <uc1:MonthCalendar ID="mcSeptember" runat="server"  Month="9"  />
                                         </td>
                                     </tr>
                                     <tr class="HeadRow">
@@ -352,13 +352,13 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcOctober" runat="server" Year="2008" Month="10"  />
+                                            <uc1:MonthCalendar ID="mcOctober" runat="server"  Month="10"  />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcNovember" runat="server" Year="2008" Month="11"  />
+                                            <uc1:MonthCalendar ID="mcNovember" runat="server"  Month="11"  />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcDecember" runat="server" Year="2008" Month="12"  />
+                                            <uc1:MonthCalendar ID="mcDecember" runat="server"  Month="12"  />
                                         </td>
                                     </tr>
                                 </table>
