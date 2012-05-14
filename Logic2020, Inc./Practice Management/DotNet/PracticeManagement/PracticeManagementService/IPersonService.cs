@@ -567,7 +567,7 @@ namespace PracticeManagementService
         List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<Person> GetCurrentActivePracticeAreaManagerList();
+        List<Person> GetApprovedByManagerList();
 
         [OperationContract]
         List<Person> GetPersonListBySearchKeyword(String looked);
@@ -577,6 +577,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         Person GetPayHistoryShortByPerson(int personId);
+
+        [OperationContract]
+        Dictionary<DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate);
 
     }
 }
