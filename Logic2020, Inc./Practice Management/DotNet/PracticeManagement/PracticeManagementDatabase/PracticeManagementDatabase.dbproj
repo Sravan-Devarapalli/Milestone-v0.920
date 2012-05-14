@@ -4011,9 +4011,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetSubstituteDayDetails.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetCurrentActivePracticeAreaManagerList.proc.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetORTTimeTypeId.function.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4106,6 +4103,12 @@
       <SubType>Code</SubType>
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\IsPersonSalaryTypeListByPeriod.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetApprovedByManagerList.proc.sql">
+      <SubType>Code</SubType>
     </Build>
   </ItemGroup>
   <ItemGroup>
