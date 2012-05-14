@@ -15,20 +15,8 @@ namespace DataAccess
     {
         #region Constants
 
-        #region Stored Procedures
-
-        private const string PayGetCurrentByPersonProcedure = "dbo.PayGetCurrentByPerson";
-        private const string PayGetHistoryByPersonProcedure = "dbo.PayGetHistoryByPerson";
-        private const string GetPayHistoryShortByPersonProcedure = "dbo.GetPayHistoryShortByPerson";
-        private const string PayGetByPersonStartDateProcedure = "dbo.PayGetByPersonStartDate";
-        private const string PaySaveProcedure = "dbo.PaySave";
-        private const string PayDeleteProcedure = "dbo.PayDelete";
-
-        #endregion
-
         #region Parameters
-
-        private const string PersonIdParam = "@PersonId";
+        
         private const string AmountParam = "@Amount";
         private const string TimescaleParam = "@Timescale";
         private const string TimesPaidPerMonthParam = "@TimesPaidPerMonth";
@@ -37,8 +25,6 @@ namespace DataAccess
         private const string BonusAmountParam = "@BonusAmount";
         private const string BonusHoursToCollectParam = "@BonusHoursToCollect";
         private const string DefaultHoursPerDayParam = "@DefaultHoursPerDay";
-        private const string StartDateParam = "@StartDate";
-        private const string EndDateParam = "@EndDate";
         private const string OldStartDateParam = "@OLD_StartDate";
         private const string OldEndDateParam = "@OLD_EndDate";
         private const string SeniorityIdParam = "@SeniorityId";
@@ -53,7 +39,6 @@ namespace DataAccess
         private const string StartDateColumn = "StartDate";
         private const string EndDateColumn = "EndDate";
         private const string AmountColumn = "Amount";
-        private const string TimescaleColumn = "Timescale";
         private const string TimescaleNameColumn = "TimescaleName";
         private const string AmountHourlyColumn = "AmountHourly";
         private const string TimesPaidPerMonthColumn = "TimesPaidPerMonth";
@@ -83,12 +68,12 @@ namespace DataAccess
         public static Pay GetCurrentByPerson(int personId)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(PayGetCurrentByPersonProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.PayGetCurrentByPersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
 
                 connection.Open();
 
@@ -110,12 +95,12 @@ namespace DataAccess
         public static List<Pay> GetHistoryByPerson(int personId)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(PayGetHistoryByPersonProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.PayGetHistoryByPersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
 
                 connection.Open();
 
@@ -132,12 +117,12 @@ namespace DataAccess
         public static List<Pay> GetPayHistoryShortByPerson(int personId)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(GetPayHistoryShortByPersonProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.GetPayHistoryShortByPersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
 
                 connection.Open();
 
@@ -160,13 +145,13 @@ namespace DataAccess
         public static Pay GetByPersonStartDate(int personId, DateTime startDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(PayGetByPersonStartDateProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.PayGetByPersonStartDateProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-                command.Parameters.AddWithValue(StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -190,12 +175,12 @@ namespace DataAccess
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
 
-            using (SqlCommand command = new SqlCommand(PaySaveProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.PaySaveProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam, pay.PersonId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, pay.PersonId);
                 command.Parameters.AddWithValue(AmountParam, pay.Amount.Value);
                 command.Parameters.AddWithValue(TimescaleParam, pay.Timescale);
                 command.Parameters.AddWithValue(TimesPaidPerMonthParam,
@@ -208,8 +193,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(BonusHoursToCollectParam,
                     pay.BonusHoursToCollect.HasValue ? (object)pay.BonusHoursToCollect.Value : DBNull.Value);
                 command.Parameters.AddWithValue(DefaultHoursPerDayParam, pay.DefaultHoursPerDay);
-                command.Parameters.AddWithValue(StartDateParam, pay.StartDate);
-                command.Parameters.AddWithValue(EndDateParam,
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, pay.StartDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam,
                     pay.EndDate.HasValue ? (object)pay.EndDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(OldStartDateParam,
                     pay.OldStartDate.HasValue ? (object)pay.OldStartDate.Value : DBNull.Value);
@@ -245,13 +230,13 @@ namespace DataAccess
         {
             var connection = new SqlConnection(DataSourceHelper.DataConnection);
 
-            using (SqlCommand command = new SqlCommand(PayDeleteProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.PayDeleteProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-                command.Parameters.AddWithValue(StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
 
                 try
                 {
@@ -274,7 +259,7 @@ namespace DataAccess
             {
                 int startDateIndex = reader.GetOrdinal(StartDateColumn);
                 int endDateIndex = reader.GetOrdinal(EndDateColumn);
-                int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
+                int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
 
 
                 while (reader.Read())
@@ -300,7 +285,7 @@ namespace DataAccess
                 int startDateIndex = reader.GetOrdinal(StartDateColumn);
                 int endDateIndex = reader.GetOrdinal(EndDateColumn);
                 int amountIndex = reader.GetOrdinal(AmountColumn);
-                int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
+                int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
                 int timescaleNameIndex = reader.GetOrdinal(TimescaleNameColumn);
                 int amountHourlyIndex = reader.GetOrdinal(AmountHourlyColumn);
                 int timesPaidPerMonthIndex = reader.GetOrdinal(TimesPaidPerMonthColumn);
@@ -346,6 +331,38 @@ namespace DataAccess
                     pay.PracticeName = !reader.IsDBNull(PracticeNameIndex) ? reader.GetString(PracticeNameIndex) : string.Empty;
                     pay.SalesCommissionFractionOfMargin = !reader.IsDBNull(SalesCommFractionOfMarginIndex) ? (decimal?)reader.GetDecimal(SalesCommFractionOfMarginIndex) : null;
                     result.Add(pay);
+                }
+            }
+        }
+
+        public static Dictionary<DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.IsPersonSalaryTypeListByPeriodProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    Dictionary<DateTime, bool> result = new Dictionary<DateTime, bool>();
+                    if (reader.HasRows)
+                    {
+                        int dateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
+                        int isSalaryTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsSalaryType);
+
+                        while (reader.Read())
+                        {
+                            result.Add(reader.GetDateTime(dateIndex), reader.GetBoolean(isSalaryTypeIndex));
+                        }
+                    }
+                    return result;
                 }
             }
         }
