@@ -138,10 +138,9 @@ namespace PraticeManagement.Controls
 
             if (!IsPostBack)
             {
-
                 FillRecurringHolidaysList(cblRecurringHolidays, "All Recurring Holidays");
-
                 SelectedYear = DateTime.Today.Year;
+                UpdateCalendar();
             }
 
             if (tdRecurringHolidaysDetails.Visible)
@@ -234,6 +233,9 @@ namespace PraticeManagement.Controls
                     }
                 }
             }
+
+
+            UpdateCalendar();
         }
 
         private void SetRecurringHoliday(int? id, bool isSet, string user)
