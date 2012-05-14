@@ -4110,6 +4110,24 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetApprovedByManagerList.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeEntryHours_ReviewStatusId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeEntryHours_ModifiedBy.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeEntryHistory_ReviewStatusId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeEntryHistory_ActivityTypeId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeEntryHistory_ModifiedBy.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_TimeEntryHistory_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
