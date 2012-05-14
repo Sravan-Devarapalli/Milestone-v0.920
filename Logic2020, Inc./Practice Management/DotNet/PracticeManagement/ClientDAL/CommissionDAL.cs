@@ -15,13 +15,6 @@ namespace DataAccess
     {
         #region Constants
 
-        #region Stored Procedures
-
-        private const string CommissionGetByProjectTypeProcedure = "dbo.CommissionGetByProjectType";
-        private const string CommissionSetProcedure = "dbo.CommissionSet";
-
-        #endregion
-
         #region Parameters
 
         private const string CommissionIdParam = "@CommissionId";
@@ -61,7 +54,7 @@ namespace DataAccess
         public static List<Commission> CommissionGetByProjectType(int projectId, CommissionType commissionType)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(CommissionGetByProjectTypeProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Commission.CommissionGetByProjectTypeProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -92,7 +85,7 @@ namespace DataAccess
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
 
-            using (SqlCommand command = new SqlCommand(CommissionSetProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Commission.CommissionSetProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
