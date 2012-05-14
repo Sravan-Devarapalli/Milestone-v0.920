@@ -57,10 +57,13 @@ namespace PraticeManagement.Controls
 
         }
 
-        public CalendarItem[] CalendarItems
+        private CalendarItem[] CalendarItems
         {
-            private get;
-            set;
+            get
+            {
+                return HostingControl.CalendarItems;
+            }
+
         }
 
         public bool IsReadOnly
@@ -75,11 +78,6 @@ namespace PraticeManagement.Controls
         #endregion
 
         #region Methods
-
-        protected string GetExtenderBehaviourId()
-        {
-            return "";
-        }
 
         protected string DayOnClientClick(DateTime dateValue)
         {
