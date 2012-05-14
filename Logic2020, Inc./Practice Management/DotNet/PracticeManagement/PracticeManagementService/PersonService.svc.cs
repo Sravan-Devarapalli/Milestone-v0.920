@@ -897,7 +897,7 @@ namespace PracticeManagementService
             PayDAL.DeletePay(personId, startDate);
         }
 
-       
+
         /// <summary>
         /// Selects a list of the seniorities.
         /// </summary>
@@ -1058,7 +1058,7 @@ namespace PracticeManagementService
         {
             var person = new Person()
             {
-                Id  = personId
+                Id = personId
             };
             person.PaymentHistory = PayDAL.GetPayHistoryShortByPerson(personId);
             return person;
@@ -1079,24 +1079,30 @@ namespace PracticeManagementService
             return PersonDAL.IsPersonHaveActiveStatusDuringThisPeriod(personId, startDate, endDate);
         }
 
-       public List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate,DateTime endDate)
-       {
-           return PersonDAL.PersonsListHavingActiveStatusDuringThisPeriod(startDate, endDate);
-       }
+        public List<Person> PersonsListHavingActiveStatusDuringThisPeriod(DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.PersonsListHavingActiveStatusDuringThisPeriod(startDate, endDate);
+        }
 
-       public List<Person> GetCurrentActivePracticeAreaManagerList()
-       {
-           return PersonDAL.GetCurrentActivePracticeAreaManagerList();
-       }
+        public List<Person> GetApprovedByManagerList()
+        {
+            return PersonDAL.GetApprovedByManagerList();
+        }
 
-       public List<Person> GetPersonListBySearchKeyword(String looked)
-       {
-           return PersonDAL.GetPersonListBySearchKeyword(looked);
-       }
-       public List<Timescale> GetAllPayTypes()
-       {
-           return PersonDAL.GetAllPayTypes();
-       }
+        public List<Person> GetPersonListBySearchKeyword(String looked)
+        {
+            return PersonDAL.GetPersonListBySearchKeyword(looked);
+        }
+        public List<Timescale> GetAllPayTypes()
+        {
+            return PersonDAL.GetAllPayTypes();
+        }
+
+        public Dictionary<DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            return PayDAL.IsPersonSalaryTypeListByPeriod(personId, startDate, endDate);
+        }
+
         #endregion
     }
 }
