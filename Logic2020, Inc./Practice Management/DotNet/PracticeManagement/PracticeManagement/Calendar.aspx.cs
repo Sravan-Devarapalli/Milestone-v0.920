@@ -11,7 +11,7 @@ namespace PraticeManagement
 {
     public partial class Calendar : System.Web.UI.Page
     {
-        public PraticeManagement.Controls.Calendar CalendarControl
+        public PraticeManagement.Controls.PersonCalendar CalendarControl
         {
             get
             {
