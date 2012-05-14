@@ -14,22 +14,6 @@ namespace DataAccess
     {
         #region Constants
 
-        #region Stored Procedures
-
-        private const string ClientInsertProcedure = "dbo.ClientInsert";
-        private const string ClientUpdateProcedure = "dbo.ClientUpdate";
-        private const string ClientListAllProcedure = "dbo.ClientListAll";
-        private const string ClientGetByIdProcedure = "dbo.ClientGetById";
-        private const string ClientListAllForProjectProcedure = "dbo.ClientListAllForProject";
-        private const string UpdateIsChargableForClientProcedure = "dbo.UpdateIsChargableForClient";
-        private const string ColorsListAllProcedure = "dbo.ColorsListAll";
-        private const string GetClientMarginColorInfoProcedure = "dbo.GetClientMarginColorInfo";
-        private const string ClientMarginColorInfoInsertProcedure = "dbo.ClientMarginColorInfoInsert";
-        private const string ClientListAllWithoutPermissionsProcedure = "dbo.ClientListAllWithoutPermissions";
-        private const string GetInternalAccountProcedure = "dbo.GetInternalAccount";
-
-        #endregion
-
         #region Parameters
 
         private const string ClientIdParam = "@ClientId";
@@ -80,7 +64,7 @@ namespace DataAccess
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ClientInsertProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientInsertProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -145,7 +129,7 @@ namespace DataAccess
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
 
-            using (var command = new SqlCommand(ClientMarginColorInfoInsertProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientMarginColorInfoInsertProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -191,7 +175,7 @@ namespace DataAccess
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ClientUpdateProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientUpdateProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -267,7 +251,7 @@ namespace DataAccess
             var clientList = new List<Client>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ClientListAllProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientListAllProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -290,7 +274,7 @@ namespace DataAccess
             var clientList = new List<Client>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ClientGetByIdProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientGetByIdProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -323,7 +307,7 @@ namespace DataAccess
             var clientList = new List<Client>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ClientListAllProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientListAllProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -352,7 +336,7 @@ namespace DataAccess
             var clientList = new List<Client>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ClientListAllProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientListAllProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -385,7 +369,7 @@ namespace DataAccess
         public static List<Client> ClientListAllForProject(int? projectId, int? loggedInPersonId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(ClientListAllForProjectProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientListAllForProjectProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -530,7 +514,7 @@ namespace DataAccess
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(UpdateIsChargableForClientProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.UpdateIsChargableForClientProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -548,7 +532,7 @@ namespace DataAccess
             var colors = new List<ColorInformation>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ColorsListAllProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ColorsListAllProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -592,7 +576,7 @@ namespace DataAccess
             var clientMarginColorInfo = new List<ClientMarginColorInfo>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(GetClientMarginColorInfoProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.GetClientMarginColorInfoProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -645,7 +629,7 @@ namespace DataAccess
             var clientList = new List<Client>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(ClientListAllWithoutPermissionsProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientListAllWithoutPermissionsProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -670,7 +654,7 @@ namespace DataAccess
             Client client = new Client();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(GetInternalAccountProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.GetInternalAccountProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
