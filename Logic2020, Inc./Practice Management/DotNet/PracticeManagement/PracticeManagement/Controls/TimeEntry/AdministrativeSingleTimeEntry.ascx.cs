@@ -195,6 +195,7 @@ namespace PraticeManagement.Controls.TimeEntry
                         (HostingPage.SelectedPerson.TerminationDate.HasValue &&
                                     HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind
                          ) ? "0" : "1";
+            tbActualHours.Attributes["IsPersonSalaryTypeDisable"] = HostingPage.IsPersonSalaryTypeList[DateBehind] ? "0" : "1";
         }
 
         public void CanelControlStyle()
@@ -216,11 +217,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
             }
 
-            //if (IsPTO)
-            //{
-            //    tbNotes.Enabled = false;
-            //    btnSaveNotes.Enabled = false;
-            //}
+            if (IsPTO)
+            {
+                tbActualHours.Enabled = HostingPage.IsPersonSalaryTypeList[DateBehind];
+            }
 
             if (IsHoliday)
             {
