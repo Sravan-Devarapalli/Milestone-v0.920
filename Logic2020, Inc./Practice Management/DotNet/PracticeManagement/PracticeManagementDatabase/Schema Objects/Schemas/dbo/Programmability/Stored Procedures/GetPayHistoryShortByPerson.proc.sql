@@ -12,7 +12,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT P.StartDate,
-	       P.EndDate,
+	       CASE WHEN P.EndDate IS NULL 
+		   THEN NULL ELSE  P.EndDate- 1 END AS [EndDate],
 	       P.Timescale
 	  FROM dbo.Pay AS P
 	  WHERE p.Person = @PersonId
