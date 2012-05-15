@@ -115,7 +115,7 @@ AS
                      ),
                 PersonWithCurrentPay
                   AS ( SELECT   P.PersonId ,
-                                TS.Name AS Timescale
+                                ISNULL(TS.Name,'') AS Timescale
                        FROM     dbo.Person P
                                 LEFT JOIN PersonWithLatestPay PLP ON P.PersonId = PLP.PersonId
                                 LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
