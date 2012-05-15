@@ -34,7 +34,11 @@
                 <tr style="text-align: left;">
                     <td colspan="4" class="ProjectAccountName" style="width: 85%; white-space: nowrap;
                         padding-left: 15px; font-size: 15px; font-weight: 1500;">
-                        <%# Eval("Project.ProjectNumber")%>-<%# Eval("Project.Name")%><b style="font-style: normal;"> (<%# Eval("Project.Client.Name")%>><%# Eval("Project.Group.Name")%>)</b>
+                        <%# Eval("Project.ProjectNumber")%>
+                        -
+                        <%# Eval("Project.Name")%><b style="font-style: normal;"> (<%# Eval("Project.Client.Name")%>
+                            >
+                            <%# Eval("Project.Group.Name")%>)</b>
                     </td>
                     <td style="width: 15%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 15px;">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
