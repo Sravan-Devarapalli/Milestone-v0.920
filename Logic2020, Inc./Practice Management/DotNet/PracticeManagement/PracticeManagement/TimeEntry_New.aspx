@@ -289,16 +289,18 @@
 
                     function expandCollapseSections(SectionName, lblSection) {
                         var cpeSection = $find(SectionName);
-                        var isCollapsed = cpeSection.get_Collapsed();
-                        var cpeSectionCount = lblSection.getAttribute('rowsCount');
-                        if (cpeSectionCount != '0') {
-                            if (isCollapsed) {
-                                cpeSection.togglePanel();
+                        if (cpeSection != null) {
+                            var isCollapsed = cpeSection.get_Collapsed();
+                            var cpeSectionCount = lblSection.getAttribute('rowsCount');
+                            if (cpeSectionCount != '0') {
+                                if (isCollapsed) {
+                                    cpeSection.togglePanel();
+                                }
                             }
-                        }
-                        else {
-                            if (!isCollapsed) {
-                                cpeSection.togglePanel();
+                            else {
+                                if (!isCollapsed) {
+                                    cpeSection.togglePanel();
+                                }
                             }
                         }
                     }
