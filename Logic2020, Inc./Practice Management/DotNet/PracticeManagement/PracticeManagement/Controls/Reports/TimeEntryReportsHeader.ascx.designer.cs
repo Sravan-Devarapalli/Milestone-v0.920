@@ -13,6 +13,24 @@ namespace PraticeManagement.Controls.Reports {
     public partial class TimeEntryReportsHeader {
         
         /// <summary>
+        /// tdFirst control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdFirst;
+        
+        /// <summary>
+        /// tdSecond control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdSecond;
+        
+        /// <summary>
         /// thTimePeriod control.
         /// </summary>
         /// <remarks>
@@ -65,6 +83,15 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlByPerson;
+        
+        /// <summary>
+        /// tdThird control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdThird;
     }
 }
 
