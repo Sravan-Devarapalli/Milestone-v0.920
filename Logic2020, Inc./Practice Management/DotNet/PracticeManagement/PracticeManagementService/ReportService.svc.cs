@@ -29,9 +29,9 @@ namespace PracticeManagementService
             return ReportDAL.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
 
-        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate,bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames)
+        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate,bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames,string personStatusIds)
         {
-            return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate,includePersonsWithNoTimeEntries , personIds, seniorityIds, timescaleNames);
+            return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames, personStatusIds);
         }
 
         public List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds)
