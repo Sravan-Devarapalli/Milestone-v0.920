@@ -7,9 +7,9 @@
         </td>
     </tr>
     <tr>
-        <td style="width: 5%;">
+        <td id="tdFirst" runat="server" style="width: 5%;">
         </td>
-        <td style="width: 90%;">
+        <td id="tdSecond" runat="server" style="width: 90%;">
             <table class="TimeEntruReportHeader">
                 <tr>
                     <th id="thTimePeriod" runat="server">
@@ -18,16 +18,16 @@
                     </th>
                     <th id="thProject" runat="server">
                         <asp:HyperLink ID="hlByProject" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/ProjectSummaryReport.aspx"
-                            ForeColor="Black" Font-Underline="false" ><div class="PaddingTop6">By Project</div></asp:HyperLink>
+                            ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Project</div></asp:HyperLink>
                     </th>
                     <th id="thPerson" runat="server">
-                        <asp:HyperLink ID="hlByPerson" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/PersonDetailTimeReport.aspx" style="vertical-align:baseline !important;"
-                            ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Person</div></asp:HyperLink>
+                        <asp:HyperLink ID="hlByPerson" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/PersonDetailTimeReport.aspx"
+                            Style="vertical-align: baseline !important;" ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Person</div></asp:HyperLink>
                     </th>
                 </tr>
             </table>
         </td>
-        <td style="width: 5%;">
+        <td id="tdThird" runat="server" style="width: 5%;">
         </td>
     </tr>
 </table>
