@@ -440,8 +440,8 @@
                                                             ToolTip="Selected day(s) are not working day(s). Please select any working day(s)."
                                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                             ValidationGroup="TimeOff" OnServerValidate="cvStartDateEndDateTimeOff_ServerValidate"></asp:CustomValidator>
-                                                        <asp:CustomValidator ID="cvNotW2Salary" runat="server" ErrorMessage="In Selected day(s) Person not having W2-Salary."
-                                                            ToolTip="In Selected day(s) Person not having W2-Salary." Text="*" EnableClientScript="false"
+                                                        <asp:CustomValidator ID="cvNotW2Salary" runat="server" ErrorMessage="Person is not having W2-Salary pay during the selected day(s)."
+                                                            ToolTip="Person is not having W2-Salary pay during the selected day(s)." Text="*" EnableClientScript="false"
                                                             SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff" OnServerValidate="cvNotW2Salary_ServerValidate"></asp:CustomValidator>
                                                     </td>
                                                     <td style="padding-bottom: 0px !important; padding-top: 0px !important;">
@@ -539,8 +539,8 @@
                                             Date:&nbsp;&nbsp;&nbsp;
                                             <asp:Label ID="lbdateSingleDay" runat="server"></asp:Label>
                                             <asp:HiddenField ID="hdnDateSingleDay" runat="server"></asp:HiddenField>
-                                            <asp:CustomValidator ID="cvSingleDay" runat="server" ErrorMessage="In Selected day Person not having W2-Salary."
-                                                ToolTip="In Selected day Person not having W2-Salary." Text="*" EnableClientScript="false"
+                                            <asp:CustomValidator ID="cvSingleDay" runat="server" ErrorMessage="Person is not having W2-Salary pay during the selected day(s)."
+                                                ToolTip="Person is not having W2-Salary pay during the selected day(s)." Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Dynamic" ValidationGroup="SingleDay" OnServerValidate="cvSingleDay_ServerValidate"></asp:CustomValidator>
                                         </td>
                                     </tr>
