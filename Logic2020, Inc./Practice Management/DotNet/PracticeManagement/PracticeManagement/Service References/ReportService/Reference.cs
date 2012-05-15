@@ -25,7 +25,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByResourceResponse")]
-        DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames);
+        DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames, string personStatusIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByProject", ReplyAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByProjectResponse")]
         DataTransferObjects.Reports.ProjectLevelGroupedHours[] TimePeriodSummaryReportByProject(System.DateTime startDate, System.DateTime endDate, string clientIds, string personStatusIds);
@@ -70,7 +70,6 @@ namespace PraticeManagement.ReportService {
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
      
-        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -99,8 +98,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames) {
-            return base.Channel.TimePeriodSummaryReportByResource(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames);
+        public DataTransferObjects.Reports.PersonLevelGroupedHours[] TimePeriodSummaryReportByResource(System.DateTime startDate, System.DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames, string personStatusIds) {
+            return base.Channel.TimePeriodSummaryReportByResource(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames, personStatusIds);
         }
         
         public DataTransferObjects.Reports.ProjectLevelGroupedHours[] TimePeriodSummaryReportByProject(System.DateTime startDate, System.DateTime endDate, string clientIds, string personStatusIds) {
