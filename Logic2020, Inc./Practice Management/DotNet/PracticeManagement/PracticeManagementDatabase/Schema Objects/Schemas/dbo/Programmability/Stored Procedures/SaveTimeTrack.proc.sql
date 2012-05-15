@@ -29,13 +29,11 @@ BEGIN
 			.
 	</Sections>
 	*/
-	DECLARE @PTOTimeTypeId	INT,
-			@CurrentPMTime	DATETIME,
+	DECLARE @CurrentPMTime	DATETIME,
 			@ModifiedBy		INT,
 			@HolidayTimeTypeId INT,
 			@ORTTimeTypeId	INT
 
-	SET @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
 	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 	SET @CurrentPMTime = dbo.InsertingTime()
 	SET @ORTTimeTypeId = dbo.GetORTTimeTypeId()
@@ -203,11 +201,8 @@ BEGIN
 					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
 		INNER JOIN Person P ON P.PersonId = PC.PersonId AND P.IsStrawman = 0 AND PC.TimeTypeId <> @HolidayTimeTypeId AND C.DayOff <> 1 
-		LEFT JOIN dbo.Pay pay ON pay.Person = P.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale = 2--Here 2 is W2Salaried person.
-		WHERE (PC.IsFromTimeEntry = 1
-				OR (PC.IsFromTimeEntry = 0 AND pay.Person IS NOT NULL) 
-				)--can delete only if it is entered for the timeentry page and not floating holiday
-			AND ( ISNULL(Dates.c.value('@ActualHours', 'REAL'), 0) = 0)
+		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale = 2--Here 2 is W2Salaried person.
+		WHERE ISNULL(Dates.c.value('@ActualHours', 'REAL'), 0) = 0 --can delete only if it is entered for the timeentry page and not floating holiday
 
 		--Update PTO actual hours.
 		UPDATE PC
