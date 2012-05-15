@@ -24,11 +24,11 @@ namespace PraticeManagement.Reporting
                 {
                     return diRange.FromDate.Value;
                 }
-                else 
+                else
                 {
                     ListItem li = ddlPeriod.SelectedItem;
                     string startDateString = li.Attributes["startdate"];
-                    DateTime startDate ;
+                    DateTime startDate;
                     if (DateTime.TryParse(startDateString, out startDate))
                     {
                         return startDate;
@@ -73,7 +73,7 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                ListItem li =  ddlPeriod.SelectedItem;
+                ListItem li = ddlPeriod.SelectedItem;
                 string milestoneName = li.Text;
                 if (!StartDate.HasValue || !EndDate.HasValue)
                 {
@@ -154,6 +154,7 @@ namespace PraticeManagement.Reporting
                 DataHelper.FillListDefault(ddlClients, "-- Select an Account -- ", clients as object[], false);
             }
 
+
         }
 
         protected void txtProjectNumber_OnTextChanged(object sender, EventArgs e)
@@ -166,6 +167,12 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            if (timeEntryReportHeader.Count == 2)
+            {
+                tdFirst.Style["width"] = "20%";
+                tdThird.Style["width"] = "50%";
+            }
+
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -246,7 +253,7 @@ namespace PraticeManagement.Reporting
             {
                 mpeCustomDates.Show();
             }
-            
+
 
         }
 
