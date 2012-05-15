@@ -309,13 +309,9 @@ AS
 	WHERE StartDate = @EndDate
 			AND Person = @PersonId
 
-	DECLARE @HolidayTimeTypeId INT,
-			@PTOChargeCodeId INT,
-			@HolidayChargeCodeId INT
+	DECLARE @HolidayTimeTypeId INT
 
 	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
-	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = dbo.GetPTOTimeTypeId()
-	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
 	
 	--Delete Holiday timeEntries if person is not w2salaried.
 	DELETE TEH
@@ -323,17 +319,21 @@ AS
 	JOIN dbo.TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId
 	JOIN dbo.Calendar C ON (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,CASE WHEN @StartDate > @OLD_StartDate  THEN @OLD_StartDate ELSE @StartDate END) AND 
 							ISNULL(@NextRecordEndDate,CASE WHEN @EndDate < @OLD_EndDate THEN @OLD_EndDate ELSE @EndDate END)-1)
-		AND TE.PersonId = @PersonId AND TE.ChargeCodeId  IN (@HolidayChargeCodeId ) AND TE.ChargeCodeDate = C.Date
+		AND TE.PersonId = @PersonId AND TE.ChargeCodeDate = C.Date
+	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
+	JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 	LEFT JOIN Pay P ON P.Person = TE.PersonId AND C.Date BETWEEN p.StartDate AND P.EndDate - 1
-	WHERE C.Date >= @Today AND (P.Person IS NULL OR  p.Timescale <> @W2SalaryId)
+	WHERE (P.Person IS NULL OR  p.Timescale <> @W2SalaryId)
 
 	DELETE TE
 	FROM dbo.TimeEntry TE 
 	JOIN dbo.Calendar C ON (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,CASE WHEN @StartDate > @OLD_StartDate  THEN @OLD_StartDate ELSE @StartDate END) AND 
 							ISNULL(@NextRecordEndDate,CASE WHEN @EndDate < @OLD_EndDate THEN @OLD_EndDate ELSE @EndDate END)-1)
-		AND TE.PersonId = @PersonId AND TE.ChargeCodeId  IN (@HolidayChargeCodeId ) AND TE.ChargeCodeDate = C.Date
+		AND TE.PersonId = @PersonId AND TE.ChargeCodeDate = C.Date
+	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
+	JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 	LEFT JOIN Pay P ON P.Person = TE.PersonId AND C.Date BETWEEN p.StartDate AND P.EndDate - 1
-	WHERE C.Date >= @Today AND (P.Person IS NULL OR  p.Timescale <> @W2SalaryId)
+	WHERE (P.Person IS NULL OR  p.Timescale <> @W2SalaryId)
 	
 		--Insert PTO/Holiday timeEntries
 		INSERT INTO dbo.TimeEntry(PersonId,
@@ -357,8 +357,7 @@ AS
 		JOIN dbo.Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale = @W2SalaryId AND p.Person = @PersonId
 		JOIN dbo.Person per ON per.PersonId = p.Person AND per.IsStrawman = 0
 		LEFT JOIN dbo.PersonCalendar PC ON PC.Date = C.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
-		INNER JOIN dbo.TimeType TT ON  C.Date >= @Today
-									AND (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
+		INNER JOIN dbo.TimeType TT ON  (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
 									AND (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
 									AND ((C.DayOff = 1  AND DATEPART(DW,C.DATE) NOT IN (1,7) AND TT.TimeTypeId = @HolidayTimeTypeId )
 										OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND TT.TimeTypeId = PC.TimeTypeId)
@@ -387,8 +386,7 @@ AS
 		JOIN dbo.Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale = @W2SalaryId AND p.Person = @PersonId
 		JOIN dbo.Person per ON per.PersonId = p.Person AND per.IsStrawman = 0
 		LEFT JOIN dbo.PersonCalendar PC ON PC.Date = C.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
-		INNER JOIN dbo.TimeType TT ON  C.Date >= @Today
-									AND (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
+		INNER JOIN dbo.TimeType TT ON (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
 									AND (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
 									AND ((C.DayOff = 1  AND DATEPART(DW,C.DATE) NOT IN (1,7) AND TT.TimeTypeId = @HolidayTimeTypeId )
 										OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND TT.TimeTypeId = PC.TimeTypeId)
