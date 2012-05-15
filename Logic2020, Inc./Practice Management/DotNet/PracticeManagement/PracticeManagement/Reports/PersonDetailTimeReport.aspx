@@ -272,9 +272,9 @@
             </table>
             <table width="100%" style="height: 160px;">
                 <tr>
-                    <td style="width: 65%">
+                    <td id="tdFirst" runat="server" style="width: 65%">
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 30%; text-align: right; font-weight: bold;">
@@ -297,11 +297,13 @@
                             </tr>
                         </table>
                     </td>
+                    <td id="tdThird" runat="server" style="width: 0%">
+                    </td>
                 </tr>
                 <tr>
-                    <td style="width: 65%">
+                    <td>
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="text-align: right; width: 30%; font-weight: bold;">
@@ -326,12 +328,14 @@
                             </tr>
                         </table>
                     </td>
+                    <td>
+                    </td>
                 </tr>
                 <tr>
-                    <td style="width: 65%">
+                    <td>
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;" >
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
+                        <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 30%;">
                                 </td>
@@ -344,19 +348,21 @@
                             </tr>
                         </table>
                     </td>
+                    <td>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="height:30px;">
+                    <td colspan="3" style="height: 30px;">
                         &nbsp;&nbsp;
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="height:30px;">
+                    <td colspan="3" style="height: 30px;">
                         &nbsp;&nbsp;
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="border-bottom: 3px solid black; width: 100%; height:10px">
+                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; height: 10px">
                     </td>
                 </tr>
             </table>
