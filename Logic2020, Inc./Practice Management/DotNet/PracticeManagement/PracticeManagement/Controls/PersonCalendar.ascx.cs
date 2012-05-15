@@ -586,12 +586,18 @@ namespace PraticeManagement.Controls
 
             while (startDate <= endDate)
             {
-                CalendarItem ci = CalendarItems.ToList().First(c => c.Date == startDate);
-                if (ci.ReadOnly)
+                var ciList = CalendarItems.ToList().Where(c => c.Date == startDate).ToList();
+                if (ciList.Count() > 0)
                 {
-                    args.IsValid = false;
-                    break;
+                    if (ciList[0].ReadOnly)
+                    {
+                        args.IsValid = false;
+                        break;
+                    }
+
                 }
+
+
 
                 startDate = startDate.AddDays(1);
             }
