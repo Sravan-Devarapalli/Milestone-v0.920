@@ -296,7 +296,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames)
+        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames,string personStatusIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByResource, connection))
@@ -319,6 +319,10 @@ namespace DataAccess
                 if (timescaleNames != null)
                 {
                     command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleNamesListParam, timescaleNames);
+                }
+                if (personStatusIds != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds);
                 }
 
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -351,6 +355,8 @@ namespace DataAccess
                 int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
                 int timeScaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
                 int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+                int personStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
+                int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
 
                 while (reader.Read())
                 {
@@ -369,6 +375,11 @@ namespace DataAccess
                                                 CurrentPay = new Pay
                                                 {
                                                     TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                                                },
+                                                Status = new PersonStatus
+                                                {
+                                                    Id = reader.GetInt32(personStatusIdIndex),
+                                                    Name = reader.GetString(personStatusNameIndex)
                                                 },
                                                 UtlizationPercent = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d
                                             };
