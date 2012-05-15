@@ -281,7 +281,10 @@ namespace PraticeManagement.Reporting
                     var logInPerson = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(DataHelper.CurrentPerson.Id.Value));
                     ddlPerson.Items.Add(new ListItem(logInPerson.PersonLastFirstName, DataHelper.CurrentPerson.Id.Value.ToString()));
                     ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+                    imgSearch.Visible = false;
                 }
+
+
             }
         }
 
