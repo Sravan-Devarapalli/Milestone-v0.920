@@ -40,6 +40,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
+        /// tdFirst control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdFirst;
+        
+        /// <summary>
         /// ddlPerson control.
         /// </summary>
         /// <remarks>
@@ -56,6 +65,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image imgSearch;
+        
+        /// <summary>
+        /// tdThird control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdThird;
         
         /// <summary>
         /// ddlPeriod control.
