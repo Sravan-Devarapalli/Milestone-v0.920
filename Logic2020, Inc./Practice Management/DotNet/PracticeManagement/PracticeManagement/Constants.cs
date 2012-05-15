@@ -150,6 +150,10 @@ namespace PraticeManagement
             public const string StrawmanDetails = "~/StrawManDetails.aspx";
             public const string ConsultingDemand = "~/Reports/ConsultingDemand.aspx";
             public const string ConsultingDemandWithFilterQueryString = "~/Reports/ConsultingDemand.aspx?ApplyFilterFromCookie=true";
+            public const string TimeEntryReport_new = "~/Reports/TimeEntryReport_new.aspx";
+            public const string PersonDetailReport = "~/Reports/PersonDetailTimeReport.aspx";
+            public const string TimePeriodSummaryReport = "~/Reports/TimePeriodSummaryReport.aspx";
+            public const string ProjectSummaryReport = "~/Reports/ProjectSummaryReport.aspx";
         }
 
         /// <summary>
