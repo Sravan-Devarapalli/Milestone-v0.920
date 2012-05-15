@@ -54,6 +54,7 @@
       <xs:element minOccurs="0" name="Phase" type="xs:int" />
       <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q5:Project" />
       <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectGroup" nillable="true" type="q6:ProjectGroup" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="TimeEntrySection" type="q7:TimeEntrySectionType" />
       <xs:element minOccurs="0" name="TimeType" nillable="true" type="tns:TimeTypeRecord" />
     </xs:sequence>
   </xs:complexType>
