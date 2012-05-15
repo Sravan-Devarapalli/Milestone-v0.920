@@ -141,8 +141,8 @@
   <xs:element name="ArrayOfProjectLevelTimeEntriesHistory" nillable="true" type="tns:ArrayOfProjectLevelTimeEntriesHistory" />
   <xs:complexType name="ProjectLevelTimeEntriesHistory">
     <xs:sequence>
+      <xs:element minOccurs="0" name="PersonLevelTimeEntries" nillable="true" type="tns:ArrayOfPersonLevelTimeEntriesHistory" />
       <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q11:Project" />
-      <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="TimeEntryRecords" nillable="true" type="q12:ArrayOfTimeEntryRecord" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectLevelTimeEntriesHistory" nillable="true" type="tns:ProjectLevelTimeEntriesHistory" />
