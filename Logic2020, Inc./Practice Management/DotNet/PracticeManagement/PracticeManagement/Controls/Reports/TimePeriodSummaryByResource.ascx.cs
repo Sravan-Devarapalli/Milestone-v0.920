@@ -19,6 +19,8 @@ namespace PraticeManagement.Controls.Reports
 
         private HtmlImage ImgOffshoreFilter { get; set; }
 
+        private HtmlImage ImgPersonStatusTypeFilter { get; set; }
+
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page); }
@@ -38,6 +40,11 @@ namespace PraticeManagement.Controls.Reports
             return payType + name;
         }
 
+        protected bool IsPersonTerminated(int statusId)
+        {
+            return statusId == 2;//Terminated
+        }
+
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
 
@@ -47,7 +54,7 @@ namespace PraticeManagement.Controls.Reports
                 var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value,
                     HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.ActualSelectedItemsXmlFormat,
                     cblSeniorities.ActualSelectedItems,
-                    cblPayTypes.ActualSelectedItemsXmlFormat)).ToList();
+                    cblPayTypes.ActualSelectedItemsXmlFormat, cblPersonStatusType.SelectedItems)).ToList();
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByResource Report");
@@ -236,7 +243,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
-          cblOffShore.OKButtonId = cblSeniorities.OKButtonId = cblPayTypes.OKButtonId = btnFilterOK.ClientID;
+          cblOffShore.OKButtonId = cblSeniorities.OKButtonId = cblPayTypes.OKButtonId =cblPersonStatusType.OKButtonId = btnFilterOK.ClientID;
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -246,6 +253,7 @@ namespace PraticeManagement.Controls.Reports
                 ImgSeniorityFilter = e.Item.FindControl("imgSeniorityFilter") as HtmlImage;
                 ImgPayTypeFilter = e.Item.FindControl("imgPayTypeFilter") as HtmlImage;
                 ImgOffshoreFilter = e.Item.FindControl("imgOffShoreFilter") as HtmlImage;
+                ImgPersonStatusTypeFilter = e.Item.FindControl("imgPersonStatusTypeFilter") as HtmlImage;
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -258,11 +266,11 @@ namespace PraticeManagement.Controls.Reports
             PersonLevelGroupedHours[] data;
             if (isPopulateFilters)
             {
-                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, null, null));
+                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, null, null, null,null));
             }
             else
             {
-                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.SelectedItemsXmlFormat, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat));
+                data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.SelectedItemsXmlFormat, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat, cblPersonStatusType.SelectedItems));
             }
 
             DataBindResource(data, isPopulateFilters);
@@ -284,6 +292,7 @@ namespace PraticeManagement.Controls.Reports
                 cblSeniorities.SaveSelectedIndexesInViewState();
                 cblPayTypes.SaveSelectedIndexesInViewState();
                 cblOffShore.SaveSelectedIndexesInViewState();
+                cblPersonStatusType.SaveSelectedIndexesInViewState();
                 ImgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblSeniorities.FilterPopupClientID,
                   cblSeniorities.SelectedIndexes, cblSeniorities.CheckBoxListObject.ClientID, cblSeniorities.WaterMarkTextBoxBehaviorID);
 
@@ -292,6 +301,9 @@ namespace PraticeManagement.Controls.Reports
 
                 ImgOffshoreFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblOffShore.FilterPopupClientID,
                    cblOffShore.SelectedIndexes, cblOffShore.CheckBoxListObject.ClientID, cblOffShore.WaterMarkTextBoxBehaviorID);
+
+                ImgPersonStatusTypeFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblPersonStatusType.FilterPopupClientID,
+                   cblPersonStatusType.SelectedIndexes, cblPersonStatusType.CheckBoxListObject.ClientID, cblPersonStatusType.WaterMarkTextBoxBehaviorID);
               
             }
             else
@@ -308,7 +320,7 @@ namespace PraticeManagement.Controls.Reports
             PopulateOffshoreFilter(reportData);
             PopulateSeniorityFilter(reportData);
             PopulatePayTypeFilter(reportData);
-
+            PopulatPersonStatusTypeFilter(reportData);
         }
 
         private void PopulateOffshoreFilter(List<PersonLevelGroupedHours> reportData)
@@ -316,6 +328,13 @@ namespace PraticeManagement.Controls.Reports
             var offshoreList = reportData.Select(r => new { Name = r.Person.OffshoreText }).Distinct().ToList().OrderBy(s => s.Name);
             DataHelper.FillListDefault(cblOffShore.CheckBoxListObject, "All Resource Types", offshoreList.ToArray(), false, "Name", "Name");
             cblOffShore.SelectAllItems(true);
+        }
+
+        private void PopulatPersonStatusTypeFilter(List<PersonLevelGroupedHours> reportData)
+        {
+            var personStatusTypeList = reportData.Select(r => new { Name = r.Person.Status.Name, Id = r.Person.Status.Id }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblPersonStatusType.CheckBoxListObject, "All Person Status Types", personStatusTypeList.ToArray(), false, "Id", "Name");
+            cblPersonStatusType.SelectAllItems(true);
         }
 
         private void PopulateSeniorityFilter(List<PersonLevelGroupedHours> reportData)
@@ -379,7 +398,6 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-      
         protected string GetPersonDetailReportUrl(int? personId)
         {
             string personDetailReportUrl = string.Format(Constants.ApplicationPages.RedirectPersonDetailReportIdFormat, personId, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"));
