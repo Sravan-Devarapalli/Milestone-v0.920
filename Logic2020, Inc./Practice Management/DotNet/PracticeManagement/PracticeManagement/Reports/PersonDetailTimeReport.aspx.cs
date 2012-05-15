@@ -287,6 +287,16 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            if (timeEntryReportHeader.Count == 2)
+            {
+                tdFirst.Style["width"] = "50%";
+                tdThird.Style["width"] = "20%";
+            }
+            else if (timeEntryReportHeader.Count == 1)
+            {
+                tdFirst.Style["width"] = "35%";
+                tdThird.Style["width"] = "35%";
+            }
 
             int personId = int.Parse(ddlPerson.SelectedItem.Value);
             Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
