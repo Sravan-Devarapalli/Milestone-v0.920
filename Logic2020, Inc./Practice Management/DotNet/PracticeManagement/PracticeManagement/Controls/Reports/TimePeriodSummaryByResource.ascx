@@ -174,6 +174,9 @@
     <asp:Panel ID="pnlFilterOffshore" Style="display: none;" runat="server">
         <uc:FilteredCheckBoxList ID="cblOffShore" runat="server" Height="155px" />
     </asp:Panel>
+    <asp:Panel ID="pnlFilterPersonStatusType" Style="display: none;" runat="server">
+        <uc:FilteredCheckBoxList ID="cblPersonStatusType" runat="server" Height="155px" />
+    </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
         <HeaderTemplate>
@@ -183,10 +186,16 @@
                         <tr>
                             <th style="width: 210px; text-align: left;" class="padLeft5">
                                 Resource
-                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute;
-                                    padding-left: 2px;" runat="server" id="imgOffShoreFilter" />
+                                <img alt="Filter" src="../../Images/Terminated.png" style="padding-left: 2px;" runat="server"
+                                    id="imgPersonStatusTypeFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
+                                    TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
+                                    PopupControlID="pnlFilterPersonStatusType" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="Filter" src="../../Images/Offshore_Icon.png" style="padding-left: 2px;"
+                                    runat="server" id="imgOffShoreFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceOffshoreFilter" runat="server" TargetControlID="imgOffShoreFilter"
-                                    BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterOffshore" Position="Bottom">
+                                    BehaviorID="pceOffshoreFilter" PopupControlID="pnlFilterOffshore" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 130px;">
@@ -235,8 +244,10 @@
                 <td class="padLeft5" style="text-align: left;">
                     <%--<asp:HyperLink ID="btnPersonName" runat="server"  Text='<%# Eval("Person.PersonLastFirstName")%>' NavigateUrl='<%# GetPersonDetailReportUrl((int?)Eval("Person.Id")) %>' />--%>
                     <%# Eval("Person.PersonLastFirstName")%>
+                    <asp:Image ID="imgIspersonTerminated" runat="server" ImageUrl="~/Images/Terminated.png"
+                        ToolTip="Resource is an Terminated employee." Visible='<%# (bool)IsPersonTerminated((int)Eval("Person.Status.Id"))%>' />
                     <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
-                        ToolTip="Resource is an offshore employee" Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
+                        ToolTip="Resource is an offshore employee." Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
                 </td>
                 <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.PersonLastFirstName")%>'>
                     <%# Eval("Person.Seniority.Name")%>
