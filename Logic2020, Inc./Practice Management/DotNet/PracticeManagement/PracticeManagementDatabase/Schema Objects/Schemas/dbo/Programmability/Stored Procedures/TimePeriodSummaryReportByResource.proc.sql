@@ -12,7 +12,8 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
       @IncludePersonsWithNoTimeEntries BIT ,
       @PersonTypes NVARCHAR(MAX) = NULL ,
       @SeniorityIds NVARCHAR(MAX) = NULL ,
-      @TimeScaleNamesList XML = NULL
+      @TimeScaleNamesList XML = NULL,
+	  @PersonStatusIds NVARCHAR(MAX) = NULL 
     )
 AS 
     BEGIN
@@ -103,6 +104,36 @@ AS
                                 AND @StartDateLocal < PTSH.EndDate
                                 AND PTSH.PersonStatusId = 1 --ACTIVE STATUS
                                 
+                     ),
+				PersonWithLatestPay
+                  AS ( SELECT   P.PersonId ,
+                                MAX(PA.StartDate) AS RecentStartDate
+                       FROM     dbo.Person P
+                                LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
+                       WHERE    P.IsStrawman = 0
+                       GROUP BY P.PersonId
+                     ),
+                PersonWithCurrentPay
+                  AS ( SELECT   P.PersonId ,
+                                TS.Name AS Timescale
+                       FROM     dbo.Person P
+                                LEFT JOIN PersonWithLatestPay PLP ON P.PersonId = PLP.PersonId
+                                LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
+                                                        AND ( ( @NOW BETWEEN PA.StartDate
+                                                              AND
+                                                              ISNULL(PA.EndDate
+                                                              - 1,
+                                                              dbo.GetFutureDate()) )
+                                                              OR ( @NOW NOT BETWEEN PA.StartDate
+                                                              AND
+                                                              ISNULL(PA.EndDate
+                                                              - 1,
+                                                              dbo.GetFutureDate())
+                                                              AND PLP.RecentStartDate = PA.StartDate
+                                                              )
+                                                            )
+                                LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
+                       WHERE    P.IsStrawman = 0
                      )
             SELECT  P.PersonId ,
                     P.LastName ,
@@ -120,9 +151,9 @@ AS
                                       ELSE ( Data.ActualHours * 100 )
                                            / PDH.DefaultHours
                                  END, 0), 0) AS UtlizationPercent ,
-                    CASE WHEN P.PersonStatusId = 2 THEN 'Terminated'
-                         ELSE ISNULL(TS.Name, '')
-                    END AS Timescale
+                    PCP.Timescale,
+					PS.PersonStatusId AS 'PersonStatusId',
+				    PS.Name AS 'PersonStatusName'
             FROM    ( SELECT    TE.PersonId ,
                                 ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
                                                     AND Pro.ProjectNumber != 'P031000'
@@ -181,6 +212,8 @@ AS
                                                )
                                                AND p.IsStrawman = 0
                     INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
+					INNER JOIN PersonWithCurrentPay PCP ON P.PersonId = PCP.PersonId
+					INNER JOIN [dbo].[PersonStatus] PS ON PS.PersonStatusId = P.PersonStatusId
                     LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
                                             AND @NOW BETWEEN PA.StartDate
                                                      AND     ISNULL(PA.EndDate
@@ -205,12 +238,14 @@ AS
                                 SELECT  ResultId
                                 FROM    dbo.ConvertStringListIntoTable(@SeniorityIds) )
                               )
+						   AND ( @PersonStatusIds IS NULL
+								 OR PS.PersonStatusId IN (
+								 SELECT  ResultId
+								 FROM    dbo.ConvertStringListIntoTable(@PersonStatusIds) )
+							  )
                           AND ( @TimeScaleNamesList IS NULL
-                                OR ( CASE WHEN P.PersonStatusId = 2
-                                          THEN 'Terminated'
-                                          ELSE ISNULL(TS.Name, '')
-                                     END ) IN ( SELECT  Name
-                                                FROM    @TimeScaleNames )
+                                OR ( PCP.Timescale ) IN ( 
+								  SELECT  Name FROM    @TimeScaleNames )
                               )
                         )
             ORDER BY P.LastName ,
