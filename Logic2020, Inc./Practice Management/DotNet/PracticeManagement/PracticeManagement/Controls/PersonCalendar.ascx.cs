@@ -586,18 +586,11 @@ namespace PraticeManagement.Controls
 
             while (startDate <= endDate)
             {
-                var ciList = CalendarItems.ToList().Where(c => c.Date == startDate).ToList();
-                if (ciList.Count() > 0)
+                if (!personPayHistory.Any(p => startDate >= p.StartDate && startDate <= p.EndDate && p.Timescale == TimescaleType.Salary))
                 {
-                    if (ciList[0].ReadOnly)
-                    {
-                        args.IsValid = false;
-                        break;
-                    }
-
+                    args.IsValid = false;
+                    break;
                 }
-
-
 
                 startDate = startDate.AddDays(1);
             }
