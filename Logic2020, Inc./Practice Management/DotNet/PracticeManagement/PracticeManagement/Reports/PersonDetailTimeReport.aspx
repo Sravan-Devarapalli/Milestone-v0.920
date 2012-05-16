@@ -202,6 +202,7 @@
             padding-right: 25px;
         }
     </style>
+     <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -209,6 +210,14 @@
     <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+
+
+            $("#tblPersonSummaryReport").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
+
             $("#tblPersonSearchResult").tablesorter(
                 {
                     sortList: [[0, 0]]
@@ -252,6 +261,13 @@
             }
             SetTooltipsForallDropDowns();
             $("#tblPersonSearchResult").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
+
+
+            $("#tblPersonSummaryReport").tablesorter(
                 {
                     sortList: [[0, 0]]
                 }
