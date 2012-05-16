@@ -51,20 +51,20 @@ BEGIN
 			--Delete Holiday timeEntries if person is not w2salaried.
 			IF (@Timescale = @W2SalaryId)
 			BEGIN
-				DECLARE @HolidayChargeCodeId INT
-				SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = dbo.GetHolidayTimeTypeId()
 
 				DELETE TEH
 				FROM dbo.TimeEntryHours TEH
-				JOIN dbo.TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId 
-				WHERE TE.ChargeCodeId  IN (@HolidayChargeCodeId ) 
-						AND TE.PersonId = @PersonId 
+				JOIN dbo.TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId
+				JOIN dbo.ChargeCode CC ON TE.ChargeCodeId = CC.Id
+				JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
+				WHERE TE.PersonId = @PersonId 
 						AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
 
 				DELETE TE
 				FROM dbo.TimeEntry TE 
-				WHERE TE.ChargeCodeId  IN (@HolidayChargeCodeId ) 
-						AND TE.PersonId = @PersonId 
+				JOIN dbo.ChargeCode CC ON TE.ChargeCodeId = CC.Id
+				JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
+				WHERE TE.PersonId = @PersonId 
 						AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
 
 			END
