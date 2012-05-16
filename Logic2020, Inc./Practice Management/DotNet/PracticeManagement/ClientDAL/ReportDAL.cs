@@ -217,6 +217,7 @@ namespace DataAccess
                 int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
+                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
 
                 while (reader.Read())
                 {
@@ -236,7 +237,8 @@ namespace DataAccess
                             Status = new ProjectStatus
                             {
                                 Name = reader.GetString(projectStatusNameIndex)
-                            }
+                            },
+                            TimeEntrySectionId = reader.GetInt32(timeEntrySectionIdIndex)
                         },
 
                         Client = new Client()
