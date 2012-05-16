@@ -2076,8 +2076,8 @@ namespace PraticeManagement
 
                     DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
                     DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
-                    DatabindRepeater(repInternalSections, xinternalSectionlist, true);
-                    DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist, false);
+                    DatabindRepeater(repInternalSections, xinternalSectionlist, false);
+                    DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
                 }
             }
             else
@@ -2275,7 +2275,7 @@ namespace PraticeManagement
         public void UpdateCalendarItemAndBind(CalendarItem[] calendarItems)
         {
             CalendarItems = calendarItems;
-            var projectSectionXdoc =  UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
+            var projectSectionXdoc = UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
             var businessDevelopmentSectionXdoc = UpdateCalendarItems(PrePareXmlForBusinessDevelopmentSectionFromRepeater());
             var internalSectionXdoc = UpdateCalendarItems(PrePareXmlForInternalSectionFromRepeater());
             var administrativeSectionXdoc = UpdateCalendarItems(XDocument.Parse(AdministrativeSectionXml));
@@ -2291,7 +2291,7 @@ namespace PraticeManagement
             DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
             DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
             DatabindRepeater(repInternalSections, xinternalSectionlist, false);
-                DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
+            DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
             ProjectSectionXml = projectSectionXdoc.ToString();
             BusinessDevelopmentSectionXml = businessDevelopmentSectionXdoc.ToString();
             InternalSectionXml = internalSectionXdoc.ToString();
