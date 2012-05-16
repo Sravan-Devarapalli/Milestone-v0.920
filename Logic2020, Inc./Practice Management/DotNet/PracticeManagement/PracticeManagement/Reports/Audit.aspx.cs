@@ -26,6 +26,10 @@ namespace PraticeManagement.Reporting
                     {
                         return Utils.Calendar.PayrollPerviousStartDate(now);
                     }
+                    else if (selectedVal == -1)
+                    {
+                        return new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
+                    }
                 }
                 return null;
             }
@@ -46,6 +50,11 @@ namespace PraticeManagement.Reporting
                     else if (selectedVal == -15)
                     {
                         return Utils.Calendar.PayrollPerviousEndDate(now);
+                    }
+                    else if (selectedVal == -1)
+                    {
+                        return new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddDays(-1);
+
                     }
                 }
                 return null;
