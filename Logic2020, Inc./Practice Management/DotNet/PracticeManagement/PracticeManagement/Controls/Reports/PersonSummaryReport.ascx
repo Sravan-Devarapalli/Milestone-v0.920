@@ -25,34 +25,36 @@
 </table>
 <asp:Repeater ID="repSummary" runat="server">
     <HeaderTemplate>
-        <table class="TimePeriodByproject" style="width: 100%;">
-            <tr>
-                <th style="text-align: left; width: 550px;">
-                    Project Name
-                </th>
-                <th style="width: 110px;">
-                    Status
-                </th>
-                <th style="width: 110px;">
-                    Billing
-                </th>
-                <th style="width: 100px;">
-                    Billable
-                </th>
-                <th style="width: 100px;">
-                    Non-Billable
-                </th>
-                <th style="width: 100px;">
-                    Total
-                </th>
-                <th style="width: 325px;">
-                    Percent of Total Hours this Period
-                </th>
-            </tr>
+        <table id="tblPersonSummaryReport" class="tablesorter TimePeriodByproject" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="text-align: left; width: 550px;">
+                        Project Name
+                    </th>
+                    <th style="width: 110px;">
+                        Status
+                    </th>
+                    <th style="width: 110px;">
+                        Billing
+                    </th>
+                    <th style="width: 100px;">
+                        Billable
+                    </th>
+                    <th style="width: 100px;">
+                        Non-Billable
+                    </th>
+                    <th style="width: 100px;">
+                        Total
+                    </th>
+                    <th style="width: 325px;">
+                        Percent of Total Hours this Period
+                    </th>
+                </tr>
+            </thead>
     </HeaderTemplate>
     <ItemTemplate>
         <tr style="background-color: White;">
-            <td style="text-align: left;">
+            <td sorttable_customkey='<%# Eval("Project.TimeEntrySectionId")%><%# Eval("Project.ProjectNumber")%>' style="text-align: left;">
                 <table class="TdLevelNoBorder">
                     <tr>
                         <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
@@ -85,7 +87,7 @@
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
-            <td>
+            <td sorttable_customkey='<%# Eval("ProjectTotalHoursPercent")%>' >
                 <table class="TdLevelNoBorder" width="100%">
                     <tr>
                         <td style="width: 10%">
@@ -93,9 +95,11 @@
                         <td style="text-align: right; width: 65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
-                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%"  title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
+                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%"
+                                        title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
                                     </td>
-                                    <td style="background-color: #BEBEBE; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
+                                    <td style="background-color: #BEBEBE; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%"
+                                        title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
                                     </td>
                                     <td style="background-color: White; height: 18px;" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
                                     </td>
@@ -114,7 +118,7 @@
     </ItemTemplate>
     <AlternatingItemTemplate>
         <tr style="background-color: #f9faff;">
-            <td style="text-align: left;">
+            <td sorttable_customkey='<%# Eval("Project.TimeEntrySectionId")%><%# Eval("Project.ProjectNumber")%>' style="text-align: left;">
                 <table class="TdLevelNoBorder">
                     <tr>
                         <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
@@ -132,7 +136,7 @@
                     </tr>
                 </table>
             </td>
-             <td>
+            <td>
                 <%# Eval("Project.Status.Name")%>
             </td>
             <td>
@@ -147,7 +151,7 @@
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
-            <td>
+            <td sorttable_customkey='<%# Eval("ProjectTotalHoursPercent")%>'>
                 <table class="TdLevelNoBorder" width="100%">
                     <tr>
                         <td style="width: 10%">
@@ -155,9 +159,11 @@
                         <td style="text-align: right; width: 65%">
                             <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
                                 <tr>
-                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
+                                    <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%"
+                                        title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
                                     </td>
-                                    <td style="background-color: #BEBEBE; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
+                                    <td style="background-color: #BEBEBE; height: 18px;" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%"
+                                        title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
                                     </td>
                                     <td style="background-color: White; height: 18px;" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
                                     </td>
