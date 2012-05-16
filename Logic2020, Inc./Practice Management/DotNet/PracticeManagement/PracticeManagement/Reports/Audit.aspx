@@ -22,24 +22,24 @@
                         <table>
                             <tr>
                                 <td>
-                                    Display all time entries in&nbsp;
+                                    Display all time entries from&nbsp;
                                 </td>
                                 <td>
                                     <asp:DropDownList ID="ddlPeriod" runat="server" Width="160px" AutoPostBack="true"
                                         OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
+                                        <asp:ListItem Text="Previous Month" Value="-1"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                     </asp:DropDownList>
-                                    <asp:HiddenField ID="hdnperiodValue" runat="server" Value="Please Select"/>
-                                    &nbsp;
-                                    that were changed afterwards.
+                                    <asp:HiddenField ID="hdnperiodValue" runat="server" Value="Please Select" />
+                                    &nbsp; that were changed afterwards.
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                 </td>
-                                <td style="padding-top: 5px;height:20px;">
+                                <td style="padding-top: 5px; height: 20px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                                     <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
@@ -48,9 +48,9 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 10%;text-align:right;padding:5px;vertical-align:top;">
-                        <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Text="Run Report" Width="150px" Enabled="false"
-                            ToolTip="Run Report" />
+                    <td style="width: 10%; text-align: right; padding: 5px; vertical-align: top;">
+                        <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Text="Run Report"
+                            Width="150px" Enabled="false" ToolTip="Run Report" />
                     </td>
                 </tr>
             </table>
@@ -130,7 +130,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 10%; text-align: center;vertical-align: middle;">
+                        <td style="width: 10%; text-align: center; vertical-align: middle;">
                             <table width="100%">
                                 <tr>
                                     <td style="font-size: 15px; padding-bottom: 3px;">
