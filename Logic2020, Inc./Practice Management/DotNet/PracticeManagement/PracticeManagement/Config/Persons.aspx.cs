@@ -267,6 +267,9 @@ namespace PraticeManagement.Config
                     if (PreviousPage != null)
                     {
                         txtSearch.Text = PreviousPage.SearchText;
+                        personsFilter.Projected = true;
+                        personsFilter.Inactive = true;
+                        personsFilter.Terminated = true;
                     }
 
                     CurrentIndex = 0;
