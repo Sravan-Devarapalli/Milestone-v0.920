@@ -175,19 +175,6 @@ namespace PracticeManagementService
         }
 
         /// <summary>
-        /// 	Creates a project from an opportunity.
-        /// </summary>
-        /// <param name = "opportunityId">An ID of the opportunity to be converted.</param>
-        /// <param name = "userName">A current user.</param>
-        /// Deprecated 
-        public int OpportunityConvertToProject(int opportunityId, string userName)
-        {
-            var project = OpportunityDAL.OpportunityConvertToProject(opportunityId, userName);
-
-            return project;
-        }
-
-        /// <summary>
         /// Gets a opportunity id by the oportunity number
         /// </summary>
         /// <param name="opportunityNumber">Number of requested opportunity</param>
