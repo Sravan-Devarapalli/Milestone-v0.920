@@ -61,10 +61,10 @@
                             <asp:RequiredFieldValidator ID="rvUpdatedTimeType" runat="server" ControlToValidate="tbName"
                                 Display="Dynamic" ErrorMessage="Work Type Name is required" ToolTip="Work Type Name is required"
                                 ValidationGroup="UpdateTimeType">*</asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator ID="regValUpdatedTimeType" ControlToValidate="tbName"
-                                Display="Dynamic" runat="server" ValidationGroup="UpdateTimeType" ValidationExpression="^[a-zA-Z\s]{0,50}$"
-                                ErrorMessage="Work Type Name should have only alphabets and should not be more than 50 characters."
-                                ToolTip="Work Type Name should have only alphabets and should not be more than 50 characters.">*</asp:RegularExpressionValidator>
+                            <AjaxControlToolkit:FilteredTextBoxExtender ID="fteTimeType" runat="server" TargetControlID="tbName"
+                                FilterMode="ValidChars" FilterType="UppercaseLetters,LowercaseLetters,Numbers,Custom"
+                                ValidChars=" ">
+                            </AjaxControlToolkit:FilteredTextBoxExtender>
                             <asp:CustomValidator ID="cvUpdatedTimeTypeName" runat="server" ControlToValidate="tbName"
                                 Display="Dynamic" ValidationGroup="UpdateTimeType" ErrorMessage="This work type already exists. Please enter a different work type."
                                 ToolTip="This work type already exists. Please enter a different work type.">*</asp:CustomValidator>
@@ -168,15 +168,16 @@
                     </td>
                     <td align="left" style="width: 45%">
                         <asp:TextBox ID="tbNewTimeType" Style="width: 92%" Text="New work type" runat="server"
-                            Visible="false" />
+                            MaxLength="50" Visible="false" />
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="tbNewTimeType"
                             WatermarkText="New work type" EnableViewState="false" WatermarkCssClass="watermarked" />
                         <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="tbNewTimeType"
                             Display="Dynamic" ErrorMessage="Work Type Name is required" ToolTip="Work Type Name is required"
                             ValidationGroup="NewTimeType">*</asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="regValTimeType" ControlToValidate="tbNewTimeType"
-                            Display="Dynamic" runat="server" ValidationGroup="NewTimeType" ValidationExpression="[a-zA-Z\s]{0,50}$"
-                            ErrorMessage="Work Type Name should have only alphabets and should not be more than 50 characters.">*</asp:RegularExpressionValidator>
+                        <AjaxControlToolkit:FilteredTextBoxExtender ID="fteNewTimeType" runat="server" TargetControlID="tbNewTimeType"
+                            FilterMode="ValidChars" FilterType="UppercaseLetters,LowercaseLetters,Numbers,Custom"
+                            ValidChars=" ">
+                        </AjaxControlToolkit:FilteredTextBoxExtender>
                     </td>
                     <td align="center" style="width: 10%">
                         <asp:RadioButton ID="rbIsDefault" runat="server" Visible="false" GroupName="rbNewTimeType" />
@@ -189,7 +190,7 @@
                             Text="*" />
                     </td>
                     <td align="center" style="width: 14%">
-                        <asp:RadioButton ID="rbIsAdministrative" runat="server" Visible="false" GroupName="rbNewTimeType"/>
+                        <asp:RadioButton ID="rbIsAdministrative" runat="server" Visible="false" GroupName="rbNewTimeType" />
                     </td>
                     <td align="center" style="width: 10%">
                         <asp:CheckBox ID="rbIsActive" runat="server" Visible="false" />
