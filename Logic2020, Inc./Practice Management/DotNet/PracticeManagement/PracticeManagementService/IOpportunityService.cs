@@ -117,14 +117,6 @@ namespace PracticeManagementService
         List<OpportunityTransitionStatus> OpportunityTransitionStatusListAll();
 
         /// <summary>
-        /// Creates a project from an opportunity.
-        /// </summary>
-        /// <param name="opportunityId">An ID of the opportunity to be converted.</param>
-        /// <param name="userName">A current user.</param>
-        [OperationContract]
-        int OpportunityConvertToProject(int opportunityId, string userName);
-
-        /// <summary>
         /// Gets a opportunity id by the oportunity number
         /// </summary>
         /// <param name="opportunityNumber">Number of requested opportunity</param>
