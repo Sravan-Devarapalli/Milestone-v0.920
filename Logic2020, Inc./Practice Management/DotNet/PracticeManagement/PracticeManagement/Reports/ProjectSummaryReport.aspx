@@ -567,6 +567,8 @@
             <asp:PostBackTrigger ControlID="ucByResource$ucProjectSummaryReport$btnExportToExcel" />
             <asp:PostBackTrigger ControlID="ucByResource$ucProjectDetailReport$btnExportToExcel" />
             <asp:PostBackTrigger ControlID="ucByWorktype$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="ucByResource$ucProjectSummaryReport$btnExportToPDF" />
+            <asp:PostBackTrigger ControlID="ucByResource$ucProjectDetailReport$btnExportToPDF" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
