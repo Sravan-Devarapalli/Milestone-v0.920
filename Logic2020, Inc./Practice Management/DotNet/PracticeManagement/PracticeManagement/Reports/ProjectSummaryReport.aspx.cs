@@ -7,13 +7,18 @@ using System.Web.UI.WebControls;
 using System.Web.Security;
 using PraticeManagement.Controls;
 using DataTransferObjects;
+using iTextSharp.text.pdf;
+using PraticeManagement.Objects;
+using DataTransferObjects.Reports;
+using PraticeManagement.Configuration;
+using System.IO;
+using iTextSharp.text;
 
 namespace PraticeManagement.Reporting
 {
     public partial class ProjectSummaryReport : PracticeManagementPageBase
     {
         #region Properties
-
 
         public DateTime? StartDate
         {
@@ -26,7 +31,7 @@ namespace PraticeManagement.Reporting
                 }
                 else
                 {
-                    ListItem li = ddlPeriod.SelectedItem;
+                    System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
                     string startDateString = li.Attributes["startdate"];
                     DateTime startDate;
                     if (DateTime.TryParse(startDateString, out startDate))
@@ -49,7 +54,7 @@ namespace PraticeManagement.Reporting
                 }
                 else
                 {
-                    ListItem li = ddlPeriod.SelectedItem;
+                    System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
                     string enddateString = li.Attributes["enddate"];
                     DateTime enddate;
                     if (DateTime.TryParse(enddateString, out enddate))
@@ -73,7 +78,7 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                ListItem li = ddlPeriod.SelectedItem;
+                System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
                 string milestoneName = li.Text;
                 if (!StartDate.HasValue || !EndDate.HasValue)
                 {
@@ -112,6 +117,8 @@ namespace PraticeManagement.Reporting
         }
 
         #endregion
+
+        #region Control Methods
 
         protected override void Display()
         {
@@ -203,36 +210,6 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        private void LoadActiveView()
-        {
-            if (!string.IsNullOrEmpty(ProjectNumber) && ddlView.SelectedValue != string.Empty)
-            {
-                mvProjectSummaryReport.ActiveViewIndex = Convert.ToInt32(ddlView.SelectedValue);
-                try
-                {
-                    msgError.ClearMessage();
-                    divWholePage.Style.Remove("display");
-                    if (mvProjectSummaryReport.ActiveViewIndex == 0)
-                    {
-                        ucByResource.LoadActiveTabInByResource(true);
-                    }
-                    else if (mvProjectSummaryReport.ActiveViewIndex == 1)
-                    {
-                        ucByWorktype.PopulateByWorkTypeData();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    msgError.ShowErrorMessage(ex.Message);
-                    divWholePage.Style.Add("display", "none");
-                }
-            }
-            else
-            {
-                divWholePage.Style.Add("display", "none");
-            }
-        }
-
         protected void ddlView_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mvProjectSummaryReport.ActiveViewIndex == 0)
@@ -283,15 +260,6 @@ namespace PraticeManagement.Reporting
             ClearFilters();
         }
 
-        private void ClearFilters()
-        {
-            ltrlNoProjectsText.Visible = repProjectNamesList.Visible = false;
-            ClearAndAddFirsItemForDdlProjects();
-            ddlProjects.SelectedIndex = ddlClients.SelectedIndex = 0;
-            txtProjectSearch.Text = string.Empty;
-            btnProjectSearch.Attributes["disabled"] = "disabled";
-        }
-
         protected void btnProjectSearch_Click(object sender, EventArgs e)
         {
             List<Project> list = ServiceCallers.Custom.Report(r => r.ProjectSearchByName(txtProjectSearch.Text)).ToList();
@@ -337,7 +305,7 @@ namespace PraticeManagement.Reporting
 
                 foreach (var project in projects)
                 {
-                    var li = new ListItem(project.ProjectNumber + " - " + project.Name,
+                    var li = new System.Web.UI.WebControls.ListItem(project.ProjectNumber + " - " + project.Name,
                                            project.ProjectNumber.ToString());
 
                     li.Attributes[Constants.Variables.OptionGroup] = project.Status.Name;
@@ -348,15 +316,6 @@ namespace PraticeManagement.Reporting
             }
 
             mpeProjectSearch.Show();
-        }
-
-        private void ClearAndAddFirsItemForDdlProjects()
-        {
-            ListItem firstItem = new ListItem("-- Select a Project --", string.Empty);
-            ddlProjects.Items.Clear();
-            ddlProjects.Items.Add(firstItem);
-            ddlProjects.Enabled = false;
-
         }
 
         protected void ddlProjects_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -371,6 +330,58 @@ namespace PraticeManagement.Reporting
             {
                 mpeProjectSearch.Show();
             }
+        }
+
+        #endregion
+
+        #region  Methods
+
+        private void LoadActiveView()
+        {
+            if (!string.IsNullOrEmpty(ProjectNumber) && ddlView.SelectedValue != string.Empty)
+            {
+                mvProjectSummaryReport.ActiveViewIndex = Convert.ToInt32(ddlView.SelectedValue);
+                try
+                {
+                    msgError.ClearMessage();
+                    divWholePage.Style.Remove("display");
+                    if (mvProjectSummaryReport.ActiveViewIndex == 0)
+                    {
+                        ucByResource.LoadActiveTabInByResource(true);
+                    }
+                    else if (mvProjectSummaryReport.ActiveViewIndex == 1)
+                    {
+                        ucByWorktype.PopulateByWorkTypeData();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    msgError.ShowErrorMessage(ex.Message);
+                    divWholePage.Style.Add("display", "none");
+                }
+            }
+            else
+            {
+                divWholePage.Style.Add("display", "none");
+            }
+        }
+
+        private void ClearFilters()
+        {
+            ltrlNoProjectsText.Visible = repProjectNamesList.Visible = false;
+            ClearAndAddFirsItemForDdlProjects();
+            ddlProjects.SelectedIndex = ddlClients.SelectedIndex = 0;
+            txtProjectSearch.Text = string.Empty;
+            btnProjectSearch.Attributes["disabled"] = "disabled";
+        }
+
+        private void ClearAndAddFirsItemForDdlProjects()
+        {
+            System.Web.UI.WebControls.ListItem firstItem = new System.Web.UI.WebControls.ListItem("-- Select a Project --", string.Empty);
+            ddlProjects.Items.Clear();
+            ddlProjects.Items.Add(firstItem);
+            ddlProjects.Enabled = false;
+
         }
 
         private void PopulateControls(string projectNumber)
@@ -388,7 +399,7 @@ namespace PraticeManagement.Reporting
             var list = ServiceCallers.Custom.Report(r => r.GetMilestonesForProject(ProjectNumber));
 
             ddlPeriod.Items.Clear();
-            var listItem = new ListItem("Entire Project", "*");
+            var listItem = new System.Web.UI.WebControls.ListItem("Entire Project", "*");
             if (list.Length > 0)
             {
                 DateTime projectStartDate = list.Min(m => m.StartDate);
@@ -399,15 +410,455 @@ namespace PraticeManagement.Reporting
             ddlPeriod.Items.Add(listItem);
             foreach (var milestone in list)
             {
-                ListItem li = new ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() };
+                System.Web.UI.WebControls.ListItem li = new System.Web.UI.WebControls.ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() };
                 li.Attributes.Add("startdate", milestone.StartDate.ToString("MM/dd/yyyy"));
                 li.Attributes.Add("enddate", milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"));
                 ddlPeriod.Items.Add(li);
             }
-            var customListItem = new ListItem("Custom Dates", "0");
+            var customListItem = new System.Web.UI.WebControls.ListItem("Custom Dates", "0");
             ddlPeriod.Items.Add(customListItem);
             ddlPeriod.SelectedValue = "*";
         }
+
+        public string GetDoubleFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
+        #endregion
+
+        #region PDFVariables
+
+        private string RowSpliter = Guid.NewGuid().ToString();
+
+        private string ColoumSpliter = Guid.NewGuid().ToString();
+
+        private String _headerText = "";
+
+        private PdfPTable _HeaderTable;
+
+        private TableStyles _PdfProjectPersonsSummaryTableStyle;
+
+        private TableStyles PdfProjectPersonsSummaryTableStyle
+        {
+            get
+            {
+                if (_PdfProjectPersonsSummaryTableStyle == null)
+                {
+                    TdStyles headerStyle1 = new TdStyles("left", true, false, 12, 1);
+                    TdStyles headerStyle2 = new TdStyles("center", true, false, 12, 1);
+                    headerStyle1.BackgroundColor = headerStyle2.BackgroundColor = "light-gray";
+                    TdStyles contentStyle1 = new TdStyles("left", false, false, 12, 1);
+                    TdStyles contentStyle2 = new TdStyles("center", false, false, 12, 1);
+
+                    TdStyles[] headerStyleArray = { headerStyle1, headerStyle2 };
+                    TdStyles[] contentStyleArray = { contentStyle1, contentStyle2 };
+
+                    TrStyles headerRowStyle = new TrStyles(headerStyleArray);
+                    TrStyles contentRowStyle = new TrStyles(contentStyleArray);
+
+                    TrStyles[] rowStyleArray = { headerRowStyle, contentRowStyle };
+
+                    float[] widths = { .25f, .12f, .1f, .15f, .1f, .28f };
+                    _PdfProjectPersonsSummaryTableStyle = new TableStyles(widths, rowStyleArray, 100, "custom", new int[] { 245, 250, 255 });
+                    _PdfProjectPersonsSummaryTableStyle.IsColoumBorders = false;
+                }
+                return (TableStyles)_PdfProjectPersonsSummaryTableStyle;
+            }
+        }
+
+        private TableStyles _PdfProjectPersonsDetailTableStyle;
+
+        private TableStyles PdfProjectPersonsDetailTableStyle
+        {
+            get
+            {
+                if (_PdfProjectPersonsDetailTableStyle == null)
+                {
+                    TdStyles HeaderStyle = new TdStyles("center", true, false, 12, 1);
+                    HeaderStyle.BackgroundColor = "light-gray";
+                    TdStyles ContentStyle1 = new TdStyles("left", false, false, 12, 1);
+                    TdStyles ContentStyle2 = new TdStyles("center", false, false, 12, 1);
+
+                    TdStyles[] HeaderStyleArray = { HeaderStyle };
+                    TdStyles[] ContentStyleArray = { ContentStyle1, ContentStyle2, ContentStyle2, ContentStyle2, ContentStyle2, ContentStyle2, ContentStyle1 };
+
+                    TrStyles HeaderRowStyle = new TrStyles(HeaderStyleArray);
+                    TrStyles ContentRowStyle = new TrStyles(ContentStyleArray);
+
+                    TrStyles[] RowStyleArray = { HeaderRowStyle, ContentRowStyle };
+                    float[] widths = { .1f, .1f, .15f, .08f, .13f, .08f, .36f };
+                    _PdfProjectPersonsDetailTableStyle = new TableStyles(widths, RowStyleArray, 100, "custom", new int[] { 245, 250, 255 });
+                    _PdfProjectPersonsDetailTableStyle.IsColoumBorders = false;
+                }
+                return _PdfProjectPersonsDetailTableStyle;
+            }
+        }
+
+        #endregion
+
+        #region Pdf Methods
+
+        /// <summary>
+        /// Returns the PdfHeader i.e logo 
+        /// </summary>
+        private PdfPTable GetPdfHeaderLogo()
+        {
+            if (_HeaderTable == null)
+            {
+                _HeaderTable = new PdfPTable(1);
+
+                //logo
+                byte[] buffer = BrandingConfigurationManager.LogoData.Data;
+                PdfPCell logo = new PdfPCell(iTextSharp.text.Image.GetInstance(buffer), true);
+                _HeaderTable.WidthPercentage = 100;
+
+                //logo styles
+                logo.BorderWidth = 0;
+                logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
+                logo.FixedHeight = 90f;
+                logo.VerticalAlignment = Element.ALIGN_MIDDLE;
+                logo.PaddingBottom = 30f;
+                _HeaderTable.AddCell(logo);
+            }
+            return _HeaderTable;
+        }
+
+        /// <summary>
+        /// Returns the PdfHeader i.e logo and Header Text
+        /// </summary>
+        private PdfPTable GetPdfHeader(String headerText)
+        {
+            if (!_headerText.Equals(headerText))
+            {
+                _HeaderTable = new PdfPTable(1);
+                _headerText = headerText;
+
+                //logo
+                byte[] buffer = BrandingConfigurationManager.LogoData.Data;
+                PdfPCell logo = new PdfPCell(iTextSharp.text.Image.GetInstance(buffer), true);
+
+                var _UnderlineBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
+                var _UnderLineFont = new Font(_UnderlineBaseFont, 20, Font.UNDERLINE);
+
+                PdfPCell HeaderText = new PdfPCell(new Phrase(headerText, _UnderLineFont));
+                //Styles
+                _HeaderTable.WidthPercentage = 100;
+                _HeaderTable.SetWidths(new float[] { 1f });
+                logo.VerticalAlignment = Element.ALIGN_MIDDLE;
+                logo.FixedHeight = 80f;
+                logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
+                HeaderText.BorderWidth = logo.BorderWidth = 0;
+                HeaderText.HorizontalAlignment = Element.ALIGN_CENTER;
+                HeaderText.PaddingBottom = 20f;
+                HeaderText.VerticalAlignment = Element.ALIGN_TOP;
+
+                _HeaderTable.AddCell(logo);
+                _HeaderTable.CompleteRow();
+                _HeaderTable.AddCell(HeaderText);
+                _HeaderTable.CompleteRow();
+            }
+            return _HeaderTable;
+        }
+
+        private PdfPTable GetPdfTableWithGivenString(String text)
+        {
+            PdfPTable textTable = new PdfPTable(1);
+            var _BOLDITALICBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
+            var _BOLDITALICFont = new Font(_BOLDITALICBaseFont, 16, Font.ITALIC);
+            PdfPCell textCell = new PdfPCell(new Phrase(text, _BOLDITALICFont));
+
+            //Styles
+            textTable.WidthPercentage = 100;
+            textTable.SetWidths(new float[] { 1f });
+            textCell.BorderWidth = 0;
+            textCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            textCell.PaddingTop = 20f;
+            textCell.VerticalAlignment = Element.ALIGN_TOP;
+
+            textTable.AddCell(textCell);
+            textTable.CompleteRow();
+            return textTable;
+        }
+
+        private PdfPTable GetPdfReportHeader(List<PersonLevelGroupedHours> personLevelGroupedHoursList, Project project, int? personId)
+        {
+            List<PersonLevelGroupedHours> _personLevelGroupedHoursList = personLevelGroupedHoursList;
+            if (personId.HasValue)
+            {
+                _personLevelGroupedHoursList = personLevelGroupedHoursList.Where(p => p.Person.Id == personId.Value).ToList();
+            }
+
+            double billableHours = _personLevelGroupedHoursList.Sum(p => p.DayTotalHours != null ? p.DayTotalHours.Sum(d => d.BillableHours) : p.BillableHours);
+            double nonBillableHours = _personLevelGroupedHoursList.Sum(p => p.NonBillableHours);
+            double projectedHours = _personLevelGroupedHoursList.Sum(p => p.ForecastedHours);
+
+            PdfPTable outerTable = new PdfPTable(4);
+            outerTable.WidthPercentage = 100;
+            float[] outerWidths = { .6f, .2f, .1f, .1f };
+            outerTable.SetWidths(outerWidths);
+
+            var boldBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
+            var boldGrayFont = new Font(boldBaseFont, 15, Font.BOLD, BaseColor.GRAY);
+            var boldFont = new Font(boldBaseFont, 15, Font.BOLD);
+            var normalBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
+            var normalFont9 = new Font(normalBaseFont, 9, Font.NORMAL);
+            var normalFont12 = new Font(normalBaseFont, 12, Font.NORMAL);
+
+            //inner table1
+            PdfPTable innerTable1 = new PdfPTable(1);
+            innerTable1.WidthPercentage = 100;
+            PdfPCell headerText1;
+            PdfPCell headerText2;
+            PdfPCell headerText3;
+            PdfPCell headerText4;
+
+
+            if (personId.HasValue)
+            {
+                headerText1 = new PdfPCell(new Phrase(_personLevelGroupedHoursList[0].Person.PersonLastFirstName, boldFont));
+                headerText2 = new PdfPCell(new Phrase(project.Client.Name + ">" + project.Group.Name, boldGrayFont));
+                headerText3 = new PdfPCell(new Phrase(string.Format("{0} - {1} ({2})", project.ProjectNumber, project.Name, string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType), boldFont));
+                headerText4 = new PdfPCell(new Phrase(ProjectRange, boldFont));
+            }
+            else
+            {
+                headerText1 = new PdfPCell(new Phrase(project.Client.Name + ">" + project.Group.Name, boldGrayFont));
+                headerText2 = new PdfPCell(new Phrase(string.Format("{0} - {1}", project.ProjectNumber, project.Name), boldFont));
+                headerText3 = new PdfPCell(new Phrase(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType, boldFont));
+                headerText4 = new PdfPCell(new Phrase(ProjectRange, boldFont));
+            }
+
+            headerText1.BorderWidth = headerText2.BorderWidth = headerText3.BorderWidth = headerText4.BorderWidth = 0f;
+
+            innerTable1.AddCell(headerText1);
+            innerTable1.CompleteRow();
+            innerTable1.AddCell(headerText2);
+            innerTable1.CompleteRow();
+            innerTable1.AddCell(headerText3);
+            innerTable1.CompleteRow();
+            innerTable1.AddCell(headerText4);
+            innerTable1.CompleteRow();
+
+            //inner table2
+            PdfPTable innerTable2 = new PdfPTable(1);
+            innerTable2.WidthPercentage = 100;
+            PdfPCell headerText5 = new PdfPCell(new Phrase("Projected Hours", normalFont12));
+            PdfPCell headerText6 = new PdfPCell(new Phrase(projectedHours.ToString(Constants.Formatting.DoubleValue), boldFont));
+            headerText5.VerticalAlignment = Element.ALIGN_BOTTOM;
+            headerText6.VerticalAlignment = Element.ALIGN_TOP;
+            headerText5.HorizontalAlignment = headerText6.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerText5.BorderWidth = headerText6.BorderWidth = 0f;
+            headerText5.FixedHeight = headerText6.FixedHeight = 30f;
+
+            innerTable2.AddCell(headerText5);
+            innerTable2.CompleteRow();
+            innerTable2.AddCell(headerText6);
+            innerTable2.CompleteRow();
+
+            //inner table3
+            PdfPTable innerTable3 = new PdfPTable(1);
+            innerTable3.WidthPercentage = 100;
+            PdfPCell headerText7 = new PdfPCell(new Phrase("Total Hours", normalFont12));
+            PdfPCell headerText8 = new PdfPCell(new Phrase((billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue), boldFont));
+            headerText7.VerticalAlignment = Element.ALIGN_BOTTOM;
+            headerText8.VerticalAlignment = Element.ALIGN_TOP;
+            headerText7.HorizontalAlignment = headerText8.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerText7.FixedHeight = headerText8.FixedHeight = 30f;
+            headerText7.BorderWidth = headerText8.BorderWidth = 0f;
+
+            innerTable3.AddCell(headerText7);
+            innerTable3.CompleteRow();
+            innerTable3.AddCell(headerText8);
+            innerTable3.CompleteRow();
+
+
+            //inner table4
+            PdfPTable innerTable4 = new PdfPTable(1);
+            innerTable4.WidthPercentage = 100;
+            PdfPCell headerText9 = new PdfPCell(new Phrase("BILLABLE", normalFont9));
+            PdfPCell headerText10 = new PdfPCell(new Phrase(billableHours.ToString(Constants.Formatting.DoubleValue), normalFont9));
+            PdfPCell headerText11 = new PdfPCell(new Phrase("NON-BILLABLE", normalFont9));
+            PdfPCell headerText12 = new PdfPCell(new Phrase(nonBillableHours.ToString(Constants.Formatting.DoubleValue), normalFont9));
+            headerText9.VerticalAlignment = headerText11.VerticalAlignment = Element.ALIGN_BOTTOM;
+            headerText10.VerticalAlignment = headerText12.VerticalAlignment = Element.ALIGN_TOP;
+            headerText9.HorizontalAlignment = headerText10.HorizontalAlignment = headerText11.HorizontalAlignment = headerText12.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerText9.FixedHeight = headerText10.FixedHeight = headerText11.FixedHeight = headerText12.FixedHeight = 15f;
+            headerText9.BorderWidth = headerText10.BorderWidth = headerText11.BorderWidth = headerText12.BorderWidth = 0f;
+
+            innerTable4.AddCell(headerText9);
+            innerTable4.CompleteRow();
+            innerTable4.AddCell(headerText10);
+            innerTable4.CompleteRow();
+            innerTable4.AddCell(headerText11);
+            innerTable4.CompleteRow();
+            innerTable4.AddCell(headerText12);
+            innerTable4.CompleteRow();
+
+            PdfPCell innerTableCell1 = new PdfPCell(innerTable1);
+            PdfPCell innerTableCell2 = new PdfPCell(innerTable2);
+            PdfPCell innerTableCell3 = new PdfPCell(innerTable3);
+            PdfPCell innerTableCell4 = new PdfPCell(innerTable4);
+            innerTableCell1.BorderWidth = innerTableCell2.BorderWidth = innerTableCell3.BorderWidth = innerTableCell4.BorderWidth = 0f;
+            innerTableCell1.PaddingBottom = 20f;
+
+            outerTable.AddCell(innerTableCell1);
+            outerTable.AddCell(innerTableCell2);
+            outerTable.AddCell(innerTableCell3);
+            outerTable.AddCell(innerTableCell4);
+            outerTable.CompleteRow();
+            return outerTable;
+        }
+
+        private String GetSummaryReportDataInPdfString(List<PersonLevelGroupedHours> data)
+        {
+            String _pdfProjectPersonsSummary = string.Empty;
+            if (data.Count > 0)
+            {
+                //Header
+                _pdfProjectPersonsSummary = string.Format("Resource{0}ProjectRole{0}Billable{0}Non-Billable{0}Total{0}Project Variance(in Hours){1}", ColoumSpliter, RowSpliter);
+
+                var list = data.OrderBy(p => p.Person.PersonLastFirstName);
+
+                //Data
+                foreach (var byPerson in list)
+                {
+                    _pdfProjectPersonsSummary += String.Format("{0}{6}{1}{6}{2}{6}{3}{6}{4}{6}{5}{7}",
+                        byPerson.Person.PersonLastFirstName,
+                        byPerson.Person.ProjectRoleName,
+                        GetDoubleFormat(byPerson.BillableHours),
+                        GetDoubleFormat(byPerson.NonBillableHours),
+                        GetDoubleFormat(byPerson.TotalHours),
+                        byPerson.Variance,
+                        ColoumSpliter,
+                        RowSpliter);
+                }
+            }
+
+            return _pdfProjectPersonsSummary;
+        }
+
+        private String GetDetailReportDataInPdfString(List<PersonLevelGroupedHours> data, int personId)
+        {
+            String _pdfProjectPersonDetail = string.Empty;
+            if (data.Count > 0)
+            {
+                List<PersonLevelGroupedHours> list = data.Where(p => p.Person.Id == personId).ToList();
+
+                if (list[0].DayTotalHours != null)
+                {
+                    //Header
+                    _pdfProjectPersonDetail = String.Format("Date{0}WorkType{0}WorkType Name{0}Billable{0}Non-Billable{0}Total{0}Note{1}", ColoumSpliter, RowSpliter);
+
+                    //Data
+                    foreach (var byPerson in list)
+                    {
+                        if (byPerson.DayTotalHours != null)
+                        {
+                            foreach (var byDateList in byPerson.DayTotalHours)
+                            {
+                                foreach (var byWorkType in byDateList.DayTotalHoursList)
+                                {
+                                    _pdfProjectPersonDetail += String.Format("{0}{7}{1}{7}{2}{7}{3}{7}{4}{7}{5}{7}{6}{8}",
+                                        byDateList.Date.ToString("MM/dd/yyyy"),
+                                        byWorkType.TimeType.Code,
+                                        byWorkType.TimeType.Name,
+                                        GetDoubleFormat(byWorkType.BillableHours),
+                                        GetDoubleFormat(byWorkType.NonBillableHours),
+                                        GetDoubleFormat(byWorkType.TotalHours),
+                                        byWorkType.NoteForExport,
+                                        ColoumSpliter,
+                                        RowSpliter);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    _pdfProjectPersonDetail = string.Empty;
+                }
+            }
+
+            return _pdfProjectPersonDetail;
+        }
+
+        private byte[] RenderPdf(HtmlToPdfBuilder builder, List<PersonLevelGroupedHours> summaryData, List<PersonLevelGroupedHours> detailData, Project project)
+        {
+            MemoryStream file = new MemoryStream();
+            Document document = new Document(builder.PageSize);
+            document.SetPageSize(iTextSharp.text.PageSize.A4.Rotate());
+            PdfWriter writer = PdfWriter.GetInstance(document, file);
+            document.Open();
+            document.NewPage();
+            if (summaryData.Count > 0)
+            {
+                document.Add((IElement)GetPdfHeader("Project Summary Report"));
+                document.Add((IElement)GetPdfReportHeader(summaryData, project, null));
+                string reportDataInPdfString = GetSummaryReportDataInPdfString(summaryData);
+                var table = builder.GetPdftable(reportDataInPdfString, PdfProjectPersonsSummaryTableStyle, RowSpliter, ColoumSpliter);
+                document.Add((IElement)table);
+                document.NewPage();
+                var personIds = detailData.Select(p => p.Person.Id).Distinct();
+                foreach (int personId in personIds)
+                {
+                    document.Add((IElement)GetPdfHeader("Project Detail Report"));
+                    string reportDetailDataInPdfString = GetDetailReportDataInPdfString(detailData, personId);
+                    IElement detailTable = null;
+                    if (!string.IsNullOrEmpty(reportDetailDataInPdfString))
+                    {
+                        detailTable = builder.GetPdftable(reportDetailDataInPdfString, PdfProjectPersonsDetailTableStyle, RowSpliter, ColoumSpliter);
+                    }
+                    else
+                    {
+                        detailTable = GetPdfTableWithGivenString("There are no Time Entries entered towards this project for the selected date range.");
+                    }
+                    document.Add((IElement)GetPdfReportHeader(detailData, project, personId));
+                    document.Add((IElement)detailTable);
+                    document.NewPage();
+                }
+            }
+            else
+            {
+                document.Add((IElement)GetPdfHeaderLogo());
+            }
+            document.Close();
+            return file.ToArray();
+        }
+
+        public void PDFExport()
+        {
+            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(ProjectNumber, MilestoneId, StartDate, EndDate));
+            List<PersonLevelGroupedHours> summaryData = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber,
+                MilestoneId, PeriodSelected == "0" ? StartDate : null,
+                PeriodSelected == "0" ? EndDate : null, ByResourceControl.cblProjectRolesControl.ActualSelectedItemsXmlFormat)).ToList();
+            List<PersonLevelGroupedHours> detailData = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(ProjectNumber, MilestoneId,
+               PeriodSelected == "0" ? StartDate : null, PeriodSelected == "0" ? EndDate : null,
+               ByResourceControl.cblProjectRolesControl.ActualSelectedItemsXmlFormat)).ToList();
+
+            HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
+            string filename = string.Format("{0}_{1}_{2}.pdf", project.ProjectNumber, project.Name, "_ByResource").Replace(' ', '_');
+            byte[] pdfDataInBytes = this.RenderPdf(builder, summaryData, detailData, project);
+            HttpContext.Current.Response.ContentType = "Application/pdf";
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", filename));
+
+            int len = pdfDataInBytes.Length;
+            int bytes;
+            byte[] buffer = new byte[1024];
+            Stream outStream = HttpContext.Current.Response.OutputStream;
+            using (MemoryStream stream = new MemoryStream(pdfDataInBytes))
+            {
+                while (len > 0 && (bytes = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    outStream.Write(buffer, 0, bytes);
+                    HttpContext.Current.Response.Flush();
+                    len -= bytes;
+                }
+            }
+        }
+
+        #endregion
     }
 }
 
