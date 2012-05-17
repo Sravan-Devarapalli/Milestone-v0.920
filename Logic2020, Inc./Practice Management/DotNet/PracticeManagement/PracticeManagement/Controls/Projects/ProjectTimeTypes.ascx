@@ -213,7 +213,7 @@
             <td style="white-space: nowrap; height: 25px; padding-left: 10px;">
                 <asp:TextBox ID="txtNewTimeType" Width="90%" MaxLength="50" runat="server"></asp:TextBox>
                 <ajax:FilteredTextBoxExtender ID="fteNewTimeType" TargetControlID="txtNewTimeType"
-                    FilterType="LowercaseLetters ,UppercaseLetters,Custom" FilterMode="ValidChars"
+                    FilterMode="ValidChars" FilterType="UppercaseLetters,LowercaseLetters,Numbers,Custom"
                     ValidChars=" " runat="server">
                 </ajax:FilteredTextBoxExtender>
                 <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="txtNewTimeType"
