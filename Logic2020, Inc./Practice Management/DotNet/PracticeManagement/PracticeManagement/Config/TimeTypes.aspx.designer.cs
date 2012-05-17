@@ -85,13 +85,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rvNewTimeType;
         
         /// <summary>
-        /// regValTimeType control.
+        /// fteNewTimeType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator regValTimeType;
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender fteNewTimeType;
         
         /// <summary>
         /// rbIsDefault control.
