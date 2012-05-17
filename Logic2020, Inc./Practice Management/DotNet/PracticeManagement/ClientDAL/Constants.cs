@@ -951,7 +951,6 @@
                 public const string OpportunityInsert = "dbo.OpportunityInsert";
                 public const string OpportunityUpdate = "dbo.OpportunityUpdate";
                 public const string OpportunityGetExcelSet = "dbo.OpportunityExcelSet";
-                public const string OpportunityConvertToProject = "dbo.OpportunityConvertToProject";
                 public const string OpportunityGetByNumber = "dbo.OpportunityGetByNumber";
                 public const string GetOpportunityPersons = "dbo.GetOpportunityPersons";
                 public const string ConvertOpportunityToProject = "dbo.ConvertOpportunityToProject";
