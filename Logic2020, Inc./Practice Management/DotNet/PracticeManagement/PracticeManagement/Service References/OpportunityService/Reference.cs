@@ -76,9 +76,6 @@ namespace PraticeManagement.OpportunityService {
             "")]
         DataTransferObjects.OpportunityTransitionStatus[] OpportunityTransitionStatusListAll();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityConvertToProject", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityConvertToProjectResponse")]
-        int OpportunityConvertToProject(int opportunityId, string userName);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetOpportunityId", ReplyAction="http://tempuri.org/IOpportunityService/GetOpportunityIdResponse")]
         System.Nullable<int> GetOpportunityId(string opportunityNumber);
         
@@ -118,8 +115,7 @@ namespace PraticeManagement.OpportunityService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class OpportunityServiceClient : System.ServiceModel.ClientBase<PraticeManagement.OpportunityService.IOpportunityService>, PraticeManagement.OpportunityService.IOpportunityService {
-        
-        
+      
         public OpportunityServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -214,10 +210,6 @@ namespace PraticeManagement.OpportunityService {
         
         public DataTransferObjects.OpportunityTransitionStatus[] OpportunityTransitionStatusListAll() {
             return base.Channel.OpportunityTransitionStatusListAll();
-        }
-        
-        public int OpportunityConvertToProject(int opportunityId, string userName) {
-            return base.Channel.OpportunityConvertToProject(opportunityId, userName);
         }
         
         public System.Nullable<int> GetOpportunityId(string opportunityNumber) {
