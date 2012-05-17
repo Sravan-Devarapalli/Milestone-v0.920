@@ -131,12 +131,6 @@
   <wsdl:message name="IOpportunityService_OpportunityTransitionStatusListAll_OutputMessage">
     <wsdl:part name="parameters" element="tns:OpportunityTransitionStatusListAllResponse" />
   </wsdl:message>
-  <wsdl:message name="IOpportunityService_OpportunityConvertToProject_InputMessage">
-    <wsdl:part name="parameters" element="tns:OpportunityConvertToProject" />
-  </wsdl:message>
-  <wsdl:message name="IOpportunityService_OpportunityConvertToProject_OutputMessage">
-    <wsdl:part name="parameters" element="tns:OpportunityConvertToProjectResponse" />
-  </wsdl:message>
   <wsdl:message name="IOpportunityService_GetOpportunityId_InputMessage">
     <wsdl:part name="parameters" element="tns:GetOpportunityId" />
   </wsdl:message>
@@ -277,10 +271,6 @@
     <wsdl:operation name="OpportunityTransitionStatusListAll">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityTransitionStatusListAll" message="tns:IOpportunityService_OpportunityTransitionStatusListAll_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityTransitionStatusListAllResponse" message="tns:IOpportunityService_OpportunityTransitionStatusListAll_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="OpportunityConvertToProject">
-      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityConvertToProject" message="tns:IOpportunityService_OpportunityConvertToProject_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityConvertToProjectResponse" message="tns:IOpportunityService_OpportunityConvertToProject_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetOpportunityId">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityId" message="tns:IOpportunityService_GetOpportunityId_InputMessage" />
@@ -498,15 +488,6 @@
     </wsdl:operation>
     <wsdl:operation name="OpportunityTransitionStatusListAll">
       <soap:operation soapAction="http://tempuri.org/IOpportunityService/OpportunityTransitionStatusListAll" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="OpportunityConvertToProject">
-      <soap:operation soapAction="http://tempuri.org/IOpportunityService/OpportunityConvertToProject" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
