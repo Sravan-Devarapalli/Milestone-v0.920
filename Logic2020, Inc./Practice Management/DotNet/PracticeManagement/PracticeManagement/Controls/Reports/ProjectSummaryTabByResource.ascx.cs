@@ -7,11 +7,18 @@ using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Text;
 using System.Web.UI.HtmlControls;
+using iTextSharp.text.pdf;
+using PraticeManagement.Objects;
+using System.IO;
+using iTextSharp.text;
+using PraticeManagement.Configuration;
+using DataTransferObjects;
 
 namespace PraticeManagement.Controls.Reports
 {
     public partial class ProjectSummaryTabByResource : System.Web.UI.UserControl
     {
+        #region Variables
         private HtmlImage ImgProjectRoleFilter { get; set; }
 
         public FilteredCheckBoxList cblProjectRolesControl
@@ -32,17 +39,9 @@ namespace PraticeManagement.Controls.Reports
             get { return (PraticeManagement.Controls.Reports.ProjectSummaryByResource)HostingPage.ByResourceControl; }
         }
 
-        protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-                ImgProjectRoleFilter = e.Item.FindControl("imgProjectRoleFilter") as HtmlImage;
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
+        #endregion
 
-            }
-        }
+        #region Methods
 
         public void DataBindByResourceSummary(PersonLevelGroupedHours[] reportData, bool isFirstTime)
         {
@@ -65,6 +64,7 @@ namespace PraticeManagement.Controls.Reports
                 divEmptyMessage.Style["display"] = "";
                 repResource.Visible = false;
             }
+            btnExportToPDF.Enabled = btnExportToExcel.Enabled = reportData.Count() > 0;
         }
 
         private void PopulateProjectRoleFilter(List<PersonLevelGroupedHours> reportData)
@@ -73,6 +73,22 @@ namespace PraticeManagement.Controls.Reports
             DataHelper.FillListDefault(cblProjectRoles.CheckBoxListObject, "All Project Roles", projectRoles.ToArray(), false, "Value", "Text");
             cblProjectRoles.SelectAllItems(true);
             cblProjectRoles.OKButtonId = btnUpdate.ClientID;
+        }
+
+        #endregion
+
+        #region Control Methods
+
+        protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                ImgProjectRoleFilter = e.Item.FindControl("imgProjectRoleFilter") as HtmlImage;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+
+            }
         }
 
         public string GetDoubleFormat(double value)
@@ -84,8 +100,8 @@ namespace PraticeManagement.Controls.Reports
         {
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
-            List<PersonLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber, 
-                HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, 
+            List<PersonLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber,
+                HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null,
                 HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, cblProjectRoles.ActualSelectedItemsXmlFormat)).ToList();
 
             StringBuilder sb = new StringBuilder();
@@ -156,13 +172,15 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
-
+            HostingPage.PDFExport();
         }
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
         {
             HostingControl.PopulateByResourceSummaryReport();
         }
+
+        #endregion
 
     }
 }
