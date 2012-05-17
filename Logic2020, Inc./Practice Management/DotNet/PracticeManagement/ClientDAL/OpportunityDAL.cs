@@ -515,50 +515,6 @@ namespace DataAccess
             }
         }
 
-        /// <summary>
-        /// 	Creates a new <see cref = "Project" /> from the specified <see cref = "Opportunity" />.
-        /// </summary>
-        /// <param name = "opportunityId">An ID of the opportunity to create a project from.</param>
-        /// <param name = "userName">A current user.</param>
-        public static int OpportunityConvertToProject(int opportunityId, string userName)
-        {
-            int res;
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityConvertToProject, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
-                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
-
-                var idParam = new SqlParameter(Constants.ParameterNames.ProjectId, SqlDbType.Int) { Direction = ParameterDirection.Output };
-                command.Parameters.Add(idParam);
-
-                try
-                {
-
-                    connection.Open();
-
-                    SqlTransaction trn = connection.BeginTransaction();
-                    command.Transaction = trn;
-
-                    command.ExecuteNonQuery();
-
-                    trn.Commit();
-
-                    res = (int)idParam.Value;
-                }
-                catch (SqlException ex)
-                {
-                    throw new DataAccessException(ex);
-                }
-            }
-
-            return res;
-        }
-
         private static void ReadOpportunities(DbDataReader reader, List<Opportunity> result)
         {
             if (reader.HasRows)
