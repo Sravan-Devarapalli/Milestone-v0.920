@@ -40,7 +40,7 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateByProjectData(ProjectLevelTimeEntriesHistory[] reportDataByPerson)
         {
-            var reportDataList = reportDataByPerson.ToList();
+            var reportDataList = reportDataByPerson.OrderBy(p=>p.Project.ProjectNumber).ToList();
 
             if (reportDataList.Count > 0)
             {
