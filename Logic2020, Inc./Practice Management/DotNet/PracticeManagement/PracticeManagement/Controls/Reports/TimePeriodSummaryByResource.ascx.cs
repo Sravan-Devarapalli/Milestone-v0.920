@@ -146,7 +146,7 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value,
-                    HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.ActualSelectedItemsXmlFormat, cblSeniorities.ActualSelectedItems, cblPayTypes.ActualSelectedItemsXmlFormat)).ToList();
+                    HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.ActualSelectedItemsXmlFormat, cblSeniorities.ActualSelectedItems, cblPayTypes.ActualSelectedItemsXmlFormat, cblPersonStatusType.SelectedItems)).ToList();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(" Paychex ");
                 sb.Append("\t");
