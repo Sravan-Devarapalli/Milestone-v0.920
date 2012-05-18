@@ -56,7 +56,8 @@ namespace PraticeManagement.Controls.Reports
                 divEmptyMessage.Style["display"] = "";
                 repPersons.Visible = btnExpandOrCollapseAll.Visible = false;
             }
-            btnExportToPDF.Enabled = btnExportToExcel.Enabled = reportData.Count() > 0;
+            //btnExportToPDF.Enabled = 
+            btnExportToExcel.Enabled = reportData.Count() > 0;
         }
 
         protected void repPersons_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -256,7 +257,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
-            HostingPage.PDFExport();
+            //HostingPage.PDFExport();
         }
 
     }
