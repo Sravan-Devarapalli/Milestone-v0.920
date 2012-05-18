@@ -35,7 +35,7 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateByResourceData(PersonLevelTimeEntriesHistory[] reportDataByPerson)
         {
-            var reportDataList = reportDataByPerson.ToList();
+            var reportDataList = reportDataByPerson.OrderBy(p => p.Person.PersonLastFirstName).ToList();
            
             if (reportDataList.Count > 0)
             {
