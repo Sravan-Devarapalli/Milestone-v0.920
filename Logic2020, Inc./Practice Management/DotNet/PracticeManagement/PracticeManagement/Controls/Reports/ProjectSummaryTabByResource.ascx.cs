@@ -64,7 +64,8 @@ namespace PraticeManagement.Controls.Reports
                 divEmptyMessage.Style["display"] = "";
                 repResource.Visible = false;
             }
-            btnExportToPDF.Enabled = btnExportToExcel.Enabled = reportData.Count() > 0;
+            //btnExportToPDF.Enabled = 
+            btnExportToExcel.Enabled = reportData.Count() > 0;
         }
 
         private void PopulateProjectRoleFilter(List<PersonLevelGroupedHours> reportData)
@@ -172,7 +173,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
-            HostingPage.PDFExport();
+            //HostingPage.PDFExport();
         }
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
