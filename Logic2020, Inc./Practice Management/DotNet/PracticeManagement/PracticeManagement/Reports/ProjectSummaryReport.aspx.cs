@@ -546,7 +546,7 @@ namespace PraticeManagement.Reporting
                 _HeaderTable.WidthPercentage = 100;
                 _HeaderTable.SetWidths(new float[] { 1f });
                 logo.VerticalAlignment = Element.ALIGN_MIDDLE;
-                logo.FixedHeight = 80f;
+                logo.FixedHeight = 60f;
                 logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
                 HeaderText.BorderWidth = logo.BorderWidth = 0;
                 HeaderText.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -787,7 +787,7 @@ namespace PraticeManagement.Reporting
         {
             MemoryStream file = new MemoryStream();
             Document document = new Document(builder.PageSize);
-            document.SetPageSize(iTextSharp.text.PageSize.A4.Rotate());
+            document.SetPageSize(iTextSharp.text.PageSize.A4_LANDSCAPE.Rotate());
             PdfWriter writer = PdfWriter.GetInstance(document, file);
             document.Open();
             document.NewPage();
