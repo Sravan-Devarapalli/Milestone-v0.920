@@ -11,7 +11,8 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
       @IncludePersonsWithNoTimeEntries BIT ,
       @PersonTypes NVARCHAR(MAX) = NULL ,
       @SeniorityIds NVARCHAR(MAX) = NULL ,
-      @TimeScaleNamesList XML = NULL
+      @TimeScaleNamesList XML = NULL,
+	  @PersonStatusIds NVARCHAR(MAX) = NULL 
     )
 AS 
     BEGIN
@@ -190,6 +191,11 @@ AS
                                 SELECT  ResultId
                                 FROM    dbo.ConvertStringListIntoTable(@SeniorityIds) )
                               )
+						  AND ( @PersonStatusIds IS NULL
+								 OR P.PersonStatusId IN (
+								 SELECT  ResultId
+								 FROM    dbo.ConvertStringListIntoTable(@PersonStatusIds) )
+							  )
                           AND ( @TimeScaleNamesList IS NULL
                                 OR ( CASE WHEN P.PersonStatusId = 2
                                           THEN 'Terminated'
