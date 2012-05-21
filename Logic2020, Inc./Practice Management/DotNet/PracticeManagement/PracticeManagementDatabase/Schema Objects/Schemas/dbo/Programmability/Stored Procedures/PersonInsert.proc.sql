@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		
 -- Create date: 
--- Updated by : Sainath.CH
--- Update Date: 04-03-2012
+-- Updated by : Srinivas.M
+-- Update Date: 05-21-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonInsert]
 (
@@ -21,7 +21,8 @@ CREATE PROCEDURE [dbo].[PersonInsert]
 	@PersonId        INT OUTPUT,
 	@TelephoneNumber NVARCHAR(20) = NULL,
 	@PaychexID		 NVARCHAR(20),
-	@IsOffshore	     BIT
+	@IsOffshore	     BIT,
+	@PersonDivisionId	INT
 )
 AS
 	SET NOCOUNT ON
@@ -89,10 +90,10 @@ AS
 		-- Inserting Person
 		INSERT dbo.Person
 			(FirstName, LastName, PTODaysPerAnnum,  HireDate,  Alias, DefaultPractice, 
-		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID)
+		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId)
 		VALUES
 			(@FirstName, @LastName, @PTODaysPerAnnum, @HireDate, @Alias, @DefaultPractice, 
-		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID)
+		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId)
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
