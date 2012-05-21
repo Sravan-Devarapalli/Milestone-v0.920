@@ -36,6 +36,7 @@ using PraticeManagement.Controls.Generic;
 using PraticeManagement.ConfigurationService;
 using PraticeManagement.Controls.Opportunities;
 using PraticeManagement.ReportService;
+using System.ComponentModel;
 
 #endregion
 
@@ -2319,6 +2320,62 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
+        }
+
+        public static void FillPersonDivisionList(ListControl control)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var divisions = Enum.GetValues(typeof(PersonDivisionType));
+
+                    control.AppendDataBoundItems = true;
+                    control.Items.Clear();
+
+                    control.DataTextField = "Key";
+                    control.DataValueField = "Value";
+
+                    Dictionary<string, int> list = new Dictionary<string, int>();
+
+                    foreach (PersonDivisionType item in divisions)
+                    {
+                        string key = GetDescription(item);
+
+                        int value = (int)item;
+
+                        list.Add(key, value);
+                    }
+
+                    control.DataSource = list;
+                    control.DataBind();
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static string GetDescription(Enum enumerator)
+        {
+            Type type = enumerator.GetType();
+
+            var memberInfo = type.GetMember(enumerator.ToString());
+
+            if (memberInfo != null && memberInfo.Length > 0)
+            {
+                //we default to the first member info, as it's for the specific enum value
+                object[] attributes = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+                //return the description if it's found
+                if (attributes != null && attributes.Length > 0)
+                    return ((DescriptionAttribute)attributes[0]).Description;
+            }
+
+            //if there's no description, return the string value of the enum
+            return enumerator.ToString();
         }
     }
 }
