@@ -391,6 +391,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator reqTelphoneNumber;
         
         /// <summary>
+        /// lblDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDivision;
+        
+        /// <summary>
+        /// ddlDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDivision;
+        
+        /// <summary>
         /// lblEmployeeNumber control.
         /// </summary>
         /// <remarks>
