@@ -13,6 +13,11 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class TimePeriodSummaryByResource : System.Web.UI.UserControl
     {
+        private string TimePeriodSummaryReportExport = "TimePeriod Summary Report By Resource";
+
+        private string TimePeriodSummaryReportPayCheckExport = "TimePeriod Summary Report By Resource(Pay Chex)";
+        
+
         private HtmlImage ImgSeniorityFilter { get; set; }
 
         private HtmlImage ImgPayTypeFilter { get; set; }
@@ -47,6 +52,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(TimePeriodSummaryReportExport);
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
@@ -141,6 +147,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnPayCheckExport_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(TimePeriodSummaryReportPayCheckExport);
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
