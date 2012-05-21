@@ -1,6 +1,6 @@
 ﻿---------------------------
--- Updated by:	ThulasiRam.P
--- Update date:	04-12-2012
+-- Updated By: ThulasiRam.P
+-- Updated Date: 2012-05-21
 ---------------------------
 CREATE PROCEDURE dbo.ProjectUpdate
 (
@@ -20,7 +20,8 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@Description           NVARCHAR(MAX),
 	@CanCreateCustomWorkTypes BIT,
 	@IsInternal			BIT,
-	@IsNoteRequired     BIT = 1  
+	@IsNoteRequired     BIT = 1  ,
+	@ProjectOwner       INT 
 )
 AS
 BEGIN
@@ -36,7 +37,7 @@ BEGIN
 		IF EXISTS (SELECT 1 FROM dbo.Project WHERE ProjectId = @ProjectId AND IsInternal != @IsInternal)
 		BEGIN
 			IF EXISTS (SELECT 1	FROM dbo.TimeType tt 
-						INNER JOIN dbo.CHARGECODE cc ON tt.TimeTypeId = cc.TimeTypeId 
+						INNER JOIN dbo.ChargeCode cc ON tt.TimeTypeId = cc.TimeTypeId 
 													AND cc.ProjectID = @ProjectId 
 													AND tt.IsInternal != @IsInternal 
 													AND tt.IsDefault = 0 
@@ -44,7 +45,7 @@ BEGIN
 			BEGIN
 				RAISERROR ('Can not change project status as some work types are already in use.', 16, 1)
 			END
-			--to delete existing projecttimetypes
+			--to delete existing project time types
 			DELETE ptt 
 			FROM dbo.ProjectTimeType ptt 
 			WHERE ptt.ProjectId = @ProjectId 
@@ -92,21 +93,22 @@ BEGIN
 		END
 
 		UPDATE dbo.Project
-			SET ClientId			= @ClientId,
-				Discount			= @Discount,
+			SET ClientId		= @ClientId,
+				Discount		= @Discount,
 				Terms			= @Terms,
-				NAME				= @Name,
+				NAME			= @Name,
 				PracticeId		= @PracticeId,
 				ProjectStatusId	= @ProjectStatusId,
 				BuyerName		= @BuyerName,
 				GroupId			= @GroupId,
-				IsChargeable		= @IsChargeable,
+				IsChargeable	= @IsChargeable,
 				DirectorId		= @DirectorId,
 				Description		=@Description,
 				CanCreateCustomWorkTypes = @CanCreateCustomWorkTypes,
 				IsInternal		=@IsInternal,
-				IsNoteRequired  = @IsNoteRequired
-			WHERE ProjectId = @ProjectId
+				IsNoteRequired  = @IsNoteRequired,
+				ProjectOwnerId  = @ProjectOwner
+			WHERE ProjectId     = @ProjectId
 
 		DECLARE @OpportunityId INT = NULL
 		
@@ -126,15 +128,15 @@ BEGIN
 
 
 	    DELETE pm
-		FROM ProjectManagers pm
+		FROM dbo.ProjectManagers pm
 		LEFT JOIN [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
 		ON pm.ProjectId = @ProjectId AND pm.ProjectManagerId = p.ResultId 
 		WHERE p.ResultId IS NULL and pm.ProjectId = @ProjectId
 
-		INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
+		INSERT INTO dbo.ProjectManagers(ProjectId,ProjectManagerId)
 		SELECT @ProjectId ,p.ResultId
 		FROM [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
-		LEFT JOIN ProjectManagers pm
+		LEFT JOIN dbo.ProjectManagers pm
 		ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
 		WHERE pm.ProjectManagerId IS NULL
 				
