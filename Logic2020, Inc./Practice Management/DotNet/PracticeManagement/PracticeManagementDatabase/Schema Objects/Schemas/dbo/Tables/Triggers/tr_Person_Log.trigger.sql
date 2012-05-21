@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 10-14-2008
--- Updated by:	
--- Update date:	
+-- Updated by:	Srinivas.M
+-- Update date:	05-21-2012
 -- Description:	Logs the changes in the dbo.Person table.
 -- =============================================
 CREATE TRIGGER [dbo].[tr_Person_Log]
@@ -31,12 +31,15 @@ BEGIN
 		       r.Name AS Seniority,
 		       i.IsDefaultManager,
 		       mngr.LastName + ', ' + mngr.FirstName as 'ManagerName',
-			   i.TelephoneNumber
+			   i.TelephoneNumber,
+			   i.DivisionId,
+			   PD.DivisionName
 		  FROM inserted AS i
 		       LEFT JOIN dbo.Practice AS p ON i.DefaultPractice = p.PracticeId
 		       INNER JOIN dbo.PersonStatus AS s ON i.PersonStatusId = s.PersonStatusId
 		       LEFT JOIN dbo.Seniority AS r ON i.SeniorityId = r.SeniorityId
 		       INNER JOIN dbo.Person as mngr ON mngr.PersonId = i.ManagerId
+			   LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = i.DivisionId
 	),
 
 	OLD_VALUES AS
@@ -54,12 +57,15 @@ BEGIN
 		       r.Name AS Seniority,
 		       d.IsDefaultManager,
 		       mngr.LastName + ', ' + mngr.FirstName as 'ManagerName',
-			   d.TelephoneNumber
+			   d.TelephoneNumber,
+			   d.DivisionId,
+			   PD.DivisionName
 		  FROM deleted AS d
 		       LEFT JOIN dbo.Practice AS p ON d.DefaultPractice = p.PracticeId
 		       INNER JOIN dbo.PersonStatus AS s ON d.PersonStatusId = s.PersonStatusId
 		       LEFT JOIN dbo.Seniority AS r ON d.SeniorityId = r.SeniorityId
 		       INNER JOIN dbo.Person as mngr ON mngr.PersonId = d.ManagerId
+			   LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = d.DivisionId
 	)
 
 	-- Log an activity
