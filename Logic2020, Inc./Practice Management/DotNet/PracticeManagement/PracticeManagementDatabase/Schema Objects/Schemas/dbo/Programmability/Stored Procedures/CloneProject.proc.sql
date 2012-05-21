@@ -1,6 +1,8 @@
 ﻿-- =============================================
 -- Author:		Nikita Goncharenko
 -- Create date: 2010-03-27
+-- Updated By: ThulasiRam.P
+-- Updated Date: 2012-05-21
 -- Description:	Clones project specified
 -- =============================================
 CREATE PROCEDURE [dbo].[CloneProject]
@@ -22,41 +24,45 @@ AS
 	    SELECT @IsInternal = IsInternal FROM dbo.Project WHERE ProjectId = @ProjectId
 		EXEC dbo.GenerateNewProjectNumber @IsInternal, @ProjectNumber OUTPUT ;
 
-        INSERT  INTO dbo.Project
-                (
-                  ClientId,
-                  Discount,
-                  Terms,
-                  [Name],
-                  PracticeId,
-                  StartDate,
-                  EndDate,
-                  ProjectStatusId,
-                  ProjectNumber,
-                  BuyerName,
-                  OpportunityId,
-                  GroupId,
-                  IsChargeable,
-				  DirectorId,
-				  IsInternal,
-  	              CanCreateCustomWorkTypes
-                )
-                SELECT  ClientId,
-                        Discount,
-                        Terms,
-                        SUBSTRING([Name] + ' (cloned)', 0, 100),
-                        PracticeId,
+        INSERT INTO dbo.Project
+	            (ClientId, 
+				 Discount, 
+				 Terms, 
+				 Name, 
+				 PracticeId,
+				 StartDate,
+				 EndDate,
+	             ProjectStatusId,
+				 ProjectNumber, 
+				 BuyerName, 
+				 GroupId, 
+				 IsChargeable, 
+				 DirectorId, 
+				 OpportunityId,
+				 Description,
+				 CanCreateCustomWorkTypes,
+				 IsInternal,
+				 IsNoteRequired,
+				 ProjectOwnerId)
+                SELECT  p.ClientId,
+                        p.Discount,
+                        p.Terms,
+                        SUBSTRING(p.[Name] + ' (cloned)', 0, 100),
+                        p.PracticeId,
                         NULL, --StartDate ,
                         NULL, --EndDate ,
                         @ProjectStatusId,
                         @ProjectNumber,
-                        BuyerName,
-                        OpportunityId,
-                        GroupId,
-                        IsChargeable,                     
-						DirectorId,
-						IsInternal,
-						CanCreateCustomWorkTypes
+                        p.BuyerName,
+                        p.GroupId,
+                        p.IsChargeable,                     
+						p.DirectorId,
+						p.OpportunityId,
+						p.Description,
+						p.CanCreateCustomWorkTypes,
+						p.IsInternal,
+						p.IsNoteRequired,
+						p.ProjectOwnerId
                 FROM    dbo.Project AS p
                 WHERE   p.ProjectId = @projectId
                 
@@ -133,8 +139,6 @@ AS
 
                 WHILE @@FETCH_STATUS = 0 
                     BEGIN  
-                        PRINT @origMilestoneId
-                        PRINT @ClonedProjectId
     
                         EXECUTE dbo.MilestoneClone @MilestoneId = @origMilestoneId,
                             @CloneDuration = 0, @MilestoneCloneId = 0,
