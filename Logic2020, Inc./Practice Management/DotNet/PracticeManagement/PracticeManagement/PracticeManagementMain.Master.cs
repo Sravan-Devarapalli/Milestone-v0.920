@@ -433,29 +433,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void logImpersonateLogin(string oldUserName, string newUserName)
-        {
-            var ipAddress = Request.ServerVariables["REMOTE_ADDR"];
-            var logText =
-                string.Format(
-                    @"<Login><NEW_VALUES user = ""{0}"" become = ""{1}"" IPAddress = ""{2}""><OLD_VALUES /></NEW_VALUES></Login>",
-                    oldUserName,
-                    newUserName,
-                    ipAddress);
-            using (var serviceClient = new ActivityLogServiceClient())
-            {
-                try
-                {
-                    serviceClient.ActivityLogInsert(1, logText);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
         protected void btnMenuItem_Command(object sender, CommandEventArgs e)
         {
             var ne = FireNavigating();
