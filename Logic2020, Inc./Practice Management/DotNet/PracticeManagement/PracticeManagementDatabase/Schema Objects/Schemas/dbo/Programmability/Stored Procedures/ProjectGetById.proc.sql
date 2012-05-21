@@ -1,7 +1,7 @@
 ﻿-- =============================================
 -- Description:	Get project Details.
--- Updated by:	ThulasiRam.P
--- Update date:	04-12-2012
+-- Updated By: ThulasiRam.P
+-- Updated Date: 2012-05-21
 -- =============================================
 CREATE PROCEDURE [dbo].[ProjectGetById]
 (
@@ -45,6 +45,7 @@ AS
 		   p.CanCreateCustomWorkTypes,
 		   p.IsInternal,
 		   p.ClientIsInternal,
+		   p.ProjectOwnerId,
 		   CASE (SELECT COUNT(*) 
 				FROM dbo.ChargeCode CC 
 				INNER JOIN TimeEntry TE ON TE.ChargeCodeId = CC.Id AND CC.ProjectId = p.ProjectId) 
