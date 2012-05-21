@@ -190,7 +190,7 @@ namespace PraticeManagement.Controls
 						{
 							try
 							{
-                                if (!Filter.IsGroupByPersonPage)
+                                if (!filterSet.IsGroupByPersonPage)
                                 {
                                     result =
                                         serviceClient.ProjectListAllMultiParameters(
