@@ -21,7 +21,6 @@
 	ModifiedDate	   DATETIME		  NULL,
 	IsStrawman		   BIT			  NOT NULL,
 	IsOffshore		   BIT			  NOT NULL CONSTRAINT DF_Person_IsOffshore DEFAULT(0),
-	PaychexID		   NVARCHAR (MAX) NULL
+	PaychexID		   NVARCHAR (MAX) NULL,
+	DivisionId			INT NULL
 );
-
-
