@@ -21,7 +21,7 @@
                     </td>
                     <td>
                         <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
-                           Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
+                           UseSubmitBehavior="false" ToolTip="Export To PDF" />
                     </td>
                 </tr>
             </table>
