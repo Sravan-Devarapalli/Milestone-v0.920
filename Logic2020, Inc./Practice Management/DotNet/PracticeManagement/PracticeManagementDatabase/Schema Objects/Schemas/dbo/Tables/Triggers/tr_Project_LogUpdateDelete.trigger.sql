@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-27-2008
--- Updated by:	
--- Update date:	
+-- Updated By: ThulasiRam.P
+-- Updated Date: 2012-05-21
 -- Description:	Logs the updating and deletring from the dbo.Project table.
 -- =============================================
 CREATE TRIGGER [dbo].[tr_Project_LogUpdateDelete]
@@ -35,16 +35,21 @@ BEGIN
 				,PG.Name AS 'ProjectGroup'
 				,i.Description
 				,i.DirectorId
-				,Dir.LastName + ', ' + Dir.FirstName AS 'ProjectDirector'
+				,CASE WHEN i.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
+				      ELSE '' 
+				      END AS 'ProjectDirector'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
-						ELSE 'No' END AS 'IsChargeable'
+						ELSE 'No' END AS 'IsChargeable',
+				i.ProjectOwnerId,
+				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
 		  FROM inserted AS i
 		       INNER JOIN dbo.Client AS c ON i.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON i.PracticeId = p.PracticeId
 		       INNER JOIN dbo.Person AS pm ON p.PracticeManagerId = pm.PersonId
 		       INNER JOIN dbo.ProjectStatus AS s ON i.ProjectStatusId = s.ProjectStatusId
-			   LEFT JOIN ProjectGroup AS PG ON PG.GroupId = i.GroupId
-			   LEFT JOIN Person AS Dir ON Dir.PersonId = i.DirectorId
+			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectOwnerId
+			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = i.GroupId
+			   LEFT  JOIN dbo.Person AS Dir ON Dir.PersonId = i.DirectorId
 	),
 
 	OLD_VALUES AS
@@ -66,17 +71,21 @@ BEGIN
 				,PG.Name AS 'ProjectGroup'
 				,d.Description
 				,d.DirectorId
-				,Dir.LastName + ', ' + Dir.FirstName AS 'ProjectDirector'
+				,CASE WHEN d.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
+				      ELSE '' 
+				      END AS 'ProjectDirector'
 				,CASE WHEN d.IsChargeable = 1 THEN 'Yes'
-						ELSE 'No' END AS 'IsChargeable'
+						ELSE 'No' END AS 'IsChargeable',
+						d.ProjectOwnerId,
+				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
 		  FROM deleted AS d
 		       INNER JOIN dbo.Client AS c ON d.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON d.PracticeId = p.PracticeId
 		       INNER JOIN dbo.Person AS pm ON p.PracticeManagerId = pm.PersonId
 		       INNER JOIN dbo.ProjectStatus AS s ON d.ProjectStatusId = s.ProjectStatusId
-			   LEFT JOIN ProjectGroup AS PG ON PG.GroupId = d.GroupId
-
-			   LEFT JOIN Person AS Dir ON Dir.PersonId = d.DirectorId
+			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = d.ProjectOwnerId
+			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = d.GroupId
+			   LEFT JOIN dbo.Person AS Dir ON Dir.PersonId = d.DirectorId
 	)
 
 	-- Log an activity
@@ -149,7 +158,9 @@ BEGIN
 	    OR ISNULL(i.StartDate, '2029-10-31') <> ISNULL(d.StartDate, '2029-10-31')
 	    OR ISNULL(i.EndDate, '2029-10-31') <> ISNULL(d.EndDate, '2029-10-31')
 	    OR i.IsChargeable <> d.IsChargeable
+		OR i.ProjectOwnerId <> d.ProjectOwnerId
 	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
+
