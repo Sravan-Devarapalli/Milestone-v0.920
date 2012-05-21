@@ -286,6 +286,7 @@ namespace DataTransferObjects
             set;
         }
 
+
         [DataMember]
         public List<Person> ProjectManagers
         {
@@ -388,6 +389,9 @@ namespace DataTransferObjects
 
         [DataMember]
         public string BillableType { get; set; }
+
+        [DataMember]
+        public Person ProjectOwner { get; set; }
 
         #endregion
 
