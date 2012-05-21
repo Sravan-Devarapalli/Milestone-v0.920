@@ -1105,8 +1105,7 @@ namespace PraticeManagement
                 ListItem selectedDirector = ddlDirector.Items.FindByValue(project.Director.Id.Value.ToString());
                 if (selectedDirector == null)
                 {
-                    Person selectedPerson = DataHelper.GetPerson(project.Director.Id.Value);
-                    selectedDirector = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
+                    selectedDirector = new ListItem(project.Director.PersonLastFirstName, project.Director.Id.Value.ToString());
                     ddlDirector.Items.Add(selectedDirector);
                     ddlDirector.SortByText();
                 }
@@ -1116,6 +1115,15 @@ namespace PraticeManagement
 
             if (project.ProjectOwner != null)
             {
+                ListItem selectedProjectOwner = ddlProjectOwner.Items.FindByValue(project.ProjectOwner.Id.Value.ToString());
+                if (selectedProjectOwner == null)
+                {
+                    Person selectedPerson = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(project.ProjectOwner.Id.Value));
+                    selectedProjectOwner = new ListItem(selectedPerson.PersonLastFirstName, project.ProjectOwner.Id.Value.ToString());
+                    ddlProjectOwner.Items.Add(selectedProjectOwner);
+                    ddlProjectOwner.SortByText();
+                }
+
                 ddlProjectOwner.SelectedValue = project.ProjectOwner.Id.ToString();
             }
 
