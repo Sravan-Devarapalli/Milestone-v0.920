@@ -1,7 +1,7 @@
 ﻿-- =============================================
 -- Description:	Inserts a Project
--- Updated by:	ThulasiRam.P
--- Update date:	04-12-2012
+-- Updated By: ThulasiRam.P
+-- Updated Date: 2012-05-21
 -- =============================================
 CREATE PROCEDURE dbo.ProjectInsert
 (
@@ -22,7 +22,8 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@Description        NVARCHAR(MAX),
 	@CanCreateCustomWorkTypes BIT,
 	@IsInternal			BIT,
-	@IsNoteRequired     BIT = 1
+	@IsNoteRequired     BIT = 1,
+	@ProjectOwner       INT = NULL
 )
 AS
 BEGIN
@@ -42,9 +43,9 @@ BEGIN
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Discount, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes,IsInternal,IsNoteRequired)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes,IsInternal,IsNoteRequired,ProjectOwnerId)
 	     VALUES (@ClientId, @Discount, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes,@IsInternal,@IsNoteRequired)
+	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes,@IsInternal,@IsNoteRequired,@ProjectOwner)
 	
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
