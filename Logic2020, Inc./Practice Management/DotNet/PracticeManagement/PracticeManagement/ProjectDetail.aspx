@@ -206,7 +206,7 @@
                 }
             }
 
-        } 
+        }
 
         //region project time types script
 
@@ -444,10 +444,21 @@
                                         <asp:Label ID="lblProjectNumber" runat="server"></asp:Label>
                                         <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                     </td>
-                                    <td colspan="3">
-                                        &nbsp;
+                                    <td>
                                     </td>
-                                    <td colspan="4">
+                                    <td style="white-space: nowrap;">
+                                        Project Owner
+                                    </td>
+                                    <td>
+                                        <asp:DropDownList ID="ddlProjectOwner" runat="server" CssClass="WholeWidth" onchange="setDirty();">
+                                        </asp:DropDownList>
+                                    </td>
+                                    <td>
+                                        <asp:RequiredFieldValidator ID="reqProjectOwner" runat="server" ControlToValidate="ddlProjectOwner"
+                                            EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Owner is required."
+                                            SetFocusOnError="true" Text="*" ToolTip="The Project Owner is required."></asp:RequiredFieldValidator>
+                                    </td>
+                                    <td colspan="3">
                                         <asp:CheckBox ID="chbIsChargeable" runat="server" onclick="setDirty();" Text="Milestones in this project are billable by default" />
                                     </td>
                                 </tr>
