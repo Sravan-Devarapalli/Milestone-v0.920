@@ -116,5 +116,25 @@ namespace DataTransferObjects
 
     }
 
+    [DataContract]
+    public enum PersonDivisionType
+    {
+        [EnumMember]
+        [Description("- - Select Division - -")]
+        Undefined = 0,
+        [EnumMember]
+        [Description("Business Development")]
+        BusinessDevelopment = 1,
+        [EnumMember]
+        [Description("Consulting")]
+        Consulting = 2,
+        [EnumMember]
+        [Description("Operations")]
+        Operations = 3,
+        [EnumMember]
+        [Description("Recruiting")]
+        Recruiting = 4
+    }
+
 }
 
