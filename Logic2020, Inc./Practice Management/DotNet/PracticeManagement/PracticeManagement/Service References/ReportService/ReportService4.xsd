@@ -233,6 +233,7 @@
       <xs:element minOccurs="0" name="DefaultPersonCommissions" nillable="true" type="tns:ArrayOfDefaultCommission" />
       <xs:element minOccurs="0" name="DefaultPersonRecruiterCommission" nillable="true" type="tns:ArrayOfDefaultRecruiterCommission" />
       <xs:element minOccurs="0" name="DefaultPractice" nillable="true" type="tns:Practice" />
+      <xs:element minOccurs="0" name="DivisionType" type="tns:PersonDivisionType" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q3:ArrayOfPersonDocument" />
       <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q4:ArrayOfPersonEmployer" />
@@ -556,6 +557,16 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="DefaultRecruiterCommissionItem" nillable="true" type="tns:DefaultRecruiterCommissionItem" />
+  <xs:simpleType name="PersonDivisionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="BusinessDevelopment" />
+      <xs:enumeration value="Consulting" />
+      <xs:enumeration value="Operations" />
+      <xs:enumeration value="Recruiting" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PersonDivisionType" nillable="true" type="tns:PersonDivisionType" />
   <xs:complexType name="ArrayOfPersonOverhead">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonOverhead" nillable="true" type="tns:PersonOverhead" />
