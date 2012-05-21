@@ -581,6 +581,9 @@ namespace PracticeManagementService
         [OperationContract]
         Dictionary<DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate);
 
+        [OperationContract]
+        Person GetPersonDetailsShort(int personId);
+
     }
 }
 
