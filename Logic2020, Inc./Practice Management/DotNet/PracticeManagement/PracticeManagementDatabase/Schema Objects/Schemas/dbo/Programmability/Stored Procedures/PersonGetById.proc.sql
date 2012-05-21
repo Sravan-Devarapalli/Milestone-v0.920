@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 8-04-2008
--- Updated by:	sainathc
--- Update date: 04-03-2012
+-- Updated by:	Srinivas.M
+-- Update date: 05-21-2012
 -- Description:	Retrives the Person by its ID.
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonGetById]
@@ -39,7 +39,8 @@ BEGIN
 		   p.IsWelcomeEmailSent,
 		   p.IsStrawman AS IsStrawman,
 		   p.IsOffshore,
-		   p.PaychexID
+		   p.PaychexID,
+		   p.DivisionId
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 END
