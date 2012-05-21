@@ -1,8 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 04-03-2012
--- Updated by : Sainath.CH
--- Update Date: 04-16-2012
+-- Updated by : Srinivas.M
+-- Update Date: 05-21-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
     (
@@ -12,7 +12,8 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
       @PersonTypes NVARCHAR(MAX) = NULL ,
       @SeniorityIds NVARCHAR(MAX) = NULL ,
       @TimeScaleNamesList XML = NULL,
-	  @PersonStatusIds NVARCHAR(MAX) = NULL 
+	  @PersonStatusIds NVARCHAR(MAX) = NULL,
+	  @PersonDivisionIds NVARCHAR(MAX) = NULL
     )
 AS 
     BEGIN
@@ -32,8 +33,15 @@ AS
 	
         INSERT  INTO @TimeScaleNames
                 SELECT  ResultString
-                FROM    [dbo].[ConvertXmlStringInToStringTable](@TimeScaleNamesList);
-        WITH    PersonWithLatestPay
+                FROM    [dbo].[ConvertXmlStringInToStringTable](@TimeScaleNamesList)
+
+		DECLARE @DivisionIds TABLE ( Id NVARCHAR(20))
+
+		INSERT INTO @DivisionIds
+				SELECT ResultString
+				FROM	[dbo].[ConvertXmlStringInToStringTable](@PersonDivisionIds)
+        
+        ;WITH    PersonWithLatestPay
                   AS ( SELECT   P.PersonId ,
                                 MAX(PA.StartDate) AS RecentStartDate
                        FROM     dbo.Person P
@@ -113,7 +121,8 @@ AS
                     ISNULL(Data.JuryDutyHours, 0) AS JuryDutyHours ,
                     ISNULL(Data.BereavementHours, 0) AS BereavementHours ,
                     ISNULL(Data.ORTHours, 0) AS ORTHours ,
-                    PCP.Timescale
+                    PCP.Timescale,
+					P.DivisionId
             FROM    ( SELECT    TE.PersonId ,
                                 ROUND(SUM(CASE WHEN CC.TimeEntrySectionId <> 4
                                                THEN TEH.ActualHours
@@ -203,6 +212,10 @@ AS
                                      END ) IN ( SELECT  Name
                                                 FROM    @TimeScaleNames )
                               )
+						  AND ( @PersonDivisionIds IS NULL
+								OR ISNULL(P.DivisionId, '') IN (SELECT Id
+																FROM @DivisionIds)
+							  )
                         )
             ORDER BY P.LastName ,
                     P.FirstName
