@@ -315,6 +315,9 @@
             public const string Phase = "Phase";
             public const string TimescaleName = "TimescaleName";
             public const string IsSalaryType = "IsSalaryType";
+            public const string ProjectOwnerId = "ProjectOwnerId";
+            public const string ProjectOwnerLastName = "ProjectOwnerLastName";
+            public const string ProjectOwnerFirstName = "ProjectOwnerFirstName";
         }
 
         #endregion
@@ -480,6 +483,7 @@
             public const string EstimatedRevenueParam = "@EstimatedRevenue";
             public const string OwnerId = ColumnNames.OwnerIdColumn;
             public const string ProjectOwnerIdsParam = "@ProjectOwnerIds";
+            public const string ProjectOwnerIdParam = "@ProjectOwner";
             public const string Date = "Date";
             public const string DayOff = "DayOff";
             public const string PracticeManagerIdParam = "@PracticeManagerId";
