@@ -392,6 +392,8 @@ namespace DataTransferObjects
         [DataMember]
         public string PaychexID { get; set; }
 
+        [DataMember]
+        public PersonDivisionType DivisionType { get; set; }
 
         public string OffshoreText
         {
