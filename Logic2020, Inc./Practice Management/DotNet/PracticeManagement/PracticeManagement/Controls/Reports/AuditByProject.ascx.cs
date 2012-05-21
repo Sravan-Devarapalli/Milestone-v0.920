@@ -13,6 +13,8 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class AuditByProject : System.Web.UI.UserControl
     {
+        private string AuditReportExport = "Audit Report By Project";
+
         private PraticeManagement.Reporting.Audit HostingPage
         {
             get { return ((PraticeManagement.Reporting.Audit)Page); }
@@ -58,6 +60,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(AuditReportExport);
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 List<ProjectLevelTimeEntriesHistory> data = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
