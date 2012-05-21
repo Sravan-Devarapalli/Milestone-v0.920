@@ -202,6 +202,7 @@ namespace PraticeManagement
             if (!IsPostBack)
             {
                 DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, string.Empty);
+                DataHelper.FillPersonDivisionList(ddlDivision);
                 txtFirstName.Focus();
                 UserIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
             }
@@ -878,6 +879,10 @@ namespace PraticeManagement
             txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
             ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
             txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
+            if ((int)person.DivisionType != 0)
+            {
+                ddlDivision.SelectedValue = ((int)person.DivisionType).ToString();
+            }
 
             PopulatePracticeDropDown(person);
 
@@ -987,6 +992,11 @@ namespace PraticeManagement
             person.RoleNames = roleNames.ToArray();
 
             person.Manager = defaultManager.SelectedManager;
+
+            if (ddlDivision.SelectedIndex != 0)
+            {
+                person.DivisionType = (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), ddlDivision.SelectedValue);
+            }
         }
 
         private List<string> GetSelectedRoles()
