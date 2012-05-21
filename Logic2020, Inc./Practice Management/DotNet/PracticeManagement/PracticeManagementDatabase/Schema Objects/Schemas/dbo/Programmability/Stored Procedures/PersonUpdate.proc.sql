@@ -1,8 +1,8 @@
 ﻿	-- =============================================
 	-- Author:		Anatoliy Lokshin
 	-- Create date: 8-04-2008
-	-- Updated by:	Sainathc
-	-- Update date: 04-03-2012
+	-- Updated by:	Srinivas.M
+	-- Update date: 05-21-2012
 	-- Description:	Updates the Person.
 	-- =============================================
 	CREATE PROCEDURE [dbo].[PersonUpdate]
@@ -23,7 +23,8 @@
 		@PracticeOwnedId	INT = NULL, 
 		@TelephoneNumber	NVARCHAR(20) = NULL,
 		@PaychexID		 NVARCHAR(20),
-		@IsOffshore	     BIT
+		@IsOffshore	     BIT,
+		@PersonDivisionId	INT
 	)
 	AS
 		SET NOCOUNT ON
@@ -241,6 +242,8 @@
 
 				END CATCH
 			END
+			
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 			UPDATE Person
 			   SET FirstName = @FirstName,
@@ -257,7 +260,8 @@
 				   PracticeOwnedId = @PracticeOwnedId,
 				   TelephoneNumber = @TelephoneNumber,
 				   PaychexID= @PaychexID,
-				   IsOffshore = @IsOffshore
+				   IsOffshore = @IsOffshore,
+				   DivisionId = @PersonDivisionId
 			 WHERE PersonId = @PersonId
 
 			 EXEC dbo.PersonStatusHistoryUpdate
