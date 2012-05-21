@@ -20,6 +20,8 @@ namespace PraticeManagement.Controls.Reports
 
         private int SectionId;
 
+        private string PersonDetailReportExport = "Person Detail Report";
+
         private List<KeyValuePair<string, string>> CollapsiblePanelExtenderClientIds
         {
             get;
@@ -204,6 +206,8 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(PersonDetailReportExport);
+
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var reportData = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(HostingPage.SelectedPersonId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
