@@ -20,5 +20,6 @@
 	[IsAllowedToShow]			BIT	   NOT NULL CONSTRAINT DF_Project_IsAllowedToShow DEFAULT 1,--For not showing internal projects(like PTO,HOL,etc)/"Business Development" project in overall PM site.
 	[IsAdministrative]          BIT    NOT NULL CONSTRAINT [DF_Project_IsAdministrative] DEFAULT 0,
 	[IsNoteRequired]            BIT    NOT NULL CONSTRAINT DF_Project_IsNoteRequired DEFAULT (1),
+	[ProjectOwnerId]            INT NULL, 
     FOREIGN KEY ([GroupId]) REFERENCES [dbo].[ProjectGroup] ([GroupId]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
