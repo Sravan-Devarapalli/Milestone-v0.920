@@ -1,8 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
--- Updated by : Sainath.CH
--- Update Date: 04-16-2012
+-- Updated by : Srinivas.M
+-- Update Date: 05-21-2012
 -- Description:  Time Entries grouped by Resource for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
@@ -13,7 +13,8 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
       @PersonTypes NVARCHAR(MAX) = NULL ,
       @SeniorityIds NVARCHAR(MAX) = NULL ,
       @TimeScaleNamesList XML = NULL,
-	  @PersonStatusIds NVARCHAR(MAX) = NULL 
+	  @PersonStatusIds NVARCHAR(MAX) = NULL,
+	  @PersonDivisionIds NVARCHAR(MAX) = NULL
     )
 AS 
     BEGIN
@@ -34,6 +35,12 @@ AS
         INSERT  INTO @TimeScaleNames
                 SELECT  ResultString
                 FROM    [dbo].[ConvertXmlStringInToStringTable](@TimeScaleNamesList)
+
+		DECLARE @DivisionIds TABLE ( Id NVARCHAR(20))
+
+		INSERT INTO @DivisionIds
+				SELECT ResultString
+				FROM	[dbo].[ConvertXmlStringInToStringTable](@PersonDivisionIds)
 
 	-- Get person level Default hours in between the StartDate and EndDate
 	--1.Day should not be company holiday and also not converted to substitute day.
@@ -153,7 +160,8 @@ AS
                                  END, 0), 0) AS UtlizationPercent ,
                     PCP.Timescale,
 					PS.PersonStatusId AS 'PersonStatusId',
-				    PS.Name AS 'PersonStatusName'
+				    PS.Name AS 'PersonStatusName',
+					P.DivisionId AS 'DivisionId'
             FROM    ( SELECT    TE.PersonId ,
                                 ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
                                                     AND Pro.ProjectNumber != 'P031000'
@@ -247,6 +255,10 @@ AS
                                 OR ( PCP.Timescale ) IN ( 
 								  SELECT  Name FROM    @TimeScaleNames )
                               )
+						  AND ( @PersonDivisionIds IS NULL
+								OR ISNULL(P.DivisionId, '') IN (SELECT Id
+																FROM @DivisionIds)
+							  )
                         )
             ORDER BY P.LastName ,
                     P.FirstName
