@@ -2,6 +2,8 @@
 -- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 8-12-2008
+-- Updated by:	Srinivas.M
+-- Update Date:	05-21-2012
 -- Description:	Updates a Project's Start and End Dates according to the data in the Milestone table
 -- =============================================
 CREATE TRIGGER tr_Milestone_UpdateProjectPeriod
@@ -9,6 +11,12 @@ ON dbo.Milestone
 AFTER INSERT, UPDATE, DELETE
 AS
 	SET NOCOUNT ON
+		
+	DECLARE @UserLogin NVARCHAR(50)
+	
+	SELECT @UserLogin = UserLogin
+	FROM SessionLogData
+	WHERE SessionID = @@SPID
 	
 	DECLARE @StartDate DATETIME,
 			@EndDate	DATETIME,
@@ -31,5 +39,12 @@ AS
 		SET EndDate = @EndDate + (7 - DATEPART(dw,EndDate))
 	FROM [dbo].[PersonTimeEntryRecursiveSelection] PTRS
 	WHERE PTRS.ProjectId = @ProjectId AND PTRS.IsRecursive = 1
-
+	
+	IF  ( SELECT UserLogin
+			FROM SessionLogData
+			WHERE SessionID = @@SPID
+		) IS NULL
+	BEGIN
+		EXEC SessionLogPrepare @UserLogin = @UserLogin
+	END
 
