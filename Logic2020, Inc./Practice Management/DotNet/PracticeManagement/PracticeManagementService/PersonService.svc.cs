@@ -1053,6 +1053,11 @@ namespace PracticeManagementService
             return person;
         }
 
+        public Person GetPersonDetailsShort(int personId)
+        {
+            return  PersonDAL.GetPersonFirstLastNameById(personId);
+        }
+
 
         public Person GetPayHistoryShortByPerson(int personId)
         {
