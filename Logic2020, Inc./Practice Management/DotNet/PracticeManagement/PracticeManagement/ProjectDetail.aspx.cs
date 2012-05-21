@@ -1001,6 +1001,7 @@ namespace PraticeManagement
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
             DataHelper.FillProjectManagersList(cblProjectManagers, "All Project Managers");
+            DataHelper.FillProjectManagersList(ddlProjectOwner, "-- Select Project Owner --");
 
             int? id = ProjectId;
             if (id.HasValue)
@@ -1111,6 +1112,11 @@ namespace PraticeManagement
                 }
 
                 ddlDirector.SelectedValue = selectedDirector.Value;
+            }
+
+            if (project.ProjectOwner != null)
+            {
+                ddlProjectOwner.SelectedValue = project.ProjectOwner.Id.ToString();
             }
 
             PopulateAttachmentControl(project);
@@ -1326,6 +1332,9 @@ namespace PraticeManagement
             PopulatePracticeManagementCommission(project);
             project.BillingInfo = billingInfo.Info;
             project.Description = txtDescription.Text;
+
+            project.ProjectOwner = new Person() { Id = Convert.ToInt32(ddlProjectOwner.SelectedValue) };
+
 
             project.IsNoteRequired = chbNoteRequired.Checked;
 
