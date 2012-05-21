@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-25-2008
--- Updated by:	
--- Update date:	
+-- Updated By: ThulasiRam.P
+-- Updated Date: 2012-05-21
 -- Description:	Logs the inserting into the dbo.Project table.
 -- =============================================
 CREATE TRIGGER [dbo].[tr_Project_LogInsert]
@@ -33,15 +33,20 @@ BEGIN
 				,PG.Name AS 'ProjectGroup'
 				,i.Description
 				,i.DirectorId
-				,D.LastName + ', ' + D.FirstName AS 'ProjectDirector'
+				,CASE WHEN i.DirectorId IS NOT NULL THEN D.LastName + ', ' + D.FirstName 
+				      ELSE '' 
+				      END AS 'ProjectDirector'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
-						ELSE 'No' END AS 'IsChargeable'
+						ELSE 'No' END AS 'IsChargeable',
+				i.ProjectOwnerId,
+				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
 		FROM inserted AS i
-		JOIN Client AS C ON C.ClientId = i.ClientId
-		JOIN Practice AS prac ON prac.PracticeId = i.PracticeId
-		JOIN ProjectStatus AS ps ON ps.ProjectStatusId = i.ProjectStatusId
-		JOIN ProjectGroup AS PG ON PG.GroupId = i.GroupId
-		JOIN Person AS D ON D.PersonId = i.DirectorId
+		INNER JOIN dbo.Client AS C ON C.ClientId = i.ClientId
+		INNER JOIN dbo.Practice AS prac ON prac.PracticeId = i.PracticeId
+		INNER JOIN dbo.ProjectStatus AS ps ON ps.ProjectStatusId = i.ProjectStatusId
+		INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = i.GroupId
+		LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectOwnerId -- While Converting opportunity to Project ProjectOwnerId will not be there.So here Left join is used instead of INNER JOIN.
+		LEFT JOIN dbo.Person AS D ON D.PersonId = i.DirectorId
 	)
 	
 	-- Log an activity
