@@ -11,6 +11,7 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class PersonSummaryReport : System.Web.UI.UserControl
     {
+        private string PersonSummaryReportExport = "Person Summary Report";
 
         private PraticeManagement.Reporting.PersonDetailTimeReport HostingPage
         {
@@ -40,6 +41,8 @@ namespace PraticeManagement.Controls.Reports
      
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(PersonSummaryReportExport);
+
             // mso-number-format:"0\.00"
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
