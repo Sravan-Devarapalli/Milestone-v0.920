@@ -627,7 +627,8 @@
                                         Offshore Resource
                                     </td>
                                     <td class="info-field">
-                                        <asp:DropDownList ID="ddlPersonType" runat="server" CssClass="info-field" onchange="setDirty();" Width="158px">
+                                        <asp:DropDownList ID="ddlPersonType" runat="server" CssClass="info-field" onchange="setDirty();"
+                                            Width="158px">
                                             <asp:ListItem Text="NO" Value="0" Selected="True"></asp:ListItem>
                                             <asp:ListItem Text="YES" Value="1"></asp:ListItem>
                                         </asp:DropDownList>
@@ -635,10 +636,11 @@
                                     <td>
                                     </td>
                                     <td>
-                                        <asp:Label id="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
+                                        <asp:Label ID="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
                                     </td>
                                     <td class="info-field">
-                                        <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="info-field" onchange="setDirty();" Visible="false"></asp:TextBox>
+                                        <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="info-field" onchange="setDirty();"
+                                            Visible="false"></asp:TextBox>
                                         <ajaxToolkit:FilteredTextBoxExtender ID="ftePayCheckId" TargetControlID="txtPayCheckId"
                                             FilterType="Numbers" FilterMode="ValidChars" runat="server" />
                                     </td>
@@ -659,10 +661,11 @@
                                             ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>
                                     </td>
                                     <td>
-                                        &nbsp;
+                                        <asp:Label ID="lblDivision" runat="server" Text="Division"></asp:Label>
                                     </td>
-                                    <td>
-                                        &nbsp;
+                                    <td class="info-field">
+                                        <asp:DropDownList ID="ddlDivision" runat="server">
+                                        </asp:DropDownList>
                                     </td>
                                     <td>
                                         &nbsp;
