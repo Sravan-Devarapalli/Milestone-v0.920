@@ -174,6 +174,9 @@
     <asp:Panel ID="pnlFilterOffshore" Style="display: none;" runat="server">
         <uc:FilteredCheckBoxList ID="cblOffShore" runat="server" Height="155px" />
     </asp:Panel>
+    <asp:Panel ID="pnlDivision" Style="display: none;" runat="server">
+        <uc:FilteredCheckBoxList ID="cblDivision" runat="server" Height="155px" />
+    </asp:Panel>
     <asp:Panel ID="pnlFilterPersonStatusType" Style="display: none;" runat="server">
         <uc:FilteredCheckBoxList ID="cblPersonStatusType" runat="server" Height="155px" />
     </asp:Panel>
@@ -196,6 +199,11 @@
                                     runat="server" id="imgOffShoreFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceOffshoreFilter" runat="server" TargetControlID="imgOffShoreFilter"
                                     BehaviorID="pceOffshoreFilter" PopupControlID="pnlFilterOffshore" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="Filter" src="../../Images/divisions_16x16.png" style="padding-left: 2px;"
+                                    runat="server" id="imgDivisionFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceDivision" runat="server" TargetControlID="imgDivisionFilter"
+                                    BehaviorID="pceDivision" PopupControlID="pnlDivision" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 130px;">
