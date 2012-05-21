@@ -298,7 +298,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames,string personStatusIds)
+        public static List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames, string personStatusIds, string personDivisionIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByResource, connection))
@@ -325,6 +325,11 @@ namespace DataAccess
                 if (personStatusIds != null)
                 {
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds);
+                }
+
+                if (personDivisionIds != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonDivisionIdsParam, personDivisionIds);
                 }
 
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -359,6 +364,7 @@ namespace DataAccess
                 int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
                 int personStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
                 int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+                int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
 
                 while (reader.Read())
                 {
@@ -385,6 +391,10 @@ namespace DataAccess
                                                 },
                                                 UtlizationPercent = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d
                                             };
+                    if(!reader.IsDBNull(divisionIdIndex))
+                    {
+                        person.DivisionType = (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), reader.GetInt32(divisionIdIndex).ToString());
+                    }
                     PLGH.Person = person;
                     PLGH.BillableHours = reader.GetDouble(billableHoursIndex);
                     PLGH.ProjectNonBillableHours = reader.GetDouble(projectNonBillableHoursIndex);
@@ -849,7 +859,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames, string personStatusIds)
+        public static List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames, string personStatusIds, string personDivisionIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryByResourcePayCheck, connection))
@@ -879,6 +889,10 @@ namespace DataAccess
                 if (personStatusIds != null)
                 {
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds);
+                }
+                if (personDivisionIds != null)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonDivisionIdsParam, personDivisionIds);
                 }
 
                 connection.Open();
@@ -910,6 +924,7 @@ namespace DataAccess
                 int bereavementHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BereavementHours);
                 int oRTHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ORTHours);
                 int paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
+                int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
 
                 while (reader.Read())
                 {
@@ -924,7 +939,8 @@ namespace DataAccess
                         {
                             TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
                         },
-                        PaychexID = reader.IsDBNull(paychexIDIndex) ? string.Empty : reader.GetString(paychexIDIndex)
+                        PaychexID = reader.IsDBNull(paychexIDIndex) ? string.Empty : reader.GetString(paychexIDIndex),
+                        DivisionType = reader.IsDBNull(divisionIdIndex) ? (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), "0") : (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), reader.GetInt32(divisionIdIndex).ToString())
                     };
                     PLPC.Person = person;
                     PLPC.BranchID = reader.GetInt32(branchIDIndex);
