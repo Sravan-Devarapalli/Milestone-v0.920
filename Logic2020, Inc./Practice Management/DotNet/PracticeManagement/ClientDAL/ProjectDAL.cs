@@ -18,7 +18,7 @@ namespace DataAccess
     /// </summary>
     public class ProjectDAL
     {
-      
+
         /// <summary>
         /// Retrieves the list of projects which intended for the specific client.
         /// </summary>
@@ -855,6 +855,7 @@ namespace DataAccess
                     project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
 
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
@@ -911,6 +912,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, project.IsNoteRequired);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                    project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
@@ -1022,6 +1024,17 @@ namespace DataAccess
                     int ClientIsInternalIndex = -1;
                     int hasTimeEntriesIndex = -1;
                     int isNoteRequiredIndex = -1;
+
+                    int projectOwnerIdIndex = -1;
+
+                    try
+                    {
+                        projectOwnerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerId);
+                    }
+                    catch
+                    {
+                        projectOwnerIdIndex = -1;
+                    }
 
                     try
                     {
@@ -1144,6 +1157,11 @@ namespace DataAccess
                             ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
 
                         };
+
+                        if (projectOwnerIdIndex > -1 && !reader.IsDBNull(projectOwnerIdIndex))
+                        {
+                            project.ProjectOwner = new Person() { Id = reader.GetInt32(projectOwnerIdIndex) };
+                        }
 
                         if (isNoteRequiredIndex > -1)
                         {
@@ -1303,6 +1321,10 @@ namespace DataAccess
                     int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
                     int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
 
+                    int projectOwnerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerId);
+                    int projectOwnerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerLastName);
+                    int projectOwnerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerFirstName);
+
                     int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
                     int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
 
@@ -1310,6 +1332,8 @@ namespace DataAccess
                     int practiceOwnerNameIndex = -1;
                     int projectGroupIdIndex = -1;
                     int projectGroupNameIndex = -1;
+
+
 
                     int hasAttachments = -1;
                     try
@@ -1465,6 +1489,16 @@ namespace DataAccess
                             {
                             }
                             resultList.Add(project);
+                        }
+
+                        if (!reader.IsDBNull(projectOwnerIdIndex))
+                        {
+                            project.ProjectOwner = new Person()
+                            {
+                                Id = reader.GetInt32(projectOwnerIdIndex),
+                                FirstName = reader.GetString(projectOwnerFirstNameIndex),
+                                LastName = reader.GetString(projectOwnerLastNameIndex)
+                            };
                         }
 
                         if (!reader.IsDBNull(mileStoneIdIndex))
@@ -2231,7 +2265,7 @@ namespace DataAccess
             }
             return projectList;
         }
-        
+
         public static List<Project> GetProjectListByDateRange(bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, DateTime periodStart, DateTime periodEnd)
         {
             var projectList = new List<Project>();
@@ -2364,7 +2398,7 @@ namespace DataAccess
                 }
             }
         }
-        
+
         public static bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2386,7 +2420,7 @@ namespace DataAccess
                 }
             }
         }
-        
+
         public static List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate)
         {
 
@@ -2409,7 +2443,7 @@ namespace DataAccess
                 }
             }
         }
-        
+
         private static void ReadProjectsAfterTermination(SqlDataReader reader, List<Project> result)
         {
             if (reader.HasRows)
@@ -2626,7 +2660,7 @@ namespace DataAccess
                 }
             }
         }
-        
+
         public static Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
