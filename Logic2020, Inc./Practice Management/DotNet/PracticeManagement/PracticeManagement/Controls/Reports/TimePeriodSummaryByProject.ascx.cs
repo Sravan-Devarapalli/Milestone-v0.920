@@ -12,6 +12,8 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class TimePeriodSummaryByProject : System.Web.UI.UserControl
     {
+        private string TimePeriodSummaryReportExport = "TimePeriod Summary Report By Project";
+
         private HtmlImage ImgClientFilter { get; set; }
 
         private HtmlImage ImgProjectStatusFilter { get; set; }
@@ -47,6 +49,8 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(TimePeriodSummaryReportExport);
+
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value,
