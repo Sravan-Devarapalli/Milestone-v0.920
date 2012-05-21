@@ -13,6 +13,7 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class ByworkType : System.Web.UI.UserControl
     {
+        private string ProjectSummaryReportExport = "ProjectSummary Report By WorkType";
 
         private PraticeManagement.Reporting.ProjectSummaryReport HostingPage
         {
@@ -38,6 +39,8 @@ namespace PraticeManagement.Controls.Reports
         }
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(ProjectSummaryReportExport);
+
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
             WorkTypeLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, null));
             data = data.OrderBy(p => p.WorkType.Name).ToArray();
