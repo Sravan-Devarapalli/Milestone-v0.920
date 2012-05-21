@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 8-04-2008
--- Updated by:	SainathC
--- Update date: 04-03-2012
+-- Updated by:	Srinivas.M
+-- Update date: 05-21-2012
 -- Description:	Verifies the UserName uniquness for the dbo.Person table.
 -- =============================================
 CREATE VIEW dbo.v_Person
@@ -39,7 +39,8 @@ AS
 					practice.[Name] AS '@Name' 
 			FROM dbo.Practice as practice 			
 			WHERE practice.PracticeManagerId = p.PersonId
-			FOR XML PATH('Practice'), ROOT('Practices')) AS 'PracticesOwned'
+			FOR XML PATH('Practice'), ROOT('Practices')) AS 'PracticesOwned',
+			p.DivisionId
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
