@@ -491,7 +491,7 @@ namespace PraticeManagement.Objects
         public bool bold = false;
         public bool underline = false;
         public int BorderWidth = 1;
-        public int fontSize = 12;
+        public int fontSize = 7;
         public float PaddingTop = 10f;
         public float PaddingBottom = 10f;
         public float PaddingLeft = 5f;
