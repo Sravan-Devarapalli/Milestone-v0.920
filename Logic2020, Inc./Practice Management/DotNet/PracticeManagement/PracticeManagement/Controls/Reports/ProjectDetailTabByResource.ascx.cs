@@ -25,6 +25,8 @@ namespace PraticeManagement.Controls.Reports
 
         private int sectionId;
 
+        private string ProjectDetailByResourceExport = "Project Detail Report By Resource";
+
         private List<string> CollapsiblePanelExtenderClientIds
         {
             get;
@@ -56,7 +58,7 @@ namespace PraticeManagement.Controls.Reports
                 divEmptyMessage.Style["display"] = "";
                 repPersons.Visible = btnExpandOrCollapseAll.Visible = false;
             }
-            //btnExportToPDF.Enabled = 
+            btnExportToPDF.Enabled = 
             btnExportToExcel.Enabled = reportData.Count() > 0;
         }
 
@@ -145,6 +147,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(ProjectDetailByResourceExport);
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
             PersonLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId,
@@ -257,7 +260,8 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
-            //HostingPage.PDFExport();
+            DataHelper.InsertExportActivityLogMessage(ProjectDetailByResourceExport);
+            HostingPage.PDFExport();
         }
 
     }
