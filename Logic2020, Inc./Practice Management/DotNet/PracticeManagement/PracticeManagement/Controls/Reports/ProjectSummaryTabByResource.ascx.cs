@@ -18,6 +18,7 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class ProjectSummaryTabByResource : System.Web.UI.UserControl
     {
+        private string ProjectSummaryByResourceExport = "Project Summary Report By Resource";
         #region Variables
         private HtmlImage ImgProjectRoleFilter { get; set; }
 
@@ -64,7 +65,7 @@ namespace PraticeManagement.Controls.Reports
                 divEmptyMessage.Style["display"] = "";
                 repResource.Visible = false;
             }
-            //btnExportToPDF.Enabled = 
+            btnExportToPDF.Enabled = 
             btnExportToExcel.Enabled = reportData.Count() > 0;
         }
 
@@ -99,6 +100,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            DataHelper.InsertExportActivityLogMessage(ProjectSummaryByResourceExport);
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
             List<PersonLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber,
@@ -173,7 +175,8 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
-            //HostingPage.PDFExport();
+            DataHelper.InsertExportActivityLogMessage(ProjectSummaryByResourceExport);
+            HostingPage.PDFExport();
         }
 
         protected void btnUpdate_OnClick(object sender, EventArgs e)
