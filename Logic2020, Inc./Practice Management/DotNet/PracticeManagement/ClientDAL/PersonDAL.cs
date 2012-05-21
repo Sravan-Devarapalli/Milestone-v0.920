@@ -90,6 +90,7 @@ namespace DataAccess
         private const string PersonStatusIdsParam = "@PersonStatusIds";
         private const string IsOffshoreParam = "@IsOffshore";
         private const string PaychexIDParam = "@PaychexID";
+        private const string PersonDivisionIdParam = "@PersonDivisionId";
 
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
@@ -234,6 +235,8 @@ namespace DataAccess
         private const string PracticeNameColumn = "PracticeName";
         private const string IsMinimumLoadFactorColumn = "IsMinimumLoadFactor";
         private const string TimeScaleChangeStatusColumn = "TimeScaleChangeStatus";
+
+        private const string DivisionIdColumn = "DivisionId";
 
         #endregion
 
@@ -845,8 +848,9 @@ namespace DataAccess
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(UserLoginParam,
                                                 !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
-                command.Parameters.AddWithValue(IsOffshoreParam,person.IsOffshore);
+                command.Parameters.AddWithValue(IsOffshoreParam, person.IsOffshore);
                 command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
+                command.Parameters.AddWithValue(PersonDivisionIdParam, (int)person.DivisionType != 0 ? (object)((int)person.DivisionType) : DBNull.Value);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(
@@ -958,6 +962,7 @@ namespace DataAccess
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(IsOffshoreParam, person.IsOffshore);
                 command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
+                command.Parameters.AddWithValue(PersonDivisionIdParam, (int)person.DivisionType != 0 ? (object)((int)person.DivisionType) : DBNull.Value);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(
@@ -2316,6 +2321,7 @@ namespace DataAccess
                     int isStrawManIndex;
                     int isOffshoreIndex;
                     int paychexIDIndex;
+                    int divisionIdIndex;
 
                     try
                     {
@@ -2325,7 +2331,7 @@ namespace DataAccess
                     {
                         isOffshoreIndex = -1;
                     }
-                    
+
                     try
                     {
                         paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
@@ -2369,6 +2375,15 @@ namespace DataAccess
                     catch
                     {
                         isDefManagerIndex = -1;
+                    }
+
+                    try
+                    {
+                        divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+                    }
+                    catch
+                    {
+                        divisionIdIndex = -1;
                     }
 
 
@@ -2460,6 +2475,11 @@ namespace DataAccess
                         if (paychexIDIndex > -1)
                         {
                             person.PaychexID = reader.IsDBNull(paychexIDIndex) ? null : reader.GetString(paychexIDIndex);
+                        }
+
+                        if (divisionIdIndex > -1)
+                        {
+                            person.DivisionType = reader.IsDBNull(divisionIdIndex) ? (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), "0") : (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), reader.GetInt32(divisionIdIndex).ToString());
                         }
 
                         if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
@@ -3481,7 +3501,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(LookedParam,!string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
+                command.Parameters.AddWithValue(LookedParam, !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -3507,9 +3527,9 @@ namespace DataAccess
                                 {
                                     Name = reader.GetString(statusNameIndex)
                                 },
-                                CurrentPay = new Pay 
+                                CurrentPay = new Pay
                                 {
-                                TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                                    TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
                                 }
                             };
                             result.Add(person);
