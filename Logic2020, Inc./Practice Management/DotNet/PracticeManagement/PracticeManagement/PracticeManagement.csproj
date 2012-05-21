@@ -401,6 +401,7 @@
     <Content Include="Images\close_inactive16.png" />
     <Content Include="Images\copy.png" />
     <Content Include="Images\desc.gif" />
+    <Content Include="Images\divisions_16x16.png" />
     <Content Include="Images\Non-Billable-Icon.png" />
     <Content Include="Images\notes.png" />
     <Content Include="Images\notes_optional.png" />
