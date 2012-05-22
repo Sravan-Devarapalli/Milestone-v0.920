@@ -60,9 +60,24 @@ namespace PraticeManagement.Controls.Reports
             {
 
                 var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value,
-                    HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.ActualSelectedItemsXmlFormat,
-                    cblSeniorities.ActualSelectedItems,
-                    cblPayTypes.ActualSelectedItemsXmlFormat, cblPersonStatusType.SelectedItems, cblDivision.ActualSelectedItemsXmlFormat)).ToList();
+                    HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.SelectedItemsXmlFormat,
+                    cblSeniorities.SelectedItems,
+                    cblPayTypes.SelectedItemsXmlFormat, cblPersonStatusType.SelectedItems, cblDivision.SelectedItemsXmlFormat)).ToList();
+                
+                string filterApplied = "Filters applied to columns: ";
+                List<string> filteredColoums = new List<string>();
+                if (!cblOffShore.AllItemsSelected || !cblPersonStatusType.AllItemsSelected || !cblDivision.AllItemsSelected)
+                {
+                    filteredColoums.Add("Resource");
+                }
+                if (!cblSeniorities.AllItemsSelected)
+                {
+                    filteredColoums.Add("Seniority");
+                }
+                if (!cblPayTypes.AllItemsSelected)
+                {
+                    filteredColoums.Add("Pay Type");
+                }
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByResource Report");
@@ -73,6 +88,19 @@ namespace PraticeManagement.Controls.Reports
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
                 sb.Append("\t");
+                if (filteredColoums.Count > 0)
+                {
+                    sb.AppendLine();
+                    for (int i = 0; i < filteredColoums.Count; i++)
+                    {
+                        if (i == filteredColoums.Count-1)
+                            filterApplied = filterApplied + filteredColoums[i] + ".";
+                        else
+                            filterApplied = filterApplied + filteredColoums[i] + ",";
+                    }
+                    sb.Append(filterApplied);
+                    sb.Append("\t");
+                }
                 sb.AppendLine();
                 sb.AppendLine();
 
@@ -153,9 +181,24 @@ namespace PraticeManagement.Controls.Reports
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-
                 List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value,
-                    HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.ActualSelectedItemsXmlFormat, cblSeniorities.ActualSelectedItems, cblPayTypes.ActualSelectedItemsXmlFormat, cblPersonStatusType.SelectedItems, cblDivision.ActualSelectedItemsXmlFormat)).ToList();
+                    HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.SelectedItemsXmlFormat, cblSeniorities.SelectedItems, cblPayTypes.SelectedItemsXmlFormat, cblPersonStatusType.SelectedItems, cblDivision.SelectedItemsXmlFormat)).ToList();
+
+                string filterApplied = "Filters applied to columns: ";
+                List<string> filteredColoums = new List<string>();
+                if (!cblOffShore.AllItemsSelected || !cblPersonStatusType.AllItemsSelected || !cblDivision.AllItemsSelected)
+                {
+                    filteredColoums.Add("Resource");
+                }
+                if (!cblSeniorities.AllItemsSelected)
+                {
+                    filteredColoums.Add("Seniority");
+                }
+                if (!cblPayTypes.AllItemsSelected)
+                {
+                    filteredColoums.Add("Pay Type");
+                }
+
                 StringBuilder sb = new StringBuilder();
                 sb.Append(" Paychex ");
                 sb.Append("\t");
@@ -165,6 +208,19 @@ namespace PraticeManagement.Controls.Reports
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
                 sb.Append("\t");
+                if (filteredColoums.Count > 0)
+                {
+                    sb.AppendLine();
+                    for (int i = 0; i < filteredColoums.Count; i++)
+                    {
+                        if (i == filteredColoums.Count - 1)
+                            filterApplied = filterApplied + filteredColoums[i] + ".";
+                        else
+                            filterApplied = filterApplied + filteredColoums[i] + ",";
+                    }
+                    sb.Append(filterApplied);
+                    sb.Append("\t");
+                }
                 sb.AppendLine();
                 sb.AppendLine();
                 bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
