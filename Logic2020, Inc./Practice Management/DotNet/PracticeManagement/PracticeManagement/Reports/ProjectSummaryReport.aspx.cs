@@ -803,10 +803,10 @@ namespace PraticeManagement.Reporting
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(ProjectNumber, MilestoneId, StartDate, EndDate));
             List<PersonLevelGroupedHours> summaryData = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber,
                 MilestoneId, PeriodSelected == "0" ? StartDate : null,
-                PeriodSelected == "0" ? EndDate : null, ByResourceControl.cblProjectRolesControl.ActualSelectedItemsXmlFormat)).ToList();
+                PeriodSelected == "0" ? EndDate : null, ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
             List<PersonLevelGroupedHours> detailData = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(ProjectNumber, MilestoneId,
                PeriodSelected == "0" ? StartDate : null, PeriodSelected == "0" ? EndDate : null,
-               ByResourceControl.cblProjectRolesControl.ActualSelectedItemsXmlFormat)).ToList();
+               ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
 
             HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
             string filename = string.Format("{0}_{1}_{2}.pdf", project.ProjectNumber, project.Name, "_ByResource").Replace(' ', '_');
