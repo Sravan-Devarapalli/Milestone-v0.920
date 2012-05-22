@@ -54,7 +54,19 @@ namespace PraticeManagement.Controls.Reports
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value,
-                    cblClients.ActualSelectedItems, cblProjectStatus.ActualSelectedItems));
+                    cblClients.SelectedItems, cblProjectStatus.SelectedItems));
+
+                string filterApplied = "Filters applied to columns: ";
+                List<string> filteredColoums = new List<string>();
+                if (!cblClients.AllItemsSelected)
+                {
+                    filteredColoums.Add("Project");
+                }
+                if (!cblProjectStatus.AllItemsSelected)
+                {
+                    filteredColoums.Add("Status");
+                }
+
                 StringBuilder sb = new StringBuilder();
                 sb.Append("TimePeriod_ByProject Report");
                 sb.Append("\t");
@@ -64,6 +76,19 @@ namespace PraticeManagement.Controls.Reports
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
                 sb.Append("\t");
+                if (filteredColoums.Count > 0)
+                {
+                    sb.AppendLine();
+                    for (int i = 0; i < filteredColoums.Count; i++)
+                    {
+                        if (i == filteredColoums.Count - 1)
+                            filterApplied = filterApplied + filteredColoums[i] + ".";
+                        else
+                            filterApplied = filterApplied + filteredColoums[i] + ",";
+                    }
+                    sb.Append(filterApplied);
+                    sb.Append("\t");
+                }
                 sb.AppendLine();
                 sb.AppendLine();
 
