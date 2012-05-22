@@ -152,7 +152,16 @@ namespace PraticeManagement.Controls.Reports
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
             PersonLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId,
                 HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null,
-                HostingControl.cblProjectRolesControl.ActualSelectedItemsXmlFormat));
+                HostingControl.cblProjectRolesControl.SelectedItemsXmlFormat));
+            
+            string filterApplied = "Filters applied to columns: ";
+            bool isFilterApplied = false;
+            if (!HostingControl.cblProjectRolesControl.AllItemsSelected)
+            {
+                filterApplied = filterApplied + " ProjectRoles.";
+                isFilterApplied = true;
+            }
+
             StringBuilder sb = new StringBuilder();
             sb.Append(project.Client.Name);
             sb.Append("\t");
@@ -168,6 +177,12 @@ namespace PraticeManagement.Controls.Reports
             sb.AppendLine();
             sb.Append(HostingPage.ProjectRange);
             sb.Append("\t");
+            if (isFilterApplied)
+            {
+                sb.AppendLine();
+                sb.Append(filterApplied);
+                sb.Append("\t");
+            }
             sb.AppendLine();
             sb.AppendLine();
             if (data.Length > 0)
