@@ -189,18 +189,18 @@
                         <tr>
                             <th style="width: 210px; text-align: left;" class="padLeft5">
                                 Resource
-                                <img alt="Filter" src="../../Images/Terminated.png" style="padding-left: 2px;" runat="server"
+                                <img alt="Filter" src="../../Images/Terminated.png" style="padding-left: 2px;" runat="server" title="Person Status"
                                     id="imgPersonStatusTypeFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
                                     TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
                                     PopupControlID="pnlFilterPersonStatusType" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
-                                <img alt="Filter" src="../../Images/Offshore_Icon.png" style="padding-left: 2px;"
+                                <img alt="Filter" src="../../Images/Offshore_Icon.png" style="padding-left: 2px;" title="Location"
                                     runat="server" id="imgOffShoreFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceOffshoreFilter" runat="server" TargetControlID="imgOffShoreFilter"
                                     BehaviorID="pceOffshoreFilter" PopupControlID="pnlFilterOffshore" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
-                                <img alt="Filter" src="../../Images/divisions_16x16.png" style="padding-left: 2px;"
+                                <img alt="Filter" src="../../Images/divisions_16x16.png" style="padding-left: 2px;" title="Division"
                                     runat="server" id="imgDivisionFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceDivision" runat="server" TargetControlID="imgDivisionFilter"
                                     BehaviorID="pceDivision" PopupControlID="pnlDivision" Position="Bottom">
@@ -208,7 +208,7 @@
                             </th>
                             <th style="width: 130px;">
                                 Seniority
-                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute;
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" style="position: absolute;
                                     padding-left: 2px;" runat="server" id="imgSeniorityFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
                                     BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
@@ -216,7 +216,7 @@
                             </th>
                             <th style="width: 110px;">
                                 Pay Type
-                                <img alt="Filter" src="../../Images/search_filter.png" style="position: absolute;
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" style="position: absolute;
                                     padding-left: 2px;" runat="server" id="imgPayTypeFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter"
                                     BehaviorID="pcePayTypeFilter" PopupControlID="pnlFilterPayType" Position="Bottom">
