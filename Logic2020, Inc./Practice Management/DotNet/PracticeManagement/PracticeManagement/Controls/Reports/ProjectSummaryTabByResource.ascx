@@ -42,7 +42,7 @@
                         </th>
                         <th style="width: 130px;">
                             Project Role
-                            <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectRoleFilter"
+                            <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectRoleFilter"
                                 style="position: absolute; padding-left: 2px;" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceProjectRole" runat="server" TargetControlID="imgProjectRoleFilter"
                                 PopupControlID="pnlFilterProjectRoles" Position="Bottom">
