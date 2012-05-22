@@ -161,7 +161,7 @@
                         <tr>
                             <th class="t-left padLeft5" style="width: 500px; height: 20px;">
                                 Project
-                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter"
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter"
                                     style="position: absolute; padding-left: 2px;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceClient" runat="server" TargetControlID="imgClientFilter"
                                     PopupControlID="pnlFilterResource" Position="Bottom">
@@ -169,7 +169,7 @@
                             </th>
                             <th style="width: 110px; height: 20px;">
                                 Status
-                                <img alt="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter"
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter"
                                     style="position: absolute; padding-left: 2px;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
