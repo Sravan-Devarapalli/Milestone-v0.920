@@ -494,103 +494,7 @@ namespace PraticeManagement.Reporting
         #endregion
 
         #region Pdf Methods
-
-        /// <summary>
-        /// Returns the PdfHeader i.e logo 
-        /// </summary>
-        private PdfPTable GetPdfHeaderLogo()
-        {
-            PdfPTable headerTable = new PdfPTable(2);
-
-            //logo
-            byte[] buffer = BrandingConfigurationManager.LogoData.Data;
-            PdfPCell logo = new PdfPCell(iTextSharp.text.Image.GetInstance(buffer), true);
-            headerTable.WidthPercentage = 100;
-
-            //logo styles
-            logo.BorderWidth = 0;
-            logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
-            logo.FixedHeight = 60f;
-            logo.VerticalAlignment = Element.ALIGN_MIDDLE;
-            logo.PaddingBottom = 30f;
-            headerTable.AddCell(logo);
-            return headerTable;
-        }
-
-        /// <summary>
-        /// Returns the PdfHeader i.e logo and Header Text
-        /// </summary>
-        private PdfPTable GetPdfHeader(int pageNo, int pageCount)
-        {
-            PdfPTable headerTable = new PdfPTable(2);
-            //logo
-            byte[] buffer = BrandingConfigurationManager.LogoData.Data;
-            PdfPCell logo = new PdfPCell(iTextSharp.text.Image.GetInstance(buffer), true);
-
-            var baseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
-            var font1 = new Font(baseFont, 10, Font.NORMAL);
-            var font2 = new Font(baseFont, 10, Font.NORMAL);
-            PdfPTable innerTable = new PdfPTable(2);
-            PdfPCell headerText1 = new PdfPCell(new Phrase("Report Date: ", font2));
-            PdfPCell headerText2 = new PdfPCell(new Phrase(DateTime.Now.ToString("MM/dd/yyyy"), font1));
-            PdfPCell headerText3 = new PdfPCell(new Phrase("Page  ", font2));
-            PdfPCell headerText4 = new PdfPCell(new Phrase(pageNo + " of " + pageCount, font1));
-
-
-            //Styles
-            innerTable.WidthPercentage = headerTable.WidthPercentage = 100;
-            headerTable.SetWidths(new float[] { .8f, .2f });
-            innerTable.SetWidths(new float[] { .6f,.4f });
-            logo.VerticalAlignment = Element.ALIGN_MIDDLE;
-            logo.FixedHeight = 40f;
-            logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
-            headerText1.BorderWidth = headerText2.BorderWidth = headerText3.BorderWidth = headerText4.BorderWidth = logo.BorderWidth = 0;
-            headerText1.HorizontalAlignment = headerText3.HorizontalAlignment = Element.ALIGN_RIGHT;
-            headerText2.HorizontalAlignment = headerText4.HorizontalAlignment = Element.ALIGN_LEFT;
-            headerText1.VerticalAlignment = headerText2.VerticalAlignment = headerText3.VerticalAlignment = headerText4.VerticalAlignment = Element.ALIGN_TOP;
-
-            innerTable.AddCell(headerText1);
-            innerTable.AddCell(headerText2);
-            innerTable.CompleteRow();
-            innerTable.AddCell(headerText3);
-            innerTable.AddCell(headerText4);
-            innerTable.CompleteRow();
-            PdfPCell innerTableCell = new PdfPCell(innerTable);
-            innerTableCell.BorderWidth = 0;
-            PdfPCell innerTableCell1 = new PdfPCell(GetPdfTableWithGivenString(""));
-            innerTableCell1.BorderWidth = 0;
-            innerTableCell1.Colspan = 2;
-            
-
-            headerTable.AddCell(logo);
-            headerTable.AddCell(innerTableCell);
-            headerTable.CompleteRow();
-            headerTable.AddCell(innerTableCell1);
-            headerTable.CompleteRow();
-
-            return headerTable;
-        }
-
-        private PdfPTable GetPdfTableWithGivenString(String text)
-        {
-            PdfPTable textTable = new PdfPTable(1);
-            var _BOLDITALICBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
-            var _BOLDITALICFont = new Font(_BOLDITALICBaseFont, 16, Font.ITALIC);
-            PdfPCell textCell = new PdfPCell(new Phrase(text, _BOLDITALICFont));
-
-            //Styles
-            textTable.WidthPercentage = 100;
-            textTable.SetWidths(new float[] { 1f });
-            textCell.BorderWidth = 0;
-            textCell.HorizontalAlignment = Element.ALIGN_CENTER;
-            textCell.PaddingTop = 20f;
-            textCell.VerticalAlignment = Element.ALIGN_TOP;
-
-            textTable.AddCell(textCell);
-            textTable.CompleteRow();
-            return textTable;
-        }
-
+       
         private PdfPTable GetPdfReportHeader(List<PersonLevelGroupedHours> personLevelGroupedHoursList, Project project, int? personId)
         {
             List<PersonLevelGroupedHours> _personLevelGroupedHoursList = personLevelGroupedHoursList;
@@ -798,23 +702,26 @@ namespace PraticeManagement.Reporting
             MemoryStream file = new MemoryStream();
             Document document = new Document(builder.PageSize);
             document.SetPageSize(iTextSharp.text.PageSize.A4_LANDSCAPE.Rotate());
-
+            MyPageEventHandler e = new MyPageEventHandler()
+            {
+                PageCount = 0,
+                PageNo = 1
+            };
             PdfWriter writer = PdfWriter.GetInstance(document, file);
+            writer.PageEvent = e;
             document.Open();
-            document.NewPage();
             if (summaryData.Count > 0)
             {
-                PdfPTable i = GetPdfHeader(writer.CurrentPageNumber, 20);
-                document.Add((IElement)i);
                 document.Add((IElement)GetPdfReportHeader(summaryData, project, null));
                 string reportDataInPdfString = GetSummaryReportDataInPdfString(summaryData);
                 var table = builder.GetPdftable(reportDataInPdfString, PdfProjectPersonsSummaryTableStyle, RowSpliter, ColoumSpliter);
                 document.Add((IElement)table);
                 document.NewPage();
                 var personIds = detailData.Select(p => p.Person.Id).Distinct();
+                int i = 0, personIdsCount = personIds.Count();
                 foreach (int personId in personIds)
                 {
-                    document.Add((IElement)GetPdfHeader(writer.CurrentPageNumber, 20));
+                    i++;
                     string reportDetailDataInPdfString = GetDetailReportDataInPdfString(detailData, personId);
                     IElement detailTable = null;
                     if (!string.IsNullOrEmpty(reportDetailDataInPdfString))
@@ -823,20 +730,21 @@ namespace PraticeManagement.Reporting
                     }
                     else
                     {
-                        detailTable = GetPdfTableWithGivenString("There are no Time Entries entered towards this project for the selected date range.");
+                        detailTable = PDFHelper.GetPdfTableWithGivenString("There are no Time Entries entered towards this project for the selected date range.");
                     }
                     document.Add((IElement)GetPdfReportHeader(detailData, project, personId));
                     document.Add((IElement)detailTable);
-                    document.NewPage();
+                    if (i < personIdsCount)
+                    {
+                        document.NewPage();
+                    }
                 }
             }
             else
             {
-                document.Add((IElement)GetPdfHeaderLogo());
+                document.Add((IElement)PDFHelper.GetPdfHeaderLogo());
             }
-
-            document.NewPage();
-            return writer.CurrentPageNumber-1;
+            return writer.CurrentPageNumber;
         }
 
         private byte[] RenderPdf(HtmlToPdfBuilder builder, List<PersonLevelGroupedHours> summaryData, List<PersonLevelGroupedHours> detailData, Project project)
@@ -845,23 +753,25 @@ namespace PraticeManagement.Reporting
             MemoryStream file = new MemoryStream();
             Document document = new Document(builder.PageSize);
             document.SetPageSize(iTextSharp.text.PageSize.A4_LANDSCAPE.Rotate());
-
+            MyPageEventHandler e = new MyPageEventHandler() {
+                PageCount = pageCount,
+                PageNo = 1
+                };
             PdfWriter writer = PdfWriter.GetInstance(document, file);
+            writer.PageEvent = e;
             document.Open();
-            document.NewPage();
             if (summaryData.Count > 0)
             {
-                PdfPTable i = GetPdfHeader(writer.CurrentPageNumber, pageCount);
-                document.Add((IElement)i);
                 document.Add((IElement)GetPdfReportHeader(summaryData, project, null));
                 string reportDataInPdfString = GetSummaryReportDataInPdfString(summaryData);
                 var table = builder.GetPdftable(reportDataInPdfString, PdfProjectPersonsSummaryTableStyle, RowSpliter, ColoumSpliter);
                 document.Add((IElement)table);
                 document.NewPage();
                 var personIds = detailData.Select(p => p.Person.Id).Distinct();
+                int i = 0, personIdsCount = personIds.Count();
                 foreach (int personId in personIds)
                 {
-                    document.Add((IElement)GetPdfHeader(writer.CurrentPageNumber, pageCount));
+                    i++;
                     string reportDetailDataInPdfString = GetDetailReportDataInPdfString(detailData, personId);
                     IElement detailTable = null;
                     if (!string.IsNullOrEmpty(reportDetailDataInPdfString))
@@ -870,16 +780,19 @@ namespace PraticeManagement.Reporting
                     }
                     else
                     {
-                        detailTable = GetPdfTableWithGivenString("There are no Time Entries entered towards this project for the selected date range.");
+                        detailTable = PDFHelper.GetPdfTableWithGivenString("There are no Time Entries entered towards this project for the selected date range.");
                     }
                     document.Add((IElement)GetPdfReportHeader(detailData, project, personId));
                     document.Add((IElement)detailTable);
-                    document.NewPage();
+                    if (i < personIdsCount)
+                    {
+                        document.NewPage();
+                    }
                 }
             }
             else
             {
-                document.Add((IElement)GetPdfHeaderLogo());
+                document.Add((IElement)PDFHelper.GetPdfHeaderLogo());
             }
             document.Close();
             return file.ToArray();
