@@ -16,6 +16,13 @@ namespace PraticeManagement.Controls
 
         #endregion
 
+        public bool AllItemsSelected
+        {
+            get
+            {
+                return CheckBoxListObject.Items.Count == SelectedIndexesList.Count || CheckBoxListObject.Items.Count-1 == SelectedIndexesList.Count;
+            }
+        }
 
         public string OKButtonId
         {
@@ -57,18 +64,6 @@ namespace PraticeManagement.Controls
 
         }
 
-
-        public string SelectedItemsXmlFormat
-        {
-
-            get
-            {
-
-                return ActualSelectedItemsXmlFormat;
-            }
-        }
-
-
         public Unit Height
         {
 
@@ -86,7 +81,6 @@ namespace PraticeManagement.Controls
                 return hdnSelectedIndexes.Value;
             }
         }
-
 
         public List<int> SelectedIndexesList
         {
@@ -112,8 +106,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-
-        public string ActualSelectedItems
+        public string SelectedItems
         {
             get
             {
@@ -138,8 +131,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-
-        public string ActualSelectedItemsXmlFormat
+        public string SelectedItemsXmlFormat
         {
             get
             {
@@ -165,7 +157,6 @@ namespace PraticeManagement.Controls
             }
 
         }
-
 
         public void SaveSelectedIndexesInViewState()
         {
@@ -201,7 +192,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         public string FilterPopupClientID
         {
             get
@@ -215,15 +205,6 @@ namespace PraticeManagement.Controls
             get
             {
                 return wmSearch.BehaviorID;
-            }
-        }
-
-        public string SelectedItems
-        {
-            get
-            {
-
-                return ActualSelectedItems;
             }
         }
 
