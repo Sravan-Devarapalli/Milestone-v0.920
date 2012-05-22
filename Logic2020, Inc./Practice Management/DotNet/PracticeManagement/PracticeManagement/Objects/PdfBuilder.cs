@@ -363,7 +363,7 @@ namespace PraticeManagement.Objects
                             trStyles[i].BackgroundColor = "white";
                         }
                     }
-                    trStyles[i].IsFirstRow = rowno == 0 ;
+                    trStyles[i].IsFirstRow = rowno == 0;
                     trStyles[i].IsLastRow = rowno == table.Rows.Count;
                     trStyles[i].IsColoumBorders = IsColoumBorders;
                     trStyles[i].ApplyRowStyles(row);
@@ -439,7 +439,7 @@ namespace PraticeManagement.Objects
                         {
                             tdStyles[i].BorderWidths = new float[] { 0.5f, 0f, 0.5f, 0f }; //top - right- bottom -left
                         }
-                        if(coloumCount == 1) //last coloum 
+                        if (coloumCount == 1) //last coloum 
                         {
                             if (IsFirstRow)
                             {
@@ -470,7 +470,7 @@ namespace PraticeManagement.Objects
                             }
                         }
                     }
-                   
+
                     tdStyles[i].ApplyStyles(cell);
                     if (i < tdStyles.Length - 1)
                     {
@@ -644,5 +644,123 @@ namespace PraticeManagement.Objects
     public delegate void RenderEvent(PdfWriter writer, Document document);
 
     #endregion
+
+    #region PDFHelper Classes
+
+    public class PDFHelper
+    {
+        public static PdfPTable GetPdfTableWithGivenString(String text)
+        {
+            PdfPTable textTable = new PdfPTable(1);
+            var _BOLDITALICBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
+            var _BOLDITALICFont = new Font(_BOLDITALICBaseFont, 16, Font.ITALIC);
+            PdfPCell textCell = new PdfPCell(new Phrase(text, _BOLDITALICFont));
+
+            //Styles
+            textTable.WidthPercentage = 100;
+            textTable.SetWidths(new float[] { 1f });
+            textCell.BorderWidth = 0;
+            textCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            textCell.PaddingTop = 20f;
+            textCell.VerticalAlignment = Element.ALIGN_TOP;
+
+            textTable.AddCell(textCell);
+            textTable.CompleteRow();
+            return textTable;
+        }
+
+        /// <summary>
+        /// Returns the PdfHeader i.e logo 
+        /// </summary>
+        public static PdfPTable GetPdfHeaderLogo()
+        {
+            PdfPTable headerTable = new PdfPTable(2);
+
+            //logo
+            byte[] buffer = BrandingConfigurationManager.LogoData.Data;
+            PdfPCell logo = new PdfPCell(iTextSharp.text.Image.GetInstance(buffer), true);
+            headerTable.WidthPercentage = 100;
+
+            //logo styles
+            logo.BorderWidth = 0;
+            logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
+            logo.FixedHeight = 60f;
+            logo.VerticalAlignment = Element.ALIGN_MIDDLE;
+            logo.PaddingBottom = 30f;
+            headerTable.AddCell(logo);
+            return headerTable;
+        }
+
+        /// <summary>
+        /// Returns the PdfHeader i.e logo and Header Text
+        /// </summary>
+        public static PdfPTable GetPdfHeader(int pageNo, int pageCount)
+        {
+            PdfPTable headerTable = new PdfPTable(2);
+            //logo
+            byte[] buffer = BrandingConfigurationManager.LogoData.Data;
+            PdfPCell logo = new PdfPCell(iTextSharp.text.Image.GetInstance(buffer), true);
+
+            var baseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
+            var font1 = new Font(baseFont, 10, Font.NORMAL);
+            var font2 = new Font(baseFont, 10, Font.NORMAL);
+            PdfPTable innerTable = new PdfPTable(2);
+            PdfPCell headerText1 = new PdfPCell(new Phrase("Report Date: ", font2));
+            PdfPCell headerText2 = new PdfPCell(new Phrase(DateTime.Now.ToString("MM/dd/yyyy"), font1));
+            PdfPCell headerText3 = new PdfPCell(new Phrase("Page  ", font2));
+            PdfPCell headerText4 = new PdfPCell(new Phrase(pageNo + " of " + pageCount, font1));
+
+
+            //Styles
+            innerTable.WidthPercentage = headerTable.WidthPercentage = 100;
+            headerTable.SetWidths(new float[] { .8f, .2f });
+            innerTable.SetWidths(new float[] { .6f, .4f });
+            logo.VerticalAlignment = Element.ALIGN_MIDDLE;
+            logo.FixedHeight = 40f;
+            logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
+            headerText1.BorderWidth = headerText2.BorderWidth = headerText3.BorderWidth = headerText4.BorderWidth = logo.BorderWidth = 0;
+            headerText1.HorizontalAlignment = headerText3.HorizontalAlignment = Element.ALIGN_RIGHT;
+            headerText2.HorizontalAlignment = headerText4.HorizontalAlignment = Element.ALIGN_LEFT;
+            headerText1.VerticalAlignment = headerText2.VerticalAlignment = headerText3.VerticalAlignment = headerText4.VerticalAlignment = Element.ALIGN_TOP;
+
+            innerTable.AddCell(headerText1);
+            innerTable.AddCell(headerText2);
+            innerTable.CompleteRow();
+            innerTable.AddCell(headerText3);
+            innerTable.AddCell(headerText4);
+            innerTable.CompleteRow();
+            PdfPCell innerTableCell = new PdfPCell(innerTable);
+            innerTableCell.BorderWidth = 0;
+            PdfPCell innerTableCell1 = new PdfPCell(PDFHelper.GetPdfTableWithGivenString(""));
+            innerTableCell1.BorderWidth = 0;
+            innerTableCell1.Colspan = 2;
+
+
+            headerTable.AddCell(logo);
+            headerTable.AddCell(innerTableCell);
+            headerTable.CompleteRow();
+            headerTable.AddCell(innerTableCell1);
+            headerTable.CompleteRow();
+
+            return headerTable;
+        }
+
+    }
+
+    public class MyPageEventHandler : PdfPageEventHelper
+    {
+        public int PageCount { get; set; }
+
+        public int PageNo { get; set; }
+
+        public override void OnStartPage(PdfWriter writer, Document document)
+        {
+            document.Add((IElement)PDFHelper.GetPdfHeader(PageNo, PageCount));
+            PageNo++;
+        }
+    }
+
+    #endregion
+
 }
 
