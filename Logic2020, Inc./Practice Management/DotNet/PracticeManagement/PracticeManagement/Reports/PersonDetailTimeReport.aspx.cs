@@ -271,7 +271,9 @@ namespace PraticeManagement.Reporting
             {
                 bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 bool userIsDirector = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
-                if (userIsAdministrator || userIsDirector)
+                bool userIsBusinessUnitManager = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
+
+                if (userIsAdministrator || userIsDirector || userIsBusinessUnitManager)
                 {
                     DataHelper.FillPersonList(ddlPerson, null, 1, false);
                 }
