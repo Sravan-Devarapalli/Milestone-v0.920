@@ -22,7 +22,7 @@ namespace PracticeManagementService
 
         [OperationContract]
         Triple<double, double, double> GetPersonTimeEntriesTotalsByPeriod(int personId, DateTime startDate, DateTime endDate);
-        
+
         [OperationContract]
         List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames, string personStatusIds, string personDivisionIds);
 
@@ -61,6 +61,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<ProjectLevelGroupedHours> AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes);
     }
 }
 
