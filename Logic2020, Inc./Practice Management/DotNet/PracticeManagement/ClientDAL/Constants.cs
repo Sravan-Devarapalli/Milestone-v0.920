@@ -595,6 +595,7 @@
             public const string IncludePersonsWithNoTimeEntriesParam = "@IncludePersonsWithNoTimeEntries";
             public const string TimeTypeIdsParam = "@TimeTypeIds";
             public const string PersonDivisionIdsParam = "@PersonDivisionIds";
+            public const string ProjectStatusIdsParam = "@ProjectStatusIds";
         }
 
         #endregion
