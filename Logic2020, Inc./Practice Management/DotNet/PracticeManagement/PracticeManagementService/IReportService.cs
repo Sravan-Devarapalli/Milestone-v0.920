@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using DataTransferObjects.Reports;
 using DataTransferObjects;
+using DataTransferObjects.Reports.ByAccount;
 
 namespace PracticeManagementService
 {
@@ -57,6 +58,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ProjectLevelTimeEntriesHistory> TimeEntryAuditReportByProject(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
     }
 }
 
