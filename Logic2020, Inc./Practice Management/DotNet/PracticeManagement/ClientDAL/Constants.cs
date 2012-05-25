@@ -319,6 +319,8 @@
             public const string ProjectOwnerLastName = "ProjectOwnerLastName";
             public const string ProjectOwnerFirstName = "ProjectOwnerFirstName";
             public const string DivisionId = "DivisionId";
+            public const string Active = "Active";
+            public const string ProjectsCount="ProjectsCount";
         }
 
         #endregion
@@ -596,6 +598,8 @@
             public const string TimeTypeIdsParam = "@TimeTypeIds";
             public const string PersonDivisionIdsParam = "@PersonDivisionIds";
             public const string ProjectStatusIdsParam = "@ProjectStatusIds";
+            public const string AccountIdParam = "@AccountId";
+            public const string BusinessUnitIdsParam = "@BusinessUnitIds";
         }
 
         #endregion
