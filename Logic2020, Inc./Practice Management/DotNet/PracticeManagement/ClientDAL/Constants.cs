@@ -320,7 +320,7 @@
             public const string ProjectOwnerFirstName = "ProjectOwnerFirstName";
             public const string DivisionId = "DivisionId";
             public const string Active = "Active";
-            public const string ProjectsCount="ProjectsCount";
+            public const string ProjectsCount = "ProjectsCount";
         }
 
         #endregion
@@ -571,7 +571,7 @@
             public const string RichTextParam = "@RichText";
             public const string ShowAll = "@ShowAll";
             public const string isOpportunityDescriptionSelected = "@IsOpportunityDescriptionSelected";
-            public const string projectTimeTypesParam = "@ProjectTimeTypes";
+            public const string ProjectTimeTypesParam = "@ProjectTimeTypes";
             public const string IsInternalParam = "@IsInternal";
             public const string CanCreateCustomWorkTypesParam = "@CanCreateCustomWorkTypes";
             public const string TimeEntriesXmlParam = "@TimeEntriesXml";
@@ -600,6 +600,7 @@
             public const string ProjectStatusIdsParam = "@ProjectStatusIds";
             public const string AccountIdParam = "@AccountId";
             public const string BusinessUnitIdsParam = "@BusinessUnitIds";
+            public static string ProjectBillingTypesParam = "@ProjectBillingTypes";
         }
 
         #endregion
@@ -803,6 +804,8 @@
                 public const string GetMilestonesForProject = "dbo.GetMilestonesForProject";
                 public const string TimePeriodSummaryByResourcePayCheck = "dbo.TimePeriodSummaryByResourcePayCheck";
                 public const string TimeEntryAuditReport = "dbo.TimeEntryAuditReport";
+                public const string AccountSummaryReportByProject = "dbo.AccountSummaryByProject";
+                public const string AccountSummaryReportByWorkType = "dbo.AccountSummaryByBusinessUnit";
 
 
             }
