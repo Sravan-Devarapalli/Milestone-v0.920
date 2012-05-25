@@ -407,7 +407,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds)
+        public static List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string projectStatusIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByProject, connection))
@@ -416,7 +416,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIds != null ? clientIds : (Object)DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds != null ? personStatusIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusIdsParam, projectStatusIds != null ? projectStatusIds : (Object)DBNull.Value);
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
