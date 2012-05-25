@@ -805,7 +805,7 @@
                 public const string TimePeriodSummaryByResourcePayCheck = "dbo.TimePeriodSummaryByResourcePayCheck";
                 public const string TimeEntryAuditReport = "dbo.TimeEntryAuditReport";
                 public const string AccountSummaryReportByProject = "dbo.AccountSummaryByProject";
-                public const string AccountSummaryReportByWorkType = "dbo.AccountSummaryByBusinessUnit";
+                public const string AccountSummaryReportByBusinessUnit = "dbo.AccountSummaryByBusinessUnit";
 
 
             }
