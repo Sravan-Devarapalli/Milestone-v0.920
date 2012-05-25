@@ -10,13 +10,11 @@ BEGIN
 	
 	
 	DECLARE @StartDateLocal DATETIME ,
-		@EndDateLocal DATETIME ,
-		@NOW DATE ,
+		@EndDateLocal DATETIME,
 		@HolidayTimeType INT
 
 	SET @StartDateLocal = CONVERT(DATE, @StartDate)
 	SET @EndDateLocal = CONVERT(DATE, @EndDate)
-	SET @NOW = dbo.GettingPMTime(GETUTCDATE())
 	SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
 	
 	;WITH PersonTotalStatusHistory
@@ -46,7 +44,9 @@ BEGIN
                                                 dbo.GetFutureDate())
         )
 
-		SELECT    PG.GroupId, PG.Name, PG.Active,
+		SELECT    PG.GroupId, 
+					PG.Name AS GroupName, 
+					PG.Active,
                     ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
                                         AND Pro.ProjectNumber != 'P031000'
                                     THEN TEH.ActualHours
