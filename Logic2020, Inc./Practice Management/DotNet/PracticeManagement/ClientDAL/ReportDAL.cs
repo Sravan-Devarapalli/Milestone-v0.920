@@ -408,6 +408,33 @@ namespace DataAccess
             }
         }
 
+
+        public static List<ProjectLevelGroupedHours> AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByProject, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds != null ? businessUnitIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectBillingTypesParam, projectBillingTypes != null ? projectBillingTypes : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusIdsParam, projectStatusIds != null ? projectStatusIds : (Object)DBNull.Value);
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<ProjectLevelGroupedHours>();
+                    ReadTimePeriodSummaryReportByProject(reader, result);
+                    return result;
+                }
+            }
+        }
+
         public static List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string projectStatusIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -493,12 +520,12 @@ namespace DataAccess
         public static List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByWorkType, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByWorkType, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds != null ? businessUnitIds : (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
 
@@ -543,7 +570,7 @@ namespace DataAccess
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
                 int projectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectsCount);
-               
+
 
                 while (reader.Read())
                 {
@@ -564,7 +591,7 @@ namespace DataAccess
 
                     buLGH.BusinessUnit = pg;
 
-                  
+
 
                     result.Add(buLGH);
 
