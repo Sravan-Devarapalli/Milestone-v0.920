@@ -8,6 +8,7 @@ using System.ServiceModel.Activation;
 using DataTransferObjects.Reports;
 using DataAccess;
 using DataTransferObjects;
+using DataTransferObjects.Reports.ByAccount;
 
 namespace PracticeManagementService
 {
@@ -29,14 +30,14 @@ namespace PracticeManagementService
             return ReportDAL.GetPersonTimeEntriesTotalsByPeriod(personId, startDate, endDate);
         }
 
-        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate,bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames,string personStatusIds, string personDivisionIds)
+        public List<PersonLevelGroupedHours> TimePeriodSummaryReportByResource(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personIds, string seniorityIds, string timescaleNames, string personStatusIds, string personDivisionIds)
         {
             return ReportDAL.TimePeriodSummaryReportByResource(startDate, endDate, includePersonsWithNoTimeEntries, personIds, seniorityIds, timescaleNames, personStatusIds, personDivisionIds);
         }
 
         public List<ProjectLevelGroupedHours> TimePeriodSummaryReportByProject(DateTime startDate, DateTime endDate, string clientIds, string personStatusIds)
         {
-            return ReportDAL.TimePeriodSummaryReportByProject(startDate, endDate, clientIds,personStatusIds);
+            return ReportDAL.TimePeriodSummaryReportByProject(startDate, endDate, clientIds, personStatusIds);
         }
 
         public List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate)
@@ -101,6 +102,12 @@ namespace PracticeManagementService
         public List<ProjectLevelTimeEntriesHistory> TimeEntryAuditReportByProject(DateTime startDate, DateTime endDate)
         {
             return ReportDAL.TimeEntryAuditReportByProject(startDate, endDate);
+        }
+
+
+        public List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
         }
 
     }
