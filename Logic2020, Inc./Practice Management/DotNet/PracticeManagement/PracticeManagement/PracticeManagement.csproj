@@ -372,6 +372,9 @@
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
     <Content Include="Controls\Reports\BillableAndNonBillableGraph.ascx" />
+    <Content Include="Controls\Reports\ByAccount\AccountSummaryByBusinessDevelopment.ascx" />
+    <Content Include="Controls\Reports\ByAccount\AccountSummaryByBusinessUnit.ascx" />
+    <Content Include="Controls\Reports\ByAccount\AccountSummaryByProject.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
@@ -474,6 +477,7 @@
     <Content Include="Images\People_icon.png" />
     <Content Include="Images\right_icon.png" />
     <Content Include="Images\trash-icon-Large.png" />
+    <Content Include="Reports\AccountSummaryReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
@@ -1290,6 +1294,27 @@
     <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.designer.cs">
       <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessDevelopment.ascx.cs">
+      <DependentUpon>AccountSummaryByBusinessDevelopment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessDevelopment.ascx.designer.cs">
+      <DependentUpon>AccountSummaryByBusinessDevelopment.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessUnit.ascx.cs">
+      <DependentUpon>AccountSummaryByBusinessUnit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessUnit.ascx.designer.cs">
+      <DependentUpon>AccountSummaryByBusinessUnit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByProject.ascx.cs">
+      <DependentUpon>AccountSummaryByProject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByProject.ascx.designer.cs">
+      <DependentUpon>AccountSummaryByProject.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\ByworkType.ascx.cs">
       <DependentUpon>ByworkType.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1705,6 +1730,13 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\AccountSummaryReport.aspx.cs">
+      <DependentUpon>AccountSummaryReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\AccountSummaryReport.aspx.designer.cs">
+      <DependentUpon>AccountSummaryReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Audit.aspx.cs">
       <DependentUpon>Audit.aspx</DependentUpon>
