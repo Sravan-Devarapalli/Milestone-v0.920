@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
       @StartDate DATETIME ,
       @EndDate DATETIME ,
       @ClientIds NVARCHAR(MAX) = NULL ,
-      @PersonStatusIds NVARCHAR(MAX) = NULL
+      @ProjectStatusIds NVARCHAR(MAX) = NULL
     )
 AS 
     BEGIN
@@ -29,10 +29,10 @@ AS
                 SELECT  ResultId
                 FROM    [dbo].[ConvertStringListIntoTable](@ClientIds)
 
-        DECLARE @PersonStatusIdsTable TABLE ( ID INT )
-        INSERT  INTO @PersonStatusIdsTable
+        DECLARE @ProjectStatusIdsTable TABLE ( ID INT )
+        INSERT  INTO @ProjectStatusIdsTable
                 SELECT  ResultId
-                FROM    [dbo].[ConvertStringListIntoTable](@PersonStatusIds);
+                FROM    [dbo].[ConvertStringListIntoTable](@ProjectStatusIds);
             WITH    ProjectForeCastedHoursUntilToday
                       AS ( SELECT   M.ProjectId ,
                                     SUM(MPE.HoursPerDay) AS ForecastedHoursUntilToday ,
@@ -164,10 +164,10 @@ AS
                       OR C.ClientId IN ( SELECT ID
                                          FROM   @ClientIdsTable )
                     )
-                    AND ( @PersonStatusIds IS NULL
+                    AND ( @ProjectStatusIds IS NULL
                           OR PS.ProjectStatusId IN (
                           SELECT    ID
-                          FROM      @PersonStatusIdsTable )
+                          FROM      @ProjectStatusIdsTable )
                         )
             ORDER BY TimeEntrySectionId ,
                     P.ProjectNumber
