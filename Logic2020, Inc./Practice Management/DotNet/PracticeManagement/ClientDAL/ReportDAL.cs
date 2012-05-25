@@ -9,6 +9,7 @@ using System.Data;
 using DataTransferObjects;
 using DataTransferObjects.TimeEntry;
 using System.Data.Common;
+using DataTransferObjects.Reports.ByAccount;
 
 namespace DataAccess
 {
@@ -391,7 +392,7 @@ namespace DataAccess
                                                 },
                                                 UtlizationPercent = !reader.IsDBNull(utlizationPercentIndex) ? (int)reader.GetDouble(utlizationPercentIndex) : 0d
                                             };
-                    if(!reader.IsDBNull(divisionIdIndex))
+                    if (!reader.IsDBNull(divisionIdIndex))
                     {
                         person.DivisionType = (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), reader.GetInt32(divisionIdIndex).ToString());
                     }
@@ -487,6 +488,90 @@ namespace DataAccess
                 }
             }
         }
+
+
+        public static List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryReportByWorkType, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<BusinessUnitLevelGroupedHours>();
+                    ReadByBusinessUnit(reader, result);
+                    PopulateBusinessUnitTotalHoursPercent(result);
+                    return result;
+                }
+            }
+        }
+
+
+        private static void PopulateBusinessUnitTotalHoursPercent(List<BusinessUnitLevelGroupedHours> reportData)
+        {
+            double grandTotal = reportData.Sum(t => t.TotalHours);
+            grandTotal = Math.Round(grandTotal, 2);
+
+            if (grandTotal > 0)
+            {
+                foreach (BusinessUnitLevelGroupedHours buLevelGroupedHours in reportData)
+                {
+                    buLevelGroupedHours.BusinessUnitTotalHoursPercent = Convert.ToInt32((buLevelGroupedHours.TotalHours / grandTotal) * 100);
+                }
+            }
+        }
+
+
+        private static void ReadByBusinessUnit(SqlDataReader reader, List<BusinessUnitLevelGroupedHours> result)
+        {
+            if (reader.HasRows)
+            {
+                int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int businessUnitStatusIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
+                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
+                int projectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectsCount);
+               
+
+                while (reader.Read())
+                {
+                    int businessUnitId = reader.GetInt32(businessUnitIdIndex);
+
+                    var pg = new ProjectGroup
+                    {
+                        Id = businessUnitId,
+                        Name = reader.GetString(businessUnitNameIndex),
+                        IsActive = reader.GetBoolean(businessUnitStatusIndex)
+                    };
+
+                    BusinessUnitLevelGroupedHours buLGH = new BusinessUnitLevelGroupedHours();
+                    buLGH.BillableHours = !reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d;
+                    buLGH.NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d;
+                    buLGH.BusinessDevelopmentHours = !reader.IsDBNull(businessDevelopmentHoursIndex) ? reader.GetDouble(businessDevelopmentHoursIndex) : 0d;
+                    buLGH.ProjectsCount = !reader.IsDBNull(projectsCountIndex) ? reader.GetDouble(projectsCountIndex) : 0d;
+
+                    buLGH.BusinessUnit = pg;
+
+                  
+
+                    result.Add(buLGH);
+
+                }
+            }
+        }
+
 
         public static List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate)
         {
@@ -1119,7 +1204,7 @@ namespace DataAccess
                     var projectId = reader.GetInt32(projectIdIndex);
                     ProjectLevelTimeEntriesHistory projectLevelTimeEntriesHistory = new ProjectLevelTimeEntriesHistory();
                     var personId = reader.GetInt32(personIdIndex);
-                    
+
 
                     var timeEntryRecord = new TimeEntryRecord
                     {
@@ -1161,7 +1246,7 @@ namespace DataAccess
                     if (result.Any(p => p.Project.Id == projectId))
                     {
                         projectLevelTimeEntriesHistory = result.First(p => p.Project.Id == projectId);
-                        PersonLevelTimeEntriesHistory personLevelTimeEntriesHistory ;
+                        PersonLevelTimeEntriesHistory personLevelTimeEntriesHistory;
                         if (projectLevelTimeEntriesHistory.PersonLevelTimeEntries.Any(p => p.Person.Id == personId))
                         {
                             personLevelTimeEntriesHistory = projectLevelTimeEntriesHistory.PersonLevelTimeEntries.First(p => p.Person.Id == personId);
@@ -1206,7 +1291,7 @@ namespace DataAccess
                         };
                         result.Add(projectLevelTimeEntriesHistory);
                     }
-                    
+
                 }
             }
         }
