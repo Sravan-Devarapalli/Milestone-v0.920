@@ -520,7 +520,7 @@ namespace DataAccess
         public static List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByWorkType, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByBusinessUnit, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
