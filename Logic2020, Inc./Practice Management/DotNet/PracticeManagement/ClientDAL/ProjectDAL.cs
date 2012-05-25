@@ -2644,7 +2644,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.projectTimeTypesParam, projectTimeTypesList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectTimeTypesParam, projectTimeTypesList);
                 try
                 {
                     if (currentTransaction != null)
