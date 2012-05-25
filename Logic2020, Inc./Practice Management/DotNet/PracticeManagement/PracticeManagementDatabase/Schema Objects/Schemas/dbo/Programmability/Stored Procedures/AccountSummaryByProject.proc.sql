@@ -82,6 +82,7 @@ BEGIN
 					PRO.ProjectStatusId,
 					PRO.Name AS ProjectName,
 					PRO.ProjectNumber,
+					PRO.GroupId,
 					CC.TimeEntrySectionId,
                     ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
                                         AND PRO.ProjectNumber != 'P031000'
@@ -128,12 +129,15 @@ BEGIN
 												FROM dbo.ConvertStringListIntoTable(@ProjectStatusIds)
 												)
 					)
-			GROUP BY PRO.ProjectId, CC.ClientId, CC.TimeEntrySectionId, PRO.ProjectStatusId, PRO.Name, PRO.ProjectNumber
+			GROUP BY PRO.ProjectId, CC.ClientId, CC.TimeEntrySectionId, PRO.ProjectStatusId, PRO.Name, PRO.ProjectNumber, PRO.GroupId
 		)
 
 
 		SELECT C.ClientId,
 				C.Name AS ClientName,
+                C.Code AS ClientCode,
+                PG.Name AS GroupName ,
+                PG.Code AS GroupCode ,
 				HD.ProjectId,
 				HD.ProjectName,
 				HD.ProjectNumber,
@@ -156,6 +160,7 @@ BEGIN
 		FROM HoursData HD
 		INNER JOIN Client C ON C.ClientId = HD.ClientId
 		INNER JOIN ProjectStatus PS ON PS.ProjectStatusId = HD.ProjectStatusId
+		INNER JOIN ProjectGroup PG ON PG.GroupId = HD.GroupId
         LEFT JOIN ProjectForeCastedHoursUntilToday pfh ON pfh.ProjectId = HD.ProjectId
 		ORDER BY HD.TimeEntrySectionId, HD.ProjectNumber
 	
