@@ -321,6 +321,8 @@
             public const string DivisionId = "DivisionId";
             public const string Active = "Active";
             public const string ProjectsCount = "ProjectsCount";
+            public const string BusinessUnitId = "BusinessUnitId";
+            public const string BusinessUnitName = "BusinessUnitName";
         }
 
         #endregion
@@ -806,6 +808,7 @@
                 public const string TimeEntryAuditReport = "dbo.TimeEntryAuditReport";
                 public const string AccountSummaryReportByProject = "dbo.AccountSummaryByProject";
                 public const string AccountSummaryReportByBusinessUnit = "dbo.AccountSummaryByBusinessUnit";
+                public const string AccountSummaryByBusinessDevelopment = "dbo.AccountSummaryByBusinessDevelopment";
 
 
             }
