@@ -2,6 +2,7 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
   <xs:element name="PersonTimeEntriesDetails">
     <xs:complexType>
       <xs:sequence>
@@ -247,6 +248,76 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimeEntryAuditReportByProjectResult" nillable="true" type="q15:ArrayOfProjectLevelTimeEntriesHistory" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByBusinessUnit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByBusinessUnitResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q16:ArrayOfBusinessUnitLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByProject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="projectStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectBillingTypes" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByProjectResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q17:ArrayOfProjectLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByBusinessUnit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByBusinessUnitResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByBusinessUnitResult" nillable="true" type="q18:ArrayOfBusinessUnitLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByPersonResult" nillable="true" type="q19:ArrayOfGroupByPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
