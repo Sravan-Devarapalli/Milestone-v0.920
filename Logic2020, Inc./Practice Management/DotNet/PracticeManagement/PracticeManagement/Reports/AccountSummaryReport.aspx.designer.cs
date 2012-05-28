@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PraticeManagement.Reports {
+namespace PraticeManagement.Reporting {
     
     
     public partial class AccountSummaryReport {
@@ -40,13 +40,22 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.DropDownList ddlAccount;
         
         /// <summary>
-        /// ddlBusinessUnit control.
+        /// cblProjectGroup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessUnit;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblProjectGroup;
+        
+        /// <summary>
+        /// sdeCblProjectGroup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblProjectGroup;
         
         /// <summary>
         /// ddlPeriod control.
@@ -157,6 +166,78 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divWholePage;
         
         /// <summary>
+        /// tblProjectViewSwitch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Table tblProjectViewSwitch;
+        
+        /// <summary>
+        /// rowSwitcher control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow rowSwitcher;
+        
+        /// <summary>
+        /// cellBusinessUnit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellBusinessUnit;
+        
+        /// <summary>
+        /// lnkbtnBusinessUnit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnBusinessUnit;
+        
+        /// <summary>
+        /// cellProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellProject;
+        
+        /// <summary>
+        /// lnkbtnProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnProject;
+        
+        /// <summary>
+        /// cellBusinessDevelopment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellBusinessDevelopment;
+        
+        /// <summary>
+        /// lnkbtnBusinessDevelopment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnBusinessDevelopment;
+        
+        /// <summary>
         /// mvAccountReport control.
         /// </summary>
         /// <remarks>
@@ -184,6 +265,15 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Panel pnlBusinessUnitReport;
         
         /// <summary>
+        /// tpByBusinessUnit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ByAccount.ByBusinessUnit tpByBusinessUnit;
+        
+        /// <summary>
         /// vwProjectReport control.
         /// </summary>
         /// <remarks>
@@ -202,6 +292,15 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Panel pnlProjectReport;
         
         /// <summary>
+        /// tpByProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ByAccount.ByProject tpByProject;
+        
+        /// <summary>
         /// vwBusinessDevelopmentReport control.
         /// </summary>
         /// <remarks>
@@ -218,6 +317,15 @@ namespace PraticeManagement.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlBusinessDevelopmentReport;
+        
+        /// <summary>
+        /// tpByBusinessDevelopment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ByAccount.ByBusinessDevelopment tpByBusinessDevelopment;
     }
 }
 
