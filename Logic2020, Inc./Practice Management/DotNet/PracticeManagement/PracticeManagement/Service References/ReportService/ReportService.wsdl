@@ -9,6 +9,7 @@
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
@@ -101,6 +102,30 @@
   <wsdl:message name="IReportService_TimeEntryAuditReportByProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:TimeEntryAuditReportByProjectResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByBusinessUnit_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByBusinessUnit" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByBusinessUnit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByBusinessUnitResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByBusinessUnit_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByBusinessUnit" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByBusinessUnit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByBusinessUnitResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByPersonResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
@@ -161,6 +186,22 @@
     <wsdl:operation name="TimeEntryAuditReportByProject">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimeEntryAuditReportByProject" message="tns:IReportService_TimeEntryAuditReportByProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimeEntryAuditReportByProjectResponse" message="tns:IReportService_TimeEntryAuditReportByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByBusinessUnit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnit" message="tns:IReportService_AccountSummaryReportByBusinessUnit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnitResponse" message="tns:IReportService_AccountSummaryReportByBusinessUnit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByProject" message="tns:IReportService_AccountSummaryReportByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByProjectResponse" message="tns:IReportService_AccountSummaryReportByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByBusinessUnit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnit" message="tns:IReportService_AccountReportGroupByBusinessUnit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnitResponse" message="tns:IReportService_AccountReportGroupByBusinessUnit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByPerson" message="tns:IReportService_AccountReportGroupByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByPersonResponse" message="tns:IReportService_AccountReportGroupByPerson_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -293,6 +334,42 @@
     </wsdl:operation>
     <wsdl:operation name="TimeEntryAuditReportByProject">
       <soap:operation soapAction="http://tempuri.org/IReportService/TimeEntryAuditReportByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByBusinessUnit">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountSummaryReportByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByBusinessUnit">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByPerson">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountReportGroupByPerson" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
