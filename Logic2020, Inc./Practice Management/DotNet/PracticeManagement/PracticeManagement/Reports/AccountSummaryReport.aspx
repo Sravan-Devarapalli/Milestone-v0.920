@@ -8,12 +8,11 @@
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
-<%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessUnit.ascx"
-    TagPrefix="uc" TagName="ByBusinessUnit" %>
-<%@ Register Src="~/Controls/Reports/ByAccount/ByProject.ascx" TagPrefix="uc"
-    TagName="ByProject" %>
-<%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessDevelopment.ascx"
-    TagPrefix="uc" TagName="ByBusinessDevelopment" %>
+<%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessUnit.ascx" TagPrefix="uc"
+    TagName="ByBusinessUnit" %>
+<%@ Register Src="~/Controls/Reports/ByAccount/ByProject.ascx" TagPrefix="uc" TagName="ByProject" %>
+<%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessDevelopment.ascx" TagPrefix="uc"
+    TagName="ByBusinessDevelopment" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -111,48 +110,13 @@
                     sortForce: [[0, 0]]
                 });
 
-                $("#tblAccountSummaryByProject").tablesorter({
+            $("#tblAccountSummaryByProject").tablesorter({
                 sortList: [[0, 0]],
                 sortForce: [[0, 0]]
             });
         }
-
-        function custom_ScrollingDropdown_onclick(control, type) {
-            var temp = 0;
-            var text = "";
-            var scrollingDropdownList = document.getElementById(control.toString());
-            var arrayOfCheckBoxes = scrollingDropdownList.getElementsByTagName("input");
-            if (arrayOfCheckBoxes.length == 1 && arrayOfCheckBoxes[0].disabled) {
-                text = "No " + type.toString() + "s to select.";
-            }
-            else {
-                for (var i = 0; i < arrayOfCheckBoxes.length; i++) {
-
-                    if (arrayOfCheckBoxes[i].checked) {
-                        if (arrayOfCheckBoxes[i].parentNode.parentNode.style.display != "none") {
-                            temp++;
-                            text = arrayOfCheckBoxes[i].parentNode.childNodes[1].innerHTML;
-                        }
-                    }
-                    if (temp > 1) {
-                        text = "Multiple " + type.toString() + "s selected";
-
-                    }
-                    if (arrayOfCheckBoxes[0].checked) {
-                        text = arrayOfCheckBoxes[0].parentNode.childNodes[1].innerHTML;
-                    }
-                    if (temp === 0) {
-                        text = "Please Choose " + type.toString() + "(s)";
-                    }
-                }
-                if (text.length > 32) {
-                    text = text.substr(0, 30) + "..";
-                }
-                scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = text;
-            }
-        }
-
     </script>
+    <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
@@ -195,10 +159,10 @@
                                 </td>
                                 <td style="text-align: left;">
                                     <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" Width="160"
-                                        AllSelectedReturnType="Null" NoItemsType="All" Height="160px" onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Business Unit')"
+                                        AllSelectedReturnType="Null" NoItemsType="All" Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')"
                                         DropDownListType="Business Unit" CellPadding="3" />
-                                    <ext:ScrollableDropdownExtender ID="sdeCblProjectGroup" runat="server" TargetControlID="cblProjectGroup"
-                                        UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="160px">
+                                    <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup" 
+                                        UseAdvanceFeature="true" Width="160px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                     </ext:ScrollableDropdownExtender>
                                 </td>
                             </tr>
@@ -339,6 +303,7 @@
             </div>
         </ContentTemplate>
         <Triggers>
+            <asp:PostBackTrigger ControlID="tpByProject$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
