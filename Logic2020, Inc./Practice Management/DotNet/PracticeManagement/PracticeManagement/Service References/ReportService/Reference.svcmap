@@ -28,6 +28,7 @@
     <MetadataFile FileName="ReportService.wsdl" MetadataType="Wsdl" ID="fa727c88-d689-484a-b416-cebb099eac83" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?wsdl" />
     <MetadataFile FileName="ReportService.disco" MetadataType="Disco" ID="7fae72ad-40f8-4917-89b7-2848596de004" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?disco" />
     <MetadataFile FileName="ReportService4.xsd" MetadataType="Schema" ID="cf09ba22-38f8-4c0b-a0d5-ade70945fbd6" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ReportService7.xsd" MetadataType="Schema" ID="0a9dcbca-dbf2-4d67-8977-052c82274392" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd7" />
     <MetadataFile FileName="ReportService5.xsd" MetadataType="Schema" ID="0381f7e3-fe58-48c3-84df-d396ce9ed7e8" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd1" />
     <MetadataFile FileName="ReportService6.xsd" MetadataType="Schema" ID="b33f9ae4-ccae-4d54-b0ec-6d6d01a919c8" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd4" />
   </Metadata>
