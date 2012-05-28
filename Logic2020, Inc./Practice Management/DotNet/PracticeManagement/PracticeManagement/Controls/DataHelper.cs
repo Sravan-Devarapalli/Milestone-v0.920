@@ -809,8 +809,8 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-        }        
-        
+        }
+
         /// <summary>
         /// Fills the list control with the list of Line Manger persons.
         /// </summary>
@@ -1201,13 +1201,13 @@ namespace PraticeManagement.Controls
         public static void FillTimeEntryProjectList(ListControl control, string firstItemText, Project[] projects, string firstItemValue)
         {
             control.Items.Clear();
-            
+
             if (!string.IsNullOrEmpty(firstItemText))
             {
                 var listitem = new ListItem() { Text = firstItemText, Value = firstItemValue };
                 control.Items.Add(listitem);
             }
-            
+
             if (projects != null && projects.Length > 0)
             {
                 foreach (Project project in projects)
@@ -1257,7 +1257,7 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-           
+
         }
 
         /// <summary>
@@ -1540,7 +1540,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillProjectGroupList(ListControl control, int? clientId, int? projectId)
+        public static void FillProjectGroupList(ListControl control, int? clientId, int? projectId, string firstItemText = null, bool noFirstItem = true)
         {
             using (var serviceClient = new ProjectGroupServiceClient())
             {
@@ -1549,7 +1549,7 @@ namespace PraticeManagement.Controls
                     ProjectGroup[] groups = serviceClient.GroupListAll(clientId, projectId);
                     groups = groups.AsQueryable().Where(g => g.IsActive).ToArray();
 
-                    FillListDefault(control, null, groups, true);
+                    FillListDefault(control, firstItemText, groups, noFirstItem);
 
                     // control.Items.Insert(0, new ListItem(Resources.Controls.DefaultGroup, string.Empty));
                 }
