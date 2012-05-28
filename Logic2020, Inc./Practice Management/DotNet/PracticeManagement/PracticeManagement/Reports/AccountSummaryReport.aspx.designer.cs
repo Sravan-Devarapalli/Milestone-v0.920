@@ -49,13 +49,13 @@ namespace PraticeManagement.Reporting {
         protected global::PraticeManagement.Controls.ScrollingDropDown cblProjectGroup;
         
         /// <summary>
-        /// sdeCblProjectGroup control.
+        /// sdeProjectGroup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblProjectGroup;
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectGroup;
         
         /// <summary>
         /// ddlPeriod control.
