@@ -479,6 +479,17 @@ namespace DataAccess
                 int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
                 int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
 
+                int groupIdIndex = -1;
+
+                try
+                {
+                    groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                }
+                catch
+                {
+                    groupIdIndex = -1;
+                }
+
                 while (reader.Read())
                 {
                     ProjectLevelGroupedHours plgh = new ProjectLevelGroupedHours();
@@ -505,12 +516,20 @@ namespace DataAccess
                         },
                         TimeEntrySectionId = reader.GetInt32(timeEntrySectionIdIndex)
                     };
+
+                    if (groupIdIndex > -1)
+                    {
+                        project.Group.Id = reader.GetInt32(groupIdIndex);
+                    }
+
                     plgh.Project = project;
                     plgh.BillableHours = reader.GetDouble(billableHoursIndex);
                     plgh.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
                     plgh.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
                     plgh.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
                     plgh.BillingType = reader.GetString(billingTypeIndex);
+
+
                     result.Add(plgh);
                 }
             }
