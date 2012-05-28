@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports.ByAccount;
+using DataTransferObjects.Reports;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
@@ -12,7 +13,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
 
         public void PopulateData(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
@@ -41,10 +41,36 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         //    btnExportToExcel.Enabled = reportData.Count() > 0;
         //}
 
-        //protected void repBusinessUnits_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        //{
+        protected void repBusinessUnits_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                //CollapsiblePanelExtenderClientIds = new List<string>();
 
-        //}
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var repPersons = e.Item.FindControl("repPersons") as Repeater;
+                PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
+
+                //var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
+                //cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
+
+                //sectionId = dataitem.TimeEntrySectionId;
+                repPersons.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
+                repPersons.DataBind();
+                //CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
+
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                //JavaScriptSerializer jss = new JavaScriptSerializer();
+                //var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                //hdncpeExtendersIds.Value = output;
+                //btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+                //hdnCollapsed.Value = "true";
+            }
+        }
 
         //public void DataBindByResourceDetail(BusinessUnitLevelGroupedHours[] reportData)
         //{
@@ -65,58 +91,58 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         //    btnExportToExcel.Enabled = reportData.Count() > 0;
         //}
 
-        //protected void repPersons_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        //{
-        //    if (e.Item.ItemType == ListItemType.Header)
-        //    {
-        //        CollapsiblePanelExtenderClientIds = new List<string>();
+        protected void repPersons_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                //CollapsiblePanelExtenderClientIds = new List<string>();
 
-        //    }
-        //    else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-        //    {
-        //        var repDate = e.Item.FindControl("repDate") as Repeater;
-        //        PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var repDate = e.Item.FindControl("repDate") as Repeater;
+                PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
 
-        //        var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
-        //        cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
+                //var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
+                //cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
 
-        //        sectionId = dataitem.TimeEntrySectionId;
-        //        repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
-        //        repDate.DataBind();
-        //        CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
+                //sectionId = dataitem.TimeEntrySectionId;
+                repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
+                repDate.DataBind();
+                //CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
 
-        //    }
-        //    else if (e.Item.ItemType == ListItemType.Footer)
-        //    {
-        //        JavaScriptSerializer jss = new JavaScriptSerializer();
-        //        var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
-        //        hdncpeExtendersIds.Value = output;
-        //        btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
-        //        hdnCollapsed.Value = "true";
-        //    }
-        //}
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                //JavaScriptSerializer jss = new JavaScriptSerializer();
+                //var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                //hdncpeExtendersIds.Value = output;
+                //btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+                //hdnCollapsed.Value = "true";
+            }
+        }
 
-        //protected void repDate_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        //{
-        //    if (e.Item.ItemType == ListItemType.Header)
-        //    {
+        protected void repDate_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
 
-        //    }
-        //    else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-        //    {
-        //        var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
-        //        TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
-        //        var rep = sender as Repeater;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
+                TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
+                var rep = sender as Repeater;
 
-        //        //var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
-        //        //cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
-        //        // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
+                //var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
+                //cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
+                // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
 
 
-        //        repWorktype.DataSource = dataitem.DayTotalHoursList;
-        //        repWorktype.DataBind();
-        //    }
-        //}
+                repWorktype.DataSource = dataitem.DayTotalHoursList;
+                repWorktype.DataBind();
+            }
+        }
 
         protected string GetDoubleFormat(double value)
         {
