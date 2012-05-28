@@ -57,5 +57,14 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 PopulateGroupByPerson();
             }
         }
+
+        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnExportToPDF_OnClick(object sender, EventArgs e)
+        {
+
+        }
     }
 }
