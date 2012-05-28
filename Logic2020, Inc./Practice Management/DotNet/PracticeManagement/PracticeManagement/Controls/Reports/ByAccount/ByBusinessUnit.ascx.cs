@@ -24,7 +24,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             get
             {
-                if (cblBusinessUnits.SelectedItems == null)
+                if (cblBusinessUnits == null || (cblBusinessUnits.SelectedItems == "" && cblBusinessUnits.SelectedIndexesList.Count > 0 ))
                 {
                     return HostingPage.BusinessUnitIds;
                 }
@@ -50,7 +50,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected void btnFilterOK_OnClick(object sender, EventArgs e)
         {
-            PopulateByBusinessUnitReport(true);
+            PopulateByBusinessUnitReport(false);
         }
 
         protected string GetDoubleFormat(double value)
@@ -63,7 +63,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             BusinessUnitLevelGroupedHours[] data = null;
             if (isPopulateFilters)
             {
-                data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
             }
             else
             {
@@ -107,8 +107,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateBusinessUnitFilter(List<BusinessUnitLevelGroupedHours> reportData)
         {
-            var businessUnitList = reportData.Select(r => new { Name = r.BusinessUnit.Name }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnitList.ToArray(), false, "Name", "Name");
+            var businessUnitList = reportData.Select(r => new { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnitList.ToArray(), false, "Id", "Name");
             cblBusinessUnits.SelectAllItems(true);
         }
     }
