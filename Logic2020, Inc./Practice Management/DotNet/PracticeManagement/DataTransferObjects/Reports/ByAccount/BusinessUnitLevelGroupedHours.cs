@@ -19,6 +19,13 @@ namespace DataTransferObjects.Reports.ByAccount
         }
 
         [DataMember]
+        public List<PersonLevelGroupedHours> PersonLevelGroupedHoursList
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public double BillableHours
         {
             get;
@@ -56,13 +63,13 @@ namespace DataTransferObjects.Reports.ByAccount
         }
 
         [DataMember]
-        public double ProjectsCount { get; set; }
+        public int ProjectsCount { get; set; }
 
         public double TotalHours
         {
             get
             {
-                return BillableHours + NonBillableHours + BusinessDevelopmentHours;
+                return PersonLevelGroupedHoursList != null ? PersonLevelGroupedHoursList.Sum(t => t.TotalHours) : BillableHours + NonBillableHours + BusinessDevelopmentHours;
             }
         }
 
