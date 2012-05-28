@@ -517,6 +517,7 @@ namespace DataAccess
         }
 
 
+
         public static List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -587,7 +588,7 @@ namespace DataAccess
                     buLGH.BillableHours = !reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d;
                     buLGH.NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d;
                     buLGH.BusinessDevelopmentHours = !reader.IsDBNull(businessDevelopmentHoursIndex) ? reader.GetDouble(businessDevelopmentHoursIndex) : 0d;
-                    buLGH.ProjectsCount = !reader.IsDBNull(projectsCountIndex) ? reader.GetDouble(projectsCountIndex) : 0d;
+                    buLGH.ProjectsCount = !reader.IsDBNull(projectsCountIndex) ? reader.GetInt32(projectsCountIndex) : 0;
 
                     buLGH.BusinessUnit = pg;
 
@@ -595,6 +596,249 @@ namespace DataAccess
 
                     result.Add(buLGH);
 
+                }
+            }
+        }
+
+        public static List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryByBusinessDevelopment, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds != null ? businessUnitIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<BusinessUnitLevelGroupedHours>();
+                    ReadBusinessDevelopmentDetailsGroupByBusinessUnit(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryByBusinessDevelopment, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds != null ? businessUnitIds : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<GroupByPerson>();
+                    ReadBusinessDevelopmentDetailsGroupByPerson(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadBusinessDevelopmentDetailsGroupByPerson(SqlDataReader reader, List<GroupByPerson> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+
+                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+
+                int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
+
+                int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitId);
+                int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
+                int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
+
+                while (reader.Read())
+                {
+                    var dayTotalHoursbyWorkType = new TimeEntryByWorkType()
+                    {
+                        Note = !reader.IsDBNull(noteIndex) ? reader.GetString(noteIndex) : string.Empty,
+
+                        NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
+                        TimeType = new TimeTypeRecord()
+                        {
+                            Name = reader.GetString(timeTypeNameIndex)
+                        }
+                    };
+
+                    var dt = new TimeEntriesGroupByDate()
+                    {
+                        Date = reader.GetDateTime(chargeCodeDateIndex),
+                        DayTotalHoursList = new List<TimeEntryByWorkType>()
+                                                {
+                                                    dayTotalHoursbyWorkType
+                                                }
+                    };
+
+
+                    GroupByPerson personTimeEntries = new GroupByPerson();
+
+                    int businessUnitId = reader.GetInt32(businessUnitIdIndex);
+                    int personId = reader.GetInt32(personIdIndex);
+
+                    Person person = new Person
+                    {
+                        Id = personId,
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex)
+
+                    };
+
+                    var businessUnit = new ProjectGroup()
+                        {
+                            Id = businessUnitId,
+                            Name = reader.GetString(businessUnitNameIndex),
+                            IsActive = reader.GetBoolean(isActiveIndex)
+                        };
+
+
+                    GroupByBusinessUnit businessUnitTimeEntries = new GroupByBusinessUnit();
+
+                    businessUnitTimeEntries.BusinessUnit = businessUnit;
+                    businessUnitTimeEntries.DayTotalHours = new List<TimeEntriesGroupByDate>() 
+                                                    {
+                                                        dt
+                                                    };
+
+                    personTimeEntries.Person = person;
+                    personTimeEntries.BusinessUnitLevelGroupedHoursList = new List<GroupByBusinessUnit>() { 
+                    businessUnitTimeEntries
+                    };
+
+
+                    if (result.Any(r => r.Person.Id == personId))
+                    {
+                        personTimeEntries = result.First(r => r.Person.Id == personId);
+
+                        if (personTimeEntries.BusinessUnitLevelGroupedHoursList.Any(r => r.BusinessUnit.Id == businessUnitId))
+                        {
+                            businessUnitTimeEntries = personTimeEntries.BusinessUnitLevelGroupedHoursList.First(r => r.BusinessUnit.Id == businessUnitId);
+                            businessUnitTimeEntries.AddDayTotalHours(dt);
+                        }
+                        else
+                        {
+                            personTimeEntries.BusinessUnitLevelGroupedHoursList.Add(businessUnitTimeEntries);
+                        }
+                    }
+                    else
+                    {
+                        result.Add(personTimeEntries);
+                    }
+                }
+            }
+        }
+
+        private static void ReadBusinessDevelopmentDetailsGroupByBusinessUnit(SqlDataReader reader, List<BusinessUnitLevelGroupedHours> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+
+                int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+
+                int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
+
+                int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitId);
+                int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
+                int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
+
+                while (reader.Read())
+                {
+                    var dayTotalHoursbyWorkType = new TimeEntryByWorkType()
+                    {
+                        Note = !reader.IsDBNull(noteIndex) ? reader.GetString(noteIndex) : string.Empty,
+
+                        NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
+                        TimeType = new TimeTypeRecord()
+                        {
+                            Name = reader.GetString(timeTypeNameIndex)
+                        }
+                    };
+
+                    var dt = new TimeEntriesGroupByDate()
+                     {
+                         Date = reader.GetDateTime(chargeCodeDateIndex),
+                         DayTotalHoursList = new List<TimeEntryByWorkType>()
+                                                {
+                                                    dayTotalHoursbyWorkType
+                                                }
+                     };
+
+
+                    BusinessUnitLevelGroupedHours businessUnitLGH;
+
+                    int businessUnitId = reader.GetInt32(businessUnitIdIndex);
+                    int personId = reader.GetInt32(personIdIndex);
+
+                    Person person = new Person
+                    {
+                        Id = personId,
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex)
+
+                    };
+
+
+                    PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
+
+                    PLGH.Person = person;
+                    PLGH.DayTotalHours = new List<TimeEntriesGroupByDate>() 
+                                                    {
+                                                        dt
+                                                    };
+
+                    if (result.Any(r => r.BusinessUnit.Id == businessUnitId))
+                    {
+                        businessUnitLGH = result.First(r => r.BusinessUnit.Id == businessUnitId);
+
+                        if (businessUnitLGH.PersonLevelGroupedHoursList.Any(r => r.Person.Id == personId))
+                        {
+                            PLGH = businessUnitLGH.PersonLevelGroupedHoursList.First(r => r.Person.Id == personId);
+                            PLGH.AddDayTotalHours(dt);
+                        }
+                        else
+                        {
+                            businessUnitLGH.PersonLevelGroupedHoursList.Add(PLGH);
+                        }
+
+                    }
+                    else
+                    {
+                        businessUnitLGH = new BusinessUnitLevelGroupedHours();
+                        businessUnitLGH.BusinessUnit = new ProjectGroup()
+                        {
+                            Id = businessUnitId,
+                            Name = reader.GetString(businessUnitNameIndex),
+                            IsActive = reader.GetBoolean(isActiveIndex)
+                        };
+
+                        businessUnitLGH.PersonLevelGroupedHoursList = new List<PersonLevelGroupedHours>();
+                        businessUnitLGH.PersonLevelGroupedHoursList.Add(PLGH);
+                    }
                 }
             }
         }
