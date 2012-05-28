@@ -1,11 +1,19 @@
 ﻿<%@ Page Title="By Account" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
-    AutoEventWireup="true" CodeBehind="AccountSummaryReport.aspx.cs" Inherits="PraticeManagement.Reports.AccountSummaryReport" %>
+    AutoEventWireup="true" CodeBehind="AccountSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.AccountSummaryReport" %>
 
 <%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
     TagName="TimeEntryReportsHeader" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
+<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
+<%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessUnit.ascx"
+    TagPrefix="uc" TagName="ByBusinessUnit" %>
+<%@ Register Src="~/Controls/Reports/ByAccount/ByProject.ascx" TagPrefix="uc"
+    TagName="ByProject" %>
+<%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessDevelopment.ascx"
+    TagPrefix="uc" TagName="ByBusinessDevelopment" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -81,66 +89,67 @@
     <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#tblProjectSummaryByResource").tablesorter(
+            $("#tblAccountSummaryByBusinessReport").tablesorter(
             {
-                headers: {
-                    6: {
-                        sorter: false
-                    },
-                    1: {
-                        sorter: false
-                    },
-                    7: {
-                        sorter: false
-                    }
-                },
                 sortList: [[0, 0]],
                 sortForce: [[0, 0]]
             });
 
-            $("#tblProjectSummaryByWorkType").tablesorter({
+            $("#tblAccountSummaryByProject").tablesorter({
                 sortList: [[0, 0]],
                 sortForce: [[0, 0]]
             });
-
-            $("#tblProjectSearchResult").tablesorter(
-                {
-                    sortList: [[0, 0]]
-                }
-                );
         });
 
 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function endRequestHandle(sender, Args) {
 
-            $("#tblProjectSummaryByResource").tablesorter(
+            $("#tblAccountSummaryByBusinessReport").tablesorter(
                 {
-                    headers: {
-                        6: {
-                            sorter: false
-                        },
-                        1: {
-                            sorter: false
-                        },
-                        7: {
-                            sorter: false
-                        }
-                    },
                     sortList: [[0, 0]],
                     sortForce: [[0, 0]]
                 });
 
-            $("#tblProjectSummaryByWorkType").tablesorter({
+                $("#tblAccountSummaryByProject").tablesorter({
                 sortList: [[0, 0]],
                 sortForce: [[0, 0]]
             });
+        }
 
-            $("#tblProjectSearchResult").tablesorter(
-                {
-                    sortList: [[0, 0]]
+        function custom_ScrollingDropdown_onclick(control, type) {
+            var temp = 0;
+            var text = "";
+            var scrollingDropdownList = document.getElementById(control.toString());
+            var arrayOfCheckBoxes = scrollingDropdownList.getElementsByTagName("input");
+            if (arrayOfCheckBoxes.length == 1 && arrayOfCheckBoxes[0].disabled) {
+                text = "No " + type.toString() + "s to select.";
+            }
+            else {
+                for (var i = 0; i < arrayOfCheckBoxes.length; i++) {
+
+                    if (arrayOfCheckBoxes[i].checked) {
+                        if (arrayOfCheckBoxes[i].parentNode.parentNode.style.display != "none") {
+                            temp++;
+                            text = arrayOfCheckBoxes[i].parentNode.childNodes[1].innerHTML;
+                        }
+                    }
+                    if (temp > 1) {
+                        text = "Multiple " + type.toString() + "s selected";
+
+                    }
+                    if (arrayOfCheckBoxes[0].checked) {
+                        text = arrayOfCheckBoxes[0].parentNode.childNodes[1].innerHTML;
+                    }
+                    if (temp === 0) {
+                        text = "Please Choose " + type.toString() + "(s)";
+                    }
                 }
-                );
+                if (text.length > 32) {
+                    text = text.substr(0, 30) + "..";
+                }
+                scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = text;
+            }
         }
 
     </script>
@@ -165,7 +174,8 @@
                                     Account:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
-                                    <asp:DropDownList ID="ddlAccount" runat="server" Width="160px">
+                                    <asp:DropDownList ID="ddlAccount" runat="server" Width="160px" AutoPostBack="true"
+                                        OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
                                     </asp:DropDownList>
                                 </td>
                             </tr>
@@ -184,8 +194,12 @@
                                     Business Unit:&nbsp;
                                 </td>
                                 <td style="text-align: left;">
-                                    <asp:DropDownList ID="ddlBusinessUnit" runat="server" Width="160px">
-                                    </asp:DropDownList>
+                                    <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" Width="160"
+                                        AllSelectedReturnType="Null" NoItemsType="All" Height="160px" onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Business Unit')"
+                                        DropDownListType="Business Unit" CellPadding="3" />
+                                    <ext:ScrollableDropdownExtender ID="sdeCblProjectGroup" runat="server" TargetControlID="cblProjectGroup"
+                                        UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="160px">
+                                    </ext:ScrollableDropdownExtender>
                                 </td>
                             </tr>
                         </table>
@@ -282,24 +296,43 @@
                 </table>
             </asp:Panel>
             <br />
-            <div id="divWholePage" runat="server" style="display: none;">
+            <div id="divWholePage" runat="server">
+                <asp:Table ID="tblProjectViewSwitch" runat="server" CssClass="CustomTabStyle">
+                    <asp:TableRow ID="rowSwitcher" runat="server">
+                        <asp:TableCell ID="cellBusinessUnit" CssClass="SelectedSwitch" runat="server">
+                            <span class="bg"><span>
+                                <asp:LinkButton ID="lnkbtnBusinessUnit" runat="server" Text="Business Unit" CausesValidation="false"
+                                    OnCommand="btnView_Command" CommandArgument="0" ToolTip="Business Unit"></asp:LinkButton></span>
+                            </span>
+                        </asp:TableCell>
+                        <asp:TableCell ID="cellProject" runat="server">
+                            <span class="bg"><span>
+                                <asp:LinkButton ID="lnkbtnProject" runat="server" Text="Project" CausesValidation="false"
+                                    OnCommand="btnView_Command" CommandArgument="1" ToolTip="Project"></asp:LinkButton></span>
+                            </span>
+                        </asp:TableCell>
+                        <asp:TableCell ID="cellBusinessDevelopment" runat="server">
+                            <span class="bg"><span>
+                                <asp:LinkButton ID="lnkbtnBusinessDevelopment" runat="server" Text="Business Development"
+                                    CausesValidation="false" OnCommand="btnView_Command" CommandArgument="2" ToolTip="Business Development"></asp:LinkButton></span>
+                            </span>
+                        </asp:TableCell>
+                    </asp:TableRow>
+                </asp:Table>
                 <asp:MultiView ID="mvAccountReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwBusinessUnitReport" runat="server">
                         <asp:Panel ID="pnlBusinessUnitReport" runat="server" CssClass="WholeWidth">
-                            <%--<uc:ByResource ID="tpByResource" runat="server">
-                            </uc:ByResource>--%>
+                            <uc:ByBusinessUnit ID="tpByBusinessUnit" runat="server"></uc:ByBusinessUnit>
                         </asp:Panel>
                     </asp:View>
                     <asp:View ID="vwProjectReport" runat="server">
                         <asp:Panel ID="pnlProjectReport" runat="server" CssClass="WholeWidth">
-                            <%--<uc:Byproject ID="tpByProject" runat="server">
-                            </uc:Byproject>--%>
+                            <uc:ByProject ID="tpByProject" runat="server"></uc:ByProject>
                         </asp:Panel>
                     </asp:View>
                     <asp:View ID="vwBusinessDevelopmentReport" runat="server">
                         <asp:Panel ID="pnlBusinessDevelopmentReport" runat="server" CssClass="WholeWidth">
-                            <%--<uc:Byproject ID="tpByProject" runat="server">
-                            </uc:Byproject>--%>
+                            <uc:ByBusinessDevelopment ID="tpByBusinessDevelopment" runat="server"></uc:ByBusinessDevelopment>
                         </asp:Panel>
                     </asp:View>
                 </asp:MultiView>
