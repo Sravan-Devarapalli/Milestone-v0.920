@@ -154,6 +154,7 @@ namespace PraticeManagement
             public const string PersonDetailReport = "~/Reports/PersonDetailTimeReport.aspx";
             public const string TimePeriodSummaryReport = "~/Reports/TimePeriodSummaryReport.aspx";
             public const string ProjectSummaryReport = "~/Reports/ProjectSummaryReport.aspx";
+            public static string AccountSummaryReport = "~/Reports/AccountSummaryReport.aspx";
         }
 
         /// <summary>
