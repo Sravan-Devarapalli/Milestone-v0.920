@@ -115,6 +115,17 @@ namespace PracticeManagementService
             return ReportDAL.AccountSummaryReportByProject(accountId, businessUnitIds, startDate, endDate, projectStatusIds, projectBillingTypes);
         }
 
+        public List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
+        }
+
+
+        public List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate);
+        }
+
     }
 }
 
