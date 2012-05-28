@@ -205,7 +205,7 @@ namespace PraticeManagement.Reporting
             //Fill BusinessUnits.
             if (ddlAccount.SelectedIndex != 0)
             {
-                DataHelper.FillProjectGroupList(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null);
+                DataHelper.FillProjectGroupList(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
             }
         }
 
@@ -300,7 +300,7 @@ namespace PraticeManagement.Reporting
             SetCssClassEmpty();
 
             ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
-        }        
+        }
 
         private void LoadActiveView()
         {
@@ -361,11 +361,12 @@ namespace PraticeManagement.Reporting
         }
 
         private void PopulateByProjectReport()
-        { 
+        {
+            tpByProject.PopulateByProjectData();
         }
 
         private void PopulateByBusinessDevelopmentReport()
-        { 
+        {
         }
     }
 }
