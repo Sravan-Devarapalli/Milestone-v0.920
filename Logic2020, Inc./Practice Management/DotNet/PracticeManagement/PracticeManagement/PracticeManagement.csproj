@@ -372,9 +372,9 @@
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
     <Content Include="Controls\Reports\BillableAndNonBillableGraph.ascx" />
-    <Content Include="Controls\Reports\ByAccount\AccountSummaryByBusinessDevelopment.ascx" />
-    <Content Include="Controls\Reports\ByAccount\AccountSummaryByBusinessUnit.ascx" />
-    <Content Include="Controls\Reports\ByAccount\AccountSummaryByProject.ascx" />
+    <Content Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx" />
+    <Content Include="Controls\Reports\ByAccount\ByBusinessUnit.ascx" />
+    <Content Include="Controls\Reports\ByAccount\ByProject.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
@@ -1299,26 +1299,23 @@
     <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.designer.cs">
       <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessDevelopment.ascx.cs">
-      <DependentUpon>AccountSummaryByBusinessDevelopment.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+    <Compile Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx.cs">
+      <DependentUpon>ByBusinessDevelopment.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessDevelopment.ascx.designer.cs">
-      <DependentUpon>AccountSummaryByBusinessDevelopment.ascx</DependentUpon>
+    <Compile Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx.designer.cs">
+      <DependentUpon>ByBusinessDevelopment.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessUnit.ascx.cs">
-      <DependentUpon>AccountSummaryByBusinessUnit.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+    <Compile Include="Controls\Reports\ByAccount\ByBusinessUnit.ascx.cs">
+      <DependentUpon>ByBusinessUnit.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByBusinessUnit.ascx.designer.cs">
-      <DependentUpon>AccountSummaryByBusinessUnit.ascx</DependentUpon>
+    <Compile Include="Controls\Reports\ByAccount\ByBusinessUnit.ascx.designer.cs">
+      <DependentUpon>ByBusinessUnit.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByProject.ascx.cs">
-      <DependentUpon>AccountSummaryByProject.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+    <Compile Include="Controls\Reports\ByAccount\ByProject.ascx.cs">
+      <DependentUpon>ByProject.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ByAccount\AccountSummaryByProject.ascx.designer.cs">
-      <DependentUpon>AccountSummaryByProject.ascx</DependentUpon>
+    <Compile Include="Controls\Reports\ByAccount\ByProject.ascx.designer.cs">
+      <DependentUpon>ByProject.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ByworkType.ascx.cs">
       <DependentUpon>ByworkType.ascx</DependentUpon>
