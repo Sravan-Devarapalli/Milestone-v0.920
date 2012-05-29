@@ -262,10 +262,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateBillingFilter(ProjectLevelGroupedHours[] reportData)
         {
-
-
             var billingtypes = reportData.Select(r => new { Text = string.IsNullOrEmpty(r.BillingType) ? "Unassigned" : r.BillingType, Value = r.BillingType }).Distinct().ToList().OrderBy(s => s.Value);
-            DataHelper.FillListDefault(cblBilling.CheckBoxListObject, "All Billing Types", billingtypes.ToArray(), false, "Text", "Value");
+            DataHelper.FillListDefault(cblBilling.CheckBoxListObject, "All Billing Types", billingtypes.ToArray(), false, "Value", "Text");
             cblBilling.SelectAllItems(true);
         }
 
