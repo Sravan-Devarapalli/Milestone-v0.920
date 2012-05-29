@@ -1,139 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="http://www.logic2020.com" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ClientService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://www.logic2020.com" location="http://system66.ggk.com/PracticeManagementService/ClientService.svc?wsdl=wsdl0" />
-  <wsdl:types />
-  <wsdl:binding name="BasicHttpBinding_IClientService" type="i0:IClientService">
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.logic2020.com" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.logic2020.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.logic2020.com/Imports">
+      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd0" namespace="http://www.logic2020.com" />
+      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IClientService_SaveClientDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveClientDetail" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_SaveClientDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveClientDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientDetail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientDetail" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientDetail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientDetailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientDetailsShort_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientDetailsShort" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientDetailsShort_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientDetailsShortResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientInactivate_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientInactivate" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientInactivate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientInactivateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientReactivate_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientReactivate" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientReactivate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientReactivateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_UpdateIsChargableForClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateIsChargableForClient" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_UpdateIsChargableForClient_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateIsChargableForClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAll" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllSecure_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllSecure" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllSecure_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllSecureResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllSecureByNewRule_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllSecureByNewRule" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllSecureByNewRule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllSecureByNewRuleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllWithInactive_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllWithInactive" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllWithInactive_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllWithInactiveResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllForProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllForProject" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllForProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllForProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetAllColorsForMargin_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllColorsForMargin" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetAllColorsForMargin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllColorsForMarginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientMarginColorInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientMarginColorInfo" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetClientMarginColorInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetClientMarginColorInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllWithoutPermissions_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllWithoutPermissions" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientListAllWithoutPermissions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientListAllWithoutPermissionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetInternalAccount_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetInternalAccount" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetInternalAccount_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetInternalAccountResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IClientService">
     <wsdl:operation name="SaveClientDetail">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/SaveClientDetail" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/SaveClientDetail" message="tns:IClientService_SaveClientDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/SaveClientDetailResponse" message="tns:IClientService_SaveClientDetail_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetClientDetail">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/GetClientDetail" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetClientDetail" message="tns:IClientService_GetClientDetail_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetClientDetailResponse" message="tns:IClientService_GetClientDetail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetClientDetailsShort">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetClientDetailsShort" message="tns:IClientService_GetClientDetailsShort_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetClientDetailsShortResponse" message="tns:IClientService_GetClientDetailsShort_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientInactivate">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientInactivate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientInactivate" message="tns:IClientService_ClientInactivate_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientInactivateResponse" message="tns:IClientService_ClientInactivate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientReactivate">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientReactivate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientReactivate" message="tns:IClientService_ClientReactivate_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientReactivateResponse" message="tns:IClientService_ClientReactivate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateIsChargableForClient">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/UpdateIsChargableForClient" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/UpdateIsChargableForClient" message="tns:IClientService_UpdateIsChargableForClient_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/UpdateIsChargableForClientResponse" message="tns:IClientService_UpdateIsChargableForClient_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientListAll">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientListAll" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAll" message="tns:IClientService_ClientListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllResponse" message="tns:IClientService_ClientListAll_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientListAllSecure">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientListAllSecure" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllSecure" message="tns:IClientService_ClientListAllSecure_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllSecureResponse" message="tns:IClientService_ClientListAllSecure_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientListAllSecureByNewRule">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientListAllSecureByNewRule" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllSecureByNewRule" message="tns:IClientService_ClientListAllSecureByNewRule_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllSecureByNewRuleResponse" message="tns:IClientService_ClientListAllSecureByNewRule_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientListAllWithInactive">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientListAllWithInactive" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllWithInactive" message="tns:IClientService_ClientListAllWithInactive_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllWithInactiveResponse" message="tns:IClientService_ClientListAllWithInactive_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientListAllForProject">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientListAllForProject" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllForProject" message="tns:IClientService_ClientListAllForProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllForProjectResponse" message="tns:IClientService_ClientListAllForProject_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAllColorsForMargin">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/GetAllColorsForMargin" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetAllColorsForMargin" message="tns:IClientService_GetAllColorsForMargin_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetAllColorsForMarginResponse" message="tns:IClientService_GetAllColorsForMargin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetClientMarginColorInfo">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/GetClientMarginColorInfo" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetClientMarginColorInfo" message="tns:IClientService_GetClientMarginColorInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetClientMarginColorInfoResponse" message="tns:IClientService_GetClientMarginColorInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ClientListAllWithoutPermissions">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientListAllWithoutPermissions" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllWithoutPermissions" message="tns:IClientService_ClientListAllWithoutPermissions_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientListAllWithoutPermissionsResponse" message="tns:IClientService_ClientListAllWithoutPermissions_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetInternalAccount">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/GetInternalAccount" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetInternalAccount" message="tns:IClientService_GetInternalAccount_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetInternalAccountResponse" message="tns:IClientService_GetInternalAccount_OutputMessage" />
     </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="ClientService">
-    <wsdl:port name="BasicHttpBinding_IClientService" binding="tns:BasicHttpBinding_IClientService">
-      <soap:address location="http://system66.ggk.com/PracticeManagementService/ClientService.svc" />
-    </wsdl:port>
-  </wsdl:service>
+  </wsdl:portType>
 </wsdl:definitions>
