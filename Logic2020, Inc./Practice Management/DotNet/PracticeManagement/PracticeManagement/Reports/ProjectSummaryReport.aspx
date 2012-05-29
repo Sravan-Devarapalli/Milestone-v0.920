@@ -206,10 +206,11 @@
             </table>
             <table style="width: 100%; height: 160px;">
                 <tr>
-                    <td id="tdFirst" runat="server" style="width: 35%;">
+                    <td id="tdFirst" runat="server" style="width: 50%;">
                         &nbsp;
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;" id="tdSecond"
+                        runat="server">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -235,7 +236,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td id="tdThird" runat="server" style="width: 35%;">
+                    <td id="tdThird" runat="server" style="width: 25%;">
                         &nbsp;
                     </td>
                 </tr>
