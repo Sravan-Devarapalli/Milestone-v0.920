@@ -232,10 +232,6 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            tdFirst.Style["width"] = timeEntryReportHeader.TdFirstWidth;
-            tdSecond.Style["width"] = timeEntryReportHeader.TdSecondWidth;
-            tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
-
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
