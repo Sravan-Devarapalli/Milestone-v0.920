@@ -263,6 +263,131 @@
             </asp:Panel>
             <br />
             <div id="divWholePage" runat="server">
+                <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;">
+                    <tr>
+                        <td style="font-size: 16px; font-weight: bold;">
+                            <table>
+                                <tr>
+                                    <td style="vertical-align: top; padding-bottom: 10px; font-weight: bold;">
+                                        <asp:Literal ID="ltAccount" runat="server"></asp:Literal>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top; padding-bottom: 10px;">
+                                        <asp:Literal ID="ltHeaderCount" runat="server"></asp:Literal>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 10px; vertical-align: bottom;">
+                                        <asp:Literal ID="ltRange" runat="server"></asp:Literal>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="text-align: right; width: 470px; padding-bottom: 10px;">
+                            <table style="table-layout: fixed; width: 100%;">
+                                <tr>
+                                    <td style="width: 27%;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px; white-space: nowrap;">
+                                                    Total Project Hours
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 25px; text-align: center;">
+                                                    <asp:Literal ID="ltrlTotalProjectHours" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 27%;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                                    BD
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 25px; text-align: center;">
+                                                    <asp:Literal ID="ltrlBDHours" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 27%; vertical-align: bottom;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="text-align: center;">
+                                                    BILLABLE
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-bottom: 5px; text-align: center;">
+                                                    <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center;">
+                                                    NON-BILLABLE
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center;">
+                                                    <asp:Literal ID="ltrlNonBillableHours" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="vertical-align: bottom; width: 8%; padding: 0px !important;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="padding: 0px !important;">
+                                                    <table width="100%" style="table-layout: fixed;">
+                                                        <tr>
+                                                            <td style="text-align: center;">
+                                                                <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table width="100%">
+                                                        <tr id="trBillable" runat="server" title="Billable Percentage.">
+                                                            <td style="background-color: #7FD13B; border: 1px solid Gray;">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="vertical-align: bottom; width: 8%; padding: 0px;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="padding: 0px !important;">
+                                                    <table width="100%" style="table-layout: fixed;">
+                                                        <tr>
+                                                            <td style="text-align: center;">
+                                                                <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table width="100%">
+                                                        <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
+                                                            <td style="background-color: #BEBEBE; border: 1px solid Gray;">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 2%;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
                 <asp:Table ID="tblProjectViewSwitch" runat="server" CssClass="CustomTabStyle">
                     <asp:TableRow ID="rowSwitcher" runat="server">
                         <asp:TableCell ID="cellBusinessUnit" CssClass="SelectedSwitch" runat="server">
