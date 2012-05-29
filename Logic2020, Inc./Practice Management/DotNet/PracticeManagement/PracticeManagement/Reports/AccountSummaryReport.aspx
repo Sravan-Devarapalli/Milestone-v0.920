@@ -304,6 +304,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="tpByProject$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpByBusinessUnit$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
