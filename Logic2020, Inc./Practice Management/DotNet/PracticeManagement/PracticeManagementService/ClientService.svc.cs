@@ -54,6 +54,11 @@ namespace PracticeManagementService
                    Array.FindIndex(roles, s => s == Constants.RoleNames.SalespersonRoleName) >= 0;
         }
 
+        public Client GetClientDetailsShort(int clientId)
+        {
+            return ClientDAL.GetDetailsShortById(clientId);
+        }
+
         /// <summary>
         /// Inactivate (hide) a client
         /// </summary>
