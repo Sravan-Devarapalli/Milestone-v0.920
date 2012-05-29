@@ -100,7 +100,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.ByAccount.BusinessDevelopmentGroupByBusinessUnit tpByBusinessUnit;
+        protected global::PraticeManagement.Controls.Reports.ByAccount.GroupByBusinessUnit tpByBusinessUnit;
         
         /// <summary>
         /// vwPersonReport control.
@@ -127,7 +127,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.ByAccount.BusinessDevelopmentGroupByPerson tpByPerson;
+        protected global::PraticeManagement.Controls.Reports.ByAccount.GroupByPerson tpByPerson;
     }
 }
 
