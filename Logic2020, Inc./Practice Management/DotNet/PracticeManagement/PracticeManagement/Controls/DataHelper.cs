@@ -809,8 +809,8 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-        }
-
+        }        
+        
         /// <summary>
         /// Fills the list control with the list of Line Manger persons.
         /// </summary>
@@ -1549,6 +1549,25 @@ namespace PraticeManagement.Controls
                     ProjectGroup[] groups = serviceClient.GroupListAll(clientId, projectId);
                     groups = groups.AsQueryable().Where(g => g.IsActive).ToArray();
 
+                    FillListDefault(control, firstItemText, groups, noFirstItem);
+
+                    // control.Items.Insert(0, new ListItem(Resources.Controls.DefaultGroup, string.Empty));
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static void FillProjectGroupListWithInactiveGroups(ListControl control, int? clientId, int? projectId, string firstItemText = null, bool noFirstItem = true)
+        {
+            using (var serviceClient = new ProjectGroupServiceClient())
+            {
+                try
+                {
+                    ProjectGroup[] groups = serviceClient.GroupListAll(clientId, projectId);
                     FillListDefault(control, firstItemText, groups, noFirstItem);
 
                     // control.Items.Insert(0, new ListItem(Resources.Controls.DefaultGroup, string.Empty));
