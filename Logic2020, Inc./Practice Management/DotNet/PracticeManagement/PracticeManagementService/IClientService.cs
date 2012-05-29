@@ -27,6 +27,9 @@ namespace PracticeManagementService
         [OperationContract]
         Client GetClientDetail(int clientId, string viewerUsername);
 
+        [OperationContract]
+        Client GetClientDetailsShort(int clientId);
+
         /// <summary>
         /// Inactivate (hide) a client
         /// </summary>
