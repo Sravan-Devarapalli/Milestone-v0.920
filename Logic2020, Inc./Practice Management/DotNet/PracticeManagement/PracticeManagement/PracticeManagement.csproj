@@ -521,23 +521,6 @@
     <None Include="Service References\CalendarService\CalendarService7.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ClientService\ClientService2.wsdl" />
-    <None Include="Service References\ClientService\ClientService3.wsdl" />
-    <None Include="Service References\ClientService\ClientService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService6.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService7.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\ProjectGroupService\ProjectGroupService10.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -670,11 +653,11 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\ExpandOrCollapse.js" />
     <Content Include="Scripts\FilterTable.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\TimeTypeService\TimeTypeService14.disco" />
-    <None Include="Service References\ClientService\ClientService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -795,7 +778,24 @@
     <None Include="Service References\ClientService\ClientService1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ClientService\ClientService2.wsdl" />
     <None Include="Service References\ClientService\ClientService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService3.wsdl" />
+    <None Include="Service References\ClientService\ClientService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService7.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
@@ -1125,6 +1125,7 @@
     <None Include="Service References\RoleService\RoleService1.disco" />
     <Content Include="Service References\ClientService\ClientService.disco" />
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
+    <None Include="Service References\ClientService\ClientService1.disco" />
     <Content Include="Service References\MembershipService\MembershipService.disco" />
     <None Include="Service References\TimeEntryService\configuration91.svcinfo" />
     <None Include="Service References\TimeEntryService\configuration.svcinfo" />
