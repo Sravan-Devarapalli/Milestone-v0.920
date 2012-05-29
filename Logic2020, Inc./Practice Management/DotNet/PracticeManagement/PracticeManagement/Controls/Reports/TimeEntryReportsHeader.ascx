@@ -7,11 +7,11 @@
         </td>
     </tr>
     <tr>
-        <td id="tdFirst" runat="server" style="width: 5%;">
+        <td id="tdFirst" runat="server" style="width: 1%;">
         </td>
-        <td id="tdSecond" runat="server" style="width: 90%;">
+        <td id="tdSecond" runat="server" style="width: 98%;">
             <table class="TimeEntruReportHeader">
-                <tr>
+                <tr>  
                     <th id="thTimePeriod" runat="server">
                         <asp:HyperLink ID="hlByTimePeriod" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/TimePeriodSummaryReport.aspx"
                             ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Time Period</div></asp:HyperLink>
@@ -31,7 +31,7 @@
                 </tr>
             </table>
         </td>
-        <td id="tdThird" runat="server" style="width: 5%;">
+        <td id="tdThird" runat="server" style="width: 1%;">
         </td>
     </tr>
 </table>
