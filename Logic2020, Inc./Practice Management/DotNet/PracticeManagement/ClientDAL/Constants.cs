@@ -323,6 +323,7 @@
             public const string ProjectsCount = "ProjectsCount";
             public const string BusinessUnitId = "BusinessUnitId";
             public const string BusinessUnitName = "BusinessUnitName";
+            public const string PersonsCountColumn = "PersonsCount";
         }
 
         #endregion
