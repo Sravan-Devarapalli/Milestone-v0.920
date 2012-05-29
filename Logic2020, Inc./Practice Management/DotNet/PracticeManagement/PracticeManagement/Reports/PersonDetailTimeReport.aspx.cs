@@ -292,15 +292,24 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (timeEntryReportHeader.Count == 2)
+
+            if (timeEntryReportHeader.Count == 1)
+            {
+                tdFirst.Style["width"] = timeEntryReportHeader.TdFirstWidth;
+                tdSecond.Style["width"] = timeEntryReportHeader.TdSecondWidth;
+                tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
+            }
+            else if (timeEntryReportHeader.Count == 2)
             {
                 tdFirst.Style["width"] = "50%";
-                tdThird.Style["width"] = "20%";
+                tdSecond.Style["width"] = "25%";
+                tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
             }
-            else if (timeEntryReportHeader.Count == 1)
+            else if (timeEntryReportHeader.Count == 3)
             {
-                tdFirst.Style["width"] = "35%";
-                tdThird.Style["width"] = "35%";
+                tdFirst.Style["width"] = "63%";
+                tdSecond.Style["width"] = "25%";
+                tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
             }
 
             int personId = int.Parse(ddlPerson.SelectedItem.Value);
