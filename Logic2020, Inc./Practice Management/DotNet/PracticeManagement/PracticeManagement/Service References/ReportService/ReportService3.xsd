@@ -264,7 +264,7 @@
   <xs:element name="AccountSummaryReportByBusinessUnitResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q16:ArrayOfBusinessUnitLevelGroupedHours" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q16:GroupByAccount" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -283,7 +283,7 @@
   <xs:element name="AccountSummaryReportByProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q17:ArrayOfProjectLevelGroupedHours" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q17:GroupByAccount" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
