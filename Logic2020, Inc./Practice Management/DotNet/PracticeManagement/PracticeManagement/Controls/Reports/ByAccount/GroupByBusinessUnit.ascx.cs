@@ -110,7 +110,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected string GetBusinessUnitStatus(bool isActive)
         {
-            return isActive ? "Active" : "";
+            return isActive ? "( Active )" : "( InActive )";
         }
 
         protected bool GetNoteVisibility(String note)
