@@ -372,11 +372,11 @@
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
     <Content Include="Controls\Reports\BillableAndNonBillableGraph.ascx" />
-    <Content Include="Controls\Reports\ByAccount\BusinessDevelopmentGroupByBusinessUnit.ascx" />
-    <Content Include="Controls\Reports\ByAccount\BusinessDevelopmentGroupByPerson.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessUnit.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByProject.ascx" />
+    <Content Include="Controls\Reports\ByAccount\GroupByBusinessUnit.ascx" />
+    <Content Include="Controls\Reports\ByAccount\GroupByPerson.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
@@ -1303,20 +1303,6 @@
     <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.designer.cs">
       <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ByAccount\BusinessDevelopmentGroupByBusinessUnit.ascx.cs">
-      <DependentUpon>BusinessDevelopmentGroupByBusinessUnit.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Reports\ByAccount\BusinessDevelopmentGroupByBusinessUnit.ascx.designer.cs">
-      <DependentUpon>BusinessDevelopmentGroupByBusinessUnit.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Reports\ByAccount\BusinessDevelopmentGroupByPerson.ascx.cs">
-      <DependentUpon>BusinessDevelopmentGroupByPerson.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Reports\ByAccount\BusinessDevelopmentGroupByPerson.ascx.designer.cs">
-      <DependentUpon>BusinessDevelopmentGroupByPerson.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx.cs">
       <DependentUpon>ByBusinessDevelopment.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1337,6 +1323,20 @@
     </Compile>
     <Compile Include="Controls\Reports\ByAccount\ByProject.ascx.designer.cs">
       <DependentUpon>ByProject.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\GroupByBusinessUnit.ascx.cs">
+      <DependentUpon>GroupByBusinessUnit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\GroupByBusinessUnit.ascx.designer.cs">
+      <DependentUpon>GroupByBusinessUnit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\GroupByPerson.ascx.cs">
+      <DependentUpon>GroupByPerson.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ByAccount\GroupByPerson.ascx.designer.cs">
+      <DependentUpon>GroupByPerson.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ByworkType.ascx.cs">
       <DependentUpon>ByworkType.ascx</DependentUpon>
