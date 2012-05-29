@@ -290,6 +290,47 @@ namespace DataAccess
             return clientList.Count > 0 ? clientList[0] : null;
         }
 
+        public static Client GetDetailsShortById(int clientId)
+        {
+            var client = new Client();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientGetByIdProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, clientId);
+
+                    connection.Open();
+
+                    ReadClientDetailsShort(command, client);
+                }
+            }
+            return client;
+        }
+
+        private static void ReadClientDetailsShort(SqlCommand command, Client client)
+        {
+            using (var reader = command.ExecuteReader())
+            {
+                int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+
+                while (reader.Read())
+                {
+                    var id = reader.GetInt32(clientIdIndex);
+                    var code = reader.GetString(clientCodeIndex);
+                    var name = reader.GetString(nameIndex);
+
+                    client.Id = id;
+                    client.Name = name;
+                    client.Code = code;
+                }
+            }
+        }
+
         /// <summary>
         /// 	List all active and inactive clients in the system
         /// </summary>
