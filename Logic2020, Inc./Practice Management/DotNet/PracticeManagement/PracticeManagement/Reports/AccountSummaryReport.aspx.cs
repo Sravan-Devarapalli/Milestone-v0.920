@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Reports.ByAccount;
+using System.Text;
 
 namespace PraticeManagement.Reporting
 {
@@ -67,6 +68,10 @@ namespace PraticeManagement.Reporting
         {
             get
             {
+                if (!string.IsNullOrEmpty(BusinessUnitsFilteredIds))
+                {
+                    return BusinessUnitsFilteredIds;
+                }
                 return cblProjectGroup.SelectedItems;
             }
         }
@@ -233,6 +238,18 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public string BusinessUnitsFilteredIds
+        {
+            get
+            {
+                return ViewState["BusinessUnitsFilteredIds"] as string;
+            }
+            set
+            {
+                ViewState["BusinessUnitsFilteredIds"] = value;
+            }
+        }
+
         #endregion
 
         #region Events
@@ -326,13 +343,14 @@ namespace PraticeManagement.Reporting
                 DataHelper.FillListDefault(cblProjectGroup, "All Business Units", null,
                                              false);
             }
+            SelectView();
         }
 
         protected void cblProjectGroup_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             SelectView();
         }
-        
+
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
