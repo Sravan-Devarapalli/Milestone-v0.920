@@ -37,7 +37,20 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected void btnGroupBy_Click(object sender, EventArgs e)
         {
-            PopulateByBusinessDevelopment();
+            if (btnGroupBy.Text == Text_GroupByPerson)
+            {
+                btnGroupBy.Text = Text_GroupByBusinessUnit;
+                btnGroupBy.ToolTip = Text_GroupByBusinessUnit;
+                mvBusinessDevelopmentReport.ActiveViewIndex = 1;
+                PopulateGroupByPerson();
+            }
+            else
+            {
+                mvBusinessDevelopmentReport.ActiveViewIndex = 0;
+                btnGroupBy.Text = Text_GroupByPerson;
+                btnGroupBy.ToolTip = Text_GroupByPerson;
+                PopulateGroupByBusinessUnit();
+            }
         }
 
         private void PopulateGroupByBusinessUnit()
@@ -53,8 +66,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         public void ApplyAttributes(int count)
         {
-            btnExpandOrCollapseAll.Visible = btnExportToPDF.Enabled =
-                       btnExportToExcel.Enabled = count > 0;
+            btnGroupBy.Visible = btnExpandOrCollapseAll.Visible = 
+                          btnExportToExcel.Enabled = count > 0;
         }
 
         public void SetExpandCollapseIdsTohiddenField(string output)
@@ -66,19 +79,13 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         public void PopulateByBusinessDevelopment()
         {
-            if (btnGroupBy.Text == Text_GroupByPerson)
+            if (mvBusinessDevelopmentReport.ActiveViewIndex == 1)
             {
-                btnGroupBy.Text = Text_GroupByBusinessUnit;
-                btnGroupBy.ToolTip = Text_GroupByBusinessUnit;
-                mvBusinessDevelopmentReport.ActiveViewIndex = 1;
-                PopulateGroupByBusinessUnit();
+                PopulateGroupByPerson();
             }
             else
             {
-                mvBusinessDevelopmentReport.ActiveViewIndex = 0;
-                btnGroupBy.Text = Text_GroupByPerson;
-                btnGroupBy.ToolTip = Text_GroupByPerson;
-                PopulateGroupByPerson();
+                PopulateGroupByBusinessUnit();
             }
         }
 
