@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using DataTransferObjects.Reports.ByAccount;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
@@ -13,16 +14,24 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private const string Text_GroupByBusinessUnit = "Group by Business Unit";
         private const string Text_GroupByPerson = "Group by Person";
-        
+
         private PraticeManagement.Reporting.AccountSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.AccountSummaryReport)Page); }
         }
 
+      
+
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
+                                                           ", " + hdnCollapsed.ClientID +
+                                                           ", " + hdncpeExtendersIds.ClientID +
+                                                           ");";
+
+            btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
         }
 
         protected void btnGroupBy_Click(object sender, EventArgs e)
@@ -38,6 +47,20 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         private void PopulateGroupByPerson()
         {
             tpByPerson.PopulateData(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value);
+        }
+
+
+        public void ApplyAttributes(int count)
+        {
+            btnExpandOrCollapseAll.Visible = btnExportToPDF.Enabled =
+                       btnExportToExcel.Enabled = count > 0;
+        }
+
+        public void SetExpandCollapseIdsTohiddenField(string output)
+        {
+            hdncpeExtendersIds.Value = output;
+            btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+            hdnCollapsed.Value = "true";
         }
 
         public void PopulateByBusinessDevelopment()
