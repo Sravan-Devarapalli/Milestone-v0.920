@@ -14,12 +14,12 @@
                             Export:
                         </td>
                         <td>
-                            <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" UseSubmitBehavior="false"
-                                ToolTip="Export To Excel" />
+                            <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                                UseSubmitBehavior="false" ToolTip="Export To Excel" />
                         </td>
                         <td>
-                            <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" Enabled="false" UseSubmitBehavior="false"
-                                ToolTip="Export To PDF" />
+                            <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
+                                Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
                         </td>
                     </tr>
                 </table>
