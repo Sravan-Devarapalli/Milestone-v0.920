@@ -12,14 +12,14 @@ namespace PraticeManagement.Reporting
     public partial class AccountSummaryReport : PracticeManagementPageBase
     {
         #region Properties
-        
-
 
         public int AccountId
         {
             get
             {
-                return Convert.ToInt32(ddlAccount.SelectedValue);
+                int accountId = -1;
+                int.TryParse(ddlAccount.SelectedValue,out accountId);
+		return accountId;
             }
         }
 
@@ -209,7 +209,10 @@ namespace PraticeManagement.Reporting
             if (!IsPostBack)
             {
                 DataHelper.FillClientList(ddlAccount, "- - Select Account - -");
+                cblProjectGroup.Items.Add(new ListItem("All Business Units", String.Empty));
+                cblProjectGroup.DataBind();
             }
+            
         }
 
         protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
@@ -218,6 +221,12 @@ namespace PraticeManagement.Reporting
             if (ddlAccount.SelectedIndex != 0)
             {
                 DataHelper.FillProjectGroupList(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+            }
+            else
+            {
+                cblProjectGroup.Items.Clear();
+                cblProjectGroup.Items.Add(new ListItem("All Business Units", String.Empty));
+                cblProjectGroup.DataBind();
             }
         }
 
@@ -243,6 +252,25 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
+            if (timeEntryReportHeader.Count == 1)
+            {
+                tdFirst.Style["width"] = timeEntryReportHeader.TdFirstWidth;
+                tdSecond.Style["width"] = timeEntryReportHeader.TdSecondWidth;
+                tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
+            }
+            else if (timeEntryReportHeader.Count == 2)
+            {
+                tdFirst.Style["width"] = "23%";
+                tdSecond.Style["width"] = "30%";
+                tdThird.Style["width"] = "47%";
+            }
+            else if (timeEntryReportHeader.Count == 3)
+            {
+                tdFirst.Style["width"] = "10%";
+                tdSecond.Style["width"] = "30%";
+                tdThird.Style["width"] = "60%";
+            }
+
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -383,3 +411,4 @@ namespace PraticeManagement.Reporting
         }
     }
 }
+
