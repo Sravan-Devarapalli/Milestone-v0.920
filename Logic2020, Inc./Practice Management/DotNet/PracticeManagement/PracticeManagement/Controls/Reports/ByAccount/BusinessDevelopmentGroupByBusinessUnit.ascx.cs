@@ -17,7 +17,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         public void PopulateData(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            var data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate));
+            List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate)).ToList();
             repBusinessUnits.DataSource = data;
             repBusinessUnits.DataBind();
         }
@@ -50,15 +50,15 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var repPersons = e.Item.FindControl("repPersons") as Repeater;
-                PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
+                //var repPersons = e.Item.FindControl("repPersons") as Repeater;
+                //PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
 
                 //var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
                 //cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
 
                 //sectionId = dataitem.TimeEntrySectionId;
-                repPersons.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
-                repPersons.DataBind();
+                //repPersons.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
+                //repPersons.DataBind();
                 //CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
 
             }
@@ -100,15 +100,15 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var repDate = e.Item.FindControl("repDate") as Repeater;
-                PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
+                //var repDate = e.Item.FindControl("repDate") as Repeater;
+                //PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
 
                 //var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
                 //cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
 
                 //sectionId = dataitem.TimeEntrySectionId;
-                repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
-                repDate.DataBind();
+                //repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
+                //repDate.DataBind();
                 //CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
 
             }
@@ -130,17 +130,17 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
-                TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
-                var rep = sender as Repeater;
+                //var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
+                //TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
+                //var rep = sender as Repeater;
 
                 //var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
                 //cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
                 // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
 
 
-                repWorktype.DataSource = dataitem.DayTotalHoursList;
-                repWorktype.DataBind();
+                //repWorktype.DataSource = dataitem.DayTotalHoursList;
+                //repWorktype.DataBind();
             }
         }
 
@@ -149,10 +149,15 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             return value.ToString(Constants.Formatting.DoubleValue);
         }
 
-        protected string GetPersonRole(string role)
+        protected string GetBusinessUnitStatus(bool isActive)
         {
-            return string.IsNullOrEmpty(role) ? "" : "(" + role + ")";
+            return isActive ? "Active" : "";
         }
+
+        //protected string GetPersonRole(string role)
+        //{
+        //    return string.IsNullOrEmpty(role) ? "" : "(" + role + ")";
+        //}
 
         protected bool GetNoteVisibility(String note)
         {
