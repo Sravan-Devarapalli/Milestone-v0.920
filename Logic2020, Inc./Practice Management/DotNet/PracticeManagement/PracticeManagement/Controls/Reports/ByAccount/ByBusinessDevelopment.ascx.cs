@@ -165,7 +165,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else
             {
-                sb.Append("There are no Time Entries towards this project.");
+                sb.Append("There are no Time Entries towards this account.");
             }
             var filename = string.Format("{0}_{1}_{2}.xls", account.Code, account.Name, "_ByBusinessDevlopment");
             filename = filename.Replace(' ', '_');
