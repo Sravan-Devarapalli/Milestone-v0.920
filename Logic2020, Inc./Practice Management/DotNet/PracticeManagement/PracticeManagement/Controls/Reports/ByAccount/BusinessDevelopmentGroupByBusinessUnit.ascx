@@ -9,7 +9,7 @@
                 <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessUnit" runat="Server"
                         CollapsedText="Expand Business Unit Details" ExpandedText="Collapse Business Unit Details"
-                        EnableViewState="false" BehaviorID="cpeBusinessUnit" Collapsed="true" TargetControlID="pnlBusinessUnitDetails"
+                        EnableViewState="false" Collapsed="true" TargetControlID="pnlBusinessUnitDetails"
                         ImageControlID="imgProject" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
                         CollapseControlID="imgProject" ExpandControlID="imgProject" TextLabelID="lbProject" />
                     <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
@@ -33,10 +33,10 @@
                         <tr style="text-align: left;">
                             <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpePerson" runat="Server" CollapsedText="Expand Person Details"
-                                    ExpandedText="Collapse Person Details" EnableViewState="false" BehaviorID="cpePerson"
-                                    Collapsed="true" TargetControlID="pnlPersonDetails" ImageControlID="imgPerson"
-                                    CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgPerson"
-                                    ExpandControlID="imgPerson" TextLabelID="lbPerson" />
+                                    ExpandedText="Collapse Person Details" EnableViewState="false" Collapsed="true"
+                                    TargetControlID="pnlPersonDetails" ImageControlID="imgPerson" CollapsedImage="~/Images/expand.jpg"
+                                    ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgPerson" ExpandControlID="imgPerson"
+                                    TextLabelID="lbPerson" />
                                 <asp:Image ID="imgPerson" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
                                 <asp:Label ID="lbPerson" Style="display: none;" runat="server"></asp:Label>
                                 <%# Eval("Person.PersonLastFirstName")%>
@@ -135,7 +135,7 @@
                                 </asp:Panel>
                             </ItemTemplate>
                             <AlternatingItemTemplate>
-                               <table class="WholeWidthWithHeight">
+                                <table class="WholeWidthWithHeight">
                                     <tr style="text-align: left; background-color: #ECE9D9;">
                                         <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;">
                                             <%--<AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDate" runat="Server" CollapsedText="Expand Date Details"
