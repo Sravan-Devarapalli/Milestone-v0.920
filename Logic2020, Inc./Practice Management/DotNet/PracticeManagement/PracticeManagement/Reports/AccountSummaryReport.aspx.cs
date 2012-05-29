@@ -247,6 +247,11 @@ namespace PraticeManagement.Reporting
             if (ddlAccount.SelectedIndex != 0)
             {
                 DataHelper.FillProjectGroupList(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+
+                foreach (ListItem item in cblProjectGroup.Items)
+                {
+                    item.Selected = true;
+                }
             }
             else
             {
