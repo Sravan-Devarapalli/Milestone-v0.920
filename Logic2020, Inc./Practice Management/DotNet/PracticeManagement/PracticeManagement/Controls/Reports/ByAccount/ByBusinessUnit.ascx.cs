@@ -6,12 +6,15 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using DataTransferObjects.Reports.ByAccount;
+using System.Text;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
     public partial class ByBusinessUnit : System.Web.UI.UserControl
     {
         #region Properties
+
+        private const string ByAccountByBusinessUnitReportExport = "Account Report By Business Unit";
 
         private HtmlImage ImgBusinessUnitFilter { get; set; }
 
@@ -24,7 +27,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             get
             {
-                if (cblBusinessUnits == null || (cblBusinessUnits.SelectedItems == "" && cblBusinessUnits.SelectedIndexesList.Count > 0 ))
+                if (cblBusinessUnits == null || cblBusinessUnits.SelectedItems == null || (cblBusinessUnits.SelectedItems == "" && cblBusinessUnits.SelectedIndexesList.Count > 0))
                 {
                     return HostingPage.BusinessUnitIds;
                 }
@@ -110,6 +113,114 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             var businessUnitList = reportData.Select(r => new { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name);
             DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnitList.ToArray(), false, "Id", "Name");
             cblBusinessUnits.SelectAllItems(true);
+        }
+
+        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
+        {
+            DataHelper.InsertExportActivityLogMessage(ByAccountByBusinessUnitReportExport);
+            var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(HostingPage.AccountId));
+
+            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+            {
+                var data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+
+                string filterApplied = "Filters applied to columns: ";
+                List<string> filteredColoums = new List<string>();
+                if (!cblBusinessUnits.AllItemsSelected)
+                {
+                    filteredColoums.Add("Business Unit");
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Account_ByBusinessUnit Report");
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(data.Length + " Business Units");
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(HostingPage.Range);
+                sb.Append("\t");
+                if (filteredColoums.Count > 0)
+                {
+                    sb.AppendLine();
+                    for (int i = 0; i < filteredColoums.Count; i++)
+                    {
+                        if (i == filteredColoums.Count - 1)
+                            filterApplied = filterApplied + filteredColoums[i] + ".";
+                        else
+                            filterApplied = filterApplied + filteredColoums[i] + ",";
+                    }
+                    sb.Append(filterApplied);
+                    sb.Append("\t");
+                }
+                sb.AppendLine();
+                sb.AppendLine();
+
+                if (data.Length > 0)
+                {
+                    //Header
+                    sb.Append("Account");
+                    sb.Append("\t");
+                    sb.Append("Account Name");
+                    sb.Append("\t");
+                    sb.Append("Business Unit");
+                    sb.Append("\t");
+                    sb.Append("Business Unit Name");
+                    sb.Append("\t");
+                    sb.Append("# of Projects");
+                    sb.Append("\t");
+                    sb.Append("Billable");
+                    sb.Append("\t");
+                    sb.Append("Non-Billable");
+                    sb.Append("\t");
+                    sb.Append("BD");
+                    sb.Append("\t");
+                    sb.Append("Total");
+                    sb.Append("\t");
+                    sb.Append("Percent of Total Hours");
+                    sb.Append("\t");
+                    sb.AppendLine();
+
+                    //Data
+                    foreach (var businessUnitLevelGroupedHours in data)
+                    {
+                        sb.Append(account.Code);
+                        sb.Append("\t");
+                        sb.Append(account.Name);
+                        sb.Append("\t");
+                        sb.Append(businessUnitLevelGroupedHours.BusinessUnit.Code);
+                        sb.Append("\t");
+                        sb.Append(businessUnitLevelGroupedHours.BusinessUnit.Name);
+                        sb.Append("\t");
+                        sb.Append(businessUnitLevelGroupedHours.ProjectsCount);
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.BillableHours));
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.NonBillableHours));
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.BusinessDevelopmentHours));
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.TotalHours));
+                        sb.Append("\t");
+                        sb.Append(businessUnitLevelGroupedHours.BusinessUnitTotalHoursPercent);
+                        sb.Append("\t");
+                        sb.AppendLine();
+                    }
+
+                }
+                else
+                {
+                    sb.Append("There are no Time Entries towards this range selected.");
+                }
+                //“TimePeriod_ByProject_DateRange.xls”.  
+                var filename = string.Format("Account_ByBusinessUnit_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy"), HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                GridViewExportUtil.Export(filename, sb);
+            }
+        }
+
+        protected void btnExportToPDF_OnClick(object sender, EventArgs e)
+        {
+
         }
     }
 }
