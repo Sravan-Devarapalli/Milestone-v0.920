@@ -40,6 +40,24 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
+        /// tdFirst control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdFirst;
+        
+        /// <summary>
+        /// tdSecond control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdSecond;
+        
+        /// <summary>
         /// chkIncludePersons control.
         /// </summary>
         /// <remarks>
@@ -47,6 +65,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkIncludePersons;
+        
+        /// <summary>
+        /// tdThird control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdThird;
         
         /// <summary>
         /// ddlPeriod control.
