@@ -43,9 +43,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         private void SetHeaderSectionValues(List<BusinessUnitLevelGroupedHours> reportData)
         {
             HostingPage.UpdateHeaderSection = true;
-            HostingPage.BusinessUnitsCount = reportData.Select(r => r.BusinessUnit.Id.Value).Distinct().Count();
-            HostingPage.ProjectsCount = 1;
 
+            HostingPage.BusinessUnitsCount = reportData.Select(r => r.BusinessUnit.Id.Value).Distinct().Count();
+            HostingPage.ProjectsCount = reportData.Count > 0 ? 1 : 0;
             HostingPage.PersonsCount = reportData.SelectMany(g => g.PersonLevelGroupedHoursList.Select(p =>  p.Person.Id.Value )).Distinct().Count();
 
             HostingPage.TotalProjectHours = reportData.Sum(g => g.TotalHours);
