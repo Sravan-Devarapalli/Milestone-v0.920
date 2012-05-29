@@ -409,7 +409,7 @@ namespace DataAccess
         }
 
 
-        public static List<ProjectLevelGroupedHours> AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
+        public static GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByProject, connection))
@@ -428,8 +428,11 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    var result = new List<ProjectLevelGroupedHours>();
-                    ReadTimePeriodSummaryReportByProject(reader, result);
+                    var result = new GroupByAccount();
+                    var groupedByProject = new List<ProjectLevelGroupedHours>();
+                    ReadTimePeriodSummaryReportByProject(reader, groupedByProject);
+
+                    result.GroupedProjects = groupedByProject;
                     return result;
                 }
             }
@@ -537,7 +540,7 @@ namespace DataAccess
 
 
 
-        public static List<BusinessUnitLevelGroupedHours> AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public static GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByBusinessUnit, connection))
@@ -555,9 +558,12 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    var result = new List<BusinessUnitLevelGroupedHours>();
-                    ReadByBusinessUnit(reader, result);
-                    PopulateBusinessUnitTotalHoursPercent(result);
+                    var result = new GroupByAccount();
+                    var groupedBusinessUnits = new List<BusinessUnitLevelGroupedHours>();
+                    ReadByBusinessUnit(reader, groupedBusinessUnits);
+                    PopulateBusinessUnitTotalHoursPercent(groupedBusinessUnits);
+
+                    result.GroupedBusinessUnits = groupedBusinessUnits;
                     return result;
                 }
             }
@@ -781,10 +787,12 @@ namespace DataAccess
 
                 int chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
                 int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int timeTypeCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeCodeColumn);
                 int noteIndex = reader.GetOrdinal(Constants.ColumnNames.Note);
 
                 int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitId);
                 int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
+                int businessUnitCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
                 int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
 
                 while (reader.Read())
@@ -796,7 +804,8 @@ namespace DataAccess
                         NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? Convert.ToDouble(reader[nonBillableHoursIndex]) : 0d,
                         TimeType = new TimeTypeRecord()
                         {
-                            Name = reader.GetString(timeTypeNameIndex)
+                            Name = reader.GetString(timeTypeNameIndex),
+                            Code = reader.GetString(timeTypeCodeIndex)
                         }
                     };
 
@@ -854,6 +863,7 @@ namespace DataAccess
                         {
                             Id = businessUnitId,
                             Name = reader.GetString(businessUnitNameIndex),
+                            Code = reader.GetString(businessUnitCodeIndex),
                             IsActive = reader.GetBoolean(isActiveIndex)
                         };
 
