@@ -174,10 +174,23 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (timeEntryReportHeader.Count == 2)
+            if (timeEntryReportHeader.Count == 1)
             {
-                tdFirst.Style["width"] = "20%";
+                tdFirst.Style["width"] = timeEntryReportHeader.TdFirstWidth;
+                tdSecond.Style["width"] = timeEntryReportHeader.TdSecondWidth;
+                tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
+            }
+            else if (timeEntryReportHeader.Count == 2)
+            {
+                tdFirst.Style["width"] = "25%";
+                tdSecond.Style["width"] = "25%";
                 tdThird.Style["width"] = "50%";
+            }
+            else if (timeEntryReportHeader.Count == 3)
+            {
+                tdFirst.Style["width"] = "37%";
+                tdSecond.Style["width"] = "25%";
+                tdThird.Style["width"] = "37%";
             }
 
             var now = Utils.Generic.GetNowWithTimeZone();
@@ -494,7 +507,7 @@ namespace PraticeManagement.Reporting
         #endregion
 
         #region Pdf Methods
-       
+
         private PdfPTable GetPdfReportHeader(List<PersonLevelGroupedHours> personLevelGroupedHoursList, Project project, int? personId)
         {
             List<PersonLevelGroupedHours> _personLevelGroupedHoursList = personLevelGroupedHoursList;
@@ -753,10 +766,11 @@ namespace PraticeManagement.Reporting
             MemoryStream file = new MemoryStream();
             Document document = new Document(builder.PageSize);
             document.SetPageSize(iTextSharp.text.PageSize.A4_LANDSCAPE.Rotate());
-            MyPageEventHandler e = new MyPageEventHandler() {
+            MyPageEventHandler e = new MyPageEventHandler()
+            {
                 PageCount = pageCount,
                 PageNo = 1
-                };
+            };
             PdfWriter writer = PdfWriter.GetInstance(document, file);
             writer.PageEvent = e;
             document.Open();
