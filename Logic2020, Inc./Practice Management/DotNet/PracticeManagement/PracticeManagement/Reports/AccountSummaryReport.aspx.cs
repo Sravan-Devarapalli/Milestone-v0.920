@@ -5,18 +5,30 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
+using PraticeManagement.Controls.Reports.ByAccount;
 
 namespace PraticeManagement.Reporting
 {
     public partial class AccountSummaryReport : PracticeManagementPageBase
     {
         #region Properties
+        
+
 
         public int AccountId
         {
             get
             {
                 return Convert.ToInt32(ddlAccount.SelectedValue);
+            }
+        }
+
+
+        public ByBusinessDevelopment ByBusinessDevelopmentControl
+        {
+            get
+            {
+                return tpByBusinessDevelopment;
             }
         }
 
