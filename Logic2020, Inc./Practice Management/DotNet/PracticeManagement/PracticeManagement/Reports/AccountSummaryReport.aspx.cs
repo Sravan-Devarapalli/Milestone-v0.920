@@ -367,6 +367,7 @@ namespace PraticeManagement.Reporting
 
         private void PopulateByBusinessDevelopmentReport()
         {
+            tpByBusinessDevelopment.PopulateByBusinessDevelopment();
         }
     }
 }
