@@ -1,8 +1,8 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ByBusinessDevelopment.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.ByAccount.ByBusinessDevelopment" %>
-<%@ Register Src="~/Controls/Reports/ByAccount/BusinessDevelopmentGroupByBusinessUnit.ascx"
+<%@ Register Src="~/Controls/Reports/ByAccount/GroupByBusinessUnit.ascx"
     TagName="GroupByBusinessUnit" TagPrefix="UC" %>
-<%@ Register Src="~/Controls/Reports/ByAccount/BusinessDevelopmentGroupByPerson.ascx"
+<%@ Register Src="~/Controls/Reports/ByAccount/GroupByPerson.ascx"
     TagName="GroupByPerson" TagPrefix="UC" %>
 <asp:HiddenField ID="hdncpeExtendersIds" runat="server" Value="" />
 <asp:HiddenField ID="hdnCollapsed" runat="server" Value="true" />
