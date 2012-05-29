@@ -31,7 +31,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 {
                     return HostingPage.BusinessUnitIds;
                 }
-
+                HostingPage.BusinessUnitsFilteredIds = cblBusinessUnits.SelectedItems;
                 return cblBusinessUnits.SelectedItems;
             }
         }
