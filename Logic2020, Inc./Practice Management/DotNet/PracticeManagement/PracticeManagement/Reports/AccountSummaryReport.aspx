@@ -130,60 +130,61 @@
             </table>
             <table width="100%" style="height: 160px;">
                 <tr>
-                    <td style="width: 5%;">
+                    <td style="width: 25%;" id="tdFirst" runat="server">
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top; width: 30%;" id="tdSecond"
+                        runat="server">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="text-align: right; width: 30%; font-weight: bold;">
+                                <td style="text-align: right; width: 25%; font-weight: bold;">
                                     Account:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
-                                    <asp:DropDownList ID="ddlAccount" runat="server" Width="160px" AutoPostBack="true"
+                                <td style="text-align: left; width: 75%;">
+                                    <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" Width="220"
                                         OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
                                     </asp:DropDownList>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 65%">
+                    <td style="width: 45%" id="tdThird" runat="server">
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 5%;">
+                    <td>
                     </td>
                     <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="text-align: right; width: 30%; font-weight: bold;">
+                                <td style="text-align: right; width: 25%; font-weight: bold;">
                                     Business Unit:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
-                                    <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" Width="160"
-                                        AllSelectedReturnType="Null" NoItemsType="All" Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')"
+                                <td style="text-align: left; width: 75%;">
+                                    <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                                        NoItemsType="All" Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')"
                                         DropDownListType="Business Unit" CellPadding="3" />
-                                    <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup" 
-                                        UseAdvanceFeature="true" Width="160px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                                    <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
+                                        UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                     </ext:ScrollableDropdownExtender>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 65%">
+                    <td>
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 5%;">
+                    <td>
                     </td>
                     <td style="height: 30px; text-align: center; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="text-align: right; width: 30%; font-weight: bold;">
+                                <td style="text-align: right; width: 25%; font-weight: bold;">
                                     Range:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
+                                <td style="text-align: left; width: 75%;">
                                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="160px">
+                                        Width="220px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
@@ -199,16 +200,16 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 65%">
+                    <td>
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 5%;">
+                    <td>
                     </td>
                     <td style="height: 30px; text-align: center; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="width: 30%;">
+                                <td style="width: 25%;">
                                 </td>
                                 <td style="text-align: left; height: 15px;">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
@@ -219,7 +220,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 65%">
+                    <td>
                     </td>
                 </tr>
                 <tr>
