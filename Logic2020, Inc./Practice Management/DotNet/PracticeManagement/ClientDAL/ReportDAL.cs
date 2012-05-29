@@ -859,7 +859,10 @@ namespace DataAccess
 
                         businessUnitLGH.PersonLevelGroupedHoursList = new List<PersonLevelGroupedHours>();
                         businessUnitLGH.PersonLevelGroupedHoursList.Add(PLGH);
+
+                        result.Add(businessUnitLGH);
                     }
+
                 }
             }
         }
