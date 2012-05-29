@@ -18,8 +18,8 @@ namespace PraticeManagement.Reporting
             get
             {
                 int accountId = -1;
-                int.TryParse(ddlAccount.SelectedValue,out accountId);
-		return accountId;
+                int.TryParse(ddlAccount.SelectedValue, out accountId);
+                return accountId;
             }
         }
 
@@ -34,12 +34,17 @@ namespace PraticeManagement.Reporting
         public bool UpdateHeaderSection { get; set; }
 
         public int BusinessUnitsCount { get; set; }
+
         public int ProjectsCount { get; set; }
+        
         public int PersonsCount { get; set; }
 
         public Double TotalProjectHours { get; set; }
+        
         public Double BDHours { get; set; }
+        
         public Double BillableHours { get; set; }
+        
         public Double NonBillableHours { get; set; }
 
         public String HeaderCountText
@@ -234,11 +239,12 @@ namespace PraticeManagement.Reporting
         {
             if (!IsPostBack)
             {
-                DataHelper.FillClientList(ddlAccount, "- - Select Account - -");
+                var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
+                DataHelper.FillListDefault(ddlAccount, "- - Select Account - -", allClients, false);
                 cblProjectGroup.Items.Add(new ListItem("All Business Units", String.Empty));
                 cblProjectGroup.DataBind();
             }
-            
+
         }
 
         protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
