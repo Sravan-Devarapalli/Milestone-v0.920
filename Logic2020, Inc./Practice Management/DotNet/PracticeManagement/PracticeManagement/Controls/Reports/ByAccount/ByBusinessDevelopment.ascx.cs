@@ -11,8 +11,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
     {
         #region Properties
 
-        private const string Text_GroupByBusinessUnit = "Group By Business Unit";
-        private const string Text_GroupByPerson = "Group By Person";
+        private const string Text_GroupByBusinessUnit = "Group by Business Unit";
+        private const string Text_GroupByPerson = "Group by Person";
         
         private PraticeManagement.Reporting.AccountSummaryReport HostingPage
         {
