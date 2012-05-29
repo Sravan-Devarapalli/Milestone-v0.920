@@ -118,7 +118,7 @@
     </asp:Repeater>
     <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
         runat="server">
-        There are no Business Units for the selected range.
+        There are no Time Entries towards this range selected.
     </div>
 </div>
 
