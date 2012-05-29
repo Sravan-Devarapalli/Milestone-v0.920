@@ -14,6 +14,30 @@ namespace PraticeManagement.Controls.Reports
 
         public int Count { get; set; }
 
+        public string TdFirstWidth
+        {
+            get
+            {
+                return tdFirst.Style["width"];
+            }
+        }
+
+        public string TdSecondWidth
+        {
+            get
+            {
+                return tdSecond.Style["width"];
+            }
+        }
+
+        public string TdThirdWidth
+        {
+            get
+            {
+                return tdThird.Style["width"];
+            }
+        }
+
         private void ApplyCssHeader()
         {
             if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
@@ -36,7 +60,7 @@ namespace PraticeManagement.Controls.Reports
                 thByAccount.Style["background-color"] = "White";
                 thProject.Style["background-color"] = "#e2ebff";
                 thPerson.Style["background-color"] = "White";
-                
+
             }
             else if (Page is PraticeManagement.Reporting.PersonDetailTimeReport)
             {
@@ -46,7 +70,7 @@ namespace PraticeManagement.Controls.Reports
                 thPerson.Style["background-color"] = "#e2ebff";
 
             }
-           
+
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -67,7 +91,7 @@ namespace PraticeManagement.Controls.Reports
             count = thPerson.Visible ? count + 1 : count;
 
             thByAccount.Visible = UrlAuthorizationModule.CheckUrlAccessForPrincipal(Constants.ApplicationPages.AccountSummaryReport, new RolePrincipal(HttpContext.Current.User.Identity), "GET");
-            count = thPerson.Visible ? count + 1 : count;
+            count = thByAccount.Visible ? count + 1 : count;
 
             if (count == 1)
             {
@@ -75,7 +99,7 @@ namespace PraticeManagement.Controls.Reports
                 tdSecond.Style["width"] = "26%";
                 tdThird.Style["width"] = "37%";
             }
-            else if(count == 2)
+            else if (count == 2)
             {
                 tdFirst.Style["width"] = "25%";
                 tdSecond.Style["width"] = "50%";
