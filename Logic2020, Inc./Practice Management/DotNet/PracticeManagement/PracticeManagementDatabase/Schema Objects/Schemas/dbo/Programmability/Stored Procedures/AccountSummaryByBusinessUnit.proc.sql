@@ -47,6 +47,7 @@ BEGIN
 		SELECT    PG.GroupId, 
 					PG.Name AS GroupName, 
 					PG.Active,
+					PG.Code AS GroupCode,
                     ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
                                         AND Pro.ProjectNumber != 'P031000'
                                     THEN TEH.ActualHours
@@ -88,6 +89,6 @@ BEGIN
 											FROM dbo.ConvertStringListIntoTable(@BusinessUnitIds)
 											)
 					)
-        GROUP BY  PG.GroupId, PG.Name, PG.Active
+        GROUP BY  PG.GroupId, PG.Name, PG.Active, PG.Code
 
 END
