@@ -132,7 +132,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(ByAccountByBusinessUnitReportExport);
-            var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(HostingPage.AccountId));
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
@@ -199,9 +198,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     //Data
                     foreach (var businessUnitLevelGroupedHours in data)
                     {
-                        sb.Append(account.Code);
+                        sb.Append(report.Account.Code);
                         sb.Append("\t");
-                        sb.Append(account.Name);
+                        sb.Append(report.Account.Name);
                         sb.Append("\t");
                         sb.Append(businessUnitLevelGroupedHours.BusinessUnit.Code);
                         sb.Append("\t");
