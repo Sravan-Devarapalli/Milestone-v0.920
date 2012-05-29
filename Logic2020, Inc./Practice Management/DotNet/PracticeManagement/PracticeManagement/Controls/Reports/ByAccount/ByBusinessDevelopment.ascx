@@ -11,7 +11,7 @@
         <td colspan="4" style="width: 90%;">
             <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
                 Width="100px" ToolTip="Collapse All" />
-            <asp:Button ID="btnGroupBy" runat="server" Text="Group by Person" ToolTip="Group By Person"
+            <asp:Button ID="btnGroupBy" runat="server" Text="Group by Person" ToolTip="Group by Person"
                 OnClick="btnGroupBy_Click" />
         </td>
         <td style="text-align: right; width: 10%; padding-right: 5px;">
