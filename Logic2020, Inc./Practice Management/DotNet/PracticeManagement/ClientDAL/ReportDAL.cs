@@ -586,6 +586,7 @@ namespace DataAccess
                 int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
                 int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
                 int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+                int businessUnitCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
                 int businessUnitStatusIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
                 int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
                 int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
@@ -600,7 +601,8 @@ namespace DataAccess
                     {
                         Id = businessUnitId,
                         Name = reader.GetString(businessUnitNameIndex),
-                        IsActive = reader.GetBoolean(businessUnitStatusIndex)
+                        IsActive = reader.GetBoolean(businessUnitStatusIndex),
+                        Code = reader.GetString(businessUnitCodeIndex)
                     };
 
                     BusinessUnitLevelGroupedHours buLGH = new BusinessUnitLevelGroupedHours();
@@ -693,7 +695,7 @@ namespace DataAccess
                     {
                         Note = !reader.IsDBNull(noteIndex) ? reader.GetString(noteIndex) : string.Empty,
 
-                        NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
+                        NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? Convert.ToDouble(reader[nonBillableHoursIndex]) : 0d,
                         TimeType = new TimeTypeRecord()
                         {
                             Name = reader.GetString(timeTypeNameIndex)
@@ -791,7 +793,7 @@ namespace DataAccess
                     {
                         Note = !reader.IsDBNull(noteIndex) ? reader.GetString(noteIndex) : string.Empty,
 
-                        NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
+                        NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? Convert.ToDouble(reader[nonBillableHoursIndex]) : 0d,
                         TimeType = new TimeTypeRecord()
                         {
                             Name = reader.GetString(timeTypeNameIndex)
