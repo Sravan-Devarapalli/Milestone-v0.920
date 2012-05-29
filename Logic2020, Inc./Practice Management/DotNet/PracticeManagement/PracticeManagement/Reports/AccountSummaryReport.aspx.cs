@@ -36,15 +36,15 @@ namespace PraticeManagement.Reporting
         public int BusinessUnitsCount { get; set; }
 
         public int ProjectsCount { get; set; }
-        
+
         public int PersonsCount { get; set; }
 
         public Double TotalProjectHours { get; set; }
-        
+
         public Double BDHours { get; set; }
-        
+
         public Double BillableHours { get; set; }
-        
+
         public Double NonBillableHours { get; set; }
 
         public String HeaderCountText
@@ -235,56 +235,20 @@ namespace PraticeManagement.Reporting
 
         #endregion
 
+        #region Events
+
+        #region Page Events
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
                 DataHelper.FillListDefault(ddlAccount, "- - Select Account - -", allClients, false);
-                cblProjectGroup.Items.Add(new ListItem("All Business Units", String.Empty));
+                cblProjectGroup.DataSource = new List<ListItem> { new ListItem("All Business Units", String.Empty) };
                 cblProjectGroup.DataBind();
             }
 
-        }
-
-        protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Fill BusinessUnits.
-            if (ddlAccount.SelectedIndex != 0)
-            {
-                DataHelper.FillProjectGroupList(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
-
-                foreach (ListItem item in cblProjectGroup.Items)
-                {
-                    item.Selected = true;
-                }
-            }
-            else
-            {
-                cblProjectGroup.Items.Clear();
-                cblProjectGroup.Items.Add(new ListItem("All Business Units", String.Empty));
-                cblProjectGroup.DataBind();
-            }
-        }
-
-        protected override void Display()
-        {
-            string rangeSelected = Request.QueryString[Constants.QueryStringParameterNames.RangeArgument];
-            if (!string.IsNullOrEmpty(rangeSelected))
-            {
-                if (ddlPeriod.Items.FindByValue(rangeSelected) != null)
-                {
-                    ddlPeriod.SelectedValue = rangeSelected;
-                }
-                if (ddlPeriod.SelectedValue == "0")
-                {
-                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
-                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
-                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
-                }
-            }
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
@@ -341,10 +305,92 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        #endregion
+
+        #region Control Events
+
+        protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Fill BusinessUnits.
+            if (ddlAccount.SelectedIndex != 0)
+            {
+                DataHelper.FillProjectGroupList(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+
+                foreach (ListItem item in cblProjectGroup.Items)
+                {
+                    item.Selected = true;
+                }
+            }
+            else
+            {
+                cblProjectGroup.DataSource = new List<ListItem> { new ListItem("All Business Units", String.Empty) };
+                cblProjectGroup.DataBind();
+            }
+        }
+
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
             SwitchView((Control)sender, viewIndex);
+        }
+
+        protected void btnCustDatesOK_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumDateRange.ValidationGroup);
+            if (Page.IsValid)
+            {
+                hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
+                hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
+                SelectView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
+        protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlPeriod.SelectedValue != "0")
+            {
+                SelectView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
+        protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
+        {
+            diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
+            diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Methods
+
+        protected override void Display()
+        {
+            string rangeSelected = Request.QueryString[Constants.QueryStringParameterNames.RangeArgument];
+            if (!string.IsNullOrEmpty(rangeSelected))
+            {
+                if (ddlPeriod.Items.FindByValue(rangeSelected) != null)
+                {
+                    ddlPeriod.SelectedValue = rangeSelected;
+                }
+                if (ddlPeriod.SelectedValue == "0")
+                {
+                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
+                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
+                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
+                }
+            }
         }
 
         private void SelectView()
@@ -402,39 +448,6 @@ namespace PraticeManagement.Reporting
                         break;
                 }
             }
-        }
-
-        protected void btnCustDatesOK_Click(object sender, EventArgs e)
-        {
-            Page.Validate(valSumDateRange.ValidationGroup);
-            if (Page.IsValid)
-            {
-                hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
-                hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
-                SelectView();
-            }
-            else
-            {
-                mpeCustomDates.Show();
-            }
-        }
-
-        protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ddlPeriod.SelectedValue != "0")
-            {
-                SelectView();
-            }
-            else
-            {
-                mpeCustomDates.Show();
-            }
-        }
-
-        protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
-        {
-            diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
-            diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
         }
 
         private void PopulateByBusinessUnitReport()
@@ -497,6 +510,8 @@ namespace PraticeManagement.Reporting
                 trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
             }
         }
+
+        #endregion
     }
 }
 
