@@ -126,6 +126,22 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             var data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate)).ToList();
             DatabindbyBusinessUnitDetails(data);
+
+            SetHeaderSectionValues(data);
+        }
+
+        private void SetHeaderSectionValues(List<DataTransferObjects.Reports.ByAccount.GroupByPerson> reportData)
+        {
+            HostingPage.UpdateHeaderSection = true;
+
+            HostingPage.BusinessUnitsCount = reportData.SelectMany(p => p.BusinessUnitLevelGroupedHoursList.Select(g => g.BusinessUnit.Id.Value )).Distinct().Count();
+            HostingPage.ProjectsCount = 1;
+            HostingPage.PersonsCount = reportData.Select(p => p.Person.Id.Value).Distinct().Count();
+
+            HostingPage.TotalProjectHours = reportData.Sum(p => p.TotalHours);
+            HostingPage.BDHours = reportData.Sum(p => p.TotalHours);
+            HostingPage.BillableHours = 0d;
+            HostingPage.NonBillableHours = reportData.Sum(g => g.TotalHours);
         }
 
     }
