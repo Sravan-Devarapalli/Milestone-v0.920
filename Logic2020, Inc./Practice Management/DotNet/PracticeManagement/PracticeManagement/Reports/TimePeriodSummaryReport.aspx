@@ -128,17 +128,17 @@
             </table>
             <table width="100%" style="height:160px;">
                 <tr>
-                    <td style="width: 5%;">
+                    <td id="tdFirst" runat="server" style="width: 1%;">
                     </td>
-                    <td style="text-align: center;vertical-align: top;height:30px;">
+                    <td style="text-align: center;vertical-align: top;height:30px;" id="tdSecond" runat="server">
                         <asp:CheckBox ID="chkIncludePersons" runat="server" Checked="false" Text="Include persons with no time entered in report output"
                             AutoPostBack="true" OnCheckedChanged="chkIncludePersons_CheckedChanged" />
                     </td>
-                    <td style="width: 65%">
+                    <td style="width: 70%" id="tdThird" runat="server">
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 5%;">
+                    <td>
                     </td>
                     <td style="height:30px;text-align: center;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
@@ -164,11 +164,11 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 65%">
+                    <td>
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 5%;">
+                    <td>
                     </td>
                     <td style="height:30px;text-align: center;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
@@ -184,11 +184,11 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 65%">
+                     <td>
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 5%;">
+                     <td>
                     </td>
                     <td style=" text-align: center;height:30px;vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
@@ -207,7 +207,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 65%">
+                     <td>
                     </td>
                 </tr>
                 <tr>
