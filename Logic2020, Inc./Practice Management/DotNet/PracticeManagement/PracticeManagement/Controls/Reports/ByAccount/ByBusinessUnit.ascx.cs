@@ -63,17 +63,33 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         public void PopulateByBusinessUnitReport(bool isPopulateFilters = true)
         {
-            BusinessUnitLevelGroupedHours[] data = null;
+            GroupByAccount report;
             if (isPopulateFilters)
             {
-                data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
             }
             else
             {
-                data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
             }
 
-            DataBindBusinesUnit(data, isPopulateFilters);
+            DataBindBusinesUnit(report.GroupedBusinessUnits.ToArray(), isPopulateFilters);
+
+            SetHeaderSectionValues(report);
+        }
+
+        private void SetHeaderSectionValues(GroupByAccount reportData)
+        {
+            HostingPage.UpdateHeaderSection = true;
+
+            HostingPage.BusinessUnitsCount = reportData.BusinessUnitsCount;
+            HostingPage.ProjectsCount = reportData.ProjectsCount;
+            HostingPage.PersonsCount = reportData.PersonsCount;
+
+            HostingPage.TotalProjectHours = reportData.TotalProjectHours;
+            HostingPage.BDHours = reportData.BusinessDevelopmentHours;
+            HostingPage.BillableHours = reportData.BillableHours;
+            HostingPage.NonBillableHours = reportData.NonBillableHours + HostingPage.BDHours;
         }
 
         public void DataBindBusinesUnit(BusinessUnitLevelGroupedHours[] reportData, bool isPopulateFilters)
@@ -99,8 +115,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 divEmptyMessage.Style["display"] = "";
                 repBusinessUnit.Visible = false;
             }
-
-            //PopulateHeaderSection(reportDataList);
         }
 
         private void PopulateFilterPanels(List<BusinessUnitLevelGroupedHours> reportData)
@@ -122,7 +136,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                var data = report.GroupedBusinessUnits.ToArray();
 
                 string filterApplied = "Filters applied to columns: ";
                 List<string> filteredColoums = new List<string>();
