@@ -135,7 +135,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.UpdateHeaderSection = true;
 
             HostingPage.BusinessUnitsCount = reportData.SelectMany(p => p.BusinessUnitLevelGroupedHoursList.Select(g => g.BusinessUnit.Id.Value )).Distinct().Count();
-            HostingPage.ProjectsCount = 1;
+            HostingPage.ProjectsCount = reportData.Count > 0 ? 1 : 0;
             HostingPage.PersonsCount = reportData.Select(p => p.Person.Id.Value).Distinct().Count();
 
             HostingPage.TotalProjectHours = reportData.Sum(p => p.TotalHours);
