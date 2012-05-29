@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
 using System.Text;
+using DataTransferObjects;
+using DataTransferObjects.Reports.ByAccount;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
@@ -55,8 +57,10 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value,
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value,
                      cblProjectStatus.SelectedItems, cblBilling.SelectedItems));
+
+                var data = report.GroupedProjects.ToArray();
 
                 string filterApplied = "Filters applied to columns: ";
                 List<string> filteredColoums = new List<string>();
@@ -175,17 +179,33 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         public void PopulateByProjectData(bool isPopulateFilters = true)
         {
-            ProjectLevelGroupedHours[] data;
+            GroupByAccount report;
             if (isPopulateFilters)
             {
-                data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
             }
             else
             {
-                data = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
             }
 
-            DataBindProject(data, isPopulateFilters);
+            DataBindProject(report.GroupedProjects.ToArray(), isPopulateFilters);
+
+            SetHeaderSectionValues(report);
+        }
+
+        private void SetHeaderSectionValues(GroupByAccount reportData)
+        {
+            HostingPage.UpdateHeaderSection = true;
+
+            HostingPage.BusinessUnitsCount = reportData.BusinessUnitsCount;
+            HostingPage.ProjectsCount = reportData.ProjectsCount;
+            HostingPage.PersonsCount = reportData.PersonsCount;
+
+            HostingPage.TotalProjectHours = reportData.TotalProjectHours;
+            HostingPage.BDHours = reportData.BusinessDevelopmentHours;
+            HostingPage.BillableHours = reportData.BillableHours;
+            HostingPage.NonBillableHours = reportData.NonBillableHours;
         }
 
         protected void repProject_ItemDataBound(object sender, RepeaterItemEventArgs e)
