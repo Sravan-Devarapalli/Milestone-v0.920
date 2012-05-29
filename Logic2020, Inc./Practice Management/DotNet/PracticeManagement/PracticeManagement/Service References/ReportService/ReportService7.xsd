@@ -2,6 +2,15 @@
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
+  <xs:complexType name="GroupByAccount">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Account" nillable="true" type="q1:Client" />
+      <xs:element minOccurs="0" name="GroupedBusinessUnits" nillable="true" type="tns:ArrayOfBusinessUnitLevelGroupedHours" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GroupedProjects" nillable="true" type="q2:ArrayOfProjectLevelGroupedHours" />
+      <xs:element minOccurs="0" name="PersonsCount" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GroupByAccount" nillable="true" type="tns:GroupByAccount" />
   <xs:complexType name="ArrayOfBusinessUnitLevelGroupedHours">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="BusinessUnitLevelGroupedHours" nillable="true" type="tns:BusinessUnitLevelGroupedHours" />
@@ -12,11 +21,11 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
       <xs:element minOccurs="0" name="BusinessDevelopmentHours" type="xs:double" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="BusinessUnit" nillable="true" type="q1:ProjectGroup" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="BusinessUnit" nillable="true" type="q3:ProjectGroup" />
       <xs:element minOccurs="0" name="BusinessUnitTotalHoursPercent" type="xs:int" />
       <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
       <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
-      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonLevelGroupedHoursList" nillable="true" type="q2:ArrayOfPersonLevelGroupedHours" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonLevelGroupedHoursList" nillable="true" type="q4:ArrayOfPersonLevelGroupedHours" />
       <xs:element minOccurs="0" name="ProjectsCount" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
@@ -30,7 +39,7 @@
   <xs:complexType name="GroupByPerson">
     <xs:sequence>
       <xs:element minOccurs="0" name="BusinessUnitLevelGroupedHoursList" nillable="true" type="tns:ArrayOfGroupByBusinessUnit" />
-      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q3:Person" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q5:Person" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GroupByPerson" nillable="true" type="tns:GroupByPerson" />
@@ -42,8 +51,8 @@
   <xs:element name="ArrayOfGroupByBusinessUnit" nillable="true" type="tns:ArrayOfGroupByBusinessUnit" />
   <xs:complexType name="GroupByBusinessUnit">
     <xs:sequence>
-      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="BusinessUnit" nillable="true" type="q4:ProjectGroup" />
-      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="DayTotalHours" nillable="true" type="q5:ArrayOfTimeEntriesGroupByDate" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="BusinessUnit" nillable="true" type="q6:ProjectGroup" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="DayTotalHours" nillable="true" type="q7:ArrayOfTimeEntriesGroupByDate" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GroupByBusinessUnit" nillable="true" type="tns:GroupByBusinessUnit" />
