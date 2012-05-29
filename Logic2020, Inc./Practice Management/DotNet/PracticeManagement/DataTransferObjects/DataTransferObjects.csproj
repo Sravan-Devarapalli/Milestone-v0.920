@@ -145,6 +145,7 @@
     <Compile Include="EmailTemplate.cs" />
     <Compile Include="OpurtunityPerson.cs" />
     <Compile Include="Reports\ByAccount\BusinessUnitLevelGroupedHours.cs" />
+    <Compile Include="Reports\ByAccount\GroupByAccount.cs" />
     <Compile Include="Reports\ByAccount\GroupByBusinessUnit.cs" />
     <Compile Include="Reports\ByAccount\GroupByPerson.cs" />
     <Compile Include="Reports\GroupedHours.cs" />
