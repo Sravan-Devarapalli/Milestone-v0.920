@@ -433,6 +433,9 @@ namespace DataAccess
                     ReadTimePeriodSummaryReportByProject(reader, groupedByProject);
 
                     result.GroupedProjects = groupedByProject;
+
+                    reader.NextResult();
+                    ReadByAccountDetails(reader, result);
                     return result;
                 }
             }
@@ -563,12 +566,39 @@ namespace DataAccess
                     ReadByBusinessUnit(reader, groupedBusinessUnits);
                     PopulateBusinessUnitTotalHoursPercent(groupedBusinessUnits);
 
+                    reader.NextResult();
+                    ReadByAccountDetails(reader, result);
+
                     result.GroupedBusinessUnits = groupedBusinessUnits;
                     return result;
                 }
             }
         }
 
+        private static void ReadByAccountDetails(SqlDataReader reader, GroupByAccount result)
+        {
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    int personsCountIndex = reader.GetOrdinal(Constants.ColumnNames.PersonsCountColumn);
+                    int accountNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                    int accountCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+                    int accountIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+
+                    int personsCount = reader.GetInt32(personsCountIndex);
+                    result.PersonsCount = personsCount;
+                    var account = new Client
+                    {
+                        Id = reader.GetInt32(accountIdIndex),
+                        Name = reader.GetString(accountNameIndex),
+                        Code = reader.GetString(accountCodeIndex)
+                    };
+
+                    result.Account = account;
+                }
+            }
+        }
 
         private static void PopulateBusinessUnitTotalHoursPercent(List<BusinessUnitLevelGroupedHours> reportData)
         {
