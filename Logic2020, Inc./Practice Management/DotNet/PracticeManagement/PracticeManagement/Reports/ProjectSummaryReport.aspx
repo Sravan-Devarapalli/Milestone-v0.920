@@ -18,65 +18,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script language="javascript" type="text/javascript">
-
-        function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
-            var btn = btnExpandOrCollapseAllClientId;
-            var hdnCollapsed = hdnCollapsedClientId;
-            var isExpand = false;
-            if (btn != null) {
-                if (btn.value == "Expand All") {
-                    isExpand = true;
-                    btn.value = "Collapse All";
-                    btn.title = "Collapse All";
-                    hdnCollapsed.value = 'false';
-                }
-                else {
-                    btn.value = "Expand All";
-                    btn.title = "Expand All";
-                    hdnCollapsed.value = 'true';
-                }
-
-                var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
-                ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
-            }
-            return false;
-        }
-
-
-
-
-        function ExpandOrcollapseExtender(cpe, isExpand) {
-            if (cpe != null) {
-                if (isExpand) {
-                    ExpandPanel(cpe)
-                }
-                else {
-                    var isCollapsed = cpe.get_Collapsed();
-                    if (!isCollapsed)
-                        cpe._doClose();
-                }
-            }
-        }
-
-
-        function ExpandPanel(cpe) {
-            var isCollapsed = cpe.get_Collapsed();
-            if (isCollapsed) {
-                cpe.expandPanel();
-            }
-        }
-
-
-        function ExpandOrCollapsePanels(ids, isExpand) {
-            for (var i = 0; i < ids.length; i++) {
-                var cpe = $find(ids[i]);
-                ExpandOrcollapseExtender(cpe, isExpand);
-            }
-        }
-
-    
-    </script>
+    <script src="../Scripts/ExpandOrCollapse.js" type="text/javascript"></script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
         
@@ -267,7 +209,7 @@
                     <td id="tdFirst" runat="server" style="width: 35%;">
                         &nbsp;
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -293,15 +235,15 @@
                             </tr>
                         </table>
                     </td>
-                    <td  id="tdThird" runat="server" style="width: 35%;">
+                    <td id="tdThird" runat="server" style="width: 35%;">
                         &nbsp;
                     </td>
                 </tr>
                 <tr>
-                    <td >
+                    <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -317,15 +259,15 @@
                             </tr>
                         </table>
                     </td>
-                    <td >
+                    <td>
                         &nbsp;
                     </td>
                 </tr>
                 <tr>
-                    <td >
+                    <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%;">
@@ -348,7 +290,7 @@
                     <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 40%; text-align: right; font-weight: bold;">
@@ -373,7 +315,7 @@
                     <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center;height:30px;vertical-align: top;">
+                    <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
                                 <td style="width: 300px;" colspan="3">
@@ -388,7 +330,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; height:10px">
+                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; height: 10px">
                     </td>
                 </tr>
             </table>
@@ -561,7 +503,6 @@
                     </tr>
                 </table>
             </div>
-
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="ucByResource$ucProjectSummaryReport$btnExportToExcel" />
