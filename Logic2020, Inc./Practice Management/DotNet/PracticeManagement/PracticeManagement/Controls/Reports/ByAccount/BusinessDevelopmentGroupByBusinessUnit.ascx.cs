@@ -6,11 +6,27 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports.ByAccount;
 using DataTransferObjects.Reports;
+using AjaxControlToolkit;
+using System.Web.Script.Serialization;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
     public partial class BusinessDevelopmentGroupByBusinessUnit : System.Web.UI.UserControl
     {
+
+        private PraticeManagement.Reporting.AccountSummaryReport HostingPage
+        {
+            get { return ((PraticeManagement.Reporting.AccountSummaryReport)Page); }
+        }
+
+
+        private List<string> CollapsiblePanelExtenderClientIds
+        {
+            get;
+            set;
+        }
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
         }
@@ -18,107 +34,60 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         public void PopulateData(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate)).ToList();
-            repBusinessUnits.DataSource = data;
-            repBusinessUnits.DataBind();
+            DatabindbyBusinessUnitDetails(data);
         }
 
-        //private void DataBindByBusinessUnitDetail(BusinessUnitLevelGroupedHours[] reportData)
-        //{
-        //    if (reportData.Length > 0)
-        //    {
-        //        reportData = reportData.OrderBy(bu => bu.b p.Person.PersonLastFirstName).ToArray();
-        //        divEmptyMessage.Style["display"] = "none";
-        //        repBusinessUnits.Visible = btnExpandOrCollapseAll.Visible = true;
-        //        repBusinessUnits.DataSource = reportData;
-        //        repBusinessUnits.DataBind();
-        //    }
-        //    else
-        //    {
-        //        divEmptyMessage.Style["display"] = "";
-        //        repBusinessUnits.Visible = btnExpandOrCollapseAll.Visible = false;
-        //    }
-        //    btnExportToPDF.Enabled =
-        //    btnExportToExcel.Enabled = reportData.Count() > 0;
-        //}
+        private void DatabindbyBusinessUnitDetails(List<BusinessUnitLevelGroupedHours> reportdata)
+        {
+            if (reportdata.Count > 0)
+            {
+                reportdata = reportdata.OrderBy(bu => bu.BusinessUnit.Name).ToList();
+                divEmptyMessage.Style["display"] = "none";
+                repBusinessUnits.Visible = true;
+                repBusinessUnits.DataSource = reportdata;
+                repBusinessUnits.DataBind();
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+                repBusinessUnits.Visible = false;
+            }
+
+            HostingPage.ByBusinessDevelopmentControl.ApplyAttributes(reportdata.Count);
+
+        }
 
         protected void repBusinessUnits_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                //CollapsiblePanelExtenderClientIds = new List<string>();
+                CollapsiblePanelExtenderClientIds = new List<string>();
 
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                //var repPersons = e.Item.FindControl("repPersons") as Repeater;
-                //PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
-
-                //var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
-                //cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
-
-                //sectionId = dataitem.TimeEntrySectionId;
-                //repPersons.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
-                //repPersons.DataBind();
-                //CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
+                var cpeBusinessUnit = e.Item.FindControl("cpeBusinessUnit") as CollapsiblePanelExtender;
+                CollapsiblePanelExtenderClientIds.Add(cpeBusinessUnit.BehaviorID);
 
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
-                //JavaScriptSerializer jss = new JavaScriptSerializer();
-                //var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
-                //hdncpeExtendersIds.Value = output;
-                //btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
-                //hdnCollapsed.Value = "true";
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                HostingPage.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output);
             }
         }
-
-        //public void DataBindByResourceDetail(BusinessUnitLevelGroupedHours[] reportData)
-        //{
-        //    if (reportData.Length > 0)
-        //    {
-        //        reportData = reportData.OrderBy(p => p.Person.PersonLastFirstName).ToArray();
-        //        divEmptyMessage.Style["display"] = "none";
-        //        repPersons.Visible = btnExpandOrCollapseAll.Visible = true;
-        //        repPersons.DataSource = reportData;
-        //        repPersons.DataBind();
-        //    }
-        //    else
-        //    {
-        //        divEmptyMessage.Style["display"] = "";
-        //        repPersons.Visible = btnExpandOrCollapseAll.Visible = false;
-        //    }
-        //    btnExportToPDF.Enabled =
-        //    btnExportToExcel.Enabled = reportData.Count() > 0;
-        //}
 
         protected void repPersons_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                //CollapsiblePanelExtenderClientIds = new List<string>();
-
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                //var repDate = e.Item.FindControl("repDate") as Repeater;
-                //PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
-
-                //var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
-                //cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
-
-                //sectionId = dataitem.TimeEntrySectionId;
-                //repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
-                //repDate.DataBind();
-                //CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
-
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
-                //JavaScriptSerializer jss = new JavaScriptSerializer();
-                //var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
-                //hdncpeExtendersIds.Value = output;
-                //btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
-                //hdnCollapsed.Value = "true";
             }
         }
 
@@ -130,17 +99,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                //var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
-                //TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
-                //var rep = sender as Repeater;
-
-                //var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
-                //cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
-                // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
-
-
-                //repWorktype.DataSource = dataitem.DayTotalHoursList;
-                //repWorktype.DataBind();
             }
         }
 
@@ -153,11 +111,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             return isActive ? "Active" : "";
         }
-
-        //protected string GetPersonRole(string role)
-        //{
-        //    return string.IsNullOrEmpty(role) ? "" : "(" + role + ")";
-        //}
 
         protected bool GetNoteVisibility(String note)
         {
