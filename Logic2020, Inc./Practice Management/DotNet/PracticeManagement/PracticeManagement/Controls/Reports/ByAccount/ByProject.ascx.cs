@@ -58,7 +58,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value,
-                     cblProjectStatus.SelectedItems, cblBilling.SelectedItems));
+                     cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
 
                 var data = report.GroupedProjects.ToArray();
 
