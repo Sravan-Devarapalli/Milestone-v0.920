@@ -328,6 +328,11 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        protected void cblProjectGroup_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectView();
+        }
+        
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
@@ -395,7 +400,7 @@ namespace PraticeManagement.Reporting
 
         private void SelectView()
         {
-            if (ddlPeriod.SelectedValue != "Please Select")
+            if (StartDate.HasValue && EndDate.HasValue && AccountId != -1 && (BusinessUnitIds == null || !string.IsNullOrEmpty(BusinessUnitIds)))
             {
                 divWholePage.Style.Remove("display");
                 LoadActiveView();
@@ -410,7 +415,7 @@ namespace PraticeManagement.Reporting
         private void SwitchView(Control control, int viewIndex)
         {
             SelectView(control, viewIndex);
-            LoadActiveView();
+            SelectView();
         }
 
         private void SetCssClassEmpty()
@@ -432,22 +437,20 @@ namespace PraticeManagement.Reporting
 
         private void LoadActiveView()
         {
-            if (StartDate.HasValue && EndDate.HasValue)
+            int activeView = mvAccountReport.ActiveViewIndex;
+            switch (activeView)
             {
-                int activeView = mvAccountReport.ActiveViewIndex;
-                switch (activeView)
-                {
-                    case 0:
-                        PopulateByBusinessUnitReport();
-                        break;
-                    case 1:
-                        PopulateByProjectReport();
-                        break;
-                    case 2:
-                        PopulateByBusinessDevelopmentReport();
-                        break;
-                }
+                case 0:
+                    PopulateByBusinessUnitReport();
+                    break;
+                case 1:
+                    PopulateByProjectReport();
+                    break;
+                case 2:
+                    PopulateByBusinessDevelopmentReport();
+                    break;
             }
+
         }
 
         private void PopulateByBusinessUnitReport()
