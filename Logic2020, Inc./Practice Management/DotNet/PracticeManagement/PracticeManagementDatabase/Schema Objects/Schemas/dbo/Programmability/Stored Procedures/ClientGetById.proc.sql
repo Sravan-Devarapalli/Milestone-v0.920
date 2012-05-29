@@ -20,7 +20,8 @@ AS
 	       c.Inactive,
 	       c.IsChargeable,
 		   c.IsMarginColorInfoEnabled,
-		   c.IsInternal
+		   c.IsInternal,
+		   c.Code AS ClientCode
 	  FROM dbo.Client AS c
 	 WHERE c.ClientId = @ClientId
 
