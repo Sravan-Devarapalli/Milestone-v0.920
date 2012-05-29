@@ -24,6 +24,15 @@ namespace DataTransferObjects.Reports.ByAccount
             set;
         }
 
+
+        public double TotalHours
+        {
+            get
+            {
+                return BusinessUnitLevelGroupedHoursList != null ? BusinessUnitLevelGroupedHoursList.Sum(bu => bu.TotalHours) : 0d;
+            }
+        }
+
     }
 }
 
