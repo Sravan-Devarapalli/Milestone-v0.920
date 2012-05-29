@@ -16,6 +16,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <script src="../Scripts/ExpandOrCollapse.js" type="text/javascript"></script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
         
