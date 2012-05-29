@@ -27,6 +27,19 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             get { return ((PraticeManagement.Reporting.AccountSummaryReport)Page); }
         }
 
+        private String BusinessUnitIds
+        {
+            get
+            {
+                if (cblBusinessUnits == null || cblBusinessUnits.SelectedItems == null || (cblBusinessUnits.SelectedItems == "" && cblBusinessUnits.SelectedIndexesList.Count > 0))
+                {
+                    return HostingPage.BusinessUnitIds;
+                }
+                HostingPage.BusinessUnitsFilteredIds = cblBusinessUnits.SelectedItems;
+                return cblBusinessUnits.SelectedItems;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             cblBilling.OKButtonId = cblBusinessUnits.OKButtonId = cblProjectStatus.OKButtonId = btnFilterOK.ClientID;
@@ -186,7 +199,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else
             {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
             }
 
             DataBindProject(report.GroupedProjects.ToArray(), isPopulateFilters);
@@ -292,3 +305,4 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
     }
 }
+
