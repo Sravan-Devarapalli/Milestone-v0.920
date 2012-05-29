@@ -23,6 +23,32 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public String AccountName
+        {
+            get
+            {
+                return ddlAccount.SelectedItem.Text;
+            }
+        }
+
+        public bool UpdateHeaderSection { get; set; }
+
+        public int BusinessUnitsCount { get; set; }
+        public int ProjectsCount { get; set; }
+        public int PersonsCount { get; set; }
+
+        public Double TotalProjectHours { get; set; }
+        public Double BDHours { get; set; }
+        public Double BillableHours { get; set; }
+        public Double NonBillableHours { get; set; }
+
+        public String HeaderCountText
+        {
+            get
+            {
+                return string.Format("{0} BUs, {1} Projects, {2} Persons", BusinessUnitsCount, ProjectsCount, PersonsCount);
+            }
+        }
 
         public ByBusinessDevelopment ByBusinessDevelopmentControl
         {
@@ -297,6 +323,11 @@ namespace PraticeManagement.Reporting
             {
                 SelectView();
             }
+
+            if (UpdateHeaderSection)
+            {
+                PopulateHeaderSection();
+            }
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -408,6 +439,52 @@ namespace PraticeManagement.Reporting
         private void PopulateByBusinessDevelopmentReport()
         {
             tpByBusinessDevelopment.PopulateByBusinessDevelopment();
+        }
+
+        private void PopulateHeaderSection()
+        {
+            ltAccount.Text = AccountName;
+            ltHeaderCount.Text = HeaderCountText;
+            ltRange.Text = Range;
+
+            ltrlTotalProjectHours.Text = TotalProjectHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlBDHours.Text = BDHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlBillableHours.Text = BillableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlNonBillableHours.Text = NonBillableHours.ToString(Constants.Formatting.DoubleValue);
+
+            var billablePercent = 0;
+            var nonBillablePercent = 0;
+            if (BillableHours != 0 || NonBillableHours != 0)
+            {
+                billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(BillableHours, NonBillableHours);
+                nonBillablePercent = (100 - billablePercent);
+            }
+
+            ltrlBillablePercent.Text = billablePercent.ToString();
+            ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+
+
+            if (billablePercent == 0 && nonBillablePercent == 0)
+            {
+                trBillable.Height = "1px";
+                trNonBillable.Height = "1px";
+            }
+            else if (billablePercent == 100)
+            {
+                trBillable.Height = "80px";
+                trNonBillable.Height = "1px";
+            }
+            else if (billablePercent == 0 && nonBillablePercent == 100)
+            {
+                trBillable.Height = "1px";
+                trNonBillable.Height = "80px";
+            }
+            else
+            {
+                int billablebarHeight = (int)(((float)80 / (float)100) * billablePercent);
+                trBillable.Height = billablebarHeight.ToString() + "px";
+                trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
+            }
         }
     }
 }
