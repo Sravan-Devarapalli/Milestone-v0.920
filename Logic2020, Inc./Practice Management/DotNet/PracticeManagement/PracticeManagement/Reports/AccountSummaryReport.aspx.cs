@@ -323,8 +323,8 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                cblProjectGroup.DataSource = new List<ListItem> { new ListItem("All Business Units", String.Empty) };
-                cblProjectGroup.DataBind();
+                DataHelper.FillListDefault(cblProjectGroup, "All Business Units", null,
+                                             false);
             }
         }
 
