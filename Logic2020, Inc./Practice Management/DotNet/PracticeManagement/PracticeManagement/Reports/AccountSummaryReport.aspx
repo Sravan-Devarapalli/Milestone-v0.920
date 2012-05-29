@@ -160,9 +160,10 @@
                                     Business Unit:&nbsp;
                                 </td>
                                 <td style="text-align: left; width: 75%;">
-                                    <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null" OnSelectedIndexChanged = "cblProjectGroup_OnSelectedIndexChanged"
-                                        NoItemsType="All" Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')" AutoPostBack="true"
-                                        DropDownListType="Business Unit" CellPadding="3" />
+                                    <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                                        OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
+                                        Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')"
+                                        AutoPostBack="true" DropDownListType="Business Unit" CellPadding="3" />
                                     <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
                                         UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                     </ext:ScrollableDropdownExtender>
