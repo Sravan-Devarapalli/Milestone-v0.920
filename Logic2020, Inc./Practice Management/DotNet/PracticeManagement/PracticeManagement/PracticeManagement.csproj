@@ -2399,13 +2399,6 @@
     <Compile Include="Controls\TimeEntry\TimeEntryBarHeader.ascx.designer.cs">
       <DependentUpon>TimeEntryBarHeader.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TimeEntry\TimeEntryManagement.ascx.cs">
-      <DependentUpon>TimeEntryManagement.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\TimeEntry\TimeEntryManagement.ascx.designer.cs">
-      <DependentUpon>TimeEntryManagement.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\TimeEntry\WeekChangedEventArguments.cs" />
     <Compile Include="DefaultRecruitingCommissionDetail.aspx.cs">
       <DependentUpon>DefaultRecruitingCommissionDetail.aspx</DependentUpon>
@@ -2839,13 +2832,6 @@
     <Compile Include="set_user.aspx.designer.cs">
       <DependentUpon>set_user.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reports\TimeEntryReport.aspx.cs">
-      <DependentUpon>TimeEntryReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reports\TimeEntryReport.aspx.designer.cs">
-      <DependentUpon>TimeEntryReport.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Utils\Calendar.cs" />
     <Compile Include="Utils\Coloring.cs" />
     <Compile Include="Utils\Generic.cs" />
@@ -2951,7 +2937,6 @@
     <Content Include="Controls\Reports\PersonStats.ascx" />
     <Content Include="Controls\RestrictionPanel.ascx" />
     <Content Include="Controls\TimeEntry\TimeEntryBarHeader.ascx" />
-    <Content Include="Controls\TimeEntry\TimeEntryManagement.ascx" />
     <Content Include="Css\BrowserSpecific\IEMenu6.css" />
     <Content Include="Css\DetailsView.css" />
     <Content Include="Css\Menu.css" />
@@ -3465,7 +3450,6 @@
     <Content Include="Service References\PracticeService\PracticeService.disco" />
     <Content Include="set_user.aspx" />
     <Content Include="Third Party Tools\Css Adapters\CSSFriendly.dll" />
-    <Content Include="Reports\TimeEntryReport.aspx" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ActivityLogService\" />
