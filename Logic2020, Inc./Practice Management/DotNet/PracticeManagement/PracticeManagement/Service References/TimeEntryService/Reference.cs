@@ -152,35 +152,14 @@ namespace PraticeManagement.TimeEntryService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TimeEntryService.ITimeEntryService")]
     public interface ITimeEntryService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDay", ReplyAction="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDayResponse")]
-        System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/TimeZonesAll", ReplyAction="http://tempuri.org/ITimeEntryService/TimeZonesAllResponse")]
         DataTransferObjects.Timezone[] TimeZonesAll();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/SetTimeZone", ReplyAction="http://tempuri.org/ITimeEntryService/SetTimeZoneResponse")]
         void SetTimeZone(DataTransferObjects.Timezone timezone);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntries", ReplyAction="http://tempuri.org/ITimeEntryService/RemoveTimeEntriesResponse")]
-        void RemoveTimeEntries(int milestonePersonId, int timeTypeId, System.DateTime startDate, System.DateTime endDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntryById", ReplyAction="http://tempuri.org/ITimeEntryService/RemoveTimeEntryByIdResponse")]
-        void RemoveTimeEntryById(int id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/RemoveTimeEntry", ReplyAction="http://tempuri.org/ITimeEntryService/RemoveTimeEntryResponse")]
-        void RemoveTimeEntry(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/AddTimeEntry", ReplyAction="http://tempuri.org/ITimeEntryService/AddTimeEntryResponse")]
-        int AddTimeEntry(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry, int defaultMpId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/HasTimeEntriesForMilestone", ReplyAction="http://tempuri.org/ITimeEntryService/HasTimeEntriesForMilestoneResponse")]
         bool HasTimeEntriesForMilestone(int milestoneId, System.DateTime startDate, System.DateTime endDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/UpdateTimeEntry", ReplyAction="http://tempuri.org/ITimeEntryService/UpdateTimeEntryResponse")]
-        void UpdateTimeEntry(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry, int defaultMilestoneId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/ConstructAndUpdateTimeEntry", ReplyAction="http://tempuri.org/ITimeEntryService/ConstructAndUpdateTimeEntryResponse")]
-        void ConstructAndUpdateTimeEntry(int id, string milestoneDate, string entryDate, int milestonePersonId, double actualHours, double forecastedHours, int timeTypeId, string note, string isReviewed, bool isChargeable, bool isCorrect, int modifiedById);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPerson", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPersonResponse")]
         DataTransferObjects.TimeEntry.TimeEntryRecord[] GetTimeEntriesForPerson(DataTransferObjects.Person person, System.DateTime startDate, System.DateTime endDate);
@@ -251,6 +230,9 @@ namespace PraticeManagement.TimeEntryService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/PersonTimeEntriesByPeriod", ReplyAction="http://tempuri.org/ITimeEntryService/PersonTimeEntriesByPeriodResponse")]
         DataTransferObjects.TimeEntry.TimeEntrySection[] PersonTimeEntriesByPeriod(int personId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDay", ReplyAction="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDayResponse")]
+        System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -260,7 +242,7 @@ namespace PraticeManagement.TimeEntryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
-    
+     
         
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -278,10 +260,6 @@ namespace PraticeManagement.TimeEntryService {
                 base(binding, remoteAddress) {
         }
         
-        public System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday) {
-            return base.Channel.GetPersonTimeEnteredHoursByDay(personId, date, includePTOAndHoliday);
-        }
-        
         public DataTransferObjects.Timezone[] TimeZonesAll() {
             return base.Channel.TimeZonesAll();
         }
@@ -290,32 +268,8 @@ namespace PraticeManagement.TimeEntryService {
             base.Channel.SetTimeZone(timezone);
         }
         
-        public void RemoveTimeEntries(int milestonePersonId, int timeTypeId, System.DateTime startDate, System.DateTime endDate) {
-            base.Channel.RemoveTimeEntries(milestonePersonId, timeTypeId, startDate, endDate);
-        }
-        
-        public void RemoveTimeEntryById(int id) {
-            base.Channel.RemoveTimeEntryById(id);
-        }
-        
-        public void RemoveTimeEntry(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry) {
-            base.Channel.RemoveTimeEntry(timeEntry);
-        }
-        
-        public int AddTimeEntry(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry, int defaultMpId) {
-            return base.Channel.AddTimeEntry(timeEntry, defaultMpId);
-        }
-        
         public bool HasTimeEntriesForMilestone(int milestoneId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.HasTimeEntriesForMilestone(milestoneId, startDate, endDate);
-        }
-        
-        public void UpdateTimeEntry(DataTransferObjects.TimeEntry.TimeEntryRecord timeEntry, int defaultMilestoneId) {
-            base.Channel.UpdateTimeEntry(timeEntry, defaultMilestoneId);
-        }
-        
-        public void ConstructAndUpdateTimeEntry(int id, string milestoneDate, string entryDate, int milestonePersonId, double actualHours, double forecastedHours, int timeTypeId, string note, string isReviewed, bool isChargeable, bool isCorrect, int modifiedById) {
-            base.Channel.ConstructAndUpdateTimeEntry(id, milestoneDate, entryDate, milestonePersonId, actualHours, forecastedHours, timeTypeId, note, isReviewed, isChargeable, isCorrect, modifiedById);
         }
         
         public DataTransferObjects.TimeEntry.TimeEntryRecord[] GetTimeEntriesForPerson(DataTransferObjects.Person person, System.DateTime startDate, System.DateTime endDate) {
@@ -408,6 +362,10 @@ namespace PraticeManagement.TimeEntryService {
         
         public DataTransferObjects.TimeEntry.TimeEntrySection[] PersonTimeEntriesByPeriod(int personId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.PersonTimeEntriesByPeriod(personId, startDate, endDate);
+        }
+        
+        public System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday) {
+            return base.Channel.GetPersonTimeEnteredHoursByDay(personId, date, includePTOAndHoliday);
         }
     }
 }
