@@ -47,12 +47,6 @@
   <PermissionStatement Action="GRANT">
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
-    <Object Name="TimeEntryInsert" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
     <Object Name="ProjectListAllMultiParameters_batch" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
@@ -1463,12 +1457,6 @@
   <PermissionStatement Action="GRANT">
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
-    <Object Name="TimeEntryUpdate" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
     <Object Name="aspnet_Setup_RestorePermissions" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
@@ -1992,12 +1980,6 @@
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="CommissionGetByProjectType" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="TimeEntryRemove" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
