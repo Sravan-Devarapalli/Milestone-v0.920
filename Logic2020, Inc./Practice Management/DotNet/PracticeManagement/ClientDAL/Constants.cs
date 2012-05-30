@@ -708,12 +708,7 @@
             public class TimeEntry
             {
                 #region Time entry
-
-                public const string Add = "dbo.TimeEntryInsert";
-                public const string Remove = "dbo.TimeEntryRemove";
-                public const string RemoveTimeEntries = "dbo.TimeEntriesRemove";
                 public const string Get = "dbo.PersonTimeEntries";
-                public const string Update = "dbo.TimeEntryUpdate";
                 public const string ListAll = "dbo.TimeEntriesAll";
                 public const string GetCount = "dbo.TimeEntriesGetCount";
                 public const string GetTotals = "dbo.TimeEntriesGetTotals";
@@ -724,7 +719,7 @@
                 public const string ToggleIsCorrect = "dbo.TimeEntryToggleIsCorrect";
                 public const string ToggleIsChargeable = "dbo.TimeEntryToggleIsChargeable";
 
-                //New sproc timetrack
+                //New sproc time track
                 public const string DeleteTimeEntryProcedure = "dbo.DeleteTimeEntry";
                 public const string SaveTimeTrackProcedure = "dbo.SaveTimeTrack";
                 public const string SetPersonTimeEntryRecursiveSelectionProcedure = "dbo.SetPersonTimeEntryRecursiveSelection";
