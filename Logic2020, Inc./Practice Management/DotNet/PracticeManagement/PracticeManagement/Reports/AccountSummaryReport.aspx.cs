@@ -343,6 +343,7 @@ namespace PraticeManagement.Reporting
                 DataHelper.FillListDefault(cblProjectGroup, "All Business Units", null,
                                              false);
             }
+            ddlPeriod.SelectedValue = "Please Select";
             SelectView();
         }
 
