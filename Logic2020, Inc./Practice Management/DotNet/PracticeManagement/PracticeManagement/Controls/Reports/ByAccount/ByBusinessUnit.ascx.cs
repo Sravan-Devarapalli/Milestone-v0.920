@@ -27,9 +27,14 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             get
             {
-                if (cblBusinessUnits == null || cblBusinessUnits.SelectedItems == null || (cblBusinessUnits.SelectedItems == "" && cblBusinessUnits.SelectedIndexesList.Count > 0))
+                if (HostingPage.BusinessUnitsFilteredIds == null)
                 {
                     return HostingPage.BusinessUnitIds;
+                }
+
+                if (HostingPage.BusinessUnitsFilteredIds != null)
+                {
+                    return HostingPage.BusinessUnitsFilteredIds;
                 }
                 HostingPage.BusinessUnitsFilteredIds = cblBusinessUnits.SelectedItems;
                 return cblBusinessUnits.SelectedItems;
@@ -53,6 +58,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected void btnFilterOK_OnClick(object sender, EventArgs e)
         {
+            HostingPage.BusinessUnitsFilteredIds = cblBusinessUnits.SelectedItems;
             PopulateByBusinessUnitReport(false);
         }
 
@@ -66,7 +72,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             GroupByAccount report;
             if (isPopulateFilters)
             {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
             }
             else
             {
@@ -86,7 +92,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.ProjectsCount = reportData.ProjectsCount;
             HostingPage.PersonsCount = reportData.PersonsCount;
 
-            HostingPage.TotalProjectHours = reportData.TotalProjectHours;
+            HostingPage.TotalProjectHours = (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) > 0 ? reportData.TotalProjectHours : 0d;
             HostingPage.BDHours = reportData.BusinessDevelopmentHours;
             HostingPage.BillableHours = reportData.BillableHours;
             HostingPage.NonBillableHours = reportData.NonBillableHours + HostingPage.BDHours;
@@ -135,7 +141,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, cblBusinessUnits.SelectedItems, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
                 var data = report.GroupedBusinessUnits.ToArray();
 
                 string filterApplied = "Filters applied to columns: ";
