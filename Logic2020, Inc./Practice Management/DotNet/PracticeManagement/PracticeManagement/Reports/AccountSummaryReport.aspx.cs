@@ -8,6 +8,7 @@ using PraticeManagement.Controls;
 using PraticeManagement.Controls.Reports.ByAccount;
 using System.Text;
 using PraticeManagement.FilterObjects;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reporting
 {
@@ -406,9 +407,33 @@ namespace PraticeManagement.Reporting
             SelectView();
         }
 
+        public bool SetSelectedFilters { get; set; }
+
+
+        public ProjectGroup[] BusinessUnitsList
+        {
+            get
+            {
+                return ViewState["ProjectGroup_Key"] as ProjectGroup[];
+            }
+            set
+            {
+                ViewState["ProjectGroup_Key"] = value;
+            }
+        }
+
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
+
             int viewIndex = int.Parse((string)e.CommandArgument);
+
+            if (mvAccountReport.ActiveViewIndex != viewIndex && viewIndex != 2)
+            {
+                SetSelectedFilters = true;
+
+               
+            }
+
             SwitchView((Control)sender, viewIndex);
         }
 
