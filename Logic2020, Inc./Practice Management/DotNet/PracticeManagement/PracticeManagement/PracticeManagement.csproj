@@ -1483,6 +1483,7 @@
     </Compile>
     <Compile Include="FilterObjects\ActivityLogFilter.cs" />
     <Compile Include="FilterObjects\BenchReportFilter.cs" />
+    <Compile Include="FilterObjects\ByAccountReportFilter.cs" />
     <Compile Include="FilterObjects\ConsultantUtilTimeLineFilter.cs">
       <SubType>Code</SubType>
     </Compile>
