@@ -69,10 +69,10 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                if (!string.IsNullOrEmpty(BusinessUnitsFilteredIds))
-                {
-                    return BusinessUnitsFilteredIds;
-                }
+                //if (!string.IsNullOrEmpty(BusinessUnitsFilteredIds))
+                //{
+                //    return BusinessUnitsFilteredIds;
+                //}
                 return cblProjectGroup.SelectedItems;
             }
         }
@@ -381,6 +381,7 @@ namespace PraticeManagement.Reporting
         protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Fill BusinessUnits.
+            BusinessUnitsFilteredIds = null;
             if (ddlAccount.SelectedIndex != 0)
             {
                 DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
@@ -416,6 +417,7 @@ namespace PraticeManagement.Reporting
             Page.Validate(valSumDateRange.ValidationGroup);
             if (Page.IsValid)
             {
+                BusinessUnitsFilteredIds = null;
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 SelectView();
@@ -428,6 +430,7 @@ namespace PraticeManagement.Reporting
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
+            BusinessUnitsFilteredIds = null;
             if (ddlPeriod.SelectedValue != "0")
             {
                 SelectView();
