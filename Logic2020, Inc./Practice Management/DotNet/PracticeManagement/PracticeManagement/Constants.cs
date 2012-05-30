@@ -80,6 +80,7 @@ namespace PraticeManagement
             public const string ConsultantUtilTimeLineFilterCookie = "ConsultantUtilTimeLineFilter";
             public const string ConsultingCapacityFilterCookie = "ConsultingCapacityFilter";
             public const string ConsultingDemandFilterCookie = "ConsultingDemandFilter";
+            public const string ByAccountReportFitlerCookie = "ByAccountReportFilter";
         }
 
         /// <summary>
