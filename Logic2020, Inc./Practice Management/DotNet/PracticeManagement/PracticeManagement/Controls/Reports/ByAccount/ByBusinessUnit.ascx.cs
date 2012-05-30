@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using DataTransferObjects.Reports.ByAccount;
 using System.Text;
+using DataTransferObjects;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
@@ -92,7 +93,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.ProjectsCount = reportData.ProjectsCount;
             HostingPage.PersonsCount = reportData.PersonsCount;
 
-            HostingPage.TotalProjectHours = (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) > 0 ? reportData.TotalProjectHours : 0d;
+            HostingPage.TotalProjectHours = (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) > 0 ? (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) : 0d;
             HostingPage.BDHours = reportData.BusinessDevelopmentHours;
             HostingPage.BillableHours = reportData.BillableHours;
             HostingPage.NonBillableHours = reportData.NonBillableHours + HostingPage.BDHours;
@@ -125,14 +126,37 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateFilterPanels(List<BusinessUnitLevelGroupedHours> reportData)
         {
-            PopulateBusinessUnitFilter(reportData);
+            if (HostingPage.SetSelectedFilters && HostingPage.BusinessUnitsList != null)
+            {
+                PopulateBusinessUnitFilter(HostingPage.BusinessUnitsList);
+                foreach (ListItem item in cblBusinessUnits.Items)
+                {
+                    if (reportData.Any(r => r.BusinessUnit.Id.Value.ToString() == item.Value))
+                    {
+                        item.Selected = true;
+                    }
+                    else
+                    {
+                        item.Selected = false;
+                    }
+                }
+
+            }
+            else
+            {
+                var businessUnitList = reportData.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name);
+                HostingPage.BusinessUnitsList = businessUnitList.ToArray();
+                PopulateBusinessUnitFilter(HostingPage.BusinessUnitsList);
+                cblBusinessUnits.SelectAllItems(true);
+            }
         }
 
-        private void PopulateBusinessUnitFilter(List<BusinessUnitLevelGroupedHours> reportData)
+
+
+        private void PopulateBusinessUnitFilter(ProjectGroup[] businessUnits)
         {
-            var businessUnitList = reportData.Select(r => new { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnitList.ToArray(), false, "Id", "Name");
-            cblBusinessUnits.SelectAllItems(true);
+            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "Name");
+            
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
