@@ -32,62 +32,12 @@ namespace PracticeManagementService
 
         #region Time entries
 
-        [OperationContract]
-        void RemoveTimeEntries(int milestonePersonId, int timeTypeId, DateTime startDate, DateTime endDate);
-
-        /// <summary>
-        /// Removes entry
-        /// </summary>
-        /// <param name="timeEntry">Time entry to remove</param>
-        [OperationContract]
-        void RemoveTimeEntryById(int id);
-
-        /// <summary>
-        /// Removes entry
-        /// </summary>
-        /// <param name="timeEntry">Time entry to remove</param>
-        [OperationContract]
-        void RemoveTimeEntry(TimeEntryRecord timeEntry);
-
-        /// <summary>
-        /// Adds new time entry
-        /// </summary>
-        /// <param name="timeEntry">Time entry to add</param>
-        [OperationContract]
-        int AddTimeEntry(TimeEntryRecord timeEntry, int defaultMpId);
-
         /// <summary>
         /// Has time entries
         /// </summary>
         /// <param name="milestoneId">milestoneId</param>
         [OperationContract]
         bool HasTimeEntriesForMilestone(int milestoneId, DateTime startDate, DateTime endDate);
-
-        /// <summary>
-        /// Updates time entry
-        /// </summary>
-        /// <param name="timeEntry">Time entry to add</param>
-        [OperationContract]
-        void UpdateTimeEntry(TimeEntryRecord timeEntry, int defaultMilestoneId);
-
-        /// <summary>
-        /// Constructs the objects and passes it to update the time entry
-        /// </summary>
-        [OperationContract]
-        void ConstructAndUpdateTimeEntry(
-            int id,
-            string milestoneDate,
-            string entryDate,
-            int milestonePersonId,
-            double actualHours,
-            double forecastedHours,
-            int timeTypeId,
-            string note,
-            string isReviewed,
-            bool isChargeable,
-            bool isCorrect,
-            int modifiedById
-            );
 
         /// <summary>
         /// Get time entries by person
