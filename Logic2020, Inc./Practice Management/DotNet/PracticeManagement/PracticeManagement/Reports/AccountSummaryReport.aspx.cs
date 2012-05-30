@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Reports.ByAccount;
 using System.Text;
+using PraticeManagement.FilterObjects;
 
 namespace PraticeManagement.Reporting
 {
@@ -18,7 +19,7 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                int accountId = -1;
+                int accountId = 0;
                 int.TryParse(ddlAccount.SelectedValue, out accountId);
                 return accountId;
             }
@@ -262,10 +263,61 @@ namespace PraticeManagement.Reporting
             {
                 var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
                 DataHelper.FillListDefault(ddlAccount, "- - Select Account - -", allClients, false);
-                cblProjectGroup.DataSource = new List<ListItem> { new ListItem("All Business Units", String.Empty) };
-                cblProjectGroup.DataBind();
+
+                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ByAccountReportFitlerCookie) as ByAccountReportFilter;
+                if (cookie != null)
+                {
+                    var targetItem = ddlAccount.Items.FindByValue(cookie.AccountId);
+                    if (targetItem != null)
+                    {
+                        ddlAccount.SelectedValue = targetItem.Value;
+
+                        if (ddlAccount.SelectedIndex != 0)
+                        {
+                            DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+
+                            cblProjectGroup.SelectedItems = cookie.BusinessUnitIds;
+                        }
+                        else
+                        {
+                            FillInitProjectGroupList();
+                        }
+
+                    }
+                    else
+                    {
+                        FillInitProjectGroupList();
+                    }
+
+                    var targetItems = ddlPeriod.Items.FindByValue(cookie.RangeSelected.ToString());
+
+                    ddlPeriod.SelectedValue = targetItems.Value;
+
+                    if (cookie.RangeSelected.ToString() == "0")
+                    {
+                        diRange.FromDate = cookie.StartDate;
+                        diRange.ToDate = cookie.EndDate;
+                    }
+
+                    //SelectView();//Updating in Prerender
+                }
+                else
+                {
+                    FillInitProjectGroupList();
+                }
             }
 
+        }
+
+        private void FillInitProjectGroupList()
+        {
+            cblProjectGroup.DataSource = new List<ListItem> { new ListItem("All Business Units", String.Empty) };
+            cblProjectGroup.DataBind();
+
+            foreach (ListItem item in cblProjectGroup.Items)
+            {
+                item.Selected = true;
+            }
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
@@ -349,6 +401,7 @@ namespace PraticeManagement.Reporting
 
         protected void cblProjectGroup_OnSelectedIndexChanged(object sender, EventArgs e)
         {
+            BusinessUnitsFilteredIds = null;
             SelectView();
         }
 
@@ -399,27 +452,30 @@ namespace PraticeManagement.Reporting
 
         protected override void Display()
         {
-            string rangeSelected = Request.QueryString[Constants.QueryStringParameterNames.RangeArgument];
-            if (!string.IsNullOrEmpty(rangeSelected))
-            {
-                if (ddlPeriod.Items.FindByValue(rangeSelected) != null)
-                {
-                    ddlPeriod.SelectedValue = rangeSelected;
-                }
-                if (ddlPeriod.SelectedValue == "0")
-                {
-                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
-                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
-                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
-                }
-            }
+        }
+
+        public void SaveFilters()
+        {
+            ByAccountReportFilter filter = GetFilterSettings();
+            SerializationHelper.SerializeCookie(filter, Constants.FilterKeys.ByAccountReportFitlerCookie);
+        }
+
+        private ByAccountReportFilter GetFilterSettings()
+        {
+            var filter = new ByAccountReportFilter { 
+                                AccountId = ddlAccount.SelectedValue,
+                                BusinessUnitIds = cblProjectGroup.SelectedItems,
+                                RangeSelected = ddlPeriod.SelectedValue,
+                                StartDate = StartDate,
+                                EndDate = EndDate
+                                };
+
+            return filter;
         }
 
         private void SelectView()
         {
-            if (StartDate.HasValue && EndDate.HasValue && AccountId != -1 && (BusinessUnitIds == null || !string.IsNullOrEmpty(BusinessUnitIds)))
+            if (StartDate.HasValue && EndDate.HasValue && AccountId != 0 && (BusinessUnitIds == null || !string.IsNullOrEmpty(BusinessUnitIds)))
             {
                 divWholePage.Style.Remove("display");
                 LoadActiveView();
@@ -429,6 +485,14 @@ namespace PraticeManagement.Reporting
                 divWholePage.Style.Add("display", "none");
             }
 
+            //if (AccountId == 0 && !StartDate.HasValue && !EndDate.HasValue)
+            //{
+            //    RemoveSavedFilters();
+            //}
+            //else
+            //{
+                SaveFilters();
+            //}
         }
 
         private void SwitchView(Control control, int viewIndex)
