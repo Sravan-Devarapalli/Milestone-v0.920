@@ -269,7 +269,7 @@
                         <td style="font-size: 16px; font-weight: bold;">
                             <table>
                                 <tr>
-                                    <td style="vertical-align: top; padding-bottom: 10px; font-weight: bold;">
+                                    <td style="vertical-align: top; padding-bottom: 2px; font-weight: bold;">
                                         <asp:Literal ID="ltAccount" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
@@ -279,7 +279,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-top: 10px; vertical-align: bottom;">
+                                    <td style="padding-top: 10px; vertical-align: bottom;padding-bottom: 5px;">
                                         <asp:Literal ID="ltRange" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
