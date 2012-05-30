@@ -1567,7 +1567,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    ProjectGroup[] groups = serviceClient.GroupListAll(clientId, projectId);
+                    ProjectGroup[] groups = serviceClient.GroupListAll(clientId, projectId).OrderBy(g => g.Name).ToArray();
                     FillListDefault(control, firstItemText, groups, noFirstItem);
 
                     // control.Items.Insert(0, new ListItem(Resources.Controls.DefaultGroup, string.Empty));
