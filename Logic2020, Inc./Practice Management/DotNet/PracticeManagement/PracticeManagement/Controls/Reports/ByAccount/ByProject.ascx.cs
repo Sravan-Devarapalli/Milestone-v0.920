@@ -35,8 +35,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 {
                     return HostingPage.BusinessUnitIds;
                 }
-                
-                if(HostingPage.BusinessUnitsFilteredIds != null)
+
+                if (HostingPage.BusinessUnitsFilteredIds != null)
                 {
                     return HostingPage.BusinessUnitsFilteredIds;
                 }
@@ -220,7 +220,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.ProjectsCount = reportData.ProjectsCount;
             HostingPage.PersonsCount = reportData.PersonsCount;
 
-            HostingPage.TotalProjectHours = (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) > 0 ? reportData.TotalProjectHours : 0d;
+            HostingPage.TotalProjectHours = (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) > 0 ? (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) : 0d;
             HostingPage.BDHours = reportData.BusinessDevelopmentHours;
             HostingPage.BillableHours = reportData.BillableHours;
             HostingPage.NonBillableHours = reportData.NonBillableHours;
@@ -273,7 +273,30 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateFilterPanels(ProjectLevelGroupedHours[] reportData)
         {
-            PopulateBusinessUnitFilter(reportData);
+            if (HostingPage.SetSelectedFilters && HostingPage.BusinessUnitsList != null)
+            {
+                PopulateBusinessUnitFilter(HostingPage.BusinessUnitsList);
+                foreach (ListItem item in cblBusinessUnits.Items)
+                {
+                    if (reportData.Any(r => r.Project.Group.Id.Value.ToString() == item.Value))
+                    {
+                        item.Selected = true;
+                    }
+                    else
+                    {
+                        item.Selected = false;
+                    }
+                }
+
+            }
+            else
+            {
+                ProjectGroup[] businessUnits = reportData.Select(r => new { Id = r.Project.Group.Id, Name = r.Project.Group.Name }).Distinct().ToList().OrderBy(s => s.Name).Select(pg => new ProjectGroup { Id = pg.Id, Name = pg.Name }).ToArray();
+                HostingPage.BusinessUnitsList = businessUnits.ToArray();
+                PopulateBusinessUnitFilter(businessUnits);
+                cblBusinessUnits.SelectAllItems(true);
+            }
+
             PopulateProjectStatusFilter(reportData);
             PopulateBillingFilter(reportData);
         }
@@ -285,14 +308,13 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             cblBilling.SelectAllItems(true);
         }
 
-        private void PopulateBusinessUnitFilter(ProjectLevelGroupedHours[] reportData)
+        private void PopulateBusinessUnitFilter(ProjectGroup[] businessUnits)
         {
-            var businessUnits = reportData.Select(r => new { Id = r.Project.Group.Id, Name = r.Project.Group.Name }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
             int height = 17 * businessUnits.Length;
             Unit unitHeight = new Unit((height + 17) > 50 ? 50 : height + 17);
             DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "Name");
             cblBusinessUnits.Height = unitHeight;
-            cblBusinessUnits.SelectAllItems(true);
+
         }
 
         private void PopulateProjectStatusFilter(ProjectLevelGroupedHours[] reportData)
