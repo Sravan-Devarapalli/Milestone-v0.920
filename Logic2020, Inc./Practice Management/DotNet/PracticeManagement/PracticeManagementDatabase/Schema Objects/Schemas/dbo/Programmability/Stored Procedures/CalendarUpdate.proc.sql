@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 6-5-2008
--- Updated by:	Srinivas.M
--- Update date:	23-02-2012
+-- Updated by:	ThulasiRam.P
+-- Update date:	30-05-2012
 -- Description:	Updates a calendar item
 -- =============================================
 CREATE PROCEDURE [dbo].[CalendarUpdate]
@@ -219,12 +219,6 @@ AS
 
 	END
 	
-
-	UPDATE ca
-	   SET DayOff = pc.DayOff
-	  FROM dbo.PersonCalendarAuto AS ca
-	       INNER JOIN dbo.v_PersonCalendar AS pc ON ca.date = pc.Date AND ca.PersonId = pc.PersonId
-		   JOIN @Dates AS d ON ca.Date = d.[date]
 	 
 	--Delete All Holiday/PTO timeEntries.
 	--Delete From TimeEntryHours.
