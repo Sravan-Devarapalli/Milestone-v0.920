@@ -1,6 +1,6 @@
 ﻿-- =============================================
 -- Updated by : Sainath.CH
--- Update Date: 03-30-2012
+-- Update Date: 05-31-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonFirstLastNameById]
 	@PersonId int
@@ -13,7 +13,8 @@ BEGIN
 			P.LastName,
 			P.IsStrawman,
 			TS.Name AS Timescale,
-			P.IsOffshore
+			P.IsOffshore,
+			P.PersonStatusId
 	FROM dbo.Person P
 	LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
 							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
