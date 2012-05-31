@@ -28,12 +28,6 @@ namespace PraticeManagement
 {
     public partial class PersonDetail : PracticeManagementPageBase, IPostBackEventHandler
     {
-        //#region Logger
-
-        //private static readonly ILog Log =
-        //    LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        //#endregion
 
         #region Constants
 
@@ -161,13 +155,11 @@ namespace PraticeManagement
             }
         }
 
-
         public bool UserIsRecruiter
         {
             get { return (bool)ViewState["UserIsRecruiter"]; }
             set { ViewState["UserIsRecruiter"] = value; }
         }
-
 
         private Pay PayFooter
         {
@@ -194,7 +186,7 @@ namespace PraticeManagement
         }
         #endregion
 
-        #region page events
+        #region Page Events
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -226,70 +218,21 @@ namespace PraticeManagement
                 PersonStatusId = PersonStatusType.Projected;
             }
             recruiterInfo.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
-            if (UserIsAdministrator)
-            {
-                lbPayChexID.Visible = txtPayCheckId.Visible = true;
-            }
-            else
-            {
-                lbPayChexID.Visible = txtPayCheckId.Visible = false;
-            }
-
-            //if (!UserIsAdministrator)
-            //{
-            //    if (!UserIsRecruiter)
-            //    {
-            //        DisableControls();
-            //    }
-            //    else if (!IsPostBack)
-            //    {
-            //        RestrictRecruiterPrivs();
-            //    }
-            //}
-
+            lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
             btnAddDefaultRecruitingCommission.Enabled = UserIsAdministrator || UserIsRecruiter || UserIsHR;//#2817 UserisHR is added as per requirement.
             cellPermissions.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
         }
 
         #endregion
 
-        private void RestrictRecruiterPrivs()
-        {
-            Person current = DataHelper.CurrentPerson;
-
-            if (PersonStatusId == PersonStatusType.Active || PersonStatusId == PersonStatusType.Terminated ||
-                current == null || !current.Id.HasValue ||
-                recruiterInfo.RecruiterCommission.Count(
-                    commission => commission.RecruiterId == current.Id.Value) == 0)
-            {
-                DisableControls();
-            }
-        }
-
-        protected void defaultManager_OnCustomError(object sender, PraticeManagement.Events.ErrorEventArgs errorEventArgs)
-        {
-            mlError.ShowErrorMessage("Career Counselor of this person is not active. Please select another career counselor.");
-        }
-
         protected void recruiterInfo_InfoChanged(object sender, EventArgs e)
         {
             IsDirty = true;
         }
 
-        public static byte[] ConvertStringToBytes(string input)
-        {
-            var stream = new System.IO.MemoryStream();
-            using (var writer = new System.IO.StreamWriter(stream))
-            {
-                writer.Write(input);
-                writer.Flush();
-            }
-            return stream.ToArray();
-        }
-
         protected void lnkSaveReport_OnClick(object sender, EventArgs e)
         {
-            string html =hdnSaveReportText.Value;
+            string html = hdnSaveReportText.Value;
             HTMLToPdf(html);
         }
 
@@ -297,7 +240,7 @@ namespace PraticeManagement
         {
             var document = new iTextSharp.text.Document();
             iTextSharp.text.pdf.PdfWriter.GetInstance(document, new FileStream(Request.PhysicalApplicationPath + @"\Error.pdf", FileMode.Create));
-            
+
             document.Open();
             var styles = new iTextSharp.text.html.simpleparser.StyleSheet();
             var hw = new iTextSharp.text.html.simpleparser.HTMLWorker(document);
@@ -317,7 +260,7 @@ namespace PraticeManagement
         /// <param name="e"></param>
         protected void btnSave_Click(object sender, EventArgs e)
         {
-           
+
             int viewindex = mvPerson.ActiveViewIndex;
             TableCell CssSelectCell = null;
             foreach (TableCell item in tblPersonViewSwitch.Rows[0].Cells)
@@ -360,6 +303,9 @@ namespace PraticeManagement
 
         private void ValidatePage()
         {
+           
+            custTerminateDateTE.Enabled = false;
+            int activeindex = mvPerson.ActiveViewIndex;
             for (int i = 0, j = mvPerson.ActiveViewIndex; i < mvPerson.Views.Count; i++, j++)
             {
                 if (j == mvPerson.Views.Count)
@@ -373,6 +319,13 @@ namespace PraticeManagement
                     break;
                 }
             }
+
+            if (!DisableValidatecustTerminateDateTE && Page.IsValid)
+            {
+                custTerminateDateTE.Enabled = true;
+                Page.Validate(valsPerson.ValidationGroup);
+            }
+            SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
         }
 
         public bool ValidateAndSavePersonDetails()
@@ -589,13 +542,6 @@ namespace PraticeManagement
                 rpPermissions.Visible = true;
                 var permissions = DataHelper.GetPermissions(new Person { Id = PersonId.Value });
                 rpPermissions.ApplyPermissions(permissions);
-
-                //if (Log.IsInfoEnabled)
-                //{
-                //    Log.InfoFormat("Entered person (ID {0}) details.\n", SelectedId.Value);
-                //    Log.Info(permissions);
-                //    Log.Info(Generic.WalkStackTrace(new StackTrace()));
-                //}
             }
         }
 
@@ -1096,31 +1042,6 @@ namespace PraticeManagement
             }
         }
 
-        private void DisableControls()
-        {
-            Control body = Page.Master.FindControl("body");
-            EnableDisableControls(body, false);
-        }
-
-        public void EnableDisableControls(Control control, bool enable)
-        {
-            if (control is WebControl && control != btnCancelAndReturn)
-            {
-                var webControl = (WebControl)control;
-                webControl.Enabled = enable;
-            }
-            if (control.Controls.Count > 0)
-            {
-                for (int n = 0; n < control.Controls.Count; n++)
-                {
-                    Control childControl = control.Controls[n];
-                    if (childControl.ID != "tblPersonViewSwitch" &&
-                        childControl.ID != "whatIf")
-                        EnableDisableControls(childControl, enable);
-                }
-            }
-        }
-
         protected void vwPermissions_PreRender(object sender, EventArgs e)
         {
             if (UserIsAdministrator || UserIsHR)//#2817 UserisHR is added as per requirement.
@@ -1169,6 +1090,7 @@ namespace PraticeManagement
         #region Validation
 
         private ExceptionDetail internalException;
+        private bool DisableValidatecustTerminateDateTE;
 
         protected void custValPractice_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
@@ -1281,7 +1203,7 @@ namespace PraticeManagement
                 }
             }
         }
-        
+
         protected void cvRolesActiveStatus_ServerValidate(object source, ServerValidateEventArgs args)
         {
             if (PersonStatusId.HasValue && PersonStatusId == PersonStatusType.Active)
@@ -1447,32 +1369,12 @@ namespace PraticeManagement
             activityLog.Update();
         }
 
-        public static Opportunity[] GetOpportunities(int targetPersonId)
-        {
-            using (OpportunityServiceClient serviceClient = new OpportunityServiceClient())
-            {
-                try
-                {
-                    var context = new OpportunityListContext { TargetPersonId = targetPersonId };
-                    Opportunity[] opportunities =
-                        serviceClient.OpportunityListAll(context);
-
-                    return opportunities;
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
         protected void cvInactiveStatus_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
             if (ddlPersonStatus.SelectedValue == 4.ToString() && PrevPersonStatusId == 1)//active to inactive status
             {
-                //check future timeentries exists or not
+                //check future timeentries exists or not(Current date can not have time entries)
                 bool tEsExistsAfterNow = false;
                 DateTime now = DateTime.Now;
                 using (PersonServiceClient serviceClient = new PersonServiceClient())
@@ -1484,7 +1386,7 @@ namespace PraticeManagement
                     cvInactiveStatus.ToolTip = cvInactiveStatus.ErrorMessage = string.Format(lblTimeEntriesExistFormat, now.ToString("MM/dd/yyy"));
                     args.IsValid = false;
                 }
-            } 
+            }
         }
 
         protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1499,7 +1401,7 @@ namespace PraticeManagement
             {
                 if (this.PersonId.HasValue && terminationDate.HasValue)
                 {
-                    TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1));
+                    TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, terminationDate.Value);
                     milestonesAfterTerminationDate.AddRange(serviceClient.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1)));
                     ownerProjects.AddRange(serviceClient.GetOwnerProjectsAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1)));
                     ownerOpportunities.AddRange(serviceClient.GetActiveOpportunitiesByOwnerId(this.PersonId.Value));
@@ -1583,6 +1485,18 @@ namespace PraticeManagement
             }
         }
 
+        protected void btnTerminationProcessCancel_OnClick(object source, EventArgs args)
+        {
+            mpeViewTerminationDateErrors.Hide();
+        }
+
+        protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
+        {
+            DisableValidatecustTerminateDateTE = true;
+            btnSave_Click(source, args);
+            mpeViewTerminationDateErrors.Hide();
+        }
+
         #region gvCompensationHistory Events
 
         private void _gvCompensationHistory_OnRowDataBound(GridViewRow gvRow, Pay pay)
@@ -1603,7 +1517,7 @@ namespace PraticeManagement
             dpStartDate.DateValue = pay.StartDate;
             dpEndDate.DateValue = pay.EndDate.HasValue ? pay.EndDate.Value.AddDays(-1) : DateTime.MinValue;
             ddlBasis.Attributes["vacationdaysId"] = txtVacationDays.ClientID;
-           
+
             if (pay.Timescale == TimescaleType.Salary)
             {
                 ddlBasis.SelectedIndex = 0;
@@ -1965,6 +1879,7 @@ namespace PraticeManagement
         }
 
         #endregion
+
     }
 }
 
