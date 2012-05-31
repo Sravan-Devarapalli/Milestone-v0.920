@@ -6,11 +6,11 @@
 )
 AS
 BEGIN 
+	--Returns the active project if the given personid is project Owner.
 
 	SELECT proj.ProjectId,
 		   proj.Name ProjectName
 	FROM dbo.Project AS proj 
-	INNER JOIN dbo.ProjectManagers AS pm ON pm.ProjectId = proj.ProjectId
-	WHERE pm.ProjectManagerId =@PersonId AND proj.ProjectStatusId =3 
+	WHERE proj.ProjectOwnerId = @PersonId AND proj.ProjectStatusId =3 --Active Status
 	
 END
