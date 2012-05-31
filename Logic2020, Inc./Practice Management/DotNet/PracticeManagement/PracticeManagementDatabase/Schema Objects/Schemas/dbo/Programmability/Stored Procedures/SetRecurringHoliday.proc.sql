@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Srinivas.M
--- Create date: 
--- Updated by:	ThulasiRam.P
--- Update date:	30-05-2012
+-- Create date: 25-07-2011
+-- Updated by:	Sainathc
+-- Update date:	31-05-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[SetRecurringHoliday]
 (
@@ -321,7 +321,7 @@ BEGIN
 							[ReviewStatusId]
 						)
 		SELECT TE.TimeEntryId,
-				CASE PC.TimeTypeId WHEN @HolidayTimeTypeId THEN 8 ELSE PC.ActualHours END,
+				CASE PC.TimeTypeId WHEN @HolidayTimeTypeId THEN 8 ELSE ISNULL(PC.ActualHours,8) END,
 				@CurrentPMTime,
 				@CurrentPMTime,
 				@ModifiedBy,
