@@ -32,6 +32,7 @@ namespace PraticeManagement
         private bool _userIsRecruiter;
         private bool _userIsSalesperson;
         private bool _userIsHR;
+        private bool IsErrorPanelDisplay;
 
         #endregion
 
@@ -315,7 +316,6 @@ namespace PraticeManagement
             return StrawMans.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType, Quantity = p.Quantity, NeedBy = p.NeedBy }).OrderBy(p => p.NeedBy).ThenBy(p => p.Name);
         }
 
-
         protected static string GetFormattedPersonName(string personLastFirstName, int opportunityPersonTypeId)
         {
             if (opportunityPersonTypeId == (int)OpportunityPersonType.NormalPerson)
@@ -328,7 +328,6 @@ namespace PraticeManagement
             }
 
         }
-
 
         public string GetAnimationsScriptForAnimShow()
         {
@@ -357,7 +356,7 @@ namespace PraticeManagement
                 groups = groups.AsQueryable().Where(g => (g.IsActive == true)).ToArray();
                 DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
 
-                var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(Opportunity.Client.Id, true, false,false));
+                var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(Opportunity.Client.Id, true, false, false));
                 DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
 
                 AddAttrbuteToddlProjects(projects);
@@ -423,26 +422,21 @@ namespace PraticeManagement
             {
                 hdnOpportunityProjectedStartDate.Value = string.Empty;
             }
+          
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            if (IsErrorPanelDisplay)
+            {
+                PopulateErrorPanel();
+            }
+
         }
 
         protected void cblPotentialResources_OnDataBound(object senser, EventArgs e)
         {
-            //foreach (ListItem item in cblPotentialResources.Items)
-            //{
-            //    item.Selected = false;
-
-            //    if (OpportunityId.HasValue)
-            //    {
-            //        foreach (var opPerson in OpportunityPersons)
-            //        {
-            //            if (opPerson.Person.Id.Value.ToString() == item.Value)
-            //            {
-            //                item.Attributes["selectedchecktype"] = opPerson.PersonType.ToString();
-            //                break;
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         private string GetPersonsIndexesWithPersonTypeString(List<OpportunityPerson> persons)
@@ -470,7 +464,6 @@ namespace PraticeManagement
             return sb.ToString();
         }
 
-
         private string GetPersonsIdsWithPersonTypeString(List<OpportunityPerson> persons)
         {
             StringBuilder sb = new StringBuilder();
@@ -482,10 +475,9 @@ namespace PraticeManagement
                 {
 
                     sb.Append(operson.Person.Id.Value).ToString();
-                                   
-                        sb.Append(':');
-                        sb.Append(operson.PersonType.ToString());
-                        sb.Append(',');
+                    sb.Append(':');
+                    sb.Append(operson.PersonType.ToString());
+                    sb.Append(',');
 
                 }
             }
@@ -559,7 +551,6 @@ namespace PraticeManagement
         //    upProposedResources.Update();
         //}
 
-
         /// <summary>
         /// 	Creates a project from the opportunity.
         /// </summary>
@@ -571,6 +562,7 @@ namespace PraticeManagement
                 Page.Validate(vsumWonConvert.ValidationGroup);
                 if (!Page.IsValid)
                 {
+                    IsErrorPanelDisplay = true;
                     return;
                 }
 
@@ -617,6 +609,7 @@ namespace PraticeManagement
                             else
                             {
                                 lbEndDate.Font.Bold = true;
+                                IsErrorPanelDisplay = true;
                             }
                         }
                         else
@@ -624,8 +617,21 @@ namespace PraticeManagement
                             ConvertToProject();
                         }
                     }
+                    else
+                    {
+                        IsErrorPanelDisplay = true;
+                    }
                 }
             }
+            else
+            {
+                IsErrorPanelDisplay = true;
+            }
+        }
+
+        private void PopulateErrorPanel()
+        {
+            mpeErrorPanel.Show();
         }
 
         public bool CheckForDirtyBehaviour()
@@ -732,6 +738,7 @@ namespace PraticeManagement
                     {
                         serviceClient.Abort();
                         mlConfirmation.ShowErrorMessage("{0}", ex.Message);
+                        IsErrorPanelDisplay = true;
                     }
                 }
             }
@@ -756,6 +763,7 @@ namespace PraticeManagement
                 {
                     LoadOpportunityDetails();
                 }
+                IsErrorPanelDisplay = true;
             }
         }
 
@@ -820,12 +828,15 @@ namespace PraticeManagement
             {
                 mpeAttachToProject.Show();
             }
+            else
+            {
+                IsErrorPanelDisplay = true;
+            }
         }
 
         protected void cvOpportunityStrawmanEndDateCheck_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            
             compEndDate.Validate();
             if (compEndDate.IsValid)
             {
@@ -867,6 +878,7 @@ namespace PraticeManagement
             {
                 dpEndDate.ErrorMessage = string.Empty;
                 dpStartDate.ErrorMessage = string.Empty;
+                IsErrorPanelDisplay = true;
             }
 
             return retValue;
@@ -889,13 +901,13 @@ namespace PraticeManagement
                 {
                     int? id = serviceClient.OpportunitySave(opportunity, User.Identity.Name);
 
-                        if (id.HasValue)
-                        {
-                            OpportunityId = id;
-                        }
+                    if (id.HasValue)
+                    {
+                        OpportunityId = id;
+                    }
 
-                        result = true;
-                        ClearDirty();
+                    result = true;
+                    ClearDirty();
 
                     ViewState.Remove(OPPORTUNITY_KEY);
                     ViewState.Remove(PreviousReportContext_Key);
@@ -929,7 +941,6 @@ namespace PraticeManagement
             {
                 opportunityProjectedStartDate = StartDate.Value.Date;
             }
-            
             lblStrawmansImpacted.Text = string.Empty;
             lblNewOpportunityStartDate.Text = StartDate.Value.ToShortDateString();
 
@@ -952,17 +963,17 @@ namespace PraticeManagement
                     {
                         lblStrawmansImpacted.Text = lblStrawmansImpacted.Text + "<br/> - " + ddlStrawmen.Items.FindByValue(list[0]).Text + "(" + quantity + ")";
                         impacted = true;
-                        newStrawMansList.Append(string.Format(StrawMansListEncodeFormat, 
-                                                                id, 
-                                                                personType, 
+                        newStrawMansList.Append(string.Format(StrawMansListEncodeFormat,
+                                                                id,
+                                                                personType,
                                                                 quantity,
                                                                 StartDate.Value.ToString(StrawMansDateEncodeFormat)));
                     }
                     else
                     {
-                        newStrawMansList.Append(string.Format(StrawMansListEncodeFormat, 
-                                                                id, 
-                                                                personType, 
+                        newStrawMansList.Append(string.Format(StrawMansListEncodeFormat,
+                                                                id,
+                                                                personType,
                                                                 quantity,
                                                                 needBy.ToString(StrawMansDateEncodeFormat)));
                     }
@@ -1112,7 +1123,7 @@ namespace PraticeManagement
                 ddlPriority.Items.FindByValue(opportunity.Priority == null ? "0" : opportunity.Priority.Id.ToString()));
 
             ddlPriority.Attributes["selectedPriorityText"] = ddlPriority.SelectedItem.Text;
-            
+
             PopulateSalesPersonDropDown();
 
             PopulatePracticeDropDown();
@@ -1392,15 +1403,6 @@ namespace PraticeManagement
 
         #region Validations
 
-        protected void custTransitionStatus_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            int statusId;
-            e.IsValid =
-                !int.TryParse(e.Value, out statusId) || statusId != (int)OpportunityTransitionStatusType.Lost ||
-                // Only Administratos, Salesperson or Practice Manager can set the status to Lost.
-                _userIsAdministrator || _userIsSalesperson;
-        }
-
         protected void custOppDescription_ServerValidation(object source, ServerValidateEventArgs args)
         {
             args.IsValid = txtDescription.Text.Length <= 2000;
@@ -1441,7 +1443,6 @@ namespace PraticeManagement
             }
         }
 
-
         protected void cvPriority_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
@@ -1450,8 +1451,22 @@ namespace PraticeManagement
             {
                 if (ProposedPersons.Count() < 1 && StrawMans.Count() < 1)
                 {
-                    mpePopup.Show();
                     e.IsValid = false;
+                }
+            }
+        }
+
+        protected void cvOwner_OnServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            int ownerId;
+            if (int.TryParse(ddlOpportunityOwner.SelectedValue, out ownerId))
+            {
+                Person owner = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(ownerId));
+                PersonStatusType status = PersonStatus.ToStatusType(owner.Status.Id);
+                if (status == PersonStatusType.Terminated || status == PersonStatusType.Inactive)
+                {
+                    args.IsValid = false;
                 }
             }
         }
@@ -1466,7 +1481,6 @@ namespace PraticeManagement
         {
             if (IsDirty)
             {
-              
                 if (ValidateAndSave())
                 {
                     Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
@@ -1474,18 +1488,7 @@ namespace PraticeManagement
             }
             else
             {
-                if (OpportunityId.HasValue)
-                {
-                    Page.Validate(vsumOpportunity.ValidationGroup);
-                    if (Page.IsValid)
-                    {
-                        Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
-                    }
-                }
-                else
-                {
-                    Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
-                }
+                Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
             }
         }
         #endregion
