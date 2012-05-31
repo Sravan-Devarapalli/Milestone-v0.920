@@ -2,8 +2,8 @@
 -- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 5-26-2008
--- Update by:	Anatoliy Lokshin
--- Update date:	7-3-2008
+-- Update by:	sainathc
+-- Update date:	05/31/2012
 -- Description:	Saves a current payment for the specified person.
 -- =============================================
 CREATE PROCEDURE [dbo].[PaySave]
@@ -375,7 +375,7 @@ AS
 										ReviewStatusId)
 		SELECT TE.TimeEntryId
 				,CASE WHEN TT.TimeTypeId = @HolidayTimeTypeId THEN 8
-						ELSE PC.ActualHours END
+						ELSE ISNULL(PC.ActualHours,8) END
 				,0 --Non Billable
 				,@CurrentPMTime
 				,@CurrentPMTime
