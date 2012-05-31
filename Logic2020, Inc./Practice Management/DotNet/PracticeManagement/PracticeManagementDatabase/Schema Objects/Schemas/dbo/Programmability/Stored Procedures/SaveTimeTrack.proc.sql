@@ -1,4 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[SaveTimeTrack]
+﻿-- =============================================
+-- Author:		Srinivas.M
+-- Create date: 
+-- Updated by:	ThulasiRam.P
+-- Update date:	30-05-2012
+-- =============================================
+CREATE PROCEDURE [dbo].[SaveTimeTrack]
 	@TimeEntriesXml		XML,
 	@PersonId			INT,
 	@StartDate			DATETIME,
@@ -293,13 +299,6 @@ BEGIN
 		FROM PersonCalendar PC
 		JOIN NeedToModifyDates NTMF ON NTMF.PersonId = PC.PersonId AND NTMF.Date = PC.Date
 		
-		--Update PersonCalendarAuto table with PersonCalendar table changes.
-		UPDATE ca
-		   SET DayOff = pc.DayOff
-		FROM dbo.PersonCalendarAuto AS ca
-		INNER JOIN dbo.v_PersonCalendar AS pc
-			ON pc.Date BETWEEN @StartDate AND @EndDate AND ca.PersonId = @PersonId AND ca.DayOff <> pc.DayOff AND ca.date = pc.Date AND ca.PersonId = pc.PersonId
-
 		 EXEC dbo.SessionLogUnprepare
 
 		 COMMIT TRAN TimeEntry
