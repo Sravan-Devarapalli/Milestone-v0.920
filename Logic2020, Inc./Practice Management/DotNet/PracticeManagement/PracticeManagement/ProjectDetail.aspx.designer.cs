@@ -229,6 +229,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvProjectManager;
         
         /// <summary>
+        /// cvProjectManagerStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvProjectManagerStatus;
+        
+        /// <summary>
         /// lblProjectNumber control.
         /// </summary>
         /// <remarks>
@@ -254,6 +263,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlProjectOwner;
+        
+        /// <summary>
+        /// reqProjectOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqProjectOwner;
+        
+        /// <summary>
+        /// cvProjectOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvProjectOwner;
         
         /// <summary>
         /// chbIsChargeable control.
