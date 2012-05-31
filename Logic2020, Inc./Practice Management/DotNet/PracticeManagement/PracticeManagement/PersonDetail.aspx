@@ -388,7 +388,7 @@
         {
             min-height: 60px;
             min-width: 180px;
-            max-width: 550px;
+            max-width: 450px;
             max-height: 500px;
         }
         
@@ -1514,8 +1514,7 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <asp:Button ID="btnSave" runat="server" ValidationGroup="Person" Text="Save" OnClick="btnSave_Click"
-                            OnClientClick="if (!validateStatus()) return false;" />&nbsp;
+                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="if (!validateStatus()) return false;" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
                         <script type="text/javascript">
                             function disableSaveButton() {
@@ -1563,7 +1562,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
                                              "-" + ((DataTransferObjects.Milestone)Container.DataItem).Description%>
                                         </ItemTemplate>
                                     </asp:DataList>
@@ -1573,7 +1572,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerProjects" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%# ((DataTransferObjects.Project)Container.DataItem).Name %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Project)Container.DataItem).Name %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1582,7 +1581,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" Style="white-space: normal;">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%# ((DataTransferObjects.Opportunity)Container.DataItem).Name %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Opportunity)Container.DataItem).Name %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1590,17 +1589,27 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" colspan="2" style="padding: 6px 6px 6px 6px;">
-                            <table>
+                        <td align="left" colspan="2" style="padding: 6px 0px 6px 6px;">
+                            Click OK to terminate this person and set an end date for all applicable projects.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="2" style="padding: 6px 0px 6px 6px;">
+                            <table width="70%">
                                 <tr>
-                                    <td>
+                                    <td style="width: 50%; text-align: center;">
                                         <asp:ImageButton ID="imgPrinter" runat="server" ImageUrl="~/Images/printer.png" ToolTip="Print"
                                             OnClientClick="return printform();" />
-                                    </td>
-                                    <td>
                                         <asp:ImageButton ID="lnkSaveReport" runat="server" ImageUrl="~/Images/saveToDisk.png"
                                             Style="margin-left: 10px;" OnClientClick="saveReport();" OnClick="lnkSaveReport_OnClick"
                                             ToolTip="Save Report" /><asp:HiddenField ID="hdnSaveReportText" runat="server" />
+                                    </td>
+                                    <td style="width: 50%; text-align: center;">
+                                        <asp:Button ID="btnTerminationProcessOK" runat="server" Text="OK" OnClick="btnTerminationProcessOK_OnClick"
+                                            Width="60" />
+                                        &nbsp;
+                                        <asp:Button ID="btnTerminationProcessCancel" runat="server" Text="Cancel" OnClick="btnTerminationProcessCancel_OnClick"
+                                            Width="60" />
                                     </td>
                                 </tr>
                             </table>
