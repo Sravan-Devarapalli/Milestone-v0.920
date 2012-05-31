@@ -310,6 +310,15 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.TextBoxWatermarkExtender watermarkEstRevenue;
         
         /// <summary>
+        /// fteEstRevenue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender fteEstRevenue;
+        
+        /// <summary>
         /// reqEstRevenue control.
         /// </summary>
         /// <remarks>
@@ -371,6 +380,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqOpportunityOwner;
+        
+        /// <summary>
+        /// cvOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvOwner;
         
         /// <summary>
         /// txtBuyerName control.
@@ -436,49 +454,85 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.AnimationExtender animShow;
         
         /// <summary>
-        /// hdnCanShowPopup control.
+        /// hdnTargetErrorPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnCanShowPopup;
+        protected global::System.Web.UI.WebControls.HiddenField hdnTargetErrorPanel;
         
         /// <summary>
-        /// mpePopup control.
+        /// mpeErrorPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpePopup;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeErrorPanel;
         
         /// <summary>
-        /// pnlPopup control.
+        /// pnlErrorPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlPopup;
+        protected global::System.Web.UI.WebControls.Panel pnlErrorPanel;
         
         /// <summary>
-        /// btnClose control.
+        /// btnCancelErrorPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnClose;
+        protected global::System.Web.UI.WebControls.Button btnCancelErrorPanel;
         
         /// <summary>
-        /// btnOk control.
+        /// mlConfirmation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnOk;
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
+        
+        /// <summary>
+        /// vsumOpportunity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumOpportunity;
+        
+        /// <summary>
+        /// vsumWonConvert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumWonConvert;
+        
+        /// <summary>
+        /// vsumHasPersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumHasPersons;
+        
+        /// <summary>
+        /// btnOKErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOKErrorPanel;
         
         /// <summary>
         /// hdnNewStrawmansList control.
@@ -965,51 +1019,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltrWonConvertInvalid;
-        
-        /// <summary>
-        /// mlConfirmation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
-        
-        /// <summary>
-        /// vsumOpportunity control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary vsumOpportunity;
-        
-        /// <summary>
-        /// vsumOpportunityTransition control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary vsumOpportunityTransition;
-        
-        /// <summary>
-        /// vsumWonConvert control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary vsumWonConvert;
-        
-        /// <summary>
-        /// vsumHasPersons control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary vsumHasPersons;
         
         /// <summary>
         /// hdnOpportunityDelete control.
