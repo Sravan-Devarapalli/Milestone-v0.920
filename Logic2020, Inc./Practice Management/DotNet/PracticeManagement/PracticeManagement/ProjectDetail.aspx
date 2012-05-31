@@ -434,6 +434,10 @@
                                             ValidationGroup="Project" ErrorMessage="The Project Manager(s) is required."
                                             ValidateEmptyText="true" OnServerValidate="cvProjectManager_OnServerValidate"
                                             SetFocusOnError="true" Text="*" ToolTip="The Project Manager(s) is required."></asp:CustomValidator>
+                                        <asp:CustomValidator ID="cvProjectManagerStatus" runat="server" EnableClientScript="false"
+                                            ValidationGroup="Project" ErrorMessage="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."
+                                            ValidateEmptyText="true" OnServerValidate="cvProjectManagerStatus_OnServerValidate"
+                                            SetFocusOnError="true" Text="*" ToolTip="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -457,6 +461,10 @@
                                         <asp:RequiredFieldValidator ID="reqProjectOwner" runat="server" ControlToValidate="ddlProjectOwner"
                                             EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Owner is required."
                                             SetFocusOnError="true" Text="*" ToolTip="The Project Owner is required."></asp:RequiredFieldValidator>
+                                        <asp:CustomValidator ID="cvProjectOwner" runat="server" EnableClientScript="false"
+                                            ValidationGroup="Project" ErrorMessage="The selected owner has been terminated or made inactive.  Please select another owner."
+                                            ValidateEmptyText="true" OnServerValidate="cvProjectOwner_OnServerValidate"
+                                            SetFocusOnError="true" Text="*" ToolTip="The selected owner has been terminated or made inactive.  Please select another owner."></asp:CustomValidator>
                                     </td>
                                     <td colspan="3">
                                         <asp:CheckBox ID="chbIsChargeable" runat="server" onclick="setDirty();" Text="Milestones in this project are billable by default" />
