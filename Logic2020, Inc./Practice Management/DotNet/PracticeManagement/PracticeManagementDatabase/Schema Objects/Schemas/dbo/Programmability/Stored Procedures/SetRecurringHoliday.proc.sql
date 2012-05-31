@@ -1,4 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[SetRecurringHoliday]
+﻿-- =============================================
+-- Author:		Srinivas.M
+-- Create date: 
+-- Updated by:	ThulasiRam.P
+-- Update date:	30-05-2012
+-- =============================================
+CREATE PROCEDURE [dbo].[SetRecurringHoliday]
 (
 	@Id INT = NULL,
 	@IsSet	BIT,
@@ -118,12 +124,6 @@ BEGIN
 		SET IsSeries = NTMF.IsSeries
 	FROM dbo.PersonCalendar PC
 	INNER JOIN NeedToModifyDates NTMF ON NTMF.PersonId = PC.PersonId AND NTMF.Date = PC.Date
-
-	--Update PersonCalendarAuto table
-	UPDATE C1
-	SET DayOff = @IsSet
-	FROM dbo.PersonCalendarAuto C1
-	JOIN @RecurringHolidaysDates rhd ON C1.Date = rhd.Date
 		
 	--Delete all administrative worktype timeEntries.
 	DELETE TEH
