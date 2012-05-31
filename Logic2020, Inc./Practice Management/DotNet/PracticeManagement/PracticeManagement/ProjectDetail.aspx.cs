@@ -172,6 +172,39 @@ namespace PraticeManagement
             args.IsValid = cblProjectManagers.SelectedValues != null ? cblProjectManagers.SelectedValues.Count > 0 : false;
         }
 
+        protected void cvProjectOwner_OnServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            int ownerId;
+            if (int.TryParse(ddlProjectOwner.SelectedValue,out ownerId))
+            {
+                Person owner = ServiceCallers.Custom.Person(p=>p.GetPersonDetailsShort(ownerId));
+                PersonStatusType status = PersonStatus.ToStatusType(owner.Status.Id);
+                if (status == PersonStatusType.Terminated || status == PersonStatusType.Inactive)
+                {
+                    args.IsValid = false;
+                }
+            }
+        }
+
+        protected void cvProjectManagerStatus_OnServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+
+            if (cblProjectManagers.SelectedItems != null)
+            {
+                string projectManagerIds = cblProjectManagers.SelectedItems;
+                List<Person> projectManagers = ServiceCallers.Custom.Person(p => p.GetPersonListByPersonIdList(projectManagerIds)).ToList();
+                foreach (Person manger in projectManagers)
+                {
+                    PersonStatusType status = PersonStatus.ToStatusType(manger.Status.Id);
+                    if (status == PersonStatusType.Terminated || status == PersonStatusType.Inactive)
+                    {
+                        args.IsValid = false;
+                    }
+                }
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -681,7 +714,6 @@ namespace PraticeManagement
             // Only set an input focus
             ((Control)sender).Focus();
         }
-
 
         /// <summary>
         /// Sets the salesperson commission
