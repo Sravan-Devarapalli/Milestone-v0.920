@@ -101,7 +101,7 @@ BEGIN
 				TEH.ModifiedDate = @CurrentPMTime,
 				TEH.CreateDate = @CurrentPMTime
 		FROM dbo.TimeEntryHours TEH
-		INNER JOIN dbo.TimeEntry TE ON TE.PersonId = @PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = @SubstituteDayDate
+		INNER JOIN dbo.TimeEntry TE ON  TE.TimeEntryId =TEH.TimeEntryId  AND  TE.PersonId = @PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = @SubstituteDayDate
 	END
 	ELSE
 	BEGIN
