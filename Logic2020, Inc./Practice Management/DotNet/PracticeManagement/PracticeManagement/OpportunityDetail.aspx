@@ -771,7 +771,7 @@
             var hdnOpportunityProjectedStartDate = document.getElementById('<%= hdnOpportunityProjectedStartDate.ClientID %>');
             var dpStartDate = document.getElementById('<%= (dpStartDate.FindControl("txtDate") as TextBox).ClientID %>');
             var dpStartDateExtender = $find('dpStartDateBehaviourId');
-            
+
             if (hdnOpportunityProjectedStartDate != null && hdnOpportunityProjectedStartDate.value != '' && dpStartDate != null && dpStartDateExtender != null) {
                 var previousStartDate = new Date(hdnOpportunityProjectedStartDate.value).format('MM/dd/yyyy');
 
@@ -811,8 +811,9 @@
                                                 <b>Start Date</b>
                                             </td>
                                             <td class="DatePickerPadding" style="padding-left: 4px; padding-right: 4px;">
-                                                <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false" BehaviorID="dpStartDateBehaviourId"
-                                                    OnClientChange="EnableSaveButton();setDirty();" TextBoxWidth="62px" runat="server" />
+                                                <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false"
+                                                    BehaviorID="dpStartDateBehaviourId" OnClientChange="EnableSaveButton();setDirty();"
+                                                    TextBoxWidth="62px" runat="server" />
                                             </td>
                                             <td>
                                                 <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
@@ -866,7 +867,8 @@
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqOpportunityName" runat="server" ControlToValidate="txtOpportunityName"
                                                     ToolTip="The Opportunity Name is required." Text="*" EnableClientScript="false"
-                                                    SetFocusOnError="true" Display="Dynamic" Width="100%" ValidationGroup="Opportunity" />
+                                                    ErrorMessage="The Opportunity Name is required." SetFocusOnError="true" Display="Dynamic"
+                                                    Width="100%" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
@@ -885,7 +887,8 @@
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqStatus" runat="server" ControlToValidate="ddlStatus"
                                                     Width="50%" ToolTip="The Status is required." Text="*" EnableClientScript="false"
-                                                    SetFocusOnError="true" Display="Dynamic" ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Status is required." SetFocusOnError="true" Display="Dynamic"
+                                                    ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="custWonConvert" runat="server" Text="*" Width="50%" ErrorMessage="Cannot convert an opportunity with the status Won to project."
                                                     ValidationGroup="WonConvert" OnServerValidate="custWonConvert_OnServerValidate" />
                                             </td>
@@ -907,8 +910,9 @@
                                             </td>
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqClient" runat="server" ControlToValidate="ddlClient"
-                                                    Width="100%" ToolTip="The Account is required." Text="*" EnableClientScript="false"
-                                                    SetFocusOnError="true" Display="Dynamic" ValidationGroup="Opportunity" />
+                                                    ErrorMessage="The Account is required." Width="100%" ToolTip="The Account is required."
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
@@ -982,9 +986,11 @@
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqPriority" runat="server" ControlToValidate="ddlPriority"
                                                     Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
-                                                    Text="*" ToolTip="The Priority is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Priority is required." Text="*" ToolTip="The Priority is required."
+                                                    ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
                                                     ToolTip="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority."
+                                                    ErrorMessage="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority."
                                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
@@ -1028,19 +1034,22 @@
                                                 <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarkEstRevenue" runat="server"
                                                     TargetControlID="txtEstRevenue" WatermarkText="Ex: 15000, minimum 1000" EnableViewState="false"
                                                     WatermarkCssClass="watermarkedtext" />
+                                                <AjaxControlToolkit:FilteredTextBoxExtender ID="fteEstRevenue" TargetControlID="txtEstRevenue" 
+                                                    FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server"  ValidChars="."/>
                                             </td>
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqEstRevenue" runat="server" ControlToValidate="txtEstRevenue"
                                                     ToolTip="The Est. Revenue is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Est. Revenue is required." Display="Dynamic" ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="custEstimatedRevenue" runat="server" ControlToValidate="txtEstRevenue"
                                                     ToolTip="A number with 2 decimal digits is allowed for the Est. Revenue." Text="*"
+                                                    ErrorMessage="A number with 2 decimal digits is allowed for the Est. Revenue."
                                                     EnableClientScript="false" SetFocusOnError="true" OnServerValidate="custEstimatedRevenue_ServerValidate"
                                                     Display="Dynamic" ValidationGroup="Opportunity"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="custEstRevenue" runat="server" ControlToValidate="txtEstRevenue"
                                                     ToolTip="Est. Revenue minimum value should be 1000." Text="*" EnableClientScript="false"
-                                                    SetFocusOnError="true" Display="Dynamic" OnServerValidate="custEstRevenue_ServerValidate"
-                                                    ValidationGroup="Opportunity" />
+                                                    ErrorMessage="Est. Revenue minimum value should be 1000." SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="custEstRevenue_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
@@ -1061,7 +1070,8 @@
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
                                                     Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
-                                                    Text="*" ToolTip="The Salesperson is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Salesperson is required." Text="*" ToolTip="The Salesperson is required."
+                                                    ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -1079,6 +1089,10 @@
                                                 <asp:RequiredFieldValidator ID="reqOpportunityOwner" runat="server" ControlToValidate="ddlOpportunityOwner"
                                                     EnableClientScript="false" ValidationGroup="Opportunity" ErrorMessage="The Owner is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Owner is required."></asp:RequiredFieldValidator>
+                                                <asp:CustomValidator ID="cvOwner" runat="server" EnableClientScript="false" ValidationGroup="Opportunity"
+                                                    ErrorMessage="The selected owner has been terminated or made inactive.  Please select another owner."
+                                                    ValidateEmptyText="true" OnServerValidate="cvOwner_OnServerValidate" SetFocusOnError="true"
+                                                    Text="*" ToolTip="The selected owner has been terminated or made inactive.  Please select another owner."></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -1098,9 +1112,10 @@
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqBuyerName" runat="server" ControlToValidate="txtBuyerName"
                                                     ToolTip="The Buyer Name is required." Text="*" SetFocusOnError="true" Display="Dynamic"
-                                                    ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Buyer Name is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:RegularExpressionValidator ID="valregBuyerName" runat="server" ControlToValidate="txtBuyerName"
                                                     ToolTip="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe or hyphen."
+                                                    ErrorMessage="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe or hyphen."
                                                     ValidationGroup="Opportunity" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" ValidationExpression="^[a-zA-Z'\-]{2,30}$"></asp:RegularExpressionValidator>
                                             </td>
@@ -1121,7 +1136,8 @@
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqPractice" runat="server" ControlToValidate="ddlPractice"
                                                     ToolTip="The Practice is required." Width="100%" Text="*" EnableClientScript="false"
-                                                    SetFocusOnError="true" Display="Dynamic" ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Practice is required." SetFocusOnError="true" Display="Dynamic"
+                                                    ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -1132,72 +1148,76 @@
                         </ajax:AnimationExtender>
                         <ajax:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint" runat="server">
                         </ajax:AnimationExtender>
-                        <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
-                        <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
-                            CancelControlID="btnClose" BehaviorID="mpePriorityPopup" BackgroundCssClass="modalBackground"
-                            PopupControlID="pnlPopup" DropShadow="false" OkControlID="btnOk" />
-                        <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
-                            Style="display: none" BorderWidth="2px">
+                        <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
+                        <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
+                            TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
+                            CancelControlID="btnCancelErrorPanel" DropShadow="false" />
+                        <asp:Panel ID="pnlErrorPanel" runat="server" BackColor="White" BorderColor="Black"
+                            Style="display: none; max-height: 400px; max-width: 550px; min-height: 100px;
+                            min-width: 400px" BorderWidth="2px">
                             <table width="100%">
                                 <tr>
                                     <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
                                         valign="bottom">
                                         <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                                        <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
-                                            Style="float: right;" Text="X"></asp:Button>
+                                        <asp:Button ID="btnCancelErrorPanel" runat="server" CssClass="mini-report-close"
+                                            ToolTip="Cancel" Style="float: right;" Text="X"></asp:Button>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 10px;" colspan="2">
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <p>
-                                                        You must add a Team Make-Up to this opportunity before it can be saved with a PO,
-                                                        A, or B priority.
-                                                    </p>
-                                                    <br />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align: center;">
-                                                    <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return false;" />
-                                                </td>
-                                            </tr>
-                                        </table>
+                                    <td style="padding: 10px;">
+                                        <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
+                                        <asp:ValidationSummary ID="vsumOpportunity" runat="server" DisplayMode="BulletList"
+                                            CssClass="ApplyStyleForDashBoardLists" ValidationGroup="Opportunity" ShowMessageBox="false"
+                                            ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving an opportunity." />
+                                        <asp:ValidationSummary ID="vsumWonConvert" runat="server" ValidationGroup="WonConvert"
+                                            CssClass="ApplyStyleForDashBoardLists" DisplayMode="BulletList" EnableClientScript="false"
+                                            HeaderText="Unable to convert opportunity due to the following errors:" />
+                                        <asp:ValidationSummary ID="vsumHasPersons" runat="server" ValidationGroup="HasPersons"
+                                            CssClass="ApplyStyleForDashBoardLists" DisplayMode="BulletList" EnableClientScript="false"
+                                            HeaderText="Unable to convert opportunity due to the following errors:" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; text-align: center;">
+                                        <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
                                     </td>
                                 </tr>
                             </table>
                         </asp:Panel>
                         <asp:HiddenField ID="hdnNewStrawmansList" Value="" runat="server" />
-                        <AjaxControlToolkit:ModalPopupExtender ID="mpeStrawmansImpactedWithOpportunityStartDate" runat="server" TargetControlID="hdnNewStrawmansList"
-                            CancelControlID="btnStrawmansImpactCancel" BehaviorID="mpeBehaviourStrawmansImpactedWithOpportunityStartDate" BackgroundCssClass="modalBackground"
-                            PopupControlID="pnlStrawmansImpactedWithOpportunityStartDatePopUp" DropShadow="false" OnCancelScript="ResetStartDate(); return false;" />
-                        <asp:Panel ID="pnlStrawmansImpactedWithOpportunityStartDatePopUp" BackColor="White" BorderColor="Black" BorderWidth="2px" runat="server" 
-                            CssClass="ConfirmBoxErrorClass" style="display:none;">
+                        <AjaxControlToolkit:ModalPopupExtender ID="mpeStrawmansImpactedWithOpportunityStartDate"
+                            runat="server" TargetControlID="hdnNewStrawmansList" CancelControlID="btnStrawmansImpactCancel"
+                            BehaviorID="mpeBehaviourStrawmansImpactedWithOpportunityStartDate" BackgroundCssClass="modalBackground"
+                            PopupControlID="pnlStrawmansImpactedWithOpportunityStartDatePopUp" DropShadow="false"
+                            OnCancelScript="ResetStartDate(); return false;" />
+                        <asp:Panel ID="pnlStrawmansImpactedWithOpportunityStartDatePopUp" BackColor="White"
+                            BorderColor="Black" BorderWidth="2px" runat="server" CssClass="ConfirmBoxErrorClass"
+                            Style="display: none;">
                             <table width="100%">
                                 <tr>
                                     <td valign="bottom" class="AttentionPopUpHeaderStyle">
                                         Attention!
                                         <asp:Button ID="btnPopupClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
-                                            OnClientClick="$find('mpeBehaviourStrawmansImpactedWithOpportunityStartDate').hide(); return false;" Style="float: right;"
-                                            Text="X"></asp:Button>
+                                            OnClientClick="$find('mpeBehaviourStrawmansImpactedWithOpportunityStartDate').hide(); return false;"
+                                            Style="float: right;" Text="X"></asp:Button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding:6px;">
-                                        Following Strawman(s) Need by date will be Adjusted to Opportunity's New Start Date 
+                                    <td style="padding: 6px;">
+                                        Following Strawman(s) Need by date will be Adjusted to Opportunity's New Start Date
                                         <asp:Label ID="lblNewOpportunityStartDate" Font-Bold="true" runat="server"></asp:Label>.
                                         <br />
                                         <asp:Label ID="lblStrawmansImpacted" runat="server"></asp:Label>
                                         <p>
-                                        <br />
-                                            Click Ok to update the Strawman(s) 'Needed By' dates to reflect new Opportunity's Start Date.
+                                            <br />
+                                            Click Ok to update the Strawman(s) 'Needed By' dates to reflect new Opportunity's
+                                            Start Date.
                                         </p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center" style="padding:6px;">
+                                    <td align="center" style="padding: 6px;">
                                         <asp:Button ID="btnStrawmansImpactOkSave" runat="server" Text="Ok" OnClick="btnStrawmansImpactOkSave_Click" />
                                         <asp:Button ID="btnStrawmansImpactCancel" runat="server" Text="Cancel" />
                                     </td>
@@ -1229,7 +1249,8 @@
                                                 <td style="text-align: right">
                                                     <asp:CustomValidator ID="custOppDesciption" runat="server" ControlToValidate="txtDescription"
                                                         Display="Dynamic" OnServerValidate="custOppDescription_ServerValidation" SetFocusOnError="True"
-                                                        ToolTip="The opportunity description cannot be more than 2000 symbols" ValidationGroup="Opportunity">*</asp:CustomValidator>
+                                                        ErrorMessage="The opportunity description cannot be more than 2000 symbols" ToolTip="The opportunity description cannot be more than 2000 symbols"
+                                                        ValidationGroup="Opportunity">*</asp:CustomValidator>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1564,15 +1585,6 @@
                         <table style="width: 100%; background: #e2ebff;">
                             <tr>
                                 <td style="padding: 4px; height: 35px; width: 64%;">
-                                    <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
-                                    <asp:ValidationSummary ID="vsumOpportunity" runat="server" ValidationGroup="Opportunity"
-                                        EnableClientScript="false" HeaderText="Error occurred while saving an opportunity." />
-                                    <asp:ValidationSummary ID="vsumOpportunityTransition" runat="server" ValidationGroup="OpportunityTransition"
-                                        DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to proceed with opportunity transition due to the following errors:" />
-                                    <asp:ValidationSummary ID="vsumWonConvert" runat="server" ValidationGroup="WonConvert"
-                                        DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
-                                    <asp:ValidationSummary ID="vsumHasPersons" runat="server" ValidationGroup="HasPersons"
-                                        DisplayMode="BulletList" EnableClientScript="false" HeaderText="Unable to convert opportunity due to the following errors:" />
                                 </td>
                                 <td style="width: 36%;">
                                     <table style="float: right;">
