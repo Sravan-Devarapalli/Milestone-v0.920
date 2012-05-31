@@ -2677,6 +2677,16 @@ namespace DataAccess
                 int hireDateIndex;
                 int terminationDateIndex;
                 int isStrawManIndex;
+                int personStatusIdIndex;
+                try
+                {
+                    personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
+                }
+                catch
+                {
+                    personStatusIdIndex = -1;
+                }
+
                 try
                 {
                     isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
@@ -2720,6 +2730,15 @@ namespace DataAccess
                     {
                         person.IsStrawMan = reader.GetBoolean(isStrawManIndex);//== 0 ? false : true
                     }
+
+                    if (personStatusIdIndex > -1)
+                    {
+                        person.Status = new PersonStatus
+                        {
+                            Id = reader.GetInt32(personStatusIdIndex)
+                        };
+                    }
+
                     var isDefaultManager = reader.GetBoolean(isDefManagerIndex);
                     if (isDefaultManager)
                         person.Manager = new Person { Id = personId };
@@ -3397,6 +3416,7 @@ namespace DataAccess
                 int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
                 int timeScaleIndex = reader.GetOrdinal(TimescaleColumn);
                 int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+                int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
 
                 while (reader.Read())
                 {
@@ -3408,6 +3428,10 @@ namespace DataAccess
                                     TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
                                 };
                     person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
+                    person.Status = new PersonStatus
+                    {
+                        Id = reader.GetInt32(personStatusIdIndex)
+                    };
                     if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
                     {
                         break;
