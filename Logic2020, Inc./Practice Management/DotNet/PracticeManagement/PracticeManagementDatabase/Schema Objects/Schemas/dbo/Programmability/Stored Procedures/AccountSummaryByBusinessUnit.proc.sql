@@ -11,11 +11,10 @@ BEGIN
 	
 	DECLARE @StartDateLocal DATETIME ,
 		@EndDateLocal DATETIME,
-		@HolidayTimeType INT
+		@HolidayTimeType INT,
+		@FutureDate DATETIME
 
-	SET @StartDateLocal = CONVERT(DATE, @StartDate)
-	SET @EndDateLocal = CONVERT(DATE, @EndDate)
-	SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+	SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate), @HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
 	
 	
 		SELECT    PG.GroupId, 
@@ -47,7 +46,7 @@ BEGIN
 				INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
 				INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = P.PersonId
 												AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
-																			AND PTSH.EndDate
+																			AND ISNULL(PTSH.EndDate,@FutureDate)
 				INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId
 				LEFT JOIN dbo.Project Pro ON Pro.ProjectId = CC.ProjectId
 		WHERE CC.ClientId = @AccountId
@@ -81,7 +80,7 @@ BEGIN
 				INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
 				INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = P.PersonId
 												AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
-																			AND PTSH.EndDate
+																			AND ISNULL(PTSH.EndDate,@FutureDate)
 				INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId
 				LEFT JOIN dbo.Project Pro ON Pro.ProjectId = CC.ProjectId
 				INNER JOIN dbo.Client C ON C.ClientId = CC.ClientId
