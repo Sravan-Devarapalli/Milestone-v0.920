@@ -23,7 +23,7 @@ namespace PracticeManagementService
 
 
         [OperationContract]
-        List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday);
+        List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid);
 
         [OperationContract]
         Triple<int, int, int> GetAdministrativeChargeCodeValues(int timeTypeId);
@@ -54,6 +54,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         string GetWorkTypeNameById(int worktypeId);
+
+        [OperationContract]
+        TimeTypeRecord GetUnpaidTimeType();
 
         #endregion
 
