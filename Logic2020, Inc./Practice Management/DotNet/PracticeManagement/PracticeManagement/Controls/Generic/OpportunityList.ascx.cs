@@ -224,8 +224,7 @@ namespace PraticeManagement.Controls.Generic
 
         public void DatabindOpportunities(OpportunityFilterSettings filter = null)
         {
-
-            var opportunities = GetOpportunities(filter);
+           var opportunities = GetOpportunities(filter);
             DataBindLookedOpportunities(opportunities);
         }
 
@@ -244,9 +243,7 @@ namespace PraticeManagement.Controls.Generic
                 PraticeManagement.Utils.Generic.RedirectWithReturnTo(detailsLink, Request.Url.AbsoluteUri, Response);
             }
         }
-             
-
-
+  
         protected string GetOpportunityDetailsLink(int opportunityId, int index)
         {
             return Utils.Generic.GetTargetUrlWithReturn(Urls.OpportunityDetailsLink(opportunityId), Request.Url.AbsoluteUri);
@@ -295,13 +292,6 @@ namespace PraticeManagement.Controls.Generic
             {
                 return false;
             }
-
-            if (person.Status.Name == PersonStatusType.Inactive.ToString()
-                || person.Status.Name == PersonStatusType.Terminated.ToString())
-            {
-                return false;
-            }
-
             return true;
         }
 
