@@ -173,7 +173,7 @@ namespace PraticeManagement.Controls
         {
             CalendarItem[] calendar;
             using (var client = new CalendarServiceClient())
-                calendar = client.GetCalendar(startDate, endDate, person.Id, null);
+                calendar = client.GetPersonCalendar(startDate, endDate, person.Id, null);
 
             return calendar.Select(item => DatePoint.Create(item)).ToList();
         }
