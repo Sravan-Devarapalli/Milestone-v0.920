@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Srinivas.M
 -- Create date: 
--- Updated by:	ThulasiRam.P
--- Update date:	30-05-2012
+-- Updated by:	Sainathc
+-- Update date:	01-06-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[SaveTimeTrack]
 	@TimeEntriesXml		XML,
@@ -38,11 +38,13 @@ BEGIN
 	DECLARE @CurrentPMTime	DATETIME,
 			@ModifiedBy		INT,
 			@HolidayTimeTypeId INT,
-			@ORTTimeTypeId	INT
+			@ORTTimeTypeId	INT,
+			@UnpaidTimeTypeId	INT
 
 	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 	SET @CurrentPMTime = dbo.InsertingTime()
 	SET @ORTTimeTypeId = dbo.GetORTTimeTypeId()
+	SET @UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
 
 	SELECT @ModifiedBy = P.PersonId
 	FROM Person P
@@ -115,7 +117,7 @@ BEGIN
 		FROM dbo.TimeEntry TE
 		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId   
 		INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
-		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND @HolidayTimeTypeId <> TT.TimeTypeId
+		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND @HolidayTimeTypeId <> TT.TimeTypeId AND @UnpaidTimeTypeId <> TT.TimeTypeId
 		INNER JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
 			ON NEW.c.value('..[1]/@Date', 'DATETIME') = TE.ChargeCodeDate
 				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
@@ -156,7 +158,7 @@ BEGIN
 								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
 								AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
 								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')
-		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.TimeTypeId <> @HolidayTimeTypeId
+		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.TimeTypeId <> @HolidayTimeTypeId AND TT.TimeTypeId <> @UnpaidTimeTypeId
 		LEFT JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
 										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
 		LEFT JOIN ForecastedHours FH ON FH.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT') 
@@ -206,7 +208,8 @@ BEGIN
 				ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
-		INNER JOIN Person P ON P.PersonId = PC.PersonId AND P.IsStrawman = 0 AND PC.TimeTypeId <> @HolidayTimeTypeId AND C.DayOff <> 1 
+					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @UnpaidTimeTypeId
+		INNER JOIN Person P ON P.PersonId = PC.PersonId AND P.IsStrawman = 0 AND PC.TimeTypeId <> @HolidayTimeTypeId AND PC.TimeTypeId <> @UnpaidTimeTypeId AND C.DayOff <> 1 
 		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale = 2--Here 2 is W2Salaried person.
 		WHERE ISNULL(Dates.c.value('@ActualHours', 'REAL'), 0) = 0 --can delete only if it is entered for the timeentry page and not floating holiday
 
@@ -223,6 +226,7 @@ BEGIN
 			ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 				AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
 				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
+				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @UnpaidTimeTypeId
 				AND Dates.c.value('@ActualHours', 'REAL') > 0
 			INNER JOIN dbo.TimeType tt ON tt.TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT')
 			LEFT JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = Dates.c.value('..[1]/..[1]/@OldId', 'INT')
@@ -261,6 +265,7 @@ BEGIN
 		LEFT JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = Dates.c.value('..[1]/..[1]/@OldId', 'INT')
 		WHERE Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
 				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
+				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @UnpaidTimeTypeId
 				AND Dates.c.value('@ActualHours', 'REAL') > 0
 				AND PC.Date IS NULL
 
