@@ -36,11 +36,11 @@ namespace PraticeManagement.Reporting
 
         public bool UpdateHeaderSection { get; set; }
 
-        public int BusinessUnitsCount { get; set; }
+        public int BusinessUnitsCount { get { return Convert.ToInt32(ViewState["BusinessUnitsCount_Key"]); } set { ViewState["BusinessUnitsCount_Key"] = value; } }
 
-        public int ProjectsCount { get; set; }
+        public int ProjectsCount { get { return Convert.ToInt32(ViewState["ProjectsCount_Key"]); } set { ViewState["ProjectsCount_Key"] = value; } }
 
-        public int PersonsCount { get; set; }
+        public int PersonsCount { get { return Convert.ToInt32(ViewState["PersonsCount_Key"]); } set { ViewState["PersonsCount_Key"] = value; } }
 
         public Double TotalProjectHours { get; set; }
 
@@ -57,6 +57,7 @@ namespace PraticeManagement.Reporting
                 return string.Format("{0} BUs, {1} Projects, {2} Persons", BusinessUnitsCount, ProjectsCount, PersonsCount);
             }
         }
+
 
         public ByBusinessDevelopment ByBusinessDevelopmentControl
         {
@@ -419,7 +420,7 @@ namespace PraticeManagement.Reporting
             {
                 SetSelectedFilters = true;
 
-               
+
             }
 
             SwitchView((Control)sender, viewIndex);
@@ -478,13 +479,14 @@ namespace PraticeManagement.Reporting
 
         private ByAccountReportFilter GetFilterSettings()
         {
-            var filter = new ByAccountReportFilter { 
-                                AccountId = ddlAccount.SelectedValue,
-                                BusinessUnitIds = cblProjectGroup.SelectedItems,
-                                RangeSelected = ddlPeriod.SelectedValue,
-                                StartDate = StartDate,
-                                EndDate = EndDate
-                                };
+            var filter = new ByAccountReportFilter
+            {
+                AccountId = ddlAccount.SelectedValue,
+                BusinessUnitIds = cblProjectGroup.SelectedItems,
+                RangeSelected = ddlPeriod.SelectedValue,
+                StartDate = StartDate,
+                EndDate = EndDate
+            };
 
             return filter;
         }
@@ -507,7 +509,7 @@ namespace PraticeManagement.Reporting
             //}
             //else
             //{
-                SaveFilters();
+            SaveFilters();
             //}
         }
 
