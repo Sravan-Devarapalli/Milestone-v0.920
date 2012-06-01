@@ -77,6 +77,15 @@ namespace PraticeManagement.Controls
             
         }
 
+        private bool IsUserHrORAdmin
+        {
+            get
+            {
+                return HostingControl.IsUserHrORAdmin;
+            }
+
+        }
+
         #endregion
 
         #region Methods
@@ -172,8 +181,12 @@ namespace PraticeManagement.Controls
             return toolTip;
         }
 
-        public bool GetIsReadOnly(bool dateLevelReadonly, bool dayOff, bool companyDayOff, DateTime date)
+        public bool GetIsReadOnly(bool dateLevelReadonly, bool dayOff, bool companyDayOff, DateTime date, bool isUnpaidTimeType)
         {
+            if (isUnpaidTimeType && !IsUserHrORAdmin)
+            {
+                return true;
+            }
 
             bool isReadOnly = dayOff
                 ? (companyDayOff
@@ -205,3 +218,4 @@ namespace PraticeManagement.Controls
         #endregion
     }
 }
+
