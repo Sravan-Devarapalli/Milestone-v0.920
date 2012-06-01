@@ -160,7 +160,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         private void PopulateBusinessUnitFilter(ProjectGroup[] businessUnits)
         {
             DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "Name");
-            
+
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
@@ -179,11 +179,22 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     filteredColoums.Add("Business Unit");
                 }
 
+                var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(HostingPage.AccountId));
+
                 StringBuilder sb = new StringBuilder();
                 sb.Append("Account_ByBusinessUnit Report");
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(data.Length + " Business Units");
+                sb.Append(account.Name);
+                sb.Append("\t");
+                sb.Append(account.Code);
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(HostingPage.BusinessUnitsCount + " Business Units");
+                sb.Append("\t");
+                sb.Append(HostingPage.ProjectsCount + " Projects");
+                sb.Append("\t");
+                sb.Append(HostingPage.PersonsCount + " Persons");
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
@@ -272,3 +283,4 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         }
     }
 }
+
