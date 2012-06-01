@@ -19,12 +19,11 @@ BEGIN
 	DECLARE @StartDateLocal DATETIME,
 			@EndDateLocal   DATETIME,
 			@PersonIdLocal    INT,
-			@HolidayTimeType INT 
+			@HolidayTimeType INT ,
+			@FutureDate DATETIME
 
-	SET @StartDateLocal = CONVERT(DATE,@StartDate)
-	SET @EndDateLocal = CONVERT(DATE,@EndDate)
-	SET @PersonIdLocal = @PersonId
-	SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+
+	SELECT @StartDateLocal = CONVERT(DATE,@StartDate), @EndDateLocal = CONVERT(DATE,@EndDate), @PersonIdLocal = @PersonId, @HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
 	
 	;WITH PersonByProjectsBillableTypes AS
 	(
@@ -66,7 +65,7 @@ BEGIN
 	INNER JOIN dbo.Client C ON CC.ClientId = C.ClientId
 	INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = PRO.ProjectStatusId
-	INNER JOIN dbo.PersonStatusHistory PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
+	INNER JOIN dbo.PersonStatusHistory PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate AND ISNULL(PTSH.EndDate,@FutureDate)
 	LEFT JOIN PersonByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId 
 	WHERE TE.PersonId = @PersonIdLocal 
 		AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
