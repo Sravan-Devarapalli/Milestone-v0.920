@@ -273,9 +273,13 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateFilterPanels(ProjectLevelGroupedHours[] reportData)
         {
-            if (HostingPage.SetSelectedFilters && HostingPage.BusinessUnitsList != null)
+            if (HostingPage.SetSelectedFilters)
             {
-                PopulateBusinessUnitFilter(HostingPage.BusinessUnitsList);
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
+                var businessUnitList = report.GroupedProjects.Select(r => new ProjectGroup { Name = r.Project.Group.Name, Id = r.Project.Group.Id }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
+
+                PopulateBusinessUnitFilter(businessUnitList);
+
                 foreach (ListItem item in cblBusinessUnits.Items)
                 {
                     if (reportData.Any(r => r.Project.Group.Id.Value.ToString() == item.Value))
@@ -288,17 +292,22 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     }
                 }
 
+                var data = report.GroupedProjects.ToArray();
+                PopulateProjectStatusFilter(data);
+                PopulateBillingFilter(data);
+
             }
             else
             {
                 ProjectGroup[] businessUnits = reportData.Select(r => new { Id = r.Project.Group.Id, Name = r.Project.Group.Name }).Distinct().ToList().OrderBy(s => s.Name).Select(pg => new ProjectGroup { Id = pg.Id, Name = pg.Name }).ToArray();
-                HostingPage.BusinessUnitsList = businessUnits.ToArray();
                 PopulateBusinessUnitFilter(businessUnits);
                 cblBusinessUnits.SelectAllItems(true);
+
+                PopulateProjectStatusFilter(reportData);
+                PopulateBillingFilter(reportData);
             }
 
-            PopulateProjectStatusFilter(reportData);
-            PopulateBillingFilter(reportData);
+
         }
 
         private void PopulateBillingFilter(ProjectLevelGroupedHours[] reportData)
