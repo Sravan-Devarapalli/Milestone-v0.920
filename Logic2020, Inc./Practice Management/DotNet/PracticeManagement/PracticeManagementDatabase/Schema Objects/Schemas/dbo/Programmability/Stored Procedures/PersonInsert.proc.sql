@@ -100,9 +100,27 @@ AS
 
 		SET @PersonId = SCOPE_IDENTITY()
 
-		EXEC dbo.PersonStatusHistoryUpdate
-			@PersonId = @PersonId,
-			@PersonStatusId = @PersonStatusId
+		DECLARE @Date DATETIME 
+
+		SET @Date = @Today
+
+		IF(@HireDate < @Today)
+		BEGIN
+
+		SET @Date = CONVERT(DATE,@HireDate)
+
+		END
+
+		INSERT INTO [dbo].[PersonStatusHistory]
+			   ([PersonId]
+			   ,[PersonStatusId]
+			   ,[StartDate]
+			   )
+			VALUES
+			   (@PersonId
+			   ,@PersonStatusId
+			   ,@Date
+			   )
 
 		SELECT @PersonId
 	END
