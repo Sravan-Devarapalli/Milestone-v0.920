@@ -140,7 +140,7 @@ namespace PraticeManagement.Controls.Reports
 
                     using (var serviceClient = new CalendarServiceClient())
                     {
-                        var result = serviceClient.GetCalendar(startDate, endDate, personId, null);
+                        var result = serviceClient.GetPersonCalendar(startDate, endDate, personId, null);
                         dlProject.DataSource = result;
                         dlProject.DataBind();
                     }
@@ -337,3 +337,4 @@ namespace PraticeManagement.Controls.Reports
 
     }
 }
+
