@@ -44,6 +44,7 @@ namespace PraticeManagement
         public const string IsPTOXname = "IsPTO";
         public const string IsHolidayXname = "IsHoliday";
         public const string IsORTXname = "IsORT";
+        public const string IsUnpaidXname = "IsUnpaid";
         public const string IdXname = "Id";
         public const string OldIdXname = "OldId";
         public const string CssClassXname = "CssClass";
@@ -74,7 +75,7 @@ namespace PraticeManagement
         private const string internalSectionXmlClose = "</Section>";
         private const string administrativeSectionXmlOpen = "<Section Id=\"4\">";
         private const string administrativeSectionXmlClose = "</Section>";
-        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsORT=\"{10}\" IsNoteRequired=\"{11}\" >";
+        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsORT=\"{10}\" IsNoteRequired=\"{11}\" IsUnpaid=\"{12}\" >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
         private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
@@ -885,14 +886,19 @@ namespace PraticeManagement
                 bar.IsPTO = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsPTOXname)).Value);
                 bar.IsHoliday = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsHolidayXname)).Value);
                 bar.IsORT = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsORTXname)).Value);
+                bar.IsUnpaid = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsUnpaidXname)).Value);
 
                 var workTypeElement = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
 
-                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false));
+                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false,false));
 
-                if (bar.IsPTO || bar.IsHoliday)
+                if (bar.IsPTO || bar.IsHoliday )
                 {
                     bar.SelectedTimeType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(projectId), true, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]))[0];
+                }
+                else if (bar.IsUnpaid)
+                {
+                    bar.SelectedTimeType = ServiceCallers.Custom.TimeType(p => p.GetUnpaidTimeType());
                 }
                 else
                 {
@@ -922,7 +928,7 @@ namespace PraticeManagement
                 var imgPlus = e.Item.FindControl(imgPlusAdministrativeSectionImage) as ImageButton;
                 if (!IsPostBack)
                 {
-                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false));
+                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false,false));
 
                     if (AdministrativeTimeTypes.Count() < 1)
                         imgPlus.Style["display"] = "none";
@@ -1071,7 +1077,7 @@ namespace PraticeManagement
 
             CalendarItems = CalendarItems ??
                                ServiceCallers.Custom.Calendar(
-                                                                c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                               );
 
 
@@ -1130,7 +1136,7 @@ namespace PraticeManagement
 
             CalendarItems = CalendarItems ??
                                ServiceCallers.Custom.Calendar(
-                                                                c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                               );
 
             //IsNoteRequiredList = IsNoteRequiredList ??
@@ -1186,7 +1192,7 @@ namespace PraticeManagement
 
             CalendarItems = CalendarItems ??
                                ServiceCallers.Custom.Calendar(
-                                                                c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                               );
 
             /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
@@ -1591,7 +1597,7 @@ namespace PraticeManagement
         {
             CalendarItems = CalendarItems ??
                                   ServiceCallers.Custom.Calendar(
-                                                                   c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                   c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                  );
             repAccountProjectSection.DataSource = CalendarItems;
             repAccountProjectSection.DataBind();
@@ -1825,7 +1831,7 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString()));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString(),teSection.Project.IsUnpaidProject.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
@@ -1842,7 +1848,7 @@ namespace PraticeManagement
 
                 CalendarItems = CalendarItems ??
                                    ServiceCallers.Custom.Calendar(
-                                                                    c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                    c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
 
                 if (teSection.SectionId == TimeEntrySectionType.Internal || teSection.SectionId == TimeEntrySectionType.BusinessDevelopment)
@@ -2038,7 +2044,7 @@ namespace PraticeManagement
 
             var teSctions = ServiceCallers.Custom.TimeEntry(te => te.PersonTimeEntriesByPeriod(pcPersons.SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]));
 
-            AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).OrderByDescending(tes => tes.Project.IsHolidayProject).ThenByDescending(tes => tes.Project.IsPTOProject).ToList();
+            AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).OrderByDescending(tes => tes.Project.IsHolidayProject).ThenByDescending(tes => tes.Project.IsPTOProject).ThenByDescending(tes => tes.Project.IsUnpaidProject).ToList();
             InternalSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Internal).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Project.ProjectNumber).ToList();
             BusinessDevelopmentSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.BusinessDevelopment).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Account.Name).ThenBy(tes => tes.BusinessUnit.Name).ToList();
             ProjectSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Project).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Project.ProjectNumber).ToList();
@@ -2095,7 +2101,7 @@ namespace PraticeManagement
             {
                 CalendarItems = CalendarItems ??
                                    ServiceCallers.Custom.Calendar(
-                                                                    c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                    c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
                 BillableControlIds = string.Empty;
                 NonBillableControlIds = string.Empty;
@@ -2172,7 +2178,7 @@ namespace PraticeManagement
 
                 CalendarItems = CalendarItems ??
                                    ServiceCallers.Custom.Calendar(
-                                                                    c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                    c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
                 //IsNoteRequiredList = IsNoteRequiredList ??
                 //            DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
@@ -2218,7 +2224,7 @@ namespace PraticeManagement
 
                 CalendarItems = CalendarItems ??
                                    ServiceCallers.Custom.Calendar(
-                                                                    c => c.GetCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+                                                                    c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                                   );
                 /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
                 //var isNoteRequiredForProject = Convert.ToBoolean(accountAndProjectSelectionElement.Attribute(XName.Get(IsNoteRequiredXname)).Value);
