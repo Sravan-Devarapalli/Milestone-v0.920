@@ -24,9 +24,10 @@ AS
 			@ProjectId INT = NULL ,
 			@Today DATE ,
 			@MilestoneStartDate DATETIME = NULL ,
-			@MilestoneEndDate DATETIME = NULL
+			@MilestoneEndDate DATETIME = NULL,
+			@FutureDate DATETIME
 
-		SET @ProjectNumberLocal = @ProjectNumber
+		SELECT @ProjectNumberLocal = @ProjectNumber,@FutureDate = dbo.GetFutureDate()
 	
 		SELECT  @ProjectId = P.ProjectId
 		FROM    dbo.Project AS P
@@ -169,8 +170,7 @@ AS
 															  AND CC.ProjectId = @ProjectId
 							INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = TE.PersonId
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
-															  AND
-															  PTSH.EndDate
+															  AND ISNULL(PTSH.EndDate,@FutureDate)
 							FULL  JOIN PersonMaxRoleValues AS PMRV ON PMRV.PersonId = TE.PersonId
 							INNER JOIN dbo.Person AS P ON ( P.PersonId = TE.PersonId
 															OR PMRV.PersonId = P.PersonId
