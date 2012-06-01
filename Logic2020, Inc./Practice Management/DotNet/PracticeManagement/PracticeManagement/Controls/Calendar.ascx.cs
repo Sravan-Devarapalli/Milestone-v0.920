@@ -107,7 +107,7 @@ namespace PraticeManagement.Controls
 
 
             var days =
-                 ServiceCallers.Custom.Calendar(c => c.GetCalendar(firstDisplayedDay, lastDisplayedDay, null, null));
+                 ServiceCallers.Custom.Calendar(c => c.GetCalendar(firstDisplayedDay, lastDisplayedDay));
 
             CalendarItems = days;
 
@@ -131,7 +131,6 @@ namespace PraticeManagement.Controls
         {
 
         }
-
 
         protected void Page_Load(object sender, EventArgs e)
         {
