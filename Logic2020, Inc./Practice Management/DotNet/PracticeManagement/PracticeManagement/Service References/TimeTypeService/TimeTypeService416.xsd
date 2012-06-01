@@ -19,6 +19,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="includePTO" type="xs:boolean" />
         <xs:element minOccurs="0" name="includeHoliday" type="xs:boolean" />
+        <xs:element minOccurs="0" name="includeUnpaid" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -92,6 +93,18 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="GetWorkTypeNameByIdResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnpaidTimeType">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnpaidTimeTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetUnpaidTimeTypeResult" nillable="true" type="q6:TimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
