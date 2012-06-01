@@ -25,9 +25,10 @@ AS
 		SET @EndDateLocal = CONVERT(DATE, @EndDate)
 
 		DECLARE @NOW DATE ,
-			@HolidayTimeType INT 
-		SET @NOW = dbo.GettingPMTime(GETUTCDATE())
-		SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+			@HolidayTimeType INT ,
+			@FutureDate DATETIME
+
+		SELECT @NOW = dbo.GettingPMTime(GETUTCDATE()), @HolidayTimeType = dbo.GetHolidayTimeTypeId(), @FutureDate = dbo.GetFutureDate()
 
 		DECLARE @TimeScaleNames TABLE ( Name NVARCHAR(1024) )
 	
@@ -76,7 +77,7 @@ AS
 								PTSH.PersonId
 					   FROM     dbo.PersonStatusHistory PTSH
 					   WHERE    PTSH.StartDate < @EndDateLocal
-								AND @StartDateLocal < PTSH.EndDate
+								AND @StartDateLocal <  ISNULL(PTSH.EndDate,@FutureDate)
 								AND PTSH.PersonStatusId = 1 --ACTIVE STATUS
 								
 					 )
@@ -133,8 +134,7 @@ AS
 								INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
 								INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = P.PersonId
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
-															  AND
-															  PTSH.EndDate
+															  AND ISNULL(PTSH.EndDate,@FutureDate)
 					  WHERE     TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
 															dbo.GetFutureDate())
 								AND ( CC.timeTypeId != @HolidayTimeType
