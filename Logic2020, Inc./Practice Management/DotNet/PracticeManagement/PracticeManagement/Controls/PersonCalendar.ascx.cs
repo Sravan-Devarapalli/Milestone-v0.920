@@ -153,6 +153,14 @@ namespace PraticeManagement.Controls
 
         }
 
+        public bool IsUserHrORAdmin
+        {
+            get
+            {
+                return userIsAdministrator || userIsHR;
+            }
+        }
+
         #endregion
 
         public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedById, string approvedByName)
@@ -197,8 +205,7 @@ namespace PraticeManagement.Controls
 
             if ((!userIsAdministrator) && (userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsHR))
             {
-                Person current = DataHelper.CurrentPerson;
-                practiceManagerId = current != null ? current.Id : 0;
+                practiceManagerId = DataHelper.CurrentPerson.Id ;
             }
 
             DateTime firstMonthDay = new DateTime(SelectedYear, 1, 1);
@@ -209,7 +216,7 @@ namespace PraticeManagement.Controls
 
 
             var days =
-                 ServiceCallers.Custom.Calendar(c => c.GetCalendar(firstDisplayedDay, lastDisplayedDay, SelectedPersonId, practiceManagerId));
+                 ServiceCallers.Custom.Calendar(c => c.GetPersonCalendar(firstDisplayedDay, lastDisplayedDay, SelectedPersonId, practiceManagerId));
 
 
             if (days != null)
@@ -261,9 +268,6 @@ namespace PraticeManagement.Controls
                 mcDecember.UpdateMonthCalendar();
 
             }
-
-
-
             upnlBody.Update();
         }
 
@@ -304,9 +308,15 @@ namespace PraticeManagement.Controls
                 Person current = DataHelper.CurrentPerson;
 
                 ddlPerson.SelectedValue =current.Id.Value.ToString();
-                   
 
-                var administrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, false));
+                bool isUserHr = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
+                bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                bool isUnpaidWorktypeInclude = false;
+                if (isUserHr || isUserAdminstrator)
+                {
+                    isUnpaidWorktypeInclude = true;
+                }
+                var administrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, false, isUnpaidWorktypeInclude));
                 DataHelper.FillListDefault(ddlTimeTypesSingleDay, "- - Make Selection - -", administrativeTimeTypes, false);
                 DataHelper.FillListDefault(ddlTimeTypesTimeOff, "- - Make Selection - -", administrativeTimeTypes, false);
                 AddAttributesToTimeTypesDropdown(ddlTimeTypesSingleDay, administrativeTimeTypes);
@@ -332,11 +342,13 @@ namespace PraticeManagement.Controls
                     if (obj != null)
                     {
                         item.Attributes.Add("IsORT", obj.IsORTTimeType.ToString());
+                        item.Attributes.Add("IsUnpaid", obj.IsUnpaidTimeType.ToString());
                     }
                 }
                 else
                 {
                     item.Attributes.Add("IsORT", false.ToString());
+                    item.Attributes.Add("IsUnpaid", false.ToString());
                 }
             }
         }
@@ -391,7 +403,7 @@ namespace PraticeManagement.Controls
                 }
                 int? approvedBy = null;
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
-                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" || timeTypeSelectedItem.Attributes["IsUnpaid"].ToLower() == "true")
                 {
                     approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
                 }
@@ -462,7 +474,7 @@ namespace PraticeManagement.Controls
                     int? approvedBy = null;
                     var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
 
-                    if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true")
+                    if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" || timeTypeSelectedItem.Attributes["IsUnpaid"].ToLower() == "true")
                     {
                         approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
                     }
@@ -772,3 +784,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
