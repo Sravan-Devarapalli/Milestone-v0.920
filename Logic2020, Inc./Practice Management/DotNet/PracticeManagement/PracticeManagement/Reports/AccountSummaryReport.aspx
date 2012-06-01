@@ -156,7 +156,7 @@
                     <td style="text-align: center; height: 30px; vertical-align: top;">
                         <table width="100%" align="center" style="vertical-align: top;">
                             <tr>
-                                <td style="text-align: right; width: 25%; font-weight: bold; vertical-align:top;">
+                                <td style="text-align: right; width: 25%; font-weight: bold; vertical-align: top;">
                                     Business Unit:&nbsp;
                                 </td>
                                 <td style="text-align: left; width: 75%;">
@@ -279,7 +279,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-top: 10px; vertical-align: bottom;padding-bottom: 5px;">
+                                    <td style="padding-top: 10px; vertical-align: bottom; padding-bottom: 5px;">
                                         <asp:Literal ID="ltRange" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
@@ -436,5 +436,6 @@
             <asp:PostBackTrigger ControlID="tpByBusinessDevelopment$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
+    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
 </asp:Content>
 
