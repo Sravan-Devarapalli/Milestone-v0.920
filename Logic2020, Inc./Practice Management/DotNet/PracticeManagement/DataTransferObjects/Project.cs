@@ -63,7 +63,6 @@ namespace DataTransferObjects
             set;
         }
 
-
         [DataMember]
         public bool IsNoteRequired { get; set; }
 
@@ -86,7 +85,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         /// <summary>
         /// Gets or sets a reference to the client the project intended for.
@@ -135,7 +133,6 @@ namespace DataTransferObjects
                 return HttpUtility.HtmlEncode(Name);
             }
         }
-
 
         /// <summary>
         /// Gets or sets a project's practice.
@@ -385,6 +382,12 @@ namespace DataTransferObjects
         public bool IsORTProject { get; set; }
 
         [DataMember]
+        public bool IsUnpaidProject { get; set; }
+
+        [DataMember]
+        public int TimeTypeId { get; set; }
+
+        [DataMember]
         public int TimeEntrySectionId { get; set; }
 
         [DataMember]
@@ -392,6 +395,7 @@ namespace DataTransferObjects
 
         [DataMember]
         public Person ProjectOwner { get; set; }
+
 
         #endregion
 
