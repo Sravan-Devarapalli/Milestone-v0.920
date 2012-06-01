@@ -410,18 +410,6 @@ namespace PraticeManagement.Reporting
         public bool SetSelectedFilters { get; set; }
 
 
-        public ProjectGroup[] BusinessUnitsList
-        {
-            get
-            {
-                return ViewState["ProjectGroup_Key"] as ProjectGroup[];
-            }
-            set
-            {
-                ViewState["ProjectGroup_Key"] = value;
-            }
-        }
-
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
 
