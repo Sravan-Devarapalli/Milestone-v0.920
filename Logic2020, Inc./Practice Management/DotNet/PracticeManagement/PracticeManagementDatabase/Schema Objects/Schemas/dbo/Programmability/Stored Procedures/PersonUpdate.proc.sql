@@ -5,7 +5,7 @@
 	-- Update date: 05-31-2012
 	-- Description:	Updates the Person.
 	-- =============================================
-	CREATE PROCEDURE [dbo].[PersonUpdate]
+	CREATE PROCEDURE [dbo].[PersonUpdate] 
 	(
 		@PersonId        INT,
 		@FirstName       NVARCHAR(40),
@@ -32,7 +32,8 @@
 				@Today			DATETIME,
 				@CurrentPayEndDate DATETIME,
 				@CurrentSalesCommEndDate DATETIME,
-				@W2SalaryId INT
+				@W2SalaryId INT,
+				@IsHireDateChanged BIT
 
 		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
 		SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
@@ -211,7 +212,14 @@
 			
 			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-			UPDATE Person
+			SET @IsHireDateChanged =  0
+
+			IF NOT EXISTS(SELECT 1 FROM dbo.Person AS P WHERE P.PersonId = @PersonId AND P.HireDate = @HireDate)
+			BEGIN
+			 SET @IsHireDateChanged =  1
+			END
+
+			UPDATE dbo.Person
 			   SET FirstName = @FirstName,
 				   LastName = @LastName,
 				   PTODaysPerAnnum = ISNULL(@PTODaysPerAnnum, PTODaysPerAnnum),
@@ -234,10 +242,31 @@
 					@PersonId = @PersonId,
 					@PersonStatusId = @PersonStatusId
 
+			IF(@IsHireDateChanged =  1)
+			BEGIN
+				
+				;WITH FirstPSHRow  AS 
+				(
+				 SELECT MIN(StartDate) AS StartDate,
+						@PersonId AS PersonId				 
+				 FROM dbo.PersonStatusHistory AS PSH 
+				 WHERE  PSH.PersonId = @PersonId
+				)
+
+				UPDATE PSH 
+				SET PSH.startdate = CONVERT(DATE,P.HireDate)
+				FROM dbo.Person AS P 
+				INNER JOIN FirstPSHRow AS FPSHR ON P.PersonId = FPSHR.PersonId
+				INNER JOIN dbo.PersonStatusHistory AS PSH ON P.PersonId = FPSHR.PersonId   AND  FPSHR.startdate = PSH.startdate    
+				WHERE  P.HireDate < PSH.startdate  
+
+			END
+
+
 			IF(ISNULL(@Alias,'') <> '' AND NOT EXISTS (SELECT 1 FROM dbo.aspnet_Users WHERE UserName = @Alias))
 			BEGIN
 
-				DECLARE @UserId uniqueidentifier,
+				DECLARE @UserId UNIQUEIDENTIFIER,
 						@UTCNow DATETIME
 				SELECT @UTCNow = GETUTCDATE()
 			
