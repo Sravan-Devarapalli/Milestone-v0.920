@@ -20,14 +20,12 @@ AS
 			@EndDateLocal DATETIME ,
 			@PersonIdLocal INT ,
 			@ORTTimeTypeId INT ,
-			@HolidayTimeType INT 
+			@HolidayTimeType INT ,
+			@FutureDate DATETIME
 
-		SET @StartDateLocal = CONVERT(DATE, @StartDate)
-		SET @EndDateLocal = CONVERT(DATE, @EndDate)
-		SET @PersonIdLocal = @PersonId
-		SET @ORTTimeTypeId = dbo.GetORTTimeTypeId()
-		SET @HolidayTimeType = dbo.GetHolidayTimeTypeId();
-		WITH    PersonDayWiseByProjectsBillableTypes
+		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate),@PersonIdLocal = @PersonId,@ORTTimeTypeId = dbo.GetORTTimeTypeId(),@HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
+
+		;WITH    PersonDayWiseByProjectsBillableTypes
 				  AS ( SELECT   M.ProjectId ,
 								C.Date ,
 								MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue ,
@@ -97,8 +95,7 @@ AS
 					INNER JOIN dbo.ProjectStatus PS ON PRO.ProjectStatusId = PS.ProjectStatusId
 					INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
 					INNER JOIN dbo.PersonStatusHistory PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate
-															  AND
-															  PTSH.EndDate
+															  AND ISNULL(PTSH.EndDate,@FutureDate)
 					LEFT JOIN PersonDayWiseByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId
 															  AND PDBR.Date = TE.ChargeCodeDate
 			WHERE   TE.PersonId = @PersonIdLocal
