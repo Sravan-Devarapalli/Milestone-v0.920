@@ -26,11 +26,11 @@ AS
 			@MilestoneStartDate DATETIME = NULL ,
 			@MilestoneEndDate DATETIME = NULL ,
 			@ForecastedHours FLOAT ,
-			@CategoryNamesLocal NVARCHAR(MAX) = NULL
+			@CategoryNamesLocal NVARCHAR(MAX) = NULL,
+			@FutureDate DATETIME
 				
 
-		SET @ProjectNumberLocal = @ProjectNumber
-		SET @CategoryNamesLocal = @CategoryNames
+		SELECT @ProjectNumberLocal = @ProjectNumber, @CategoryNamesLocal = @CategoryNames,@FutureDate = dbo.GetFutureDate()
 
 		SELECT  @ProjectId = P.ProjectId
 		FROM    dbo.Project AS P
@@ -141,8 +141,7 @@ AS
 															AND CC.ProjectId = @ProjectId
 							INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = TE.PersonId
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
-															  AND
-															  PTSH.EndDate
+															  AND ISNULL(PTSH.EndDate,@FutureDate)
 							INNER JOIN dbo.Person AS P ON P.PersonId = TE.PersonId
 														  AND p.IsStrawman = 0
 							FULL JOIN AssignedWorkTypes AWT ON AWT.TimeTypeId = CC.TimeTypeId
