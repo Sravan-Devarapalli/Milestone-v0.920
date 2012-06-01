@@ -24,9 +24,14 @@ namespace PracticeManagementService
         /// An ID of the practice manager to retrieve the data for his subordinate
         /// </param>
         /// <returns>The list of the <see cref="CalendarItem"/> objects.</returns>
-        public List<CalendarItem> GetCalendar(DateTime startDate, DateTime endDate, int? personId, int? practiceManagerId)
+        public List<CalendarItem> GetCalendar(DateTime startDate, DateTime endDate)
         {
-            return CalendarDAL.CalendarList(startDate, endDate, personId, practiceManagerId);
+            return CalendarDAL.CalendarList(startDate, endDate);
+        }
+
+        public List<CalendarItem> GetPersonCalendar(DateTime startDate, DateTime endDate, int? personId, int? practiceManagerId)
+        {
+            return CalendarDAL.PersonCalendarList(startDate, endDate, personId, practiceManagerId);
         }
 
         /// <summary>
