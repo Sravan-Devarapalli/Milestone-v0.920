@@ -117,9 +117,10 @@ namespace PraticeManagement
                 {
                     try
                     {
+                        string searchText = txtSearchText.Text;
                         var projects =
                             serviceClient.ProjectSearchText(
-                                txtSearchText.Text,
+                                searchText,
                                 DataHelper.CurrentPerson.Id.Value);
 
                         IEnumerable<int> ProjectIds = projects.ToList().FindAll(p => p.Id.HasValue).Select(q => q.Id.Value).Distinct();
@@ -139,8 +140,19 @@ namespace PraticeManagement
                             groupedProjects.Add(project);
                         }
 
-                        lvProjects.DataSource = groupedProjects;
-                        lvProjects.DataBind();
+                        if (IsTextProjectNumberFormat(searchText) && groupedProjects.Count == 1)
+                        {
+                            Project project = groupedProjects.First();
+                            RedirectWithBack(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
+                                                            Constants.ApplicationPages.ProjectDetail,
+                                                            project.Id),
+                                            Constants.ApplicationPages.Projects);
+                        }
+                        else
+                        {
+                            lvProjects.DataSource = groupedProjects;
+                            lvProjects.DataBind();
+                        }
                     }
                     catch (CommunicationException)
                     {
@@ -149,6 +161,19 @@ namespace PraticeManagement
                     }
                 }
             }
+        }
+
+        private bool IsTextProjectNumberFormat(string searchText)
+        {
+            searchText = searchText.ToUpper().Trim();
+            int projectNumber = 0;
+            bool isprojectFormat = false;
+            if (searchText.StartsWith("P") && int.TryParse(searchText.Substring(1), out projectNumber))
+            {
+                isprojectFormat = true;
+            }
+
+            return isprojectFormat;
         }
 
         protected void lvProjects_ItemDataBound(object sender, ListViewItemEventArgs e)
