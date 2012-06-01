@@ -324,6 +324,9 @@
             public const string BusinessUnitId = "BusinessUnitId";
             public const string BusinessUnitName = "BusinessUnitName";
             public const string PersonsCountColumn = "PersonsCount";
+	        public const string IsUnpaidTimeType = "IsUnpaidTimeType";
+            public const string IsUnpaidColoumn = "IsUnpaid";
+            
         }
 
         #endregion
@@ -604,6 +607,7 @@
             public const string AccountIdParam = "@AccountId";
             public const string BusinessUnitIdsParam = "@BusinessUnitIds";
             public static string ProjectBillingTypesParam = "@ProjectBillingTypes";
+	    public const string IncludeUnpaidParam = "@IncludeUnpaid";
         }
 
         #endregion
@@ -814,6 +818,7 @@
 
             public class Calendar
             {
+                public const string PersonCalendarGetProcedure = "dbo.PersonCalendarGet";
                 public const string CalendarGetProcedure = "dbo.CalendarGet";
                 public const string CalendarUpdateProcedure = "dbo.CalendarUpdate";
                 public const string SaveTimeOffProcedure = "dbo.SaveTimeOff";
@@ -904,6 +909,8 @@
                 public const string GetOwnerProjectsAfterTerminationDateProcedure = "dbo.GetOwnerProjectsAfterTerminationDate";
                 public const string GetTimeTypesByProjectIdProcedure = "dbo.GetProjectTimeTypes";
                 public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
+                public const string GetUnpaidTimeTypeProcedure = "dbo.GetUnpaidTimeType";
+                
 
             }
             #endregion
