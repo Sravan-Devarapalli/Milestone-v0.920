@@ -46,14 +46,14 @@
                 )
             )
             ) : "" %>' ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (double?)Eval("ActualHours"),(bool)Eval("IsFloatingHoliday") )%>'>
-                    <asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)GetIsReadOnly((bool)Eval("ReadOnly"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (DateTime)Eval("Date"))%>'
+                    <asp:LinkButton ID="btnDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year && !(bool)GetIsReadOnly((bool)Eval("ReadOnly"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (DateTime)Eval("Date"), (bool)Eval("IsUnpaidTimeType"))%>'
                         DayOff='<%# (bool)Eval("DayOff") ? "true":"false" %>' Date='<%# Eval("Date") %>'
                         OnClientClick='<%# DayOnClientClick() %>' ToolTip='<%# GetToolTip( (string)Eval("HolidayDescription"), (double?)Eval("ActualHours"),(bool)Eval("IsFloatingHoliday") )%>'
                         HolidayDescription='<%# string.IsNullOrEmpty((string)Eval("HolidayDescription"))? "":((string)Eval("HolidayDescription"))%>'
                         Enabled="true" CompanyDayOff='<%# (bool)Eval("CompanyDayOff") ? "true" : "false" %>'
                         ActualHours='<%# GetDoubleFormat((double?)Eval("ActualHours")) %>' IsFloatingHoliday='<%# (bool)Eval("IsFloatingHoliday") %>'
                         OnClick="btnDay_OnClick" TimeTypeId='<%# (int?)Eval("TimeTypeId") %>'></asp:LinkButton>
-                    <asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year &&  GetIsReadOnly((bool)Eval("ReadOnly"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (DateTime)Eval("Date")) %>'></asp:Label>
+                    <asp:Label ID="lblDay" runat="server" Text='<%# Eval("Date.Day") %>' Visible='<%# ((DateTime)Eval("Date")).Month == Month && ((DateTime)Eval("Date")).Year == Year &&  GetIsReadOnly((bool)Eval("ReadOnly"), (bool)Eval("DayOff"), (bool)Eval("CompanyDayOff"), (DateTime)Eval("Date"), (bool)Eval("IsUnpaidTimeType")) %>'></asp:Label>
                 </asp:Panel>
             </ItemTemplate>
         </asp:DataList>
