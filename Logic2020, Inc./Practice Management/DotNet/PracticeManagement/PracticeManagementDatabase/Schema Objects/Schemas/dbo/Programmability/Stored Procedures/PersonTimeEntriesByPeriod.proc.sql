@@ -1,7 +1,7 @@
 ﻿-- =============================================
 -- Description:	Get PersonTimeEntriesByPeriod.
--- Updated by:	ThulasiRam.P
--- Update date:	04-12-2012
+-- Updated by:	sainath c
+-- Update date:	01-06-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesByPeriod]
     @PersonId INT ,
@@ -17,7 +17,8 @@ AS
             @FutureDateLocal DATETIME ,
             @StartDateLocal DATETIME ,
             @EndDateLocal DATETIME ,
-            @ORTTimeTypeId INT
+            @ORTTimeTypeId INT,
+			@UnpaidTimeTypeId	INT
  		    
 			 
         SELECT  @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId() ,
@@ -25,7 +26,8 @@ AS
                 @ORTTimeTypeId = dbo.GetORTTimeTypeId() ,
                 @FutureDateLocal = dbo.GetFutureDate() ,
                 @StartDateLocal = @StartDate ,
-                @EndDateLocal = @EndDate
+                @EndDateLocal = @EndDate,
+				@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
 	
         SELECT  @W2SalaryId = TimescaleId
         FROM    Timescale
@@ -48,7 +50,7 @@ AS
                 TEH.ModifiedDate ,
                 TEH.ActualHours ,
                 TE.ForecastedHours ,
-                ( CASE WHEN CC.TimeTypeId = @HolidayTimeTypeId
+                ( CASE WHEN (CC.TimeTypeId = @HolidayTimeTypeId OR CC.TimeTypeId = @UnpaidTimeTypeId)
                        THEN TE.Note + dbo.GetApprovedByName(TE.ChargeCodeDate,
                                                             CC.TimeTypeId,
                                                             TE.PersonId)
@@ -150,26 +152,41 @@ AS
 
 	--List of Charge codes with ISPTO and IsHoliday
         SELECT  CC.ProjectId AS 'ProjectId' ,
+				CC.TimeTypeId ,
                 1 IsPTO ,
                 0 IsHoliday ,
-                0 IsORT
+                0 IsORT,
+				0 IsUnpaid
         FROM    dbo.ChargeCode CC
         WHERE   CC.TimeTypeId = @PTOTimeTypeId
         UNION ALL
         SELECT  CC.ProjectId AS 'ProjectId' ,
+				CC.TimeTypeId ,
                 0 IsPTO ,
                 1 IsHoliday ,
-                0 IsORT
+                0 IsORT,
+				0 IsUnpaid
         FROM    dbo.ChargeCode CC
         WHERE   CC.TimeTypeId = @HolidayTimeTypeId
                 AND @IsW2SalaryPerson = 1
         UNION ALL
         SELECT  CC.ProjectId AS 'ProjectId' ,
-                0 IsPTO ,
+				CC.TimeTypeId ,
+				0 IsPTO ,
                 0 IsHoliday ,
-                1 IsORT
+                1 IsORT,
+				0 IsUnpaid
         FROM    dbo.ChargeCode CC
         WHERE   CC.TimeTypeId = @ORTTimeTypeId
+		UNION ALL
+        SELECT  CC.ProjectId AS 'ProjectId' ,
+                CC.TimeTypeId ,
+				0 IsPTO ,
+                0 IsHoliday ,
+                0 IsORT,
+				1 IsUnpaid
+        FROM    dbo.ChargeCode CC
+        WHERE   CC.TimeTypeId = @UnpaidTimeTypeId
 
     END
 
