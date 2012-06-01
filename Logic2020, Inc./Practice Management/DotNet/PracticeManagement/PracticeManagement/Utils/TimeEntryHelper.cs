@@ -172,7 +172,7 @@ namespace PraticeManagement.Utils
             var tes = GetTimeEntriesForPerson(person, selectedDates);
             var calendar =
                 ServiceCallers.Custom.Calendar(
-                    c => c.GetCalendar(startDate, endDate, person.Id.Value, null));
+                    c => c.GetPersonCalendar(startDate, endDate, person.Id.Value, null));
 
             return new TeGrid(tes, milestonePersonEntries, calendar);
         }
