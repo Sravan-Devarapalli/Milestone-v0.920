@@ -63,6 +63,9 @@ namespace DataTransferObjects.TimeEntry
         public bool IsORTTimeType { get; set; }//ORT:- "Other Reportable Time" work type.
 
         [DataMember]
+        public bool IsUnpaidTimeType { get; set; }
+
+        [DataMember]
         public string Category
         {
             get;
