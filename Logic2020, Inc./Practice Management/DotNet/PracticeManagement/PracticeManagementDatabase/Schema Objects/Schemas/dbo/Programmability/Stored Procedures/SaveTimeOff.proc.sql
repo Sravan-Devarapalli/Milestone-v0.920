@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Srinivas.M
 -- Create date: 02-23-2012
--- Updated by:	Srinivas.M
--- Update date:	02-28-2012
+-- Updated by:	Sainath C
+-- Update date:	06-01-2012
 -- Description: Insert/Update/Delete Time Off(s) for a person.
 -- =============================================
 CREATE PROCEDURE [dbo].[SaveTimeOff]
@@ -48,12 +48,14 @@ AS
             @HolidayTimeTypeId INT ,
             @Description NVARCHAR(500) ,
             @IsSeries BIT ,
-            @ORTTimeTypeId INT
+            @ORTTimeTypeId INT,
+			@UnpaidTimeTypeId	INT
 			
         SELECT  @Today = dbo.GettingPMTime(GETUTCDATE()) ,
                 @CurrentPMTime = dbo.InsertingTime() ,
                 @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId() ,
-                @ORTTimeTypeId = dbo.GetORTTimeTypeId()
+                @ORTTimeTypeId = dbo.GetORTTimeTypeId(),
+				@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
 
         SELECT  @ModifiedBy = PersonId
         FROM    Person
@@ -208,7 +210,7 @@ AS
                                     @Description ,
                                     @IsSeries ,
                                     0 ,
-                                    CASE WHEN @TimeTypeId = @ORTTimeTypeId
+                                    CASE WHEN @TimeTypeId = @ORTTimeTypeId OR @TimeTypeId = @UnpaidTimeTypeId
                                          THEN @ApprovedBy
                                          ELSE NULL
                                     END
