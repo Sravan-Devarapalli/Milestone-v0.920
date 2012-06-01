@@ -34,7 +34,7 @@ namespace DataAccess
             }
         }
 
-        public static List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday)
+        public static List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.GetAllAdministrativeTimeTypes, connection))
@@ -42,6 +42,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludePTOParam, includePTO);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludeHolidayParam, includeHoliday);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeUnpaidParam, includeUnpaid);
 
                 connection.Open();
 
@@ -208,6 +209,16 @@ namespace DataAccess
                     isORTIndex = -1;
                 }
 
+                int isUnpaidIndex = -1;
+                try
+                {
+                    isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidTimeType);
+                }
+                catch
+                {
+                    isUnpaidIndex = -1;
+                }
+
                 while (reader.Read())
                 {
                     var tt = new TimeTypeRecord
@@ -218,7 +229,14 @@ namespace DataAccess
                     };
 
                     if (isORTIndex > -1)
+                    {
                         tt.IsORTTimeType = reader.GetBoolean(isORTIndex);
+                    }
+                    if (isUnpaidIndex > -1)
+                    {
+                        tt.IsUnpaidTimeType = reader.GetBoolean(isUnpaidIndex);
+                    }
+
                     result.Add(tt);
 
                 }
@@ -252,6 +270,36 @@ namespace DataAccess
             return name;
 
         }
+
+        public static TimeTypeRecord GetUnpaidTimeType()
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetUnpaidTimeTypeProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    TimeTypeRecord result = new TimeTypeRecord();
+
+                    if (reader.HasRows)
+                    {
+                        int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                        int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+
+                        while (reader.Read())
+                        {
+                            result.Id = reader.GetInt32(timeTypeIdIndex);
+                            result.Name = reader.GetString(nameIndex);
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
+
     }
 }
 
