@@ -1,10 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-07-2008
--- Updated by:	Anatoliy Lokshin
--- Update date: 12-04-2008
--- Updated by:	Anton Kolensikov
--- Update date: 08-07-2009
+-- Updated by:	sainathc
+-- Update date: 01-06-2012
 -- Description:	Retrives the list of projects by the specified conditions.
 -- =============================================
 CREATE PROCEDURE [dbo].[ProjectSearchText]
@@ -26,7 +24,7 @@ AS
 		
 
 		DECLARE @SearchText NVARCHAR(257)
-		SET @SearchText = '%' + ISNULL(@Looked, '') + '%'
+		SET @SearchText = '%' +  Replace(ISNULL(@Looked, ''),' ','%') + '%'
 
 	
 	/*
