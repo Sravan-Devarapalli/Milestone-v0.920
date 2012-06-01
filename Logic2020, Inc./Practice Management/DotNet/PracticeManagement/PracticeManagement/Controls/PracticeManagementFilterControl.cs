@@ -10,8 +10,6 @@ namespace PraticeManagement.Controls
     {
         private static T _filter;
 
-        public event EventHandler FilterOptionsChanged;
-
         public static T Filter
         {
             get
@@ -73,7 +71,6 @@ namespace PraticeManagement.Controls
         protected void FireFilterOptionsChanged()
         {
             UpdateFilter();
-            Utils.Generic.InvokeEventHandler(FilterOptionsChanged, this);
         }
 
         protected static int? GetDropDownValueWithDefault(DropDownList ddl)
