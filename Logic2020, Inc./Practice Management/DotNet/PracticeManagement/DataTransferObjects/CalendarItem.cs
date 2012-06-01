@@ -22,14 +22,12 @@ namespace DataTransferObjects
             set;
         }
 
-
         [DataMember]
         public DateTime? SubstituteDayDate
         {
             get;
             set;
         }
-
 
         /// <summary>
         /// Gets or sets is a day is day-off
@@ -118,7 +116,9 @@ namespace DataTransferObjects
 
         [DataMember]
         public int? TimeTypeId { get; set; }
-        
+
+        [DataMember]
+        public bool IsUnpaidTimeType { get; set; }
 
         #endregion
 
@@ -147,6 +147,6 @@ namespace DataTransferObjects
             return new CalendarItem { Date = d };
         }
 
-       
     }
 }
+
