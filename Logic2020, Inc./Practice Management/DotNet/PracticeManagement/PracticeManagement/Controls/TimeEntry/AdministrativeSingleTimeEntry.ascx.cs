@@ -64,6 +64,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public bool IsUnpaid
+        {
+            get
+            {
+                return ViewState["IsUnpaidWorktype"] != null ? (bool)ViewState["IsUnpaidWorktype"] : false;
+            }
+            set
+            {
+                ViewState["IsUnpaidWorktype"] = value;
+            }
+        }
+
         public XElement TimeEntryRecordElement
         {
             get;
@@ -222,7 +234,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 tbActualHours.Enabled = HostingPage.IsPersonSalaryTypeList[DateBehind];
             }
 
-            if (IsHoliday)
+            if (IsHoliday || IsUnpaid)
             {
                 imgClear.Style["display"] = "none";
             }
