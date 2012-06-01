@@ -101,9 +101,19 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(HostingPage.AccountId));
 
             StringBuilder sb = new StringBuilder();
+ sb.Append("Account_ByBusinessDevelopment Report");
+                sb.Append("\t");
+                sb.AppendLine();
             sb.Append(account.Name);
             sb.Append("\t");
             sb.Append(account.Code);
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(HostingPage.BusinessUnitsCount + " Business Units");
+            sb.Append("\t");
+            sb.Append(HostingPage.ProjectsCount + " Projects");
+            sb.Append("\t");
+            sb.Append(HostingPage.PersonsCount + " Persons");
             sb.Append("\t");
             sb.AppendLine();
             sb.AppendLine();
@@ -185,3 +195,4 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         }
     }
 }
+
