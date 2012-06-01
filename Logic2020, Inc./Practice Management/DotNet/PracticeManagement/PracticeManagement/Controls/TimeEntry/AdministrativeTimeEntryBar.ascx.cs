@@ -94,6 +94,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public bool IsUnpaid
+        {
+            get
+            {
+                return ViewState["IsUnpaid_KEY"] != null ? (bool)ViewState["IsUnpaid_KEY"] : false;
+            }
+            set
+            {
+                ViewState["IsUnpaid_KEY"] = value;
+            }
+        }
+
 
         public TimeTypeRecord[] TimeTypes { get; set; }
 
@@ -169,7 +181,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
                 ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value;
 
-                if (IsHoliday)
+                if (IsHoliday || IsUnpaid)
                 {
                     ste.Disabled = true;
                 }
@@ -181,6 +193,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.IsPTO = IsPTO;
                 ste.IsHoliday = IsHoliday;
                 ste.IsORT = IsORT;
+                ste.IsUnpaid = IsUnpaid;
 
                 tdTimeTypes.Attributes["class"] ="time-entry-bar-time-typesNew " + GetDayCssClass();
 
@@ -268,7 +281,7 @@ namespace PraticeManagement.Controls.TimeEntry
             if (workTypeOldID > 0)
             {
                 ServiceCallers.Custom.TimeEntry(te => te.DeleteTimeEntry(accountId, projectId, personId, workTypeOldID, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
-                var calendarItems = ServiceCallers.Custom.Calendar(c => c.GetCalendar(dates[0], dates[dates.Length - 1], personId, null));
+                var calendarItems = ServiceCallers.Custom.Calendar(c => c.GetPersonCalendar(dates[0], dates[dates.Length - 1], personId, null));
 
                 HostingPage.UpdateCalendarItemAndBind(calendarItems);
             }
@@ -292,7 +305,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private string GetDayCssClass()
         {
-            if (IsPTO || IsHoliday)
+            if (IsPTO || IsHoliday || IsUnpaid)
             {
                 return "textLeft padLeft3P";
             }
@@ -307,7 +320,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public void UpdateTimeEntries()
         {
-            if (IsPTO || IsHoliday)
+            if (IsPTO || IsHoliday || IsUnpaid)
             {
                 ddlTimeTypes.Visible = false;
                 lblTimeType.Visible = true;
@@ -452,7 +465,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 nonbillableASte.ValidateNoteAndHours(ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname] == true.ToString());
             }
 
-            if (isThereAtleastOneTimeEntryrecord && !IsPTO && !IsHoliday && !ValideWorkTypeDropDown())
+            if (isThereAtleastOneTimeEntryrecord && !IsPTO && !IsHoliday && !IsUnpaid && !ValideWorkTypeDropDown())
             {
                 HostingPage.IsValidWorkType = false;
             }
@@ -460,11 +473,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
         internal void UpdateAccountAndProjectWorkType(XElement accountAndProjectSelectionElement, XElement workTypeElement)
         {
-            var workTypeId = (IsPTO || IsHoliday) ? Convert.ToInt32(hdnworkTypeId.Value) : Convert.ToInt32(ddlTimeTypes.SelectedValue); ;
+            var workTypeId = (IsPTO || IsHoliday || IsUnpaid) ? Convert.ToInt32(hdnworkTypeId.Value) : Convert.ToInt32(ddlTimeTypes.SelectedValue); ;
             workTypeElement.Attribute(XName.Get(TimeEntry_New.IdXname)).Value = workTypeId.ToString();
             accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.IsORTXname)).Value = ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname];
 
-            if (workTypeId > 0 && !(IsPTO || IsHoliday))
+            if (workTypeId > 0 && !(IsPTO || IsHoliday || IsUnpaid))
             {
                 Triple<int, int, int> result = ServiceCallers.Custom.TimeType(tt => tt.GetAdministrativeChargeCodeValues(workTypeId));
                 accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.AccountIdXname)).Value = result.First.ToString();
