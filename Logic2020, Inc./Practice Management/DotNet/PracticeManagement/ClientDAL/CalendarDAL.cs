@@ -24,11 +24,33 @@ namespace DataAccess
         /// An ID of the practice manager to retrieve the data for his subordinate
         /// </param>
         /// <returns>The list of the <see cref="CalendarItem"/> objects.</returns>
-        public static List<CalendarItem> CalendarList(DateTime startDate, DateTime endDate, int? personId,
-                                                      int? practiceManagerId)
+        public static List<CalendarItem> CalendarList(DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.CalendarGetProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<CalendarItem>();
+
+                    ReadCalendarItems(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
+        public static List<CalendarItem> PersonCalendarList(DateTime startDate, DateTime endDate, int? personId, int? practiceManagerId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.PersonCalendarGetProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -47,7 +69,7 @@ namespace DataAccess
                 {
                     var result = new List<CalendarItem>();
 
-                    ReadCalendarItems(reader, result);
+                    ReadPersonCalendarItems(reader, result);
 
                     return result;
                 }
@@ -137,19 +159,75 @@ namespace DataAccess
                 int dateIndex;
                 int dayOffIndex;
                 int companyDayOffIndex;
-                int readOnlyIndex;
                 int isRecurringIndex;
                 int recurringHolidayIdIndex;
                 int holidayDescriptionIndex;
                 int recurringHolidayDateIndex;
+                GetCalendarItemIndexes(reader, out dateIndex, out dayOffIndex, out companyDayOffIndex, out isRecurringIndex, out recurringHolidayIdIndex, out holidayDescriptionIndex, out recurringHolidayDateIndex);
+
+                while (reader.Read())
+                    result.Add(ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, isRecurringIndex, recurringHolidayIdIndex, holidayDescriptionIndex, recurringHolidayDateIndex));
+            }
+        }
+
+        private static void ReadPersonCalendarItems(SqlDataReader reader, List<CalendarItem> result)
+        {
+            if (reader.HasRows)
+            {
+                int dateIndex;
+                int dayOffIndex;
+                int companyDayOffIndex;
+                int readOnlyIndex;
+                int holidayDescriptionIndex;
                 int actualHoursIndex;
                 int isFloatingHolidayIndex;
                 int timeTypeIdIndex;
-                GetCalendarItemIndexes(reader, out dateIndex, out dayOffIndex, out companyDayOffIndex, out readOnlyIndex, out isRecurringIndex, out recurringHolidayIdIndex, out holidayDescriptionIndex, out recurringHolidayDateIndex, out actualHoursIndex, out isFloatingHolidayIndex, out timeTypeIdIndex);
+                int isUnpaidTimeTypeIndex;
+                GetPersonCalendarItemIndexes(reader, out dateIndex, out dayOffIndex, out companyDayOffIndex, out readOnlyIndex, out  holidayDescriptionIndex, out actualHoursIndex, out isFloatingHolidayIndex, out timeTypeIdIndex, out isUnpaidTimeTypeIndex);
 
                 while (reader.Read())
-                    result.Add(ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex, isRecurringIndex, recurringHolidayIdIndex, holidayDescriptionIndex, recurringHolidayDateIndex, actualHoursIndex, isFloatingHolidayIndex, timeTypeIdIndex));
+                    result.Add(ReadSinglePersonCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex, holidayDescriptionIndex, actualHoursIndex, isFloatingHolidayIndex, timeTypeIdIndex, isUnpaidTimeTypeIndex));
             }
+        }
+              
+        public static bool GetCalendarItemIndexes(SqlDataReader reader, out int dateIndex, out int dayOffIndex, out int companyDayOffIndex, out int isRecurringIndex, out int recurringHolidayIdIndex, out int holidayDescriptionIndex, out int recurringHolidayDateIndex)
+        {
+            try
+            {
+                dateIndex = reader.GetOrdinal(Constants.ColumnNames.Date);
+                dayOffIndex = reader.GetOrdinal(Constants.ColumnNames.DayOff);
+                companyDayOffIndex = reader.GetOrdinal(Constants.ColumnNames.CompanyDayOff);
+                isRecurringIndex = reader.GetOrdinal(Constants.ColumnNames.IsRecurringColumn);
+                recurringHolidayIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecurringHolidayIdColumn);
+                holidayDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDescriptionColumn);
+                recurringHolidayDateIndex = reader.GetOrdinal(Constants.ColumnNames.RecurringHolidayDateColumn);
+                return true;
+            }
+            catch (Exception)
+            {
+                dateIndex = dayOffIndex = companyDayOffIndex = isRecurringIndex = recurringHolidayIdIndex = holidayDescriptionIndex = recurringHolidayDateIndex = -1;
+            }
+
+            return false;
+        }
+
+        public static CalendarItem ReadSingleCalendarItem(SqlDataReader reader, int dateIndex, int dayOffIndex, int companyDayOffIndex, int isRecurringIndex, int recurringHolidayIdIndex, int holidayDescriptionIndex, int recurringHolidayDateIndex)
+        {
+            bool isrecurring = Convert.ToBoolean(reader.IsDBNull(isRecurringIndex) ? null : (object)reader.GetBoolean(isRecurringIndex));
+            int? recurringHoliday = reader.IsDBNull(recurringHolidayIdIndex) ? null : (int?)reader.GetInt32(recurringHolidayIdIndex);
+            var description = reader.IsDBNull(holidayDescriptionIndex) ? string.Empty : reader.GetString(holidayDescriptionIndex);
+            DateTime? recurringHolidayDate = reader.IsDBNull(recurringHolidayDateIndex) ? null : (DateTime?)reader.GetDateTime(recurringHolidayDateIndex);
+            var calendarItem = new CalendarItem
+            {
+                Date = reader.GetDateTime(dateIndex),
+                DayOff = reader.GetBoolean(dayOffIndex),
+                CompanyDayOff = reader.GetBoolean(companyDayOffIndex),
+                IsRecurringHoliday = isrecurring,
+                RecurringHolidayId = recurringHoliday,
+                HolidayDescription = description,
+                RecurringHolidayDate = recurringHolidayDate
+            };
+            return calendarItem;
         }
 
         /// <summary>
@@ -161,7 +239,7 @@ namespace DataAccess
         /// <param name="companyDayOffIndex"></param>
         /// <param name="readOnlyIndex"></param>
         /// <returns>True if indexes have been initialized, false otherwise</returns>
-        public static bool GetCalendarItemIndexes(SqlDataReader reader, out int dateIndex, out int dayOffIndex, out int companyDayOffIndex, out int readOnlyIndex, out int isRecurringIndex, out int recurringHolidayIdIndex, out int holidayDescriptionIndex, out int recurringHolidayDateIndex, out int actualHoursIndex, out int isFloatingHolidayIndex, out int timeTypeIdIndex)
+        public static bool GetPersonCalendarItemIndexes(SqlDataReader reader, out int dateIndex, out int dayOffIndex, out int companyDayOffIndex, out int readOnlyIndex, out int holidayDescriptionIndex, out int actualHoursIndex, out int isFloatingHolidayIndex, out int timeTypeIdIndex, out int isUnpaidTimeTypeIndex)
         {
             try
             {
@@ -170,54 +248,35 @@ namespace DataAccess
                 companyDayOffIndex = reader.GetOrdinal(Constants.ColumnNames.CompanyDayOff);
                 readOnlyIndex = reader.GetOrdinal(Constants.ColumnNames.ReadOnly);
                 timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                try
-                {
-                    isRecurringIndex = reader.GetOrdinal(Constants.ColumnNames.IsRecurringColumn);
-                    recurringHolidayIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecurringHolidayIdColumn);
-                    holidayDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDescriptionColumn);
-                    recurringHolidayDateIndex = reader.GetOrdinal(Constants.ColumnNames.RecurringHolidayDateColumn);
-                    actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
-                    isFloatingHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsFloatingHolidayColumn);
-                }
-                catch
-                {
-                    isRecurringIndex = recurringHolidayIdIndex = holidayDescriptionIndex = recurringHolidayDateIndex = actualHoursIndex = isFloatingHolidayIndex = -1;
-                }
-
+                holidayDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDescriptionColumn);
+                actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
+                isFloatingHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsFloatingHolidayColumn);
+                isUnpaidTimeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidTimeType);
                 return true;
             }
             catch (Exception)
             {
-                timeTypeIdIndex = dateIndex = dayOffIndex = companyDayOffIndex = readOnlyIndex = isRecurringIndex = recurringHolidayIdIndex = holidayDescriptionIndex = recurringHolidayDateIndex = actualHoursIndex = isFloatingHolidayIndex = -1;
+                timeTypeIdIndex = dateIndex = dayOffIndex = companyDayOffIndex = readOnlyIndex = holidayDescriptionIndex = actualHoursIndex = isFloatingHolidayIndex = isUnpaidTimeTypeIndex = -1;
             }
 
             return false;
         }
 
-        public static CalendarItem ReadSingleCalendarItem(SqlDataReader reader, int dateIndex, int dayOffIndex, int companyDayOffIndex, int readOnlyIndex, int isRecurringIndex, int recurringHolidayIdIndex, int holidayDescriptionIndex, int recurringHolidayDateIndex, int actualHoursIndex, int isFloatingHolidayIndex, int timeTypeIdIndex)
+        public static CalendarItem ReadSinglePersonCalendarItem(SqlDataReader reader, int dateIndex, int dayOffIndex, int companyDayOffIndex, int readOnlyIndex, int holidayDescriptionIndex, int actualHoursIndex, int isFloatingHolidayIndex, int timeTypeIdIndex, int isUnpaidTimeTypeIndex)
         {
-            bool isrecurring = Convert.ToBoolean(reader.IsDBNull(isRecurringIndex) ? null : (object)reader.GetBoolean(isRecurringIndex));
-            int? recurringHoliday = reader.IsDBNull(recurringHolidayIdIndex) ? null : (int?)reader.GetInt32(recurringHolidayIdIndex);
-            var description = reader.IsDBNull(holidayDescriptionIndex) ? string.Empty : reader.GetString(holidayDescriptionIndex);
-            DateTime? recurringHolidayDate = reader.IsDBNull(recurringHolidayDateIndex) ? null : (DateTime?)reader.GetDateTime(recurringHolidayDateIndex);
-            int? timeTypeId = reader.IsDBNull(timeTypeIdIndex) ? null : (int?)reader.GetInt32(timeTypeIdIndex);
             var calendarItem = new CalendarItem
-                       {
-                           Date = reader.GetDateTime(dateIndex),
-                           DayOff = reader.GetBoolean(dayOffIndex),
-                           CompanyDayOff = reader.GetBoolean(companyDayOffIndex),
-                           ReadOnly = reader.GetBoolean(readOnlyIndex),
-                           IsRecurringHoliday = isrecurring,
-                           RecurringHolidayId = recurringHoliday,
-                           HolidayDescription = description,
-                           RecurringHolidayDate = recurringHolidayDate,
-                           TimeTypeId = timeTypeId
-                       };
-            if (actualHoursIndex != -1)
-                calendarItem.ActualHours = reader.IsDBNull(actualHoursIndex) ? null : (double?)reader.GetFloat(actualHoursIndex);
+            {
+                Date = reader.GetDateTime(dateIndex),
+                DayOff = reader.GetBoolean(dayOffIndex),
+                CompanyDayOff = reader.GetBoolean(companyDayOffIndex),
+                ReadOnly = reader.GetBoolean(readOnlyIndex),
+                HolidayDescription = reader.IsDBNull(holidayDescriptionIndex) ? string.Empty : reader.GetString(holidayDescriptionIndex),
+                TimeTypeId = reader.IsDBNull(timeTypeIdIndex) ? null : (int?)reader.GetInt32(timeTypeIdIndex),
+                ActualHours = reader.IsDBNull(actualHoursIndex) ? null : (double?)reader.GetFloat(actualHoursIndex),
+                IsFloatingHoliday = reader.GetInt32(isFloatingHolidayIndex) == 1,
+                IsUnpaidTimeType = reader.GetInt32(isUnpaidTimeTypeIndex) == 1
+            };
 
-            if (isFloatingHolidayIndex != -1)
-                calendarItem.IsFloatingHoliday = reader.IsDBNull(isFloatingHolidayIndex) ? false : (reader.GetString(isFloatingHolidayIndex) == "1" ? true : false);
 
             return calendarItem;
         }
@@ -366,7 +425,6 @@ namespace DataAccess
             }
         }
 
-
         public static void DeleteSubstituteDay(int personId, DateTime substituteDayDate, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -407,7 +465,6 @@ namespace DataAccess
             }
         }
 
-
         public static Quadruple<DateTime, DateTime, int?, string> GetTimeOffSeriesPeriod(int personId, DateTime date)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -441,8 +498,8 @@ namespace DataAccess
 
                 while (reader.Read())
                 {
-                    return new Quadruple<DateTime, DateTime, int?, string>(reader.GetDateTime(startDateIndex), 
-                                                                reader.GetDateTime(endDateIndex), 
+                    return new Quadruple<DateTime, DateTime, int?, string>(reader.GetDateTime(startDateIndex),
+                                                                reader.GetDateTime(endDateIndex),
                                                                 reader.IsDBNull(approvedByIdIndex) ? null : (int?)reader.GetInt32(approvedByIdIndex),
                                                                 reader.IsDBNull(approvedByNameIndex) ? string.Empty : reader.GetString(approvedByNameIndex));
                 }
@@ -511,3 +568,4 @@ namespace DataAccess
         #endregion
     }
 }
+
