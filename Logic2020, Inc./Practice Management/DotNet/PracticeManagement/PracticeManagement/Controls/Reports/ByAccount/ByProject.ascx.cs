@@ -287,7 +287,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (HostingPage.SetSelectedFilters)
             {
                 var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
-                var businessUnitList = report.GroupedProjects.Select(r => new ProjectGroup { Name = r.Project.Group.Name, Id = r.Project.Group.Id }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
+                var businessUnitList = report.GroupedProjects.Select(r => new { Name = r.Project.Group.Name, Id = r.Project.Group.Id }).Distinct().Select(a => new ProjectGroup { Id = a.Id, Name = a.Name }).ToList().OrderBy(s => s.Name).ToArray();
 
                 PopulateBusinessUnitFilter(businessUnitList);
 
