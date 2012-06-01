@@ -30,11 +30,11 @@ namespace PracticeManagementService
             }
         }
 
-        public List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday)
+        public List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid)
         {
             try
             {
-                return TimeTypeDAL.GetAllAdministrativeTimeTypes(includePTO, includeHoliday);
+                return TimeTypeDAL.GetAllAdministrativeTimeTypes(includePTO, includeHoliday, includeUnpaid);
             }
             catch (Exception e)
             {
@@ -116,6 +116,12 @@ namespace PracticeManagementService
                 throw e;
             }
         }
+
+        public TimeTypeRecord GetUnpaidTimeType()
+        {
+            return TimeTypeDAL.GetUnpaidTimeType();
+        }
+
     }
 }
 
