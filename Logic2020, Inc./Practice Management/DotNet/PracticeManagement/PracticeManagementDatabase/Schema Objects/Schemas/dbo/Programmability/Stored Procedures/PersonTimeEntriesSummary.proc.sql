@@ -38,28 +38,6 @@ BEGIN
 			AND M.StartDate < @EndDateLocal 
 			AND @StartDateLocal  < M.ProjectedDeliveryDate
 	  GROUP BY M.ProjectId
-	),
-	PersonTotalStatusHistory
-	AS
-	(
-		SELECT CASE WHEN PSH.StartDate = MinPayStartDate THEN PS.HireDate ELSE PSH.StartDate END AS StartDate,
-				ISNULL(PSH.EndDate,dbo.GetFutureDate()) AS EndDate,
-				PSH.PersonStatusId
-		FROM dbo.PersonStatusHistory PSH 
-		LEFT JOIN (
-					SELECT PSH.PersonId
-								,P.HireDate 
-								,MIN(PSH.StartDate) AS MinPayStartDate
-					FROM dbo.PersonStatusHistory PSH
-					INNER JOIN dbo.Person P ON PSH.PersonId = P.PersonId
-												AND P.PersonId = @PersonIdLocal
-					WHERE P.IsStrawman = 0
-					GROUP BY PSH.PersonId,P.HireDate
-					HAVING P.HireDate < MIN(PSH.StartDate)
-				) AS PS ON PS.PersonId = PSH.PersonId
-		WHERE  PSH.PersonId = @PersonIdLocal 
-				AND PSH.StartDate < @EndDateLocal 
-				AND @StartDateLocal  < ISNULL(PSH.EndDate,dbo.GetFutureDate())
 	)
 
 	SELECT  CC.TimeEntrySectionId,
@@ -88,7 +66,7 @@ BEGIN
 	INNER JOIN dbo.Client C ON CC.ClientId = C.ClientId
 	INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = PRO.ProjectStatusId
-	INNER JOIN PersonTotalStatusHistory PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
+	INNER JOIN dbo.PersonStatusHistory PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
 	LEFT JOIN PersonByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId 
 	WHERE TE.PersonId = @PersonIdLocal 
 		AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
