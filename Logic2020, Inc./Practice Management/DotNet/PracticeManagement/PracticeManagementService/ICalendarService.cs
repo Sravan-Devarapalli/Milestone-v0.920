@@ -23,7 +23,10 @@ namespace PracticeManagementService
         /// </param>
         /// <returns>The list of the <see cref="CalendarItem"/> objects.</returns>
         [OperationContract]
-        List<CalendarItem> GetCalendar(DateTime startDate, DateTime endDate, int? personId, int? practiceManagerId);
+        List<CalendarItem> GetCalendar(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<CalendarItem> GetPersonCalendar(DateTime startDate, DateTime endDate, int? personId, int? practiceManagerId);
 
         /// <summary>
         /// Saves a <see cref="CalendarItem"/> object to the database.
