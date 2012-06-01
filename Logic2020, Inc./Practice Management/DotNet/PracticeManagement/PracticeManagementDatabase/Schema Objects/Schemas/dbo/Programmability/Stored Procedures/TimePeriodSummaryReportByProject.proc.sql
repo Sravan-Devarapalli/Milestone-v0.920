@@ -18,11 +18,10 @@ AS
 		DECLARE @Today DATE ,
 			@StartDateLocal DATETIME ,
 			@EndDateLocal DATETIME ,
-			@HolidayTimeType INT 
-		SET @StartDateLocal = CONVERT(DATE, @StartDate)
-		SET @EndDateLocal = CONVERT(DATE, @EndDate)
-		SET @Today = dbo.GettingPMTime(GETUTCDATE())
-		SET @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+			@HolidayTimeType INT ,
+			@FutureDate DATETIME
+
+		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate),@Today = dbo.GettingPMTime(GETUTCDATE()), @HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
 
 		DECLARE @ClientIdsTable TABLE ( ID INT )
 		INSERT  INTO @ClientIdsTable
@@ -117,8 +116,7 @@ AS
 								INNER JOIN dbo.Person AS P ON P.PersonId = TE.PersonId
 								INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = P.PersonId
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
-															  AND
-															  PTSH.EndDate
+															  AND ISNULL(PTSH.EndDate,@FutureDate)
 					  WHERE     TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
 															dbo.GetFutureDate())
 								AND ( CC.timeTypeId != @HolidayTimeType
