@@ -22,6 +22,8 @@ namespace PraticeManagement.Controls.Opportunities
     }
     public partial class OpportunityListControl : PracticeManagementFilterControl<OpportunitySortingContext>
     {
+        #region Constants 
+
         private const string ViewStateSortOrder = "SortOrder";
         private const string ViewStateSortDirection = "SortDirection";
         private const string CssArrowClass = "arrow";
@@ -57,6 +59,9 @@ namespace PraticeManagement.Controls.Opportunities
                         		</Parallel>
                         	</Sequence>
                         </OnClick>";
+
+        #endregion
+
         private List<NameValuePair> quantities;
 
         #region Properties
@@ -116,7 +121,6 @@ namespace PraticeManagement.Controls.Opportunities
                 SetViewStateValue(ViewStateSortDirection, value);
             }
         }
-
 
         protected List<NameValuePair> Quantities
         {
@@ -261,8 +265,7 @@ namespace PraticeManagement.Controls.Opportunities
             if (!IsPostBack)
             {
                 ResetControls();
-                InitFilter();
-                FireFilterOptionsChanged();
+                
             }
         }
 
@@ -345,7 +348,6 @@ namespace PraticeManagement.Controls.Opportunities
             }
         }
 
-
         protected string GetOpportunityDetailsLink(int opportunityId, int index)
         {
             return Utils.Generic.GetTargetUrlWithReturn(Urls.OpportunityDetailsLink(opportunityId), Request.Url.AbsoluteUri);
@@ -401,27 +403,11 @@ namespace PraticeManagement.Controls.Opportunities
             return type.ToString();
         }
 
-        protected static bool IsNeedToShowPerson(Person person)
-        {
-            if (person == null)
-            {
-                return false;
-            }
-
-            if (person.Status.Name == PersonStatusType.Inactive.ToString()
-                || person.Status.Name == PersonStatusType.Terminated.ToString())
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         protected static string GetSalesTeam(Person SalesPerson, Person Owner)
         {
-            string salesTeam = (IsNeedToShowPerson(SalesPerson) ? GetWrappedText(SalesPerson.LastName, 15) : string.Empty)
+            string salesTeam = (SalesPerson != null ? GetWrappedText(SalesPerson.LastName, 15) : string.Empty)
                                + "<br/>"
-                               + (IsNeedToShowPerson(Owner) ? GetWrappedText(Owner.LastName, 15) : string.Empty);
+                               + (Owner != null ? GetWrappedText(Owner.LastName, 15) : string.Empty);
 
             return salesTeam;
         }
@@ -881,10 +867,6 @@ namespace PraticeManagement.Controls.Opportunities
             var opportunities = DataHelper.GetFilteredOpportunitiesForDiscussionReview2(false);
             return OpportunitiesHelper.GetFormatedSummaryDetails(opportunities, PriorityTrendList, StatusChangesList);
         }
-
-
-
-
     }
 }
 
