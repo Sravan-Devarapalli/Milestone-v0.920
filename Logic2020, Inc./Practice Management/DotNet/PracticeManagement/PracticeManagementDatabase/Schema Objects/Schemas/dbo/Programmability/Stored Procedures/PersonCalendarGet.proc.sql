@@ -37,7 +37,7 @@ BEGIN
                    ELSE ''
               END ) AS HolidayDescription ,
             PCAL.ActualHours ,
-            PCAL.IsFloatingHoliday AS [IsFloatingHoliday] ,
+            ISNULL(PCAL.IsFloatingHoliday,0) AS [IsFloatingHoliday] ,
             PCAL.TimeTypeId,
 			CASE WHEN @UnpaidTimeTypeId = PCAL.TimeTypeId THEN 1 ELSE 0 END AS [IsUnpaidTimeType]
     FROM    dbo.Calendar AS CAL
@@ -63,7 +63,7 @@ BEGIN
                    ELSE ''
               END ) AS HolidayDescription ,
             PCAL.ActualHours ,
-            PCAL.IsFloatingHoliday AS [IsFloatingHoliday] ,
+            ISNULL(PCAL.IsFloatingHoliday,0) AS [IsFloatingHoliday] ,
             PCAL.TimeTypeId,
 			CASE WHEN @UnpaidTimeTypeId = PCAL.TimeTypeId THEN 1 ELSE 0 END AS [IsUnpaidTimeType]
     FROM    dbo.Calendar AS CAL
