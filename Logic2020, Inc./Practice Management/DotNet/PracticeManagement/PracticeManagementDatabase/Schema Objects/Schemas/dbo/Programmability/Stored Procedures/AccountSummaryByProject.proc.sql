@@ -14,12 +14,14 @@ BEGIN
 	DECLARE @StartDateLocal DATETIME ,
 		@EndDateLocal DATETIME ,
 		@Today DATE ,
-		@HolidayTimeType INT
+		@HolidayTimeType INT,
+		@FutureDate DATETIME
 
 SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 	 , @EndDateLocal = CONVERT(DATE, @EndDate)
 	 , @Today = dbo.GettingPMTime(GETUTCDATE())
 	 , @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+	 , @FutureDate = dbo.GetFutureDate()
 
 		;WITH ProjectForeCastedHoursUntilToday
 		AS (
@@ -80,7 +82,7 @@ SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 			 INNER JOIN dbo.Person P
 				 ON P.PersonId = TE.PersonId
 			 INNER JOIN dbo.PersonStatusHistory PTSH
-				 ON PTSH.PersonId = P.PersonId AND TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
+				 ON PTSH.PersonId = P.PersonId AND TE.ChargeCodeDate BETWEEN PTSH.StartDate AND ISNULL(PTSH.EndDate,@FutureDate)
 			 INNER JOIN dbo.Project PRO
 				 ON PRO.ProjectId = CC.ProjectId
 		 WHERE
@@ -183,7 +185,7 @@ ORDER BY
 			 INNER JOIN dbo.Person P
 				 ON P.PersonId = TE.PersonId
 			 INNER JOIN dbo.PersonStatusHistory PTSH
-				 ON PTSH.PersonId = P.PersonId AND TE.ChargeCodeDate BETWEEN PTSH.StartDate AND PTSH.EndDate
+				 ON PTSH.PersonId = P.PersonId AND TE.ChargeCodeDate BETWEEN PTSH.StartDate AND ISNULL(PTSH.EndDate,@FutureDate)
 			 INNER JOIN dbo.Project PRO
 				 ON PRO.ProjectId = CC.ProjectId
 			 LEFT JOIN ProjectForeCastedHoursUntilToday pfh
