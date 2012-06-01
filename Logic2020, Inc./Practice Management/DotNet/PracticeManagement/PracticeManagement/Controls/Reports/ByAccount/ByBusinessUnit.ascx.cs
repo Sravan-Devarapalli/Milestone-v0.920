@@ -126,9 +126,15 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateFilterPanels(List<BusinessUnitLevelGroupedHours> reportData)
         {
-            if (HostingPage.SetSelectedFilters && HostingPage.BusinessUnitsList != null)
+            if (HostingPage.SetSelectedFilters)
             {
-                PopulateBusinessUnitFilter(HostingPage.BusinessUnitsList);
+
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+
+                var businessUnitList = report.GroupedBusinessUnits.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
+
+                PopulateBusinessUnitFilter(businessUnitList);
+
                 foreach (ListItem item in cblBusinessUnits.Items)
                 {
                     if (reportData.Any(r => r.BusinessUnit.Id.Value.ToString() == item.Value))
@@ -140,13 +146,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                         item.Selected = false;
                     }
                 }
-
             }
             else
             {
-                var businessUnitList = reportData.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name);
-                HostingPage.BusinessUnitsList = businessUnitList.ToArray();
-                PopulateBusinessUnitFilter(HostingPage.BusinessUnitsList);
+                var businessUnitList = reportData.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
+                PopulateBusinessUnitFilter(businessUnitList);
                 cblBusinessUnits.SelectAllItems(true);
             }
         }
