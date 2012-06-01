@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-  <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:import schemaLocation="http://system58.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System.Collections.Generic" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/CalendarService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System.Collections.Generic" />
   <xs:element name="GetCalendar">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
-        <xs:element minOccurs="0" name="personId" nillable="true" type="xs:int" />
-        <xs:element minOccurs="0" name="practiceManagerId" nillable="true" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -20,10 +18,27 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetPersonCalendar">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="personId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="practiceManagerId" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPersonCalendarResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPersonCalendarResult" nillable="true" type="q2:ArrayOfCalendarItem" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SaveCalendar">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="item" nillable="true" type="q2:CalendarItem" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="item" nillable="true" type="q3:CalendarItem" />
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -55,7 +70,7 @@
   <xs:element name="GetRecurringHolidaysListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetRecurringHolidaysListResult" nillable="true" type="q3:ArrayOfTripleOfintstringboolean" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetRecurringHolidaysListResult" nillable="true" type="q4:ArrayOfTripleOfintstringboolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -84,14 +99,14 @@
   <xs:element name="GetRecurringHolidaysInWeekResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetRecurringHolidaysInWeekResult" nillable="true" type="q4:ArrayOfKeyValueOfdateTimestring" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetRecurringHolidaysInWeekResult" nillable="true" type="q5:ArrayOfKeyValueOfdateTimestring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveSubstituteDay">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="item" nillable="true" type="q5:CalendarItem" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="item" nillable="true" type="q6:CalendarItem" />
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -145,7 +160,7 @@
   <xs:element name="GetTimeOffSeriesPeriodResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTimeOffSeriesPeriodResult" nillable="true" type="q6:QuadrupleOfdateTimedateTimeNullableOfintstring7PP7_PALA" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTimeOffSeriesPeriodResult" nillable="true" type="q7:QuadrupleOfdateTimedateTimeNullableOfintstring7PP7_PALA" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -175,7 +190,7 @@
   <xs:element name="GetSubstituteDayDetailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/System.Collections.Generic" minOccurs="0" name="GetSubstituteDayDetailsResult" type="q7:KeyValuePairOfdateTimestring" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/System.Collections.Generic" minOccurs="0" name="GetSubstituteDayDetailsResult" type="q8:KeyValuePairOfdateTimestring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
