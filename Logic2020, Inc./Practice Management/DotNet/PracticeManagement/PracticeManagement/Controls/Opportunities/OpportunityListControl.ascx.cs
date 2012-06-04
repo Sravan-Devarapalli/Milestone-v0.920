@@ -265,7 +265,13 @@ namespace PraticeManagement.Controls.Opportunities
             if (!IsPostBack)
             {
                 ResetControls();
-                
+                bool isFilterCached = false;
+                Boolean.TryParse(Request.QueryString.Get("isFilterCached"), out isFilterCached);
+                if (!isFilterCached)
+                {
+                    InitFilter();
+                    FireFilterOptionsChanged();
+                }
             }
         }
 
@@ -350,7 +356,10 @@ namespace PraticeManagement.Controls.Opportunities
 
         protected string GetOpportunityDetailsLink(int opportunityId, int index)
         {
-            return Utils.Generic.GetTargetUrlWithReturn(Urls.OpportunityDetailsLink(opportunityId), Request.Url.AbsoluteUri);
+            string absoluteUri = Request.Url.AbsoluteUri;
+            absoluteUri = absoluteUri.Replace("DiscussionReview2.aspx?isFilterCached=true","DiscussionReview2.aspx");
+            absoluteUri = absoluteUri.Replace("DiscussionReview2.aspx","DiscussionReview2.aspx?isFilterCached=true");
+            return Utils.Generic.GetTargetUrlWithReturn(Urls.OpportunityDetailsLink(opportunityId), absoluteUri);
         }
 
         public string GetProjectDetailUrl(Opportunity opty)
