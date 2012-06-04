@@ -377,6 +377,7 @@
     <Content Include="Controls\Reports\ByAccount\ByProject.ascx" />
     <Content Include="Controls\Reports\ByAccount\GroupByBusinessUnit.ascx" />
     <Content Include="Controls\Reports\ByAccount\GroupByPerson.ascx" />
+    <Content Include="Controls\Reports\ByPerson\GroupByProject.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
@@ -1337,6 +1338,13 @@
     </Compile>
     <Compile Include="Controls\Reports\ByAccount\GroupByPerson.ascx.designer.cs">
       <DependentUpon>GroupByPerson.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ByPerson\GroupByProject.ascx.cs">
+      <DependentUpon>GroupByProject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ByPerson\GroupByProject.ascx.designer.cs">
+      <DependentUpon>GroupByProject.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ByworkType.ascx.cs">
       <DependentUpon>ByworkType.ascx</DependentUpon>
