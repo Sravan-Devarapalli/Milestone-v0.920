@@ -76,6 +76,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public String OpportunityNumber
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets the Director to which this project is associated.
         /// </summary>
@@ -396,6 +403,9 @@ namespace DataTransferObjects
         [DataMember]
         public Person ProjectOwner { get; set; }
 
+        [DataMember]
+        public decimal? SowBudget { get; set; }
+
 
         #endregion
 
@@ -427,6 +437,18 @@ namespace DataTransferObjects
         public override string ToString()
         {
             return Name;
+        }
+
+        public string ProjectRange
+        {
+            get
+            {
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    return StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                }
+                return string.Empty;
+            }
         }
 
         #endregion
