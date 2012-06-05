@@ -616,13 +616,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlAttachments;
         
         /// <summary>
-        /// btnAttachSOW control.
+        /// stbAttachSOW control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAttachSOW;
+        protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton stbAttachSOW;
         
         /// <summary>
         /// mpeAttachSOW control.
@@ -1084,6 +1084,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlAttachSOW;
         
         /// <summary>
+        /// ddlAttachmentCategory  control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlAttachmentCategory ;
+        
+        /// <summary>
+        /// cvAttachmentCategory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvAttachmentCategory;
+        
+        /// <summary>
         /// fuProjectAttachment control.
         /// </summary>
         /// <remarks>
@@ -1091,6 +1109,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload fuProjectAttachment;
+        
+        /// <summary>
+        /// cvAttachment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvAttachment;
         
         /// <summary>
         /// cvProjectAttachment control.
