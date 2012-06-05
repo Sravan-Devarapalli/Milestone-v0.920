@@ -78,6 +78,12 @@
   <wsdl:message name="IProjectService_GetTimeTypesInUseDetailsByProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetTimeTypesInUseDetailsByProjectResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_AttachOpportunityToProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:AttachOpportunityToProject" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_AttachOpportunityToProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AttachOpportunityToProjectResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
   </wsdl:message>
@@ -339,6 +345,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetTimeTypesInUseDetailsByProject" message="tns:IProjectService_GetTimeTypesInUseDetailsByProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetTimeTypesInUseDetailsByProjectResponse" message="tns:IProjectService_GetTimeTypesInUseDetailsByProject_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="AttachOpportunityToProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/AttachOpportunityToProject" message="tns:IProjectService_AttachOpportunityToProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/AttachOpportunityToProjectResponse" message="tns:IProjectService_AttachOpportunityToProject_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetByIdResponse" message="tns:IProjectService_ProjectGetById_OutputMessage" />
@@ -578,6 +588,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetTimeTypesInUseDetailsByProject">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetTimeTypesInUseDetailsByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AttachOpportunityToProject">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/AttachOpportunityToProject" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
