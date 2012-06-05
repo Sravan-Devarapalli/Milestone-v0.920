@@ -2,6 +2,8 @@
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByResource" %>
 <%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
     TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Reports/ByPerson/GroupByProject.ascx" TagName="GroupByProject"
+    TagPrefix="uc" %>
 <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
     height: 90px;">
     <tr>
@@ -189,19 +191,19 @@
                         <tr>
                             <th style="width: 210px; text-align: left;" class="padLeft5">
                                 Resource
-                                <img alt="Filter" src="../../Images/Terminated.png" style="padding-left: 2px;" runat="server" title="Person Status"
-                                    id="imgPersonStatusTypeFilter" />
+                                <img alt="Filter" src="../../Images/Terminated.png" style="padding-left: 2px;" runat="server"
+                                    title="Person Status" id="imgPersonStatusTypeFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
                                     TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
                                     PopupControlID="pnlFilterPersonStatusType" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
-                                <img alt="Filter" src="../../Images/Offshore_Icon.png" style="padding-left: 2px;" title="Location"
-                                    runat="server" id="imgOffShoreFilter" />
+                                <img alt="Filter" src="../../Images/Offshore_Icon.png" style="padding-left: 2px;"
+                                    title="Location" runat="server" id="imgOffShoreFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceOffshoreFilter" runat="server" TargetControlID="imgOffShoreFilter"
                                     BehaviorID="pceOffshoreFilter" PopupControlID="pnlFilterOffshore" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
-                                <img alt="Filter" src="../../Images/divisions_16x16.png" style="padding-left: 2px;" title="Division"
-                                    runat="server" id="imgDivisionFilter" />
+                                <img alt="Filter" src="../../Images/divisions_16x16.png" style="padding-left: 2px;"
+                                    title="Division" runat="server" id="imgDivisionFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceDivision" runat="server" TargetControlID="imgDivisionFilter"
                                     BehaviorID="pceDivision" PopupControlID="pnlDivision" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
@@ -249,13 +251,23 @@
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
-                <td class="padLeft5" style="text-align: left;">
-                    <%--<asp:HyperLink ID="btnPersonName" runat="server"  Text='<%# Eval("Person.PersonLastFirstName")%>' NavigateUrl='<%# GetPersonDetailReportUrl((int?)Eval("Person.Id")) %>' />--%>
-                    <%# Eval("Person.PersonLastFirstName")%>
-                    <asp:Image ID="imgIspersonTerminated" runat="server" ImageUrl="~/Images/Terminated.png"
-                        ToolTip="Resource is an Terminated employee." Visible='<%# (bool)IsPersonTerminated((int)Eval("Person.Status.Id"))%>' />
-                    <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
-                        ToolTip="Resource is an offshore employee." Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
+                <td valign="middle" sorttable_customkey='<%# Eval("Person.PersonLastFirstName")%>'>
+                    <table class="TdLevelNoBorder">
+                        <tr>
+                            <td style="text-align: left; padding-left: 5px;">
+                                <asp:LinkButton ID="lnkPerson" PersonId='<%# Eval("Person.Id")%>' runat="server"
+                                    Font-Underline="false" ForeColor="Black" ToolTip='<%# Eval("Person.PersonLastFirstName")%>'
+                                    OnClick="lnkPerson_OnClick" Text='<%# Eval("Person.PersonLastFirstName")%>'></asp:LinkButton>
+                            </td>
+                            <td style="text-align: left;padding-left: 5px;">
+                                <asp:Image ID="imgIspersonTerminated" runat="server" ImageUrl="~/Images/Terminated.png"
+                                    ToolTip="Resource is an Terminated employee." Visible='<%# (bool)IsPersonTerminated((int)Eval("Person.Status.Id"))%>' />
+                                <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
+                                    ToolTip="Resource is an offshore employee." Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
+                                <img id="imgZoomIn" runat="server" src="~/Images/Zoom-In-icon.png" style="visibility: hidden;" />
+                            </td>
+                        </tr>
+                    </table>
                 </td>
                 <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.PersonLastFirstName")%>'>
                     <%# Eval("Person.Seniority.Name")%>
@@ -315,4 +327,23 @@
         There are no Time Entries by any Employee for the selected range.
     </div>
 </div>
+<asp:HiddenField ID="hdnTempField" runat="server" />
+<AjaxControlToolkit:ModalPopupExtender ID="mpePersonDetailReport" runat="server"
+    TargetControlID="hdnTempField" CancelControlID="btnCancelPersonDetailReport"
+    BackgroundCssClass="modalBackground" PopupControlID="pnlPersonDetailReport" DropShadow="false" />
+<asp:Panel ID="pnlPersonDetailReport" Style="background-color: rgb(226, 235, 255);
+    display: none;" runat="server" BorderColor="Black" BorderWidth="2px" Width="85%">
+    <table style="width: 100%; padding: 5px;">
+        <tr>
+            <td style="width: 100%;">
+                <div style="max-height: 500px; overflow-y: auto;">
+                    <uc:GroupByProject ID="ucPersonDetailReport" runat="server" />
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div style="float: right; padding: 5px; padding-right: 15px;">
+        <asp:Button ID="btnCancelPersonDetailReport" Text="Close" ToolTip="Close" runat="server" />
+    </div>
+</asp:Panel>
 
