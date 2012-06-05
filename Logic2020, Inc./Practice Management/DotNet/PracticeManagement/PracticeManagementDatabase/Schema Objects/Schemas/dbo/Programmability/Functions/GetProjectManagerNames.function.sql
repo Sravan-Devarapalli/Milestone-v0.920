@@ -12,14 +12,20 @@ RETURNS NVARCHAR(MAX)
 AS
 BEGIN
   
-  DECLARE @Temp NVARCHAR(MAX) = ''
+	DECLARE @Temp NVARCHAR(MAX) = ''
   
-SELECT @Temp = @Temp + Pers.LastName + ', ' +Pers.FirstName +'; '
-FROM Project P
-JOIN ProjectManagers PM ON PM.ProjectId = P.ProjectId
-JOIN Person Pers ON Pers.Personid = PM.ProjectManagerId
-WHERE P.ProjectId = @ProjectId
-RETURN @Temp
+	SELECT @Temp = @Temp + Pers.LastName + ', ' +Pers.FirstName +'; '
+	FROM Project P
+	JOIN ProjectManagers PM ON PM.ProjectId = P.ProjectId
+	JOIN Person Pers ON Pers.Personid = PM.ProjectManagerId
+	WHERE P.ProjectId = @ProjectId
+
+	SELECT @Temp = @Temp + Pers.LastName + ', ' +Pers.FirstName +'; '
+	FROM Project P
+	JOIN Person Pers ON Pers.Personid = P.ProjectOwnerId
+	WHERE P.ProjectId = @ProjectId
+
+	RETURN @Temp
 END
 
 
