@@ -22,6 +22,7 @@ namespace DataTransferObjects
 
         public class Formatting
         {
+            public const string EntryDateFormat = "MM/dd/yyyy";
             public const string ProjectDetailedNameFormat = "{0} - {1} - {2} - {3}";
             public const string ProjectNameNumberFormat = "{0} - {1}";
             public const string StringValueSeparator = ",";
