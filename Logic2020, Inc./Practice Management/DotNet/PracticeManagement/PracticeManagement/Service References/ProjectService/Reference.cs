@@ -54,6 +54,9 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetTimeTypesInUseDetailsByProject", ReplyAction="http://tempuri.org/IProjectService/GetTimeTypesInUseDetailsByProjectResponse")]
         DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/AttachOpportunityToProject", ReplyAction="http://tempuri.org/IProjectService/AttachOpportunityToProjectResponse")]
+        void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -260,6 +263,10 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds) {
             return base.Channel.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
+        }
+        
+        public void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link) {
+            base.Channel.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
