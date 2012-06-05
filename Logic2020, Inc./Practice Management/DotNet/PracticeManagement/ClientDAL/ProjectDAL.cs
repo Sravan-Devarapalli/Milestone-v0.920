@@ -2133,6 +2133,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.UploadedDateParam, DateTime.Now);
                 command.Parameters.AddWithValue(Constants.ParameterNames.AttachmentFileName, !string.IsNullOrEmpty(attachment.AttachmentFileName) ? (object)attachment.AttachmentFileName : DBNull.Value);
                 command.Parameters.Add(Constants.ParameterNames.AttachmentData, SqlDbType.VarBinary, -1);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CategoryIdParam,(int)attachment.Category);
                 command.Parameters[Constants.ParameterNames.AttachmentData].Value = attachment.AttachmentData != null ? (object)attachment.AttachmentData : DBNull.Value;
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
@@ -2217,6 +2218,7 @@ namespace DataAccess
                 int attachmentFileNameIndex = reader.GetOrdinal(Constants.ColumnNames.FileName);
                 int uploadedDateIndex = reader.GetOrdinal(Constants.ColumnNames.UploadedDate);
                 int attachmentSizeIndex = reader.GetOrdinal(Constants.ColumnNames.AttachmentSize);
+                int categoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.CategoryId);
 
                 while (reader.Read())
                 {
@@ -2225,7 +2227,7 @@ namespace DataAccess
                     attachment.AttachmentFileName = reader.GetString(attachmentFileNameIndex);
                     attachment.AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex);
                     attachment.UploadedDate = reader.IsDBNull(uploadedDateIndex) ? null : (DateTime?)reader.GetDateTime(uploadedDateIndex);
-
+                    attachment.Category = (ProjectAttachmentCategory)reader.GetInt32(categoryIdIndex);
                     attachments.Add(attachment);
                 }
             }
