@@ -136,5 +136,18 @@ namespace DataTransferObjects
         Recruiting = 4
     }
 
+
+    public enum ProjectAttachmentCategory
+    {
+        [EnumMember]
+        [Description("- - Select Category - -")]
+        Undefined = 0,
+        [EnumMember]
+        [Description("SOW")]
+        SOW = 1,
+        [EnumMember]
+        [Description("Support Document")]
+        SupportDocument = 2
+    }
 }
 
