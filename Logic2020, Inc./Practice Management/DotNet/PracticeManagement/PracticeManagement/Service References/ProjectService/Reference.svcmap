@@ -21,16 +21,16 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/ProjectService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ProjectService1.xsd" MetadataType="Schema" ID="1071229c-15c0-4141-8dcd-43d5acc6a0c1" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ProjectService14.xsd" MetadataType="Schema" ID="27422457-f79f-4cb7-a04d-a719469c5e64" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" />
-    <MetadataFile FileName="ProjectService15.xsd" MetadataType="Schema" ID="047b17b8-b903-424b-be12-1b9fb10a45e9" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd4" />
-    <MetadataFile FileName="ProjectService16.xsd" MetadataType="Schema" ID="fcbfb481-0876-4fa8-adee-54bab29e8a2f" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" />
-    <MetadataFile FileName="ProjectService17.xsd" MetadataType="Schema" ID="5b785314-b203-45f7-9738-c2e50c61c132" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd6" />
-    <MetadataFile FileName="ProjectService1.wsdl" MetadataType="Wsdl" ID="f1edcabc-1852-4cb2-8d45-d245f0d8ec50" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?wsdl" />
-    <MetadataFile FileName="ProjectService18.xsd" MetadataType="Schema" ID="b3ff1556-7837-4ffc-89e5-602c4a776442" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ProjectService20.xsd" MetadataType="Schema" ID="949d2094-fa83-4cde-a4a1-fa4870d0835c" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd3" />
-    <MetadataFile FileName="ProjectService22.xsd" MetadataType="Schema" ID="04c28ad7-fc4e-4de6-9e28-ae0306e4044a" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" />
-    <MetadataFile FileName="ProjectService1.disco" MetadataType="Disco" ID="5016e173-4424-45f4-81c7-a37c4d4d6528" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?disco" />
+    <MetadataFile FileName="ProjectService1.xsd" MetadataType="Schema" ID="60036e5f-6b83-4cda-bd80-a0eb1ad52bca" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd6" />
+    <MetadataFile FileName="ProjectService14.xsd" MetadataType="Schema" ID="c8b1f24f-2823-4b18-8d49-8886c02b4a51" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ProjectService15.xsd" MetadataType="Schema" ID="3db1770b-4dec-44df-9576-feeb7f348187" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ProjectService16.xsd" MetadataType="Schema" ID="6acb889a-320f-4252-937b-2775136d91b8" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ProjectService17.xsd" MetadataType="Schema" ID="9536c5b2-22e5-49ba-9a10-a901c36cac23" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ProjectService18.xsd" MetadataType="Schema" ID="f0544783-95d6-4e7a-92be-3556dda32f36" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ProjectService1.wsdl" MetadataType="Wsdl" ID="824b9a29-ebd8-422e-a355-1bf5804bf001" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?wsdl" />
+    <MetadataFile FileName="ProjectService20.xsd" MetadataType="Schema" ID="f71182a4-82c7-4cd1-b4f7-adeff66f77a1" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" />
+    <MetadataFile FileName="ProjectService1.disco" MetadataType="Disco" ID="fddba1f6-c95d-45e1-a34a-e3eb1ce13d23" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?disco" />
+    <MetadataFile FileName="ProjectService22.xsd" MetadataType="Schema" ID="9a9136f7-858f-4ad9-a67d-b6320aa12592" SourceId="1" SourceUrl="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
