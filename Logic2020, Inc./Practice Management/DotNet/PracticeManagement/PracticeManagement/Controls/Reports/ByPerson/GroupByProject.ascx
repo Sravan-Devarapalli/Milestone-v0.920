@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="GroupByProject.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.ByPerson.GroupByProject" %>
-<table class="WholeWidthWithHeight">
+<table style="background-color: rgb(245, 250, 255);" class="WholeWidthWithHeight">
     <tr style="text-align: left;">
         <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;">
             <asp:Label ID="lblPerson" runat="server" Font-Size="16px" Font-Bold="true"></asp:Label>
