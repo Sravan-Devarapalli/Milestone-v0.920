@@ -4,9 +4,9 @@
 <%@ Register TagPrefix="uc" Namespace="PraticeManagement.Controls.Generic" Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
-<table width="100%" class="WholeWidth">
+<table class="WholeWidth">
     <tr>
-        <td style="padding-top: 5px;">
+        <td style="padding-top: 5px; width: 100%; text-align: right;">
             <asp:ShadowedTextButton ID="btnAddNewTimeType" ToolTip="Add Work Type" runat="server"
                 CausesValidation="false" CssClass="add-btn" Text="Add Work Type" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeType" runat="server" TargetControlID="btnAddNewTimeType"
@@ -24,14 +24,13 @@
         <td align="left" valign="middle" style="width: 75%; vertical-align: middle;">
             <table class="WholeWidth">
                 <tr style="padding-top: 2px;">
-                    <td align="center" style="padding-left: 6px; padding-right: 6px; padding-top: 2px;
-                        padding-bottom: 3px; vertical-align: top; text-align: center; width: 44%">
+                    <td align="center" style="padding: 2px 6px 0px 6px; vertical-align: top; text-align: center;
+                        width: 44%">
                         <b>Work Types Not Assigned to Project</b>
                     </td>
-                    <td valign="middle" align="center" style="width: 12%">
+                    <td valign="middle" align="center" style="width: 8%">
                     </td>
-                    <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center;
-                        padding-bottom: 3px; padding-top: 2px; width: 44%">
+                    <td align="center" style="padding: 2px 6px 0px 6px; text-align: center; width: 44%">
                         <b>Work Types Assigned to Project</b>
                         <asp:CustomValidator ID="cvTimetype" runat="server" ValidationGroup="Project" OnServerValidate="cvTimetype_OnServerValidate"
                             Display="Dynamic" ErrorMessage="Atleast one WorkType should be assigned to the project."
@@ -40,19 +39,17 @@
                 </tr>
             </table>
             <table class="WholeWidth">
-                <tr>
-                    <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
-                        vertical-align: middle;">
+                <tr style=" height:auto !important;">
+                    <td style="padding: 0px 6px 0px 6px; width: 44%; margin: auto; vertical-align: middle;">
                         <asp:TextBox ID="txtTimeTypesNotAssignedToProject" runat="server" Width="100%" Style="border: 1px solid black;
                             padding-left: 1px; padding-right: 1px;"></asp:TextBox>
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmTimeTypesNotAssignedToProject"
                             runat="server" TargetControlID="txtTimeTypesNotAssignedToProject" WatermarkText="Begin typing to sort list below..."
                             WatermarkCssClass="watermarkedtext" />
                     </td>
-                    <td valign="middle" align="center" style="width: 12%">
+                    <td valign="middle" align="center" style="width: 8%">
                     </td>
-                    <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
-                        vertical-align: middle;">
+                    <td style="padding: 0px 6px 0px 6px; width: 44%; margin: auto; vertical-align: middle;">
                         <asp:TextBox ID="txtTimeTypesAssignedToProject" runat="server" Width="100%" MaxLength="50"
                             Style="border: 1px solid black; padding-left: 1px; padding-right: 1px;"></asp:TextBox>
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender1" runat="server"
@@ -61,12 +58,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
-                        line-height: 19px; vertical-align: middle;">
+                    <td style="padding: 0px 6px 0px 6px; width: 44%; margin: auto; line-height: 19px;
+                        vertical-align: middle;">
                         <div id="divTimeTypesNotAssignedToProject" class="cbfloatRight" runat="server" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             padding: 1px;">
-                            <table id="tblTimeTypesNotAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
+                            <table id="tblTimeTypesNotAssignedToProject" class="WholeWidth WholeWidthWithForAllColumns" cellpadding="0" cellspacing="0">
                                 <tbody>
                                     <tr isfilteredrow="false" id="tblTimeTypesNotAssignedToProjectDefault" runat="server">
                                         <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
@@ -84,7 +81,7 @@
                                                     <input type="image" id="imgDeleteWorkType" alt="Delete Work Type" style="padding-top: 2px;
                                                         visibility: hidden;" runat="server" src="~/Images/close_16.png" title="Delete Work Type"
                                                         timetypeid='<%# Eval("Id") %>' />
-                                                    <input type="checkbox" style="height: 16px;" id="cbTimeTypesNotAssignedToProject"
+                                                    <input type="checkbox" style="height: 16px; " id="cbTimeTypesNotAssignedToProject"
                                                         runat="server" />
                                                 </td>
                                             </tr>
@@ -107,7 +104,7 @@
                                                     <input type="image" id="imgDeleteWorkType" runat="server" alt="Delete Work Type"
                                                         style="padding-top: 2px;" src="~/Images/close_16.png" title="Delete Work Type"
                                                         timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
-                                                    <input type="checkbox" style="height: 16px;" id="cbTimeTypesNotAssignedToProject"
+                                                    <input type="checkbox" style="height: 16px; " id="cbTimeTypesNotAssignedToProject"
                                                         runat="server" />
                                                 </td>
                                             </tr>
@@ -117,7 +114,7 @@
                             </table>
                         </div>
                     </td>
-                    <td valign="middle" align="center" style="width: 12%">
+                    <td valign="middle" align="center" style="width: 8%">
                         <asp:Button ID="btnAssignAll" UseSubmitBehavior="false" Text=">>" ToolTip="Add All"
                             OnClick="btnAssignAll_OnClick" runat="server" />
                         <br />
@@ -135,7 +132,7 @@
                         <div id="divTimeTypesAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             line-height: 19px; vertical-align: middle; padding: 1px;">
-                            <table id="tblTimeTypesAssignedToProject" class="WholeWidth" cellpadding="0" cellspacing="0">
+                            <table id="tblTimeTypesAssignedToProject" class="WholeWidth WholeWidthWithForAllColumns" cellpadding="0" cellspacing="0">
                                 <tbody>
                                     <tr isfilteredrow="false" id="tblTimeTypesAssignedToProjectDefault" runat="server">
                                         <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
