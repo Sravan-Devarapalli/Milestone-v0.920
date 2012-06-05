@@ -1,6 +1,6 @@
 ﻿---------------------------
--- Updated By: ThulasiRam.P
--- Updated Date: 2012-05-21
+-- Updated By: Sainathc
+-- Updated Date: 2012-06-05
 ---------------------------
 
 CREATE PROCEDURE [dbo].[ProjectListAllMultiParameters]
@@ -130,6 +130,7 @@ AS
 								JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectManagerId
 									WHERE projManagers.ProjectId = P.ProjectId
 							  )
+					OR Powner.PersonId IN ( SELECT ID FROM @ProjectOwnersList)
 			    )
 			AND (    @SalespersonIds IS NULL 
 				  OR c.PersonId IN (SELECT * FROM @SalespersonsList)
