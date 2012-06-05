@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-25-2008
--- Updated By: ThulasiRam.P
--- Updated Date: 2012-05-21
+-- Updated By:	Srinivas.M
+-- Updated Date: 2012-06-05
 -- Description:	Logs the inserting into the dbo.Project table.
 -- =============================================
 CREATE TRIGGER [dbo].[tr_Project_LogInsert]
@@ -40,6 +40,7 @@ BEGIN
 						ELSE 'No' END AS 'IsChargeable',
 				i.ProjectOwnerId,
 				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+				, i.SowBudget
 		FROM inserted AS i
 		INNER JOIN dbo.Client AS C ON C.ClientId = i.ClientId
 		INNER JOIN dbo.Practice AS prac ON prac.PracticeId = i.PracticeId
