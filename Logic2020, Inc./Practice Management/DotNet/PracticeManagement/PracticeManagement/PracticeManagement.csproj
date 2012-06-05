@@ -425,6 +425,7 @@
     <Content Include="Images\StrawMan_Large.png" />
     <Content Include="Images\Team_Icon.jpg" />
     <Content Include="Images\Terminated.png" />
+    <Content Include="Images\Zoom-In-icon.png" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="OpportunitySearch.aspx" />
     <Content Include="ProjectCalendar.aspx" />
