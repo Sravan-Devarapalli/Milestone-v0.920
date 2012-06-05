@@ -706,15 +706,15 @@ namespace PracticeManagementService
                         project.ManagementCommission.ProjectWithMargin = project;
                         CommissionDAL.CommissionSet(project.ManagementCommission, connection, currentTransaction);
                     }
-                    if (project.BillingInfo != null)
-                    {
-                        project.BillingInfo.Id = project.Id;
-                        ProjectBillingInfoDAL.ProjectBillingInfoSave(project.BillingInfo, connection, currentTransaction);
-                    }
-                    else
-                    {
-                        ProjectBillingInfoDAL.ProjectBillingInfoDelete(project.Id.Value, connection, currentTransaction);
-                    }
+                    //if (project.BillingInfo != null)
+                    //{
+                    //    project.BillingInfo.Id = project.Id;
+                    //    ProjectBillingInfoDAL.ProjectBillingInfoSave(project.BillingInfo, connection, currentTransaction);
+                    //}
+                    //else
+                    //{
+                    //    ProjectBillingInfoDAL.ProjectBillingInfoDelete(project.Id.Value, connection, currentTransaction);
+                    //}
 
                     //Save ProjectTimetypes 
                     if (!String.IsNullOrEmpty(project.ProjectWorkTypesList))
@@ -1121,6 +1121,22 @@ namespace PracticeManagementService
             catch (Exception e)
             {
                 string logData = string.Format(Constants.Formatting.ErrorLogMessage, "IsUserHasPermissionOnProject", "ProjectService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+
+        }
+
+        public bool IsUserIsProjectOwner(string user, int id)
+        {
+            try
+            {
+                return ProjectDAL.IsUserIsProjectOwner(user, id);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "IsUserIsProjectOwner", "ProjectService.svc", string.Empty,
                     HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
