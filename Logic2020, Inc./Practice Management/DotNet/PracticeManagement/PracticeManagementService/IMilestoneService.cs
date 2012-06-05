@@ -173,6 +173,9 @@ namespace PracticeManagementService
         /// <returns>Entity instance</returns>
         [OperationContract]
         ProjectExpense[] GetProjectExpensesForMilestone(ProjectExpense entity);
+
+        [OperationContract]
+        void MilestoneUpdateShortDetails(Milestone milestone, string userName);
     }
 }
 
