@@ -82,6 +82,10 @@ span.highlighted
 {
     width: 100%;
 }
+.WholeWidthWithForAllColumns td
+{
+    width:100%;
+}
 .hidden
 {
     display: none;
