@@ -2672,5 +2672,13 @@ TABLE.ProjectSearchPopup TD
 {
     padding:5px;
 }   
- 
 
+.Width92Per
+{
+    width:92%;
+}   
+
+.ScrollingDropDownWholeWidth .scrollext_sdeProjectManagersLabel
+{
+    width:100% !important;
+}
