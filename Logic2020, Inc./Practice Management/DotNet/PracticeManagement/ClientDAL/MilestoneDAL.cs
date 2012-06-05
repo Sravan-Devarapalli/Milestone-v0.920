@@ -47,6 +47,7 @@ namespace DataAccess
         private const string MilestoneGetByIdProcedure = "dbo.MilestoneGetById";
         private const string MilestoneInsertProcedure = "dbo.MilestoneInsert";
         private const string MilestoneUpdateProcedure = "dbo.MilestoneUpdate";
+        private const string MilestoneUpdateShortDetailsProcedure = "dbo.MilestoneUpdateShortDetails";
         private const string MilestoneDeleteProcedure = "dbo.MilestoneDelete";
         private const string MilestoneMoveProcedure = "dbo.MilestoneMove";
         private const string MilestoneMoveEndProcedure = "dbo.MilestoneMoveEnd";
@@ -336,6 +337,27 @@ namespace DataAccess
                 command.ExecuteNonQuery();
 
                 trn.Commit();
+            }
+        }
+
+        public static void MilestoneUpdateShortDetails(Milestone milestone, string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(MilestoneUpdateShortDetailsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(MilestoneIdParam, milestone.Id.Value);
+                command.Parameters.AddWithValue(DescriptionParam,
+                    !string.IsNullOrEmpty(milestone.Description) ?
+                    (object)milestone.Description : DBNull.Value);
+                command.Parameters.AddWithValue(UserLoginParam,
+                    !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+
+                connection.Open();
+                
+                command.ExecuteNonQuery();
             }
         }
 
