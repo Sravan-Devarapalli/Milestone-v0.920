@@ -36,7 +36,11 @@ AS
 	SELECT pm.ProjectManagerId  
 	FROM ProjectManagers AS pm 
 	WHERE pm.ProjectId = @Id
-	
+
+	INSERT INTO @ProjectManagerIdsList
+	SELECT  p.ProjectOwnerId 
+	FROM dbo.project AS p 
+	WHERE p.ProjectId = @Id
 	
 	IF EXISTS (SELECT 1
 				FROM aspnet_Users u
