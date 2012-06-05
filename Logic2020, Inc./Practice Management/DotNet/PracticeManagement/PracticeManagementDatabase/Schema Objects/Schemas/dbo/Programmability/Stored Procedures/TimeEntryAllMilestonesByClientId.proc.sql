@@ -1,4 +1,8 @@
-﻿CREATE  PROCEDURE [dbo].[TimeEntryAllMilestonesByClientId] 
+﻿-- =============================================
+-- Updated by:	Sainath C
+-- Update date:	06-05-2012
+-- =============================================
+CREATE  PROCEDURE [dbo].[TimeEntryAllMilestonesByClientId] 
 @ClientId INT = NULL,
 @PersonId INT = NULL,
 @ShowAll BIT = 1
@@ -23,6 +27,7 @@ BEGIN
 				AND (
 						@PersonId IS NULL
 						OR projManagers.ProjectManagerId = @PersonId
+						OR proj.ProjectOwnerId = @PersonId
 						OR proj.DirectorId = @PersonId
 						OR C.PersonId = @PersonId
 					)
@@ -42,6 +47,7 @@ BEGIN
 				AND (
 						@PersonId IS NULL
 						OR projManagers.ProjectManagerId = @PersonId
+						OR p.ProjectOwnerId = @PersonId
 						OR P.DirectorId = @PersonId
 						OR C.PersonId = @PersonId
 					)
