@@ -3,7 +3,7 @@
 <%@ Import Namespace="DataTransferObjects.Reports" %>
 <asp:HiddenField ID="hdncpeExtendersIds" runat="server" Value="" />
 <asp:HiddenField ID="hdnCollapsed" runat="server" Value="true" />
-<table class="WholeWidthWithHeight">
+<table id="tblExportSection" runat="server" class="WholeWidthWithHeight">
     <tr>
         <td colspan="4" style="width: 90%;">
             <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false" Width="100px"
