@@ -284,6 +284,11 @@ namespace PracticeManagementService
             return (new ProjectExpenseDal()).GetForMilestone(entity);
         }
 
+        public void MilestoneUpdateShortDetails(Milestone milestone, string userName)
+        {
+            MilestoneDAL.MilestoneUpdateShortDetails(milestone, userName);
+        }
+
 
         #endregion
     }
