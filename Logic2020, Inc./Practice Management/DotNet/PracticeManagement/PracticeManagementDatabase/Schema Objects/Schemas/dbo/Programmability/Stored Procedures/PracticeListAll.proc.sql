@@ -39,7 +39,7 @@ AS
 			FROM Project Proj
 			LEFT JOIN ProjectManagers PM ON PM.ProjectId = Proj.ProjectId
 			LEFT JOIN Commission C ON C.ProjectId = Proj.ProjectId AND C.CommissionType = 1
-			WHERE (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId)
+			WHERE (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId OR Proj.projectownerId = @PersonId )
 			GROUP BY Proj.PracticeId
 		)
 
@@ -106,7 +106,7 @@ AS
 			FROM dbo.Project AS proj 
 			INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
 			LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1 --as per #2914
-			WHERE projManagers.ProjectManagerId = @PersonId OR C.PersonId = @PersonId
+			WHERE projManagers.ProjectManagerId = @PersonId OR C.PersonId = @PersonId OR proj.projectownerId = @PersonId
 		END
 	
 		SELECT 
