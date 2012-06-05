@@ -57,6 +57,7 @@ BEGIN
 			OR ( ISNULL(@UserHasHighRoleThanProjectLead,1) <> 0 AND p.DirectorId = @PersonId )--if Only Project Lead Role then we are not considering Director. as per #2941.
 			OR Cm.PersonId = @PersonId
 			OR projmanager.ProjectManagerId = @PersonId
+			OR P.projectOwnerId = @PersonId
 			)
 		ORDER BY C.Name
 
@@ -93,8 +94,9 @@ BEGIN
 			FROM dbo.Project AS proj
 			INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = proj.ProjectId
 			LEFT JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
-			WHERE projmanager.ProjectManagerId = @PersonId OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
-
+			WHERE projmanager.ProjectManagerId = @PersonId 
+					OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
+					OR proj.projectOwnerId = @PersonId 
 		END
 
 		IF @ShowAll = 0
