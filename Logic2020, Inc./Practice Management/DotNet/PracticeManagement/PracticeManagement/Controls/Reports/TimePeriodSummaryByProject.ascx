@@ -2,6 +2,10 @@
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByProject" %>
 <%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
     TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Reports/ByAccount/GroupByBusinessUnit.ascx" TagName="GroupByBusinessUnit"
+    TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Reports/ProjectDetailTabByResource.ascx" TagName="ProjectDetailTabByResource"
+    TagPrefix="uc" %>
 <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;">
     <tr>
         <td style="font-size: 16px; font-weight: bold;">
@@ -161,16 +165,16 @@
                         <tr>
                             <th class="t-left padLeft5" style="width: 500px; height: 20px;">
                                 Project
-                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server" id="imgClientFilter"
-                                    style="position: absolute; padding-left: 2px;" />
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server"
+                                    id="imgClientFilter" style="position: absolute; padding-left: 2px;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceClient" runat="server" TargetControlID="imgClientFilter"
                                     PopupControlID="pnlFilterResource" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th style="width: 110px; height: 20px;">
                                 Status
-                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectStatusFilter"
-                                    style="position: absolute; padding-left: 2px;" />
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server"
+                                    id="imgProjectStatusFilter" style="position: absolute; padding-left: 2px;" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
@@ -204,14 +208,17 @@
                                 >
                                 <%# Eval("Project.Group.Name")%>
                             </td>
+                            <td rowspan="2" style="padding-left: 3px;" valign="middle">
+                                <img id="imgZoomIn" runat="server" src="~/Images/Zoom-In-icon.png" style="display: none;" />
+                            </td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px; text-align: left;">
-                                <%-- <asp:HyperLink ID="btnProjectNumber" runat="server" Text='<%# Eval("Project.ProjectNumber")%>'
-                                    NavigateUrl='<%# GetProjectSummaryReportUrl((string)Eval("Project.ProjectNumber")) %>' />--%>
-                                <%# Eval("Project.ProjectNumber")%>
-                                -
-                                <%# Eval("Project.Name")%>
+                                <asp:LinkButton ID="lnkProject" AccountId='<%# Eval("Project.Client.Id")%>' GroupId='<%# Eval("Project.Group.Id")%>'
+                                    Font-Underline="false" ForeColor="Black" ClientName=' <%# Eval("Project.Client.Name")%>'
+                                    GroupName=' <%# Eval("Project.Group.Name")%>' ProjectNumber='<%# Eval("Project.ProjectNumber")%>'
+                                    runat="server" ToolTip='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.Name"))%>'
+                                    OnClick="lnkProject_OnClick" Text='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.Name"))%>'></asp:LinkButton>
                             </td>
                         </tr>
                     </table>
@@ -288,4 +295,41 @@
         There are no Time Entries towards this range selected.
     </div>
 </div>
+<asp:HiddenField ID="hdnTempField" runat="server" />
+<AjaxControlToolkit:ModalPopupExtender ID="mpeProjectDetailReport" runat="server"
+    TargetControlID="hdnTempField" CancelControlID="btnCancelProjectDetailReport"
+    BackgroundCssClass="modalBackground" PopupControlID="pnlProjectDetailReport"
+    DropShadow="false" />
+<asp:Panel ID="pnlProjectDetailReport" Style="background-color: rgb(226, 235, 255);
+    display: none;" runat="server" BorderColor="Black" BorderWidth="2px" Width="85%">
+    <table style="width: 100%; padding: 5px;">
+        <tr>
+            <td style="width: 100%;">
+                <table class="WholeWidthWithHeight">
+                    <tr style="background-color: rgb(245, 250, 255);">
+                        <td style="width: 90%; font-weight: bold; font-size: 15px; padding: 3px; padding-left: 10px;">
+                            <asp:Literal ID="ltrlProject" runat="server"></asp:Literal>
+                        </td>
+                        <td style="width: 10%; font-weight: bold; text-align: right; font-size: 15px; padding: 3px;">
+                            <asp:Literal ID="ltrlProjectDetailTotalhours" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="width: 100%;">
+                            <div style="max-height: 500px; overflow-y: auto; width: 100%;">
+                                <uc:GroupByBusinessUnit ID="ucGroupByProject" runat="server" Visible="false" />
+                                <uc:ProjectDetailTabByResource ID="ucProjectDetailReport" runat="server" Visible="false" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="background-color: rgb(245, 250, 255);">
+                        <td colspan="2" style="width: 100%; text-align: right; padding: 3px;">
+                            <asp:Button ID="btnCancelProjectDetailReport" Text="Close" ToolTip="Close" runat="server" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
 
