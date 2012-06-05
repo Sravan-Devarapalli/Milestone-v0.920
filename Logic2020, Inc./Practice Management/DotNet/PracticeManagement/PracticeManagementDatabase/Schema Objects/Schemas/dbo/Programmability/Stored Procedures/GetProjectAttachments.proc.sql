@@ -7,7 +7,8 @@ BEGIN
 	SELECT Id,
 			FileName,
 			DATALENGTH(AttachmentData) AS AttachmentSize,
-			UploadedDate
-	FROM ProjectAttachment
+			UploadedDate,
+			PA.CategoryId
+	FROM dbo.ProjectAttachment PA
 	WHERE ProjectId = @ProjectId
 END
