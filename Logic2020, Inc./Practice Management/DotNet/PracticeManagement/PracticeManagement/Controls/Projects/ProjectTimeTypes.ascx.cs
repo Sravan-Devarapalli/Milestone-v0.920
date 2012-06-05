@@ -69,24 +69,22 @@ namespace PraticeManagement.Controls.Projects
 
                 AllTimeTypes = allTimeTypes.Where(t => t.IsAdministrative == false).ToArray();
 
-                if (Page is ProjectDetail && ((ProjectDetail)Page).ProjectId != null)
+                if (Page is ProjectDetail)
                 {
-                    Project project = ((ProjectDetail)Page).Project;
-
-                    if (project.IsInternal) //default and internal time types for all internal projects
+                    //default and external time types for all external projects
+                    AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || !T.IsInternal).ToArray();
+                    if (((ProjectDetail)Page).ProjectId != null)
                     {
-                        AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || T.IsInternal).ToArray();
+                        int projectId = ((ProjectDetail)Page).ProjectId.Value;
+                        ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(proj => proj.GetTimeTypesByProjectId(projectId, false, null, null));
+                        foreach (TimeTypeRecord tt in ProjectTimetypes)
+                        {
+                            tt.InUse = AllTimeTypes.First(t => t.Id == tt.Id).InUse;
+                        }
                     }
-                    else //default and external time types for all external projects
+                    else
                     {
-                        AllTimeTypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault || !T.IsInternal).ToArray();
-                    }
-
-                    int projectId = ((ProjectDetail)Page).ProjectId.Value;
-                    ProjectTimetypes = ServiceCallers.Invoke<ProjectServiceClient, TimeTypeRecord[]>(proj => proj.GetTimeTypesByProjectId(projectId, false, null, null));
-                    foreach (TimeTypeRecord tt in ProjectTimetypes)
-                    {
-                        tt.InUse = AllTimeTypes.First(t => t.Id == tt.Id).InUse;
+                        ProjectTimetypes = AllTimeTypes.AsQueryable().Where(T => T.IsDefault).ToArray();
                     }
                 }
                 AllTimeTypes = AllTimeTypes.Where(tt => !ProjectTimetypes.Any(t => tt.Id == t.Id)).ToArray();
@@ -148,6 +146,7 @@ namespace PraticeManagement.Controls.Projects
         protected void cvTimetype_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = ProjectTimetypes.Count() > 0;
+
         }
 
         protected void btnCloseWorkType_OnClick(object sender, EventArgs e)
@@ -344,14 +343,17 @@ namespace PraticeManagement.Controls.Projects
 
         private string GetTimeTypeNamesInUse(string timeTypeIds)
         {
-            int projectId = ((ProjectDetail)Page).ProjectId.Value;
-            var timeTypesInUseDetail = ServiceCallers.Custom.Project(p => p.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds));
             StringBuilder timeTypesInUse = new StringBuilder();
-            foreach (TimeTypeRecord tt in timeTypesInUseDetail)
+            if (((ProjectDetail)Page).ProjectId.HasValue)
             {
-                if (tt.InUse)
+                int projectId = ((ProjectDetail)Page).ProjectId.Value;
+                var timeTypesInUseDetail = ServiceCallers.Custom.Project(p => p.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds));
+                foreach (TimeTypeRecord tt in timeTypesInUseDetail)
                 {
-                    timeTypesInUse.Append("-" + tt.Name + "<br/>");
+                    if (tt.InUse)
+                    {
+                        timeTypesInUse.Append("-" + tt.Name + "<br/>");
+                    }
                 }
             }
             return timeTypesInUse.ToString();
