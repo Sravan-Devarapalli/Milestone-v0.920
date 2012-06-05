@@ -2827,6 +2827,23 @@ namespace DataAccess
                 }
             }
         }
+
+        public static void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.AttachOpportunityToProject, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.Parameters.AddWithValue(Constants.ParameterNames.LinkParam, link);
+                connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
 
