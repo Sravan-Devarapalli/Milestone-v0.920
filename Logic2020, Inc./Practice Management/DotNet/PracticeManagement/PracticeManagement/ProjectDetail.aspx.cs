@@ -303,6 +303,7 @@ namespace PraticeManagement
                 int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, AttachmentFileSize));
 
                 lblAttachmentMessage.Text = string.Format(AttachSOWMessage, size / 1000);
+                DataHelper.FillAttachemntCategoryList(ddlAttachmentCategory);
             }
             mlConfirmation.ClearMessage();
 
@@ -547,8 +548,7 @@ namespace PraticeManagement
                 ucProjectTimeTypes.ProjectTimetypes = null;
 
                 Project = GetCurrentProject(ProjectId);
-                if (Project != null)
-                    PopulateControls(Project);
+                PopulateControls(Project);
             }
             else
             {
@@ -567,36 +567,46 @@ namespace PraticeManagement
             if (Page.IsValid)
             {
                 AttachmentService.ProjectAttachment attachment = PopulateProjectAttachment();
-
-                if (ProjectId.HasValue)
+                if (attachment != null)
                 {
-                    AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
-                    svc.SaveProjectAttachment(attachment, ProjectId.Value, User.Identity.Name);
+                    if (ProjectId.HasValue)
+                    {
+                        AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
+                        svc.SaveProjectAttachment(attachment, ProjectId.Value, User.Identity.Name);
+                    }
+                    else
+                    {
+                        attachment.UploadedDate = DateTime.Now;
+
+                        if (AttachmentsForNewProject == null)
+                        {
+                            AttachmentsForNewProject = new List<AttachmentService.ProjectAttachment>();
+                        }
+
+                        attachment.AttachmentId = AttachmentsForNewProject.Count + 1;
+                        AttachmentsForNewProject.Add(attachment);
+
+                        gvProjectAttachments.DataSource = AttachmentsForNewProject;
+                        gvProjectAttachments.DataBind();
+                    }
+                    if (ProjectId.HasValue)
+                    {
+                        Project = GetCurrentProject(ProjectId);
+                        PopulateAttachmentControl(Project);
+                    }
+                    ddlAttachmentCategory.SelectedValue = "0";
+                    btnUpload.Enabled = false;
                 }
                 else
                 {
-                    attachment.UploadedDate = DateTime.Now;
-
-                    if (AttachmentsForNewProject == null)
-                    {
-                        AttachmentsForNewProject = new List<AttachmentService.ProjectAttachment>();
-                    }
-
-                    attachment.AttachmentId = AttachmentsForNewProject.Count + 1;
-                    AttachmentsForNewProject.Add(attachment);
-
-                    gvProjectAttachments.DataSource = AttachmentsForNewProject;
-                    gvProjectAttachments.DataBind();
+                    mpeAttachSOW.Show();
                 }
             }
-
-            if (Page.IsValid && ProjectId.HasValue)
+            else
             {
-                Project = GetCurrentProject(ProjectId);
-                if (Project != null)
-                    PopulateAttachmentControl(Project);
+                mpeAttachSOW.Show();
             }
-            btnUpload.Enabled = false;
+
         }
 
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -806,12 +816,12 @@ namespace PraticeManagement
             if (Project != null && Project.Id.HasValue)
             {
                 imgLink.Visible = true;
-                imgNavigateToOpp.Visible =  imgUnlink.Visible =  lbOpportunity.Visible = Project.OpportunityId.HasValue;
+                imgNavigateToOpp.Visible = imgUnlink.Visible = lbOpportunity.Visible = Project.OpportunityId.HasValue;
 
                 if (Project.OpportunityId.HasValue)
                 {
                     lbOpportunity.Text = string.Format(OpportunityLinkedTextFormat, Project.OpportunityNumber);
-                    imgNavigateToOpp.Attributes.Add("NavigateUrl", String.Format( Constants.ApplicationPages.DetailRedirectFormat, "OpportunityDetail.aspx", Project.OpportunityId.Value));//PraticeManagement.Utils.Urls.OpportunityDetailsLink(Project.OpportunityId.Value));
+                    imgNavigateToOpp.Attributes.Add("NavigateUrl", String.Format(Constants.ApplicationPages.DetailRedirectFormat, "OpportunityDetail.aspx", Project.OpportunityId.Value));//PraticeManagement.Utils.Urls.OpportunityDetailsLink(Project.OpportunityId.Value));
                 }
             }
         }
@@ -933,6 +943,15 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvAttachment_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (!fuProjectAttachment.HasFile)
+            {
+                args.IsValid = false;
+            }
+        }
+
         protected void cvalidatorProjectAttachment_OnServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
@@ -951,6 +970,15 @@ namespace PraticeManagement
                         args.IsValid = false;
                     }
                 }
+            }
+        }
+
+        protected void cvAttachmentCategory_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (ddlAttachmentCategory.SelectedValue == "0")
+            {
+                args.IsValid = false;
             }
         }
 
@@ -1137,9 +1165,7 @@ namespace PraticeManagement
             if (id.HasValue)
             {
                 Project = GetCurrentProject(id);
-
-                if (Project != null)
-                    PopulateControls(Project);
+                PopulateControls(Project);
             }
             else
             {
@@ -1156,6 +1182,9 @@ namespace PraticeManagement
                 {
                     ddlProjectStatus.Enabled = false;
                 }
+                PopulateAttachmentControl(Project);
+                ucProjectTimeTypes.ResetSearchTextFilters();
+                ucProjectTimeTypes.PopulateControls();
             }
 
             UpdateSalesCommissionState();
@@ -1189,57 +1218,60 @@ namespace PraticeManagement
 
         private void PopulateControls(Project project)
         {
-            lblProjectNumber.Text = project.ProjectNumber;
-            lblProjectName.Text = project.Name;
-            lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
-
-            txtProjectName.Text = project.Name;
-            txtDescription.Text = project.Description;
-            lblProjectNumber.Text = project.ProjectNumber;
-            ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
-            if (project.SowBudget.HasValue)
-                txtSowBudget.Text = project.SowBudget.Value.ToString();
-
-            PopulateClientDropDown(project);
-            FillAndSelectProjectGroupList(project);
-            PopulatePracticeDropDown(project);
-            SelectProjectStatus(project);
-            PopulateProjectManagerDropDown(project);
-
-            financials.Project = project;
-
-            //txtClientDiscount.Text = project.Discount != 0 ? project.Discount.ToString() : string.Empty;
-            txtBuyerName.Text = project.BuyerName;
-
-            DisplaySalesCommissions(project);
-
-            DisplayPracticeManagementCommissions(project);
-
-            if (project.Director != null && project.Director.Id.HasValue)
+            if (project != null)
             {
-                ListItem selectedDirector = ddlDirector.Items.FindByValue(project.Director.Id.Value.ToString());
-                if (selectedDirector == null)
+                lblProjectNumber.Text = project.ProjectNumber;
+                lblProjectName.Text = project.Name;
+                lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
+
+                txtProjectName.Text = project.Name;
+                txtDescription.Text = project.Description;
+                lblProjectNumber.Text = project.ProjectNumber;
+                ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
+                if (project.SowBudget.HasValue)
+                    txtSowBudget.Text = project.SowBudget.Value.ToString();
+
+                PopulateClientDropDown(project);
+                FillAndSelectProjectGroupList(project);
+                PopulatePracticeDropDown(project);
+                SelectProjectStatus(project);
+                PopulateProjectManagerDropDown(project);
+
+                financials.Project = project;
+
+                //txtClientDiscount.Text = project.Discount != 0 ? project.Discount.ToString() : string.Empty;
+                txtBuyerName.Text = project.BuyerName;
+
+                DisplaySalesCommissions(project);
+
+                DisplayPracticeManagementCommissions(project);
+
+                if (project.Director != null && project.Director.Id.HasValue)
                 {
-                    selectedDirector = new ListItem(project.Director.PersonLastFirstName, project.Director.Id.Value.ToString());
-                    ddlDirector.Items.Add(selectedDirector);
-                    ddlDirector.SortByText();
+                    ListItem selectedDirector = ddlDirector.Items.FindByValue(project.Director.Id.Value.ToString());
+                    if (selectedDirector == null)
+                    {
+                        selectedDirector = new ListItem(project.Director.PersonLastFirstName, project.Director.Id.Value.ToString());
+                        ddlDirector.Items.Add(selectedDirector);
+                        ddlDirector.SortByText();
+                    }
+
+                    ddlDirector.SelectedValue = selectedDirector.Value;
                 }
 
-                ddlDirector.SelectedValue = selectedDirector.Value;
-            }
-
-            if (project.ProjectOwner != null)
-            {
-                ListItem selectedProjectOwner = ddlProjectOwner.Items.FindByValue(project.ProjectOwner.Id.Value.ToString());
-                if (selectedProjectOwner == null)
+                if (project.ProjectOwner != null)
                 {
-                    Person selectedPerson = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(project.ProjectOwner.Id.Value));
-                    selectedProjectOwner = new ListItem(selectedPerson.PersonLastFirstName, project.ProjectOwner.Id.Value.ToString());
-                    ddlProjectOwner.Items.Add(selectedProjectOwner);
-                    ddlProjectOwner.SortByText();
-                }
+                    ListItem selectedProjectOwner = ddlProjectOwner.Items.FindByValue(project.ProjectOwner.Id.Value.ToString());
+                    if (selectedProjectOwner == null)
+                    {
+                        Person selectedPerson = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(project.ProjectOwner.Id.Value));
+                        selectedProjectOwner = new ListItem(selectedPerson.PersonLastFirstName, project.ProjectOwner.Id.Value.ToString());
+                        ddlProjectOwner.Items.Add(selectedProjectOwner);
+                        ddlProjectOwner.SortByText();
+                    }
 
-                ddlProjectOwner.SelectedValue = project.ProjectOwner.Id.ToString();
+                    ddlProjectOwner.SelectedValue = project.ProjectOwner.Id.ToString();
+                }
             }
 
             PopulateAttachmentControl(project);
@@ -1250,9 +1282,20 @@ namespace PraticeManagement
 
         private void PopulateAttachmentControl(Project project)
         {
-            if (project.Attachments != null && project.Attachments.Count > 0)
+            if (project != null)
             {
-                gvProjectAttachments.DataSource = project.Attachments;
+                if (project.Attachments != null)
+                {
+                    gvProjectAttachments.DataSource = project.Attachments;
+                }
+                else
+                {
+                    gvProjectAttachments.DataSource = new List<ProjectAttachment>();
+                }
+            }
+            else
+            {
+                gvProjectAttachments.DataSource = new List<ProjectAttachment>();
             }
             gvProjectAttachments.DataBind();
         }
@@ -1464,6 +1507,7 @@ namespace PraticeManagement
                 attachment.AttachmentFileName = fuProjectAttachment.FileName;
                 attachment.AttachmentData = fuProjectAttachment.FileBytes;
                 attachment.AttachmentSize = fuProjectAttachment.FileBytes.Length;
+                attachment.Category = (PraticeManagement.AttachmentService.ProjectAttachmentCategory)Convert.ToInt32(ddlAttachmentCategory.SelectedValue);
                 return attachment;
             }
             return null;
@@ -1586,6 +1630,8 @@ namespace PraticeManagement
 
         protected void btnCancel_OnClick(object sender, EventArgs e)
         {
+            ddlAttachmentCategory.SelectedValue = "0";
+            btnUpload.Enabled = false;
         }
 
         protected void lnkClone_OnClick(object sender, EventArgs e)
