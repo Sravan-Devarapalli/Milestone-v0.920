@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
 using System.Text;
+using DataTransferObjects.Reports.ByAccount;
+using ByBusinessUnit = PraticeManagement.Controls.Reports.ByAccount.GroupByBusinessUnit;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -190,8 +192,53 @@ namespace PraticeManagement.Controls.Reports
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                var lnkProject = e.Item.FindControl("lnkProject") as LinkButton;
+                var imgZoomIn = e.Item.FindControl("imgZoomIn") as HtmlImage;
 
+                lnkProject.Attributes["onmouseover"] = string.Format("document.getElementById(\'{0}\').style.display='';", imgZoomIn.ClientID);
+                lnkProject.Attributes["onmouseout"] = string.Format("document.getElementById(\'{0}\').style.display='none';", imgZoomIn.ClientID);
             }
+        }
+
+        protected void lnkProject_OnClick(object sender, EventArgs e)
+        {
+            var lnkProject = sender as LinkButton;
+            var projectNumber = lnkProject.Attributes["ProjectNumber"];
+
+            var businessDevelopmentProj = ServiceCallers.Custom.Project(p => p.GetBusinessDevelopmentProject());
+            string totalHours = string.Empty;
+
+            if (businessDevelopmentProj.ProjectNumber.ToUpper() == projectNumber.ToUpper())
+            {
+                var accountId = Convert.ToInt32(lnkProject.Attributes["AccountId"]);
+                var buIds = lnkProject.Attributes["GroupId"] + ",";
+                ucGroupByProject.Visible = true;
+                ucProjectDetailReport.Visible = false;
+                totalHours = GetDoubleFormat(ucGroupByProject.PopulateData(accountId, buIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+            }
+            else
+            {
+
+                var list = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(projectNumber, null,
+                     HostingPage.StartDate, HostingPage.EndDate,
+                    null));
+
+                totalHours = GetDoubleFormat(list.Sum(l => l.TotalHours));
+                ucGroupByProject.Visible = false;
+                ucProjectDetailReport.Visible = true;
+                ucProjectDetailReport.DataBindByResourceDetail(list);
+            }
+
+            ltrlProject.Text = "<b style=\"color: Gray;\">" +
+                lnkProject.Attributes["ClientName"] + " > " + lnkProject.Attributes["GroupName"] + " > </b><b>" + lnkProject.Text + "</b>";
+            ltrlProjectDetailTotalhours.Text = totalHours;
+
+            mpeProjectDetailReport.Show();
+        }
+
+        protected string GetProjectName(string projectNumber, string name)
+        {
+            return projectNumber + " - " + name;
         }
 
         public void DataBindProject(ProjectLevelGroupedHours[] reportData, bool isPopulateFilters)
@@ -289,12 +336,6 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-        protected string GetProjectSummaryReportUrl(string projectNumber)
-        {
-            string projectSummaryReportUrl = string.Format(Constants.ApplicationPages.RedirectProjectSummaryReportIdFormat, projectNumber, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"), "0");
-            string timePeriodReportUrl = string.Format(Constants.ApplicationPages.RedirectTimePeriodSummaryReportFormat, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"), HostingPage.SelectedView, HostingPage.IncludePersonWithNoTimeEntries);
-            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(projectSummaryReportUrl, timePeriodReportUrl);
-        }
 
         protected void btnFilterOK_OnClick(object sender, EventArgs e)
         {
