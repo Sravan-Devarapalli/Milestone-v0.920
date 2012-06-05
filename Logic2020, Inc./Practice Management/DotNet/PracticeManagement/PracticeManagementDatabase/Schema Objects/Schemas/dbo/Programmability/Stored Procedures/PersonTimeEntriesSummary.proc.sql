@@ -2,8 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 03-05-2012
 -- Description: Person TimeEntries Summary By Period.
--- Updated by : Sainath.CH
--- Update Date: 04-12-2012
+-- Updated by : ThulasiRam.P
+-- Update Date: 06-05-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesSummary]
 (
@@ -65,7 +65,7 @@ BEGIN
 	INNER JOIN dbo.Client C ON CC.ClientId = C.ClientId
 	INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = PRO.ProjectStatusId
-	INNER JOIN dbo.PersonStatusHistory PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate AND ISNULL(PTSH.EndDate,@FutureDate)
+	INNER JOIN dbo.PersonStatusHistory AS PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate AND ISNULL(PTSH.EndDate,@FutureDate) AND PTSH.PersonId = TE.PersonId
 	LEFT JOIN PersonByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId 
 	WHERE TE.PersonId = @PersonIdLocal 
 		AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
