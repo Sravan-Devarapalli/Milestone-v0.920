@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports.ByAccount;
 using System.Text;
+using PraticeManagement.Reporting;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
@@ -15,24 +16,21 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private const string Text_GroupByBusinessUnit = "Group by Business Unit";
         private const string Text_GroupByPerson = "Group by Person";
-
-        private PraticeManagement.Reporting.AccountSummaryReport HostingPage
-        {
-            get { return ((PraticeManagement.Reporting.AccountSummaryReport)Page); }
-        }
-
-
+        private const string AccountDetailByBusinessDevelopmentExport = "Account Detail Report By Business Development";
 
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
-                                                           ", " + hdnCollapsed.ClientID +
-                                                           ", " + hdncpeExtendersIds.ClientID +
-                                                           ");";
+            if (Page is AccountSummaryReport)
+            {
+                btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
+                                                               ", " + hdnCollapsed.ClientID +
+                                                               ", " + hdncpeExtendersIds.ClientID +
+                                                               ");";
 
-            btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
+                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
+            }
         }
 
         protected void btnGroupBy_Click(object sender, EventArgs e)
@@ -55,18 +53,26 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateGroupByBusinessUnit()
         {
-            tpByBusinessUnit.PopulateData(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value);
+            if (Page is AccountSummaryReport)
+            {
+                var hostingPage = Page as AccountSummaryReport;
+                tpByBusinessUnit.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+            }
         }
 
         private void PopulateGroupByPerson()
         {
-            tpByPerson.PopulateData(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value);
+            if (Page is AccountSummaryReport)
+            {
+                var hostingPage = Page as AccountSummaryReport;
+                tpByPerson.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+            }
         }
 
 
         public void ApplyAttributes(int count)
         {
-            btnGroupBy.Visible = btnExpandOrCollapseAll.Visible = 
+            btnGroupBy.Visible = btnExpandOrCollapseAll.Visible =
                           btnExportToExcel.Enabled = count > 0;
         }
 
@@ -89,104 +95,106 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
         }
 
-
-        private string AccountDetailByBusinessDevelopmentExport = "Account Detail Report By Business Development";
-
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            DataHelper.InsertExportActivityLogMessage(AccountDetailByBusinessDevelopmentExport);
-
-            List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
-
-            var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(HostingPage.AccountId));
-
-            StringBuilder sb = new StringBuilder();
- sb.Append("Account_ByBusinessDevelopment Report");
-                sb.Append("\t");
-                sb.AppendLine();
-            sb.Append(account.Name);
-            sb.Append("\t");
-            sb.Append(account.Code);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(HostingPage.BusinessUnitsCount + " Business Units");
-            sb.Append("\t");
-            sb.Append(HostingPage.ProjectsCount + " Projects");
-            sb.Append("\t");
-            sb.Append(HostingPage.PersonsCount + " Persons");
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.AppendLine();
-
-            if (data.Count > 0)
+            if (Page is AccountSummaryReport)
             {
-                //Header
-                /* Person Name 
-                Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
-                sb.Append("Resource");
+                var hostingPage = Page as AccountSummaryReport;
+
+                DataHelper.InsertExportActivityLogMessage(AccountDetailByBusinessDevelopmentExport);
+
+                List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value)).ToList();
+
+                var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(hostingPage.AccountId));
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Account_ByBusinessDevelopment Report");
                 sb.Append("\t");
-                sb.Append("Date");
-                sb.Append("\t");
-                sb.Append("WorkType");
-                sb.Append("\t");
-                sb.Append("WorkType Name");
-                sb.Append("\t");
-                sb.Append("Business Unit");
-                sb.Append("\t");
-                sb.Append("Business Unit Name");
-                sb.Append("\t");
-                sb.Append("Non-Billable");
-                sb.Append("\t");
-                sb.Append("Total");
-                sb.Append("\t");
-                sb.Append("Note");
                 sb.AppendLine();
-                //Data
-                foreach (var buLevelGroupedHours in data)
+                sb.Append(account.Name);
+                sb.Append("\t");
+                sb.Append(account.Code);
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.Append(hostingPage.BusinessUnitsCount + " Business Units");
+                sb.Append("\t");
+                sb.Append(hostingPage.ProjectsCount + " Projects");
+                sb.Append("\t");
+                sb.Append(hostingPage.PersonsCount + " Persons");
+                sb.Append("\t");
+                sb.AppendLine();
+                sb.AppendLine();
+
+                if (data.Count > 0)
                 {
-
-                    foreach (var personLevelGroupedHoursList in buLevelGroupedHours.PersonLevelGroupedHoursList)
+                    //Header
+                    /* Person Name 
+                    Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
+                    sb.Append("Resource");
+                    sb.Append("\t");
+                    sb.Append("Date");
+                    sb.Append("\t");
+                    sb.Append("WorkType");
+                    sb.Append("\t");
+                    sb.Append("WorkType Name");
+                    sb.Append("\t");
+                    sb.Append("Business Unit");
+                    sb.Append("\t");
+                    sb.Append("Business Unit Name");
+                    sb.Append("\t");
+                    sb.Append("Non-Billable");
+                    sb.Append("\t");
+                    sb.Append("Total");
+                    sb.Append("\t");
+                    sb.Append("Note");
+                    sb.AppendLine();
+                    //Data
+                    foreach (var buLevelGroupedHours in data)
                     {
-                        foreach (var groupByDate in personLevelGroupedHoursList.DayTotalHours)
+
+                        foreach (var personLevelGroupedHoursList in buLevelGroupedHours.PersonLevelGroupedHoursList)
                         {
-
-                            foreach (var dateLevel in groupByDate.DayTotalHoursList)
+                            foreach (var groupByDate in personLevelGroupedHoursList.DayTotalHours)
                             {
-                                sb.Append(personLevelGroupedHoursList.Person.PersonLastFirstName);
-                                sb.Append("\t");
 
-                                sb.Append(groupByDate.Date.ToString("MM/dd/yyyy"));
-                                sb.Append("\t");
-                                sb.Append(dateLevel.TimeType.Code);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.TimeType.Name);
-                                sb.Append("\t");
-                                sb.Append(buLevelGroupedHours.BusinessUnit.Code);
-                                sb.Append("\t");
-                                sb.Append(buLevelGroupedHours.BusinessUnit.Name);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.NonBillableHours);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.TotalHours);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.NoteForExport);
-                                sb.Append("\t");
-                                sb.AppendLine();
+                                foreach (var dateLevel in groupByDate.DayTotalHoursList)
+                                {
+                                    sb.Append(personLevelGroupedHoursList.Person.PersonLastFirstName);
+                                    sb.Append("\t");
+
+                                    sb.Append(groupByDate.Date.ToString("MM/dd/yyyy"));
+                                    sb.Append("\t");
+                                    sb.Append(dateLevel.TimeType.Code);
+                                    sb.Append("\t");
+                                    sb.Append(dateLevel.TimeType.Name);
+                                    sb.Append("\t");
+                                    sb.Append(buLevelGroupedHours.BusinessUnit.Code);
+                                    sb.Append("\t");
+                                    sb.Append(buLevelGroupedHours.BusinessUnit.Name);
+                                    sb.Append("\t");
+                                    sb.Append(dateLevel.NonBillableHours);
+                                    sb.Append("\t");
+                                    sb.Append(dateLevel.TotalHours);
+                                    sb.Append("\t");
+                                    sb.Append(dateLevel.NoteForExport);
+                                    sb.Append("\t");
+                                    sb.AppendLine();
+
+                                }
 
                             }
-
                         }
-                    }
 
+                    }
                 }
+                else
+                {
+                    sb.Append("There are no Time Entries towards this account.");
+                }
+                var filename = string.Format("{0}_{1}_{2}.xls", account.Code, account.Name, "_ByBusinessDevlopment");
+                filename = filename.Replace(' ', '_');
+                GridViewExportUtil.Export(filename, sb);
             }
-            else
-            {
-                sb.Append("There are no Time Entries towards this account.");
-            }
-            var filename = string.Format("{0}_{1}_{2}.xls", account.Code, account.Name, "_ByBusinessDevlopment");
-            filename = filename.Replace(' ', '_');
-            GridViewExportUtil.Export(filename, sb);
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
