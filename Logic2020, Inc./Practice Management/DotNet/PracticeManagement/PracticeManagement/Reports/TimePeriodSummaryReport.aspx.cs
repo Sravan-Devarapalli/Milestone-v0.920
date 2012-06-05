@@ -9,7 +9,7 @@ using PraticeManagement.Controls;
 
 namespace PraticeManagement.Reporting
 {
-    public partial class TimePeriodSummaryReport : PracticeManagementPageBase
+    public partial class TimePeriodSummaryReport : Page
     {
         #region Properties
 
@@ -192,39 +192,6 @@ namespace PraticeManagement.Reporting
         }
 
         #endregion
-        
-        protected override void Display()
-        {
-            string includeAll = Request.QueryString[Constants.QueryStringParameterNames.IncludeAllArgument];
-            bool includeAllBoolean = false;
-            bool.TryParse(includeAll, out includeAllBoolean);
-            chkIncludePersons.Checked = includeAllBoolean;
-
-            string rangeSelected = Request.QueryString[Constants.QueryStringParameterNames.RangeArgument];
-            if (!string.IsNullOrEmpty(rangeSelected))
-            {
-                if (ddlPeriod.Items.FindByValue(rangeSelected) != null)
-                {
-                    ddlPeriod.SelectedValue = rangeSelected;
-                }
-                if (ddlPeriod.SelectedValue == "0")
-                {
-                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
-                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
-                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
-                }
-            }
-            int? viewSelected = GetArgumentInt32(Constants.QueryStringParameterNames.ViewArgument);
-            if (viewSelected.HasValue)
-            {
-                if (ddlView.Items.FindByValue(viewSelected.Value.ToString()) != null)
-                {
-                    ddlView.SelectedValue = viewSelected.Value.ToString();
-                }
-            }
-        }
        
         protected void Page_Load(object sender, EventArgs e)
         {
