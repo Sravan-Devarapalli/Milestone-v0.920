@@ -4,6 +4,7 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Security;
 using PraticeManagement.Utils;
+using System.Web;
 
 namespace PraticeManagement.Controls.Projects
 {
@@ -89,6 +90,20 @@ namespace PraticeManagement.Controls.Projects
                 gvRevenueMilestones.Sort("StartDate", SortDirection.Ascending);
                 PreviousSortExpression = "StartDate";
             }
+        }
+
+        protected void imgbtnUpdate_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgEdit = sender as ImageButton;
+            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
+
+            var tbMilesonename = row.FindControl("tbMilestoneName") as TextBox;
+            var milestone = new Milestone{ Id = Convert.ToInt32(tbMilesonename.Attributes["MilestoneId"]),
+                                            Description = tbMilesonename.Text};
+
+            //Save Milestone Name.
+            ServiceCallers.Custom.Milestone(m => m.MilestoneUpdateShortDetails(milestone, HttpContext.Current.User.Identity.Name));
+            gvRevenueMilestones.EditIndex = -1;
         }
 
         protected string GetMilestoneRedirectUrl(object milestoneId)
