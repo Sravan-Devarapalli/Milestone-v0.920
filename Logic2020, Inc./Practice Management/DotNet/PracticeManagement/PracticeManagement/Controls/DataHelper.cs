@@ -2385,6 +2385,42 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillAttachemntCategoryList(ListControl control)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var categories = Enum.GetValues(typeof(ProjectAttachmentCategory));
+
+                    control.AppendDataBoundItems = true;
+                    control.Items.Clear();
+
+                    control.DataTextField = "Key";
+                    control.DataValueField = "Value";
+
+                    Dictionary<string, int> list = new Dictionary<string, int>();
+
+                    foreach (ProjectAttachmentCategory item in categories)
+                    {
+                        string key = GetDescription(item);
+
+                        int value = (int)item;
+
+                        list.Add(key, value);
+                    }
+
+                    control.DataSource = list;
+                    control.DataBind();
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         public static string GetDescription(Enum enumerator)
         {
             Type type = enumerator.GetType();
