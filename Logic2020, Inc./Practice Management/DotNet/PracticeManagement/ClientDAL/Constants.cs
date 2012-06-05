@@ -326,6 +326,7 @@
             public const string PersonsCountColumn = "PersonsCount";
 	        public const string IsUnpaidTimeType = "IsUnpaidTimeType";
             public const string IsUnpaidColoumn = "IsUnpaid";
+            public const string SowBudgetColumn = "SowBudget";
             
         }
 
@@ -607,7 +608,8 @@
             public const string AccountIdParam = "@AccountId";
             public const string BusinessUnitIdsParam = "@BusinessUnitIds";
             public static string ProjectBillingTypesParam = "@ProjectBillingTypes";
-	    public const string IncludeUnpaidParam = "@IncludeUnpaid";
+	        public const string IncludeUnpaidParam = "@IncludeUnpaid";
+            public const string SowBudgetParam = "@SowBudget";
         }
 
         #endregion
@@ -910,6 +912,7 @@
                 public const string GetTimeTypesByProjectIdProcedure = "dbo.GetProjectTimeTypes";
                 public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
                 public const string GetUnpaidTimeTypeProcedure = "dbo.GetUnpaidTimeType";
+                public const string IsUserIsProjectOwner = "dbo.IsUserIsProjectOwner";
                 
 
             }
