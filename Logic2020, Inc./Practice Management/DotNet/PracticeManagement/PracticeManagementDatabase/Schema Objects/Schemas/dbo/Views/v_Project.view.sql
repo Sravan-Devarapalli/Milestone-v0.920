@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 6-05-2008
--- Updated By: ThulasiRam.P
--- Updated Date: 2012-05-21
+-- Updated By:	Srinivas.M
+-- Updated Date: 2012-06-05
 -- Description:	List projects with their details
 -- =============================================
 CREATE VIEW dbo.v_Project
@@ -37,7 +37,8 @@ AS
 		   p.IsInternal,
 		   c.IsInternal AS 'ClientIsInternal',
 		   p.IsNoteRequired,
-		   p.ProjectOwnerId
+		   p.ProjectOwnerId,
+		   p.SowBudget
 	  FROM dbo.Project AS p
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
