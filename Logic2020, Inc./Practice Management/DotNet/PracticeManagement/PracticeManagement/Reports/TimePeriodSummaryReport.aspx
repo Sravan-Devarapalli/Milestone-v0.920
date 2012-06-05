@@ -259,12 +259,7 @@
                             <uc:Byproject ID="tpByProject" runat="server"></uc:Byproject>
                         </asp:Panel>
                     </asp:View>
-<%--                    <asp:View ID="vwWorkTypeReport" runat="server">
-                        <asp:Panel ID="pnlWorkTypeReport" runat="server" CssClass="tab-pane WholeWidth">
-                            <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
-                        </asp:Panel>
-                    </asp:View>
---%>                </asp:MultiView>
+                </asp:MultiView>
             </div>
         </ContentTemplate>
         <Triggers>
