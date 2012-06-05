@@ -254,6 +254,51 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyMessage;
+        
+        /// <summary>
+        /// hdnTempField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnTempField;
+        
+        /// <summary>
+        /// mpePersonDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpePersonDetailReport;
+        
+        /// <summary>
+        /// pnlPersonDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPersonDetailReport;
+        
+        /// <summary>
+        /// ucPersonDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Reports.ByPerson.GroupByProject ucPersonDetailReport;
+        
+        /// <summary>
+        /// btnCancelPersonDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelPersonDetailReport;
     }
 }
 
