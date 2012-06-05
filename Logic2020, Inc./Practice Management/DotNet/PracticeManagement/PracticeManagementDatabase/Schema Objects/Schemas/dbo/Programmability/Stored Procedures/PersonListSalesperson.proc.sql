@@ -59,7 +59,7 @@ BEGIN
 		LEFT JOIN ProjectManagers PM ON PM.ProjectId = P.ProjectId
 		LEFT JOIN Commission C ON C.ProjectId = P.ProjectId AND C.CommissionType = 1
 		JOIN v_Person SP ON SP.PersonId = C.PersonId
-		WHERE (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
+		WHERE (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId OR P.projectOwnerId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
 			AND (SP.PersonStatusId = 1 /* Active person only */
 					OR @IncludeInactive = 1)
 
@@ -106,6 +106,7 @@ BEGIN
 			INNER JOIN  dbo.Project AS proj  ON proj.ProjectId = vppc.ProjectId
 			INNER JOIN  dbo.ProjectManagers AS projManagers  ON proj.ProjectId = projManagers.ProjectId
 			WHERE projManagers.ProjectManagerId = @PersonId or (vppc.PersonId = @PersonId AND vppc.CommissionType = 1)
+					OR proj.projectOwnerId = @PersonId 
 		END
 
 			;WITH    Salespersons
