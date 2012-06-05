@@ -1,10 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 5-28-2008
--- Updated by:	Anatoliy Lokshin
--- Update date:	11-19-2008
--- Updated by:	Anton Koesnikov
--- Update date:	08-07-2009
+-- Updated by:	Sainath C
+-- Update date:	06-05-2012
 -- Description:	List milestones with their details
 -- =============================================
 CREATE VIEW dbo.v_Milestone
@@ -40,7 +38,8 @@ AS
 	         WHERE cal.Date BETWEEN m.StartDate AND ProjectedDeliveryDate AND cal.DayOff = 0) AS ProjectedDuration,
 	       p.BuyerName,
            p.GroupId,
-		   p.IsAllowedToShow
+		   p.IsAllowedToShow,
+		   p.ProjectOwnerId
 	  FROM dbo.Milestone AS m
 	       INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
 	       INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
