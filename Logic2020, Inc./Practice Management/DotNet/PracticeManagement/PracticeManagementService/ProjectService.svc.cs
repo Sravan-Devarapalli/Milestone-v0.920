@@ -1180,6 +1180,10 @@ namespace PracticeManagementService
             return ProjectDAL.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
         }
 
+        public void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
+        {
+            ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
+        }
 
         #endregion
     }
