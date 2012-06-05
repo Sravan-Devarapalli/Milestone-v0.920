@@ -8,6 +8,7 @@ using DataTransferObjects.Reports;
 using System.Web.Script.Serialization;
 using AjaxControlToolkit;
 using System.Text;
+using PraticeManagement.Reporting;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -15,12 +16,28 @@ namespace PraticeManagement.Controls.Reports
     {
         private PraticeManagement.Reporting.ProjectSummaryReport HostingPage
         {
-            get { return ((PraticeManagement.Reporting.ProjectSummaryReport)Page.Page); }
+            get
+            {
+                if (Page is ProjectSummaryReport)
+                {
+                    return ((PraticeManagement.Reporting.ProjectSummaryReport)Page);
+                }
+                return null;
+            }
         }
 
         private PraticeManagement.Controls.Reports.ProjectSummaryByResource HostingControl
         {
-            get { return (PraticeManagement.Controls.Reports.ProjectSummaryByResource)HostingPage.ByResourceControl; }
+            get
+            {
+                if (Page is ProjectSummaryReport)
+                {
+                    return
+                        (PraticeManagement.Controls.Reports.ProjectSummaryByResource)((PraticeManagement.Reporting.ProjectSummaryReport)Page).ByResourceControl;
+                }
+                return null;
+
+            }
         }
 
         private int sectionId;
@@ -35,16 +52,25 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
-                                                            ", " + hdnCollapsed.ClientID +
-                                                            ", " + hdncpeExtendersIds.ClientID +
-                                                            ");";
+            if (HostingPage != null)
+            {
+                btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
+                                                                ", " + hdnCollapsed.ClientID +
+                                                                ", " + hdncpeExtendersIds.ClientID +
+                                                                ");";
 
-            btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
+                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
+            }
+            else
+            {
+                tblExportSection.Visible = false;
+            }
         }
 
         public void DataBindByResourceDetail(PersonLevelGroupedHours[] reportData)
         {
+
+
             if (reportData.Length > 0)
             {
                 reportData = reportData.OrderBy(p => p.Person.PersonLastFirstName).ToArray();
@@ -58,7 +84,7 @@ namespace PraticeManagement.Controls.Reports
                 divEmptyMessage.Style["display"] = "";
                 repPersons.Visible = btnExpandOrCollapseAll.Visible = false;
             }
-            btnExportToPDF.Enabled = 
+            btnExportToPDF.Enabled =
             btnExportToExcel.Enabled = reportData.Count() > 0;
         }
 
@@ -153,7 +179,7 @@ namespace PraticeManagement.Controls.Reports
             PersonLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId,
                 HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null,
                 HostingControl.cblProjectRolesControl.SelectedItemsXmlFormat));
-            
+
             string filterApplied = "Filters applied to columns: ";
             bool isFilterApplied = false;
             if (!HostingControl.cblProjectRolesControl.AllItemsSelected)
