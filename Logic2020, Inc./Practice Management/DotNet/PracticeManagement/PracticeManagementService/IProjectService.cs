@@ -352,6 +352,9 @@ namespace PracticeManagementService
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
 
         [OperationContract]
+        bool IsUserIsProjectOwner(string user, int id);
+
+        [OperationContract]
         List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
