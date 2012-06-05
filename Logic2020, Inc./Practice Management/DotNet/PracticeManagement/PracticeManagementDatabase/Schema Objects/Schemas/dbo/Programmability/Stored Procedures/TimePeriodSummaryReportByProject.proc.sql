@@ -1,8 +1,8 @@
 ﻿-- =========================================================================
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
--- Updated by : Sainath.CH
--- Update Date: 04-27-2012
+-- Updated by : ThulasiRam.P
+-- Update Date: 06-05-2012
 -- Description:  Time Entries grouped by Project for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByProject]
@@ -65,6 +65,7 @@ AS
 			SELECT  C.ClientId ,
 					C.Name AS ClientName ,
 					C.Code AS ClientCode ,
+					PG.GroupId, 
 					PG.Name AS GroupName ,
 					PG.Code AS GroupCode ,
 					P.ProjectId ,
