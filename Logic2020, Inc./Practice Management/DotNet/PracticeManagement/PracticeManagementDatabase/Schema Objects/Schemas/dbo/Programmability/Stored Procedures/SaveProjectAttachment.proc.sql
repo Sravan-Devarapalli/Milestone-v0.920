@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[SaveProjectAttachment]
 (
-	@ProjectId			  INT, 
+	@ProjectId			  INT,
+	@CategoryId			  INT, 
     @FileName			  NVARCHAR(256),	
 	@AttachmentData	      VARBINARY(MAX),
 	@UploadedDate         DATETIME ,
@@ -15,13 +16,15 @@ AS
 
 	  INSERT INTO ProjectAttachment
 			   ([ProjectId]
+			   ,[CategoryId]
 			   ,[FileName]
 			   ,[AttachmentData]
 			   ,UploadedDate
 			   )     
 		 VALUES
 			   (@ProjectId
-			   ,@FileName			   
+			   ,@CategoryId
+			   ,@FileName
 			   ,@AttachmentData
 			   ,@UploadedDate)
       
