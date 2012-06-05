@@ -1,13 +1,12 @@
 ﻿-- =============================================
 -- Description:	Inserts a Project
--- Updated By: ThulasiRam.P
--- Updated Date: 2012-05-21
+-- Updated By:	Srinivas.M
+-- Updated Date: 2012-06-05
 -- =============================================
 CREATE PROCEDURE dbo.ProjectInsert
 (
 	@ProjectId          INT OUT,
 	@ClientId           INT,
-	@Discount           DECIMAL(18,2),
 	@Terms              INT,
 	@Name               NVARCHAR(100),
 	@PracticeId         INT,
@@ -15,7 +14,6 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@BuyerName          NVARCHAR(100),
 	@UserLogin          NVARCHAR(255),
 	@GroupId			INT,
-	@IsChargeable		BIT,
 	@ProjectManagerIdsList	NVARCHAR(MAX),
 	@DirectorId			INT = NULL,
 	@OpportunityId		INT = NULL,
@@ -23,7 +21,8 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@CanCreateCustomWorkTypes BIT,
 	@IsInternal			BIT,
 	@IsNoteRequired     BIT = 1,
-	@ProjectOwner       INT = NULL
+	@ProjectOwner       INT = NULL,
+	@SowBudget			DECIMAL(18,2)
 )
 AS
 BEGIN
@@ -42,10 +41,10 @@ BEGIN
 
 	-- Inserting Project
 	INSERT INTO dbo.Project
-	            (ClientId, Discount, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, IsChargeable,  DirectorId, OpportunityId,Description,CanCreateCustomWorkTypes,IsInternal,IsNoteRequired,ProjectOwnerId)
-	     VALUES (@ClientId, @Discount, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @IsChargeable, @DirectorId, @OpportunityId,@Description,@CanCreateCustomWorkTypes,@IsInternal,@IsNoteRequired,@ProjectOwner)
+	            (ClientId, Terms, Name, PracticeId,
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, DirectorId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectOwnerId, SowBudget)
+	     VALUES (@ClientId, @Terms, @Name, @PracticeId,
+	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget)
 	
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
