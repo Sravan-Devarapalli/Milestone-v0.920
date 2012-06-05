@@ -31,6 +31,15 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.HiddenField hdnCollapsed;
         
         /// <summary>
+        /// tblExportSection control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblExportSection;
+        
+        /// <summary>
         /// btnExpandOrCollapseAll control.
         /// </summary>
         /// <remarks>
