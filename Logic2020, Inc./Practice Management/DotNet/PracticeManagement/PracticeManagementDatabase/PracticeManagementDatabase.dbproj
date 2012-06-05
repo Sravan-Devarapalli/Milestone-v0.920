@@ -4157,6 +4157,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_ProjectAttachment_CategoryId.fkey.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\AttachOpportunityToProject.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
@@ -4221,4 +4224,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
