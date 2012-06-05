@@ -25,6 +25,13 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public ProjectAttachmentCategory Category
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public Byte[] AttachmentData
         {
             get;
