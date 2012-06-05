@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 11-27-2008
--- Updated By: ThulasiRam.P
--- Updated Date: 2012-05-21
+-- Updated By:	Srinivas.M
+-- Updated Date: 2012-06-05
 -- Description:	Logs the updating and deletring from the dbo.Project table.
 -- =============================================
 CREATE TRIGGER [dbo].[tr_Project_LogUpdateDelete]
@@ -42,6 +42,7 @@ BEGIN
 						ELSE 'No' END AS 'IsChargeable',
 				i.ProjectOwnerId,
 				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+				, i.SowBudget
 		  FROM inserted AS i
 		       INNER JOIN dbo.Client AS c ON i.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON i.PracticeId = p.PracticeId
@@ -78,6 +79,7 @@ BEGIN
 						ELSE 'No' END AS 'IsChargeable',
 						d.ProjectOwnerId,
 				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+				, d.SowBudget
 		  FROM deleted AS d
 		       INNER JOIN dbo.Client AS c ON d.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON d.PracticeId = p.PracticeId
@@ -160,6 +162,7 @@ BEGIN
 	    OR i.IsChargeable <> d.IsChargeable
 		OR i.ProjectOwnerId <> d.ProjectOwnerId
 	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
+	    OR ISNULL(i.SowBudget, 0) <> ISNULL(d.SowBudget, 0)
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
