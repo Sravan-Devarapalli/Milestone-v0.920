@@ -8,6 +8,7 @@ using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
 using System.Text;
 using System.Web.Security;
+using PraticeManagement.Controls.Reports.ByPerson;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -306,6 +307,16 @@ namespace PraticeManagement.Controls.Reports
             PopulateByResourceData(false);
         }
 
+        protected void lnkPerson_OnClick(object sender, EventArgs e) 
+        {
+            var lnkPerson = sender as LinkButton;
+            var personId = Convert.ToInt32(lnkPerson.Attributes["PersonId"]);
+            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
+            ucPersonDetailReport.DatabindRepepeaterPersonDetails(list,lnkPerson.Text);
+
+            mpePersonDetailReport.Show();
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             cblOffShore.OKButtonId = cblSeniorities.OKButtonId = cblPayTypes.OKButtonId = cblPersonStatusType.OKButtonId = cblDivision.OKButtonId = btnFilterOK.ClientID;
@@ -320,10 +331,16 @@ namespace PraticeManagement.Controls.Reports
                 ImgOffshoreFilter = e.Item.FindControl("imgOffShoreFilter") as HtmlImage;
                 ImgPersonStatusTypeFilter = e.Item.FindControl("imgPersonStatusTypeFilter") as HtmlImage;
                 ImgDivisionFilter = e.Item.FindControl("imgDivisionFilter") as HtmlImage;
+
+               
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                var lnkPerson = e.Item.FindControl("lnkPerson") as LinkButton;
+                var imgZoomIn = e.Item.FindControl("imgZoomIn") as HtmlImage;
 
+                lnkPerson.Attributes["onmouseover"] = string.Format("document.getElementById(\'{0}\').style.visibility='visible';", imgZoomIn.ClientID);
+                lnkPerson.Attributes["onmouseout"] = string.Format("document.getElementById(\'{0}\').style.visibility='hidden';", imgZoomIn.ClientID);
             }
         }
 
@@ -475,14 +492,6 @@ namespace PraticeManagement.Controls.Reports
             }
 
         }
-
-        protected string GetPersonDetailReportUrl(int? personId)
-        {
-            string personDetailReportUrl = string.Format(Constants.ApplicationPages.RedirectPersonDetailReportIdFormat, personId, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"));
-            string timePeriodReportUrl = string.Format(Constants.ApplicationPages.RedirectTimePeriodSummaryReportFormat, HostingPage.RangeSelected, HostingPage.StartDate.Value.ToString("yyyy/MM/dd"), HostingPage.EndDate.Value.ToString("yyyy/MM/dd"), HostingPage.SelectedView, HostingPage.IncludePersonWithNoTimeEntries);
-            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(personDetailReportUrl, timePeriodReportUrl);
-        }
-
 
     }
 }
