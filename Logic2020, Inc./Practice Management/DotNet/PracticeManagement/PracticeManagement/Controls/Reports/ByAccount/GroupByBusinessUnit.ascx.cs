@@ -8,18 +8,13 @@ using DataTransferObjects.Reports.ByAccount;
 using DataTransferObjects.Reports;
 using AjaxControlToolkit;
 using System.Web.Script.Serialization;
+using PraticeManagement.Reporting;
 
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
     public partial class GroupByBusinessUnit : System.Web.UI.UserControl
     {
-
-        private PraticeManagement.Reporting.AccountSummaryReport HostingPage
-        {
-            get { return ((PraticeManagement.Reporting.AccountSummaryReport)Page); }
-        }
-
 
         private List<string> CollapsiblePanelExtenderClientIds
         {
@@ -32,26 +27,33 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
         }
 
-        public void PopulateData(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public double PopulateData(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate)).ToList();
             DatabindbyBusinessUnitDetails(data);
 
+
             SetHeaderSectionValues(data);
+
+            return data.Sum(d => d.TotalHours);
         }
 
         private void SetHeaderSectionValues(List<BusinessUnitLevelGroupedHours> reportData)
         {
-            HostingPage.UpdateHeaderSection = true;
+            if (Page is AccountSummaryReport)
+            {
+                var hostingPage = (AccountSummaryReport)Page;
+                hostingPage.UpdateHeaderSection = true;
 
-            HostingPage.BusinessUnitsCount = reportData.Select(r => r.BusinessUnit.Id.Value).Distinct().Count();
-            HostingPage.ProjectsCount = reportData.Count > 0 ? 1 : 0;
-            HostingPage.PersonsCount = reportData.SelectMany(g => g.PersonLevelGroupedHoursList.Select(p =>  p.Person.Id.Value )).Distinct().Count();
+                hostingPage.BusinessUnitsCount = reportData.Select(r => r.BusinessUnit.Id.Value).Distinct().Count();
+                hostingPage.ProjectsCount = reportData.Count > 0 ? 1 : 0;
+                hostingPage.PersonsCount = reportData.SelectMany(g => g.PersonLevelGroupedHoursList.Select(p => p.Person.Id.Value)).Distinct().Count();
 
-            HostingPage.TotalProjectHours = reportData.Sum(g => g.TotalHours);
-            HostingPage.BDHours = HostingPage.TotalProjectHours;
-            HostingPage.BillableHours = 0d;
-            HostingPage.NonBillableHours = HostingPage.TotalProjectHours;
+                hostingPage.TotalProjectHours = reportData.Sum(g => g.TotalHours);
+                hostingPage.BDHours = hostingPage.TotalProjectHours;
+                hostingPage.BillableHours = 0d;
+                hostingPage.NonBillableHours = hostingPage.TotalProjectHours;
+            }
         }
 
         private void DatabindbyBusinessUnitDetails(List<BusinessUnitLevelGroupedHours> reportdata)
@@ -70,53 +72,46 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 repBusinessUnits.Visible = false;
             }
 
-            HostingPage.ByBusinessDevelopmentControl.ApplyAttributes(reportdata.Count);
+            if (Page is AccountSummaryReport)
+            {
+                var hostingPage = (AccountSummaryReport)Page;
+                hostingPage.ByBusinessDevelopmentControl.ApplyAttributes(reportdata.Count);
+            }
 
         }
 
         protected void repBusinessUnits_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Header)
+            if (Page is AccountSummaryReport)
             {
-                CollapsiblePanelExtenderClientIds = new List<string>();
+                var hostingPage = (AccountSummaryReport)Page;
 
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                var cpeBusinessUnit = e.Item.FindControl("cpeBusinessUnit") as CollapsiblePanelExtender;
-                CollapsiblePanelExtenderClientIds.Add(cpeBusinessUnit.BehaviorID);
+                if (e.Item.ItemType == ListItemType.Header)
+                {
+                    CollapsiblePanelExtenderClientIds = new List<string>();
 
-            }
-            else if (e.Item.ItemType == ListItemType.Footer)
-            {
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
-                HostingPage.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output);
+                }
+                else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+                {
+                    var cpeBusinessUnit = e.Item.FindControl("cpeBusinessUnit") as CollapsiblePanelExtender;
+                    CollapsiblePanelExtenderClientIds.Add(cpeBusinessUnit.BehaviorID);
+
+                }
+                else if (e.Item.ItemType == ListItemType.Footer)
+                {
+                    JavaScriptSerializer jss = new JavaScriptSerializer();
+                    var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                    hostingPage.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output);
+                }
             }
         }
 
         protected void repPersons_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-            }
-            else if (e.Item.ItemType == ListItemType.Footer)
-            {
-            }
         }
 
         protected void repDate_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-            }
         }
 
         protected string GetDoubleFormat(double value)
