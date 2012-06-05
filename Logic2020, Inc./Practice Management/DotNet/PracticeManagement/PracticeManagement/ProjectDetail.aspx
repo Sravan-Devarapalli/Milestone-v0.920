@@ -69,11 +69,34 @@
                 args.IsValid = false; // Not valid file type
             }
         }
+        function cvAttachment_ClientValidationFunction(obj, args) {
+            var fuControl = document.getElementById('<%= fuProjectAttachment.ClientID %>');
+            var fileUploadPath = fuControl.value;
+            if (fileUploadPath != null && fileUploadPath != undefined) {
+                args.IsValid = true; // Valid file type
+            }
+            else {
+                args.IsValid = false; // Not valid file type
+            }
+        }
+
+        function cvAttachmentCategory_ClientValidationFunction(obj, args) {
+            var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
+            var categoryValue = ddlAttachmentCategory.value;
+            if (categoryValue != "0") {
+                args.IsValid = true; // Valid 
+            }
+            else {
+                args.IsValid = false; // Not valid 
+            }
+        }
 
         function EnableUploadButton() {
             var cvProjectAttachment = document.getElementById('<%= cvProjectAttachment.ClientID %>');
+            var cvAttachmentCategory = document.getElementById('<%= cvAttachmentCategory.ClientID %>');
+            var cvAttachment = document.getElementById('<%= cvAttachment.ClientID %>');
             var UploadButton = document.getElementById('<%= btnUpload.ClientID %>');
-            if (cvProjectAttachment.isvalid) {
+            if (cvProjectAttachment.isvalid && cvAttachmentCategory.isvalid && cvAttachment.isvalid) {
                 UploadButton.disabled = "";
             }
             else {
@@ -344,17 +367,17 @@
                                         CancelControlID="btncloseEditProjectName" BehaviorID="mpeEditProjectName" BackgroundCssClass="modalBackground"
                                         PopupControlID="pnlProjectName" DropShadow="false" />
                                 </td>
-                                <td style="width: 25%; text-align: right;">
+                                <td style="width: 27%; text-align: right;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="font-weight: bold; font-size: 15px; width: 70%;">
+                                            <td style="font-weight: bold; font-size: 15px; width: 60%;">
                                                 Project Status
                                             </td>
                                             <td>
                                                 <div id="divStatus" runat="server">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td style="width: 37%;">
                                                 <asp:DropDownList ID="ddlProjectStatus" runat="server" onchange="setDirty();" AutoPostBack="True"
                                                     Width="100" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
                                                 </asp:DropDownList>
@@ -372,7 +395,7 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="width: 1%;">
+                                <td style="width: 3%;">
                                 </td>
                             </tr>
                         </table>
@@ -399,7 +422,7 @@
                                             </td>
                                             <td style="width: 65%;">
                                                 <asp:DropDownList ID="ddlClientName" runat="server" OnSelectedIndexChanged="ddlClientName_SelectedIndexChanged"
-                                                    CssClass="WholeWidth" AutoPostBack="True" onchange="setDirty();">
+                                                    CssClass="Width92Per" AutoPostBack="True" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td style="width: 5%;">
@@ -424,7 +447,7 @@
                                             </td>
                                             <td style="width: 65%; white-space: nowrap;">
                                                 &nbsp;&nbsp;
-                                                <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="WholeWidth"
+                                                <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="Width92Per"
                                                     Enabled="false" onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
@@ -464,7 +487,7 @@
                                                 Business Unit
                                             </td>
                                             <td style="width: 65%;">
-                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="WholeWidth"
+                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="Width92Per"
                                                     OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true">
                                                 </asp:DropDownList>
                                             </td>
@@ -487,7 +510,7 @@
                                             </td>
                                             <td style="width: 65%; white-space: nowrap;">
                                                 &nbsp;&nbsp;
-                                                <asp:TextBox ID="txtBuyerName" runat="server" onchange="setDirty();" CssClass="WholeWidth"
+                                                <asp:TextBox ID="txtBuyerName" runat="server" onchange="setDirty();" CssClass="Width92Per"
                                                     MaxLength="100"></asp:TextBox>
                                             </td>
                                             <td style="width: 5%;">
@@ -537,7 +560,7 @@
                                                 Practice Area
                                             </td>
                                             <td style="width: 65%;">
-                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="WholeWidth"
+                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="Width92Per"
                                                     AutoPostBack="True" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
                                                 </asp:DropDownList>
                                             </td>
@@ -559,7 +582,7 @@
                                             </td>
                                             <td style="width: 65%; white-space: nowrap;">
                                                 $
-                                                <asp:TextBox ID="txtSowBudget" runat="server" onchange="setDirty();" CssClass="WholeWidth"
+                                                <asp:TextBox ID="txtSowBudget" runat="server" onchange="setDirty();" CssClass="Width92Per"
                                                     MaxLength="100"></asp:TextBox>
                                             </td>
                                             <td style="width: 5%;">
@@ -576,15 +599,15 @@
                                 <td style="width: 32%; padding: 3px 0px 3px 0px;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="width: 30%;">
+                                            <td style="width: 30%; vertical-align:top;">
                                                 Project Manager(s)
                                             </td>
-                                            <td style="width: 65%;">
-                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="WholeWidth"
+                                            <td style="width: 65%;" class="ScrollingDropDownWholeWidth">
+                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="Width92Per"
                                                     AllSelectedReturnType="AllItems" Height="240px" onclick="scrollingDropdown_onclick('cblProjectManagers','Project Manager');"
                                                     DropDownListType="Manager" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
-                                                    UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
+                                                    UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="220px">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
@@ -742,22 +765,33 @@
                         <asp:MultiView ID="mvProjectDetailTab" runat="server" ActiveViewIndex="0">
                             <asp:View ID="vwMilestones" runat="server">
                                 <asp:Panel ID="pnlRevenueMilestones" runat="server" CssClass="tab-pane">
-                                    <asp:ShadowedTextButton ID="btnAddMilistone" runat="server" CausesValidation="false"
-                                        OnClick="btnAddMilistone_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;"
-                                        Text="Add Milestone" />
+                                    <div style="padding-bottom:10px;">
+                                        <asp:ShadowedTextButton ID="btnAddMilistone" runat="server" CausesValidation="false"
+                                            OnClick="btnAddMilistone_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;"
+                                            Text="Add Milestone" />
+                                    </div>
                                     <uc:ProjectMilestonesFinancials ID="milestones" runat="server" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vmAttachments" runat="server">
                                 <asp:Panel ID="pnlAttachments" runat="server" CssClass="tab-pane">
-                                    <asp:Button ID="btnAttachSOW" runat="server" Text="Attach SOW" ToolTip="Attach SOW"
-                                        UseSubmitBehavior="false" OnClientClick="return false;" />
-                                    <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="btnAttachSOW"
+                                    <div style="padding-bottom:10px;">
+                                        <asp:ShadowedTextButton ID="stbAttachSOW" runat="server" CausesValidation="false"
+                                            CssClass="add-btn" OnClientClick="return false;" Text="Add Attachment" />
+                                    </div>
+                                    <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="stbAttachSOW"
                                         BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     <asp:GridView ID="gvProjectAttachments" runat="server" AutoGenerateColumns="false"
-                                        EmptyDataText="" DataKeyNames="AttachmentId" GridLines="None" ShowHeader="false">
+                                        BackColor="White" CssClass="CompPerfTable" Width="100%" HorizontalAlign="Center"
+                                        EmptyDataText="No Attachments have been attached for this project.." DataKeyNames="AttachmentId"
+                                        GridLines="None">
                                         <Columns>
                                             <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Attachment Name
+                                                    </div>
+                                                </HeaderTemplate>
                                                 <ItemTemplate>
                                                     <% if (Project != null && Project.Id.HasValue)
                                                        { %>
@@ -771,23 +805,53 @@
                                                         Text='<%# GetWrappedText((string)Eval("AttachmentFileName")) %>' OnClick="lnkProjectAttachment_OnClick" />
                                                     <% } %>
                                                 </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
                                             </asp:TemplateField>
                                             <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Category
+                                                    </div>
+                                                </HeaderTemplate>
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblAttachmentSize" runat="server" Text='<%# string.Format("({0}Kb)", (int)Eval("AttachmentSize")/1000)  %>'></asp:Label>
+                                                    <asp:Label ID="lblAttachmentCategory" runat="server" Text='<%# Eval("Category")%>'></asp:Label>
                                                 </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
                                             </asp:TemplateField>
                                             <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Size
+                                                    </div>
+                                                </HeaderTemplate>
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format(" - Uploaded: {0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("MM/dd/yyyy")) : string.Empty %>'></asp:Label>
+                                                    <asp:Label ID="lblAttachmentSize" runat="server" Text='<%# string.Format("{0}Kb", (int)Eval("AttachmentSize")/1024)  %>'></asp:Label>
                                                 </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
                                             </asp:TemplateField>
                                             <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Last Modified Date
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format("{0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("MM/dd/yyyy")) : string.Empty %>'></asp:Label>
+                                                </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
+                                            </asp:TemplateField>
+                                            <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        &nbsp;
+                                                    </div>
+                                                </HeaderTemplate>
                                                 <ItemTemplate>
                                                     <asp:ImageButton ID="imgbtnDeleteAttachment1" OnClick="imgbtnDeleteAttachment_Click"
                                                         AttachmentId='<%# Eval("AttachmentId") %>' OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
                                                         Visible="true" runat="server" ImageUrl="~/Images/trash-icon-Large.png" ToolTip="Delete Attachment" />
                                                 </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
                                             </asp:TemplateField>
                                         </Columns>
                                     </asp:GridView>
@@ -1010,9 +1074,32 @@
                         </td>
                     </tr>
                     <tr>
+                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px; padding-bottom: 10px;">
+                            <table>
+                                <tr>
+                                    <td>
+                                        Category :
+                                    </td>
+                                    <td>
+                                        <asp:DropDownList ID="ddlAttachmentCategory" runat="server" onchange="EnableUploadButton();">
+                                        </asp:DropDownList>
+                                        <asp:CustomValidator ID="cvAttachmentCategory" runat="server" ControlToValidate="ddlAttachmentCategory"
+                                            EnableClientScript="true" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvAttachmentCategory_OnServerValidate"
+                                            ValidationGroup="ProjectAttachment" Text="*" ToolTip="Category is required."
+                                            ClientValidationFunction="cvAttachmentCategory_ClientValidationFunction" ErrorMessage="Category is required."></asp:CustomValidator>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
                             <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" BackColor="White"
                                 runat="server" Width="435px" Size="68" />
+                            <asp:CustomValidator ID="cvAttachment" runat="server" ControlToValidate="fuProjectAttachment"
+                                EnableClientScript="true" ClientValidationFunction="cvAttachment_ClientValidationFunction"
+                                SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvAttachment_OnServerValidate"
+                                ValidationGroup="ProjectAttachment" Text="*" ToolTip="File is Required." ErrorMessage="File is Required."></asp:CustomValidator>
                             <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
                                 EnableClientScript="true" ClientValidationFunction="cvProjectAttachment_ClientValidationFunction"
                                 SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvProjectAttachment_OnServerValidate"
