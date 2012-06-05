@@ -612,6 +612,7 @@
             public const string IncludeUnpaidParam = "@IncludeUnpaid";
             public const string SowBudgetParam = "@SowBudget";
             public const string CategoryIdParam = "@CategoryId";
+            public const string LinkParam = "@Link";
         }
 
         #endregion
@@ -915,6 +916,7 @@
                 public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
                 public const string GetUnpaidTimeTypeProcedure = "dbo.GetUnpaidTimeType";
                 public const string IsUserIsProjectOwner = "dbo.IsUserIsProjectOwner";
+                public const string AttachOpportunityToProject = "dbo.AttachOpportunityToProject";
 
             }
             #endregion
