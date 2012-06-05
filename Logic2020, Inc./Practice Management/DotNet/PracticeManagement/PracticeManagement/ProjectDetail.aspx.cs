@@ -37,6 +37,7 @@ namespace PraticeManagement
         public const string AllTimeTypesKey = "AllTimeTypesKey";
         public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
+        public const string OpportunityLinkedTextFormat = "This project is linked to opportunity {0}.";
 
 
         #endregion
@@ -147,6 +148,23 @@ namespace PraticeManagement
             }
         }
 
+        private bool? IsUserIsProjectOwner
+        {
+            get
+            {
+                if (ProjectId.HasValue)
+                {
+                    if (ViewState["IsProjectOwner"] == null)
+                    {
+                        ViewState["IsProjectOwner"] = DataHelper.IsUserIsProjectOwner(User.Identity.Name, ProjectId.Value);
+                    }
+                    return (bool)ViewState["IsProjectOwner"];
+                }
+
+                return null;
+            }
+        }
+
         private int tblProjectDetailTabViewSwitch_ActiveViewIndex
         {
             get
@@ -163,6 +181,28 @@ namespace PraticeManagement
             }
         }
 
+        private bool HasAttachments
+        {
+            get
+            {
+                if (Project != null)
+                {
+                    if (Project.Attachments != null && Project.Attachments.Count > 0)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (AttachmentsForNewProject != null && AttachmentsForNewProject.Count > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -176,9 +216,9 @@ namespace PraticeManagement
         {
             args.IsValid = true;
             int ownerId;
-            if (int.TryParse(ddlProjectOwner.SelectedValue,out ownerId))
+            if (int.TryParse(ddlProjectOwner.SelectedValue, out ownerId))
             {
-                Person owner = ServiceCallers.Custom.Person(p=>p.GetPersonDetailsShort(ownerId));
+                Person owner = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(ownerId));
                 PersonStatusType status = PersonStatus.ToStatusType(owner.Status.Id);
                 if (status == PersonStatusType.Terminated || status == PersonStatusType.Inactive)
                 {
@@ -203,6 +243,14 @@ namespace PraticeManagement
                         args.IsValid = false;
                     }
                 }
+            }
+        }
+
+        protected void cvProjectName_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (string.IsNullOrEmpty(lblProjectName.Text.Trim()))
+            {
+                args.IsValid = false;
             }
         }
 
@@ -234,6 +282,8 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
+                ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && !IsUserIsProjectOwner.Value));
+
                 txtProjectName.Focus();
 
                 int clientId = -1;
@@ -248,7 +298,6 @@ namespace PraticeManagement
                 {
                     TableCellHistoryg.Visible = true;
                     cellProjectTools.Visible = true;
-                    CellProjectTimeTypes.Visible = true;
                 }
 
                 int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, AttachmentFileSize));
@@ -273,7 +322,8 @@ namespace PraticeManagement
             }
             if (ddlProjectGroup.Items.Count > 0)
                 ddlProjectGroup.SortByText();
-
+            AddStatusIcon();
+            PopulateOpportunityLink();
         }
 
         /// <summary>
@@ -313,7 +363,9 @@ namespace PraticeManagement
                 userIsProjectManagerOfTheProject = Project.ProjectManagers.Any(p => p.Id == DataHelper.CurrentPerson.Id);
             }
 
-            txtProjectName.ReadOnly = txtClientDiscount.ReadOnly = isReadOnly;
+            txtProjectName.ReadOnly =
+                //txtClientDiscount.ReadOnly = 
+                isReadOnly;
             txtSalesCommission.ReadOnly = !userIsAdministrator;
 
             ddlClientName.Enabled = ddlPractice.Enabled = !isReadOnly;
@@ -376,7 +428,7 @@ namespace PraticeManagement
 
             if (userIsProjectLead && !(userIsAdministrator || userIsSalesPerson || userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsSeniorLeadership || userIsHR || userIsRecruiter))
             {
-                lbOpportunity.Enabled = false;//as per #2941.
+                imgLink.Enabled = imgNavigateToOpp.Enabled = imgUnlink.Enabled = false;//as per #2941.
                 cellProjectTools.Visible = false;
             }
 
@@ -443,6 +495,21 @@ namespace PraticeManagement
             }
 
             gvProjectAttachments.DataBind();
+
+        }
+
+
+        protected void btnUpdateProjectName_OnClick(object sender, EventArgs e)
+        {
+            Page.Validate("ProjectName");
+            if (Page.IsValid)
+            {
+                lblProjectName.Text = txtProjectName.Text;
+            }
+            else
+            {
+                mpeEditProjectName.Show();
+            }
 
         }
 
@@ -597,8 +664,7 @@ namespace PraticeManagement
 
         private void SetDefaultsToClientDependancyControls()
         {
-            chbIsChargeable.Checked = false;
-            txtClientDiscount.Text = string.Empty;
+            //txtClientDiscount.Text = string.Empty;
             ddlSalesperson.SelectedIndex = 0;
             ddlDirector.SelectedIndex = 0;
 
@@ -626,10 +692,9 @@ namespace PraticeManagement
 
                 if (client != null)
                 {
-                    txtClientDiscount.Text =
-                        client.DefaultDiscount != 0 ? client.DefaultDiscount.ToString() : string.Empty;
+                    //txtClientDiscount.Text = client.DefaultDiscount != 0 ? client.DefaultDiscount.ToString() : string.Empty;
 
-                    chbIsChargeable.Checked = client.IsChargeable;
+                    //chbIsChargeable.Checked = client.IsChargeable;
 
                     if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName)
                         && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
@@ -646,10 +711,10 @@ namespace PraticeManagement
                     }
 
                     //  If it's a new project, change chargeability when client is changed
-                    if (!ProjectId.HasValue)
-                    {
-                        chbIsChargeable.Checked = client.IsChargeable;
-                    }
+                    //if (!ProjectId.HasValue)
+                    //{
+                    //    chbIsChargeable.Checked = client.IsChargeable;
+                    //}
 
                     if (client.DefaultDirectorId.HasValue)
                     {
@@ -713,6 +778,46 @@ namespace PraticeManagement
         {
             // Only set an input focus
             ((Control)sender).Focus();
+        }
+
+        private void AddStatusIcon()
+        {
+            int statusId = 0;
+            string statusCssClass = "DisplayNone";
+            string iconTooltip = ddlProjectStatus.SelectedItem.Text;
+            if (int.TryParse(ddlProjectStatus.SelectedValue, out statusId))
+            {
+                if (statusId == 3 && !HasAttachments)
+                {
+                    statusCssClass = "ActiveProjectWithoutSOW";
+                    iconTooltip = "Active without SOW";
+                }
+                else
+                {
+                    statusCssClass = ProjectHelper.GetIndicatorClassByStatusId(statusId);
+                }
+            }
+            divStatus.Attributes.Add("class", statusCssClass);
+            divStatus.Attributes.Add("title", iconTooltip);
+        }
+
+        private void PopulateOpportunityLink()
+        {
+            if (Project != null && Project.Id.HasValue)
+            {
+                imgLink.Visible = true;
+                imgNavigateToOpp.Visible =  imgUnlink.Visible =  lbOpportunity.Visible = Project.OpportunityId.HasValue;
+
+                if (Project.OpportunityId.HasValue)
+                {
+                    lbOpportunity.Text = string.Format(OpportunityLinkedTextFormat, Project.OpportunityNumber);
+                    imgNavigateToOpp.Attributes.Add("NavigateUrl", String.Format( Constants.ApplicationPages.DetailRedirectFormat, "OpportunityDetail.aspx", Project.OpportunityId.Value));//PraticeManagement.Utils.Urls.OpportunityDetailsLink(Project.OpportunityId.Value));
+                }
+            }
+        }
+
+        protected void imgUnlink_Click(object sender, ImageClickEventArgs e)
+        {
         }
 
         /// <summary>
@@ -895,20 +1000,14 @@ namespace PraticeManagement
         private bool ValidateProjectTimeTypesTab()
         {
             bool isValid = true;
-            if (CellProjectTimeTypes.Visible)
+            if (ucProjectTimeTypes.ProjectTimetypes == null)
             {
-                int activeIndex = mvProjectDetailTab.ActiveViewIndex;
-                mvProjectDetailTab.ActiveViewIndex = 2;
-                if (ucProjectTimeTypes.ProjectTimetypes == null)
-                {
-                    ucProjectTimeTypes.PopulateControls();
-                }
-                Page.Validate(vsumProject.ValidationGroup);
-                if (!Page.IsValid)
-                {
-                    isValid = false;
-                }
-                mvProjectDetailTab.ActiveViewIndex = activeIndex;
+                ucProjectTimeTypes.PopulateControls();
+            }
+            Page.Validate(vsumProject.ValidationGroup);
+            if (!Page.IsValid)
+            {
+                isValid = false;
             }
             return isValid;
         }
@@ -925,7 +1024,6 @@ namespace PraticeManagement
                 {
                     this.ProjectId = id;
                     projectExpenses.BindExpenses();
-                    CellProjectTimeTypes.Visible = true;
                 }
                 result = true;
             }
@@ -1027,7 +1125,7 @@ namespace PraticeManagement
 
         protected override void Display()
         {
-            DataHelper.FillPracticeWithOwnerListOnlyActive(ddlPractice, string.Empty);
+            DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
             DataHelper.FillClientListForProject(ddlClientName, "-- Select Account --", ProjectId);
             DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Sales person --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
@@ -1091,46 +1189,31 @@ namespace PraticeManagement
 
         private void PopulateControls(Project project)
         {
+            lblProjectNumber.Text = project.ProjectNumber;
+            lblProjectName.Text = project.Name;
+            lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
 
             txtProjectName.Text = project.Name;
             txtDescription.Text = project.Description;
             lblProjectNumber.Text = project.ProjectNumber;
-            chbIsChargeable.Checked = project.IsChargeable;
-            chbNoteRequired.Checked = project.IsNoteRequired;
+            ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
+            if (project.SowBudget.HasValue)
+                txtSowBudget.Text = project.SowBudget.Value.ToString();
 
             PopulateClientDropDown(project);
             FillAndSelectProjectGroupList(project);
             PopulatePracticeDropDown(project);
             SelectProjectStatus(project);
-            ShowStartAndEndDate(project);
             PopulateProjectManagerDropDown(project);
 
             financials.Project = project;
 
-            txtClientDiscount.Text =
-                project.Discount != 0 ? project.Discount.ToString() : string.Empty;
+            //txtClientDiscount.Text = project.Discount != 0 ? project.Discount.ToString() : string.Empty;
             txtBuyerName.Text = project.BuyerName;
 
             DisplaySalesCommissions(project);
 
             DisplayPracticeManagementCommissions(project);
-
-            // Billing info
-            billingInfo.Info =
-                ServiceCallers.Invoke<ProjectServiceClient, BillingInfo>
-                    (client => client.GetProjectBillingInfo(project.Id.Value));
-
-            if (project.OpportunityId.HasValue)
-            {
-                lbOpportunity.Visible = true;
-                lbOpportunity.NavigateUrl =
-                    Generic.GetTargetUrlWithReturn(
-                        string.Format(
-                            Constants.ApplicationPages.DetailRedirectFormat,
-                            Constants.ApplicationPages.OpportunityDetail,
-                            project.OpportunityId.Value),
-                        Request.Url.AbsoluteUri);
-            }
 
             if (project.Director != null && project.Director.Id.HasValue)
             {
@@ -1266,24 +1349,13 @@ namespace PraticeManagement
             }
         }
 
-        private void ShowStartAndEndDate(Project project)
-        {
-            if (project.StartDate.HasValue)
-            {
-                lblProjectStart.Text = project.StartDate.Value.ToString("MM/dd/yyyy");
-            }
-            if (project.EndDate.HasValue)
-            {
-                lblProjectEnd.Text = project.EndDate.Value.ToString("MM/dd/yyyy");
-            }
-        }
-
         private void SelectProjectStatus(Project project)
         {
             ddlProjectStatus.SelectedIndex =
                 ddlProjectStatus.Items.IndexOf(
                 ddlProjectStatus.Items.FindByValue(
                 project.Status != null ? project.Status.Id.ToString() : string.Empty));
+
         }
 
         private void PopulatePracticeDropDown(Project project)
@@ -1297,7 +1369,7 @@ namespace PraticeManagement
             // For situation, when disabled practice is assigned to project.
             if (selectedPractice == null)
             {
-                selectedPractice = new ListItem(string.Format("{0} ({1})", project.Practice.Name, project.Practice.PracticeOwnerName), project.Practice.Id.ToString());
+                selectedPractice = new ListItem(project.Practice.Name, project.Practice.Id.ToString());
                 ddlPractice.Items.Add(selectedPractice);
                 ddlPractice.SortByText();
             }
@@ -1352,14 +1424,13 @@ namespace PraticeManagement
         {
             project.Id = ProjectId;
             project.Name = txtProjectName.Text;
-            project.Discount =
-                !string.IsNullOrEmpty(txtClientDiscount.Text.Trim()) ? decimal.Parse(txtClientDiscount.Text) : 0;
+            //project.Discount = !string.IsNullOrEmpty(txtClientDiscount.Text.Trim()) ? decimal.Parse(txtClientDiscount.Text) : 0;
             project.BuyerName = txtBuyerName.Text;
             project.Client = new Client { Id = int.Parse(ddlClientName.SelectedValue) };
             project.Practice = new Practice { Id = int.Parse(ddlPractice.SelectedValue) };
             project.Status = new ProjectStatus { Id = int.Parse(ddlProjectStatus.SelectedValue) };
             project.ProjectManagerIdsList = cblProjectManagers.SelectedItems;
-            project.IsChargeable = chbIsChargeable.Checked;
+            //project.IsChargeable = chbIsChargeable.Checked;
 
             project.IsInternal = false; //AS per Matt Reilly MattR@logic2020.com  
             //date: Sat, Mar 17, 2012 at 1:53 AM
@@ -1370,13 +1441,13 @@ namespace PraticeManagement
             PopulateProjectGroup(project);
             PopulateSalesCommission(project);
             PopulatePracticeManagementCommission(project);
-            project.BillingInfo = billingInfo.Info;
             project.Description = txtDescription.Text;
+            project.SowBudget = Convert.ToDecimal(txtSowBudget.Text);
 
             project.ProjectOwner = new Person() { Id = Convert.ToInt32(ddlProjectOwner.SelectedValue) };
 
 
-            project.IsNoteRequired = chbNoteRequired.Checked;
+            project.IsNoteRequired = ddlNotes.SelectedValue == "1";
 
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
@@ -1455,30 +1526,19 @@ namespace PraticeManagement
             rlstManagementCommission.Focus();
         }
 
-        protected void nOpportunity_OnNoteAdded(object source, EventArgs args)
-        {
-            activityLog.Update();
-        }
-
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
             SelectView((Control)sender, viewIndex, false);
             tblProjectDetailTabViewSwitch_ActiveViewIndex = viewIndex;
-            if (viewIndex == 6) //History
+            if (viewIndex == 5) //History
             {
                 activityLog.Update();
             }
-            else if (viewIndex == 2)
-            {
-                ucProjectTimeTypes.PopulateControls();
-            }
-            else if (viewIndex == 0 && ProjectId.HasValue)
+            else if (viewIndex == 2 && ProjectId.HasValue)
             {
                 financials.Project = GetCurrentProject(ProjectId.Value);
             }
-
-
         }
 
         private void SelectView(Control sender, int viewIndex, bool selectOnly)
