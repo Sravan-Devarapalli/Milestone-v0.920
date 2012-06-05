@@ -55,7 +55,6 @@ BEGIN
 
 	-- Create a project
 	EXEC dbo.ProjectInsert @ClientId = @ClientId,
-		@Discount = @Discount,
 		@Terms = @Terms,
 		@Name = @Name,
 		@PracticeId = @PracticeId,
@@ -63,7 +62,6 @@ BEGIN
 		@BuyerName = @BuyerName,
 		@UserLogin = @UserLogin,
 		@GroupId = @GroupId,
-		@IsChargeable = @IsChargeable,
 		@ProjectManagerIdsList = @ProjectManagerId,
 	    @ProjectId = @ProjectId OUTPUT,
 		@OpportunityId = @OpportunityId,
