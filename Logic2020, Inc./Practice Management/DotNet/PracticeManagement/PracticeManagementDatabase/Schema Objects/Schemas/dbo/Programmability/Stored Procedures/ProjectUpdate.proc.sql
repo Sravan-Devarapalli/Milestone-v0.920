@@ -1,12 +1,11 @@
 ﻿---------------------------
--- Updated By: ThulasiRam.P
--- Updated Date: 2012-05-21
+-- Updated By:	Srinivas.M
+-- Updated Date: 2012-06-05
 ---------------------------
 CREATE PROCEDURE dbo.ProjectUpdate
 (
 	@ProjectId          INT,
 	@ClientId           INT,
-	@Discount           DECIMAL(18,2),
 	@Terms              INT,
 	@Name               NVARCHAR(100),
 	@PracticeId         INT,
@@ -14,14 +13,14 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@BuyerName          NVARCHAR(100),
 	@UserLogin          NVARCHAR(255),
 	@GroupId			INT,
-	@IsChargeable		BIT,
 	@DirectorId			INT,
 	@ProjectManagerIdsList	NVARCHAR(MAX),
 	@Description           NVARCHAR(MAX),
 	@CanCreateCustomWorkTypes BIT,
 	@IsInternal			BIT,
 	@IsNoteRequired     BIT = 1  ,
-	@ProjectOwner       INT 
+	@ProjectOwner       INT,
+	@SowBudget			DECIMAL(18,2)
 )
 AS
 BEGIN
@@ -94,20 +93,19 @@ BEGIN
 
 		UPDATE dbo.Project
 			SET ClientId		= @ClientId,
-				Discount		= @Discount,
 				Terms			= @Terms,
 				NAME			= @Name,
 				PracticeId		= @PracticeId,
 				ProjectStatusId	= @ProjectStatusId,
 				BuyerName		= @BuyerName,
 				GroupId			= @GroupId,
-				IsChargeable	= @IsChargeable,
 				DirectorId		= @DirectorId,
 				Description		=@Description,
 				CanCreateCustomWorkTypes = @CanCreateCustomWorkTypes,
 				IsInternal		=@IsInternal,
 				IsNoteRequired  = @IsNoteRequired,
-				ProjectOwnerId  = @ProjectOwner
+				ProjectOwnerId  = @ProjectOwner,
+				SowBudget		= @SowBudget
 			WHERE ProjectId     = @ProjectId
 
 		DECLARE @OpportunityId INT = NULL
