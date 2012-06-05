@@ -523,6 +523,22 @@
     <None Include="Service References\CalendarService\CalendarService7.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
+    <None Include="Service References\MilestoneService\MilestoneService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService9.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ProjectGroupService\ProjectGroupService10.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -658,8 +674,9 @@
     <Content Include="Scripts\ExpandOrCollapse.js" />
     <Content Include="Scripts\FilterTable.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\TimeTypeService\TimeTypeService14.disco" />
+    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -907,22 +924,6 @@
     <None Include="Service References\MilestonePersonService\MilestonePersonService8.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
-    <None Include="Service References\MilestoneService\MilestoneService12.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MilestoneService\MilestoneService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MilestoneService\MilestoneService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MilestoneService\MilestoneService6.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\MilestoneService\MilestoneService7.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\OpportunityService\OpportunityService1.wsdl" />
     <None Include="Service References\OpportunityService\OpportunityService10.xsd">
       <SubType>Designer</SubType>
@@ -1140,7 +1141,6 @@
     <None Include="Service References\TimescaleService\TimescaleService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService12.disco" />
     <None Include="Service References\OverheadService\OverheadService1.disco" />
-    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\PersonSkillService\configuration91.svcinfo" />
     <None Include="Service References\PersonSkillService\configuration.svcinfo" />
     <None Include="Service References\PersonSkillService\Reference.svcmap">
