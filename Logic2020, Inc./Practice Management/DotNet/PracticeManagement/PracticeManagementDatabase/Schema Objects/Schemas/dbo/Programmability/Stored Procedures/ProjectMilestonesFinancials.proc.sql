@@ -1,6 +1,8 @@
 ﻿-- =============================================
 -- Author:		Nikita Goncharenko
 -- Create date: 2010-06-11
+-- Updated By:	Srinivas.M
+-- Updated Date: 2012-06-05
 -- Description:	Project milestones financials
 -- =============================================
 CREATE PROCEDURE dbo.ProjectMilestonesFinancials 
@@ -74,7 +76,6 @@ BEGIN
 		m.IsChargeable,
 		m.StartDate,
 		m.ProjectedDeliveryDate,
-		m.ConsultantsCanAdjust,
 		0 as 'ExpectedHours',
 		fin.FinancialDate,
 		fin.MonthEnd,
