@@ -12,7 +12,7 @@ using System.Web.Security;
 
 namespace PraticeManagement.Reporting
 {
-    public partial class PersonDetailTimeReport : PracticeManagementPageBase
+    public partial class PersonDetailTimeReport : Page
     {
 
         public DateTime? StartDate
@@ -224,46 +224,6 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        protected override void Display()
-        {
-            if (SelectedId.HasValue)
-            {
-                if (ddlPerson.Items.FindByValue(SelectedId.Value.ToString()) != null)
-                {
-                    ddlPerson.SelectedValue = SelectedId.Value.ToString();
-                }
-                else
-                {
-                    var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(SelectedId.Value));
-                    ddlPerson.Items.Add(new ListItem(person.PersonLastFirstName, SelectedId.Value.ToString()));
-                    ddlPerson.SelectedValue = SelectedId.Value.ToString();
-                }
-            }
-            else
-            {
-                ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
-            }
-
-            int? rangeSelected = GetArgumentInt32(Constants.QueryStringParameterNames.RangeArgument);
-            if (rangeSelected.HasValue)
-            {
-                if (ddlPeriod.Items.FindByValue(rangeSelected.Value.ToString()) != null)
-                {
-                    ddlPeriod.SelectedValue = rangeSelected.Value.ToString();
-                }
-                if (ddlPeriod.SelectedValue == "0")
-                {
-                    DateTime? startDate = GetArgumentDateTime(Constants.QueryStringParameterNames.StartDateArgument);
-                    DateTime? endDate = GetArgumentDateTime(Constants.QueryStringParameterNames.EndDateArgument);
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    diRange.FromDate = startDate.HasValue ? startDate : Utils.Calendar.WeekStartDate(now);
-                    diRange.ToDate = endDate.HasValue ? endDate : Utils.Calendar.WeekEndDate(now);
-                }
-
-            }
-
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             dlPersonDiv.Style.Add("display", "none");
@@ -273,6 +233,8 @@ namespace PraticeManagement.Reporting
                 bool userIsDirector = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
                 bool userIsBusinessUnitManager = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
 
+                var currentPerson = DataHelper.CurrentPerson;
+
                 if (userIsAdministrator || userIsDirector || userIsBusinessUnitManager)
                 {
                     DataHelper.FillPersonList(ddlPerson, null, 1, false);
@@ -280,12 +242,12 @@ namespace PraticeManagement.Reporting
                 else
                 {
                     ddlPerson.Items.Clear();
-                    var logInPerson = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(DataHelper.CurrentPerson.Id.Value));
-                    ddlPerson.Items.Add(new ListItem(logInPerson.PersonLastFirstName, DataHelper.CurrentPerson.Id.Value.ToString()));
-                    ddlPerson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
+                    var logInPerson = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(currentPerson.Id.Value));
+                    ddlPerson.Items.Add(new ListItem(logInPerson.PersonLastFirstName, currentPerson.Id.Value.ToString()));
                     imgSearch.Visible = false;
                 }
 
+                ddlPerson.SelectedValue = currentPerson.Id.Value.ToString();
 
             }
         }
