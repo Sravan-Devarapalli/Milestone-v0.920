@@ -2170,6 +2170,14 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static bool IsUserIsProjectOwner(string user, int Id)
+        {
+            using (var serviceClient = new ProjectServiceClient())
+            {
+                return serviceClient.IsUserIsProjectOwner(user, Id);
+            }
+        }
+
         public static List<UserPasswordsHistory> GetPasswordHistoryByUserName(string userName)
         {
             using (var person = new PersonServiceClient())
