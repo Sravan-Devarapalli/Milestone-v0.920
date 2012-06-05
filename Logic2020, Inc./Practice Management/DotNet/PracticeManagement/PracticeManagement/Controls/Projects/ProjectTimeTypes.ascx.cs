@@ -147,8 +147,7 @@ namespace PraticeManagement.Controls.Projects
 
         protected void cvTimetype_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
-            e.IsValid = ProjectTimetypes.Count() > 0 ;
-
+            e.IsValid = ProjectTimetypes.Count() > 0;
         }
 
         protected void btnCloseWorkType_OnClick(object sender, EventArgs e)
