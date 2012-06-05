@@ -836,10 +836,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupIdParam,
                     project.Group != null && project.Group.Id.HasValue ?
                     (object)project.Group.Id.Value : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.DiscountParam, project.Discount);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TermsParam, project.Terms);
                 command.Parameters.AddWithValue(Constants.ParameterNames.NameParam, project.Name);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, project.IsChargeable);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, project.IsNoteRequired);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIdsList, project.ProjectManagerIdsList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam,
@@ -856,6 +854,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget);
 
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
@@ -894,7 +893,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupIdParam,
                     project.Group != null && project.Group.Id.HasValue ?
                     (object)project.Group.Id.Value : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.DiscountParam, project.Discount);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TermsParam, project.Terms);
                 command.Parameters.AddWithValue(Constants.ParameterNames.NameParam, project.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIdsList, project.ProjectManagerIdsList);
@@ -908,11 +906,11 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam, !string.IsNullOrEmpty(project.Description) ? (object)project.Description : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, project.IsChargeable);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, project.IsNoteRequired);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                    project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
@@ -1026,6 +1024,22 @@ namespace DataAccess
                     int isNoteRequiredIndex = -1;
 
                     int projectOwnerIdIndex = -1;
+                    int opportunityNumberIndex = -1;
+                    int sowBudgetIndex = -1;
+
+                    try
+                    {
+                        opportunityNumberIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityNumberColumn);
+                    }
+                    catch
+                    { }
+
+                    try
+                    {
+                        sowBudgetIndex = reader.GetOrdinal(Constants.ColumnNames.SowBudgetColumn);
+                    }
+                    catch
+                    { }
 
                     try
                     {
@@ -1158,6 +1172,11 @@ namespace DataAccess
 
                         };
 
+                        if (sowBudgetIndex != -1)
+                        {
+                            project.SowBudget = reader.IsDBNull(sowBudgetIndex) ? null : (decimal?)reader.GetDecimal(sowBudgetIndex);
+                        }
+
                         if (projectOwnerIdIndex > -1 && !reader.IsDBNull(projectOwnerIdIndex))
                         {
                             project.ProjectOwner = new Person() { Id = reader.GetInt32(projectOwnerIdIndex) };
@@ -1247,6 +1266,9 @@ namespace DataAccess
 
                         project.OpportunityId =
                         !reader.IsDBNull(opportunityId) ? (int?)reader.GetInt32(opportunityId) : null;
+
+                        if (opportunityNumberIndex >= 0)
+                            project.OpportunityNumber = reader.IsDBNull(opportunityNumberIndex) ? null : reader.GetString(opportunityNumberIndex);
 
                         if (readGroups)
                         {
@@ -2419,6 +2441,27 @@ namespace DataAccess
                     return Convert.ToBoolean(result);
                 }
             }
+        }
+
+        public static bool IsUserIsProjectOwner(string user, int id)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.IsUserIsProjectOwner, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, user);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, id);
+
+                    connection.Open();
+
+                    var result = command.ExecuteScalar();
+
+                    return Convert.ToBoolean(result);
+                }
+            } 
         }
 
         public static List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate)
