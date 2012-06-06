@@ -489,30 +489,6 @@
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
-    <Permission>DELETE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>INSERT</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>SELECT</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>UPDATE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="ProjectBillingInfo" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="OpportunityStatusListAll" Schema="dbo" Type="OBJECT" />
@@ -893,12 +869,6 @@
   <PermissionStatement Action="GRANT">
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
-    <Object Name="ProjectBillingInfoGetById" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
     <Object Name="RecruiterReactivate" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
@@ -933,12 +903,6 @@
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="ProjectBillingInfoDelete" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
     <Permission>DELETE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="Calendar" Schema="dbo" Type="OBJECT" />
@@ -960,12 +924,6 @@
     <Permission>UPDATE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="Calendar" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="ProjectBillingInfoSave" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
