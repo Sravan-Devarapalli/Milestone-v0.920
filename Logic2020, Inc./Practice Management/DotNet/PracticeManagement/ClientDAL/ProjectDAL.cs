@@ -1350,6 +1350,7 @@ namespace DataAccess
                     int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
                     int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
 
+                    int sowBudgetIndex = reader.GetOrdinal(Constants.ColumnNames.SowBudgetColumn);
                     int salesPersonNameIndex = -1;
                     int practiceOwnerNameIndex = -1;
                     int projectGroupIdIndex = -1;
@@ -1427,7 +1428,8 @@ namespace DataAccess
                                     Name = reader.GetString(practiceNameIndex)
                                 },
 
-                                ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
+                                ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex)),
+                                SowBudget = !reader.IsDBNull(sowBudgetIndex) ? (Decimal?)reader.GetDecimal(sowBudgetIndex) : null
                             };
 
                             if (projectGroupIdIndex >= 0)
