@@ -52,6 +52,14 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string Uploader
+        {
+            get;
+            set;
+        }
+
+
     }
 }
 
