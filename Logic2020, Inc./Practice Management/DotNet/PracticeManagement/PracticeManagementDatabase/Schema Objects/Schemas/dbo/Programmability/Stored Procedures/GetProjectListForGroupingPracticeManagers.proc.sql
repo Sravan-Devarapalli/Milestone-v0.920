@@ -103,6 +103,7 @@ BEGIN
 								JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectManagerId
 									WHERE projManagers.ProjectId = p.ProjectId
 								)
+					OR p.ProjectOwnerId IN (SELECT POL.Id  FROM @ProjectOwnersList POL)
 			    )
 			AND (    @SalespersonIds IS NULL 
 				  OR c.PersonId IN (SELECT Id FROM @SalespersonsList)
