@@ -317,8 +317,16 @@
                     <tr>
                         <td colspan="2" style="width: 100%;">
                             <div style="max-height: 500px; overflow-y: auto; width: 100%;">
-                                <uc:GroupByBusinessUnit ID="ucGroupByProject" runat="server" Visible="false" />
-                                <uc:ProjectDetailTabByResource ID="ucProjectDetailReport" runat="server" Visible="false" />
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 97%;">
+                                            <uc:GroupByBusinessUnit ID="ucGroupByProject" runat="server" Visible="false" />
+                                            <uc:ProjectDetailTabByResource ID="ucProjectDetailReport" runat="server" Visible="false" />
+                                        </td>
+                                        <td style="width: 3%;">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </td>
                     </tr>
