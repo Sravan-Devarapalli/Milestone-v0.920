@@ -385,7 +385,6 @@
             public const string ClientName = ColumnNames.ClientName;
             public const string ClonedProjectId = "ClonedProjectId";
             public const string CloneMilestones = "CloneMilestones";
-            public const string CloneBillingInfo = "CloneBillingInfo";
             public const string CloneBillingNotes = "CloneBillingNotes";
             public const string CloneNotes = "CloneNotes";
             public const string CloneCommissions = "CloneCommissions";
