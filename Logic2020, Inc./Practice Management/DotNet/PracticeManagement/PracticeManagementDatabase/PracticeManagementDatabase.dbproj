@@ -430,9 +430,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Note_NoteTarget.fkey.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Note_NoteTarget1.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Note_PersonId.fkey.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4196,4 +4193,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
