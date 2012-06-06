@@ -94,20 +94,7 @@ BEGIN
 				FROM	ProjectAttachment
 				WHERE ProjectId = @ProjectID
 			END
-			
-			IF EXISTS (SELECT ProjectId FROM ProjectBillingInfo WHERE ProjectId = @ProjectID)
-			BEGIN
-				IF EXISTS (SELECT 1 FROM Note WHERE NoteTargetId = 5 AND TargetId = @ProjectID)
-				BEGIN--To delete ProjectBillingInfoNote.
-					DELETE Note
-					WHERE NoteTargetId = 5 AND TargetId = @ProjectID-- Here 5 is ProjectBillingInfo in NoteTarget table.
-				END
-				
-				DELETE
-				FROM ProjectBillingInfo
-				WHERE ProjectId = @ProjectID
-			END
-			
+
 			IF EXISTS (SELECT 1 FROM Note WHERE NoteTargetId = 2 AND TargetId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
