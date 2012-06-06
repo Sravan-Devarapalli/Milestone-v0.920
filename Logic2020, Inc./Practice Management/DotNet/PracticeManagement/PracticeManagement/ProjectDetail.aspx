@@ -1,8 +1,6 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="ProjectDetail.aspx.cs" Inherits="PraticeManagement.ProjectDetail"
     Title="Project Details | Practice Management" EnableEventValidation="false" ValidateRequest="False" %>
-
-<%@ Register Src="Controls/BillingInfo.ascx" TagName="BillingInfo" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register TagPrefix="extDisable" Namespace="PraticeManagement.Controls.Generic.ElementDisabler"
     Assembly="PraticeManagement" %>
@@ -16,7 +14,6 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectFinancials.ascx" TagName="ProjectFinancials" %>
 <%--<%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>--%>
-<%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
@@ -840,6 +837,17 @@
                                                 </ItemTemplate>
                                                 <ItemStyle HorizontalAlign="Center" />
                                             </asp:TemplateField>
+                                              <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Uploader
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblUploader" runat="server" Text='<%# Eval("Uploader") %>'></asp:Label>
+                                                </ItemTemplate>
+                                                <ItemStyle HorizontalAlign="Center" />
+                                            </asp:TemplateField>
                                             <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
@@ -938,8 +946,6 @@
                                                         <asp:CheckBox ID="chbCloneMilestones" runat="server" Checked="true" Text="Clone milestones and milestone person details" /></li>
                                                     <li>
                                                         <asp:CheckBox ID="chbCloneCommissions" runat="server" Checked="true" Text="Clone commissions" /></li>
-                                                    <li>
-                                                        <asp:CheckBox ID="chbCloneBillingInfo" runat="server" Checked="true" Text="Clone billing info" /></li>
                                                     <li>
                                                         <asp:CheckBox ID="chbCloneNotes" runat="server" Checked="true" Text="Clone notes" /></li>
                                                     <li>Clone status
