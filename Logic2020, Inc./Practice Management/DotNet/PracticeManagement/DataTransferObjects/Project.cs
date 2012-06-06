@@ -271,18 +271,7 @@ namespace DataTransferObjects
             get;
             set;
         }
-
-        /// <summary>
-        /// Gets or sets a billing info for the project.
-        /// </summary>
-        [DataMember]
-        public BillingInfo BillingInfo
-        {
-            get;
-            set;
-        }
-
-    
+            
         [DataMember]
         public string ProjectManagerIdsList
         {
