@@ -217,6 +217,8 @@ namespace PraticeManagement.AttachmentService {
         
         private System.Nullable<System.DateTime> uploadedDateField;
         
+        private string uploaderField;
+        
         /// <remarks/>
         public int AttachmentId {
             get {
@@ -276,6 +278,16 @@ namespace PraticeManagement.AttachmentService {
             }
             set {
                 this.uploadedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Uploader {
+            get {
+                return this.uploaderField;
+            }
+            set {
+                this.uploaderField = value;
             }
         }
     }
