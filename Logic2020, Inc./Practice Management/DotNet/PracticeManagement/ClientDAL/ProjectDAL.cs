@@ -1642,7 +1642,6 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, context.Project.Id.Value);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusId, context.ProjectStatus.Id);
                     command.Parameters.AddWithValue(Constants.ParameterNames.CloneMilestones, context.CloneMilestones);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.CloneBillingInfo, context.CloneBillingInfo);
                     command.Parameters.AddWithValue(Constants.ParameterNames.CloneNotes, context.CloneNotes);
                     command.Parameters.AddWithValue(Constants.ParameterNames.CloneCommissions, context.CloneCommissions);
 
@@ -2219,6 +2218,9 @@ namespace DataAccess
                 int uploadedDateIndex = reader.GetOrdinal(Constants.ColumnNames.UploadedDate);
                 int attachmentSizeIndex = reader.GetOrdinal(Constants.ColumnNames.AttachmentSize);
                 int categoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.CategoryId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
 
                 while (reader.Read())
                 {
@@ -2228,6 +2230,10 @@ namespace DataAccess
                     attachment.AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex);
                     attachment.UploadedDate = reader.IsDBNull(uploadedDateIndex) ? null : (DateTime?)reader.GetDateTime(uploadedDateIndex);
                     attachment.Category = (ProjectAttachmentCategory)reader.GetInt32(categoryIdIndex);
+                    if(!reader.IsDBNull(personIdIndex))
+                    {
+                        attachment.Uploader = reader.GetString(firstNameIndex) +" "+ reader.GetString(lastNameIndex);
+                    }
                     attachments.Add(attachment);
                 }
             }
