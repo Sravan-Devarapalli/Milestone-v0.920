@@ -18,7 +18,6 @@ AS
 	2	Project
 	3	Person
 	4	Opportunity
-	5	BillingInfo
 	*/
 
 	DECLARE @FirstRecord INT,
