@@ -259,7 +259,7 @@
                                     Font-Underline="false" ForeColor="Black" ToolTip='<%# Eval("Person.PersonLastFirstName")%>'
                                     OnClick="lnkPerson_OnClick" Text='<%# Eval("Person.PersonLastFirstName")%>'></asp:LinkButton>
                             </td>
-                            <td style="text-align: left;padding-left: 5px;">
+                            <td style="text-align: left; padding-left: 5px;">
                                 <asp:Image ID="imgIspersonTerminated" runat="server" ImageUrl="~/Images/Terminated.png"
                                     ToolTip="Resource is an Terminated employee." Visible='<%# (bool)IsPersonTerminated((int)Eval("Person.Status.Id"))%>' />
                                 <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
@@ -333,17 +333,13 @@
     BackgroundCssClass="modalBackground" PopupControlID="pnlPersonDetailReport" DropShadow="false" />
 <asp:Panel ID="pnlPersonDetailReport" Style="background-color: rgb(226, 235, 255);
     display: none;" runat="server" BorderColor="Black" BorderWidth="2px" Width="85%">
+    <uc:GroupByProject ID="ucPersonDetailReport" runat="server" />
     <table style="width: 100%; padding: 5px;">
-        <tr>
-            <td style="width: 100%;">
-                <div style="max-height: 500px; overflow-y: auto;">
-                    <uc:GroupByProject ID="ucPersonDetailReport" runat="server" />
-                </div>
+        <tr style="background-color: rgb(245, 250, 255);">
+            <td style="width: 100%; text-align: right; padding: 3px;">
+                <asp:Button ID="btnCancelPersonDetailReport" Text="Close" ToolTip="Close" runat="server" />
             </td>
         </tr>
     </table>
-    <div style="float: right; padding: 5px; padding-right: 15px;">
-        <asp:Button ID="btnCancelPersonDetailReport" Text="Close" ToolTip="Close" runat="server" />
-    </div>
 </asp:Panel>
 
