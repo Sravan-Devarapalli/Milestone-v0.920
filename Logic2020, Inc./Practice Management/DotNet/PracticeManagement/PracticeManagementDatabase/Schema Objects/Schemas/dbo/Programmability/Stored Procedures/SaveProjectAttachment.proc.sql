@@ -14,19 +14,25 @@ AS
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
+	DECLARE @PersonId INT
+	SELECT @PersonId = PersonId FROM dbo.Person P WHERE P.alias = @UserLogin
+
 	  INSERT INTO ProjectAttachment
 			   ([ProjectId]
 			   ,[CategoryId]
 			   ,[FileName]
 			   ,[AttachmentData]
 			   ,UploadedDate
+			   ,ModifiedBy
 			   )     
 		 VALUES
 			   (@ProjectId
 			   ,@CategoryId
 			   ,@FileName
 			   ,@AttachmentData
-			   ,@UploadedDate)
+			   ,@UploadedDate
+			   ,@PersonId
+			   )
       
       EXEC dbo.SessionLogUnprepare
 	END
