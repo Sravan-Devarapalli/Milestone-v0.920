@@ -17,8 +17,6 @@ namespace DataTransferObjects
         Person = 3,
         [EnumMember]
         Opportunity = 4,
-        [EnumMember]
-        BillingInfo = 5
     }
 }
 
