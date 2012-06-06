@@ -19,6 +19,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="AttachmentData" type="s:base64Binary" />
           <s:element minOccurs="1" maxOccurs="1" name="AttachmentSize" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="UploadedDate" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Uploader" type="s:string" />
         </s:sequence>
       </s:complexType>
       <s:simpleType name="ProjectAttachmentCategory">
