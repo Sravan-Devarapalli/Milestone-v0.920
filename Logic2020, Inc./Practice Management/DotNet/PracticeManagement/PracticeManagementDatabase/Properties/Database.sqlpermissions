@@ -23,12 +23,6 @@
   <PermissionStatement Action="GRANT">
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
-    <Object Name="OpportunityExcelSet" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
     <Object Name="aspnet_Membership_UpdateUserInfo" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
