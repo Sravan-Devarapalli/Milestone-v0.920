@@ -674,11 +674,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\PK_Milestone.pkey.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\OpportunityExcelSet.proc.sql">
-      <SubType>Code</SubType>
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>Off</QuotedIdentifier>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\aspnet_Membership_UpdateUserInfo.proc.sql">
       <SubType>Code</SubType>
       <AnsiNulls>On</AnsiNulls>
