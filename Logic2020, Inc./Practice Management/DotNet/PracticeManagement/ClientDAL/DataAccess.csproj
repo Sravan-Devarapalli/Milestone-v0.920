@@ -130,7 +130,6 @@
     <Compile Include="PersonRoleDAL.cs" />
     <Compile Include="PersonStatusDAL.cs" />
     <Compile Include="PracticeDAL.cs" />
-    <Compile Include="ProjectBillingInfoDAL.cs" />
     <Compile Include="ProjectDAL.cs" />
     <Compile Include="ProjectExpenseDal.cs" />
     <Compile Include="ProjectGroupDAL.cs" />
