@@ -18,7 +18,6 @@ using PraticeManagement.Controls;
 using PraticeManagement.DefaultCommissionService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
-using BillingInfo = DataTransferObjects.BillingInfo;
 using ProjectAttachment = DataTransferObjects.ProjectAttachment;
 using System.Linq;
 
@@ -702,10 +701,6 @@ namespace PraticeManagement
 
                 if (client != null)
                 {
-                    //txtClientDiscount.Text = client.DefaultDiscount != 0 ? client.DefaultDiscount.ToString() : string.Empty;
-
-                    //chbIsChargeable.Checked = client.IsChargeable;
-
                     if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName)
                         && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
                         && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)
@@ -719,12 +714,6 @@ namespace PraticeManagement
                             ddlSalesperson.Items.IndexOf(ddlSalesperson.Items.FindByValue(client.DefaultSalespersonId.ToString()));
                         ddlSalesperson_SelectedIndexChanged(ddlSalesperson, EventArgs.Empty);
                     }
-
-                    //  If it's a new project, change chargeability when client is changed
-                    //if (!ProjectId.HasValue)
-                    //{
-                    //    chbIsChargeable.Checked = client.IsChargeable;
-                    //}
 
                     if (client.DefaultDirectorId.HasValue)
                     {
@@ -1238,8 +1227,7 @@ namespace PraticeManagement
                 PopulateProjectManagerDropDown(project);
 
                 financials.Project = project;
-
-                //txtClientDiscount.Text = project.Discount != 0 ? project.Discount.ToString() : string.Empty;
+                
                 txtBuyerName.Text = project.BuyerName;
 
                 DisplaySalesCommissions(project);
@@ -1643,7 +1631,6 @@ namespace PraticeManagement
                         Project = new Project { Id = ProjectId },
                         CloneMilestones = chbCloneMilestones.Checked,
                         CloneCommissions = chbCloneCommissions.Checked,
-                        CloneBillingInfo = chbCloneBillingInfo.Checked,
                         CloneNotes = chbCloneNotes.Checked,
                         ProjectStatus = new ProjectStatus
                         {
