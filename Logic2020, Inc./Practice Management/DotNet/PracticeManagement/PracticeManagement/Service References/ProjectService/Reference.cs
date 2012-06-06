@@ -15,9 +15,6 @@ namespace PraticeManagement.ProjectService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProjectService.IProjectService")]
     public interface IProjectService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject", ReplyAction="http://tempuri.org/IProjectService/IsUserHasPermissionOnProjectResponse")]
-        bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject", ReplyAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse")]
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
         
@@ -61,9 +58,6 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
         DataTransferObjects.Project ProjectGetById(int projectId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectBillingInfo", ReplyAction="http://tempuri.org/IProjectService/GetProjectBillingInfoResponse")]
-        DataTransferObjects.BillingInfo GetProjectBillingInfo(int projectId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsComputedFinancials", ReplyAction="http://tempuri.org/IProjectService/GetProjectsComputedFinancialsResponse")]
         DataTransferObjects.ComputedFinancials GetProjectsComputedFinancials(int projectId);
@@ -195,6 +189,9 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/AllProjectsWithFinancialTotalsAndPersons", ReplyAction="http://tempuri.org/IProjectService/AllProjectsWithFinancialTotalsAndPersonsRespon" +
             "se")]
         DataTransferObjects.Project[] AllProjectsWithFinancialTotalsAndPersons();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject", ReplyAction="http://tempuri.org/IProjectService/IsUserHasPermissionOnProjectResponse")]
+        bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -204,6 +201,8 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
+        
+     
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -219,10 +218,6 @@ namespace PraticeManagement.ProjectService {
         
         public ProjectServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
-        }
-        
-        public bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId) {
-            return base.Channel.IsUserHasPermissionOnProject(user, id, isProjectId);
         }
         
         public bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId) {
@@ -271,10 +266,6 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
             return base.Channel.ProjectGetById(projectId);
-        }
-        
-        public DataTransferObjects.BillingInfo GetProjectBillingInfo(int projectId) {
-            return base.Channel.GetProjectBillingInfo(projectId);
         }
         
         public DataTransferObjects.ComputedFinancials GetProjectsComputedFinancials(int projectId) {
@@ -428,6 +419,10 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.Project[] AllProjectsWithFinancialTotalsAndPersons() {
             return base.Channel.AllProjectsWithFinancialTotalsAndPersons();
+        }
+        
+        public bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId) {
+            return base.Channel.IsUserHasPermissionOnProject(user, id, isProjectId);
         }
     }
 }
