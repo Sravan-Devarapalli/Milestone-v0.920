@@ -618,8 +618,6 @@ namespace PracticeManagementService
                                 ComputedFinancialsDAL.FinancialsGetByMilestone(milestone.Id.Value);
                         }
                     }
-
-                    result.BillingInfo = GetProjectBillingInfo(projectId);
                 }
 
                 return result;
@@ -631,24 +629,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-        }
-
-        public BillingInfo GetProjectBillingInfo(int projectId)
-        {
-            try
-            {
-                var billingInfo = ProjectBillingInfoDAL.ProjectBillingInfoGetById(projectId);
-
-                return billingInfo;
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectBillingInfo", "ProjectService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-
         }
 
         public Project GetProjectDetailWithoutMilestones(int projectId, string userName)
@@ -706,16 +686,7 @@ namespace PracticeManagementService
                         project.ManagementCommission.ProjectWithMargin = project;
                         CommissionDAL.CommissionSet(project.ManagementCommission, connection, currentTransaction);
                     }
-                    //if (project.BillingInfo != null)
-                    //{
-                    //    project.BillingInfo.Id = project.Id;
-                    //    ProjectBillingInfoDAL.ProjectBillingInfoSave(project.BillingInfo, connection, currentTransaction);
-                    //}
-                    //else
-                    //{
-                    //    ProjectBillingInfoDAL.ProjectBillingInfoDelete(project.Id.Value, connection, currentTransaction);
-                    //}
-
+                    
                     //Save ProjectTimetypes 
                     if (!String.IsNullOrEmpty(project.ProjectWorkTypesList))
                     {
