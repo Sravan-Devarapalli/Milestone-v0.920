@@ -136,7 +136,7 @@ namespace DataTransferObjects
         Recruiting = 4
     }
 
-
+    [DataContract]
     public enum ProjectAttachmentCategory
     {
         [EnumMember]
