@@ -25,12 +25,6 @@ namespace DataTransferObjects.ContextObjects
         public bool CloneMilestones { get; set; }
 
         /// <summary>
-        /// Whether to Clone Billing Info too
-        /// </summary>
-        [DataMember]
-        public bool CloneBillingInfo { get; set; }
-
-        /// <summary>
         /// Whether to clone Billing Notes too
         /// </summary>
         [DataMember]
