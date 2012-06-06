@@ -18,14 +18,7 @@ namespace PracticeManagementService
         /// <returns></returns>
         [OperationContract]
         Project ProjectGetById(int projectId);
-        /// <summary>
-        /// Project billing info
-        /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <returns>Project billing info</returns>
-        [OperationContract]
-        BillingInfo GetProjectBillingInfo(int projectId);
-
+       
         /// <summary>
         /// Projects Computed Financials 
         /// </summary>
