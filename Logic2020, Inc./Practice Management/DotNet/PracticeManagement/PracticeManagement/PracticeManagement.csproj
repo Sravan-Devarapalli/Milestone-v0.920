@@ -1869,13 +1869,6 @@
     <Compile Include="Controls\ActivityLogControl.ascx.designer.cs">
       <DependentUpon>ActivityLogControl.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\BillingInfo.ascx.cs">
-      <DependentUpon>BillingInfo.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\BillingInfo.ascx.designer.cs">
-      <DependentUpon>BillingInfo.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\BrandingSettingsControl.ascx.cs">
       <DependentUpon>BrandingSettingsControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2901,7 +2894,6 @@
     <Content Include="ClientDetails.aspx" />
     <Content Include="CompanyPerfomanceServ.asmx" />
     <Content Include="Controls\ActivityLogControl.ascx" />
-    <Content Include="Controls\BillingInfo.ascx" />
     <Content Include="Controls\BrandingSettingsControl.ascx" />
     <Content Include="Controls\Clients\ClientGroups.ascx" />
     <Content Include="Controls\Clients\ClientProjects.ascx" />
