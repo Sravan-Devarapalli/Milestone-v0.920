@@ -594,7 +594,7 @@ namespace PracticeManagementService
         }
 
 
-        
+
 
         /// <summary>
         /// Reatrives a project with a specified ID.
@@ -1151,13 +1151,12 @@ namespace PracticeManagementService
             return ProjectDAL.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
         }
 
-        public void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
+        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
         {
-            ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
+            return ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
         }
 
         #endregion
     }
 }
-
 
