@@ -36,7 +36,7 @@ namespace PraticeManagement
         public const string AllTimeTypesKey = "AllTimeTypesKey";
         public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
-        public const string OpportunityLinkedTextFormat = "This project is linked to opportunity {0}.";
+        public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
 
 
         #endregion
@@ -206,6 +206,19 @@ namespace PraticeManagement
 
         #region Methods
 
+        protected void cvOpportunityRequired_Validate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = ddlOpportunities.SelectedIndex != 0;
+        }
+
+        protected void cvClientOpportunityLinked_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (Project != null && Project.Client.Id.HasValue && Project.OpportunityId.HasValue && Project.Client.Id.Value.ToString() != ddlClientName.SelectedValue)
+            {
+                args.IsValid = false;
+            }
+        }
+
         protected void cvProjectManager_OnServerValidate(object sender, ServerValidateEventArgs args)
         {
             args.IsValid = cblProjectManagers.SelectedValues != null ? cblProjectManagers.SelectedValues.Count > 0 : false;
@@ -284,6 +297,7 @@ namespace PraticeManagement
                 ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && !IsUserIsProjectOwner.Value));
 
                 txtProjectName.Focus();
+                txtSowBudget.Enabled = (userIsAdministrator || userIsSalesPerson);
 
                 int clientId = -1;
                 if (int.TryParse(Page.Request.QueryString["clientId"], out clientId))
@@ -498,7 +512,6 @@ namespace PraticeManagement
 
         }
 
-
         protected void btnUpdateProjectName_OnClick(object sender, EventArgs e)
         {
             Page.Validate("ProjectName");
@@ -548,6 +561,11 @@ namespace PraticeManagement
 
                 Project = GetCurrentProject(ProjectId);
                 PopulateControls(Project);
+
+                if (!SelectedId.HasValue)
+                {
+                    FillUnlinkedOpportunityList(Project.Client.Id);
+                }
             }
             else
             {
@@ -667,6 +685,7 @@ namespace PraticeManagement
                 int clientId = int.Parse(ddlClientName.SelectedValue);
                 SetClientDefaultValues(clientId);
 
+                FillUnlinkedOpportunityList(clientId);
             }
 
         }
@@ -815,8 +834,55 @@ namespace PraticeManagement
             }
         }
 
+        protected void imgLink_Click(object sender, ImageClickEventArgs e)
+        {
+            if (IsDirty)
+            {
+                if (ValidateAndSave())
+                {
+                    mpeLinkOpportunityPopup.Show();
+                }
+            }
+            else
+            {
+                mpeLinkOpportunityPopup.Show();
+            }
+        }
+
         protected void imgUnlink_Click(object sender, ImageClickEventArgs e)
         {
+            try
+            {
+                var result = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, Project.OpportunityId.Value, User.Identity.Name, false));
+
+                Project.OpportunityId = null;
+                Project.OpportunityNumber = null;
+            }
+            catch
+            { }
+        }
+
+        protected void btnLinkOpportunity_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumLinkOpportunity.ValidationGroup);
+            if (Page.IsValid)
+            {
+                try
+                {
+                    int opportunityId = Convert.ToInt32(ddlOpportunities.SelectedValue);
+                    var opportunityNumber = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, opportunityId, User.Identity.Name, true));
+
+                    Project.OpportunityId = opportunityId;
+                    Project.OpportunityNumber = opportunityNumber;
+                    mpeLinkOpportunityPopup.Hide();
+                }
+                catch
+                { }
+            }
+            else
+            {
+                mpeLinkOpportunityPopup.Show();
+            }
         }
 
         /// <summary>
@@ -1155,6 +1221,8 @@ namespace PraticeManagement
             {
                 Project = GetCurrentProject(id);
                 PopulateControls(Project);
+
+                FillUnlinkedOpportunityList(Project.Client.Id);
             }
             else
             {
@@ -1436,6 +1504,20 @@ namespace PraticeManagement
             }
         }
 
+        private void FillUnlinkedOpportunityList(int? clientId)
+        {
+            if (clientId.HasValue)
+            {
+                DataHelper.FillUnlinkedOpportunityList(clientId, ddlOpportunities, "-- Select Opportunity --");
+            }
+            else
+            {
+                ddlOpportunities.Items.Clear();
+                ddlOpportunities.Items.Add(new ListItem { Text = "-- Select Opportunity --", Value = "" });
+                ddlOpportunities.DataBind();
+            }
+        }
+
         private void PopulateProjectGroupDropDown(Project project)
         {
             if (project != null && project.Group != null)
@@ -1473,7 +1555,7 @@ namespace PraticeManagement
             PopulateSalesCommission(project);
             PopulatePracticeManagementCommission(project);
             project.Description = txtDescription.Text;
-            project.SowBudget = Convert.ToDecimal(txtSowBudget.Text);
+            project.SowBudget = string.IsNullOrEmpty(txtSowBudget.Text) ? null : (decimal?)Convert.ToDecimal(txtSowBudget.Text);
 
             project.ProjectOwner = new Person() { Id = Convert.ToInt32(ddlProjectOwner.SelectedValue) };
 
