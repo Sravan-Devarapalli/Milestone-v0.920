@@ -91,7 +91,7 @@ BEGIN
    			 WHERE [ProjectId] = @ProjectId
 		END
 
-		UPDATE dbo.Project
+		UPDATE P
 			SET ClientId		= @ClientId,
 				Terms			= @Terms,
 				NAME			= @Name,
@@ -105,8 +105,11 @@ BEGIN
 				IsInternal		=@IsInternal,
 				IsNoteRequired  = @IsNoteRequired,
 				ProjectOwnerId  = @ProjectOwner,
-				SowBudget		= @SowBudget
-			WHERE ProjectId     = @ProjectId
+				SowBudget		= @SowBudget,
+				Discount		= C.DefaultDiscount
+		FROM dbo.Project P
+		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
+		WHERE ProjectId = @ProjectId
 
 		DECLARE @OpportunityId INT = NULL
 		
