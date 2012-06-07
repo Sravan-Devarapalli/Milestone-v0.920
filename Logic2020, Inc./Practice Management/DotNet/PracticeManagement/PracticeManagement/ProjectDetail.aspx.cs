@@ -130,6 +130,7 @@ namespace PraticeManagement
             }
         }
 
+        //return true if the user is "project manager" or "project owner" of the project
         private bool? IsUserisOwnerOfProject
         {
             get
@@ -147,6 +148,7 @@ namespace PraticeManagement
             }
         }
 
+        //return true if the user is "project owner" of the project
         private bool? IsUserIsProjectOwner
         {
             get
@@ -205,6 +207,35 @@ namespace PraticeManagement
         #endregion
 
         #region Methods
+
+        protected void custSowBudgetMinValue_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            if (!string.IsNullOrEmpty(txtSowBudget.Text))
+            {
+                Decimal result;
+                if (Decimal.TryParse(txtSowBudget.Text, out result))
+                {
+                    if (result < 1000)
+                    {
+                        e.IsValid = false;
+                    }
+                }
+            }
+        }
+
+        protected void custSowBudget_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            if (!string.IsNullOrEmpty(txtSowBudget.Text))
+            {
+                Decimal result;
+                if (!Decimal.TryParse(txtSowBudget.Text, out result))
+                {
+                    e.IsValid = false;
+                }
+            }
+        }
 
         protected void cvOpportunityRequired_Validate(object sender, ServerValidateEventArgs args)
         {
@@ -294,7 +325,7 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
-                ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && !IsUserIsProjectOwner.Value));
+                ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
 
                 txtProjectName.Focus();
                 txtSowBudget.Enabled = (userIsAdministrator || userIsSalesPerson);
@@ -1277,16 +1308,12 @@ namespace PraticeManagement
         {
             if (project != null)
             {
-                lblProjectNumber.Text = project.ProjectNumber;
-                lblProjectName.Text = project.Name;
+                lblProjectNumber.Text = !string.IsNullOrEmpty(project.ProjectNumber)?project.ProjectNumber +" - ":string.Empty;
+                txtProjectName.Text = lblProjectName.Text = project.Name;
                 lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
-
-                txtProjectName.Text = project.Name;
                 txtDescription.Text = project.Description;
-                lblProjectNumber.Text = project.ProjectNumber;
                 ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
-                if (project.SowBudget.HasValue)
-                    txtSowBudget.Text = project.SowBudget.Value.ToString();
+                txtSowBudget.Text = project.SowBudget != null ? project.SowBudget.Value.ToString("###,###,###,###,##0") : string.Empty;
 
                 PopulateClientDropDown(project);
                 FillAndSelectProjectGroupList(project);
