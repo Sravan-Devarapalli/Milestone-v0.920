@@ -273,6 +273,21 @@ namespace PracticeManagementService
             }
         }
 
+        public List<Opportunity> OpportunityListWithMinimumDetails(int? clientId, bool? attach)
+        {
+            try
+            {
+                return OpportunityDAL.OpportunityListWithMinimumDetails(clientId, attach);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "OpportunityListWithMinimumDetails", "OpportunityService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
         #endregion
     }
 }
