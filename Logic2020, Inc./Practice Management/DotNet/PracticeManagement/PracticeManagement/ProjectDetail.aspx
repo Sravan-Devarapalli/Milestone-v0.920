@@ -1,6 +1,7 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="ProjectDetail.aspx.cs" Inherits="PraticeManagement.ProjectDetail"
     Title="Project Details | Practice Management" EnableEventValidation="false" ValidateRequest="False" %>
+
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register TagPrefix="extDisable" Namespace="PraticeManagement.Controls.Generic.ElementDisabler"
     Assembly="PraticeManagement" %>
@@ -41,7 +42,7 @@
 
         function ConfirmUnlink() {
 
-            if (confirm("Do you want to unlink Opportunity")) {
+            if (confirm("Are you sure. Do you want to unlink the Opportunity?")) {
                 return true;
             }
 
@@ -430,6 +431,10 @@
                                                     ToolTip="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="cvClient_ServerValidate"></asp:CustomValidator>
+                                                <asp:CustomValidator ID="cvClientOpportunityLinked" runat="server" ErrorMessage="Project's account cannot be modified as this project is linked to an Opportunity, Please unlink the Opportunity before account changed."
+                                                    ToolTip="Project's account cannot be modified as this project is linked to an Opportunity, Please unlink the Opportunity before account changed."
+                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="cvClientOpportunityLinked_ServerValidate"></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -583,10 +588,6 @@
                                                     MaxLength="100"></asp:TextBox>
                                             </td>
                                             <td style="width: 5%;">
-                                                <asp:RequiredFieldValidator ID="rfvSowBudget" runat="server" ControlToValidate="txtSowBudget"
-                                                    ErrorMessage="The SOW Budget is required." ToolTip="The SOW Budget is required."
-                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic"></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -596,7 +597,7 @@
                                 <td style="width: 32%; padding: 3px 0px 3px 0px;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="width: 30%; vertical-align:top;">
+                                            <td style="width: 30%; vertical-align: top;">
                                                 Project Manager(s)
                                             </td>
                                             <td style="width: 65%;" class="ScrollingDropDownWholeWidth">
@@ -661,21 +662,22 @@
                                 <td style="width: 45%; padding-left: 10px;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="height: 20px; font-size: 15px; font-style: italic;">
+                                            <td style="height: 20px; font-size: 15px; font-style: italic; vertical-align: middle;">
                                                 <u>Opportunity Linking</u>
-                                                <asp:Image ID="imgLink" runat="server" AlternateText="Link Opportunity" ToolTip="Link Opportunity"
-                                                    Visible="false" ImageUrl="~/Images/icon-edit.png" />
+                                                <asp:ImageButton ID="imgLink" runat="server" AlternateText="Link Opportunity" ToolTip="Link Opportunity"
+                                                    OnClick="imgLink_Click" Visible="false" ImageUrl="~/Images/link.png" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="height: 30px; padding-left: 10px;">
-                                                <asp:Label ID="lbOpportunity" Visible="false" runat="server"></asp:Label>
+                                            <td style="height: 30px; padding-left: 10px; vertical-align: middle;">
+                                                <asp:Label ID="lbOpportunity" Visible="false" runat="server" Style="line-height: 20px;
+                                                    vertical-align: middle;"></asp:Label>
                                                 <asp:ImageButton ID="imgNavigateToOpp" runat="server" AlternateText="Navigate to Opportunity"
                                                     OnClientClick="RedirectToOpportunity(); return false;" Visible="false" ToolTip="Navigate to Opportunity"
-                                                    ImageUrl="~/Images/icon-edit.png" />
+                                                    ImageUrl="~/Images/arrow_16x16.png" />
                                                 <asp:ImageButton ID="imgUnlink" runat="server" AlternateText="Unlink Opportunity"
                                                     OnClientClick="if(!ConfirmUnlink()) return false;" OnClick="imgUnlink_Click"
-                                                    ToolTip="Unlink Opportunity" Visible="false" ImageUrl="~/Images/icon-edit.png" />
+                                                    ToolTip="Unlink Opportunity" Visible="false" ImageUrl="~/Images/close_16.png" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -762,7 +764,7 @@
                         <asp:MultiView ID="mvProjectDetailTab" runat="server" ActiveViewIndex="0">
                             <asp:View ID="vwMilestones" runat="server">
                                 <asp:Panel ID="pnlRevenueMilestones" runat="server" CssClass="tab-pane">
-                                    <div style="padding-bottom:10px;">
+                                    <div style="padding-bottom: 10px;">
                                         <asp:ShadowedTextButton ID="btnAddMilistone" runat="server" CausesValidation="false"
                                             OnClick="btnAddMilistone_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;"
                                             Text="Add Milestone" />
@@ -772,7 +774,7 @@
                             </asp:View>
                             <asp:View ID="vmAttachments" runat="server">
                                 <asp:Panel ID="pnlAttachments" runat="server" CssClass="tab-pane">
-                                    <div style="padding-bottom:10px;">
+                                    <div style="padding-bottom: 10px;">
                                         <asp:ShadowedTextButton ID="stbAttachSOW" runat="server" CausesValidation="false"
                                             CssClass="add-btn" OnClientClick="return false;" Text="Add Attachment" />
                                     </div>
@@ -837,7 +839,7 @@
                                                 </ItemTemplate>
                                                 <ItemStyle HorizontalAlign="Center" />
                                             </asp:TemplateField>
-                                              <asp:TemplateField>
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Uploader
@@ -1062,6 +1064,51 @@
                         <td colspan="3" style="padding-left: 5px; padding-bottom: 5px;">
                             <asp:ValidationSummary ID="VsumProjectName" runat="server" EnableClientScript="false"
                                 ValidationGroup="ProjectName" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnLinkPopup" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeLinkOpportunityPopup" runat="server"
+                TargetControlID="hdnLinkPopup" CancelControlID="btnLinkOpportunityClose" BehaviorID="mpeLinkOpportunityPopup"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlLinkOpportunity" DropShadow="false"
+                OkControlID="btnLinkOpportunityCancel" />
+            <asp:Panel ID="pnlLinkOpportunity" runat="server" BackColor="White" BorderColor="Black"
+                Style="display: none;" BorderWidth="2px" Width="465px">
+                <table class="WholeWidth">
+                    <tr>
+                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
+                            valign="bottom">
+                            <b style="font-size: 14px; padding-top: 2px;">Link an Opportunity</b>
+                            <asp:Button ID="btnLinkOpportunityClose" runat="server" CssClass="mini-report-close"
+                                ToolTip="Cancel" Style="float: right;" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;" colspan="2">
+                            <table class="WholeWidth">
+                                <tr>
+                                    <td>
+                                        Select an Opportunity:
+                                        <asp:DropDownList ID="ddlOpportunities" runat="server">
+                                        </asp:DropDownList>
+                                        <asp:CustomValidator ID="cvOpportunityRequired" runat="server" OnServerValidate="cvOpportunityRequired_Validate"
+                                            ValidationGroup="LinkOpportunity" Display="Dynamic" SetFocusOnError="true" Text="*"
+                                            ErrorMessage="Opportunity is required." ToolTip="Opportunity is required."></asp:CustomValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 5px; padding-bottom: 5px;">
+                                        <asp:ValidationSummary ID="valSumLinkOpportunity" runat="server" ValidationGroup="LinkOpportunity" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <asp:Button ID="btnLinkOpportunity" runat="server" Text="Save" OnClick="btnLinkOpportunity_Click" />
+                                        <asp:Button ID="btnLinkOpportunityCancel" runat="server" Text="Cancel" />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>
