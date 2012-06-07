@@ -1758,9 +1758,9 @@ namespace PraticeManagement
 
         public string GetWrappedText(string name)
         {
-            if (name.Length > 50)
+            if (name.Length > 30)
             {
-                for (int i = 50; i < name.Length; i = i + 50)
+                for (int i = 30; i < name.Length; i = i + 30)
                 {
                     name = name.Insert(i, "<wbr />");
                 }
