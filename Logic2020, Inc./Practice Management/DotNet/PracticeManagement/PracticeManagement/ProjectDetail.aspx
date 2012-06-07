@@ -380,32 +380,38 @@
                                 <td style="width: 28%; text-align: right;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="font-weight: bold; font-size: 15px; width: 60%;">
-                                                Project Status
-                                            </td>
-                                            <td>
-                                                <div id="divStatus" runat="server">
-                                                </div>
-                                            </td>
-                                            <td style="width: 37%;">
-                                                <asp:DropDownList ID="ddlProjectStatus" runat="server" onchange="setDirty();" AutoPostBack="True"
-                                                    Width="100" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
-                                                </asp:DropDownList>
-                                                <asp:RequiredFieldValidator ID="reqProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
-                                                    ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Project"
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                <asp:CustomValidator ID="custProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
-                                                    ErrorMessage="Only administrators can make projects Active or Completed." ToolTip="Only administrators can make projects Active or Completed."
-                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" OnServerValidate="custProjectStatus_ServerValidate"></asp:CustomValidator>
-                                                <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
-                                                    ErrorMessage="Can not change project status as some work types are already in use."
-                                                    ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
+                                            <td style="float:right; vertical-align:middle;">
+                                                <table>
+                                                    <tr>
+                                                        <td style="font-weight: bold; font-size: 15px; width: 60%;">
+                                                            Project Status
+                                                        </td>
+                                                        <td style="padding-right:4px;">
+                                                            <div id="divStatus" runat="server">
+                                                            </div>
+                                                        </td>
+                                                        <td style="vertical-align:middle; line-height:1px;">
+                                                            <asp:DropDownList ID="ddlProjectStatus" runat="server" onchange="setDirty();" AutoPostBack="True"
+                                                                Width="100" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="reqProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
+                                                                ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Project"
+                                                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                            <asp:CustomValidator ID="custProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
+                                                                ErrorMessage="Only administrators can make projects Active or Completed." ToolTip="Only administrators can make projects Active or Completed."
+                                                                ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                Display="Dynamic" OnServerValidate="custProjectStatus_ServerValidate"></asp:CustomValidator>
+                                                            <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
+                                                                ErrorMessage="Can not change project status as some work types are already in use."
+                                                                ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="width: 1%;">
+                                <td style="width: 1%; padding-left:20px;">
                                 </td>
                             </tr>
                         </table>
