@@ -854,7 +854,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
 
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
@@ -910,7 +910,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.CanCreateCustomWorkTypesParam, project.CanCreateCustomWorkTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                    project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
@@ -2134,7 +2134,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.UploadedDateParam, DateTime.Now);
                 command.Parameters.AddWithValue(Constants.ParameterNames.AttachmentFileName, !string.IsNullOrEmpty(attachment.AttachmentFileName) ? (object)attachment.AttachmentFileName : DBNull.Value);
                 command.Parameters.Add(Constants.ParameterNames.AttachmentData, SqlDbType.VarBinary, -1);
-                command.Parameters.AddWithValue(Constants.ParameterNames.CategoryIdParam,(int)attachment.Category);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CategoryIdParam, (int)attachment.Category);
                 command.Parameters[Constants.ParameterNames.AttachmentData].Value = attachment.AttachmentData != null ? (object)attachment.AttachmentData : DBNull.Value;
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
@@ -2232,9 +2232,9 @@ namespace DataAccess
                     attachment.AttachmentSize = (int)reader.GetInt64(attachmentSizeIndex);
                     attachment.UploadedDate = reader.IsDBNull(uploadedDateIndex) ? null : (DateTime?)reader.GetDateTime(uploadedDateIndex);
                     attachment.Category = (ProjectAttachmentCategory)reader.GetInt32(categoryIdIndex);
-                    if(!reader.IsDBNull(personIdIndex))
+                    if (!reader.IsDBNull(personIdIndex))
                     {
-                        attachment.Uploader = reader.GetString(firstNameIndex) +" "+ reader.GetString(lastNameIndex);
+                        attachment.Uploader = reader.GetString(firstNameIndex) + " " + reader.GetString(lastNameIndex);
                     }
                     attachments.Add(attachment);
                 }
@@ -2471,7 +2471,7 @@ namespace DataAccess
 
                     return Convert.ToBoolean(result);
                 }
-            } 
+            }
         }
 
         public static List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate)
@@ -2536,10 +2536,10 @@ namespace DataAccess
                         while (reader.Read())
                         {
                             var project = new Project
-                                            {
-                                                Id = (int)reader[Constants.ColumnNames.ProjectIdColumn],
-                                                Name = (string)reader[Constants.ColumnNames.NameColumn]
-                                            };
+                            {
+                                Id = (int)reader[Constants.ColumnNames.ProjectIdColumn],
+                                Name = (string)reader[Constants.ColumnNames.NameColumn]
+                            };
                             projectList.Add(project);
                         }
                     }
@@ -2778,17 +2778,17 @@ namespace DataAccess
 
 
                             var project = new Project
-                              {
-                                  Id = reader.GetInt32(projectIdIndex),
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
 
-                                  Name = reader.GetString(nameIndex),
-                                  StartDate =
-                                      !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
-                                  EndDate =
-                                      !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
-                                  ProjectNumber = projectNumber,
-                                  BillableType = !reader.IsDBNull(billingTypeIndex) ? reader.GetString(billingTypeIndex) : string.Empty
-                              };
+                                Name = reader.GetString(nameIndex),
+                                StartDate =
+                                    !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                                EndDate =
+                                    !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                                ProjectNumber = projectNumber,
+                                BillableType = !reader.IsDBNull(billingTypeIndex) ? reader.GetString(billingTypeIndex) : string.Empty
+                            };
 
                             project.Status = new ProjectStatus
                             {
@@ -2836,7 +2836,7 @@ namespace DataAccess
             }
         }
 
-        public static void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
+        public static string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.AttachOpportunityToProject, connection))
@@ -2849,10 +2849,14 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.LinkParam, link);
                 connection.Open();
 
-                command.ExecuteNonQuery();
+                var result = command.ExecuteScalar();
+                if (link)
+                {
+                    return result.ToString();
+                }
+                return null;
             }
         }
     }
 }
-
 
