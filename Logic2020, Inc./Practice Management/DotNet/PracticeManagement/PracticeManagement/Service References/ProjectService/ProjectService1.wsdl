@@ -12,12 +12,6 @@
       <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IProjectService_IsUserHasPermissionOnProject_InputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserHasPermissionOnProject" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserHasPermissionOnProject_OutputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserHasPermissionOnProjectResponse" />
-  </wsdl:message>
   <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_InputMessage">
     <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProject" />
   </wsdl:message>
@@ -89,12 +83,6 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetByIdResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectBillingInfo_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectBillingInfo" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectBillingInfo_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectBillingInfoResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectsComputedFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectsComputedFinancials" />
@@ -300,11 +288,13 @@
   <wsdl:message name="IProjectService_AllProjectsWithFinancialTotalsAndPersons_OutputMessage">
     <wsdl:part name="parameters" element="tns:AllProjectsWithFinancialTotalsAndPersonsResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserHasPermissionOnProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserHasPermissionOnProject" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserHasPermissionOnProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserHasPermissionOnProjectResponse" />
+  </wsdl:message>
   <wsdl:portType name="IProjectService">
-    <wsdl:operation name="IsUserHasPermissionOnProject">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject" message="tns:IProjectService_IsUserHasPermissionOnProject_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProjectResponse" message="tns:IProjectService_IsUserHasPermissionOnProject_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="IsUserIsOwnerOfProject">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" message="tns:IProjectService_IsUserIsOwnerOfProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse" message="tns:IProjectService_IsUserIsOwnerOfProject_OutputMessage" />
@@ -352,10 +342,6 @@
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetByIdResponse" message="tns:IProjectService_ProjectGetById_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectBillingInfo">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectBillingInfo" message="tns:IProjectService_GetProjectBillingInfo_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectBillingInfoResponse" message="tns:IProjectService_GetProjectBillingInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetProjectsComputedFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsComputedFinancials" message="tns:IProjectService_GetProjectsComputedFinancials_InputMessage" />
@@ -493,18 +479,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/AllProjectsWithFinancialTotalsAndPersons" message="tns:IProjectService_AllProjectsWithFinancialTotalsAndPersons_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/AllProjectsWithFinancialTotalsAndPersonsResponse" message="tns:IProjectService_AllProjectsWithFinancialTotalsAndPersons_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="IsUserHasPermissionOnProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject" message="tns:IProjectService_IsUserHasPermissionOnProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProjectResponse" message="tns:IProjectService_IsUserHasPermissionOnProject_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="IsUserHasPermissionOnProject">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="IsUserIsOwnerOfProject">
       <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" style="document" />
       <wsdl:input>
@@ -606,15 +587,6 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectGetById" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectBillingInfo">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectBillingInfo" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -921,6 +893,15 @@
     </wsdl:operation>
     <wsdl:operation name="AllProjectsWithFinancialTotalsAndPersons">
       <soap:operation soapAction="http://tempuri.org/IProjectService/AllProjectsWithFinancialTotalsAndPersons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsUserHasPermissionOnProject">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
