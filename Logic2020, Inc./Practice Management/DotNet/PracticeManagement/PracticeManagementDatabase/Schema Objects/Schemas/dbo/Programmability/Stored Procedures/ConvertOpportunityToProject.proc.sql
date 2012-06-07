@@ -67,7 +67,8 @@ BEGIN
 		@OpportunityId = @OpportunityId,
 		@Description   = @Description,
 		@CanCreateCustomWorkTypes = 0,
-		@IsInternal = 0
+		@IsInternal = 0,
+		@SowBudget = NULL
 
 	-- Add a sales commission
 	INSERT INTO dbo.Commission
