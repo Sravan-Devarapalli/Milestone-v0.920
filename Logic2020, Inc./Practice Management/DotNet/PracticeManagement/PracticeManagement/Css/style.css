@@ -2681,4 +2681,12 @@ TABLE.ProjectSearchPopup TD
 .ScrollingDropDownWholeWidth .scrollext_sdeProjectManagersLabel
 {
     width:99% !important;
+    vertical-align: middle;
+    line-height: 19px;
+    padding-left: 4px;
+}
+
+.ScrollingDropDownWholeWidth .scroll_cblProjectManagers
+{
+    width:20% !important;
 }
