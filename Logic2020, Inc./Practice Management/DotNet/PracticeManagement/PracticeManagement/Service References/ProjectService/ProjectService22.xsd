@@ -3,7 +3,6 @@
   <xs:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
   <xs:complexType name="ProjectCloningContext">
     <xs:sequence>
-      <xs:element minOccurs="0" name="CloneBillingInfo" type="xs:boolean" />
       <xs:element minOccurs="0" name="CloneCommissions" type="xs:boolean" />
       <xs:element minOccurs="0" name="CloneMilestones" type="xs:boolean" />
       <xs:element minOccurs="0" name="CloneNotes" type="xs:boolean" />
