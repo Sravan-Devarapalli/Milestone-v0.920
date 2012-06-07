@@ -1,6 +1,8 @@
 ﻿-- =============================================
 -- Author:		Nikita Goncharenko
 -- Create date: 2010-07-02
+-- Updated Date: 2012-06-07
+-- Updated By: ThulasiRam.P
 -- Description:	Record opportunity changes to AL
 -- =============================================
 CREATE TRIGGER [dbo].[tr_Opportunity_Log]
@@ -212,7 +214,6 @@ BEGIN
 				OR (ISNULL(i.OwnerId,0) <> ISNULL(d.OwnerId,0))
 				OR (ISNULL(i.GroupId,0) <> ISNULL(d.GroupId,0))
 				OR (ISNULL(i.SalespersonId,0) <> ISNULL(d.SalespersonId,0))
-				OR (ISNULL(i.Priority,'') <> ISNULL(d.Priority,''))
 				OR (ISNULL(i.ProjectedStartDate,'1900-01-01') <> ISNULL(d.ProjectedStartDate,'1900-01-01'))
 				OR (ISNULL(i.ProjectedEndDate,'1900-01-01') <> ISNULL(d.ProjectedEndDate,'1900-01-01'))
 				OR (ISNULL(i.[Description],'') <> ISNULL(d.[Description],''))
@@ -220,7 +221,6 @@ BEGIN
 				OR (ISNULL(i.ProjectId,0) <> ISNULL(d.ProjectId,0))
 				OR (ISNULL(i.OpportunityIndex,0) <> ISNULL(d.OpportunityIndex,0))
 				OR (ISNULL(i.EstimatedRevenue,0) <> ISNULL(d.EstimatedRevenue,0))
-				--OR (ISNULL(i.OutSideResources,'') <> ISNULL(d.OutSideResources,''))
 				OR (ISNULL(i.Pipeline,'') <> ISNULL(d.Pipeline,''))
 				OR (ISNULL(i.Proposed,'') <> ISNULL(d.Proposed,''))
 				OR (ISNULL(i.SendOut,'') <> ISNULL(d.SendOut,''))
