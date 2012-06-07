@@ -52,7 +52,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/AttachOpportunityToProject", ReplyAction="http://tempuri.org/IProjectService/AttachOpportunityToProjectResponse")]
-        void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link);
+        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
@@ -202,8 +202,6 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
-     
-        
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -260,8 +258,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
         }
         
-        public void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link) {
-            base.Channel.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
+        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link) {
+            return base.Channel.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
