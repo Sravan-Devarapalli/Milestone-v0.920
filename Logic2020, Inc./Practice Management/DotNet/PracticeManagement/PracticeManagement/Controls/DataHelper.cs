@@ -1121,6 +1121,25 @@ namespace PraticeManagement.Controls
 
         }
 
+        public static void FillUnlinkedOpportunityList(int? clientId, ListControl control, string firstItemText)
+        {
+            using (var serviceClient = new OpportunityService.OpportunityServiceClient())
+            {
+                try
+                {
+                    Opportunity[] opportunities = serviceClient.OpportunityListWithMinimumDetails(clientId, false);
+
+                    FillListDefault(control, firstItemText, opportunities, false, "Id", "Name");
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+
+        }
+
         /// <summary>
         /// Fills the list control with the list of active practice managers.
         /// </summary>
