@@ -14,7 +14,6 @@
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
       <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
       <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingInfo" nillable="true" type="tns:BillingInfo" />
       <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CanCreateCustomWorkTypes" type="xs:boolean" />
       <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
@@ -82,6 +81,7 @@
       <xs:element minOccurs="0" name="AttachmentSize" type="xs:int" />
       <xs:element minOccurs="0" name="Category" type="tns:ProjectAttachmentCategory" />
       <xs:element minOccurs="0" name="UploadedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Uploader" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
@@ -93,22 +93,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ProjectAttachmentCategory" nillable="true" type="tns:ProjectAttachmentCategory" />
-  <xs:complexType name="BillingInfo">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BillingAddress1" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingAddress2" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingCity" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingContact" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingEmail" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingPhone" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingState" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingZip" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="PurchaseOrder" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BillingInfo" nillable="true" type="tns:BillingInfo" />
   <xs:complexType name="Client">
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
