@@ -157,6 +157,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvClient;
         
         /// <summary>
+        /// cvClientOpportunityLinked control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvClientOpportunityLinked;
+        
+        /// <summary>
         /// ddlSalesperson control.
         /// </summary>
         /// <remarks>
@@ -292,15 +301,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.TextBox txtSowBudget;
         
         /// <summary>
-        /// rfvSowBudget control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvSowBudget;
-        
-        /// <summary>
         /// cblProjectManagers control.
         /// </summary>
         /// <remarks>
@@ -370,7 +370,7 @@ namespace PraticeManagement {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgLink;
+        protected global::System.Web.UI.WebControls.ImageButton imgLink;
         
         /// <summary>
         /// lbOpportunity control.
@@ -1064,6 +1064,87 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary VsumProjectName;
+        
+        /// <summary>
+        /// hdnLinkPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnLinkPopup;
+        
+        /// <summary>
+        /// mpeLinkOpportunityPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeLinkOpportunityPopup;
+        
+        /// <summary>
+        /// pnlLinkOpportunity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlLinkOpportunity;
+        
+        /// <summary>
+        /// btnLinkOpportunityClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLinkOpportunityClose;
+        
+        /// <summary>
+        /// ddlOpportunities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlOpportunities;
+        
+        /// <summary>
+        /// cvOpportunityRequired control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvOpportunityRequired;
+        
+        /// <summary>
+        /// valSumLinkOpportunity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumLinkOpportunity;
+        
+        /// <summary>
+        /// btnLinkOpportunity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLinkOpportunity;
+        
+        /// <summary>
+        /// btnLinkOpportunityCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLinkOpportunityCancel;
         
         /// <summary>
         /// pnlAttachSOW control.
