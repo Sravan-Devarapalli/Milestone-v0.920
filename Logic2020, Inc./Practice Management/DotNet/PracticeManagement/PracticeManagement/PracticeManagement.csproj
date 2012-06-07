@@ -401,6 +401,7 @@
     <Content Include="Css\TableSortStyle.css" />
     <Content Include="DashBoard.aspx" />
     <Content Include="Images\add_24.png" />
+    <Content Include="Images\arrow_16x16.png" />
     <Content Include="Images\asc.gif" />
     <Content Include="Images\bg.gif" />
     <Content Include="Images\close_24.png" />
@@ -408,6 +409,7 @@
     <Content Include="Images\copy.png" />
     <Content Include="Images\desc.gif" />
     <Content Include="Images\divisions_16x16.png" />
+    <Content Include="Images\link.png" />
     <Content Include="Images\Non-Billable-Icon.png" />
     <Content Include="Images\notes.png" />
     <Content Include="Images\notes_optional.png" />
@@ -538,6 +540,28 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService9.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService1.wsdl" />
+    <None Include="Service References\OpportunityService\OpportunityService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService13.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService14.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService16.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\OpportunityService\OpportunityService21.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ProjectGroupService\ProjectGroupService10.xsd">
@@ -677,6 +701,7 @@
     <Content Include="Scripts\jquery.tablesorter.js" />
     <None Include="Service References\TimeTypeService\TimeTypeService14.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
+    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
@@ -925,25 +950,6 @@
     <None Include="Service References\MilestonePersonService\MilestonePersonService8.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\OpportunityService\OpportunityService1.wsdl" />
-    <None Include="Service References\OpportunityService\OpportunityService10.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OpportunityService\OpportunityService11.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OpportunityService\OpportunityService12.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OpportunityService\OpportunityService13.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OpportunityService\OpportunityService14.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OpportunityService\OpportunityService16.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\OpportunityService\OpportunityService17.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -954,9 +960,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\OpportunityService\OpportunityService20.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\OpportunityService\OpportunityService21.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\OverheadService\OverheadService1.wsdl" />
@@ -1149,7 +1152,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
-    <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="SkillsProfile.aspx" />
