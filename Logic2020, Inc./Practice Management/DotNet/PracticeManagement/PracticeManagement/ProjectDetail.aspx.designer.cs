@@ -301,6 +301,42 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.TextBox txtSowBudget;
         
         /// <summary>
+        /// watermarkSowBudget control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender watermarkSowBudget;
+        
+        /// <summary>
+        /// fteSowBudget control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender fteSowBudget;
+        
+        /// <summary>
+        /// custSowBudget control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custSowBudget;
+        
+        /// <summary>
+        /// custSowBudgetMinValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custSowBudgetMinValue;
+        
+        /// <summary>
         /// cblProjectManagers control.
         /// </summary>
         /// <remarks>
