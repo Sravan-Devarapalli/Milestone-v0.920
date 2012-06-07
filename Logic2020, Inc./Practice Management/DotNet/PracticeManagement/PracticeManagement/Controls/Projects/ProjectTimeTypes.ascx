@@ -190,7 +190,7 @@
 </table>
 <asp:Panel ID="pnlAddNewTimeType" runat="server" BackColor="White" BorderColor="Black"
     Style="display: none; width: 375px;" BorderWidth="2px">
-    <table width="100%" style="padding: 5px;">
+    <table width="100%" style="padding: 5px;" class="projectTimeTypes">
         <tr style="background-color: Gray; height: 20px;">
             <th valign="middle" align="center" style="text-align: center; color: Black; font-weight: bold;
                 background-color: Gray;">
@@ -201,13 +201,13 @@
                     Style="float: right;" OnClick="btnCloseWorkType_OnClick" Text="X"></asp:Button>
             </th>
         </tr>
-        <tr style="height: 5px;">
-            <td colspan="2">
+        <tr style="height: 5px !important;">
+            <td colspan="2" style="height: 5px !important;">
                 &nbsp;
             </td>
         </tr>
         <tr>
-            <td style="white-space: nowrap; height: 25px; padding-left: 10px;">
+            <td style="white-space: nowrap; height: 25px !important; padding-left: 10px !important;">
                 <asp:TextBox ID="txtNewTimeType" Width="90%" MaxLength="50" runat="server"></asp:TextBox>
                 <ajax:FilteredTextBoxExtender ID="fteNewTimeType" TargetControlID="txtNewTimeType"
                     FilterMode="ValidChars" FilterType="UppercaseLetters,LowercaseLetters,Numbers,Custom"
@@ -221,11 +221,11 @@
                     ErrorMessage="This work type already exists. Please enter a different work type."
                     Display="Dynamic" ToolTip="This work type already exists. Please enter a different work type.">*</asp:CustomValidator>
             </td>
-            <td style="width: 15px;">
+            <td style="width: 15px !important;">
             </td>
         </tr>
         <tr>
-            <td style="white-space: nowrap; height: 20px; padding-left: 10px;">
+            <td style="white-space: nowrap;padding-left: 10px !important;">
                 <asp:ValidationSummary ID="vsumNewTimeType" runat="server" EnableClientScript="false"
                     ValidationGroup="NewTimeType" />
             </td>
@@ -233,7 +233,7 @@
             </td>
         </tr>
         <tr>
-            <td align="center" style="height: 20px; padding-left: 10px;">
+            <td align="center" style="padding-left: 10px;">
                 <asp:Button ID="btnInsertTimeType" runat="server" OnClick="btnInsertTimeType_OnClick"
                     ToolTip="Confirm" Text="Add" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:Button ID="btnCancleTimeType" runat="server" ToolTip="Cancel" Text="Cancel"
