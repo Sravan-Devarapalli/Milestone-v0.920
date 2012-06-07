@@ -183,6 +183,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Opportunity> OpportunitySearchText(string looked, int personId);
+
+        [OperationContract]
+        List<Opportunity> OpportunityListWithMinimumDetails(int? clientId, bool? attach);
     }
 }
 
