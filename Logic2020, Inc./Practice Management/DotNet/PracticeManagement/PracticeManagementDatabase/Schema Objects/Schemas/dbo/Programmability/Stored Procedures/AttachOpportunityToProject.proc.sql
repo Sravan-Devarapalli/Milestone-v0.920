@@ -32,10 +32,15 @@ BEGIN
 		
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
+		DECLARE @OpportunityNumber NVARCHAR(255)
+
 		UPDATE O
-			SET O.ProjectId = @ProjectId
+			SET O.ProjectId = @ProjectId,
+				@OpportunityNumber = O.OpportunityNumber
 		FROM dbo.Opportunity O
 		WHERE O.OpportunityId = @OpportunityId
+
+		SELECT @OpportunityNumber
 		
 	END
 	ELSE
