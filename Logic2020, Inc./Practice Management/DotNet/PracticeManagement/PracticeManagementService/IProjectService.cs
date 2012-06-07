@@ -366,13 +366,13 @@ namespace PracticeManagementService
         Dictionary<DateTime, bool> GetIsHourlyRevenueByPeriod(int projectId, int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        Project GetProjectShortByProjectNumber(string projectNumber,int? milestoneId, DateTime? startDate, DateTime? endDate);
+        Project GetProjectShortByProjectNumber(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate);
 
         [OperationContract]
         List<TimeTypeRecord> GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds);
 
         [OperationContract]
-        void AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link);
+        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link);
     }
 }
 
