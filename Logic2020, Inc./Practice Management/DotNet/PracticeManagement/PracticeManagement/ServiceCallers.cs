@@ -79,6 +79,11 @@ namespace PraticeManagement
                 return Invoke(func);
             }
 
+            public static void Project(Action<ProjectServiceClient> action)
+            {
+                Invoke(action);
+            }
+
             public static TResult Person<TResult>(Func<PersonServiceClient, TResult> func)
             {
                 return Invoke(func);
