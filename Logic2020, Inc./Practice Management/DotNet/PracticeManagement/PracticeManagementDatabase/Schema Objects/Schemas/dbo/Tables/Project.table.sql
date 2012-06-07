@@ -12,7 +12,7 @@
     [BuyerName]        NVARCHAR (100)  NULL,
     [OpportunityId]    INT             NULL,
     [GroupId]          INT             NULL,
-    [IsChargeable]     BIT             NOT NULL,
+    [IsChargeable]     BIT             NULL,
 	[DirectorId]	   INT			   NULL,
 	[Description]      NVARCHAR (MAX)  NULL,
 	[CanCreateCustomWorkTypes]	BIT	   NOT NULL,
