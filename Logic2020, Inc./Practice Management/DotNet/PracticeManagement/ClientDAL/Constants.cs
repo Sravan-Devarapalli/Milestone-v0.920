@@ -972,6 +972,7 @@
                 public const string OpportunityListAll = "dbo.OpportunityListAll";
                 public const string FilteredOpportunityListAll = "dbo.FilteredOpportunityListAll";
                 public const string OpportunityListAllShort = "dbo.OpportunityListAllShort";
+                public const string OpportunityListWithMinimumDetails = "dbo.OpportunityListWithMinimumDetails";
                 public const string OpportunityGetById = "dbo.OpportunityGetById";
                 public const string OpportunityInsert = "dbo.OpportunityInsert";
                 public const string OpportunityUpdate = "dbo.OpportunityUpdate";
