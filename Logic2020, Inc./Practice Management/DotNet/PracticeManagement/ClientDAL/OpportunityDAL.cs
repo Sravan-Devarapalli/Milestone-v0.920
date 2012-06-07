@@ -1312,6 +1312,47 @@ namespace DataAccess
             }
             
         }
+
+        public static List<Opportunity> OpportunityListWithMinimumDetails(int? clientId, bool? attach)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityListWithMinimumDetails, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdParam, clientId.HasValue ? (object)clientId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.LinkParam, attach.HasValue ? (object)attach.Value : DBNull.Value);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<Opportunity>();
+                    ReadOpportunityBasicDetails(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadOpportunityBasicDetails(SqlDataReader reader, List<Opportunity> result)
+        {
+            int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+            int opportunityNameIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityName);
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var opportunity = new Opportunity
+                    {
+                        Id = reader.GetInt32(opportunityIdIndex),
+                        Name = reader.GetString(opportunityNameIndex)
+                    };
+
+                    result.Add(opportunity);
+                }
+            }
+        }
     }
 }
 
