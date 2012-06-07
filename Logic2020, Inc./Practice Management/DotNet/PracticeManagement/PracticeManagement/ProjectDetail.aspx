@@ -348,7 +348,6 @@
         
         .ProjectAttachmentNameWrap
         {
-            max-width: 300px;
             display: inline-block;
             white-space: normal !important;
             word-wrap: break-word;
@@ -629,7 +628,7 @@
                                 <td style="width: 32%; padding: 3px 0px 3px 0px;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="width: 30%; vertical-align: top;">
+                                            <td style="width: 30%; vertical-align: top; line-height:20px;">
                                                 Project Manager(s)
                                             </td>
                                             <td style="width: 65%;" class="ScrollingDropDownWholeWidth">
@@ -637,7 +636,7 @@
                                                     AllSelectedReturnType="AllItems" Height="240px" onclick="scrollingDropdown_onclick('cblProjectManagers','Project Manager');"
                                                     DropDownListType="Manager" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
-                                                    UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="220px">
+                                                    UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
