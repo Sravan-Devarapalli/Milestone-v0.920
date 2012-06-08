@@ -26,7 +26,8 @@
         <s:restriction base="s:string">
           <s:enumeration value="Undefined" />
           <s:enumeration value="SOW" />
-          <s:enumeration value="SupportDocument" />
+          <s:enumeration value="MSA" />
+          <s:enumeration value="ChangeRequest" />
         </s:restriction>
       </s:simpleType>
       <s:element name="SaveProjectAttachmentResponse">
