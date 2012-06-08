@@ -1129,7 +1129,7 @@ namespace PraticeManagement.Controls
                 {
                     Opportunity[] opportunities = serviceClient.OpportunityListWithMinimumDetails(clientId, false);
 
-                    FillListDefault(control, firstItemText, opportunities, false, "Id", "Name");
+                    FillListDefault(control, firstItemText, opportunities, false, "Id", "ClientOpportunity");
                 }
                 catch (CommunicationException)
                 {
