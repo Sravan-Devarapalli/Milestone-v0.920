@@ -45,7 +45,6 @@ AS
 	       r.Name AS RoleName,
 	       m.SalesCommission,
 	       m.ExpectedHours AS MilestoneExpectedHours,
-	       m.ActualDeliveryDate AS MilestoneActualDeliveryDate,
 		   ISNULL((SELECT COUNT(*)
 				FROM dbo.v_PersonCalendar AS pcal
 				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 
