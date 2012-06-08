@@ -305,7 +305,10 @@ namespace PraticeManagement.AttachmentService {
         SOW,
         
         /// <remarks/>
-        SupportDocument,
+        MSA,
+        
+        /// <remarks/>
+        ChangeRequest,
     }
     
     /// <remarks/>
