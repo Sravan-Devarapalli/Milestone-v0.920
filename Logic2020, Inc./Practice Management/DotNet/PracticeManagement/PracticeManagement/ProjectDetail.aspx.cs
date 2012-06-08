@@ -207,6 +207,7 @@ namespace PraticeManagement
         #endregion
 
         private bool IsErrorPanelDisplay;
+        private bool FromSaveButtonClick;
 
         #region Methods
 
@@ -598,6 +599,7 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            FromSaveButtonClick = true;
             ValidateSaveAndPopulate();
         }
 
@@ -1183,8 +1185,15 @@ namespace PraticeManagement
                     projectExpenses.BindExpenses();
                 }
                 result = true;
+                if (FromSaveButtonClick)
+                {
+                    IsErrorPanelDisplay = true;
+                }
             }
-            IsErrorPanelDisplay = true;
+            else
+            {
+                IsErrorPanelDisplay = true;
+            }
             return result;
         }
 
