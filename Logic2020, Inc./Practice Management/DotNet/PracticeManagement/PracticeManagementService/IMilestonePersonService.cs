@@ -42,14 +42,6 @@ namespace PracticeManagementService
         List<MilestonePerson> GetMilestonePersonListByMilestone(int milestoneId);
 
         /// <summary>
-        /// Retrives the list of the <see cref="Milestone"/>s for the specified <see cref="Person"/>.
-        /// </summary>
-        /// <param name="personId">An ID of the person the the data be retrieved for.</param>
-        /// <returns>The list of the <see cref="MilestonePerson"/> objects.</returns>
-        [OperationContract]
-        List<MilestonePerson> GetMilestonePersonListByPerson(int personId);
-
-        /// <summary>
         /// Retrives the milestone-person link details
         /// </summary>
         /// <param name="milestonePersonId">An ID of the milestone-person association.</param>
