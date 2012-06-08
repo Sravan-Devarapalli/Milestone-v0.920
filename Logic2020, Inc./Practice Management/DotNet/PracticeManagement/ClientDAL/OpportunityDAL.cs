@@ -1338,7 +1338,9 @@ namespace DataAccess
         {
             int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
             int opportunityNameIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityName);
-
+            int opportunityNumberIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityNumberColumn);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -1346,7 +1348,12 @@ namespace DataAccess
                     var opportunity = new Opportunity
                     {
                         Id = reader.GetInt32(opportunityIdIndex),
-                        Name = reader.GetString(opportunityNameIndex)
+                        Name = reader.GetString(opportunityNameIndex),
+                        OpportunityNumber = reader.GetString(opportunityNumberIndex),
+                        Client = new Client 
+                        {
+                            Name = reader.GetString(clientNameIndex)
+                        }
                     };
 
                     result.Add(opportunity);
