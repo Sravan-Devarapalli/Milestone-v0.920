@@ -498,7 +498,6 @@
     <Content Include="Controls\ExpenseCategoryListControl.ascx" />
     <Content Include="Controls\ExpenseListControl.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
-    <Content Include="Controls\Generic\RecentNotes.ascx" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
@@ -1990,13 +1989,6 @@
     </Compile>
     <Compile Include="Controls\Generic\OpportunityList.ascx.designer.cs">
       <DependentUpon>OpportunityList.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Generic\RecentNotes.ascx.cs">
-      <DependentUpon>RecentNotes.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Generic\RecentNotes.ascx.designer.cs">
-      <DependentUpon>RecentNotes.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Generic\ScrollableDropdown\ScrollableDropdownExtender.cs" />
     <Compile Include="Controls\Generic\SearchHighlighting\SearchHighlightingExtender.cs" />
