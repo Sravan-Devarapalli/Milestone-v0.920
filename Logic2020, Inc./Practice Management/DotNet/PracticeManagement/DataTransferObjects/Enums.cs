@@ -146,8 +146,11 @@ namespace DataTransferObjects
         [Description("SOW")]
         SOW = 1,
         [EnumMember]
-        [Description("Support Document")]
-        SupportDocument = 2
+        [Description("MSA")]
+        MSA = 2,
+        [EnumMember]
+        [Description("Change Request")]
+        ChangeRequest = 3
     }
 }
 
