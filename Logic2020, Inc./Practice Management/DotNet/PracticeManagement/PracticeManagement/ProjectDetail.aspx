@@ -30,6 +30,7 @@
     <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script src="Scripts/ScrollinDropDown.js" type="text/javascript"></script>
     <script src="Scripts/FilterTable.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript">
         function checkDirty(target, entityId) {
             if (showDialod()) {
@@ -42,7 +43,7 @@
 
         function ConfirmUnlink() {
 
-            if (confirm("Are you sure. Do you want to unlink the Opportunity?")) {
+            if (confirm("Are you sure you want to unlink the existing Opportunity?")) {
                 return true;
             }
 
@@ -232,6 +233,11 @@
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
         function endRequestHandle(sender, Args) {
+            $("#tblProjectAttachments").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
             var activityLog = document.getElementById('<%= activityLog.ClientID%>');
             if (activityLog != null) {
                 imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
@@ -266,23 +272,29 @@
 
         // End Region projecttimetypes script
 
-    
+        $(document).ready(function () {
+            $("#tblProjectAttachments").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
+        });
     </script>
     <style type="text/css">
         /* --------- Tabs for person and project details pages ------ */
-                
+        
         .projectTimeTypes tr
         {
-            height: 20px !important; 
+            height: 20px !important;
         }
         
         .projectTimeTypes td
         {
             float: none !important;
             padding: 0px !important;
-            height: 20px !important; 
+            height: 20px !important;
         }
-
+        
         .CustomTabStyle tr
         {
             height: 30px;
@@ -363,7 +375,11 @@
                     <td>
                         <table class="WholeWidth">
                             <tr>
-                                <td style="width: 71%; padding: 5px;">
+                                <td style="width: 71%; padding: 5px;padding-left:0px;">
+                                    <asp:TextBox ID="txtProjectNameFirstTime" runat="server" Visible="false" Width="350"></asp:TextBox>
+                                    <AjaxControlToolkit:TextBoxWatermarkExtender ID="txtweProjectNameFirstTime" runat="server"
+                                        TargetControlID="txtProjectNameFirstTime" WatermarkText="Enter a Project Name here..."
+                                        EnableViewState="false" WatermarkCssClass="watermarkedtext" />
                                     <asp:Label ID="lblProjectNumber" runat="server" Style="font-size: 15px; font-weight: bold;"></asp:Label>
                                     <asp:Label ID="lblProjectName" runat="server" Style="font-size: 15px; font-weight: bold;"></asp:Label>
                                     <asp:Label ID="lblProjectRange" runat="server" Style="font-size: 15px; font-weight: bold;"></asp:Label>
@@ -379,17 +395,17 @@
                                 <td style="width: 28%; text-align: right;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="float:right; vertical-align:middle;">
+                                            <td style="float: right; vertical-align: middle;">
                                                 <table>
                                                     <tr>
                                                         <td style="font-weight: bold; font-size: 15px; width: 60%;">
                                                             Project Status
                                                         </td>
-                                                        <td style="padding-right:4px;">
+                                                        <td style="padding-right: 4px;">
                                                             <div id="divStatus" runat="server">
                                                             </div>
                                                         </td>
-                                                        <td style="vertical-align:middle; line-height:1px;">
+                                                        <td style="vertical-align: middle; line-height: 1px;">
                                                             <asp:DropDownList ID="ddlProjectStatus" runat="server" onchange="setDirty();" AutoPostBack="True"
                                                                 Width="100" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
                                                             </asp:DropDownList>
@@ -410,7 +426,7 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="width: 1%; padding-left:20px;">
+                                <td style="width: 1%; padding-left: 20px;">
                                 </td>
                             </tr>
                         </table>
@@ -435,9 +451,9 @@
                                             <td style="width: 30%;">
                                                 Account
                                             </td>
-                                            <td style="width: 65%;">
+                                            <td style="width: 65%;" >
                                                 <asp:DropDownList ID="ddlClientName" runat="server" OnSelectedIndexChanged="ddlClientName_SelectedIndexChanged"
-                                                    CssClass="Width92Per" AutoPostBack="True" onchange="setDirty();">
+                                                    CssClass="Width95Per" AutoPostBack="True" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td style="width: 5%;">
@@ -466,7 +482,7 @@
                                             </td>
                                             <td style="width: 65%; white-space: nowrap;">
                                                 &nbsp;&nbsp;
-                                                <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" style="width:95%;"
+                                                <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="Width95Per"
                                                     Enabled="false" onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
@@ -488,7 +504,7 @@
                                                 Client Director
                                             </td>
                                             <td style="width: 65%;">
-                                                <asp:DropDownList ID="ddlDirector" runat="server" Enabled="false" CssClass="WholeWidth"
+                                                <asp:DropDownList ID="ddlDirector" runat="server" Enabled="false" CssClass="Width95Per"
                                                     onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
@@ -506,7 +522,7 @@
                                                 Business Unit
                                             </td>
                                             <td style="width: 65%;">
-                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="Width92Per"
+                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="Width95Per"
                                                     OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true">
                                                 </asp:DropDownList>
                                             </td>
@@ -555,10 +571,10 @@
                                                 Project Owner
                                             </td>
                                             <td style="width: 65%;">
-                                                <asp:DropDownList ID="ddlProjectOwner" runat="server" onchange="setDirty();" CssClass="WholeWidth">
+                                                <asp:DropDownList ID="ddlProjectOwner" runat="server" onchange="setDirty();" CssClass="Width95Per">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 5%;">
+                                            <td style="width: 5%;padding-left:2px;">
                                                 <asp:RequiredFieldValidator ID="reqProjectOwner" runat="server" ControlToValidate="ddlProjectOwner"
                                                     EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Owner is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Project Owner is required."></asp:RequiredFieldValidator>
@@ -579,7 +595,7 @@
                                                 Practice Area
                                             </td>
                                             <td style="width: 65%;">
-                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="Width92Per"
+                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="Width95Per"
                                                     AutoPostBack="True" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
                                                 </asp:DropDownList>
                                             </td>
@@ -601,13 +617,13 @@
                                             </td>
                                             <td style="width: 65%; white-space: nowrap;">
                                                 $
-                                                <asp:TextBox ID="txtSowBudget" runat="server" onchange="setDirty();" CssClass="Width92Per" style="width:92% !important"
-                                                    MaxLength="100"></asp:TextBox>
+                                                <asp:TextBox ID="txtSowBudget" runat="server" onchange="setDirty();" CssClass="Width92Per"
+                                                    Style="width: 92% !important" MaxLength="100"></asp:TextBox>
                                                 <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarkSowBudget" runat="server"
-                                                    TargetControlID="txtSowBudget" WatermarkText="Ex: 15000, minimum 1000" EnableViewState="false"
+                                                    TargetControlID="txtSowBudget" WatermarkText="Ex: 15000" EnableViewState="false"
                                                     WatermarkCssClass="watermarkedtext" />
                                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="fteSowBudget" TargetControlID="txtSowBudget"
-                                                    FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server" ValidChars="." />
+                                                    FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server" ValidChars=".," />
                                             </td>
                                             <td style="width: 5%;">
                                                 <asp:CustomValidator ID="custSowBudget" runat="server" ControlToValidate="txtSowBudget"
@@ -615,10 +631,6 @@
                                                     ErrorMessage="A number with 2 decimal digits is allowed for the SOW Budget."
                                                     EnableClientScript="false" SetFocusOnError="true" OnServerValidate="custSowBudget_ServerValidate"
                                                     Display="Dynamic" ValidationGroup="Project"></asp:CustomValidator>
-                                                <asp:CustomValidator ID="custSowBudgetMinValue" runat="server" ControlToValidate="txtSowBudget"
-                                                    ToolTip="SOW Budget minimum value should be 1000." Text="*" EnableClientScript="false"
-                                                    ErrorMessage="SOW Budget minimum value should be 1000." SetFocusOnError="true"
-                                                    Display="Dynamic" OnServerValidate="custSowBudgetMinValue_ServerValidate" ValidationGroup="Project" />
                                             </td>
                                         </tr>
                                     </table>
@@ -628,7 +640,7 @@
                                 <td style="width: 32%; padding: 3px 0px 3px 0px;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="width: 30%; vertical-align: top; line-height:20px;">
+                                            <td style="width: 30%; vertical-align: top; line-height: 20px;">
                                                 Project Manager(s)
                                             </td>
                                             <td style="width: 65%;" class="ScrollingDropDownWholeWidth">
@@ -640,7 +652,7 @@
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
-                                            <td style="width: 5%;">
+                                            <td style="width: 5%;padding-left:2px;">
                                                 <asp:CustomValidator ID="cvProjectManager" runat="server" EnableClientScript="false"
                                                     ValidationGroup="Project" ErrorMessage="The Project Manager(s) is required."
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectManager_OnServerValidate"
@@ -670,10 +682,11 @@
                     <td>
                         <table class="WholeWidth">
                             <tr>
-                                <td style="width: 55%;height:120px;">
+                                <td style="width: 55%; height: 120px;">
                                     <table class="WholeWidth" height="100%">
                                         <tr>
-                                            <td style="height: 20px; font-size: 15px; font-style: italic; vertical-align: bottom;padding-bottom: 5px; ">
+                                            <td style="height: 20px; font-size: 15px; font-style: italic; vertical-align: bottom;
+                                                padding-bottom: 5px;">
                                                 <u>Project Notes</u>
                                                 <asp:CustomValidator ID="custProjectDesciption" runat="server" ControlToValidate="txtDescription"
                                                     Display="Dynamic" OnServerValidate="custProjectDesciption_ServerValidation" SetFocusOnError="True"
@@ -690,19 +703,19 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="width: 45%; padding-left: 10px; height:120px; ">
+                                <td style="width: 45%; padding-left: 10px; height: 120px;">
                                     <table class="WholeWidth" height="100%">
                                         <tr>
-                                            <td style="height: 20px; font-size: 15px; font-style: italic; vertical-align: bottom;padding-bottom: 5px; ">
+                                            <td style="height: 20px; font-size: 15px; font-style: italic; vertical-align: bottom;
+                                                padding-bottom: 5px;">
                                                 <u>Opportunity Linking</u>
                                                 <asp:ImageButton ID="imgLink" runat="server" AlternateText="Link Opportunity" ToolTip="Link Opportunity"
-                                                    OnClick="imgLink_Click" Visible="false" ImageUrl="~/Images/link.png" />
+                                                    OnClick="imgLink_Click" Visible="true" ImageUrl="~/Images/link.png" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="height: 30px; padding-left: 10px; vertical-align: top;">
-                                                <asp:Label ID="lbOpportunity" Visible="false" runat="server" Style="line-height: 20px;
-                                                    vertical-align: middle;"></asp:Label>
+                                                <asp:Label ID="lbOpportunity" runat="server" Style="line-height: 20px; vertical-align: middle;"></asp:Label>
                                                 <asp:ImageButton ID="imgNavigateToOpp" runat="server" AlternateText="Navigate to Opportunity"
                                                     OnClientClick="RedirectToOpportunity(); return false;" Visible="false" ToolTip="Navigate to Opportunity"
                                                     ImageUrl="~/Images/arrow_16x16.png" />
@@ -712,12 +725,12 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="height: 30px; font-size: 15px; font-style: italic;vertical-align: bottom;"">
+                                            <td style="height: 30px; font-size: 15px; font-style: italic; vertical-align: bottom;">
                                                 <u>Time Entry</u>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="height: 20px; padding-left: 10px;vertical-align: bottom;padding-bottom:3px;">
+                                            <td style="height: 20px; padding-left: 10px; vertical-align: bottom; padding-bottom: 3px;">
                                                 Notes for this project are
                                                 <asp:DropDownList ID="ddlNotes" runat="server" Width="200">
                                                     <asp:ListItem Selected="True" Text="Required" Value="1"></asp:ListItem>
@@ -811,18 +824,48 @@
                                     </div>
                                     <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="stbAttachSOW"
                                         BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
-                                    <asp:GridView ID="gvProjectAttachments" runat="server" AutoGenerateColumns="false"
-                                        BackColor="White" CssClass="CompPerfTable" Width="100%" HorizontalAlign="Center"
-                                        EmptyDataText="No Attachments have been attached for this project.." DataKeyNames="AttachmentId"
-                                        GridLines="None">
-                                        <Columns>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Attachment Name
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
+                                    <asp:Repeater ID="repProjectAttachments" runat="server">
+                                        <HeaderTemplate>
+                                            <table class="CompPerfTable tablesorter" width="100%" align="center" id="tblProjectAttachments">
+                                                <thead>
+                                                    <tr class="CompPerfHeader">
+                                                        <th style="width: 43%;">
+                                                            <div class="ie-bg NoBorder">
+                                                                Attachment Name
+                                                            </div>
+                                                        </th>
+                                                        <th style="width: 13%;">
+                                                            <div class="ie-bg NoBorder">
+                                                                Category
+                                                            </div>
+                                                        </th>
+                                                        <th style="width: 11%;">
+                                                            <div class="ie-bg NoBorder">
+                                                                Size
+                                                            </div>
+                                                        </th>
+                                                        <th style="width: 13%;">
+                                                            <div class="ie-bg NoBorder">
+                                                                Uploaded Date
+                                                            </div>
+                                                        </th>
+                                                        <th style="width: 15%;">
+                                                            <div class="ie-bg NoBorder">
+                                                                Uploader
+                                                            </div>
+                                                        </th>
+                                                        <th style="width: 5%;">
+                                                            <div class="ie-bg NoBorder">
+                                                                &nbsp;
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td class="textLeft padLeft20">
                                                     <% if (Project != null && Project.Id.HasValue)
                                                        { %>
                                                     <asp:HyperLink ID="hlnkProjectAttachment1" CssClass="ProjectAttachmentNameWrap" runat="server"
@@ -834,74 +877,33 @@
                                                         Visible="<%# IsProjectCreated() %>" CommandName='<%# Eval("AttachmentId") %>'
                                                         Text='<%# GetWrappedText((string)Eval("AttachmentFileName")) %>' OnClick="lnkProjectAttachment_OnClick" />
                                                     <% } %>
-                                                </ItemTemplate>
-                                                <ItemStyle HorizontalAlign="Left" CssClass="padLeft20"/>
-                                                <HeaderStyle HorizontalAlign="Left" CssClass="padLeft20" Width="43%"/>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Category
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
+                                                </td>
+                                                <td class="textCenter">
                                                     <asp:Label ID="lblAttachmentCategory" runat="server" Text='<%# Eval("Category")%>'></asp:Label>
-                                                </ItemTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                                <HeaderStyle Width="13%"/>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Size
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
+                                                </td>
+                                                <td class="textCenter" sorttable_customkey='<%# ((int)Eval("AttachmentSize")/1024) %>'>
                                                     <asp:Label ID="lblAttachmentSize" runat="server" Text='<%# string.Format("{0}Kb", (int)Eval("AttachmentSize")/1024)  %>'></asp:Label>
-                                                </ItemTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                                <HeaderStyle Width="11%"/>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Uploaded Date
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format("{0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("MM/dd/yyyy")) : string.Empty %>'></asp:Label>
-                                                </ItemTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                                <HeaderStyle Width="13%"/>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Uploader
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
+                                                </td>
+                                                <td class="textCenter">
+                                                    <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format("{0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("yyyy/MM/dd")) : string.Empty %>'></asp:Label>
+                                                </td>
+                                                <td class="textCenter">
                                                     <asp:Label ID="lblUploader" runat="server" Text='<%# Eval("Uploader") %>'></asp:Label>
-                                                </ItemTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                                <HeaderStyle Width="15%"/>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        &nbsp;
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
+                                                </td>
+                                                <td class="textCenter">
                                                     <asp:ImageButton ID="imgbtnDeleteAttachment1" OnClick="imgbtnDeleteAttachment_Click"
                                                         AttachmentId='<%# Eval("AttachmentId") %>' OnClientClick="if(confirm('Do you really want to delete the project attachment?')){ return true;}return false;"
                                                         Visible="true" runat="server" ImageUrl="~/Images/trash-icon-Large.png" ToolTip="Delete Attachment" />
-                                                </ItemTemplate>
-                                                <ItemStyle HorizontalAlign="Center" />
-                                                <HeaderStyle Width="5%"/>
-                                            </asp:TemplateField>
-                                        </Columns>
-                                    </asp:GridView>
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            </tbody> </table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <div id="divEmptyMessage" style="display: none; background-color: White;" runat="server">
+                                        No attachments have been uploaded for this project.
+                                    </div>
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwFinancials" runat="server">
@@ -972,6 +974,7 @@
                             <asp:View ID="vwHistory" runat="server">
                                 <asp:Panel ID="plnTabHistory" runat="server" CssClass="tab-pane">
                                     <uc:ActivityLogControl runat="server" ID="activityLog" DisplayDropDownValue="Project"
+                                        ShowProjectDropDown="false" LabelTextBeforeDropDown="Show Project changes over "
                                         DateFilterValue="Year" ShowDisplayDropDown="false" />
                                 </asp:Panel>
                             </asp:View>
@@ -985,8 +988,6 @@
                                                         <asp:CheckBox ID="chbCloneMilestones" runat="server" Checked="true" Text="Clone milestones and milestone person details" /></li>
                                                     <li>
                                                         <asp:CheckBox ID="chbCloneCommissions" runat="server" Checked="true" Text="Clone commissions" /></li>
-                                                    <li>
-                                                        <asp:CheckBox ID="chbCloneNotes" runat="server" Checked="true" Text="Clone notes" /></li>
                                                     <li>Clone status
                                                         <asp:DropDownList ID="ddlCloneProjectStatus" runat="server" DataSourceID="odsProjectStatus"
                                                             DataTextField="Name" DataValueField="Id" />
@@ -1039,19 +1040,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
-                        <asp:ValidationSummary ID="vsumProject" runat="server" EnableClientScript="false"
-                            ValidationGroup="Project" />
-                        <asp:ValidationSummary ID="vsumProjectAttachment" runat="server" EnableClientScript="false"
-                            ValidationGroup="ProjectAttachment" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
-                    </td>
-                </tr>
-                <tr>
                     <td align="center" colspan="3">
                         <asp:HiddenField ID="hdnProjectId" runat="server" />
                         <asp:HiddenField ID="hdnProjectDelete" runat="server" />
@@ -1062,15 +1050,16 @@
                     </td>
                 </tr>
             </table>
+            <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
+            <asp:HiddenField ID="hdnLinkPopup" runat="server" Value="" />
+            <asp:HiddenField ID="hdnCanShowPopup" runat="server" />
             <asp:Panel ID="pnlProjectName" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none" BorderWidth="2px" Width="280px">
+                Style="display: none" BorderWidth="2px" Width="480px">
                 <table class="WholeWidth">
                     <tr>
-                        <th align="center" style="text-align: center; background-color: Gray; padding-top: 5px;
-                            vertical-align: bottom" colspan="3">
-                            <b style="font-size: 14px;">Edit Project Name</b>
-                            <asp:Button ID="btncloseEditProjectName" runat="server" CssClass="mini-report-close"
-                                ToolTip="Cancel" Style="float: right;" Text="X"></asp:Button>
+                        <th align="center" style="text-align: center; background-color: Gray; white-space: nowrap;
+                            font-weight: lighter; font-size: 14px; padding: 6px;" colspan="3" valign="middle">
+                            Edit Project Name
                         </th>
                     </tr>
                     <tr>
@@ -1079,10 +1068,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: right; width: 30%; padding-bottom: 5px; padding-right: 5px;">
+                        <td style="text-align: right; width: 20%; padding-bottom: 5px; padding-right: 5px;">
                             Project Name
                         </td>
-                        <td style="padding-bottom: 5px; width: 60%;">
+                        <td style="padding-bottom: 5px; width: 70%;">
                             <asp:TextBox ID="txtProjectName" runat="server" Style="width: 95%"></asp:TextBox>
                         </td>
                         <td style="padding-bottom: 5px; width: 10%;">
@@ -1095,6 +1084,8 @@
                         <td colspan="3" style="text-align: center; padding-bottom: 5px;">
                             <asp:Button ID="btnUpdateProjectName" runat="server" Text="Update" OnClick="btnUpdateProjectName_OnClick"
                                 onchange="setDirty();" />
+                            <asp:Button ID="btncloseEditProjectName" runat="server" ToolTip="Cancel" Text="Cancel">
+                            </asp:Button>
                         </td>
                     </tr>
                     <tr>
@@ -1105,85 +1096,21 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:HiddenField ID="hdnLinkPopup" runat="server" Value="" />
-            <AjaxControlToolkit:ModalPopupExtender ID="mpeLinkOpportunityPopup" runat="server"
-                TargetControlID="hdnLinkPopup" CancelControlID="btnLinkOpportunityClose" BehaviorID="mpeLinkOpportunityPopup"
-                BackgroundCssClass="modalBackground" PopupControlID="pnlLinkOpportunity" DropShadow="false"
-                OkControlID="btnLinkOpportunityCancel" />
-            <asp:Panel ID="pnlLinkOpportunity" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none;" BorderWidth="2px" Width="465px">
-                <table class="WholeWidth">
-                    <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                            valign="bottom">
-                            <b style="font-size: 14px; padding-top: 2px;">Link an Opportunity</b>
-                            <asp:Button ID="btnLinkOpportunityClose" runat="server" CssClass="mini-report-close"
-                                ToolTip="Cancel" Style="float: right;" Text="X"></asp:Button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px;" colspan="2">
-                            <table class="WholeWidth">
-                                <tr>
-                                    <td>
-                                        Select an Opportunity:
-                                        <asp:DropDownList ID="ddlOpportunities" runat="server" Width="250">
-                                        </asp:DropDownList>
-                                        <asp:CustomValidator ID="cvOpportunityRequired" runat="server" OnServerValidate="cvOpportunityRequired_Validate"
-                                            ValidationGroup="LinkOpportunity" Display="Dynamic" SetFocusOnError="true" Text="*"
-                                            ErrorMessage="Opportunity is required." ToolTip="Opportunity is required."></asp:CustomValidator>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top: 5px; padding-bottom: 5px;">
-                                        <asp:ValidationSummary ID="valSumLinkOpportunity" runat="server" ValidationGroup="LinkOpportunity" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: center;">
-                                        <asp:Button ID="btnLinkOpportunity" runat="server" Text="Save" OnClick="btnLinkOpportunity_Click" />
-                                        <asp:Button ID="btnLinkOpportunityCancel" runat="server" Text="Cancel" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </asp:Panel>
             <asp:Panel ID="pnlAttachSOW" runat="server" BackColor="White" BorderColor="Black"
                 Style="display: none" BorderWidth="2px" Width="465px">
                 <table class="WholeWidth" style="padding: 5px;">
                     <tr style="background-color: Gray; height: 27px;">
-                        <td align="center" style="white-space: nowrap; font-size: 14px;">
-                            Attach SOW to Existing Project
+                        <td align="center" style="white-space: nowrap; font-size: 14px;" colspan="2">
+                            Add Attachment
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             &nbsp;
                         </td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px; padding-bottom: 10px;">
-                            <table>
-                                <tr>
-                                    <td>
-                                        Category :
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList ID="ddlAttachmentCategory" runat="server" onchange="EnableUploadButton();">
-                                        </asp:DropDownList>
-                                        <asp:CustomValidator ID="cvAttachmentCategory" runat="server" ControlToValidate="ddlAttachmentCategory"
-                                            EnableClientScript="true" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvAttachmentCategory_OnServerValidate"
-                                            ValidationGroup="ProjectAttachment" Text="*" ToolTip="Category is required."
-                                            ClientValidationFunction="cvAttachmentCategory_ClientValidationFunction" ErrorMessage="Category is required."></asp:CustomValidator>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
+                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;" colspan="2">
                             <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" BackColor="White"
                                 runat="server" Width="435px" Size="68" />
                             <asp:CustomValidator ID="cvAttachment" runat="server" ControlToValidate="fuProjectAttachment"
@@ -1201,12 +1128,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;">
+                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px;" colspan="2">
                             <asp:Label ID="lblAttachmentMessage" ForeColor="Gray" runat="server"></asp:Label>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right" style="padding: 10px; padding-right: 20px; white-space: nowrap;">
+                        <td style="white-space: nowrap; padding-left: 10px; padding-right: 20px; padding-top: 10px;">
+                            <asp:DropDownList ID="ddlAttachmentCategory" runat="server" onchange="EnableUploadButton();">
+                            </asp:DropDownList>
+                            <asp:CustomValidator ID="cvAttachmentCategory" runat="server" ControlToValidate="ddlAttachmentCategory"
+                                EnableClientScript="true" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvAttachmentCategory_OnServerValidate"
+                                ValidationGroup="ProjectAttachment" Text="*" ToolTip="Category is required."
+                                ClientValidationFunction="cvAttachmentCategory_ClientValidationFunction" ErrorMessage="Category is required."></asp:CustomValidator>
+                        </td>
+                        <td align="right" style="white-space: nowrap; padding-left: 10px; padding-right: 20px;
+                            padding-top: 10px;">
                             <asp:Button ID="btnUpload" Enabled="false" ValidationGroup="ProjectAttachment" runat="server"
                                 Text="Upload" OnClick="btnUpload_Click" />
                             &nbsp;&nbsp;&nbsp;
@@ -1214,13 +1150,88 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             &nbsp;
                         </td>
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:HiddenField ID="hdnCanShowPopup" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
+                TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
+                OkControlID="btnOKErrorPanel" CancelControlID="btnOKErrorPanel" DropShadow="false" />
+            <asp:Panel ID="pnlErrorPanel" runat="server" BackColor="White" BorderColor="Black"
+                Style="display: none; max-height: 400px; max-width: 550px; min-height: 100px;
+                min-width: 400px" BorderWidth="2px">
+                <table width="100%">
+                    <tr>
+                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
+                            valign="bottom">
+                            <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">
+                            <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
+                            <asp:ValidationSummary ID="vsumProject" runat="server" EnableClientScript="false"
+                                ValidationGroup="Project" />
+                            <asp:ValidationSummary ID="vsumProjectAttachment" runat="server" EnableClientScript="false"
+                                ValidationGroup="ProjectAttachment" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; text-align: center;">
+                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeLinkOpportunityPopup" runat="server"
+                TargetControlID="hdnLinkPopup" CancelControlID="btnLinkOpportunityCancel" BehaviorID="mpeLinkOpportunityPopup"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlLinkOpportunity" DropShadow="false"
+                OkControlID="btnLinkOpportunityCancel" />
+            <asp:Panel ID="pnlLinkOpportunity" runat="server" BackColor="White" BorderColor="Black"
+                Style="display: none;" BorderWidth="2px" Width="465px">
+                <table class="WholeWidth">
+                    <tr>
+                        <th align="center" style="text-align: center; background-color: Gray; white-space: nowrap;
+                            font-weight: lighter; font-size: 14px; padding: 6px;" colspan="2" valign="middle">
+                            Link This Project to Existing Opportunity 
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;" colspan="2">
+                            <table class="WholeWidth">
+                            <tr>
+                            <td style="white-space:nowrap;padding-bottom:15px;">
+                            Select an Opportunity and Click Link Button to Link
+                            <asp:Label id="lblProjectNameLinkPopUp" runat="server" Font-Bold="true"></asp:Label>
+                             Project
+                            </td></tr>
+                                <tr>
+                                    <td>
+                                        <asp:DropDownList ID="ddlOpportunities" runat="server" Width="400">
+                                        </asp:DropDownList>
+                                        <asp:CustomValidator ID="cvOpportunityRequired" runat="server" OnServerValidate="cvOpportunityRequired_Validate"
+                                            ValidationGroup="LinkOpportunity" Display="Dynamic" SetFocusOnError="true" Text="*"
+                                            ErrorMessage="Opportunity is required." ToolTip="Opportunity is required."></asp:CustomValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 5px; padding-bottom: 5px;">
+                                        <asp:ValidationSummary ID="valSumLinkOpportunity" runat="server" ValidationGroup="LinkOpportunity" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <asp:Button ID="btnLinkOpportunity" runat="server" Text="Link" OnClick="btnLinkOpportunity_Click" />
+                                        <asp:Button ID="btnLinkOpportunityCancel" runat="server" Text="Cancel" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeTimeEntriesRelatedToitPopup" runat="server"
                 TargetControlID="hdnCanShowPopup" CancelControlID="btnClose" BehaviorID="mpeTEsRelatedToItPopup"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlPopup" DropShadow="false"
@@ -1263,7 +1274,8 @@
             <asp:PostBackTrigger ControlID="btnSave" />
             <asp:PostBackTrigger ControlID="btnUpload" />
             <asp:PostBackTrigger ControlID="btnCancel" />
-            <asp:PostBackTrigger ControlID="gvProjectAttachments" />
+            <asp:PostBackTrigger ControlID="repProjectAttachments" />
+            <asp:PostBackTrigger ControlID="btnOKErrorPanel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
