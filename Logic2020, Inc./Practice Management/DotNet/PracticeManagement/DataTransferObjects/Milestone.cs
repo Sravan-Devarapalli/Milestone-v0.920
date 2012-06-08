@@ -83,11 +83,6 @@ namespace DataTransferObjects
         [DataMember]
         public ComputedFinancials ComputedFinancials { get; set; }
 
-        /// <summary>
-        /// Gets or sets a date when the the <see cref="Milestone"/> has been delivered.
-        /// </summary>
-        [DataMember]
-        public DateTime? ActualDeliveryDate { get; set; }
 
         /// <summary>
         /// Gets or sets a number of expected hours for the <see cref="Milestone"/>.
@@ -213,11 +208,7 @@ namespace DataTransferObjects
         {
             get
             {
-                return ActualDeliveryDate.HasValue
-                           ?
-                               ActualDeliveryDate.Value
-                           :
-                               ProjectedDeliveryDate;
+                return ProjectedDeliveryDate;
             }
             set
             {
@@ -326,3 +317,4 @@ namespace DataTransferObjects
         #endregion
     }
 }
+
