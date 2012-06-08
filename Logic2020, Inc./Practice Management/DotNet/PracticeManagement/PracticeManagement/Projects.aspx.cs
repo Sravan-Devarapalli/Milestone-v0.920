@@ -812,11 +812,11 @@ namespace PraticeManagement
             {
                 if (cssClass == "ActiveProjectWithoutSOW")
                 {
-                    btnProject.ButtonProjectNameToolTip = "Active without SOW";
+                    btnProject.ButtonProjectNameToolTip = "Active without Attachment";
                 }
                 else
                 {
-                    btnProject.ButtonProjectNameToolTip = "Active with SOW";
+                    btnProject.ButtonProjectNameToolTip = "Active with Attachment";
                 }
             }
 
