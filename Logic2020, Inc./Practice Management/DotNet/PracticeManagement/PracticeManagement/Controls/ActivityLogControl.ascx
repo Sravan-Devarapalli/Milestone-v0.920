@@ -223,9 +223,9 @@
                                     <asp:Image ID="imgCalender" EnableViewState="true" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
                                 <td id="spnPersons" runat="server">
-                                    <asp:Label ID="Label1" runat="server" Text="for "></asp:Label><asp:DropDownList ID="ddlPersonName"
+                                    <asp:Label ID="Label1" runat="server" Text="&nbsp;for&nbsp;"></asp:Label><asp:DropDownList ID="ddlPersonName"
                                         runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
-                                        DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
+                                        DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />&nbsp;
                                 </td>
                                 <td id="spnProjects" runat="server">
                                     <asp:Label ID="Label2" runat="server" Text="&nbsp;on "></asp:Label><asp:DropDownList ID="ddlProjects"
