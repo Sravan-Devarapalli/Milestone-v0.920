@@ -89,7 +89,7 @@ namespace PraticeManagement
         private const string STR_SortExpression = "SortExpression";
         private const string STR_SortDirection = "SortDirection";
         private const string STR_SortColumnId = "SortColumnId";
-        private const string ToolTipView = "{0:d} - {1:d}<br/><b>Buyer Name:&nbsp;</b>{2}<br/><b>Salesperson:&nbsp;</b>{3}<br/><b>Owner:&nbsp;</b>{4}<br/><b>Resources:&nbsp;</b>{5}<br/><b>SOW Budget:&nbsp;</b>{6}<br/>";
+        private const string ToolTipView = "<b>Buyer Name:&nbsp;</b>{0}<br/><b>Salesperson:&nbsp;</b>{1}<br/><b>Owner:&nbsp;</b>{2}<br/><b>SOW Budget:&nbsp;</b>{3}<br/><b>Resources:&nbsp;</b>{4}<br/>";
         private const string AppendPersonFormat = "{0}{1}, {2}";
         private const string CompPerfDataCssClass = "CompPerfData";
         private const string CompPerfHeaderDivCssClass = "ie-bg no-wrap";
@@ -1226,19 +1226,12 @@ namespace PraticeManagement
                                      );
             }
 
-           
-
-       
-
-
             return string.Format(ToolTipView,
-                 project.StartDate.HasValue ? project.StartDate.Value.ToString("MM/dd/yyyy") : string.Empty,
-                 project.EndDate.HasValue ? project.EndDate.Value.ToString("MM/dd/yyyy") : string.Empty,
                  HttpUtility.HtmlEncode(project.BuyerName),
                  HttpUtility.HtmlEncode(project.SalesPersonName),
                  HttpUtility.HtmlEncode(project.ProjectOwner != null ? project.ProjectOwner.Name : string.Empty),
-                 resources,
-                 project.SowBudget.HasValue ? "$" + project.SowBudget.Value.ToString("0") : string.Empty
+                 project.SowBudget.HasValue ? project.SowBudget.Value.ToString(CurrencyDisplayFormat) : string.Empty,
+                 resources
                 );
         }
 
