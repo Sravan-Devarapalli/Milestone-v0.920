@@ -1295,19 +1295,7 @@
   <PermissionStatement Action="GRANT">
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
-    <Object Name="MilestonePersonGetByMilestonePerson" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
     <Object Name="OpportunityUpdate" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="MilestonePersonListByProjectMonth" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
@@ -1344,12 +1332,6 @@
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="DefaultRecruiterCommissionGetByPersonDate" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="MilestonePersonListByProjectPerson" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
@@ -1416,12 +1398,6 @@
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="ConsultantUtilizationWeekly" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="MilestonePersonListByPerson" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
@@ -1704,12 +1680,6 @@
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="aspnet_Roles_CreateRole" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="MilestonePersonGetByMilestonePersonId" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
