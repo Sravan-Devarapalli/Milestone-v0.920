@@ -79,8 +79,15 @@ BEGIN
 		IF(@ProjectId IS NOT NULL)
 		BEGIN
 		  UPDATE dbo.Project
-		  SET Description = @Description
+		  SET Description   = @Description,
+			  OpportunityId = @OpportunityId
 		  WHERE ProjectId = @ProjectId
+		END
+		ELSE
+		BEGIN
+	   	  UPDATE dbo.Project
+			SET OpportunityId = null
+			WHERE OpportunityId = @OpportunityId
 		END
 
 		-- Logging changes
