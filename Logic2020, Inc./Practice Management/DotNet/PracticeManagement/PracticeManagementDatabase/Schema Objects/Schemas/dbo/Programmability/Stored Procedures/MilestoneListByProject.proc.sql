@@ -19,7 +19,6 @@ AS
 	       m.Amount,
 	       m.StartDate,
 	       m.ProjectedDeliveryDate,
-	       m.ActualDeliveryDate,
 	       m.IsHourlyAmount,
 	       m.ProjectName,
 	       m.ProjectStartDate,
