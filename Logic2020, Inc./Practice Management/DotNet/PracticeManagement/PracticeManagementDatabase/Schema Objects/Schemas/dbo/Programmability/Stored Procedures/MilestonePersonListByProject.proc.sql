@@ -34,7 +34,6 @@ BEGIN
 	       mp.IsHourlyAmount,
 	       mp.SalesCommission,
 	       mp.MilestoneExpectedHours,
-	       mp.MilestoneActualDeliveryDate,
 	       mp.MilestoneHourlyRevenue,
 	       mp.ConsultantsCanAdjust,
 	       mp.ClientIsChargeable,
@@ -45,3 +44,4 @@ BEGIN
 	 WHERE mp.ProjectId = @ProjectId 
 
 END
+
