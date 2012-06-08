@@ -2,13 +2,13 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MilestonePersonService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
-      <xsd:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByProject_InputMessage">
@@ -34,12 +34,6 @@
   </wsdl:message>
   <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByMilestone_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetMilestonePersonListByMilestoneResponse" />
-  </wsdl:message>
-  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByPerson_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByPerson" />
-  </wsdl:message>
-  <wsdl:message name="IMilestonePersonService_GetMilestonePersonListByPerson_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetMilestonePersonListByPersonResponse" />
   </wsdl:message>
   <wsdl:message name="IMilestonePersonService_GetMilestonePersonDetail_InputMessage">
     <wsdl:part name="parameters" element="tns:GetMilestonePersonDetail" />
@@ -160,10 +154,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestone" message="tns:IMilestonePersonService_GetMilestonePersonListByMilestone_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestoneResponse" message="tns:IMilestonePersonService_GetMilestonePersonListByMilestone_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetMilestonePersonListByPerson">
-      <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByPerson" message="tns:IMilestonePersonService_GetMilestonePersonListByPerson_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByPersonResponse" message="tns:IMilestonePersonService_GetMilestonePersonListByPerson_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetMilestonePersonDetail">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonDetail" message="tns:IMilestonePersonService_GetMilestonePersonDetail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMilestonePersonService/GetMilestonePersonDetailResponse" message="tns:IMilestonePersonService_GetMilestonePersonDetail_OutputMessage" />
@@ -264,15 +254,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetMilestonePersonListByMilestone">
       <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByMilestone" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetMilestonePersonListByPerson">
-      <soap:operation soapAction="http://tempuri.org/IMilestonePersonService/GetMilestonePersonListByPerson" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -436,7 +417,7 @@
   </wsdl:binding>
   <wsdl:service name="MilestonePersonService">
     <wsdl:port name="BasicHttpBinding_IMilestonePersonService" binding="tns:BasicHttpBinding_IMilestonePersonService">
-      <soap:address location="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc" />
+      <soap:address location="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
