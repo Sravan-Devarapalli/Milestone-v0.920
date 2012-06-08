@@ -78,24 +78,6 @@ namespace PracticeManagementService
         }
 
         /// <summary>
-        /// Retrives the list of the <see cref="Milestone"/>s for the specified <see cref="Person"/>.
-        /// </summary>
-        /// <param name="personId">An ID of the person the the data be retrieved for.</param>
-        /// <returns>The list of the <see cref="MilestonePerson"/> objects.</returns>
-        public List<MilestonePerson> GetMilestonePersonListByPerson(int personId)
-        {
-            List<MilestonePerson> mps = MilestonePersonDAL.MilestonePersonListByPerson(personId);
-
-            foreach (MilestonePerson mp in mps)
-                mp.ComputedFinancials =
-                    ComputedFinancialsDAL.FinancialsGetByMilestonePerson(
-                        mp.Milestone.Id.Value,
-                        personId);
-
-            return mps;
-        }
-
-        /// <summary>
         /// Retrives the milestone-person link details for the specified <see cref="Milestone"/> and
         /// <see cref="Person"/>
         /// </summary>
