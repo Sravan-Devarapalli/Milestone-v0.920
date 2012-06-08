@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-  <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
-  <xs:import schemaLocation="http://system44.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
   <xs:element name="GetMilestonePersonListByProject">
     <xs:complexType>
       <xs:sequence>
@@ -59,20 +59,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetMilestonePersonListByPerson">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="personId" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetMilestonePersonListByPersonResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonListByPersonResult" nillable="true" type="q6:ArrayOfMilestonePerson" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetMilestonePersonDetail">
     <xs:complexType>
       <xs:sequence>
@@ -83,7 +69,7 @@
   <xs:element name="GetMilestonePersonDetailResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonDetailResult" nillable="true" type="q7:MilestonePerson" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonDetailResult" nillable="true" type="q6:MilestonePerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -123,7 +109,7 @@
   <xs:element name="SaveMilestonePerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q8:MilestonePerson" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q7:MilestonePerson" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -131,14 +117,14 @@
   <xs:element name="SaveMilestonePersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q9:MilestonePerson" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q8:MilestonePerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveMilestonePersons">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePersons" nillable="true" type="q10:ArrayOfMilestonePerson" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePersons" nillable="true" type="q9:ArrayOfMilestonePerson" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -151,7 +137,7 @@
   <xs:element name="DeleteMilestonePerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q11:MilestonePerson" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q10:MilestonePerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -170,7 +156,7 @@
   <xs:element name="GetMilestonePersonListByMilestoneNoFinancialsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonListByMilestoneNoFinancialsResult" nillable="true" type="q12:ArrayOfMilestonePerson" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonListByMilestoneNoFinancialsResult" nillable="true" type="q11:ArrayOfMilestonePerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -184,7 +170,7 @@
   <xs:element name="MilestonePersonsByMilestoneForTEByProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="MilestonePersonsByMilestoneForTEByProjectResult" nillable="true" type="q13:ArrayOfMilestonePerson" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="MilestonePersonsByMilestoneForTEByProjectResult" nillable="true" type="q12:ArrayOfMilestonePerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -198,7 +184,7 @@
   <xs:element name="CalculateMilestonePersonFinancialsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" minOccurs="0" name="CalculateMilestonePersonFinancialsResult" nillable="true" type="q14:MilestonePersonComputedFinancials" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" minOccurs="0" name="CalculateMilestonePersonFinancialsResult" nillable="true" type="q13:MilestonePersonComputedFinancials" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -212,7 +198,7 @@
   <xs:element name="GetMilestonePersonsDetailsByMileStoneIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonsDetailsByMileStoneIdResult" nillable="true" type="q15:ArrayOfMilestonePerson" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonsDetailsByMileStoneIdResult" nillable="true" type="q14:ArrayOfMilestonePerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -232,7 +218,7 @@
   <xs:element name="UpdateMilestonePersonEntry">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="entry" nillable="true" type="q16:MilestonePersonEntry" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="entry" nillable="true" type="q15:MilestonePersonEntry" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -247,7 +233,7 @@
   <xs:element name="MilestonePersonEntryInsert">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="entry" nillable="true" type="q17:MilestonePersonEntry" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="entry" nillable="true" type="q16:MilestonePersonEntry" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -262,7 +248,7 @@
   <xs:element name="MilestonePersonAndEntryInsert">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q18:MilestonePerson" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestonePerson" nillable="true" type="q17:MilestonePerson" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -284,7 +270,7 @@
   <xs:element name="GetMilestonePersonEntryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonEntryResult" nillable="true" type="q19:MilestonePersonEntry" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonePersonEntryResult" nillable="true" type="q18:MilestonePersonEntry" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -306,8 +292,8 @@
   <xs:element name="MilestoneResourceUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestone" nillable="true" type="q20:Milestone" />
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestoneUpdateObj" nillable="true" type="q21:MilestoneUpdateObject" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestone" nillable="true" type="q19:Milestone" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="milestoneUpdateObj" nillable="true" type="q20:MilestoneUpdateObject" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
