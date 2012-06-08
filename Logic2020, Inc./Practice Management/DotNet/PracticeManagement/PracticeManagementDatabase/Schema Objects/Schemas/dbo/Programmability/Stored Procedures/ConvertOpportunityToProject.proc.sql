@@ -87,7 +87,6 @@ BEGIN
 		@Amount = NULL,
 		@StartDate = @ProjectedStartDate,
 		@ProjectedDeliveryDate = @ProjectedEndDate,
-		@ActualDeliveryDate = NULL,
 		@IsHourlyAmount = 1,
 		@UserLogin = @UserLogin,
 		@ConsultantsCanAdjust = 0,
@@ -163,3 +162,4 @@ BEGIN
 		@NoteText = @CreatedMessage,
 		@OpportunityTransitionId = null
 END
+
