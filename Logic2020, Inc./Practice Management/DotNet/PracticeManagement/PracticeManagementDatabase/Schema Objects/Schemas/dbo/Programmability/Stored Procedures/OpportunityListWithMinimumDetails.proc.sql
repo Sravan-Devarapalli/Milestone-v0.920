@@ -27,6 +27,6 @@ BEGIN
 		AND ((@ClientId IS NOT NULL AND O.ClientId = @ClientId)
 			OR @ClientId IS NULL
 			)
-	ORDER BY O.Name
+	ORDER BY O.OpportunityNumber
 
 END
