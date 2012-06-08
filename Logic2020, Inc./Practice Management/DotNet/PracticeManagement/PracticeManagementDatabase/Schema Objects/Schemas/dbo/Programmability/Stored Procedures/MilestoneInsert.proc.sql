@@ -14,7 +14,6 @@ CREATE PROCEDURE dbo.MilestoneInsert
 	@Amount                   DECIMAL(18,2),
 	@StartDate                DATETIME,
 	@ProjectedDeliveryDate    DATETIME,
-	@ActualDeliveryDate       DATETIME,
 	@IsHourlyAmount           BIT,
 	@UserLogin                NVARCHAR(255),
 	@ConsultantsCanAdjust	  BIT,
@@ -29,9 +28,9 @@ AS
 
 	INSERT INTO dbo.Milestone
 	            (ProjectId, Description, Amount, StartDate,
-	             ProjectedDeliveryDate, ActualDeliveryDate, IsHourlyAmount, ConsultantsCanAdjust, IsChargeable, IsDefault)
+	             ProjectedDeliveryDate, IsHourlyAmount, ConsultantsCanAdjust, IsChargeable, IsDefault)
 	     VALUES (@ProjectId, @Description, @Amount, @StartDate,
-	             @ProjectedDeliveryDate, @ActualDeliveryDate, @IsHourlyAmount, @ConsultantsCanAdjust, @IsChargeable, @IsDefault)
+	             @ProjectedDeliveryDate, @IsHourlyAmount, @ConsultantsCanAdjust, @IsChargeable, @IsDefault)
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
@@ -39,3 +38,4 @@ AS
 	SET @MilestoneId = SCOPE_IDENTITY()
 
 	
+
