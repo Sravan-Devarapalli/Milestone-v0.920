@@ -33,7 +33,6 @@ AS
 	       mp.IsHourlyAmount,
 	       mp.SalesCommission,
 	       mp.MilestoneExpectedHours,
-	       mp.MilestoneActualDeliveryDate,
 	       mp.MilestoneHourlyRevenue,
 	       p.HireDate,
 	       p.TerminationDate,
