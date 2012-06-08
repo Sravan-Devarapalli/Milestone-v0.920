@@ -14,8 +14,11 @@ AS
 BEGIN
 	
 	SELECT O.OpportunityId,
-			O.Name AS OpportunityName
-	FROM Opportunity O
+			O.Name AS OpportunityName,
+			O.OpportunityNumber,
+			C.Name AS ClientName
+	FROM dbo.Opportunity O
+	INNER JOIN dbo.Client C ON O.ClientId =C.ClientId
 	WHERE O.OpportunityStatusId = 1
 		AND (@Link IS NULL
 			OR (@Link IS NOT NULL AND @Link = 0 AND O.ProjectId IS NULL)
