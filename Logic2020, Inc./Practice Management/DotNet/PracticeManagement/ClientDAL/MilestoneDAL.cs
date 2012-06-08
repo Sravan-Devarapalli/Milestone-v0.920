@@ -25,7 +25,6 @@ namespace DataAccess
         private const string StartDateParam = "@StartDate";
         private const string EndDateParam = "@EndDate";
         private const string ProjectedDeliveryDateParam = "@ProjectedDeliveryDate";
-        private const string ActualDeliveryDateParam = "@ActualDeliveryDate";
         private const string IsHourlyAmountParam = "@IsHourlyAmount";
         private const string ShiftDaysParam = "@ShiftDays";
         private const string PersonIdParam = "@PersonId";
@@ -275,7 +274,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(ProjectedDeliveryDateParam, milestone.ProjectedDeliveryDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, milestone.IsChargeable);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ConsultantsCanAdjust, milestone.ConsultantsCanAdjust);
-                command.Parameters.AddWithValue(ActualDeliveryDateParam, milestone.ActualDeliveryDate.HasValue ? (object)milestone.ActualDeliveryDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(IsHourlyAmountParam, milestone.IsHourlyAmount);
                 command.Parameters.AddWithValue(UserLoginParam, !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
@@ -322,9 +320,6 @@ namespace DataAccess
                     milestone.Amount.HasValue ? (object)milestone.Amount.Value.Value : DBNull.Value);
                 command.Parameters.AddWithValue(StartDateParam, milestone.StartDate);
                 command.Parameters.AddWithValue(ProjectedDeliveryDateParam, milestone.ProjectedDeliveryDate);
-                command.Parameters.AddWithValue(ActualDeliveryDateParam,
-                    milestone.ActualDeliveryDate.HasValue ?
-                    (object)milestone.ActualDeliveryDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(IsHourlyAmountParam, milestone.IsHourlyAmount);
                 command.Parameters.AddWithValue(UserLoginParam,
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
@@ -527,7 +522,6 @@ namespace DataAccess
                 int amountIndex = reader.GetOrdinal("Amount");
                 int startDateIndex = reader.GetOrdinal("StartDate");
                 int projectedDeliveryDateIndex = reader.GetOrdinal("ProjectedDeliveryDate");
-                int actualDeliveryDateIndex = reader.GetOrdinal("ActualDeliveryDate");
                 int clientNameIndex = reader.GetOrdinal("ClientName");
                 int projectNameIndex = reader.GetOrdinal("ProjectName");
                 int projectStartDateIndex = reader.GetOrdinal(ProjectStartDateColumn);
@@ -560,9 +554,6 @@ namespace DataAccess
                         !reader.IsDBNull(amountIndex) ? (decimal?)reader.GetDecimal(amountIndex) : null;
                     milestone.StartDate = reader.GetDateTime(startDateIndex);
                     milestone.ProjectedDeliveryDate = reader.GetDateTime(projectedDeliveryDateIndex);
-                    milestone.ActualDeliveryDate =
-                        !reader.IsDBNull(actualDeliveryDateIndex) ?
-                        (DateTime?)reader.GetDateTime(actualDeliveryDateIndex) : null;
                     milestone.IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex);
                     milestone.ExpectedHours = reader.GetDecimal(expectedHoursIndex);
                     milestone.PersonCount = reader.GetInt32(personCountIndex);
