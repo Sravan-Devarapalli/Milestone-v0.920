@@ -1644,7 +1644,6 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, context.Project.Id.Value);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusId, context.ProjectStatus.Id);
                     command.Parameters.AddWithValue(Constants.ParameterNames.CloneMilestones, context.CloneMilestones);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.CloneNotes, context.CloneNotes);
                     command.Parameters.AddWithValue(Constants.ParameterNames.CloneCommissions, context.CloneCommissions);
 
                     var clonedProjectId = new SqlParameter(Constants.ParameterNames.ClonedProjectId, SqlDbType.Int) { Direction = ParameterDirection.Output };
