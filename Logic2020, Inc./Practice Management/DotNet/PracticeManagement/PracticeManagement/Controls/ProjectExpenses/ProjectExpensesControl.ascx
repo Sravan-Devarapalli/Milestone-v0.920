@@ -21,7 +21,7 @@
             <Columns>
                 <asp:TemplateField HeaderText="Name">
                     <HeaderTemplate>
-                        <div class="ie-bg">
+                        <div class="ie-bg NoBorder">
                             Name
                         </div>
                     </HeaderTemplate>
@@ -44,7 +44,7 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Start Date">
                     <HeaderTemplate>
-                        <div class="ie-bg">
+                        <div class="ie-bg NoBorder">
                             Start Date
                         </div>
                     </HeaderTemplate>
@@ -110,7 +110,7 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="End Date">
                     <HeaderTemplate>
-                        <div class="ie-bg">
+                        <div class="ie-bg NoBorder">
                             End Date
                         </div>
                     </HeaderTemplate>
@@ -183,7 +183,7 @@
                 </asp:TemplateField>
                 <asp:TemplateField>
                     <HeaderTemplate>
-                        <div class="ie-bg">
+                        <div class="ie-bg NoBorder">
                             Expense, $
                         </div>
                     </HeaderTemplate>
@@ -214,7 +214,7 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Reimbursed, %">
                     <HeaderTemplate>
-                        <div class="ie-bg">
+                        <div class="ie-bg NoBorder">
                             Reimbursed, %
                         </div>
                     </HeaderTemplate>
@@ -247,7 +247,7 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Reimbursed, $">
                     <HeaderTemplate>
-                        <div class="ie-bg">
+                        <div class="ie-bg NoBorder">
                             Reimbursed, $
                         </div>
                     </HeaderTemplate>
