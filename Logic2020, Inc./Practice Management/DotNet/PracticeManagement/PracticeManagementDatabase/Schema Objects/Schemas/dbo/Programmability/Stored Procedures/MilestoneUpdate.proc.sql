@@ -6,7 +6,6 @@
 	@Amount                   DECIMAL(18,2),
 	@StartDate                DATETIME,
 	@ProjectedDeliveryDate    DATETIME,
-	@ActualDeliveryDate       DATETIME,
 	@IsHourlyAmount           BIT,
 	@UserLogin                NVARCHAR(255),
 	@ConsultantsCanAdjust	  BIT,
@@ -26,7 +25,6 @@ BEGIN
 	       Amount = @Amount,
 	       StartDate = @StartDate,
 	       ProjectedDeliveryDate = @ProjectedDeliveryDate,
-	       ActualDeliveryDate = @ActualDeliveryDate,
 	       IsHourlyAmount = @IsHourlyAmount,
 	       IsChargeable = @IsChargeable,
 	       ConsultantsCanAdjust = @ConsultantsCanAdjust
@@ -35,3 +33,4 @@ BEGIN
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
  END
+
