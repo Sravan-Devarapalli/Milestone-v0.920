@@ -62,7 +62,6 @@ namespace DataAccess
         private const string IsHourlyAmountColumn = "IsHourlyAmount";
         private const string DiscountColumn = "Discount";
         private const string MilestoneExpectedHoursColumn = "MilestoneExpectedHours";
-        private const string MilestoneActualDeliveryDateColumn = "MilestoneActualDeliveryDate";
         private const string MilestoneHourlyRevenueColumn = "MilestoneHourlyRevenue";
         private const string PersonVacationsOnMilestoneColumn = "VacationDays";
         private const string PersonSeniorityIdColumn = "SeniorityId";
@@ -213,36 +212,6 @@ namespace DataAccess
                 }
             }
         }
-
-        /// <summary>
-        /// 	Retrives the list of the <see cref = "Milestone" />s for the specified <see cref = "Person" />.
-        /// </summary>
-        /// <param name = "personId">An ID of the person the the data be retrieved for.</param>
-        /// <returns>The list of the <see cref = "MilestonePerson" /> objects.</returns>
-        public static List<MilestonePerson> MilestonePersonListByPerson(int personId)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (
-                var command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.MilestonePersonListByPerson,
-                                             connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                {
-                    var result = new List<MilestonePerson>();
-
-                    ReadMilestonePersons(reader, result);
-
-                    return result;
-                }
-            }
-        }
-
 
         /// <summary>
         /// 	Retrives the milestone-person link details.
@@ -653,7 +622,6 @@ namespace DataAccess
                 var isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
                 var discountIndex = reader.GetOrdinal(DiscountColumn);
                 var milestoneExpectedHoursIndex = reader.GetOrdinal(MilestoneExpectedHoursColumn);
-                var milestoneActualDeliveryDateIndex = reader.GetOrdinal(MilestoneActualDeliveryDateColumn);
                 var milestoneHourlyRevenueIndex = reader.GetOrdinal(MilestoneHourlyRevenueColumn);
                 var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
 
@@ -790,11 +758,6 @@ namespace DataAccess
                                                             reader.GetDateTime(milestoneProjectedDeliveryDateIndex),
                                                         IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex),
                                                         ExpectedHours = reader.GetDecimal(milestoneExpectedHoursIndex),
-                                                        ActualDeliveryDate =
-                                                            !reader.IsDBNull(milestoneActualDeliveryDateIndex)
-                                                                ? (DateTime?)
-                                                                  reader.GetDateTime(milestoneActualDeliveryDateIndex)
-                                                                : null,
                                                         Project = project
                                                     };
 
