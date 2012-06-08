@@ -31,8 +31,8 @@
         <asp:TemplateField HeaderText="Milestone Name">
             <ItemStyle Width="35%" CssClass="wrapMilestoneName" />
             <HeaderTemplate>
-                <div class="ie-bg">
-                    <asp:LinkButton ID="lbMilestoneName" runat="server" Text="Milestone Name" CommandName="Sort"
+                <div class="ie-bg NoBorder">
+                    <asp:LinkButton ID="lbMilestoneName" runat="server" Text="Milestone Name" CommandName="Sort" Font-Underline="false" ForeColor="#333" 
                         CommandArgument="MilestoneName" />
                 </div>
             </HeaderTemplate>
@@ -50,8 +50,8 @@
         <asp:TemplateField HeaderText="Start Date">
             <ItemStyle HorizontalAlign="Center" Width="9%" />
             <HeaderTemplate>
-                <div class="ie-bg">
-                    <asp:LinkButton ID="lbStartDate" runat="server" Text="Start Date" CommandName="Sort"
+                <div class="ie-bg NoBorder">
+                    <asp:LinkButton ID="lbStartDate" runat="server" Text="Start Date" CommandName="Sort" Font-Underline="false" ForeColor="#333" 
                         CommandArgument="StartDate" /></div>
             </HeaderTemplate>
             <ItemTemplate>
@@ -61,8 +61,8 @@
         <asp:TemplateField HeaderText="End Date">
             <ItemStyle HorizontalAlign="Center" Width="9%" />
             <HeaderTemplate>
-                <div class="ie-bg">
-                    <asp:LinkButton ID="lbEndDate" runat="server" Text="End Date" CommandName="Sort"
+                <div class="ie-bg NoBorder">
+                    <asp:LinkButton ID="lbEndDate" runat="server" Text="End Date" CommandName="Sort" Font-Underline="false" ForeColor="#333" 
                         CommandArgument="ProjectedDeliveryDate" /></div>
             </HeaderTemplate>
             <ItemTemplate>
@@ -90,8 +90,8 @@
         </asp:TemplateField>--%>
         <asp:TemplateField HeaderText="Revenue">
             <HeaderTemplate>
-                <div class="ie-bg">
-                    <asp:LinkButton ID="lbRevenue" runat="server" Text="Revenue" CommandName="Sort" CommandArgument="Revenue" />
+                <div class="ie-bg NoBorder">
+                    <asp:LinkButton ID="lbRevenue" runat="server" Text="Revenue" CommandName="Sort" CommandArgument="Revenue" Font-Underline="false" ForeColor="#333"  />
                 </div>
             </HeaderTemplate>
             <ItemStyle HorizontalAlign="Center" Width="7%" />
@@ -102,8 +102,8 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Gross Margin">
             <HeaderTemplate>
-                <div class="ie-bg">
-                    <asp:LinkButton ID="lbGrossMargin" runat="server" Text="Gross Margin" CommandName="Sort"
+                <div class="ie-bg NoBorder">
+                    <asp:LinkButton ID="lbGrossMargin" runat="server" Text="Gross Margin" CommandName="Sort" Font-Underline="false" ForeColor="#333" 
                         CommandArgument="GrossMargin" />
                 </div>
             </HeaderTemplate>
@@ -115,8 +115,8 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Margin %">
             <HeaderTemplate>
-                <div class="ie-bg">
-                    <asp:LinkButton ID="lbMargin" runat="server" Text="Margin %" CommandName="Sort" CommandArgument="TargetMargin" />
+                <div class="ie-bg NoBorder">
+                    <asp:LinkButton ID="lbMargin" runat="server" Text="Margin %" CommandName="Sort" CommandArgument="TargetMargin" Font-Underline="false" ForeColor="#333"  />
                 </div>
             </HeaderTemplate>
             <ItemStyle HorizontalAlign="Center" Width="7%" />
@@ -127,8 +127,8 @@
         <asp:TemplateField HeaderText="Billable">
             <ItemStyle HorizontalAlign="Center" Width="7%" />
             <HeaderTemplate>
-                <div class="ie-bg">
-                    <asp:LinkButton ID="lbBillable" runat="server" Text="Billable" CommandName="Sort"
+                <div class="ie-bg NoBorder">
+                    <asp:LinkButton ID="lbBillable" runat="server" Text="Billable" CommandName="Sort" Font-Underline="false" ForeColor="#333" 
                         CommandArgument="IsChargeable" />
                 </div>
             </HeaderTemplate>
