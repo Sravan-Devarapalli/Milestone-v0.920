@@ -63,17 +63,17 @@
                         <div id="divTimeTypesNotAssignedToProject" class="cbfloatRight" runat="server" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             padding: 1px;">
-                            <table id="tblTimeTypesNotAssignedToProject" class="WholeWidth WholeWidthWithForAllColumns" cellpadding="0" cellspacing="0">
+                            <table id="tblTimeTypesNotAssignedToProject" class="WholeWidth WholeWidthForAllColumns" cellpadding="0" cellspacing="0">
                                 <tbody>
-                                    <tr isfilteredrow="false" id="tblTimeTypesNotAssignedToProjectDefault" runat="server">
-                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                    <tr isfilteredrow="false" id="tblTimeTypesNotAssignedToProjectDefault" runat="server" style="height:0px !important;">
+                                        <td style="padding-top: 2px; padding-bottom: 4px; font-weight: bold; font-style: italic;">
                                             Default
                                         </td>
                                     </tr>
                                     <asp:Repeater ID="repDefaultTimeTypesNotAssignedToProject" runat="server">
                                         <ItemTemplate>
-                                            <tr timetypename='<%# Eval("Name") %>'>
-                                                <td style="padding-top: 2px;">
+                                            <tr timetypename='<%# Eval("Name") %>' style="height:0px !important;">
+                                                <td style="padding-top: 2px; padding-bottom:0px !important;">
                                                     <label id="lblTimeTypesNotAssignedToProject" for="cbTimeTypesNotAssignedToProject"
                                                         title='<%# Eval("Name") %>' runat="server" style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
@@ -87,16 +87,16 @@
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
-                                    <tr isfilteredrow="false" id="tblTimeTypesNotAssignedToProjectCustom" runat="server">
-                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                    <tr isfilteredrow="false" id="tblTimeTypesNotAssignedToProjectCustom" runat="server" style="height:0px !important;">
+                                        <td style="padding-top: 2px; padding-bottom: 4px; font-weight: bold; font-style: italic;">
                                             Custom
                                         </td>
                                     </tr>
                                     <asp:Repeater ID="repCustomTimeTypesNotAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
                                         runat="server">
                                         <ItemTemplate>
-                                            <tr timetypename='<%# Eval("Name") %>'>
-                                                <td style="padding-top: 2px;">
+                                            <tr timetypename='<%# Eval("Name") %>' style="height:0px !important;">
+                                                <td style="padding-top: 2px; padding-bottom:0px !important;">
                                                     <label id="lblTimeTypesNotAssignedToProject" for="cbTimeTypesNotAssignedToProject"
                                                         title='<%# Eval("Name") %>' runat="server" style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
@@ -132,17 +132,17 @@
                         <div id="divTimeTypesAssignedToProject" runat="server" class="cbfloatRight" style="height: 150px !important;
                             margin: auto; width: 100%; overflow-y: auto; border: 1px solid black; background: white;
                             line-height: 19px; vertical-align: middle; padding: 1px;">
-                            <table id="tblTimeTypesAssignedToProject" class="WholeWidth WholeWidthWithForAllColumns" cellpadding="0" cellspacing="0">
+                            <table id="tblTimeTypesAssignedToProject" class="WholeWidth WholeWidthForAllColumns" cellpadding="0" cellspacing="0">
                                 <tbody>
-                                    <tr isfilteredrow="false" id="tblTimeTypesAssignedToProjectDefault" runat="server">
-                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                    <tr isfilteredrow="false" id="tblTimeTypesAssignedToProjectDefault" runat="server" style="height:0px !important;">
+                                        <td style="padding-top: 2px; padding-bottom: 4px; font-weight: bold; font-style: italic;">
                                             Default
                                         </td>
                                     </tr>
                                     <asp:Repeater ID="repDefaultTimeTypesAssignedToProject" runat="server">
                                         <ItemTemplate>
-                                            <tr timetypename='<%# Eval("Name") %>'>
-                                                <td style="padding-top: 2px;">
+                                            <tr timetypename='<%# Eval("Name") %>' style="height:0px !important;">
+                                                <td style="padding-top: 2px; padding-bottom:0px !important;">
                                                     <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server"
                                                         style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
@@ -155,16 +155,16 @@
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
-                                    <tr isfilteredrow="false" id="tblTimeTypesAssignedToProjectCustom" runat="server">
-                                        <td style="padding-top: 2px; font-weight: bold; font-style: italic;">
+                                    <tr isfilteredrow="false" id="tblTimeTypesAssignedToProjectCustom" runat="server" style="height:0px !important;">
+                                        <td style="padding-top: 2px; padding-bottom: 4px; font-weight: bold; font-style: italic;">
                                             Custom
                                         </td>
                                     </tr>
                                     <asp:Repeater ID="repCustomTimeTypesAssignedToProject" OnItemDataBound="rep_OnItemDataBound"
                                         runat="server">
                                         <ItemTemplate>
-                                            <tr timetypename='<%# Eval("Name") %>'>
-                                                <td style="padding-top: 2px;">
+                                            <tr timetypename='<%# Eval("Name") %>' style="height:0px !important;">
+                                                <td style="padding-top: 2px; padding-bottom:0px !important;">
                                                     <label for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server"
                                                         style="padding-left: 25px;">
                                                         <%# Eval("Name") %>
