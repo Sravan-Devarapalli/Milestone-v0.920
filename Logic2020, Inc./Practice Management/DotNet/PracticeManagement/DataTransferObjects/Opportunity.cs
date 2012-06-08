@@ -16,6 +16,7 @@ namespace DataTransferObjects
         #region Constants
 
         private const string ClientAndGroupFormat = "{0} - {1}";
+        private const string ClientOpportunityFormat = "{0} - {1} - {2}";
 
         #endregion
 
@@ -309,6 +310,14 @@ namespace DataTransferObjects
                 return Group == null || Group.Name.Equals(ProjectGroup.DefaultGroupName, StringComparison.CurrentCultureIgnoreCase) ?
                     Client.Name :
                     string.Format(ClientAndGroupFormat, Client.Name, Group.Name);
+            }
+        }
+
+        public string ClientOpportunity
+        {
+            get
+            {
+                return string.Format(ClientOpportunityFormat, Client.Name, OpportunityNumber, Name);
             }
         }
 
