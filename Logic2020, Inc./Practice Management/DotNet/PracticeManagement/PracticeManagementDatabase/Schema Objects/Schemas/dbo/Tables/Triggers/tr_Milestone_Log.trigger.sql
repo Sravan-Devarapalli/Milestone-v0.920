@@ -22,7 +22,6 @@ BEGIN
 		       i.Description AS Name,
 		       i.ProjectId AS MilestoneProjectId,
 		       p.Name AS ProjectName,
-		       i.ActualDeliveryDate,
 		       i.ProjectedDeliveryDate,
 		       i.StartDate,
 		       i.Amount,
@@ -39,7 +38,6 @@ BEGIN
 		       d.Description AS Name,
 		       d.ProjectId AS MilestoneProjectId,
 		       p.Name AS ProjectName,
-		       d.ActualDeliveryDate,
 		       d.ProjectedDeliveryDate,
 		       d.StartDate,
 		       d.Amount,
@@ -84,12 +82,10 @@ BEGIN
 					  FOR XML AUTO, ROOT('Milestone'))),
 			LogData = (SELECT   NEW_VALUES.MilestoneId,
 								NEW_VALUES.MilestoneProjectId,
-								NEW_VALUES.ActualDeliveryDate,
 								NEW_VALUES.ProjectedDeliveryDate,
 								NEW_VALUES.StartDate,
 								OLD_VALUES.MilestoneId,
 								OLD_VALUES.MilestoneProjectId,
-								OLD_VALUES.ActualDeliveryDate,
 								OLD_VALUES.ProjectedDeliveryDate,
 								OLD_VALUES.StartDate
 					    FROM NEW_VALUES
@@ -107,7 +103,6 @@ BEGIN
 	    OR ISNULL(i.Amount, 0) <> ISNULL(d.Amount, 0)
 	    OR i.StartDate <> d.StartDate
 	    OR i.ProjectedDeliveryDate <> d.ProjectedDeliveryDate
-	    OR ISNULL(i.ActualDeliveryDate, '1900-01-01') <> ISNULL(d.ActualDeliveryDate, '1900-01-01')
 	    OR i.IsHourlyAmount <> d.IsHourlyAmount
 
 	-- End logging session
