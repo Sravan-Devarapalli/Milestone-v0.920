@@ -52,6 +52,13 @@ namespace PraticeManagement.Controls
         {
         }
 
+        public string LabelTextBeforeDropDown
+        {
+            get { return Label3.Text; }
+            set { Label3.Text = value; }
+        }
+
+
         /// <summary>
         /// 	Default constructor of ActivityLogControl.
         /// </summary>
