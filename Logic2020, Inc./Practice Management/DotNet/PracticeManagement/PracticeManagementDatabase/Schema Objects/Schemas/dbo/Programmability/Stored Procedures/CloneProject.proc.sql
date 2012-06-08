@@ -9,7 +9,6 @@ CREATE PROCEDURE [dbo].[CloneProject]
     @ProjectId INT,
 	@ProjectStatusId INT,
     @CloneMilestones BIT = 1,
-    @CloneNotes BIT = 1,
     @CloneCommissions BIT = 1,
     @ClonedProjectId INT OUT
 AS 
@@ -74,12 +73,7 @@ AS
 		SELECT  @ClonedProjectId,pm.ProjectManagerId
 		FROM    dbo.ProjectManagers AS pm
         WHERE   pm.ProjectId = @projectId
-          
-        IF @CloneNotes = 1
-        BEGIN
-			exec dbo.NotesClone @OldTargetId = @ProjectId, @NewTargetId = @ClonedProjectId
-        END
-               
+              
         IF @CloneMilestones = 1 
             BEGIN
 
