@@ -71,12 +71,6 @@ namespace PracticeManagementService
             Person person, DateTime startDate, DateTime endDate, int defaultMilestoneId);
 
         /// <summary>
-        /// Get milestones by person for given time period exclusively for Time Entry page.
-        /// </summary>
-        [OperationContract]
-        MilestonePersonEntry[] GetTimeEntryMilestones(Person person, DateTime startDate, DateTime endDate);
-
-        /// <summary>
         /// Returns all time entries for given Context/Filter conditions
         /// </summary>
         [OperationContract]
