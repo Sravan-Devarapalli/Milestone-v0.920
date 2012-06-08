@@ -221,11 +221,11 @@ namespace PraticeManagement
             {
                 if (cssClass == "ActiveProjectWithoutSOW")
                 {
-                    statusName = "Active without SOW";
+                    statusName = "Active without Attachment.";
                 }
                 else
                 {
-                    statusName = "Active with SOW";
+                    statusName = "Active with Attachment.";
                 }
             }
 
