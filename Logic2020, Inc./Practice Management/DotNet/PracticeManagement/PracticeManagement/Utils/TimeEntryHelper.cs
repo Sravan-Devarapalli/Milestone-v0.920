@@ -225,33 +225,6 @@ namespace PraticeManagement.Utils
             return milestones.ToArray();
         }
 
-        /// <summary>
-        /// Get milestones by person for given time period exclusively for Time Entry page.
-        /// </summary>
-        public static MilestonePersonEntry[]
-            GetTimeEntryMilestones(Person person, DateTime startDate, DateTime endDate, bool includeDefault)
-        {
-            var milestones = new List<MilestonePersonEntry>();
-            int? mileStoneId = MileStoneConfigurationManager.GetMileStoneId();
-            int defaultMilestoneId = mileStoneId.HasValue ? mileStoneId.Value : 0;
-            using (var serv = new TimeEntryServiceClient())
-            {
-                milestones.AddRange(serv.GetTimeEntryMilestones(person, startDate, endDate));
-            }
-
-            if (includeDefault)
-            {
-                // Needed for the default milestone issue
-                //  Check if default milestone is already in the list
-                var isDefaultThere = milestones.Any(mpe => mpe.ParentMilestone.Id.Value == defaultMilestoneId);
-
-                //  If it's not, put it there
-                if (!isDefaultThere && defaultMilestoneId != 0)
-                    milestones.Add(CreateDefaultMpe(startDate, endDate, defaultMilestoneId));
-            }
-            return milestones.ToArray();
-        }
-
         private static MilestonePersonEntry CreateDefaultMpe(DateTime startDate, DateTime endDate,
                                                              int defaultMilestoneId)
         {
