@@ -89,7 +89,6 @@
             public const string ManagerFirstName = "ManagerFirstName";
             public const string ManagerId = "ManagerId";
             public const string ManagerLastName = "ManagerLastName";
-            public const string MilestoneActualDeliveryDate = "MilestoneActualDeliveryDate";
             public const string MilestoneDate = "MilestoneDate";
             public const string MilestoneDateFrom = "MilestoneDateFrom";
             public const string MilestoneDateTo = "MilestoneDateTo";
@@ -386,7 +385,6 @@
             public const string ClonedProjectId = "ClonedProjectId";
             public const string CloneMilestones = "CloneMilestones";
             public const string CloneBillingNotes = "CloneBillingNotes";
-            public const string CloneNotes = "CloneNotes";
             public const string CloneCommissions = "CloneCommissions";
             public const string ConsultantsCanAdjust = ColumnNames.ConsultantsCanAdjust;
             public const string CurrentId = "CurrentId";
@@ -749,7 +747,6 @@
                 #region Shared
 
                 public const string ConsultantMilestones = "dbo.ConsultantMilestones";
-                public const string GetTimeEntryMilestones = "dbo.GetTimeEntryMilestones";
                 public const string CheckPersonTimeEntriesAfterTerminationDate = "dbo.CheckPersonTimeEntriesAfterTerminationDate";
                 #endregion
 
@@ -935,7 +932,6 @@
                 public const string DeleteMilestonePersonEntry = "dbo.DeleteMilestonePersonEntry";
                 public const string MilestonePersonEntryInsert = "dbo.MilestonePersonEntryInsert";
                 public const string MilestonePersonDeleteEntries = "dbo.MilestonePersonDeleteEntries";
-                public const string MilestonePersonListByPerson = "dbo.MilestonePersonListByPerson";
                 public const string MilestonePersonGetByMilestonePersonId = "dbo.MilestonePersonGetByMilestonePersonId";
                 public const string MilestonePersonEntryListByMilestonePersonId = "dbo.MilestonePersonEntryListByMilestonePersonId";
                 public const string CheckTimeEntriesForMilestonePerson = "dbo.CheckTimeEntriesForMilestonePerson";
