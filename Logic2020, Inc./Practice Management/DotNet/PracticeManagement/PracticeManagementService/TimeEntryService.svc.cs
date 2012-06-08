@@ -134,24 +134,6 @@ namespace PracticeManagementService
             }
         }
 
-        /// <summary>
-        /// Get milestones by person for given time period exclusively for Time Entry page.
-        /// </summary>
-        public MilestonePersonEntry[] GetTimeEntryMilestones(Person person, DateTime startDate, DateTime endDate)
-        {
-            try
-            {
-                return TimeEntryDAL.GetTimeEntryMilestones(person, startDate, endDate);
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntryMilestones", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-        }
-
         // ReSharper disable InconsistentNaming
         public TimeEntryRecord[] GetAllTimeEntries(TimeEntrySelectContext selectContext, int startRow, int maxRows)
         // ReSharper restore InconsistentNaming
