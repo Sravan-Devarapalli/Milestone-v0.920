@@ -182,29 +182,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Get milestones by person for given time period exclusively for Time Entry page.
-        /// </summary>
-        public static MilestonePersonEntry[] GetTimeEntryMilestones(Person person, DateTime startDate, DateTime endDate)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetTimeEntryMilestones, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, person.Id.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
-
-                connection.Open();
-
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    return ReadMilestonePersonEntries(reader).ToArray();
-                }
-            }
-        }
-
-        /// <summary>
         /// Get milestones by person for given time period
         /// </summary>
         public static GroupedTimeEntries<Person> GetTimeEntriesByProject(TimeEntryProjectReportContext reportContext)
