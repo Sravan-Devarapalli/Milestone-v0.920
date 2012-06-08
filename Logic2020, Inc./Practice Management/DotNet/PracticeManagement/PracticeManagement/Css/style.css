@@ -2676,11 +2676,16 @@ TABLE.ProjectSearchPopup TD
 .Width92Per
 {
     width:92%;
+}  
+ 
+.Width95Per
+{
+    width:95%;
 }   
 
 .ScrollingDropDownWholeWidth .scrollext_sdeProjectManagersLabel
 {
-    width:99% !important;
+    width:93% !important;
     vertical-align: middle;
     line-height: 19px;
     padding-left: 4px;
@@ -2690,3 +2695,9 @@ TABLE.ProjectSearchPopup TD
 {
     width:20% !important;
 }
+.NoBorder
+{
+    border-right-width:0px !important;
+    border-right-style:none !important;
+}
+
