@@ -1382,7 +1382,7 @@ namespace PraticeManagement
                 lblProjectNameLinkPopUp.Text = txtProjectNameFirstTime.Text = txtProjectName.Text = lblProjectName.Text = project.Name;
                 lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
                 txtDescription.Text = project.Description;
-                ddlNotes.SelectedValue = project.Client.IsNoteRequired ? "1" : (project.IsNoteRequired ? "1" : "0");
+                ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
                 if (project.Client.IsNoteRequired)
                 {
                     ddlNotes.Enabled = false;
