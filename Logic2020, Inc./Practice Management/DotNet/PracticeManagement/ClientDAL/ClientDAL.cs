@@ -13,7 +13,7 @@ namespace DataAccess
     public static class ClientDAL
     {
         #region Constants
-
+        
         #region Parameters
 
         private const string ClientIdParam = "@ClientId";
@@ -60,7 +60,7 @@ namespace DataAccess
         /// 	<paramref name = "client" />
         /// 	ClientId will contain the systems generated ID
         /// </remarks>
-        public static void ClientInsert(Client client)
+        public static void ClientInsert(Client client, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -77,12 +77,14 @@ namespace DataAccess
                     command.Parameters.AddWithValue(DefaultSalespersonIdParam, client.DefaultSalespersonId);
                     command.Parameters.AddWithValue(DefaultDirectorIdParam,
                         client.DefaultDirectorId.HasValue ? (object)client.DefaultDirectorId.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, client.IsNoteRequired);
 
                     var clientIdParameter = new SqlParameter(ClientIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                     command.Parameters.Add(clientIdParameter);
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsMarginColorInfoEnabled, client.IsMarginColorInfoEnabled);
                     command.Parameters.AddWithValue(IsInternalParam, client.IsInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
 
                     try
@@ -171,7 +173,7 @@ namespace DataAccess
         /// 	<paramref name = "client" />
         /// 	ClientId will contain the systems generated ID
         /// </remarks>
-        public static void ClientUpdate(Client client)
+        public static void ClientUpdate(Client client, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -191,6 +193,9 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, client.IsChargeable);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsMarginColorInfoEnabled, client.IsMarginColorInfoEnabled);
                     command.Parameters.AddWithValue(IsInternalParam, client.IsInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, client.IsNoteRequired);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+
                     try
                     {
                         connection.Open();
@@ -432,32 +437,19 @@ namespace DataAccess
             ReadClients(command, result, true);
         }
 
-        public static void ClientInactivate(Client client)
+        public static void UpdateStatusForClient(int clientId, bool inActive, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand("ClientInactivate", connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.UpdateStatusForClient, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-                    command.Parameters.AddWithValue(ClientIdParam, client.Id);
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
+                    command.Parameters.AddWithValue(ClientIdParam, clientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.InActiveParam, inActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
-        public static void ClientReactivate(Client client)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (var command = new SqlCommand("ClientReactivate", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(ClientIdParam, client.Id);
                     connection.Open();
                     command.ExecuteNonQuery();
                 }
@@ -500,6 +492,16 @@ namespace DataAccess
                     isInternalIndex = -1;
                 }
 
+                int isNoteRequiredIndex = -1;
+                try
+                {
+                    isNoteRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNoteRequired);
+                }
+                catch
+                {
+                    isNoteRequiredIndex = -1;
+                }
+
                 while (reader.Read())
                 {
                     var client = ReadClientBasic(reader);
@@ -510,6 +512,10 @@ namespace DataAccess
                         client.DefaultDirectorId = (int)reader[DefaultDirectorIdColumn];
                     client.Inactive = (bool)reader[InactiveColumn];
                     client.IsChargeable = (bool)reader[Constants.ColumnNames.IsChargeable];
+                    if (isNoteRequiredIndex != -1)
+                    {
+                        client.IsNoteRequired = reader.GetBoolean(isNoteRequiredIndex);
+                    }
                     if (isInternalIndex > -1)
                     {
                         client.IsInternal = reader.GetBoolean(isInternalIndex);
@@ -551,7 +557,7 @@ namespace DataAccess
             return new Client { Id = (int)reader[ClientIdColumn], Name = (string)reader[clientNameColumn] };
         }
 
-        public static void UpdateIsChargableForClient(int? clientId, bool isChargable)
+        public static void UpdateIsChargableForClient(int? clientId, bool isChargable, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -562,6 +568,8 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(ClientIdParam, clientId.Value);
                     command.Parameters.AddWithValue(IsChargeableParam, isChargable);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+
                     connection.Open();
                     command.ExecuteNonQuery();
                 }
@@ -713,7 +721,24 @@ namespace DataAccess
             return client;
         }
 
+        public static void ClientIsNoteRequiredUpdate(int clientId, bool isNoteRequired, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientIsNoteRequired, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
 
+                    command.Parameters.AddWithValue(ClientIdParam, clientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, isNoteRequired);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
 
