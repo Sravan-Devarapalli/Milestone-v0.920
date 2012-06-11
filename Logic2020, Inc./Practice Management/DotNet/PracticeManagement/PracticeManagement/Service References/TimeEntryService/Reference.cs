@@ -240,7 +240,6 @@ namespace PraticeManagement.TimeEntryService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
         
-    
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
