@@ -102,8 +102,6 @@ namespace PraticeManagement.MilestonePersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestonePersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestonePersonService.IMilestonePersonService>, PraticeManagement.MilestonePersonService.IMilestonePersonService {
         
-       
-        
         public MilestonePersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
