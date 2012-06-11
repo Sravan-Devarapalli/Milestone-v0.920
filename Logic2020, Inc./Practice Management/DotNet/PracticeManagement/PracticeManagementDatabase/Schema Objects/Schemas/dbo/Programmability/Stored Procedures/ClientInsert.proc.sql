@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Skip Sailors
 -- Create date: 4-22-2008
--- Updated by:	Anatoliy Lokshin
--- Update date: 8-22-2008
+-- Updated by:	ThulasiRam.P
+-- Update date: 6-08-2012
 -- Description:	Insert a new Client, output and select ID of new client record.
 -- =============================================
 CREATE PROCEDURE dbo.ClientInsert
@@ -16,7 +16,9 @@ CREATE PROCEDURE dbo.ClientInsert
 	@DefaultTerms         INT,
 	@ClientId             INT OUTPUT,
 	@IsMarginColorInfoEnabled BIT = NULL,
-	@IsInternal BIT
+	@IsInternal BIT,
+	@IsNoteRequired     BIT = 1,
+	@UserLogin          NVARCHAR(255)
 )
 AS
 	SET NOCOUNT ON
@@ -32,37 +34,37 @@ AS
 		BEGIN TRY
 		
 		/*
-		NOTE:At present there is no seprate range specified for internal or external clients and For Logic2020 code: C2020.
+		NOTE:At present there is no separate range specified for internal or external clients and For Logic2020 code: C2020.
 		RANGE : C0000 - C9999
 		*/
 
-		DECLARE  @clientCode			 NVARCHAR(10),
+		DECLARE  @ClientCode			 NVARCHAR(10),
 				 @LowerLimitRange		 INT ,
 				 @HigherLimitRange		 INT ,
 				 @NextClientNumber		 INT,
 				 @Error					 NVARCHAR(MAX)
 		SET @LowerLimitRange = 0
 		SET @HigherLimitRange = 9999
-		SET @Error = 'Account code not avaliable'
+		SET @Error = 'Account code not available'
 
-		DECLARE @ClientRanksList TABLE (clientNumber INT,clientNumberRank INT)
+		DECLARE @ClientRanksList TABLE (ClientNumber INT,ClientNumberRank INT)
 		INSERT INTO @ClientRanksList 
-		SELECT Convert(INT,SUBSTRING(Code,2,5)) as clientNumber ,
+		SELECT Convert(INT,SUBSTRING(Code,2,5)) as ClientNumber ,
 				RANK() OVER (ORDER BY Convert(INT,SUBSTRING(Code,2,5)))+@LowerLimitRange-1 AS  clientNumberRank
 		FROM dbo.Client  
 		WHERE ISNUMERIC( SUBSTRING(Code,2,5)) = 1
 
 
 		INSERT INTO @ClientRanksList 
-		SELECT -1,MAX(clientNumberRank)+1 FROM @ClientRanksList
+		SELECT -1,MAX(ClientNumberRank)+1 FROM @ClientRanksList
 
-		SELECT TOP 1 @NextClientNumber = clientNumberRank 
+		SELECT TOP 1 @NextClientNumber = ClientNumberRank 
 			FROM @ClientRanksList  
-			WHERE clientNumber != clientNumberRank 
-			ORDER BY clientNumberRank
+			WHERE ClientNumber != ClientNumberRank 
+			ORDER BY ClientNumberRank
 
 				
-		IF (@NextClientNumber IS NULL AND NOT EXISTS(SELECT 1 FROM @ClientRanksList WHERE clientNumber != -1))
+		IF (@NextClientNumber IS NULL AND NOT EXISTS(SELECT 1 FROM @ClientRanksList WHERE ClientNumber != -1))
 		BEGIN 
 			SET  @NextClientNumber = @LowerLimitRange
 		END 
@@ -71,15 +73,18 @@ AS
 			RAISERROR (@Error, 16, 1)
 		END
 
-		SET @clientCode = 'C'+ REPLICATE('0',4-LEN(@NextClientNumber)) +CONVERT(NVARCHAR,@NextClientNumber)
+		SET @ClientCode = 'C'+ REPLICATE('0',4-LEN(@NextClientNumber)) +CONVERT(NVARCHAR,@NextClientNumber)
+
+		-- Start logging session
+	    EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 		INSERT INTO Client
-					(DefaultDiscount, DefaultTerms, DefaultSalespersonId, DefaultDirectorID, Name, Inactive, IsChargeable,IsMarginColorInfoEnabled,IsInternal,Code)
-			 VALUES (@DefaultDiscount, @DefaultTerms, @DefaultSalespersonId, @DefaultDirectorId, @Name, @Inactive, @IsChargeable,@IsMarginColorInfoEnabled,@IsInternal,@clientCode)
+					(DefaultDiscount, DefaultTerms, DefaultSalespersonId, DefaultDirectorID, Name, Inactive, IsChargeable,IsMarginColorInfoEnabled,IsInternal,Code,IsNoteRequired)
+			 VALUES (@DefaultDiscount, @DefaultTerms, @DefaultSalespersonId, @DefaultDirectorId, @Name, @Inactive, @IsChargeable,@IsMarginColorInfoEnabled,@IsInternal,@clientCode,@IsNoteRequired)
 
-		SELECT @clientId = SCOPE_IDENTITY()
+		SELECT @ClientId = SCOPE_IDENTITY()
 
-		SELECT @clientId
+		SELECT @ClientId
 
 		END TRY
 		BEGIN CATCH
