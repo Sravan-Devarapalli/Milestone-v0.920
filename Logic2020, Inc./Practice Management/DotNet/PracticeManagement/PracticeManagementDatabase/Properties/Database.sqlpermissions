@@ -1607,12 +1607,6 @@
   <PermissionStatement Action="GRANT">
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
-    <Object Name="ClientInactivate" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
     <Object Name="PersonListAllForMilestone" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
@@ -1632,12 +1626,6 @@
     <Permission>EXECUTE</Permission>
     <Grantee>PracticeManager</Grantee>
     <Object Name="GetDatabaseVersion" Schema="dbo" Type="OBJECT" />
-    <Grantor>dbo</Grantor>
-  </PermissionStatement>
-  <PermissionStatement Action="GRANT">
-    <Permission>EXECUTE</Permission>
-    <Grantee>PracticeManager</Grantee>
-    <Object Name="ClientReactivate" Schema="dbo" Type="OBJECT" />
     <Grantor>dbo</Grantor>
   </PermissionStatement>
   <PermissionStatement Action="GRANT">
