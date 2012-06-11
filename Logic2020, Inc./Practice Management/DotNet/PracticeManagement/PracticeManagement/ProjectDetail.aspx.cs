@@ -818,6 +818,23 @@ namespace PraticeManagement
                     {
                         ddlDirector.SelectedIndex = 0;
                     }
+
+                    if (client.IsNoteRequired)
+                    {
+                        ddlNotes.SelectedValue = "1";
+                        ddlNotes.Enabled = false;
+                    }
+                    else
+                    {
+                        if (Project != null)
+                        {
+                            ddlNotes.SelectedValue = Project.IsNoteRequired ? "1" : "0";
+                        }
+
+                        bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                        bool userIsDirector = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);// #2817: DirectorRoleName is added as per the requirement.
+                        ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
+                    }
                 }
 
                 DataHelper.FillProjectGroupList(ddlProjectGroup, clientId, null);
@@ -1296,8 +1313,9 @@ namespace PraticeManagement
             DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
-            DataHelper.FillProjectManagersList(cblProjectManagers, "All Project Managers");
-            DataHelper.FillProjectManagersList(ddlProjectOwner, "-- Select Project Owner --");
+            Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort((int)DataTransferObjects.PersonStatusType.Active));
+            DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
+            DataHelper.FillListDefault(ddlProjectOwner, "-- Select Project Owner --", persons, false, "Id", "PersonLastFirstName");
 
             int? id = ProjectId;
             if (id.HasValue)
@@ -1364,7 +1382,11 @@ namespace PraticeManagement
                 lblProjectNameLinkPopUp.Text = txtProjectNameFirstTime.Text = txtProjectName.Text = lblProjectName.Text = project.Name;
                 lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
                 txtDescription.Text = project.Description;
-                ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
+                ddlNotes.SelectedValue = project.Client.IsNoteRequired ? "1" : (project.IsNoteRequired ? "1" : "0");
+                if (project.Client.IsNoteRequired)
+                {
+                    ddlNotes.Enabled = false;
+                }
                 txtSowBudget.Text = project.SowBudget != null ? project.SowBudget.Value.ToString("###,###,###,###,##0") : string.Empty;
 
                 PopulateClientDropDown(project);
