@@ -152,33 +152,7 @@ namespace PraticeManagement.Utils
         }
 
         #endregion
-
-
-        #region Grouping
-
-        /// <summary>
-        /// Gets the grid of the TEs
-        /// </summary>
-        /// <param name="person">Person</param>
-        /// <param name="selectedDates">Dates selected</param>
-        /// <param name="milestonePersonEntries">MPEs</param>
-        /// <returns>TE grid</returns>
-        public static TeGrid GetTeGrid(Person person, DateTime[] selectedDates,
-                                       MilestonePersonEntry[] milestonePersonEntries)
-        {
-            var startDate = selectedDates[0];
-            var endDate = selectedDates[selectedDates.Length - 1];
-
-            var tes = GetTimeEntriesForPerson(person, selectedDates);
-            var calendar =
-                ServiceCallers.Custom.Calendar(
-                    c => c.GetPersonCalendar(startDate, endDate, person.Id.Value, null));
-
-            return new TeGrid(tes, milestonePersonEntries, calendar);
-        }
-
-        #endregion
-
+        
         #region Milestones
 
         /// <summary>
