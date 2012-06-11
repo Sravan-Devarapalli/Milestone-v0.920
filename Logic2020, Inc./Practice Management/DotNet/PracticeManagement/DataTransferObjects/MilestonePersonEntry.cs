@@ -176,16 +176,6 @@ namespace DataTransferObjects
             }
         }
 
-        /// <summary>
-        /// Gets or sets a list of the projected bill entries.
-        /// </summary>
-        /// <remarks>May be used to specify as a daily as a monthly activity.</remarks>
-        [DataMember]
-        public List<BilledTime> EstimatedWorkloadByMonth
-        {
-            get;
-            set;
-        }
 
         /// <summary>
         /// Gets or sets a person role for the milestone.
