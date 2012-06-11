@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+  <xs:import schemaLocation="http://system68.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://system68.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://system68.ggk.com/PracticeManagementService/MilestonePersonService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
   <xs:complexType name="ArrayOfMilestonePerson">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="MilestonePerson" nillable="true" type="tns:MilestonePerson" />
@@ -108,7 +108,6 @@
       <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="EstimatedClientDiscount" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="EstimatedWorkloadByMonth" nillable="true" type="tns:ArrayOfBilledTime" />
       <xs:element minOccurs="0" name="HasTimeEntries" type="xs:boolean" />
       <xs:element minOccurs="0" name="HourlyAmount" nillable="true" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="HoursPerDay" type="xs:decimal" />
@@ -124,21 +123,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MilestonePersonEntry" nillable="true" type="tns:MilestonePersonEntry" />
-  <xs:complexType name="ArrayOfBilledTime">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="BilledTime" nillable="true" type="tns:BilledTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfBilledTime" nillable="true" type="tns:ArrayOfBilledTime" />
-  <xs:complexType name="BilledTime">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="DateBilled" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="EntryStartDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
-      <xs:element minOccurs="0" name="MilestoneBilled" nillable="true" type="tns:Milestone" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BilledTime" nillable="true" type="tns:BilledTime" />
   <xs:complexType name="Milestone">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" nillable="true" type="tns:PracticeManagementCurrency" />
@@ -257,6 +241,7 @@
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -303,7 +288,6 @@
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BilledTimeList" nillable="true" type="tns:ArrayOfBilledTime" />
       <xs:element minOccurs="0" name="CommissionList" nillable="true" type="tns:ArrayOfCommission" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="ContactInfoList" nillable="true" type="q2:ArrayOfPersonContactInfo" />
       <xs:element minOccurs="0" name="CurrentPay" nillable="true" type="tns:Pay" />
