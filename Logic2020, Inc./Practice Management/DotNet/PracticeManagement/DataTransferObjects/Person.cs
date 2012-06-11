@@ -27,7 +27,6 @@ namespace DataTransferObjects
         private string _alias;
         private Practice _defaultPractice;
         private List<Commission> _commissionList = new List<Commission>();
-        private List<BilledTime> _billedTimeList = new List<BilledTime>();
         private Pay _currentPay;
 
 
@@ -251,13 +250,6 @@ namespace DataTransferObjects
         {
             get { return _commissionList; }
             set { _commissionList = value; }
-        }
-
-        [DataMember]
-        public List<BilledTime> BilledTimeList
-        {
-            get { return _billedTimeList; }
-            set { _billedTimeList = value; }
         }
 
         [DataMember]
