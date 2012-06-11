@@ -611,7 +611,7 @@ namespace PraticeManagement
             {
                 try
                 {
-                    return serviceClient.SaveClientDetail(client);
+                    return serviceClient.SaveClientDetail(client, User.Identity.Name);
                 }
                 catch (Exception ex)
                 {
@@ -637,6 +637,7 @@ namespace PraticeManagement
                                                                                                   client.
                                                                                                       DefaultSalespersonId
                                                                                                       .ToString()));
+            chbIsNoteRequired.Checked = client.IsNoteRequired;
             if (client.DefaultDirectorId.HasValue)
             {
                 ListItem selectedDefaultDirector = ddlDefaultDirector.Items.FindByValue(client.DefaultDirectorId.Value.ToString());
@@ -707,6 +708,7 @@ namespace PraticeManagement
             client.Inactive = !chbActive.Checked;
             client.IsChargeable = chbIsChar.Checked;
             client.IsInternal = chbIsInternal.Checked;
+            client.IsNoteRequired = chbIsNoteRequired.Checked;
             client.DefaultTerms =
                 !string.IsNullOrEmpty(ddlDefaultTerms.SelectedValue)
                     ? int.Parse(ddlDefaultTerms.SelectedValue)
