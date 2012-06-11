@@ -27,17 +27,11 @@
   <wsdl:message name="IClientService_GetClientDetailsShort_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetClientDetailsShortResponse" />
   </wsdl:message>
-  <wsdl:message name="IClientService_ClientInactivate_InputMessage">
-    <wsdl:part name="parameters" element="tns:ClientInactivate" />
+  <wsdl:message name="IClientService_UpdateStatusForClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateStatusForClient" />
   </wsdl:message>
-  <wsdl:message name="IClientService_ClientInactivate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ClientInactivateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IClientService_ClientReactivate_InputMessage">
-    <wsdl:part name="parameters" element="tns:ClientReactivate" />
-  </wsdl:message>
-  <wsdl:message name="IClientService_ClientReactivate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ClientReactivateResponse" />
+  <wsdl:message name="IClientService_UpdateStatusForClient_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateStatusForClientResponse" />
   </wsdl:message>
   <wsdl:message name="IClientService_UpdateIsChargableForClient_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateIsChargableForClient" />
@@ -99,6 +93,12 @@
   <wsdl:message name="IClientService_GetInternalAccount_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetInternalAccountResponse" />
   </wsdl:message>
+  <wsdl:message name="IClientService_ClientIsNoteRequiredUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:ClientIsNoteRequiredUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_ClientIsNoteRequiredUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ClientIsNoteRequiredUpdateResponse" />
+  </wsdl:message>
   <wsdl:portType name="IClientService">
     <wsdl:operation name="SaveClientDetail">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/SaveClientDetail" message="tns:IClientService_SaveClientDetail_InputMessage" />
@@ -112,13 +112,9 @@
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetClientDetailsShort" message="tns:IClientService_GetClientDetailsShort_InputMessage" />
       <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetClientDetailsShortResponse" message="tns:IClientService_GetClientDetailsShort_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ClientInactivate">
-      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientInactivate" message="tns:IClientService_ClientInactivate_InputMessage" />
-      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientInactivateResponse" message="tns:IClientService_ClientInactivate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ClientReactivate">
-      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientReactivate" message="tns:IClientService_ClientReactivate_InputMessage" />
-      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientReactivateResponse" message="tns:IClientService_ClientReactivate_OutputMessage" />
+    <wsdl:operation name="UpdateStatusForClient">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/UpdateStatusForClient" message="tns:IClientService_UpdateStatusForClient_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/UpdateStatusForClientResponse" message="tns:IClientService_UpdateStatusForClient_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateIsChargableForClient">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/UpdateIsChargableForClient" message="tns:IClientService_UpdateIsChargableForClient_InputMessage" />
@@ -159,6 +155,10 @@
     <wsdl:operation name="GetInternalAccount">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetInternalAccount" message="tns:IClientService_GetInternalAccount_InputMessage" />
       <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetInternalAccountResponse" message="tns:IClientService_GetInternalAccount_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ClientIsNoteRequiredUpdate">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientIsNoteRequiredUpdate" message="tns:IClientService_ClientIsNoteRequiredUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientIsNoteRequiredUpdateResponse" message="tns:IClientService_ClientIsNoteRequiredUpdate_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
