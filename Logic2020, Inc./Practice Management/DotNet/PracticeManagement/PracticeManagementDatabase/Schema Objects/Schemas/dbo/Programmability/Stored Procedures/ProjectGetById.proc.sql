@@ -1,7 +1,7 @@
 ﻿-- =============================================
 -- Description:	Get project Details.
--- Updated By:	Srinivas.M
--- Updated Date: 2012-06-05
+-- Updated By:	ThulasiRam.P
+-- Updated Date: 2012-06-07
 -- =============================================
 CREATE PROCEDURE [dbo].[ProjectGetById]
 (
@@ -53,11 +53,12 @@ AS
 			WHEN 0 THEN CAST(0 AS BIT)
 			ELSE CAST(1 AS BIT) END AS [HasTimeEntries],
 			p.IsNoteRequired,
-			p.SowBudget
+			p.SowBudget,
+			p.ClientIsNoteRequired
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
-	  INNER JOIN Person AS person ON p.PracticeManagerId = person.PersonId
+	  INNER JOIN dbo.Person AS person ON p.PracticeManagerId = person.PersonId
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	  WHERE p.ProjectId = @ProjectId
        AND (   (@SalespersonId IS NULL AND @PracticeManagerId IS NULL)
