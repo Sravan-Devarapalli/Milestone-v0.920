@@ -38,7 +38,8 @@ AS
 		   c.IsInternal AS 'ClientIsInternal',
 		   p.IsNoteRequired,
 		   p.ProjectOwnerId,
-		   p.SowBudget
+		   p.SowBudget,
+		   c.IsNoteRequired AS [ClientIsNoteRequired]
 	  FROM dbo.Project AS p
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
