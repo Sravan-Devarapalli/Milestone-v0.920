@@ -27,7 +27,7 @@ AS
 	BEGIN
 		IF EXISTS ( SELECT 1 FROM dbo.Milestone AS m
 						INNER JOIN dbo.project AS P ON P.projectId = m.projectId
-					WHERE P.ProjectId = @Id AND P.ProjectOwnerId = @PersonId )
+					WHERE m.MilestoneId = @Id AND P.ProjectOwnerId = @PersonId )
 			SELECT 'True'
 		ELSE IF EXISTS ( SELECT pm.ProjectManagerId  
 						FROM dbo.Milestone AS milestone 
