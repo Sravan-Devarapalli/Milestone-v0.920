@@ -163,6 +163,17 @@
                                             runat="server" OnCheckedChanged="chbIsChargeable_CheckedChanged" Checked='<%# Convert.ToBoolean(Eval("IsChargeable")) %>' />
                                     </ItemTemplate>
                                 </asp:TemplateField>
+                                <asp:TemplateField>
+                                    <ItemStyle HorizontalAlign="Center" Width="120" />
+                                    <HeaderTemplate>
+                                        <div class="ie-bg">
+                                            Is Note Required</div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="chbIsNoteRequired" ClientId='<%# Eval("Id") %>' AutoPostBack="true"
+                                            runat="server" OnCheckedChanged="chbIsNoteRequired_CheckedChanged" Checked='<%# Convert.ToBoolean(Eval("IsNoteRequired")) %>' />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                             </Columns>
                         </asp:GridView>
                     </td>
