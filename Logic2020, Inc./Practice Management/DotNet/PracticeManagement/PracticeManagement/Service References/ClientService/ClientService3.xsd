@@ -5,6 +5,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="client" nillable="true" type="q1:Client" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -44,26 +45,16 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ClientInactivate">
+  <xs:element name="UpdateStatusForClient">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="client" nillable="true" type="q4:Client" />
+        <xs:element minOccurs="0" name="clientId" type="xs:int" />
+        <xs:element minOccurs="0" name="inActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ClientInactivateResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientReactivate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="client" nillable="true" type="q5:Client" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientReactivateResponse">
+  <xs:element name="UpdateStatusForClientResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -73,6 +64,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="clientId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="isChargable" type="xs:boolean" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -89,14 +81,14 @@
   <xs:element name="ClientListAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllResult" nillable="true" type="q6:ArrayOfClient" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllResult" nillable="true" type="q4:ArrayOfClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ClientListAllSecure">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q7:Person" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q5:Person" />
         <xs:element minOccurs="0" name="inactives" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
@@ -104,14 +96,14 @@
   <xs:element name="ClientListAllSecureResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllSecureResult" nillable="true" type="q8:ArrayOfClient" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllSecureResult" nillable="true" type="q6:ArrayOfClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ClientListAllSecureByNewRule">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q9:Person" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q7:Person" />
         <xs:element minOccurs="0" name="inactives" type="xs:boolean" />
         <xs:element minOccurs="0" name="applyNewRule" type="xs:boolean" />
       </xs:sequence>
@@ -120,7 +112,7 @@
   <xs:element name="ClientListAllSecureByNewRuleResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllSecureByNewRuleResult" nillable="true" type="q10:ArrayOfClient" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllSecureByNewRuleResult" nillable="true" type="q8:ArrayOfClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -132,7 +124,7 @@
   <xs:element name="ClientListAllWithInactiveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllWithInactiveResult" nillable="true" type="q11:ArrayOfClient" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllWithInactiveResult" nillable="true" type="q9:ArrayOfClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -147,7 +139,7 @@
   <xs:element name="ClientListAllForProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllForProjectResult" nillable="true" type="q12:ArrayOfClient" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllForProjectResult" nillable="true" type="q10:ArrayOfClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -159,7 +151,7 @@
   <xs:element name="GetAllColorsForMarginResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllColorsForMarginResult" nillable="true" type="q13:ArrayOfColorInformation" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllColorsForMarginResult" nillable="true" type="q11:ArrayOfColorInformation" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -173,7 +165,7 @@
   <xs:element name="GetClientMarginColorInfoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetClientMarginColorInfoResult" nillable="true" type="q14:ArrayOfClientMarginColorInfo" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetClientMarginColorInfoResult" nillable="true" type="q12:ArrayOfClientMarginColorInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -185,7 +177,7 @@
   <xs:element name="ClientListAllWithoutPermissionsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllWithoutPermissionsResult" nillable="true" type="q15:ArrayOfClient" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllWithoutPermissionsResult" nillable="true" type="q13:ArrayOfClient" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -197,8 +189,22 @@
   <xs:element name="GetInternalAccountResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetInternalAccountResult" nillable="true" type="q16:Client" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetInternalAccountResult" nillable="true" type="q14:Client" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ClientIsNoteRequiredUpdate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientId" type="xs:int" />
+        <xs:element minOccurs="0" name="isNoteRequired" type="xs:boolean" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ClientIsNoteRequiredUpdateResponse">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
 </xs:schema>
