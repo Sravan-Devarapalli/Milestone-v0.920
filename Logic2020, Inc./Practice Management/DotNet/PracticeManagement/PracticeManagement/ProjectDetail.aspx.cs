@@ -1293,7 +1293,7 @@ namespace PraticeManagement
         {
             DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
             DataHelper.FillClientListForProject(ddlClientName, "-- Select Account --", ProjectId);
-            DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Sales person --");
+            DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
             DataHelper.FillProjectManagersList(cblProjectManagers, "All Project Managers");
