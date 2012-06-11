@@ -1,4 +1,9 @@
-﻿CREATE PROCEDURE dbo.ClientUpdate
+﻿-- =============================================
+-- Updated by:	ThulasiRam.P
+-- Update date: 6-08-2012
+-- Description:	Update Client
+-- =============================================
+CREATE PROCEDURE dbo.ClientUpdate
 (
 	@ClientId             INT,
 	@Name                 NVARCHAR(50),
@@ -9,7 +14,9 @@
 	@Inactive             BIT,
 	@DefaultTerms         INT,
 	@IsMarginColorInfoEnabled BIT = NULL,
-	@IsInternal		      BIT
+	@IsInternal		      BIT,
+	@IsNoteRequired     BIT = 1,
+	@UserLogin          NVARCHAR(255)
 )
 AS
 	SET NOCOUNT ON;
@@ -22,6 +29,10 @@ AS
 	END
 	ELSE
 	BEGIN
+	 
+	    -- Start logging session
+	    EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+
 		UPDATE dbo.Client
 		   SET DefaultDiscount = @DefaultDiscount,
 			   DefaultTerms = @DefaultTerms,
@@ -31,7 +42,8 @@ AS
 			   Inactive = @Inactive,
 			   IsChargeable = @IsChargeable,
 			   IsMarginColorInfoEnabled = @IsMarginColorInfoEnabled,
-			   IsInternal = @IsInternal
+			   IsInternal = @IsInternal,
+			   IsNoteRequired = @IsNoteRequired
 		 WHERE ClientId = @ClientId
 	END
 
