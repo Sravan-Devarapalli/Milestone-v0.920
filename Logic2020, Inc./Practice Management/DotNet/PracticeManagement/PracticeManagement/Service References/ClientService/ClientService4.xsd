@@ -17,6 +17,7 @@
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -322,7 +323,6 @@
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
       <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
       <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingInfo" nillable="true" type="tns:BillingInfo" />
       <xs:element minOccurs="0" name="BuyerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CanCreateCustomWorkTypes" type="xs:boolean" />
       <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
@@ -342,10 +342,12 @@
       <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsORTProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsPTOProject" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsUnpaidProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="ManagementCommission" nillable="true" type="tns:Commission" />
       <xs:element minOccurs="0" name="Milestones" nillable="true" type="tns:ArrayOfMilestone" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
       <xs:element minOccurs="0" name="PracticeManagerCommission" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="ProjectManagerIdsList" nillable="true" type="xs:string" />
@@ -357,10 +359,12 @@
       <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q11:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
       <xs:element minOccurs="0" name="SalesCommission" nillable="true" type="tns:ArrayOfCommission" />
       <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SowBudget" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectStatus" />
       <xs:element minOccurs="0" name="Terms" type="xs:int" />
       <xs:element minOccurs="0" name="TimeEntrySectionId" type="xs:int" />
+      <xs:element minOccurs="0" name="TimeTypeId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Project" nillable="true" type="tns:Project" />
@@ -384,26 +388,20 @@
       <xs:element minOccurs="0" name="AttachmentFileName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="AttachmentId" type="xs:int" />
       <xs:element minOccurs="0" name="AttachmentSize" type="xs:int" />
+      <xs:element minOccurs="0" name="Category" type="tns:ProjectAttachmentCategory" />
       <xs:element minOccurs="0" name="UploadedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Uploader" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
-  <xs:complexType name="BillingInfo">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BillingAddress1" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingAddress2" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingCity" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingContact" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingEmail" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingPhone" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingState" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="BillingZip" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="PurchaseOrder" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BillingInfo" nillable="true" type="tns:BillingInfo" />
+  <xs:simpleType name="ProjectAttachmentCategory">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="SOW" />
+      <xs:enumeration value="SupportDocument" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ProjectAttachmentCategory" nillable="true" type="tns:ProjectAttachmentCategory" />
   <xs:complexType name="Commission">
     <xs:sequence>
       <xs:element minOccurs="0" name="FractionOfMargin" type="xs:decimal">
