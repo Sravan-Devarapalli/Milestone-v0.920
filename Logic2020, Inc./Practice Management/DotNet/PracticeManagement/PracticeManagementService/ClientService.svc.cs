@@ -17,16 +17,16 @@ namespace PracticeManagementService
         /// Commit data about a <see cref="Client"/> to the system store
         /// </summary>
         /// <param name="client"><see cref="Client"/> with information to be changed</param>
-        public int? SaveClientDetail(Client client)
+        public int? SaveClientDetail(Client client, string userLogin)
         {
             if (!client.Id.HasValue)
             {
-                ClientDAL.ClientInsert(client);
+                ClientDAL.ClientInsert(client, userLogin);
                 return client.Id;
             }
             else
             {
-                ClientDAL.ClientUpdate(client);
+                ClientDAL.ClientUpdate(client, userLogin);
                 return client.Id;
             }
         }
@@ -59,34 +59,14 @@ namespace PracticeManagementService
             return ClientDAL.GetDetailsShortById(clientId);
         }
 
-        /// <summary>
-        /// Inactivate (hide) a client
-        /// </summary>
-        /// <param name="client"><see cref="Client"/> to hide</param>
-        /// <remarks>
-        /// Uses the ClientId to hide record in data store
-        /// </remarks>
-        public void ClientInactivate(Client client)
+        public void UpdateStatusForClient(int clientId, bool inActive, string userLogin)
         {
-            ClientDAL.ClientInactivate(client);
+            ClientDAL.UpdateStatusForClient(clientId, inActive, userLogin);
         }
 
-        /// <summary>
-        /// Reactivate a client
-        /// </summary>
-        /// <param name="client">client whose ID will be reactivated</param>
-        /// <remarks>
-        /// Presumably the client was inactivated previosuly, but there is no restriction,
-        /// i.e. active clients can be reactivated with no error.
-        /// </remarks>
-        public void ClientReactivate(Client client)
+        public void UpdateIsChargableForClient(int? clientId, bool isChargable, string userLogin)
         {
-            ClientDAL.ClientReactivate(client);
-        }
-
-        public void UpdateIsChargableForClient(int? clientId, bool isChargable)
-        {
-            ClientDAL.UpdateIsChargableForClient(clientId, isChargable);
+            ClientDAL.UpdateIsChargableForClient(clientId, isChargable, userLogin);
         }
 
         /// <summary>
@@ -180,6 +160,21 @@ namespace PracticeManagementService
         public Client GetInternalAccount()
         {
             return ClientDAL.GetInternalAccount();
+        }
+
+        public void ClientIsNoteRequiredUpdate(int clientId, bool isNoteRequired, string userLogin)
+        {
+            try
+            {
+                ClientDAL.ClientIsNoteRequiredUpdate(clientId, isNoteRequired, userLogin);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ClientIsNoteRequiredUpdate", "ClientService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
         }
 
 
