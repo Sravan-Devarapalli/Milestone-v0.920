@@ -12,7 +12,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="client"><see cref="Client"/> with information to be changed</param>
         [OperationContract]
-        int? SaveClientDetail(Client client);
+        int? SaveClientDetail(Client client, string userLogin);
 
         /// <summary>
         /// Get a client
@@ -30,29 +30,11 @@ namespace PracticeManagementService
         [OperationContract]
         Client GetClientDetailsShort(int clientId);
 
-        /// <summary>
-        /// Inactivate (hide) a client
-        /// </summary>
-        /// <param name="client"><see cref="Client"/> to hide</param>
-        /// <remarks>
-        /// Uses the ClientId to hide record in data store
-        /// </remarks>
         [OperationContract]
-        void ClientInactivate(Client client);
-
-        /// <summary>
-        /// Reactivate a client
-        /// </summary>
-        /// <param name="client">client whose ID will be reactivated</param>
-        /// <remarks>
-        /// Presumably the client was inactivated previosuly, but there is no restriction,
-        /// i.e. active clients can be reactivated with no error.
-        /// </remarks>
-        [OperationContract]
-        void ClientReactivate(Client client);
+        void UpdateStatusForClient(int clientId, bool inActive, string userLogin);
 
         [OperationContract]
-        void UpdateIsChargableForClient(int? clientId, bool isChargable);
+        void UpdateIsChargableForClient(int? clientId, bool isChargable, string userLogin);
 
         /// <summary>
         /// List all active clients in the system
@@ -105,7 +87,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         Client GetInternalAccount();
-        
+
+        [OperationContract]
+        void ClientIsNoteRequiredUpdate(int clientId, bool isNoteRequired, string userLogin);
 
     }
 }
