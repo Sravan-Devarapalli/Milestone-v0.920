@@ -106,7 +106,7 @@ AS
 				'Unknown' AS 'ManagerLastName'	-- just stubs
 		FROM dbo.Project AS proj
 		INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
-		INNER JOIN dbo.Person AS pers ON projManagers.ProjectManagerId = pers.PersonId
+		INNER JOIN dbo.Person AS pers ON ( projManagers.ProjectManagerId = pers.PersonId OR  proj.projectownerId = pers.PersonId )
 		LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
 		WHERE (@IncludeInactive = 1 OR pers.PersonStatusId != 4)
 				AND ( @PersonId IS NULL
@@ -114,9 +114,8 @@ AS
 					  			SELECT    *
 					  			FROM      @ProjectManagersPermissions 
 							       )
-					   OR projManagers.ProjectManagerId  = @PersonId
+					   OR pers.PersonId = @PersonId
 					   OR C.PersonId = @PersonId
-					   OR proj.projectownerId = @PersonId
 					)
 		order by pers.lastname, pers.firstname
 	END
