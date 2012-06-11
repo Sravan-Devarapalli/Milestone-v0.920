@@ -1026,6 +1026,14 @@ namespace DataAccess
                     int projectOwnerIdIndex = -1;
                     int opportunityNumberIndex = -1;
                     int sowBudgetIndex = -1;
+                    int clientIsNoteRequiredIndex = -1;
+
+                    try
+                    {
+                        clientIsNoteRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsNoteRequired);
+                    }
+                    catch
+                    { }
 
                     try
                     {
@@ -1234,6 +1242,11 @@ namespace DataAccess
                             Name = reader.GetString(clientNameIndex),
                             IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
                         };
+
+                        if (clientIsNoteRequiredIndex != -1)
+                        {
+                            project.Client.IsNoteRequired = reader.GetBoolean(clientIsNoteRequiredIndex);
+                        }
 
                         if (isMarginColorInfoEnabledIndex >= 0)
                         {
