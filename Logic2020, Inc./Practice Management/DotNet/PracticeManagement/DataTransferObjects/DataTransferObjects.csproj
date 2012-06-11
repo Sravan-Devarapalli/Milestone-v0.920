@@ -115,6 +115,7 @@
     <Compile Include="CommissionType.cs" />
     <Compile Include="CompanyLogo.cs" />
     <Compile Include="CompositeObjects\GroupedTimeEntries.cs" />
+    <Compile Include="CompositeObjects\PersonTimeEntries.cs" />
     <Compile Include="CompositeObjects\TimeEntriesGroupedByPersonProject.cs" />
     <Compile Include="ComputedFinancials.cs" />
     <Compile Include="ComputedFinancialsEx.cs" />
