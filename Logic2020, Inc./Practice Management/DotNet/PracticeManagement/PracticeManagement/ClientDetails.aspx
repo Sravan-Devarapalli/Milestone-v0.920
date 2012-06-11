@@ -112,6 +112,16 @@
                         </tr>
                         <tr>
                             <td>
+                                Is Note Required?
+                            </td>
+                            <td>
+                                <asp:CheckBox ID="chbIsNoteRequired" runat="server" Checked="true" />
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 Account Name
                             </td>
                             <td>
