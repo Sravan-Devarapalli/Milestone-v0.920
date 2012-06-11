@@ -310,6 +310,7 @@
             public const string PaychexID = "PaychexID";
             public const string IsOffshore = "IsOffshore";
             public const string IsNoteRequired = "IsNoteRequired";
+            public const string ClientIsNoteRequired = "ClientIsNoteRequired";
             public const string OriginalHours = "OriginalHours";
             public const string Phase = "Phase";
             public const string TimescaleName = "TimescaleName";
@@ -610,6 +611,7 @@
             public const string SowBudgetParam = "@SowBudget";
             public const string CategoryIdParam = "@CategoryId";
             public const string LinkParam = "@Link";
+            public const string InActiveParam = "@InActive";
         }
 
         #endregion
@@ -1019,6 +1021,8 @@
                 public const string ClientMarginColorInfoInsertProcedure = "dbo.ClientMarginColorInfoInsert";
                 public const string ClientListAllWithoutPermissionsProcedure = "dbo.ClientListAllWithoutPermissions";
                 public const string GetInternalAccountProcedure = "dbo.GetInternalAccount";
+                public const string UpdateStatusForClient = "dbo.UpdateStatusForClient";
+                public const string ClientIsNoteRequired = "dbo.ClientIsNoteRequiredUpdate";
             }
 
             #endregion
