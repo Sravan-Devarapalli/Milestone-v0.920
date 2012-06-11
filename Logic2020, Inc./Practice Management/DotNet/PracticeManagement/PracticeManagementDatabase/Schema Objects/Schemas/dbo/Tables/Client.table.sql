@@ -9,6 +9,7 @@
 	[IsChargeable]				BIT				NOT NULL,
 	[DefaultDirectorID]			INT,
 	[IsMarginColorInfoEnabled]	BIT				NULL,
-	[IsInternal]				BIT				NOT NULL
+	[IsInternal]				BIT				NOT NULL,
+	[IsNoteRequired]            BIT				NOT NULL
 );
 
