@@ -130,21 +130,14 @@ namespace PraticeManagement.Config
 
         protected void chbInactive_CheckedChanged(object sender, EventArgs e)
         {
-            CheckBox chbInactive = sender as CheckBox;
-            var ClientId = Convert.ToInt32(chbInactive.Attributes["ClientId"]);
+            CheckBox chbActive = sender as CheckBox;
+            var ClientId = Convert.ToInt32(chbActive.Attributes["ClientId"]);
 
             using (var serviceClient = new ClientServiceClient())
             {
                 try
                 {
-                    if (chbInactive.Checked)
-                    {
-                        serviceClient.ClientReactivate(new Client() { Id = ClientId });
-                    }
-                    else
-                    {
-                        serviceClient.ClientInactivate(new Client() { Id = ClientId });
-                    }
+                    serviceClient.UpdateStatusForClient(ClientId, !chbActive.Checked, User.Identity.Name);
                 }
                 catch (CommunicationException)
                 {
@@ -167,7 +160,7 @@ namespace PraticeManagement.Config
             {
                 try
                 {
-                    serviceClient.UpdateIsChargableForClient(ClientId, chbIsChargeable.Checked);
+                    serviceClient.UpdateIsChargableForClient(ClientId, chbIsChargeable.Checked, User.Identity.Name);
                 }
                 catch (CommunicationException)
                 {
@@ -179,6 +172,29 @@ namespace PraticeManagement.Config
             Client client = ClientsList.AsQueryable().Where(c => c.Id == ClientId).ToArray()[0];
 
             client.IsChargeable = !client.IsChargeable;
+        }
+
+        protected void chbIsNoteRequired_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chbIsNoteRequired = sender as CheckBox;
+            var ClientId = Convert.ToInt32(chbIsNoteRequired.Attributes["ClientId"]);
+
+            using (var serviceClient = new ClientServiceClient())
+            {
+                try
+                {
+                    serviceClient.ClientIsNoteRequiredUpdate(ClientId, chbIsNoteRequired.Checked, User.Identity.Name);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+
+            Client client = ClientsList.AsQueryable().Where(c => c.Id == ClientId).ToArray()[0];
+
+            client.IsNoteRequired = !client.IsNoteRequired;
         }
 
         protected void btnClientName_Command(object sender, CommandEventArgs e)
