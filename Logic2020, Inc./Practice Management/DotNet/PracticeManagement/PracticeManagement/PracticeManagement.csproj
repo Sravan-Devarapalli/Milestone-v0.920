@@ -509,6 +509,25 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
+    <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
+    <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ActivityLogService\ActivityLogService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\CalendarService\CalendarService1.wsdl" />
     <None Include="Service References\CalendarService\CalendarService3.xsd">
       <SubType>Designer</SubType>
@@ -526,9 +545,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.wsdl" />
-    <None Include="Service References\MilestonePersonService\MilestonePersonService11.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService3.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -545,6 +561,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestonePersonService\MilestonePersonService9.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
@@ -583,6 +602,38 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\OpportunityService\OpportunityService21.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService1.wsdl" />
+    <None Include="Service References\PersonSkillService\PersonSkillService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonSkillService\PersonSkillService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PracticeService\PracticeService1.wsdl" />
+    <None Include="Service References\PracticeService\PracticeService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PracticeService\PracticeService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PracticeService\PracticeService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PracticeService\PracticeService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PracticeService\PracticeService7.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ProjectGroupService\ProjectGroupService10.xsd">
@@ -698,7 +749,7 @@
     <None Include="Service References\TimeEntryService\TimeEntryService44.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\TimeEntryService\TimeEntryService46.xsd">
+    <None Include="Service References\TimeEntryService\TimeEntryService45.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService5.wsdl" />
@@ -723,7 +774,10 @@
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
+    <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
+    <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
@@ -807,27 +861,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\AuthService\AuthService1.disco" />
     <Content Include="Service References\CalendarService\CalendarService.disco" />
     <None Include="Service References\ActivityLogService\ActivityLogService.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
-    <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ActivityLogService\ActivityLogService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ActivityLogService\ActivityLogService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ActivityLogService\ActivityLogService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ActivityLogService\ActivityLogService5.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\AuthService\AuthService1.wsdl" />
@@ -988,22 +1025,6 @@
     <None Include="Service References\PersonService\DataTransferObjects.Skills1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService10.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService11.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService12.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService2.wsdl" />
-    <None Include="Service References\PersonSkillService\PersonSkillService8.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService9.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\PersonStatusService\PersonStatusService1.wsdl" />
     <None Include="Service References\PersonStatusService\PersonStatusService3.xsd">
       <SubType>Designer</SubType>
@@ -1151,7 +1172,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\PersonSkillService\PersonSkillService2.disco" />
     <Content Include="SkillsEntry.aspx" />
     <Content Include="SkillsProfile.aspx" />
     <Content Include="SkillsSearch.aspx" />
@@ -2386,9 +2406,6 @@
     </Compile>
     <Compile Include="Controls\SerializationHelper.cs" />
     <Compile Include="Controls\TimeEntry\ReadyToUpdateTeArguments.cs" />
-    <Compile Include="Controls\TimeEntry\TeGrid.cs" />
-    <Compile Include="Controls\TimeEntry\TeGridCell.cs" />
-    <Compile Include="Controls\TimeEntry\TeGridRow.cs" />
     <Compile Include="Controls\TimeEntry\TimeEntryBarHeader.ascx.cs">
       <DependentUpon>TimeEntryBarHeader.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3298,18 +3315,13 @@
     <None Include="Service References\PracticeService\configuration.svcinfo" />
     <None Include="Service References\PracticeService\PracticeService.wsdl" />
     <None Include="Service References\PracticeService\PracticeService.xsd" />
-    <None Include="Service References\PracticeService\PracticeService1.wsdl" />
     <None Include="Service References\PracticeService\PracticeService1.xsd" />
     <None Include="Service References\PracticeService\PracticeService11.wsdl" />
     <None Include="Service References\PracticeService\PracticeService2.xsd" />
-    <None Include="Service References\PracticeService\PracticeService3.xsd" />
     <None Include="Service References\PracticeService\PracticeService34.xsd" />
     <None Include="Service References\PracticeService\PracticeService35.xsd" />
     <None Include="Service References\PracticeService\PracticeService36.xsd" />
     <None Include="Service References\PracticeService\PracticeService37.xsd" />
-    <None Include="Service References\PracticeService\PracticeService4.xsd" />
-    <None Include="Service References\PracticeService\PracticeService5.xsd" />
-    <None Include="Service References\PracticeService\PracticeService6.xsd" />
     <None Include="Service References\PracticeService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -3442,7 +3454,6 @@
     <None Include="Service References\OpportunityService\configuration91.svcinfo" />
     <Content Include="Scripts\TreeViewAdapter.js" />
     <Content Include="Service References\OpportunityService\OpportunityService.disco" />
-    <None Include="Service References\PracticeService\PracticeService1.disco" />
     <Content Include="Service References\PracticeService\PracticeService.disco" />
     <Content Include="set_user.aspx" />
     <Content Include="Third Party Tools\Css Adapters\CSSFriendly.dll" />
