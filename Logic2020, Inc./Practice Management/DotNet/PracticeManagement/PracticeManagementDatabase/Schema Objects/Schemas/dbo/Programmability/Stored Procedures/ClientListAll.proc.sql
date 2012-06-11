@@ -48,10 +48,11 @@ BEGIN
 					, c.[Name]
 					, c.Inactive
 					, c.IsChargeable
-		FROM Client C
-		JOIN Project P ON P.ClientId = C.ClientId
+					,c.IsNoteRequired
+		FROM dbo.Client C
+		INNER JOIN dbo.Project P ON P.ClientId = C.ClientId
 		INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = P.ProjectId
-		LEFT JOIN Commission Cm ON Cm.ProjectId = p.ProjectId AND Cm.CommissionType = 1
+		LEFT  JOIN dbo.Commission Cm ON Cm.ProjectId = p.ProjectId AND Cm.CommissionType = 1
 		WHERE ((@ShowAll = 0 AND C.Inactive = 0) OR @ShowAll <> 0)
 		AND	(@PersonId IS null
 			OR ( ISNULL(@UserHasHighRoleThanProjectLead,1) <> 0 AND p.DirectorId = @PersonId )--if Only Project Lead Role then we are not considering Director. as per #2941.
@@ -110,8 +111,9 @@ BEGIN
 					, c.[Name]
 					, c.Inactive
 					, c.IsChargeable
-				FROM Client AS c
-				WHERE Inactive = 0
+					,c.IsNoteRequired
+				FROM dbo.Client AS c
+				WHERE c.Inactive = 0
 					AND (
 						@PersonId IS NULL 
 						OR ClientId IN (SELECT cp.ClientId FROM @ClientPermissions AS cp)
@@ -122,15 +124,16 @@ BEGIN
 		ELSE
 		BEGIN
 			SELECT 
-					  ClientId
-					, DefaultDiscount
-					, DefaultTerms
-					, DefaultSalespersonId
-					, DefaultDirectorID
-					, [Name]
-					, Inactive
-					, IsChargeable
-				FROM Client
+					 c.ClientId
+					,c.DefaultDiscount
+					,c.DefaultTerms
+					,c.DefaultSalespersonId
+					,c.DefaultDirectorID
+					,c.[Name]
+					,c.Inactive
+					,c.IsChargeable
+					,c.IsNoteRequired
+				FROM dbo.Client AS c
 				WHERE (
 					@PersonId IS NULL 
 					OR ClientId IN (SELECT cp.ClientId FROM @ClientPermissions AS cp)
