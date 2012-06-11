@@ -31,17 +31,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ClientInactivate">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientInactivate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ClientReactivate">
-      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientReactivate" style="document" />
+    <wsdl:operation name="UpdateStatusForClient">
+      <soap:operation soapAction="http://www.logic2020.com/IClientService/UpdateStatusForClient" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -132,6 +123,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetInternalAccount">
       <soap:operation soapAction="http://www.logic2020.com/IClientService/GetInternalAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClientIsNoteRequiredUpdate">
+      <soap:operation soapAction="http://www.logic2020.com/IClientService/ClientIsNoteRequiredUpdate" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
