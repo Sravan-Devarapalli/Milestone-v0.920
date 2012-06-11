@@ -378,7 +378,7 @@
                         <table class="WholeWidth">
                             <tr>
                                 <td style="width: 66%; padding: 3px 0px 3px 0px; padding-left: 0px;">
-                                    <asp:TextBox ID="txtProjectNameFirstTime" runat="server" Visible="false" Width="350"></asp:TextBox>
+                                    <asp:TextBox ID="txtProjectNameFirstTime" runat="server" Visible="false" Width="500"></asp:TextBox>
                                     <AjaxControlToolkit:TextBoxWatermarkExtender ID="txtweProjectNameFirstTime" runat="server"
                                         TargetControlID="txtProjectNameFirstTime" WatermarkText="Enter a Project Name here..."
                                         EnableViewState="false" WatermarkCssClass="watermarkedtext" />
