@@ -96,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivityLogDAL.cs" />
-    <Compile Include="BilledTimeDAL.cs" />
     <Compile Include="CalendarDAL.cs" />
     <Compile Include="ClientDAL.cs" />
     <Compile Include="CommissionDAL.cs" />
