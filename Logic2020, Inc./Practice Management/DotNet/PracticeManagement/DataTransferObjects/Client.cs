@@ -171,6 +171,13 @@ namespace DataTransferObjects
             set; 
         }
 
+        [DataMember]
+        public bool IsNoteRequired
+        {
+            get;
+            set;
+        }
+
 		#endregion
 
 		#region Construction
