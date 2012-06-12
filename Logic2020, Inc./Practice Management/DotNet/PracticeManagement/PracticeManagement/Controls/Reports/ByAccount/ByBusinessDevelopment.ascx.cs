@@ -58,6 +58,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 var hostingPage = Page as AccountSummaryReport;
                 tpByBusinessUnit.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
             }
+            else if (Page is TimePeriodSummaryReport)
+            {
+                var hostingPage = Page as TimePeriodSummaryReport;
+                hostingPage.Total = tpByBusinessUnit.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+            }
         }
 
         private void PopulateGroupByPerson()
@@ -67,8 +72,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 var hostingPage = Page as AccountSummaryReport;
                 tpByPerson.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
             }
+            else if (Page is TimePeriodSummaryReport)
+            {
+                var hostingPage = Page as TimePeriodSummaryReport;
+                hostingPage.Total = tpByPerson.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+            }
         }
-
 
         public void ApplyAttributes(int count)
         {
