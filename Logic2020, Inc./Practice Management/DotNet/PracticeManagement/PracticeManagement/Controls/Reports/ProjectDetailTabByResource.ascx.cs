@@ -40,6 +40,96 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        private string ProjectNumber
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page).ByProjectControl.SelectedProjectNumber;
+                }
+
+                return HostingPage.ProjectNumber;
+            }
+        }
+
+        private int? MilestoneId
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    return null;
+                }
+
+                return HostingPage.MilestoneId;
+            }
+        }
+
+        private string PeriodSelected
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    return "0";
+                }
+
+                return HostingPage.PeriodSelected;
+            }
+        }
+
+        private DateTime? StartDate
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page).StartDate;
+                }
+
+                return HostingPage.StartDate;
+            }
+        }
+
+        private DateTime? EndDate
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page).EndDate;
+                }
+
+                return HostingPage.EndDate;
+            }
+        }
+
+        private string ProjectRange
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    return StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                }
+                return HostingPage.ProjectRange;
+            }
+        }
+
+        private string ProjectRoles
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    return null;
+                }
+
+                return HostingControl.cblProjectRolesControl.SelectedItemsXmlFormat;
+            }
+        }
+
         private int sectionId;
 
         public HiddenField hdnGroupByControl
@@ -68,18 +158,16 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (HostingPage != null)
-            {
-                btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
-                                                                ", " + hdnCollapsed.ClientID +
-                                                                ", " + hdncpeExtendersIds.ClientID +
-                                                                ");";
+            btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
+                                                            ", " + hdnCollapsed.ClientID +
+                                                            ", " + hdncpeExtendersIds.ClientID +
+                                                            ");";
 
-                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
-            }
-            else
+            btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
+
+            if (HostingPage == null)
             {
-                tblExportSection.Visible = false;
+                btnExportToPDF.Attributes.Add("disabled", "disabled");
             }
 
             if (!IsPostBack)
@@ -263,14 +351,12 @@ namespace PraticeManagement.Controls.Reports
         {
             DataHelper.InsertExportActivityLogMessage(ProjectDetailByResourceExport);
 
-            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
-            PersonLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId,
-                HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null,
-                HostingControl.cblProjectRolesControl.SelectedItemsXmlFormat));
+            var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(ProjectNumber, MilestoneId, StartDate, EndDate));
+            PersonLevelGroupedHours[] data = GetReportData().ToArray();
 
             string filterApplied = "Filters applied to columns: ";
             bool isFilterApplied = false;
-            if (!HostingControl.cblProjectRolesControl.AllItemsSelected)
+            if (HostingControl != null && !HostingControl.cblProjectRolesControl.AllItemsSelected)
             {
                 filterApplied = filterApplied + " ProjectRoles.";
                 isFilterApplied = true;
@@ -289,7 +375,7 @@ namespace PraticeManagement.Controls.Reports
             sb.Append(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType);
             sb.Append("\t");
             sb.AppendLine();
-            sb.Append(HostingPage.ProjectRange);
+            sb.Append(ProjectRange);
             sb.Append("\t");
             if (isFilterApplied)
             {
@@ -409,15 +495,23 @@ namespace PraticeManagement.Controls.Reports
 
             List<PersonLevelGroupedHours> list = GetReportData();
             DataBindByResourceDetail(list);
-            HostingControl.PopulateHeaderSection(list);
+
+            if (HostingControl != null)
+                HostingControl.PopulateHeaderSection(list);
         }
 
         private List<PersonLevelGroupedHours> GetReportData()
         {
             List<PersonLevelGroupedHours> list =
-                ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId,
-                    HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null,
-                    HostingControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
+                ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(ProjectNumber, MilestoneId,
+                    PeriodSelected == "0" ? StartDate : null, PeriodSelected == "0" ? EndDate : null,
+                    ProjectRoles)).ToList();
+
+            if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+            {
+                ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page).ByProjectControl.MpeProjectDetailReport.Show();
+            }
+
             return list;
         }
     }
