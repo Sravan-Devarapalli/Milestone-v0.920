@@ -16,6 +16,61 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <script type="text/javascript">
+
+        function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
+            var btn = btnExpandOrCollapseAllClientId;
+            var hdnCollapsed = hdnCollapsedClientId;
+            var isExpand = false;
+            if (btn != null) {
+                if (btn.value == "Expand All") {
+                    isExpand = true;
+                    btn.value = "Collapse All";
+                    btn.title = "Collapse All";
+                    hdnCollapsed.value = 'false';
+                }
+                else {
+                    btn.value = "Expand All";
+                    btn.title = "Expand All";
+                    hdnCollapsed.value = 'true';
+                }
+                var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
+                ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
+            }
+            return false;
+        }
+
+        function ExpandOrcollapseExtender(cpe, isExpand) {
+            if (cpe != null) {
+                if (isExpand) {
+                    ExpandPanel(cpe)
+                }
+                else {
+                    var isCollapsed = cpe.get_Collapsed();
+                    if (!isCollapsed)
+                        cpe._doClose();
+                }
+            }
+        }
+
+
+        function ExpandPanel(cpe) {
+            var isCollapsed = cpe.get_Collapsed();
+            if (isCollapsed) {
+                cpe.expandPanel();
+            }
+        }
+
+
+        function ExpandOrCollapsePanels(datePanels, isExpand) {
+
+            for (var j = 0; j < datePanels.length; j++) {
+                var cpeDate = $find(datePanels[j]);
+                ExpandOrcollapseExtender(cpeDate, isExpand);
+            }
+
+        }
+    </script>
     <style>
         /* --------- Tabs for person and project details pages ------ */
         
@@ -266,6 +321,7 @@
             <asp:PostBackTrigger ControlID="tpByResource$btnExportToExcel" />
             <asp:PostBackTrigger ControlID="tpByResource$btnPayCheckExport" />
             <asp:PostBackTrigger ControlID="tpByProject$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpByResource$ucPersonDetailReport$ucPersonDetailReport$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
