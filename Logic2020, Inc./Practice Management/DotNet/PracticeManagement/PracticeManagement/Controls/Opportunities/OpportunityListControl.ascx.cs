@@ -266,7 +266,7 @@ namespace PraticeManagement.Controls.Opportunities
             {
                 ResetControls();
                 bool isFilterCached = false;
-                Boolean.TryParse(Request.QueryString.Get("isFilterCached"), out isFilterCached);
+                Boolean.TryParse(Request.QueryString.Get("isFilterCached") != null ? Request.QueryString.Get("isFilterCached").Split(',')[0] : null, out isFilterCached);
                 if (!isFilterCached)
                 {
                     InitFilter();
