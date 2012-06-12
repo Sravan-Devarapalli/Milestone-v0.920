@@ -77,31 +77,40 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 var hostingPage = (AccountSummaryReport)Page;
                 hostingPage.ByBusinessDevelopmentControl.ApplyAttributes(reportdata.Count);
             }
-
+            else
+            {
+                var hostingPage = (TimePeriodSummaryReport)Page;
+                hostingPage.ByProjectControl.ByBusinessDevelopmentControl.ApplyAttributes(reportdata.Count);
+            }
         }
 
         protected void repBusinessUnits_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (Page is AccountSummaryReport)
+
+            if (e.Item.ItemType == ListItemType.Header)
             {
-                var hostingPage = (AccountSummaryReport)Page;
+                CollapsiblePanelExtenderClientIds = new List<string>();
 
-                if (e.Item.ItemType == ListItemType.Header)
-                {
-                    CollapsiblePanelExtenderClientIds = new List<string>();
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var cpeBusinessUnit = e.Item.FindControl("cpeBusinessUnit") as CollapsiblePanelExtender;
+                CollapsiblePanelExtenderClientIds.Add(cpeBusinessUnit.BehaviorID);
 
-                }
-                else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                if (Page is AccountSummaryReport)
                 {
-                    var cpeBusinessUnit = e.Item.FindControl("cpeBusinessUnit") as CollapsiblePanelExtender;
-                    CollapsiblePanelExtenderClientIds.Add(cpeBusinessUnit.BehaviorID);
-
-                }
-                else if (e.Item.ItemType == ListItemType.Footer)
-                {
-                    JavaScriptSerializer jss = new JavaScriptSerializer();
-                    var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                    var hostingPage = (AccountSummaryReport)Page;
                     hostingPage.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output);
+                }
+                else
+                {
+                    var hostingPage = (TimePeriodSummaryReport)Page;
+                    hostingPage.ByProjectControl.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output);
                 }
             }
         }
