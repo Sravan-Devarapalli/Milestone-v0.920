@@ -192,6 +192,7 @@ namespace DataTransferObjects.Utils
                             GDP = new GroupByDateByPerson();
                             GDP.Date = TEGD.Date;
                             GDP.ProjectTotalHours = new List<GroupByPersonByWorktype>();
+                            GDP.TimeEntrySectionId = PLGH.TimeEntrySectionId;
                             groupByDateByPersonList.Add(GDP);
                         }
 
