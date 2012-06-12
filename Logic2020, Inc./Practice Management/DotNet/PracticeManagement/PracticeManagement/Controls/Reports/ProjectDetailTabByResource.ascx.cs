@@ -65,27 +65,46 @@ namespace PraticeManagement.Controls.Reports
             {
                 tblExportSection.Visible = false;
             }
+
+            if (!IsPostBack)
+            {
+                hdnGroupBy.Value = "Person";
+            }
         }
 
-        public void DataBindByResourceDetail(PersonLevelGroupedHours[] reportData)
+        public void DataBindByResourceDetail(List<PersonLevelGroupedHours> reportData)
         {
-
-
-            if (reportData.Length > 0)
+            if (reportData.Count > 0)
             {
-                reportData = reportData.OrderBy(p => p.Person.PersonLastFirstName).ToArray();
-                divEmptyMessage.Style["display"] = "none";
-                repPersons.Visible = btnExpandOrCollapseAll.Visible = true;
-                repPersons.DataSource = reportData;
-                repPersons.DataBind();
+                string groupby = hdnGroupBy.Value;
+                if (groupby == "date")
+                {
+                    repPersons.Visible = false;
+                    repDate2.Visible = true; ;
+                    List<GroupByDateByPerson> groupByDateList = DataTransferObjects.Utils.Generic.GetGroupByDateList(reportData);
+                    groupByDateList = groupByDateList.OrderBy(p => p.Date).ToList();
+                    repDate2.DataSource = groupByDateList;
+                    repDate2.DataBind();
+                }
+                else
+                {
+                    reportData = reportData.OrderBy(p => p.Person.PersonLastFirstName).ToList();
+                    repPersons.Visible = true;
+                    repDate2.Visible = false; ;
+                    repPersons.DataSource = reportData;
+                    repPersons.DataBind();
+                }
             }
             else
             {
-                divEmptyMessage.Style["display"] = "";
-                repPersons.Visible = btnExpandOrCollapseAll.Visible = false;
+                repDate2.Visible = repPersons.Visible = false;
             }
+
+            btnExpandOrCollapseAll.Visible =
+            btnGroupBy.Visible =
             btnExportToPDF.Enabled =
-            btnExportToExcel.Enabled = reportData.Count() > 0;
+            btnExportToExcel.Enabled = reportData.Count > 0;
+            divEmptyMessage.Style["display"] = reportData.Count() > 0 ? "none" : "";
         }
 
         protected void repPersons_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -102,13 +121,12 @@ namespace PraticeManagement.Controls.Reports
 
                 var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
                 cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
-                
+
                 sectionId = dataitem.TimeEntrySectionId;
                 repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
                 repDate.DataBind();
                 if (dataitem.DayTotalHours == null || dataitem.DayTotalHours.Count == 0)
                 {
-                    e.Item.Controls.Remove(cpePerson);
                     var image = e.Item.FindControl("imgProject") as Image;
                     image.Style.Add(HtmlTextWriterStyle.Visibility, "hidden");
                 }
@@ -148,6 +166,51 @@ namespace PraticeManagement.Controls.Reports
                 repWorktype.DataSource = dataitem.DayTotalHoursList;
                 repWorktype.DataBind();
             }
+        }
+
+        protected void repPerson2_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var repWorktype = e.Item.FindControl("repWorktype") as Repeater;
+                GroupByPersonByWorktype dataitem = (GroupByPersonByWorktype)e.Item.DataItem;
+                var rep = sender as Repeater;
+                repWorktype.DataSource = dataitem.ProjectTotalHoursList;
+                repWorktype.DataBind();
+            }
+        }
+
+        protected void repDate2_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                CollapsiblePanelExtenderClientIds = new List<string>();
+
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+
+                var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
+                cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
+                CollapsiblePanelExtenderClientIds.Add(cpeDate.BehaviorID);
+                var repPerson2 = e.Item.FindControl("repPerson2") as Repeater;
+                GroupByDateByPerson dataitem = (GroupByDateByPerson)e.Item.DataItem;
+                //sectionId = dataitem.TimeEntrySectionId;
+                repPerson2.DataSource = dataitem.ProjectTotalHours != null ? dataitem.ProjectTotalHours.OrderBy(p => p.Person.PersonLastFirstName).ToList() : dataitem.ProjectTotalHours;
+                repPerson2.DataBind();
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
+                hdncpeExtendersIds.Value = output;
+                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+                hdnCollapsed.Value = "true";
+            }
+
         }
 
         protected string GetDoubleFormat(double value)
@@ -314,6 +377,33 @@ namespace PraticeManagement.Controls.Reports
             HostingPage.PDFExport();
         }
 
+        protected void btnGroupBy_OnClick(object sender, EventArgs e)
+        {
+            string groupby = hdnGroupBy.Value;
+            if (groupby == "date")
+            {
+                btnGroupBy.ToolTip = btnGroupBy.Text = "Group By Date";
+                hdnGroupBy.Value = "Person";
+            }
+            else if (groupby == "Person")
+            {
+                btnGroupBy.ToolTip = btnGroupBy.Text = "Group By Person";
+                hdnGroupBy.Value = "date";
+            }
+
+            List<PersonLevelGroupedHours> list = GetReportData();
+            DataBindByResourceDetail(list);
+            HostingControl.PopulateHeaderSection(list);
+        }
+
+        private List<PersonLevelGroupedHours> GetReportData()
+        {
+            List<PersonLevelGroupedHours> list =
+                ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId,
+                    HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null,
+                    HostingControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
+            return list;
+        }
     }
 }
 
