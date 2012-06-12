@@ -199,12 +199,20 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public PraticeManagement.Controls.Reports.TimePeriodSummaryByProject ByProjectControl
+        {
+            get
+            {
+                return tpByProject;
+            }
+        }
+
         public int AccountId
         {
             get
             {
                 int accountId = 0;
-                if (ViewState["TimePeriodSummaryReportBusinessUnitIds"] != null)
+                if (ViewState["TimePeriodSummaryReportAccountId"] != null)
                 {
                     int.TryParse(ViewState["TimePeriodSummaryReportAccountId"].ToString(), out accountId);
                 }
@@ -237,7 +245,25 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public double Total { get; set; }
+        public double Total
+        {
+            get
+            {
+                if (ViewState["TimePeriodSummaryReportTotal"] != null)
+                {
+                    return (double)ViewState["TimePeriodSummaryReportTotal"];
+                }
+                else
+                {
+                    return 0d;
+                }
+            }
+
+            set
+            {
+                ViewState["TimePeriodSummaryReportTotal"] = value;
+            }
+        }
 
         #endregion
        
