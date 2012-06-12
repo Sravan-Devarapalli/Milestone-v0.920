@@ -8,7 +8,7 @@ using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
 using System.Text;
 using DataTransferObjects.Reports.ByAccount;
-using ByBusinessUnit = PraticeManagement.Controls.Reports.ByAccount.GroupByBusinessUnit;
+using ByBusinessDevelopment = PraticeManagement.Controls.Reports.ByAccount.ByBusinessDevelopment;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -210,11 +210,12 @@ namespace PraticeManagement.Controls.Reports
 
             if (businessDevelopmentProj.ProjectNumber.ToUpper() == projectNumber.ToUpper())
             {
-                var accountId = Convert.ToInt32(lnkProject.Attributes["AccountId"]);
-                var buIds = lnkProject.Attributes["GroupId"] + ",";
-                ucGroupByProject.Visible = true;
+                HostingPage.AccountId = Convert.ToInt32(lnkProject.Attributes["AccountId"]);
+                HostingPage.BusinessUnitIds = lnkProject.Attributes["GroupId"] + ",";
+                ucGroupByBusinessDevelopment.Visible = true;
                 ucProjectDetailReport.Visible = false;
-                totalHours = GetDoubleFormat(ucGroupByProject.PopulateData(accountId, buIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                ucGroupByBusinessDevelopment.PopulateByBusinessDevelopment();
+                totalHours = GetDoubleFormat(HostingPage.Total);
             }
             else
             {
@@ -224,7 +225,7 @@ namespace PraticeManagement.Controls.Reports
                     null)).ToList();
 
                 totalHours = GetDoubleFormat(list.Sum(l => l.TotalHours));
-                ucGroupByProject.Visible = false;
+                ucGroupByBusinessDevelopment.Visible = false;
                 ucProjectDetailReport.Visible = true;
                 ucProjectDetailReport.DataBindByResourceDetail(list);
             }
