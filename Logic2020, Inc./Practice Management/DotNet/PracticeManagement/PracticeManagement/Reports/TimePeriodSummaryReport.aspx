@@ -322,6 +322,8 @@
             <asp:PostBackTrigger ControlID="tpByResource$btnPayCheckExport" />
             <asp:PostBackTrigger ControlID="tpByProject$btnExportToExcel" />
             <asp:PostBackTrigger ControlID="tpByResource$ucPersonDetailReport$ucPersonDetailReport$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpByProject$ucProjectDetailReport$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpByProject$ucGroupByBusinessDevelopment$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
