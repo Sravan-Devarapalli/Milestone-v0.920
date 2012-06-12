@@ -13,14 +13,77 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class PersonDetailReport : System.Web.UI.UserControl
     {
-        private PraticeManagement.Reporting.PersonDetailTimeReport HostingPage
-        {
-            get { return ((PraticeManagement.Reporting.PersonDetailTimeReport)Page); }
-        }
-
         private int SectionId;
 
         private string PersonDetailReportExport = "Person Detail Report";
+
+        private int SelectedPersonId
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    var hostingPage = (PraticeManagement.Reporting.TimePeriodSummaryReport)Page;
+                    return hostingPage.ByResourceControl.SelectedPersonForDetails;
+                }
+                else
+                {
+                    var hostingPage = (PraticeManagement.Reporting.PersonDetailTimeReport)Page;
+                    return hostingPage.SelectedPersonId;
+                }
+            }
+        }
+
+        private DateTime? StartDate
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    var hostingPage = (PraticeManagement.Reporting.TimePeriodSummaryReport)Page;
+                    return hostingPage.StartDate;
+                }
+                else
+                {
+                    var hostingPage = (PraticeManagement.Reporting.PersonDetailTimeReport)Page;
+                    return hostingPage.StartDate;
+                }
+            }
+        }
+
+        private DateTime? EndDate
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    var hostingPage = (PraticeManagement.Reporting.TimePeriodSummaryReport)Page;
+                    return hostingPage.EndDate;
+                }
+                else
+                {
+                    var hostingPage = (PraticeManagement.Reporting.PersonDetailTimeReport)Page;
+                    return hostingPage.EndDate;
+                }
+            }
+        }
+
+        private string Range
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+                {
+                    var hostingPage = (PraticeManagement.Reporting.TimePeriodSummaryReport)Page;
+                    return hostingPage.Range;
+                }
+                else
+                {
+                    var hostingPage = (PraticeManagement.Reporting.PersonDetailTimeReport)Page;
+                    return hostingPage.Range;
+                }
+            }
+        }
 
         private List<KeyValuePair<string, string>> CollapsiblePanelExtenderClientIds
         {
@@ -208,10 +271,10 @@ namespace PraticeManagement.Controls.Reports
         {
             DataHelper.InsertExportActivityLogMessage(PersonDetailReportExport);
 
-            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+            if (StartDate.HasValue && EndDate.HasValue)
             {
-                var reportData = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(HostingPage.SelectedPersonId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
-                int personId = HostingPage.SelectedPersonId;
+                var reportData = GetReportData();
+                int personId = SelectedPersonId;
                 var person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
 
                 StringBuilder sb = new StringBuilder();
@@ -227,7 +290,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append(personStatusAndType);
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(HostingPage.Range);
+                sb.Append(Range);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.AppendLine();
@@ -321,7 +384,7 @@ namespace PraticeManagement.Controls.Reports
                 {
                     sb.Append("This person has not entered Time Entries for the selected period.");
                 }
-                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Detail", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Detail", StartDate.Value.ToString("MM.dd.yyyy"), EndDate.Value.ToString("MM.dd.yyyy"));
                 GridViewExportUtil.Export(filename, sb);
 
             }
@@ -334,7 +397,6 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnGroupBy_OnClick(object sender, EventArgs e)
         {
-
             string groupby = hdnGroupBy.Value;
             if (groupby == "date")
             {
@@ -346,8 +408,23 @@ namespace PraticeManagement.Controls.Reports
                 btnGroupBy.ToolTip = btnGroupBy.Text = "Group By Project";
                 hdnGroupBy.Value = "date";
             }
-            var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(HostingPage.SelectedPersonId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
+
+            var list = GetReportData();
             DatabindRepepeaterPersonDetails(list);
+        }
+
+        private List<TimeEntriesGroupByClientAndProject> GetReportData()
+        {
+            List<TimeEntriesGroupByClientAndProject> list = new List<TimeEntriesGroupByClientAndProject>();
+            list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(SelectedPersonId, StartDate.Value, EndDate.Value)).ToList();
+
+            if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
+            {
+                var hostingPage = (PraticeManagement.Reporting.TimePeriodSummaryReport)Page;                
+                hostingPage.ByResourceControl.PersonDetailPopup.Show();
+            }
+
+            return list;
         }
     }
 }
