@@ -42,6 +42,22 @@ namespace PraticeManagement.Controls.Reports
 
         private int sectionId;
 
+        public HiddenField hdnGroupByControl
+        {
+            get
+            {
+                return hdnGroupBy;
+            }
+        }
+
+        public Button btnGroupByControl
+        {
+            get
+            {
+                return btnGroupBy;
+            }
+        }
+
         private string ProjectDetailByResourceExport = "Project Detail Report By Resource";
 
         private List<string> CollapsiblePanelExtenderClientIds
@@ -198,7 +214,7 @@ namespace PraticeManagement.Controls.Reports
                 CollapsiblePanelExtenderClientIds.Add(cpeDate.BehaviorID);
                 var repPerson2 = e.Item.FindControl("repPerson2") as Repeater;
                 GroupByDateByPerson dataitem = (GroupByDateByPerson)e.Item.DataItem;
-                //sectionId = dataitem.TimeEntrySectionId;
+                sectionId = dataitem.TimeEntrySectionId;
                 repPerson2.DataSource = dataitem.ProjectTotalHours != null ? dataitem.ProjectTotalHours.OrderBy(p => p.Person.PersonLastFirstName).ToList() : dataitem.ProjectTotalHours;
                 repPerson2.DataBind();
             }
