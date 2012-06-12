@@ -13,6 +13,8 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        public int TimeEntrySectionId { get; set; }
+
         public List<GroupByPersonByWorktype> ProjectTotalHours
         {
             get;
