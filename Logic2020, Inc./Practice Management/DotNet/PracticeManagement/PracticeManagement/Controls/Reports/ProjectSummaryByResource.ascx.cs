@@ -91,12 +91,12 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateByResourceDetailReport()
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, ucProjectSummaryReport.cblProjectRolesControl.SelectedItemsXmlFormat));
+            var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, ucProjectSummaryReport.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
             ucProjectDetailReport.DataBindByResourceDetail(data);
             PopulateHeaderSection(data.ToList());
         }
 
-        private void PopulateHeaderSection(List<PersonLevelGroupedHours> personLevelGroupedHoursList)
+        public void PopulateHeaderSection(List<PersonLevelGroupedHours> personLevelGroupedHoursList)
         {
             //if (personLevelGroupedHoursList.Count > 0)
             //{
