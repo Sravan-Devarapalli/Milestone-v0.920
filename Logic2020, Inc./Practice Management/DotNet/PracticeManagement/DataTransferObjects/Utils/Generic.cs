@@ -170,5 +170,47 @@ namespace DataTransferObjects.Utils
             }
             return groupByDateList;
         }
+
+        public static List<GroupByDateByPerson> GetGroupByDateList(List<PersonLevelGroupedHours> personLevelGroupedHoursList)
+        {
+            List<GroupByDateByPerson> groupByDateByPersonList = new List<GroupByDateByPerson>();
+
+            foreach (PersonLevelGroupedHours PLGH in personLevelGroupedHoursList)
+            {
+                if (PLGH.DayTotalHours != null)
+                {
+                    foreach (TimeEntriesGroupByDate TEGD in PLGH.DayTotalHours)
+                    {
+                        GroupByDateByPerson GDP;
+                        GroupByPersonByWorktype GPW;
+                        if (groupByDateByPersonList.Any(p => p.Date == TEGD.Date))
+                        {
+                            GDP = groupByDateByPersonList.First(p => p.Date == TEGD.Date);
+                        }
+                        else
+                        {
+                            GDP = new GroupByDateByPerson();
+                            GDP.Date = TEGD.Date;
+                            GDP.ProjectTotalHours = new List<GroupByPersonByWorktype>();
+                            groupByDateByPersonList.Add(GDP);
+                        }
+
+                        if (GDP.ProjectTotalHours.Any(p => p.Person.Id == PLGH.Person.Id))
+                        {
+                            GPW = GDP.ProjectTotalHours.First(p => p.Person.Id == PLGH.Person.Id);
+                        }
+                        else
+                        {
+                            GPW = new GroupByPersonByWorktype();
+                            GPW.Person = PLGH.Person;
+                            GPW.ProjectTotalHoursList = new List<TimeEntryByWorkType>();
+                            GDP.ProjectTotalHours.Add(GPW);
+                        }
+                        GPW.ProjectTotalHoursList.AddRange(TEGD.DayTotalHoursList);
+                    }
+                }
+            }
+            return groupByDateByPersonList;
+        }
     }
 }
