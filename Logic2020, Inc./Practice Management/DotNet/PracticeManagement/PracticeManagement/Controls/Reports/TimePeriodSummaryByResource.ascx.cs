@@ -9,6 +9,7 @@ using System.Web.UI.HtmlControls;
 using System.Text;
 using System.Web.Security;
 using PraticeManagement.Controls.Reports.ByPerson;
+using AjaxControlToolkit;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -18,6 +19,26 @@ namespace PraticeManagement.Controls.Reports
 
         private string TimePeriodSummaryReportPayCheckExport = "TimePeriod Summary Report By Resource(Pay Chex)";
 
+        public ModalPopupExtender PersonDetailPopup
+        {
+            get
+            {
+                return mpePersonDetailReport;
+                
+            }
+        }
+
+        public int SelectedPersonForDetails
+        {
+            get
+            {
+                return (int)ViewState["SelectedPersonForDetail"];
+            }
+            set
+            {
+                ViewState["SelectedPersonForDetail"] = value;
+            }
+        }
 
         private HtmlImage ImgSeniorityFilter { get; set; }
 
@@ -311,6 +332,7 @@ namespace PraticeManagement.Controls.Reports
         {
             var lnkPerson = sender as LinkButton;
             var personId = Convert.ToInt32(lnkPerson.Attributes["PersonId"]);
+            SelectedPersonForDetails = personId;
             var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
             ucPersonDetailReport.DatabindRepepeaterPersonDetails(list,lnkPerson.Text);
 
