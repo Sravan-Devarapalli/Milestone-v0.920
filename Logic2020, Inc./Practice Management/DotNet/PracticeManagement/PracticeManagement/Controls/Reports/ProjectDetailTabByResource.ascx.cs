@@ -102,11 +102,20 @@ namespace PraticeManagement.Controls.Reports
 
                 var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
                 cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
-
+                
                 sectionId = dataitem.TimeEntrySectionId;
                 repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
                 repDate.DataBind();
-                CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
+                if (dataitem.DayTotalHours == null || dataitem.DayTotalHours.Count == 0)
+                {
+                    e.Item.Controls.Remove(cpePerson);
+                    var image = e.Item.FindControl("imgProject") as Image;
+                    image.Style.Add(HtmlTextWriterStyle.Visibility, "hidden");
+                }
+                else
+                {
+                    CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
+                }
 
             }
             else if (e.Item.ItemType == ListItemType.Footer)
