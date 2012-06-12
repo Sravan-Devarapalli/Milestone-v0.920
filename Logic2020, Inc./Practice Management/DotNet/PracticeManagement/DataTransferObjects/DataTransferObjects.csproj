@@ -143,6 +143,8 @@
     <Compile Include="EmailData.cs" />
     <Compile Include="EmailTemplate.cs" />
     <Compile Include="OpurtunityPerson.cs" />
+    <Compile Include="Reports\ByPerson\GroupByDateByPerson.cs" />
+    <Compile Include="Reports\ByPerson\GroupByPersonByWorktype.cs" />
     <Compile Include="Reports\ByAccount\BusinessUnitLevelGroupedHours.cs" />
     <Compile Include="Reports\ByAccount\GroupByAccount.cs" />
     <Compile Include="Reports\ByAccount\GroupByBusinessUnit.cs" />
