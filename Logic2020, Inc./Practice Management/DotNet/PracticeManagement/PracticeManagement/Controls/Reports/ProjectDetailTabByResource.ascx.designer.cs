@@ -49,6 +49,24 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Button btnExpandOrCollapseAll;
         
         /// <summary>
+        /// btnGroupBy control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGroupBy;
+        
+        /// <summary>
+        /// hdnGroupBy control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnGroupBy;
+        
+        /// <summary>
         /// btnExportToExcel control.
         /// </summary>
         /// <remarks>
@@ -74,6 +92,15 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repPersons;
+        
+        /// <summary>
+        /// repDate2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repDate2;
         
         /// <summary>
         /// divEmptyMessage control.
