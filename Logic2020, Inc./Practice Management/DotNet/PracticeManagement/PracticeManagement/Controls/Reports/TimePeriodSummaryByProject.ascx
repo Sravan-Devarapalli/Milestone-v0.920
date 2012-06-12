@@ -2,7 +2,7 @@
     Inherits="PraticeManagement.Controls.Reports.TimePeriodSummaryByProject" %>
 <%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
     TagPrefix="uc" %>
-<%@ Register Src="~/Controls/Reports/ByAccount/GroupByBusinessUnit.ascx" TagName="GroupByBusinessUnit"
+<%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessDevelopment.ascx" TagName="GroupByBusinessDevelopment"
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Reports/ProjectDetailTabByResource.ascx" TagName="ProjectDetailTabByResource"
     TagPrefix="uc" %>
@@ -320,7 +320,7 @@
                                 <table style="width: 100%;">
                                     <tr>
                                         <td style="width: 97%;">
-                                            <uc:GroupByBusinessUnit ID="ucGroupByProject" runat="server" Visible="false" />
+                                            <uc:GroupByBusinessDevelopment ID="ucGroupByBusinessDevelopment" runat="server" Visible="false" />
                                             <uc:ProjectDetailTabByResource ID="ucProjectDetailReport" runat="server" Visible="false" />
                                         </td>
                                         <td style="width: 3%;">
