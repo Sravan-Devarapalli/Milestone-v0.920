@@ -229,13 +229,13 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Literal ltrlProjectDetailTotalhours;
         
         /// <summary>
-        /// ucGroupByProject control.
+        /// ucGroupByBusinessDevelopment control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.ByAccount.GroupByBusinessUnit ucGroupByProject;
+        protected global::PraticeManagement.Controls.Reports.ByAccount.ByBusinessDevelopment ucGroupByBusinessDevelopment;
         
         /// <summary>
         /// ucProjectDetailReport control.
