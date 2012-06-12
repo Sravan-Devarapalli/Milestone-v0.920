@@ -191,6 +191,14 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public PraticeManagement.Controls.Reports.TimePeriodSummaryByResource ByResourceControl
+        {
+            get
+            {
+                return tpByResource;
+            }
+        }
+
         #endregion
        
         protected void Page_Load(object sender, EventArgs e)
