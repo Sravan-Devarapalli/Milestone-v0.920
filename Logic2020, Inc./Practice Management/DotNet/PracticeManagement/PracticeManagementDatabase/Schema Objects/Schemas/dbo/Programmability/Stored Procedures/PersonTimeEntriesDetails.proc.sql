@@ -21,9 +21,10 @@ AS
 			@PersonIdLocal INT ,
 			@ORTTimeTypeId INT ,
 			@HolidayTimeType INT ,
+			@UnpaidTimeTypeId	INT,
 			@FutureDate DATETIME
 
-		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate),@PersonIdLocal = @PersonId,@ORTTimeTypeId = dbo.GetORTTimeTypeId(),@HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
+		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate),@PersonIdLocal = @PersonId,@ORTTimeTypeId = dbo.GetORTTimeTypeId(),@HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate(),@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
 
 		;WITH    PersonDayWiseByProjectsBillableTypes
 				  AS ( SELECT   M.ProjectId ,
@@ -71,6 +72,7 @@ AS
 					  END ) AS BillingType ,
 					( CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
 								  OR TT.TimeTypeId = @HolidayTimeType
+								  OR TT.TimeTypeId = @UnpaidTimeTypeId
 								)
 						   THEN TE.Note
 								+ dbo.GetApprovedByName(TE.ChargeCodeDate,
