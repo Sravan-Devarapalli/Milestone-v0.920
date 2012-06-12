@@ -199,6 +199,46 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public int AccountId
+        {
+            get
+            {
+                int accountId = 0;
+                if (ViewState["TimePeriodSummaryReportBusinessUnitIds"] != null)
+                {
+                    int.TryParse(ViewState["TimePeriodSummaryReportAccountId"].ToString(), out accountId);
+                }
+                return accountId;
+            }
+
+            set
+            {
+                ViewState["TimePeriodSummaryReportAccountId"] = value;
+            }
+        }
+
+        public string BusinessUnitIds
+        {
+            get
+            {
+                if (ViewState["TimePeriodSummaryReportBusinessUnitIds"] != null)
+                {
+                    return ViewState["TimePeriodSummaryReportBusinessUnitIds"].ToString();
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+
+            set
+            {
+                ViewState["TimePeriodSummaryReportBusinessUnitIds"] = value;
+            }
+        }
+
+        public double Total { get; set; }
+
         #endregion
        
         protected void Page_Load(object sender, EventArgs e)
