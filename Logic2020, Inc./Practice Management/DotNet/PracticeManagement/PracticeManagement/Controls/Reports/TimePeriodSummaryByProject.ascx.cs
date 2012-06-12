@@ -20,6 +20,34 @@ namespace PraticeManagement.Controls.Reports
 
         private HtmlImage ImgProjectStatusFilter { get; set; }
 
+        public string SelectedProjectNumber
+        {
+            get
+            {
+                return (string)ViewState["SelectedProjectNumberForDetails"];
+            }
+            set
+            {
+                ViewState["SelectedProjectNumberForDetails"] = value;
+            }
+        }
+
+        public AjaxControlToolkit.ModalPopupExtender MpeProjectDetailReport
+        {
+            get
+            {
+                return mpeProjectDetailReport;
+            }
+        }
+
+        public ByBusinessDevelopment ByBusinessDevelopmentControl
+        {
+            get
+            {
+                return ucGroupByBusinessDevelopment;
+            }
+        }            
+
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page); }
@@ -203,12 +231,12 @@ namespace PraticeManagement.Controls.Reports
         protected void lnkProject_OnClick(object sender, EventArgs e)
         {
             var lnkProject = sender as LinkButton;
-            var projectNumber = lnkProject.Attributes["ProjectNumber"];
+            SelectedProjectNumber = lnkProject.Attributes["ProjectNumber"];
 
             var businessDevelopmentProj = ServiceCallers.Custom.Project(p => p.GetBusinessDevelopmentProject());
             string totalHours = string.Empty;
 
-            if (businessDevelopmentProj.ProjectNumber.ToUpper() == projectNumber.ToUpper())
+            if (businessDevelopmentProj.ProjectNumber.ToUpper() == SelectedProjectNumber.ToUpper())
             {
                 HostingPage.AccountId = Convert.ToInt32(lnkProject.Attributes["AccountId"]);
                 HostingPage.BusinessUnitIds = lnkProject.Attributes["GroupId"] + ",";
@@ -220,7 +248,7 @@ namespace PraticeManagement.Controls.Reports
             else
             {
 
-                var list = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(projectNumber, null,
+                var list = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(SelectedProjectNumber, null,
                      HostingPage.StartDate, HostingPage.EndDate,
                     null)).ToList();
 
