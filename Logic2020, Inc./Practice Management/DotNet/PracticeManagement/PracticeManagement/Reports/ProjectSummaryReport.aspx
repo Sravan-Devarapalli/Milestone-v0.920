@@ -220,7 +220,7 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                <asp:TextBox ID="txtProjectNumber" Width="157px" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                                <asp:TextBox ID="txtProjectNumber" Width="150px" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
                                                     runat="server"></asp:TextBox>
                                                 <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
                                                     TargetControlID="txtProjectNumber" BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext"
@@ -252,7 +252,7 @@
                                 </td>
                                 <td style="text-align: left;">
                                     <cc2:CustomDropDown ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="160px">
+                                        Width="157px">
                                         <asp:ListItem Selected="True" Text="Entire Project" Value="*"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                     </cc2:CustomDropDown>
@@ -299,7 +299,7 @@
                                 </td>
                                 <td style="text-align: left;">
                                     <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
-                                        Width="160px">
+                                        Width="157px">
                                         <asp:ListItem Selected="True" Text="Please Select" Value=""></asp:ListItem>
                                         <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
                                         <asp:ListItem Text="By WorkType" Value="1"></asp:ListItem>
