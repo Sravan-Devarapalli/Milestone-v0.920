@@ -91,6 +91,8 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateByResourceDetailReport()
         {
+            ucProjectDetailReport.hdnGroupByControl.Value = "Person";
+            ucProjectDetailReport.btnGroupByControl.Text = ucProjectDetailReport.btnGroupByControl.ToolTip = "Group By Date";
             var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null, HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, ucProjectSummaryReport.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
             ucProjectDetailReport.DataBindByResourceDetail(data);
             PopulateHeaderSection(data.ToList());
@@ -155,8 +157,6 @@ namespace PraticeManagement.Controls.Reports
             //}
         }
 
-
-    
     }
 }
 
