@@ -463,7 +463,7 @@ namespace PraticeManagement
 
             if (IsPostBack && IsValidated)
             {
-                Page.Validate();
+                Page.Validate(vsumProject.ValidationGroup);
                 IsErrorPanelDisplay = !Page.IsValid;
             }
 
@@ -614,6 +614,7 @@ namespace PraticeManagement
             {
                 ClearDirty();
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Project"));
+                IsErrorPanelDisplay = true;
             }
 
             if (Page.IsValid && ProjectId.HasValue)
@@ -632,7 +633,10 @@ namespace PraticeManagement
             else
             {
                 if (!cvIsInternal.IsValid)
+                {
                     mlConfirmation.ShowErrorMessage(IsInternalChangeErrorMessage);
+                    IsErrorPanelDisplay = true;
+                }
                 if (!cvWorkTypesAssigned.IsValid)
                 {
                     mlConfirmation.ClearMessage();
@@ -715,6 +719,7 @@ namespace PraticeManagement
                     {
                         serviceClient.Abort();
                         mlConfirmation.ShowErrorMessage("{0}", ex.Message);
+                        IsErrorPanelDisplay = true;
                     }
                 }
             }
