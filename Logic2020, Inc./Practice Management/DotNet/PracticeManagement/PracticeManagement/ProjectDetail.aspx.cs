@@ -27,6 +27,7 @@ namespace PraticeManagement
     {
         #region Constants
 
+        private const string MailToSubjectFormat = "mailto:{0}?subject={1}";
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
@@ -37,6 +38,7 @@ namespace PraticeManagement
         public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
         public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
+
 
 
         #endregion
@@ -367,7 +369,10 @@ namespace PraticeManagement
             AddStatusIcon();
             PopulateOpportunityLink();
             txtProjectNameFirstTime.Visible = !(ProjectId.HasValue && Project != null);
-            imgEditProjectName.Visible = !txtProjectNameFirstTime.Visible;
+            imgEditProjectName.Visible =
+            imgMailToProjectOwner.Visible =
+            imgMailToClientDirector.Visible =
+            imgMailToSalesperson.Visible = !txtProjectNameFirstTime.Visible;
         }
 
         /// <summary>
@@ -1849,6 +1854,37 @@ namespace PraticeManagement
         private void PopulateErrorPanel()
         {
             mpeErrorPanel.Show();
+        }
+
+        protected void imgMailToProjectOwner_OnClick(object sender, EventArgs e)
+        {
+            int ownerId = 0;
+            int.TryParse(ddlProjectOwner.SelectedValue, out ownerId);
+            MailTo(ownerId, (ImageButton)sender);
+        }
+
+        protected void imgMailToClientDirector_OnClick(object sender, EventArgs e)
+        {
+            int directorId = 0;
+            int.TryParse(ddlDirector.SelectedValue, out directorId);
+            MailTo(directorId, (ImageButton)sender);
+        }
+
+        protected void imgMailToSalesperson_OnClick(object sender, EventArgs e)
+        {
+            int salesPersonId = 0;
+            int.TryParse(ddlSalesperson.SelectedValue, out salesPersonId);
+            MailTo(salesPersonId, (ImageButton)sender);
+
+        }
+
+        private void MailTo(int personId, ImageButton img)
+        {
+            string subject = Project.ProjectNumber + " - " + Project.Name;
+            Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(personId));
+            string peronEmailId = person.Alias;
+            string function = string.Format("mailTo('{0}');", string.Format(MailToSubjectFormat, peronEmailId, subject));
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Mailto", function,true);
         }
 
         #endregion
