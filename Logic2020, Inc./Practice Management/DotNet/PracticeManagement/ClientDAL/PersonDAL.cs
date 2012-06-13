@@ -3417,11 +3417,13 @@ namespace DataAccess
                 int timeScaleIndex = reader.GetOrdinal(TimescaleColumn);
                 int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
                 int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
+                int aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
 
                 while (reader.Read())
                 {
                     person.FirstName = reader.GetString(firstNameIndex);
                     person.LastName = reader.GetString(lastNameIndex);
+                    person.Alias = reader.GetString(aliasIndex);
                     person.IsStrawMan = reader.IsDBNull(isStrawManIndex) ? false : reader.GetBoolean(isStrawManIndex);
                     person.CurrentPay = new Pay
                                 {
