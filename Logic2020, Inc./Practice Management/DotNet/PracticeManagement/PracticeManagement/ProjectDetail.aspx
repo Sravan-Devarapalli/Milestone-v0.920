@@ -75,48 +75,60 @@
         }
 
         function cvProjectAttachment_ClientValidationFunction(obj, args) {
+            args.IsValid = IsValidProjectAttachMent();
+        }
+
+        function IsValidProjectAttachMent() {
+
             var fuControl = document.getElementById('<%= fuProjectAttachment.ClientID %>');
             var FileUploadPath = fuControl.value;
             var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
             if (Extension == "pdf" || Extension == "doc" || Extension == "docx") {
-                args.IsValid = true; // Valid file type
+                return true; // Valid file type
             }
             else {
-                args.IsValid = false; // Not valid file type
+                return false; // Not valid file type
             }
         }
+
+
         function cvAttachment_ClientValidationFunction(obj, args) {
+            args.IsValid = IsHaveAttachement();
+        }
+
+        function IsHaveAttachement() {
             var fuControl = document.getElementById('<%= fuProjectAttachment.ClientID %>');
             var fileUploadPath = fuControl.value;
             if (fileUploadPath != null && fileUploadPath != undefined) {
-                args.IsValid = true; // Valid file type
+                return true; // Valid file type
             }
             else {
-                args.IsValid = false; // Not valid file type
+                return false; // Not valid file type
             }
         }
 
         function cvAttachmentCategory_ClientValidationFunction(obj, args) {
+            args.IsValid = IsAttachmentCategorySelected();
+        }
+
+        function IsAttachmentCategorySelected() {
             var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
             var categoryValue = ddlAttachmentCategory.value;
             if (categoryValue != "0") {
-                args.IsValid = true; // Valid 
+                return true; // Valid 
             }
             else {
-                args.IsValid = false; // Not valid 
+                return false; // Not valid 
             }
         }
 
         function EnableUploadButton() {
-            var cvProjectAttachment = document.getElementById('<%= cvProjectAttachment.ClientID %>');
-            var cvAttachmentCategory = document.getElementById('<%= cvAttachmentCategory.ClientID %>');
-            var cvAttachment = document.getElementById('<%= cvAttachment.ClientID %>');
-            var UploadButton = document.getElementById('<%= btnUpload.ClientID %>');
-            if (cvProjectAttachment.isvalid && cvAttachmentCategory.isvalid && cvAttachment.isvalid) {
-                UploadButton.disabled = "";
+            var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
+            if (IsHaveAttachement() && IsValidProjectAttachMent() && IsAttachmentCategorySelected()) {
+                uploadButton.disabled = "";
             }
             else {
-                UploadButton.disabled = "disabled";
+                uploadButton.disabled = "disabled";
             }
         }
 
@@ -521,7 +533,7 @@
                                                     EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Sales person is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Sales person is required."></asp:RequiredFieldValidator>
                                                 <asp:ImageButton ID="imgMailToSalesperson" runat="server" OnClick="imgMailToSalesperson_OnClick"
-                                                    ImageUrl="Images/email_envelope.png" />
+                                                    ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
                                             </td>
                                         </tr>
                                     </table>
@@ -539,10 +551,12 @@
                                                     onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 2%;">&nbsp;</td>
+                                            <td style="width: 2%;">
+                                                &nbsp;
+                                            </td>
                                             <td style="width: 8%;">
                                                 <asp:ImageButton ID="imgMailToClientDirector" runat="server" OnClick="imgMailToClientDirector_OnClick"
-                                                    ImageUrl="Images/email_envelope.png" />
+                                                    ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
                                             </td>
                                         </tr>
                                     </table>
@@ -608,7 +622,7 @@
                                                 <asp:DropDownList ID="ddlProjectOwner" runat="server" onchange="setDirty();" CssClass="Width95Per">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 2%; white-space:nowrap;">
+                                            <td style="width: 2%; white-space: nowrap;">
                                                 <asp:RequiredFieldValidator ID="reqProjectOwner" runat="server" ControlToValidate="ddlProjectOwner"
                                                     Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Owner is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Project Owner is required."></asp:RequiredFieldValidator>
@@ -617,9 +631,9 @@
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectOwner_OnServerValidate" SetFocusOnError="true"
                                                     Display="Dynamic" Text="*" ToolTip="The selected owner has been terminated or made inactive.  Please select another owner."></asp:CustomValidator>
                                             </td>
-                                            <td style="width:8%;">
+                                            <td style="width: 8%;">
                                                 <asp:ImageButton ID="imgMailToProjectOwner" runat="server" OnClick="imgMailToProjectOwner_OnClick"
-                                                    ImageUrl="Images/email_envelope.png" />
+                                                    ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
                                             </td>
                                         </tr>
                                     </table>
@@ -1315,11 +1329,8 @@
             </asp:Panel>
         </ContentTemplate>
         <Triggers>
-            <asp:PostBackTrigger ControlID="btnSave" />
             <asp:PostBackTrigger ControlID="btnUpload" />
             <asp:PostBackTrigger ControlID="btnCancel" />
-            <asp:PostBackTrigger ControlID="repProjectAttachments" />
-            <asp:PostBackTrigger ControlID="btnOKErrorPanel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
