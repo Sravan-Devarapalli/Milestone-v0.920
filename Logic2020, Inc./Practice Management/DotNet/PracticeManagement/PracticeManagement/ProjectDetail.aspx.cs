@@ -548,7 +548,7 @@ namespace PraticeManagement
                 AttachmentsForNewProject = list;
                 if (list.Count > 0)
                 {
-                    divEmptyMessage.Style["display"] = "display";
+                    divEmptyMessage.Style["display"] = "none";
                     repProjectAttachments.Visible = true;
                     repProjectAttachments.DataSource = list;
                     repProjectAttachments.DataBind();
@@ -582,7 +582,7 @@ namespace PraticeManagement
         {
             if (!ProjectId.HasValue)
             {
-                Page.Validate();
+                Page.Validate(vsumProject.ValidationGroup);
                 if (Page.IsValid)
                 {
                     int projectId = SaveData();
@@ -667,7 +667,7 @@ namespace PraticeManagement
 
                         if (AttachmentsForNewProject.Count > 0)
                         {
-                            divEmptyMessage.Style["display"] = "display";
+                            divEmptyMessage.Style["display"] = "none";
                             repProjectAttachments.Visible = true;
                             repProjectAttachments.DataSource = AttachmentsForNewProject;
                             repProjectAttachments.DataBind();
@@ -1446,7 +1446,7 @@ namespace PraticeManagement
         {
             if (project != null)
             {
-                if (project.Attachments != null)
+                if (project.Attachments != null && project.Attachments.Count > 0)
                 {
                     divEmptyMessage.Style["display"] = "none";
                     repProjectAttachments.Visible = true;
