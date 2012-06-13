@@ -46,7 +46,7 @@
                             </td>
                         </tr>
                     </table>
-                    <asp:Panel ID="pnlPersonDetails" runat="server" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlPersonDetails" runat="server" CssClass="bg-white">
                         <asp:Repeater ID="repDate" runat="server" DataSource='<%# Eval("DayTotalHours") %>'
                             OnItemDataBound="repDate_ItemDataBound">
                             <HeaderTemplate>
@@ -241,7 +241,7 @@
                             </td>
                         </tr>
                     </table>
-                    <asp:Panel ID="pnlPersonDetails" runat="server" CssClass="cp bg-white">
+                    <asp:Panel ID="pnlPersonDetails" runat="server" CssClass="bg-white">
                         <asp:Repeater ID="repDate" runat="server" DataSource='<%# Eval("DayTotalHours") %>'
                             OnItemDataBound="repDate_ItemDataBound">
                             <HeaderTemplate>
