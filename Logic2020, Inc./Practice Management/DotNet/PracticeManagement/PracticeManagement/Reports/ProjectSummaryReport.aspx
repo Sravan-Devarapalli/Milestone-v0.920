@@ -98,6 +98,7 @@
     <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            SetTooltipsForallDropDowns();
             $("#tblProjectSummaryByResource").tablesorter(
             {
                 headers: {
@@ -127,9 +128,20 @@
                 );
         });
 
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
+        }
 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function endRequestHandle(sender, Args) {
+
+            SetTooltipsForallDropDowns();
 
             $("#tblProjectSummaryByResource").tablesorter(
                 {
@@ -193,7 +205,8 @@
         }
 
     </script>
-    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
+    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server">
+    </uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
@@ -253,8 +266,10 @@
                                 <td style="text-align: left;">
                                     <cc2:CustomDropDown ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
                                         Width="157px">
-                                        <asp:ListItem Selected="True" Text="Entire Project" Value="*"></asp:ListItem>
-                                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                                        <asp:ListItem Selected="True" Text="Entire Project" Value="*">
+                                        </asp:ListItem>
+                                        <asp:ListItem Text="Custom Dates" Value="0">
+                                        </asp:ListItem>
                                     </cc2:CustomDropDown>
                                 </td>
                             </tr>
@@ -402,7 +417,8 @@
                                     <td>
                                         <cc3:CustomDropDown ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
                                             Width="250px" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
-                                            <asp:ListItem Text="-- Select a Project --" Value=""></asp:ListItem>
+                                            <asp:ListItem Text="-- Select a Project --" Value="">
+                                            </asp:ListItem>
                                         </cc3:CustomDropDown>
                                     </td>
                                 </tr>
@@ -487,12 +503,14 @@
                 <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwResourceReport" runat="server">
                         <asp:Panel Style="padding-top: 10px;" ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
-                            <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
+                            <uc:ByResource ID="ucByResource" runat="server">
+                            </uc:ByResource>
                         </asp:Panel>
                     </asp:View>
                     <asp:View ID="vwProjectReport" runat="server">
                         <asp:Panel ID="pnlProjectReport" runat="server" CssClass="WholeWidth">
-                            <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
+                            <uc:ByWorkType ID="ucByWorktype" runat="server">
+                            </uc:ByWorkType>
                         </asp:Panel>
                     </asp:View>
                 </asp:MultiView>
