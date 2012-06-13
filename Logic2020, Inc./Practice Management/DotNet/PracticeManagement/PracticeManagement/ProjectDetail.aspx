@@ -32,6 +32,23 @@
     <script src="Scripts/FilterTable.js" type="text/javascript"></script>
     <script src="Scripts/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript">
+
+        function pageLoad() {
+            document.onkeypress = enterPressed;
+        }
+
+        function enterPressed(evn) {
+            if (window.event && window.event.keyCode == 13) {
+                if (window.event.srcElement.tagName != "TEXTAREA") {
+                    return false;
+                }
+            } else if (evn && evn.keyCode == 13) {
+                if (evn.originalTarget.type != "textarea") {
+                    return false;
+                }
+            }
+        }
+
         function checkDirty(target, entityId) {
             if (showDialod()) {
                 __doPostBack('__Page', target + ':' + entityId);
