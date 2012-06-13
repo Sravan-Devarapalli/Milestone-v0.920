@@ -79,13 +79,13 @@ namespace PraticeManagement.Reporting
             get
             {
                 System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
-                string milestoneName = li.Text;
                 if (!StartDate.HasValue || !EndDate.HasValue)
                 {
                     return string.Empty;
                 }
                 else if (li.Value != "0")
                 {
+                    string milestoneName = li.Attributes["milestone"];
                     return milestoneName + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
                 }
                 else
@@ -386,6 +386,7 @@ namespace PraticeManagement.Reporting
                 DateTime projectEndDate = list.Max(m => m.ProjectedDeliveryDate);
                 listItem.Attributes.Add("startdate", projectStartDate.ToString("MM/dd/yyyy"));
                 listItem.Attributes.Add("enddate", projectEndDate.ToString("MM/dd/yyyy"));
+                listItem.Attributes.Add("milestone", listItem.Text);
             }
             ddlPeriod.Items.Add(listItem);
             foreach (var milestone in list)
@@ -393,11 +394,12 @@ namespace PraticeManagement.Reporting
 
                 System.Web.UI.WebControls.ListItem li = new System.Web.UI.WebControls.ListItem()
                 {
-                    Text = string.Format("{0} ({1} - {2})", milestone.Description, milestone.StartDate.ToString("M/d/yy"), milestone.ProjectedDeliveryDate.ToString("M/d/yy")),
+                    Text = string.Format("{0} ({1} - {2})", milestone.Description, milestone.StartDate.ToString("MM/dd/yy"), milestone.ProjectedDeliveryDate.ToString("MM/dd/yy")),
                     Value = milestone.Id.Value.ToString()
                 };
                 li.Attributes.Add("startdate", milestone.StartDate.ToString("MM/dd/yyyy"));
                 li.Attributes.Add("enddate", milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"));
+                li.Attributes.Add("milestone", milestone.Description);
                 ddlPeriod.Items.Add(li);
             }
             var customListItem = new System.Web.UI.WebControls.ListItem("Custom Dates", "0");
