@@ -299,13 +299,13 @@
                 );
         });
 
-            function mailTo(url) {
-                
+        function mailTo(url) {
+
             var mailtoHiddenLink = document.getElementById('mailtoHiddenLink');
             mailtoHiddenLink.href = url;
             mailtoHiddenLink.click();
             return false;
-            }
+        }
 
     </script>
     <style type="text/css">
@@ -399,7 +399,7 @@
             <table class="WholeWidth">
                 <tr>
                     <td style="width: 2%">
-                      <a id="mailtoHiddenLink" style="display:none;"></a>
+                        <a id="mailtoHiddenLink" style="display: none;"></a>
                     </td>
                     <td>
                         <table class="WholeWidth">
@@ -424,7 +424,7 @@
                                 <td style="width: 35%;">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="font-weight: bold; font-size: 15px; width: 30%;padding-left:15px;">
+                                            <td style="font-weight: bold; font-size: 15px; width: 30%; padding-left: 15px;">
                                                 <table>
                                                     <tr>
                                                         <td>
@@ -437,13 +437,13 @@
                                                     </tr>
                                                 </table>
                                             </td>
-                                            <td style="vertical-align: middle; line-height: 1px; width: 46%;">
+                                            <td style="vertical-align: middle; line-height: 1px; width: 44%;">
                                                 <asp:DropDownList ID="ddlProjectStatus" runat="server" onchange="setDirty();" AutoPostBack="True"
                                                     CssClass="WholeWidth" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 10%;vertical-align: middle;padding-left:2px;">
-                                               <asp:RequiredFieldValidator ID="reqProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
+                                            <td style="width: 10%; vertical-align: middle; padding-left: 2px;">
+                                                <asp:RequiredFieldValidator ID="reqProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
                                                     ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Project"
                                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="custProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
@@ -516,7 +516,7 @@
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                             </td>
-                                            <td style="width: 10%;vertical-align:middle;padding-left:2px;">
+                                            <td style="width: 10%; vertical-align: middle; padding-left: 2px;">
                                                 <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
                                                     EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Sales person is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Sales person is required."></asp:RequiredFieldValidator>
@@ -539,7 +539,8 @@
                                                     onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 10%;">
+                                            <td style="width: 2%;">&nbsp;</td>
+                                            <td style="width: 8%;">
                                                 <asp:ImageButton ID="imgMailToClientDirector" runat="server" OnClick="imgMailToClientDirector_OnClick"
                                                     ImageUrl="Images/email_envelope.png" />
                                             </td>
@@ -581,7 +582,7 @@
                                                 <asp:TextBox ID="txtBuyerName" runat="server" onchange="setDirty();" CssClass="Width92Per"
                                                     MaxLength="100"></asp:TextBox>
                                             </td>
-                                            <td style="width: 10%;vertical-align:middle;padding-left:2px;">
+                                            <td style="width: 10%; vertical-align: middle; padding-left: 2px;">
                                                 <asp:RequiredFieldValidator ID="reqBuyerName" runat="server" ControlToValidate="txtBuyerName"
                                                     ErrorMessage="The Buyer Name is required." ToolTip="The Buyer Name is required."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -607,7 +608,7 @@
                                                 <asp:DropDownList ID="ddlProjectOwner" runat="server" onchange="setDirty();" CssClass="Width95Per">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 10%;">
+                                            <td style="width: 2%; white-space:nowrap;">
                                                 <asp:RequiredFieldValidator ID="reqProjectOwner" runat="server" ControlToValidate="ddlProjectOwner"
                                                     Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Owner is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Project Owner is required."></asp:RequiredFieldValidator>
@@ -615,6 +616,8 @@
                                                     ValidationGroup="Project" ErrorMessage="The selected owner has been terminated or made inactive.  Please select another owner."
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectOwner_OnServerValidate" SetFocusOnError="true"
                                                     Display="Dynamic" Text="*" ToolTip="The selected owner has been terminated or made inactive.  Please select another owner."></asp:CustomValidator>
+                                            </td>
+                                            <td style="width:8%;">
                                                 <asp:ImageButton ID="imgMailToProjectOwner" runat="server" OnClick="imgMailToProjectOwner_OnClick"
                                                     ImageUrl="Images/email_envelope.png" />
                                             </td>
@@ -660,7 +663,7 @@
                                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="fteSowBudget" TargetControlID="txtSowBudget"
                                                     FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server" ValidChars=".," />
                                             </td>
-                                            <td style="width: 10%;vertical-align:middle;padding-left:2px;">
+                                            <td style="width: 10%; vertical-align: middle; padding-left: 2px;">
                                                 <asp:CustomValidator ID="custSowBudget" runat="server" ControlToValidate="txtSowBudget"
                                                     ToolTip="A number with 2 decimal digits is allowed for the Est. Revenue." Text="*"
                                                     ErrorMessage="A number with 2 decimal digits is allowed for the SOW Budget."
@@ -680,7 +683,7 @@
                                             </td>
                                             <td style="width: 60%;" class="ScrollingDropDownWholeWidth">
                                                 <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="Width92Per"
-                                                    AllSelectedReturnType="AllItems" Height="240px" onclick="scrollingDropdown_onclick('cblProjectManagers','Project Manager');"
+                                                    AllSelectedReturnType="AllItems" Height="240px" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
                                                     DropDownListType="Manager" CellPadding="3" />
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
