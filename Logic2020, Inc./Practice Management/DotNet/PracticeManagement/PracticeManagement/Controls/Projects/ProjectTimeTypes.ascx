@@ -279,7 +279,7 @@
             </td>
         </tr>
         <tr>
-            <td align="center" style="padding-bottom: 10px;">
+            <td align="center" style="padding-bottom: 10px;width:100%;">
                 <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick();" />
             </td>
         </tr>
