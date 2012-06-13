@@ -390,7 +390,12 @@ namespace PraticeManagement.Reporting
             ddlPeriod.Items.Add(listItem);
             foreach (var milestone in list)
             {
-                System.Web.UI.WebControls.ListItem li = new System.Web.UI.WebControls.ListItem() { Text = milestone.Description, Value = milestone.Id.Value.ToString() };
+
+                System.Web.UI.WebControls.ListItem li = new System.Web.UI.WebControls.ListItem()
+                {
+                    Text = string.Format("{0} ({1} - {2})", milestone.Description, milestone.StartDate.ToString("M/d/yy"), milestone.ProjectedDeliveryDate.ToString("M/d/yy")),
+                    Value = milestone.Id.Value.ToString()
+                };
                 li.Attributes.Add("startdate", milestone.StartDate.ToString("MM/dd/yyyy"));
                 li.Attributes.Add("enddate", milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"));
                 ddlPeriod.Items.Add(li);
