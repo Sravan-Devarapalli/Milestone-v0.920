@@ -51,7 +51,7 @@
                 </td>
             </tr>
         </table>
-        <asp:Panel ID="pnlProjectDetails" runat="server" CssClass="cp bg-white">
+        <asp:Panel ID="pnlProjectDetails" runat="server" CssClass="bg-white">
             <asp:Repeater ID="repDate" runat="server" OnItemDataBound="repDate_ItemDataBound">
                 <HeaderTemplate>
                 </HeaderTemplate>
@@ -284,7 +284,7 @@
                 </td>
             </tr>
         </table>
-        <asp:Panel ID="pnlDateDetails" runat="server" CssClass="cp bg-white">
+        <asp:Panel ID="pnlDateDetails" runat="server" CssClass="bg-white">
             <asp:Repeater ID="repProject2" runat="server" OnItemDataBound="repProject2_ItemDataBound">
                 <HeaderTemplate>
                 </HeaderTemplate>
