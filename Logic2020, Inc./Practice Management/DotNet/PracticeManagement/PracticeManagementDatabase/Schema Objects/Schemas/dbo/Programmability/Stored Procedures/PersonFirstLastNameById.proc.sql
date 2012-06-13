@@ -14,7 +14,8 @@ BEGIN
 			P.IsStrawman,
 			TS.Name AS Timescale,
 			P.IsOffshore,
-			P.PersonStatusId
+			P.PersonStatusId,
+			P.Alias
 	FROM dbo.Person P
 	LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
 							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
