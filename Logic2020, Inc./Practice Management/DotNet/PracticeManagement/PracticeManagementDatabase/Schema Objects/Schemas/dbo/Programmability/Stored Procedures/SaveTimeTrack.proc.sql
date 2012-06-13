@@ -1,15 +1,17 @@
 ﻿-- =============================================
 -- Author:		Srinivas.M
 -- Create date: 
--- Updated by:	Sainathc
--- Update date:	01-06-2012
+-- Updated by:	ThulasiRam.P
+-- Update date:	12-06-2012
 -- =============================================
 CREATE PROCEDURE [dbo].[SaveTimeTrack]
+(
 	@TimeEntriesXml		XML,
 	@PersonId			INT,
 	@StartDate			DATETIME,
 	@EndDate			DATETIME,
 	@UserLogin			NVARCHAR(255)
+)
 AS
 BEGIN
 	/*
@@ -35,16 +37,19 @@ BEGIN
 			.
 	</Sections>
 	*/
+
+	SET NOCOUNT ON;
+
 	DECLARE @CurrentPMTime	DATETIME,
 			@ModifiedBy		INT,
 			@HolidayTimeTypeId INT,
 			@ORTTimeTypeId	INT,
 			@UnpaidTimeTypeId	INT
 
-	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
-	SET @CurrentPMTime = dbo.InsertingTime()
-	SET @ORTTimeTypeId = dbo.GetORTTimeTypeId()
-	SET @UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
+	SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
+		   @CurrentPMTime = dbo.InsertingTime(), 
+		   @ORTTimeTypeId = dbo.GetORTTimeTypeId(), 
+		   @UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
 
 	SELECT @ModifiedBy = P.PersonId
 	FROM Person P
@@ -55,35 +60,64 @@ BEGIN
 
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
+		DECLARE @ThisWeekTimeEntries TABLE (ClientId            INT	NOT NULL,
+											ProjectGroupId      INT	NOT NULL,
+											ProjectId           INT	NOT NULL,
+											TimeTypeId          INT	NOT NULL,
+											TimeEntrySectionId	INT	NOT NULL,
+											ChargeCodeDate      DATETIME	NOT NULL,
+											ActualHours         REAL		NOT NULL,
+											IsChargeable        BIT			NOT NULL,
+											[Note]              VARCHAR (1000)	NOT NULL,
+											OldTimeTypeId       INT	NULL,
+											ApprovedById        INT NULL
+										   )
+
+		--- Execute a SELECT stmt using OPENXML row set provider.
+		INSERT INTO @ThisWeekTimeEntries
+		SELECT NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT'),
+			   NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT'),
+			   NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT'),
+			   NEW.c.value('..[1]/..[1]/@Id', 'INT'),
+			   NEW.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT'),
+			   NEW.c.value('..[1]/@Date', 'DATETIME'),
+			   NEW.c.value('@ActualHours', 'REAL'),
+			   NEW.c.value('@IsChargeable', 'BIT'),
+			   NEW.c.value('@Note', 'NVARCHAR(1000)'),
+			   NEW.c.value('..[1]/..[1]/@OldId', 'INT'),
+			   NEW.c.value('@ApprovedById', 'INT')
+		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
+		
+
 		--Insert ChargeCode if not exists in ChargeCode Table.
 		INSERT INTO dbo.ChargeCode(ClientId, ProjectGroupId, ProjectId, PhaseId, TimeTypeId, TimeEntrySectionId)
-		SELECT t.c.value('..[1]/@AccountId', 'INT') ClientId,
-				t.c.value('..[1]/@BusinessUnitId', 'INT') ProjectGroupId,
-				t.c.value('..[1]/@ProjectId', 'INT') ProjectId,
-				01 AS 'PhaseId',
-				t.c.value('@Id', 'INT') TimeTypeId,
-				t.c.value('..[1]/..[1]/@Id', 'INT') TimeEntrySectionId
-		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType') t(c)
-		LEFT JOIN dbo.ChargeCode CC ON CC.ClientId = t.c.value('..[1]/@AccountId', 'INT')
-							AND CC.ProjectGroupId = t.c.value('..[1]/@BusinessUnitId', 'INT')
-							AND CC.ProjectId = t.c.value('..[1]/@ProjectId', 'INT')
-							AND CC.TimeTypeId = t.c.value('@Id', 'INT')
-		WHERE CC.Id IS NULL AND t.c.value('@Id', 'INT') > 0
+		SELECT  TWTE.ClientId,
+				TWTE.ProjectGroupId,
+				TWTE.ProjectId,
+				01,
+				TWTE.TimeTypeId,
+				TWTE.TimeEntrySectionId
+		FROM @ThisWeekTimeEntries AS TWTE
+		LEFT JOIN dbo.ChargeCode CC ON CC.ClientId = TWTE.ClientId
+							AND CC.ProjectGroupId = TWTE.ProjectGroupId
+							AND CC.ProjectId = TWTE.ProjectId
+							AND CC.TimeTypeId = TWTE.TimeTypeId
+		WHERE CC.Id IS NULL AND TWTE.TimeTypeId > 0
+
 
 		--Delete timeEntries which are not exists in the xml and timeEntries having ActualHours=0 in xml.
 		DELETE TEH
 		FROM dbo.TimeEntry TE
 		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId  
-		JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
-		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-			ON TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
-				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
-				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
-				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')
-				AND NEW.c.value('@ActualHours', 'REAL') > 0
-				AND NEW.c.value('@IsChargeable', 'BIT') = TEH.IsChargeable
-		WHERE NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT') IS NULL
+		INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId AND TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+		LEFT  JOIN @ThisWeekTimeEntries AS TWTE ON TE.ChargeCodeDate = TWTE.ChargeCodeDate
+				AND CC.ClientId = TWTE.ClientId
+				AND CC.ProjectGroupId = TWTE.ProjectGroupId
+				AND CC.ProjectId = TWTE.ProjectId
+				AND CC.TimeTypeId = TWTE.TimeTypeId
+				AND TWTE.ActualHours > 0
+				AND TWTE.IsChargeable = TEH.IsChargeable
+		WHERE TWTE.ClientId IS NULL
 
 
 		DELETE TE
@@ -93,50 +127,40 @@ BEGIN
 
 		--Update TimeEntries which are modified.
 		UPDATE TEH
-		SET	TEH.ActualHours = NEW.c.value('@ActualHours', 'REAL'),
-			TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT'),
+		SET	TEH.ActualHours = TWTE.ActualHours,
 			TEH.ModifiedDate = @CurrentPMTime,
 			TEH.ModifiedBy = @ModifiedBy
 		FROM dbo.TimeEntry TE
 		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId   
-		JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
-		JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-			ON NEW.c.value('..[1]/@Date', 'DATETIME') = TE.ChargeCodeDate
-				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
-				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
-				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
-				AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
+		INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
+		INNER JOIN @ThisWeekTimeEntries AS TWTE
+			ON TWTE.ChargeCodeDate = TE.ChargeCodeDate
+				AND CC.ClientId = TWTE.ClientId
+				AND CC.ProjectGroupId = TWTE.ProjectGroupId
+				AND CC.ProjectId = TWTE.ProjectId
+				AND CC.TimeTypeId = TWTE.TimeTypeId
+				AND TEH.IsChargeable = TWTE.IsChargeable
 				AND (
-						TEH.ActualHours <> NEW.c.value('@ActualHours', 'REAL') OR
-						TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)')  --Added to fire the trigger on table 'TimeEntryHours' When note Changed.
+						TEH.ActualHours <> TWTE.ActualHours OR
+						TE.Note <> TWTE.Note  --Added to fire the trigger on table 'TimeEntryHours' When note Changed.
 				     )
 
 		UPDATE TE
-		SET	TE.Note = CASE WHEN TT.IsAdministrative = 1 AND NEW.c.value('@Note', 'NVARCHAR(1000)') = '' THEN TT.Name ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END
+		SET	TE.Note = CASE WHEN TT.IsAdministrative = 1 AND TWTE.Note = '' THEN TT.Name + '.' ELSE TWTE.Note END
 		FROM dbo.TimeEntry TE
 		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId   
 		INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND TE.PersonId = @PersonId
 		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND @HolidayTimeTypeId <> TT.TimeTypeId AND @UnpaidTimeTypeId <> TT.TimeTypeId
-		INNER JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-			ON NEW.c.value('..[1]/@Date', 'DATETIME') = TE.ChargeCodeDate
-				AND CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
-				AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
-				AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-				AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
-				AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
-				AND ( TE.Note <> NEW.c.value('@Note', 'NVARCHAR(1000)'))
+		INNER JOIN @ThisWeekTimeEntries AS TWTE
+			ON TWTE.ChargeCodeDate = TE.ChargeCodeDate
+				AND CC.ClientId = TWTE.ClientId
+				AND CC.ProjectGroupId = TWTE.ProjectGroupId
+				AND CC.ProjectId = TWTE.ProjectId
+				AND CC.TimeTypeId = TWTE.TimeTypeId	
+				AND TEH.IsChargeable = TWTE.IsChargeable
+				AND ( TE.Note <> TWTE.Note )
 
-		;WITH ForecastedHours AS 
-		(
-			SELECT MP.PersonId, M.ProjectId, C.Date, SUM(MPE.HoursPerDay) AS 'ForcastedHours'
-			FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-			JOIN dbo.Milestone M ON M.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-			JOIN dbo.MilestonePerson MP ON MP.PersonId = @PersonId AND M.MilestoneId = MP.MilestoneId
-			JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId AND NEW.c.value('..[1]/@Date', 'DATETIME') BETWEEN MPE.StartDate AND MPE.EndDate
-			JOIN dbo.Calendar C ON C.Date = NEW.c.value('..[1]/@Date', 'DATETIME')
-			GROUP BY MP.PersonId, M.ProjectId, MP.PersonId, C.Date
-		)
+	
 
 		--Insert any new entries exists.
 		INSERT INTO dbo.TimeEntry(PersonId, 
@@ -148,24 +172,22 @@ BEGIN
 								IsAutoGenerated)
 		SELECT DISTINCT @PersonId,
 				CC.Id,
-				NEW.c.value('..[1]/@Date', 'DATETIME'),
-				ISNULL(FH.ForcastedHours, 0),
-				CASE WHEN TT.IsAdministrative = 1 AND ( NEW.c.value('@Note', 'NVARCHAR(1000)') = '' OR ISNULL(OldTT.Name,'') + '.' = NEW.c.value('@Note', 'NVARCHAR(1000)')) THEN TT.Name + '.' ELSE NEW.c.value('@Note', 'NVARCHAR(1000)') END,
+				TWTE.ChargeCodeDate,
+				0,
+				CASE WHEN TT.IsAdministrative = 1 AND ( TWTE.Note = '' OR ISNULL(OldTT.Name,'') + '.' = TWTE.Note ) THEN TT.Name + '.' ELSE TWTE.Note END,
 				1,
 				0
-		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-		INNER JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
-								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
-								AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')
+		FROM @ThisWeekTimeEntries AS TWTE
+		INNER JOIN dbo.ChargeCode CC ON CC.ClientId = TWTE.ClientId
+								AND CC.ProjectGroupId = TWTE.ProjectGroupId
+								AND CC.ProjectId = TWTE.ProjectId
+								AND CC.TimeTypeId = TWTE.TimeTypeId	
 		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.TimeTypeId <> @HolidayTimeTypeId AND TT.TimeTypeId <> @UnpaidTimeTypeId
 		LEFT JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
-										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
-		LEFT JOIN ForecastedHours FH ON FH.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT') 
-										AND FH.Date = NEW.c.value('..[1]/@Date', 'DATETIME')
-		LEFT JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = NEW.c.value('..[1]/..[1]/@OldId', 'INT')
+										AND TE.ChargeCodeDate = TWTE.ChargeCodeDate
+		LEFT JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = TWTE.OldTimeTypeId
 		WHERE TE.TimeEntryId IS NULL
-			AND NEW.c.value('@ActualHours', 'REAL') > 0
+			AND TWTE.ActualHours > 0
 
 
 		INSERT INTO dbo.TimeEntryHours(TimeEntryId,
@@ -176,24 +198,24 @@ BEGIN
 										ModifiedBy,
 										ReviewStatusId)
 		SELECT  TE.TimeEntryId,
-				NEW.c.value('@ActualHours', 'REAL'),
-				NEW.c.value('@IsChargeable', 'BIT'),
+				TWTE.ActualHours,
+				TWTE.IsChargeable,
 				@CurrentPMTime,
 				@CurrentPMTime,
 				@ModifiedBy,
 				1-- pending status
-		FROM @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') NEW(c)
-		JOIN dbo.ChargeCode CC ON CC.ClientId = NEW.c.value('..[1]/..[1]/..[1]/@AccountId', 'INT')
-								AND CC.ProjectGroupId = NEW.c.value('..[1]/..[1]/..[1]/@BusinessUnitId', 'INT')
-								AND CC.ProjectId = NEW.c.value('..[1]/..[1]/..[1]/@ProjectId', 'INT')
-								AND CC.TimeTypeId = NEW.c.value('..[1]/..[1]/@Id', 'INT')	
+		FROM  @ThisWeekTimeEntries AS TWTE
+		INNER JOIN dbo.ChargeCode AS CC ON CC.ClientId = TWTE.ClientId
+								AND CC.ProjectGroupId = TWTE.ProjectGroupId
+								AND CC.ProjectId = TWTE.ProjectId
+								AND CC.TimeTypeId = TWTE.TimeTypeId		
 		INNER JOIN dbo.TimeEntry TE ON TE.ChargeCodeId = CC.Id AND TE.PersonId = @PersonId
-										AND TE.ChargeCodeDate = NEW.c.value('..[1]/@Date', 'DATETIME')
+										AND TE.ChargeCodeDate = TWTE.ChargeCodeDate
 		LEFT JOIN dbo.TimeEntryHours TEH ON (  TEH.TimeEntryId = TE.TimeEntryId
-											   AND TEH.IsChargeable = NEW.c.value('@IsChargeable', 'BIT')
+											   AND TEH.IsChargeable = TWTE.IsChargeable
 											)
 		WHERE TEH.TimeEntryId IS NULL
-			AND NEW.c.value('@ActualHours', 'REAL') > 0
+			AND TWTE.ActualHours > 0
 
 		/*
 			Delete PersonCalendar Entry Only,
@@ -203,38 +225,38 @@ BEGIN
 		--Delete PTO entry from PersonCalendar only if the Person has PTO not Floating Holiday.
 		DELETE PC
 		FROM dbo.PersonCalendar PC
-		JOIN Calendar C ON C.Date = PC.Date AND PC.PersonId =  @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate
-		LEFT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
-				ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
-					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
-					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
-					AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @UnpaidTimeTypeId
-		INNER JOIN Person P ON P.PersonId = PC.PersonId AND P.IsStrawman = 0 AND PC.TimeTypeId <> @HolidayTimeTypeId AND PC.TimeTypeId <> @UnpaidTimeTypeId AND C.DayOff <> 1 
-		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale = 2--Here 2 is W2Salaried person.
-		WHERE ISNULL(Dates.c.value('@ActualHours', 'REAL'), 0) = 0 --can delete only if it is entered for the timeentry page and not floating holiday
+		INNER JOIN dbo.Calendar C ON C.Date = PC.Date AND PC.PersonId =  @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate
+		LEFT  JOIN @ThisWeekTimeEntries AS TWTE
+				 ON TWTE.TimeEntrySectionId = 4
+					AND TWTE.ChargeCodeDate = PC.Date
+					AND TWTE.TimeTypeId <> @HolidayTimeTypeId
+					AND TWTE.TimeTypeId <> @UnpaidTimeTypeId
+		INNER JOIN dbo.Pay AS pay ON pay.Person = PC.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale = 2 --Here 2 is W2Salaried person.
+								  AND PC.TimeTypeId <> @HolidayTimeTypeId AND PC.TimeTypeId <> @UnpaidTimeTypeId AND C.DayOff <> 1 
+		WHERE ISNULL(TWTE.ActualHours, 0) = 0 --can delete only if it is entered for the time entry page and not floating holiday
 
 		--Update PTO actual hours.
 		UPDATE PC
-		SET	ActualHours = Dates.c.value('@ActualHours', 'REAL'),
-			IsSeries = 0,
-			IsFromTimeEntry = 1,
-			TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT'),
-			Description = CASE WHEN TT.IsAdministrative = 1 AND ( Dates.c.value('@Note', 'NVARCHAR(1000)') = '' OR ISNULL(OldTT.Name,'') + '.' = Dates.c.value('@Note', 'NVARCHAR(1000)')) THEN TT.Name + '.' ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END,
-			ApprovedBy = CASE Dates.c.value('..[1]/..[1]/@Id', 'INT') WHEN @ORTTimeTypeId THEN Dates.c.value('@ApprovedById', 'INT') ELSE NULL END
+		SET	PC.ActualHours = TWTE.ActualHours,
+			PC.IsSeries = 0,
+			PC.IsFromTimeEntry = 1,
+			PC.TimeTypeId = TWTE.TimeTypeId,
+			PC.Description = CASE WHEN TT.IsAdministrative = 1 AND ( TWTE.Note = '' OR ISNULL(OldTT.Name,'') + '.' = TWTE.Note ) THEN TT.Name + '.' ELSE TWTE.Note END,
+			PC.ApprovedBy = CASE TWTE.TimeTypeId WHEN @ORTTimeTypeId THEN TWTE.ApprovedById ELSE NULL END
 		FROM dbo.PersonCalendar PC
-		JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
-			ON Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
-				AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
-				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
-				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @UnpaidTimeTypeId
-				AND Dates.c.value('@ActualHours', 'REAL') > 0
-			INNER JOIN dbo.TimeType tt ON tt.TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT')
-			LEFT JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = Dates.c.value('..[1]/..[1]/@OldId', 'INT')
+		INNER JOIN @ThisWeekTimeEntries AS TWTE
+			ON TWTE.TimeEntrySectionId = 4
+				AND TWTE.ChargeCodeDate = PC.Date
+				AND TWTE.TimeTypeId <> @HolidayTimeTypeId
+				AND TWTE.TimeTypeId <> @UnpaidTimeTypeId
+				AND TWTE.ActualHours > 0
+			INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = TWTE.TimeTypeId
+			LEFT  JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = TWTE.OldTimeTypeId
 		WHERE PC.PersonId = @PersonId AND PC.Date BETWEEN @StartDate AND @EndDate AND PC.DayOff = 1
-			AND (Dates.c.value('@ActualHours', 'REAL') <> PC.ActualHours 
-				OR PC.TimeTypeId <> Dates.c.value('..[1]/..[1]/@Id', 'INT') 
-				OR PC.Description <> Dates.c.value('@Note', 'NVARCHAR(1000)')
-				OR (PC.TimeTypeId = @ORTTimeTypeId AND PC.ApprovedBy <> Dates.c.value('@ApprovedById', 'INT')))
+			AND (TWTE.ActualHours <> PC.ActualHours 
+				OR PC.TimeTypeId <> TWTE.TimeTypeId 
+				OR PC.Description <> TWTE.Note
+				OR (PC.TimeTypeId = @ORTTimeTypeId AND PC.ApprovedBy <> TWTE.ApprovedById))
 				
 		
 		--Insert PTO.
@@ -248,61 +270,27 @@ BEGIN
 									IsFromTimeEntry,
 									ApprovedBy
 									)
-		SELECT Dates.c.value('..[1]/@Date', 'DATETIME'),
+		SELECT TWTE.ChargeCodeDate,
 				@PersonId,
 				1,
-				Dates.c.value('@ActualHours', 'REAL'),
+				TWTE.ActualHours,
 				0,
-				Dates.c.value('..[1]/..[1]/@Id', 'INT'),
-				CASE WHEN TT.IsAdministrative = 1 AND ( Dates.c.value('@Note', 'NVARCHAR(1000)') = '' OR ISNULL(OldTT.Name,'') + '.' = Dates.c.value('@Note', 'NVARCHAR(1000)')) THEN TT.Name + '.' ELSE Dates.c.value('@Note', 'NVARCHAR(1000)') END,
+				TWTE.TimeTypeId,
+				CASE WHEN TT.IsAdministrative = 1 AND ( TWTE.Note = '' OR ISNULL(OldTT.Name,'') + '.' = TWTE.Note ) THEN TT.Name + '.' ELSE TWTE.Note END,
 				1,
-				CASE TT.TimeTypeId WHEN @ORTTimeTypeId THEN Dates.c.value('@ApprovedById', 'INT') ELSE NULL END
+				CASE TT.TimeTypeId WHEN @ORTTimeTypeId THEN TWTE.ApprovedById ELSE NULL END
 		FROM dbo.PersonCalendar PC
-		RIGHT JOIN @TimeEntriesXml.nodes('Sections/Section/AccountAndProjectSelection/WorkType/CalendarItem/TimeEntryRecord') Dates(c)
+		RIGHT JOIN @ThisWeekTimeEntries AS TWTE
 				ON PC.PersonId =  @PersonId
-					AND Dates.c.value('..[1]/@Date', 'DATETIME') = PC.Date
-		INNER JOIN TimeType TT ON TT.TimeTypeId = Dates.c.value('..[1]/..[1]/@Id', 'INT')
-		LEFT JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = Dates.c.value('..[1]/..[1]/@OldId', 'INT')
-		WHERE Dates.c.value('..[1]/..[1]/..[1]/..[1]/@Id', 'INT') = 4
-				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @HolidayTimeTypeId
-				AND Dates.c.value('..[1]/..[1]/@Id', 'INT') <> @UnpaidTimeTypeId
-				AND Dates.c.value('@ActualHours', 'REAL') > 0
+					AND TWTE.ChargeCodeDate = PC.Date
+		INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = TWTE.TimeTypeId
+		LEFT  JOIN dbo.TimeType OldTT ON OldTT.TimeTypeId = TWTE.OldTimeTypeId
+		WHERE TWTE.TimeEntrySectionId = 4
+				AND TWTE.TimeTypeId <> @HolidayTimeTypeId
+				AND TWTE.TimeTypeId <> @UnpaidTimeTypeId
+				AND TWTE.ActualHours > 0
 				AND PC.Date IS NULL
 
-		DECLARE @BeforeStartDate DATETIME,
-				@AfterEndDate	DATETIME
-
-		SELECT @BeforeStartDate 
-		FROM dbo.Calendar  C
-		WHERE ( (DATEPART(DW, @BeforeStartDate) = 2 AND C.date = DATEADD(DD, -3, @BeforeStartDate))
-					OR  C.date = DATEADD(DD, -1, @BeforeStartDate)
-				)
-
-		SELECT @AfterEndDate 
-		FROM dbo.Calendar  C
-		WHERE ((DATEPART(DW, @AfterEndDate) = 6 AND C.date = DATEADD(DD,3, @AfterEndDate) )
-					OR  C.date = DATEADD(DD,1, @AfterEndDate)
-				)
-
-		;WITH NeedToModifyDates AS
-		(
-			SELECT  PC.PersonId, C.Date, CONVERT(BIT, 0) 'IsSeries'
-			FROM Calendar C
-			JOIN PersonCalendar PC ON C.Date BETWEEN @BeforeStartDate AND @AfterEndDate AND PC.PersonId = @PersonId AND C.Date = PC.Date AND PC.DayOff = 1 AND PC.IsSeries = 1
-			LEFT JOIN PersonCalendar APC ON PC.PersonId = APC.PersonId AND APC.DayOff = 1 AND APC.IsSeries = 1 AND APC.ActualHours = PC.ActualHours AND APC.TimeTypeId = PC.TimeTypeId AND ISNULL(APC.ApprovedBy, 0) = ISNULL(PC.ApprovedBy, 0)--APC:- AffectedPersonCalendar
-						AND ((DATEPART(DW, C.date) = 6 AND APC.date = DATEADD(DD,3, C.date) )
-								OR (DATEPART(DW, C.date) = 2 AND APC.date = DATEADD(DD, -3, C.date))
-								OR  APC.date = DATEADD(DD,1, C.date)
-								OR  APC.date = DATEADD(DD, -1, C.date)
-							)
-			GROUP BY PC.PersonId, C.date
-			Having COUNT(APC.date) < 2
-		)
-
-		UPDATE PC
-			SET IsSeries = NTMF.IsSeries
-		FROM PersonCalendar PC
-		JOIN NeedToModifyDates NTMF ON NTMF.PersonId = PC.PersonId AND NTMF.Date = PC.Date
 		
 		 EXEC dbo.SessionLogUnprepare
 
