@@ -91,7 +91,7 @@ BEGIN
 
 		--Insert ChargeCode if not exists in ChargeCode Table.
 		INSERT INTO dbo.ChargeCode(ClientId, ProjectGroupId, ProjectId, PhaseId, TimeTypeId, TimeEntrySectionId)
-		SELECT  TWTE.ClientId,
+		SELECT DISTINCT  TWTE.ClientId,
 				TWTE.ProjectGroupId,
 				TWTE.ProjectId,
 				01,
