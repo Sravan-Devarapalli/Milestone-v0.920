@@ -1022,9 +1022,6 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ProjectDelete", "ProjectService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
 
