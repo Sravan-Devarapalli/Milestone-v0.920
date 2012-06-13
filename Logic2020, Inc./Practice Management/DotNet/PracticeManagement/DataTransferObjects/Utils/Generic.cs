@@ -147,7 +147,7 @@ namespace DataTransferObjects.Utils
                             {
                                 groupByDate.ProjectTotalHours = new List<GroupByClientAndProject>();
                             }
-                            if (!groupByDate.ProjectTotalHours.Any(g => g.Project.ProjectNumber == timeEntriesGroupByClientAndProject.Project.ProjectNumber))
+                            if (!groupByDate.ProjectTotalHours.Any(g => g.Project.ProjectNumber == timeEntriesGroupByClientAndProject.Project.ProjectNumber && g.Client.Code == timeEntriesGroupByClientAndProject.Client.Code))
                             {
                                 groupByClientAndProject = new GroupByClientAndProject();
                                 groupByClientAndProject.Client = timeEntriesGroupByClientAndProject.Client;
@@ -156,7 +156,7 @@ namespace DataTransferObjects.Utils
                             }
                             else
                             {
-                                groupByClientAndProject = groupByDate.ProjectTotalHours.First(g => g.Project.ProjectNumber == timeEntriesGroupByClientAndProject.Project.ProjectNumber);
+                                groupByClientAndProject = groupByDate.ProjectTotalHours.First(g => g.Project.ProjectNumber == timeEntriesGroupByClientAndProject.Project.ProjectNumber && g.Client.Code == timeEntriesGroupByClientAndProject.Client.Code);
                             }
 
                             if (groupByClientAndProject.ProjectTotalHoursList == null)
@@ -215,3 +215,4 @@ namespace DataTransferObjects.Utils
         }
     }
 }
+
