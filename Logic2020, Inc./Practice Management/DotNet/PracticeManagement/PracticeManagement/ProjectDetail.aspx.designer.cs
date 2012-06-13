@@ -211,6 +211,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSalesperson;
         
         /// <summary>
+        /// imgMailToSalesperson control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgMailToSalesperson;
+        
+        /// <summary>
         /// ddlDirector control.
         /// </summary>
         /// <remarks>
@@ -218,6 +227,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlDirector;
+        
+        /// <summary>
+        /// imgMailToClientDirector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgMailToClientDirector;
         
         /// <summary>
         /// ddlProjectGroup control.
@@ -290,6 +308,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator cvProjectOwner;
+        
+        /// <summary>
+        /// imgMailToProjectOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgMailToProjectOwner;
         
         /// <summary>
         /// ddlPractice control.
