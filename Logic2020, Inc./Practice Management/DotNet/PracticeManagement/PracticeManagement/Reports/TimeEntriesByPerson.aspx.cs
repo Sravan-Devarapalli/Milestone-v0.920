@@ -22,7 +22,7 @@ using System.Text.RegularExpressions;
 
 namespace PraticeManagement.Sandbox
 {
-    public partial class TimeEntriesByPerson : PracticeManagementPageBase
+    public partial class TimeEntriesByPerson : Page
     {
         #region Fields
 
@@ -30,7 +30,6 @@ namespace PraticeManagement.Sandbox
         protected double GrandTotal;
         protected double ProjectTotals;
         protected int ColspanForTotals;
-        private int calendarPersonId;
 
         #endregion
 
@@ -141,10 +140,7 @@ namespace PraticeManagement.Sandbox
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Response.AppendHeader("Content-Encoding", "gzip");
-            //Response.Filter = new GZipStream(Response.Filter, CompressionMode.Compress);
-
-
+           
             hdnUpdateClicked.Value = "false";
 
             TextBox fromDate = diRange.FindControl("tbFrom") as TextBox;
@@ -213,20 +209,6 @@ namespace PraticeManagement.Sandbox
                 statusList = "-1";
             return statusList;
         }
-
-        protected override void Display()
-        {
-            //Utils.Generic.InitStartEndDate(diRange);
-        }
-
-        protected void wsChoose_WeekChanged(object sender, WeekChangedEventArgs args)
-        {
-        }
-
-        protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
-        {
-        }
-
 
 
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
