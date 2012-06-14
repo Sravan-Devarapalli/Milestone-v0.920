@@ -34,7 +34,7 @@ namespace PraticeManagement.Controls.MilestonePersons
                     foreach (var te in tes)
                     {
                         var entryRecord = te;
-                        var index = points.FindIndex(obj => obj.Date == entryRecord.MilestoneDate);
+                        var index = points.FindIndex(obj => obj.Date == entryRecord.ChargeCodeDate);
 
                         if (index < 0)
                         {
@@ -64,3 +64,4 @@ namespace PraticeManagement.Controls.MilestonePersons
         }
     }
 }
+
