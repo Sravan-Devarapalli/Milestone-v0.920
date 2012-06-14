@@ -69,7 +69,7 @@ namespace DataTransferObjects.Utils
             foreach (var etnry in groupedTimeEtnries)
                 foreach (var record in etnry.Value)
                 {
-                    var date = record.MilestoneDate;
+                    var date = record.ChargeCodeDate;
                     var hours = record.ActualHours;
 
                     try
