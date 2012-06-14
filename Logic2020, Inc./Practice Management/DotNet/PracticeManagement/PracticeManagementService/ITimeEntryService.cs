@@ -45,23 +45,14 @@ namespace PracticeManagementService
         [OperationContract]
         TimeEntryRecord[] GetTimeEntriesForPerson(Person person, DateTime startDate, DateTime endDate);
 
+        [OperationContract]
+        PersonTimeEntries GetTimeEntriesPerson(TimeEntryPersonReportContext reportContext);
         /// <summary>
         /// Get time entries by project grouped by person
         /// </summary>
         [OperationContract]
         GroupedTimeEntries<Person> GetTimeEntriesProject(TimeEntryProjectReportContext reportContext);
 
-        /// <summary>
-        /// Get time entries by project grouped by person
-        /// </summary>
-        [OperationContract]
-        GroupedTimeEntries<TimeEntryHours> GetTimeEntriesProjectCumulative(TimeEntryPersonReportContext reportContext);
-
-        /// <summary>
-        /// Get time entries by project grouped by person
-        /// </summary>
-        [OperationContract]
-        GroupedTimeEntries<Project> GetTimeEntriesPerson(TimeEntryPersonReportContext reportContext);
 
         /// <summary>
         /// Get milestones by person for given time period
