@@ -1,71 +1,81 @@
 ﻿CREATE PROCEDURE [dbo].[TimeEntriesGetByManyPersons]
-	@PersonIds	NVARCHAR(MAX),
+(
+	@PersonId	INT,
 	@StartDate	DATETIME = NULL,
 	@EndDate	DATETIME = NULL,
 	@TimescaleIds NVARCHAR(4000)= NULL,
 	@PracticeIds  NVARCHAR(MAX)
-	
+)	
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	
-	-- Convert project owner ids from string to table
-	DECLARE @PersonList table (Id int)
-	insert into @PersonList
-	select * FROM dbo.ConvertStringListIntoTable(@PersonIds)
-	
 	--@TimescaleIds is null means all timescales.
 	IF @TimescaleIds IS NOT NULL
 	BEGIN
 		DECLARE @TimescaleIdList TABLE (Id INT)
 		INSERT INTO @TimescaleIdList
-		select * FROM dbo.ConvertStringListIntoTable(@TimescaleIds)
+		SELECT * FROM dbo.ConvertStringListIntoTable(@TimescaleIds)
 	END
 	
-	declare @PracticeIdsList table (Id int)
-	insert into @PracticeIdsList
-	select * FROM dbo.ConvertStringListIntoTable(@PracticeIds)
+	DECLARE @PracticeIdsList table (Id int)
+	INSERT INTO @PracticeIdsList
+	SELECT * FROM dbo.ConvertStringListIntoTable(@PracticeIds)
 	
 	;WITH PersonsFilteredByPersonIdsAndPayIds AS
 	(
-		SELECT Distinct P.PersonId
-						, P.FirstName
-						, P.LastName
+		SELECT P.PersonId
 		FROM Person P
-		JOIN @PersonList PL ON PL.Id = P.PersonId
-		LEFT JOIN Pay pa ON pa.Person = P.PersonId AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, dbo.GetFutureDate()) -1) >= @StartDate
+		LEFT JOIN dbo.Pay pa ON pa.Person = P.PersonId AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, dbo.GetFutureDate()) -1) >= @StartDate
 		WHERE (@TimescaleIds IS NULL OR pa.Timescale IN (SELECT Id FROM @TimescaleIdList)) 
-		      AND (@PracticeIds IS NULL) OR ISNULL(pa.PracticeId,P.DefaultPractice) IN (SELECT Id FROM @PracticeIdsList)
+		      AND ((@PracticeIds IS NULL) OR ISNULL(pa.PracticeId,P.DefaultPractice) IN (SELECT Id FROM @PracticeIdsList)) 
+			  AND (P.PersonId = @PersonId)
 	)
+	SELECT PROJ.ProjectNumber,
+		   PROJ.Name ProjectName,
+		   C.Name ClientName,
+		   TT.Name TimeTypeName,
+		   PG.Name AS GroupName,
+		   TE.Note ,
+		   TE.ChargeCodeDate,
+		 ROUND(SUM(CASE
+					WHEN TEH.IsChargeable = 1 AND PROJ.ProjectNumber != 'P031000' THEN
+						TEH.ActualHours
+					ELSE
+						0
+				END), 2) AS [BillableHours],
+		 ROUND(SUM(CASE
+					WHEN TEH.IsChargeable = 0 OR PROJ.ProjectNumber = 'P031000' THEN
+						TEH.ActualHours
+					ELSE
+						0
+				END), 2) AS [NonBillableHours] ,
+		   TE.ChargeCodeId
+	FROM PersonsFilteredByPersonIdsAndPayIds P
+	INNER JOIN dbo.TimeEntry TE ON TE.PersonId = P.PersonId
+									AND TE.ChargeCodeDate BETWEEN ISNULL(@StartDate, te.ChargeCodeDate) and ISNULL(@EndDate, te.ChargeCodeDate)
+    INNER JOIN dbo.TimeEntryHours AS TEH ON TE.TimeEntryId = TEH.TimeEntryId
+	INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TE.ChargeCodeId				
+	INNER JOIN dbo.Project AS PROJ ON PROJ.ProjectId = CC.ProjectId
+	INNER JOIN dbo.Client AS C ON C.ClientId = CC.ClientId
+	INNER JOIN dbo.TimeType AS TT ON TT.TimeTypeId = CC.TimeTypeId
+	INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = CC.ProjectGroupId
+	GROUP BY TE.ChargeCodeDate,
+			 TE.ChargeCodeId,
+		     PROJ.ProjectNumber,
+		     PROJ.Name,
+		     C.Name,
+		     TT.Name,
+		     TE.Note,
+			 PG.Name
+	ORDER BY PROJ.ProjectNumber, TE.ChargeCodeDate
 
-	SELECT DISTINCT p.PersonId,
-		   p.FirstName ObjectFirstName,
-		   p.LastName ObjectLastName,
-		   proj.ProjectId,
-		   proj.ProjectNumber,
-		   proj.Name ProjectName,
-		   c.Name ClientName,
-		   tt.Name TimeTypeName,
-		   te.Note ,
-		   te.MilestoneDate,
-		   te.ActualHours,
-		   mp.MilestonePersonId
-	FROM PersonsFilteredByPersonIdsAndPayIds p
-	JOIN dbo.MilestonePerson mp on mp.PersonId = p.PersonId
-	JOIN dbo.MilestonePersonEntry mpe on mpe.MilestonePersonId = mp.MilestonePersonId
-	JOIN dbo.Milestone m on m.MilestoneId = mp.MilestoneId
-	JOIN dbo.Project proj on proj.ProjectId = m.ProjectId
-	JOIN dbo.Client c on proj.ClientId = c.ClientId
-	JOIN dbo.TimeEntries te on te.MilestonePersonId = mp.MilestonePersonId
-									and te.MilestoneDate BETWEEN ISNULL(@StartDate, te.MilestoneDate) and ISNULL(@EndDate, te.MilestoneDate)
-	LEFT JOIN dbo.TimeType tt on tt.TimeTypeId = te.TimeTypeId
-	WHERE (ISNULL(@StartDate,Mpe.StartDate) >= mpe.StartDate AND ISNULL(@EndDate,mpe.EndDate) <= mpe.EndDate
-			OR ISNULL(@StartDate,Mpe.StartDate - 1) < mpe.StartDate AND ISNULL(@EndDate,mpe.StartDate) >= mpe.StartDate
-			OR ISNULL(@StartDate,Mpe.EndDate) <= mpe.EndDate AND ISNULL(@EndDate,mpe.EndDate + 1) >= mpe.EndDate
-			)
-		AND (te.TimeEntryId is Not null or proj.ProjectStatusId = 3) --For getting only active projects or there are timeentries for projects.
-	ORDER BY proj.ProjectId, te.MilestoneDate
+	SELECT P.FirstName,
+		   P.LastName
+	FROM dbo.Person AS P
+	WHERE (P.PersonId = @PersonId)
 	 
 END
+
