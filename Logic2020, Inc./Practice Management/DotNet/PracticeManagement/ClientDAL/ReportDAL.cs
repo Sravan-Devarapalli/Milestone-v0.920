@@ -1459,7 +1459,7 @@ namespace DataAccess
                             },
                             TimeEntrySection = (TimeEntrySectionType)reader.GetInt32(timeEntrySectionIdIndex)
                         },
-                        MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
+                        ChargeCodeDate = reader.GetDateTime(chargeCodeDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
                         ActualHours = Convert.ToDouble(reader[actualHoursIndex]),
                         Note = reader.GetString(noteIndex),
@@ -1570,7 +1570,7 @@ namespace DataAccess
                             },
                             TimeEntrySection = (TimeEntrySectionType)reader.GetInt32(timeEntrySectionIdIndex)
                         },
-                        MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
+                        ChargeCodeDate = reader.GetDateTime(chargeCodeDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
                         ActualHours = Convert.ToDouble(reader[actualHoursIndex]),
                         Note = reader.GetString(noteIndex),
