@@ -102,6 +102,9 @@ namespace DataTransferObjects
     public enum TimeEntrySectionType
     {
         [EnumMember]
+        [Description("Undefined")]
+        Undefined = 0,
+        [EnumMember]
         [Description("Project")] 
         Project = 1,
         [EnumMember]
