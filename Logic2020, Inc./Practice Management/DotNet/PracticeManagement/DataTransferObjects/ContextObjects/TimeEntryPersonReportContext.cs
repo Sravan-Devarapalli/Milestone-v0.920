@@ -12,15 +12,18 @@ namespace DataTransferObjects.ContextObjects
     public class TimeEntryPersonReportContext
     {
         [DataMember]
-        public IEnumerable<int> PersonIds { get; set; }
+        public int PersonId { get; set; }
         [DataMember]
         public DateTime? StartDate { get; set; }
         [DataMember]
         public DateTime? EndDate { get; set; }
         [DataMember]
-        public IEnumerable<int> PayTypeIds { get; set; }
+        public List<int> PayTypeIds { get; set; }
         [DataMember]
-        public IEnumerable<int> PracticeIds { get; set; }
+        public List<int> PracticeIds { get; set; }
+        [DataMember]
+        public List<int> PersonIds { get; set; }
 
     }
 }
+
