@@ -7,7 +7,7 @@
     <ItemTemplate>
         <div id="divPersonListSummary" runat="server">
             <div runat="server" id="divPersonName" class="divPersonName">
-                <%# Eval("PersonName") %>
+                <%# Eval("Person.Name") %>
             </div>
             <div class="PersonGridLeftPadding divTeTable" runat="server" id="divTeTable">
                 <div class="TimeEntrySummary">
@@ -45,7 +45,12 @@
                                 EnableViewState="false" OnItemDataBound="dlProject_OnItemDataBound">
                                 <ItemTemplate>
                                     <td>
-                                        <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null ? string.Format("{0:F2}",((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).ActualHours) : string.Empty%>
+                                        <p style="color: #3BA153;">
+                                            <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null && ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).BillableHours != 0  ? " B - " + string.Format("{0:F2}", ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).BillableHours) : string.Empty%>
+                                        </p>
+                                        <p style="color: Gray;">
+                                            <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null && ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).NonBillableHours != 0 ? "NB - " + string.Format("{0:F2}", ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).NonBillableHours) : string.Empty%>
+                                        </p>
                                     </td>
                                 </ItemTemplate>
                             </asp:Repeater>
@@ -96,7 +101,7 @@
                                             Date</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <%# ((TimeEntryRecord)Container.DataItem).MilestoneDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
+                                        <%# ((TimeEntryRecord)Container.DataItem).ChargeCodeDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                                     </ItemTemplate>
                                     <ItemStyle Width="8%" />
                                 </asp:TemplateField>
@@ -108,7 +113,7 @@
                                     <ItemTemplate>
                                         <%# Eval("Note") %>
                                     </ItemTemplate>
-                                    <ItemStyle Width="60%" />
+                                    <ItemStyle Width="55%" />
                                 </asp:TemplateField>
                                 <asp:TemplateField FooterStyle-CssClass="AlignRight">
                                     <HeaderTemplate>
@@ -131,10 +136,14 @@
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <div class="TextAlignCenter">
-                                            <%#((TimeEntryRecord)Container.DataItem).ActualHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
+                                            <span style="color: #3BA153;">B -
+                                                <%#((TimeEntryRecord)Container.DataItem).BillableHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
+                                            </span>&nbsp;&nbsp;<span style="color: Gray;">NB -
+                                                <%#((TimeEntryRecord)Container.DataItem).NonBillableHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
+                                            </span>
                                         </div>
                                     </ItemTemplate>
-                                    <ItemStyle Width="8%" />
+                                    <ItemStyle Width="13%" />
                                     <FooterTemplate>
                                         <div class="ie-bg TextAlignCenter">
                                             <asp:Label ID="lblGvGridTotal" runat="server" Font-Bold="true"></asp:Label></div>
@@ -147,7 +156,7 @@
             </div>
             <div id="divPersonNotEntered" runat="server" class="PersonGridLeftPadding">
                 &nbsp;
-                <asp:Literal ID="lblnoDataMesssage" runat="server" Text="This person has not entered any time for the period selected." 
+                <asp:Literal ID="lblnoDataMesssage" runat="server" Text="This person has not entered any time for the period selected."
                     Visible="false"></asp:Literal>
             </div>
         </div>
