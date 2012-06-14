@@ -11,7 +11,7 @@ namespace DataTransferObjects.TimeEntry
     /// </summary>
     [DataContract]
     [Serializable]
-    [DebuggerDisplay("TimeEntry: Date={MilestoneDate}, Actl={ActualHours}, Frcst={ForecastedHours}")]
+    [DebuggerDisplay("TimeEntry: Date={ChargeCodeDate}, Actl={ActualHours}, Frcst={ForecastedHours}")]
     public class TimeEntryRecord : IComparable<TimeEntryRecord>
     {
         #region Constants
@@ -35,7 +35,7 @@ namespace DataTransferObjects.TimeEntry
         /// ChargeCodeDate
         /// </summary>
         [DataMember]
-        public DateTime MilestoneDate { get; set; }
+        public DateTime ChargeCodeDate { get; set; }
 
         /// <summary>
         /// Date when the user had entered this time entry
@@ -145,12 +145,22 @@ namespace DataTransferObjects.TimeEntry
         /// <param name="other">An object to compare with this object.</param>
         public int CompareTo(TimeEntryRecord other)
         {
-            return MilestoneDate.CompareTo(other.MilestoneDate);
+            return ChargeCodeDate.CompareTo(other.ChargeCodeDate);
         }
 
         #endregion
 
 
+        [DataMember]
+        public double BillableHours { get; set; }
+
+        [DataMember]
+        public double NonBillableHours { get; set; }
+
+        public double TotalHours { get { return BillableHours + NonBillableHours; } }
+
+        [DataMember]
+        public Person Person { get; set; }
     }
 }
 
