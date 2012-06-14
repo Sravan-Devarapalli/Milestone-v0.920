@@ -83,22 +83,7 @@ namespace PracticeManagementService
             }
         }
 
-        public GroupedTimeEntries<TimeEntryHours> GetTimeEntriesProjectCumulative(TimeEntryPersonReportContext reportContext)
-        {
-            try
-            {
-                return TimeEntryDAL.GetTimeEntriesByProjectCumulative(reportContext);
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetTimeEntriesProjectCumulative", "TimeEntryService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-        }
-
-        public GroupedTimeEntries<Project> GetTimeEntriesPerson(TimeEntryPersonReportContext reportContext)
+        public PersonTimeEntries GetTimeEntriesPerson(TimeEntryPersonReportContext reportContext)
         {
             try
             {
@@ -112,6 +97,8 @@ namespace PracticeManagementService
                 throw e;
             }
         }
+
+
 
         /// <summary>
         /// Get milestones by person for given time period
