@@ -18,17 +18,44 @@ namespace DataTransferObjects.TimeEntry
             get
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append(Client.Name);
+
+                if (Client != null)
+                {
+                    sb.Append(Client.Name);
+                }
+
                 sb.Append(seperator);
-                sb.Append(ProjectGroup.Name);
+
+                if (ProjectGroup != null)
+                {
+                    sb.Append(ProjectGroup.Name);
+                }
                 sb.Append(seperator);
-                sb.Append(Project.ProjectNumber);
+
+                if (Project != null)
+                {
+                    sb.Append(Project.ProjectNumber);
+                }
                 sb.Append(seperator);
-                sb.Append(Project.Name);
+
+                if (Project != null)
+                {
+                    sb.Append(Project.Name);
+                }
+
+             
                 sb.Append(seperator);
-                sb.Append("Phase"+Phase);
-                sb.Append(seperator);
-                sb.Append(TimeType.Name);
+
+                if (Phase != 0)
+                {
+                    sb.Append("Phase" + Phase);
+                    sb.Append(seperator);
+                }
+
+                if (TimeType != null)
+                {
+                    sb.Append(TimeType.Name);
+                }
 
                 return sb.ToString();
 
