@@ -126,7 +126,7 @@ namespace PraticeManagement.Controls.Reports
                                 sb.Append("\t");
                                 sb.Append(personLevelTimeEntrie.Person.CurrentPay != null ? personLevelTimeEntrie.Person.CurrentPay.TimescaleName : string.Empty);
                                 sb.Append("\t");
-                                sb.Append(timeEntryRecord.MilestoneDate.ToString("MM/dd/yyyy"));
+                                sb.Append(timeEntryRecord.ChargeCodeDate.ToString("MM/dd/yyyy"));
                                 sb.Append("\t");
                                 sb.Append(timeEntryRecord.ModifiedDate.ToString("MM/dd/yyyy"));
                                 sb.Append("\t");
@@ -194,3 +194,4 @@ namespace PraticeManagement.Controls.Reports
 
     }
 }
+
