@@ -12,14 +12,14 @@
             <div class="PersonGridLeftPadding divTeTable" runat="server" id="divTeTable">
                 <div class="TimeEntrySummary">
                     Time Entry Summary</div>
-                <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# GetModifiedDatasource(DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries")) %>'
+                <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries") %>'
                     OnItemDataBound="repTeTable_OnItemDataBound" EnableViewState="false" OnItemCreated="repTeTable_OnItemCreated">
                     <HeaderTemplate>
                         <table class="time-entry-person-projects WholeWidth">
                             <thead>
                                 <tr>
                                     <th class="ClientProjectTimeType">
-                                        Account-Project-Work Type
+                                        Account - Business Unit - P# - Project Name  - Work Type
                                     </th>
                                     <asp:Repeater ID="dlProject" runat="server" OnItemCreated="dlProject_OnItemCreated"
                                         EnableViewState="false" OnInit="dlProject_OnInit">
@@ -39,14 +39,14 @@
                     <ItemTemplate>
                         <tr class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
                             <td class="ClientProjectTimeType">
-                                <%# DataBinder.Eval(Container.DataItem, "Key")%>
+                                <%# DataBinder.Eval(Container.DataItem, "Key.ChargeCodeName")%>
                             </td>
                             <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
                                 EnableViewState="false" OnItemDataBound="dlProject_OnItemDataBound">
                                 <ItemTemplate>
                                     <td>
                                         <p style="color: #3BA153;">
-                                            <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null && ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).BillableHours != 0  ? " B - " + string.Format("{0:F2}", ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).BillableHours) : string.Empty%>
+                                            <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null && ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).BillableHours != 0  ? "&nbsp;B - " + string.Format("{0:F2}", ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).BillableHours) : string.Empty%>
                                         </p>
                                         <p style="color: Gray;">
                                             <%#  ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")) != null && ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).NonBillableHours != 0 ? "NB - " + string.Format("{0:F2}", ((TimeEntryRecord)DataBinder.Eval(Container.DataItem, "Value")).NonBillableHours) : string.Empty%>
@@ -87,10 +87,10 @@
                     EnableViewState="false" OnItemDataBound="dlProjects_OnItemDataBound">
                     <ItemTemplate>
                         <div class="ClientAndProjectName">
-                            <%# Eval("Key.Client.Name") + " - " + Eval("Key.Name")%>
+                            <%# DataBinder.Eval(Container.DataItem, "Key.ChargeCodeName")%>
                         </div>
                         <asp:GridView ID="gvTimeEntries" runat="server" AutoGenerateColumns="False" DataSource='<%# Eval("Value") %>'
-                            EnableViewState="false" EnableModelValidation="True" CssClass="CompPerfTable WholeWidth"
+                            EnableViewState="false" EnableModelValidation="True" CssClass="CompPerfTable WholeWidth PaddingClass"
                             GridLines="Both" ShowFooter="true" OnRowDataBound="gvTimeEntries_OnRowDataBound"
                             BackColor="White" EmptyDataText="This person has not entered any time for the period selected.">
                             <AlternatingRowStyle BackColor="#F9FAFF" />
@@ -121,7 +121,7 @@
                                             Work Type</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <%#((TimeEntryRecord)Container.DataItem).TimeType.Name %>
+                                        <%#((TimeEntryRecord)Container.DataItem).ChargeCode.TimeType.Name %>
                                     </ItemTemplate>
                                     <ItemStyle Width="24%" />
                                     <FooterTemplate>
@@ -135,7 +135,7 @@
                                             Hours</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <div class="TextAlignCenter">
+                                        <div class="TextAlignRight">
                                             <span style="color: #3BA153;">B -
                                                 <%#((TimeEntryRecord)Container.DataItem).BillableHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%>
                                             </span>&nbsp;&nbsp;<span style="color: Gray;">NB -
@@ -145,7 +145,7 @@
                                     </ItemTemplate>
                                     <ItemStyle Width="13%" />
                                     <FooterTemplate>
-                                        <div class="ie-bg TextAlignCenter">
+                                        <div class="TextAlignRight">
                                             <asp:Label ID="lblGvGridTotal" runat="server" Font-Bold="true"></asp:Label></div>
                                     </FooterTemplate>
                                 </asp:TemplateField>
