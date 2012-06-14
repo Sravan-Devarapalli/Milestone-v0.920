@@ -207,28 +207,6 @@ namespace DataAccess
             }
         }
 
-        /// <summary>
-        /// Get milestones by person for given time period
-        /// </summary>
-        public static GroupedTimeEntries<TimeEntryHours> GetTimeEntriesByProjectCumulative(TimeEntryPersonReportContext reportContext)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntryHoursByManyPersonsProject, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
-                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id));
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, reportContext.PayTypeIds != null ? (object)DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PayTypeIds, id => id) : DBNull.Value);
-
-                connection.Open();
-
-                using (var reader = command.ExecuteReader())
-                    return ReadTimeEntryHours(reader);
-            }
-        }
 
         public static bool CheckPersonTimeEntriesAfterTerminationDate(int personId, DateTime terminationDate)
         {
@@ -249,15 +227,15 @@ namespace DataAccess
         /// <summary>
         /// Get milestones by person for given time period
         /// </summary>
-        public static GroupedTimeEntries<Project> GetTimeEntriesByPerson(TimeEntryPersonReportContext reportContext)
+        public static PersonTimeEntries GetTimeEntriesByPerson(TimeEntryPersonReportContext reportContext)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntriesGetByManyPersons, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntriesGetByPersons, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, reportContext.PersonId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, reportContext.StartDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, reportContext.EndDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, reportContext.PracticeIds != null ? (object)DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PracticeIds, id => id) : DBNull.Value);
@@ -265,8 +243,32 @@ namespace DataAccess
 
                 connection.Open();
 
-                using (var reader = command.ExecuteReader())
-                    return ReadMilestoneTimeEntryPersonProject(reader);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = ReadTimeEntryByPerson(reader);
+
+                    reader.NextResult();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                            var lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+
+                            var person = new Person()
+                            {
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex),
+                                Id = reportContext.PersonId
+                            };
+
+                            result.Person = person;
+                        }
+                    }
+
+                    return result;
+                }
             }
         }
 
@@ -336,16 +338,49 @@ namespace DataAccess
             };
         }
 
-        private static GroupedTimeEntries<Project> ReadMilestoneTimeEntryPersonProject(SqlDataReader reader)
+        private static PersonTimeEntries ReadTimeEntryByPerson(SqlDataReader reader)
         {
-            var result = new GroupedTimeEntries<Project>();
+            var result = new PersonTimeEntries();
 
             if (reader.HasRows)
                 while (reader.Read())
                 {
-                    var project = ReadProject(reader);
-                    project.Client = new Client { Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn)) };
-                    result.AddTimeEntry(project, ReadTimeEntryShort(reader));
+                    var timeTypeNameIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeName);
+                    int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
+
+                    var project = new Project
+                    {
+                        Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectName)),
+                        ProjectNumber = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectNumber))
+                    };
+
+                    var client = new Client
+                    {
+                        Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ClientName))
+                    };
+
+                    var projectGroup = new ProjectGroup()
+                    {
+                        Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn))
+                    };
+
+                    var timeType = new TimeTypeRecord { Name = reader.GetString(timeTypeNameIndex) };
+
+                    var chargeCode = new ChargeCode()
+                    {
+                        ChargeCodeId = reader.GetInt32(chargeCodeIdIndex),
+                        Project = project,
+                        Client = client,
+                        ProjectGroup = projectGroup,
+                        TimeType = timeType
+                    };
+
+                    var ter = ReadTimeEntryShort(reader);
+
+                    ter.ChargeCode = chargeCode;
+
+                    result.AddTimeEntry(ter);
+
                 }
 
             return result;
@@ -705,7 +740,7 @@ namespace DataAccess
                 Id = reader.GetInt32(teIdIndex),
                 Note = reader.GetString(noteIndex),
                 EntryDate = reader.GetDateTime(entryDateIndex),
-                MilestoneDate = reader.GetDateTime(milestoneDateIndex),
+                ChargeCodeDate = reader.GetDateTime(milestoneDateIndex),
                 TimeType = timeType,
                 ActualHours = reader.GetFloat(actualHrsIndex),
                 ForecastedHours = reader.GetFloat(forecastedHrsIndex),
@@ -726,36 +761,22 @@ namespace DataAccess
         private static TimeEntryRecord ReadTimeEntryShort(SqlDataReader reader)
         {
             var noteIndex = reader.GetOrdinal(Constants.ParameterNames.Note);
-            var timeTypeNameIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeName);
-            var milestoneDateIndex = reader.GetOrdinal(Constants.ParameterNames.MilestoneDate);
-            var actualHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ActualHours);
-            var milestonePersonIdIndex = reader.GetOrdinal(Constants.ParameterNames.MilestonePersonId);
-            var firstNameIndex = reader.GetOrdinal(Constants.ParameterNames.ObjectFirstName);
-            var lastNameIndex = reader.GetOrdinal(Constants.ParameterNames.ObjectLastName);
-            var personIdIndex = reader.GetOrdinal(Constants.ParameterNames.PersonId);
+            var chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+            int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+            int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+
+
 
             var timeEntry = new TimeEntryRecord();
             timeEntry.Note = reader.IsDBNull(noteIndex) ? string.Empty : reader.GetString(noteIndex);
-            if (!reader.IsDBNull(noteIndex))
-            {
-                timeEntry.MilestoneDate = reader.GetDateTime(milestoneDateIndex);
-            }
-            timeEntry.TimeType = new TimeTypeRecord { Name = reader.IsDBNull(noteIndex) ? string.Empty : reader.GetString(timeTypeNameIndex) };
+            timeEntry.ChargeCodeDate = reader.GetDateTime(chargeCodeDateIndex);
 
-            if (!reader.IsDBNull(actualHrsIndex))
-            {
-                timeEntry.ActualHours = reader.GetFloat(actualHrsIndex);
-            }
 
-            timeEntry.ParentMilestonePersonEntry = new MilestonePersonEntry(reader.GetInt32(milestonePersonIdIndex))
-            {
-                ThisPerson = new Person()
-                {
-                    FirstName = reader.GetString(firstNameIndex),
-                    LastName = reader.GetString(lastNameIndex),
-                    Id = reader.GetInt32(personIdIndex)
-                }
-            };
+
+
+            timeEntry.BillableHours = reader.GetDouble(billableHoursIndex);
+            timeEntry.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
+
 
             return timeEntry;
         }
@@ -768,7 +789,7 @@ namespace DataAccess
             var personIdIndex = reader.GetOrdinal(Constants.ParameterNames.PersonId);
             var timeEntry = new TimeEntryRecord
             {
-                MilestoneDate = reader.GetDateTime(milestoneDateIndex),
+                ChargeCodeDate = reader.GetDateTime(milestoneDateIndex),
                 ActualHours = reader.GetDouble(actualHrsIndex),
                 ParentMilestonePersonEntry = new MilestonePersonEntry() { ThisPerson = new Person() { Id = reader.GetInt32(personIdIndex) } }
                 // TimeType = new TimeTypeRecord { Name = reader.GetString(timetypeIndex) }
@@ -842,7 +863,7 @@ namespace DataAccess
             return projectStatus;
         }
 
-        private static Project ReadProject(DbDataReader reader)
+        private static Project ReadProject(DbDataReader reader, bool isReadClientId = true)
         {
             var project = new Project
             {
@@ -850,6 +871,15 @@ namespace DataAccess
                 Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectName)),
                 ProjectNumber = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectNumber))
             };
+
+            if (isReadClientId)
+                ReadClientId(project, reader);
+
+            return project;
+        }
+
+        private static void ReadClientId(Project project, DbDataReader reader)
+        {
             try
             {
 
@@ -858,7 +888,6 @@ namespace DataAccess
             catch
             {
             }
-            return project;
         }
 
         private static Person ReadObjectPerson(DbDataReader reader)
@@ -966,7 +995,7 @@ namespace DataAccess
 
         }
 
-        public static Dictionary<DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId,int clientId,int groupId,int projectId,int timeTypeId, DateTime startDate, DateTime endDate)
+        public static Dictionary<DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId, int clientId, int groupId, int projectId, int timeTypeId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -989,7 +1018,7 @@ namespace DataAccess
                         {
                             var chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
                             var isChargeCodeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsChargeCodeOffColumn);
- 
+
                             while (reader.Read())
                             {
                                 DateTime key = reader.GetDateTime(chargeCodeDateIndex);
@@ -1181,7 +1210,7 @@ namespace DataAccess
                 int isHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsHolidayColumn);
                 int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTColumn);
                 int isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidColoumn);
-                
+
 
                 while (reader.Read())
                 {
@@ -1197,10 +1226,10 @@ namespace DataAccess
                     }
                 }
             }
-           
+
         }
 
-            
+
 
         public static void ReadTimeEntriesSections(SqlDataReader reader, List<TimeEntrySection> timeEntrySections, List<TimeEntryRecord> timeEntries)
         {
@@ -1317,7 +1346,7 @@ namespace DataAccess
                         ChargeCodeId = reader.GetInt32(chargeCodeIdIndex),
                         Note = reader.GetString(noteIndex),
                         EntryDate = reader.GetDateTime(createDateIndex),
-                        MilestoneDate = reader.GetDateTime(chargeCodeDateIndex),
+                        ChargeCodeDate = reader.GetDateTime(chargeCodeDateIndex),
                         TimeType = timeType,
                         ActualHours = reader.GetFloat(actualHrsIndex),
                         ForecastedHours = reader.GetFloat(forecastedHrsIndex),
