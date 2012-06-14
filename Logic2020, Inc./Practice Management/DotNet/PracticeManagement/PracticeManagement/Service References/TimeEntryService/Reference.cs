@@ -58,96 +58,6 @@ namespace PraticeManagement.TimeEntryService {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TimeEntriesGroupedByTimeEntryHours", Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects")]
-    [System.SerializableAttribute()]
-    public partial class TimeEntriesGroupedByTimeEntryHours : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<DataTransferObjects.TimeEntry.TimeEntryHours, DataTransferObjects.TimeEntry.TimeEntryRecord[]> _groupedTimeEtnriesField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<DataTransferObjects.TimeEntry.TimeEntryHours, DataTransferObjects.TimeEntry.TimeEntryRecord[]> _groupedTimeEtnries {
-            get {
-                return this._groupedTimeEtnriesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this._groupedTimeEtnriesField, value) != true)) {
-                    this._groupedTimeEtnriesField = value;
-                    this.RaisePropertyChanged("_groupedTimeEtnries");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TimeEntriesGroupedByProject", Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects")]
-    [System.SerializableAttribute()]
-    public partial class TimeEntriesGroupedByProject : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<DataTransferObjects.Project, DataTransferObjects.TimeEntry.TimeEntryRecord[]> _groupedTimeEtnriesField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<DataTransferObjects.Project, DataTransferObjects.TimeEntry.TimeEntryRecord[]> _groupedTimeEtnries {
-            get {
-                return this._groupedTimeEtnriesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this._groupedTimeEtnriesField, value) != true)) {
-                    this._groupedTimeEtnriesField = value;
-                    this.RaisePropertyChanged("_groupedTimeEtnries");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TimeEntryService.ITimeEntryService")]
     public interface ITimeEntryService {
@@ -164,14 +74,11 @@ namespace PraticeManagement.TimeEntryService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPerson", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPersonResponse")]
         DataTransferObjects.TimeEntry.TimeEntryRecord[] GetTimeEntriesForPerson(DataTransferObjects.Person person, System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesPerson", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesPersonResponse")]
+        DataTransferObjects.CompositeObjects.PersonTimeEntries GetTimeEntriesPerson(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProject", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectResponse")]
         PraticeManagement.TimeEntryService.TimeEntriesGroupedByPerson GetTimeEntriesProject(DataTransferObjects.ContextObjects.TimeEntryProjectReportContext reportContext);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectCumulative", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectCumulativeResponse")]
-        PraticeManagement.TimeEntryService.TimeEntriesGroupedByTimeEntryHours GetTimeEntriesProjectCumulative(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesPerson", ReplyAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesPersonResponse")]
-        PraticeManagement.TimeEntryService.TimeEntriesGroupedByProject GetTimeEntriesPerson(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetCurrentMilestones", ReplyAction="http://tempuri.org/ITimeEntryService/GetCurrentMilestonesResponse")]
         DataTransferObjects.MilestonePersonEntry[] GetCurrentMilestones(DataTransferObjects.Person person, System.DateTime startDate, System.DateTime endDate, int defaultMilestoneId);
@@ -239,7 +146,7 @@ namespace PraticeManagement.TimeEntryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
-        
+       
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -272,16 +179,12 @@ namespace PraticeManagement.TimeEntryService {
             return base.Channel.GetTimeEntriesForPerson(person, startDate, endDate);
         }
         
+        public DataTransferObjects.CompositeObjects.PersonTimeEntries GetTimeEntriesPerson(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext) {
+            return base.Channel.GetTimeEntriesPerson(reportContext);
+        }
+        
         public PraticeManagement.TimeEntryService.TimeEntriesGroupedByPerson GetTimeEntriesProject(DataTransferObjects.ContextObjects.TimeEntryProjectReportContext reportContext) {
             return base.Channel.GetTimeEntriesProject(reportContext);
-        }
-        
-        public PraticeManagement.TimeEntryService.TimeEntriesGroupedByTimeEntryHours GetTimeEntriesProjectCumulative(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext) {
-            return base.Channel.GetTimeEntriesProjectCumulative(reportContext);
-        }
-        
-        public PraticeManagement.TimeEntryService.TimeEntriesGroupedByProject GetTimeEntriesPerson(DataTransferObjects.ContextObjects.TimeEntryPersonReportContext reportContext) {
-            return base.Channel.GetTimeEntriesPerson(reportContext);
         }
         
         public DataTransferObjects.MilestonePersonEntry[] GetCurrentMilestones(DataTransferObjects.Person person, System.DateTime startDate, System.DateTime endDate, int defaultMilestoneId) {
