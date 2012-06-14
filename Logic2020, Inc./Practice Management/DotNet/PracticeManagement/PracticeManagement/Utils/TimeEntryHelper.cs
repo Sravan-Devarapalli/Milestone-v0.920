@@ -306,7 +306,6 @@ namespace PraticeManagement.Utils
 
             var personTimeEntries = ServiceCallers.Custom.TimeEntry(te => te.GetTimeEntriesPerson(reportContext));
 
-            PersonTimeEntries tEGPP = null;
 
             if (!(personTimeEntries.GroupedTimeEtnries.Values.Count > 0))
             {
@@ -315,14 +314,15 @@ namespace PraticeManagement.Utils
 
                 foreach (var person in persons)
                 {
-                    tEGPP = new PersonTimeEntries
+                  return new PersonTimeEntries
                     {
                         Person = new Person() { LastName = person.LastName, FirstName = person.FirstName, Id = personId }
                     };
                 }
             }
 
-            return tEGPP;
+            return personTimeEntries;
+          
         }
        
         private static string FormCSV(IEnumerable<int> IdList)
