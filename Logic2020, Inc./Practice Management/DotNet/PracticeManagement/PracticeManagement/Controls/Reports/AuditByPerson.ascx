@@ -80,7 +80,7 @@
                 <ItemTemplate>
                     <tr style="text-align: left; background-color: #D4D0C9;">
                         <td style="text-align: left; padding-left: 5px;">
-                            <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
+                            <%# GetDateFormat((DateTime)Eval("ChargeCodeDate"))%>
                         </td>
                         <td style="text-align: left; padding-left: 10px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
@@ -142,7 +142,7 @@
                 <AlternatingItemTemplate>
                     <tr style="text-align: left; background-color: #ECE9D9;">
                          <td style="text-align: left; padding-left: 5px;">
-                            <%# GetDateFormat((DateTime)Eval("MilestoneDate"))%>
+                            <%# GetDateFormat((DateTime)Eval("ChargeCodeDate"))%>
                         </td>
                         <td style="text-align: left; padding-left: 10px;">
                             <%# GetDateFormat((DateTime)Eval("ModifiedDate"))%>
