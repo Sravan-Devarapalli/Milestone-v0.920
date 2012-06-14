@@ -62,7 +62,7 @@ namespace DataTransferObjects
         {
             return new DatePoint
                        {
-                           Date = te.MilestoneDate,
+                           Date = te.ChargeCodeDate,
                            Value = te.ActualHours
                        };
         }
@@ -88,3 +88,4 @@ namespace DataTransferObjects
         #endregion
     }
 }
+
