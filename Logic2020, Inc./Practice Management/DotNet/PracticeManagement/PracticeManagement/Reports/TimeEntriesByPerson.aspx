@@ -88,9 +88,10 @@
             padding-right: -1px;
         }
         
-        .TextAlignCenter
+        .TextAlignRight
         {
-            text-align: center;
+            text-align: right;
+            padding-right: 15px;
         }
         
         .NotVisible
@@ -98,15 +99,24 @@
             display: none;
             visibility: hidden;
         }
+        
+        table.PaddingClass td
+        {
+            padding: 3px;
+        }
+        
         table.time-entry-person-projects th
         {
             border-bottom: 1px solid gray;
             border-top: 1px solid gray;
             padding-left: 5px;
             padding-right: 5px;
+            padding-top: 3px;
+            padding-bottom: 3px;
             vertical-align: middle;
             text-align: center;
             font-weight: 700;
+            white-space: nowrap;
         }
         table.time-entry-person-projects tr
         {
@@ -120,8 +130,11 @@
             border-bottom: 1px solid lightgray;
             border-top: 1px solid lightgray;
             padding-left: 5px;
-            text-align: center;
+            text-align: right;
             padding-right: 5px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            white-space: nowrap;
         }
         
         .divPersonName
@@ -141,6 +154,8 @@
             font-style: italic;
             font-size: 16px;
             font-weight: bold;
+            padding-top: 4px;
+            padding-bottom: 4px;
         }
         .divProjects
         {
@@ -152,12 +167,15 @@
             font-style: italic;
             font-size: 16px;
             font-weight: bold;
+            padding-top: 4px;
+            padding-bottom: 4px;
         }
         .ClientAndProjectName
         {
-            padding-top: 3px;
             font-size: 14px;
             font-weight: bold;
+            padding-top: 3px;
+            padding-bottom: 3px;
         }
         .HeaderDiv
         {
@@ -181,7 +199,7 @@
         .ClientProjectTimeType
         {
             text-align: left !important;
-            width: 20%;
+            white-space: nowrap;
         }
     </style>
     <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
