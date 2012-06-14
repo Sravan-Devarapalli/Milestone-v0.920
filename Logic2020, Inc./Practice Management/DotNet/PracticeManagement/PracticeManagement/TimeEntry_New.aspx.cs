@@ -1865,7 +1865,7 @@ namespace PraticeManagement
                 var teRecords = keyVal.Value;
                 foreach (CalendarItem day in CalendarItems)
                 {
-                    var filterByDateTeRecords = teRecords != null ? teRecords.Where(ter => ter.MilestoneDate.Date == day.Date).ToList() : null;
+                    var filterByDateTeRecords = teRecords != null ? teRecords.Where(ter => ter.ChargeCodeDate.Date == day.Date).ToList() : null;
 
                     var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
 
