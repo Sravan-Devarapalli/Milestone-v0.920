@@ -263,7 +263,7 @@
                                         Date</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <%# ((TimeEntryRecord)Container.DataItem).MilestoneDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
+                                    <%# ((TimeEntryRecord)Container.DataItem).ChargeCodeDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                                 </ItemTemplate>
                                 <HeaderStyle VerticalAlign="Middle" HorizontalAlign="Center" />
                                 <ItemStyle Wrap="False" HorizontalAlign="Left" VerticalAlign="Middle" Width="100" />
