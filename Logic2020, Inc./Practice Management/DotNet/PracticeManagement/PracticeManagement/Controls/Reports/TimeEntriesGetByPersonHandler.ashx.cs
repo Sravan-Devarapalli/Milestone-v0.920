@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text.RegularExpressions;
+using DataTransferObjects.CompositeObjects;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -19,7 +20,7 @@ namespace PraticeManagement.Controls.Reports
         public void ProcessRequest(HttpContext context)
         {
 
-            var ExportToExcel = Convert.ToBoolean(context.Request.QueryString["ExportToExcel"]);
+            var exportToExcel = Convert.ToBoolean(context.Request.QueryString["ExportToExcel"]);
 
             var startDate = Convert.ToDateTime(context.Request.QueryString["StartDate"]);
             var endDate = Convert.ToDateTime(context.Request.QueryString["EndDate"]);
@@ -44,7 +45,7 @@ namespace PraticeManagement.Controls.Reports
                     payscales.Add(val);
             }
 
-            if (ExportToExcel)
+            if (exportToExcel)
             {
                 DateIndex = -1;
                 HoursIndex = -1;
@@ -121,7 +122,9 @@ namespace PraticeManagement.Controls.Reports
             else
             {
                 var personid = Convert.ToInt32(context.Request.QueryString["PersonID"]);
-                var persons = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(new List<int>() { personid }, startDate, endDate, payTypeIds.ToLower() != "null" ? payscales : null, practiceIds.ToLower() != "null" ? practices : null);
+                var person = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personid , startDate, endDate, payTypeIds.ToLower() != "null" ? payscales : null, practiceIds.ToLower() != "null" ? practices : null);
+
+                var persons = new List<PersonTimeEntries> { person };
 
                 PraticeManagement.Sandbox.TimeEntriesByPerson page = new PraticeManagement.Sandbox.TimeEntriesByPerson();
                 TimeEntriesByPerson cntrlTimeEntriesByPerson = (TimeEntriesByPerson)page.LoadControl("~/Controls/Reports/TimeEntriesByPerson.ascx");
