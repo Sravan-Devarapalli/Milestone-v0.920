@@ -58,7 +58,7 @@ namespace PraticeManagement.Controls.Reports
             foreach (var etnry in groupedTimeEtnries)
                 foreach (var record in etnry.Value)
                 {
-                    var date = record.MilestoneDate;
+                    var date = record.ChargeCodeDate;
                     var hours = record.ActualHours;
 
                     try
@@ -267,7 +267,7 @@ namespace PraticeManagement.Controls.Reports
 
             while (startDate <= endDate)
             {
-                var ters = teRecordsList.Any(t => t.MilestoneDate.Date == startDate) ? teRecordsList.Where(t => t.MilestoneDate.Date == startDate) : null;
+                var ters = teRecordsList.Any(t => t.ChargeCodeDate.Date == startDate) ? teRecordsList.Where(t => t.ChargeCodeDate.Date == startDate) : null;
                 TimeEntryRecord ter = null;
 
                 if (ters != null)
