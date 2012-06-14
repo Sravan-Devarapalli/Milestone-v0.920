@@ -755,11 +755,9 @@
                 #region Reports
 
                 public const string TimeEntriesGetByProject = "dbo.TimeEntriesGetByProject";
-                public const string TimeEntriesGetByPerson = "dbo.TimeEntriesGetByPerson";
-                public const string TimeEntriesGetByManyPersons = "dbo.TimeEntriesGetByManyPersons";
+                public const string TimeEntriesGetByPersons = "dbo.TimeEntriesGetByManyPersons";
                 public const string TimeEntriesGetByPersonsForExcel = "dbo.TimeEntriesGetByPersonsForExcel";
                 public const string TimeEntriesGetByProjectCumulative = "dbo.TimeEntryHoursByPersonProject";
-                public const string TimeEntryHoursByManyPersonsProject = "dbo.TimeEntryHoursByManyPersonsProject";
 
                 #endregion
             }
