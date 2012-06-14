@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TimeEntryService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TimeEntryService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd5" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/System" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd9" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd5" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CompositeObjects" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc?xsd=xsd9" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ITimeEntryService_TimeZonesAll_InputMessage">
@@ -38,23 +38,17 @@
   <wsdl:message name="ITimeEntryService_GetTimeEntriesForPerson_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetTimeEntriesForPersonResponse" />
   </wsdl:message>
-  <wsdl:message name="ITimeEntryService_GetTimeEntriesProject_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetTimeEntriesProject" />
-  </wsdl:message>
-  <wsdl:message name="ITimeEntryService_GetTimeEntriesProject_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetTimeEntriesProjectResponse" />
-  </wsdl:message>
-  <wsdl:message name="ITimeEntryService_GetTimeEntriesProjectCumulative_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetTimeEntriesProjectCumulative" />
-  </wsdl:message>
-  <wsdl:message name="ITimeEntryService_GetTimeEntriesProjectCumulative_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetTimeEntriesProjectCumulativeResponse" />
-  </wsdl:message>
   <wsdl:message name="ITimeEntryService_GetTimeEntriesPerson_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTimeEntriesPerson" />
   </wsdl:message>
   <wsdl:message name="ITimeEntryService_GetTimeEntriesPerson_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetTimeEntriesPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesProject" />
+  </wsdl:message>
+  <wsdl:message name="ITimeEntryService_GetTimeEntriesProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTimeEntriesProjectResponse" />
   </wsdl:message>
   <wsdl:message name="ITimeEntryService_GetCurrentMilestones_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCurrentMilestones" />
@@ -187,17 +181,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPerson" message="tns:ITimeEntryService_GetTimeEntriesForPerson_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesForPersonResponse" message="tns:ITimeEntryService_GetTimeEntriesForPerson_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetTimeEntriesProject">
-      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProject" message="tns:ITimeEntryService_GetTimeEntriesProject_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectResponse" message="tns:ITimeEntryService_GetTimeEntriesProject_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetTimeEntriesProjectCumulative">
-      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectCumulative" message="tns:ITimeEntryService_GetTimeEntriesProjectCumulative_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectCumulativeResponse" message="tns:ITimeEntryService_GetTimeEntriesProjectCumulative_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetTimeEntriesPerson">
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesPerson" message="tns:ITimeEntryService_GetTimeEntriesPerson_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesPersonResponse" message="tns:ITimeEntryService_GetTimeEntriesPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProject" message="tns:ITimeEntryService_GetTimeEntriesProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectResponse" message="tns:ITimeEntryService_GetTimeEntriesProject_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCurrentMilestones">
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeEntryService/GetCurrentMilestones" message="tns:ITimeEntryService_GetCurrentMilestones_InputMessage" />
@@ -314,26 +304,17 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetTimeEntriesProject">
-      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesProject" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetTimeEntriesProjectCumulative">
-      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesProjectCumulative" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetTimeEntriesPerson">
       <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeEntriesProject">
+      <soap:operation soapAction="http://tempuri.org/ITimeEntryService/GetTimeEntriesProject" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -515,7 +496,7 @@
   </wsdl:binding>
   <wsdl:service name="TimeEntryService">
     <wsdl:port name="BasicHttpBinding_ITimeEntryService" binding="tns:BasicHttpBinding_ITimeEntryService">
-      <soap:address location="http://system68.ggk.com/PracticeManagementService/TimeEntryService.svc" />
+      <soap:address location="http://system66.ggk.com/PracticeManagementService/TimeEntryService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
