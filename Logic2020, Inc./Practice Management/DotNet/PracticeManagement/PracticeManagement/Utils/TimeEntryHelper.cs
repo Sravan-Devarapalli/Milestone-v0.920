@@ -293,87 +293,38 @@ namespace PraticeManagement.Utils
             return byProject._groupedTimeEtnries;
         }
 
-        public static Dictionary<TimeEntryHours, TimeEntryRecord[]> GetTimeEntriesForProjectCumulative(IEnumerable<int> personIds, DateTime? startDate, DateTime? endDate)
+        public static PersonTimeEntries GetTimeEntriesForPerson(int personId, DateTime? startDate, DateTime? endDate, List<int> payTypeIds, List<int> practiceIds)
         {
             var reportContext = new TimeEntryPersonReportContext
             {
-                PersonIds = personIds,
-                StartDate = startDate,
-                EndDate = endDate
-            };
-
-            var byProject = ServiceCallers.Custom.TimeEntry(client => client.GetTimeEntriesProjectCumulative(reportContext));
-
-            return byProject._groupedTimeEtnries;
-        }
-
-        public static List<TimeEntriesGroupedByPersonProject> GetTimeEntriesForPerson(IEnumerable<int> personIds, DateTime? startDate, DateTime? endDate, IEnumerable<int> payTypeIds, IEnumerable<int> practiceIds)
-        {
-            var reportContext = new TimeEntryPersonReportContext
-            {
-                PersonIds = personIds,
+                PersonId = personId,
                 StartDate = startDate,
                 EndDate = endDate,
                 PayTypeIds = payTypeIds,
                 PracticeIds = practiceIds
             };
 
-            var byPerson = ServiceCallers.Custom.TimeEntry(client => client.GetTimeEntriesPerson(reportContext));
+            var personTimeEntries = ServiceCallers.Custom.TimeEntry(te => te.GetTimeEntriesPerson(reportContext));
 
-            var result = new List<TimeEntriesGroupedByPersonProject>();
-            var personIdList = new List<int>();
-          
+            PersonTimeEntries tEGPP = null;
 
-            foreach (var teList in byPerson._groupedTimeEtnries.Values)
+            if (!(personTimeEntries.GroupedTimeEtnries.Values.Count > 0))
             {
-                var tempList = teList.Select(te => te.ParentMilestonePersonEntry.ThisPerson.Id.Value);
-                personIdList.AddRange(tempList);
-            }
 
-            personIdList = personIdList.Distinct().ToList();
+                var persons = ServiceCallers.Custom.Person(p => p.GetPersonListByPersonIdsAndPayTypeIds(personId + ",", payTypeIds != null ? FormCSV(payTypeIds) : null, practiceIds != null ? FormCSV(practiceIds) : null, startDate.Value, endDate.Value));
 
-            TimeEntriesGroupedByPersonProject tEGPP = null;
-
-            foreach (var personId in personIdList)
-            {
-                tEGPP = new TimeEntriesGroupedByPersonProject();
-                tEGPP.GroupedTimeEtnries = new Dictionary<Project, List<TimeEntryRecord>>();
-
-                foreach (var keyValuePair in byPerson._groupedTimeEtnries)
+                foreach (var person in persons)
                 {
-                    var temeEntryRecords = keyValuePair.Value.ToList().FindAll(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId);
-                    if (temeEntryRecords.Any())
-                        tEGPP.GroupedTimeEtnries.Add(keyValuePair.Key, temeEntryRecords.FindAll(te => te.MilestoneDate >= startDate));
+                    tEGPP = new PersonTimeEntries
+                    {
+                        Person = new Person() { LastName = person.LastName, FirstName = person.FirstName, Id = personId }
+                    };
                 }
-
-                tEGPP.GroupedTimeEtnries = tEGPP.GroupedTimeEtnries.OrderBy(gTE => gTE.Key.Name).ToDictionary(v => v.Key, v => v.Value);
-
-                var thisPerson = byPerson._groupedTimeEtnries.First(kvp => kvp.Value.ToList().FindAll(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId).Any()).Value.ToList().First(te => te.ParentMilestonePersonEntry.ThisPerson.Id == personId).ParentMilestonePersonEntry.ThisPerson;
-                tEGPP.PersonName = thisPerson.LastName + ", " + thisPerson.FirstName;
-                tEGPP.PersonId = thisPerson.Id.Value;
-
-                result.Add(tEGPP);
             }
 
-            var emptyPersons = personIds.Except(personIdList);
-
-            //As per #2962, filtering persons with paytypeIds && practiceIds.
-            var persons = ServiceCallers.Custom.Person(p => p.GetPersonListByPersonIdsAndPayTypeIds(FormCSV(emptyPersons), payTypeIds != null ? FormCSV(payTypeIds) : null, practiceIds != null ? FormCSV(practiceIds) : null, startDate.Value, endDate.Value));
-
-            foreach (var person in persons)
-            {
-                var emptyTEGPP = new TimeEntriesGroupedByPersonProject
-                {
-                    PersonName = person.LastName + ", " + person.FirstName,
-                    PersonId = person.Id.Value
-                };
-
-                result.Add(emptyTEGPP);
-            }
-
-            return result.OrderBy(te => te.PersonName).ToList();
+            return tEGPP;
         }
-
+       
         private static string FormCSV(IEnumerable<int> IdList)
         {
             StringBuilder sb = new StringBuilder(string.Empty);
