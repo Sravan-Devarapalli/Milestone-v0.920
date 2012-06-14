@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PersonDetailReport.ascx.cs"
+﻿8<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PersonDetailReport.ascx.cs"
     Inherits="PraticeManagement.Controls.Reports.PersonDetailReport" %>
 <%@ Import Namespace="DataTransferObjects.Reports" %>
 <asp:HiddenField ID="hdncpeExtendersIds" runat="server" Value="" />
