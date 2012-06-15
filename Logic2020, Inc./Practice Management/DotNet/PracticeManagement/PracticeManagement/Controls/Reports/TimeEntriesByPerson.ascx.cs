@@ -51,7 +51,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
 
-        private static IEnumerable<KeyValuePair<DateTime, double>> GetTotalsByDate<T>(Dictionary<T, TimeEntryRecord[]> groupedTimeEtnries)
+        private static IEnumerable<KeyValuePair<DateTime, double>> GetTotalsByDate(Dictionary<ChargeCode, TimeEntryRecord[]> groupedTimeEtnries)
         {
             var res = new SortedDictionary<DateTime, double>();
 
@@ -59,7 +59,7 @@ namespace PraticeManagement.Controls.Reports
                 foreach (var record in etnry.Value)
                 {
                     var date = record.ChargeCodeDate;
-                    var hours = record.ActualHours;
+                    var hours = record.TotalHours;
 
                     try
                     {
@@ -78,10 +78,10 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Footer)
             {
-                var dsource = ((sender as Repeater).DataSource as Dictionary<string, List<TimeEntryRecord>>);
+                var dsource = ((sender as Repeater).DataSource as Dictionary<ChargeCode, TimeEntryRecord[]>);
                 if (dsource != null)
                 {
-                    Dictionary<string, TimeEntryRecord[]> dic = new Dictionary<string, TimeEntryRecord[]>();
+                    var dic = new Dictionary<ChargeCode, TimeEntryRecord[]>();
 
                     foreach (var item in dsource)
                     {
@@ -155,8 +155,8 @@ namespace PraticeManagement.Controls.Reports
             {
                 if (e.Item.DataItem != null)
                 {
-                    var item = (TimeEntriesGroupedByPersonProject)e.Item.DataItem;
-                    calendarPersonId = item.PersonId;
+                    var item = (PersonTimeEntries)e.Item.DataItem;
+                    calendarPersonId = item.Person.Id.Value;
                 }
             }
         }
@@ -195,9 +195,9 @@ namespace PraticeManagement.Controls.Reports
         {
             try
             {
-                return timeEntries.Sum(item => item.ActualHours);
+                return timeEntries.Sum(item => item.TotalHours);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return 0.00;
             }
@@ -219,7 +219,7 @@ namespace PraticeManagement.Controls.Reports
                 ProjectTotals = 0;
 
             if (e.Item.DataItem is KeyValuePair<DateTime, TimeEntryRecord> && ((KeyValuePair<DateTime, TimeEntryRecord>)(e.Item.DataItem)).Value != null)
-                ProjectTotals += ((KeyValuePair<DateTime, TimeEntryRecord>)(e.Item.DataItem)).Value.ActualHours;
+                ProjectTotals += ((KeyValuePair<DateTime, TimeEntryRecord>)(e.Item.DataItem)).Value.TotalHours;
         }
 
         protected void dlTotals_OnInit(object sender, EventArgs e)
@@ -245,7 +245,7 @@ namespace PraticeManagement.Controls.Reports
         protected void dlPersons_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
 
-            var dataItem = (TimeEntriesGroupedByPersonProject)e.Item.DataItem;
+            var dataItem = (PersonTimeEntries)e.Item.DataItem;
             if (dataItem.GroupedTimeEtnries == null || dataItem.GroupedTimeEtnries.Count == 0)
             {
                 var divProjects = e.Item.FindControl("divProjects") as System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -274,7 +274,8 @@ namespace PraticeManagement.Controls.Reports
                 {
                     ter = new TimeEntryRecord()
                     {
-                        ActualHours = ters.Sum(p => p.ActualHours)
+                        BillableHours = ters.Sum(p => p.BillableHours),
+                        NonBillableHours = ters.Sum(p => p.NonBillableHours)
                     };
                 }
 
@@ -300,38 +301,6 @@ namespace PraticeManagement.Controls.Reports
 
             }
 
-        }
-
-
-        protected Dictionary<string, List<TimeEntryRecord>> GetModifiedDatasource(object groupedTES)
-        {
-            Dictionary<Project, List<TimeEntryRecord>> groupedTESList = groupedTES as Dictionary<Project, List<TimeEntryRecord>>;
-
-
-            var modifiedgroupedTESList = new Dictionary<string, List<TimeEntryRecord>>();
-
-            if (groupedTESList != null && groupedTESList.Count > 0)
-            {
-
-                foreach (var keyVal in groupedTESList)
-                {
-                    if (keyVal.Value.Count() > 0)
-                    {
-                        var timeTypes = keyVal.Value.Select(t => t.TimeType.Name).Distinct();
-
-                        foreach (var name in timeTypes)
-                        {
-                            modifiedgroupedTESList.Add(keyVal.Key.Client.Name + " - " + keyVal.Key.Name
-                           + " - " + name, keyVal.Value.Where(k => k.TimeType.Name == name).ToList());
-                        }
-
-                    }
-                }
-
-            }
-
-
-            return modifiedgroupedTESList;
         }
 
 
