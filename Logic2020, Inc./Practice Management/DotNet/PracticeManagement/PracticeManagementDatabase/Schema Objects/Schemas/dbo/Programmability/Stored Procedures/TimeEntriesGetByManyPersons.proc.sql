@@ -11,6 +11,23 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
+
+	DECLARE @StartDateLocal DATETIME ,
+			@EndDateLocal DATETIME ,
+			@PersonIdLocal INT ,
+			@ORTTimeTypeId INT ,
+			@HolidayTimeType INT ,
+			@UnpaidTimeTypeId	INT,
+			@FutureDate DATETIME
+
+	SELECT @StartDateLocal = CONVERT(DATE, @StartDate),
+			@EndDateLocal = CONVERT(DATE, @EndDate),
+			@PersonIdLocal = @PersonId,
+			@ORTTimeTypeId = dbo.GetORTTimeTypeId(),
+			@HolidayTimeType = dbo.GetHolidayTimeTypeId(),
+			@FutureDate = dbo.GetFutureDate(),
+			@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
+
 	
 	--@TimescaleIds is null means all timescales.
 	IF @TimescaleIds IS NOT NULL
@@ -26,19 +43,18 @@ BEGIN
 	
 	;WITH PersonsFilteredByPersonIdsAndPayIds AS
 	(
-		SELECT P.PersonId
+		SELECT DISTINCT P.PersonId
 		FROM Person P
-		LEFT JOIN dbo.Pay pa ON pa.Person = P.PersonId AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, dbo.GetFutureDate()) -1) >= @StartDate
+		LEFT JOIN dbo.Pay pa ON pa.Person = P.PersonId AND pa.StartDate <= @EndDateLocal AND (ISNULL(pa.EndDate, @FutureDate) -1) >= @StartDateLocal
 		WHERE (@TimescaleIds IS NULL OR pa.Timescale IN (SELECT Id FROM @TimescaleIdList)) 
 		      AND ((@PracticeIds IS NULL) OR ISNULL(pa.PracticeId,P.DefaultPractice) IN (SELECT Id FROM @PracticeIdsList)) 
-			  AND (P.PersonId = @PersonId)
+			  AND (P.PersonId = @PersonIdLocal)
 	)
 	SELECT PROJ.ProjectNumber,
-		   PROJ.Name ProjectName,
-		   C.Name ClientName,
-		   TT.Name TimeTypeName,
+		   PROJ.Name AS ProjectName,
+		   C.Name AS ClientName,
+		   TT.Name AS TimeTypeName,
 		   PG.Name AS GroupName,
-		   TE.Note ,
 		   TE.ChargeCodeDate,
 		 ROUND(SUM(CASE
 					WHEN TEH.IsChargeable = 1 AND PROJ.ProjectNumber != 'P031000' THEN
@@ -52,10 +68,20 @@ BEGIN
 					ELSE
 						0
 				END), 2) AS [NonBillableHours] ,
-		   TE.ChargeCodeId
+		   TE.ChargeCodeId,
+		   ( CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
+								  OR TT.TimeTypeId = @HolidayTimeType
+								  OR TT.TimeTypeId = @UnpaidTimeTypeId
+								)
+						   THEN TE.Note
+								+ dbo.GetApprovedByName(TE.ChargeCodeDate,
+														TT.TimeTypeId,
+														@PersonIdLocal)
+						   ELSE TE.Note
+					  END ) AS Note 
 	FROM PersonsFilteredByPersonIdsAndPayIds P
 	INNER JOIN dbo.TimeEntry TE ON TE.PersonId = P.PersonId
-									AND TE.ChargeCodeDate BETWEEN ISNULL(@StartDate, te.ChargeCodeDate) and ISNULL(@EndDate, te.ChargeCodeDate)
+									AND TE.ChargeCodeDate BETWEEN ISNULL(@StartDateLocal, te.ChargeCodeDate) and ISNULL(@EndDateLocal, te.ChargeCodeDate)
     INNER JOIN dbo.TimeEntryHours AS TEH ON TE.TimeEntryId = TEH.TimeEntryId
 	INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TE.ChargeCodeId				
 	INNER JOIN dbo.Project AS PROJ ON PROJ.ProjectId = CC.ProjectId
@@ -65,6 +91,7 @@ BEGIN
 	GROUP BY TE.ChargeCodeDate,
 			 TE.ChargeCodeId,
 		     PROJ.ProjectNumber,
+			 TT.TimeTypeId,
 		     PROJ.Name,
 		     C.Name,
 		     TT.Name,
@@ -75,7 +102,7 @@ BEGIN
 	SELECT P.FirstName,
 		   P.LastName
 	FROM dbo.Person AS P
-	WHERE (P.PersonId = @PersonId)
+	WHERE (P.PersonId = @PersonIdLocal)
 	 
 END
 
