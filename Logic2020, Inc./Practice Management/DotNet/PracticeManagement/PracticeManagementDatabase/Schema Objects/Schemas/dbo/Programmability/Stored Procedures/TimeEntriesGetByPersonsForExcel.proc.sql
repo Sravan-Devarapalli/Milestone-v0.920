@@ -9,19 +9,33 @@ AS
 BEGIN
   
   SET NOCOUNT ON;
+
+  DECLARE @StartDateLocal DATETIME ,
+			@EndDateLocal DATETIME ,
+			@ORTTimeTypeId INT ,
+			@HolidayTimeType INT ,
+			@UnpaidTimeTypeId	INT,
+			@FutureDate DATETIME
+
+	SELECT  @StartDateLocal = CONVERT(DATE, @StartDate),
+			@EndDateLocal = CONVERT(DATE, @EndDate),
+			@ORTTimeTypeId = dbo.GetORTTimeTypeId(),
+			@HolidayTimeType = dbo.GetHolidayTimeTypeId(),
+			@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId(),
+			@FutureDate = dbo.GetFutureDate()
     
-	DECLARE @PersonList TABLE (Id INT)
+	DECLARE @PersonList TABLE (Id INT PRIMARY KEY)
 	INSERT INTO @PersonList
 	SELECT * FROM dbo.ConvertStringListIntoTable(@PersonIds)
 	
 	--@TimescaleIds is null means all timescales.
 	IF @TimescaleIds IS NOT NULL
 	BEGIN
-		DECLARE @TimescaleIdList table (Id int)
+		DECLARE @TimescaleIdList TABLE (Id int PRIMARY KEY)
 		INSERT INTO @TimescaleIdList
 		SELECT * FROM dbo.ConvertStringListIntoTable(@TimescaleIds)
 	END	
-	DECLARE @PracticeIdsList TABLE (Id INT)
+	DECLARE @PracticeIdsList TABLE (Id INT  PRIMARY KEY)
 	INSERT INTO @PracticeIdsList
 	SELECT * FROM dbo.ConvertStringListIntoTable(@PracticeIds)
 
@@ -44,7 +58,16 @@ BEGIN
 		   PROJ.Name AS [Project Name],
 		   TT.Name AS [Work Type],
 		   TE.ChargeCodeDate AS [Date],
-		   TE.Note ,
+		   (CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
+								  OR TT.TimeTypeId = @HolidayTimeType
+								  OR TT.TimeTypeId = @UnpaidTimeTypeId
+								)
+						   THEN TE.Note
+								+ dbo.GetApprovedByName(TE.ChargeCodeDate,
+														TT.TimeTypeId,
+														p.PersonId)
+						   ELSE TE.Note
+					  END ) AS Note,
 		 ROUND(SUM(CASE
 					WHEN TEH.IsChargeable = 1 AND PROJ.ProjectNumber != 'P031000' THEN
 						TEH.ActualHours
@@ -71,6 +94,7 @@ BEGIN
 			 TE.ChargeCodeDate,
 			 TE.ChargeCodeId,
 		     PROJ.ProjectNumber,
+			 TT.TimeTypeId,
 		     PROJ.Name,
 		     C.Name,
 		     TT.Name,
@@ -81,4 +105,4 @@ BEGIN
 	ORDER BY  p.LastName,p.FirstName,C.Name,PG.Name,PROJ.ProjectNumber,TT.Name,TE.ChargeCodeDate
 
 END
-
+GO
