@@ -61,7 +61,7 @@
             if (hdnPersonIds.value != "") {
                 var array = hdnPersonIds.value.split(',');
                 var temp = 0; for (var i = 0; i < array.length; i++) {
-                    if (array[i] != "" && array[i] != "undefined") {
+                    if (array[i] != "" && array[i] != "undefined" && array[i].toString() != "-1") {
                         if ($get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display == "none")
                         { $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display = 'block' }
                         var urlVal = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?PersonID=" + array[i].toString() + "&StartDate=" + hdnStartDate.value + "&EndDate=" + hdnEndDate.value + "&PayScaleIds=" + hdnPayScaleIds.value + "&PracticeIds=" + hdnPracticeIds.value;
