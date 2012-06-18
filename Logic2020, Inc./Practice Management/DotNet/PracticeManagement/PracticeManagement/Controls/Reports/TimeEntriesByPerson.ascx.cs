@@ -78,7 +78,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Footer)
             {
-                var dsource = ((sender as Repeater).DataSource as Dictionary<ChargeCode, TimeEntryRecord[]>);
+                var dsource = ((sender as Repeater).DataSource as Dictionary<ChargeCode, List<TimeEntryRecord>>);
                 if (dsource != null)
                 {
                     var dic = new Dictionary<ChargeCode, TimeEntryRecord[]>();
