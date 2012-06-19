@@ -141,23 +141,11 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (timeEntryReportHeader.Count == 1)
+            if (timeEntryReportHeader.Count == 2)
             {
-                tdFirst.Style["width"] = timeEntryReportHeader.TdFirstWidth;
-                tdSecond.Style["width"] = timeEntryReportHeader.TdSecondWidth;
-                tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
-            }
-            else if (timeEntryReportHeader.Count == 2)
-            {
-                tdFirst.Style["width"] = "25%";
-                tdSecond.Style["width"] = "25%";
+                tdFirst.Style["width"] = "20%";
+                tdSecond.Style["width"] = "30%";
                 tdThird.Style["width"] = "50%";
-            }
-            else if (timeEntryReportHeader.Count == 3)
-            {
-                tdFirst.Style["width"] = "37%";
-                tdSecond.Style["width"] = "25%";
-                tdThird.Style["width"] = "37%";
             }
 
             var now = Utils.Generic.GetNowWithTimeZone();
