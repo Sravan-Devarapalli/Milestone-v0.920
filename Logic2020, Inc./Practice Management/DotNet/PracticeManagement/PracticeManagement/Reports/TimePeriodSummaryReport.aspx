@@ -189,7 +189,7 @@
                         <asp:CheckBox ID="chkIncludePersons" runat="server" Checked="false" Text="Include persons with no time entered in report output"
                             AutoPostBack="true" OnCheckedChanged="chkIncludePersons_CheckedChanged" />
                     </td>
-                    <td style="width: 70%" id="tdThird" runat="server">
+                    <td style="width: 65%" id="tdThird" runat="server">
                     </td>
                 </tr>
                 <tr>
