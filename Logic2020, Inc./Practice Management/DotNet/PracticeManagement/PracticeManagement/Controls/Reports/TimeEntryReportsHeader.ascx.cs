@@ -43,21 +43,18 @@ namespace PraticeManagement.Controls.Reports
             if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
             {
                 thTimePeriod.Style["background-color"] = "#e2ebff";
-                thByAccount.Style["background-color"] = "White";
                 thProject.Style["background-color"] = "White";
                 thPerson.Style["background-color"] = "White";
             }
             else if (Page is PraticeManagement.Reporting.AccountSummaryReport)
             {
                 thTimePeriod.Style["background-color"] = "White";
-                thByAccount.Style["background-color"] = "#e2ebff";
                 thProject.Style["background-color"] = "White";
                 thPerson.Style["background-color"] = "White";
             }
             else if (Page is PraticeManagement.Reporting.ProjectSummaryReport)
             {
                 thTimePeriod.Style["background-color"] = "White";
-                thByAccount.Style["background-color"] = "White";
                 thProject.Style["background-color"] = "#e2ebff";
                 thPerson.Style["background-color"] = "White";
 
@@ -65,7 +62,6 @@ namespace PraticeManagement.Controls.Reports
             else if (Page is PraticeManagement.Reporting.PersonDetailTimeReport)
             {
                 thTimePeriod.Style["background-color"] = "White";
-                thByAccount.Style["background-color"] = "White";
                 thProject.Style["background-color"] = "White";
                 thPerson.Style["background-color"] = "#e2ebff";
 
@@ -90,26 +86,23 @@ namespace PraticeManagement.Controls.Reports
             thPerson.Visible = UrlAuthorizationModule.CheckUrlAccessForPrincipal(Constants.ApplicationPages.PersonDetailReport, new RolePrincipal(HttpContext.Current.User.Identity), "GET");
             count = thPerson.Visible ? count + 1 : count;
 
-            thByAccount.Visible = UrlAuthorizationModule.CheckUrlAccessForPrincipal(Constants.ApplicationPages.AccountSummaryReport, new RolePrincipal(HttpContext.Current.User.Identity), "GET");
-            count = thByAccount.Visible ? count + 1 : count;
-
             if (count == 1)
             {
-                tdFirst.Style["width"] = "37%";
-                tdSecond.Style["width"] = "26%";
-                tdThird.Style["width"] = "37%";
+                tdFirst.Style["width"] = "35%";
+                tdSecond.Style["width"] = "30%";
+                tdThird.Style["width"] = "35%";
             }
             else if (count == 2)
             {
-                tdFirst.Style["width"] = "25%";
-                tdSecond.Style["width"] = "50%";
-                tdThird.Style["width"] = "25%";
+                tdFirst.Style["width"] = "20%";
+                tdSecond.Style["width"] = "60%";
+                tdThird.Style["width"] = "20%";
             }
             else if (count == 3)
             {
-                tdFirst.Style["width"] = "12%";
-                tdSecond.Style["width"] = "76%";
-                tdThird.Style["width"] = "12%";
+                tdFirst.Style["width"] = "1%";
+                tdSecond.Style["width"] = "98%";
+                tdThird.Style["width"] = "1%";
             }
 
             Count = count;
@@ -117,3 +110,4 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
+
