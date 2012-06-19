@@ -2,7 +2,7 @@
 -- Author:		Sainath.CH
 -- Create date: 03-05-2012
 -- Updated by : Srinivas.M
--- Update Date: 05-21-2012
+-- Update Date: 06-19-2012
 -- Description:  Time Entries grouped by Resource for a particular period.
 -- =========================================================================
 CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
@@ -71,7 +71,7 @@ AS
 													 ELSE @EndDateLocal
 												END
 								AND ( ( PC.CompanyDayOff = 0
-										AND ISNULL(PC.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()
+										AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType
 									  )
 									  OR ( PC.CompanyDayOff = 1
 										   AND PC.SubstituteDate IS NOT NULL
