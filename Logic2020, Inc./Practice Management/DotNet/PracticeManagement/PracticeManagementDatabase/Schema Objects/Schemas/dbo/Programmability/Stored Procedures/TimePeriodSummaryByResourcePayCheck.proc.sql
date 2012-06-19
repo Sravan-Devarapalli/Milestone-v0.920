@@ -147,7 +147,7 @@ AS
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
 															  AND ISNULL(PTSH.EndDate,@FutureDate)
 					  WHERE     TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-															dbo.GetFutureDate())
+															@FutureDate)
 								AND ( CC.timeTypeId != @HolidayTimeType
 									  OR ( CC.timeTypeId = @HolidayTimeType
 										   AND PTSH.PersonStatusId = 1
