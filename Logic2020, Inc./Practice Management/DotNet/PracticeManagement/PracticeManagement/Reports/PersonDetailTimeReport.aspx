@@ -288,7 +288,7 @@
             </table>
             <table width="100%" style="height: 160px;">
                 <tr>
-                    <td id="tdFirst" runat="server" style="width: 75%">
+                    <td id="tdFirst" runat="server" style="width: 65%">
                     </td>
                     <td style="text-align: center; height: 30px; vertical-align: top;" id="tdSecond" runat="server">
                         <table width="100%" align="center" style="vertical-align: top;">
