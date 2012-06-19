@@ -219,7 +219,7 @@
             </table>
             <table style="width: 100%; height: 160px;">
                 <tr>
-                    <td id="tdFirst" runat="server" style="width: 50%;">
+                    <td id="tdFirst" runat="server" style="width: 35%;">
                         &nbsp;
                     </td>
                     <td style="text-align: center; height: 30px; vertical-align: top;" id="tdSecond"
@@ -249,7 +249,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td id="tdThird" runat="server" style="width: 25%;">
+                    <td id="tdThird" runat="server" style="width: 35%;">
                         &nbsp;
                     </td>
                 </tr>
