@@ -25,7 +25,11 @@ AS
 			@HolidayTimeType INT ,
 			@FutureDate DATETIME
 
-		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate),@NOW = dbo.GettingPMTime(GETUTCDATE()),@HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
+		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), 
+			   @EndDateLocal = CONVERT(DATE, @EndDate),
+			   @NOW = dbo.GettingPMTime(GETUTCDATE()),
+			   @HolidayTimeType = dbo.GetHolidayTimeTypeId(),
+			   @FutureDate = dbo.GetFutureDate()
 
 
 		DECLARE @TimeScaleNames TABLE ( Name NVARCHAR(1024) )
@@ -55,7 +59,7 @@ AS
 								  FROM      dbo.Calendar AS CAL
 											INNER JOIN dbo.Person AS P ON CAL.Date >= P.HireDate
 															  AND CAL.Date <= ISNULL(P.TerminationDate,
-															  dbo.GetFutureDate())
+															  @FutureDate)
 											LEFT JOIN dbo.PersonCalendar AS PCAL ON PCAL.Date = CAL.Date
 															  AND PCAL.PersonId = P.PersonId
 								) AS PC
@@ -84,36 +88,48 @@ AS
 								AND PTSH.PersonStatusId = 1 --ACTIVE STATUS
 								
 					 ),
-				PersonWithLatestPay
-				  AS ( SELECT   P.PersonId ,
-								MAX(PA.StartDate) AS RecentStartDate
-					   FROM     dbo.Person P
-								LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
+				    PersonPayDuringSelectedRange
+				  AS ( 
+					   SELECT   P.PersonId ,
+								MAX(pa.StartDate) AS StartDate
+					   FROM     dbo.Person AS P
+								LEFT JOIN dbo.Pay pa ON pa.Person = P.PersonId 
+														AND pa.StartDate <= @EndDateLocal AND (ISNULL(pa.EndDate, @FutureDate) - 1) >= @StartDateLocal
 					   WHERE    P.IsStrawman = 0
 					   GROUP BY P.PersonId
+
 					 ),
-				PersonWithCurrentPay
-				  AS ( SELECT   P.PersonId ,
-								ISNULL(TS.Name,'') AS Timescale
-					   FROM     dbo.Person P
-								LEFT JOIN PersonWithLatestPay PLP ON P.PersonId = PLP.PersonId
-								LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
-														AND ( ( @NOW BETWEEN PA.StartDate
-															  AND
-															  ISNULL(PA.EndDate
-															  - 1,
-															  dbo.GetFutureDate()) )
-															  OR ( @NOW NOT BETWEEN PA.StartDate
-															  AND
-															  ISNULL(PA.EndDate
-															  - 1,
-															  dbo.GetFutureDate())
-															  AND PLP.RecentStartDate = PA.StartDate
-															  )
-															)
-								LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
+					 PersonPayToday
+					 AS 
+					 (
+					   SELECT   P.PersonId ,
+								MAX(pa.StartDate) AS StartDate
+					   FROM     dbo.Person AS P
+								LEFT JOIN dbo.Pay AS pa ON pa.Person = P.PersonId 
+														AND @NOW BETWEEN pa.StartDate AND (ISNULL(pa.EndDate, @FutureDate) - 1)
 					   WHERE    P.IsStrawman = 0
+					   GROUP BY P.PersonId
 					 )
+					 ,
+					 PersonWithPay AS
+					 (
+					  SELECT PPDTP.PersonId,
+					         ISNULL(TS.Name,'') AS Timescale
+					  FROM	PersonPayDuringSelectedRange AS PPDTP
+					  LEFT JOIN dbo.Pay AS pa ON pa.Person = PPDTP.PersonId  AND pa.StartDate = PPDTP.StartDate
+					  LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
+					  WHERE PPDTP.StartDate IS NOT NULL
+					  UNION 
+					  SELECT PPT.PersonId,
+					         ISNULL(TS.Name,'') AS Timescale
+					  FROM	 PersonPayDuringSelectedRange AS PPDTP
+					  INNER JOIN PersonPayToday AS PPT ON PPDTP.PersonId = PPT.PersonId
+					  LEFT JOIN dbo.Pay AS pa ON pa.Person = PPT.PersonId  AND pa.StartDate = PPT.StartDate
+					  LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
+					  WHERE PPDTP.StartDate IS NULL
+					 )
+
+					 
 			SELECT  P.PersonId ,
 					P.LastName ,
 					P.FirstName ,
@@ -177,7 +193,7 @@ AS
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
 															  AND ISNULL(PTSH.EndDate,@FutureDate)
 					  WHERE     TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-															dbo.GetFutureDate())
+															@FutureDate)
 								AND ( CC.timeTypeId != @HolidayTimeType
 									  OR ( CC.timeTypeId = @HolidayTimeType
 										   AND PTSH.PersonStatusId = 1
@@ -191,14 +207,8 @@ AS
 											   )
 											   AND p.IsStrawman = 0
 					INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
-					INNER JOIN PersonWithCurrentPay PCP ON P.PersonId = PCP.PersonId
+					INNER JOIN PersonWithPay PCP ON P.PersonId = PCP.PersonId 
 					INNER JOIN [dbo].[PersonStatus] PS ON PS.PersonStatusId = P.PersonStatusId
-					LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId
-											AND @NOW BETWEEN PA.StartDate
-													 AND     ISNULL(PA.EndDate
-															  - 1,
-															  dbo.GetFutureDate())
-					LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
 					LEFT JOIN PersonDefaultHoursWithInPeriod PDH ON PDH.PersonId = P.PersonId
 			WHERE   ( @IncludePersonsWithNoTimeEntries = 1
 					  OR ( @IncludePersonsWithNoTimeEntries = 0
