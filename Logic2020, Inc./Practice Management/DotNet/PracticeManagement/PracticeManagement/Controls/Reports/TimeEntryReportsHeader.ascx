@@ -16,10 +16,6 @@
                         <asp:HyperLink ID="hlByTimePeriod" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/TimePeriodSummaryReport.aspx"
                             ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Time Period</div></asp:HyperLink>
                     </th>
-                     <th id="thByAccount" runat="server">
-                        <asp:HyperLink ID="hlnkByAccount" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/AccountSummaryReport.aspx"
-                            ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Account</div></asp:HyperLink>
-                    </th>
                     <th id="thProject" runat="server">
                         <asp:HyperLink ID="hlByProject" Width="100%" Height="100%" runat="server" NavigateUrl="~/Reports/ProjectSummaryReport.aspx"
                             ForeColor="Black" Font-Underline="false"><div class="PaddingTop6">By Project</div></asp:HyperLink>
