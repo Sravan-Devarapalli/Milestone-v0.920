@@ -112,6 +112,51 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.GridView gvCompensationHistory;
         
         /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
+        
+        /// <summary>
+        /// btnCancelAndRetrun control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.Buttons.CancelAndReturnButton btnCancelAndRetrun;
+        
+        /// <summary>
+        /// hdnTargetValidationPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnTargetValidationPanel;
+        
+        /// <summary>
+        /// mpeValidationPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeValidationPanel;
+        
+        /// <summary>
+        /// pnlValidationPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlValidationPanel;
+        
+        /// <summary>
         /// valSummary control.
         /// </summary>
         /// <remarks>
@@ -130,22 +175,13 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.MessageLabel lblSave;
         
         /// <summary>
-        /// btnSave control.
+        /// btnOKValidationPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
-        
-        /// <summary>
-        /// btnCancelAndRetrun control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.CancelAndReturnButton btnCancelAndRetrun;
+        protected global::System.Web.UI.WebControls.Button btnOKValidationPanel;
     }
 }
 
