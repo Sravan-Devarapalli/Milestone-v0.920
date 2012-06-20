@@ -92,7 +92,15 @@ namespace DataTransferObjects
         [EnumMember]
         ChangedSkills = 41,
         [EnumMember]
-        DeletedSkills = 42
+        DeletedSkills = 42,
+        [EnumMember]
+        Strawmen = 43,
+        [EnumMember]
+        AddedStrawmen = 44,
+        [EnumMember]
+        ChangedStrawmen = 45,
+        [EnumMember]
+        DeletedStrawmen = 46
     }
 }
 
