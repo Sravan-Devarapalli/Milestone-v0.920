@@ -24,6 +24,7 @@
                         or (name() = 'MilestonePerson' and //DefaultMileStoneId!= //NEW_VALUES/@MilestoneId or not(//DefaultMileStoneId))
                         or name() = 'Person'
                         or name() = 'Opportunity' 
+                        or name() = 'Strawman' 
                         or name() = 'OpportunityTransition'">
             <a>
               <xsl:attribute name="href">
@@ -56,6 +57,11 @@
                     <xsl:value-of select="//NEW_VALUES/@MilestoneId"/>
                     <xsl:text>&amp;milestonePersonId=</xsl:text>
                     <xsl:value-of select="//NEW_VALUES/@MilestonePersonId"/>
+                    <xsl:value-of select="$redirectUrl"/>
+                  </xsl:when>
+                  <xsl:when test="name() = 'Strawman'">
+                    <xsl:text>StrawManDetails.aspx?id=</xsl:text>
+                    <xsl:value-of select="//NEW_VALUES/@PersonId"/>
                     <xsl:value-of select="$redirectUrl"/>
                   </xsl:when>
                   <xsl:otherwise>#</xsl:otherwise>
@@ -116,7 +122,7 @@
 
   <xsl:template name="CheckForHyperlink">
     <xsl:choose>
-      <xsl:when test="name() = 'Project' or name() = 'Milestone' or name() = 'MilestonePerson' or name() = 'Person' or name() = 'Opportunity' or name() = 'OpportunityTransition'">
+      <xsl:when test="name() = 'Project' or name() = 'Milestone' or name() = 'MilestonePerson' or name() = 'Person' or name() = 'Opportunity' or name() = 'OpportunityTransition' or name() = 'Strawman'">
         <xsl:value-of select="true()"/>
       </xsl:when>
       <xsl:otherwise>
@@ -149,6 +155,11 @@
       </xsl:when>
       <xsl:when test="name() = 'MilestonePerson' and //NEW_VALUES/@FullName">
         <xsl:value-of select="//NEW_VALUES/@FullName"/>
+      </xsl:when>
+      <xsl:when test="name() = 'Strawman' and //NEW_VALUES/@Role">
+        <xsl:value-of select="//NEW_VALUES/@Role"/>
+        <xsl:text>,&#160;</xsl:text>
+        <xsl:value-of select="//NEW_VALUES/@Skill"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="//NEW_VALUES/@Name"/>
