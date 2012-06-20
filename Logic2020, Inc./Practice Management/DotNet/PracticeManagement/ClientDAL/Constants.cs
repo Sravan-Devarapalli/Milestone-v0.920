@@ -329,6 +329,9 @@
             public const string IsUnpaidColoumn = "IsUnpaid";
             public const string SowBudgetColumn = "SowBudget";
             public const string CategoryId = "CategoryId";
+            public const string InUseFutureColumn = "InUseFuture";
+            public const string PayPersonIdColumn = "PayPersonId";
+            public const string VacationDaysColumn = "VacationDays";
 
         }
 
@@ -613,6 +616,7 @@
             public const string CategoryIdParam = "@CategoryId";
             public const string LinkParam = "@Link";
             public const string InActiveParam = "@InActive";
+            public const string StrawmanIdParam = "@StrawmanId";
         }
 
         #endregion
@@ -697,7 +701,70 @@
                 public const string GetApprovedByManagerListProcedure = "dbo.GetApprovedByManagerList";
                 public const string GetPersonListBySearchKeywordProcedure = "dbo.GetPersonListBySearchKeyword";
                 public const string GetAllPayTypesProcedure = "dbo.GetAllPayTypes";
-
+                public const string GetStrawManListAllProcedure = "dbo.GetStrawManListAll";
+                public const string GetStrawManListAllShortProcedure = "dbo.GetStrawManListAllShort";
+                public const string SaveStrawManProcedure = "dbo.SaveStrawMan";
+                public const string DeleteStrawmanProcedure = "dbo.DeleteStrawman";
+                public const string SaveStrawManFromExistingProcedure = "dbo.SaveStrawManFromExisting";
+                public const string GetStrawmanDetailsByIdWithCurrentPayProcedure = "dbo.GetStrawmanDetailsByIdWithCurrentPay";
+                public const string PersonFirstLastNameByIdProcedure = "dbo.PersonFirstLastNameById";
+                public const string GetPersonDetailsShortByGivenIdsProcedure = "dbo.GetPersonDetailsShortByGivenIds";
+                public const string GetConsultantDemandProcedure = "dbo.GetConsultantDemand";
+                public const string ConsultantUtilizationReportProcedure = "dbo.ConsultantUtilizationReport";
+                public const string ConsultantUtilizationWeeklyProcedure = "dbo.ConsultantUtilizationWeekly";
+                public const string ConsultantUtilizationDailyByPersonProcedure = "dbo.ConsultantUtilizationDailyByPerson";
+                public const string PersonInsertProcedure = "dbo.PersonInsert";
+                public const string PersonUpdateProcedure = "dbo.PersonUpdate";
+                public const string PersonListAllSeniorityFilterProcedure = "dbo.PersonListAllSeniorityFilter";
+                public const string PersonListAllShortProcedure = "dbo.PersonListAllShort";
+                public const string OwnerListAllShortProcedure = "dbo.OwnerListAllShort";
+                public const string PersonsGetBySeniorityAndStatusProcedure = "dbo.PersonsGetBySeniorityAndStatus";
+                public const string PersonListShortByRoleAndStatusProcedure = "dbo.PersonListShortByRoleAndStatus";
+                public const string PersonListByStatusListProcedure = "dbo.PersonListAllByStatusList";
+                public const string GetPersonListByPersonIdListProcedure = "dbo.GetPersonListByPersonIds";
+                public const string PersonListAllForMilestoneProcedure = "dbo.PersonListAllForMilestone";
+                public const string PersonListRecruiterProcedure = "dbo.PersonListRecruiter";
+                public const string PersonGetByIdProcedure = "dbo.PersonGetById";
+                public const string PersonOverheadByPersonProcedure = "dbo.PersonOverheadByPerson";
+                public const string PersonOverheadByTimescaleProcedure = "dbo.PersonOverheadByTimescale";
+                public const string PersonGetCountProcedure = "dbo.PersonGetCount";
+                public const string PersonGetCountByCommaSeparatedIdsListProcedure = "dbo.PersonGetCountByCommaSeparatedIdsList";
+                public const string PersonListBenchExpenseProcedure = "dbo.PersonListBenchExpense";
+                public const string UpdateLastPasswordChangedDateForPersonProcedure = "dbo.UpdateLastPasswordChangedDateForPerson";
+                public const string GetPersonListByPersonIdsAndPayTypeIdsProcedure = "dbo.GetPersonListByPersonIdsAndPayTypeIds";
+                public const string MilestonePersonListOverheadByPersonProcedure = "dbo.MilestonePersonListOverheadByPerson";
+                public const string PersonSetStatusProcedure = "dbo.PersonSetStatus";
+                public const string PersonListSalespersonProcedure = "dbo.PersonListSalesperson";
+                public const string PersonListPracticeManagerProcedure = "dbo.PersonListPracticeManager";
+                public const string PersonListProjectOwnerProcedure = "dbo.PersonListProjectOwner";
+                public const string PersonListOpportunityOwnerProcedure = "dbo.PersonListOpportunityOwner";
+                public const string PersonWorkDaysNumberProcedure = "dbo.PersonWorkDaysNumber";
+                public const string PersonGetCountActiveProcedure = "dbo.PersonGetCountActive";
+                public const string PersonGetByAliasProcedure = "dbo.PersonGetByAlias";
+                public const string MembershipDeleteProcedure = "dbo.MembershipDelete";
+                public const string aspnetUsersDeleteUserProcedure = "dbo.aspnet_Users_DeleteUser";
+                public const string aspnetMembershipCreateUserProcedure = "dbo.aspnet_Membership_CreateUser";
+                public const string MembershipAliasUpdateProcedure = "dbo.MembershipAliasUpdate";
+                public const string PersonListSubordinatesProcedure = "dbo.PersonListSubordinates";
+                public const string PersonOneOffListProcedure = "dbo.PersonOneOffList";
+                public const string PersonEnsureIntegrityProcedure = "dbo.PersonEnsureIntegrity";
+                public const string PersonGetExcelSetProcedure = "dbo.PersonExcelSet";
+                public const string PermissionsGetAllowedClientsProcedure = "dbo.PermissionsGetAllowedClients";
+                public const string PermissionsGetAllowedGroupsProcedure = "dbo.PermissionsGetAllowedGroups";
+                public const string UserTemporaryCredentialsInsertProcedure = "dbo.UserTemporaryCredentialsInsert";
+                public const string GetTemporaryCredentialsByUserNameProcedure = "dbo.GetTemporaryCredentialsByUserName";
+                public const string SetNewPasswordForUserProcedure = "dbo.aspnet_Membership_SetPassword";
+                public const string DeleteTemporaryCredentialsByUserNameProcedure = "dbo.DeleteTemporaryCredentialsByUserName";
+                public const string GetCareerCounselorHierarchiPersonsProcedure = "dbo.GetCareerCounselorHierarchiPersons";
+                public const string PermissionsGetAllowedPracticeManagersProcedure = "dbo.PermissionsGetAllowedPracticeManagers";
+                public const string PermissionsGetAllowedPracticesProcedure = "dbo.PermissionsGetAllowedPractices";
+                public const string PermissionsGetAllowedSalespersonsProcedure = "dbo.PermissionsGetAllowedSalespersons";
+                public const string PermissionsGetAllProcedure = "dbo.PermissionsGetAll";
+                public const string PermissionsSetAllProcedure = "dbo.PermissionsSetAll";
+                public const string PersonMilestoneWithFinancials = "dbo.PersonMilestoneWithFinancials";
+                public const string PersonListAllSeniorityFilterWithPayProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPay";
+                public const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
+                public const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
             }
 
             #endregion
