@@ -109,6 +109,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             string businessUnitIds = string.Empty;
             DateTime? startDate;
             DateTime? endDate;
+            string range = string.Empty;
             int businessUnitsCount = 0, projectsCount = 0, personsCount = 0;
 
             if (Page is TimePeriodSummaryReport)
@@ -118,6 +119,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 businessUnitIds = hostingPage.BusinessUnitIds;
                 startDate = hostingPage.StartDate;
                 endDate = hostingPage.EndDate;
+                range = hostingPage.Range;
             }
             else
             {
@@ -126,6 +128,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 businessUnitIds = hostingPage.BusinessUnitIds;
                 startDate = hostingPage.StartDate;
                 endDate = hostingPage.EndDate;
+                range = hostingPage.Range;
             }
 
             DataHelper.InsertExportActivityLogMessage(AccountDetailByBusinessDevelopmentExport);
@@ -162,6 +165,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             sb.Append(projectsCount + " Projects");
             sb.Append("\t");
             sb.Append(personsCount + " Persons");
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(range);
             sb.Append("\t");
             sb.AppendLine();
             sb.AppendLine();
