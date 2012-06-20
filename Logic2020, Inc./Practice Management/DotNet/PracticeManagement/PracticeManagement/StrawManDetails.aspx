@@ -18,34 +18,36 @@
         <ContentTemplate>
             <table class="WholeWidth">
                 <tr>
-                    <td style="padding-left:4px;padding-top:5px;" >
+                    <td style="padding-left: 4px; padding-top: 5px;">
                         Role
                     </td>
-                    <td style="padding-top:5px;" >
+                    <td style="padding-top: 5px;">
                         <asp:TextBox ID="tbLastName" runat="server" onchange="setDirty();"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Role is required."
-                            ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true"
+                            ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true" EnableClientScript="false"
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
                         <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Role character length must be lessthan or equal to 50."
-                            ToolTip="Role character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
+                            ToolTip="Role character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup" EnableClientScript="false"
                             SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
-                    <td></td>
+                    <td>
+                    </td>
                 </tr>
-                 <tr>
-                    <td width="1%" style="padding-left:4px;">
+                <tr>
+                    <td width="1%" style="padding-left: 4px;">
                         Skill
                     </td>
                     <td width="10%">
                         <asp:TextBox ID="tbFirstName" runat="server" onchange="setDirty();"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="Skill is required."
-                            ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true"
+                        <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="Skill is required." 
+                            ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true" EnableClientScript="false"
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
                         <asp:CustomValidator ID="cvLengthFirstName" runat="server" Text="*" ErrorMessage="Skill characters length must be lessthan or equal to 50."
-                            ToolTip="Skill characters length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup"
+                            ToolTip="Skill characters length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup" EnableClientScript="false"
                             SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
-                    <td></td>
+                    <td>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="3" style="padding-top: 10px; font-weight: bold;">
@@ -56,7 +58,7 @@
                     <td colspan="3">
                         <asp:Panel ID="pnlCompensation" runat="server" CssClass="bg-light-frame">
                             <div class="filters" style="margin-top: 5px; margin-bottom: 10px;">
-                                <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" IsStrawmanMode="true" />
+                                <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" IsStrawmanMode="true" ValidationGroup="StrawmanGroup" />
                             </div>
                             <div style="padding-top: 10px; font-weight: bold; height: 50px">
                                 Compensation History :<br />
@@ -114,14 +116,14 @@
                                     <asp:TemplateField HeaderText="Vacation">
                                         <HeaderTemplate>
                                             <div class="ie-bg">
-                                                Vacation</div>
+                                                Vacation(In Hours)</div>
                                         </HeaderTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                         <EditItemTemplate>
-                                            <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("VacationDays") %>'></asp:TextBox>
+                                            <asp:TextBox ID="TextBox2" runat="server" Text='<%# ((int?)Eval("VacationDays")).HasValue ? (((int?)Eval("VacationDays")).Value * 8).ToString() : string.Empty %>'></asp:TextBox>
                                         </EditItemTemplate>
                                         <ItemTemplate>
-                                            <asp:Label ID="Label2" runat="server" Text='<%# Bind("VacationDays") %>'></asp:Label>
+                                            <asp:Label ID="Label2" runat="server" Text='<%# ((int?)Eval("VacationDays")).HasValue ? (((int?)Eval("VacationDays")).Value  * 8).ToString() : string.Empty %>'></asp:Label>
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
@@ -148,19 +150,44 @@
                 </tr>
                 <tr>
                     <td colspan="3" style="padding-top: 15px;">
-                        <asp:ValidationSummary ID="valSummary" runat="server" ValidationGroup="StrawmanGroup" />
-                        <uc:MessageLabel ID="lblSave" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
-                            WarningColor="Orange" EnableViewState="false" />
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" style="text-align: center;">
-                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click"
-                            ValidationGroup="StrawmanGroup" />
+                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click"/>
                         <asp:CancelAndReturnButton ID="btnCancelAndRetrun" runat="server" />
                     </td>
                 </tr>
             </table>
+            <asp:HiddenField ID="hdnTargetValidationPanel" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeValidationPanel" runat="server" BehaviorID="mpeValidationPanelBehaviourId"
+                TargetControlID="hdnTargetValidationPanel" BackgroundCssClass="modalBackground"
+                PopupControlID="pnlValidationPanel" OkControlID="btnOKValidationPanel" CancelControlID="btnOKValidationPanel"
+                DropShadow="false" />
+            <asp:Panel ID="pnlValidationPanel" runat="server" BackColor="White" BorderColor="Black"
+                Style="display: none; max-height: 400px; max-width: 550px; min-height: 100px;
+                min-width: 400px" BorderWidth="2px">
+                <table width="100%">
+                    <tr>
+                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
+                            valign="bottom">
+                            <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">
+                            <asp:ValidationSummary ID="valSummary" runat="server" ValidationGroup="StrawmanGroup" />
+                            <uc:MessageLabel ID="lblSave" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
+                                WarningColor="Orange" EnableViewState="false" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; text-align: center;">
+                            <asp:Button ID="btnOKValidationPanel" runat="server" ToolTip="OK" Text="OK" Width="100" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
