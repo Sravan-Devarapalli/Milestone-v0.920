@@ -427,6 +427,42 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.HiddenField hdnmpeTeamStructure;
         
         /// <summary>
+        /// hdnRowSpliter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnRowSpliter;
+        
+        /// <summary>
+        /// hdnColoumSpliter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnColoumSpliter;
+        
+        /// <summary>
+        /// hdnStrawmanListInDropdown control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnStrawmanListInDropdown;
+        
+        /// <summary>
+        /// hdnUsedInactiveStrawmanList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnUsedInactiveStrawmanList;
+        
+        /// <summary>
         /// mpeTeamStructure control.
         /// </summary>
         /// <remarks>
