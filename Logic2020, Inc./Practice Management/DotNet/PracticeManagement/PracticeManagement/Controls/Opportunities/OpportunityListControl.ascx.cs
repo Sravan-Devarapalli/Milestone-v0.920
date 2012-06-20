@@ -64,6 +64,8 @@ namespace PraticeManagement.Controls.Opportunities
 
         private List<NameValuePair> quantities;
 
+        private List<OpportunityPerson> UsedInactiveStrawMans = new List<OpportunityPerson>();
+
         #region Properties
 
         public bool AllowAutoRedirectToDetails { get; set; }
@@ -294,6 +296,15 @@ namespace PraticeManagement.Controls.Opportunities
         {
             PreparePrioritiesWithAnimations();
             ScriptManager.RegisterStartupScript(this, this.GetType(), "MultipleSelectionCheckBoxes_OnClickKeyName", string.Format("MultipleSelectionCheckBoxes_OnClick('{0}');", cblPotentialResources.ClientID), true);
+            if (!IsPostBack)
+            {
+                List<Person> persons = new List<Person>();
+                foreach (OpportunityPerson op in UsedInactiveStrawMans)
+                {
+                    persons.Add(op.Person);
+                }
+                hdnUsedInactiveStrawmanList.Value = GetStrawmanListInStringFormat(persons.Distinct().ToArray());
+            }
         }
 
         private void PreparePrioritiesWithAnimations()
@@ -331,7 +342,11 @@ namespace PraticeManagement.Controls.Opportunities
                 var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3", null));
                 cblPotentialResources.DataSource = potentialPersons.OrderBy(c => c.LastName);
                 cblPotentialResources.DataBind();
-                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll()).OrderBy(p => p.PersonLastFirstName);
+                hdnRowSpliter.Value = Guid.NewGuid().ToString();
+                hdnColoumSpliter.Value = Guid.NewGuid().ToString();
+                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawmenListAllShort(false));
+                hdnStrawmanListInDropdown.Value = GetStrawmanListInStringFormat(Strawmen);
+                
                 ddlStrawmen.DataSource = Strawmen;
                 ddlStrawmen.DataBind();
                 ddlStrawmen.Items.Insert(0, new ListItem { Text = "-Select Strawman-", Value = "0" });
@@ -352,6 +367,27 @@ namespace PraticeManagement.Controls.Opportunities
 
                 PraticeManagement.Utils.Generic.RedirectWithReturnTo(detailsLink, Request.Url.AbsoluteUri, Response);
             }
+        }
+
+        private string GetStrawmanListInStringFormat(Person[] strawMans)
+        {
+            StringBuilder strawmanListInDropdown = new StringBuilder();
+            string rowSpliter = hdnRowSpliter.Value;
+            string coloumSpliter = hdnColoumSpliter.Value;
+            strawmanListInDropdown.Append("-Select Strawman-" + coloumSpliter + "0" + rowSpliter);
+            for (int i = 0; i < strawMans.Length; i++)
+            {
+                Person strawMan = strawMans[i];
+                if (i != strawMans.Length - 1)
+                {
+                    strawmanListInDropdown.Append(strawMan.PersonLastFirstName + coloumSpliter + strawMan.Id + rowSpliter);
+                }
+                else
+                {
+                    strawmanListInDropdown.Append(strawMan.PersonLastFirstName + coloumSpliter + strawMan.Id);
+                }
+            }
+            return strawmanListInDropdown.ToString();
         }
 
         protected string GetOpportunityDetailsLink(int opportunityId, int index)
@@ -636,6 +672,14 @@ namespace PraticeManagement.Controls.Opportunities
                     hasStrawMans = strawMansList.Count() > 0;
 
                     dtlProposedPersons.DataSource = propsedPersonsList;
+ 		    if (!IsPostBack)
+            	   {
+                    var inactiveStrawMans = strawMansList.Where(p => p.Person.Status.Id != (int)PersonStatusType.Active);
+                    if (inactiveStrawMans.Count() > 0)
+                    {
+                        UsedInactiveStrawMans.AddRange(inactiveStrawMans);
+                    }
+		}
                     dtlTeamStructure.DataSource = strawMansList;
                     dtlProposedPersons.DataBind();
                     dtlTeamStructure.DataBind();
