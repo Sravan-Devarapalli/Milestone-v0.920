@@ -25,10 +25,16 @@ BEGIN
 				op.OpportunityPersonTypeId,
 				op.RelationTypeId,
 				op.Quantity,
-				op.NeedBy
+				op.NeedBy,
+				p.PersonStatusId 
 		FROM dbo.OpportunityPersons op
-		JOIN dbo.Person p ON p.PersonId = op.PersonId
-		WHERE op.OpportunityId IN (SELECT OpportunityId FROM @OpportunityIdTable)
-				AND p.PersonStatusId IN(1,3)
+		INNER JOIN dbo.Person p ON p.PersonId = op.PersonId
+		INNER JOIN @OpportunityIdTable O ON O.OpportunityId = op.OpportunityId
+		WHERE (
+				p.PersonStatusId IN(1,3)
+				OR
+				p.IsStrawman = 1
+			)
 		ORDER BY op.OpportunityId
 END
+
