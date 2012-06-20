@@ -11,36 +11,42 @@
 	@BonusAmount			DECIMAL(18,2),
 	@BonusHoursToCollect	INT,
 	@DefaultHoursPerDay		DECIMAL(18,2),
-	@StartDate				DATETIME
+	@StartDate				DATETIME,
+	@PersonStatusId         INT 
 AS
 BEGIN
+	DECLARE @ErrorMessage NVARCHAR(2000)
 	BEGIN TRY
-		DECLARE @Today DATETIME
-		DECLARE @ErrorMessage NVARCHAR(500)
+		BEGIN TRAN TRAN_SaveStrawman
 
-		SELECT @Today = dbo.GettingPMTime(GETDATE())
+		EXEC dbo.SessionLogPrepare @userLogin = @UserLogin
+		
+		DECLARE @FutureDate  DATETIME
+		SELECT	@StartDate = ISNULL(CONVERT(DATE, @StartDate), '1900-01-01'),
+				@BonusHoursToCollect = ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear()),
+				@FutureDate = dbo.GetFutureDate()
 
-		SELECT @Today = CONVERT(TIME,@Today)
-
-		SET @StartDate = ISNULL(CONVERT(DATE, @StartDate), '1900-01-01')
-		SET @BonusHoursToCollect = ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear())
-			
-		IF @PersonId IS NULL
-		BEGIN
-			IF EXISTS (SELECT 1 FROM Person WHERE FirstName = @FirstName AND LastName = @LastName)
+		IF EXISTS (SELECT 1 FROM Person P
+					WHERE (
+							P.PersonId != @PersonId --edit strawman 
+							OR @PersonId IS NULL --new strawman creating
+						  ) 
+						AND P.FirstName = @FirstName 
+						AND P.LastName = @LastName
+					)
 			BEGIN
-			
 				-- Person First and Last Name uniqueness violation
 				SELECT @ErrorMessage = [dbo].[GetErrorMessage](70001)
 				RAISERROR (@ErrorMessage, 16, 1)
 			END
-			EXEC dbo.SessionLogPrepare @userLogin = @UserLogin
+
+		IF @PersonId IS NULL
+		BEGIN
 
 			DECLARE @Counter INT,
-				@StringCounter NVARCHAR(7),
-				@EmployeeNumber NVARCHAR(12),
-				@HireDate DATETIME
-
+					@StringCounter NVARCHAR(7),
+					@EmployeeNumber NVARCHAR(12),
+					@HireDate DATETIME
 			SELECT @Counter = 0, @HireDate = dbo.GettingPMTime(GETUTCDATE())
 
 			WHILE  (1 = 1)
@@ -59,42 +65,49 @@ BEGIN
 				SET @Counter = @Counter + 1
 			END
 		
-			INSERT INTO Person(FirstName, LastName, EmployeeNumber, PTODaysPerAnnum, IsStrawman,HireDate)
-			VALUES (@FirstName, @LastName, @EmployeeNumber, 0, 1, @Today) --For strawmem we will use HireDate field as created date field
+			INSERT INTO Person(FirstName,
+							   LastName,
+							   EmployeeNumber,
+							   PTODaysPerAnnum,
+							   IsStrawman,
+							   HireDate,
+							   PersonStatusId)
+			VALUES (@FirstName,
+					@LastName,
+					@EmployeeNumber,
+					0,
+					1,
+					'1900-01-01',  --For strawman we will use HireDate field as created date field and it will be the pm minimum start date
+					1)
 		
 			SET @PersonId = SCOPE_IDENTITY()
-
-			EXEC dbo.SessionLogUnprepare
 		END
 
 
-		IF @PersonId IS NOT NULL
+		IF @PersonId IS NOT NULL AND EXISTS (SELECT 1 FROM dbo.Person P WHERE P.IsStrawman = 1)
 		BEGIN
 			IF EXISTS (SELECT 1 
-					   FROM Person AS P 
-					   WHERE P.PersonId != @PersonId AND FirstName = @FirstName AND LastName = @LastName)
-			BEGIN
-			
-				-- Person First and Last Name uniqueness violation
-				SELECT @ErrorMessage = [dbo].[GetErrorMessage](70001)
-				RAISERROR (@ErrorMessage, 16, 1)
-			END
-			IF EXISTS (SELECT 1 FROM Person WHERE PersonId = @PersonId AND ( FirstName <> @FirstName OR LastName <> @LastName ) )
+						FROM Person 
+						WHERE PersonId = @PersonId 
+							AND ( FirstName <> @FirstName OR LastName <> @LastName OR PersonStatusId <> @PersonStatusId) )
 			BEGIN
 				UPDATE Person
-				SET FirstName = @FirstName, LastName = @LastName
-				WHERE PersonId = @PersonId
+					SET FirstName = @FirstName, LastName = @LastName, PersonStatusId = @PersonStatusId
+					WHERE PersonId = @PersonId
+
+				EXEC dbo.PersonStatusHistoryUpdate
+					@PersonId = @PersonId,
+					@PersonStatusId = @PersonStatusId
 			END
 			
 			IF NOT EXISTS (SELECT 1 FROM Pay P WHERE Person = @PersonId)
 			BEGIN
-				INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay)
-				SELECT @PersonId, @StartDate , CONVERT(DATE, dbo.GetFutureDate()), @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay
+				INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay, IsActivePay)
+				SELECT @PersonId, @StartDate , @FutureDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay, 1
 			END
 			ELSE IF EXISTS (SELECT 1 FROM Pay pa 
-								JOIN  dbo.Person P ON P.PersonId = Pa.Person AND P.IsStrawman = 1
-								 WHERE pa.Person = @PersonId AND  pa.StartDate = @StartDate
-							 )
+						    WHERE pa.Person = @PersonId AND  pa.StartDate = @StartDate
+							)
 			BEGIN
 				--IF Saving Second time in a day. then update previous saved on the same day. 
 				--OR Updating existing compensation on that startdate.
@@ -108,15 +121,11 @@ BEGIN
 					Pa.BonusHoursToCollect = @BonusHoursToCollect,
 					Pa.DefaultHoursPerDay = @DefaultHoursPerDay
 				FROM  Pay Pa
-				JOIN  dbo.Person P ON P.PersonId = Pa.Person
-				WHERE Pa.Person = @PersonId AND P.IsStrawman = 1 AND
-				pa.StartDate = @StartDate
+				WHERE Pa.Person = @PersonId AND pa.StartDate = @StartDate
 			END
 			ELSE --To update existing compensation enddate to this startdate and create new compensation from startdate to futuredate.
 			BEGIN
 				
-				DECLARE @FutureDate  DATETIME
-				SELECT @FutureDate = CONVERT(DATE, dbo.GetFutureDate())
 				IF EXISTS (SELECT 1 FROM dbo.Pay Pa
 							WHERE 
 							Pa.EndDate = @FutureDate
@@ -133,23 +142,29 @@ BEGIN
 						 )
 				BEGIN
 
-						--End the Previous compensation upto @Startdate.
+						--End the Last compensation with Start date i.e. today.
 						UPDATE Pay
 						SET EndDate = @StartDate
-						WHERE Person = @PersonId AND @StartDate BETWEEN ISNULL(StartDate, '1900-01-01') AND ISNULL(EndDate, dbo.GetFutureDate())
+						WHERE Person = @PersonId AND EndDate = @FutureDate
 
-						--Insert new compensation with startdate today.
+						--Insert new compensation with start date i.e. today and end with future date. 
 						INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay)
-						SELECT @PersonId, @StartDate, CONVERT(DATE, dbo.GetFutureDate()), @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay
+						SELECT @PersonId, @StartDate, @FutureDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay
+
+						UPDATE Pay	SET IsActivePay = CASE WHEN EndDate = @FutureDate   THEN 1 ELSE 0 END	WHERE Person = @PersonId
 				END
 			END
-					
 		END
 
-		SELECT @PersonId
-	
+		EXEC dbo.SessionLogUnprepare
+
+		COMMIT TRAN TRAN_SaveStrawman
+
 	END TRY
 	BEGIN CATCH
-		RAISERROR (@ErrorMessage, 16, 1)
+		ROLLBACK TRAN TRAN_SaveStrawman
+		SET @ErrorMessage = ERROR_MESSAGE()
+		RAISERROR(@ErrorMessage, 16, 1)
 	END CATCH
 END
+
