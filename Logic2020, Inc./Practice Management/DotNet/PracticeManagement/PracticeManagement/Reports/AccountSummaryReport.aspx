@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="By Account" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="AccountSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.AccountSummaryReport" %>
 
-<%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
-    TagName="TimeEntryReportsHeader" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
@@ -118,119 +116,95 @@
         }
     </script>
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
-    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <table width="100%">
-                <tr>
-                    <td class="height30P vBottom fontBold">
-                        2.&nbsp;Select report parameters:
+                <tr class="height30P">
+                    <td class="vBottom fontBold" style="width: 3%; white-space: nowrap;">
+                        &nbsp;Select report parameters:&nbsp;
                     </td>
-                </tr>
-            </table>
-            <table width="100%" style="height: 160px;">
-                <tr>
-                    <td style="width: 25%;" id="tdFirst" runat="server">
-                    </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top; width: 30%;" id="tdSecond"
-                        runat="server">
-                        <table width="100%" align="center" style="vertical-align: top;">
-                            <tr>
-                                <td style="text-align: right; width: 25%; font-weight: bold;">
-                                    Account:&nbsp;
-                                </td>
-                                <td style="text-align: left; width: 75%;">
-                                    <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" Width="220"
-                                        OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
-                                    </asp:DropDownList>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="width: 45%" id="tdThird" runat="server">
-                    </td>
-                </tr>
-                <tr>
                     <td>
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
-                            <tr>
-                                <td style="text-align: right; width: 25%; font-weight: bold; vertical-align: top;">
-                                    Business Unit:&nbsp;
-                                </td>
-                                <td style="text-align: left; width: 75%;">
-                                    <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                                        OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
-                                        Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')"
-                                        AutoPostBack="true" DropDownListType="Business Unit" CellPadding="3" />
-                                    <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
-                                        UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                                    </ext:ScrollableDropdownExtender>
-                                </td>
-                            </tr>
-                        </table>
+                    <td style="width: 60%;">
+                    </td>
+                </tr>
+                <tr class="height30P">
+                    <td class="ReportFilterLabels">
+                        Account:&nbsp;
+                    </td>
+                    <td class="textLeft">
+                        <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" Width="220"
+                            OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
+                        </asp:DropDownList>
                     </td>
                     <td>
                     </td>
                 </tr>
-                <tr>
-                    <td>
+                <tr class="height30P">
+                    <td class="ReportFilterLabels" style="vertical-align: top; line-height: 30px;">
+                        Business Unit:&nbsp;
                     </td>
-                    <td style="height: 30px; text-align: center; vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
-                            <tr>
-                                <td style="text-align: right; width: 25%; font-weight: bold;">
-                                    Range:&nbsp;
-                                </td>
-                                <td style="text-align: left; width: 75%;">
-                                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="220px">
-                                        <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
-                                        <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
-                                        <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
-                                        <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
-                                        <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
-                                        <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
-                                        <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
-                                        <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
-                                        <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
-                                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
-                                    </asp:DropDownList>
-                                </td>
-                            </tr>
-                        </table>
+                    <td class="textLeft">
+                        <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
+                            Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')"
+                            AutoPostBack="true" DropDownListType="Business Unit" CellPadding="3" />
+                        <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
+                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
                     </td>
                     <td>
                     </td>
                 </tr>
-                <tr>
-                    <td>
+                <tr class="height30P">
+                    <td class="ReportFilterLabels">
+                        Range:&nbsp;
                     </td>
-                    <td style="height: 30px; text-align: center; vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
-                            <tr>
-                                <td style="width: 25%;">
-                                </td>
-                                <td style="text-align: left; height: 15px;">
-                                    <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
-                                    <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
-                                    <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
-                                </td>
-                            </tr>
-                        </table>
+                    <td class="textLeft">
+                        <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
+                            Width="220px">
+                            <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
+                            <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
+                            <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
+                            <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
+                            <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
+                            <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
+                            <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
+                            <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
+                            <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
+                            <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
+                        </asp:DropDownList>
                     </td>
                     <td>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3" style="height: 30px;">
+                <tr class="height30P">
+                    <td>
+                    </td>
+                    <td class="textLeft">
+                        <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
+                        <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                        <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                        <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr class="height30P">
+                    <td colspan="2">
                         &nbsp;
                     </td>
+                    <td>
+                    </td>
                 </tr>
-                <tr>
-                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; height: 10px;">
+                <tr class="height30P">
+                    <td colspan="2">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr style="border-bottom: 3px solid black;">
+                    <td colspan="3">
                     </td>
                 </tr>
             </table>
@@ -279,7 +253,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-top: 10px; vertical-align: bottom; padding-bottom: 5px;">
+                                    <td style="padding-top: 10px; vertical-align: bottom; padding-bottom: 5px; float:left;">
                                         <asp:Literal ID="ltRange" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
