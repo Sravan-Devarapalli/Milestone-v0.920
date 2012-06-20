@@ -139,7 +139,6 @@ namespace PraticeManagement
             }
         }
 
-
         protected void login_OnLoggingIn(object sender, EventArgs e)
         {
             MembershipUser user = Membership.GetUser(login.UserName);
@@ -255,21 +254,38 @@ namespace PraticeManagement
 
             }
             else
-                using (PersonServiceClient serviceClient = new PersonServiceClient())
+            {
+                //Check with TemporaryCredentials
+                if (ServiceCallers.Custom.Person(p => p.CheckIfTemporaryCredentialsValid(login.UserName, login.Password)))
                 {
-                    try
+                    // Redirect to change password page as TemporaryCredentials are satisfied.
+                    string changePasswordPageUrl =
+                            Request.Url.Scheme + "://" + Request.Url.Host
+                            + (IsAzureWebRole() ? string.Empty : ":" + Request.Url.Port.ToString())
+                            + Request.ApplicationPath + "/ChangePassword.aspx?UserName={0}&Pwd={1}";
+
+                    changePasswordPageUrl = string.Format(changePasswordPageUrl, login.UserName, login.Password);
+                    Response.Redirect(changePasswordPageUrl);
+                }
+                else
+                {
+                    using (PersonServiceClient serviceClient = new PersonServiceClient())
                     {
-                        LogLoginResult(4);
-                        Person person = serviceClient.GetPersonByAlias(login.UserName);
-                        if (person != null && person.Status != null && person.Status.Id != (int)PersonStatusType.Active)
-                            loginErrorDetails.Text = MessageLoginErrorNotActive;
-                    }
-                    catch (CommunicationException)
-                    {
-                        serviceClient.Abort();
-                        throw;
+                        try
+                        {
+                            LogLoginResult(4);
+                            Person person = serviceClient.GetPersonByAlias(login.UserName);
+                            if (person != null && person.Status != null && person.Status.Id != (int)PersonStatusType.Active)
+                                loginErrorDetails.Text = MessageLoginErrorNotActive;
+                        }
+                        catch (CommunicationException)
+                        {
+                            serviceClient.Abort();
+                            throw;
+                        }
                     }
                 }
+            }
         }
 
         protected void lnkbtnForgotPwd_OnClick(object sender, EventArgs e)
