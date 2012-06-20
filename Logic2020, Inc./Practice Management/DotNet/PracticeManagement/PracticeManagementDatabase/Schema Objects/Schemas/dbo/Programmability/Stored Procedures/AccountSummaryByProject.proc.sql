@@ -43,7 +43,7 @@ SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 							DATEADD(DAY, -1, @Today)
 						ELSE
 							@EndDateLocal
-					END AND ((PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()) OR (PC.CompanyDayOff = 1 AND PC.SubstituteDate IS NOT NULL))
+					END AND ((PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType) OR (PC.CompanyDayOff = 1 AND PC.SubstituteDate IS NOT NULL))
 			GROUP BY
 				M.ProjectId
 	),
@@ -87,7 +87,7 @@ SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 				 ON PRO.ProjectId = CC.ProjectId
 		 WHERE
 			 CC.ClientId = @AccountId
-			 AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, dbo.GetFutureDate())
+			 AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, @FutureDate)
 			 AND (CC.timeTypeId != @HolidayTimeType
 			 OR (CC.timeTypeId = @HolidayTimeType
 			 AND PTSH.PersonStatusId = 1))
@@ -192,7 +192,7 @@ ORDER BY
 				 ON pfh.ProjectId = PRO.ProjectId
 		 WHERE  TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal AND
 			 CC.ClientId = @AccountId
-			 AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, dbo.GetFutureDate())
+			 AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, @FutureDate)
 			 AND (CC.timeTypeId != @HolidayTimeType
 			 OR (CC.timeTypeId = @HolidayTimeType
 			 AND PTSH.PersonStatusId = 1))
