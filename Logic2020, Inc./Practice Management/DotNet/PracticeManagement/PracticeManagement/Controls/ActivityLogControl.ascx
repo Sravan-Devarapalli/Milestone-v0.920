@@ -183,6 +183,10 @@
                                         <asp:ListItem Text="ALL Person Events" Value="3"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Added Persons" Value="4"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed Persons" Value="5"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Strawmen Events" Value="43"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Strawmen" Value="44"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Strawmen" Value="45"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Strawmen" Value="46"></asp:ListItem>
                                         <asp:ListItem Text="Target Person" Value="6"></asp:ListItem>
                                         <asp:ListItem Text="ALL Logon Events" Value="32"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Successfull Logins" Value="33"></asp:ListItem>
@@ -372,3 +376,4 @@
         <asp:AsyncPostBackTrigger ControlID="btnResetFilter" EventName="Click" />
     </Triggers>
 </asp:UpdatePanel>
+
