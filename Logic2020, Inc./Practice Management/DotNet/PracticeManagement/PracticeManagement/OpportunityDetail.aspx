@@ -205,15 +205,14 @@
 
             ddlStrawManOriginal = tblTeamStructure.rows[0].cells[0].children[0];
             ddlStrawMan.style.width = ddlStrawManOriginal.style.width;
-            for (var i = 0; i < ddlStrawManOriginal.children.length; i++) {
-                var option = document.createElement("option");
-                option.text = ddlStrawManOriginal.children[i].text;
-                option.value = ddlStrawManOriginal.children[i].value;
-                try {
-                    ddlStrawMan.add(option, null); //Standard    
-                } catch (error) {
-                    ddlStrawMan.add(option); // IE only    
-                }
+
+            var hdnStrawmanListInDropdown = document.getElementById('<%= hdnStrawmanListInDropdown.ClientID %>');
+            var hdnColoumSpliter = document.getElementById('<%= hdnColoumSpliter.ClientID %>');
+            var hdnRowSpliter = document.getElementById('<%= hdnRowSpliter.ClientID %>');
+            var strawmans = hdnStrawmanListInDropdown.value.split(hdnRowSpliter.value);
+            for (var i = 0; i < strawmans.length; i++) {
+                var strawmanDetails = strawmans[i].split(hdnColoumSpliter.value);
+                AddOption(strawmanDetails[0], strawmanDetails[1], ddlStrawMan);
             }
 
             cell1.appendChild(ddlStrawMan);
@@ -252,6 +251,7 @@
             setcalendar();
             return false;
         }
+
 
         function ClearProposedResources() {
             var chkboxList = document.getElementById('<%=cblPotentialResources.ClientID %>');
@@ -361,6 +361,11 @@
                 }
             }
             var trTeamStructure = document.getElementById('tblTeamStructure').getElementsByTagName('tr');
+            var hdnUsedInactiveStrawmanList = document.getElementById('<%=hdnUsedInactiveStrawmanList.ClientID %>');
+            var hdnColoumSpliter = document.getElementById('<%= hdnColoumSpliter.ClientID %>');
+            var hdnRowSpliter = document.getElementById('<%= hdnRowSpliter.ClientID %>');
+            var strawmans = hdnUsedInactiveStrawmanList.value.split(hdnRowSpliter.value);
+
             for (var i = 0; i < attachedTeam.length - 1; i++) {
                 if (i > 0) {
                     AddStrawmanRow();
@@ -371,7 +376,21 @@
                 var personString = attachedTeam[i];
                 //Strawmans' info is separated  by ","s.
                 // Each Strawman info is in the format "PersonId:PersonType|Quantity?NeedBy"
-                ddlPerson.value = personString.substring(0, personString.indexOf(":", 0));
+                var selectedValue = personString.substring(0, personString.indexOf(":", 0))
+                ddlPerson.value = selectedValue;
+                if (ddlPerson.value == '' || ddlPerson.value == null) {
+
+                    var strawmanname = '';
+                    for (var j = 0; j < strawmans.length; j++) {
+                        var strawmanDetails = strawmans[j].split(hdnColoumSpliter.value);
+                        if(selectedValue == strawmanDetails[1])
+                        {
+                            strawmanname = strawmanDetails[0];
+                        }
+                    }
+                    AddOption(strawmanname, selectedValue, ddlPerson);
+                    ddlPerson.value = selectedValue;
+                }
                 ddlQuantity.value = personString.substring(personString.indexOf("|", 0) + 1, personString.indexOf("?", 0));
                 var needByDate = new Date(personString.substring(personString.indexOf("?", 0) + 1, personString.length));
                 txtNeedBy.value = needByDate.format('MM/dd/yyyy');
@@ -379,6 +398,17 @@
             }
             $find("behaviorIdTeamStructure").show();
             return false;
+        }
+
+        function AddOption(optionText, optionValue, ddl) {
+            var option = document.createElement("option");
+            option.text = optionText;
+            option.value = optionValue;
+            try {
+                ddl.add(option, null); //Standard    
+            } catch (error) {
+                ddl.add(option); // IE only    
+            }
         }
 
         function GetProposedPersonIdsListWithPersonType() {
@@ -1034,8 +1064,8 @@
                                                 <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarkEstRevenue" runat="server"
                                                     TargetControlID="txtEstRevenue" WatermarkText="Ex: 15000, minimum 1000" EnableViewState="false"
                                                     WatermarkCssClass="watermarkedtext" />
-                                                <AjaxControlToolkit:FilteredTextBoxExtender ID="fteEstRevenue" TargetControlID="txtEstRevenue" 
-                                                    FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server"  ValidChars="."/>
+                                                <AjaxControlToolkit:FilteredTextBoxExtender ID="fteEstRevenue" TargetControlID="txtEstRevenue"
+                                                    FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server" ValidChars="." />
                                             </td>
                                             <td style="width: 3%">
                                                 <asp:RequiredFieldValidator ID="reqEstRevenue" runat="server" ControlToValidate="txtEstRevenue"
@@ -1456,6 +1486,10 @@
                                         </table>
                                     </asp:Panel>
                                     <asp:HiddenField ID="hdnmpeTeamStructure" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnRowSpliter" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnColoumSpliter" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnStrawmanListInDropdown" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnUsedInactiveStrawmanList" runat="server" Value="" />
                                     <AjaxControlToolkit:ModalPopupExtender ID="mpeTeamStructure" runat="server" BehaviorID="behaviorIdTeamStructure"
                                         TargetControlID="hdnmpeTeamStructure" EnableViewState="false" BackgroundCssClass="modalBackground"
                                         PopupControlID="pnlTeamStructure" CancelControlID="btnTeamCancel" DropShadow="false" />
