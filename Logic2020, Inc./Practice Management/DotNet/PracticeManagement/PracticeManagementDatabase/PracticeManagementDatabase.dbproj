@@ -4082,6 +4082,18 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ClientIsNoteRequiredUpdate.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\DeleteStrawMan.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetStrawmanDetailsByIdWithCurrentPay.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetStrawManListAllShort.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_PersonDelete.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
@@ -4146,3 +4158,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
