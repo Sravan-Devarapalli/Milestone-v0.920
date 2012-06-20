@@ -786,6 +786,7 @@ namespace DataAccess
                 int opportunityPersonRelationTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonRelationTypeId);
                 int opportunityPersonQuantityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonQuantity);
                 int needByIndex = reader.GetOrdinal(Constants.ColumnNames.NeedBy);
+                int personStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
 
                 while (reader.Read())
                 {
@@ -795,7 +796,11 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(personIdIndex),
                             FirstName = reader.GetString(firstNameIndex),
-                            LastName = reader.GetString(lastNameIndex)
+                            LastName = reader.GetString(lastNameIndex),
+                            Status = new PersonStatus
+                            {
+                                Id = reader.GetInt32(personStatusIdIndex)
+                            }
                         },
                         PersonType = reader.GetInt32(opportunityPersonTypeIdIndex),
                         RelationType = reader.GetInt32(opportunityPersonRelationTypeIdIndex),
@@ -822,6 +827,7 @@ namespace DataAccess
                 int opportunityPersonRelationTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonRelationTypeId);
                 int opportunityPersonQuantityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityPersonQuantity);
                 int needByIndex = reader.GetOrdinal(Constants.ColumnNames.NeedBy);
+                int personStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
                 Opportunity CurrentOpportunity = null;
 
                 while (reader.Read())
@@ -841,16 +847,18 @@ namespace DataAccess
                                    {
                                        Id = personId,
                                        FirstName = reader.GetString(firstNameIndex),
-                                       LastName = reader.GetString(lastNameIndex)
+                                       LastName = reader.GetString(lastNameIndex),
+                                       Status = new PersonStatus
+                                       {
+                                           Id = reader.GetInt32(personStatusIdIndex)
+                                       }
                                    },
                         PersonType = reader.GetInt32(opportunityPersonTypeIdIndex),
                         RelationType = reader.GetInt32(opportunityPersonRelationTypeIdIndex),
-                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex)?  reader.GetInt32(opportunityPersonQuantityIndex):0,
-                        NeedBy = !reader.IsDBNull(needByIndex)? reader.GetDateTime(needByIndex):(DateTime?)null
+                        Quantity = !reader.IsDBNull(opportunityPersonQuantityIndex) ? reader.GetInt32(opportunityPersonQuantityIndex) : 0,
+                        NeedBy = !reader.IsDBNull(needByIndex) ? reader.GetDateTime(needByIndex) : (DateTime?)null
 
-                    }
-                    ;
-
+                    };
                     CurrentOpportunity.ProposedPersons.Add(opportunityPerson);
                 }
             }
@@ -933,7 +941,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdListParam, personIdList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OutSideResourcesParam, outSideResources);
                 command.Parameters.AddWithValue(Constants.ParameterNames.RelationTypeIdParam, relationTypeId);
-                
 
                 try
                 {
@@ -1243,7 +1250,6 @@ namespace DataAccess
                 command.ExecuteNonQuery();
             }
         }
-        
 
         public static List<Opportunity> FilteredOpportunityListAll(bool showActive, bool showExperimental, bool showInactive, bool showLost, bool showWon, string clientIdsList, string opportunityGroupIdsList, string opportunityOwnerIdsList, string salespersonIdsList)
         {
@@ -1310,7 +1316,6 @@ namespace DataAccess
                     return (int)command.ExecuteScalar() > 0;
                 }
             }
-            
         }
 
         public static List<Opportunity> OpportunityListWithMinimumDetails(int? clientId, bool? attach)
@@ -1340,7 +1345,7 @@ namespace DataAccess
             int opportunityNameIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityName);
             int opportunityNumberIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityNumberColumn);
             int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
-                
+
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -1350,7 +1355,7 @@ namespace DataAccess
                         Id = reader.GetInt32(opportunityIdIndex),
                         Name = reader.GetString(opportunityNameIndex),
                         OpportunityNumber = reader.GetString(opportunityNumberIndex),
-                        Client = new Client 
+                        Client = new Client
                         {
                             Name = reader.GetString(clientNameIndex)
                         }
