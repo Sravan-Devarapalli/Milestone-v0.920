@@ -104,82 +104,6 @@ namespace DataAccess
 
         #endregion
 
-        #region Stored Procedures
-
-        private const string ConsultantUtilizationReportProcedure = "dbo.ConsultantUtilizationReport";
-        private const string ConsultantUtilizationWeeklyProcedure = "dbo.ConsultantUtilizationWeekly";
-        private const string ConsultantUtilizationDailyByPersonProcedure = "dbo.ConsultantUtilizationDailyByPerson";
-        private const string PersonInsertProcedure = "dbo.PersonInsert";
-        private const string PersonUpdateProcedure = "dbo.PersonUpdate";
-        private const string PersonListAllSeniorityFilterProcedure = "dbo.PersonListAllSeniorityFilter";
-        private const string PersonListAllShortProcedure = "dbo.PersonListAllShort";
-        private const string OwnerListAllShortProcedure = "dbo.OwnerListAllShort";
-        private const string PersonsGetBySeniorityAndStatusProcedure = "dbo.PersonsGetBySeniorityAndStatus";
-        private const string PersonListShortByRoleAndStatusProcedure = "dbo.PersonListShortByRoleAndStatus";
-        private const string PersonListByStatusListProcedure = "dbo.PersonListAllByStatusList";
-        private const string GetPersonListByPersonIdListProcedure = "dbo.GetPersonListByPersonIds";
-        private const string PersonListAllForMilestoneProcedure = "dbo.PersonListAllForMilestone";
-        private const string PersonListRecruiterProcedure = "dbo.PersonListRecruiter";
-        private const string PersonGetByIdProcedure = "dbo.PersonGetById";
-        private const string PersonOverheadByPersonProcedure = "dbo.PersonOverheadByPerson";
-        private const string PersonOverheadByTimescaleProcedure = "dbo.PersonOverheadByTimescale";
-        private const string PersonGetCountProcedure = "dbo.PersonGetCount";
-        private const string PersonGetCountByCommaSeparatedIdsListProcedure = "dbo.PersonGetCountByCommaSeparatedIdsList";
-        private const string PersonListBenchExpenseProcedure = "dbo.PersonListBenchExpense";
-        private const string UpdateLastPasswordChangedDateForPersonProcedure = "dbo.UpdateLastPasswordChangedDateForPerson";
-        private const string GetPersonListByPersonIdsAndPayTypeIdsProcedure = "dbo.GetPersonListByPersonIdsAndPayTypeIds";
-
-
-        private const string MilestonePersonListOverheadByPersonProcedure =
-            "dbo.MilestonePersonListOverheadByPerson";
-
-        private const string PersonSetStatusProcedure = "dbo.PersonSetStatus";
-        private const string PersonListSalespersonProcedure = "dbo.PersonListSalesperson";
-        private const string PersonListPracticeManagerProcedure = "dbo.PersonListPracticeManager";
-        private const string PersonListProjectOwnerProcedure = "dbo.PersonListProjectOwner";
-        private const string PersonListOpportunityOwnerProcedure = "dbo.PersonListOpportunityOwner";
-        private const string PersonWorkDaysNumberProcedure = "dbo.PersonWorkDaysNumber";
-        private const string PersonGetCountActiveProcedure = "dbo.PersonGetCountActive";
-        private const string PersonGetByAliasProcedure = "dbo.PersonGetByAlias";
-        private const string MembershipDeleteProcedure = "dbo.MembershipDelete";
-        private const string aspnetUsersDeleteUserProcedure = "dbo.aspnet_Users_DeleteUser";
-        private const string aspnetMembershipCreateUserProcedure = "dbo.aspnet_Membership_CreateUser";
-        private const string MembershipAliasUpdateProcedure = "dbo.MembershipAliasUpdate";
-        private const string PersonListSubordinatesProcedure = "dbo.PersonListSubordinates";
-        private const string PersonOneOffListProcedure = "dbo.PersonOneOffList";
-        private const string PersonEnsureIntegrityProcedure = "dbo.PersonEnsureIntegrity";
-        private const string PersonGetExcelSetProcedure = "dbo.PersonExcelSet";
-        private const string PermissionsGetAllowedClientsProcedure = "dbo.PermissionsGetAllowedClients";
-        private const string PermissionsGetAllowedGroupsProcedure = "dbo.PermissionsGetAllowedGroups";
-        private const string UserTemporaryCredentialsInsertProcedure = "dbo.UserTemporaryCredentialsInsert";
-        private const string GetTemporaryCredentialsByUserNameProcedure = "dbo.GetTemporaryCredentialsByUserName";
-        private const string SetNewPasswordForUserProcedure = "dbo.aspnet_Membership_SetPassword";
-        private const string DeleteTemporaryCredentialsByUserNameProcedure = "dbo.DeleteTemporaryCredentialsByUserName";
-        private const string GetCareerCounselorHierarchiPersonsProcedure = "dbo.GetCareerCounselorHierarchiPersons";
-
-        private const string PermissionsGetAllowedPracticeManagersProcedure =
-            "dbo.PermissionsGetAllowedPracticeManagers";
-
-        private const string PermissionsGetAllowedPracticesProcedure = "dbo.PermissionsGetAllowedPractices";
-        private const string PermissionsGetAllowedSalespersonsProcedure = "dbo.PermissionsGetAllowedSalespersons";
-        private const string PermissionsGetAllProcedure = "dbo.PermissionsGetAll";
-        private const string PermissionsSetAllProcedure = "dbo.PermissionsSetAll";
-        private const string PersonMilestoneWithFinancials = "dbo.PersonMilestoneWithFinancials";
-
-        private const string PersonListAllSeniorityFilterWithPayProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPay";
-        private const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
-        private const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
-
-        private const string SaveStrawManProcedure = "dbo.SaveStrawMan";
-        private const string SaveStrawManFromExistingProcedure = "dbo.SaveStrawManFromExisting";
-
-        private const string GetStrawManListAllProcedure = "dbo.GetStrawManListAll";
-        private const string PersonFirstLastNameByIdProcedure = "dbo.PersonFirstLastNameById";
-
-        public const string GetConsultantDemandProcedure = "dbo.GetConsultantDemand";
-
-        #endregion
-
         #region Columns
         private const string LastLoginDateColumn = "LastLoginDate";
         private const string DescriptionColumn = "Description";
@@ -356,7 +280,7 @@ namespace DataAccess
         public static DataSet GetConsultantUtilizationReport(ConsultantTableReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(ConsultantUtilizationReportProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationReportProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -387,7 +311,7 @@ namespace DataAccess
         public static DataSet GetPersonMilestoneWithFinancials(int personId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonMilestoneWithFinancials, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonMilestoneWithFinancials, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -410,7 +334,7 @@ namespace DataAccess
         public static List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(ConsultantUtilizationWeeklyProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationWeeklyProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -440,7 +364,7 @@ namespace DataAccess
         public static List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(ConsultantUtilizationDailyByPersonProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationDailyByPersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -685,23 +609,23 @@ namespace DataAccess
             switch (target)
             {
                 case PermissionTarget.Client:
-                    procedure = PermissionsGetAllowedClientsProcedure;
+                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedClientsProcedure;
                     break;
 
                 case PermissionTarget.Group:
-                    procedure = PermissionsGetAllowedGroupsProcedure;
+                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedGroupsProcedure;
                     break;
 
                 case PermissionTarget.Practice:
-                    procedure = PermissionsGetAllowedPracticesProcedure;
+                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedPracticesProcedure;
                     break;
 
                 case PermissionTarget.PracticeManager:
-                    procedure = PermissionsGetAllowedPracticeManagersProcedure;
+                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedPracticeManagersProcedure;
                     break;
 
                 case PermissionTarget.Salesperson:
-                    procedure = PermissionsGetAllowedSalespersonsProcedure;
+                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedSalespersonsProcedure;
                     break;
 
                 default:
@@ -748,7 +672,7 @@ namespace DataAccess
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(PermissionsGetAllProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PermissionsGetAllProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -809,7 +733,7 @@ namespace DataAccess
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
 
-            using (var command = new SqlCommand(PersonInsertProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonInsertProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -887,7 +811,7 @@ namespace DataAccess
         public static DataSet PersonGetExcelSet()
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonGetExcelSetProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetExcelSetProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -914,7 +838,7 @@ namespace DataAccess
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
-            using (var command = new SqlCommand(PersonUpdateProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonUpdateProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1005,7 +929,7 @@ namespace DataAccess
             var result = new List<Person>();
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListRecruiterProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListRecruiterProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1033,7 +957,7 @@ namespace DataAccess
             var result = new List<Person>();
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListSalespersonProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListSalespersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1058,7 +982,7 @@ namespace DataAccess
             var result = new List<Person>();
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListSalespersonProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListSalespersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1089,7 +1013,7 @@ namespace DataAccess
             var result = new List<Person>();
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListPracticeManagerProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListPracticeManagerProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1123,7 +1047,7 @@ namespace DataAccess
             var result = new List<Person>();
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListPracticeManagerProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListPracticeManagerProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1158,7 +1082,7 @@ namespace DataAccess
             var result = new List<Person>();
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListProjectOwnerProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListProjectOwnerProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1180,7 +1104,7 @@ namespace DataAccess
             var result = new List<Person>();
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListOpportunityOwnerProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListOpportunityOwnerProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1206,7 +1130,7 @@ namespace DataAccess
             var personList = new List<Person>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(PersonGetByIdProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetByIdProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -1236,7 +1160,7 @@ namespace DataAccess
             var personList = new List<Person>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(PersonListAllSeniorityFilterProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListAllSeniorityFilterProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -1288,7 +1212,7 @@ namespace DataAccess
             var personList = new List<Person>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(PersonListAllSeniorityFilterWithPayProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListAllSeniorityFilterWithPayProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -1350,7 +1274,7 @@ namespace DataAccess
             var personList = new List<Person>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -1403,7 +1327,7 @@ namespace DataAccess
         public static List<Person> PersonListAllShort(int? practice, int? statusId, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListAllShortProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListAllShortProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1436,7 +1360,7 @@ namespace DataAccess
         public static List<Person> PersonsGetBySeniorityAndStatus(int seniorityId, int? statusId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonsGetBySeniorityAndStatusProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonsGetBySeniorityAndStatusProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1463,7 +1387,7 @@ namespace DataAccess
         public static List<Person> GetPersonListByStatusList(string statusList, int? personId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListByStatusListProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListByStatusListProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1499,7 +1423,7 @@ namespace DataAccess
                                                              DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListAllForMilestoneProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListAllForMilestoneProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1549,7 +1473,7 @@ namespace DataAccess
         public static List<Person> PersonListBenchExpense(BenchReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListBenchExpenseProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListBenchExpenseProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1595,7 +1519,7 @@ namespace DataAccess
         public static List<Person> PersonListSubordinates(int practiceManagerId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListSubordinatesProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListSubordinatesProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1618,7 +1542,7 @@ namespace DataAccess
         public static List<Person> GetCareerCounselorHierarchiPersons(int managerId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(GetCareerCounselorHierarchiPersonsProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetCareerCounselorHierarchiPersonsProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1640,7 +1564,7 @@ namespace DataAccess
         public static List<Person> PersonOneOffList(DateTime today, int? maxSeniorityLevel)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonOneOffListProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonOneOffListProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1669,7 +1593,7 @@ namespace DataAccess
         public static int PersonWorkDaysNumber(int personId, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonWorkDaysNumberProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonWorkDaysNumberProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1699,7 +1623,7 @@ namespace DataAccess
                                                 out int consultantsCount)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonGetCountActiveProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetCountActiveProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1733,7 +1657,7 @@ namespace DataAccess
         public static Person PersonGetByAlias(string alias)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonGetByAliasProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetByAliasProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1844,7 +1768,7 @@ namespace DataAccess
         public static int PersonGetCount(int? practice, bool showAll, string looked, int? recruiterId, int? timeScaleId, bool projected, bool terminated, bool inactive, char? alphabet)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonGetCountProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetCountProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1900,7 +1824,7 @@ namespace DataAccess
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(PersonSetStatusProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonSetStatusProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -1922,7 +1846,7 @@ namespace DataAccess
         public static List<PersonOverhead> PersonOverheadListByPerson(int personId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonOverheadByPersonProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonOverheadByPersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1954,7 +1878,7 @@ namespace DataAccess
                 timescale = TimescaleType._1099Ctc;
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonOverheadByTimescaleProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonOverheadByTimescaleProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -1983,7 +1907,7 @@ namespace DataAccess
                                                                                int milestoneId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(MilestonePersonListOverheadByPersonProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.MilestonePersonListOverheadByPersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2014,7 +1938,7 @@ namespace DataAccess
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
-            using (var command = new SqlCommand(aspnetUsersDeleteUserProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.aspnetUsersDeleteUserProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2048,7 +1972,7 @@ namespace DataAccess
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
-            using (var command = new SqlCommand(aspnetMembershipCreateUserProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.aspnetMembershipCreateUserProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2089,7 +2013,7 @@ namespace DataAccess
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
-            using (var command = new SqlCommand(MembershipAliasUpdateProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.MembershipAliasUpdateProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2119,7 +2043,7 @@ namespace DataAccess
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
-            using (var command = new SqlCommand(MembershipDeleteProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.MembershipDeleteProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2150,7 +2074,7 @@ namespace DataAccess
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
 
-            using (var command = new SqlCommand(PersonEnsureIntegrityProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonEnsureIntegrityProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2190,7 +2114,7 @@ namespace DataAccess
             if (person.Id != null)
             {
                 using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-                using (var command = new SqlCommand(PermissionsSetAllProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PermissionsSetAllProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -2755,7 +2679,7 @@ namespace DataAccess
         public static List<Person> GetPersonListByPersonIdList(string personIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(GetPersonListByPersonIdListProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListByPersonIdListProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2775,7 +2699,7 @@ namespace DataAccess
         public static List<Person> GetPersonListByPersonIdsAndPayTypeIds(string personIds, string paytypeIds, string practiceIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(GetPersonListByPersonIdsAndPayTypeIdsProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListByPersonIdsAndPayTypeIdsProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2805,7 +2729,7 @@ namespace DataAccess
         public static List<Person> PersonListShortByRoleAndStatus(int? statusId, string rolename)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonListShortByRoleAndStatusProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListShortByRoleAndStatusProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2833,7 +2757,7 @@ namespace DataAccess
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
             }
-            using (var command = new SqlCommand(UserTemporaryCredentialsInsertProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.UserTemporaryCredentialsInsertProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2859,7 +2783,7 @@ namespace DataAccess
         public static UserCredentials GetTemporaryCredentialsByUserName(string userName)
         {
             using (SqlConnection connection = new SqlConnection(DataAccess.Other.DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(GetTemporaryCredentialsByUserNameProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.GetTemporaryCredentialsByUserNameProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2884,7 +2808,7 @@ namespace DataAccess
         public static void DeleteTemporaryCredentialsByUserName(string userName)
         {
             using (SqlConnection connection = new SqlConnection(DataAccess.Other.DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(DeleteTemporaryCredentialsByUserNameProcedure, connection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.DeleteTemporaryCredentialsByUserNameProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2923,7 +2847,7 @@ namespace DataAccess
         {
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(SetNewPasswordForUserProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.SetNewPasswordForUserProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -2975,7 +2899,7 @@ namespace DataAccess
         public static int PersonGetCount(string practiceIds, bool showAll, string looked, string recruiterIds, string timeScaleIds, bool projected, bool terminated, bool inactive, char? alphabet)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonGetCountByCommaSeparatedIdsListProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetCountByCommaSeparatedIdsListProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -3038,7 +2962,7 @@ namespace DataAccess
         public static void UpdateLastPasswordChangedDateForPerson(string email)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(UpdateLastPasswordChangedDateForPersonProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.UpdateLastPasswordChangedDateForPersonProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -3053,7 +2977,7 @@ namespace DataAccess
         public static List<UserPasswordsHistory> GetPasswordHistoryByUserName(string userName)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(GetPasswordHistoryByUserNameProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPasswordHistoryByUserNameProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -3133,7 +3057,7 @@ namespace DataAccess
         public static List<Person> OwnerListAllShort(int? statusId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(OwnerListAllShortProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.OwnerListAllShortProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -3172,18 +3096,19 @@ namespace DataAccess
                 }
             }
         }
-        public static void SaveStrawManFromExisting(int existingPersonId, string newFirstName, string newLastName, out int newPersonid)
+
+        public static void SaveStrawManFromExisting(int existingPersonId, Person person, out int newPersonid, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(SaveStrawManFromExistingProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.SaveStrawManFromExistingProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
 
-                    command.Parameters.AddWithValue(FirstNameParam, newFirstName);
-                    command.Parameters.AddWithValue(LastNameParam, newLastName);
+                    command.Parameters.AddWithValue(FirstNameParam, person.FirstName);
+                    command.Parameters.AddWithValue(LastNameParam, person.LastName);
 
                     var personIdParameter = new SqlParameter();
                     personIdParameter.ParameterName = PersonIdParam;
@@ -3191,6 +3116,12 @@ namespace DataAccess
                     personIdParameter.Value = existingPersonId;
                     personIdParameter.Direction = ParameterDirection.InputOutput;
                     command.Parameters.Add(personIdParameter);
+
+                    command.Parameters.AddWithValue(AmountParam, person.CurrentPay.Amount.Value);
+                    command.Parameters.AddWithValue(TimescaleParam, person.CurrentPay.Timescale);
+                    command.Parameters.AddWithValue(VacationDaysParam, person.CurrentPay.VacationDays.HasValue ? (object)person.CurrentPay.VacationDays.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(PersonStatusIdParam, person.Status != null && person.Id.HasValue ? (object)person.Status.Id : (int)PersonStatusType.Active);
+                    command.Parameters.AddWithValue(UserLoginParam, userLogin);
 
                     connection.Open();
                     try
@@ -3205,11 +3136,12 @@ namespace DataAccess
                 }
             }
         }
+
         public static void SaveStrawMan(Person person, Pay currentPay, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(SaveStrawManProcedure, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.SaveStrawManProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -3236,6 +3168,8 @@ namespace DataAccess
                     command.Parameters.AddWithValue(BonusHoursToCollectParam, currentPay.BonusHoursToCollect.HasValue ? (object)currentPay.BonusHoursToCollect.Value : DBNull.Value);
                     command.Parameters.AddWithValue(DefaultHoursPerDayParam, currentPay.DefaultHoursPerDay);
                     command.Parameters.AddWithValue(StartDateParam, currentPay.StartDate == DateTime.MinValue ? DBNull.Value : (object)currentPay.StartDate);
+                    command.Parameters.AddWithValue(PersonStatusIdParam, person.Status != null && person.Id.HasValue ? (object)person.Status.Id : (int)PersonStatusType.Active);
+
 
                     connection.Open();
                     try
@@ -3251,12 +3185,37 @@ namespace DataAccess
             }
         }
 
+        public static void DeleteStrawman(int personId, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.DeleteStrawmanProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(PersonIdParam, personId);
+                    command.Parameters.AddWithValue(UserLoginParam, userLogin);
+
+                    connection.Open();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+        }
+
         public static List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate)
         {
             var consultants = new List<ConsultantDemandItem>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (SqlCommand command = new SqlCommand(GetConsultantDemandProcedure, connection))
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.GetConsultantDemandProcedure, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -3350,13 +3309,33 @@ namespace DataAccess
 
         }
 
-        public static List<Person> GetStrawManListAll()
+        public static List<Person> GetStrawmenListAll()
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(GetStrawManListAllProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetStrawManListAllProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadStrawmansWithCurrentPay(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static List<Person> GetStrawmenListAllShort(bool includeInactive)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetStrawManListAllShortProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeInactive, includeInactive);
+
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -3367,11 +3346,160 @@ namespace DataAccess
             }
         }
 
+        public static Person GetStrawmanDetailsByIdWithCurrentPay(int strawmanId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetStrawmanDetailsByIdWithCurrentPayProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StrawmanIdParam, strawmanId);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    return ReadStrawmanWithCurrentPay(reader);
+                }
+            }
+        }
+
+        private static Person ReadStrawmanWithCurrentPay(SqlDataReader reader)
+        {
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+            int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+           
+            int payPersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.PayPersonIdColumn);
+            int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+            int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+            int amountIndex = reader.GetOrdinal(Constants.ColumnNames.Amount);
+            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+            int timesPaidPerMonthIndex = reader.GetOrdinal(TimesPaidPerMonthColumn);
+            int termsIndex = reader.GetOrdinal(TermsColumn);
+            int vacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.VacationDaysColumn);
+            int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
+            int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
+            int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
+            int defaultHoursPerDayIndex = reader.GetOrdinal(DefaultHoursPerDayColumn);
+           
+            Person person = null;
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    person = new Person
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        InUse = reader.GetInt32(inUseIndex) == 1 ? true : false,
+                        Status = new PersonStatus
+                        {
+                            Id = (int)Enum.Parse(
+                                        typeof(PersonStatusType),
+                                        (string)reader[personStatusNameIndex]),
+                            Name = reader.GetString(personStatusNameIndex)
+                        },
+                    };
+
+
+                    if (!reader.IsDBNull(payPersonIdIndex))
+                    {
+                        Pay pay = new Pay
+                        {
+                            PersonId = reader.GetInt32(payPersonIdIndex),
+                            Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                            TimescaleName = reader.GetString(timescaleNameIndex),
+                            Amount = reader.GetDecimal(amountIndex),
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate =
+                                !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                            TimesPaidPerMonth =
+                                !reader.IsDBNull(timesPaidPerMonthIndex) ?
+                                (int?)reader.GetInt32(timesPaidPerMonthIndex) : null,
+                            Terms = !reader.IsDBNull(termsIndex) ? (int?)reader.GetInt32(termsIndex) : null,
+                            VacationDays =
+                                !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
+                            BonusAmount = reader.GetDecimal(bonusAmountIndex),
+                            BonusHoursToCollect =
+                                !reader.IsDBNull(bonusHoursToCollectIndex) ?
+                                (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
+                            IsYearBonus = reader.GetBoolean(isYearBonusIndex),
+                            DefaultHoursPerDay = reader.GetDecimal(defaultHoursPerDayIndex)
+
+                        };
+                        person.CurrentPay = pay;
+                    }
+                }
+            }
+            return person;
+        }
+
+        private static void ReadStrawmansWithCurrentPay(SqlDataReader reader, List<Person> result)
+        {
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+            int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+            
+            int payPersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.PayPersonIdColumn);
+            int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+            int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+            int amountIndex = reader.GetOrdinal(Constants.ColumnNames.Amount);
+            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+            int vacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.VacationDaysColumn);
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var person = new Person
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        InUse = reader.GetInt32(inUseIndex) == 1 ? true : false,
+
+                        Status = new PersonStatus
+                        {
+                            Id = (int)Enum.Parse(
+                                        typeof(PersonStatusType),
+                                        (string)reader[personStatusNameIndex]),
+                            Name = reader.GetString(personStatusNameIndex)
+                        },
+                    };
+
+
+                    if (!reader.IsDBNull(payPersonIdIndex))
+                    {
+                        Pay pay = new Pay
+                        {
+                            PersonId = reader.GetInt32(personIdIndex),
+                            TimescaleName = reader.GetString(timescaleNameIndex),
+                            Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                            Amount = reader.GetDecimal(amountIndex),
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                            VacationDays = !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : 0
+                        };
+                        person.CurrentPay = pay;
+                    }
+                    result.Add(person);
+                }
+            }
+        }
+
         private static void ReadStrawmanShort(SqlDataReader reader, List<Person> result)
         {
             int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
             int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -3390,7 +3518,7 @@ namespace DataAccess
         public static Person GetPersonFirstLastNameById(int personId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(PersonFirstLastNameByIdProcedure, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonFirstLastNameByIdProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -3441,8 +3569,6 @@ namespace DataAccess
                 }
             }
         }
-
-
 
         public static bool IsPersonHaveActiveStatusDuringThisPeriod(int personId, DateTime startDate, DateTime? endDate)
         {
@@ -3596,6 +3722,7 @@ namespace DataAccess
                 }
             }
         }
+
     }
 }
 
