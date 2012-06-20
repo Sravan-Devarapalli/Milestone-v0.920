@@ -1031,17 +1031,19 @@ namespace PracticeManagementService
         public int? SaveStrawman(Person person, Pay currentPay, string userLogin)
         {
             PersonDAL.SaveStrawMan(person, currentPay, userLogin);
-            if (person.Id.HasValue)
-            {
-
-            }
-
             return person.Id;
         }
-        public int SaveStrawManFromExisting(int existingPersonId, string newFirstName, string newLastName)
+
+        public void DeleteStrawman(int personId, string userLogin)
+        {
+            PersonDAL.DeleteStrawman(personId, userLogin);
+        }
+
+
+        public int SaveStrawManFromExisting(int existingPersonId, Person person, string userLogin)
         {
             int newPersonId = 0;
-            PersonDAL.SaveStrawManFromExisting(existingPersonId, newFirstName, newLastName, out newPersonId);
+            PersonDAL.SaveStrawManFromExisting(existingPersonId, person, out newPersonId,userLogin);
             return newPersonId;
         }
 
@@ -1069,9 +1071,19 @@ namespace PracticeManagementService
             return person;
         }
 
-        public List<Person> GetStrawManListAll()
+        public List<Person> GetStrawmenListAll()
         {
-            return PersonDAL.GetStrawManListAll();
+            return PersonDAL.GetStrawmenListAll();
+        }
+
+        public List<Person> GetStrawmenListAllShort(bool includeInactive)
+        {
+            return PersonDAL.GetStrawmenListAllShort(includeInactive);
+        }
+
+        public Person GetStrawmanDetailsByIdWithCurrentPay(int id)
+        {
+            return PersonDAL.GetStrawmanDetailsByIdWithCurrentPay(id);
         }
 
         public List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate)
@@ -1108,6 +1120,10 @@ namespace PracticeManagementService
             return PayDAL.IsPersonSalaryTypeListByPeriod(personId, startDate, endDate);
         }
 
+        public List<Pay> GetHistoryByPerson(int personId)
+        {
+            return  PayDAL.GetHistoryByPerson(personId);
+        }
         #endregion
     }
 }
