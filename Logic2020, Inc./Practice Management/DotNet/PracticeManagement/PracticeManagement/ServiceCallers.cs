@@ -89,6 +89,11 @@ namespace PraticeManagement
                 return Invoke(func);
             }
 
+            public static void Person(Action<PersonServiceClient> action)
+            {
+                Invoke(action);
+            }
+
             public static TResult Opportunity<TResult>(Func<OpportunityServiceClient, TResult> func)
             {
                 return Invoke(func);
@@ -158,7 +163,7 @@ namespace PraticeManagement
             {
                 return Invoke(func);
             }
-            
+
             public static TResult Calendar<TResult>(Func<CalendarServiceClient, TResult> func)
             {
                 return Invoke(func);
@@ -181,3 +186,4 @@ namespace PraticeManagement
         }
     }
 }
+
