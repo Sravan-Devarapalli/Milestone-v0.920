@@ -866,7 +866,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    var persons = serviceClient.GetStrawManListAll();
+                    var persons = serviceClient.GetStrawmenListAllShort(true);
 
                     Array.Sort(persons);
 
