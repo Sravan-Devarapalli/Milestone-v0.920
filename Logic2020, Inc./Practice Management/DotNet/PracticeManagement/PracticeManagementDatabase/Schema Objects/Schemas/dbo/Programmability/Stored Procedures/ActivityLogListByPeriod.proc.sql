@@ -66,7 +66,7 @@ AS
 	               ROW_NUMBER() OVER(ORDER BY a.LogDate DESC) - 1 AS rownum
 	          FROM dbo.UserActivityLog AS a
 	               INNER JOIN dbo.UserActivityType AS t ON a.ActivityTypeID = t.ActivityTypeID
-	         WHERE CONVERT(DATE,a.LogDate) BETWEEN CONVERT(DATE,@StartDate) AND Convert(DATE,@EndDate)
+	         WHERE CONVERT(DATE,a.LogDate) BETWEEN CONVERT(DATE,@StartDate) AND CONVERT(DATE,@EndDate)
 				  AND(
 				  ((@EventSource = 'Error' OR @EventSource = 'All' )AND a.LogData.exist('/Error') = 1)
 				  OR ((@EventSource = 'AddedPersons' OR @EventSource = 'All' ) AND a.LogData.exist('/Person') = 1 AND t.ActivityName = 'Added')
@@ -196,8 +196,15 @@ AS
 					 )
 				  OR ( (@EventSource = 'DeletedSkills' OR @EventSource = 'All') AND (a.LogData.exist('/PersonSkill') = 1 or a.LogData.exist('/PersonIndustry') = 1) AND t.ActivityName = 'Deleted'
 					 )
+				  OR ( (@EventSource = 'Strawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1
+					 )
+				  OR ( (@EventSource = 'AddedStrawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1 AND t.ActivityName = 'Added'
+					 )
+				  OR ( (@EventSource = 'ChangedStrawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1 AND t.ActivityName = 'Changed'
+					 )
+				  OR ( (@EventSource = 'DeletedStrawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1 AND t.ActivityName = 'Deleted'
+					 )
 					)
-	
 					AND (@ProjectId IS NULL 
 						 OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
 						 OR a.LogData.value('(/Milestone/NEW_VALUES/@MilestoneProjectId)[1]', 'int') = @ProjectId
