@@ -71,10 +71,6 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                //if (!string.IsNullOrEmpty(BusinessUnitsFilteredIds))
-                //{
-                //    return BusinessUnitsFilteredIds;
-                //}
                 return cblProjectGroup.SelectedItems;
             }
         }
@@ -324,25 +320,6 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
-            if (timeEntryReportHeader.Count == 1)
-            {
-                tdFirst.Style["width"] = timeEntryReportHeader.TdFirstWidth;
-                tdSecond.Style["width"] = timeEntryReportHeader.TdSecondWidth;
-                tdThird.Style["width"] = timeEntryReportHeader.TdThirdWidth;
-            }
-            else if (timeEntryReportHeader.Count == 2)
-            {
-                tdFirst.Style["width"] = "23%";
-                tdSecond.Style["width"] = "30%";
-                tdThird.Style["width"] = "47%";
-            }
-            else if (timeEntryReportHeader.Count == 3)
-            {
-                tdFirst.Style["width"] = "10%";
-                tdSecond.Style["width"] = "30%";
-                tdThird.Style["width"] = "60%";
-            }
-
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
