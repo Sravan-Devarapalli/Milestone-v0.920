@@ -265,7 +265,7 @@
     </tr>
     <tr>
         <td nowrap="nowrap">
-            Vacation Days
+            <asp:Label ID="lblVacationDays" runat="server" Text="Vacation Days"></asp:Label>
         </td>
         <td style="padding-left: 12px;">
             <asp:TextBox ID="txtVacationDays" runat="server" Width="120px" onchange="setDirty();"
@@ -275,12 +275,15 @@
             per Year
         </td>
         <td colspan="9">
-            <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
-                Display="Dynamic" EnableClientScript="False" ErrorMessage="The Vacation Days must be an integer number."
-                Operator="DataTypeCheck" ToolTip="The Vacation Days must be an integer number."
-                Type="Integer">*</asp:CompareValidator>
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtVacationDays" Text="*"
-               EnableClientScript="false" Display="Dynamic" ErrorMessage="Vacation days is required" ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
+            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtVacationDays" runat="server"
+                TargetControlID="txtVacationDays" FilterMode="ValidChars" FilterType="Numbers">
+            </AjaxControlToolkit:FilteredTextBoxExtender>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtVacationDays"
+                Text="*" EnableClientScript="false" Display="Dynamic" ErrorMessage="Vacation days is required"
+                ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
+            <asp:CustomValidator ID="cvVacationDays" runat="server" Text="*" ErrorMessage="VacationDays(In Hours) must be in multiple of 8."
+                ToolTip="VacationDays(In Hours) must be in multiple of 8." SetFocusOnError="true" EnableClientScript="false"
+                Enabled="false" OnServerValidate="cvVacationDays_ServerValidate"></asp:CustomValidator>
         </td>
     </tr>
     <tr id="trPayments" runat="server">
