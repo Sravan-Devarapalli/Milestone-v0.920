@@ -33,6 +33,7 @@ namespace PraticeManagement
         private bool _userIsSalesperson;
         private bool _userIsHR;
         private bool IsErrorPanelDisplay;
+        private List<Person> _inactiveStrawmanList;
 
         #endregion
 
@@ -198,6 +199,35 @@ namespace PraticeManagement
 
         }
 
+        private List<Person> InactiveStrawmanList
+        {
+            get
+            {
+                if (_inactiveStrawmanList == null)
+                {
+                    string coloumSpliter = hdnColoumSpliter.Value;
+                    string rowSpliter = hdnRowSpliter.Value;
+                    string[] inactiveStrawmans = hdnUsedInactiveStrawmanList.Value.Split(new string[] { rowSpliter }, StringSplitOptions.None);
+                    _inactiveStrawmanList = new List<Person>();
+
+                    for (int i = 0; i < inactiveStrawmans.Length; i++)
+                    {
+                        string[] strawmanDetails = inactiveStrawmans[i].Split(new string[] { coloumSpliter }, StringSplitOptions.None); ;
+                        Person strawman = new Person
+                        {
+                            FirstName = strawmanDetails[0],
+                            Id = int.Parse(strawmanDetails[1])
+                        };
+                        _inactiveStrawmanList.Add(strawman);
+                    }
+                }
+                return _inactiveStrawmanList;
+            }
+        }
+
+
+
+
         //private bool HasProposedPersonsOfTypeNormal
         //{
         //    get
@@ -231,7 +261,10 @@ namespace PraticeManagement
 
                 FillPotentialResources();
 
-                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawManListAll()).OrderBy(p => p.PersonLastFirstName);
+                hdnRowSpliter.Value = Guid.NewGuid().ToString();
+                hdnColoumSpliter.Value = Guid.NewGuid().ToString();
+                var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawmenListAllShort(false));
+                hdnStrawmanListInDropdown.Value = GetStrawmanListInStringFormat(Strawmen);
 
                 ddlStrawmen.DataSource = Strawmen;
                 ddlStrawmen.DataBind();
@@ -301,14 +334,45 @@ namespace PraticeManagement
                 dtlProposedPersons.DataSource = ProposedPersons.Select(p => new { Name = p.Person.Name, id = p.Person.Id, PersonType = p.PersonType }).OrderBy(p => p.Name);
                 dtlProposedPersons.DataBind();
 
-                FillStrawMans(StrawMans);
+                FillStrawMans(StrawMans, true);
             }
         }
 
-        public void FillStrawMans(OpportunityPerson[] strawMans)
+        public void FillStrawMans(OpportunityPerson[] strawMans, bool fillInactiveStrawman = false)
         {
             dtlTeamStructure.DataSource = GetTeamStructureDataSource(StrawMans);
             dtlTeamStructure.DataBind();
+            if (fillInactiveStrawman)
+            {
+                var inactiveStrawmen = strawMans.Where(p => p.Person.Status.Id != (int)PersonStatusType.Active);
+                List<Person> persons = new List<Person>();
+                foreach (OpportunityPerson op in inactiveStrawmen)
+                {
+                    persons.Add(op.Person);
+                }
+                hdnUsedInactiveStrawmanList.Value = GetStrawmanListInStringFormat(persons.ToArray());
+            }
+        }
+
+        private string GetStrawmanListInStringFormat(Person[] strawMans)
+        {
+            StringBuilder strawmanListInDropdown = new StringBuilder();
+            string rowSpliter = hdnRowSpliter.Value;
+            string coloumSpliter = hdnColoumSpliter.Value;
+            strawmanListInDropdown.Append("-Select Strawman-" + coloumSpliter + "0" + rowSpliter);
+            for (int i = 0; i < strawMans.Length; i++)
+            {
+                Person strawMan = strawMans[i];
+                if (i != strawMans.Length - 1)
+                {
+                    strawmanListInDropdown.Append(strawMan.PersonLastFirstName + coloumSpliter + strawMan.Id + rowSpliter);
+                }
+                else
+                {
+                    strawmanListInDropdown.Append(strawMan.PersonLastFirstName + coloumSpliter + strawMan.Id);
+                }
+            }
+            return strawmanListInDropdown.ToString();
         }
 
         private object GetTeamStructureDataSource(OpportunityPerson[] strawMans)
@@ -422,7 +486,7 @@ namespace PraticeManagement
             {
                 hdnOpportunityProjectedStartDate.Value = string.Empty;
             }
-          
+
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -944,6 +1008,7 @@ namespace PraticeManagement
             lblStrawmansImpacted.Text = string.Empty;
             lblNewOpportunityStartDate.Text = StartDate.Value.ToShortDateString();
 
+
             string[] strawMansSelectedWithIds = hdnTeamStructure.Value.Split(',');
             var newStrawMansList = new StringBuilder();
             for (int i = 0; i < strawMansSelectedWithIds.Length; i++)
@@ -961,7 +1026,20 @@ namespace PraticeManagement
                         || (Opportunity != null && startDateMovedBackward && needBy.Date == opportunityProjectedStartDate)
                         )
                     {
-                        lblStrawmansImpacted.Text = lblStrawmansImpacted.Text + "<br/> - " + ddlStrawmen.Items.FindByValue(list[0]).Text + "(" + quantity + ")";
+                        string strawmanName = string.Empty;
+                        if (ddlStrawmen.Items.FindByValue(list[0]) != null)
+                        {
+                            strawmanName = ddlStrawmen.Items.FindByValue(list[0]).Text;
+                        }
+                        else
+                        {
+                            if (InactiveStrawmanList.Any(p => p.Id == int.Parse(list[0])))
+                            {
+                                strawmanName = InactiveStrawmanList.First(p => p.Id == int.Parse(list[0])).FirstName;
+                            }
+                        }
+
+                        lblStrawmansImpacted.Text = lblStrawmansImpacted.Text + "<br/> - " + strawmanName + "(" + quantity + ")";
                         impacted = true;
                         newStrawMansList.Append(string.Format(StrawMansListEncodeFormat,
                                                                 id,
@@ -1347,7 +1425,18 @@ namespace PraticeManagement
                 if (list.Length == 4)
                 {
 
-                    var personName = ddlStrawmen.Items.FindByValue(list[0]).Text;
+                    var personName = string.Empty;
+                    if (ddlStrawmen.Items.FindByValue(list[0]) != null)
+                    {
+                        personName = ddlStrawmen.Items.FindByValue(list[0]).Text;
+                    }
+                    else
+                    {
+                        if (InactiveStrawmanList.Any(p => p.Id == int.Parse(list[0])))
+                        {
+                            personName = InactiveStrawmanList.First(p => p.Id == int.Parse(list[0])).FirstName;
+                        }
+                    }
                     var firstname = personName.Split(',')[1];
                     var lastName = personName.Split(',')[0];
 
