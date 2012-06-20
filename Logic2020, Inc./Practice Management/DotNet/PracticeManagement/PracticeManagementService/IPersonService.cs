@@ -549,13 +549,19 @@ namespace PracticeManagementService
         int? SaveStrawman(Person person, Pay currentPay, string userLogin);
 
         [OperationContract]
+        void DeleteStrawman(int personId, string userLogin);
+
+        [OperationContract]
         Person GetStrawmanDetailsById(int personId);
 
         [OperationContract]
-        List<Person> GetStrawManListAll();
+        List<Person> GetStrawmenListAll();
 
         [OperationContract]
-        int SaveStrawManFromExisting(int existingPersonId, string newFirstName, string newLastName);
+        List<Person> GetStrawmenListAllShort(bool includeInactive);
+
+        [OperationContract]
+        int SaveStrawManFromExisting(int existingPersonId, Person person, string userLogin);
 
         [OperationContract]
         List<ConsultantDemandItem> GetConsultantswithDemand(DateTime startDate, DateTime endDate);
@@ -583,7 +589,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         Person GetPersonDetailsShort(int personId);
+        
+        [OperationContract]
+        Person GetStrawmanDetailsByIdWithCurrentPay(int id);
 
+        [OperationContract]
+        List<Pay> GetHistoryByPerson(int personId);
     }
 }
 
