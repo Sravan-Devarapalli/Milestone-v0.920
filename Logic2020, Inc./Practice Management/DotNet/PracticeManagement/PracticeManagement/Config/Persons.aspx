@@ -100,10 +100,6 @@
                                     <td style="width: 26%;" align="right">
                                         <table >
                                             <tr>
-                                                <td style="padding-right:10px">
-                                                    <asp:ShadowedTextButton runat="server" Text="Add Strawman" ID="StbAddStrawman" CssClass="add-btn"
-                                                        OnClick="StbAddStrawman_OnClick" />
-                                                </td>
                                                 <td>
                                                     <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
                                                         NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
@@ -400,87 +396,6 @@
                     </tr>
                 </table>
             </div>
-            <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="StbAddStrawman"
-                BackgroundCssClass="modalBackground" PopupControlID="pnlPopup" DropShadow="false" />
-            <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
-                Style="display: none;" BorderWidth="2px" Height="250px" Width="380px">
-                <table width="100%" class="strawman">
-                    <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" colspan="3"
-                            valign="bottom">
-                            <b style="font-size: 14px; padding-top: 2px;">ADD Strawman</b>
-                            <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
-                                Style="float: right;" OnClick="btnCancel_OnClick" Text="X"></asp:Button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <asp:RadioButton runat="server" ID="rbNewStrawman" Checked="true" OnCheckedChanged='rbStrawman_OnCheckedChanged'
-                                AutoPostBack="true" Text="New Strawman" GroupName="rgpStrawman" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <asp:RadioButton runat="server" ID="rbCopyStrawman" OnCheckedChanged='rbStrawman_OnCheckedChanged'
-                                AutoPostBack="true" Text="Copy Existing Strawman" GroupName="rgpStrawman" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 10px !important;" align="right">
-                            <asp:Label ID="lblStrawmanName" runat="server" Text="Existing Strawman"></asp:Label>
-                        </td>
-                        <td>
-                            <asp:DropDownList ID="ddlStrawmanName" runat="server" Enabled="false" OnSelectedIndexChanged='ddlStrawmanName_OnSelectedIndexChanged'
-                                AutoPostBack="true" Width="180px">
-                            </asp:DropDownList>
-                            <asp:CustomValidator ID="cvddlStrawmanName" runat="server" Enabled="false" Text="*"
-                                ValidateEmptyText="true" ErrorMessage="Existing Strawman is required." OnServerValidate="cvddlStrawmanName_ServerValidate"
-                                ControlToValidate="ddlStrawmanName" ToolTip="Existing Strawman is required" SetFocusOnError="true"
-                                ValidationGroup="StrawmanGroup"></asp:CustomValidator>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 10px !important;" align="right">
-                            <asp:Label ID="lblastName" runat="server" Text="Role"></asp:Label>
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbLastName" MaxLength="50" runat="server" Enabled="false" Width="180px"></asp:TextBox>
-                            <asp:CustomValidator ID="cvLastName" runat="server" Enabled="false" ValidateEmptyText="true"
-                                Text="*" ErrorMessage="Role is required." OnServerValidate="cvLastName_ServerValidate"
-                                ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true"
-                                ValidationGroup="StrawmanGroup"></asp:CustomValidator>
-                            <asp:CustomValidator ID="cvDupliacteName" runat="server" Enabled="false" Text="*"
-                                ErrorMessage="There is another strawman with the same skill and role." ToolTip="There is another strawman with the same skill and role."
-                                ValidationGroup="StrawmanGroup" SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 10px !important;" align="right">
-                            <asp:Label ID="lbfirstName" runat="server" Text="Skill"></asp:Label>
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbFirstName" runat="server" MaxLength="50" Enabled="false" Width="180px"></asp:TextBox>
-                            <asp:CustomValidator ID="cvFirstName" runat="server" Text="*" Enabled="false" ValidateEmptyText="true"
-                                ErrorMessage="Skill is required." OnServerValidate="cvFirstName_ServerValidate"
-                                ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true"
-                                ValidationGroup="StrawmanGroup"></asp:CustomValidator>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="right" style="padding-top: 10px; padding-right: 40px;">
-                            <asp:Button ID="btnOk" runat="server" Text="OK" ValidationGroup="StrawmanGroup" OnClick="btnOK_OnClick"
-                                Width="60px" />
-                            <asp:Button ID="btncancel" runat="server" Text="Cancel" OnClick="btnCancel_OnClick"
-                                Width="60px" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <asp:ValidationSummary ID="valSummary" runat="server" ValidationGroup="StrawmanGroup" />
-                        </td>
-                    </tr>
-                </table>
-            </asp:Panel>
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnExportToExcel" />
