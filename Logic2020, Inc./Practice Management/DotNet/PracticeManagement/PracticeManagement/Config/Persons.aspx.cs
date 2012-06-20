@@ -35,25 +35,6 @@ namespace PraticeManagement.Config
 
         #region Properties
 
-        private int? SaveData(int existingPersonId, string newFirstName, string newLastName)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    return serviceClient.SaveStrawManFromExisting(existingPersonId, newFirstName, newLastName);
-                }
-                catch (Exception exMessage)
-                {
-                    ExMessage = exMessage.Message;
-                    serviceClient.Abort();
-                    Page.Validate("StrawmanGroup");
-                    mpePopup.Show();
-                }
-            }
-            return null;
-        }
-
         public string ExMessage { get; set; }
 
         private int? CurrentIndex
@@ -193,7 +174,6 @@ namespace PraticeManagement.Config
             AddAlphabetButtons();
             if (!IsPostBack)
             {
-                DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a Strawman --");
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 bool userIsHR =
@@ -607,136 +587,7 @@ namespace PraticeManagement.Config
                 // lnkbtnNext1.ForeColor = color;
             }
         }
-
-        protected void StbAddStrawman_OnClick(object sender, EventArgs e)
-        {
-            rbNewStrawman.Checked = true;
-            ddlStrawmanName.SelectedIndex = -1;
-            mpePopup.Show();
-        }
-        protected void btnCancel_OnClick(object sender, EventArgs e)
-        {
-            rbNewStrawman.Checked = true;
-            ddlStrawmanName.SelectedIndex = -1;
-            ddlStrawmanName_OnSelectedIndexChanged();
-            mpePopup.Hide();
-
-        }
-        protected void btnOK_OnClick(object sender, EventArgs e)
-        {
-            if (rbCopyStrawman.Checked)
-            {
-                Page.Validate("StrawmanGroup");
-            }
-            ExMessage = "";
-            String id = "";
-            if (Page.IsValid)
-            {
-                if (rbCopyStrawman.Checked)
-                {
-                    int? newId = SaveData(Convert.ToInt32(ddlStrawmanName.SelectedValue), tbFirstName.Text, tbLastName.Text);
-                    id = newId != null ? "id=" + newId + "&" : "";
-                }
-            }
-            else
-            {
-                mpePopup.Show();
-            }
-            if (string.IsNullOrEmpty(ExMessage) && Page.IsValid)
-            {
-                Response.Redirect("~/StrawManDetails.aspx?" + id + "returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true");
-            }
-
-        }
-
-        protected void rbStrawman_OnCheckedChanged(object sender, EventArgs e)
-        {
-            mpePopup.Show();
-            if (rbCopyStrawman.Checked)
-            {
-                ddlStrawmanName.Enabled = true;
-                cvddlStrawmanName.Enabled = true;
-                ddlStrawmanName_OnSelectedIndexChanged();
-
-            }
-            else
-            {
-                ddlStrawmanName.Enabled = false;
-                cvddlStrawmanName.Enabled = false;
-                ddlStrawmanName.SelectedValue = "-1";
-                ddlStrawmanName_OnSelectedIndexChanged();
-
-            }
-        }
-        private void ddlStrawmanName_OnSelectedIndexChanged()
-        {
-            mpePopup.Show();
-            if (ddlStrawmanName.SelectedValue == "-1")
-            {
-                tbFirstName.Enabled = false;
-                tbLastName.Enabled = false;
-                tbFirstName.Text = "";
-                tbLastName.Text = "";
-                cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = false;
-            }
-            else
-            {
-                String[] names = ddlStrawmanName.SelectedItem.Text.Split(',');
-                tbFirstName.Enabled = true;
-                tbLastName.Enabled = true;
-                tbFirstName.Text = names[1].TrimStart();
-                tbLastName.Text = names[0];
-                cvDupliacteName.Enabled = cvFirstName.Enabled = cvLastName.Enabled = true;
-            }
-        }
-        protected void ddlStrawmanName_OnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            ddlStrawmanName_OnSelectedIndexChanged();
-        }
-
-        protected void cvddlStrawmanName_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            if (rbCopyStrawman.Checked)
-            {
-                e.IsValid = ddlStrawmanName.SelectedValue == "-1" ? false : true;
-            }
-        }
-
-        protected void cvDupliacteName_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(ExMessage) && ExMessage == DuplicatePersonName)
-            {
-                e.IsValid = false;
-            }
-        }
-        protected void cvFirstName_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            if (rbCopyStrawman.Checked && !(ddlStrawmanName.SelectedValue == "-1"))
-            {
-                e.IsValid = string.IsNullOrEmpty(tbFirstName.Text) ? false : true;
-            }
-        }
-        protected void cvLastName_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            if (rbCopyStrawman.Checked && !(ddlStrawmanName.SelectedValue == "-1"))
-            {
-                e.IsValid = string.IsNullOrEmpty(tbLastName.Text) ? false : true;
-            }
-        }
-
-        protected void cvNameLength_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            var item = sender as CustomValidator;
-            if (item.ID == "cvLengthFirstName")
-            {
-                e.IsValid = tbFirstName.Text.Length <= NameCharactersLength;
-            }
-            else if (item.ID == "cvLengthLastName")
-            {
-                e.IsValid = tbLastName.Text.Length <= NameCharactersLength;
-            }
-
-        }
+  
         #endregion
 
         #region StaticMethods
@@ -1003,18 +854,7 @@ namespace PraticeManagement.Config
             if (obj is Person)
             {
                 var person = obj as Person;
-                if (person.IsStrawMan)
-                {
-                    var StrawmanDetailPage = string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-                                        Constants.ApplicationPages.StrawManDetail,
-                                        person.Id);
-                    return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(StrawmanDetailPage,
-                       Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
-
-
-                }
                 personId = person.Id.Value;
-
             }
             else if (obj == null)
             {
