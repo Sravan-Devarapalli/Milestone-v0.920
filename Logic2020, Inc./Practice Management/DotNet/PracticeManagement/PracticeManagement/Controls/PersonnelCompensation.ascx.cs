@@ -257,13 +257,24 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                return
-                    !string.IsNullOrEmpty(txtVacationDays.Text) && !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked) ?
-                    (int?)int.Parse(txtVacationDays.Text) : null;
+                int vacationDays = 0;
+                int.TryParse(txtVacationDays.Text, out vacationDays);
+                if (IsStrawmanMode)
+                {
+                    vacationDays = vacationDays / 8;
+                }
+                return  !string.IsNullOrEmpty(txtVacationDays.Text) && !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked) ?
+                (int?)vacationDays : null;
+
             }
             set
             {
-                txtVacationDays.Text = value.HasValue ? value.Value.ToString() : string.Empty;
+                int vacationDays = value.HasValue ? value.Value : 0;
+                if (IsStrawmanMode)
+                {
+                    vacationDays = vacationDays * 8;
+                }
+                txtVacationDays.Text = vacationDays.ToString();
             }
         }
 
@@ -595,6 +606,37 @@ namespace PraticeManagement.Controls
 
         public bool IsStrawmanMode { get; set; }
 
+        public string ValidationGroup
+        {
+            set
+            {
+                reqStartDate.ValidationGroup =
+                compStartDate.ValidationGroup =
+                compDateRange.ValidationGroup =
+                compEndDate.ValidationGroup =
+                reqSalaryAnnual.ValidationGroup =
+                compSalaryAnnual.ValidationGroup =
+                reqSalaryHourly.ValidationGroup =
+                compSalaryHourly.ValidationGroup =
+                req1099Ctc.ValidationGroup =
+                comp1099Ctc.ValidationGroup =
+                reqPercRevenue.ValidationGroup =
+                compPercRevenue.ValidationGroup =
+                compBonusHourly.ValidationGroup =
+                reqBonusDuration.ValidationGroup =
+                compBonusDuration.ValidationGroup =
+                compBonusAnnual.ValidationGroup =
+                reqDefaultHoursPerDay.ValidationGroup =
+                compDefaultHoursPerDay.ValidationGroup =
+                RequiredFieldValidator1.ValidationGroup =
+                cvVacationDays.ValidationGroup =
+                reqPaymentTerms.ValidationGroup =
+                custValSeniority.ValidationGroup =
+                custValPractice.ValidationGroup =
+                custValSalesCommission.ValidationGroup = value;
+            }
+        }
+
         #endregion
 
         #region Events
@@ -618,7 +660,6 @@ namespace PraticeManagement.Controls
                     DataHelper.FillSenioritiesList(ddlSeniority, "-- Select Seniority --");
                     DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
                 }
-
             }
         }
 
@@ -629,6 +670,8 @@ namespace PraticeManagement.Controls
                 trCompensationDate.Visible = false;
                 trSeniorityAndPractice.Visible = false;
                 trSalesCommisiion.Visible = false;
+                cvVacationDays.Enabled = true;
+                lblVacationDays.Text = "Vacation Days(In Hours)";
             }
             UpdateCompensationState();
         }
@@ -642,13 +685,31 @@ namespace PraticeManagement.Controls
                 CompensationMethodChanged(this, e);
             }
         }
+
         protected void custValSeniority_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = ddlSeniority.SelectedIndex > 0;
         }
+
         protected void custValPractice_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = ddlPractice.SelectedIndex > 0;
+        }
+
+        protected void cvVacationDays_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtVacationDays.Text))
+            {
+                e.IsValid = false;
+                int vacationDays;
+                if (int.TryParse(txtVacationDays.Text, out vacationDays))
+                {
+                    if (vacationDays % 8 == 0)
+                    {
+                        e.IsValid = true;
+                    }
+                }
+            }
         }
 
         private void UpdateCompensationState()
