@@ -23,6 +23,8 @@ namespace PraticeManagement
         private const int NameCharactersLength = 50;
         #endregion
 
+        private bool IsValidationPanelDisplay;
+
         #region Properties
 
         public int? PersonId
@@ -58,7 +60,7 @@ namespace PraticeManagement
                 pay.VacationDays = personnelCompensation.VacationDays;
                 pay.TimesPaidPerMonth = personnelCompensation.TimesPaidPerMonth;
                 pay.Terms = personnelCompensation.Terms;
-                
+
 
                 return pay;
             }
@@ -74,13 +76,18 @@ namespace PraticeManagement
                 personnelCompensation.VacationDays = pay.VacationDays;
                 personnelCompensation.TimesPaidPerMonth = pay.TimesPaidPerMonth;
                 personnelCompensation.Terms = pay.Terms;
-                
+
             }
         }
 
         public string ExMessage { get; set; }
 
         #endregion
+
+        private void PopulateValidationPanel()
+        {
+            mpeValidationPanel.Show();
+        }
 
         protected void cvDupliacteName_ServerValidate(object sender, ServerValidateEventArgs e)
         {
@@ -107,6 +114,16 @@ namespace PraticeManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             lblSave.ClearMessage();
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+
+            if (IsValidationPanelDisplay)
+            {
+                PopulateValidationPanel();
+            }
         }
 
         protected override void Display()
@@ -194,19 +211,13 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            if (IsDirty)
-            {
-                if (ValidateAndSave())
-                {
-                    lblSave.ShowInfoMessage(SuccessMessage);
-                }
-            }
-            else
+            if (ValidateAndSave())
             {
                 lblSave.ShowInfoMessage(SuccessMessage);
             }
-        }
 
+            IsValidationPanelDisplay = true;
+        }
 
         protected void btnStartDate_Command(object sender, CommandEventArgs e)
         {
@@ -234,7 +245,7 @@ namespace PraticeManagement
                     result = PersonId.HasValue;
                     ClearDirty();
                 }
-                
+
             }
 
             return result;
@@ -272,7 +283,7 @@ namespace PraticeManagement
                     Page.Validate(valSummary.ValidationGroup);
                 }
             }
-            return null;
+            return PersonId;
         }
 
         protected void imgCompensationDelete_OnClick(object sender, EventArgs e)
