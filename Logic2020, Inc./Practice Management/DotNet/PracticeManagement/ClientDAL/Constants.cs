@@ -307,6 +307,7 @@
             public const string JuryDutyHours = "JuryDutyHours";
             public const string BereavementHours = "BereavementHours";
             public const string ORTHours = "ORTHours";
+            public const string UnpaidHours = "UnpaidHours";
             public const string PaychexID = "PaychexID";
             public const string IsOffshore = "IsOffshore";
             public const string IsNoteRequired = "IsNoteRequired";
