@@ -309,8 +309,10 @@ namespace PraticeManagement.Utils
 
             if (!(personTimeEntries.GroupedTimeEtnries.Values.Count > 0))
             {
+                personTimeEntries = new PersonTimeEntries();
 
                 var persons = ServiceCallers.Custom.Person(p => p.GetPersonListByPersonIdsAndPayTypeIds(personId + ",", payTypeIds != null ? FormCSV(payTypeIds) : null, practiceIds != null ? FormCSV(practiceIds) : null, startDate.Value, endDate.Value));
+
 
                 foreach (var person in persons)
                 {
