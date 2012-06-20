@@ -2386,6 +2386,10 @@ start percent
 {
   width: 100%;
 }
+.width90P
+{
+  width: 90%;
+}
 .height10P
 {
     height: 10px;
@@ -2700,4 +2704,12 @@ TABLE.ProjectSearchPopup TD
     border-right-width:0px !important;
     border-right-style:none !important;
 }
-
+.Padding3PX
+{
+    padding: 3px;
+}
+.ReportFilterLabels
+{
+    text-align: right;
+    font-weight: bold;
+}
