@@ -395,6 +395,10 @@ namespace DataTransferObjects
             }
         }
 
+        //Is person assigned to any project or opportuninty for past,present and future purposes
+        [DataMember]
+        public bool InUse { get; set; }
+
         #endregion
 
         #region Properties - calculated
