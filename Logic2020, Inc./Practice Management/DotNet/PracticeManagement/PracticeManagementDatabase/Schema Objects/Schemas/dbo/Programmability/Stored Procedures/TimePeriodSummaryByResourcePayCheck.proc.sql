@@ -107,6 +107,7 @@ AS
 					ISNULL(Data.JuryDutyHours, 0) AS JuryDutyHours ,
 					ISNULL(Data.BereavementHours, 0) AS BereavementHours ,
 					ISNULL(Data.ORTHours, 0) AS ORTHours ,
+					ISNULL(Data.UnpaidHours, 0) AS UnpaidHours ,
 					PCP.Timescale,
 					P.DivisionId
 			FROM    ( SELECT    TE.PersonId ,
@@ -133,7 +134,11 @@ AS
 								ROUND(SUM(CASE WHEN TT.Code = 'W9300'
 											   THEN TEH.ActualHours
 											   ELSE 0
-										  END), 2) AS ORTHours
+										  END), 2) AS ORTHours ,
+								ROUND(SUM(CASE WHEN TT.Code = 'W9350'
+											   THEN TEH.ActualHours
+											   ELSE 0
+										  END), 2) AS UnpaidHours
 					  FROM      dbo.TimeEntry TE
 								INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId
 															  AND TE.ChargeCodeDate BETWEEN @StartDateLocal
