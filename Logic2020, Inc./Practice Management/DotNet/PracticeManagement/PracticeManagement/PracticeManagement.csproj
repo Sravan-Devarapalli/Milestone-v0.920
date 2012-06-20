@@ -357,6 +357,7 @@
     <Content Include="ckeditor\skins\v2\skin.js" />
     <Content Include="ckeditor\skins\v2\templates.css" />
     <Content Include="ckeditor\themes\default\theme.js" />
+    <Content Include="Config\Strawmen.aspx" />
     <Content Include="Controls\Calendar.ascx" />
     <EmbeddedResource Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
@@ -1247,6 +1248,13 @@
     </Compile>
     <Compile Include="AttachProjectToOpportunityHandler.ashx.cs">
       <DependentUpon>AttachProjectToOpportunityHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Strawmen.aspx.cs">
+      <DependentUpon>Strawmen.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Strawmen.aspx.designer.cs">
+      <DependentUpon>Strawmen.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Calendar.ascx.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
