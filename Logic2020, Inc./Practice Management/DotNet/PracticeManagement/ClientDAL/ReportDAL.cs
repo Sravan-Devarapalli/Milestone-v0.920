@@ -1343,6 +1343,7 @@ namespace DataAccess
                 int juryDutyHoursIndex = reader.GetOrdinal(Constants.ColumnNames.JuryDutyHours);
                 int bereavementHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BereavementHours);
                 int oRTHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ORTHours);
+                int unpaidHoursIndex = reader.GetOrdinal(Constants.ColumnNames.UnpaidHours);
                 int paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
                 int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
 
@@ -1372,6 +1373,7 @@ namespace DataAccess
                     workTypeLevelTimeOffHours.Add("JuryDuty", reader.GetDouble(juryDutyHoursIndex));
                     workTypeLevelTimeOffHours.Add("Bereavement", reader.GetDouble(bereavementHoursIndex));
                     workTypeLevelTimeOffHours.Add("ORT", reader.GetDouble(oRTHoursIndex));
+                    workTypeLevelTimeOffHours.Add("Unpaid", reader.GetDouble(unpaidHoursIndex));
                     PLPC.WorkTypeLevelTimeOffHours = workTypeLevelTimeOffHours;
                     result.Add(PLPC);
                 }
