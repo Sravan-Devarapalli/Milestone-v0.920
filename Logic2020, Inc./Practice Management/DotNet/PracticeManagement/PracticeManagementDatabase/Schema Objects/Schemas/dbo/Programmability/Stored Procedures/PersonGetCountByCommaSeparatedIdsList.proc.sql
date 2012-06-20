@@ -68,3 +68,5 @@ AS
 						FROM dbo.v_Pay AS pay
 						WHERE pay.PersonId = p.PersonId AND pay.Timescale IN (SELECT TimeScaleId FROM @TimeScaleIdsTable)))
 		AND ( p.LastName LIKE @Alphabet )
+		AND p.IsStrawman = 0  
+
