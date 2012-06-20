@@ -127,6 +127,7 @@ BEGIN
 						) 
 		            AND (@PracticeIdsList IS NULL OR p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsList)))
 					AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
+					AND p.IsStrawman = 0  
 		            AND (  @RecruiterIdsList IS NULL
 		                 OR EXISTS (SELECT 1
 		                              FROM dbo.RecruiterCommission AS c
@@ -150,3 +151,4 @@ BEGIN
 				@TimescaleIdsList = @TimescaleIdsList,@PracticeIdsList =@PracticeIdsList,@RecruiterIdsList =@RecruiterIdsList
 				
 	END
+
