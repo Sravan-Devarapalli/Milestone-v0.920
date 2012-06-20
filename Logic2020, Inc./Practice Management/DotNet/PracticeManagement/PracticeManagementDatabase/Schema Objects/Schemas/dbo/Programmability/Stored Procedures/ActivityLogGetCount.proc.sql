@@ -160,6 +160,14 @@ AS
 					 )
 				  OR ( (@EventSource = 'DeletedSkills' OR @EventSource = 'All') AND (a.LogData.exist('/PersonSkill') = 1 or a.LogData.exist('/PersonIndustry') = 1) AND t.ActivityName = 'Deleted'
 					 )
+				  OR ( (@EventSource = 'Strawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1
+					 )
+				  OR ( (@EventSource = 'AddedStrawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1 AND t.ActivityName = 'Added'
+					 )
+				  OR ( (@EventSource = 'ChangedStrawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1 AND t.ActivityName = 'Changed'
+					 )
+				  OR ( (@EventSource = 'DeletedStrawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1 AND t.ActivityName = 'Deleted'
+					 )
 					)
 	
 					AND (@ProjectId IS NULL 
