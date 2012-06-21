@@ -117,11 +117,11 @@ namespace PraticeManagement
             if (exc != null)
             {
                 excSrc = exc.Source;
-                excMsg = HttpUtility.HtmlEncode(exc.Message);
+                excMsg = exc.Message;
 
                 if (exc.InnerException != null)
                 {
-                    innerExcMsg = HttpUtility.HtmlEncode(exc.InnerException.Message);
+                    innerExcMsg = exc.InnerException.Message;
                     innerExcSrc = exc.InnerException.Source;
                 }
             }
