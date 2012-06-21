@@ -3346,6 +3346,24 @@ namespace DataAccess
             }
         }
 
+        public static List<Person> GetStrawmanListShortFilterWithTodayPay()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetStrawmanListShortFilterWithTodayPay, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadStrawmanShort(reader, result);
+                    return result;
+                }
+            }
+        }
+
         public static Person GetStrawmanDetailsByIdWithCurrentPay(int strawmanId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
