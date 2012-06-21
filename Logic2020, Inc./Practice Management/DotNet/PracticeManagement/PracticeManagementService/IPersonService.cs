@@ -595,6 +595,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Pay> GetHistoryByPerson(int personId);
+
+        [OperationContract]
+        List<Person> GetStrawmanListShortFilterWithTodayPay();
     }
 }
 
