@@ -378,7 +378,7 @@
                 // Each Strawman info is in the format "PersonId:PersonType|Quantity?NeedBy"
                 var selectedValue = personString.substring(0, personString.indexOf(":", 0))
                 ddlPerson.value = selectedValue;
-                if (ddlPerson.value == '' || ddlPerson.value == null) {
+                if (ddlPerson.value == '' || ddlPerson.value == null || ddlPerson.value != selectedValue) {
 
                     var strawmanname = '';
                     for (var j = 0; j < strawmans.length; j++) {
