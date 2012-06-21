@@ -57,6 +57,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetHistoryByPerson", ReplyAction="http://tempuri.org/IPersonService/GetHistoryByPersonResponse")]
         DataTransferObjects.Pay[] GetHistoryByPerson(int personId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPayResponse")]
+        DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonReactivate", ReplyAction="http://tempuri.org/IPersonService/PersonReactivateResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         void PersonReactivate(DataTransferObjects.Person person);
@@ -311,7 +314,6 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-    
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -374,6 +376,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Pay[] GetHistoryByPerson(int personId) {
             return base.Channel.GetHistoryByPerson(personId);
+        }
+        
+        public DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay() {
+            return base.Channel.GetStrawmanListShortFilterWithTodayPay();
         }
         
         public void PersonReactivate(DataTransferObjects.Person person) {
