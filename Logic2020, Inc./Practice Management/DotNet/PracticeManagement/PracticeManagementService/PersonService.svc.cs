@@ -1124,6 +1124,12 @@ namespace PracticeManagementService
         {
             return  PayDAL.GetHistoryByPerson(personId);
         }
+
+        public List<Person> GetStrawmanListShortFilterWithTodayPay()
+        {
+            return PersonDAL.GetStrawmanListShortFilterWithTodayPay();
+        }
+
         #endregion
     }
 }
