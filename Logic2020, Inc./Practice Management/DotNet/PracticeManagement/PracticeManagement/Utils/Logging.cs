@@ -1,5 +1,6 @@
 ﻿using System.ServiceModel;
 using PraticeManagement.ActivityLogService;
+using System.Web;
 
 namespace PraticeManagement.Utils
 {
@@ -19,7 +20,7 @@ namespace PraticeManagement.Utils
         {
             string logText = string.Format(Constants.ActityLog.ErrorLogMessage,
                 userName, srcUrl, srcQuery,
-                excMsg, excSrc, innerExcMsg, innerExcSrc);
+                HttpUtility.HtmlEncode(excMsg), excSrc, HttpUtility.HtmlEncode(innerExcMsg), innerExcSrc);
 
             using (var serviceClient = new ActivityLogServiceClient())
             {
