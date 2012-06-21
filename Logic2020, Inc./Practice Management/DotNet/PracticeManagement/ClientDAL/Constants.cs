@@ -617,6 +617,7 @@
             public const string LinkParam = "@Link";
             public const string InActiveParam = "@InActive";
             public const string StrawmanIdParam = "@StrawmanId";
+            public const string FilterWithTodayPay = "@FilterWithTodayPay";
         }
 
         #endregion
@@ -765,6 +766,7 @@
                 public const string PersonListAllSeniorityFilterWithPayProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPay";
                 public const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
                 public const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
+                public const string GetStrawmanListShortFilterWithTodayPay = "dbo.GetStrawmanListShortFilterWithTodayPay";
             }
 
             #endregion
