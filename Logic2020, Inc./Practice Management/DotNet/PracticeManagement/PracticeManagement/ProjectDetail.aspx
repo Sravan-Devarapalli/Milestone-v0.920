@@ -27,7 +27,6 @@
     Project Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script src="Scripts/ScrollinDropDown.js" type="text/javascript"></script>
     <script src="Scripts/FilterTable.js" type="text/javascript"></script>
     <script src="Scripts/jquery.tablesorter.js" type="text/javascript"></script>
