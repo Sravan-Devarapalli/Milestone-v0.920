@@ -71,6 +71,17 @@ namespace PraticeManagement.Utils
             }
         }
 
+        public static string BinariesCreatedTime
+        {
+            get
+            {
+                Assembly currentAssembly = Assembly.GetExecutingAssembly();
+                AssemblyName assemblyName = AssemblyName.GetAssemblyName(currentAssembly.Location);
+                var fileInfo = new FileInfo(currentAssembly.Location);
+                return HttpUtility.HtmlEncode(fileInfo.CreationTime.ToString());
+            }
+        }
+
         public static void RedirectWithReturnTo(string targetUrl, string currentUrl, HttpResponse httpResponse)
         {
             httpResponse.Redirect(GetTargetUrlWithReturn(targetUrl, currentUrl));
