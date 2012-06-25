@@ -2,7 +2,6 @@
     Inherits="PraticeManagement.Controls.Opportunities.ProposedResources" %>
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
-<script type="text/javascript" src="../../Scripts/jquery-1.4.1.js"></script>
 <script type="text/javascript">
     function Add_Click() {
         var cblPotentialResources = document.getElementById("<%= cblPotentialResources.ClientID%>");
