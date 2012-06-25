@@ -17,7 +17,6 @@
     Account Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/jquery-1.4.1.js"></script>
     <script type="text/javascript">
         function setClassForAddProject() {
             var button = document.getElementById("<%= btnAddProject.ClientID%>");
