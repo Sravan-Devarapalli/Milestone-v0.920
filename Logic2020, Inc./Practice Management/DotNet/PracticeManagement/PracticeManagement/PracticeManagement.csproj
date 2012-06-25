@@ -411,6 +411,7 @@
     <Content Include="Images\desc.gif" />
     <Content Include="Images\divisions_16x16.png" />
     <Content Include="Images\email_envelope.png" />
+    <Content Include="Images\favicon.ico" />
     <Content Include="Images\link.png" />
     <Content Include="Images\Non-Billable-Icon.png" />
     <Content Include="Images\notes.png" />
@@ -463,7 +464,6 @@
     <Content Include="Controls\Opportunities\OpportunityListControl.ascx" />
     <Content Include="Controls\Opportunities\ProposedResources.ascx" />
     <Content Include="Controls\PersonsFilter.ascx" />
-    <Content Include="Css\DynamicMenu.css" />
     <Content Include="DiscussionReview2.aspx" />
     <Content Include="GuestPages\ChangePasswordError.aspx" />
     <Content Include="Images\alert_Icon.png" />
@@ -770,6 +770,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\Combined_Jquery1_4_1AndCorpNav.js" />
     <Content Include="Scripts\ExpandOrCollapse.js" />
     <Content Include="Scripts\FilterTable.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
@@ -1883,7 +1884,6 @@
     <Compile Include="Configuration\ConsReportColoring\ConsReportColoringElementSection.cs" />
     <Compile Include="Configuration\LocationDescriptionConfigurationSection.cs" />
     <Compile Include="Configuration\MileStoneConfigurationManager.cs" />
-    <Compile Include="Configuration\TimeEntryConfiguration.cs" />
     <Compile Include="Configuration\UrlRoleMappingElement.cs" />
     <Compile Include="Configuration\UrlRoleMappingElementCollection.cs" />
     <Compile Include="Configuration\UrlRoleMappingElementSection.cs" />
