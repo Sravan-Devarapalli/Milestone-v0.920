@@ -13,7 +13,6 @@
     Project Search Results
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         function ExpandAll(btn) {
             var hdnExpandCollapseExtendersIds = document.getElementById('<%= hdnExpandCollapseExtendersIds.ClientID %>');
