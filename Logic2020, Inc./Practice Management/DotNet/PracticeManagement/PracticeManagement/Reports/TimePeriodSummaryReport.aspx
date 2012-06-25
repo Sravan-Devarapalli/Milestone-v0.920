@@ -141,7 +141,6 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script src="../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
