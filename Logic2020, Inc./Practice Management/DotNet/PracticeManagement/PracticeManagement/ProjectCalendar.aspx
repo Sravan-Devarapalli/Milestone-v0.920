@@ -25,7 +25,6 @@
             font-size: 11px;
         }
     </style>
-    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         var FADINGTOOLTIP
         var wnd_height, wnd_width;
