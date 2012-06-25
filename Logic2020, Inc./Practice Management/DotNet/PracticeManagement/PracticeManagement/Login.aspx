@@ -28,7 +28,6 @@
             float: left;
         }
     </style>
-    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
     <script type="text/javascript">
 
