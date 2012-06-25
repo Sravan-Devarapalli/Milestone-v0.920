@@ -334,7 +334,7 @@ namespace PraticeManagement
                         Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);
 
                     if (userIsProjectLead)
-                    {                        
+                    {
                         var userRoles = Roles.GetRolesForUser(Page.User.Identity.Name);
                         var dontSkip = userRoles.Any(r => level2Item.Roles.Contains(r));
 
@@ -395,13 +395,13 @@ namespace PraticeManagement
             // Set logo image.
             imgLogo.ImageUrl = BrandingConfigurationManager.GetLogoImageUrl();
 
-           
+
             try
             {
-               
+
                 UpdateLastServerVisitInfo();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -549,6 +549,11 @@ namespace PraticeManagement
                 val = string.Empty;
             }
             return val;
+        }
+
+        protected string GetClientUrl(string url)
+        {
+            return ResolveClientUrl(url) + "?time=" + Generic.BinariesCreatedTime;
         }
     }
 }
