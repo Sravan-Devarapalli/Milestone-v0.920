@@ -9,7 +9,6 @@
     Notes
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
     <script type="text/javascript">
 
         function changeAlternateitemscolrsForCBL() {
