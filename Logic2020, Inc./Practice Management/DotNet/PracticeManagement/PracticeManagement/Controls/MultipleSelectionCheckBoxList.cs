@@ -23,7 +23,6 @@ namespace PraticeManagement.Controls
 
         private const string GeneralScriptSource =
             @"
-         <script type=""text/javascript"" src=""../Scripts/jquery-1.4.1.js""></script>
          <script type=""text/javascript"">
 
             function currCheckbox_Onclick(cb)
