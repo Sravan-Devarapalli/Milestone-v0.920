@@ -25,11 +25,16 @@ namespace PraticeManagement.Controls
             {
                 RequestToRead(context);
             }
+
         }
 
         private void RequestToRead(HttpContext context)
         {
             byte[] buffer = BrandingConfigurationManager.LogoData.Data;
+            
+            context.Response.Cache.SetExpires(DateTime.Now.AddDays(14));
+            context.Response.Cache.SetCacheability(HttpCacheability.Public);
+            context.Response.Cache.SetValidUntilExpires(true);
 
             context.Response.ContentType = "image/jpeg";
             context.Response.OutputStream.Write(buffer, 0, buffer.Length);
@@ -41,6 +46,7 @@ namespace PraticeManagement.Controls
             string fileName = BrandingConfigurationManager.LogoData.FileName;
 
             context.Response.Clear();
+
             context.Response.AddHeader(
                 "content-disposition", string.Format("attachment; filename={0}", fileName));
             context.Response.ContentType = "image/jpeg";
