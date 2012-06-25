@@ -6,50 +6,168 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head  runat="server">
+    <link rel="Stylesheet"  href="<%# GetClientUrl("~/Css/style.css") %>" />
     <asp:ContentPlaceHolder ID="title" runat="server">
     </asp:ContentPlaceHolder>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-    <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/jquery-1.4.1.js") %>'></script>
-    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/style.css") %>" />
-    <!--[if IE]>
-    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/style-ie7.css") %>" />
-    <![endif]-->
-    <link rel="Stylesheet" href="<%# ResolveClientUrl("~/Css/DynamicMenu.css") %>" />
-    <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/Cookie.js") %>'></script>
-    <script type="text/javascript" src='<%# ResolveClientUrl("~/Scripts/corpNav.js") %>'></script>
-    <script type="text/javascript">
-        function checkDirtyBase() {
-            if (showDialod()) {
-                __doPostBack("<%# this.UniqueID %>", "");
-                return true;
-            }
-
-            return false;
-        }
-
-        function checkDirtyWithRedirect(url) {
-            if ((document.location.pathname.match("/OpportunityDetail.aspx") != null) ||
-                showDialod()) {
-                __doPostBack("__Page", url);
-                return false;
-            }
-
-            return true;
-        }
-        $(document).ready(function () {
-            RunTimerToRefreshPage();
-        });
-    </script>
+    <link  rel="icon"  href="<%# GetClientUrl("~/Images/favicon.ico") %>" type="image/x-icon" />
+    <script type="text/javascript" src='<%# GetClientUrl("~/Scripts/Combined_Jquery1_4_1AndCorpNav.js") %>'></script>
 </head>
 <body>
     <form id="form1" runat="server">
+     <script type="text/javascript">
+         function checkDirtyWithRedirect(url) {
+             if ((document.location.pathname.match("/OpportunityDetail.aspx") != null) ||
+                showDialod()) {
+                 __doPostBack("__Page", url);
+                 return false;
+             }
+
+             return true;
+         }
+         $(document).ready(function () {
+             RunTimerToRefreshPage();
+         });
+         //<!--
+         function showInProcessImage(divWait, divContainer) {
+             // get the bounds of both the container and the image  
+             var containerBounds = Sys.UI.DomElement.getBounds(divContainer);
+             var imgBounds = Sys.UI.DomElement.getBounds(divWait);
+
+             // figure out where to position the element (the center of the container)  
+             var x = containerBounds.x +
+					Math.round(containerBounds.width / 2) - Math.round(imgBounds.width / 2);
+             var y = containerBounds.y +
+					Math.round(containerBounds.height / 2) - Math.round(imgBounds.height / 2);
+
+             // set the position of the in progress image  
+             Sys.UI.DomElement.setLocation(divWait, x, y);
+
+             // finally un-hide it  
+             divWait.style.visibility = 'visible';
+             divWait.style.display = 'block';
+         }
+
+         function hideInProcessImage(divWait) {
+             divWait.style.visibility = 'hidden';
+             divWait.style.display = 'none';
+         }
+         function getCookie(c_name) {
+             var i, x, y, ARRcookies = document.cookie.split(";");
+             for (i = 0; i < ARRcookies.length; i++) {
+                 x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+                 y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+                 x = x.replace(/^\s+|\s+$/g, "");
+                 if (x == c_name) {
+                     return unescape(y);
+                 }
+             }
+         }
+         function fnShowTimeOutPopup() {
+             var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
+             var cookie_IsLoggedIn = getCookie("IsLoggedIn");
+             var cookie_FormsAuthTicketExpiry = getCookie("FormsAuthTicketExpiry");
+             var Cookie_FormsAuthTicketExpiryDate = new Date(getCookie("FormsAuthTicketExpiry"));
+             hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
+             FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
+             if (cookie_IsLoggedIn == 'true') {
+                 if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry == 0) {
+                     var lnkHiddenLinkForTimeOutAlert = document.getElementById('<%= lnkHiddenLinkForTimeOutAlert.ClientID %>');
+                     lnkHiddenLinkForTimeOutAlert.click();
+                 }
+                 else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {
+                     hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
+                     clearTimeout(logOffUserSession);
+                     var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
+                     var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
+                     var clientNow = new Date();
+                     showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
+                     logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - 3000);
+                 }
+                 else {
+                     fnLogOffUserSession();
+                 }
+             }
+             else {
+                 var hdnRedirectToLogedOutPage = document.getElementById('<%= hdnRedirectToLogedOutPage.ClientID %>');
+                 hdnRedirectToLogedOutPage.value = 'true';
+                 fnLogOffUserSessionatServer()
+             }
+         }
+         function fnLogOffUserSession() {
+             var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
+             var cookie_IsLoggedIn = getCookie("IsLoggedIn");
+             var cookie_FormsAuthTicketExpiry = getCookie("FormsAuthTicketExpiry");
+             var Cookie_FormsAuthTicketExpiryDate = new Date(cookie_FormsAuthTicketExpiry);
+             hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
+             FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
+             if (cookie_IsLoggedIn == 'true') {
+                 if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry <= 0) {
+                     var hdnRedirectToLogedOutPage = document.getElementById('<%= hdnRedirectToLogedOutPage.ClientID %>');
+                     hdnRedirectToLogedOutPage.value = 'true';
+                     fnLogOffUserSessionatServer()
+                 }
+                 else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {
+                     $find('bhAlterTimeOut').hide();
+                     hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
+                     var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
+                     var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
+                     var clientNow = new Date();
+                     showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
+                     logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - 3000);
+                 }
+             }
+         }
+         function fnLogOffUserSessionatServer() {
+             var btnLogOutOnSessionTimeOut = document.getElementById('<%= btnLogOutOnSessionTimeOut.ClientID %>');
+             btnLogOutOnSessionTimeOut.click();
+         }
+         function RunTimerToRefreshPage() {
+             var hdnRunTimeOutPopuUpScript = document.getElementById('<%= hdnRunTimeOutPopuUpScript.ClientID %>');
+             if (hdnRunTimeOutPopuUpScript.value == 'true') {
+                 hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
+                 FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
+                 var clientNow = new Date();
+                 var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
+                 var hdnLastServerVisit = new Date(document.getElementById('<%= hdnLastServerVisit.ClientID %>').value);
+                 serverClientTimeDiff = clientNow - hdnLastServerVisit;
+                 var Cookie_FormsAuthTicketExpiry = new Date(getCookie("FormsAuthTicketExpiry"));
+                 var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
+                 showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - parseInt(hdnPopupTimebeforeFormsAutTimeOut.value) - 3000);
+                 logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - 3000);
+             }
+         }
+
+         function RefreshPage() {
+             clearTimeout(logOffUserSession);
+             var btnRefreshPage = document.getElementById('<%= btnRefreshPage.ClientID %>');
+             btnRefreshPage.click();
+         }
+
+         var showTimeOutPopup;
+         var logOffUserSession;
+         var serverClientTimeDiff;
+
+         Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRefreshPopupRequestHandle);
+         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRefreshPopupRequestRequestHandle);
+
+         function beginRefreshPopupRequestHandle(sender, Args) {
+             clearTimeout(showTimeOutPopup);
+             clearTimeout(logOffUserSession);
+         }
+         function endRefreshPopupRequestRequestHandle(sender, Args) {
+             RunTimerToRefreshPage();
+         }
+
+         //-->
+    </script>
     <AjaxControlToolkit:ToolkitScriptManager ID="scriptManager" runat="server" 
 					LoadScriptsBeforeUI="true" CombineScripts="False" EnablePageMethods="True" 
 					ScriptMode="Release" EnableScriptLocalization="False">
-					<Scripts>
-						<asp:ScriptReference Name="MicrosoftAjax.js" Path="~/Scripts/MicrosoftAjax.js" />
-					</Scripts>
+                    <Scripts>
+                        <asp:ScriptReference Name="MicrosoftAjax.js" Path="~/Scripts/MicrosoftAjax.js" />
+                    </Scripts>
 	</AjaxControlToolkit:ToolkitScriptManager>
 	<asp:HiddenField ID="hidDirtyData" runat="server" />
 	<asp:HiddenField ID="hidDoSaveDirty" runat="server" />
@@ -126,153 +244,6 @@
 					}}
 				//-->
 				</script> </asp:Literal>
-    <asp:Literal runat="server" EnableViewState="false" ID="TabsScriptBlock" Mode="PassThrough">
-        <style type="text/css">
-            .tab-visible
-            {
-                display: block;
-            }
-            
-            .tab-invisible
-            {
-                display: none;
-            }
-        </style> </asp:Literal>
-    <script type="text/javascript">        //<!--
-
-
-        function showInProcessImage(divWait, divContainer) {
-            // get the bounds of both the container and the image  
-            var containerBounds = Sys.UI.DomElement.getBounds(divContainer);
-            var imgBounds = Sys.UI.DomElement.getBounds(divWait);
-
-            // figure out where to position the element (the center of the container)  
-            var x = containerBounds.x +
-					Math.round(containerBounds.width / 2) - Math.round(imgBounds.width / 2);
-            var y = containerBounds.y +
-					Math.round(containerBounds.height / 2) - Math.round(imgBounds.height / 2);
-
-            // set the position of the in progress image  
-            Sys.UI.DomElement.setLocation(divWait, x, y);
-
-            // finally un-hide it  
-            divWait.style.visibility = 'visible';
-            divWait.style.display = 'block';
-        }
-
-        function hideInProcessImage(divWait) {
-            divWait.style.visibility = 'hidden';
-            divWait.style.display = 'none';
-        }
-        function getCookie(c_name) {
-            var i, x, y, ARRcookies = document.cookie.split(";");
-            for (i = 0; i < ARRcookies.length; i++) {
-                x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-                y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-                x = x.replace(/^\s+|\s+$/g, "");
-                if (x == c_name) {
-                    return unescape(y);
-                }
-            }
-        }
-        function fnShowTimeOutPopup() {
-            var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
-            var cookie_IsLoggedIn = getCookie("IsLoggedIn");
-            var cookie_FormsAuthTicketExpiry = getCookie("FormsAuthTicketExpiry");
-            var Cookie_FormsAuthTicketExpiryDate = new Date(getCookie("FormsAuthTicketExpiry"));
-            hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
-            FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
-            if (cookie_IsLoggedIn == 'true') {
-                if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry == 0) {
-                    var lnkHiddenLinkForTimeOutAlert = document.getElementById('<%= lnkHiddenLinkForTimeOutAlert.ClientID %>');
-                    lnkHiddenLinkForTimeOutAlert.click();
-                }
-                else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {
-                    hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
-                    clearTimeout(logOffUserSession);
-                    var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
-                    var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
-                    var clientNow = new Date();
-                    showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
-                    logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - 3000);
-                }
-                else {
-                    fnLogOffUserSession();
-                }
-            }
-            else {
-                var hdnRedirectToLogedOutPage = document.getElementById('<%= hdnRedirectToLogedOutPage.ClientID %>');
-                hdnRedirectToLogedOutPage.value = 'true';
-                fnLogOffUserSessionatServer()
-            }
-        }
-        function fnLogOffUserSession() {
-            var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
-            var cookie_IsLoggedIn = getCookie("IsLoggedIn");
-            var cookie_FormsAuthTicketExpiry = getCookie("FormsAuthTicketExpiry");
-            var Cookie_FormsAuthTicketExpiryDate = new Date(cookie_FormsAuthTicketExpiry);
-            hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
-            FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
-            if (cookie_IsLoggedIn == 'true') {
-                if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry <= 0) {
-                    var hdnRedirectToLogedOutPage = document.getElementById('<%= hdnRedirectToLogedOutPage.ClientID %>');
-                    hdnRedirectToLogedOutPage.value = 'true';
-                    fnLogOffUserSessionatServer()
-                }
-                else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {
-                    $find('bhAlterTimeOut').hide();
-                    hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
-                    var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
-                    var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
-                    var clientNow = new Date();
-                    showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
-                    logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - 3000);
-                }
-            }
-        }
-        function fnLogOffUserSessionatServer() {
-            var btnLogOutOnSessionTimeOut = document.getElementById('<%= btnLogOutOnSessionTimeOut.ClientID %>');
-            btnLogOutOnSessionTimeOut.click();
-        }
-        function RunTimerToRefreshPage() {
-            var hdnRunTimeOutPopuUpScript = document.getElementById('<%= hdnRunTimeOutPopuUpScript.ClientID %>');
-            if (hdnRunTimeOutPopuUpScript.value == 'true') {
-                hdnFormsAuthTicketExpiry = document.getElementById('<%= hdnFormsAuthTicketExpiry.ClientID %>');
-                FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
-                var clientNow = new Date();
-                var cookie_LastServerVisit = new Date(getCookie("LastServerVisit"));
-                var hdnLastServerVisit = new Date(document.getElementById('<%= hdnLastServerVisit.ClientID %>').value);
-                serverClientTimeDiff = clientNow - hdnLastServerVisit;     
-                var Cookie_FormsAuthTicketExpiry = new Date(getCookie("FormsAuthTicketExpiry"));
-                var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('<%= hdnPopupTimebeforeFormsAutTimeOut.ClientID %>');
-                showTimeOutPopup = setTimeout("fnShowTimeOutPopup();", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - parseInt(hdnPopupTimebeforeFormsAutTimeOut.value) - 3000);
-                logOffUserSession = setTimeout("fnLogOffUserSession();", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - 3000);
-            }
-        }
-
-        function RefreshPage() {
-            clearTimeout(logOffUserSession);
-            var btnRefreshPage = document.getElementById('<%= btnRefreshPage.ClientID %>');
-            btnRefreshPage.click();
-        }
-
-        var showTimeOutPopup;
-        var logOffUserSession;
-        var serverClientTimeDiff;
-
-        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRefreshPopupRequestHandle);
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRefreshPopupRequestRequestHandle);
-
-        function beginRefreshPopupRequestHandle(sender, Args) {
-            clearTimeout(showTimeOutPopup);
-            clearTimeout(logOffUserSession);
-        }
-        function endRefreshPopupRequestRequestHandle(sender, Args) {
-            RunTimerToRefreshPage();
-        }
-
-        //-->
-    </script>
     <div class="wrapper">
         <div class="right-shadow">
         </div>
@@ -295,7 +266,7 @@
                         OnLoggingOut="loginStatus_LoggingOut" />
                 </div>
                 <div class="changePassword">
-                <b style="font-size:15px;">
+                <b style="font-size:15px" >
                     <uc:LoginUserImpersonation ID="loginUserImpersonation" runat="server">
                     </uc:LoginUserImpersonation></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <asp:HyperLink ID="hlnkChangePassword" runat="server" NavigateUrl="~/ChangePassword.aspx"
@@ -314,7 +285,7 @@
             </div>
         </div>
         <div class="holder">
-            <div class="top-menu" style="z-index: 1000 !important; position: relative;">
+            <div class="top-menu">
                 <asp:SiteMapDataSource ID="smdsMain" runat="server" EnableViewState="False" ShowStartingNode="False" />
                 <div id="navItems">
                     <ul>
@@ -322,13 +293,12 @@
                         </asp:Literal>
                     </ul>
                 </div>
-                <div style="height: 20px; vertical-align: middle;">
-                    <asp:Label ID="lblCurrentPage" runat="server" Font-Bold="true" Style="white-space: nowrap;
-                        padding: 4px;">
+                <div class="CurrentPageDiv">
+                    <asp:Label ID="lblCurrentPage" runat="server" class="Padding4pxWithNoWrap" >
                     </asp:Label>
                 </div>
             </div>
-            <div class="main-content" style="z-index: -1000 !important; margin-left: 9px;">
+            <div class="main-content main-contentZindex" >
                 <asp:ContentPlaceHolder ID="body" runat="server">
                 </asp:ContentPlaceHolder>
                 <asp:UpdatePanel ID="upRefreshPanel" runat="server">
