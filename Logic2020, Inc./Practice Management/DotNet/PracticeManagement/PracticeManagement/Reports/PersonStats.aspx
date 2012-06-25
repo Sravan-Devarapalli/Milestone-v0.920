@@ -7,6 +7,9 @@
 <%@ Register TagPrefix="uc1" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
+<asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
+    <script src="../Scripts/Cookie.js" type="text/javascript"></script>
+</asp:Content>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Person Stats | Practice Management</title>
 </asp:Content>
@@ -48,15 +51,14 @@
                             EnableClientScript="False" ValidationGroup="Filter" OnServerValidate="custPeriod_ServerValidate"></asp:CustomValidator>
                         <asp:CustomValidator ID="custPeriodLengthLimit" runat="server" EnableViewState="False"
                             ErrorMessage="The period length must be not more then {0} months." ToolTip="The period length must be not more then {0} months."
-                            Text="*" EnableClientScript="False" ValidationGroup="Filter"
-                            OnServerValidate="custPeriodLengthLimit_ServerValidate"></asp:CustomValidator>
+                            Text="*" EnableClientScript="False" ValidationGroup="Filter" OnServerValidate="custPeriodLengthLimit_ServerValidate"></asp:CustomValidator>
                     </td>
                     <td>
                         <asp:Button ID="Button1" runat="server" Text="Update View" Width="100px" OnClick="btnUpdateView_Click"
                             ValidationGroup="Filter" EnableViewState="False" CssClass="pm-button" />
                         <asp:Button ID="Button2" runat="server" Text="Reset Filter" Width="100px" CausesValidation="False"
                             OnClientClick="this.disabled=true;Delete_Cookie('CompanyPerformanceFilterKey', '/', '');window.location.href=window.location.href;return false;"
-                            EnableViewState="False" CssClass="pm-button"/>
+                            EnableViewState="False" CssClass="pm-button" />
                     </td>
                 </tr>
             </table>
@@ -124,13 +126,13 @@
                             </table>
                         </div>
                     </ContentTemplate>
-                </ajaxToolkit:TabPanel>                
+                </ajaxToolkit:TabPanel>
             </AjaxControlToolkit:TabContainer>
         </asp:Panel>
         <asp:ValidationSummary ID="valsPerformance" runat="server" Width="100%" ValidationGroup="Filter"
             CssClass="searchError" />
     </div>
-    <div style="overflow-x:auto;">
+    <div style="overflow-x: auto;">
         <uc:PersonStats ID="repPersonStats" runat="server" />
     </div>
 </asp:Content>
