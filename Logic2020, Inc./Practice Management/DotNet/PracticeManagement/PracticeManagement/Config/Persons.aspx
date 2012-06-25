@@ -26,7 +26,6 @@
     Person List
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="../Scripts/jquery-1.4.1.js"></script>
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <script type="text/javascript">
 
