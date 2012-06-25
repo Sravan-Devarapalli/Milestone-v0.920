@@ -10,11 +10,13 @@
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
+<asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
+    <script src="Scripts/Cookie.js" type="text/javascript"></script>
+</asp:Content>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Projects Group by | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" src="Scripts/ScrollinDropDown.js"></script>
     <script type="text/javascript">
         function ChangeResetButton() {
