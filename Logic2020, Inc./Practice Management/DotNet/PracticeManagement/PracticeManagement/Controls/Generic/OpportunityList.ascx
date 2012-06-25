@@ -4,7 +4,6 @@
 <%@ Import Namespace="System.Data" %>
 <%@ Register Src="~/Controls/ProjectNameCellRounded.ascx" TagName="ProjectNameCellRounded"
     TagPrefix="uc" %>
-<script src="../../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
 <script type="text/javascript">
 
     function setHintPosition(img, displayPnl) {
