@@ -78,7 +78,7 @@ namespace PraticeManagement.Utils
                 Assembly currentAssembly = Assembly.GetExecutingAssembly();
                 AssemblyName assemblyName = AssemblyName.GetAssemblyName(currentAssembly.Location);
                 var fileInfo = new FileInfo(currentAssembly.Location);
-                return HttpUtility.HtmlEncode(fileInfo.CreationTime.ToString());
+                return HttpUtility.HtmlEncode(fileInfo.CreationTime.ToString("Mdyyyyhhmmss"));
             }
         }
 
