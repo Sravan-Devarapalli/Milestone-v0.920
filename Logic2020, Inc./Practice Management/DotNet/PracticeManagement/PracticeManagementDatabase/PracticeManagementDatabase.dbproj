@@ -2859,7 +2859,7 @@
     <Build Include="Schema Objects\Database Level Objects\Security\Schemas\aspnet_WebEvent_FullAccess.schema.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimeEntriesGetByManyPersons.proc.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimeEntriesGetByPersonId.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TimeEntriesGetCount.proc.sql">
@@ -4161,3 +4161,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
