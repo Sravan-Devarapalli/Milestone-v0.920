@@ -230,7 +230,7 @@ namespace DataAccess
         public static PersonTimeEntries GetTimeEntriesByPerson(TimeEntryPersonReportContext reportContext)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntriesGetByPersons, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.TimeEntriesGetByPersonId, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -345,26 +345,36 @@ namespace DataAccess
             if (reader.HasRows)
                 while (reader.Read())
                 {
-                    var timeTypeNameIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeName);
+                    int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                    int timeTypeNameIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeName);
                     int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
-
+                    int clientIdIndex = reader.GetOrdinal(Constants.ParameterNames.ClientId);
+                    int groupIdIndex = reader.GetOrdinal(Constants.ParameterNames.GroupIdColumn);
+                    
                     var project = new Project
                     {
+                        Id = (int)reader[Constants.ColumnNames.ProjectIdColumn],
                         Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectName)),
                         ProjectNumber = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ProjectNumber))
                     };
 
                     var client = new Client
                     {
+                        Id = reader.GetInt32(clientIdIndex),
                         Name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.ClientName))
                     };
 
                     var projectGroup = new ProjectGroup()
                     {
+                        Id = reader.GetInt32(groupIdIndex),
                         Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn))
                     };
 
-                    var timeType = new TimeTypeRecord { Name = reader.GetString(timeTypeNameIndex) };
+                    var timeType = new TimeTypeRecord
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        Name = reader.GetString(timeTypeNameIndex)
+                    };
 
                     var chargeCode = new ChargeCode()
                     {
