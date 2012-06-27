@@ -353,6 +353,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string GroupIdColumn = "GroupId";
             public const string AttachmentFileName = "@FileName";
             public const string AttachmentData = "@AttachmentData";
             public const string OpportunityTransitionId = ColumnNames.OpportunityTransitionId;
@@ -825,7 +826,7 @@
                 #region Reports
 
                 public const string TimeEntriesGetByProject = "dbo.TimeEntriesGetByProject";
-                public const string TimeEntriesGetByPersons = "dbo.TimeEntriesGetByManyPersons";
+                public const string TimeEntriesGetByPersonId = "dbo.TimeEntriesGetByPersonId";
                 public const string TimeEntriesGetByPersonsForExcel = "dbo.TimeEntriesGetByPersonsForExcel";
                 public const string TimeEntriesGetByProjectCumulative = "dbo.TimeEntryHoursByPersonProject";
 
