@@ -37,13 +37,6 @@ namespace PraticeManagement.Controls.Reports
             set;
         }
 
-        public Repeater repPersonsObject
-        {
-            get
-            {
-                return repPersons;
-            }
-        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -149,18 +142,6 @@ namespace PraticeManagement.Controls.Reports
         }
 
 
-        protected void dlPersons_OnItemCreated(object sender, RepeaterItemEventArgs e)
-        {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                if (e.Item.DataItem != null)
-                {
-                    var item = (PersonTimeEntries)e.Item.DataItem;
-                    calendarPersonId = item.Person.Id.Value;
-                }
-            }
-        }
-
         protected void gvTimeEntries_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
 
@@ -242,21 +223,30 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-        protected void dlPersons_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+       
+        public void PopulateControls(PersonTimeEntries personTimeEnryDetails)
         {
 
-            var dataItem = (PersonTimeEntries)e.Item.DataItem;
-            if (dataItem.GroupedTimeEtnries == null || dataItem.GroupedTimeEtnries.Count == 0)
+            if (personTimeEnryDetails.Person != null)
             {
-                var divProjects = e.Item.FindControl("divProjects") as System.Web.UI.HtmlControls.HtmlGenericControl;
-                var divTeTable = e.Item.FindControl("divTeTable") as System.Web.UI.HtmlControls.HtmlGenericControl;
-                var lblnoDataMesssage = e.Item.FindControl("lblnoDataMesssage") as Literal;
+                calendarPersonId = personTimeEnryDetails.Person.Id.Value;
+                divPersonName.InnerText = personTimeEnryDetails.Person.Name;
+            }
+
+
+            if (personTimeEnryDetails.GroupedTimeEtnries == null || personTimeEnryDetails.GroupedTimeEtnries.Count == 0)
+            {
                 lblnoDataMesssage.Visible = true;
                 divProjects.Visible = false;
                 divTeTable.Visible = false;
             }
-        }
 
+            repTeTable.DataSource = personTimeEnryDetails.GroupedTimeEtnries;
+            repTeTable.DataBind();
+
+            dlProjects.DataSource = personTimeEnryDetails.GroupedTimeEtnries;
+            dlProjects.DataBind();
+        }
 
         protected Dictionary<DateTime, TimeEntryRecord> GetUpdatedDatasource(object teRecords)
         {
