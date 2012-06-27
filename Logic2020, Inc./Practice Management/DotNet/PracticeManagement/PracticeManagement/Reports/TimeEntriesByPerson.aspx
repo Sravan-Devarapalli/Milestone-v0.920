@@ -231,7 +231,7 @@
                         <td style="width: 3%; padding-top: 3px; white-space: nowrap;" align="left">
                             &nbsp;&nbsp;for&nbsp;&nbsp;
                         </td>
-                        <td style="width: 28%; padding-top: 3px;" align="left">
+                        <td style="padding-top: 3px; width: 260px;" align="left">
                             <div style="margin-top: -2px;">
                                 <cc2:ScrollingDropDown ID="cblPersons" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
                                     onclick="scrollingDropdown_onclick('cblPersons','Person')" BackColor="White"
@@ -243,11 +243,13 @@
                             </div>
                         </td>
                         <td>
-                            view : &nbsp;
-                            <asp:DropDownList ID="ddlView" Width="100px" runat="server">
-                                <asp:ListItem Text="By Account - Business Unit - Project" Value="1" Selected="True"></asp:ListItem>
-                                <asp:ListItem onclick="EnableResetButton();" Text="By Charge Code" Value="2"></asp:ListItem>
+                            in &nbsp;
+                            <asp:DropDownList ID="ddlView" Width="125px" runat="server">
+                                <asp:ListItem Text="Project Level" Value="1" title="Project Level" Selected="True"></asp:ListItem>
+                                <asp:ListItem onclick="EnableResetButton();" Text="Work Type Level" title="Work Type Level"
+                                    Value="2"></asp:ListItem>
                             </asp:DropDownList>
+                            &nbsp; view
                         </td>
                         <td style="padding-top: 3px;" align="right">
                             <div style="margin-top: -2px;">
