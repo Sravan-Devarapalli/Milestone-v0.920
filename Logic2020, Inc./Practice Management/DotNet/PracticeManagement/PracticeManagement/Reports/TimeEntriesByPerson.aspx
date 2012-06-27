@@ -17,7 +17,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <script language="javascript" type="text/javascript">
-        function saveReportExcel() {
+        function Excel_Click() {
             var hlnkExportToExcel = document.getElementById('<%= hlnkExportToExcel.ClientID %>');
             if (navigator.userAgent.indexOf(' Chrome/') > -1) {
                 var evObj = document.createEvent('MouseEvents');
@@ -28,6 +28,7 @@
                 hlnkExportToExcel.click()
             }
         }
+
         function saveReport() {
             var hdnGuid = document.getElementById('<%= hdnGuid.ClientID %>');
             var divPersonListSummary = $("div[id$='divPersonListSummary']");
@@ -45,18 +46,22 @@
             if (button != null) {
                 button.disabled = false; hiddenField.value = "true"
             }
-        } function CheckIsPostBackRequired(sender) {
+        }
+        function CheckIsPostBackRequired(sender) {
             var defaultDate = (new Date(sender.defaultValue)).format('M/d/yyyy');
             if (sender.value == defaultDate) {
                 return false
             } return true
-        } Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        }
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function MakeAsynchronousCalls() {
             var hdnPersonIds = document.getElementById("<%= hdnPersonIds.ClientID%>");
             var hdnStartDate = document.getElementById("<%= hdnStartDate.ClientID%>");
             var hdnEndDate = document.getElementById("<%= hdnEndDate.ClientID%>");
             var hdnPayScaleIds = document.getElementById("<%= hdnPayScaleIds.ClientID%>");
             var hdnPracticeIds = document.getElementById("<%= hdnPracticeIds.ClientID%>");
+            var ddlView = document.getElementById("<%= ddlView.ClientID%>");
+
             var displayPanel = $("#" + "<%= pnlList.ClientID%>"); var hmlData = "";
             if (hdnPersonIds.value != "") {
                 var array = hdnPersonIds.value.split(',');
@@ -64,7 +69,7 @@
                     if (array[i] != "" && array[i] != "undefined" && array[i].toString() != "-1") {
                         if ($get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display == "none")
                         { $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display = 'block' }
-                        var urlVal = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?PersonID=" + array[i].toString() + "&StartDate=" + hdnStartDate.value + "&EndDate=" + hdnEndDate.value + "&PayScaleIds=" + hdnPayScaleIds.value + "&PracticeIds=" + hdnPracticeIds.value;
+                        var urlVal = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?PersonID=" + array[i].toString() + "&StartDate=" + hdnStartDate.value + "&EndDate=" + hdnEndDate.value + "&PayScaleIds=" + hdnPayScaleIds.value + "&PracticeIds=" + hdnPracticeIds.value + "&view=" + ddlView.value;
                         $.post(urlVal, function (data) { $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display = 'block'; temp++; displayPanel.append(data); if (temp == array.length - 1) { $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display = 'none' } })
                     }
                 }
@@ -104,7 +109,6 @@
         {
             padding: 3px;
         }
-        
         table.time-entry-person-projects th
         {
             border-bottom: 1px solid gray;
@@ -238,6 +242,13 @@
                                 </ext:ScrollableDropdownExtender>
                             </div>
                         </td>
+                        <td>
+                            view : &nbsp;
+                            <asp:DropDownList ID="ddlView" Width="100px" runat="server">
+                                <asp:ListItem Text="By Account - Business Unit - Project" Value="1" Selected="True"></asp:ListItem>
+                                <asp:ListItem onclick="EnableResetButton();" Text="By Charge Code" Value="2"></asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
                         <td style="padding-top: 3px;" align="right">
                             <div style="margin-top: -2px;">
                                 <table>
@@ -261,9 +272,11 @@
                         </td>
                         <td align="right">
                         </td>
+                        <td>
+                        </td>
                         <td style="padding-top: 5px;">
                             <input type="button" runat="server" id="btnExportToXL" value="Export To Excel" disabled="disabled"
-                                enableviewstate="false" style="width: 100px" onclick="saveReportExcel();" title="Export To Excel" />
+                                enableviewstate="false" style="width: 100px" onclick="Excel_Click();" title="Export To Excel" />
                             <asp:HyperLink ID="hlnkExportToExcel" runat="server" Style="display: none;" Text="Export To Excel"
                                 ToolTip="Export To Excel"></asp:HyperLink>
                             <asp:Button ID="btnExportToPDF" runat="server" Text="Export To PDF" OnClientClick="saveReport();"
