@@ -68,7 +68,7 @@ namespace PraticeManagement
         private const string IncludeProjectsWithoutDirectorItemKey = "ShowWithoutDirector";
         private const string LinkHTMLTemplate = "<a href='{0}' target='_blank'>{1}</a>";
         private const string ProjectDetailPagePath = "ProjectDetail.aspx";
-
+        private const string DefaultProjectId_Key = "DefaultProjectId";
         #endregion
 
         #region "Properties"
@@ -78,7 +78,16 @@ namespace PraticeManagement
 
             get
             {
-                return MileStoneConfigurationManager.GetProjectId();
+                if (ViewState[DefaultProjectId_Key] == null)
+                {
+                    var dprojectId = MileStoneConfigurationManager.GetProjectId();
+                    ViewState[DefaultProjectId_Key] = dprojectId;
+                    return dprojectId;
+                }
+                else
+                {
+                    return ((int)ViewState[DefaultProjectId_Key]);
+                }
             }
         }
 
