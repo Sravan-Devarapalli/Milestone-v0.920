@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using DataAccess.Other;
 using DataTransferObjects;
+using System.Linq;
 
 namespace DataAccess
 {
@@ -18,6 +19,7 @@ namespace DataAccess
 
         private const string GroupIdParam = "@GroupId";
         private const string ClientIdParam = "@ClientId";
+        private const string CommaSeperatedClientListParam = "@CommaSeperatedClientList";
         private const string ProjectIdParam = "@ProjectId";
         private const string NameParam = "@Name";
         private const string isActiveParam = "@IsActive";
@@ -89,7 +91,7 @@ namespace DataAccess
             return groupList;
         }
 
-        public static List<ProjectGroup> ListGroupByClientAndPersonInPeriod(int clientId,int personId,DateTime startDate, DateTime endDate)
+        public static List<ProjectGroup> ListGroupByClientAndPersonInPeriod(int clientId, int personId, DateTime startDate, DateTime endDate)
         {
             List<ProjectGroup> groupList = new List<ProjectGroup>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -98,8 +100,8 @@ namespace DataAccess
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
-                    command.Parameters.AddWithValue(ClientIdParam,clientId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,personId);
+                    command.Parameters.AddWithValue(ClientIdParam, clientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                     command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                     connection.Open();
@@ -112,12 +114,12 @@ namespace DataAccess
 
                             while (reader.Read())
                             {
-                               ProjectGroup projectGroup =  new ProjectGroup
-                                {
-                                    Id = (int)reader.GetInt32(groupIdIndex),
-                                    Name = (string)reader.GetString(nameIndex)
-                                };
-                               groupList.Add(projectGroup);
+                                ProjectGroup projectGroup = new ProjectGroup
+                                 {
+                                     Id = (int)reader.GetInt32(groupIdIndex),
+                                     Name = (string)reader.GetString(nameIndex)
+                                 };
+                                groupList.Add(projectGroup);
                             }
                         }
                     }
@@ -126,7 +128,61 @@ namespace DataAccess
             return groupList;
         }
 
-        public static bool UpDateProductGroup(int clientId,int groupId,string groupName, bool isActive)
+
+        public static Dictionary<int, List<ProjectGroup>> ClientGroupListAll(string commaSeperatedClientList, int? projectId, int? personId)
+        {
+            Dictionary<int, List<ProjectGroup>> clientGroups = new Dictionary<int, List<ProjectGroup>>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.GetClientsGroups, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(CommaSeperatedClientListParam, commaSeperatedClientList);
+                    command.Parameters.AddWithValue(ProjectIdParam,
+                        projectId.HasValue ? (object)projectId.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
+                        personId.HasValue ? (object)personId.Value : DBNull.Value);
+                    connection.Open();
+                    ReadGroupWithClientId(command, clientGroups);
+                }
+            }
+            return clientGroups;
+        }
+
+        private static void ReadGroupWithClientId(SqlCommand command, Dictionary<int, List<ProjectGroup>> clientGroups)
+        {
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader != null)
+                    while (reader.Read())
+                    {
+                        var clientId = (int)reader[Constants.ColumnNames.ClientIdColumn];
+                        var pg = new ProjectGroup
+                         {
+                             Id = (int)reader[GroupIdColumn],
+                             Name = (string)reader[NameColumn],
+                             IsActive = (bool)reader[IsActiveColumn],
+                             InUse = (int)reader[InUseColumn] == 1
+                         };
+
+                        if (clientGroups.Keys.Count > 0 && clientGroups.Keys.Any(c => clientId == c))
+                        {
+                            clientGroups[clientId].Add(pg);
+                        }
+                        else
+                        {
+                            clientGroups.Add(clientId, new List<ProjectGroup>() { pg });
+                        }
+
+                    }
+            }
+
+        }
+
+
+
+        public static bool UpDateProductGroup(int clientId, int groupId, string groupName, bool isActive)
         {
             bool result = false;
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -203,10 +259,10 @@ namespace DataAccess
         {
             return new ProjectGroup
                        {
-                           Id = (int) reader[GroupIdColumn],
-                           Name = (string) reader[groupNameColumn],
+                           Id = (int)reader[GroupIdColumn],
+                           Name = (string)reader[groupNameColumn],
                            IsActive = (bool)reader[IsActiveColumn],
-                           InUse = (int) reader[InUseColumn] == 1
+                           InUse = (int)reader[InUseColumn] == 1
                        };
         }
 
@@ -231,13 +287,13 @@ namespace DataAccess
 
                             while (reader.Read())
                             {
-                               ProjectGroup projectGroup =  new ProjectGroup
-                                {
-                                    Id = (int)reader.GetInt32(groupIdIndex),
-                                    Name = (string)reader.GetString(nameIndex),
-                                    Code = (string)reader.GetString(codeIndex)
-                                };
-                               groupList.Add(projectGroup);
+                                ProjectGroup projectGroup = new ProjectGroup
+                                 {
+                                     Id = (int)reader.GetInt32(groupIdIndex),
+                                     Name = (string)reader.GetString(nameIndex),
+                                     Code = (string)reader.GetString(codeIndex)
+                                 };
+                                groupList.Add(projectGroup);
                             }
                         }
                     }
