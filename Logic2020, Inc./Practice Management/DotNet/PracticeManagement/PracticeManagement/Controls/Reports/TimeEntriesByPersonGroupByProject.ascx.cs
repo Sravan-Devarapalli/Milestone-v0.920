@@ -44,7 +44,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
 
-        private static IEnumerable<KeyValuePair<DateTime, double>> GetTotalsByDate(Dictionary<ChargeCode, TimeEntryRecord[]> groupedTimeEtnries)
+        private static IEnumerable<KeyValuePair<DateTime, double>> GetTotalsByDate(Dictionary<string, TimeEntryRecord[]> groupedTimeEtnries)
         {
             var res = new SortedDictionary<DateTime, double>();
 
@@ -71,10 +71,10 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Footer)
             {
-                var dsource = ((sender as Repeater).DataSource as Dictionary<ChargeCode, List<TimeEntryRecord>>);
+                var dsource = ((sender as Repeater).DataSource as Dictionary<string, List<TimeEntryRecord>>);
                 if (dsource != null)
                 {
-                    var dic = new Dictionary<ChargeCode, TimeEntryRecord[]>();
+                    var dic = new Dictionary<string, TimeEntryRecord[]>();
 
                     foreach (var item in dsource)
                     {
@@ -224,18 +224,58 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateControls(PersonTimeEntries personTimeEnryDetails)
         {
-            if (personTimeEnryDetails.GroupedTimeEtnries == null || personTimeEnryDetails.GroupedTimeEtnries.Count == 0)
-            {
-                lblnoDataMesssage.Visible = true;
-                divProjects.Visible = false;
-                divTeTable.Visible = false;
-            }
 
             if (personTimeEnryDetails.Person != null)
             {
                 calendarPersonId = personTimeEnryDetails.Person.Id.Value;
                 divPersonName.InnerText = personTimeEnryDetails.Person.Name;
             }
+
+            Dictionary<string, List<TimeEntryRecord>> list = new Dictionary<string, List<TimeEntryRecord>>();
+
+            if (personTimeEnryDetails.GroupedTimeEtnries == null || personTimeEnryDetails.GroupedTimeEtnries.Count == 0)
+            {
+                lblnoDataMesssage.Visible = true;
+                divProjects.Visible = false;
+                divTeTable.Visible = false;
+            }
+            else
+            {
+                string seperator = " - ";
+
+                list = personTimeEnryDetails.GroupedTimeEtnries.GroupBy(item => new
+                {
+                    ProjectId = item.Key.Project.Id,
+                    GroupId = item.Key.ProjectGroup.Id,
+                    ClientId = item.Key.Client.Id,
+                    DisplayName = item.Key.Client.Name +
+                                  seperator +
+                                  item.Key.ProjectGroup.Name +
+                                  seperator +
+                                  item.Key.Project.ProjectNumber +
+                                  seperator +
+                                  item.Key.Project.Name 
+                })
+                  .Select(group =>
+                        new
+                        {
+                            Name = group.Key.DisplayName,
+                            TERecords = personTimeEnryDetails.GroupedTimeEtnries.Where(t => t.Key.Project.Id == group.Key.ProjectId &&
+                                                                                            t.Key.ProjectGroup.Id == group.Key.GroupId &&
+                                                                                            t.Key.Client.Id == group.Key.ClientId 
+                                                                                            ).SelectMany(k => k.Value.Select(t => t)).ToList()
+                        })
+                  .ToDictionary(k => k.Name, v => v.TERecords);
+
+            }
+
+
+
+            repTeTable.DataSource = list;
+            repTeTable.DataBind();
+
+            dlProjects.DataSource = list;
+            dlProjects.DataBind();
         }
 
         protected Dictionary<DateTime, TimeEntryRecord> GetUpdatedDatasource(object teRecords)
