@@ -1,20 +1,21 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimeEntriesByPersonGroupByProject.ascx.cs"
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TimeEntriesByPersonGroupByProject.ascx.cs" EnableViewState="false"
     Inherits="PraticeManagement.Controls.Reports.TimeEntriesByPersonGroupByProject" %>
 <%@ Import Namespace="DataTransferObjects.TimeEntry" %>
+<%@ Import Namespace="DataTransferObjects" %>
 <div id="divPersonListSummary" runat="server">
     <div runat="server" id="divPersonName" class="divPersonName">
     </div>
     <div class="PersonGridLeftPadding divTeTable" runat="server" id="divTeTable">
         <div class="TimeEntrySummary">
             Time Entry Summary</div>
-        <asp:Repeater ID="repTeTable" runat="server" DataSource='<%# DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries") %>'
+        <asp:Repeater ID="repTeTable" runat="server" 
             OnItemDataBound="repTeTable_OnItemDataBound" EnableViewState="false" OnItemCreated="repTeTable_OnItemCreated">
             <HeaderTemplate>
                 <table class="time-entry-person-projects WholeWidth">
                     <thead>
                         <tr>
                             <th class="ClientProjectTimeType">
-                                Account - Business Unit - P# - Project Name - Work Type
+                                Account - Business Unit - P# - Project Name
                             </th>
                             <asp:Repeater ID="dlProject" runat="server" OnItemCreated="dlProject_OnItemCreated"
                                 EnableViewState="false" OnInit="dlProject_OnInit">
@@ -34,7 +35,7 @@
             <ItemTemplate>
                 <tr class="<%# Container.ItemIndex % 2 == 0 ? "alterrow" : string.Empty %>">
                     <td class="ClientProjectTimeType">
-                        <%# DataBinder.Eval(Container.DataItem, "Key.ChargeCodeName")%>
+                        <%# DataBinder.Eval(Container.DataItem, "Key")%>
                     </td>
                     <asp:Repeater ID="dlProject" runat="server" DataSource='<%# GetUpdatedDatasource(DataBinder.Eval(Container.DataItem, "Value")) %>'
                         EnableViewState="false" OnItemDataBound="dlProject_OnItemDataBound">
@@ -78,11 +79,11 @@
     <div class="PersonGridLeftPadding divProjects" runat="server" id="divProjects">
         <div class="TimeEntryDetail">
             Time Entry Detail</div>
-        <asp:Repeater ID="dlProjects" runat="server" DataSource='<%# DataBinder.Eval(Container.DataItem, "GroupedTimeEtnries")  %>'
+        <asp:Repeater ID="dlProjects" runat="server" 
             EnableViewState="false" OnItemDataBound="dlProjects_OnItemDataBound">
             <ItemTemplate>
                 <div class="ClientAndProjectName">
-                    <%# DataBinder.Eval(Container.DataItem, "Key.ChargeCodeName")%>
+                    <%# DataBinder.Eval(Container.DataItem, "Key")%>
                 </div>
                 <asp:GridView ID="gvTimeEntries" runat="server" AutoGenerateColumns="False" DataSource='<%# Eval("Value") %>'
                     EnableViewState="false" EnableModelValidation="True" CssClass="CompPerfTable WholeWidth PaddingClass"
