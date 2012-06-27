@@ -29,6 +29,181 @@ namespace PraticeManagement
         public const string AnchorTagpropertiestemplate = " href = '{0}' onclick='return checkDirtyWithRedirect(this.href);'";
         public const string PopupTimebeforeFormsAuthTimeOutSecKey = "PopupTimebeforeFormsAuthTimeOutSec";
         public const string MailToSubjectFormat = "mailto:{0}?subject={1} Issue";
+        public const string DirtyFunctionScript = @"
+					function setDirty()
+					{{
+						var hid = document.getElementById(""{0}"");
+						hid.value = ""{2}"";
+					}}
+					
+					function getDirty()
+					{{
+						var hid = document.getElementById(""{0}"");
+						return hid.value == ""{2}"";
+					}}
+					
+					function clearDirty()
+					{{
+						var hid = document.getElementById(""{0}"");
+						hid.value = ""{3}"";
+						hid = document.getElementById(""{1}"");
+						hid.value = ""{3}"";
+					}}
+					
+					function getAllowContinueWithoutSave()
+					{{
+						var hid = document.getElementById(""{4}"");
+						var result = hid.value == ""{2}"";
+						if (!result) alert(""You cannot continue while some data are not saved."");
+						return result;
+					}}
+
+					var clientValidateFunc = null;
+
+					function showDialod()
+					{{
+						if (getDirty())
+						{{
+							var hid = document.getElementById(""{1}"");
+							var result = confirm(""Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving."");
+							hid.value = result ? ""{2}"" : ""{3}"";
+							return result;
+						}}
+						
+						return false;
+					}}
+
+                    function showDialodWhenRequired() 
+                    {{
+                        if (getDirty()) 
+                        {{
+                                var hid = document.getElementById(""{1}"");
+                                var result = confirm(""Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving."");
+                                hid.value = result ? ""{2}"" : ""{3}"";
+                                return result;
+                        }}
+
+                        return -1;
+                    }}	                   								
+					
+					function confirmSaveDirty(ignoreAllowContinueWithoutSave)
+					{{
+						var result = true;
+						if (getDirty())
+						{{
+							var hid = document.getElementById(""{1}"");
+							result = confirm(""Some data isn't saved. Click Ok to Save the data or Cancel to continue without saving."");
+							hid.value = result ? ""{2}"" : ""{3}"";
+						}}
+						
+						return (result || ignoreAllowContinueWithoutSave || getAllowContinueWithoutSave()) && (!result || typeof(clientValidateFunc) != ""function"" || clientValidateFunc());
+					}}
+
+				";
+
+        public const string Script = @"
+$(document).ready(function () {{
+            RunTimerToRefreshPage();
+        }});
+
+        function fnShowTimeOutPopup() {{
+            var cookie_LastServerVisit = new Date(getCookie(""LastServerVisit""));
+            var cookie_IsLoggedIn = getCookie(""IsLoggedIn"");
+            var cookie_FormsAuthTicketExpiry = getCookie(""FormsAuthTicketExpiry"");
+            var Cookie_FormsAuthTicketExpiryDate = new Date(getCookie(""FormsAuthTicketExpiry""));
+            hdnFormsAuthTicketExpiry = document.getElementById('{0}');
+            FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
+            if (cookie_IsLoggedIn == 'true') {{
+                if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry == 0) {{
+                    var lnkHiddenLinkForTimeOutAlert = document.getElementById('{1}');
+                    lnkHiddenLinkForTimeOutAlert.click();
+                }}
+                else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {{
+                    hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
+                    clearTimeout(logOffUserSession);
+                    var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('{2}');
+                    var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
+                    var clientNow = new Date();
+                    showTimeOutPopup = setTimeout(""fnShowTimeOutPopup();"", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
+                    logOffUserSession = setTimeout(""fnLogOffUserSession();"", (Cookie_FormsAuthTicketExpiryDate - clientNow) + serverClientTimeDiff - 3000);
+                }}
+                else {{
+                    fnLogOffUserSession();
+                }}
+            }}
+            else {{
+                var hdnRedirectToLogedOutPage = document.getElementById('{3}');
+                hdnRedirectToLogedOutPage.value = 'true';
+                fnLogOffUserSessionatServer()
+            }}
+        }}
+
+        function fnLogOffUserSession() {{
+            var cookie_LastServerVisit = new Date(getCookie(""LastServerVisit""));
+            var cookie_IsLoggedIn = getCookie(""IsLoggedIn"");
+            var cookie_FormsAuthTicketExpiry = getCookie(""FormsAuthTicketExpiry"");
+            var Cookie_FormsAuthTicketExpiryDate = new Date(cookie_FormsAuthTicketExpiry);
+            hdnFormsAuthTicketExpiry = document.getElementById('{0}');
+            FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
+            if (cookie_IsLoggedIn == 'true') {{
+                if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry <= 0) {{
+                    var hdnRedirectToLogedOutPage = document.getElementById('{3}');
+                    hdnRedirectToLogedOutPage.value = 'true';
+                    fnLogOffUserSessionatServer()
+                }}
+                else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {{
+                    $find('bhAlterTimeOut').hide();
+                    hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
+                    var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('{2}');
+                    var popupTimebeforeFormsAutTimeOut = parseInt(hdnPopupTimebeforeFormsAutTimeOut.value);
+                    var clientNow = new Date();
+                    showTimeOutPopup = setTimeout(""fnShowTimeOutPopup();"", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - popupTimebeforeFormsAutTimeOut - 3000);
+                    logOffUserSession = setTimeout(""fnLogOffUserSession();"", (Cookie_FormsAuthTicketExpiryDate - clientNow) - serverClientTimeDiff - 3000);
+                }}
+            }}
+        }}
+
+        function fnLogOffUserSessionatServer() {{
+            var btnLogOutOnSessionTimeOut = document.getElementById('{4}');
+            btnLogOutOnSessionTimeOut.click();
+        }}
+
+        function RunTimerToRefreshPage() {{
+            var hdnRunTimeOutPopuUpScript = document.getElementById('{5}');
+            if (hdnRunTimeOutPopuUpScript.value == 'true') {{
+                hdnFormsAuthTicketExpiry = document.getElementById('{0}');
+                FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
+                var clientNow = new Date();
+                var cookie_LastServerVisit = new Date(getCookie(""LastServerVisit""));
+                var hdnLastServerVisit = new Date(document.getElementById('{6}').value);
+                serverClientTimeDiff = clientNow - hdnLastServerVisit;
+                var Cookie_FormsAuthTicketExpiry = new Date(getCookie(""FormsAuthTicketExpiry""));
+                var hdnPopupTimebeforeFormsAutTimeOut = document.getElementById('{2}');
+                showTimeOutPopup = setTimeout(""fnShowTimeOutPopup();"", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - parseInt(hdnPopupTimebeforeFormsAutTimeOut.value) - 3000);
+                logOffUserSession = setTimeout(""fnLogOffUserSession();"", (Cookie_FormsAuthTicketExpiry - cookie_LastServerVisit) - 3000);
+            }}
+        }}
+
+        function RefreshPage() {{
+            clearTimeout(logOffUserSession);
+            window.location.reload(true);
+        }}
+
+        var showTimeOutPopup;
+        var logOffUserSession;
+        var serverClientTimeDiff;
+
+        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRefreshPopupRequestHandle);
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRefreshPopupRequestRequestHandle);
+
+        function beginRefreshPopupRequestHandle(sender, Args) {{
+            clearTimeout(showTimeOutPopup);
+            clearTimeout(logOffUserSession);
+        }}
+        function endRefreshPopupRequestRequestHandle(sender, Args) {{
+            RunTimerToRefreshPage();
+        }} 
+";
 
 
         #region Properties
@@ -163,14 +338,24 @@ namespace PraticeManagement
 
             hdnPopupTimebeforeFormsAutTimeOut.Value = popupTimebeforeFormsAutTimeOutSec;
 
-            ltrScript.Text =
-                string.Format(ltrScript.Text,
-                              hidDirtyData.ClientID,
-                              hidDoSaveDirty.ClientID,
-                              bool.TrueString,
-                              bool.FalseString,
-                              hidAllowContinueWithoutSave.ClientID
-                              );
+            ScriptManager.RegisterStartupScript(
+                                                this, this.GetType(), this.ClientID, (string.Format(DirtyFunctionScript,
+                                                                                        hidDirtyData.ClientID,
+                                                                                        hidDoSaveDirty.ClientID,
+                                                                                        bool.TrueString,
+                                                                                        bool.FalseString,
+                                                                                        hidAllowContinueWithoutSave.ClientID
+                                                                                        ) + 
+                                                                                        string.Format(Script, hdnFormsAuthTicketExpiry.ClientID,
+                                                                                                                lnkHiddenLinkForTimeOutAlert.ClientID,
+                                                                                                                hdnPopupTimebeforeFormsAutTimeOut.ClientID,
+                                                                                                                hdnRedirectToLogedOutPage.ClientID,
+                                                                                                                btnLogOutOnSessionTimeOut.ClientID,
+                                                                                                                hdnRunTimeOutPopuUpScript.ClientID,
+                                                                                                                hdnLastServerVisit.ClientID))
+                                                                                        , true
+                                               );
+
             string htmltext = GetMenuHtml();
 
             if (user != null
