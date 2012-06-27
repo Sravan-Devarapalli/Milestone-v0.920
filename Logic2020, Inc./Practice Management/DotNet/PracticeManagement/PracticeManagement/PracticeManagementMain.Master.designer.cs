@@ -76,15 +76,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hidAllowContinueWithoutSave;
         
         /// <summary>
-        /// ltrScript control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrScript;
-        
-        /// <summary>
         /// hlHome control.
         /// </summary>
         /// <remarks>
@@ -245,24 +236,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnLogOutOnSessionTimeOut;
-        
-        /// <summary>
-        /// hpLogOutOnSessionTimeOut control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hpLogOutOnSessionTimeOut;
-        
-        /// <summary>
-        /// btnRefreshPage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRefreshPage;
         
         /// <summary>
         /// hdnLastServerVisit control.
