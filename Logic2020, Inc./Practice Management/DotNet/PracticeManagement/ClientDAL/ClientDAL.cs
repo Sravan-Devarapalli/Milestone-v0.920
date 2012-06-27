@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.SqlClient;
 using DataAccess.Other;
 using DataTransferObjects;
+using System.Text;
+using System.Linq;
 
 namespace DataAccess
 {
@@ -502,6 +504,10 @@ namespace DataAccess
                     isNoteRequiredIndex = -1;
                 }
 
+                StringBuilder commaSeperatedClientList = new StringBuilder();
+
+                List<int> clientIds = new List<int>();
+
                 while (reader.Read())
                 {
                     var client = ReadClientBasic(reader);
@@ -539,12 +545,33 @@ namespace DataAccess
                         }
                     }
 
-                    if (loadGroups)
-                        client.Groups = ProjectGroupDAL.GroupListAll(client.Id, null, person == null ? null : person.Id);
-
                     clientList.Add(client);
+                    clientIds.Add(client.Id.Value);
+
+
                 }
-            }
+
+                if (loadGroups)
+                {
+
+                    var clienIds = clientIds.Distinct();
+                    if (clienIds.Count() > 0)
+                    {
+                        foreach (var id in clienIds)
+                        {
+                            commaSeperatedClientList.Append(id);
+                            commaSeperatedClientList.Append(",");
+                        }
+
+                        var clientGroups = ProjectGroupDAL.ClientGroupListAll(commaSeperatedClientList.ToString(), null, person == null ? null : person.Id);
+
+                        foreach (Client client in clientList)
+                        {
+                            if (clientGroups.Keys.Count > 0 && clientGroups.Keys.Any(c => client.Id.Value == c))
+                                client.Groups = clientGroups[client.Id.Value];
+                        }
+                    }
+                }            }
         }
 
         private static Client ReadClientBasic(SqlDataReader reader)
