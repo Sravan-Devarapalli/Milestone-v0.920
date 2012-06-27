@@ -26,6 +26,7 @@ namespace PraticeManagement.Controls.Reports
             var endDate = Convert.ToDateTime(context.Request.QueryString["EndDate"]);
             var payTypeIds = context.Request.QueryString["PayScaleIds"];
             var practiceIds = context.Request.QueryString["PracticeIds"];
+            int view = Convert.ToInt32(context.Request.QueryString["view"]);
 
             var practicesArray = practiceIds.Split(',');
             List<int> practices = new List<int>();
@@ -127,22 +128,42 @@ namespace PraticeManagement.Controls.Reports
 
                 if (personWithTimeEntry.Person != null)
                 {
-                    var personWithTimeEntries = new List<PersonTimeEntries> { personWithTimeEntry };
+                    
 
                     PraticeManagement.Sandbox.TimeEntriesByPerson page = new PraticeManagement.Sandbox.TimeEntriesByPerson();
-                    TimeEntriesByPerson cntrlTimeEntriesByPerson = (TimeEntriesByPerson)page.LoadControl("~/Controls/Reports/TimeEntriesByPerson.ascx");
 
-                    cntrlTimeEntriesByPerson.StartDate = startDate;
-                    cntrlTimeEntriesByPerson.EndDate = endDate;
-                    cntrlTimeEntriesByPerson.repPersonsObject.DataSource = personWithTimeEntries;
-                    cntrlTimeEntriesByPerson.repPersonsObject.DataBind();
-                   
-                    page.Controls.Add(cntrlTimeEntriesByPerson);
 
-                    using (System.IO.StringWriter sw = new System.IO.StringWriter())
+                    if (view == 1)
                     {
-                        cntrlTimeEntriesByPerson.repPersonsObject.RenderControl(new HtmlTextWriter(sw));
-                        html = sw.ToString();
+                        TimeEntriesByPersonGroupByProject cntrlTimeEntriesByPerson = (TimeEntriesByPersonGroupByProject)page.LoadControl("~/Controls/Reports/TimeEntriesByPersonGroupByProject.ascx");
+
+                        cntrlTimeEntriesByPerson.StartDate = startDate;
+                        cntrlTimeEntriesByPerson.EndDate = endDate;
+                        cntrlTimeEntriesByPerson.PopulateControls(personWithTimeEntry);
+
+                        page.Controls.Add(cntrlTimeEntriesByPerson);
+
+                        using (System.IO.StringWriter sw = new System.IO.StringWriter())
+                        {
+                            cntrlTimeEntriesByPerson.RenderControl(new HtmlTextWriter(sw));
+                            html = sw.ToString();
+                        }
+                    }
+                    else
+                    {
+                        TimeEntriesByPerson cntrlTimeEntriesByPerson = (TimeEntriesByPerson)page.LoadControl("~/Controls/Reports/TimeEntriesByPerson.ascx");
+
+                        cntrlTimeEntriesByPerson.StartDate = startDate;
+                        cntrlTimeEntriesByPerson.EndDate = endDate;
+                        cntrlTimeEntriesByPerson.PopulateControls(personWithTimeEntry);
+
+                        page.Controls.Add(cntrlTimeEntriesByPerson);
+
+                        using (System.IO.StringWriter sw = new System.IO.StringWriter())
+                        {
+                            cntrlTimeEntriesByPerson.RenderControl(new HtmlTextWriter(sw));
+                            html = sw.ToString();
+                        }
                     }
 
                     html = RemoveWhitespaceFromHtml(html);
