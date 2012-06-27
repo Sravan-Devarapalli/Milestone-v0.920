@@ -3964,6 +3964,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\ConvertXmlStringInToStringTable.function.sql">
       <SubType>Code</SubType>
       <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetTimeTypesInUseDetailsByProject.proc.sql">
       <SubType>Code</SubType>
@@ -4096,6 +4097,24 @@
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetStrawmanListShortFilterWithTodayPay.proc.sql">
       <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetClientsGroups.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetFutureDateTable.function.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetHoursPerYearTable.function.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetHolidayTimeTypeIdTable.function.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
   </ItemGroup>
   <ItemGroup>
