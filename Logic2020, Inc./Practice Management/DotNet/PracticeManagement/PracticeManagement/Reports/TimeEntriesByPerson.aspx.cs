@@ -140,7 +140,7 @@ namespace PraticeManagement.Sandbox
 
         protected void Page_Load(object sender, EventArgs e)
         {
-           
+
             hdnUpdateClicked.Value = "false";
 
             TextBox fromDate = diRange.FindControl("tbFrom") as TextBox;
@@ -224,6 +224,8 @@ namespace PraticeManagement.Sandbox
             AddAttributesToCheckBoxes(this.cblPractices);
             AddAttributesToCheckBoxes(this.cblTimeScales);
             SelectCurrentPerson(DataHelper.CurrentPerson.Id);
+
+            ddlView.SelectedIndex = 0;
         }
 
         private void SelectAllItems(ScrollingDropDown ddlpractices)
