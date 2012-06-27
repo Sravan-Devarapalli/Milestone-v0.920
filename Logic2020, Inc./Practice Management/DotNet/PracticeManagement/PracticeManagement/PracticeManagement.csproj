@@ -388,6 +388,7 @@
     <Content Include="Controls\Reports\ProjectSummaryByResource.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryTabByResource.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
+    <Content Include="Controls\Reports\TimeEntriesByPersonGroupByProject.ascx" />
     <Content Include="Controls\Reports\TimeEntryReportsHeader.ascx" />
     <Content Include="Controls\Reports\TimePeriodSummaryByProject.ascx" />
     <Content Include="Controls\Reports\TimePeriodSummaryByResource.ascx" />
@@ -770,7 +771,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="Scripts\Combined_Jquery1_4_1AndCorpNav.js" />
+    <Content Include="Scripts\Combined.js" />
     <Content Include="Scripts\ExpandOrCollapse.js" />
     <Content Include="Scripts\FilterTable.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
@@ -783,6 +784,7 @@
     <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
+    <Content Include="Scripts\Master.js" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1435,6 +1437,13 @@
     </Compile>
     <Compile Include="Controls\Reports\TimeEntriesByPerson.ascx.designer.cs">
       <DependentUpon>TimeEntriesByPerson.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\TimeEntriesByPersonGroupByProject.ascx.cs">
+      <DependentUpon>TimeEntriesByPersonGroupByProject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\TimeEntriesByPersonGroupByProject.ascx.designer.cs">
+      <DependentUpon>TimeEntriesByPersonGroupByProject.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\TimeEntriesGetByPersonHandler.ashx.cs">
       <DependentUpon>TimeEntriesGetByPersonHandler.ashx</DependentUpon>
