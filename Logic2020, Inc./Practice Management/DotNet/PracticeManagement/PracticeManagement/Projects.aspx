@@ -17,12 +17,37 @@
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Projects Summary | Practice Management</title>
 </asp:Content>
+<asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
+    <script language="javascript" type="text/javascript" src="Scripts/ScrollinDropDown.js"></script>
+</asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Projected Project Profit & Loss
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="Scripts/ScrollinDropDown.js"></script>
     <script type="text/javascript">
+        function setPosition(item, ytop, xleft) {
+            item.offset({ top: ytop, left: xleft });
+        }
+
+        function SetTooltipText(descriptionText, hlinkObj) {
+            var hlinkObjct = $(hlinkObj);
+            var displayPanel = $('#<%= pnlProjectToolTipHolder.ClientID %>');
+            iptop = hlinkObjct.offset().top;
+            ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 5;
+            setPosition(displayPanel, iptop - 15, ipleft);
+            displayPanel.show();
+            setPosition(displayPanel, iptop - 15, ipleft);
+            displayPanel.show();
+
+            var lblProjectTooltip = document.getElementById('<%= lblProjectTooltip.ClientID %>');
+            lblProjectTooltip.innerHTML = descriptionText.toString();
+        }
+
+        function HidePanel() {
+            var displayPanel = $('#<%= pnlProjectToolTipHolder.ClientID %>');
+            displayPanel.hide();
+        }
+
         var IsExportAllDisplayed = false;
 
         function imgArrow_click() {
@@ -30,6 +55,7 @@
             var menu = document.getElementById('popupmenu');
             menu.style.display = 'block';
         }
+
         function imgArrow_mouseOver() {
             IsExportAllDisplayed = true;
         }
@@ -51,7 +77,6 @@
             menu.style.display = 'block';
         }
 
-
         function excludeDualSelection(target) {
             var targetElement = $get(target);
 
@@ -59,6 +84,7 @@
                 if (targetElement.checked)
                     targetElement.checked = false;
         }
+
         function RemoveExtraCharAtEnd(url) {
             if (url.lastIndexOf('#') == url.length - 1) {
                 return url.substring(0, url.length - 1);
@@ -67,6 +93,7 @@
                 return url;
             }
         }
+
         function correctMonthMiniReportPosition(reportPanelId, headerId, scrollPanelId) {
             var reportPanel = $get(reportPanelId);
             var header = $get(headerId);
@@ -186,6 +213,7 @@
         }
 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
         function endRequestHandle(sender, Args) {
             addListenersToParent('<%= cblProjectGroup.ClientID %>', '<%= cblClient.ClientID %>');
         }
@@ -200,6 +228,7 @@
             txtStartDate.value = hdnStartDate.value;
             txtEndDate.value = hdnEndDate.value;
         }
+
         function CheckIfDatesValid() {
             hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
             hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
@@ -236,6 +265,7 @@
                 btnddlPeriodChanged.click();
             }
         }
+
     </script>
     <asp:UpdatePanel ID="flrPanel" runat="server">
         <ContentTemplate>
@@ -704,6 +734,40 @@
                     <tr>
                         <td colspan="2" align="center">
                             <asp:ValidationSummary ID="valSum" runat="server" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:Panel ID="pnlProjectToolTipHolder" Style="display: none; position: absolute;
+                z-index: 2000;" runat="server" CssClass="ToolTip WordWrap">
+                <table>
+                    <tr class="top">
+                        <td class="lt">
+                            <div class="tail">
+                            </div>
+                        </td>
+                        <td class="tbor">
+                        </td>
+                        <td class="rt">
+                        </td>
+                    </tr>
+                    <tr class="middle">
+                        <td class="lbor">
+                        </td>
+                        <td class="content WordWrap">
+                            <pre>
+<asp:Label ID="lblProjectTooltip" CssClass="WordWrap" runat="server"></asp:Label>
+</pre>
+                        </td>
+                        <td class="rbor">
+                        </td>
+                    </tr>
+                    <tr class="bottom">
+                        <td class="lb">
+                        </td>
+                        <td class="bbor">
+                        </td>
+                        <td class="rb">
                         </td>
                     </tr>
                 </table>
