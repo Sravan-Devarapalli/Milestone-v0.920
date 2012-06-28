@@ -34,9 +34,9 @@
             var displayPanel = $('#<%= pnlProjectToolTipHolder.ClientID %>');
             iptop = hlinkObjct.offset().top;
             ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 5;
-            setPosition(displayPanel, iptop - 15, ipleft);
+            setPosition(displayPanel, iptop - 20, ipleft);
             displayPanel.show();
-            setPosition(displayPanel, iptop - 15, ipleft);
+            setPosition(displayPanel, iptop - 20, ipleft);
             displayPanel.show();
 
             var lblProjectTooltip = document.getElementById('<%= lblProjectTooltip.ClientID %>');
