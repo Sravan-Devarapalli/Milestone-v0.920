@@ -189,6 +189,7 @@ namespace PraticeManagement.Controls
 
         private Color _scrollBoxBorderColor;
         private Unit _scrollBoxHeight;
+        private string _cssClass;
 
         #endregion
 
@@ -201,6 +202,18 @@ namespace PraticeManagement.Controls
         public override Unit Height
         {
             set { _scrollBoxHeight = value; }
+        }
+
+        public override string CssClass
+        {
+            get
+            {
+                return _cssClass;
+            }
+            set
+            {
+                _cssClass = value;
+            }
         }
 
         public override Color BorderColor
@@ -217,19 +230,22 @@ namespace PraticeManagement.Controls
 
             //  Prepare styles for the instance of the objects
             //      by checking if important styles are set
-            string styleSheet = string.Format(CssStyle,
-                                              _scrollBoxHeight.IsEmpty ? "360px" : _scrollBoxHeight.ToString(),
-                                              Width.IsEmpty ? "200px" : Width.ToString(),
-                                              _scrollBoxBorderColor.IsEmpty
-                                                  ? "#000000"
-                                                  : ColorToHex(_scrollBoxBorderColor),
-                                              BackColor.IsEmpty ? "#ffffff" : ColorToHex(BackColor),
-                                              CellPadding < 0 ? 0 : CellPadding,
-                                              ID);
-            BorderStyle = BorderStyle.None;
+            if (string.IsNullOrEmpty(CssClass))
+            {
+                string styleSheet = string.Format(CssStyle,
+                                                  _scrollBoxHeight.IsEmpty ? "360px" : _scrollBoxHeight.ToString(),
+                                                  Width.IsEmpty ? "200px" : Width.ToString(),
+                                                  _scrollBoxBorderColor.IsEmpty
+                                                      ? "#000000"
+                                                      : ColorToHex(_scrollBoxBorderColor),
+                                                  BackColor.IsEmpty ? "#ffffff" : ColorToHex(BackColor),
+                                                  CellPadding < 0 ? 0 : CellPadding,
+                                                  ID);
+                BorderStyle = BorderStyle.None;
 
-            // Add css style for the current control
-            IncludeCss(styleSheet);
+                // Add css style for the current control
+                IncludeCss(styleSheet);
+            }
 
             // Add initialization script for the current control
             IncludeScript(InitializationScrpt);
@@ -490,7 +506,9 @@ namespace PraticeManagement.Controls
 
         public override void RenderControl(HtmlTextWriter writer)
         {
-            writer.WriteLine(string.Format("<div id='{0}' class='scroll_{0}' />", ID));
+            string writeText = string.Empty;
+            writeText = string.IsNullOrEmpty(CssClass) ?  string.Format("<div id='{0}' class='scroll_{0}' />" , ID) : string.Format("<div id='{0}' class='{1}' />", ID, CssClass);
+            writer.WriteLine(writeText);
             base.RenderControl(writer);
             writer.WriteLine("</div>");
         }
