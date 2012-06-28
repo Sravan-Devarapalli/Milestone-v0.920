@@ -643,9 +643,6 @@ namespace PraticeManagement
 
 
                     string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
-                    /*row.Attributes["class"] = row.Attributes["class"] == AlternatingRowCssClass ?
-                                                string.IsNullOrEmpty(cssClass) ? row.Attributes["class"] : string.Format("{0} {1}", cssClass, AlternatingRowCssClass) :
-                                                cssClass;*/
 
                     if (project.Status.Id == 3 && !project.HasAttachments)
                     {
@@ -663,10 +660,12 @@ namespace PraticeManagement
                         personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
                         personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
 
-                        FillProjectStateCell(e.Item, cssClass, project.Status);
+                        var htmlRow = e.Item.FindControl("boundingRow") as HtmlTableRow;
+
+                        FillProjectStateCell(htmlRow, cssClass, project.Status);
                         FillProjectNumberCell(e.Item, project);
                         FillClientNameCell(e.Item, project);
-                        FillProjectNameCell(e.Item, project);
+                        FillProjectNameCell(htmlRow, project);
                         FillProjectStartCell(e.Item, project);
                         FillProjectEndCell(e.Item, project);
                     }
@@ -796,58 +795,40 @@ namespace PraticeManagement
             row.Cells[StartDateColumnIndex].Attributes["class"] = "CompPerfPeriod";
         }
 
-        private void FillProjectStateCell(ListViewItem e, string cssClass, ProjectStatus status)
+        private void FillProjectStateCell(HtmlTableRow row, string cssClass, ProjectStatus status)
         {
-            var row = e.FindControl("boundingRow") as HtmlTableRow;
-            // Project name cell content                        
-            // Use ProjectNameCell Control for prepare friendly ToolTip popUp window
-
-            var btnProject = (ProjectNameCellRounded)LoadControl(Constants.ApplicationControls.ProjectNameCellRoundedControl);
-            btnProject.ButtonProjectNameId = ButtonProjectNameId;
-            btnProject.ButtonProjectNameText = HttpUtility.HtmlEncode("");
-            // Shading project according to its status
-            btnProject.ButtonProjectNameToolTip = status.Name;
+            var toolTip = status.Name;
 
             if (status.Id == (int)ProjectStatusType.Active)
             {
                 if (cssClass == "ActiveProjectWithoutSOW")
                 {
-                    btnProject.ButtonProjectNameToolTip = "Active without Attachment";
+                    toolTip = "Active without Attachment";
                 }
                 else
                 {
-                    btnProject.ButtonProjectNameToolTip = "Active with Attachment";
+                    toolTip = "Active with Attachment";
                 }
             }
 
-            btnProject.ButtonCssClass = cssClass;
-            btnProject.ToolTipOffsetY = -25;
-            btnProject.ToolTipOffsetX = 5;
-            var indentDiv = new Panel() { CssClass = "cell-pad" };
-            indentDiv.Controls.Add(btnProject);
-            row.Cells[ProjectStateColumnIndex].Controls.Add(indentDiv);
-
+            HtmlAnchor anchor = new HtmlAnchor();
+            anchor.Attributes["class"] = cssClass;
+            anchor.Attributes["Description"] = toolTip;
+            anchor.Attributes["onmouseout"] = "HidePanel();";
+            anchor.Attributes["onmouseover"] = "SetTooltipText(this.attributes['Description'].value,this);";
+            row.Cells[ProjectStateColumnIndex].Controls.Add(anchor);
         }
 
-        private void FillProjectNameCell(ListViewItem e, Project project)
+        private void FillProjectNameCell(HtmlTableRow row, Project project)
         {
-            var row = e.FindControl("boundingRow") as HtmlTableRow;
-            // Project name cell content                        
-            // Use ProjectNameCell Control for prepare friendly ToolTip popUp window
+            HtmlAnchor anchor = new HtmlAnchor();
+            anchor.InnerText = HttpUtility.HtmlEncode(project.Name);
+            anchor.HRef = GetRedirectUrl(project.Id.Value, Constants.ApplicationPages.ProjectDetail);
+            anchor.Attributes["Description"] = PrepareToolTipView(project);
+            anchor.Attributes["onmouseout"] = "HidePanel();";
+            anchor.Attributes["onmouseover"] = "SetTooltipText(this.attributes['Description'].value,this);";
 
-            var btnProject = (ProjectNameCellRounded)LoadControl(Constants.ApplicationControls.ProjectNameCellRoundedControl);
-            btnProject.ButtonProjectNameId = ButtonProjectNameId;
-            btnProject.ButtonProjectNameText = HttpUtility.HtmlEncode(project.Name);
-            btnProject.ButtonProjectNameToolTip = PrepareToolTipView(project);
-            btnProject.ButtonProjectNameHref = GetRedirectUrl(project.Id.Value, Constants.ApplicationPages.ProjectDetail);
-            btnProject.ToolTipOffsetX = 5;
-            btnProject.ToolTipOffsetY = -15;
-            btnProject.ToolTipPopupPosition = HoverMenuPopupPosition.Right;
-
-            var indentDiv = new Panel() { CssClass = "cell-pad" };
-            indentDiv.Controls.Add(btnProject);
-
-            row.Cells[ProjectNameColumnIndex].Controls.Add(indentDiv);
+            row.Cells[ProjectNameColumnIndex].Controls.Add(anchor);
         }
 
         private static string GetRedirectUrl(int argProjectId, string targetUrl)
@@ -867,23 +848,15 @@ namespace PraticeManagement
             btnClient.Text = HttpUtility.HtmlEncode(project.Client.Name);
             btnClient.NavigateUrl = GetRedirectUrl(project.Client.Id.Value, Constants.ApplicationPages.ClientDetails);
 
-            var indentDiv = new Panel() { CssClass = "cell-pad" };
-            indentDiv.Controls.Add(btnClient);
-
-            row.Cells[ClientNameColumnIndex].Controls.Add(indentDiv);
+            row.Cells[ClientNameColumnIndex].Controls.Add(btnClient);
         }
 
         private static void FillProjectNumberCell(ListViewItem e, Project project)
         {
             var row = e.FindControl("boundingRow") as HtmlTableRow;
             var lblProjectNumber = e.FindControl(LabelProjectNumberId) as Label;
-
             lblProjectNumber.Text = HttpUtility.HtmlEncode(project.ProjectNumber);
-
-            var indentDiv = new Panel() { CssClass = "cell-pad" };
-            indentDiv.Controls.Add(lblProjectNumber);
-
-            row.Cells[ProjectNumberColumnIndex].Controls.Add(indentDiv);
+            row.Cells[ProjectNumberColumnIndex].Controls.Add(lblProjectNumber);
             row.Cells[ProjectNumberColumnIndex].Attributes["class"] = "CompPerfProjectNumber";
         }
 
@@ -1193,7 +1166,7 @@ namespace PraticeManagement
         private static string PrepareToolTipView(Project project)
         {
             var resources = new StringBuilder();
-           
+
             var personList = new List<MilestonePerson>();
 
             foreach (var projectPerson in project.ProjectPersons)
@@ -1220,7 +1193,7 @@ namespace PraticeManagement
             foreach (var t in sortedPersons)
             {
                 resources.AppendFormat(AppendPersonFormat,
-                                     Environment.NewLine,
+                                     "<br/>",
                                      HttpUtility.HtmlEncode(t.Person.LastName),
                                      HttpUtility.HtmlEncode(t.Person.FirstName)
                                      );
