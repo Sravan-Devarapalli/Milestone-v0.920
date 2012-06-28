@@ -237,86 +237,11 @@
             }
         }
     </script>
-    <style>
-        ul, li
-        {
-            margin: 0;
-            padding: 0;
-        }
-        ul.pmenu
-        {
-            position: absolute;
-            margin: 0;
-            padding: 1px;
-            list-style: none;
-            width: 88px; /* Width of Menu Items */
-            border: 1px solid #ccc;
-            background: white;
-            display: none;
-            z-index: 10;
-        }
-        ul.pmenu li
-        {
-            position: relative;
-        }
-        ul.pmenu li ul
-        {
-            position: absolute;
-            left: 100px; /* Set 1px less than menu width */
-            top: 0;
-            display: none;
-            z-index: 10;
-        }
-        /* Styles for Menu Items */ul.pmenu li a
-        {
-            display: block;
-            text-decoration: none;
-            color: black;
-            padding: 2px 5px 2px 20px;
-        }
-        ul.pmenu li a:hover
-        {
-            background: #335EA8;
-            color: Black;
-            font-weight: bold;
-        }
-        
-        /* IE \*/* html ul.pmenu li
-        {
-            float: left;
-            height: 1%;
-        }
-        * html ul.pmenu li a
-        {
-            height: 1%;
-        }
-        * html ul.pmenu li ul
-        {
-            left: 100px;
-        }
-        /* End */ul.pmenu li:hover ul, ul.pmenu li.over ul
-        {
-            display: block;
-        }
-        /* The magic */ul.pmenu li ul
-        {
-            left: 100px;
-        }
-        
-        .xScrollProjects
-        {
-            overflow-x: auto;
-        }
-        .displayNone
-        {
-            display: none;
-        }
-    </style>
     <asp:UpdatePanel ID="flrPanel" runat="server">
         <ContentTemplate>
             <div class="filters">
                 <div class="buttons-block">
-                    <table style="border: none; padding-left: 10px;" class="WholeWidth">
+                    <table class="WholeWidth BorderNone LeftPadding10px">
                         <tr>
                             <td style="width: 3%">
                                 <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
@@ -343,7 +268,7 @@
                                     <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                 </asp:DropDownList>
                                 <asp:Button ID="btnddlPeriodChanged" runat="server" OnClick="ddlPeriod_SelectedIndexChanged"
-                                    Style="display: none" />
+                                    class="displayNone" />
                                 <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                                     CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
                                     PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
@@ -416,20 +341,20 @@
                             <ContentTemplate>
                                 <div id="divProjectFilter" runat="server" class="project-filter">
                                     <table class="WholeWidth" style="height: 80px;">
-                                        <tr class="tb-header">
-                                            <td style="border-bottom: 1px solid black; width: 190px; text-align: center">
+                                        <tr class="tb-header ProjectSummaryAdvancedFiltersHeader">
+                                            <th>
                                                 Account / Business Unit
-                                            </td>
+                                            </th>
                                             <td style="padding: 5px; width: 10px;">
                                             </td>
-                                            <td style="border-bottom: 1px solid black; width: 190px; text-align: center;">
+                                            <th>
                                                 Sales Team
-                                            </td>
+                                            </th>
                                             <td style="padding: 5px; width: 10px;">
                                             </td>
-                                            <td style="border-bottom: 1px solid black; width: 190px; text-align: center;">
+                                            <th>
                                                 Practice Area
-                                            </td>
+                                            </th>
                                             <td rowspan="3" style="text-align: right;">
                                                 <table style="text-align: right; width: 100%;">
                                                     <tr>
@@ -450,8 +375,8 @@
                                         <tr>
                                             <td style="padding: 5px;">
                                                 <uc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblProjectGroup"
-                                                    SetDirty="false" Width="240" Height="240px" onclick="scrollingDropdown_onclick('cblClient','Account');EnableOrDisableGroup();"
-                                                    DropDownListType="Account" CellPadding="3" />
+                                                    SetDirty="false" CssClass="ProjectSummaryScrollingDropDown" onclick="scrollingDropdown_onclick('cblClient','Account');EnableOrDisableGroup();"
+                                                    DropDownListType="Account" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblClient" runat="server" TargetControlID="cblClient"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
@@ -459,9 +384,8 @@
                                             <td>
                                             </td>
                                             <td>
-                                                <uc:ScrollingDropDown ID="cblSalesperson" runat="server" SetDirty="false" Width="240"
-                                                    Height="240px" onclick="scrollingDropdown_onclick('cblSalesperson','Salesperson')"
-                                                    DropDownListType="Salesperson" CellPadding="3" />
+                                                <uc:ScrollingDropDown ID="cblSalesperson" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                                    onclick="scrollingDropdown_onclick('cblSalesperson','Salesperson')" DropDownListType="Salesperson" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblSalesperson" runat="server" TargetControlID="cblSalesperson"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
@@ -469,9 +393,8 @@
                                             <td>
                                             </td>
                                             <td>
-                                                <uc:ScrollingDropDown ID="cblPractice" runat="server" SetDirty="false" Width="240"
-                                                    Height="240px" onclick="scrollingDropdown_onclick('cblPractice','Practice Area')"
-                                                    DropDownListType="Practice Area" CellPadding="3" />
+                                                <uc:ScrollingDropDown ID="cblPractice" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                                    onclick="scrollingDropdown_onclick('cblPractice','Practice Area')" DropDownListType="Practice Area" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblPractice" runat="server" TargetControlID="cblPractice"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
@@ -479,9 +402,9 @@
                                         </tr>
                                         <tr>
                                             <td style="padding: 5px;">
-                                                <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" Width="240"
-                                                    Height="240px" onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Business Unit')"
-                                                    DropDownListType="Business Unit" CellPadding="3" />
+                                                <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                                    onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Business Unit')"
+                                                    DropDownListType="Business Unit" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectGroup" runat="server" TargetControlID="cblProjectGroup"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
@@ -489,9 +412,8 @@
                                             <td>
                                             </td>
                                             <td>
-                                                <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" SetDirty="false" Width="240"
-                                                    Height="240px" onclick="scrollingDropdown_onclick('cblProjectOwner','Project Manager')"
-                                                    DropDownListType="Project Manager" CellPadding="3" />
+                                                <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                                    onclick="scrollingDropdown_onclick('cblProjectOwner','Project Manager')" DropDownListType="Project Manager" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectOwner" runat="server" TargetControlID="cblProjectOwner"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
@@ -595,10 +517,10 @@
         UpdateMode="Conditional">
         <ContentTemplate>
             <asp:Panel class="this value set OnPageLoad" runat="server" ID="horisontalScrollDiv"
-                CssClass="xScrollProjects">
+                CssClass="xScrollAuto">
                 <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound"
-                    OnSorted="lvProjects_Sorted" OnDataBound="lvProjects_OnDataBound"
-                    OnSorting="lvProjects_Sorting" OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
+                    OnSorted="lvProjects_Sorted" OnDataBound="lvProjects_OnDataBound" OnSorting="lvProjects_Sorting"
+                    OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
                     <LayoutTemplate>
                         <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
                             <tr runat="server" id="lvHeader" class="CompPerfHeader">
@@ -745,7 +667,7 @@
                                     </td>
                                 </tr>
                                 <tr onmouseover="Exportall_click_mouseOver();" onmouseout="imgArrow_mouseOut();">
-                                    <td colspan="2">
+                                    <td colspan="2" class="ExportAndExportAll">
                                         <ul id="popupmenu" class="pmenu">
                                             <li>
                                                 <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
@@ -789,5 +711,4 @@
         </ContentTemplate>
     </cc1:StyledUpdatePanel>
 </asp:Content>
-
 
