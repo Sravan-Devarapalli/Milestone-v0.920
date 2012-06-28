@@ -694,11 +694,11 @@
                                             <td style="width: 30%; vertical-align: top; line-height: 20px;">
                                                 Project Manager(s)
                                             </td>
-                                            <td style="width: 60%;" class="ScrollingDropDownWholeWidth">
-                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="Width92Per"
-                                                    AllSelectedReturnType="AllItems" Height="240px" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
-                                                    DropDownListType="Manager" CellPadding="3" />
-                                                <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
+                                            <td style="width: 60%;">
+                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="ProjectSummaryScrollingDropDown Width20Percent"
+                                                    AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
+                                                    DropDownListType="Manager" />
+                                                <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers" Width="93%"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
