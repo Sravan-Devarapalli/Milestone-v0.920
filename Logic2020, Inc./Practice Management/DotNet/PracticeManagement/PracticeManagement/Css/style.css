@@ -1485,6 +1485,10 @@ TABLE.Section td
 {
     width: 50%;
 }
+.Width20Percent
+{
+    width: 20%;
+}
 .ModalPopUpSideHeading
 {
     width: 30%;
@@ -1711,17 +1715,6 @@ TABLE.TimeEntruReportHeader TH
 .Width95Per
 {
     width: 95%;
-}
-.ScrollingDropDownWholeWidth .scrollext_sdeProjectManagersLabel
-{
-    width: 93% !important;
-    vertical-align: middle;
-    line-height: 19px;
-    padding-left: 4px;
-}
-.ScrollingDropDownWholeWidth .scroll_cblProjectManagers
-{
-    width: 20% !important;
 }
 .NoBorder
 {
@@ -2064,3 +2057,109 @@ li.l1 a:hover, .l2 dd div.flyout a:hover
 {
     color: #2a4753;
 }
+.BorderNone
+{
+    border: none;
+}
+.xScrollAuto
+{
+    overflow-x: auto;
+}
+div.scrollextLabel
+{
+    border: 1px solid #aaaaaa;
+    background-color: #ffffff;
+    display: inline-block;
+    vertical-align: middle;
+    height: 18px;
+    line-height: 18px;
+    padding-left: 2px;
+}
+/* Export to Excel Buttons in Project Summary Page*/
+.ExportAndExportAll ul, .ExportAndExportAll li
+{
+    margin: 0;
+    padding: 0;
+}
+.ExportAndExportAll ul.pmenu
+{
+    position: absolute;
+    margin: 0;
+    padding: 1px;
+    list-style: none;
+    width: 88px; /* Width of Menu Items */
+    border: 1px solid #ccc;
+    background: white;
+    display: none;
+    z-index: 10;
+}
+.ExportAndExportAll ul.pmenu li
+{
+    position: relative;
+}
+.ExportAndExportAll ul.pmenu li ul
+{
+    position: absolute;
+    left: 100px; /* Set 1px less than menu width */
+    top: 0;
+    display: none;
+    z-index: 10;
+}
+/* Styles for Menu Items */
+.ExportAndExportAll ul.pmenu li a
+{
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 2px 5px 2px 20px;
+}
+.ExportAndExportAll ul.pmenu li a:hover
+{
+    background: #335EA8;
+    color: Black;
+    font-weight: bold;
+}
+
+/* IE */
+* html .ExportAndExportAll ul.pmenu li
+{
+    float: left;
+    height: 1%;
+}
+* html .ExportAndExportAll ul.pmenu li a
+{
+    height: 1%;
+}
+* html .ExportAndExportAll ul.pmenu li ul
+{
+    left: 100px;
+}
+/* End */
+.ExportAndExportAll ul.pmenu li:hover ul, .ExportAndExportAll ul.pmenu li.over ul
+{
+    display: block;
+}
+/* The magic */
+.ExportAndExportAll ul.pmenu li ul
+{
+    left: 100px;
+}
+.ProjectSummaryScrollingDropDown
+{
+    height: 240px;
+    width: 240px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 3;
+    display: inline-block;
+    z-index: 20000;
+}
+.ProjectSummaryAdvancedFiltersHeader TH
+{
+    border-bottom: 1px solid black;
+    width: 190px;
+    text-align: center;
+}
+
