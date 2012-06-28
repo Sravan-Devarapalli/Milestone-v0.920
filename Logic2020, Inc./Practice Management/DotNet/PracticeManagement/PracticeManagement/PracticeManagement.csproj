@@ -400,6 +400,7 @@
     <Content Include="Controls\TimeEntry\SingleTimeEntry_New.ascx" />
     <Content Include="Controls\TimeEntry\WeekSelector_New.ascx" />
     <Content Include="Css\datepicker.css" />
+    <Content Include="Css\style-min.css" />
     <Content Include="Css\TableSortStyle.css" />
     <Content Include="DashBoard.aspx" />
     <Content Include="Images\add_24.png" />
