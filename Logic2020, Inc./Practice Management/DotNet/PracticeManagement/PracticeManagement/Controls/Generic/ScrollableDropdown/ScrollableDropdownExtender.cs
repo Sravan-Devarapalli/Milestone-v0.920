@@ -28,25 +28,7 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
         private Color _extenderBorderColor;
 
         #endregion
-
-        #region Styles
-
-        /// <summary>
-        /// CSS style needed for scrolling div
-        /// </summary>
-        private const string CssStyle =
-            @"
-            div.scrollext_{0} {{         
-                border: 1px solid #aaaaaa;
-                background-color: #ffffff;
-                display: inline-block;
-                vertical-align: middle;
-                height: 18px;
-            }}
-        ";
-
-        #endregion
-
+        
         [ExtenderControlProperty]
         [ClientPropertyName("labelValue")]
         [Browsable(false)]
@@ -108,25 +90,6 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
 
         protected virtual void Page_Load(object sender, EventArgs e)
         {
-            //  Prepare styles for the instance of the objects
-            //      by checking if important styles are set
-            string styleSheet = string.Format(CssStyle, LabelId);
-
-            // Add css style for the current control
-            IncludeCss(styleSheet);
-        }
-
-        /// <summary>
-        /// Adds scrolling style to the page header
-        /// </summary>
-        protected void IncludeCss(string styleSheet)
-        {
-            //  Add style to the header
-            var stylesLink = new HtmlGenericControl("style");
-            stylesLink.Attributes["type"] = "text/css";
-            stylesLink.InnerText = styleSheet;
-
-            Page.Header.Controls.Add(stylesLink);
         }
 
         public override void RenderControl(HtmlTextWriter writer)
@@ -137,8 +100,8 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
 
         private string GetHTMLToRender()
         {
-            string htmlWithoutImageFormat = "<div ID={0} class=\"scrollext_{0}\"{2}><label style=\"vertical-align:top;\">{1}</label></div>";
-            string htmlWithImageFormat = "<div ID={0} class=\"scrollext_{0}\"{3}><label style=\"vertical-align:top;\">{1}</label><span style=\"padding-left:20px;float:right;\"><image src={2} /></span></div>";
+            string htmlWithoutImageFormat = "<div ID={0} class=\"scrollextLabel\"{2}><label style=\"vertical-align:top;\">{1}</label></div>";
+            string htmlWithImageFormat = "<div ID={0} class=\"scrollextLabel\"{3}><label style=\"vertical-align:top;\">{1}</label><span style=\"padding-left:20px;float:right;\"><image src={2} /></span></div>";
 
             if (!string.IsNullOrEmpty(EditImageUrl))
             {
