@@ -54,6 +54,22 @@
             } return true
         }
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+        function removeByIndex(arr, index) {
+            arr.splice(index, 1);
+        }
+
+        function getUrlVars(urlValue) {
+            var vars = [], hash;
+            var hashes = urlValue.slice(urlValue.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
         function MakeAsynchronousCalls() {
             var hdnPersonIds = document.getElementById("<%= hdnPersonIds.ClientID%>");
             var hdnStartDate = document.getElementById("<%= hdnStartDate.ClientID%>");
@@ -61,20 +77,44 @@
             var hdnPayScaleIds = document.getElementById("<%= hdnPayScaleIds.ClientID%>");
             var hdnPracticeIds = document.getElementById("<%= hdnPracticeIds.ClientID%>");
             var ddlView = document.getElementById("<%= ddlView.ClientID%>");
-
-            var displayPanel = $("#" + "<%= pnlList.ClientID%>"); var hmlData = "";
+            var loadingProgress = $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries');
+          
             if (hdnPersonIds.value != "") {
                 var array = hdnPersonIds.value.split(',');
-                var temp = 0; for (var i = 0; i < array.length; i++) {
-                    if (array[i] != "" && array[i] != "undefined" && array[i].toString() != "-1") {
-                        if ($get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display == "none")
-                        { $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display = 'block' }
-                        var urlVal = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?PersonID=" + array[i].toString() + "&StartDate=" + hdnStartDate.value + "&EndDate=" + hdnEndDate.value + "&PayScaleIds=" + hdnPayScaleIds.value + "&PracticeIds=" + hdnPracticeIds.value + "&view=" + ddlView.value;
-                        $.post(urlVal, function (data) { $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display = 'block'; temp++; displayPanel.append(data); if (temp == array.length - 1) { $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries').style.display = 'none' } })
+
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i] == "undefined") {
+                        removeByIndex(array, i);
                     }
+                }
+
+                var temp = 0; for (var i = 0; i < array.length; i++) {
+                    
+                    if (loadingProgress.style.display == "none") {
+                        loadingProgress.style.display = 'block'
+                    }
+
+                    var urlVal = "../Controls/Reports/TimeEntriesGetByPersonHandler.ashx?PersonID=" + array[i].toString() + "&StartDate=" + hdnStartDate.value + "&EndDate=" + hdnEndDate.value + "&PayScaleIds=" + hdnPayScaleIds.value + "&PracticeIds=" + hdnPracticeIds.value + "&view=" + ddlView.value;
+                    $.post(urlVal,
+                        function (data) {
+                            var controlId = getUrlVars(this.url)["ControlId"];
+
+                            loadingProgress.style.display = 'block';
+
+                            document.getElementById(controlId).innerHTML = data;
+                            temp++;
+                            if (temp == array.length) {
+                                loadingProgress.style.display = 'none'
+                            }
+                        }
+                           );
+
+
+
                 }
             }
         }
+
         function endRequestHandle(sender, Args) {
             var hdnUpdateClicked = document.getElementById("<%= hdnUpdateClicked.ClientID%>");
             if (hdnUpdateClicked.value == "true") {
@@ -372,6 +412,8 @@
     <asp:UpdatePanel ID="updReport" UpdateMode="Conditional" runat="server">
         <ContentTemplate>
             <asp:Panel ID="pnlList" runat="server">
+                <asp:Literal ID="ltrlContainer" runat="server">
+                </asp:Literal>
                 <uc2:CalendarLegend ID="CalendarLegend" runat="server" />
             </asp:Panel>
             <asp:HiddenField ID="hdnGuid" runat="server" />
