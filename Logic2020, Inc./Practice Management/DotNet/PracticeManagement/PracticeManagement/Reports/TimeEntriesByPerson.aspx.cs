@@ -66,10 +66,29 @@ namespace PraticeManagement.Sandbox
                 AddAttributesToCheckBoxes(this.cblTimeScales);
                 AddAttributesToCheckBoxes(this.cblPersons);
 
-                var selectedvalues = cblPersons.SelectedItems;
-                var index = selectedvalues.Any(c => c == ',') ? selectedvalues.IndexOf(',') : -1;
-                hdnPersonIds.Value = cblPersons.SelectedItems;// (index != -1) ? selectedvalues.Remove(0, index + 1) : "";
 
+                var val = cblPersons.SelectedItems;
+
+                string[] array = val.Split(',');
+
+                StringBuilder sb = new StringBuilder();
+                StringBuilder ltrlsb = new StringBuilder();
+
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (array[i] != "-1" && array[i] != "" && array[i] != "undefined")
+                    {
+                        sb.Append(array[i]);
+                        sb.Append("&ControlId=" + (ClientID + i));
+                        sb.Append(",");
+                        
+                        ltrlsb.Append("<div id='" + (ClientID + i) + "' ></div>");
+                    }
+                }
+
+                ltrlContainer.Text = ltrlsb.ToString();
+
+                hdnPersonIds.Value = sb.ToString().TrimEnd(',');
                 hdnPracticeIds.Value = practiceIds != null ? cblPractices.SelectedItems : "null";
                 hdnPayScaleIds.Value = payTypeIds != null ? cblTimeScales.SelectedItems : "null";
                 hdnStartDate.Value = startDate.ToString();
