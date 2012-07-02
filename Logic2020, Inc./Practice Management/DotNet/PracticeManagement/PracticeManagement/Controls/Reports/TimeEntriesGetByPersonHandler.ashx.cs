@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text.RegularExpressions;
 using DataTransferObjects.CompositeObjects;
+using System.Text;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -26,6 +27,7 @@ namespace PraticeManagement.Controls.Reports
             var endDate = Convert.ToDateTime(context.Request.QueryString["EndDate"]);
             var payTypeIds = context.Request.QueryString["PayScaleIds"];
             var practiceIds = context.Request.QueryString["PracticeIds"];
+
             int view = Convert.ToInt32(context.Request.QueryString["view"]);
 
             var practicesArray = practiceIds.Split(',');
@@ -110,7 +112,7 @@ namespace PraticeManagement.Controls.Reports
                 col21.Text = "Date Run: ";
                 col21.Font.Size = FontUnit.Point(18);
                 col21.Font.Bold = true;
-                col22.Text =  PraticeManagement.Utils.SettingsHelper.GetCurrentPMTime().ToString();
+                col22.Text = PraticeManagement.Utils.SettingsHelper.GetCurrentPMTime().ToString();
                 col22.Style.Add(ExcelDateFormat, @"yyyy/MM/dd hh:mm \ AM\/PM");
                 col22.Font.Size = FontUnit.Point(18);
                 tableRow2.Controls.Add(col21);
@@ -123,12 +125,13 @@ namespace PraticeManagement.Controls.Reports
             else
             {
                 var personid = Convert.ToInt32(context.Request.QueryString["PersonID"]);
-                var personWithTimeEntry = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personid , startDate, endDate, payTypeIds.ToLower() != "null" ? payscales : null, practiceIds.ToLower() != "null" ? practices : null);
-                string html = "";
+            
+                var personWithTimeEntry = PraticeManagement.Utils.TimeEntryHelper.GetTimeEntriesForPerson(personid, startDate, endDate, payTypeIds.ToLower() != "null" ? payscales : null, practiceIds.ToLower() != "null" ? practices : null);
+                StringBuilder sb = new StringBuilder();
 
                 if (personWithTimeEntry.Person != null)
                 {
-                    
+
 
                     PraticeManagement.Sandbox.TimeEntriesByPerson page = new PraticeManagement.Sandbox.TimeEntriesByPerson();
 
@@ -146,7 +149,7 @@ namespace PraticeManagement.Controls.Reports
                         using (System.IO.StringWriter sw = new System.IO.StringWriter())
                         {
                             cntrlTimeEntriesByPerson.RenderControl(new HtmlTextWriter(sw));
-                            html = sw.ToString();
+                            sb.Append(sw);
                         }
                     }
                     else
@@ -162,17 +165,15 @@ namespace PraticeManagement.Controls.Reports
                         using (System.IO.StringWriter sw = new System.IO.StringWriter())
                         {
                             cntrlTimeEntriesByPerson.RenderControl(new HtmlTextWriter(sw));
-                            html = sw.ToString();
+                            sb.Append(sw);
                         }
                     }
 
-                    html = RemoveWhitespaceFromHtml(html);
                 }
-                
 
+                var html = sb.ToString();
+                RemoveWhitespaceFromHtml(html);
                 context.Response.Write(html);
-    
-
             }
         }
 
@@ -182,17 +183,10 @@ namespace PraticeManagement.Controls.Reports
         private static readonly Regex RegexLineBreaks = new Regex(@"([\n\s])+?(?<= {2,})<", RegexOptions.Compiled);
 
 
-        public static string RemoveWhitespaceFromHtml(string html)
+        public static void RemoveWhitespaceFromHtml(string html)
         {
-
             html = RegexBetweenTags.Replace(html, ">");
-
-            html = RegexLineBreaks.Replace(html, "<");
-
-
-
-            return html.Trim();
-
+            html = RegexLineBreaks.Replace(html, "<").Trim();
         }
 
 
