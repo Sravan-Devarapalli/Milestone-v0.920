@@ -1,14 +1,13 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DatePicker.ascx.cs" Inherits="PraticeManagement.Controls.DatePicker" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
-<table border="0" cellpadding="0" cellspacing="0" style="display: inline; border: none;">
+<table cellpadding="0" cellspacing="0" class="DatePickerTable">
 	<tr>
 		<td>
 			<asp:TextBox ID="txtDate" runat="server" OnTextChanged="txtDate_TextChanged" onchange="setDirty();"></asp:TextBox>
-            <ajaxToolkit:FilteredTextBoxExtender ID="fte" runat="server" FilterMode="ValidChars" FilterType="Custom, Numbers"   TargetControlID="txtDate" ValidChars="/" ></ajaxToolkit:FilteredTextBoxExtender>
+            <AjaxControlToolkit:FilteredTextBoxExtender ID="fte" runat="server" FilterMode="ValidChars" FilterType="Custom, Numbers"   TargetControlID="txtDate" ValidChars="/" ></AjaxControlToolkit:FilteredTextBoxExtender>
 		</td>
-        <td style="white-space:nowrap;">&nbsp;</td>
-		<td valign="middle">
+        <td class="no-wrap">&nbsp;</td>
+		<td class="vMiddle">
 			<asp:HyperLink ID="lnkCalendar" runat="server" ImageUrl="~/Images/calendar.gif" NavigateUrl="#"></asp:HyperLink>
 		</td>
 		<td>
@@ -17,5 +16,4 @@
 		</td>
 	</tr>
 </table>
-<ajaxToolkit:CalendarExtender ID="txtDate_CalendarExtender"  runat="server" TargetControlID="txtDate" PopupButtonID="lnkCalendar"></ajaxToolkit:CalendarExtender>
-
+<AjaxControlToolkit:CalendarExtender ID="txtDate_CalendarExtender"  runat="server" TargetControlID="txtDate" PopupButtonID="lnkCalendar"></AjaxControlToolkit:CalendarExtender>
