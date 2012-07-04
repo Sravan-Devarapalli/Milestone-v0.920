@@ -23,7 +23,7 @@
                     </td>
                     <td class="content">
                         <div id="divWait">
-                            <span style="color: Black; font-weight: bold;">
+                            <span class="fontColorBlack fontBold">
                                 <nobr><% = DisplayText %></nobr>
                             </span>
                             <br />
