@@ -38,8 +38,8 @@ AS
 		   f.PersonId,
 		   MPE.StartDate,
 		   MPE.EndDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEnd,
+	       C.MonthStartDate AS FinancialDate,
+	       C.MonthEndDate AS MonthEnd,
 
 	       ISNULL(SUM(f.PersonMilestoneDailyAmount), 0) AS Revenue,
 
@@ -66,7 +66,8 @@ AS
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END)  * ISNULL(f.PersonHoursPerDay, 0)) *
 	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission
 	  FROM FinancialsRetro AS f
+	  INNER JOIN dbo.Calendar C ON C.Date = f.Date
 	  JOIN MilestonePersonEntry MPE ON f.EntryId = MPE.Id AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
 	 WHERE f.MilestoneId = @MilestoneIdLocal AND f.PersonId IS NOT NULL--AND f.PersonId = @PersonId AND f.EntryStartDate = @EntryStartDate
-	GROUP BY f.ProjectId,f.EntryId, f.PersonId, MPE.StartDate, MPE.EndDate, YEAR(f.Date), MONTH(f.Date)
+	GROUP BY f.ProjectId,f.EntryId, f.PersonId, MPE.StartDate, MPE.EndDate, C.MonthStartDate, C.MonthEndDate
 
