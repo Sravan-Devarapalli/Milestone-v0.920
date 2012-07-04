@@ -1,19 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="RestrictionPanel.ascx.cs" Inherits="PraticeManagement.Controls.RestrictionPanel" %>
-<style type="text/css">
-    .style1
-    {
-        border-collapse: collapse;
-    }
-    .tab-visible{
-        display: block;
-    }
-	
-    .tab-invisible{
-        display: none;
-    }
-</style>
 <asp:Panel ID="pnlRestrictionPanel" runat="server">
-    <table cellpadding="5" class="style1">
+    <table cellpadding="5" class="border-collapse">
         <tr>
         <td><strong>Accounts</strong></td>
         <td><strong>Business Units</strong></td>
@@ -23,24 +10,19 @@
         </tr>
         <tr>
             <td>
-                <pmc:CascadingMsdd ID="msddClients" runat="server" TargetControlId="msddGroups" 
-                    Height="150" BorderColor="#eeeeee" Width="180" />
+                <pmc:CascadingMsdd ID="msddClients" runat="server" TargetControlId="msddGroups" CssClass="PersonDetailPermissionsScrollingDropDown"/>
             </td>
             <td>
-                <pmc:ScrollingDropDown ID="msddGroups" runat="server"  
-                    Height="150" BorderColor="#eeeeee" Width="180" />
+                <pmc:ScrollingDropDown ID="msddGroups" runat="server"  CssClass="PersonDetailPermissionsScrollingDropDown"/>
             </td>
             <td>
-                <pmc:ScrollingDropDown ID="msddSalespersons" runat="server"  
-                    Height="150" BorderColor="#eeeeee" Width="180" />
+                <pmc:ScrollingDropDown ID="msddSalespersons" runat="server"  CssClass="PersonDetailPermissionsScrollingDropDown"/>
             </td>
             <td>
-                <pmc:ScrollingDropDown ID="msddPracticeManagers" runat="server" 
-                    Height="150" BorderColor="#eeeeee" Width="180" />
+                <pmc:ScrollingDropDown ID="msddPracticeManagers" runat="server" CssClass="PersonDetailPermissionsScrollingDropDown"/>
             </td>
             <td>
-                <pmc:ScrollingDropDown ID="msddPractices" runat="server" 
-                    Height="150" BorderColor="#eeeeee" Width="180" />
+                <pmc:ScrollingDropDown ID="msddPractices" runat="server" CssClass="PersonDetailPermissionsScrollingDropDown"/>
             </td>
         </tr>
     </table>
