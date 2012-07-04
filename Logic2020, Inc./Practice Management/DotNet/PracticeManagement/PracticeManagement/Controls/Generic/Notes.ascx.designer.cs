@@ -31,33 +31,6 @@ namespace PraticeManagement.Controls.Generic {
         protected global::System.Web.UI.UpdatePanel updNotes;
         
         /// <summary>
-        /// pnlNotes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlNotes;
-        
-        /// <summary>
-        /// gvNotes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvNotes;
-        
-        /// <summary>
-        /// odsNotes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsNotes;
-        
-        /// <summary>
         /// tbNote control.
         /// </summary>
         /// <remarks>
