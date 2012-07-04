@@ -36,8 +36,8 @@ AS
 	MilestoneFinancials as 
 	(SELECT f.ProjectId,
 			f.MilestoneId,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEnd,
+	       MIN(C.MonthStartDate) AS FinancialDate,
+	       MIN(C.MonthEndDate) AS MonthEnd,
 
 	       SUM(f.PersonMilestoneDailyAmount) AS Revenue,
 		   SUM(f.PersonDiscountDailyAmount) As DiscountAmount,
@@ -58,7 +58,7 @@ AS
 	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission
  
 	  FROM FinancialsRetro AS f
-	  
+	  INNER JOIN dbo.Calendar C ON C.Date = f.Date
 	 WHERE f.MilestoneId = @MilestoneIdLocal
 	GROUP BY f.ProjectId,f.MilestoneId
 	)
