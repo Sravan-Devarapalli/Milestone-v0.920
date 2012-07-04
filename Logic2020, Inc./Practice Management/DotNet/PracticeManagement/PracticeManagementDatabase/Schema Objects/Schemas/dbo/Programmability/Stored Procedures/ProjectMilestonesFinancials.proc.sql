@@ -35,8 +35,8 @@ BEGIN
 	),
 	MilestoneFinancials as 
 	(SELECT f.MilestoneId,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEnd,
+	       MIN(C.MonthStartDate) AS FinancialDate,
+	       MIN(C.MonthEndDate) AS MonthEnd,
 
 	       SUM(f.PersonMilestoneDailyAmount) AS Revenue,
 
@@ -66,6 +66,7 @@ BEGIN
 		   --min(case when pe.ReimbursedExpense is null then 0 else pe.ReimbursedExpense  end) as 'ReimbursedExpense',
 		   --min(f.Discount) as Discount
 	  FROM FinancialsRetro AS f
+	  INNER JOIN dbo.Calendar C ON C.Date = f.Date
 	  LEFT JOIN v_MilestoneExpenses as pe on f.ProjectId = pe.ProjectId AND f.MilestoneId = pe.MilestoneId 
 	 WHERE f.ProjectId = @ProjectIdLocal
 	GROUP BY f.ProjectId,f.MilestoneId
