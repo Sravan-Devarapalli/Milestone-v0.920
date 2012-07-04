@@ -14,6 +14,10 @@ CREATE PROCEDURE dbo.PersonListAllForMilestone
 AS
 	SET NOCOUNT ON
 
+	DECLARE @FutureDate DATETIME
+
+	SELECT @FutureDate = dbo.GetFutureDate()
+
 	SELECT p.PersonId,
 		   p.FirstName,
 		   p.LastName,
@@ -28,7 +32,7 @@ AS
 	                    WHERE mp.MilestonePersonId = @MilestonePersonId AND mp.PersonId = p.PersonId))
 	   AND (   @StartDate IS NULL
 	        OR @EndDate IS NULL
-	        OR dbo.GetOverlappingPlacementDays(p.HireDate, ISNULL(p.TerminationDate, dbo.GetFutureDate()), @StartDate, @EndDate) = 1
+	        OR dbo.GetOverlappingPlacementDays(p.HireDate, ISNULL(p.TerminationDate, @FutureDate), @StartDate, @EndDate) = 1
 	       )	  
 	ORDER BY p.LastName, p.FirstName
 
