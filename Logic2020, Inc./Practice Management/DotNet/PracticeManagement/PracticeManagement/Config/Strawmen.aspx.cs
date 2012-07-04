@@ -386,22 +386,6 @@ namespace PraticeManagement.Config
             }
         }
 
-        //protected string GetStrawmanDetailsUrlWithReturn(int? strawmanId)
-        //{
-        //    if (strawmanId.HasValue)
-        //    {
-        //        var StrawmanDetailPage = string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-        //                            Constants.ApplicationPages.StrawManDetail,
-        //                            strawmanId);
-        //        return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(StrawmanDetailPage,
-        //           Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
-        //    }
-        //    else
-        //    {
-        //        return string.Empty;
-        //    }
-        //}
-
         #endregion
     }
 }
