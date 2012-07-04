@@ -22,6 +22,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtDate;
         
         /// <summary>
+        /// fte control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender fte;
+        
+        /// <summary>
         /// lnkCalendar control.
         /// </summary>
         /// <remarks>
