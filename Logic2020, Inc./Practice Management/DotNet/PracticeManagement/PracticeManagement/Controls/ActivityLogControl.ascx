@@ -4,23 +4,6 @@
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
-<style>
-    .WordWrap
-    {
-        word-wrap: break word !important; /* Internet Explorer 5.5+ */
-        word-break: break-all !important;
-        white-space: -moz-pre-wrap !important; /*Mozilla */
-        white-space: normal;
-    }
-    .displayNone
-    {
-        display: none;
-    }
-    .CompPerfTable td
-    {
-        padding-left: 5px;
-    }
-</style>
 <script type="text/javascript" language="javascript">
     function EnableResetButtonForDateIntervalChange(sender, args) {
         var btnreset = document.getElementById('<%= btnResetFilter.ClientID %>');
@@ -125,7 +108,7 @@
     }
 
     function disableProjectsDropDown() {
-        
+
         var eventSource = document.getElementById('<%= ddlEventSource.ClientID %>');
         projectList = document.getElementById('<%= ddlProjects.ClientID %>');
         if (eventSource != null && projectList != null && eventSource.value != 'undefind') {
@@ -147,10 +130,10 @@
         <table cellpadding="5" class="WholeWidth">
             <tr>
                 <td>
-                    <div id="divActivitylog" style="padding: 10px;" runat="server">
-                        <table id="tblActivitylog" runat="server" style="white-space: nowrap;">
+                    <div id="divActivitylog" class="Padding10" runat="server">
+                        <table id="tblActivitylog" runat="server" class="no-wrap">
                             <tr>
-                                <td id="tdEventSource" runat="server" style="padding-left:0px;padding-right:0px;">
+                                <td id="tdEventSource" runat="server" class="padLeft0 padRight0">
                                     <asp:Label ID="lblDisplay" runat="server" Text="Show "></asp:Label><asp:DropDownList
                                         ID="ddlEventSource" runat="server" EnableViewState="true">
                                         <asp:ListItem Text="ALL Events" Value="1" Selected="True"></asp:ListItem>
@@ -201,7 +184,7 @@
                                         <asp:ListItem Text="&nbsp; Deleted Skills" Value="42"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
-                                <td id="tdYear" runat="server" style="padding-left:2px;">
+                                <td id="tdYear" runat="server" class="padLeft2">
                                     <asp:Label ID="Label3" runat="server" Text="&nbsp;&nbsp;over&nbsp;&nbsp;"></asp:Label><asp:DropDownList
                                         ID="ddlPeriod" runat="server" EnableViewState="true">
                                         <asp:ListItem Text="Last Day" Value="-1"></asp:ListItem>
@@ -222,19 +205,20 @@
                                         Value="" />
                                     <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" EnableViewState="true" runat="server"
                                         Value="" />
-                                    <asp:Label ID="lblCustomDateRange" EnableViewState="true" Style="font-weight: bold;"
-                                        runat="server" Text=""></asp:Label>
+                                    <asp:Label ID="lblCustomDateRange" EnableViewState="true" CssClass="fontBold" runat="server"
+                                        Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" EnableViewState="true" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
                                 <td id="spnPersons" runat="server">
-                                    <asp:Label ID="Label1" runat="server" Text="&nbsp;for&nbsp;"></asp:Label><asp:DropDownList ID="ddlPersonName"
-                                        runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
-                                        DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />&nbsp;
+                                    <asp:Label ID="Label1" runat="server" Text="&nbsp;for&nbsp;"></asp:Label><asp:DropDownList
+                                        ID="ddlPersonName" runat="server" DataSourceID="odsPersons" DataTextField="PersonLastFirstName"
+                                        DataValueField="Id" OnDataBound="ddlPersonName_OnDataBound" />
+                                    &nbsp;
                                 </td>
                                 <td id="spnProjects" runat="server">
-                                    <asp:Label ID="Label2" runat="server" Text="&nbsp;on "></asp:Label><asp:DropDownList ID="ddlProjects"
-                                        runat="server" DataSourceID="odsProjects" DataTextField="Name" DataValueField="Id"
-                                        OnDataBound="ddlProjects_OnDataBound" />
+                                    <asp:Label ID="Label2" runat="server" Text="&nbsp;on "></asp:Label><asp:DropDownList
+                                        ID="ddlProjects" runat="server" DataSourceID="odsProjects" DataTextField="Name"
+                                        DataValueField="Id" OnDataBound="ddlProjects_OnDataBound" />
                                 </td>
                                 <td id="tdBtnList" runat="server">
                                     <table>
@@ -242,7 +226,7 @@
                                             <td>
                                                 <asp:Button ID="btnUpdateView" runat="server" Text="Update" ToolTip="Update" OnClick="btnUpdateView_Click" />
                                             </td>
-                                            <td style="padding-left: 4px;">
+                                            <td class="padLeft4">
                                                 <asp:Button ID="btnResetFilter" runat="server" Text="Reset " ToolTip="Reset" OnClick="btnResetFilter_Click"
                                                     Visible="false" />
                                             </td>
@@ -263,18 +247,17 @@
             <tr>
                 <td>
                     <asp:GridView ID="gvActivities" runat="server" AutoGenerateColumns="False" EmptyDataText="No activity for given parameters."
-                        DataSourceID="odsActivities" AllowPaging="True" PageSize="20" CssClass="CompPerfTable WholeWidth"
-                        GridLines="None" BackColor="White" OnRowDataBound="gvActivities_OnRowDataBound"
-                        OnDataBound="gvActivities_OnDataBound">
-                        <AlternatingRowStyle BackColor="#F9FAFF" />
+                        DataSourceID="odsActivities" AllowPaging="True" PageSize="20" CssClass="CompPerfTable gvActivitiesActivityLog"
+                        OnRowDataBound="gvActivities_OnRowDataBound" OnDataBound="gvActivities_OnDataBound">
+                        <AlternatingRowStyle CssClass="alterrow" />
                         <PagerSettings Mode="NumericFirstLast" />
                         <PagerStyle CssClass="cssPager" />
                         <RowStyle CssClass="al-row" />
                         <Columns>
                             <asp:TemplateField>
-                                <ItemStyle Width="11%" />
+                                <ItemStyle CssClass="Width11Percent" />
                                 <HeaderTemplate>
-                                    <div class="ie-bg" style="padding-right: '2px';">
+                                    <div class="ie-bg">
                                         Modified / User</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
@@ -284,9 +267,9 @@
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
-                                <ItemStyle Width="12%" CssClass="WordWrap" Wrap="true" />
+                                <ItemStyle CssClass="WordWrapActivityLog Width12Percent" />
                                 <HeaderTemplate>
-                                    <div class="ie-bg" style="padding-right: '2px';">
+                                    <div class="ie-bg">
                                         Activity</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
@@ -296,7 +279,7 @@
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
-                                <ItemStyle Width="77%" CssClass="WordWrap" Wrap="true" />
+                                <ItemStyle CssClass="WordWrapActivityLog width77P" />
                                 <HeaderTemplate>
                                     <div class="ie-bg">
                                         Changes</div>
@@ -335,11 +318,11 @@
                 </td>
             </tr>
         </table>
-        <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-            CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+        <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp"
+            Style="display: none;">
             <table class="WholeWidth">
                 <tr>
-                    <td align="center">
+                    <td class="textCenter">
                         <table>
                             <tr>
                                 <td>
@@ -353,18 +336,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="padding: 10px 0px 10px 0px;">
-                        <asp:Button ID="btnCustDatesOK" runat="server" Text="OK" Style="float: none !Important;"
-                            ValidationGroup="<%# ClientID %>" OnClientClick="return CheckIfDatesValid();"
-                            CausesValidation="true" />
+                    <td class="textCenter PaddingTop10 PaddingBottom10">
+                        <asp:Button ID="btnCustDatesOK" runat="server" Text="OK" ValidationGroup="<%# ClientID %>"
+                            OnClientClick="return CheckIfDatesValid();" CausesValidation="true" />
                         <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true" />
                         &nbsp; &nbsp;
-                        <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel"
-                            Style="float: none !Important;" />
+                        <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel" />
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
+                    <td class="textCenter">
                         <asp:ValidationSummary ID="valSum" runat="server" />
                     </td>
                 </tr>
