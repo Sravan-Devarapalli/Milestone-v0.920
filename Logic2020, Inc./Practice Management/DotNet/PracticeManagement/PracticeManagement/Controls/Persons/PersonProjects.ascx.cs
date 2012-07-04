@@ -153,11 +153,11 @@ namespace PraticeManagement.Controls.Persons
             {
                 if (cssClass == "ActiveProjectWithoutSOW")
                 {
-                    statusName = "Active without SOW";
+                    statusName = "Active without Attachment";
                 }
                 else
                 {
-                    statusName = "Active with SOW";
+                    statusName = "Active with Attachment";
                 }
             }
 
