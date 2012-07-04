@@ -24,15 +24,15 @@ AS
 				WHEN (p.ProjectStatusId = 1 AND @ShowInactive = 'TRUE') OR @ShowInactive IS NULL THEN f.PersonMilestoneDailyAmount 
 				ELSE 0 
 			END), 0) AS Revenue,
-			dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), 1) AS Date,
-			dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), NULL) as EndDate,
+			cal.MonthStartDate AS Date,
+			cal.MonthEndDate as EndDate,
 	       ISNULL(SUM(CASE WHEN pr.DefaultPractice <> 1 /* Non in offshore practice*/ THEN f.PersonHoursPerDay ELSE 0 END), 0) /
 	       (SELECT COUNT(*) * 8
 	          FROM dbo.Calendar AS c
-	         WHERE c.Date BETWEEN dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), 1) AND dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), NULL)
+	         WHERE c.Date BETWEEN cal.MonthStartDate AND cal.MonthEndDate
 	           AND c.DayOff = 0) AS VirtualConsultants,
-	       EmployeesNumber = dbo.GetEmployeeNumber(dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), 1), dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), NULL)),
-		   ConsultantsNumber = dbo.GetCounsultantsNumber(dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), 1), dbo.MakeDate(YEAR(cal.Date), MONTH(cal.Date), NULL))
+	       EmployeesNumber = dbo.GetEmployeeNumber(cal.MonthStartDate, cal.MonthEndDate),
+		   ConsultantsNumber = dbo.GetCounsultantsNumber(cal.MonthStartDate, cal.MonthEndDate)
 	  FROM dbo.Calendar AS cal
 	       LEFT JOIN dbo.v_FinancialsRetrospective AS f
 	          ON f.Date BETWEEN @StartDate AND @EndDate AND cal.Date = f.Date
@@ -49,6 +49,6 @@ AS
 	                    WHERE c.ProjectId = p.ProjectId AND c.PersonId = @PracticeManagerId AND c.CommissionType = 2 
 	                   )
 	       )
-	GROUP BY YEAR(cal.Date), MONTH(cal.Date)
-	ORDER BY YEAR(cal.Date), MONTH(cal.Date)
+	GROUP BY cal.MonthStartDate, cal.MonthEndDate
+	ORDER BY cal.MonthStartDate
 
