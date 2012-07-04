@@ -122,7 +122,7 @@ AS
 	LEFT JOIN dbo.Person AS Powner ON Powner.PersonId = P.ProjectOwnerId
 	OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = P.ProjectId) A
 	WHERE	    (c.CommissionType IS NULL OR c.CommissionType = 1)
-		    AND (dbo.IsDateRangeWithingTimeInterval(P.StartDate, P.EndDate, @StartDate, @EndDate) = 1 OR (P.StartDate IS NULL AND P.EndDate IS NULL))
+		    AND ( (P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))
 			AND ( @ClientIds IS NULL OR P.ClientId IN (SELECT * from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR P.GroupId IN (SELECT * FROM @ProjectGroupsList) )
 			AND ( @PracticeIds IS NULL OR P.PracticeId IN (SELECT * FROM @PracticesList) OR P.PracticeId IS NULL )
