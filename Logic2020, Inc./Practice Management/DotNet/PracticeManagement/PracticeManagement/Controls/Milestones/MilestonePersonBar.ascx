@@ -2,26 +2,26 @@
     Inherits="PraticeManagement.Controls.Milestones.MilestonePersonBar" %>
 <%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
-<tr id="trBar" style="height: 25px; white-space: nowrap;" runat="server">
-    <td align="center" style="width: 2%; height: 20px;">
+<tr id="trBar" runat="server">
+    <td class="Width2Percent">
         <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
             ImageUrl="~/Images/copy.png" />
     </td>
-    <td align="center" style="width: 4%; height: 20px;">
+    <td class="Width4Percent">
         <asp:ImageButton ID="btnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
             ValidationGroup="<%# GetValidationGroup() %>" ToolTip="Save" OnClick="btnInsertPerson_Click" />
         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
             ToolTip="Cancel" />
     </td>
-    <td align="center" style="width: 2%; height: 20px;">
+    <td class="Width2Percent">
     </td>
-    <td style="width: 21%; height: 20px;">
-        <table width="100%">
+    <td class="Width21Percent">
+        <table class="WholeWidth">
             <tr>
-                <td style="width: 85%;">
-                    <cc2:CustomDropDown ID="ddlPerson" Width="98%" runat="server" />
+                <td class="Width85Percent">
+                    <cc2:CustomDropDown ID="ddlPerson" CssClass="Width98Percent" runat="server" />
                 </td>
-                <td style="width: 15%;">
+                <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
                         ErrorMessage="" ToolTip="The Person Name is required." Text="*" EnableClientScript="false"
                         SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
@@ -40,18 +40,18 @@
             </tr>
         </table>
     </td>
-    <td style="width: 10%; height: 20px;">
-        <asp:DropDownList ID="ddlRole" Width="98%" runat="server">
+    <td class="Width10Percent">
+        <asp:DropDownList ID="ddlRole" CssClass="Width98Percent" runat="server">
         </asp:DropDownList>
     </td>
-    <td align="center" style="width: 11%; height: 20px;">
-        <table width="100%">
+    <td class="Width11Percent">
+        <table class="WholeWidth">
             <tr>
-                <td style="width: 85%;">
+                <td class="Width85Percent">
                     <uc2:DatePicker ID="dpPersonStartInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
                         OnClientChange="return true;" AutoPostBack="false" TextBoxWidth="95%" />
                 </td>
-                <td style="width: 15%;">
+                <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStartInsert"
                         ErrorMessage="" ToolTip="The Person Start Date is required." Text="*" EnableClientScript="false"
                         SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
@@ -75,14 +75,14 @@
             </tr>
         </table>
     </td>
-    <td align="left" style="width: 11%; height: 20px;">
-        <table width="100%">
+    <td class="Width11Percent">
+        <table class="WholeWidth">
             <tr>
-                <td style="width: 85%;">
+                <td class="Width85Percent">
                     <uc2:DatePicker ID="dpPersonEndInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
                         OnClientChange="return true;" AutoPostBack="false" TextBoxWidth="95%" />
                 </td>
-                <td style="width: 15%;">
+                <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEndInsert"
                         ErrorMessage="" ToolTip="The Person End Date is required." Text="*" EnableClientScript="false"
                         SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
@@ -102,13 +102,13 @@
             </tr>
         </table>
     </td>
-    <td align="center" style="width: 11%; height: 20px;">
-        <table width="100%">
+    <td class="Width11Percent">
+        <table class="WholeWidth">
             <tr>
-                <td style="width: 85%;">
-                    <asp:TextBox ID="txtHoursPerDayInsert" runat="server" Width="90%"></asp:TextBox>
+                <td class="Width85Percent">
+                    <asp:TextBox ID="txtHoursPerDayInsert" runat="server" CssClass="Width90Percent"></asp:TextBox>
                 </td>
-                <td style="width: 15%;">
+                <td class="Width15Percent">
                     <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txtHoursPerDayInsert"
                         ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -125,14 +125,14 @@
             </tr>
         </table>
     </td>
-    <td id="tdAmountInsert" runat="server" align="center" style="width: 9%; height: 20px;">
-        <table width="100%">
+    <td id="tdAmountInsert" runat="server" class="Width9Percent">
+        <table class="WholeWidth">
             <tr>
-                <td style="width: 85%;">
+                <td class="Width85Percent">
                     <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
-                    <asp:TextBox ID="txtAmountInsert" runat="server" Width="80%"></asp:TextBox>
+                    <asp:TextBox ID="txtAmountInsert" runat="server" CssClass="Width80Percent"></asp:TextBox>
                 </td>
-                <td style="width: 15%;">
+                <td class="Width15Percent">
                     <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmountInsert"
                         ValidateEmptyText="true" ErrorMessage="" ToolTip="The Amount is required." Text="*"
                         SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" OnServerValidate="reqHourlyRevenue_ServerValidate"
@@ -148,15 +148,15 @@
             </tr>
         </table>
     </td>
-    <td align="center" style="width: 7%; height: 20px;">
+    <td class="Width7Percent">
     </td>
-    <td align="center" style="width: 9%; height: 20px;">
-        <table width="100%">
+    <td class="Width9Percent">
+        <table class="WholeWidth">
             <tr>
-                <td style="width: 85%;">
-                    <asp:TextBox ID="txtHoursInPeriodInsert" runat="server" Width="90%"></asp:TextBox>
+                <td class="Width85Percent">
+                    <asp:TextBox ID="txtHoursInPeriodInsert" runat="server" CssClass="Width90Percent"></asp:TextBox>
                 </td>
-                <td style="width: 15%;">
+                <td class="Width15Percent">
                     <asp:CompareValidator ID="compHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriodInsert"
                         ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Hours In Period."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -176,7 +176,7 @@
             </tr>
         </table>
     </td>
-    <td align="center" style="width: 3%; height: 20px;">
+    <td class="Width3Percent">
     </td>
 </tr>
 
