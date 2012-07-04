@@ -28,7 +28,7 @@
     </script>
     <asp:UpdatePanel ID="pnlBody" runat="server">
         <ContentTemplate>
-            <div class="project-filter" class="OpportunitySearchBar">
+            <div class="project-filter OpportunitySearchBar">
                 <table class="WholeWidth">
                     <tbody>
                         <tr>
