@@ -14,9 +14,6 @@
     TagPrefix="mp" %>
 <%@ Register Src="Controls/MilestonePersons/CumulativeActivity.ascx" TagName="CumulativeTotal"
     TagPrefix="mp" %>
-<%@ Register Src="Controls/ProjectExpenses/ProjectExpensesControl.ascx" TagName="ProjectExpenses"
-    TagPrefix="uc2" %>
-<%@ Register Assembly="AjaxControlToolkit" TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
 <%@ Register TagPrefix="uc" TagName="MessageLabel" Src="~/Controls/MessageLabel.ascx" %>
 <%@ Register Src="~/Controls/Milestones/MilestonePersonList.ascx" TagName="MilestonePersonList"
@@ -36,7 +33,6 @@
                 __doPostBack('__Page', mpId);
                 return true;
             }
-
             return false;
         }
 
@@ -213,9 +209,8 @@
             var trDeleteOriginalEntry = document.getElementById('trDeleteOriginalEntry');
             var trDeleteExtendedEntry = document.getElementById('trDeleteExtendedEntry');
             var IsOriginalResource = imgDelete.getAttribute("IsOriginalResource");
-           
             hdMilestonePersonEntryId.value = imgDelete.getAttribute("MilestonePersonEntryId");
-           
+
             if (IsOriginalResource == 'false') {
                 btnDeleteAllPersonEntries.style.display = "none";
                 btnDeletePersonEntry.value = "   OK   ";
@@ -238,81 +233,6 @@
         }
       
     </script>
-    <style type="text/css">
-        /* --------- Tabs for person and project details pages ------ */
-        
-        .CustomTabStyle tr
-        {
-            height: 30px;
-        }
-        
-        .CustomTabStyle td
-        {
-            background-color: White;
-            float: left;
-            padding: 8px 0px 6px 0px;
-            position: relative;
-        }
-        
-        .CustomTabStyle td a
-        {
-            text-decoration: none;
-        }
-        
-        .CustomTabStyle td span a
-        {
-            border-bottom: 1px dashed #0898e6;
-        }
-        
-        .CustomTabStyle td span a:hover
-        {
-            border-bottom: 1px dashed #006699;
-        }
-        
-        .CustomTabStyle td a.collapse
-        {
-            display: none;
-            position: absolute;
-        }
-        
-        .CustomTabStyle .SelectedSwitch a.collapse
-        {
-            display: block;
-            right: 5px;
-            top: 10px;
-        }
-        
-        .CustomTabStyle td span.bg
-        {
-            padding: 8px 20px 7px 10px;
-        }
-        
-        .CustomTabStyle .SelectedSwitch span.bg
-        {
-            background-color: #e2ebff;
-        }
-        
-        .tab-pane
-        {
-            background-color: #e2ebff;
-            padding: 5px;
-        }
-        
-        /* ------------------------ */
-        
-        table.ProjectDetail-ProjectInfo-Table td
-        {
-            padding-left: 4px;
-        }
-        
-        .ConfirmBoxClassError
-        {
-            min-height: 60px;
-            min-width: 200px;
-            max-width: 600px;
-            max-height: 500px;
-        }
-    </style>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <table class="WholeWidth">
@@ -355,7 +275,7 @@
             </table>
             <asp:HiddenField ID="hidDirty" runat="server" />
             <asp:HiddenField ID="hdnEditEntryIdIndex" runat="server" Value="" />
-            <div style="background-color: #E2EBFF; padding: 5px; margin-bottom: 10px; margin-top: 10px;">
+            <div class="MileStoneDetailBasicInfo">
                 <table>
                     <tr>
                         <td>
@@ -370,7 +290,7 @@
                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Milestone"></asp:CustomValidator>
                         </td>
                         <td>
-                            <table cellpadding="0" cellspacing="0" border="0">
+                            <table>
                                 <tr>
                                     <td>
                                         From
@@ -429,7 +349,7 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td rowspan="2" valign="middle">
+                                    <td rowspan="2" class="vMiddle">
                                         Revenue
                                     </td>
                                     <td colspan="3">
@@ -476,7 +396,7 @@
                     </tr>
                 </table>
             </div>
-            <asp:Table ID="tblMilestoneDetailTabViewSwitch" runat="server" CssClass="CustomTabStyle">
+            <asp:Table ID="tblMilestoneDetailTabViewSwitch" runat="server" CssClass="CommonCustomTabStyle">
                 <asp:TableRow ID="rowSwitcher" runat="server">
                     <asp:TableCell ID="cellFinancials" runat="server" CssClass="SelectedSwitch">
                         <span class="bg"><span>
@@ -537,21 +457,21 @@
             <asp:MultiView ID="mvMilestoneDetailTab" runat="server" ActiveViewIndex="0">
                 <asp:View ID="vwFinancials" runat="server">
                     <asp:Panel ID="pnlFinancials" runat="server" CssClass="tab-pane">
-                        <table style="background-color: #F9FAFF">
+                        <table class="alterrow">
                             <tr>
                                 <td>
                                     Estimated Revenue
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblTotalRevenue" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblTotalRevenue" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Reimbursed Expenses, $
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblReimbursedExpenses" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblReimbursedExpenses" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
@@ -559,43 +479,43 @@
                                     Account discount (<asp:Label ID="lblClientDiscount" runat="server"></asp:Label>
                                     &nbsp;%)
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblClientDiscountAmount" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblClientDiscountAmount" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Revenue net of Discounts
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblTotalRevenueNet" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblTotalRevenueNet" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     COGS
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblTotalCogs" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblTotalCogs" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Expenses, $
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblExpenses" runat="server" Font-Bold="true" />
+                                <td class="textRight">
+                                    <asp:Label ID="lblExpenses" runat="server" class="fontBold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Gross Margin
                                 </td>
-                                <td align="right" nowrap="nowrap">
+                                <td class="textRight no-wrap">
                                     <table>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblTotalMargin" runat="server" Font-Bold="true" />
+                                                <asp:Label ID="lblTotalMargin" runat="server" class="fontBold" />
                                             </td>
                                             <td id="tdTargetMargin" runat="server">
                                                 &nbsp;(<asp:Label ID="lblTargetMargin" runat="server" />)
@@ -609,24 +529,24 @@
                                     Sales commission (<asp:Label ID="lblSalesCommissionPercentage" runat="server"></asp:Label>
                                     &nbsp;%)
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblProjectedSalesCommission" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblProjectedSalesCommission" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Practice Manager commission
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblPracticeManagerCommission" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblPracticeManagerCommission" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Net Margin
                                 </td>
-                                <td align="right">
-                                    <asp:Label ID="lblFinalMilestoneMargin" runat="server" Font-Bold="true"></asp:Label>
+                                <td class="textRight">
+                                    <asp:Label ID="lblFinalMilestoneMargin" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                         </table>
@@ -636,19 +556,18 @@
                     <asp:Panel ID="pnlDetails" runat="server" CssClass="tab-pane" Style="overflow: auto;
                         margin-bottom: 5px;">
                         <asp:GridView EnableViewState="false" ID="gvPeople" runat="server" AutoGenerateColumns="False"
-                            BorderStyle="None" BorderWidth="1" EmptyDataText="There is nothing to be displayed."
-                            OnRowDataBound="gvPeople_RowDataBound" ShowFooter="true" CssClass="CompPerfTable WholeWidth"
-                            GridLines="None" BackColor="White" OnDataBound="gvPeople_OnDataBound">
-                            <AlternatingRowStyle BackColor="#F9FAFF" />
-                            <RowStyle BackColor="White" />
+                            EmptyDataText="There is nothing to be displayed." OnRowDataBound="gvPeople_RowDataBound"
+                            ShowFooter="true" CssClass="CompPerfTable MileStoneDetailPageDetailTab" OnDataBound="gvPeople_OnDataBound">
+                            <AlternatingRowStyle CssClass="alterrow" />
                             <Columns>
-                                <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                <asp:TemplateField>
                                     <HeaderTemplate>
                                         <div class="ie-bg">
                                             &nbsp;
                                         </div>
                                     </HeaderTemplate>
-                                    <ItemStyle HorizontalAlign="Center" />
+                                    <HeaderStyle CssClass="textCenter" />
+                                    <ItemStyle CssClass="textCenter" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgEdit" ToolTip="Edit" runat="server" OnClientClick="return ChangeActiveViewIndex(this);"
                                             ImageUrl="~/Images/icon-edit.png" />
@@ -664,7 +583,6 @@
                                             Text='<%# HttpUtility.HtmlEncode(string.Format("{0}, {1}", Eval("Person.LastName"), Eval("Person.FirstName"))) %>'
                                             onclick="return checkDirtyWithRedirect(this.href);" />
                                     </ItemTemplate>
-                                    <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
@@ -674,30 +592,27 @@
                                     <ItemTemplate>
                                         <asp:Label ID="lblPersonRole" runat="server" CssClass="spacing" Text='<%# Eval("Entries[0].Role.Name") %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
-                                        <div class="ie-bg no-wrap" style="white-space: nowrap;">
+                                        <div class="ie-bg no-wrap">
                                             Start Date</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <asp:Label ID="lblStartDate" runat="server" CssClass="spacing" Text='<%# ((DateTime)Eval("Entries[0].StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="End">
+                                <asp:TemplateField>
                                     <HeaderTemplate>
-                                        <div class="ie-bg no-wrap" style="white-space: nowrap;">
+                                        <div class="ie-bg no-wrap">
                                             End Date</div>
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <asp:Label ID="lblEndDate" runat="server" CssClass="spacing" Text='<%# ((DateTime?)Eval("Entries[0].EndDate")).HasValue ? ((DateTime)Eval("Entries[0].EndDate")).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
-                                    <ItemStyle HorizontalAlign="Right" />
+                                    <ItemStyle CssClass="textRight" />
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
                                             Eff. Bill Rate</div>
@@ -709,8 +624,8 @@
                                         Totals by months
                                     </FooterTemplate>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Total Hours">
-                                    <ItemStyle HorizontalAlign="Right" />
+                                <asp:TemplateField>
+                                    <ItemStyle CssClass="textRight" />
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
                                             &#931 Hours</div>
@@ -718,10 +633,10 @@
                                     <ItemTemplate>
                                         <asp:Label ID="lblTotalHours" runat="server" Text='<%# Eval("Entries[0].ComputedFinancials.HoursBilled") %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle HorizontalAlign="Right" />
+                                    <FooterStyle CssClass="textRight" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
-                                    <ItemStyle Font-Bold="true" HorizontalAlign="Right" />
+                                    <ItemStyle CssClass="textRight fontBold" />
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
                                             Revenue</div>
@@ -729,10 +644,9 @@
                                     <ItemTemplate>
                                         <asp:Label ID="lblRevenueContribution" runat="server" Text='<%# Eval("Entries[0].ComputedFinancials.Revenue") %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
-                                    <ItemStyle Font-Bold="true" HorizontalAlign="Right" />
+                                    <ItemStyle CssClass="textRight fontBold" />
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
                                             Margin</div>
@@ -740,10 +654,9 @@
                                     <ItemTemplate>
                                         <asp:Label ID="lblMarginContribution" runat="server" Text='<%# GetText(Eval("Entries[0].ComputedFinancials.GrossMargin"), (DataTransferObjects.Person)Eval("Person") ) %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle BorderStyle="None" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
-                                    <ItemStyle Font-Bold="true" HorizontalAlign="Right" />
+                                    <ItemStyle CssClass="textRight fontBold" />
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
                                             &#931 Revenue</div>
@@ -751,7 +664,7 @@
                                     <ItemTemplate>
                                         <asp:Label ID="lblTotalRevenue" runat="server" Text='<%# Eval("Entries[0].ComputedFinancials.Revenue") %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle VerticalAlign="Top" />
+                                    <FooterStyle CssClass="vTop" />
                                 </asp:TemplateField>
                                 <asp:TemplateField>
                                     <HeaderTemplate>
@@ -759,18 +672,18 @@
                                             &#931 Gross Margin</div>
                                         </th>
                                     </HeaderTemplate>
-                                    <ItemStyle Font-Bold="true" HorizontalAlign="Right" />
+                                    <ItemStyle CssClass="textRight fontBold" />
                                     <ItemTemplate>
                                         <asp:Label ID="lblTotalMargin" runat="server" Text='<%# GetText(Eval("Entries[0].ComputedFinancials.GrossMargin"), (DataTransferObjects.Person)Eval("Person") ) %>'></asp:Label>
                                     </ItemTemplate>
-                                    <FooterStyle HorizontalAlign="Right" />
+                                    <FooterStyle CssClass="textRight" />
                                 </asp:TemplateField>
                             </Columns>
                         </asp:GridView>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwResources" OnActivate="vwResources_OnActivate" runat="server">
-                    <asp:Panel ID="pnlResources" runat="server" CssClass="tab-pane" Style="overflow: auto;">
+                    <asp:Panel ID="pnlResources" runat="server" CssClass="tab-pane">
                         <asp:UpdatePanel ID="upnlMilestonePersons" ChildrenAsTriggers="true" runat="server">
                             <ContentTemplate>
                                 <% if (IsShowResources)
@@ -785,14 +698,12 @@
                     <asp:Panel ID="pnlExpenses" runat="server" CssClass="tab-pane">
                         <asp:GridView ID="gvMilestoneExpenses" runat="server" DataSourceID="odsMilestoneExpenses"
                             EmptyDataText="No expenses are there for this Milestone period." ShowFooter="True"
-                            AutoGenerateColumns="False" AlternatingRowStyle-BackColor="#e0e0e0" DataKeyNames="Id"
-                            OnRowDataBound="gvMilestoneExpenses_OnRowDataBound" FooterStyle-Font-Bold="true"
-                            FooterStyle-VerticalAlign="Top" CssClass="CompPerfTable WholeWidth" GridLines="None"
-                            BackColor="White">
-                            <AlternatingRowStyle BackColor="#F9FAFF" />
-                            <RowStyle BackColor="White" />
+                            AutoGenerateColumns="False" DataKeyNames="Id" OnRowDataBound="gvMilestoneExpenses_OnRowDataBound"
+                            CssClass="CompPerfTable MileStoneDetailPageExpensesTab">
+                            <AlternatingRowStyle CssClass="bgColor_e0e0e0" />
+                            <FooterStyle CssClass="fontBold vTop" />
                             <Columns>
-                                <asp:TemplateField HeaderText="Name">
+                                <asp:TemplateField>
                                     <HeaderTemplate>
                                         <div class="ie-bg">
                                             Name
@@ -845,7 +756,6 @@
                                     </FooterTemplate>
                                 </asp:TemplateField>
                             </Columns>
-                            <AlternatingRowStyle BackColor="#E0E0E0" />
                         </asp:GridView>
                         <asp:ObjectDataSource ID="odsMilestoneExpenses" runat="server" DataObjectTypeName="DataTransferObjects.ProjectExpense"
                             SelectMethod="ProjectExpensesForMilestone" TypeName="PraticeManagement.Controls.ProjectExpenses.ProjectExpenseHelper"
@@ -876,15 +786,14 @@
                 </asp:View>
                 <asp:View ID="vwHistory" runat="server">
                     <asp:Panel ID="pnlHistory" runat="server" CssClass="tab-pane">
-                        <uc:Notes ID="nMilestone" runat="server" Target="Milestone" OnNoteAdded="nMilestone_OnNoteAdded"
-                            GridVisible="false" />
+                        <uc:Notes ID="nMilestone" runat="server" Target="Milestone" OnNoteAdded="nMilestone_OnNoteAdded"/>
                         <uc:ActivityLogControl runat="server" ID="activityLog" DisplayDropDownValue="Milestone"
                             DateFilterValue="Year" ShowDisplayDropDown="false" ShowProjectDropDown="false" />
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwTools" runat="server">
                     <asp:Panel ID="pnlTools" runat="server" CssClass="tab-pane">
-                        <table cellpadding="10" style="vertical-align: top">
+                        <table class="vTop">
                             <tr>
                                 <td>
                                     <asp:Panel ID="pnlMoveMilestone" runat="server">
@@ -916,7 +825,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" style="text-align: center">
+                                                <td colspan="3" class="textCenter">
                                                     <asp:CheckBox ID="chbMoveFutureMilestones" runat="server" TabIndex="2" Text="Move Future Milestones" />
                                                 </td>
                                             </tr>
@@ -996,21 +905,21 @@
                         <asp:HiddenField ID="hdnMilestoneId" runat="server" />
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Milestone" ToolTip="Delete Milestone"
                             CausesValidation="False" OnClick="btnDelete_Click" OnClientClick="if (!confirm('Do you really want to delete the milestone?')) return false;" />&nbsp;
-                        <asp:Button ID="btnSave" runat="server" Text="Save All"  ToolTip="Save All" OnClick="btnSave_Click" CausesValidation="true"
-                            ValidationGroup="Milestone" />&nbsp;
+                        <asp:Button ID="btnSave" runat="server" Text="Save All" ToolTip="Save All" OnClick="btnSave_Click"
+                            CausesValidation="true" ValidationGroup="Milestone" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
                         <script type="text/javascript">
                             function disableSaveButton() {
                                 document.getElementById('<%= btnSave.ClientID %>').disabled = true;
                             }
                         </script>
-                        <ajaxToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
+                        <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
                             <Animations>
 					            <OnClick>
 					                <ScriptAction Script="disableSaveButton();" />
 					            </OnClick>
                             </Animations>
-                        </ajaxToolkit:AnimationExtender>
+                        </AjaxControlToolkit:AnimationExtender>
                     </td>
                 </tr>
             </table>
@@ -1019,26 +928,24 @@
             <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlPopup" DropShadow="false" />
-            <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
-                Style="display: none" BorderWidth="2px">
-                <table width="100%">
-                    <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                            valign="bottom">
-                            <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                            <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
-                                Style="float: right;" OnClick="btnCancel_OnClick" Text="X"></asp:Button>
+            <asp:Panel ID="pnlPopup" runat="server" CssClass="popUp" Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th colspan="2">
+                            Attention!
+                            <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel Changes"
+                                OnClick="btnCancel_OnClick" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
-                        <td style="padding: 10px;" colspan="2">
+                        <td class="Padding10" colspan="2">
                             <table id="tblHasTimeentriesTowardsMileStone" visible="false" runat="server">
                                 <tr>
                                     <td>
                                         <p>
                                             You are attempting to change the milestone start/end date, but there is already
                                             time entered for the days you are skipping.</p>
-                                            <br />
+                                        <br />
                                         <p>
                                             You will need to reassign the time entries to a new milestone before you are allowed
                                             to change this date.</p>
@@ -1047,84 +954,82 @@
                             </table>
                             <table id="tblchangeMilestonePersonsForStartDate" visible="false" runat="server">
                                 <tr>
-                                    <td style="padding-top: 10px;">
+                                    <td class="PaddingTop10">
                                         <asp:Label ID="lblchangeMilestonePersonsPopupMessageForStartDate" runat="server"></asp:Label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center" valign="middle">
+                                    <td class="textCenter vMiddle">
                                         <asp:RadioButton ID="rbtnchangeMileStoneAndPersonsStartDate" runat="server" AutoPostBack="false"
-                                            Checked="true" GroupName="changedMileStoneStartDate" /><b style="font-size: 13px;">Change
-                                                Milestone and Resource(s)</b>
+                                            Checked="true" GroupName="changedMileStoneStartDate" /><b class="font13Px">Change Milestone
+                                                and Resource(s)</b>
                                         <asp:RadioButton ID="rbtnchangeMileStoneStartDate" runat="server" AutoPostBack="false"
-                                            GroupName="changedMileStoneStartDate" /><b style="font-size: 13px;">Change Milestone
-                                                Only</b>
+                                            GroupName="changedMileStoneStartDate" /><b class="font13Px">Change Milestone Only</b>
                                     </td>
                                 </tr>
                             </table>
-                            <hr style="padding-left: 10px; padding-right: 10px; border-color: Black;" id="hrBetweenCMSDandCMED"
-                                runat="server" visible="false" />
+                            <hr class="MilestoneDetailPopUpHR" id="hrBetweenCMSDandCMED" runat="server" visible="false" />
                             <table id="tblchangeMilestonePersonsForEndDate" visible="false" runat="server">
                                 <tr>
-                                    <td style="padding-top: 10px;">
+                                    <td class="PaddingTop10">
                                         <asp:Label ID="lblchangeMilestonePersonsForEndDate" runat="server"></asp:Label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center" valign="middle">
+                                    <td class="textCenter vMiddle">
                                         <asp:RadioButton ID="rbtnchangeMileStoneAndPersonsEndDate" runat="server" AutoPostBack="false"
-                                            Checked="true" GroupName="changedMileStoneEndDate" /><b style="font-size: 13px;">Change
-                                                Milestone and Resource(s)</b>
+                                            Checked="true" GroupName="changedMileStoneEndDate" /><b class="font13Px">Change Milestone
+                                                and Resource(s)</b>
                                         <asp:RadioButton ID="rbtnchangeMileStoneEndDate" runat="server" AutoPostBack="false"
-                                            GroupName="changedMileStoneEndDate" /><b style="font-size: 13px;">Change Milestone Only</b>
+                                            GroupName="changedMileStoneEndDate" /><b class="font13Px">Change Milestone Only</b>
                                     </td>
                                 </tr>
                             </table>
-                            <hr style="padding-left: 10px; padding-right: 10px; border-color: Black;" id="hrBetweenCMEDandRMSD"
-                                runat="server" visible="false" />
+                            <hr class="MilestoneDetailPopUpHR" id="hrBetweenCMEDandRMSD" runat="server" visible="false" />
                             <table id="tblRemoveMilestonePersonsForStartDate" visible="false" runat="server">
                                 <tr>
-                                    <td style="padding-top: 10px;">
+                                    <td class="PaddingTop10">
                                         <asp:Label ID="lblRemoveMilestonePersonsForStartDate" runat="server"></asp:Label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center" valign="middle">
+                                    <td class="textCenter vMiddle">
                                         <asp:RadioButton ID="rbtnRemovePersonsStartDate" runat="server" AutoPostBack="false"
-                                            Checked="true" GroupName="removeStart" /><b style="font-size: 13px;">OK</b>&nbsp;&nbsp;&nbsp;
+                                            Checked="true" GroupName="removeStart" /><b class="font13Px">OK</b>&nbsp;&nbsp;&nbsp;
                                         <asp:RadioButton ID="rbtnCancelStartDate" runat="server" AutoPostBack="false" GroupName="removeStart"
-                                            onclick="ShowConfirmDialogForStartDate(this);" /><b style="font-size: 13px;">Cancel</b>
+                                            onclick="ShowConfirmDialogForStartDate(this);" /><b class="font13Px">Cancel</b>
                                     </td>
                                 </tr>
                             </table>
-                            <hr style="padding-left: 10px; padding-right: 10px; border-color: Black;" id="hrBetweenRMSDandRMED"
-                                runat="server" visible="false" />
+                            <hr class="MilestoneDetailPopUpHR" id="hrBetweenRMSDandRMED" runat="server" visible="false" />
                             <table id="tblRemoveMilestonePersonsForEndDate" visible="false" runat="server">
                                 <tr>
-                                    <td style="padding-top: 10px;">
+                                    <td class="PaddingTop10">
                                         <asp:Label ID="lblRemoveMilestonePersonsForEndDate" runat="server"></asp:Label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center" valign="middle">
+                                    <td class="textCenter vMiddle">
                                         <asp:RadioButton ID="rbtnRemovePersonsEndDate" runat="server" AutoPostBack="false"
-                                            GroupName="removeEnd" Checked="true" /><b style="font-size: 13px;">OK</b>&nbsp;&nbsp;&nbsp;
+                                            GroupName="removeEnd" Checked="true" /><b class="font13Px">OK</b>&nbsp;&nbsp;&nbsp;
                                         <asp:RadioButton ID="rbtnCancelEndDate" runat="server" AutoPostBack="false" GroupName="removeEnd"
-                                            onclick="ShowConfirmDialogForEndDate(this);" /><b style="font-size: 13px;">Cancel</b>
+                                            onclick="ShowConfirmDialogForEndDate(this);" /><b class="font13Px">Cancel</b>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr id="trShowSaveandCancel" runat="server">
-                        <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
+                        <td colspan="2" class="Padding6 padBottom15" align="center">
                             <table>
                                 <tr>
-                                    <td style="padding-right: 3px;">
-                                        <asp:Button ID="btnSavePopup" runat="server" Text="Save Changes" ToolTip="Save Changes" OnClick="btnSavePopup_OnClick" />
+                                    <td class="padRight3">
+                                        <asp:Button ID="btnSavePopup" runat="server" Text="Save Changes" ToolTip="Save Changes"
+                                            OnClick="btnSavePopup_OnClick" />
                                     </td>
-                                    <td style="padding-left: 3px;">
-                                        <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel Changes" ToolTip="Cancel Changes" OnClick="btnCancel_OnClick" />
+                                    <td class="padLeft3">
+                                        <asp:Button ID="btnCancelSaving" runat="server" Text="Cancel Changes" ToolTip="Cancel Changes"
+                                            OnClick="btnCancel_OnClick" />
                                     </td>
                                 </tr>
                             </table>
