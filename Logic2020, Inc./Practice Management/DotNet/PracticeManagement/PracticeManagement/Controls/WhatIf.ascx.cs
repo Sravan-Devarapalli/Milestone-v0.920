@@ -21,7 +21,6 @@ namespace PraticeManagement.Controls
         private const string PersonKey = "PersonValue";
         private const string HorsPerWeekDefaultValue = "40";
         private const string BillRateDefaultValue = "120";
-        //private const string SalesCommissionLineText = "Sales Commission (SCPH)";
         private const string MLFText = "Minimum Load Factor (MLF)";
         private const string ClientDiscountDefaultValue = "0";
         private const string LoggedInPersonSalesCommissionKey = "LoggedInPersonSalesCommission";
@@ -61,11 +60,6 @@ namespace PraticeManagement.Controls
             set
             {
                 this.tdgrossMarginComputing.Visible = value;
-                //if (value)
-                //{
-                //    bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-                //    grossMarginComputing.Visible = isAdmin;
-                //}
             }
         }
 
@@ -100,19 +94,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        //public decimal DefaultSalesCommission
-        //{
-        //    get
-        //    {
-
-        //        decimal tempDefaultSalesCommission = 0.0M; // Default Sales Commission 
-        //Match m = validatePercentage.Match(txtDefaultSalesCommission.Text);
-        //decimal.TryParse(m.Groups[1].Captures[0].Value, out tempDefaultSalesCommission);
-        //tempDefaultSalesCommission = (tempDefaultSalesCommission / 100);
-        //        return tempDefaultSalesCommission;
-        //    }
-        //}
-
         public decimal ClientDiscount
         {
             get
@@ -121,31 +102,12 @@ namespace PraticeManagement.Controls
                 decimal clientDiscount = 0.0M; // Default Sales Commission
                 if (!string.IsNullOrEmpty(txtClientDiscount.Text))
                 {
-                    //Match m = validatePercentage.Match(txtClientDiscount.Text);
-                    //decimal.TryParse(m.Groups[1].Captures[0].Value, out clientDiscount);
                     decimal.TryParse(txtClientDiscount.Text, out clientDiscount);
                     clientDiscount = (clientDiscount / 100);
                 }
                 return clientDiscount;
             }
         }
-
-        /// <summary>
-        /// Gets or sets whether the Target Margin can be changed and the rate recalculated according to this change.
-        /// </summary>
-        //[DefaultValue(false)]
-        //public bool TargetMarginReadOnly
-        //{
-        //    get
-        //    {
-        //        return lblTargetMargin.Visible;
-        //    }
-        //    set
-        //    {
-        //        lblTargetMargin.Visible = value;
-        //        txtTargetMargin.Visible = custTargetMargin.Enabled = !value;
-        //    }
-        //}
 
         public void SetSliderDefaultValue()
         {
@@ -167,17 +129,6 @@ namespace PraticeManagement.Controls
             gvOverheadWhatIf.Visible = isAdmin;
         }
 
-        protected void custTargetMargin_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = validatePercentage.IsMatch(e.Value);
-            if (e.IsValid)
-            {
-                Match m = validatePercentage.Match(e.Value);
-                decimal value;
-                e.IsValid = decimal.TryParse(m.Groups[1].Captures[0].Value, out value) && value < 100M;
-            }
-        }
-
         protected void custDefaultSalesCommision_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = validatePercentage.IsMatch(e.Value);
@@ -189,23 +140,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        //protected void custClientDiscount_ServerValidate(object sender, ServerValidateEventArgs e)
-        //{
-        //    if (!string.IsNullOrEmpty(cvClientDiscount.Text))
-        //    {
-        //        e.IsValid = validatePercentage.IsMatch(e.Value);
-        //        if (e.IsValid)
-        //        {
-        //            Match m = validatePercentage.Match(e.Value);
-        //            decimal value;
-        //            e.IsValid = decimal.TryParse(m.Groups[1].Captures[0].Value, out value);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        e.IsValid = true;
-        //    }
-        //}
 
         protected void txtBillRateSlider_TextChanged(object sender, EventArgs e)
         {
@@ -216,25 +150,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        //protected void txtTargetMargin_TextChanged(object sender, EventArgs e)
-        //{
-        //    Page.Validate("ComputeRate");
-        //    if (Page.IsValid && Person != null)
-        //    {
-        //        DisplayFromTargetMargin();
-        //    }
-        //}
-
-        //protected void txtDefaultSalesCommission_TextChanged(object sender, EventArgs e)
-        //{
-        //    Page.Validate("ComputeRate");
-        //    if (Page.IsValid && Person != null && validatePercentage.IsMatch(txtDefaultSalesCommission.Text))
-        //    {
-        //        DisplayCalculatedRate();
-        //        //DisplayFromTargetMargin();
-        //    }
-        //}
-
         protected void txtClientDiscount_TextChanged(object sender, EventArgs e)
         {
             Page.Validate("ComputeRate");
@@ -242,56 +157,10 @@ namespace PraticeManagement.Controls
                                                     string.IsNullOrEmpty(txtClientDiscount.Text)))
             {
                 DisplayCalculatedRate();
-                //DisplayFromTargetMargin();
             }
         }
 
         #region Projected rates
-
-        //private void DisplayFromTargetMargin()
-        //{
-        //    if (validatePercentage.IsMatch(txtTargetMargin.Text))
-        //    {
-        //        decimal targetMargin;
-        //        Match m = validatePercentage.Match(txtTargetMargin.Text);
-        //        decimal.TryParse(m.Groups[1].Captures[0].Value, out targetMargin);
-
-        //        using (PersonServiceClient serviceClient = new PersonServiceClient())
-        //        {
-        //            //List<PersonOverhead> overheads = Person.OverheadList;
-        //            try
-        //            {
-        //                int id = Person != null && Person.Id.HasValue ? Person.Id.Value : 0;
-        //                decimal hoursPerWeek =
-        //                    !string.IsNullOrEmpty(txtHorsPerWeekSlider_BoundControl.Text) ?
-        //                    decimal.Parse(txtHorsPerWeekSlider_BoundControl.Text) : (decimal)sldHoursPerMonth.Minimum;
-
-        //                Person tmpPerson = Person;
-        //                tmpPerson.OverheadList = null;
-
-        //                ComputedFinancialsEx rate =
-        //                    serviceClient.CalculateProposedFinancialsPersonTargetMargin(tmpPerson, targetMargin, hoursPerWeek, ClientDiscount, IsMarginTestPage);
-
-        //                DisplayRate(rate);
-
-        //                if (rate.BillRate.HasValue)
-        //                {
-        //                    txtBillRateSlider.Text = txtBillRateSlider_BoundControl.Text =
-        //                        Math.Round(rate.BillRate.Value.Value).ToString();
-        //                }
-        //            }
-        //            catch (FaultException<ExceptionDetail>)
-        //            {
-        //                serviceClient.Abort();
-        //                throw;
-        //            }
-        //            //finally
-        //            //{
-        //            //    Person.OverheadList = overheads;
-        //            //}
-        //        }
-        //    }
-        //}
 
         private void DisplayCalculatedRate()
         {
@@ -371,14 +240,6 @@ namespace PraticeManagement.Controls
             lblMonthlyRevenueWithoutRecruiting.Text = rate.Revenue.ToString();
             if (!HideCalculatedValues)
             {
-                //lblMonthlyRevenue.Text = 
-                //lblMonthlyGogs.Text = rate.Cogs.ToString();
-                //lblMonthlyGrossMargin.Text = rate.GrossMargin.ToString();
-                //txtTargetMargin.Text = lblTargetMargin.Text =
-                    //string.Format(Constants.Formatting.PercentageFormat, rate.TargetMargin);
-                //SetBackgroundColorForMargin(rate.TargetMargin, tdTargetMargin, txtTargetMargin);
-
-
                 lblMonthlyGrossMarginWithoutRecruiting.Text = rate.MarginWithoutRecruiting.ToString();
                 lblMonthlyCogsWithoutRecruiting.Text = rate.CogsWithoutRecruiting.ToString();
                 lblTargetMarginWithoutRecruiting.Text =
@@ -386,22 +247,12 @@ namespace PraticeManagement.Controls
             }
             else
             {
-                //TargetMarginReadOnly = true;
-                //lblMonthlyRevenue.Text =
-                //lblMonthlyGogs.Text =
-                //lblMonthlyGrossMargin.Text =
-                //lblTargetMargin.Text =
                 lblMonthlyGrossMarginWithoutRecruiting.Text =
                 lblMonthlyCogsWithoutRecruiting.Text =
                 lblTargetMarginWithoutRecruiting.Text =
                    Resources.Controls.HiddenCellText;
-
-                //lblMonthlyRevenue.CssClass = 
-                //lblMonthlyGogs.CssClass = 
                 lblMonthlyCogsWithoutRecruiting.CssClass = "Cogs";
-                //lblMonthlyGrossMargin.CssClass = 
                 lblMonthlyGrossMarginWithoutRecruiting.CssClass = "Margin";
-                //SetBackgroundColorForMargin(rate.TargetMargin, tdTargetMargin);
             }
             
             SetBackgroundColorForMargin(rate.TargetMarginWithoutRecruiting, tdTargetMarginWithoutRecruiting);
