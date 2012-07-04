@@ -27,7 +27,8 @@ BEGIN
 			 @showInternalLocal			BIT,
 			 @ShowExperimentalLocal		BIT,
 			 @ShowInactiveLocal			BIT,
-			 @ExcludeInternalPracticesLocal BIT
+			 @ExcludeInternalPracticesLocal BIT,
+			 @FutureDateLocal			DATETIME
 
 	SELECT 
 	 @CategoryTypeIdLocal			=	@CategoryTypeId,
@@ -41,7 +42,8 @@ BEGIN
 	 @showInternalLocal				=	@showInternal,
 	 @ShowExperimentalLocal			=	@ShowExperimental,
 	 @ShowInactiveLocal				=	@ShowInactive,
-	 @ExcludeInternalPracticesLocal	=	@ExcludeInternalPractices
+	 @ExcludeInternalPracticesLocal	=	@ExcludeInternalPractices,
+	 @FutureDateLocal				=	dbo.GetFutureDate()
 
 	IF(@CategoryTypeIdLocal = 1) -- Client Director
 	BEGIN
@@ -53,10 +55,10 @@ BEGIN
 				P.PersonId,
 				P.LastName,
 				P.FirstName,
-				dbo.MakeDate(YEAR(C.Date),MONTH(C.Date),1) MonthStartDate,
+				C.MonthStartDate,
 				CIB.Amount
 			FROM dbo.Person P
-			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,dbo.GetFutureDate()) 
+			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDateLocal) 
 									AND C.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
 			LEFT JOIN dbo.PersonStatusHistory PSH 
 				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId =1  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
@@ -65,7 +67,7 @@ BEGIN
 			ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
 			LEFT JOIN dbo.aspnet_Roles UR ON UIR.RoleId = UR.RoleId AND UR.RoleName='Client Director'
 			LEFT JOIN dbo.Project Proj ON proj.DirectorId = P.PersonId AND C.Date BETWEEN Proj.StartDate 
-					AND ISNULL(Proj.EndDate,dbo.GetFutureDate())
+					AND ISNULL(Proj.EndDate,@FutureDateLocal)
 			LEFT JOIN dbo.CategoryItemBudget CIB ON CIB.CategoryTypeId = @CategoryTypeId 
 							AND CIB.MonthStartDate  BETWEEN @StartDateLocal AND @EndDateLocal 
 							AND MONTH(CIB.MonthStartDate) = MONTH(C.Date)
@@ -76,8 +78,7 @@ BEGIN
 					 P.LastName,
 					 P.FirstName,
 					 CIB.Amount,
-					 YEAR(C.Date),
-					 MONTH(C.Date)
+					 C.MonthStartDate
 			
 		),
 		CTEMilestonePersonSchedule
@@ -192,11 +193,11 @@ BEGIN
 			SELECT pexp.ProjectId,
 				CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
 				CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
-				dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate
+				C.MonthStartDate AS FinancialDate
 			FROM dbo.ProjectExpense as pexp
 			JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
 			WHERE c.Date BETWEEN @StartDateLocal AND @EndDateLocal
-			GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+			GROUP BY pexp.ProjectId, C.MonthStartDate
 		),
 		ProjectMonthlyFinancials
 		AS
@@ -208,11 +209,12 @@ BEGIN
 			FROM 
 			(
 				SELECT	F.ProjectId,
-						dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
+						C.MonthStartDate AS MonthStartDate,
 						SUM(f.PersonMilestoneDailyAmount) AS Revenue
 				FROM  CTEFinancialsRetroSpective F
+				INNER JOIN dbo.Calendar C ON C.Date = F.Date
 				WHERE F.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
-				GROUP BY F.ProjectId, YEAR(f.Date), MONTH(f.Date)
+				GROUP BY F.ProjectId, C.MonthStartDate
 			) Fin
 			FULL JOIN ProjectExpensesMonthly PEM
 			ON PEM.ProjectId = FIN.ProjectId AND PEM.FinancialDate = Fin.MonthStartDate
@@ -248,10 +250,10 @@ BEGIN
 				P.PersonId,
 				P.LastName,
 				P.FirstName,
-				dbo.MakeDate(YEAR(C.Date),MONTH(C.Date),1) MonthStartDate,
+				C.MonthStartDate MonthStartDate,
 				CIB.Amount
 			FROM dbo.Person P
-			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,dbo.GetFutureDate()) 
+			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDateLocal) 
 									AND C.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
 			LEFT JOIN dbo.PersonStatusHistory PSH 
 				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId =1  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
@@ -260,7 +262,7 @@ BEGIN
 			ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
 			LEFT JOIN dbo.aspnet_Roles UR ON UIR.RoleId = UR.RoleId AND UR.RoleName='Salesperson'
 			LEFT JOIN dbo.Commission Com ON Com.PersonId = P.PersonId AND Com.CommissionType = 1
-			LEFT JOIN dbo.Project Proj ON Proj.ProjectId = Com.ProjectId AND C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate,dbo.GetFutureDate())
+			LEFT JOIN dbo.Project Proj ON Proj.ProjectId = Com.ProjectId AND C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate,@FutureDateLocal)
 			LEFT JOIN dbo.CategoryItemBudget CIB ON CIB.CategoryTypeId = @CategoryTypeId 
 							AND CIB.MonthStartDate  BETWEEN @StartDateLocal AND	 @EndDateLocal
 							AND MONTH(CIB.MonthStartDate) = MONTH(C.Date)
@@ -273,8 +275,7 @@ BEGIN
 					 P.LastName,
 					 P.FirstName,
 					 CIB.Amount,
-					 YEAR(C.Date),
-					 MONTH(C.Date)
+					 C.MonthStartDate
 
 		),
 		CTEMilestonePersonSchedule
@@ -387,11 +388,11 @@ BEGIN
 			SELECT pexp.ProjectId,
 				CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
 				CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
-				dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate
+				C.MonthStartDate AS FinancialDate
 			FROM dbo.ProjectExpense as pexp
 			JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
 			WHERE c.Date BETWEEN @StartDateLocal AND @EndDateLocal
-			GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+			GROUP BY pexp.ProjectId, C.MonthStartDate
 		),
 		ProjectFinancialsMonthly
 		AS
@@ -402,11 +403,12 @@ BEGIN
 		FROM 
 		(
 			SELECT	F.ProjectId,
-					dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
+					C.MonthStartDate AS MonthStartDate,
 					SUM(f.PersonMilestoneDailyAmount) AS Revenue
-			 FROM CTEFinancialsRetroSpective F 
+			 FROM CTEFinancialsRetroSpective F
+			 INNER JOIN dbo.Calendar C ON C.Date = F.Date
 			WHERE  F.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal  
-			GROUP BY F.ProjectId, YEAR(f.Date), MONTH(f.Date)
+			GROUP BY F.ProjectId, C.MonthStartDate
 		) Fin
 		FULL JOIN ProjectExpensesMonthly PEM
 		ON PEM.ProjectId = FIN.ProjectId AND PEM.FinancialDate = Fin.MonthStartDate
@@ -442,14 +444,14 @@ BEGIN
 		(
 			SELECT  P.PracticeId,
 					p.Name,
-					dbo.MakeDate(YEAR(C.Date),MONTH(C.Date),1) MonthStartDate,
+					C.MonthStartDate MonthStartDate,
 					CIB.Amount
 			FROM dbo.Practice P
 			JOIN dbo.Calendar C ON   C.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
 			LEFT JOIN dbo.PracticeStatusHistory PSH ON P.PracticeId = PSH.PracticeId AND Psh.IsActive = 1
 			LEFT JOIN dbo.Project proj
 			ON Proj.PracticeId = P.PracticeId  
-					AND C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate,dbo.GetFutureDate())
+					AND C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate,@FutureDateLocal)
 			LEFT JOIN dbo.CategoryItemBudget CIB 
 			ON CIB.ItemId = P.PracticeId AND CIB.CategoryTypeId = @CategoryTypeId
 				AND CIB.MonthStartDate BETWEEN @StartDateLocal AND	 @EndDateLocal
@@ -460,8 +462,7 @@ BEGIN
 			GROUP BY P.PracticeId,
 					 p.Name,
 					 CIB.Amount,
-					 YEAR(C.Date),
-					 MONTH(C.Date)
+					 C.MonthStartDate
 		)
 		,
 		
@@ -573,10 +574,11 @@ BEGIN
 	  FROM PracticeAreas PA
 	  LEFT JOIN 
 			(	SELECT f.PracticeId,
-				   dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
+				   C.MonthStartDate AS MonthStartDate,
 				   ISNULL(SUM(f.PersonMilestoneDailyAmount),0) AS Revenue
 				FROM CTEFinancialsRetroSpective f
-				GROUP BY f.PracticeId, YEAR(f.Date), MONTH(f.Date)
+				INNER JOIN dbo.Calendar C ON C.Date = f.Date
+				GROUP BY f.PracticeId, C.MonthStartDate
 			) B
 	  ON PA.PracticeId = B.PracticeId AND B.MonthStartDate = PA.MonthStartDate
 	ORDER BY PA.Name 
