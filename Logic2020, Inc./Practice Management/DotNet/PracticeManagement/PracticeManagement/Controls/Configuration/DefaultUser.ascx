@@ -5,16 +5,16 @@
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <asp:UpdatePanel ID="updDefaultManager" runat="server" UpdateMode="Conditional">
     <ContentTemplate>
-        <table width="100%">
+        <table class="WholeWidth" id="tbDefaultUser" runat="server">
             <tr>
                 <td>
                     <asp:DropDownList ID="ddlActivePersons" runat="server" DataSourceID="odsPersons"
-                        onchange="setDirty();" Width="100%" DataTextField="PersonLastFirstName" DataValueField="Id"
+                        onchange="setDirty();" CssClass="WholeWidth" DataTextField="PersonLastFirstName" DataValueField="Id"
                         OnDataBound="ddlActivePersons_OnDataBound" />
                 </td>
             </tr>
             <tr>
-                <td style="text-align:right;">
+                <td class="textRight">
                     <asp:Button ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false" CssClass="marginLineManager"
                         Text="Save Default Career Counselor" />
                 </td>
