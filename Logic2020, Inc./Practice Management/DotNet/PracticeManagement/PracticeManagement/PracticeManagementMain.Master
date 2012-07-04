@@ -47,7 +47,7 @@
                         OnLoggingOut="loginStatus_LoggingOut" />
                 </div>
                 <div class="changePassword">
-                    <b style="font-size: 15px">
+                    <b class="FontSize15PX">
                         <uc:LoginUserImpersonation ID="loginUserImpersonation" runat="server">
                         </uc:LoginUserImpersonation>
                     </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -89,12 +89,10 @@
                             CancelControlID="btnLogOutOnSessionTimeOutCancel" OkControlID="btnLogOutOnSessionTimeOutOK"
                             OnOkScript="RefreshPage();" OnCancelScript="fnLogOffUserSessionatServer();" BackgroundCssClass="modalBackground"
                             PopupControlID="pnlTimeOutAlert" DropShadow="false" BehaviorID="bhAlterTimeOut" />
-                        <asp:Panel ID="pnlTimeOutAlert" runat="server" BackColor="White" BorderColor="Black"
-                            CssClass="ConfirmBoxClass" Style="padding: 15px 15px 15px 15px; display: none;"
-                            BorderWidth="2px">
+                        <asp:Panel ID="pnlTimeOutAlert" runat="server" CssClass="ConfirmBoxClass pnlTimeOutAlert" Style="display: none;">
                             <table>
                                 <tr>
-                                    <td colspan="2" style="padding-bottom: 10px;">
+                                    <td colspan="2" class="PaddingBottom10">
                                         Are you still there? If you would like to extend your PM session, please click the
                                         "Continue"
                                         <br />
@@ -105,12 +103,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center">
-                                        <asp:Button ID="btnLogOutOnSessionTimeOutOK" runat="server" Text="Continue" Style="width: 80px;"
+                                    <td class="textCenter">
+                                        <asp:Button ID="btnLogOutOnSessionTimeOutOK" runat="server" Text="Continue" CssClass="Width80Px"
                                             CausesValidation="false" />
                                     </td>
-                                    <td align="center">
-                                        <asp:Button ID="btnLogOutOnSessionTimeOutCancel" runat="server" Text="Exit" Style="width: 80px;"
+                                    <td class="textCenter">
+                                        <asp:Button ID="btnLogOutOnSessionTimeOutCancel" runat="server" Text="Exit" CssClass="Width80Px"
                                             CausesValidation="false" />
                                     </td>
                                 </tr>
