@@ -107,11 +107,12 @@ AS
 	       ) AS RecruitingCommissionRate
 	  FROM dbo.v_MilestoneRevenueRetrospective AS r
 		   -- Linking to persons
-	       JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date 
+	       JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
+	       JOIN dbo.GetFutureDateTable() FD ON 1=1 --For improving query performance we are using table valued function instead of scalar function.
 	       -- Salary
 		   LEFT JOIN dbo.v_PersonPayRetrospective AS p ON p.PersonId = m.PersonId AND p.Date = r.Date
 	       LEFT JOIN dbo.v_OverheadFixedRateTimescale AS o
-	           ON     p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, dbo.GetFutureDate())
+	           ON     p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, FD.FutureDate)
 	              AND o.Inactive = 0
 	              AND o.TimescaleId = p.Timescale
 		  LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
