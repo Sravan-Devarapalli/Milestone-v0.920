@@ -1,15 +1,9 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="PersonDetail.aspx.cs" Inherits="PraticeManagement.PersonDetail" Title="Person Details | Practice Management" %>
 
-<%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.Filtering"
-    TagPrefix="cc1" %>
 <%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
-<%@ Register Src="Controls/PersonnelCompensation.ascx" TagName="PersonnelCompensation"
-    TagPrefix="uc1" %>
 <%@ Register Src="Controls/RecruiterInfo.ascx" TagName="RecruiterInfo" TagPrefix="uc1" %>
-<%@ Register Src="Controls/GrossMarginComputing.ascx" TagName="GrossMarginComputing"
-    TagPrefix="uc1" %>
 <%@ Register Src="Controls/WhatIf.ascx" TagName="WhatIf" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/RestrictionPanel.ascx" TagPrefix="uc" TagName="RestrictionPanel" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLog" %>
@@ -18,7 +12,6 @@
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/OpportunityList.ascx" TagName="OpportunityList"
     TagPrefix="uc" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
@@ -224,13 +217,11 @@
                 }
             }
         }
-    </script>
     <%--
         The following script is needed to implement dirty checks on Projects tab        
         Use Page.ClientScript.GetPostBackClientHyperlink(...) method to generate
         personProjects control postback url
     --%>
-    <script type="text/javascript">
         function checkDirty(target, entityId) {
             if (showDialod()) {
                 __doPostBack('ctl00$body$personProjects', target + ':' + entityId);
@@ -318,81 +309,6 @@
             return false;
         }
     </script>
-    <style>
-        /* --------- Tabs for person and project details pages ------ */
-        
-        .CustomTabStyle tr
-        {
-            height: 30px;
-        }
-        
-        .CustomTabStyle td
-        {
-            background-color: White;
-            float: left;
-            padding: 8px 0px 15px 0px;
-            position: relative;
-        }
-        
-        .CustomTabStyle td a
-        {
-            text-decoration: none;
-        }
-        
-        .CustomTabStyle td span a
-        {
-            border-bottom: 1px dashed #0898e6;
-        }
-        
-        .CustomTabStyle td span a:hover
-        {
-            border-bottom: 1px dashed #006699;
-        }
-        
-        .CustomTabStyle td a.collapse
-        {
-            display: none;
-            position: absolute;
-        }
-        
-        .CustomTabStyle .SelectedSwitch a.collapse
-        {
-            display: block;
-            right: 2px;
-            top: 10px;
-        }
-        
-        .CustomTabStyle td span.bg
-        {
-            padding: 8px 10px 7px 10px;
-        }
-        
-        .CustomTabStyle .SelectedSwitch span.bg
-        {
-            background-color: #e2ebff;
-        }
-        
-        .tab-pane
-        {
-            background-color: #e2ebff;
-            padding: 5px;
-        }
-        
-        .info-field
-        {
-            width: 152px;
-        }
-        
-        .ConfirmBoxClassError
-        {
-            min-height: 60px;
-            min-width: 180px;
-            max-width: 450px;
-            max-height: 500px;
-        }
-        
-        /* ------------------------ */
-    </style>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
@@ -458,11 +374,11 @@
                         <asp:Panel ID="pnlPersonalInfo" runat="server">
                             <table>
                                 <tr>
-                                    <td nowrap="nowrap">
+                                    <td>
                                         First Name
                                     </td>
-                                    <td class="info-field">
-                                        <asp:TextBox ID="txtFirstName" runat="server" CssClass="info-field" onchange="setDirty();"></asp:TextBox>
+                                    <td>
+                                        <asp:TextBox ID="txtFirstName" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>
                                     </td>
                                     <td>
                                         <asp:RequiredFieldValidator ID="reqFirstName" runat="server" ValidationGroup="Person"
@@ -481,8 +397,8 @@
                                     <td>
                                         Status
                                     </td>
-                                    <td class="info-field">
-                                        <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="info-field" onchange="setDirty();">
+                                    <td>
+                                        <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width158px" onchange="setDirty();">
                                         </asp:DropDownList>
                                     </td>
                                     <td>
@@ -499,11 +415,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td nowrap="nowrap">
+                                    <td>
                                         Last Name
                                     </td>
-                                    <td class="info-field">
-                                        <asp:TextBox ID="txtLastName" runat="server" CssClass="info-field" onchange="setDirty();"></asp:TextBox>
+                                    <td>
+                                        <asp:TextBox ID="txtLastName" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>
                                     </td>
                                     <td>
                                         <asp:RequiredFieldValidator ID="reqLastName" runat="server" ValidationGroup="Person"
@@ -517,10 +433,11 @@
                                     <td>
                                         Career Counselor
                                     </td>
-                                    <td class="info-field" style="padding-right: 2px">
+                                    <td class="padRight2">
                                         <asp:UpdatePanel ID="pnlLineManager" runat="server">
                                             <ContentTemplate>
-                                                <uc:DefaultManager ID="defaultManager" runat="server" InsertFirtItem="false" PersonsRole="Practice Area Manager" />
+                                                <uc:DefaultManager ID="defaultManager" runat="server" InsertFirtItem="false" PersonsRole="Practice Area Manager"
+                                                    CssClass="Width158px" />
                                             </ContentTemplate>
                                             <Triggers>
                                                 <asp:AsyncPostBackTrigger ControlID="lbSetPracticeOwner" EventName="Click" />
@@ -535,8 +452,8 @@
                                     <td nowrap="nowrap">
                                         Default Practice Area
                                     </td>
-                                    <td class="info-field">
-                                        <asp:DropDownList ID="ddlDefaultPractice" runat="server" Width="158px" onchange="setDirty();">
+                                    <td>
+                                        <asp:DropDownList ID="ddlDefaultPractice" runat="server" CssClass="Width158px" onchange="setDirty();">
                                             <asp:ListItem Text="Technology Solutions"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
@@ -549,7 +466,7 @@
                                     <td>
                                         Hire&nbsp;Date
                                     </td>
-                                    <td class="info-field">
+                                    <td class="Width158px">
                                         <uc2:DatePicker ID="dtpHireDate" runat="server" OnSelectionChanged="dtpHireDate_SelectionChanged"
                                             AutoPostBack="true" />
                                     </td>
@@ -572,8 +489,8 @@
                                     <td>
                                         Email&nbsp;Address
                                     </td>
-                                    <td class="info-field">
-                                        <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="info-field" onchange="setDirty();"></asp:TextBox>
+                                    <td>
+                                        <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>
                                     </td>
                                     <td>
                                         <asp:RegularExpressionValidator ID="regEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
@@ -596,7 +513,7 @@
                                     <td nowrap="nowrap">
                                         Termination Date
                                     </td>
-                                    <td class="info-field">
+                                    <td class="Width158px">
                                         <uc2:DatePicker ID="dtpTerminationDate" runat="server" OnSelectionChanged="dtpTerminationDate_SelectionChanged"
                                             AutoPostBack="true" />
                                     </td>
@@ -625,9 +542,8 @@
                                     <td nowrap="nowrap">
                                         Offshore Resource
                                     </td>
-                                    <td class="info-field">
-                                        <asp:DropDownList ID="ddlPersonType" runat="server" CssClass="info-field" onchange="setDirty();"
-                                            Width="158px">
+                                    <td>
+                                        <asp:DropDownList ID="ddlPersonType" runat="server" CssClass="Width158px" onchange="setDirty();">
                                             <asp:ListItem Text="NO" Value="0" Selected="True"></asp:ListItem>
                                             <asp:ListItem Text="YES" Value="1"></asp:ListItem>
                                         </asp:DropDownList>
@@ -637,10 +553,10 @@
                                     <td>
                                         <asp:Label ID="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
                                     </td>
-                                    <td class="info-field">
-                                        <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="info-field" onchange="setDirty();"
+                                    <td>
+                                        <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="Width152px" onchange="setDirty();"
                                             Visible="false"></asp:TextBox>
-                                        <ajaxToolkit:FilteredTextBoxExtender ID="ftePayCheckId" TargetControlID="txtPayCheckId"
+                                        <AjaxControlToolkit:FilteredTextBoxExtender ID="ftePayCheckId" TargetControlID="txtPayCheckId"
                                             FilterType="Numbers" FilterMode="ValidChars" runat="server" />
                                     </td>
                                     <td>
@@ -650,8 +566,8 @@
                                     <td>
                                         Telephone number
                                     </td>
-                                    <td class="info-field">
-                                        <asp:TextBox ID="txtTelephoneNumber" runat="server" onchange="setDirty();" CssClass="info-field"></asp:TextBox>
+                                    <td>
+                                        <asp:TextBox ID="txtTelephoneNumber" runat="server" onchange="setDirty();" CssClass="Width152px"></asp:TextBox>
                                     </td>
                                     <td>
                                         <asp:RegularExpressionValidator ID="reqTelphoneNumber" runat="server" ControlToValidate="txtTelephoneNumber"
@@ -662,8 +578,8 @@
                                     <td>
                                         <asp:Label ID="lblDivision" runat="server" Text="Division"></asp:Label>
                                     </td>
-                                    <td class="info-field">
-                                        <asp:DropDownList ID="ddlDivision" runat="server">
+                                    <td>
+                                        <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width158px">
                                         </asp:DropDownList>
                                     </td>
                                     <td>
@@ -674,10 +590,10 @@
                                     <td>
                                         <asp:Label ID="lblEmployeeNumber" runat="server" Text="PersonID"></asp:Label>
                                     </td>
-                                    <td class="info-field">
+                                    <td>
                                         <asp:TextBox ID="txtEmployeeNumber" runat="server" MaxLength="12" onchange="setDirty();"
                                             onfocus="if (!this.readOnly &amp;&amp; !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) this.blur();"
-                                            CssClass="info-field"></asp:TextBox>
+                                            CssClass="Width152px"></asp:TextBox>
                                         <asp:HiddenField ID="hdnPersonId" runat="server" />
                                         <asp:HiddenField ID="hdnIsDefaultManager" runat="server" />
                                     </td>
@@ -693,7 +609,7 @@
                                     <td>
                                         Practice Areas Owned
                                     </td>
-                                    <td class="info-field">
+                                    <td class="Width152px">
                                         <asp:Repeater ID="repPracticesOwned" runat="server">
                                             <HeaderTemplate>
                                                 <ul class="practices">
@@ -746,74 +662,67 @@
             <table class="WholeWidth">
                 <tr>
                     <td class="PersonMultiView">
-                        <asp:Table ID="tblPersonViewSwitch" runat="server" CssClass="CustomTabStyle">
+                        <asp:Table ID="tblPersonViewSwitch" runat="server" CssClass="CommonCustomTabStyle PersonDetailPage_CustomTabStyle">
                             <asp:TableRow ID="rowSwitcher" runat="server">
                                 <asp:TableCell ID="cellCompensation" runat="server">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnCompensation" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Compensation"
-                                            CausesValidation="false" Style="width: 83px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
+                                            CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellRecruiting" runat="server">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnViewRecruiting" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recruiter"
-                                            CausesValidation="false" Style="width: 58px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                            CausesValidation="false" CssClass="width58Px" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellCommissions" runat="server">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnCommissions" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Commissions"
-                                            CausesValidation="false" Style="width: 80px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellRates" runat="server" Visible="false">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnRates" runat="server" Text="Overhead and Margin" CausesValidation="false"
-                                            Style="display: inline-block; vertical-align: top; text-align: center;" OnCommand="btnView_Command"
-                                            CommandArgument="3"></asp:LinkButton></span> </span></span> </span></asp:TableCell>
+                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton>
+                                    </span>
+                                </asp:TableCell>
                                 <asp:TableCell ID="cellWhatIf" runat="server">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnWhatIf" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; What-If?"
-                                            CausesValidation="false" Style="width: 50px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="4" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton></span>
+                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="4"
+                                            OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjects" runat="server">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnProjects" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Projects"
-                                            CausesValidation="false" Style="width: 50px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
+                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellOpportunities" runat="server">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnOppportunities" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Opportunities"
-                                            CausesValidation="false" Style="width: 80px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
+                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellPermissions" runat="server">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnPermissions" runat="server" Text="Project/Opportunity Permissions"
-                                            Style="width: 120px; display: inline-block; vertical-align: top; text-align: center;"
-                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
+                                            CssClass="Width120Px" CausesValidation="false" OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellSecurity" runat="server" CssClass="SelectedSwitch">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnSecurity" runat="server" Text="Application Security" CausesValidation="false"
-                                            Style="width: 80px; display: inline-block; vertical-align: top; text-align: center;"
-                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
+                                            CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellActivityLog" runat="server" Visible="false">
-                                    <span class="bg" style="padding-bottom: 31px;"><span>
+                                    <span class="bg">
                                         <asp:LinkButton ID="btnActivityLog" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History"
-                                            CausesValidation="false" Style="width: 45px; display: inline-block; vertical-align: top;
-                                            text-align: center;" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton></span>
+                                            CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -821,9 +730,9 @@
                         <asp:MultiView ID="mvPerson" runat="server" ActiveViewIndex="8">
                             <asp:View ID="vwCompensation" runat="server">
                                 <asp:Panel ID="pnlCompensation" runat="server" CssClass="tab-pane">
-                                    <div class="filters" style="margin-top: 5px; margin-bottom: 10px;">
+                                    <div class="filters Margin-Top5Px Margin-Bottom10Px">
                                         <div class="buttons-block">
-                                            <span style="color: gray;">Click on Start Date column in the grid to edit compensation
+                                            <span class="colorGray">Click on Start Date column in the grid to edit compensation
                                                 history item.</span>
                                             <asp:ShadowedTextButton ID="btnAddCompensation" runat="server" Text="Add Compensation"
                                                 OnClick="btnAddCompensation_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;" />
@@ -836,35 +745,28 @@
                                     </div>
                                     <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
                                         OnRowDataBound="gvCompensationHistory_OnRowDataBound" EmptyDataText="No compensation history for this person."
-                                        CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White" ShowFooter="false">
-                                        <AlternatingRowStyle BackColor="#F9FAFF" />
+                                        CssClass="CompPerfTable CompensationHistory" ShowFooter="false">
+                                        <AlternatingRowStyle CssClass="alterrow" />
                                         <Columns>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemStyle Width="2%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
-                                                    Wrap="false" />
-                                                <ItemTemplate>
-                                                    <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
-                                                        ImageUrl="~/Images/copy.png" />
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                </FooterTemplate>
-                                                <FooterStyle Width="2%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
-                                                    Wrap="false" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         &nbsp;
                                                     </div>
                                                 </HeaderTemplate>
-                                                <ItemStyle Width="4%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
-                                                    Wrap="false" />
+                                                <ItemStyle CssClass="Width2Percent" />
+                                                <ItemTemplate>
+                                                    <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
+                                                        ImageUrl="~/Images/copy.png" />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        &nbsp;
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemStyle CssClass="Width2Percent" />
                                                 <ItemTemplate>
                                                     <asp:ImageButton ID="imgEditCompensation" ToolTip="Edit Compensation" runat="server"
                                                         OnClick="imgEditCompensation_OnClick" ImageUrl="~/Images/icon-edit.png" />
@@ -882,10 +784,8 @@
                                                     <asp:ImageButton ID="imgCancel" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
                                                         OnClick="imgCancelFooter_OnClick" />
                                                 </FooterTemplate>
-                                                <FooterStyle Width="4%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px"
-                                                    Wrap="false" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Start</div>
@@ -895,10 +795,10 @@
                                                         CommandArgument='<%# Eval("StartDate") %>' OnCommand="btnStartDate_Command" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
-                                                    <span style="float: left; width: 85%;">
+                                                    <span class="fl-left Width85Percent">
                                                         <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%; vertical-align: middle">
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
                                                             ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -911,10 +811,10 @@
                                                     </span>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
-                                                    <span style="float: left; width: 85%;">
+                                                    <span class="fl-left Width85Percent">
                                                         <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%; vertical-align: middle">
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
                                                             ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -926,10 +826,9 @@
                                                             Type="Date"></asp:CompareValidator>
                                                     </span>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width11Percent" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         End</div>
@@ -937,10 +836,10 @@
                                                 <ItemTemplate>
                                                     <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label></ItemTemplate>
                                                 <EditItemTemplate>
-                                                    <span style="float: left; width: 85%;">
+                                                    <span class="fl-left Width85Percent">
                                                         <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%; vertical-align: middle">
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
                                                             ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
@@ -953,10 +852,10 @@
                                                     </span>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
-                                                    <span style="float: left; width: 85%;">
+                                                    <span class="fl-left Width85Percent">
                                                         <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
                                                             TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span style="width: 15%; vertical-align: middle">
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
                                                             ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
@@ -968,8 +867,7 @@
                                                             Type="Date"></asp:CompareValidator>
                                                     </span>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="11%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width11Percent" />
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
@@ -980,7 +878,7 @@
                                                     <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("PracticeName")%>'></asp:Label></ItemTemplate>
                                                 <EditItemTemplate>
                                                     <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
-                                                        Width="85%">
+                                                        CssClass="Width85Percent">
                                                     </asp:DropDownList>
                                                     <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
                                                         ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
@@ -989,15 +887,14 @@
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
                                                     <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
-                                                        Width="85%">
+                                                        CssClass="Width85Percent">
                                                     </asp:DropDownList>
                                                     <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
                                                         ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
                                                         OnServerValidate="custValPractice_OnServerValidate">
                                                     </asp:CustomValidator>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width14Percent" />
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
                                                 <HeaderTemplate>
@@ -1009,7 +906,7 @@
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
                                                     <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlSeniorityName" runat="server"
-                                                        Width="80%">
+                                                        CssClass="Width80Percent">
                                                     </asp:DropDownList>
                                                     <asp:CustomValidator ID="custValSeniority" runat="server" ToolTip="Please select Seniority"
                                                         ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Seniority"
@@ -1018,26 +915,24 @@
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
                                                     <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlSeniorityName" runat="server"
-                                                        Width="80%">
+                                                        CssClass="Width80Percent">
                                                     </asp:DropDownList>
                                                     <asp:CustomValidator ID="custValSeniority" runat="server" ToolTip="Please select Seniority"
                                                         ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Seniority"
                                                         OnServerValidate="custValSeniority_OnServerValidate">
                                                     </asp:CustomValidator>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="14%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width14Percent" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Basis</div>
                                                 </HeaderTemplate>
                                                 <ItemTemplate>
                                                     <asp:Label ID="lblBasis" runat="server" Text='<%# Eval("TimescaleName") %>'></asp:Label></ItemTemplate>
-                                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                                 <EditItemTemplate>
-                                                    <asp:DropDownList ID="ddlBasis" runat="server" Width="90%" onchange="return EnableDisableVacationDays(this);">
+                                                    <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" onchange="return EnableDisableVacationDays(this);">
                                                         <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
                                                         <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
                                                         <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
@@ -1045,17 +940,16 @@
                                                     </asp:DropDownList>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
-                                                    <asp:DropDownList ID="ddlBasis" runat="server" Width="90%" onchange="return EnableDisableVacationDays(this);">
+                                                    <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" onchange="return EnableDisableVacationDays(this);">
                                                         <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
                                                         <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
                                                         <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
                                                         <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
                                                     </asp:DropDownList>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="8%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="8%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width8Percent" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Amount</div>
@@ -1064,10 +958,9 @@
                                                     <asp:Label ID="lbAmount" runat="server" Text='<%# Bind("Amount") %>'></asp:Label>
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
-                                                    <span style="width: 85%; float: left;">
-                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" Width="80%"
-                                                            Style="text-align: right;"></asp:TextBox>
-                                                    </span><span style="width: 15%">
+                                                    <span class="fl-left Width85Percent">
+                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" CssClass="Width80Percent textRight"></asp:TextBox>
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
                                                             Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -1079,10 +972,9 @@
                                                     </span>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
-                                                    <span style="width: 85%; float: left;">
-                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" Width="80%"
-                                                            Style="text-align: right;"></asp:TextBox>
-                                                    </span><span style="width: 15%; vertical-align: middle">
+                                                    <span class="fl-left Width85Percent">
+                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" CssClass="Width80Percent textRight"></asp:TextBox>
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
                                                             Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -1093,10 +985,9 @@
                                                             Display="Dynamic"></asp:CompareValidator>
                                                     </span>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width6Percent" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Vacation</div>
@@ -1105,10 +996,10 @@
                                                     <asp:Label ID="lbVacationDays" runat="server" Text='<%# Bind("VacationDays") %>'></asp:Label>
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
-                                                    <span style="width: 85%; float: left;">
+                                                    <span class="fl-left Width85Percent">
                                                         <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
-                                                            Width="80%" Text="0"></asp:TextBox>
-                                                    </span><span style="width: 15%; vertical-align: middle">
+                                                            CssClass="Width80Percent" Text="0"></asp:TextBox>
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
                                                             ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
@@ -1119,10 +1010,10 @@
                                                     </span>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
-                                                    <span style="width: 85%; float: left;">
+                                                    <span class="fl-left Width85Percent">
                                                         <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
-                                                            Width="80%" Text="0"></asp:TextBox>
-                                                    </span><span style="width: 15%; vertical-align: middle">
+                                                            CssClass="Width80Percent" Text="0"></asp:TextBox>
+                                                    </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
                                                             ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
@@ -1132,10 +1023,9 @@
                                                             ErrorMessage="Vacation days is required" ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
                                                     </span>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="6%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width6Percent" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                         Sales Commission %</div>
@@ -1146,22 +1036,21 @@
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
                                                     <asp:TextBox ID="txtSalesCommission" ValidationGroup="CompensationUpdate" runat="server"
-                                                        Width="80%"></asp:TextBox>
+                                                        CssClass="Width80Percent"></asp:TextBox>
                                                     <asp:CustomValidator ID="custValSalesCommission" runat="server" Display="Dynamic"
                                                         ValidationGroup="CompensationUpdate" Text="*" OnServerValidate="custValSalesCommission_OnServerValidate">
                                                     </asp:CustomValidator>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
                                                     <asp:TextBox ID="txtSalesCommission" ValidationGroup="CompensationUpdate" runat="server"
-                                                        Width="80%"></asp:TextBox>
+                                                        CssClass="Width80Percent"></asp:TextBox>
                                                     <asp:CustomValidator ID="custValSalesCommission" runat="server" Display="Dynamic"
                                                         ValidationGroup="CompensationUpdate" Text="*" OnServerValidate="custValSalesCommission_OnServerValidate">
                                                     </asp:CustomValidator>
                                                 </FooterTemplate>
-                                                <ItemStyle Width="5%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="5%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width5Percent" />
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                            <asp:TemplateField>
                                                 <HeaderTemplate>
                                                     <div class="ie-bg">
                                                     </div>
@@ -1171,16 +1060,15 @@
                                                         EndDate='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'
                                                         StartDate='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>' ImageUrl="~/Images/cross_icon.png"
                                                         OnClick="imgCompensationDelete_OnClick" />
-                                                    <ajaxToolkit:ConfirmButtonExtender ID="ConfirmButtonExtender1" ConfirmText="Are you sure you want to delete this Compensation?"
+                                                    <AjaxControlToolkit:ConfirmButtonExtender ID="ConfirmButtonExtender1" ConfirmText="Are you sure you want to delete this Compensation?"
                                                         runat="server" TargetControlID="imgCompensationDelete">
-                                                    </ajaxToolkit:ConfirmButtonExtender>
+                                                    </AjaxControlToolkit:ConfirmButtonExtender>
                                                     <asp:CustomValidator ID="cvDeleteCompensation" runat="server" Text="*" ErrorMessage="The Person is active during this compensation period."
                                                         ToolTip="The Person is active during this compensation period." ValidationGroup="CompensationDelete"></asp:CustomValidator>
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
                                                 </EditItemTemplate>
-                                                <ItemStyle Width="3%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
-                                                <FooterStyle Width="3%" HorizontalAlign="Center" VerticalAlign="Middle" Height="20px" />
+                                                <ItemStyle CssClass="Width3Percent" />
                                             </asp:TemplateField>
                                         </Columns>
                                     </asp:GridView>
@@ -1196,7 +1084,7 @@
                                 <asp:Panel ID="pnlCommission" runat="server" CssClass="tab-pane WholeWidth">
                                     <table>
                                         <tr>
-                                            <td nowrap="nowrap">
+                                            <td class="nowrap">
                                                 <asp:CheckBox ID="chbSalesCommissions" runat="server" Text="Person receives sales commission"
                                                     AutoPostBack="True" OnCheckedChanged="chbSalesCommissions_CheckedChanged" />
                                             </td>
@@ -1204,7 +1092,7 @@
                                                 &nbsp;
                                             </td>
                                             <td>
-                                                <asp:TextBox ID="txtSalesCommissionsGross" runat="server" Width="60px" Enabled="False"
+                                                <asp:TextBox ID="txtSalesCommissionsGross" runat="server" CssClass="Width60Px" Enabled="False"
                                                     onchange="setDirty();"></asp:TextBox>
                                             </td>
                                             <td>
@@ -1295,7 +1183,7 @@
                                                 &nbsp;
                                             </td>
                                             <td>
-                                                <asp:TextBox ID="txtManagementCommission" runat="server" Width="60px" Enabled="False"
+                                                <asp:TextBox ID="txtManagementCommission" runat="server" CssClass="Width60Px" Enabled="False"
                                                     onchange="setDirty();"></asp:TextBox>
                                             </td>
                                             <td>
@@ -1331,7 +1219,7 @@
                             </asp:View>
                             <asp:View ID="vwWhatIf" runat="server">
                                 <asp:Panel ID="pnlWhatIf" runat="server" CssClass="tab-pane WholeWidth">
-                                    <div style="background-color: none">
+                                    <div class="bgColorNone">
                                         <uc1:WhatIf ID="whatIf" runat="server" DisplayTargetMargin="True" TargetMarginReadOnly="True"
                                             DisplayDefinedTermsAndCalcs="true" />
                                     </div>
@@ -1358,7 +1246,7 @@
                                 <asp:Panel ID="Panel6" runat="server" CssClass="tab-pane WholeWidth">
                                     <table cellpadding="3">
                                         <tr>
-                                            <td class="style2">
+                                            <td class="Width60Px">
                                                 <strong>
                                                     <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
                                                 <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
@@ -1385,9 +1273,9 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="style2">
+                                            <td class="Width60Px">
                                                 <asp:CheckBoxList ID="chblRoles" runat="server" AutoPostBack="true" OnSelectedIndexChanged="chblRoles_SelectedIndexChanged"
-                                                    Width="170px">
+                                                    CssClass="Width170Px">
                                                 </asp:CheckBoxList>
                                             </td>
                                             <td>
@@ -1403,7 +1291,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="style2">
+                                            <td class="Width60Px">
                                                 <asp:Button ID="btnResetPassword" runat="server" OnClick="btnResetPassword_Click"
                                                     OnClientClick="return confirm('Do you really want to reset user\'s password?');"
                                                     Text="Reset Password" />
@@ -1426,11 +1314,10 @@
                                         </tr>
                                         <tr>
                                             <td colspan="4">
-                                                <div style="width: 350px; overflow-x: scroll; overflow-y: auto; height: 350px; margin-top: 10px;
-                                                    margin-bottom: 10px">
+                                                <div class="DivPermissionDiffenrece">
                                                     <asp:GridView ID="gvPermissionDiffenrece" runat="server" AutoGenerateColumns="false"
-                                                        CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White">
-                                                        <AlternatingRowStyle BackColor="#F9FAFF" />
+                                                        CssClass="CompPerfTable PermissionDiffenrece">
+                                                        <AlternatingRowStyle CssClass="alterrow" />
                                                         <Columns>
                                                             <asp:TemplateField>
                                                                 <HeaderTemplate>
@@ -1478,7 +1365,7 @@
                             </asp:View>
                             <asp:View ID="vwActivityLog" runat="server">
                                 <asp:Panel ID="pnlLog" runat="server" CssClass="tab-pane WholeWidth">
-                                    <uc:Notes ID="nPerson" runat="server" Target="Person" GridVisible="false" OnNoteAdded="nPerson_OnNoteAdded" />
+                                    <uc:Notes ID="nPerson" runat="server" Target="Person" OnNoteAdded="nPerson_OnNoteAdded" />
                                     <uc:ActivityLog runat="server" ID="activityLog" DisplayDropDownValue="TargetPerson"
                                         DateFilterValue="Year" ShowDisplayDropDown="false" ShowProjectDropDown="false"
                                         ShowPersonDropDown="false" />
@@ -1520,13 +1407,13 @@
                                 document.getElementById('<%= btnSave.ClientID %>').disabled = true;
                             }
                         </script>
-                        <ajaxToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
+                        <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
                             <Animations>
 					            <OnClick>
 					                <ScriptAction Script="disableSaveButton();" />
 					            </OnClick>
                             </Animations>
-                        </ajaxToolkit:AnimationExtender>
+                        </AjaxControlToolkit:AnimationExtender>
                     </td>
                 </tr>
             </table>
@@ -1534,51 +1421,46 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeViewTerminationDateErrors" runat="server"
                 TargetControlID="hdnField" CancelControlID="btnClose" BackgroundCssClass="modalBackground"
                 PopupControlID="pnlTerminationDateErrors" DropShadow="false" />
-            <asp:Panel ID="pnlTerminationDateErrors" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClassError" Style="display: none;" BorderWidth="2px">
-                <table width="100%">
-                    <tr style="height: 20px;">
-                        <th align="center" style="text-align: center; background-color: Gray; width: 90%;
-                            font-weight: bold; font-size: 14px;">
+            <asp:Panel ID="pnlTerminationDateErrors" runat="server" CssClass="popUp PopUpPersonDetailPage"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
                             Error
-                        </th>
-                        <th align="right" style="padding-right: 3px; background-color: Gray; font-size: 14px;
-                            width: 10%">
-                            <asp:Button ID="btnClose" ToolTip="Close" runat="server" CssClass="mini-report-close"
+                            <asp:Button ID="btnClose" ToolTip="Close" runat="server" CssClass="mini-report-closeNew"
                                 Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center" style="padding: 6px 6px 2px 6px; text-align: left;">
-                            <div id="dvTerminationDateErrors" runat="server" visible="false" style="padding: 0px 0px 5px 0px;
-                                max-height: 200px; overflow-y: auto; color: Red;">
-                                <asp:Label ID="lblTerminationDateError" runat="server" Style="padding-top: 7px;">
+                        <td class="Padding6">
+                            <div id="dvTerminationDateErrors" runat="server" visible="false" class="errorDivPersonDetailPage">
+                                <asp:Label ID="lblTerminationDateError" runat="server" CssClass="PaddingTop7">
                                 </asp:Label><br />
-                                <asp:Label ID="lblTimeEntriesExist" runat="server" Style="padding-top: 7px;">
+                                <asp:Label ID="lblTimeEntriesExist" runat="server" CssClass="PaddingTop7">
                                 </asp:Label>
-                                <div id="dvProjectMilestomesExist" style="padding-top: 5px;" runat="server">
+                                <div id="dvProjectMilestomesExist" class="PaddingTop5" runat="server">
                                     <asp:Label ID="lblProjectMilestomesExist" runat="server">
                                     </asp:Label><br />
-                                    <asp:DataList ID="dtlProjectMilestones" runat="server" Style="white-space: normal;">
+                                    <asp:DataList ID="dtlProjectMilestones" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
                                              "-" + ((DataTransferObjects.Milestone)Container.DataItem).Description%>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                                <div id="divOwnerProjectsExist" style="padding-top: 10px;" runat="server">
+                                <div id="divOwnerProjectsExist" class="PaddingTop10" runat="server">
                                     <asp:Label ID="lblOwnerProjectsExist" runat="server" Text="Person is designated as the Owner for the following projects:">
                                     </asp:Label><br />
-                                    <asp:DataList ID="dtlOwnerProjects" runat="server" Style="white-space: normal;">
+                                    <asp:DataList ID="dtlOwnerProjects" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Project)Container.DataItem).Name %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                                <div id="divOwnerOpportunitiesExist" style="padding-top: 10px;" runat="server">
+                                <div id="divOwnerOpportunitiesExist" class="PaddingTop10" runat="server">
                                     <asp:Label ID="lblOwnerOpportunities" runat="server" Text="Person is designated as the Owner for the following Opportunities:">
                                     </asp:Label><br />
-                                    <asp:DataList ID="dtlOwnerOpportunities" runat="server" Style="white-space: normal;">
+                                    <asp:DataList ID="dtlOwnerOpportunities" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Opportunity)Container.DataItem).Name %>
                                         </ItemTemplate>
@@ -1588,27 +1470,27 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left" colspan="2" style="padding: 6px 0px 6px 6px;">
+                        <td class="Padding6">
                             Click OK to terminate this person and set an end date for all applicable projects.
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" colspan="2" style="padding: 6px 0px 6px 6px;">
-                            <table width="70%">
+                        <td align="center" class="Padding6">
+                            <table class="Width70Percent">
                                 <tr>
-                                    <td style="width: 50%; text-align: center;">
+                                    <td class="textCenter Width50Percent">
                                         <asp:ImageButton ID="imgPrinter" runat="server" ImageUrl="~/Images/printer.png" ToolTip="Print"
                                             OnClientClick="return printform();" />
                                         <asp:ImageButton ID="lnkSaveReport" runat="server" ImageUrl="~/Images/saveToDisk.png"
-                                            Style="margin-left: 10px;" OnClientClick="saveReport();" OnClick="lnkSaveReport_OnClick"
+                                            class="Margin-Left10Px" OnClientClick="saveReport();" OnClick="lnkSaveReport_OnClick"
                                             ToolTip="Save Report" /><asp:HiddenField ID="hdnSaveReportText" runat="server" />
                                     </td>
-                                    <td style="width: 50%; text-align: center;">
+                                    <td class="textCenter Width50Percent">
                                         <asp:Button ID="btnTerminationProcessOK" runat="server" Text="OK" OnClick="btnTerminationProcessOK_OnClick"
-                                            Width="60" />
+                                            CssClass="Width60Px" />
                                         &nbsp;
                                         <asp:Button ID="btnTerminationProcessCancel" runat="server" Text="Cancel" OnClick="btnTerminationProcessCancel_OnClick"
-                                            Width="60" />
+                                            CssClass="Width60Px" />
                                     </td>
                                 </tr>
                             </table>
@@ -1630,13 +1512,5 @@
             <asp:Parameter Name="endDate" Type="DateTime" />
         </SelectParameters>
     </asp:ObjectDataSource>
-</asp:Content>
-<asp:Content ID="Content1" runat="server" ContentPlaceHolderID="head">
-    <style type="text/css">
-        .style2
-        {
-            width: 60px;
-        }
-    </style>
 </asp:Content>
 
