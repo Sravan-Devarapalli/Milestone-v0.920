@@ -12,38 +12,38 @@
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <table class="WholeWidth">
     <tr>
-        <td align="right" style="padding: 10px; padding-right: 0px;">
+        <td class="Padding10 padRight0 textRight">
             <asp:Button ID="btnAddPerson" runat="server" Text="Add Resource" OnClick="btnAddPerson_Click"
                 ToolTip="Add Resource" />
         </td>
     </tr>
 </table>
 <asp:GridView ID="gvMilestonePersonEntries" runat="server" AutoGenerateColumns="False"
-    OnRowDataBound="gvMilestonePersonEntries_RowDataBound" CellPadding="0" CssClass="CompPerfTable WholeWidth"
+    OnRowDataBound="gvMilestonePersonEntries_RowDataBound" CssClass="CompPerfTable MileStoneDetailPageResourcesTab"
     EditRowStyle-Wrap="false" RowStyle-Wrap="false" HeaderStyle-Wrap="false" GridLines="None"
     BackColor="White">
-    <AlternatingRowStyle BackColor="#F9FAFF" Height="25px" />
-    <RowStyle BackColor="White" Height="25px" />
+    <AlternatingRowStyle CssClass="alterrow" />
+    <HeaderStyle CssClass="textCenter" />
     <Columns>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </HeaderTemplate>
-            <ItemStyle Width="2%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+            <ItemStyle CssClass="Width2Percent" />
             <ItemTemplate>
                 <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
                     ImageUrl="~/Images/copy.png" />
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </HeaderTemplate>
-            <ItemStyle Width="4%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+            <ItemStyle CssClass="Width4Percent" />
             <ItemTemplate>
                 <asp:ImageButton ID="imgMilestonePersonEntryEdit" ToolTip="Edit" runat="server" OnClick="imgMilestonePersonEntryEdit_OnClick"
                     ImageUrl="~/Images/icon-edit.png" />
@@ -53,36 +53,36 @@
                     Visible="false" ImageUrl="~/Images/no.png" OnClick="imgMilestonePersonEntryCancel_OnClick" />
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </HeaderTemplate>
-            <ItemStyle Width="2%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+            <ItemStyle CssClass="Width2Percent" />
             <ItemTemplate>
                 <asp:ImageButton ID="imgAdditionalAllocationOfResource" runat="server" OnClick="imgAdditionalAllocationOfResource_OnClick"
                     ToolTip="Extend" ImageUrl="~/Images/add_16.png" />
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     Person</div>
             </HeaderTemplate>
-            <ItemStyle Width="21%" Height="20px" />
+            <ItemStyle CssClass="Width21Percent textLeft WS-Normal" />
             <ItemTemplate>
                 <asp:HyperLink ID="lnkPersonName" runat="server" NavigateUrl='<%# GetMpeRedirectUrl((Eval("MilestonePersonId"))) %>'
                     PersonId='<%# Eval("ThisPerson.Id") %>' onclick="return checkDirtyWithRedirect(this.href);"
-                    Width="98%" Text='<%# HttpUtility.HtmlEncode(string.Format("{0}, {1}", Eval("ThisPerson.LastName"), Eval("ThisPerson.FirstName"))) %>' />
-                <table width="100%" id="tblPersonName" runat="server" visible="false">
+                    CssClass="Width98Percent" Text='<%# HttpUtility.HtmlEncode(string.Format("{0}, {1}", Eval("ThisPerson.LastName"), Eval("ThisPerson.FirstName"))) %>' />
+                <table class="WholeWidth" id="tblPersonName" runat="server" visible="false">
                     <tr>
-                        <td style="width: 85%;">
-                            <cc2:CustomDropDown ID="ddlPersonName" Width="98%" runat="server" />
+                        <td class="Width85Percent">
+                            <cc2:CustomDropDown ID="ddlPersonName" CssClass="Width98Percent" runat="server" />
                             <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("ThisPerson.Id") %>' />
                             <asp:HiddenField ID="hdnPersonIsStrawMan" runat="server" Value='<%# Eval("ThisPerson.IsStrawMan") %>' />
                         </td>
-                        <td style="width: 15%;">
+                        <td class="Width15Percent">
                             <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPersonName"
                                 ErrorMessage="" ToolTip="The Person Name is required." Display="Dynamic" Text="*"
                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup(Container) %>"></asp:RequiredFieldValidator>
@@ -99,33 +99,33 @@
                 </table>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     Role</div>
             </HeaderTemplate>
-            <ItemStyle Width="10%" Height="20px" Wrap="false" HorizontalAlign="Center" />
+            <ItemStyle CssClass="Width10Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblRole" runat="server" RoleId='<%# Eval("Role.Id") %>' Text='<%# Eval("Role.Name") %>'></asp:Label>
-                <asp:DropDownList ID="ddlRole" runat="server" Visible="false" Width="98%">
+                <asp:DropDownList ID="ddlRole" runat="server" Visible="false" CssClass="Width98Percent">
                 </asp:DropDownList>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     Start Date</div>
             </HeaderTemplate>
-            <ItemStyle Width="11%" Height="20px" HorizontalAlign="Center" Wrap="false" />
+            <ItemStyle CssClass="Width11Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
-                <table width="100%" id="tblStartDate" runat="server" visible="false">
+                <table class="WholeWidth" id="tblStartDate" runat="server" visible="false">
                     <tr>
-                        <td style="width: 85%;">
+                        <td class="Width85Percent">
                             <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="<%# GetValidationGroup(Container) %>"
                                 OnClientChange="return true;" TextBoxWidth="95%" AutoPostBack="false" DateValue='<%# Eval("StartDate") %>' />
                         </td>
-                        <td style="width: 15%;">
+                        <td class="Width15Percent">
                             <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStart"
                                 ErrorMessage="" ToolTip="The Person Start Date is required." Text="*" EnableClientScript="false"
                                 SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup(Container) %>"></asp:RequiredFieldValidator>
@@ -152,21 +152,21 @@
                 </table>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     End Date</div>
             </HeaderTemplate>
-            <ItemStyle Width="11%" Height="20px" Wrap="false" HorizontalAlign="Center" />
+            <ItemStyle CssClass="Width11Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
-                <table width="100%" id="tblEndDate" runat="server" visible="false">
+                <table class="WholeWidth" id="tblEndDate" runat="server" visible="false">
                     <tr>
-                        <td style="width: 85%;">
+                        <td class="Width85Percent">
                             <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="<%# GetValidationGroup(Container) %>"
                                 OnClientChange="return true;" TextBoxWidth="95%" AutoPostBack="false" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
                         </td>
-                        <td style="width: 15%;">
+                        <td class="Width15Percent">
                             <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
                                 ErrorMessage="" ToolTip="The Person End Date is required." Text="*" EnableClientScript="false"
                                 SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup(Container) %>"></asp:RequiredFieldValidator>
@@ -188,20 +188,20 @@
                 </table>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     Hours per day</div>
             </HeaderTemplate>
-            <ItemStyle Width="11%" Height="20px" HorizontalAlign="Center" />
+            <ItemStyle CssClass="Width11Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblHoursPerDay" runat="server" Text='<%# Eval("HoursPerDay") %>'></asp:Label>
-                <table width="100%" id="tblHoursPerDay" runat="server" visible="false">
+                <table class="WholeWidth" id="tblHoursPerDay" runat="server" visible="false">
                     <tr>
-                        <td style="width: 85%;">
-                            <asp:TextBox ID="txtHoursPerDay" runat="server" Width="90%" Text='<%# Eval("HoursPerDay") %>'></asp:TextBox>
+                        <td class="Width85Percent">
+                            <asp:TextBox ID="txtHoursPerDay" runat="server" CssClass="Width90Percent" Text='<%# Eval("HoursPerDay") %>'></asp:TextBox>
                         </td>
-                        <td style="width: 15%;">
+                        <td class="Width15Percent">
                             <asp:CompareValidator ID="compHoursPerDay" runat="server" ControlToValidate="txtHoursPerDay"
                                 ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Hours Per Day."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -219,21 +219,21 @@
                 </table>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     Hourly Rate</div>
             </HeaderTemplate>
-            <ItemStyle Width="9%" Wrap="false" Height="20px" HorizontalAlign="Center" />
+            <ItemStyle CssClass="Width9Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblAmount" runat="server" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount") : string.Empty %>'></asp:Label>
-                <table width="100%" id="tblAmount" runat="server" visible="false">
+                <table class="WholeWidth" id="tblAmount" runat="server" visible="false">
                     <tr>
-                        <td style="width: 85%;">
+                        <td class="Width85Percent">
                             <asp:Label ID="lblAmountInsert" runat="server" Text="$"></asp:Label>
-                            <asp:TextBox ID="txtAmount" runat="server" Width="80%" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
+                            <asp:TextBox ID="txtAmount" runat="server" CssClass="Width80Percent" Text='<%# Eval("HourlyAmount") != null ? Eval("HourlyAmount.Value") : string.Empty %>'></asp:TextBox>
                         </td>
-                        <td style="width: 15%;">
+                        <td class="Width15Percent">
                             <asp:CustomValidator ID="reqHourlyRevenue" runat="server" ControlToValidate="txtAmount"
                                 ValidateEmptyText="true" ErrorMessage="" ToolTip="The Amount is required." Text="*"
                                 SetFocusOnError="true" EnableClientScript="false" Display="Dynamic" ValidationGroup="<%# GetValidationGroup(Container) %>"
@@ -250,33 +250,33 @@
                 </table>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     Margin %</div>
             </HeaderTemplate>
-            <ItemStyle Width="7%" Height="20px" HorizontalAlign="Right" />
+            <ItemStyle CssClass="Width7Percent textRight" />
             <ItemTemplate>
                 <asp:Label ID="lblTargetMargin" runat="server" Text='<%# string.Format(Constants.Formatting.PercentageFormat, Eval("ComputedFinancials.TargetMargin") ?? 0) %>'></asp:Label>
                 <%-- Empty in edit mode --%>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg no-wrap">
                     Total Hours</div>
             </HeaderTemplate>
-            <ItemStyle Width="9%" Height="20px" HorizontalAlign="Center" />
+            <ItemStyle CssClass="Width9Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
                 <asp:Label ID="lblVacationIncludedAsterix" runat="server" Text="*" ForeColor="Red"
                     Visible="false" />
-                <table width="100%" id="tblHoursInPeriod" runat="server" visible="false">
+                <table class="WholeWidth" id="tblHoursInPeriod" runat="server" visible="false">
                     <tr>
-                        <td style="width: 85%;">
-                            <asp:TextBox ID="txtHoursInPeriod" Width="90%" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation") %>'></asp:TextBox>
+                        <td class="Width85Percent">
+                            <asp:TextBox ID="txtHoursInPeriod" CssClass="Width90Percent" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation") %>'></asp:TextBox>
                         </td>
-                        <td style="width: 15%;">
+                        <td class="Width15Percent">
                             <asp:CompareValidator ID="compHoursInPeriod" runat="server" ControlToValidate="txtHoursInPeriod"
                                 ErrorMessage="" ToolTip="A number with 2 decimal digits is allowed for the Hours In Period."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
@@ -297,13 +297,13 @@
                 </table>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+        <asp:TemplateField>
             <HeaderTemplate>
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </HeaderTemplate>
-            <ItemStyle Width="3%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+            <ItemStyle CssClass="Width3Percent" />
             <ItemTemplate>
                 <asp:ImageButton ID="imgMilestonePersonDelete" ToolTip="Delete" runat="server" OnClientClick="return imgMilestonePersonDelete_OnClientClick(this);"
                     MilestonePersonEntryId='<%# Eval("Id") %>' IsOriginalResource="" ImageUrl="~/Images/cross_icon.png" />
@@ -317,28 +317,28 @@
     TargetControlID="hdMpePopupDeleteMileStonePersons" CancelControlID="btnCancel"
     BehaviorID="mpeDeleteMileStonePersons" BackgroundCssClass="modalBackground" PopupControlID="pnlDeleteMileStonePersons"
     DropShadow="false" />
-<asp:Panel ID="pnlDeleteMileStonePersons" runat="server" BackColor="White" BorderColor="Black"
-    CssClass="ConfirmBoxClass" Style="display: none; min-width:300px !important;" BorderWidth="2px">
-    <table width="100%">
-        <tr>
-            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
-                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
-                    Style="float: right;" OnClientClick="return btnClose_OnClientClick();" Text="X">
-                </asp:Button>
+<asp:Panel ID="pnlDeleteMileStonePersons" runat="server" CssClass="popUp" Style="display: none;
+    min-width: 300px !important;">
+    <table class="WholeWidth">
+        <tr class="PopUpHeader">
+            <th>
+                Attention!
+                <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel Changes"
+                    OnClientClick="return btnClose_OnClientClick();" Text="X"></asp:Button>
             </th>
         </tr>
         <tr>
-            <td style="padding: 10px;" >
+            <td class="Padding10 padBottom15">
                 <table>
                     <tr id="trDeleteOriginalEntry">
-                        <td style="text-align: left;">
-                            Clicking "Delete" will result in deleting only this entry.<br /><br />
+                        <td>
+                            Clicking "Delete" will result in deleting only this entry.<br />
+                            <br />
                             Clicking "Delete All" will result in deleting all the extensions for this entry.
                         </td>
                     </tr>
                     <tr id="trDeleteExtendedEntry">
-                        <td style="padding-left : 30px;">
+                        <td class="padLeft30">
                             Are you sure you want to delete this Entry?
                         </td>
                     </tr>
@@ -347,83 +347,75 @@
             </td>
         </tr>
         <tr>
-            <td>
-                <br />
-            </td>
-        </tr>
-        <tr>
-           <td align="center" style="padding: 6px 6px 15px 6px;">
-                <table >
+            <td align="center" class="Padding6 padBottom15">
+                <table>
                     <tr>
-                        <td style="padding-right:5px;">
+                        <td class="padRight5">
                             <asp:Button ID="btnDeletePersonEntry" Text="Delete" runat="server" OnClick="btnDeletePersonEntry_OnClick" />
                         </td>
-                        <td  id="tdbtnDeleteAllPersonEntries">
+                        <td id="tdbtnDeleteAllPersonEntries">
                             <asp:Button ID="btnDeleteAllPersonEntries" Text="Delete All" runat="server" OnClick="btnDeleteAllPersonEntries_OnClick" />
                         </td>
-                        <td style="padding-left:5px;">
+                        <td class="padLeft5">
                             <asp:Button ID="btnCancel" Text="Cancel" runat="server" OnClientClick="return btnClose_OnClientClick();" />
                         </td>
                     </tr>
                 </table>
             </td>
-
         </tr>
     </table>
 </asp:Panel>
-<asp:Panel ID="pnlInsertMilestonePerson" runat="server" Wrap="False">
-    <table width="100%" class="CompPerfTable" cellspacing="0" border="0" style="background-color: White;
-        border-collapse: collapse;">
-        <tr id="thInsertMilestonePerson" runat="server" style="white-space: nowrap;" visible="false">
-            <th align="center" style="height: 20px; width: 2%; white-space: nowrap;" scope="col">
+<asp:Panel ID="pnlInsertMilestonePerson" runat="server">
+    <table class="CompPerfTable MileStoneDetailPageResourcesTab">
+        <tr id="thInsertMilestonePerson" runat="server" visible="false">
+            <th class="Width2Percent">
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </th>
-            <th align="center" style="height: 20px; width: 4%; white-space: nowrap;" scope="col">
+            <th class="Width4Percent">
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </th>
-            <th align="center" style="height: 20px; width: 2%; white-space: nowrap;" scope="col">
+            <th class="Width2Percent">
                 <div class="ie-bg">
                     &nbsp;
                 </div>
             </th>
-            <th align="center" style="height: 20px; width: 21%;" scope="col">
+            <th class="Width21Percent">
                 <div class="ie-bg no-wrap">
                     Person</div>
             </th>
-            <th align="center" style="height: 20px; width: 10%;" scope="col">
+            <th class="Width10Percent">
                 <div class="ie-bg no-wrap">
                     Role</div>
             </th>
-            <th align="center" style="height: 20px; width: 11%;" scope="col">
+            <th class="Width11Percent">
                 <div class="ie-bg no-wrap">
                     Start Date</div>
             </th>
-            <th align="center" style="height: 20px; width: 11%;" scope="col">
+            <th class="Width11Percent">
                 <div class="ie-bg no-wrap">
                     End Date</div>
             </th>
-            <th align="center" style="width: 11%;" scope="col">
+            <th class="Width11Percent">
                 <div class="ie-bg no-wrap">
                     Hours per day</div>
             </th>
-            <th id="thHourlyRate" runat="server" align="center" style="width: 9%; white-space: nowrap;"
-                scope="col">
+            <th id="thHourlyRate" runat="server" class="Width9Percent">
                 <div class="ie-bg no-wrap">
                     Hourly Rate</div>
             </th>
-            <th align="center" style="width: 7%;" scope="col">
+            <th class="Width7Percent">
                 <div class="ie-bg no-wrap">
                     Margin %</div>
             </th>
-            <th align="center" style="width: 9%;" scope="col">
+            <th class="Width9Percent">
                 <div class="ie-bg no-wrap">
                     Total Hours</div>
             </th>
-            <th align="center" style="height: 20px; width: 3%; white-space: nowrap;" scope="col">
+            <th class="Width3Percent">
                 <div class="ie-bg">
                     &nbsp;
                 </div>
@@ -450,7 +442,7 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2" style="padding-bottom: 3px">
+        <td colspan="2" class="PaddingBottom3">
             <asp:Label ID="lblVacationIncludedText" runat="server" Text="*" ForeColor="Red" Visible="false"
                 EnableViewState="false" />
             <uc:Label ID="lblResultMessage" runat="server" ErrorColor="Red" InfoColor="Green" />
