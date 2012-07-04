@@ -2,7 +2,7 @@
     Inherits="PraticeManagement.Controls.RecruiterInfo" %>
 <table>
     <tr>
-        <td width="100px" style="padding-left: 15px">
+        <td class="Width100Px padLeft15">
             Recruiter
         </td>
         <td>
