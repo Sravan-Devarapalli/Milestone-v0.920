@@ -46,8 +46,7 @@
     }
 
 </script>
-<asp:Panel ID="oppNameToolTipHolder" Style="display: none; position: absolute; z-index: 2000;"
-    runat="server" CssClass="ToolTip WordWrap">
+<asp:Panel ID="oppNameToolTipHolder" Style="display: none;" runat="server" CssClass="ToolTip WordWrap OpportunityToolTip">
     <table>
         <tr class="top">
             <td class="lt">
@@ -85,17 +84,17 @@
         <LayoutTemplate>
             <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
                 <tr runat="server" id="lvHeader" class="CompPerfHeader">
-                    <td width="1%">
+                    <td class="Width1Percent">
                         <div class="ie-bg no-wrap">
                         </div>
                     </td>
-                    <td width="4%">
+                    <td class="Width4Percent">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnNumberSort" runat="server" Text="Opp. #" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Number" />
                         </div>
                     </td>
-                    <td width="4%">
+                    <td class="Width4Percent">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Priority" />
@@ -103,7 +102,7 @@
                             <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport" runat="server">
                                 <table>
                                     <tr>
-                                        <th align="right">
+                                        <th class="textRight">
                                             <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
                                                 Text="x" />
                                         </th>
@@ -112,9 +111,8 @@
                                         <td>
                                             <asp:ListView ID="lvOpportunityPriorities" runat="server">
                                                 <LayoutTemplate>
-                                                    <div style="max-height: 150px; overflow-y: auto; overflow-x: hidden;">
-                                                        <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
-                                                            class="WholeWidth">
+                                                    <div class="lvOpportunityPriorities">
+                                                        <table id="itemPlaceHolderContainer" runat="server" class="WholeWidth bgColorWhite">
                                                             <tr runat="server" id="itemPlaceHolder">
                                                             </tr>
                                                         </table>
@@ -122,20 +120,18 @@
                                                 </LayoutTemplate>
                                                 <ItemTemplate>
                                                     <tr>
-                                                        <td style="width: 100%; padding-left: 2px;">
+                                                        <td class="WholeWidth padLeft2">
                                                             <table class="WholeWidth">
                                                                 <tr>
-                                                                    <td align="center" valign="middle" style="text-align: center; color: Black; font-size: 12px;
-                                                                        padding: 0px;">
-                                                                        <asp:Label ID="lblPriority" Width="15px" Font-Bold="true" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                    <td class="OpportunityPriority">
+                                                                        <asp:Label ID="lblPriority" CssClass="Width15Px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                     </td>
-                                                                    <td align="center" valign="middle" style="text-align: center; color: Black; padding: 0px;
-                                                                        font-size: 12px; padding-left: 2px; padding-right: 2px;">
+                                                                    <td class="OpportunityPriority padLeft2 padRight2">
                                                                         -
                                                                     </td>
-                                                                    <td style="padding: 0px;">
-                                                                        <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal;
-                                                                            color: Black; font-size: 12px;" Text='<%# Eval("Description") %>'></asp:Label>
+                                                                    <td class="Padding0">
+                                                                        <asp:Label ID="lblDescription" runat="server" CssClass="OpportunityPriorityDescription"
+                                                                            Text='<%# Eval("Description") %>'></asp:Label>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -144,7 +140,7 @@
                                                 </ItemTemplate>
                                                 <EmptyDataTemplate>
                                                     <tr>
-                                                        <td valign="middle" style="padding-left: 2px;">
+                                                        <td class="padLeft2 vMiddle">
                                                             <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
                                                         </td>
                                                     </tr>
@@ -162,49 +158,49 @@
                             </AjaxControlToolkit:AnimationExtender>
                         </div>
                     </td>
-                    <td width="15%">
+                    <td class="Width15Percent">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnClientNameSort" runat="server" Text="Business Unit" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="ClientName" />
                         </div>
                     </td>
-                    <td width="11%">
+                    <td class="Width11Percent">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnBuyerNameSort" runat="server" Text="Buyer Name" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="BuyerName" />
                         </div>
                     </td>
-                    <td width="25%">
-                        <div class="ie-bg no-wrap" style="white-space: nowrap">
+                    <td class="Width25Percent">
+                        <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnOpportunityNameSort" runat="server" Text="Opportunity Name"
                                 CommandName="Sort" CssClass="arrow" CommandArgument="OpportunityName" />
                         </div>
                     </td>
-                    <td width="7%">
+                    <td class="Width7Percent">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Salesperson" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Salesperson" />
                         </div>
                     </td>
-                    <td width="5%">
+                    <td class="Width5Percent">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnOwnerSort" runat="server" Text="Owner" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Owner" />
                         </div>
                     </td>
-                    <td align="center" width="4%">
+                    <td class="Width4Percent" align="center">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnEstimatedRevenue" runat="server" Text="Est. Revenue" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="EstimatedRevenue" />
                         </div>
                     </td>
-                    <td width="4%" style="text-align: center;">
+                    <td class="Width4Percent textCenter">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnCreateDateSort" runat="server" Text="Days Old" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="CreateDate" />
                         </div>
                     </td>
-                    <td width="4%">
+                    <td class="Width4Percent">
                         <div class="ie-bg no-wrap">
                             <asp:LinkButton ID="btnLastUpdate" runat="server" Text="Last Change" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Updated" />
@@ -218,9 +214,10 @@
             <tr>
                 <td>
                     <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" Target="_blank"
-                            ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>' ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>' 
-                            ButtonProjectNameHref = "<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>"/>
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                            Target="_blank" ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>'
+                            ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
+                            ButtonProjectNameHref="<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>" />
                     </div>
                 </td>
                 <td>
@@ -259,27 +256,28 @@
                         </asp:HyperLink>
                     </div>
                 </td>
-                <td align="right" style="padding-right: 10px;">
+                <td align="right" class="padRight10">
                     <div class="cell-pad">
                         <asp:Label ID="lblEstimatedRevenue" runat="server" Text='<%# GetFormattedEstimatedRevenue((Decimal?)Eval("EstimatedRevenue")) %>' /></div>
                 </td>
-                <td style="text-align: center;">
+                <td class="textCenter">
                     <div class="cell-pad">
                         <asp:Label ID="lblCreateDate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("CreateDate"), true) %>' /></div>
                 </td>
-                <td style="text-align: right;">
+                <td class="textRight">
                     <div class="cell-pad">
                         <asp:Label ID="lblLastUpdate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("LastUpdate"), false) %>' /></div>
                 </td>
             </tr>
         </ItemTemplate>
         <AlternatingItemTemplate>
-            <tr style="background: #F9FAFF;">
+            <tr class="alterrow">
                 <td>
                     <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" Target="_blank"
-                            ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>' ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>' 
-                            ButtonProjectNameHref = "<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>"/>
+                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
+                            Target="_blank" ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>'
+                            ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
+                            ButtonProjectNameHref="<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>" />
                     </div>
                 </td>
                 <td>
@@ -300,9 +298,9 @@
                 </td>
                 <td>
                     <div class="cell-pad">
-                        <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
+                        <asp:HyperLink ID="hlName" runat="server" Description='<%# GetWrappedText(((Opportunity) Container.DataItem).Description) %>'
                             onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
-                            runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
+                            NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
                             <%# HttpUtility.HtmlEncode((string)Eval("Name")) %>
                         </asp:HyperLink>
                     </div>
@@ -313,24 +311,22 @@
                 </td>
                 <td>
                     <div class="cell-pad">
-                        <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl='<%# IsNeedToShowPerson(((Opportunity)Container.DataItem).Owner) ? GetPersonDetailsLink((int) Eval("Owner.Id"), Container.DisplayIndex) : "#" %>'>
+                        <asp:HyperLink ID="hlOwner" runat="server" NavigateUrl='<%# IsNeedToShowPerson(((Opportunity)Container.DataItem).Owner) ? GetPersonDetailsLink((int) Eval("Owner.Id"), Container.DisplayIndex) : "#" %>'>
                            <%# IsNeedToShowPerson(((Opportunity)Container.DataItem).Owner) ? Eval("Owner.LastName") : string.Empty%>
                         </asp:HyperLink>
                     </div>
                 </td>
-                <td align="right" style="padding-right: 10px;">
+                <td align="right" class="padRight10">
                     <div class="cell-pad">
                         <asp:Label ID="lblEstimatedRevenue" runat="server" Text='<%# GetFormattedEstimatedRevenue((Decimal?)Eval("EstimatedRevenue")) %>' /></div>
                 </td>
-                <td style="text-align: center;">
+                <td class="textCenter">
                     <div class="cell-pad">
-                        <asp:Label ID="lblCreateDate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("CreateDate"),true) %>'
-                            IsCreateDate="true" /></div>
+                        <asp:Label ID="lblCreateDate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("CreateDate"), true) %>' /></div>
                 </td>
-                <td style="text-align: right;">
+                <td class="textRight">
                     <div class="cell-pad">
-                        <asp:Label ID="lblLastUpdate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("LastUpdate"),false) %>'
-                            IsCreateDate="false" /></div>
+                        <asp:Label ID="lblLastUpdate" runat="server" Text='<%# GetDaysOld((DateTime)Eval("LastUpdate"), false) %>' /></div>
                 </td>
             </tr>
         </AlternatingItemTemplate>
