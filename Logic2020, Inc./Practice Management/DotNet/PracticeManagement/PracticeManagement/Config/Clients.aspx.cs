@@ -13,6 +13,8 @@ namespace PraticeManagement.Config
     public partial class Clients : PracticeManagementPageBase
     {
         private const string ViewingRecords = "Viewing {0} - {1} of {2} Accounts";
+        private const string FontBold = "fontBold";
+        private const string FontNormal = "fontNormal";
 
         private string previousAlphabetLnkButtonId
         {
@@ -235,12 +237,9 @@ namespace PraticeManagement.Config
                 LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
                 LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
 
-                prevtopButton.Font.Bold = false;
-                prevbottomButton.Font.Bold = false;
+                prevtopButton.CssClass = prevbottomButton.CssClass = FontNormal;
             }
 
-            //lnkbtnAll.Font.Bold = true;
-            //lnkbtnAll1.Font.Bold = true;
             hdnAlphabet.Value = null;
             previousAlphabetLnkButtonId = lnkbtnAll.ID;
 
@@ -278,13 +277,9 @@ namespace PraticeManagement.Config
 
                 HtmlTableCell tc = new HtmlTableCell();
                 tc.ID = "td" + alphabet;
-                tc.Style.Add("padding-left", "15px");
-                tc.Style.Add("padding-top", "10px");
-                tc.Style.Add("padding-bottom", "10px");
-                tc.Style.Add("text-align", "center");
+                tc.Attributes.Add("class", "ClientAlphabetic");
 
                 Alphabet.Text = alphabet.ToString();
-                Alphabet.Font.Underline = false;
                 Alphabet.Click += new EventHandler(Alphabet_Clicked);
 
                 tc.Controls.Add(Alphabet);
@@ -296,16 +291,11 @@ namespace PraticeManagement.Config
                 Alphabet1.Attributes.Add("Top", "lnkbtn" + alphabet);
                 Alphabet1.Attributes.Add("Bottom", "lnkbtn1" + alphabet);
 
-
                 HtmlTableCell tc1 = new HtmlTableCell();
                 tc1.ID = "td1" + alphabet;
-                tc1.Style.Add("padding-left", "15px");
-                tc1.Style.Add("padding-top", "10px");
-                tc1.Style.Add("padding-bottom", "10px");
-                tc1.Style.Add("text-align", "center");
+                tc.Attributes.Add("class", "ClientAlphabetic");
 
                 Alphabet1.Text = alphabet.ToString();
-                Alphabet1.Font.Underline = false;
                 Alphabet1.Click += new EventHandler(Alphabet_Clicked);
 
                 tc1.Controls.Add(Alphabet1);
@@ -334,8 +324,8 @@ namespace PraticeManagement.Config
                 LinkButton prevtopButton = (LinkButton)trAlphabeticalPaging.FindControl(previousLinkButton.Attributes["Top"]);
                 LinkButton prevbottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(previousLinkButton.Attributes["Bottom"]);
 
-                prevtopButton.Font.Bold = false;
-                prevbottomButton.Font.Bold = false;
+                prevtopButton.CssClass =
+                prevbottomButton.CssClass = FontNormal;
             }
 
             LinkButton alpha = (LinkButton)sender;
@@ -343,8 +333,8 @@ namespace PraticeManagement.Config
             LinkButton topButton = (LinkButton)trAlphabeticalPaging.FindControl(alpha.Attributes["Top"]);
             LinkButton bottomButton = (LinkButton)trAlphabeticalPaging1.FindControl(alpha.Attributes["Bottom"]);
 
-            topButton.Font.Bold = true;
-            bottomButton.Font.Bold = true;
+            topButton.CssClass =
+            bottomButton.CssClass = FontBold;
             hdnAlphabet.Value = topButton.Text != "All" ? topButton.Text : null;
             previousAlphabetLnkButtonId = topButton.ID;
 
@@ -385,8 +375,8 @@ namespace PraticeManagement.Config
             DataBindClients(ClientsList);
             previousAlphabetLnkButtonId = lnkbtnAll.ID;
 
-            lnkbtnAll.Font.Bold = true;
-            lnkbtnAll1.Font.Bold = true;
+            lnkbtnAll.CssClass =
+            lnkbtnAll1.CssClass = FontBold;
 
         }
 
@@ -434,13 +424,11 @@ namespace PraticeManagement.Config
 
             if (!lnkbtnPrevious.Enabled)
             {
-                Color color = ColorTranslator.FromHtml("#8F8F8F");
-                lnkbtnPrevious.ForeColor = lnkbtnPrevious1.ForeColor = color;
+                lnkbtnPrevious.CssClass = lnkbtnPrevious1.CssClass = "color8F8F8F";
             }
             else
             {
-                Color color = ColorTranslator.FromHtml("#0898E6");
-                lnkbtnPrevious.ForeColor = lnkbtnPrevious1.ForeColor = color;
+                lnkbtnPrevious.CssClass = lnkbtnPrevious1.CssClass = "color0898E6";
             }
 
             if (gvClients.PageCount - 1 == gvClients.PageIndex || gvClients.PageCount == 0)
@@ -454,13 +442,11 @@ namespace PraticeManagement.Config
 
             if (!lnkbtnNext.Enabled)
             {
-                Color color = ColorTranslator.FromHtml("#8F8F8F");
-                lnkbtnNext.ForeColor = lnkbtnNext1.ForeColor = color;
+                lnkbtnNext.CssClass = lnkbtnNext1.CssClass = "color8F8F8F"; 
             }
             else
             {
-                Color color = ColorTranslator.FromHtml("#0898E6");
-                lnkbtnNext.ForeColor = lnkbtnNext1.ForeColor = color;
+                lnkbtnNext.CssClass = lnkbtnNext1.CssClass = "color0898E6";
             }
         }
 
