@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="Branding.aspx.cs" Inherits="PraticeManagement.Config.Branding" %>
 
-<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
-<%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/BrandingSettingsControl.ascx" TagName="BrandingLogo" TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Branding/Logo | Practice Management</title>
