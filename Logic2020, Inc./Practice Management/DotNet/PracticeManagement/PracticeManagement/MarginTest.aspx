@@ -5,7 +5,7 @@
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/PersonnelCompensation.ascx" TagName="PersonnelCompensation"
     TagPrefix="uc1" %>
-<%@ Register Src="Controls/RecruiterInfo.ascx" TagName="RecruiterInfo" TagPrefix="uc1" %>
+<%--<%@ Register Src="Controls/RecruiterInfo.ascx" TagName="RecruiterInfo" TagPrefix="uc1" %>--%>
 <%@ Register Src="Controls/WhatIf.ascx" TagName="WhatIf" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="loadingProgress" TagPrefix="uc" %>
 
@@ -27,29 +27,27 @@
             <br />
             <table class="WholeWidth">
                 <tr>
-                    <td style="padding-top: 8px;" valign="top">
+                    <td class="PaddingTop8 vTop">
                         <table>
                             <tr>
                                 <td colspan="2">
                                     <table>
                                         <tr>
-                                            <td style="padding-left: 16px; padding-bottom:6px;">
+                                            <td class="padLeft16 PaddingBottom6">
                                                 <asp:RadioButton ID="rbSelectPerson" OnCheckedChanged="rbMarginTest_CheckedChanged" Checked="true"
                                                     runat="server" Text="Select a Person" GroupName="marginTest" AutoPostBack="true" />
-                                                <asp:Label ID="lblOr" runat="server" Text="OR" Style="padding-left: 20px; padding-right:20px; text-align: right;
-                                                    font-weight: bold;"></asp:Label>
+                                                <asp:Label ID="lblOr" runat="server" Text="OR" CssClass="MarginTestLabel"></asp:Label>
                                             </td>
-                                            <td style="padding-left: 16px; padding-bottom:6px;">
+                                             <td class="padLeft16 PaddingBottom6">
                                                 <asp:RadioButton ID="rbSelectStrawman" OnCheckedChanged="rbMarginTest_CheckedChanged" Checked="false"
                                                     runat="server" Text="Select a Strawman" GroupName="marginTest" AutoPostBack="true" />
-                                                <asp:Label ID="lblOr1" runat="server" Text="OR" Style="padding-left: 20px; padding-right:20px; text-align: right;
-                                                    font-weight: bold;"></asp:Label>
+                                                <asp:Label ID="lblOr1" runat="server" Text="OR" CssClass="MarginTestLabel"></asp:Label>
                                             </td>
-                                            <td style="padding-bottom:6px;">
+                                            <td class="PaddingBottom6">
                                                 <asp:RadioButton ID="rbDefineValues" OnCheckedChanged="rbMarginTest_CheckedChanged"
                                                     runat="server" Text="Define Values" GroupName="marginTest" AutoPostBack="true" />
                                             </td>
-                                            <td align="right" style="padding-bottom:6px; padding-left:20px;">
+                                            <td class="PaddingBottom6 padLeft20 textRight">
                                                 <asp:Button ID="btnReset" runat="server" OnClick="Reset_Clicked"
                                                     Text="Reset Form" CausesValidation="false" />
                                             </td>
@@ -59,17 +57,17 @@
                                 <td>&nbsp;</td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="padding-left: 16px;">
+                                <td colspan="3" class="padLeft16">
                                     <asp:DropDownList ID="ddlPersonName" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlPersonName_SelectedIndexChanged"
-                                        Width="355px">
+                                        CssClass="Width355Px">
                                     </asp:DropDownList>
                                     <asp:DropDownList ID="ddlStrawmanName" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlPersonName_SelectedIndexChanged"
-                                        Width="355px" Visible="false">
+                                        CssClass="Width355Px" Visible="false">
                                     </asp:DropDownList>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="padding-top: 5px; padding-left: 15px;">
+                                <td colspan="3" class="PaddingTop5 padLeft15">
                                     <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" AutoPostBack="true"
                                         OnCompensationChanged="compensation_Changed" OnCompensationMethodChanged="compensation_Changed"
                                         OnPeriodChanged="compensation_Changed" />
@@ -81,7 +79,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="padding-left: 6px;">
+                                <td colspan="3" class="padLeft6">
                                     <%--<asp:Panel ID="pnlRecruiterInfo" runat="server">
                                         <uc1:RecruiterInfo ID="recruiterInfo" runat="server" ShowCommissionDetails="False"
                                             OnInfoChanged="compensation_Changed" />
@@ -101,7 +99,7 @@
                         </table>
                         <table>
                             <tr>
-                                <td style="padding-left: 23px;">
+                                <td class="padLeft23">
                                     <uc1:WhatIf ID="whatIf" runat="server" DisplayTargetMargin="true" IsMarginTestPage="true" />
                                 </td>
                             </tr>
@@ -119,7 +117,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td valign="top" width="340px;" style="padding-left: 10px; padding-top: 10px; background-color: #DBEEF3;">
+                    <td class="WhatIfGrossMarginComputing">
                         <uc1:GrossMarginComputing ID="grossMarginComputing" runat="server" />
                     </td>
                 </tr>
