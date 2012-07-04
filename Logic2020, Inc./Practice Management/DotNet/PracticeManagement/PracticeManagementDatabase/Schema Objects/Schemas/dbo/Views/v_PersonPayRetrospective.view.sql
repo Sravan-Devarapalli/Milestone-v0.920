@@ -15,11 +15,12 @@ AS
            p.BonusHoursToCollect,
            p.PracticeId,
 		   p.VacationDays,
-		   CAST(CASE p.BonusHoursToCollect WHEN dbo.GetHoursPerYear() THEN 1 ELSE 0 END AS BIT) AS IsYearBonus
+		   CAST(CASE p.BonusHoursToCollect WHEN GHY.HoursPerYear THEN 1 ELSE 0 END AS BIT) AS IsYearBonus
 	  FROM dbo.PersonCalendarAuto AS cal
 	       INNER JOIN dbo.Pay AS p
 	           ON p.StartDate <= cal.Date AND p.EndDate > cal.date AND cal.PersonId = p.Person
 	       INNER JOIN dbo.Timescale AS t ON p.Timescale = t.TimescaleId
+		   INNER JOIN dbo.GetHoursPerYearTable() GHY ON 1=1--For improving query performance we are using table valued function instead of scalar function.
 	       LEFT JOIN V_WorkinHoursByYear HY ON HY.Year = YEAR(cal.Date)
 	 WHERE cal.DayOff = 0
 
