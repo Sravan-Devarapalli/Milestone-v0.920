@@ -9,7 +9,6 @@ namespace PraticeManagement.Controls.Generic
         #region Constants
 
         private const string ViewStateTarget = "Target";
-        private const string ViewStateGridVisible = "GridVisible";
         private const string ParameterNoteTargetId = "noteTargetId";
 
         #endregion
@@ -20,7 +19,6 @@ namespace PraticeManagement.Controls.Generic
 
         #endregion
 
-
         #region Properties
 
         public NoteTarget Target
@@ -29,22 +27,7 @@ namespace PraticeManagement.Controls.Generic
             set { SetViewStateValue(ViewStateTarget, value); }
         }
 
-        public bool GridVisible
-        {
-            get { return GetViewStateValue(ViewStateGridVisible, true); }
-            set
-            {
-                SetViewStateValue(ViewStateGridVisible, value);
-                gvNotes.Visible = value;
-            }
-        }
-
         #endregion
-
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            odsNotes.SelectParameters[ParameterNoteTargetId].DefaultValue = ((int)Target).ToString();
-        }
 
         protected void btnAddNote_Click(object sender, EventArgs e)
         {
@@ -65,8 +48,6 @@ namespace PraticeManagement.Controls.Generic
                                };
 
                 ServiceCallers.Custom.Milestone(client => client.NoteInsert(note));
-
-                gvNotes.DataBind();
 
                 tbNote.Text = string.Empty;
 
