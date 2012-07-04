@@ -126,6 +126,14 @@ namespace PraticeManagement.Controls.Configuration
             get;
         }
 
+        public string CssClass
+        {
+            set
+            {
+                tbDefaultUser.Attributes["class"] = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -163,6 +171,7 @@ namespace PraticeManagement.Controls.Configuration
             {
                 EnsureChildControls();
                 btnSetDefault.Visible = AllowChange;
+               
             }
 
             if (!string.IsNullOrEmpty(OnClientChange))
