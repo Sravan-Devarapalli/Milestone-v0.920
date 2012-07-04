@@ -1,28 +1,14 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PersonnelCompensation.ascx.cs"
     Inherits="PraticeManagement.Controls.PersonnelCompensation" %>
 <%@ Register Src="DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
-<style type="text/css">
-    .VerticalAlign tr td
-    {
-        padding-top: 2px;
-        padding-bottom: 2px;
-        padding-left: 6px;
-    }
-    .PaddinLeftNone td
-    {
-        padding-top: 2px;
-        padding-bottom: 2px;
-        padding-left: 0px !important;
-    }
-</style>
 <asp:HiddenField ID="hidOldStartDate" runat="server" />
 <asp:HiddenField ID="hidOldEndDate" runat="server" />
-<table class="VerticalAlign">
+<table class="PersonnelCompensationVerticalAlign">
     <tr id="trCompensationDate" runat="server">
         <td>
             Start Date
         </td>
-        <td colspan="2" class="PaddinLeftNone" style="padding-left: 6px !important;">
+        <td colspan="2" class="PersonnelCompensationPaddinLeftNone">
             <uc2:DatePicker ID="dpStartDate" runat="server" AutoPostBack="true" OnSelectionChanged="Period_SelectionChanged" />
             <asp:Label ID="lblStartDate" runat="server" Visible="false"></asp:Label>
             <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
@@ -37,7 +23,7 @@
         <td>
             End Date
         </td>
-        <td class="PaddinLeftNone" style="padding-left: 6px !important;">
+        <td class="PersonnelCompensationPaddinLeftNone">
             <uc2:DatePicker ID="dpEndDate" runat="server" AutoPostBack="true" OnSelectionChanged="Period_SelectionChanged" />
             <asp:Label ID="lblEndDate" runat="server" Visible="false"></asp:Label>
         </td>
@@ -62,10 +48,10 @@
                 AutoPostBack="True" OnCheckedChanged="Compensation_CheckedChanged" onclick="setDirty();" />
         </td>
         <td>
-            $<asp:TextBox ID="txtSalaryAnnual" runat="server" Enabled="False" Width="120px" onchange="setDirty();"
-                OnTextChanged="Compensation_TextChanged" Style="text-align: right;"></asp:TextBox>
+            $<asp:TextBox ID="txtSalaryAnnual" runat="server" Enabled="False" onchange="setDirty();"
+                OnTextChanged="Compensation_TextChanged" CssClass="textRight Width120Px"></asp:TextBox>
         </td>
-        <td style="padding-left: 5px;">
+        <td class="Left5">
             per Year
         </td>
         <td>
@@ -94,10 +80,10 @@
                 onclick="setDirty();" />
         </td>
         <td>
-            $<asp:TextBox ID="txtSalaryHourly" runat="server" Width="120px" onchange="setDirty();"
-                OnTextChanged="Compensation_TextChanged" Style="text-align: right;"></asp:TextBox>
+            $<asp:TextBox ID="txtSalaryHourly" runat="server" onchange="setDirty();"
+                OnTextChanged="Compensation_TextChanged" CssClass="textRight Width120Px"></asp:TextBox>
         </td>
-        <td style="padding-left: 5px;">
+         <td class="Left5">
             per Hour
         </td>
         <td>
@@ -119,10 +105,10 @@
                 AutoPostBack="True" OnCheckedChanged="Compensation_CheckedChanged" onclick="setDirty();" />
         </td>
         <td>
-            $<asp:TextBox ID="txt1099Ctc" runat="server" Enabled="False" Width="120px" OnTextChanged="Compensation_TextChanged"
-                Style="text-align: right;"></asp:TextBox>
+            $<asp:TextBox ID="txt1099Ctc" runat="server" Enabled="False" OnTextChanged="Compensation_TextChanged"
+                CssClass="textRight Width120Px"></asp:TextBox>
         </td>
-        <td style="padding-left: 5px;">
+         <td class="Left5">
             per Hour
         </td>
         <td>
@@ -144,9 +130,9 @@
             <asp:RadioButton ID="rbtnPercentRevenue" runat="server" AutoPostBack="True" GroupName="Compensation"
                 Text="1099/POR" OnCheckedChanged="Compensation_CheckedChanged" onclick="setDirty();" />
         </td>
-        <td style="padding-left: 12px;">
+        <td class="Left12">
             <%-- onkeypress="setTimeout('__doPostBack(\'ctl00$body$personnelCompensation$txtPercRevenue\',\'\')', 0); this.focus();" --%>
-            <asp:TextBox ID="txtPercRevenue" runat="server" Width="120px" onchange="setDirty();"
+            <asp:TextBox ID="txtPercRevenue" runat="server" CssClass="Width120Px" onchange="setDirty();"
                 OnTextChanged="Compensation_TextChanged" Text="0" AutoPostBack="true"></asp:TextBox>
         </td>
         <td>
@@ -189,16 +175,16 @@
                 AutoPostBack="True" Checked="True" OnCheckedChanged="Bonus_CheckedChanged" onclick="setDirty();" />
         </td>
         <td>
-            $<asp:TextBox ID="txtBonusHourly" runat="server" Width="120px" onchange="setDirty();"
-                OnTextChanged="Compensation_TextChanged" Style="text-align: right;"></asp:TextBox>
+            $<asp:TextBox ID="txtBonusHourly" runat="server" onchange="setDirty();"
+                OnTextChanged="Compensation_TextChanged" CssClass="textRight Width120Px"></asp:TextBox>
         </td>
-        <td style="padding-left: 5px;" colspan="3">
+        <td class="Left5" colspan="3">
             <asp:CompareValidator ID="compBonusHourly" runat="server" ControlToValidate="txtBonusHourly"
                 ErrorMessage="A number with 2 decimal digits is allowed for the Bonus." ToolTip="A number with 2 decimal digits is allowed for the Bonus."
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck"
                 Type="Currency" Display="Dynamic"></asp:CompareValidator>
             every &nbsp;
-            <asp:TextBox ID="txtBonusDuration" runat="server" Width="80px" onchange="setDirty();"
+            <asp:TextBox ID="txtBonusDuration" runat="server" CssClass="Width80Px" onchange="setDirty();"
                 OnTextChanged="Compensation_TextChanged">500</asp:TextBox>
             &nbsp;hours
         </td>
@@ -223,10 +209,10 @@
                 AutoPostBack="True" OnCheckedChanged="Bonus_CheckedChanged" onclick="setDirty();" />
         </td>
         <td>
-            $<asp:TextBox ID="txtBonusAnnual" runat="server" Enabled="False" Width="120px" onchange="setDirty();"
-                OnTextChanged="Compensation_TextChanged" Style="text-align: right;"></asp:TextBox>
+            $<asp:TextBox ID="txtBonusAnnual" runat="server" Enabled="False" onchange="setDirty();"
+                OnTextChanged="Compensation_TextChanged" CssClass="textRight Width120Px"></asp:TextBox>
         </td>
-        <td style="padding-left: 5px;">
+        <td class="Left5">
             per Year
         </td>
         <td colspan="9">
@@ -240,8 +226,8 @@
         <td>
             Default hours per Day
         </td>
-        <td style="padding-left: 12px;">
-            <asp:TextBox ID="txtDefaultHoursPerDay" runat="server" Text="8" Width="120px" onchange="setDirty();"
+        <td class="Left12">
+            <asp:TextBox ID="txtDefaultHoursPerDay" runat="server" Text="8" CssClass="Width120Px" onchange="setDirty();"
                 OnTextChanged="Compensation_TextChanged"></asp:TextBox>
         </td>
         <td>
@@ -267,11 +253,11 @@
         <td nowrap="nowrap">
             <asp:Label ID="lblVacationDays" runat="server" Text="Vacation Days"></asp:Label>
         </td>
-        <td style="padding-left: 12px;">
-            <asp:TextBox ID="txtVacationDays" runat="server" Width="120px" onchange="setDirty();"
+        <td class="Left12">
+            <asp:TextBox ID="txtVacationDays" runat="server" CssClass="Width120Px" onchange="setDirty();"
                 OnTextChanged="Compensation_TextChanged" Text="0"></asp:TextBox>
         </td>
-        <td style="padding-left: 5px;">
+        <td class="Left5">
             per Year
         </td>
         <td colspan="9">
@@ -290,8 +276,8 @@
         <td nowrap="nowrap">
             Times paid per month
         </td>
-        <td style="padding-left: 12px;">
-            <asp:DropDownList ID="ddlPaidPerMonth" runat="server" Width="80px" onchange="setDirty();">
+        <td class="Left12">
+            <asp:DropDownList ID="ddlPaidPerMonth" runat="server" CssClass="Width80Px" onchange="setDirty();">
                 <asp:ListItem></asp:ListItem>
                 <asp:ListItem Text="1"></asp:ListItem>
                 <asp:ListItem Text="2" Selected="True"></asp:ListItem>
@@ -323,11 +309,11 @@
         <td>
             Seniority
         </td>
-        <td colspan="2" style="padding-left: 12px;">
+        <td colspan="2" class="Left12">
             <asp:DropDownList ID="ddlSeniority" runat="server">
             </asp:DropDownList>
         </td>
-        <td style="padding-left: 12px;">
+        <td class="Left12">
             <asp:CustomValidator ID="custValSeniority" runat="server" ToolTip="Please select Seniority"
                 Display="Dynamic" Text="*" ErrorMessage="Please select Seniority" OnServerValidate="custValSeniority_OnServerValidate">
             </asp:CustomValidator>
@@ -339,7 +325,7 @@
             <asp:DropDownList ID="ddlPractice" runat="server">
             </asp:DropDownList>
         </td>
-        <td colspan="5" style="padding-left: 5px;">
+        <td colspan="5" class="Left5">
             <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
                 Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area" OnServerValidate="custValPractice_OnServerValidate">
             </asp:CustomValidator>
@@ -349,7 +335,7 @@
         <td>
             Sales Commission
         </td>
-        <td style="padding-left: 12px;">
+        <td class="Left12">
             <asp:TextBox ID="txtSalesCommission" runat="server"></asp:TextBox>
         </td>
         <td colspan="9">
