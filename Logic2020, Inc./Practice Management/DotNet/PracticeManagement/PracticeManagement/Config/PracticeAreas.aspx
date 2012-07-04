@@ -23,22 +23,23 @@
         }
     </script>
     <asp:GridView ID="gvPractices" runat="server" AutoGenerateColumns="False" DataSourceID="odsPractices"
-        Width="75%" CssClass="CompPerfTable" DataKeyNames="Id" OnRowUpdating="gvPractices_OnRowUpdating"
-        OnRowDataBound="gvPractices_RowDataBound" GridLines="None" BackColor="White">
-        <AlternatingRowStyle BackColor="#F9FAFF" />
+        CssClass="CompPerfTable gvPractices" DataKeyNames="Id" OnRowUpdating="gvPractices_OnRowUpdating"
+        OnRowDataBound="gvPractices_RowDataBound">
+        <AlternatingRowStyle CssClass="alterrow" />
         <Columns>
             <asp:CommandField ShowEditButton="True" ValidationGroup="EditPractice" ButtonType="Image"
-                ItemStyle-Width="7%" ItemStyle-HorizontalAlign="Center" EditImageUrl="~/Images/icon-edit.png"
-                EditText="Edit Practice Area" UpdateText="Confirm" UpdateImageUrl="~/Images/icon-check.png"
-                CancelImageUrl="~/Images/no.png" CancelText="Cancel" />
+                HeaderStyle-CssClass="Width7Percent" EditImageUrl="~/Images/icon-edit.png" EditText="Edit Practice Area"
+                UpdateText="Confirm" UpdateImageUrl="~/Images/icon-check.png" CancelImageUrl="~/Images/no.png"
+                CancelText="Cancel" />
             <asp:TemplateField HeaderText="Practice Area Name" SortExpression="Name">
-                <ItemStyle Width="30%" Wrap="false" />
+                <HeaderStyle CssClass="width30P" />
+                <ItemStyle CssClass="Left no-wrap" />
                 <ItemTemplate>
-                    <asp:Label ID="lblPractice" Style="white-space: normal !important;" runat="server"
+                    <asp:Label ID="lblPractice" runat="server" CssClass="WS-Normal"
                         Text='<%# Bind("Name") %>' />
                 </ItemTemplate>
                 <EditItemTemplate>
-                    <asp:TextBox ID="tbEditPractice" runat="server" Text='<%# Bind("Name") %>' Width="100%"
+                    <asp:TextBox ID="tbEditPractice" runat="server" Text='<%# Bind("Name") %>' CssClass="WholeWidth"
                         ValidationGroup="EditPractice" />
                     <asp:RequiredFieldValidator ID="valPracticeName" runat="server" ValidationGroup="EditPractice"
                         Text="*" ErrorMessage="Name is required" ControlToValidate="tbEditPractice" />
@@ -51,7 +52,7 @@
                 </EditItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Active">
-                <ItemStyle HorizontalAlign="Center" Width="7%" />
+                <HeaderStyle CssClass="Width7Percent" />
                 <ItemTemplate>
                     <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# ((PracticeExtended)Container.DataItem).IsActive %>' />
                 </ItemTemplate>
@@ -60,7 +61,7 @@
                 </EditItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Used" Visible="false">
-                <ItemStyle HorizontalAlign="Center" Width="0%" />
+                <HeaderStyle CssClass="Width0Percent" />
                 <ItemTemplate>
                     <%# ((PracticeExtended) Container.DataItem).InUse ? "Yes" : "No" %>
                 </ItemTemplate>
@@ -68,8 +69,8 @@
                     <%# ((PracticeExtended) Container.DataItem).InUse ? "Yes" : "No"%>
                 </EditItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Internal" ItemStyle-HorizontalAlign="Center">
-                <ItemStyle HorizontalAlign="Center" Width="7%" />
+            <asp:TemplateField HeaderText="Internal">
+                <HeaderStyle CssClass="Width7Percent" />
                 <ItemTemplate>
                     <asp:CheckBox ID="chbIsCompanyInternal" runat="server" Enabled="false" Checked='<%# ((PracticeExtended) Container.DataItem).IsCompanyInternal %>' />
                 </ItemTemplate>
@@ -79,7 +80,8 @@
                 </EditItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField>
-                <ItemStyle Width="45%" />
+                <HeaderStyle CssClass="Width45Percent" />
+                <ItemStyle CssClass="Left" />
                 <HeaderTemplate>
                     Practice Area Owner (Status)
                 </HeaderTemplate>
@@ -89,20 +91,19 @@
                 </ItemTemplate>
                 <EditItemTemplate>
                     <asp:DropDownList ID="ddlActivePersons" runat="server" DataSourceID="odsActivePersons"
-                        Width="100%" DataValueField="Id" DataTextField="PersonLastFirstName">
+                        CssClass="WholeWidth" DataValueField="Id" DataTextField="PersonLastFirstName">
                     </asp:DropDownList>
                     <asp:HiddenField ID="hfPracticeOwner" runat="server" Value='<%#Bind("PracticeManagerId")%>' />
                 </EditItemTemplate>
             </asp:TemplateField>
-            <asp:CommandField ShowDeleteButton="True" ButtonType="Image" ItemStyle-Width="4%"
-                ItemStyle-HorizontalAlign="Center" DeleteImageUrl="~/Images/icon-delete.png" />
+            <asp:CommandField ShowDeleteButton="True" ButtonType="Image" HeaderStyle-CssClass="Width4Percent"
+                 DeleteImageUrl="~/Images/icon-delete.png" />
         </Columns>
     </asp:GridView>
     <asp:Panel ID="pnlInsertPractice" runat="server" Wrap="False">
-        <table width="75%" class="CompPerfTable" cellspacing="0" border="0" style="background-color: White;
-            border-collapse: collapse;">
-            <tr style="background-color: #F9FAFF;">
-                <td align="center" style="width: 7%; padding-top: 10px;">
+        <table class="CompPerfTable gvPractices" cellspacing="0">
+            <tr class="alterrow">
+                <td class="Width7Percent PaddingTop10">
                     <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
                         ToolTip="Add Practice Area" Visible="true" />
                     <asp:ImageButton ID="btnInsert" runat="server" ValidationGroup="InsertPractice" ImageUrl="~/Images/icon-check.png"
@@ -110,9 +111,9 @@
                     <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
                         ToolTip="Cancel" Visible="false" />
                 </td>
-                <td style="width: 30%; white-space: nowrap;">
+                <td class="width30P Left">
                     <asp:TextBox ID="tbPracticeName" ValidationGroup="InsertPractice" runat="server"
-                        Width="100%" Visible="false" />
+                        CssClass="WholeWidth" Visible="false" />
                     <asp:RequiredFieldValidator ID="valPracticeName" runat="server" ValidationGroup="InsertPractice"
                         Text="*" ErrorMessage="Name is required" ControlToValidate="tbPracticeName" />
                     <asp:RegularExpressionValidator ID="regValPracticeName" ControlToValidate="tbPracticeName"
@@ -122,17 +123,17 @@
                         Text="*" OnServerValidate="cvPracticeName_OnServerValidate" ValidationGroup="InsertPractice"
                         ErrorMessage="This Practice area already exists. Please add a different Practice area" />
                 </td>
-                <td align="center" style="width: 7%;">
+                <td class="Width7Percent">
                     <asp:CheckBox ID="chbPracticeActive" runat="server" Checked="true" Visible="false" />
                 </td>
-                <td align="center" style="width: 7%;">
+                <td class="Width7Percent">
                     <asp:CheckBox ID="chbIsInternalPractice" runat="server" Checked="false" Visible="false" />
                 </td>
-                <td style="width: 45%;">
+                <td class="Width45Percent Left">
                     <asp:DropDownList ID="ddlPracticeManagers" runat="server" DataValueField="Id" DataTextField="PersonLastFirstName"
-                        Width="100%" Visible="false" DataSourceID="odsActivePersons" />
+                        CssClass="WholeWidth" Visible="false" DataSourceID="odsActivePersons" />
                 </td>
-                <td style="width: 4%;">
+                <td class="Width4Percent">
                 </td>
             </tr>
         </table>
