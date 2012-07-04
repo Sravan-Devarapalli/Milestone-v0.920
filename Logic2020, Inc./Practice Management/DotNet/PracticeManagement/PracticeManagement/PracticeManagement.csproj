@@ -1275,6 +1275,8 @@
       <DependentUpon>FilteredCheckBoxList.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.cs" />
+    <Compile Include="Controls\Generic\BorderlessImage.cs" />
+    <Compile Include="Controls\Generic\BorderlessImageButton.cs" />
     <Compile Include="Controls\Generic\CustomCheckBoxList.cs" />
     <Compile Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.cs" />
     <Compile Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.cs" />
