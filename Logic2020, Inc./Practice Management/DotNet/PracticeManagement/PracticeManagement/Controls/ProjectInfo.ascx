@@ -9,9 +9,9 @@
 		&nbsp;&nbsp;
 		</td>
 		<td>
-			[From <asp:Label ID="lblStartDate" runat="server" Font-Bold="true" />
+			[From <asp:Label ID="lblStartDate" runat="server" CssClass="fontBold" />
 			&nbsp;to&nbsp;
-			<asp:Label ID="lblEndDate" runat="server" Font-Bold="true" />]
+			<asp:Label ID="lblEndDate" runat="server" CssClass="fontBold" />]
 		</td>
 	</tr>
 </table>
