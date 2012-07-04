@@ -28,11 +28,11 @@
     </script>
     <asp:UpdatePanel ID="pnlBody" runat="server">
         <ContentTemplate>
-            <div class="project-filter" style="background: #E2EBFF; margin-bottom: 10px; padding: 5px;">
+            <div class="project-filter" class="OpportunitySearchBar">
                 <table class="WholeWidth">
                     <tbody>
                         <tr>
-                            <td style="padding-right: 8px;">
+                            <td class="padRight8">
                                 <asp:TextBox ID="txtSearchText" runat="server" onkeypress="ChangeDefaultFocus(event);"
                                     CssClass="WholeWidth" MaxLength="255">
                                 </asp:TextBox>
@@ -43,9 +43,9 @@
                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic">
                                 </asp:RequiredFieldValidator>
                             </td>
-                            <td style="width: 55px;">
+                            <td class="width55Px">
                                 <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click"
-                                    UseSubmitBehavior="false" Width="55" />
+                                    UseSubmitBehavior="false" CssClass="width55Px" />
                             </td>
                         </tr>
                         <tr>
