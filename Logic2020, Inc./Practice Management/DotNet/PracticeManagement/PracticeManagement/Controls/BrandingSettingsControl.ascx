@@ -16,7 +16,7 @@
     </script>
     <asp:UpdatePanel ID="updpnlbody" runat="server">
         <ContentTemplate>
-            <table border="0" cellpadding="3" cellspacing="3" width="700px">
+            <table class="Width700Px">
                 <tr>
                 </tr>
                 <tr>
@@ -24,8 +24,8 @@
                         <label class="no-wrap" for="<%=tbTitle.ClientID%>">
                             Company Name</label>
                     </td>
-                    <td style="padding-right: 5px">
-                        <asp:TextBox ID="tbTitle" onchange="EnableSaveButton(true);" runat="server" Width="300px" />
+                    <td class="padRight5">
+                        <asp:TextBox ID="tbTitle" onchange="EnableSaveButton(true);" runat="server" CssClass="Width300Px" />
                     </td>
                     <td>
                         &nbsp;
@@ -36,9 +36,9 @@
                         <label class="no-wrap" for="<%=fuImagePath.ClientID%>">
                             Company Logo</label>
                     </td>
-                    <td style="padding-right: 5px; position: relative;">
+                    <td class="padRight5">
                         <asp:FileUpload ID="fuImagePath" BackColor="White" onchange="EnableSaveButton(true);"
-                            runat="server" Width="375px" Size="56" />
+                            runat="server" CssClass="Width375Px" Size="56" />
                         <asp:HiddenField ID="hdnImagePath" runat="server" />
                     </td>
                     <td>
@@ -48,22 +48,22 @@
                     <td>
                     </td>
                     <td>
-                        <span style="color: Gray">* recommended logo size is 175 x 55 px</span>
+                        <span class="watermarked">* recommended logo size is 175 x 55 px</span>
                     </td>
                 </tr>
                 <tr>
                     <td>
                     </td>
-                    <td style="padding-top:4px;">
-                        <span style="color: Gray;">* maximum logo size is 500 x 60 px</span>
+                    <td class="PaddingTop4">
+                        <span class="watermarked">* maximum logo size is 500 x 60 px</span>
                     </td>
                 </tr>
                 <tr>
                     <td>
                     </td>
                     <td>
-                        <span style="color: Gray;">* file type must be .jpg, .gif,or .png </span>
-                        <asp:Button ID="btnSave" runat="server" Text="Save All" CssClass="Margin-Left" OnClick="btnSave_Click" Width="67px"
+                        <span class="watermarked">* file type must be .jpg, .gif,or .png </span>
+                        <asp:Button ID="btnSave" runat="server" Text="Save All" CssClass="Margin-Left Width67Px" OnClick="btnSave_Click" 
                             ValidationGroup="BrandingLogo" />
                         <ext:ElementDisablerExtender ID="edeSave" runat="server" TargetControlID="btnSave"
                             ControlToDisableID="btnSave" />
@@ -100,15 +100,15 @@
             <div>
             <table>
                 <tr>
-                    <td style="font-weight:bold; padding-bottom:8px;" colspan="2">Current Logo</td>
+                    <td class="fontBold PaddingBottom8" colspan="2">Current Logo</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid black;">
-                        <asp:Image ID="imgCurrentLogo" runat="server" style="padding:2px;" ImageUrl="~/Controls/CompanyLogoImage.ashx" />
+                    <td class="border1Px">
+                        <asp:Image ID="imgCurrentLogo" runat="server" CssClass="Padding2" ImageUrl="~/Controls/CompanyLogoImage.ashx" />
                     </td>
                 </tr>
                 <tr>
-                    <td valign="bottom" style="padding-top:8px;">
+                    <td class="PaddingTop8 vBottom">
                         <asp:HyperLink ID="hplnkDownloadCurrentImage" runat="server" Text="Download image" NavigateUrl="~/Controls/CompanyLogoImage.ashx?Type=download"></asp:HyperLink>
                     </td>
                 </tr>
