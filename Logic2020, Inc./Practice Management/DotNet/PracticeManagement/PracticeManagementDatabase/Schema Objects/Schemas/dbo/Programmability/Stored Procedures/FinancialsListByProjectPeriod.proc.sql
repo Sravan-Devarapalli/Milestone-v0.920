@@ -50,9 +50,8 @@ AS
 	AS
 	(
 	SELECT f.ProjectId,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEnd,
-
+		   C.MonthStartDate AS FinancialDate,
+		   C.MonthEndDate	AS MonthEnd,
 	       SUM(f.PersonMilestoneDailyAmount) AS Revenue,
 
 	       SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount) AS RevenueNet,
@@ -76,10 +75,11 @@ AS
 	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission,
 		  		   min(f.Discount) as Discount
 	  FROM FinancialsRetro AS f
+	  INNER JOIN Calendar C ON C.Date = f.Date
 	  WHERE  
 		f.ProjectId IN (SELECT * FROM @ProjectIDs) 
 		AND f.Date BETWEEN @StartDate AND @EndDate
-	GROUP BY f.ProjectId, YEAR(f.Date), MONTH(f.Date)
+	GROUP BY f.ProjectId, C.MonthStartDate, C.MonthEndDate
 	),
 	ProjectExpensesMonthly
 	AS
@@ -87,12 +87,12 @@ AS
 		SELECT pexp.ProjectId,
 			CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
 			CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
-			dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), dbo.GetDaysInMonth(MIN(C.Date))) AS MonthEnd
+			C.MonthStartDate AS FinancialDate,
+			C.MonthEndDate AS MonthEnd
 		FROM dbo.ProjectExpense as pexp
 		JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
 		WHERE ProjectId IN (SELECT * FROM @ProjectIDs) AND c.Date BETWEEN @StartDate	AND @EndDate
-		GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+		GROUP BY pexp.ProjectId, C.MonthStartDate, C.MonthEndDate
 	)
 	
 	SELECT
