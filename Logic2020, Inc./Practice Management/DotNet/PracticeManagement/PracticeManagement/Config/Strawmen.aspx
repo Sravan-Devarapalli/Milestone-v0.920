@@ -11,21 +11,12 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Strawmen | Practice Management</title>
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <style>
-        .tab-pane
-        {
-            background-color: #e2ebff;
-            padding: 5px;
-        }
-    </style>
-</asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Strawmen List
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript" language="javascript">
-        
+
         function EnableDisableVacationDays(ddlBasic) {
             var vacationdaysId = ddlBasic.getAttribute("vacationdaysId");
             var vacationdays = document.getElementById(vacationdaysId);
@@ -44,17 +35,15 @@
             <div class="tab-pane">
                 <table class="WholeWidth">
                     <tr>
-                        <td style="text-align: right; padding: 10px">
+                        <td class="textRight Padding10">
                             <asp:ShadowedHyperlink runat="server" Text="Add Strawman" ID="StbAddStrawman" CssClass="add-btn"
                                 NavigateUrl="~/StrawManDetails.aspx?returnTo=Config/Strawmen.aspx" />
                         </td>
                     </tr>
                 </table>
                 <asp:GridView ID="gvStrawmen" runat="server" EmptyDataText="There is nothing to be displayed here"
-                    Width="100%" AutoGenerateColumns="False" OnRowDataBound="gvStrawmen_RowDataBound"
-                    CssClass="CompPerfTable" GridLines="None" BackColor="White" Style="text-align: center;
-                    padding-top: 10px;">
-                    <AlternatingRowStyle BackColor="#F9FAFF" />
+                    AutoGenerateColumns="False" OnRowDataBound="gvStrawmen_RowDataBound" CssClass="CompPerfTable gvStrawmen">
+                    <AlternatingRowStyle CssClass="alterrow" />
                     <Columns>
                         <asp:TemplateField>
                             <HeaderTemplate>
@@ -62,8 +51,7 @@
                                     &nbsp;
                                 </div>
                             </HeaderTemplate>
-                            <HeaderStyle Width="7%" />
-                            <ItemStyle HorizontalAlign="Center" Height="20px" Wrap="false" />
+                            <HeaderStyle CssClass="Width7Percent" />
                             <ItemTemplate>
                                 <asp:ImageButton ID="imgCompersationStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Click to open Compersation History"
                                     runat="server" OnClick="imgCompersationStrawman_OnClick" ImageUrl="~/Images/Zoom-In-icon.png" />
@@ -82,29 +70,24 @@
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Id" Visible="false">
-                            <ItemStyle Width="0%" />
+                            <ItemStyle CssClass="Width0Percent" />
                             <ItemTemplate>
                                 <asp:Label ID="lblId" runat="server" Text='<%# Eval("Id") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
-                            <HeaderStyle Width="39%" />
-                            <ItemStyle HorizontalAlign="Left" Height="20px" Wrap="false" />
+                            <HeaderStyle CssClass="Width39Percent" />
+                            <ItemStyle CssClass="Left" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
                                     Name</div>
                             </HeaderTemplate>
                             <ItemTemplate>
-                                <asp:Label ID="lblStrawmen" Style="white-space: normal !important; padding-left: 25px;"
-                                    runat="server" Text='<%# Eval("Name")%>'></asp:Label>
-                              <%--  <asp:LinkButton ID="lnkStrawman" ToolTip="Click to navigate to Strawmen detail page."
-                                    Style="padding-left: 25px;" runat="server" PostBackUrl='<%# GetStrawmanDetailsUrlWithReturn((int?)Eval("Id")) %>' 
-                                    Text='<%# Eval("Name")%>' />--%>
+                                <asp:Label ID="lblStrawmen" CssClass="Ws-Normal padLeft25" runat="server" Text='<%# Eval("Name")%>'></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
                                 <asp:LinkButton ID="lnkEditStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Click to edit Strawmen Role/Skill"
-                                    Style="padding-left: 25px;" runat="server" OnClick="lnkEditStrawman_OnClick"
-                                    Text='<%# Eval("Name")%>' />
+                                    CssClass="padLeft25" runat="server" OnClick="lnkEditStrawman_OnClick" Text='<%# Eval("Name")%>' />
                                 <asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another strawman with the same skill and role."
                                     ToolTip="There is another strawmen with the same skill and role." ValidationGroup="StrawmanGroup"
                                     SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>
@@ -113,8 +96,7 @@
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
-                            <HeaderStyle Width="13%" />
-                            <ItemStyle HorizontalAlign="Center" Height="20px" Wrap="false" />
+                            <HeaderStyle CssClass="Width13Percent" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
                                     Basis</div>
@@ -123,7 +105,7 @@
                                 <asp:Label ID="lblBasic" runat="server" Text='<%# ((Pay)Eval("CurrentPay")) != null ? ((Pay)Eval("CurrentPay")).TimescaleName : string.Empty %>'></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:DropDownList ID="ddlBasic" runat="server" Width="100" onchange="return EnableDisableVacationDays(this);">
+                                <asp:DropDownList ID="ddlBasic" runat="server" CssClass="Width100Px" onchange="return EnableDisableVacationDays(this);">
                                     <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
                                     <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
                                     <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
@@ -132,19 +114,19 @@
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
-                            <ItemStyle HorizontalAlign="Right" Height="20px" Wrap="false" />
-                            <HeaderStyle Width="13%" />
+                            <ItemStyle CssClass="Right" />
+                            <HeaderStyle CssClass="Width13Percent" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
                                     Amount</div>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="lblAmount" runat="server" Text='<%# ((Pay)Eval("CurrentPay")) != null ? ((Pay)Eval("CurrentPay")).Amount : 0 %>'
-                                    Style="padding-right: 25px;"></asp:Label>
+                                    CssClass="padRight25"></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
                                 <asp:TextBox ID="txtAmount" runat="server" Text='<%# ((Pay)Eval("CurrentPay")) != null ? ((Pay)Eval("CurrentPay")).Amount : 0%>'
-                                    Style="text-align: right;" Width="100"></asp:TextBox>
+                                    CssClass="Width100Px textRight"></asp:TextBox>
                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmount"
                                     FilterMode="ValidChars" FilterType="Numbers,Custom" ValidChars=".">
                                 </AjaxControlToolkit:FilteredTextBoxExtender>
@@ -154,19 +136,19 @@
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
-                            <HeaderStyle Width="13%" />
-                            <ItemStyle HorizontalAlign="Right" Height="20px" Wrap="false" />
+                            <HeaderStyle CssClass="Width13Percent" />
+                            <ItemStyle CssClass="Right" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
                                     Vacation(In Hours)</div>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="lblVacationDays" runat="server" Text='<%# GetVacationDays((Pay)Eval("CurrentPay")) %>'
-                                    Style="padding-right: 25px;"></asp:Label>
+                                    CssClass="padRight25"></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
                                 <asp:TextBox ID="txtVacationDays" runat="server" Text='<%# GetVacationDays((Pay)Eval("CurrentPay")) %>'
-                                    Width="100" Style="text-align: right;"></asp:TextBox>
+                                    CssClass="textRight Width100Px"></asp:TextBox>
                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtVacationDays" runat="server"
                                     TargetControlID="txtVacationDays" FilterMode="ValidChars" FilterType="Numbers">
                                 </AjaxControlToolkit:FilteredTextBoxExtender>
@@ -180,8 +162,7 @@
                                 <div class="ie-bg">
                                     Active</div>
                             </HeaderTemplate>
-                            <HeaderStyle Width="10%" />
-                            <ItemStyle HorizontalAlign="Center" Height="20px" Wrap="false" />
+                            <HeaderStyle CssClass="Width10Percent" />
                             <ItemTemplate>
                                 <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# ((PersonStatus)Eval("Status")).ToStatusType() == PersonStatusType.Active ? true:false %>' />
                             </ItemTemplate>
@@ -194,8 +175,7 @@
                                 <div class="ie-bg">
                                     &nbsp;</div>
                             </HeaderTemplate>
-                            <HeaderStyle Width="5%" />
-                            <ItemStyle HorizontalAlign="Center" Height="20px" Wrap="false" />
+                            <HeaderStyle CssClass="Width5Percent" />
                             <ItemTemplate>
                                 <asp:ImageButton ID="imgDeleteStrawman" strawmanId='<%# Eval("Id") %>' InUse='<%# Eval("InUse") %>'
                                     OnClientClick="return confirm('Do you really want to delete the strawman?');"
@@ -212,7 +192,7 @@
                 </asp:GridView>
                 <table class="WholeWidth">
                     <tr>
-                        <td style="padding: 10px">
+                        <td class="Padding10">
                         </td>
                     </tr>
                 </table>
@@ -223,50 +203,47 @@
             <asp:HiddenField ID="hdnCompensation" runat="server" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeEditStrawmanPopup" runat="server" TargetControlID="hdnEditStrawman"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlPopup" DropShadow="false" />
-            <asp:Panel ID="pnlPopup" runat="server" BackColor="White" BorderColor="Black" CssClass="ConfirmBoxClassError"
-                Style="display: none; min-height: 140px; max-height: 170px;" BorderWidth="2px"
-                Width="300px">
-                <table width="100%">
-                    <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" colspan="3"
-                            valign="bottom">
-                            <b style="font-size: 14px;">Edit Strawmen</b>
-                            <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel Changes"
-                                Style="float: right;" OnClick="btnCancel_OnClick" Text="X"></asp:Button>
+            <asp:Panel ID="pnlPopup" runat="server" CssClass="popUp EditStrawmenPopUp" Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th colspan="3">
+                            Edit Strawmen
+                            <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel Changes"
+                                OnClick="btnCancel_OnClick" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
-                        <td style="padding-right: 10px; padding-top: 10px;" align="right">
+                        <td class="padRight10 PaddingTop10 textRight">
                             <asp:Label ID="lblastName" runat="server" Text="Role"></asp:Label>
                         </td>
-                        <td style="padding-top: 10px;">
-                            <asp:TextBox ID="tbLastName" MaxLength="50" runat="server" Width="180px"></asp:TextBox>
+                        <td class="PaddingTop10">
+                            <asp:TextBox ID="tbLastName" MaxLength="50" runat="server" CssClass="Width180Px"></asp:TextBox>
                             <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Role is required."
                                 ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true"
                                 ValidationGroup="StrawmanNameGroup"></asp:RequiredFieldValidator>
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding-right: 10px; padding-top: 10px;" align="right">
+                        <td class="padRight10 PaddingTop10 textRight">
                             <asp:Label ID="lbfirstName" runat="server" Text="Skill"></asp:Label>
                         </td>
-                        <td style="padding-top: 10px;">
-                            <asp:TextBox ID="tbFirstName" runat="server" MaxLength="50" Width="180px"></asp:TextBox>
+                        <td class="PaddingTop10">
+                            <asp:TextBox ID="tbFirstName" runat="server" MaxLength="50" CssClass="Width180Px"></asp:TextBox>
                             <asp:RequiredFieldValidator ID="rqfvFirstName" runat="server" Text="*" ErrorMessage="Skill is required."
                                 ControlToValidate="tbFirstName" ToolTip="Skill is required." SetFocusOnError="true"
                                 ValidationGroup="StrawmanNameGroup"></asp:RequiredFieldValidator>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="right" style="padding-top: 20px; padding-right: 10px;">
+                        <td colspan="2" class="PaddingTop20 padRight10 textRight">
                             <asp:Button ID="btnOk" runat="server" Text="OK" ValidationGroup="StrawmanNameGroup"
-                                OnClick="btnOK_OnClick" Width="60px" />
+                                OnClick="btnOK_OnClick" CssClass="Width60Px" />
                             <asp:Button ID="btncancel" runat="server" Text="Cancel" OnClick="btnCancel_OnClick"
-                                Width="60px" />
+                                CssClass="Width60Px" />
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 10px; padding-bottom: 2px;">
+                        <td colspan="2" class="padLeft10 PaddingBottom2">
                             <asp:ValidationSummary ID="valSummary" runat="server" ValidationGroup="StrawmanNameGroup" />
                         </td>
                     </tr>
@@ -276,25 +253,23 @@
                 TargetControlID="hdnTargetValidationPanel" BackgroundCssClass="modalBackground"
                 PopupControlID="pnlValidationPanel" OkControlID="btnOKValidationPanel" CancelControlID="btnOKValidationPanel"
                 DropShadow="false" />
-            <asp:Panel ID="pnlValidationPanel" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none; max-height: 400px; max-width: 550px; min-height: 100px;
-                min-width: 400px" BorderWidth="2px">
-                <table width="100%">
-                    <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                            valign="bottom">
-                            <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
+            <asp:Panel ID="pnlValidationPanel" runat="server" CssClass="popUp ValidationPopUp"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
+                            Attention!
                         </th>
                     </tr>
                     <tr>
-                        <td style="padding: 10px;">
+                        <td class="Padding10">
                             <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                             <asp:ValidationSummary ID="vsStrawmenSummary" runat="server" ValidationGroup="StrawmanGroup" />
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding: 10px; text-align: center;">
-                            <asp:Button ID="btnOKValidationPanel" runat="server" ToolTip="OK" Text="OK" Width="100" />
+                        <td class="Padding10 textCenter">
+                            <asp:Button ID="btnOKValidationPanel" runat="server" ToolTip="OK" Text="OK" CssClass="Width100Px" />
                         </td>
                     </tr>
                 </table>
@@ -302,29 +277,27 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCompensation" runat="server" BehaviorID="mpeCompensation"
                 TargetControlID="hdnCompensation" BackgroundCssClass="modalBackground" PopupControlID="pnlCompensation"
                 OkControlID="btnOkCompersation" CancelControlID="btnOkCompersation" DropShadow="false" />
-            <asp:Panel ID="pnlCompensation" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none; max-height: 400px; max-width: 750px; min-height: 100px;
-                min-width: 500px" BorderWidth="2px">
-                <table width="100%">
-                    <tr>
-                        <th align="center" style="text-align: center; background-color: Gray; padding-bottom: 5px;
-                            font-size: 16px; padding-top: 2px; font-weight: 400;" valign="bottom">
+            <asp:Panel ID="pnlCompensation" runat="server" CssClass="popUp StrawmenCompensationPopUp"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
                             Compensation History
                         </th>
                     </tr>
                     <tr>
                         <td class="bg-light-frame">
-                            <asp:Label ID="lblStrawmanName" runat="server" Style="font-weight: 600; font-size: 14px;"></asp:Label>
+                            <asp:Label ID="lblStrawmanName" runat="server" CssClass="StrawmanName"></asp:Label>
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding: 2px; padding-bottom: 10px;" class="bg-light-frame">
+                        <td class="bg-light-frame strawmenPageTd">
                             <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
-                                EmptyDataText="No compensation history for this person." CssClass="CompPerfTable WholeWidth"
-                                GridLines="None" BackColor="White">
-                                <AlternatingRowStyle BackColor="#F9FAFF" />
+                                EmptyDataText="No compensation history for this person." CssClass="CompPerfTable gvCompensationHistoryStrawmen">
+                                
+                                <AlternatingRowStyle CssClass="alterrow" />
                                 <Columns>
-                                    <asp:TemplateField HeaderText="Start">
+                                    <asp:TemplateField>
                                         <ItemTemplate>
                                             <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime?)Eval("StartDate")).HasValue ? ((DateTime?)Eval("StartDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
                                         </ItemTemplate>
@@ -332,53 +305,48 @@
                                             <div class="ie-bg">
                                                 Start</div>
                                         </HeaderTemplate>
-                                        <ItemStyle HorizontalAlign="Center" Width="19%" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="End">
+                                    <asp:TemplateField>
                                         <ItemTemplate>
                                             <%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %></ItemTemplate>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 End</div>
                                         </HeaderTemplate>
-                                        <ItemStyle HorizontalAlign="Center" Width="19%" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Basis">
+                                    <asp:TemplateField>
                                         <ItemTemplate>
                                             <%# Eval("TimescaleName") %></ItemTemplate>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Basis</div>
                                         </HeaderTemplate>
-                                        <ItemStyle HorizontalAlign="Center" Width="19%" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Amount">
+                                    <asp:TemplateField>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Amount</div>
                                         </HeaderTemplate>
-                                        <ItemStyle HorizontalAlign="Center" Width="19%" />
                                         <ItemTemplate>
                                             <%# Eval("Amount") %>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Vacation">
+                                    <asp:TemplateField>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Vacation(In Hours)</div>
                                         </HeaderTemplate>
-                                        <ItemStyle HorizontalAlign="Center" Width="19%" />
                                         <ItemTemplate>
                                             <%# ((int?)Eval("VacationDays")).HasValue ? (((int?)Eval("VacationDays")).Value * 8).ToString() : string.Empty %>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
+                                    <asp:TemplateField>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 &nbsp;
                                             </div>
                                         </HeaderTemplate>
-                                        <ItemStyle Width="5%" HorizontalAlign="Center" Height="20px" Wrap="false" />
+                                        <HeaderStyle CssClass="width5" />
                                         <ItemTemplate>
                                             <asp:ImageButton ID="imgCompensationDelete" ToolTip="Delete" runat="server" OnClick="imgCompensationDelete_OnClick"
                                                 strawmanId='<%#(Eval("PersonId")) %>' ImageUrl="~/Images/cross_icon.png" />
@@ -394,8 +362,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding: 10px; text-align: center;">
-                            <asp:Button ID="btnOkCompersation" runat="server" ToolTip="OK" Text="OK" Width="100" />
+                        <td class="Padding10 textCenter">
+                            <asp:Button ID="btnOkCompersation" runat="server" ToolTip="OK" Text="OK" CssClass="Width100Px" />
                         </td>
                     </tr>
                 </table>
