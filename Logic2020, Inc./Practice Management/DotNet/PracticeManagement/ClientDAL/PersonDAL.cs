@@ -1511,28 +1511,6 @@ namespace DataAccess
             }
         }
 
-        /// <summary>
-        /// Retrieves all subordinated persons for a specified practice manager.
-        /// </summary>
-        /// <param name="practiceManagerId">An ID of the practice manager to the data be retrieved for.</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public static List<Person> PersonListSubordinates(int practiceManagerId)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListSubordinatesProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(PracticeManagerIdParam, practiceManagerId);
-
-                connection.Open();
-
-                var result = new List<Person>();
-                ReadPersons(command, result);
-                return result;
-            }
-        }
 
         /// <summary>
         /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
