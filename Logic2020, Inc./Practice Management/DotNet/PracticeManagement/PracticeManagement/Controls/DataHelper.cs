@@ -787,29 +787,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        /// <summary>
-        /// Fills the list control with the list of subordinated persons.
-        /// </summary>
-        /// <param name="control">The control to be filled.</param>
-        /// <param name="firstItemText">The text to be displayed by default.</param>
-        /// <param name="practiceManagerId">An ID of the practice manager to retrieve the list for.</param>
-        public static void FillSubordinatesList(ListControl control, string firstItemText, int practiceManagerId)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    Person[] persons = serviceClient.GetSubordinates(practiceManagerId);
-
-                    FillPersonList(control, firstItemText, persons, practiceManagerId.ToString());
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }        
         
         /// <summary>
         /// Fills the list control with the list of Line Manger persons.
