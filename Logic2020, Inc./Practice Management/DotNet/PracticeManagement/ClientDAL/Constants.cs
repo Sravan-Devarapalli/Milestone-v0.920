@@ -747,7 +747,6 @@
                 public const string aspnetUsersDeleteUserProcedure = "dbo.aspnet_Users_DeleteUser";
                 public const string aspnetMembershipCreateUserProcedure = "dbo.aspnet_Membership_CreateUser";
                 public const string MembershipAliasUpdateProcedure = "dbo.MembershipAliasUpdate";
-                public const string PersonListSubordinatesProcedure = "dbo.PersonListSubordinates";
                 public const string PersonOneOffListProcedure = "dbo.PersonOneOffList";
                 public const string PersonEnsureIntegrityProcedure = "dbo.PersonEnsureIntegrity";
                 public const string PersonGetExcelSetProcedure = "dbo.PersonExcelSet";
