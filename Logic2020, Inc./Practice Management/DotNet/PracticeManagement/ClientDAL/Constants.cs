@@ -738,7 +738,6 @@
                 public const string PersonSetStatusProcedure = "dbo.PersonSetStatus";
                 public const string PersonListSalespersonProcedure = "dbo.PersonListSalesperson";
                 public const string PersonListProjectOwnerProcedure = "dbo.PersonListProjectOwner";
-                public const string PersonListOpportunityOwnerProcedure = "dbo.PersonListOpportunityOwner";
                 public const string PersonWorkDaysNumberProcedure = "dbo.PersonWorkDaysNumber";
                 public const string PersonGetCountActiveProcedure = "dbo.PersonGetCountActive";
                 public const string PersonGetByAliasProcedure = "dbo.PersonGetByAlias";
