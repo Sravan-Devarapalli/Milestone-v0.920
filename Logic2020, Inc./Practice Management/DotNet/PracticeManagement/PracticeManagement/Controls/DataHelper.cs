@@ -980,37 +980,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
-        /// <summary>
-        /// Fills the list control with the list of active practice managers.
-        /// </summary>
-        /// <param name="control">The control to be filled.</param>
-        /// <param name="firstItemText">The text to be displayed by default.</param>
-        /// <param name="projectId">An ID of the project to the Practice Maneger be selected for.</param>
-        /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
-        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        public static void FillPracticeManagerList(ListControl control,
-                                                   string firstItemText,
-                                                   int? projectId,
-                                                   DateTime? endDate,
-                                                   bool includeInactive)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    Person[] persons = serviceClient.GetPracticeManagerList(projectId, endDate, includeInactive);
-
-                    FillPersonList(control, firstItemText, persons, String.Empty);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
         /// <summary>
         /// Fills the list control with the list of active practice managers.
         /// </summary>
@@ -1117,38 +1086,6 @@ namespace PraticeManagement.Controls
 
         }
 
-        /// <summary>
-        /// Fills the list control with the list of active practice managers.
-        /// </summary>
-        /// <param name="control">The control to be filled.</param>
-        /// <param name="firstItemText">The text to be displayed by default.</param>
-        /// <param name="projectId">An ID of the project to the Practice Maneger be selected for.</param>
-        /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
-        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        public static void FillPracticeManagerList(
-            Person person,
-            ListControl control,
-            string firstItemText,
-            int? projectId,
-            DateTime? endDate,
-            bool includeInactive)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    Person[] persons = serviceClient.PersonListPracticeManager(person, projectId, endDate,
-                                                                               includeInactive);
-
-                    FillPersonList(control, firstItemText, persons, String.Empty);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
 
         public static void FillPersonList(ListControl control, string firstItemText, Person[] persons,
                                            string firstItemValue, bool fillWithPersonFirstLastName = false)
