@@ -737,7 +737,6 @@
                 public const string MilestonePersonListOverheadByPersonProcedure = "dbo.MilestonePersonListOverheadByPerson";
                 public const string PersonSetStatusProcedure = "dbo.PersonSetStatus";
                 public const string PersonListSalespersonProcedure = "dbo.PersonListSalesperson";
-                public const string PersonListPracticeManagerProcedure = "dbo.PersonListPracticeManager";
                 public const string PersonListProjectOwnerProcedure = "dbo.PersonListProjectOwner";
                 public const string PersonListOpportunityOwnerProcedure = "dbo.PersonListOpportunityOwner";
                 public const string PersonWorkDaysNumberProcedure = "dbo.PersonWorkDaysNumber";
