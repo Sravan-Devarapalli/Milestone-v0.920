@@ -1026,28 +1026,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillOpportunityOwnerList(
-           ListControl control,
-           string firstItemText,
-           bool includeInactive,
-           Person person)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    var persons = serviceClient.PersonListOpportunityOwner(includeInactive, person);
-
-                    FillPersonList(control, firstItemText, persons, String.Empty);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
         public static void FillProjectManagersList(ListControl control, string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
