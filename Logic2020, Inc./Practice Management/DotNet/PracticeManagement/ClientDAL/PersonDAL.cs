@@ -1030,27 +1030,6 @@ namespace DataAccess
         }
 
 
-        public static List<Person> PersonListOpportunityOwner(bool includeInactive, Person person)
-        {
-            var result = new List<Person>();
-
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListOpportunityOwnerProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(IncludeInactiveParam, includeInactive);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
-                    person == null ? (object)DBNull.Value : person.Id.Value);
-
-                connection.Open();
-                ReadPersons(command, result);
-
-                return result;
-            }
-        }
-
         /// <summary>
         /// Retrieves a person record from the database.
         /// </summary>
