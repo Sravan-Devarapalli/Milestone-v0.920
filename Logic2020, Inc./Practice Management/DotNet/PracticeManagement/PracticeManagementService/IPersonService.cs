@@ -270,18 +270,6 @@ namespace PracticeManagementService
         /// <summary>
         /// List the persons who recieve the Practice Management commissions
         /// </summary>
-        /// <param name="projectId">An ID of the project to the Practice Manager be selected for.</param>
-        /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
-        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        /// <returns>
-        /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
-        /// </returns>
-        [OperationContract]
-        List<Person> GetPracticeManagerList(int? projectId, DateTime? endDate, bool includeInactive);
-
-        /// <summary>
-        /// List the persons who recieve the Practice Management commissions
-        /// </summary>
         /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <param name="person"></param>
@@ -290,19 +278,6 @@ namespace PracticeManagementService
         /// </returns>
         [OperationContract]
         List<Person> PersonListProjectOwner(bool includeInactive, Person person);
-
-        /// <summary>
-        /// List the persons who recieve the Practice Management commissions
-        /// </summary>
-        /// <param name="projectId">An ID of the project to the Practice Manager be selected for.</param>
-        /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
-        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        /// <param name="person">Person to apply restrictions to</param>
-        /// <returns>
-        /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
-        /// </returns>
-        [OperationContract]
-        List<Person> PersonListPracticeManager(Person person, int? projectId, DateTime? endDate, bool includeInactive);
 
         /// <summary>
         /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
