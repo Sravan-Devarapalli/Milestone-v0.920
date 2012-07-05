@@ -15,6 +15,19 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteStrawman", ReplyAction="http://tempuri.org/IPersonService/DeleteStrawmanResponse")]
+        void DeleteStrawman(int personId, string userLogin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanDetailsById", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person GetStrawmanDetailsById(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmenListAll", ReplyAction="http://tempuri.org/IPersonService/GetStrawmenListAllResponse")]
+        DataTransferObjects.Person[] GetStrawmenListAll();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmenListAllShort", ReplyAction="http://tempuri.org/IPersonService/GetStrawmenListAllShortResponse")]
+        DataTransferObjects.Person[] GetStrawmenListAllShort(bool includeInactive);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveStrawManFromExisting", ReplyAction="http://tempuri.org/IPersonService/SaveStrawManFromExistingResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         int SaveStrawManFromExisting(int existingPersonId, DataTransferObjects.Person person, string userLogin);
@@ -59,6 +72,10 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPayResponse")]
         DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonInactivate", ReplyAction="http://tempuri.org/IPersonService/PersonInactivateResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        void PersonInactivate(DataTransferObjects.Person person);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonReactivate", ReplyAction="http://tempuri.org/IPersonService/PersonReactivateResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -161,26 +178,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerId", ReplyAction="http://tempuri.org/IPersonService/GetActiveOpportunitiesByOwnerIdResponse")]
         DataTransferObjects.Opportunity[] GetActiveOpportunitiesByOwnerId(int personId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListOpportunityOwner", ReplyAction="http://tempuri.org/IPersonService/PersonListOpportunityOwnerResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveStrawman", ReplyAction="http://tempuri.org/IPersonService/SaveStrawmanResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         System.Nullable<int> SaveStrawman(DataTransferObjects.Person person, DataTransferObjects.Pay currentPay, string userLogin);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteStrawman", ReplyAction="http://tempuri.org/IPersonService/DeleteStrawmanResponse")]
-        void DeleteStrawman(int personId, string userLogin);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanDetailsById", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person GetStrawmanDetailsById(int personId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmenListAll", ReplyAction="http://tempuri.org/IPersonService/GetStrawmenListAllResponse")]
-        DataTransferObjects.Person[] GetStrawmenListAll();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmenListAllShort", ReplyAction="http://tempuri.org/IPersonService/GetStrawmenListAllShortResponse")]
-        DataTransferObjects.Person[] GetStrawmenListAllShort(bool includeInactive);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
@@ -268,19 +268,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person[] PersonListSalesperson(DataTransferObjects.Person person, bool inactives);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPracticeManagerList", ReplyAction="http://tempuri.org/IPersonService/GetPracticeManagerListResponse")]
-        DataTransferObjects.Person[] GetPracticeManagerList(System.Nullable<int> projectId, System.Nullable<System.DateTime> endDate, bool includeInactive);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListProjectOwner", ReplyAction="http://tempuri.org/IPersonService/PersonListProjectOwnerResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person[] PersonListProjectOwner(bool includeInactive, DataTransferObjects.Person person);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListPracticeManager", ReplyAction="http://tempuri.org/IPersonService/PersonListPracticeManagerResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person[] PersonListPracticeManager(DataTransferObjects.Person person, System.Nullable<int> projectId, System.Nullable<System.DateTime> endDate, bool includeInactive);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetSubordinates", ReplyAction="http://tempuri.org/IPersonService/GetSubordinatesResponse")]
-        DataTransferObjects.Person[] GetSubordinates(int practiceManagerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetCareerCounselorHierarchiPersons", ReplyAction="http://tempuri.org/IPersonService/GetCareerCounselorHierarchiPersonsResponse")]
         DataTransferObjects.Person[] GetCareerCounselorHierarchiPersons(int managerId);
@@ -300,10 +290,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.FaultContractAttribute(typeof(DataTransferObjects.DataAccessFault), Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault", Name="DataAccessFault", Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         int SavePersonDetail(DataTransferObjects.Person person, string currentUser, string loginPageUrl);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonInactivate", ReplyAction="http://tempuri.org/IPersonService/PersonInactivateResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        void PersonInactivate(DataTransferObjects.Person person);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -313,6 +299,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
+      
         
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -328,6 +315,22 @@ namespace PraticeManagement.PersonService {
         
         public PersonServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public void DeleteStrawman(int personId, string userLogin) {
+            base.Channel.DeleteStrawman(personId, userLogin);
+        }
+        
+        public DataTransferObjects.Person GetStrawmanDetailsById(int personId) {
+            return base.Channel.GetStrawmanDetailsById(personId);
+        }
+        
+        public DataTransferObjects.Person[] GetStrawmenListAll() {
+            return base.Channel.GetStrawmenListAll();
+        }
+        
+        public DataTransferObjects.Person[] GetStrawmenListAllShort(bool includeInactive) {
+            return base.Channel.GetStrawmenListAllShort(includeInactive);
         }
         
         public int SaveStrawManFromExisting(int existingPersonId, DataTransferObjects.Person person, string userLogin) {
@@ -380,6 +383,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay() {
             return base.Channel.GetStrawmanListShortFilterWithTodayPay();
+        }
+        
+        public void PersonInactivate(DataTransferObjects.Person person) {
+            base.Channel.PersonInactivate(person);
         }
         
         public void PersonReactivate(DataTransferObjects.Person person) {
@@ -502,28 +509,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetActiveOpportunitiesByOwnerId(personId);
         }
         
-        public DataTransferObjects.Person[] PersonListOpportunityOwner(bool includeInactive, DataTransferObjects.Person person) {
-            return base.Channel.PersonListOpportunityOwner(includeInactive, person);
-        }
-        
         public System.Nullable<int> SaveStrawman(DataTransferObjects.Person person, DataTransferObjects.Pay currentPay, string userLogin) {
             return base.Channel.SaveStrawman(person, currentPay, userLogin);
-        }
-        
-        public void DeleteStrawman(int personId, string userLogin) {
-            base.Channel.DeleteStrawman(personId, userLogin);
-        }
-        
-        public DataTransferObjects.Person GetStrawmanDetailsById(int personId) {
-            return base.Channel.GetStrawmanDetailsById(personId);
-        }
-        
-        public DataTransferObjects.Person[] GetStrawmenListAll() {
-            return base.Channel.GetStrawmenListAll();
-        }
-        
-        public DataTransferObjects.Person[] GetStrawmenListAllShort(bool includeInactive) {
-            return base.Channel.GetStrawmenListAllShort(includeInactive);
         }
         
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
@@ -630,20 +617,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.PersonListSalesperson(person, inactives);
         }
         
-        public DataTransferObjects.Person[] GetPracticeManagerList(System.Nullable<int> projectId, System.Nullable<System.DateTime> endDate, bool includeInactive) {
-            return base.Channel.GetPracticeManagerList(projectId, endDate, includeInactive);
-        }
-        
         public DataTransferObjects.Person[] PersonListProjectOwner(bool includeInactive, DataTransferObjects.Person person) {
             return base.Channel.PersonListProjectOwner(includeInactive, person);
-        }
-        
-        public DataTransferObjects.Person[] PersonListPracticeManager(DataTransferObjects.Person person, System.Nullable<int> projectId, System.Nullable<System.DateTime> endDate, bool includeInactive) {
-            return base.Channel.PersonListPracticeManager(person, projectId, endDate, includeInactive);
-        }
-        
-        public DataTransferObjects.Person[] GetSubordinates(int practiceManagerId) {
-            return base.Channel.GetSubordinates(practiceManagerId);
         }
         
         public DataTransferObjects.Person[] GetCareerCounselorHierarchiPersons(int managerId) {
@@ -664,10 +639,6 @@ namespace PraticeManagement.PersonService {
         
         public int SavePersonDetail(DataTransferObjects.Person person, string currentUser, string loginPageUrl) {
             return base.Channel.SavePersonDetail(person, currentUser, loginPageUrl);
-        }
-        
-        public void PersonInactivate(DataTransferObjects.Person person) {
-            base.Channel.PersonInactivate(person);
         }
     }
 }
