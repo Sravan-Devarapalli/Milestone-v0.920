@@ -4090,19 +4090,10 @@
     </Build>
   </ItemGroup>
   <ItemGroup>
-    <NotInBuild Include="Schema Comparisons\v0.850.dbschema">
-      <SubType>NotInBuild</SubType>
-    </NotInBuild>
     <NotInBuild Include="How to create dbschema file.txt">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
-    <NotInBuild Include="Schema Comparisons\v0.900_2010-08-17.dbschema">
-      <SubType>NotInBuild</SubType>
-    </NotInBuild>
     <NotInBuild Include="How to create update script.txt">
-      <SubType>NotInBuild</SubType>
-    </NotInBuild>
-    <NotInBuild Include="Schema Comparisons\v0.900_2010-09-29.dbschema">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
     <NotInBuild Include="VSDBCMD\UpgradeScript.sql">
@@ -4136,12 +4127,6 @@
       <SubType>NotInBuild</SubType>
     </NotInBuild>
     <NotInBuild Include="VSDBCMD\Deployment\vsdbcmd.exe.config">
-      <SubType>NotInBuild</SubType>
-    </NotInBuild>
-    <NotInBuild Include="Schema Comparisons\v0.900_2010-10-05.dbschema">
-      <SubType>NotInBuild</SubType>
-    </NotInBuild>
-    <NotInBuild Include="Schema Comparisons\v0.900_2010-10-13.dbschema">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
     <NotInBuild Include="Schema Objects\Schemas\dbo\Tables\Indexes\UN_DefaultMilestoneSetting.sql">
