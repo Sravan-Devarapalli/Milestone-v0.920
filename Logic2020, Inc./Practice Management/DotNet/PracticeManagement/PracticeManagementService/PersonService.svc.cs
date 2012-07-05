@@ -388,11 +388,6 @@ namespace PracticeManagementService
             return PersonDAL.PersonListProjectOwner(includeInactive, person);
         }
 
-        public List<Person> PersonListOpportunityOwner(bool includeInactive, Person person)
-        {
-            return PersonDAL.PersonListOpportunityOwner(includeInactive, person);
-        }
-
 
         /// <summary>
         /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
