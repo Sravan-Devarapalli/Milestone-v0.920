@@ -423,15 +423,6 @@ namespace PracticeManagementService
             return PersonDAL.PersonListPracticeManager(person, projectId, endDate, includeInactive);
         }
 
-        /// <summary>
-        /// Retrieves all subordinated persons for a specified practice manager.
-        /// </summary>
-        /// <param name="practiceManagerId">An ID of the parctice manager to teh data be retrieved for.</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public List<Person> GetSubordinates(int practiceManagerId)
-        {
-            return PersonDAL.PersonListSubordinates(practiceManagerId);
-        }
 
         /// <summary>
         /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
