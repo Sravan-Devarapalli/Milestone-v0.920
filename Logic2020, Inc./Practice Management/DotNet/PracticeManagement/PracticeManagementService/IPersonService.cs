@@ -305,14 +305,6 @@ namespace PracticeManagementService
         List<Person> PersonListPracticeManager(Person person, int? projectId, DateTime? endDate, bool includeInactive);
 
         /// <summary>
-        /// Retrieves all subordinated persons for a specified practice manager.
-        /// </summary>
-        /// <param name="practiceManagerId">An ID of the parctice manager to teh data be retrieved for.</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        [OperationContract]
-        List<Person> GetSubordinates(int practiceManagerId);
-
-        /// <summary>
         /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
         /// </summary>
         /// <param name="practiceManagerId">An ID of the manager(Counselor) to teh data be retrieved for.</param>
