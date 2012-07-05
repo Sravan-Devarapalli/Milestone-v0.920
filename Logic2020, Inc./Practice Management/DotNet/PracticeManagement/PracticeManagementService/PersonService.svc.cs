@@ -377,20 +377,6 @@ namespace PracticeManagementService
         /// <summary>
         /// List the persons who recieve the Practice Management commissions
         /// </summary>
-        /// <param name="projectId">An ID of the project to the Practice Manager be selected for.</param>
-        /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
-        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        /// <returns>
-        /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
-        /// </returns>
-        public List<Person> GetPracticeManagerList(int? projectId, DateTime? endDate, bool includeInactive)
-        {
-            return PersonDAL.PersonListPracticeManager(projectId, endDate, includeInactive);
-        }
-
-        /// <summary>
-        /// List the persons who recieve the Practice Management commissions
-        /// </summary>
         /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <param name="person"></param>
@@ -405,22 +391,6 @@ namespace PracticeManagementService
         public List<Person> PersonListOpportunityOwner(bool includeInactive, Person person)
         {
             return PersonDAL.PersonListOpportunityOwner(includeInactive, person);
-        }
-
-
-        /// <summary>
-        /// List the persons who recieve the Practice Management commissions
-        /// </summary>
-        /// <param name="projectId">An ID of the project to the Practice Manager be selected for.</param>
-        /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
-        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        /// <param name="person">Person to apply restrictions to</param>
-        /// <returns>
-        /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
-        /// </returns>
-        public List<Person> PersonListPracticeManager(Person person, int? projectId, DateTime? endDate, bool includeInactive)
-        {
-            return PersonDAL.PersonListPracticeManager(person, projectId, endDate, includeInactive);
         }
 
 
