@@ -29,6 +29,7 @@ namespace DataAccess
         private const string PTODaysPerAnnumParam = "@PTODaysPerAnnum";
         private const string HireDateParam = "@HireDate";
         private const string TerminationDateParam = "@TerminationDate";
+        private const string TerminationReasonIdParam = "@TerminationReasonId";
         private const string TeleponeNumberParam = "@TelephoneNumber";
         private const string AliasParam = "@Alias";
         private const string DefaultPracticeParam = "@DefaultPractice";
@@ -161,6 +162,8 @@ namespace DataAccess
         private const string TimeScaleChangeStatusColumn = "TimeScaleChangeStatus";
 
         private const string DivisionIdColumn = "DivisionId";
+        private const string TerminationReasonIdColumn = "TerminationReasonId";
+        private const string TerminationReasonColumn = "TerminationReason";
 
         #endregion
 
@@ -775,6 +778,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(IsOffshoreParam, person.IsOffshore);
                 command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
                 command.Parameters.AddWithValue(PersonDivisionIdParam, (int)person.DivisionType != 0 ? (object)((int)person.DivisionType) : DBNull.Value);
+                command.Parameters.AddWithValue(TerminationReasonIdParam,
+                                                person.TerminationReasonid.HasValue
+                                                    ? (object)person.TerminationReasonid.Value
+                                                    : DBNull.Value);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(
@@ -887,6 +894,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(IsOffshoreParam, person.IsOffshore);
                 command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
                 command.Parameters.AddWithValue(PersonDivisionIdParam, (int)person.DivisionType != 0 ? (object)((int)person.DivisionType) : DBNull.Value);
+                command.Parameters.AddWithValue(TerminationReasonIdParam,
+                                                person.TerminationReasonid.HasValue
+                                                    ? (object)person.TerminationReasonid.Value
+                                                    : DBNull.Value);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(
@@ -2134,6 +2145,14 @@ namespace DataAccess
                     int isOffshoreIndex;
                     int paychexIDIndex;
                     int divisionIdIndex;
+                    int terminationReasonIdIndex = -1;
+
+                    try
+                    {
+                        terminationReasonIdIndex = reader.GetOrdinal(TerminationReasonIdColumn);
+                    }
+                    catch
+                    { }
 
                     try
                     {
@@ -2245,6 +2264,12 @@ namespace DataAccess
                         {
                             person.TerminationDate = (DateTime)reader[TerminationDateColumn];
                         }
+
+                        if (terminationReasonIdIndex != -1)
+                        {
+                            person.TerminationReasonid = reader.IsDBNull(terminationReasonIdIndex) ? null : (int?)reader.GetInt32(terminationReasonIdIndex);
+                        }
+
                         if (!Convert.IsDBNull(reader["DefaultPractice"]))
                         {
                             person.DefaultPractice = new Practice
@@ -3277,7 +3302,7 @@ namespace DataAccess
             int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
             int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
             int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
-           
+
             int payPersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.PayPersonIdColumn);
             int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
             int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
@@ -3291,7 +3316,7 @@ namespace DataAccess
             int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
             int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
             int defaultHoursPerDayIndex = reader.GetOrdinal(DefaultHoursPerDayColumn);
-           
+
             Person person = null;
             if (reader.HasRows)
             {
@@ -3352,7 +3377,7 @@ namespace DataAccess
             int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
             int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
             int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
-            
+
             int payPersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.PayPersonIdColumn);
             int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
             int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
@@ -3460,9 +3485,9 @@ namespace DataAccess
                     person.Alias = reader.GetString(aliasIndex);
                     person.IsStrawMan = reader.IsDBNull(isStrawManIndex) ? false : reader.GetBoolean(isStrawManIndex);
                     person.CurrentPay = new Pay
-                                {
-                                    TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
-                                };
+                    {
+                        TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                    };
                     person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
                     person.Status = new PersonStatus
                     {
@@ -3629,6 +3654,34 @@ namespace DataAccess
             }
         }
 
+        public static Dictionary<string, int> GetTerminationReasonsList()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetTerminationReasonsList, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new Dictionary<string, int>();
+
+                    if (reader.HasRows)
+                    {
+                        int terminationReasonIdIndex = reader.GetOrdinal(TerminationReasonIdColumn);
+                        int terminationReasonIndex = reader.GetOrdinal(TerminationReasonColumn);
+                        while (reader.Read())
+                        {
+                            int value = reader.GetInt32(terminationReasonIdIndex);
+                            string key = reader.GetString(terminationReasonIndex);
+                            result.Add(key, value);
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
+
     }
 }
-
