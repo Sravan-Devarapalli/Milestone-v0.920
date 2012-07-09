@@ -15,6 +15,9 @@ CREATE PROCEDURE dbo.PersonListAllShort
 AS
 	SET NOCOUNT ON
 
+	DECLARE @FutureDate DATETIME
+	SELECT @FutureDate = dbo.GetFutureDate()
+
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
@@ -26,7 +29,7 @@ AS
 	   AND (@PersonStatusId IS NULL OR p.PersonStatusId = @PersonStatusId)
 	   AND (   @StartDate IS NULL
 	        OR @EndDate IS NULL
-	        OR dbo.GetOverlappingPlacementDays(p.HireDate, ISNULL(p.TerminationDate, dbo.GetFutureDate()), @StartDate, @EndDate) = 1
+	        OR (@StartDate <= ISNULL(p.TerminationDate,@FutureDate) AND p.HireDate <= @EndDate)
 	       )
 	ORDER BY p.LastName, p.FirstName
 
