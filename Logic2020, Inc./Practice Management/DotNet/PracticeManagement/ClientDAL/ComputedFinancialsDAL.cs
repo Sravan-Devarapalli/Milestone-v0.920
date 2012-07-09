@@ -56,41 +56,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Retrives the list of the computed financials for the project and the specified period
-        /// grouped by months.
-        /// </summary>
-        /// <param name="projectid">An ID of the project to the data be retrieved for.</param>
-        /// <param name="startDate">A period start.</param>
-        /// <param name="endDate">A period end.</param>
-        /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static Dictionary<DateTime, ComputedFinancials> FinancialsListByProjectPeriod(
-            int projectid,
-            DateTime startDate,
-            DateTime endDate)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(
-                Constants.ProcedureNames.ComputedFinancials.FinancialsListByProjectPeriod, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectid);
-                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    var result =
-                        new Dictionary<DateTime, ComputedFinancials>();
-                    ReadFinancials(reader, result);
-                    return result;
-                }
-            }
-        }
-
-        /// <summary>
         /// Retrives the list of the computed financials for the project and the specified period.
         /// </summary>
         /// <param name="projects">Projects list</param>
@@ -140,45 +105,6 @@ namespace DataAccess
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                     return ReadMilestonePersonComputedFinancials(reader);
-            }
-        }
-
-
-        /// <summary>
-        /// Retrives the list of the computed financials for the project and the specified period.
-        /// </summary>
-        /// <param name="projectid">An ID of the project to the data be retrieved for.</param>
-        /// <param name="startDate">A period start.</param>
-        /// <param name="endDate">A period end.</param>
-        /// <returns>The <see cref="ComputedFinancials"/> object if found and null otherwise.</returns>
-        public static ComputedFinancials FinancialsListByProjectPeriodTotal(
-            int projectid,
-            DateTime startDate,
-            DateTime endDate)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(
-                Constants.ProcedureNames.ComputedFinancials.FinancialsListByProjectPeriodTotal, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectid);
-                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    var result =
-                        new Dictionary<DateTime, ComputedFinancials>();
-                    ReadFinancials(reader, result);
-                    foreach (var pair in result)
-                    {
-                        return pair.Value;
-                    }
-                    return null;
-                }
             }
         }
 
