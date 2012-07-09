@@ -399,6 +399,9 @@ namespace DataTransferObjects
         [DataMember]
         public bool InUse { get; set; }
 
+        [DataMember]
+        public int? TerminationReasonid { get; set; }
+
         #endregion
 
         #region Properties - calculated
