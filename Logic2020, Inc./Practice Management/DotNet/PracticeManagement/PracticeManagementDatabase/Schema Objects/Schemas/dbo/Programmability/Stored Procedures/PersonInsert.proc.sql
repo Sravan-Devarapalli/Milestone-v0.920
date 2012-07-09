@@ -7,7 +7,7 @@
 CREATE PROCEDURE [dbo].[PersonInsert]
 (
 	@FirstName       NVARCHAR(40),
-	@LastName        NVARCHAR(40),
+	@LastName        NVARCHAR(40), 
 	@PTODaysPerAnnum INT,
 	@HireDate        DATETIME,
 	@TerminationDate DATETIME,
@@ -30,7 +30,7 @@ AS
 	DECLARE @ErrorMessage NVARCHAR(2048),
 			@Today			DATETIME
 
-	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETDATE())))
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
 
 	IF EXISTS(SELECT 1
 	            FROM dbo.[Person] AS p
@@ -87,7 +87,7 @@ AS
 			-- Try to get default manager id
 			SELECT @ManagerId = p.PersonId FROM person AS p WHERE p.IsDefaultManager = 1
 
-		SELECT @PersonStatusId = CASE WHEN @TerminationDate<= @Today THEN 2 ELSE @PersonStatusId END
+		SELECT @PersonStatusId = CASE WHEN @TerminationDate < @Today THEN 2 ELSE @PersonStatusId END
 		-- Inserting Person
 		INSERT dbo.Person
 			(FirstName, LastName, PTODaysPerAnnum,  HireDate,  Alias, DefaultPractice, 
