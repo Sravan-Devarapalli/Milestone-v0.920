@@ -308,65 +308,59 @@
             }
             return false;
         }
+
+        function ValidateCompensationAndTerminationDate(btnTerminatePersonOk, popupTerminationDate, ddlPopupTerminationReason) {
+            var terminationDateExt =  $find(popupTerminationDate);
+            var ddlterminationReason = document.getElementById(ddlPopupTerminationReason);
+            var terminationDate = terminationDateExt.get_selectedDate();
+            var terminationDateTextValue = terminationDateExt._textbox.get_Value();
+            var compensationEndDate = new Date(btnTerminatePersonOk.getAttribute('CompensationEndDate'));
+            var hasNotClosedCompensation = btnTerminatePersonOk.getAttribute('HasNotClosedCompensation');
+                        
+            if(terminationDate != '' && terminationDate != undefined && terminationDate != null && compensationEndDate != null && (compensationEndDate > terminationDate || (hasNotClosedCompensation == 'true')) && ddlterminationReason.value != '')
+            {
+                var message = '';
+                if(hasNotClosedCompensation)
+                    message =  message + 'This person has Termination Date, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                else
+                    message =  message + 'This person has Termination Date, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+
+                if(!confirm(message))
+                {
+                    Page_ClientValidate('PersonTerminate');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function EnableTerminateEmployeeOkButton(btnPersonTerminateOkId, terminationDateTextBoxId, ddlTerminationReasonId)
+        {
+            var btnPersonTerminateOk = document.getElementById(btnPersonTerminateOkId);
+            var terminationDate = document.getElementById(terminationDateTextBoxId);
+            var ddlTerminationReason = document.getElementById(ddlTerminationReasonId);
+
+            if(btnPersonTerminateOk != null && ddlTerminationReason != null && terminationDate != null)
+            {
+                Disable(btnPersonTerminateOk, (ddlTerminationReason.value == '' || terminationDate.value == ''));
+            }
+        }
+
+        function Disable(control, disable)
+        {
+            if(disable)
+            {
+                control.disabled = 'disabled';
+            }
+            else
+            {
+                control.disabled = '';
+            }
+        }
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <asp:Literal ID="ltrScript" runat="server" Mode="PassThrough"> <script type="text/javascript" defer="defer">//<!--
-				function validateStatus()
-				{{
-                 var compensationEndDateStr = "{5}";
-                 var terminationDateStr = document.getElementById("{4}").value;
-                 var ddl = document.getElementById("{0}");
-                 var statusId = ddl.selectedIndex >= 0 ? ddl.options[ddl.selectedIndex].value : "";                
-                 var hasOpenEndedCompensation = {1};                 
-                 var compensationEndDate = new Date(compensationEndDateStr);
-                 var terminationDate = new Date(terminationDateStr);
-                 var now = new Date();
-					if (terminationDateStr!='' && (now >= terminationDate || statusId == "{2}")  &&
-                            ( compensationEndDateStr != '' && compensationEndDate>terminationDate || hasOpenEndedCompensation )
-                        )
-					{{
-						var result = (statusId != "{2}" && terminationDateStr=="");
-                        if(!result)
-                        {{
-                            var  message =  "";
-                            if(statusId == "{2}")
-                            {{
-                            if(hasOpenEndedCompensation)
-                              message =  message+"This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
-                            else
-                              message =  message+"This person has a status of Terminated, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
-                            
-                            }}
-                            else
-                            {{
-                            if(hasOpenEndedCompensation)
-                                message =  message+"This person has Termination Date, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
-                             else
-                                message =  message+"This person has Termination Date, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.";
-                            }}
-                            result= confirm(message);
-                         }}
-						if (!result)
-						{{
-							for (var i = 0; i < ddl.options.length; i++)
-							{{
-								if (ddl.options[i].value == "{3}")
-								{{
-									ddl.selectedIndex = i;
-									break;
-								}}
-							}}
-						}}
-						return result;
-					}}
-					return true;
-				}}
-				
-				clientValidateFunc = validateStatus;
-			//-->
-			</script></asp:Literal>
             <asp:HiddenField ID="hidDirty" runat="server" />
             <table class="PersonForm">
                 <tr>
@@ -398,7 +392,7 @@
                                         Status
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width158px" onchange="setDirty();">
+                                        <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width158px" onchange="setDirty();" AutoPostBack="true">
                                         </asp:DropDownList>
                                     </td>
                                     <td>
@@ -412,6 +406,7 @@
                                         <asp:CustomValidator ID="cvInactiveStatus" runat="server" ErrorMessage="" ToolTip=""
                                             Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                             OnServerValidate="cvInactiveStatus_ServerValidate"></asp:CustomValidator>
+                                        &nbsp;
                                     </td>
                                 </tr>
                                 <tr>
@@ -429,6 +424,7 @@
                                             runat="server" ValidationGroup="Person" ErrorMessage="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
                                             ToolTip="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
                                             EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
+                                        &nbsp;
                                     </td>
                                     <td>
                                         Career Counselor
@@ -461,7 +457,7 @@
                                         <asp:CustomValidator ID="cvPracticeArea" runat="server" ErrorMessage="The Default Practice Area is required for active person."
                                             ToolTip="The Default Practice Area is required for active person." ValidationGroup="Person"
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            OnServerValidate="cvPracticeArea_ServerValidate"></asp:CustomValidator>
+                                            OnServerValidate="cvPracticeArea_ServerValidate"></asp:CustomValidator>&nbsp;
                                     </td>
                                     <td>
                                         Hire&nbsp;Date
@@ -482,7 +478,7 @@
                                             ErrorMessage="Cannot set a Hire Date outside recruiting commissions period."
                                             ToolTip="Cannot set a Hire Date outside recruiting commissions period." ValidationGroup="Person"
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            OnServerValidate="custHireDate_ServerValidate"></asp:CustomValidator>
+                                            OnServerValidate="custHireDate_ServerValidate"></asp:CustomValidator>&nbsp;
                                     </td>
                                 </tr>
                                 <tr>
@@ -508,14 +504,13 @@
                                         <asp:CustomValidator ID="custReqEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
                                             ErrorMessage="The Email Address is required for active person." ToolTip="The Email Address is required for active person."
                                             ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                            Display="Dynamic" ValidateEmptyText="true" OnServerValidate="custReqEmailAddress_ServerValidate"></asp:CustomValidator>
+                                            Display="Dynamic" ValidateEmptyText="true" OnServerValidate="custReqEmailAddress_ServerValidate"></asp:CustomValidator>&nbsp;
                                     </td>
                                     <td nowrap="nowrap">
                                         Termination Date
                                     </td>
                                     <td class="Width158px">
-                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" OnSelectionChanged="dtpTerminationDate_SelectionChanged"
-                                            AutoPostBack="true" />
+                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server"/>
                                     </td>
                                     <td>
                                         <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
@@ -524,8 +519,8 @@
                                             SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'"
                                             Type="Date">*</asp:CompareValidator>
                                         <asp:CustomValidator ID="custTerminationDate" runat="server" ErrorMessage="To terminate the person the Termination Date should be specified."
-                                            ToolTip="The Termination Date is not correct" ValidationGroup="Person" Text="*"
-                                            Display="Dynamic" EnableClientScript="false" OnServerValidate="custTerminationDate_ServerValidate"></asp:CustomValidator>
+                                            ToolTip="To terminate the person the Termination Date should be specified." ValidationGroup="Person"
+                                            Text="*" Display="Dynamic" EnableClientScript="false" OnServerValidate="custTerminationDate_ServerValidate"></asp:CustomValidator>
                                         <asp:CompareValidator ID="cmpTerminateDate" runat="server" ControlToValidate="dtpTerminationDate"
                                             ControlToCompare="dtpHireDate" Operator="GreaterThan" Type="Date" ErrorMessage="Termination date should be greater than Hire date."
                                             Display="Dynamic" Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than Hire date."
@@ -536,6 +531,13 @@
                                         <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
                                             Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                             OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
+                                        <asp:DropDownList ID="ddlTerminationReason" runat="server">
+                                        </asp:DropDownList>
+                                        <asp:CustomValidator ID="custTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
+                                            ToolTip="To terminate the person the Termination Reason should be specified."
+                                            ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
+                                            OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>
+                                        <asp:Button ID="btnTerminatePerson" runat="server" Text="Terminate Employee" OnClick="btnTerminatePerson_Click" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -573,7 +575,7 @@
                                         <asp:RegularExpressionValidator ID="reqTelphoneNumber" runat="server" ControlToValidate="txtTelephoneNumber"
                                             Display="Dynamic" ErrorMessage="The Telephone number is not valid." ValidationGroup="Person"
                                             ToolTip="The Telephone number is not valid." Text="*" EnableClientScript="False"
-                                            ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>
+                                            ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>&nbsp;
                                     </td>
                                     <td>
                                         <asp:Label ID="lblDivision" runat="server" Text="Division"></asp:Label>
@@ -604,7 +606,7 @@
                                         <asp:CustomValidator ID="custEmployeeNumber" runat="server" ControlToValidate="txtEmployeeNumber"
                                             Display="Dynamic" EnableClientScript="false" ValidationGroup="Person" ErrorMessage="There is another Person with the same Employee Number."
                                             OnServerValidate="custEmployeeNumber_ServerValidate" SetFocusOnError="true" Text="*"
-                                            ToolTip="There is another Person with the same Employee Number."></asp:CustomValidator>
+                                            ToolTip="There is another Person with the same Employee Number."></asp:CustomValidator>&nbsp;
                                     </td>
                                     <td>
                                         Practice Areas Owned
@@ -1402,22 +1404,11 @@
                     <td align="center">
                         <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="if (!validateStatus()) return false;" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
-                        <script type="text/javascript">
-                            function disableSaveButton() {
-                                document.getElementById('<%= btnSave.ClientID %>').disabled = true;
-                            }
-                        </script>
-                        <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
-                            <Animations>
-					            <OnClick>
-					                <ScriptAction Script="disableSaveButton();" />
-					            </OnClick>
-                            </Animations>
-                        </AjaxControlToolkit:AnimationExtender>
                     </td>
                 </tr>
             </table>
             <asp:HiddenField ID="hdnField" runat="server" />
+            <asp:HiddenField ID="hdnOpenPopUP" runat="server"></asp:HiddenField>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeViewTerminationDateErrors" runat="server"
                 TargetControlID="hdnField" CancelControlID="btnClose" BackgroundCssClass="modalBackground"
                 PopupControlID="pnlTerminationDateErrors" DropShadow="false" />
@@ -1494,6 +1485,66 @@
                                     </td>
                                 </tr>
                             </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeViewPersonTerminationPopup" runat="server"
+                TargetControlID="hdnOpenPopUP" CancelControlID="btnPersonTerminateCancel" BackgroundCssClass="modalBackground"
+                PopupControlID="pnlPersonTermination" DropShadow="false" />
+            <asp:Panel ID="pnlPersonTermination" runat="server" CssClass="popUp TerminationPopUpPersonDetailPage" Style="display: none;">
+                <table>
+                    <tr>
+                        <td class="textleft Padding6">
+                            Termination Date
+                        </td>
+                        <td class="textleft Padding6 no-wrap">
+                            :
+                            <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" BehaviorID="dtpPopUpTerminateDate"/>
+                            <asp:RequiredFieldValidator ID="rfvDtpPopUpTerminateDate" runat="server" ControlToValidate="dtpPopUpTerminateDate"
+                                Text="*" ErrorMessage="To terminate the person the Termination Date should be specified."
+                                ToolTip="To terminate the person the Termination Date should be specified." ValidationGroup="PersonTerminate"
+                                Display="Dynamic"></asp:RequiredFieldValidator>
+                            <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="dtpPopUpTerminateDate"
+                                Display="Dynamic" Enabled="False" EnableTheming="True"
+                                ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'" Operator="DataTypeCheck"
+                                SetFocusOnError="True" ValidationGroup="PersonTerminate" ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'"
+                                Type="Date">*</asp:CompareValidator>
+                            <asp:CompareValidator ID="CompareValidator2" runat="server" ControlToValidate="dtpPopUpTerminateDate"
+                                ControlToCompare="dtpHireDate" Operator="GreaterThan" Type="Date" ErrorMessage="Termination date should be greater than Hire date."
+                                Display="Dynamic" Text="*" ValidationGroup="PersonTerminate" ToolTip="Termination date should be greater than Hire date."
+                                SetFocusOnError="true"></asp:CompareValidator>
+                            <%--<asp:CustomValidator ID="CustomValidator2" runat="server" ErrorMessage="" ToolTip=""
+                                Display="Dynamic" ValidationGroup="PersonTerminate" Text="*"
+                                OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
+                            <asp:CustomValidator ID="CustomValidator3" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
+                                Display="Dynamic" ValidationGroup="PersonTerminate" Text="*"
+                                OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>--%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="textleft Padding6">
+                            Termination Reason
+                        </td>
+                        <td class="textleft Padding6 no-wrap">
+                            :
+                            <asp:DropDownList ID="ddlPopUpTerminationReason" runat="server">
+                            </asp:DropDownList>
+                            <asp:CustomValidator ID="custPopUpTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
+                                ToolTip="To terminate the person the Termination Reason should be specified."
+                                ValidationGroup="PersonTerminate" Text="*" Display="Dynamic"
+                                OnServerValidate="custPopUpTerminationReason_ServerValidate"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="Padding6">
+                            <asp:ValidationSummary ID="valSummaryTerminationPopup" runat="server" ValidationGroup="PersonTerminate"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="alignCenter Padding6">
+                            <asp:Button ID="btnPersonTerminate" Text="OK" runat="server" OnClick="btnPersonTerminate_Click"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <asp:Button ID="btnPersonTerminateCancel" Text="Cancel" runat="server" />
                         </td>
                     </tr>
                 </table>
