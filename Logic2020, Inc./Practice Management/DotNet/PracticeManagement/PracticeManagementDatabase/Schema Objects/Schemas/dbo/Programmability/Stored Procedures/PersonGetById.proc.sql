@@ -40,7 +40,8 @@ BEGIN
 		   p.IsStrawman AS IsStrawman,
 		   p.IsOffshore,
 		   p.PaychexID,
-		   p.DivisionId
+		   p.DivisionId,
+		   p.TerminationReasonId
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 END
