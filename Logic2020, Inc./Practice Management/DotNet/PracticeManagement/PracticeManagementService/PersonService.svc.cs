@@ -760,6 +760,7 @@ namespace PracticeManagementService
         /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
         /// <param name="proposedRate">A proposed person's hourly rate.</param>
         /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
+        /// Not Using.
         public ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage)
         {
             PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, 0M, proposedHoursPerWeek, isMarginTestPage);
@@ -999,7 +1000,7 @@ namespace PracticeManagementService
         public int SaveStrawManFromExisting(int existingPersonId, Person person, string userLogin)
         {
             int newPersonId = 0;
-            PersonDAL.SaveStrawManFromExisting(existingPersonId, person, out newPersonId,userLogin);
+            PersonDAL.SaveStrawManFromExisting(existingPersonId, person, out newPersonId, userLogin);
             return newPersonId;
         }
 
@@ -1013,7 +1014,7 @@ namespace PracticeManagementService
 
         public Person GetPersonDetailsShort(int personId)
         {
-            return  PersonDAL.GetPersonFirstLastNameById(personId);
+            return PersonDAL.GetPersonFirstLastNameById(personId);
         }
 
 
@@ -1078,12 +1079,17 @@ namespace PracticeManagementService
 
         public List<Pay> GetHistoryByPerson(int personId)
         {
-            return  PayDAL.GetHistoryByPerson(personId);
+            return PayDAL.GetHistoryByPerson(personId);
         }
 
         public List<Person> GetStrawmanListShortFilterWithTodayPay()
         {
             return PersonDAL.GetStrawmanListShortFilterWithTodayPay();
+        }
+
+        public Dictionary<string, int> GetTerminationReasonsList()
+        {
+            return PersonDAL.GetTerminationReasonsList();
         }
 
         #endregion
