@@ -43,13 +43,16 @@ BEGIN
 					i.DivisionId,
 					PD.DivisionName,
 					i.PayChexID,
-					CASE WHEN i.IsOffshore = 1 THEN 'YES' ELSE 'NO' END AS [IsOffshore]
+					CASE WHEN i.IsOffshore = 1 THEN 'YES' ELSE 'NO' END AS [IsOffshore],
+					TR.TerminationReasonId,
+					TR.TerminationReason
 			FROM inserted AS i
 					LEFT JOIN dbo.Practice AS p ON i.DefaultPractice = p.PracticeId
 					INNER JOIN dbo.PersonStatus AS s ON i.PersonStatusId = s.PersonStatusId
 					LEFT JOIN dbo.Seniority AS r ON i.SeniorityId = r.SeniorityId
 					LEFT JOIN dbo.Person as mngr ON mngr.PersonId = i.ManagerId
 					LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = i.DivisionId
+					LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = i.TerminationReasonId
 			WHERE i.IsStrawman = 0 
 		),
 
@@ -73,13 +76,16 @@ BEGIN
 					d.DivisionId,
 					PD.DivisionName,
 					d.PayChexID,
-					CASE WHEN d.IsOffshore = 1 THEN 'YES' ELSE 'NO' END AS [IsOffshore]
+					CASE WHEN d.IsOffshore = 1 THEN 'YES' ELSE 'NO' END AS [IsOffshore],
+					TR.TerminationReasonId,
+					TR.TerminationReason
 			FROM deleted AS d
 					LEFT JOIN dbo.Practice AS p ON d.DefaultPractice = p.PracticeId
 					INNER JOIN dbo.PersonStatus AS s ON d.PersonStatusId = s.PersonStatusId
 					LEFT JOIN dbo.Seniority AS r ON d.SeniorityId = r.SeniorityId
 					LEFT JOIN dbo.Person as mngr ON mngr.PersonId = d.ManagerId
 					LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = d.DivisionId
+					LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = d.TerminationReasonId
 			WHERE d.IsStrawman = 0
 		)
 
@@ -152,6 +158,7 @@ BEGIN
 					OR ISNULL(i.DivisionId,0) <> ISNULL(d.DivisionId,0)
 					OR ISNULL(i.PayChexID,'') <> ISNULL(d.PayChexID,'')
 					OR ISNULL(i.IsOffshore,'') <> ISNULL(d.IsOffshore,'')
+					OR ISNULL(i.TerminationReasonId, -1) <> ISNULL(d.TerminationReasonId, -1)
 				)
 
 	END
