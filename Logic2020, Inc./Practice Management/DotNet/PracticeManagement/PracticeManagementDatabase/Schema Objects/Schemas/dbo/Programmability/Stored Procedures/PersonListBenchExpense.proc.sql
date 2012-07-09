@@ -17,11 +17,7 @@ CREATE PROCEDURE [dbo].[PersonListBenchExpense]
 	@TimeScaleIds NVARCHAR(1000) = NULL
 )
 AS
-	SET NOCOUNT ON
-
-	-- Listing all records
-	DECLARE @DefaultBillRate INT
-	SELECT @DefaultBillRate  = 120
+	SET NOCOUNT ON;
 
 	DECLARE @StartDateLocal   DATETIME,
 		@EndDateLocal     DATETIME,
@@ -35,7 +31,9 @@ AS
 		@TimeScaleIdsLocal NVARCHAR(1000) = NULL,
 		@IncludeOverheadsLocal BIT,
 		@IncludeZeroCostEmployeesLocal	BIT,
-		@ApplyPersonStatusFilter	BIT
+		@ApplyPersonStatusFilter	BIT,
+		@DefaultBillRate INT, 
+	    @FutureDate DATETIME
 		
 	SELECT  @StartDateLocal=@StartDate,
 			@EndDateLocal=@EndDate,
@@ -48,7 +46,9 @@ AS
 			@PracticeIdsLocal=@PracticeIds,
 			@TimeScaleIdsLocal = @TimeScaleIds,
 			@IncludeOverheadsLocal = @IncludeOverheads,
-			@IncludeZeroCostEmployeesLocal =@IncludeZeroCostEmployees 
+			@IncludeZeroCostEmployeesLocal =@IncludeZeroCostEmployees,
+			@DefaultBillRate  = 120,
+		    @FutureDate = dbo.GetFutureDate() 
 
 	IF(@ActivePersonsLocal IS NULL AND  @ProjectedPersonsLocal IS NULL)
 	SELECT @ApplyPersonStatusFilter = 0
@@ -141,13 +141,12 @@ AS
 
 		FROM Person P
 		INNER JOIN dbo.PersonCalendarAuto AS cal 
-				ON cal.Date BETWEEN P.HireDate AND ISNULL(p.TerminationDate, dbo.GetFutureDate())
-					AND P.PersonId = cal.PersonId
-		JOIN  dbo.Pay ON Pay.StartDate <= cal.Date AND Pay.EndDate > cal.date AND P.PersonId = Pay.Person
+				ON  P.PersonId = cal.PersonId
+		INNER JOIN  dbo.Pay ON Pay.StartDate <= cal.Date AND Pay.EndDate > cal.date AND P.PersonId = Pay.Person
 		LEFT JOIN [dbo].V_WorkinHoursByYear HY ON HY.Year = YEAR(cal.Date)
 		LEFT JOIN [dbo].[v_OverheadFixedRateTimescale] OVH
 				ON OVH.TimescaleId = pay.Timescale AND cal.Date BETWEEN OVH.StartDate 
-				AND ISNULL(OVH.EndDate, dbo.GetFutureDate()) AND OVH.Inactive = 0
+				AND ISNULL(OVH.EndDate, @FutureDate) AND OVH.Inactive = 0
 		 WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
 				AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
 				AND ((p.PersonStatusId = 1 AND @ActivePersonsLocal = 1 )
@@ -246,7 +245,7 @@ AS
 			ISNULL(pr.Name,'') PracticeName,
 			ISNULL(pr.IsCompanyInternal,0) IsCompanyInternal,
 			P.HireDate,
-			ISNULL(p.TerminationDate, dbo.GetFutureDate()) AS TerminationDate,
+			ISNULL(p.TerminationDate, @FutureDate) AS TerminationDate,
 			dbo.MakeDate(YEAR(MIN(FLHRD.Date)), MONTH(MIN(FLHRD.Date)), 1) AS [Month],
 			dbo.MakeDate(YEAR(MIN(FLHRD.Date)), MONTH(MIN(FLHRD.Date)), dbo.GetDaysInMonth(MIN(FLHRD.Date))) AS MonthEnd,
 			P.PersonStatusId,
