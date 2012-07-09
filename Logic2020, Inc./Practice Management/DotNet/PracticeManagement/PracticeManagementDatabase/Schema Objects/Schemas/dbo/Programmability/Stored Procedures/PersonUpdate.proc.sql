@@ -24,7 +24,8 @@
 		@TelephoneNumber	NVARCHAR(20) = NULL,
 		@PaychexID		 NVARCHAR(20),
 		@IsOffshore	     BIT,
-		@PersonDivisionId	INT
+		@PersonDivisionId	INT,
+		@TerminationReasonId	INT
 	)
 	AS
 		SET NOCOUNT ON
@@ -235,7 +236,8 @@
 				   TelephoneNumber = @TelephoneNumber,
 				   PaychexID= @PaychexID,
 				   IsOffshore = @IsOffshore,
-				   DivisionId = @PersonDivisionId
+				   DivisionId = @PersonDivisionId,
+				   TerminationReasonId = @TerminationReasonId
 			 WHERE PersonId = @PersonId
 
 			 EXEC dbo.PersonStatusHistoryUpdate
