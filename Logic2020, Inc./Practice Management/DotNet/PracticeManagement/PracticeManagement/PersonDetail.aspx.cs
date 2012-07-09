@@ -46,6 +46,58 @@ namespace PraticeManagement
         private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
         private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
 
+        private const string ValidateStatusScript = @"
+                function validateStatus()
+				{{
+                 var compensationEndDateStr = ""{5}"";
+                 var terminationDateStr = document.getElementById(""{4}"").value;
+                 var ddl = document.getElementById(""{0}"");
+                 var statusId = ddl.selectedIndex >= 0 ? ddl.options[ddl.selectedIndex].value : '';                
+                 var hasOpenEndedCompensation = {1};                 
+                 var compensationEndDate = new Date(compensationEndDateStr);
+                 var terminationDate = new Date(terminationDateStr);
+                 var now = new Date();
+					if (terminationDateStr!='' && (now >= terminationDate || statusId == ""{2}"")  &&
+                            ( compensationEndDateStr != '' && compensationEndDate>terminationDate || hasOpenEndedCompensation )
+                        )
+					{{
+						var result = (statusId != ""{2}"" && terminationDateStr=='');
+                        if(!result)
+                        {{
+                            var  message =  '';
+                            if(statusId == ""{2}"")
+                            {{
+                            if(hasOpenEndedCompensation)
+                              message =  message + 'This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                            else
+                              message =  message + 'This person has a status of Terminated, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                            
+                            }}
+                            else
+                            {{
+                            if(hasOpenEndedCompensation)
+                                message =  message + 'This person has Termination Date, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                             else
+                                message =  message + 'This person has Termination Date, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                            }}
+                            result= confirm(message);
+                         }}
+						if (!result)
+						{{
+							for (var i = 0; i < ddl.options.length; i++)
+							{{
+								if (ddl.options[i].value == ""{3}"")
+								{{
+									ddl.selectedIndex = i;
+									break;
+								}}
+							}}
+						}}
+						return result;
+					}}
+					return true;
+				}}";
+
         #endregion
 
         #region Fields
@@ -184,6 +236,43 @@ namespace PraticeManagement
                 ViewState["PAY_HISTORY"] = value;
             }
         }
+
+        private DateTime? PreviousTerminationDate
+        {
+            get
+            {
+                return (DateTime?)ViewState["ViewState_PreviousTerminteDate"];
+            }
+            set
+            {
+                ViewState["ViewState_PreviousTerminteDate"] = value;
+            }
+        }
+
+        private string PreviousTerminationReason
+        {
+            get
+            {
+                return (string)ViewState["ViewState_PreviousTerminationReason"];
+            }
+            set
+            {
+                ViewState["ViewState_PreviousTerminationReason"] = value;
+            }
+        }
+
+        private bool? IsFromTerminateEmployeePopup
+        {
+            get
+            {
+                return (bool?)ViewState["ViewState_IsFromTerminateEmployeePopup"]; 
+            }
+            set
+            {
+                ViewState["ViewState_IsFromTerminateEmployeePopup"] = value;
+            }
+        }
+
         #endregion
 
         #region Page Events
@@ -195,6 +284,7 @@ namespace PraticeManagement
             {
                 DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, string.Empty);
                 DataHelper.FillPersonDivisionList(ddlDivision);
+                FillTerminatinReasonsDropDowns();
                 txtFirstName.Focus();
                 UserIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
             }
@@ -203,6 +293,32 @@ namespace PraticeManagement
             personOpportunities.TargetPersonId = PersonId;
             mlError.ClearMessage();
             this.dvTerminationDateErrors.Visible = false;
+        }
+
+        private void FillTerminatinReasonsDropDowns()
+        {
+            using (var serviceClient = new PersonService.PersonServiceClient())
+            {
+                var list = serviceClient.GetTerminationReasonsList();
+                FillTerminationReasonDropDown(ddlTerminationReason, list, "- - Select Termination Reason - -");
+                FillTerminationReasonDropDown(ddlPopUpTerminationReason, list, "- - Select Termination Reason - -");
+            }
+        }
+
+        private void FillTerminationReasonDropDown(ListControl control, Dictionary<string, int> list, string firstItem)
+        {
+            control.Items.Clear();
+            control.AppendDataBoundItems = true;
+
+            if (!string.IsNullOrEmpty(firstItem))
+            {
+                control.Items.Add(new ListItem(firstItem, string.Empty));
+            }
+            control.DataSource = list;
+            control.DataValueField = "Value";
+            control.DataTextField = "Key";
+
+            control.DataBind();
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -221,9 +337,54 @@ namespace PraticeManagement
             lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
             btnAddDefaultRecruitingCommission.Enabled = UserIsAdministrator || UserIsRecruiter || UserIsHR;//#2817 UserisHR is added as per requirement.
             cellPermissions.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
+
+            AddScript();
+
+            ddlTerminationReason.Enabled = (ddlPersonStatus.SelectedValue == "2");
+            dtpTerminationDate.ReadOnly = btnTerminatePerson.Enabled = !(ddlPersonStatus.SelectedValue == "2");
+            btnTerminatePerson.Visible = PersonId.HasValue;
         }
 
         #endregion
+
+        protected void btnTerminatePerson_Click(object sender, EventArgs e)
+        {
+
+            ValidatePage();
+            if (Page.IsValid)
+            {
+                dtpPopUpTerminateDate.DateValue = dtpTerminationDate.DateValue;
+                ddlPopUpTerminationReason.SelectedValue = ddlTerminationReason.SelectedValue;
+                btnPersonTerminate.Attributes["disabled"] = (ddlPopUpTerminationReason.SelectedIndex == 0 || dtpPopUpTerminateDate.DateValue == DateTime.MinValue) ? "disabled" : string.Empty;
+                mpeViewPersonTerminationPopup.Show();
+            }
+        }
+
+        protected void btnPersonTerminate_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSummaryTerminationPopup.ValidationGroup);
+            if (Page.IsValid)
+            {
+                PreviousTerminationDate = dtpTerminationDate.DateValue;
+                PreviousTerminationReason = ddlTerminationReason.SelectedValue;
+
+                dtpTerminationDate.DateValue = dtpPopUpTerminateDate.DateValue;
+                ddlTerminationReason.SelectedValue = ddlPopUpTerminationReason.SelectedValue;
+                btnSave_Click(sender, e);
+                if (!custTerminateDateTE.IsValid)
+                {
+                    IsFromTerminateEmployeePopup = true;
+                }
+                else
+                {
+                    ResetTerminateEmployeeSavingViewState(false);
+                }
+            }
+            else
+            {
+                mpeViewPersonTerminationPopup.Show();
+            }
+        }
 
         protected void recruiterInfo_InfoChanged(object sender, EventArgs e)
         {
@@ -260,7 +421,6 @@ namespace PraticeManagement
         /// <param name="e"></param>
         protected void btnSave_Click(object sender, EventArgs e)
         {
-
             int viewindex = mvPerson.ActiveViewIndex;
             TableCell CssSelectCell = null;
             foreach (TableCell item in tblPersonViewSwitch.Rows[0].Cells)
@@ -303,7 +463,7 @@ namespace PraticeManagement
 
         private void ValidatePage()
         {
-           
+
             custTerminateDateTE.Enabled = false;
             int activeindex = mvPerson.ActiveViewIndex;
             for (int i = 0, j = mvPerson.ActiveViewIndex; i < mvPerson.Views.Count; i++, j++)
@@ -324,8 +484,8 @@ namespace PraticeManagement
             {
                 custTerminateDateTE.Enabled = true;
                 Page.Validate(valsPerson.ValidationGroup);
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
-            SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
         }
 
         public bool ValidateAndSavePersonDetails()
@@ -629,28 +789,40 @@ namespace PraticeManagement
                 UpdateRecruiterList();
             }
 
-            bool hasNotClosedCompensation =
-                person != null && person.PaymentHistory != null &&
-                person.PaymentHistory.Count > 0 &&
-                !person.PaymentHistory[person.PaymentHistory.Count - 1].EndDate.HasValue;
-            string compensationEndDate = (((person != null) && (person.PaymentHistory != null)) &&
-                                            ((person.PaymentHistory.Count > 0) &&
-                                                person.PaymentHistory[person.PaymentHistory.Count - 1].EndDate.HasValue))
-                                                ? person.PaymentHistory[person.PaymentHistory.Count - 1].EndDate.ToString() : string.Empty;
-
-            ltrScript.Text =
-                string.Format(ltrScript.Text,
-                              ddlPersonStatus.ClientID,
-                              hasNotClosedCompensation ? "true" : "false",
-                              (int)PersonStatusType.Terminated,
-                              (int)PersonStatusType.Active,
-                              ((TextBox)this.dtpTerminationDate.FindControl("txtDate")).ClientID,
-                             compensationEndDate);
-
             UpdateSalesCommissionState();
             UpdateManagementCommissionState();
 
             personOpportunities.DataBind();
+        }
+
+        private void AddScript()
+        {
+            bool hasNotClosedCompensation =
+                PayHistory != null &&
+                PayHistory.Count > 0 &&
+                !PayHistory[PayHistory.Count - 1].EndDate.HasValue;
+            string compensationEndDate = (PayHistory != null && PayHistory.Count > 0 && PayHistory[PayHistory.Count - 1].EndDate.HasValue)
+                                                ? PayHistory[PayHistory.Count - 1].EndDate.ToString() : string.Empty;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), this.ClientID, (string.Format(ValidateStatusScript,
+                                                                                                  ddlPersonStatus.ClientID,
+                                                                                                  hasNotClosedCompensation ? "true" : "false",
+                                                                                                  (int)PersonStatusType.Terminated,
+                                                                                                  (int)PersonStatusType.Active,
+                                                                                                  ((TextBox)this.dtpTerminationDate.FindControl("txtDate")).ClientID,
+                                                                                                 compensationEndDate)
+                                                                                                 )
+                                                                                    , true);
+
+            btnPersonTerminate.Attributes.Add("HasNotClosedCompensation", hasNotClosedCompensation.ToString().ToLower());
+            btnPersonTerminate.Attributes.Add("CompensationEndDate", compensationEndDate);
+            if (!IsPostBack)
+            {
+                btnPersonTerminate.OnClientClick = "if(!ValidateCompensationAndTerminationDate(this, '" + dtpPopUpTerminateDate.BehaviorID + "','" + ddlPopUpTerminationReason.ClientID + "')){ return false;}";
+                var txtDate = (TextBox)dtpPopUpTerminateDate.FindControl("txtDate");
+                var onChangeScript =  "EnableTerminateEmployeeOkButton('" + btnPersonTerminate.ClientID + "','" + txtDate.ClientID + "','" + ddlPopUpTerminationReason.ClientID + "');";
+                ddlPopUpTerminationReason.Attributes.Add("onchange", onChangeScript);
+                txtDate.Attributes.Add("onchange", onChangeScript);
+            }
         }
 
         private static Person GetPerson(int? id)
@@ -674,12 +846,6 @@ namespace PraticeManagement
             UpdateRecruiterList();
             IsDirty = true;
             dtpHireDate.Focus();
-        }
-
-        protected void dtpTerminationDate_SelectionChanged(object sender, EventArgs e)
-        {
-            IsDirty = true;
-            dtpTerminationDate.Focus();
         }
 
         protected void chblRoles_SelectedIndexChanged(object sender, EventArgs e)
@@ -819,8 +985,8 @@ namespace PraticeManagement
             txtFirstName.Text = person.FirstName;
             txtLastName.Text = person.LastName;
             dtpHireDate.DateValue = person.HireDate;
-            dtpTerminationDate.DateValue =
-                person.TerminationDate.HasValue ? person.TerminationDate.Value : DateTime.MinValue;
+            PopulateTerminationDate(person.TerminationDate);
+            PopulateTerminationReason(person.TerminationReasonid);
             txtEmailAddress.Text = person.Alias;
             txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
             ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
@@ -870,6 +1036,19 @@ namespace PraticeManagement
             }
         }
 
+        private void PopulateTerminationReason(int? terminationReasonId)
+        {
+            ddlTerminationReason.SelectedValue = terminationReasonId.HasValue ? terminationReasonId.Value.ToString() : string.Empty;
+            ddlPopUpTerminationReason.SelectedValue = ddlTerminationReason.SelectedValue;
+        }
+
+        private void PopulateTerminationDate(DateTime? terminationDate)
+        {
+            dtpTerminationDate.DateValue =
+                   terminationDate.HasValue ? terminationDate.Value : DateTime.MinValue;
+            dtpPopUpTerminateDate.DateValue = dtpTerminationDate.DateValue;
+        }
+
 
         #endregion
 
@@ -887,6 +1066,7 @@ namespace PraticeManagement
             person.IsOffshore = ddlPersonType.SelectedValue == "1";
             person.PaychexID = txtPayCheckId.Text;
             person.TerminationDate = dtpTerminationDate.DateValue != DateTime.MinValue ? (DateTime?)dtpTerminationDate.DateValue : null;
+            person.TerminationReasonid = ddlTerminationReason.SelectedValue != string.Empty ? (int?)Convert.ToInt32(ddlTerminationReason.SelectedValue) : null;
 
             person.Alias = txtEmailAddress.Text;
             person.TelephoneNumber = txtTelephoneNumber.Text;
@@ -1150,10 +1330,6 @@ namespace PraticeManagement
             {
                 args.IsValid = !(ExMessage == DuplicatePersonName);
             }
-            else
-            {
-                args.IsValid = true;
-            }
         }
 
         protected void custEmailAddress_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1161,10 +1337,6 @@ namespace PraticeManagement
             if (!String.IsNullOrEmpty(ExMessage))
             {
                 args.IsValid = !(ExMessage == DuplicateEmail);
-            }
-            else
-            {
-                args.IsValid = true;
             }
         }
 
@@ -1212,10 +1384,8 @@ namespace PraticeManagement
                 if (!chblRoles.Items.Cast<ListItem>().Any(item => item.Selected))
                 {
                     args.IsValid = false;
-                    return;
                 }
             }
-            args.IsValid = true;
         }
 
         protected void custSeniority_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -1229,17 +1399,27 @@ namespace PraticeManagement
         protected void custTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
             int personStatus;
-            if (int.TryParse(this.ddlPersonStatus.SelectedValue, out personStatus))
+            if (int.TryParse(this.ddlPersonStatus.SelectedValue, out personStatus) && personStatus == 2)
             {
                 string controlValidationValue = this.dtpTerminationDate.TextValue;
 
                 bool isTerminationDateEmpty = ((controlValidationValue == null) || controlValidationValue.Trim().Equals(string.Empty));
-                args.IsValid = true;
-                if (personStatus == 2)
-                {
-                    args.IsValid = !isTerminationDateEmpty;
-                }
+                args.IsValid = !isTerminationDateEmpty;
             }
+        }
+
+        protected void custTerminationReason_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            int personStatus;
+            if (int.TryParse(this.ddlPersonStatus.SelectedValue, out personStatus) && personStatus == 2)
+            {
+                args.IsValid = (ddlTerminationReason.SelectedIndex != 0);
+            }
+        }
+
+        protected void custPopUpTerminationReason_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = (ddlPopUpTerminationReason.SelectedIndex != 0);
         }
 
         /// <summary>
@@ -1464,10 +1644,6 @@ namespace PraticeManagement
                 this.dtpTerminationDate.DateValue = terminationDate.Value;
                 args.IsValid = false;
             }
-            else
-            {
-                args.IsValid = true;
-            }
         }
 
         protected void custIsDefautManager_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1479,15 +1655,24 @@ namespace PraticeManagement
                 args.IsValid = false;
                 custIsDefautManager.ToolTip = custIsDefautManager.ErrorMessage;
             }
-            else
-            {
-                args.IsValid = true;
-            }
         }
 
         protected void btnTerminationProcessCancel_OnClick(object source, EventArgs args)
         {
+            ResetTerminateEmployeeSavingViewState(true);
             mpeViewTerminationDateErrors.Hide();
+        }
+
+        private void ResetTerminateEmployeeSavingViewState(bool populatePreviousValues)
+        {
+            if (populatePreviousValues)
+            {
+                dtpTerminationDate.DateValue = PreviousTerminationDate.HasValue ? PreviousTerminationDate.Value : DateTime.MinValue;
+                ddlTerminationReason.SelectedValue = PreviousTerminationReason;
+            }
+            IsFromTerminateEmployeePopup = null;
+            PreviousTerminationDate = null;
+            PreviousTerminationReason = null;
         }
 
         protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
@@ -1495,6 +1680,10 @@ namespace PraticeManagement
             DisableValidatecustTerminateDateTE = true;
             btnSave_Click(source, args);
             mpeViewTerminationDateErrors.Hide();
+            if (IsFromTerminateEmployeePopup.HasValue && IsFromTerminateEmployeePopup.Value)
+            {
+                ResetTerminateEmployeeSavingViewState(false);
+            }
         }
 
         #region gvCompensationHistory Events
