@@ -280,6 +280,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     personId = DataHelper.CurrentPerson.Id.Value;
                 }
+
                 bool isPersonActive = ServiceCallers.Custom.Person(p => p.IsPersonHaveActiveStatusDuringThisPeriod(personId, nextWeekStartDate, nextWeekEndDate));
                 if (!isPersonActive)
                 {
@@ -412,20 +413,11 @@ namespace PraticeManagement.Controls.TimeEntry
             DatePickerChanged(sender, e);
         }
 
-        //protected void btnPreviousWeek_Click(object sender, ImageClickEventArgs e)
-        //{
-        //    ShiftAndUpdate(-DefaultSelectedPeriod);
-        //}
 
         private void ShiftAndUpdate(int shiftBy)
         {
             OnWeekChanged(calendar.SelectedDates[0].AddDays(shiftBy));
         }
-
-        //protected void btnNextWeek_Click(object sender, ImageClickEventArgs e)
-        //{
-        //    ShiftAndUpdate(DefaultSelectedPeriod);
-        //}
 
         protected void calendar_OnVisibleMonthChanged(object sender, MonthChangedEventArgs e)
         {
