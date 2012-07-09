@@ -22,7 +22,8 @@ CREATE PROCEDURE [dbo].[PersonInsert]
 	@TelephoneNumber NVARCHAR(20) = NULL,
 	@PaychexID		 NVARCHAR(20),
 	@IsOffshore	     BIT,
-	@PersonDivisionId	INT
+	@PersonDivisionId	INT,
+	@TerminationReasonId	INT
 )
 AS
 	SET NOCOUNT ON
@@ -90,10 +91,10 @@ AS
 		-- Inserting Person
 		INSERT dbo.Person
 			(FirstName, LastName, PTODaysPerAnnum,  HireDate,  Alias, DefaultPractice, 
-		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId)
+		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId, TerminationReasonId)
 		VALUES
 			(@FirstName, @LastName, @PTODaysPerAnnum, @HireDate, @Alias, @DefaultPractice, 
-		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId)
+		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId, @TerminationReasonId)
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
