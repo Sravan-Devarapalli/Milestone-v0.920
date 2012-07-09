@@ -2094,11 +2094,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetOverlappingPlacementDays.function.sql">
-      <SubType>Code</SubType>
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\IsSomeonesManager.function.sql">
       <SubType>Code</SubType>
       <AnsiNulls>On</AnsiNulls>
@@ -4141,4 +4136,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
