@@ -563,6 +563,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> GetStrawmanListShortFilterWithTodayPay();
+
+        [OperationContract]
+        Dictionary<string, int> GetTerminationReasonsList();
     }
 }
 
