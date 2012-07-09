@@ -1,8 +1,8 @@
 ﻿-- =============================================
 -- Author:		Anatoliy Lokshin
 -- Create date: 6-13-2008
--- Updated by:	Sainath CH
--- Update date: 03-27-2012
+-- Last Updated by:	ThualsiRam.P
+-- Last Update date: 07-06-2012
 -- Description:	Determines the calendar for the persons.
 -- =============================================
 CREATE VIEW [dbo].[v_PersonCalendar]
@@ -20,6 +20,6 @@ AS
 	  FROM dbo.Calendar AS cal
 		   INNER JOIN dbo.GetFutureDateTable() FD ON 1 = 1
 		   INNER JOIN dbo.GetHolidayTimeTypeIdTable() HTT ON 1 = 1
-	       INNER JOIN dbo.Person AS p ON cal.Date >= p.HireDate AND cal.Date < ISNULL(p.TerminationDate, FD.FutureDate)
+	       INNER JOIN dbo.Person AS p ON cal.Date >= p.HireDate AND cal.Date <= ISNULL(p.TerminationDate, FD.FutureDate)
 	       LEFT JOIN dbo.PersonCalendar AS pcal ON pcal.Date = cal.Date AND pcal.PersonId = p.PersonId
 
