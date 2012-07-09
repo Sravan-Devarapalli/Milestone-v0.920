@@ -19,19 +19,22 @@ CREATE PROCEDURE dbo.PersonListAll
 AS
 	SET NOCOUNT ON;
 
-	DECLARE @FirstRecord INT
-	SET @FirstRecord = @PageSize * @PageNo
+	DECLARE @FirstRecord INT,
+			@FutureDate DATETIME
+
+	SELECT @FirstRecord = @PageSize * @PageNo ,
+		   @FutureDate = dbo.GetFutureDate()
 
 	IF @Looked IS NOT NULL
 		SET @Looked = '%' + RTRIM(@Looked) + '%'
 	ELSE
 		SET @Looked = '%'
 
-    DECLARE @flags bit
+    DECLARE @Flags bit
     IF (@StartDate IS NULL) OR (@EndDate IS NULL)
-		SET @flags = 1
+		SET @Flags = 1
 	ELSE
-		SET @flags = 0
+		SET @Flags = 0
 
 	IF @FirstRecord IS NULL
 	BEGIN
@@ -56,7 +59,7 @@ AS
 		        OR ( @ShowAll = 1 AND @PracticeId IS NULL )
 		        OR ( @ShowAll = 1 AND @PracticeId = p.DefaultPractice ) )
 		   AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
-           AND ( @flags = 1 OR dbo.GetOverlappingPlacementDays(p.HireDate, ISNULL(p.TerminationDate, dbo.GetFutureDate()), @StartDate, @EndDate) = 1)
+           AND ( @Flags = 1 OR ( @StartDate <= ISNULL(p.TerminationDate,@FutureDate) AND p.HireDate <= @EndDate))
 		   AND (   @RecruiterId IS NULL
 		        OR EXISTS (SELECT 1
 		                     FROM dbo.RecruiterCommission AS c
