@@ -67,7 +67,7 @@
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
                   or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'
-                  or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID'"></xsl:when>
+                  or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'"></xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
             <xsl:if test="name() = $attrName and . != $value">
@@ -101,7 +101,7 @@
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
                   or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'
-                  or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID'"></xsl:when>
+                  or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'"></xsl:when>
         <xsl:otherwise>
           <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
             <xsl:call-template name="DisplayChange">
@@ -170,7 +170,7 @@
                   or $attrName = 'SalespersonId' or $attrName = 'PracticeId' or $attrName = 'OpportunityStatusId' or $attrName = 'OwnerId' or $attrName = 'GroupId'
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
                   or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'
-                  or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID'"></xsl:when>
+                  or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'"></xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="FriendlyName">
             <xsl:with-param name="attrName" select="name()" />
@@ -444,6 +444,8 @@
       <xsl:when test="$attrName = 'IsMarginColorInfoEnabled'">Is Margin Color Information Enabled</xsl:when>
       <xsl:when test="$attrName = 'DefaultDirector'">Default Director</xsl:when>
       <xsl:when test="$attrName = 'DefaultSalesperson'">Default Salesperson</xsl:when>
+      <xsl:when test="$attrName = 'TerminationDate'">Termination Date</xsl:when>
+      <xsl:when test="$attrName = 'TerminationReason'">Termination Reason</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$attrName"/>
       </xsl:otherwise>
