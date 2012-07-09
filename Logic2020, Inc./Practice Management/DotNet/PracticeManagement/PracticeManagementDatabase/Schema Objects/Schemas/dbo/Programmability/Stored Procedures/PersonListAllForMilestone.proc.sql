@@ -32,7 +32,7 @@ AS
 	                    WHERE mp.MilestonePersonId = @MilestonePersonId AND mp.PersonId = p.PersonId))
 	   AND (   @StartDate IS NULL
 	        OR @EndDate IS NULL
-	        OR dbo.GetOverlappingPlacementDays(p.HireDate, ISNULL(p.TerminationDate, @FutureDate), @StartDate, @EndDate) = 1
+	        OR (@StartDate <= ISNULL(p.TerminationDate,@FutureDate) AND p.HireDate <= @EndDate)
 	       )	  
 	ORDER BY p.LastName, p.FirstName
 
