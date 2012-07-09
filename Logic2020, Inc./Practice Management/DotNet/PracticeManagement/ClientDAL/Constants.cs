@@ -765,6 +765,7 @@
                 public const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
                 public const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
                 public const string GetStrawmanListShortFilterWithTodayPay = "dbo.GetStrawmanListShortFilterWithTodayPay";
+                public const string GetTerminationReasonsList = "dbo.GetTerminationReasonsList";
             }
 
             #endregion
@@ -1116,4 +1117,3 @@
         #endregion
     }
 }
-
