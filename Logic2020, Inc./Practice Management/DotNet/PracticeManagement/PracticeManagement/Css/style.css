@@ -2750,6 +2750,12 @@ div.scrollextLabel
   max-width : 450px !important;    
 }
 
+.TerminationPopUpPersonDetailPage
+{
+    max-width : 1000 !important;
+    padding : 8px;
+}
+
 .errorDivPersonDetailPage
 {
     max-height: 200px; 
@@ -2820,6 +2826,7 @@ div.scrollextLabel
 {
     border:medium none;
     display:inline;
+    vertical-align:middle;
 }    
 .WhatIfControlIcon
 {
