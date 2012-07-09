@@ -923,15 +923,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// List all active <see cref="Person"/>s in the system
-        /// </summary>
-        /// <returns><see cref="List{T}"/> of all active persons in the system</returns>
-        public static List<Person> PersonListAll()
-        {
-            return PersonListFiltered(null, false, 0, 0, null, null);
-        }
-
-        /// <summary>
         /// Lists all active persons who receive some recruiter commissions.
         /// </summary>
         /// <returns>The list of <see cref="Person"/> objects.</returns>
