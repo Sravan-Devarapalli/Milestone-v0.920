@@ -40,7 +40,8 @@ AS
 			FROM dbo.Practice as practice 			
 			WHERE practice.PracticeManagerId = p.PersonId
 			FOR XML PATH('Practice'), ROOT('Practices')) AS 'PracticesOwned',
-			p.DivisionId
+			p.DivisionId,
+			p.TerminationReasonId
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
