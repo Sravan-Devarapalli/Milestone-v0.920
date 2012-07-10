@@ -472,6 +472,24 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvNotW2Salary;
         
         /// <summary>
+        /// cvPersonNotHired control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvPersonNotHired;
+        
+        /// <summary>
+        /// cvPersonTerminated control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvPersonTerminated;
+        
+        /// <summary>
         /// ddlTimeTypesTimeOff control.
         /// </summary>
         /// <remarks>
@@ -850,6 +868,24 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvSubstituteDay;
         
         /// <summary>
+        /// cvValidateSubDateWithHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvValidateSubDateWithHireDate;
+        
+        /// <summary>
+        /// cvValidateSubDateWithTermDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvValidateSubDateWithTermDate;
+        
+        /// <summary>
         /// valSumsubstituteday control.
         /// </summary>
         /// <remarks>
@@ -956,6 +992,24 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator cvModifySubstituteday;
+        
+        /// <summary>
+        /// cvValidateModifiedSubDateWithHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvValidateModifiedSubDateWithHireDate;
+        
+        /// <summary>
+        /// cvValidateModifiedSubDateWithTermDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvValidateModifiedSubDateWithTermDate;
         
         /// <summary>
         /// valSumModifySubstituteDay control.
