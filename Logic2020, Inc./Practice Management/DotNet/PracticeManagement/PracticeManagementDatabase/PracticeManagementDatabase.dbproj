@@ -4082,6 +4082,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetTerminationReasonsList.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonHireAndTerminationDateById.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
