@@ -288,13 +288,12 @@ namespace PracticeManagementService
         List<Person> GetCareerCounselorHierarchiPersons(int managerId);//Here managerId is counselorId.
 
         /// <summary>
-        /// Retrieves Person One-off List.
+        /// Read All persons firstname and last name  except having inactive status and must have compensation for today or in future.
         /// </summary>
-        /// <param name="today">An ID of the parctice manager to teh data be retrieved for.</param>
-        /// <param name="userName">Current user alias</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
+        /// <param name="today"></param>
+        /// <returns>List<Person></returns>
         [OperationContract]
-        List<Person> GetOneOffList(DateTime today, string userName);
+        List<Person> GetOneOffList(DateTime today);
 
         /// <summary>
         /// Get a person
@@ -566,6 +565,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         Dictionary<string, int> GetTerminationReasonsList();
+
+        [OperationContract]
+        Person GetPersonHireAndTerminationDate(int personId);
     }
 }
 
