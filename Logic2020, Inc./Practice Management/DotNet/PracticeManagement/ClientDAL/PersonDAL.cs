@@ -1451,7 +1451,7 @@ namespace DataAccess
         /// Retrieves person one-off list.
         /// </summary>
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public static List<Person> PersonOneOffList(DateTime today, int? maxSeniorityLevel)
+        public static List<Person> PersonOneOffList(DateTime today)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonOneOffListProcedure, connection))
@@ -1460,18 +1460,42 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(DateTodayParam, today);
-                command.Parameters.AddWithValue(MaxSeniorityLevelParam,
-                                                maxSeniorityLevel.HasValue
-                                                    ? (object)maxSeniorityLevel.Value
-                                                    : DBNull.Value);
-
+              
                 connection.Open();
 
-                var result = new List<Person>();
-                ReadPersons(command, result);
-                return result;
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadPersonsIdFirstNameLastName(reader, result);
+                    return result;
+                }
             }
         }
+
+
+        private static void ReadPersonsIdFirstNameLastName(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+
+                while (reader.Read())
+                {
+                    var personId = reader.GetInt32(personIdIndex);
+                    var person = new Person
+                    {
+                        Id = personId,
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                    };
+
+                    result.Add(person);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Retrieves a number of the work days for the <see cref="Person"/> and the period specified.
@@ -3674,5 +3698,52 @@ namespace DataAccess
             }
         }
 
+
+        /// <summary>
+        /// Reading hiredate and termination date for a person.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns>Person</returns>
+        public static Person GetPersonHireAndTerminationDateById(int personId)
+        {
+            var person = new Person();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonHireAndTerminationDateById, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(PersonIdParam, personId);
+
+                    connection.Open();
+
+                    person.Id = personId;
+
+                    ReadPersonHireAndTerminationdate(command, person);
+                }
+            }
+
+            return person;
+        }
+
+        private static void ReadPersonHireAndTerminationdate(SqlCommand command, Person person)
+        {
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.HasRows)
+                {
+                    int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+                    int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
+
+                    while (reader.Read())
+                    {
+                        person.HireDate = reader.GetDateTime(hireDateIndex);
+                        person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
+
+                    }
+                }
+            }
+        }
     }
 }
