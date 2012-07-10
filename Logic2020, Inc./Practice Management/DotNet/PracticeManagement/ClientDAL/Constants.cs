@@ -766,6 +766,7 @@
                 public const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
                 public const string GetStrawmanListShortFilterWithTodayPay = "dbo.GetStrawmanListShortFilterWithTodayPay";
                 public const string GetTerminationReasonsList = "dbo.GetTerminationReasonsList";
+                public const string GetPersonHireAndTerminationDateById = "dbo.GetPersonHireAndTerminationDateById";
             }
 
             #endregion
