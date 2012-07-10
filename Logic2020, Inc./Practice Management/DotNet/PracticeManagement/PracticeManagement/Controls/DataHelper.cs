@@ -190,6 +190,12 @@ namespace PraticeManagement.Controls
                 return client.GetPersonById(personId);
         }
 
+        public static Person GetPersonHireAndTerminationDate(int personId)
+        {
+            using (var client = new PersonServiceClient())
+                return client.GetPersonHireAndTerminationDate(personId);
+        }
+
         public static PersonStatus GetPersonStatus(Person person)
         {
             using (var client = new PersonServiceClient())
@@ -824,7 +830,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    var persons = serviceClient.GetOneOffList(today, HttpContext.Current.User.Identity.Name);
+                    var persons = serviceClient.GetOneOffList(today);
 
                     Array.Sort(persons);
 
