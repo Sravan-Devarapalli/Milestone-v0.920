@@ -161,6 +161,20 @@ namespace PraticeManagement.Controls
             }
         }
 
+
+        private Person selectedPerson;
+
+        private Person SelectedPerson
+        {
+            get
+            {
+                if (selectedPerson == null)
+                    selectedPerson = DataHelper.GetPersonHireAndTerminationDate(SelectedPersonId.Value);
+                return selectedPerson;
+            }
+        }
+
+
         #endregion
 
         public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedById, string approvedByName)
@@ -205,7 +219,7 @@ namespace PraticeManagement.Controls
 
             if ((!userIsAdministrator) && (userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsHR))
             {
-                practiceManagerId = DataHelper.CurrentPerson.Id ;
+                practiceManagerId = DataHelper.CurrentPerson.Id;
             }
 
             DateTime firstMonthDay = new DateTime(SelectedYear, 1, 1);
@@ -307,7 +321,7 @@ namespace PraticeManagement.Controls
                 DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
                 Person current = DataHelper.CurrentPerson;
 
-                ddlPerson.SelectedValue =current.Id.Value.ToString();
+                ddlPerson.SelectedValue = current.Id.Value.ToString();
 
                 bool isUserHr = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
                 bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
@@ -608,6 +622,89 @@ namespace PraticeManagement.Controls
             }
 
         }
+
+        protected void cvPersonNotHired_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var startDate = dtpStartDateTimeOff.DateValue.Date;
+
+            if (IsPersonNotHired(startDate))
+            {
+                args.IsValid = false;
+            }
+
+        }
+
+        protected void cvPersonTerminated_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var endDate = dtpEndDateTimeOff.DateValue.Date;
+
+            if (IsPersonTerminated(endDate))
+            {
+                args.IsValid = false;
+            }
+        }
+
+
+        protected void cvValidateSubDateWithHireDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var substituteDate = dpSubstituteDay.DateValue.Date;
+            if (IsPersonNotHired(substituteDate))
+            {
+                args.IsValid = false;
+            }
+        }
+
+        protected void cvValidateSubDateWithTermDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var substituteDate = dpSubstituteDay.DateValue.Date;
+            if (IsPersonTerminated(substituteDate))
+            {
+                args.IsValid = false;
+            }
+        }
+
+
+        protected void cvValidateModifiedSubDateWithHireDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var modifiedSubDate = dpModifySubstituteday.DateValue.Date;
+
+            if (IsPersonNotHired(modifiedSubDate))
+            {
+                args.IsValid = false;
+            }
+        }
+
+
+        protected void cvValidateModifiedSubDateWithTermDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var modifiedSubDate = dpModifySubstituteday.DateValue.Date;
+
+            if (IsPersonTerminated(modifiedSubDate))
+            {
+                args.IsValid = false;
+            }
+        }
+
+
+        public Boolean IsPersonNotHired(DateTime date)
+        {
+            if (date < SelectedPerson.HireDate)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
+        public Boolean IsPersonTerminated(DateTime date)
+        {
+            if (selectedPerson.TerminationDate.HasValue && SelectedPerson.TerminationDate < date)
+            {
+                return true;
+            }
+            return false;
+        }     
+
 
         protected void btnDeleteSubstituteDay_Click(object sender, EventArgs e)
         {
