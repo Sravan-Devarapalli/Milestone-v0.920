@@ -400,19 +400,13 @@ namespace PracticeManagementService
         }
 
         /// <summary>
-        /// Retrieves a One Off Person List
+        /// Read All persons firstname and last name  except having inactive status and must have compensation for today or in future.
         /// </summary>
-        /// <param name="today">A date today</param>
-        /// <param name="userName">Current user alias</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public List<Person> GetOneOffList(DateTime today, string userName)
+        /// <param name="today"></param>
+        /// <returns>List<Person></returns>
+        public List<Person> GetOneOffList(DateTime today)
         {
-            //bool userIsAdministrator = Roles.IsUserInRole(userName, Constants.RoleNames.AdministratorRoleName);
-            //bool userIsSalesperson = Roles.IsUserInRole(userName, Constants.RoleNames.SalespersonRoleName);
-            //int? maxSeniorityLevel = null;
-            //if (!userIsAdministrator && !userIsSalesperson)
-            //    maxSeniorityLevel = PersonDAL.PersonGetByAlias(userName).Seniority.ValueWithSeparation;
-            return PersonDAL.PersonOneOffList(today, null);
+            return PersonDAL.PersonOneOffList(today);
         }
 
         /// <summary>
@@ -1091,6 +1085,14 @@ namespace PracticeManagementService
         {
             return PersonDAL.GetTerminationReasonsList();
         }
+
+        public Person GetPersonHireAndTerminationDate(int personId)
+        {
+            Person result = PersonDAL.GetPersonHireAndTerminationDateById(personId);
+
+            return result;
+        }
+
 
         #endregion
     }
