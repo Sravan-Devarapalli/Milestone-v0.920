@@ -14,7 +14,7 @@
     TagPrefix="uc2" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectFinancials.ascx" TagName="ProjectFinancials" %>
-<%--<%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>--%>
+<%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
@@ -836,22 +836,22 @@
                                             OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
-                                <%--<asp:TableCell ID="cellPersons" runat="server">
+                                <asp:TableCell ID="cellPersons" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnPersons" runat="server" Text="Persons" CausesValidation="false"
                                             OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
                                     </span>
-                                </asp:TableCell>--%>
+                                </asp:TableCell>
                                 <asp:TableCell ID="TableCellHistoryg" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnHstory" runat="server" Text="History" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjectTools" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTools" runat="server" Text="Tools" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -1019,9 +1019,9 @@
                                     <uc2:ProjectExpenses runat="server" ID="projectExpenses" />
                                 </div>
                             </asp:View>
-                            <%--<asp:View ID="vwPersons" runat="server">
+                            <asp:View ID="vwPersons" runat="server">
                                 <uc:ProjectPersons ID="persons" runat="server" />
-                            </asp:View>--%>
+                            </asp:View>
                             <asp:View ID="vwHistory" runat="server">
                                 <asp:Panel ID="plnTabHistory" runat="server" CssClass="tab-pane">
                                     <uc:ActivityLogControl runat="server" ID="activityLog" DisplayDropDownValue="Project"
