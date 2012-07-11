@@ -39,6 +39,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Start">
+            <ItemStyle CssClass="alignCenter" />
                 <HeaderStyle Width="8%" />
                 <HeaderTemplate>
                     <div class="ie-bg">
@@ -49,6 +50,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="End">
+            <ItemStyle CssClass="alignCenter" />
                 <HeaderStyle Width="8%" />
                 <HeaderTemplate>
                     <div class="ie-bg">
@@ -59,6 +61,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField>
+            <ItemStyle CssClass="alignCenter" />
                 <HeaderStyle Width="11%" HorizontalAlign="Center" />
                 <HeaderTemplate>
                     <div class="ie-bg">
@@ -69,6 +72,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField>
+            <ItemStyle CssClass="alignCenter" />
                 <HeaderStyle Width="11%" HorizontalAlign="Center" />
                 <HeaderTemplate>
                     <div class="ie-bg">
