@@ -217,7 +217,7 @@
             lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
             if (ddlPeriod.value == '0') {
                 imgCalender.attributes["class"].value = "";
-                lblCustomDateRange.attributes["class"].value = "";
+                lblCustomDateRange.attributes["class"].value = "fontBold";
                 if (imgCalender.fireEvent) {
                     imgCalender.style.display = "";
                     lblCustomDateRange.style.display = "";
