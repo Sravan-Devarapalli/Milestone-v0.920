@@ -349,9 +349,11 @@ namespace PraticeManagement
 
         protected void btnTerminatePerson_Click(object sender, EventArgs e)
         {
-
-            ValidatePage();
-            if (Page.IsValid)
+            if (IsDirty)
+            {
+                ValidatePage();
+            }
+            if (Page.IsValid || !IsDirty)
             {
                 dtpPopUpTerminateDate.DateValue = dtpTerminationDate.DateValue;
                 ddlPopUpTerminationReason.SelectedValue = ddlTerminationReason.SelectedValue;
@@ -1659,7 +1661,10 @@ namespace PraticeManagement
 
         protected void btnTerminationProcessCancel_OnClick(object source, EventArgs args)
         {
-            ResetTerminateEmployeeSavingViewState(true);
+            if (IsFromTerminateEmployeePopup.HasValue && IsFromTerminateEmployeePopup.Value)
+            {
+                ResetTerminateEmployeeSavingViewState(true);
+            }
             mpeViewTerminationDateErrors.Hide();
         }
 
