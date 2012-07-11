@@ -1761,7 +1761,7 @@ namespace PraticeManagement
             int viewIndex = int.Parse((string)e.CommandArgument);
             SelectView((Control)sender, viewIndex, false);
             tblProjectDetailTabViewSwitch_ActiveViewIndex = viewIndex;
-            if (viewIndex == 5) //History
+            if (viewIndex == 6) //History
             {
                 activityLog.Update();
             }
