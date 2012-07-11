@@ -903,7 +903,7 @@ namespace PraticeManagement
                 if (statusId == 3 && !HasAttachments)
                 {
                     statusCssClass = "ActiveProjectWithoutSOW";
-                    iconTooltip = "Active without SOW";
+                    iconTooltip = "Active without Attachment";
                 }
                 else
                 {
