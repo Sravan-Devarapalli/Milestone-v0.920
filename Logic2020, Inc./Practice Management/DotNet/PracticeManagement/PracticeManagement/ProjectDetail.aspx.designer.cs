@@ -589,6 +589,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.LinkButton btnExpenses;
         
         /// <summary>
+        /// cellPersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellPersons;
+        
+        /// <summary>
+        /// btnPersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnPersons;
+        
+        /// <summary>
         /// TableCellHistoryg control.
         /// </summary>
         /// <remarks>
@@ -857,6 +875,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.ProjectExpenses.ProjectExpensesControl projectExpenses;
+        
+        /// <summary>
+        /// vwPersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwPersons;
+        
+        /// <summary>
+        /// persons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Projects.ProjectPersons persons;
         
         /// <summary>
         /// vwHistory control.
