@@ -68,17 +68,17 @@ namespace PraticeManagement
                             if(statusId == ""{2}"")
                             {{
                             if(hasOpenEndedCompensation)
-                              message =  message + 'This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                              message =  'This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
                             else
-                              message =  message + 'This person has a status of Terminated, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                              message =  'This person has a status of Terminated, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
                             
                             }}
                             else
                             {{
                             if(hasOpenEndedCompensation)
-                                message =  message + 'This person has Termination Date, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                                message =  'This person has Termination Date, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
                              else
-                                message =  message + 'This person has Termination Date, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
+                                message =  'This person has Termination Date, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
                             }}
                             result= confirm(message);
                          }}
@@ -804,7 +804,7 @@ namespace PraticeManagement
                 PayHistory.Count > 0 &&
                 !PayHistory[PayHistory.Count - 1].EndDate.HasValue;
             string compensationEndDate = (PayHistory != null && PayHistory.Count > 0 && PayHistory[PayHistory.Count - 1].EndDate.HasValue)
-                                                ? PayHistory[PayHistory.Count - 1].EndDate.ToString() : string.Empty;
+                                                ? PayHistory[PayHistory.Count - 1].EndDate.Value.AddDays(-1).ToString() : string.Empty;
             ScriptManager.RegisterStartupScript(this, this.GetType(), this.ClientID, (string.Format(ValidateStatusScript,
                                                                                                   ddlPersonStatus.ClientID,
                                                                                                   hasNotClosedCompensation ? "true" : "false",
