@@ -406,11 +406,6 @@ namespace PracticeManagementService
             }
         }
 
-        public double? GetPersonTimeEnteredHoursByDay(int personId, DateTime date, bool includePTOAndHoliday)
-        {
-            return TimeEntryDAL.GetPersonTimeEnteredHoursByDay(personId, date, includePTOAndHoliday);
-        }
-
         public Dictionary<DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId, int clientId, int groupId, int projectId, int timeTypeId, DateTime startDate, DateTime endDate)
         {
             try
