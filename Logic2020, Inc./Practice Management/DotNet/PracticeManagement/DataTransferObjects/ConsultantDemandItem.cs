@@ -95,7 +95,14 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public string Description
+        public string OpportunintyDescription
+        {
+            get;
+            set;
+        }
+        
+        [DataMember]
+        public string ProjectDescription
         {
             get;
             set;
