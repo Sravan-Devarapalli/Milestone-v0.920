@@ -185,7 +185,7 @@
                             <tr>
                                 <td>
                                     <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                        FromToDateFieldWidth="70" />
+                                        FromToDateFieldCssClass="Width70Px" />
                                 </td>
                                 <td>
                                 </td>
