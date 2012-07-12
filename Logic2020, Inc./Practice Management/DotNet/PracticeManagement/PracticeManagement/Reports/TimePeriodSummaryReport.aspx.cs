@@ -267,11 +267,6 @@ namespace PraticeManagement.Reporting
 
         #endregion
 
-        protected string GetClientUrl(string url)
-        {
-            return ResolveClientUrl(url) + "?time=" + PraticeManagement.Utils.Generic.BinariesCreatedTime;
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
         }
