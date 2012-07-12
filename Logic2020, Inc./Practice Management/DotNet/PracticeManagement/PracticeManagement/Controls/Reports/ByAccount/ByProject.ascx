@@ -4,10 +4,10 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;">
+            <td colspan="4" class="Width90Percent">
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;">
-                <table width="100%" style="text-align: right;">
+            <td class="textRight Width10Percent padRight5">
+                <table class="textRight WholeWidth">
                     <tr>
                         <td>
                             Export:
@@ -26,56 +26,55 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterResource" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblBusinessUnits" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblBusinessUnits" runat="server" CssClass="Height125PxImp" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterProjectStatus" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblProjectStatus" runat="server" Height="125px" />
+        <uc:FilteredCheckBoxList ID="cblProjectStatus" runat="server" CssClass="Height125PxImp" />
     </asp:Panel>
     <asp:Panel ID="pnlBilling" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblBilling" runat="server" Height="125px" />
+        <uc:FilteredCheckBoxList ID="cblBilling" runat="server" CssClass="Height125PxImp" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repProject" runat="server" OnItemDataBound="repProject_ItemDataBound">
         <HeaderTemplate>
-            <div style="min-height: 250px;">
+            <div class="minheight250Px">
                 <table id="tblAccountSummaryByProject" class="tablesorter TimePeriodByproject WholeWidth">
                     <thead>
                         <tr>
-                            <th class="t-left padLeft5" style="width: 500px; height: 20px;">
+                            <th class="ProjectColoum">
                                 Project
                                 <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
-                                    id="imgBusinessUnitFilter" style="position: absolute; padding-left: 2px;" />
+                                    id="imgBusinessUnitFilter" class="PosAbsolute padLeft2" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceBusinessUnit" runat="server" TargetControlID="imgBusinessUnitFilter"
                                     PopupControlID="pnlFilterResource" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 110px; height: 20px;">
+                            <th class="Width110Px">
                                 Status
                                 <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
-                                    id="imgProjectStatusFilter" style="position: absolute; padding-left: 2px;" />
+                                    id="imgProjectStatusFilter" class="PosAbsolute padLeft2" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 110px; height: 20px;">
+                            <th class="Width110Px">
                                 Billing
                                 <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
-                                    id="imgBilling" style="position: absolute; padding-left: 2px;" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceBilling" runat="server"
-                                    TargetControlID="imgBilling" PopupControlID="pnlBilling"
-                                    Position="Bottom">
+                                    id="imgBilling" class="PosAbsolute padLeft2" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceBilling" runat="server" TargetControlID="imgBilling"
+                                    PopupControlID="pnlBilling" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 100px; height: 20px;">
+                            <th class="Width100Px">
                                 Billable
                             </th>
-                            <th style="width: 100px; height: 20px;">
+                            <th class="Width100Px">
                                 Non-Billable
                             </th>
-                            <th style="width: 100px; height: 20px;">
+                            <th class="Width100Px">
                                 Total
                             </th>
-                            <th style="width: 325px; height: 20px;">
+                            <th class="Width325Px">
                                 Project Variance (in Hours)
                             </th>
                         </tr>
@@ -85,16 +84,16 @@
         <ItemTemplate>
             <tr class="ReportItemTemplate">
                 <td class="t-left padLeft5" sorttable_customkey='<%# Eval("Project.TimeEntrySectionId")%><%# Eval("Project.ProjectNumber")%>'>
-                    <table class="TdLevelNoBorder">
+                    <table class="TdLevelNoBorder PeronSummaryReport">
                         <tr>
-                            <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
+                            <td class="FirstTd">
                                 <%# Eval("Project.Client.Name")%>
                                 >
                                 <%# Eval("Project.Group.Name")%>
                             </td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px; text-align: left;">
+                            <td class="SecondTd">
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
                                 <%# Eval("Project.Name")%>
@@ -118,15 +117,15 @@
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
                 <td sorttable_customkey='<%# GetVarianceSortValue((string)Eval("Variance"))%>'>
-                    <table class="WholeWidth  TdLevelNoBorder">
+                    <table class="WholeWidth TdLevelNoBorder">
                         <tr>
-                            <td style="width: 5%;">
+                            <td class="Width5Percent">
                             </td>
-                            <td style="width: 70%; text-align: right;">
+                            <td class="Width70Per textRight">
                                 <table class="WholeWidth">
-                                    <tr style="border: 1px solid black;">
-                                        <td style="width: 50%; border-right: 1px solid black;">
-                                            <table width="100%">
+                                    <tr class="border1Px">
+                                        <td class="Width50Percent borderRightImp">
+                                            <table class="WholeWidth">
                                                 <tr>
                                                     <td style="<%# Eval("BillableFirstHalfHtmlStyle")%>">
                                                     </td>
@@ -135,8 +134,8 @@
                                                 </tr>
                                             </table>
                                         </td>
-                                        <td style="width: 50%; border-left: 1px solid black;">
-                                            <table width="100%">
+                                        <td class="Width50Percent borderLeft">
+                                            <table class="WholeWidth">
                                                 <tr>
                                                     <td style="<%# Eval("ForecastedFirstHalfHtmlStyle")%>">
                                                     </td>
@@ -148,16 +147,16 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 20%;">
+                            <td class="Width20Percent">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td style="text-align: right; padding-right: 3px;">
+                                        <td class="TimePeriodByProjectVariance">
                                             <%# Eval("Variance")%>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 5%;">
+                            <td class="Width5Percent">
                             </td>
                         </tr>
                     </table>
@@ -169,8 +168,7 @@
         </FooterTemplate>
     </asp:Repeater>
     <br />
-    <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-        runat="server">
+    <div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
         There are no Time Entries towards this range selected.
     </div>
 </div>
