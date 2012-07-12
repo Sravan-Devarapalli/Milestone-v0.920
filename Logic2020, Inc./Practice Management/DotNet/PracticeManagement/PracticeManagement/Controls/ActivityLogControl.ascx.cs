@@ -270,17 +270,17 @@ namespace PraticeManagement.Controls
 
             if (IsActivityLogPage)
             {
-                tblActivitylog.Attributes["class"] = "CompPerfTable WholeWidth";
+                tblActivitylog.Attributes["class"] = "CompPerfTable WholeWidth no-wrap";
                 ddlEventSource.Width = Unit.Percentage(87);
                 ddlPersonName.Width = Unit.Percentage(93);
                 ddlProjects.Width = Unit.Percentage(90);
-                tdEventSource.Style.Add("width", "23%");
-                tdYear.Style.Add("width", "12%");
-                spnPersons.Style.Add("width", "23%");
-                spnProjects.Style.Add("width", "24%");
-                tdBtnList.Style.Add("width", "18%");
+                tdEventSource.Attributes["class"] = "padLeft0 padRight0 Width23Percent";
+                tdYear.Attributes["class"] = "padLeft2 Width12Percent";
+                spnPersons.Attributes["class"] = "Width23Percent";
+                spnProjects.Attributes["class"] = "Width24Percent";
+                tdBtnList.Attributes["class"] = "Width18Percent";
                 tdBtnList.Align = "right";
-                divActivitylog.Style.Add("background-color", "#d4dff8");
+                divActivitylog.Attributes["class"] = "Padding10 bgColor_d4dff8";
                 btnResetFilter.Visible = true;
             }
             else
@@ -352,7 +352,7 @@ namespace PraticeManagement.Controls
                      );
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
