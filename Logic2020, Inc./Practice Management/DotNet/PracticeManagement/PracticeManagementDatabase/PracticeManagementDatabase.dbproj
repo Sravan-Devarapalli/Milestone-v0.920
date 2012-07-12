@@ -3720,9 +3720,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SetProjectTimeTypes.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonTimeEnteredHoursByDay.proc.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetIsHourlyRevenueByPeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4134,3 +4131,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
