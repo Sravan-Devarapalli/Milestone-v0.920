@@ -224,6 +224,11 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        protected string GetClientUrl(string url)
+        {
+            return ResolveClientUrl(url) + "?time=" + PraticeManagement.Utils.Generic.BinariesCreatedTime;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             dlPersonDiv.Style.Add("display", "none");
@@ -257,13 +262,13 @@ namespace PraticeManagement.Reporting
 
             if (timeEntryReportHeader.Count == 2)
             {
-                tdFirst.Style["width"] = "50%";
-                tdThird.Style["width"] = "20%";
+                tdFirst.Attributes["class"] = "Width50Percent";
+                tdThird.Attributes["class"] = "Width20Percent";
             }
             else if (timeEntryReportHeader.Count == 1)
             {
-                tdFirst.Style["width"] = "35%";
-                tdThird.Style["width"] = "35%";
+                tdFirst.Attributes["class"] = "Width35Percent";
+                tdThird.Attributes["class"] = "Width35Percent";
             }
 
             int personId = int.Parse(ddlPerson.SelectedItem.Value);
@@ -287,7 +292,7 @@ namespace PraticeManagement.Reporting
 
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
@@ -298,9 +303,6 @@ namespace PraticeManagement.Reporting
 
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
-
-            string url = Request.Url.AbsoluteUri;
-            btnCancelAndReturn.Visible = url.Contains("returnTo=");
 
             if (!IsPostBack)
             {
