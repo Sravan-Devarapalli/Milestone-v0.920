@@ -735,11 +735,6 @@ $(document).ready(function () {{
             }
             return val;
         }
-
-        protected string GetClientUrl(string url)
-        {
-            return ResolveClientUrl(url) + "?time=" + Generic.BinariesCreatedTime;
-        }
     }
 }
 
