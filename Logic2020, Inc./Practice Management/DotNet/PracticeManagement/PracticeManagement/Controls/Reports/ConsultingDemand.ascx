@@ -1,51 +1,11 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ConsultingDemand.ascx.cs" Inherits="PraticeManagement.Controls.Reporting.ConsultingDemand" %>
-
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ConsultingDemand.ascx.cs"
+    Inherits="PraticeManagement.Controls.Reporting.ConsultingDemand" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
     Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
-<%@ Register Src="~/Controls/Reports/UTilTimelineFilter.ascx" TagName="UtilTimelineFilter"
-    TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
-
-<style type="text/css">
-    .FadingTooltip
-    {
-        border-right: darkgray 1px outset;
-        border-top: darkgray 1px outset;
-        font-size: 10px;
-        border-left: darkgray 1px outset;
-        width: auto;
-        color: black;
-        border-bottom: darkgray 1px outset;
-        height: auto;
-        background-color: lemonchiffon;
-        borderbottomwidths: "3,3,3,3";
-        font-size: 11px;
-    }
-    .displayNone
-    {
-        display: none;
-    }
-        
-    .SetScrollRightButtonStyle
-    {
-        padding-left: 10px;
-        padding-right: 8px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        width: 8px;
-    }
-    .SetScrollLeftButtonStyle
-    {
-        padding-left: 2px;
-        padding-right: 12px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        width: 8px;
-    }
-</style>
 <script type="text/javascript" language="javascript">
     var FADINGTOOLTIP;
     var wnd_height, wnd_width;
@@ -242,7 +202,7 @@
 
         if (ddlPeriod.value == '0') {
             imgCalender.attributes["class"].value = "";
-            lblCustomDateRange.attributes["class"].value = "";
+            lblCustomDateRange.attributes["class"].value = "fontBold";
             if (imgCalender.fireEvent) {
                 imgCalender.style.display = "";
                 lblCustomDateRange.style.display = "";
@@ -412,8 +372,7 @@
     }
 
 </script>
-<div class="FadingTooltip" id="FADINGTOOLTIP" style="z-index: 999; padding: 5px;
-    visibility: hidden; position: absolute">
+<div class="FadingTooltip FadingTooltipDefault" id="FADINGTOOLTIP">
 </div>
 <uc:LoadingProgress ID="lpConsultingDemand" runat="server" />
 <asp:UpdatePanel ID="updConsReport" runat="server">
@@ -421,14 +380,13 @@
         <div class="buttons-block">
             <table class="WholeWidth">
                 <tr>
-                    <td align="left" style="width: 98%;">
+                    <td align="left" class="Width98Percent">
                         Show Consultants Demand for &nbsp;
                         <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="false" onchange="EnableResetButton(); CheckAndShowCustomDatesPoup(this);">
                             <asp:ListItem Selected="True" Text="Next 3 Months" Value="3"></asp:ListItem>
                             <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                         </asp:DropDownList>
-                        &nbsp;<asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server"
-                            Text=""></asp:Label>
+                        &nbsp;<asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                         &nbsp;<asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                         <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                             CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
@@ -446,61 +404,60 @@
                             <asp:HiddenField ID="hdnDefaultStartDate" runat="server" Value="" />
                             <asp:HiddenField ID="hdnDefaultEndDate" runat="server" Value="" />
                             <asp:HiddenField ID="hdnDefaultMonths" runat="server" Value="3" />
-                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="90px" OnClick="btnUpdateView_OnClick"
-                                EnableViewState="False" />
+                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" CssClass="Width90PxImp"
+                                OnClick="btnUpdateView_OnClick" EnableViewState="False" />
                         </td>
                         <td>
-                            <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="90px" OnClientClick="if(!ResetFilters(this)){return false;}" />
+                            <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" CssClass="Width90PxImp"
+                                OnClientClick="if(!ResetFilters(this)){return false;}" />
                         </td>
                     </td>
                 </tr>
             </table>
-            <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
-                <table class="WholeWidth">
-                    <tr>
-                        <td align="center">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                            FromToDateFieldWidth="70" />
-                                    </td>
-                                    <td>
-                                        <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
-                                            Text="*" EnableClientScript="true" ValidationGroup="<%# ClientID %>" ToolTip="Period should not be more than 12 months"
-                                            ErrorMessage="Period should not be more than 12 months." Display="Dynamic"></asp:CustomValidator>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding: 10px 0px 10px 0px;">
-                            <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid(); if(ValidAll()) return false;"
-                                Text="OK" Style="float: none !Important;" CausesValidation="true" />
-                            <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
-                                OnClientClick="return false;" />
-                            &nbsp; &nbsp;
-                            <asp:Button ID="btnCustDatesCancel" OnClientClick="ReAssignStartDateEndDates(); ClearValidations(); return false;"
-                                runat="server" Text="Cancel" Style="float: none !Important;" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center">
-                            <asp:ValidationSummary ID="valSum" runat="server" />
-                        </td>
-                    </tr>
-                </table>
-            </asp:Panel>
         </div>
+        <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
+            <table class="WholeWidth">
+                <tr>
+                    <td align="center" class="no-wrap">
+                        <table>
+                            <tr>
+                                <td>
+                                    <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                                        FromToDateFieldCssClass="Width70Px" />
+                                </td>
+                                <td>
+                                    <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
+                                        Text="*" EnableClientScript="true" ValidationGroup="<%# ClientID %>" ToolTip="Period should not be more than 12 months"
+                                        ErrorMessage="Period should not be more than 12 months." Display="Dynamic"></asp:CustomValidator>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="custBtns">
+                        <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid(); if(ValidAll()) return false;"
+                            Text="OK" CausesValidation="true" />
+                        <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
+                            OnClientClick="return false;" />
+                        &nbsp; &nbsp;
+                        <asp:Button ID="btnCustDatesCancel" OnClientClick="ReAssignStartDateEndDates(); ClearValidations(); return false;"
+                            runat="server" Text="Cancel" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="textCenter">
+                        <asp:ValidationSummary ID="valSum" runat="server" />
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
     </ContentTemplate>
 </asp:UpdatePanel>
 <asp:UpdatePanel ID="updReport" runat="server" UpdateMode="Conditional">
     <ContentTemplate>
-        <div id="chartDiv" runat="server" style="overflow-x: auto;
-            overflow-y: hidden; text-align: center;">
-            <asp:Chart ID="chrtConsultingDemand" runat="server" Width="920px">
+        <div id="chartDiv" runat="server" class="ConsultingDemandchartDiv">
+            <asp:Chart ID="chrtConsultingDemand" runat="server" CssClass="Width920Px">
                 <Legends>
                     <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
                         Alignment="Center">
@@ -519,7 +476,8 @@
                     </asp:Legend>
                 </Legends>
                 <Series>
-                    <asp:Series Name="chartSeries" ChartType="RangeBar" ></asp:Series>
+                    <asp:Series Name="chartSeries" ChartType="RangeBar">
+                    </asp:Series>
                 </Series>
                 <ChartAreas>
                     <asp:ChartArea Name="MainArea">
@@ -546,3 +504,4 @@
         </div>
     </ContentTemplate>
 </asp:UpdatePanel>
+
