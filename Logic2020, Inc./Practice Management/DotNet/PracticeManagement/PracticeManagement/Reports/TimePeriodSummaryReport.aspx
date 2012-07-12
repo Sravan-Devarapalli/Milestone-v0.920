@@ -10,133 +10,11 @@
     TagName="ByResource" %>
 <%@ Register Src="~/Controls/Reports/TimePeriodSummaryByProject.ascx" TagPrefix="uc"
     TagName="Byproject" %>
-<%@ Register Src="~/Controls/Reports/BillableAndNonBillableGraph.ascx" TagPrefix="uc"
-    TagName="BillableAndNonBillableGraph" %>
-<%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript">
-
-        function CollapseOrExpandAll(btnExpandOrCollapseAllClientId, hdnCollapsedClientId, hdncpeExtendersIds) {
-            var btn = btnExpandOrCollapseAllClientId;
-            var hdnCollapsed = hdnCollapsedClientId;
-            var isExpand = false;
-            if (btn != null) {
-                if (btn.value == "Expand All") {
-                    isExpand = true;
-                    btn.value = "Collapse All";
-                    btn.title = "Collapse All";
-                    hdnCollapsed.value = 'false';
-                }
-                else {
-                    btn.value = "Expand All";
-                    btn.title = "Expand All";
-                    hdnCollapsed.value = 'true';
-                }
-                var projectPanelskvPair = jQuery.parseJSON(hdncpeExtendersIds.value);
-                ExpandOrCollapsePanels(projectPanelskvPair, isExpand);
-            }
-            return false;
-        }
-
-        function ExpandOrcollapseExtender(cpe, isExpand) {
-            if (cpe != null) {
-                if (isExpand) {
-                    ExpandPanel(cpe)
-                }
-                else {
-                    var isCollapsed = cpe.get_Collapsed();
-                    if (!isCollapsed)
-                        cpe._doClose();
-                }
-            }
-        }
-
-
-        function ExpandPanel(cpe) {
-            var isCollapsed = cpe.get_Collapsed();
-            if (isCollapsed) {
-                cpe.expandPanel();
-            }
-        }
-
-
-        function ExpandOrCollapsePanels(datePanels, isExpand) {
-
-            for (var j = 0; j < datePanels.length; j++) {
-                var cpeDate = $find(datePanels[j]);
-                ExpandOrcollapseExtender(cpeDate, isExpand);
-            }
-
-        }
-    </script>
-    <style>
-        /* --------- Tabs for person and project details pages ------ */
-        
-        .CustomTabStyle tr
-        {
-            height: 30px;
-        }
-        
-        .CustomTabStyle td
-        {
-            background-color: White;
-            float: left;
-            padding: 8px 0px 5px 0px;
-            position: relative;
-        }
-        
-        .CustomTabStyle td a
-        {
-            text-decoration: none;
-        }
-        
-        .CustomTabStyle td span a
-        {
-            border-bottom: 1px dashed #0898e6;
-        }
-        
-        .CustomTabStyle td span a:hover
-        {
-            border-bottom: 1px dashed #006699;
-        }
-        
-        .CustomTabStyle td a.collapse
-        {
-            display: none;
-            position: absolute;
-        }
-        
-        .CustomTabStyle .SelectedSwitch a.collapse
-        {
-            display: block;
-            right: 2px;
-            top: 10px;
-        }
-        
-        .CustomTabStyle td span.bg
-        {
-            padding: 8px 10px 7px 10px;
-        }
-        
-        .CustomTabStyle .SelectedSwitch span.bg
-        {
-            background-color: #e2ebff;
-        }
-        
-        .tab-pane
-        {
-            background-color: #e2ebff;
-            padding: 5px;
-        }
-        
-        .info-field
-        {
-            width: 152px;
-        }
-    </style>
-    <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
+    <script src='<%# GetClientUrl("~/Scripts/ExpandOrCollapse.js") %>' type="text/javascript"></script>
+    <link href="<%# GetClientUrl("~/Css/TableSortStyle.css") %>" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -173,36 +51,35 @@
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <table width="100%">
+            <table class="WholeWidth">
                 <tr>
                     <td class="height30P vBottom fontBold">
                         2.&nbsp;Select report parameters:
                     </td>
                 </tr>
             </table>
-            <table width="100%" style="height:160px;">
+            <table class="WholeWidth Height160Px">
                 <tr>
-                    <td id="tdFirst" runat="server" style="width: 1%;">
+                    <td id="tdFirst" runat="server" class="Width1Percent">
                     </td>
-                    <td style="text-align: center;vertical-align: top;height:30px;" id="tdSecond" runat="server">
+                    <td class="ReportTdSecond" runat="server">
                         <asp:CheckBox ID="chkIncludePersons" runat="server" Checked="false" Text="Include persons with no time entered in report output"
                             AutoPostBack="true" OnCheckedChanged="chkIncludePersons_CheckedChanged" />
                     </td>
-                    <td style="width: 65%" id="tdThird" runat="server">
+                    <td class="Width65Percent" id="tdThird" runat="server">
                     </td>
                 </tr>
                 <tr>
                     <td>
                     </td>
-                    <td style="height:30px;text-align: center;vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="text-align: right; width: 30%; font-weight: bold;">
+                                <td class="FirstTd">
                                     Range:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
-                                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="160px">
+                                <td class="SecondTd">
+                                    <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
@@ -224,35 +101,34 @@
                 <tr>
                     <td>
                     </td>
-                    <td style="height:30px;text-align: center;vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="width: 30%;">
+                                <td class="FirstTd">
                                 </td>
-                                <td style="text-align: left; height: 15px;">
+                                <td class="SecondTd">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                                    <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
                             </tr>
                         </table>
                     </td>
-                     <td>
+                    <td>
                     </td>
                 </tr>
                 <tr>
-                     <td>
+                    <td>
                     </td>
-                    <td style=" text-align: center;height:30px;vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="text-align: right; width: 30%; font-weight: bold;">
+                                <td class="FirstTd">
                                     View:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
-                                    <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
-                                        Width="160px">
+                                <td class="SecondTd">
+                                    <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
                                         <asp:ListItem Text="By Project" Value="1"></asp:ListItem>
@@ -261,47 +137,48 @@
                             </tr>
                         </table>
                     </td>
-                     <td>
+                    <td>
                     </td>
                 </tr>
                 <tr>
-                 <td colspan="3" style="height:30px;"> &nbsp;
+                    <td colspan="3" class="Height30Px">
+                        &nbsp;
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%;height:10px;">
+                    <td colspan="3" class="ReportBorderBottom">
                     </td>
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
-                 BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates"
-                BehaviorID="bhCustomDates" DropShadow="false"  />
-            <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+                BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
+                DropShadow="false" />
+            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
                             <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                FromToDateFieldWidth="70" />
+                                FromToDateFieldCssClass="Width70Px" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <td class="custBtns">
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
-                                Style="float: none !Important;" CausesValidation="true" />
+                                CausesValidation="true" />
                             &nbsp; &nbsp;
-                            <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel" Style="float: none !Important;" OnClick="btnCustDatesCancel_OnClick" />
+                            <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel"
+                                OnClick="btnCustDatesCancel_OnClick" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center">
+                        <td class="textCenter">
                             <asp:ValidationSummary ID="valSumDateRange" runat="server" ValidationGroup='<%# ClientID %>' />
                         </td>
                     </tr>
                 </table>
             </asp:Panel>
             <br />
-            <div id="divWholePage" runat="server" style="display:none;">
+            <div id="divWholePage" runat="server" style="display: none;">
                 <asp:MultiView ID="mvTimePeriodReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwResourceReport" runat="server">
                         <asp:Panel ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
