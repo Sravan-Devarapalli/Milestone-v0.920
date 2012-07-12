@@ -332,6 +332,8 @@
             public const string InUseFutureColumn = "InUseFuture";
             public const string PayPersonIdColumn = "PayPersonId";
             public const string VacationDaysColumn = "VacationDays";
+            public const string OpportunintyDescription = "OpportunintyDescription";
+            public const string ProjectDescription = "ProjectDescription";
 
         }
 
@@ -790,7 +792,6 @@
                 public const string ListAll = "dbo.TimeEntriesAll";
                 public const string GetCount = "dbo.TimeEntriesGetCount";
                 public const string GetTotals = "dbo.TimeEntriesGetTotals";
-                public const string GetPersonTimeEnteredHoursByDay = "dbo.GetPersonTimeEnteredHoursByDay";
                 public const string PersonTimeEntriesByPeriod = "dbo.PersonTimeEntriesByPeriod";
                 public const string GetWorkTypeNameByIdProcedure = "dbo.GetWorkTypeNameById";
                 public const string ToggleIsReviewed = "dbo.TimeEntryToggleIsReviewed";
