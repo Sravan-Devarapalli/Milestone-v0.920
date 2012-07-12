@@ -42,10 +42,10 @@
                             <asp:CustomValidator ID="custNewGroupName" runat="server" ControlToValidate="txtGroupName"
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 ErrorMessage="The name of Business Unit must to be unique." ToolTip="The name of Business Unit  must to be unique."
-                                ValidationGroup="UpdateGroup" >*</asp:CustomValidator>
+                                ValidationGroup="UpdateGroup">*</asp:CustomValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField Visible="false" >
+                    <asp:TemplateField Visible="false">
                         <ItemStyle HorizontalAlign="Center" Width="0%" />
                         <HeaderTemplate>
                             <div class="ie-bg">
@@ -68,51 +68,47 @@
                         ItemStyle-HorizontalAlign="Center" DeleteImageUrl="~/Images/icon-delete.png" />
                 </Columns>
             </asp:GridView>
-            <table width="40% !important;" class="CompPerfTable" cellspacing="0" border="0" style="background-color: White;
-                border-collapse: collapse;">
-                <tr style="background-color: #F9FAFF;">
-                    <td align="center" style="width: 15%; padding-top: 10px;">
-                        <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
-                            ToolTip="Add Business Unit" Visible="true" />
-                        <asp:ImageButton ID="btnAddGroup" runat="server" ValidationGroup="NewGroup" ImageUrl="~/Images/icon-check.png"
-                            ToolTip="Confirm" Visible="false" OnClick="btnAddGroup_Click" />
-                        <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_Click"
-                            ToolTip="Cancel" Visible="false" />
-                    </td>
-                    <td style="width: 0%;">
-                    </td>
-                    <td style="width: 60%; white-space: nowrap;">
-                        <asp:Label ID="lblNewGroupName" runat="server" AssociatedControlID="txtNewGroupName" />
-                        <asp:TextBox ID="txtNewGroupName" runat="server" ValidationGroup="NewGroup" Width="96%"
-                            Visible="false" />
-                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarker" runat="server" TargetControlID="txtNewGroupName"
-                            WatermarkText="New Business Unit" WatermarkCssClass="watermarked" />
-                        <asp:RequiredFieldValidator ID="reqNewGroupName" runat="server" ControlToValidate="txtNewGroupName"
-                            ErrorMessage="Business Unit name is required." ToolTip="Business Unit name is required." EnableClientScript="false"
-                            SetFocusOnError="true" Display="Dynamic" ValidationGroup="NewGroup">*</asp:RequiredFieldValidator>
-                        <asp:CustomValidator ID="custNewGroupName" runat="server" ControlToValidate="txtNewGroupName"
-                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                            ErrorMessage="There is already a Business Unit with the same name." ToolTip="There is already a group with the same name."
-                            ValidationGroup="NewGroup" OnServerValidate="custNewGroupName_ServerValidate">*</asp:CustomValidator>
-                    </td>
-                    <td style="width: 0%;"></td>
-                    <td align="center" style="width: 15%;">
-                        <asp:CheckBox ID="chbGroupActive" runat="server" Checked="true" Visible="false" />
-                    </td>
-                    <td style="width: 10%;">
-                    </td>
-                </tr>
-            </table>
+            <div id="groupDiv" runat="server">
+                <table width="40% !important;" class="CompPerfTable" cellspacing="0" border="0" style="background-color: White;
+                    border-collapse: collapse;">
+                    <tr style="background-color: #F9FAFF;">
+                        <td align="center" style="width: 15%; padding-top: 10px;">
+                            <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
+                                ToolTip="Add Business Unit" Visible="true" />
+                            <asp:ImageButton ID="btnAddGroup" runat="server" ValidationGroup="NewGroup" ImageUrl="~/Images/icon-check.png"
+                                ToolTip="Confirm" Visible="false" OnClick="btnAddGroup_Click" />
+                            <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_Click"
+                                ToolTip="Cancel" Visible="false" />
+                        </td>
+                        <td style="width: 0%;">
+                        </td>
+                        <td style="width: 60%; white-space: nowrap;">
+                            <asp:Label ID="lblNewGroupName" runat="server" AssociatedControlID="txtNewGroupName" />
+                            <asp:TextBox ID="txtNewGroupName" runat="server" ValidationGroup="NewGroup" Width="96%"
+                                Visible="false" />
+                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarker" runat="server" TargetControlID="txtNewGroupName"
+                                WatermarkText="New Business Unit" WatermarkCssClass="watermarked" />
+                            <asp:RequiredFieldValidator ID="reqNewGroupName" runat="server" ControlToValidate="txtNewGroupName"
+                                ErrorMessage="Business Unit name is required." ToolTip="Business Unit name is required."
+                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="NewGroup">*</asp:RequiredFieldValidator>
+                            <asp:CustomValidator ID="custNewGroupName" runat="server" ControlToValidate="txtNewGroupName"
+                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                ErrorMessage="There is already a Business Unit with the same name." ToolTip="There is already a group with the same name."
+                                ValidationGroup="NewGroup" OnServerValidate="custNewGroupName_ServerValidate">*</asp:CustomValidator>
+                        </td>
+                        <td style="width: 0%;">
+                        </td>
+                        <td align="center" style="width: 15%;">
+                            <asp:CheckBox ID="chbGroupActive" runat="server" Checked="true" Visible="false" />
+                        </td>
+                        <td style="width: 10%;">
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </td>
     </tr>
 </table>
 <asp:ValidationSummary ID="valSumGroups" runat="server" ValidationGroup="NewGroup" />
 <asp:ValidationSummary ID="valSumUpdation" runat="server" ValidationGroup="UpdateGroup" />
-<asp:ObjectDataSource ID="odsClientGroups" runat="server" SelectMethod="GroupListAll"
-    TypeName="PraticeManagement.ProjectGroupService.ProjectGroupServiceClient">
-    <SelectParameters>
-        <asp:QueryStringParameter Name="clientId" QueryStringField="id" Type="Int32" />
-        <asp:Parameter Name="projectId" Type="Int32" />
-    </SelectParameters>
-</asp:ObjectDataSource>
 
