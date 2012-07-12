@@ -164,9 +164,6 @@ namespace PracticeManagementService
         [OperationContract]
         List<TimeEntrySection> PersonTimeEntriesByPeriod(int personId, DateTime startDate, DateTime endDate);
 
-        [OperationContract]
-        double? GetPersonTimeEnteredHoursByDay(int personId, DateTime date, bool includePTOAndHoliday);
-
         #endregion
 
 
