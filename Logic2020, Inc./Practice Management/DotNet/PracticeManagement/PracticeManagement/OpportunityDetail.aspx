@@ -24,6 +24,8 @@
     Opportunity Details
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <script src="<%# PraticeManagement.Utils.Generic.GetClientUrl("~/Scripts/date.js", this) %>" type="text/javascript"></script>
+    <link href="<%# PraticeManagement.Utils.Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .transitions
         {
@@ -103,9 +105,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/date.js" type="text/javascript"></script>
     <script src="Scripts/datepicker.js" type="text/javascript"></script>
-    <link href="Css/datepicker.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         function checkDirty(arg) {
             __doPostBack('__Page', arg);
@@ -839,7 +839,7 @@
                                             <td style="padding-right: 4px;">
                                                 <b>Start Date</b>
                                             </td>
-                                            <td class="DatePickerPadding" style="padding-left: 4px; padding-right: 4px;">
+                                            <td style="padding-left: 4px; padding-right: 4px;">
                                                 <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false"
                                                     BehaviorID="dpStartDateBehaviourId" OnClientChange="EnableSaveButton();setDirty();"
                                                     TextBoxWidth="62px" runat="server" />
@@ -856,7 +856,7 @@
                                             <td style="padding-left: 4px; padding-right: 8px;">
                                                 <asp:Label ID="lbEndDate" Style="font-weight: bold;" runat="server" Text="End Date"></asp:Label>
                                             </td>
-                                            <td class="DatePickerPadding">
+                                            <td>
                                                 <uc1:DatePicker ID="dpEndDate" ValidationGroup="Opportunity" AutoPostBack="false"
                                                     OnClientChange="EnableSaveButton();setDirty();" TextBoxWidth="62px" runat="server" />
                                             </td>
