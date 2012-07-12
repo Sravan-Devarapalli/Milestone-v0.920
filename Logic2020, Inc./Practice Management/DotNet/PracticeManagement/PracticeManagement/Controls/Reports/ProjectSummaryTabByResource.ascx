@@ -4,10 +4,10 @@
     TagPrefix="uc" %>
 <table class="WholeWidthWithHeight">
     <tr>
-        <td colspan="4" style="width: 90%;">
+        <td colspan="4" class="Width90Percent">
         </td>
-        <td style="text-align: right; width: 10%; padding-right: 5px;">
-            <table width="100%" style="text-align: right;">
+        <td class="Width10Percent padRight5">
+            <table class="WholeWidth">
                 <tr>
                     <td>
                         Export:
@@ -26,40 +26,40 @@
     </tr>
 </table>
 <asp:Panel ID="pnlFilterProjectRoles" Style="display: none;" runat="server">
-    <uc:FilteredCheckBoxList ID="cblProjectRoles" runat="server" Height="155px" />
+    <uc:FilteredCheckBoxList ID="cblProjectRoles" runat="server" />
 </asp:Panel>
 <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Style="display: none;" />
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
     <HeaderTemplate>
-        <div style="min-height: 250px;">
+        <div class="minheight250Px">
             <table id="tblProjectSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth">
                 <thead>
                     <tr>
-                        <th class="t-left padLeft5" style="width: 300px; background-color: White;">
+                        <th class="ProjectColum">
                             Resource
                         </th>
-                        <th style="width: 140px;">
+                        <th class="Width140px">
                         </th>
-                        <th style="width: 130px;">
+                        <th class="Width130px">
                             Project Role
-                            <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server" id="imgProjectRoleFilter"
-                                style="position: absolute; padding-left: 2px;" />
+                            <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server"
+                                id="imgProjectRoleFilter" class="FilterImg" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceProjectRole" runat="server" TargetControlID="imgProjectRoleFilter"
                                 PopupControlID="pnlFilterProjectRoles" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
-                        <th style="width: 100px;">
+                        <th class="Width100Px">
                             Billable
                         </th>
-                        <th style="width: 100px;">
+                        <th class="Width100Px">
                             Non-Billable
                         </th>
-                        <th style="width: 100px;">
+                        <th class="Width100Px">
                             Total
                         </th>
-                        <th style="width: 140px;">
+                        <th class="Width140px">
                         </th>
-                        <th style="width: 325px;">
+                        <th class="Width325Px">
                             Project Variance (in Hours)
                         </th>
                     </tr>
@@ -71,7 +71,7 @@
             <td class="t-left padLeft5">
                 <%# Eval("Person.PersonLastFirstName")%>
                 <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
-                        ToolTip="Resource is an offshore employee" Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
+                    ToolTip="Resource is an offshore employee" Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
             </td>
             <td>
             </td>
@@ -92,11 +92,11 @@
             <td>
                 <table class="WholeWidth  TdLevelNoBorder">
                     <tr>
-                        <td style="width: 75%;">
+                        <td class="Width75Percent">
                             <table class="WholeWidth">
-                                <tr style="border: 1px solid black;">
-                                    <td style="width: 50%; border-right: 1px solid black;">
-                                        <table width="100%">
+                                <tr class="border1Px">
+                                    <td class="Width50Percent borderRightImp">
+                                        <table class="WholeWidth">
                                             <tr>
                                                 <td style="<%# Eval("BillableFirstHalfHtmlStyle")%>">
                                                 </td>
@@ -105,8 +105,8 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 50%; border-left: 1px solid black;">
-                                        <table width="100%">
+                                    <td class="Width50Percent borderLeft">
+                                        <table class="WholeWidth">
                                             <tr>
                                                 <td style="<%# Eval("ForecastedFirstHalfHtmlStyle")%>">
                                                 </td>
@@ -118,10 +118,10 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 25%;">
+                        <td class="Width25Percent">
                             <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align: right; padding-right: 3px;">
+                                    <td class="TimePeriodByProjectVariance">
                                         <%# Eval("Variance")%>
                                     </td>
                                 </tr>
@@ -137,8 +137,7 @@
     </FooterTemplate>
 </asp:Repeater>
 <br />
-<div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-    runat="server">
+<div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
     There are no Time Entries towards this project.
 </div>
 
