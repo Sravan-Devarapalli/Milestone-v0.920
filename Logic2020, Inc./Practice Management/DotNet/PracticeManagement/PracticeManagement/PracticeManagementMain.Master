@@ -1,18 +1,19 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="PracticeManagementMain.master.cs"
     Inherits="PraticeManagement.PracticeManagementMain" %>
 
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register TagPrefix="uc" Assembly="FormsAuthenticationUserImpersonation" Namespace="System.Web.UI.WebControls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Menu" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <link rel="Stylesheet" href="<%# GetClientUrl("~/Css/style.min.css") %>" />
+    <link rel="Stylesheet" href="<%# Generic.GetClientUrl("~/Css/style.min.css", this) %>" />
     <asp:ContentPlaceHolder ID="title" runat="server">
     </asp:ContentPlaceHolder>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-    <link rel="icon" href="<%# GetClientUrl("~/Images/favicon.ico") %>" type="image/x-icon" />
-    <script type="text/javascript" src='<%# GetClientUrl("~/Scripts/Combined.js") %>'></script>
+    <link rel="icon" href="<%# Generic.GetClientUrl("~/Images/favicon.ico", this) %>" type="image/x-icon" />
+    <script type="text/javascript" src='<%# Generic.GetClientUrl("~/Scripts/Combined.js", this) %>'></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -53,16 +54,6 @@
                     </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <asp:HyperLink ID="hlnkChangePassword" runat="server" NavigateUrl="~/ChangePassword.aspx"
                         Visible="false" Text="Change Password" ToolTip="Change Password"></asp:HyperLink>
-                </div>
-            </div>
-            <div class="top-shadow">
-                <div class="top-shadow-left">
-                </div>
-                <div class="top-shadow-right">
-                </div>
-                <div class="top-shadow-middle">
-                </div>
-                <div class="clear0">
                 </div>
             </div>
         </div>
