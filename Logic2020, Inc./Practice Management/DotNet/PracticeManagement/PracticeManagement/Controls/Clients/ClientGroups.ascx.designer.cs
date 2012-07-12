@@ -22,6 +22,15 @@ namespace PraticeManagement.Controls.Clients {
         protected global::System.Web.UI.WebControls.GridView gvGroups;
         
         /// <summary>
+        /// groupDiv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl groupDiv;
+        
+        /// <summary>
         /// btnPlus control.
         /// </summary>
         /// <remarks>
@@ -119,15 +128,6 @@ namespace PraticeManagement.Controls.Clients {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valSumUpdation;
-        
-        /// <summary>
-        /// odsClientGroups control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsClientGroups;
     }
 }
 
