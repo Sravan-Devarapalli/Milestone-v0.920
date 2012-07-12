@@ -3,6 +3,7 @@
     Title="Opportunity Details | Practice Management" %>
 
 <%@ Import Namespace="DataTransferObjects" %>
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register TagPrefix="cc" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
@@ -24,8 +25,8 @@
     Opportunity Details
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src="<%# PraticeManagement.Utils.Generic.GetClientUrl("~/Scripts/date.js", this) %>" type="text/javascript"></script>
-    <link href="<%# PraticeManagement.Utils.Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet" type="text/css" />
+    <script src="<%# Generic.GetClientUrl("~/Scripts/date.js", this) %>" type="text/javascript"></script>
+    <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .transitions
         {
