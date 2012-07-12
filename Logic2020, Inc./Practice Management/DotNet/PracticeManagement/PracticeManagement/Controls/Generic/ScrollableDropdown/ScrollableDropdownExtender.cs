@@ -100,8 +100,8 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
 
         private string GetHTMLToRender()
         {
-            string htmlWithoutImageFormat = "<div ID={0} class=\"scrollextLabel\"{2}><label style=\"vertical-align:top;\">{1}</label></div>";
-            string htmlWithImageFormat = "<div ID={0} class=\"scrollextLabel\"{3}><label style=\"vertical-align:top;\">{1}</label><span style=\"padding-left:20px;float:right;\"><image src={2} /></span></div>";
+            string htmlWithoutImageFormat = "<div ID={0} class=\"scrollextLabel\"{2}><label class=\"vTop\">{1}</label></div>";
+            string htmlWithImageFormat = "<div ID={0} class=\"scrollextLabel\"{3}><label class=\"vTop\">{1}</label><span class=\"padLeft20 fl-right\"><image src={2} /></span></div>";
 
             if (!string.IsNullOrEmpty(EditImageUrl))
             {
