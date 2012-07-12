@@ -4,77 +4,76 @@
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Reports/ByPerson/GroupByProject.ascx" TagName="GroupByProject"
     TagPrefix="uc" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
-    height: 90px;">
+<table class="PaddingTenPx TimePeriodSummaryReportHeader">
     <tr>
-        <td style="font-size: 16px; font-weight: bold;">
+        <td class="font16Px fontBold">
             <table>
                 <tr>
-                    <td style="vertical-align: top; padding-bottom: 10px;">
+                    <td class="vtop PaddingBottom10Imp">
                         <asp:Literal ID="ltPersonCount" runat="server"></asp:Literal>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 10px; vertical-align: bottom;">
+                    <td class="PaddingTop10Imp vBottom">
                         <asp:Literal ID="lbRange" runat="server"></asp:Literal>
                     </td>
                 </tr>
             </table>
         </td>
-        <td style="text-align: right; width: 610px; padding-bottom: 10px;">
-            <table style="table-layout: fixed; width: 100%;">
+        <td class="TimePeriodTotals">
+            <table class="tableFixed WholeWidth">
                 <tr>
-                    <td style="width: 21%; text-align: center;">
-                        <table width="100%">
+                    <td class="Width21Percent">
+                        <table class="ReportHeaderTotalsTable">
                             <tr>
-                                <td style="font-size: 15px; padding-bottom: 3px;">
+                                <td class="FirstTd">
                                     Total Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px;">
+                                <td class="SecondTd">
                                     <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 21%; text-align: center;">
-                        <table width="100%">
+                    <td class="Width21Percent">
+                        <table class="ReportHeaderTotalsTable">
                             <tr>
-                                <td style="font-size: 15px; padding-bottom: 3px;">
+                                <td class="FirstTd">
                                     Avg Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px;">
+                                <td class="SecondTd">
                                     <asp:Literal ID="ltrlAvgHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 21%; text-align: center;">
-                        <table width="100%">
+                    <td class="Width21Percent">
+                        <table class="ReportHeaderTotalsTable">
                             <tr>
-                                <td style="font-size: 15px; padding-bottom: 3px;">
+                                <td class="FirstTd">
                                     Avg Utilization
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px;">
+                                <td class="SecondTd">
                                     <asp:Literal ID="ltrlAvgUtilization" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 23%; vertical-align: bottom; text-align: center;">
-                        <table width="100%">
+                    <td class="Width23Percent vBottom">
+                        <table class="ReportHeaderBillAndNonBillTable">
                             <tr>
                                 <td>
                                     BILLABLE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding-bottom: 5px;">
+                                <td class="billingHours">
                                     <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
@@ -90,20 +89,20 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 6%; padding: 0px !important;">
-                        <table width="100%">
+                    <td class="ReportHeaderBandNBGraph Width6PercentImp">
+                        <table>
                             <tr>
-                                <td style="padding: 0px !important;">
-                                    <table width="100%" style="table-layout: fixed;">
+                                <td>
+                                    <table class="tableFixed">
                                         <tr>
-                                            <td style="text-align: center;">
+                                            <td>
                                                 <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
                                             </td>
                                         </tr>
                                     </table>
-                                    <table width="100%">
+                                    <table>
                                         <tr id="trBillable" runat="server" title="Billable Percentage.">
-                                            <td style="background-color: #7FD13B; border: 1px solid Gray;">
+                                            <td class="billingGraph">
                                             </td>
                                         </tr>
                                     </table>
@@ -111,20 +110,20 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 6%; padding: 0px;">
-                        <table width="100%">
+                    <td class="ReportHeaderBandNBGraph Width6PercentImp">
+                        <table>
                             <tr>
-                                <td style="padding: 0px !important;">
-                                    <table width="100%" style="table-layout: fixed;">
+                                <td>
+                                    <table class="tableFixed">
                                         <tr>
-                                            <td style="text-align: center;">
+                                            <td>
                                                 <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
                                             </td>
                                         </tr>
                                     </table>
-                                    <table width="100%">
+                                    <table>
                                         <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                            <td style="background-color: #BEBEBE; border: 1px solid Gray;">
+                                            <td class="nonBillingGraph">
                                             </td>
                                         </tr>
                                     </table>
@@ -132,7 +131,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 2%;">
+                    <td class="Width2Percent">
                     </td>
                 </tr>
             </table>
@@ -142,10 +141,10 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;">
+            <td colspan="4" class="Width90Percent">
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;">
-                <table width="100%" style="text-align: right;">
+            <td class=" Width10Percent padRight5">
+                <table class="WholeWidth">
                     <tr>
                         <td>
                             Export:
@@ -168,81 +167,81 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterPayType" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblPayTypes" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblPayTypes" runat="server" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterOffshore" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblOffShore" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblOffShore" runat="server" />
     </asp:Panel>
     <asp:Panel ID="pnlDivision" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblDivision" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblDivision" runat="server" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterPersonStatusType" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblPersonStatusType" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblPersonStatusType" runat="server" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
         <HeaderTemplate>
-            <div style="min-height: 250px;">
+            <div class="minheight250Px">
                 <table id="tblTimePeriodSummaryByResource" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
-                        <tr>
-                            <th style="width: 210px; text-align: left;" class="padLeft5">
+                        <tr class="TimeperiodSummaryReportTr">
+                            <th class="ResourceColum">
                                 Resource
-                                <img alt="Filter" src="../../Images/Terminated.png" style="padding-left: 2px;" runat="server"
-                                    title="Person Status" id="imgPersonStatusTypeFilter" />
+                                <img alt="Filter" src="../../Images/Terminated.png" runat="server" title="Person Status"
+                                    id="imgPersonStatusTypeFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
                                     TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
                                     PopupControlID="pnlFilterPersonStatusType" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
-                                <img alt="Filter" src="../../Images/Offshore_Icon.png" style="padding-left: 2px;"
-                                    title="Location" runat="server" id="imgOffShoreFilter" />
+                                <img alt="Filter" src="../../Images/Offshore_Icon.png" title="Location" runat="server"
+                                    id="imgOffShoreFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceOffshoreFilter" runat="server" TargetControlID="imgOffShoreFilter"
                                     BehaviorID="pceOffshoreFilter" PopupControlID="pnlFilterOffshore" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
-                                <img alt="Filter" src="../../Images/divisions_16x16.png" style="padding-left: 2px;"
-                                    title="Division" runat="server" id="imgDivisionFilter" />
+                                <img alt="Filter" src="../../Images/divisions_16x16.png" title="Division" runat="server"
+                                    id="imgDivisionFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceDivision" runat="server" TargetControlID="imgDivisionFilter"
                                     BehaviorID="pceDivision" PopupControlID="pnlDivision" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 130px;">
+                            <th class="Width130pxImp">
                                 Seniority
-                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" style="position: absolute;
-                                    padding-left: 2px;" runat="server" id="imgSeniorityFilter" />
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="FilterImg"
+                                    runat="server" id="imgSeniorityFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
                                     BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 110px;">
+                            <th class="Width110PxImp">
                                 Pay Type
-                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" style="position: absolute;
-                                    padding-left: 2px;" runat="server" id="imgPayTypeFilter" />
+                                <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="FilterImg"
+                                    runat="server" id="imgPayTypeFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter"
                                     BehaviorID="pcePayTypeFilter" PopupControlID="pnlFilterPayType" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 100px">
+                            <th>
                                 Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th>
                                 Non-Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th>
                                 BD
                             </th>
-                            <th style="width: 100px;">
+                            <th>
                                 Internal
                             </th>
-                            <th style="width: 100px;">
+                            <th>
                                 Time-Off
                             </th>
-                            <th style="width: 100px;">
+                            <th>
                                 Total
                             </th>
-                            <th style="width: 295px;">
+                            <th class="Width295PxImp">
                                 Utilization Percent this Period
                             </th>
                         </tr>
@@ -251,15 +250,15 @@
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
-                <td valign="middle" sorttable_customkey='<%# Eval("Person.PersonLastFirstName")%>'>
-                    <table class="TdLevelNoBorder">
+                <td sorttable_customkey='<%# Eval("Person.PersonLastFirstName")%>'>
+                    <table class="TdLevelNoBorder ResourceColumTable">
                         <tr>
-                            <td style="text-align: left; padding-left: 5px;">
+                            <td>
                                 <asp:LinkButton ID="lnkPerson" PersonId='<%# Eval("Person.Id")%>' runat="server"
-                                    Font-Underline="false" ForeColor="Black" ToolTip='<%# Eval("Person.PersonLastFirstName")%>'
-                                    OnClick="lnkPerson_OnClick" Text='<%# Eval("Person.PersonLastFirstName")%>'></asp:LinkButton>
+                                    ToolTip='<%# Eval("Person.PersonLastFirstName")%>' OnClick="lnkPerson_OnClick"
+                                    Text='<%# Eval("Person.PersonLastFirstName")%>'></asp:LinkButton>
                             </td>
-                            <td style="text-align: left; padding-left: 5px;">
+                            <td>
                                 <asp:Image ID="imgIspersonTerminated" runat="server" ImageUrl="~/Images/Terminated.png"
                                     ToolTip="Resource is an Terminated employee." Visible='<%# (bool)IsPersonTerminated((int)Eval("Person.Status.Id"))%>' />
                                 <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
@@ -294,24 +293,24 @@
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
                 <td sorttable_customkey='<%# Eval("Person.UtlizationPercent")%>'>
-                    <table class="TdLevelNoBorder" width="100%">
+                    <table class="TdLevelNoBorder UtlizationGraph">
                         <tr>
-                            <td style="width: 5%">
+                            <td class="Width5Percent">
                             </td>
-                            <td style="text-align: right; width: 70%">
-                                <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
+                            <td class="GraphTd">
+                                <table>
                                     <tr>
-                                        <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("Person.UtlizationPercent")%>%">
+                                        <td class="FirstTd" width="<%# Eval("Person.UtlizationPercent")%>%">
                                         </td>
-                                        <td style="background-color: White; height: 18px;" width="<%# 100 - ((double)Eval("Person.UtlizationPercent") )%>%">
+                                        <td class="SecondTd" width="<%# 100 - ((double)Eval("Person.UtlizationPercent") )%>%">
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 20%; text-align: left; padding-left: 10px;">
+                            <td class="GraphValueTd">
                                 <%# Eval("Person.UtlizationPercent")%>%
                             </td>
-                            <td style="width: 5%;">
+                            <td class="Width5Percent">
                             </td>
                         </tr>
                     </table>
@@ -322,8 +321,7 @@
             </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
-    <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-        runat="server">
+    <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
         There are no Time Entries by any Employee for the selected range.
     </div>
 </div>
@@ -331,12 +329,12 @@
 <AjaxControlToolkit:ModalPopupExtender ID="mpePersonDetailReport" runat="server"
     TargetControlID="hdnTempField" CancelControlID="btnCancelPersonDetailReport"
     BackgroundCssClass="modalBackground" PopupControlID="pnlPersonDetailReport" DropShadow="false" />
-<asp:Panel ID="pnlPersonDetailReport" Style="background-color: rgb(226, 235, 255);
-    display: none;" runat="server" BorderColor="Black" BorderWidth="2px" Width="85%">
+<asp:Panel ID="pnlPersonDetailReport" CssClass="TimePeriodSummaryPersonDetailReportPopUp"
+    Style="display: none;" runat="server">
     <uc:GroupByProject ID="ucPersonDetailReport" runat="server" />
-    <table style="width: 100%; padding: 5px;">
-        <tr style="background-color: rgb(245, 250, 255);">
-            <td style="width: 100%; text-align: right; padding: 3px;">
+    <table class="CloseButtonTable">
+        <tr>
+            <td>
                 <asp:Button ID="btnCancelPersonDetailReport" Text="Close" ToolTip="Close" runat="server" />
             </td>
         </tr>
