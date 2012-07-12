@@ -110,6 +110,7 @@ namespace PraticeManagement.Controls.Reporting
                         UpdateReport();
                         updReport.Update();
                     }
+                    chrtConsultingDemand.CssClass = "Width920Px";
                 }
                 else
                 {
@@ -334,7 +335,7 @@ namespace PraticeManagement.Controls.Reporting
                                            0, // Index
                                             LabelMarkStyle.None); // Mark style: none
             objectNumberLabel.ForeColor = Color.FromArgb(8, 152, 230); //Color.FromArgb(0, 102, 153); //a onhover
-            objectNumberLabel.ToolTip = item.Description;
+            objectNumberLabel.ToolTip = item.ProjectDescription;
             objectNumberLabel.Url = item.ObjectType == 1 ?
                 Urls.OpportunityDetailsLink(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString)
                 : Urls.GetProjectDetailsUrl(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString);
@@ -348,7 +349,7 @@ namespace PraticeManagement.Controls.Reporting
                                                0, // Index
                                                 LabelMarkStyle.None); // Mark style: none
                 linkedOpportunityNumberLabel.ForeColor = Color.FromArgb(8, 152, 230);
-                linkedOpportunityNumberLabel.ToolTip = item.Description;
+                linkedOpportunityNumberLabel.ToolTip = item.OpportunintyDescription;
                 linkedOpportunityNumberLabel.Url = Urls.OpportunityDetailsLink(item.LinkedObjectId.Value, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString);
             }
 
@@ -592,7 +593,7 @@ namespace PraticeManagement.Controls.Reporting
                     );
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
