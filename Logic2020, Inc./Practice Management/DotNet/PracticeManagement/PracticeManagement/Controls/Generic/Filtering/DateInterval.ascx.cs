@@ -6,6 +6,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
     public partial class DateInterval1 : System.Web.UI.UserControl
     {
         public int? FromToDateFieldWidth { get; set; }
+        public string FromToDateFieldCssClass { get; set; }
         public bool IsFromDateRequired { get; set; }
         public bool IsToDateRequired { get; set; }
 
@@ -23,6 +24,17 @@ namespace PraticeManagement.Controls.Generic.Filtering
             {
                 this.tbFrom.Width = this.FromToDateFieldWidth.Value;
                 this.tbTo.Width = this.FromToDateFieldWidth.Value;
+            }
+
+            if (!string.IsNullOrEmpty(FromToDateFieldCssClass))
+            {
+                this.tbFrom.CssClass = this.FromToDateFieldCssClass + " MarginClass";
+                this.tbTo.CssClass = this.FromToDateFieldCssClass + " MarginClass";
+            }
+            else
+            {
+                this.tbFrom.CssClass = "MarginClass width50Px";
+                this.tbTo.CssClass = "MarginClass width50Px";
             }
 
             reqValFrom.Enabled = IsFromDateRequired;
