@@ -35,7 +35,7 @@ namespace PraticeManagement.Controls.Reports
 
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
 
-        public string SortDirection { get { return  this.rbSortbyAsc.Checked ? "Desc" : "Asc"; } }
+        public string SortDirection { get { return this.rbSortbyAsc.Checked ? "Desc" : "Asc"; } }
 
         public int SortId { get { return Convert.ToInt32(ddlSortBy.SelectedItem.Value); } }
 
@@ -64,11 +64,11 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        public int Granularity 
+        public int Granularity
         {
-            get 
-            { 
-                return ParseInt(ddlDetalization.SelectedValue, DEFAULT_STEP); 
+            get
+            {
+                return ParseInt(ddlDetalization.SelectedValue, DEFAULT_STEP);
             }
         }
 
@@ -145,7 +145,7 @@ namespace PraticeManagement.Controls.Reports
                         else
                         {
                             return now.AddDays(-(int)now.DayOfWeek).AddMonths(selectedVal).AddDays(-1).Date;
-                        }                       
+                        }
                     }
                     else
                     {
@@ -488,7 +488,7 @@ namespace PraticeManagement.Controls.Reports
                     );
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
