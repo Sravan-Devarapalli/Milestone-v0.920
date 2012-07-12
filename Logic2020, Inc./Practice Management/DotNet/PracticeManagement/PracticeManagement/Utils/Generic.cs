@@ -82,6 +82,11 @@ namespace PraticeManagement.Utils
             }
         }
 
+        public static string GetClientUrl(string url, Control page)
+        {
+            return page.ResolveClientUrl(url) + "?time=" + BinariesCreatedTime;
+        }
+
         public static void RedirectWithReturnTo(string targetUrl, string currentUrl, HttpResponse httpResponse)
         {
             httpResponse.Redirect(GetTargetUrlWithReturn(targetUrl, currentUrl));
