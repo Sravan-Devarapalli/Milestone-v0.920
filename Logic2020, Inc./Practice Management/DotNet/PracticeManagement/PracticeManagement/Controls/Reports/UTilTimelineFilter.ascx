@@ -138,7 +138,7 @@
         lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
         if (ddlPeriod.value == '0') {
             imgCalender.attributes["class"].value = "";
-            lblCustomDateRange.attributes["class"].value = "";
+            lblCustomDateRange.attributes["class"].value = "fontBold";
             if (imgCalender.fireEvent) {
                 imgCalender.style.display = "";
                 lblCustomDateRange.style.display = "";
@@ -270,14 +270,14 @@
 
 
     function EnableOrDisableItemsOfDetalization() {
-       var ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
-       var ddlDetail = document.getElementById('<%=  ddlDetalization.ClientID %>');
+        var ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+        var ddlDetail = document.getElementById('<%=  ddlDetalization.ClientID %>');
         if (ddlPeriod.value == '1') {
-            for (var i = ddlDetail.length-1; i >= 0; i--) {
+            for (var i = ddlDetail.length - 1; i >= 0; i--) {
 
                 if (ddlDetail[i].value != '1') {
                     ddlDetail.removeChild(ddlDetail[i]);
-                  
+
                 }
                 else {
                     ddlDetail[i].selected = 'true';
@@ -285,7 +285,7 @@
             }
         }
         else {
-          
+
             selectedValue = ddlDetail.value;
 
             for (var i = ddlDetail.length - 1; i >= 0; i--) {
@@ -307,24 +307,17 @@
                     }
                 }
             }
-               
+
 
         }
     }
 
 </script>
-<style type="text/css">
-    .displayNone
-    {
-        display: none;
-    }
-</style>
-<script language="javascript" type="text/javascript" src="../../Scripts/jquery-1.4.1.js"></script>
-<div class="filters" style="margin-bottom: 10px;">
+<div class="filters Margin-Bottom10Px">
     <div class="buttons-block">
         <table class="WholeWidth">
             <tr>
-                <td align="left" style="width: 98%;">
+                <td align="left" class="Width98Percent">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                         ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                         ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -337,10 +330,10 @@
                     &nbsp;
                     <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="false" onchange="EnableOrDisableItemsOfDetalization(); EnableResetButton(); CheckAndShowCustomDatesPoup(this);">
                         <asp:ListItem Text="Next Month" Value="1"></asp:ListItem>
-                        <asp:ListItem  Text="Next 2 Months" Value="2"></asp:ListItem>
+                        <asp:ListItem Text="Next 2 Months" Value="2"></asp:ListItem>
                         <asp:ListItem Selected="True" Text="Next 3 Months" Value="3"></asp:ListItem>
                         <asp:ListItem Text="Last 3 Months" Value="-3"></asp:ListItem>
-                        <asp:ListItem Text="Custom Dates"  Value="0"></asp:ListItem>
+                        <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                     </asp:DropDownList>
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                         CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
@@ -353,12 +346,13 @@
                     <asp:HiddenField ID="hdnStartDateCalExtenderBehaviourId" runat="server" Value="" />
                     <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" runat="server" Value="" />
                     &nbsp;
-                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                    <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                     &nbsp;
                     <asp:Label ID="lblBy" runat="server" Text="by "></asp:Label>
                     &nbsp;
-                    <asp:DropDownList ID="ddlDetalization" runat="server" Width="75px" AutoPostBack="false" onchange="EnableResetButton();ChangeStartEndDates();">
+                    <asp:DropDownList ID="ddlDetalization" runat="server" CssClass="Width75PxImp" AutoPostBack="false"
+                        onchange="EnableResetButton();ChangeStartEndDates();">
                         <asp:ListItem Value="1">1 Day</asp:ListItem>
                         <asp:ListItem Selected="True" Value="7">1 Week</asp:ListItem>
                         <asp:ListItem Value="30">1 Month</asp:ListItem>
@@ -372,7 +366,8 @@
                         <asp:ListItem Value="90">&lt; 90</asp:ListItem>
                         <asp:ListItem Value="50">&lt; 50</asp:ListItem>
                     </asp:DropDownList>
-                    <asp:DropDownList ID="ddlAvgCapacity" runat="server" AutoPostBack="false" onchange="EnableResetButton();" Visible="false">
+                    <asp:DropDownList ID="ddlAvgCapacity" runat="server" AutoPostBack="false" onchange="EnableResetButton();"
+                        Visible="false">
                         <asp:ListItem Value="2147483647">100 - (n)</asp:ListItem>
                         <asp:ListItem Value="100">&gt; 0</asp:ListItem>
                         <asp:ListItem Value="90">&gt; 10</asp:ListItem>
@@ -384,59 +379,59 @@
                     <table>
                         <tr>
                             <td>
-                                <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="90px" OnClick="btnUpdateView_OnClick"
-                                    EnableViewState="False" />
+                                <asp:Button ID="btnUpdateView" runat="server" Text="Update View" CssClass="Width90PxImp"
+                                    OnClick="btnUpdateView_OnClick" EnableViewState="False" />
                             </td>
                             <td>
-                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="90px" OnClick="btnResetFilter_OnClick" />
+                                <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" CssClass="Width90PxImp"
+                                    OnClick="btnResetFilter_OnClick" />
                             </td>
                             <td>
-                                <asp:Button ID="btnSaveReport" runat="server" Text="Save Report" Width="90px" OnClick="btnSaveReport_OnClick"
-                                    EnableViewState="False" />
+                                <asp:Button ID="btnSaveReport" runat="server" Text="Save Report" CssClass="Width90PxImp"
+                                    OnClick="btnSaveReport_OnClick" EnableViewState="False" />
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
         </table>
-        <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-            CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
-            <table class="WholeWidth">
-                <tr>
-                    <td align="center">
-                        <table>
-                            <tr>
-                                <td>
-                                    <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                        FromToDateFieldWidth="70" />
-                                </td>
-                                <td>
-                                    <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
-                                        Text="*" EnableClientScript="true" ValidationGroup="<%# ClientID %>" ToolTip="Period should not be more than three months"
-                                        ErrorMessage="Period should not be more than three months."></asp:CustomValidator>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" style="padding: 10px 0px 10px 0px;">
-                        <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid();"
-                            Text="OK" Style="float: none !Important;" CausesValidation="true" />
-                        <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
-                            OnClientClick="return false;" />
-                        &nbsp; &nbsp;
-                        <asp:Button ID="btnCustDatesCancel" runat="server" Text="Cancel" Style="float: none !Important;" />
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center">
-                        <asp:ValidationSummary ID="valSum" runat="server" />
-                    </td>
-                </tr>
-            </table>
-        </asp:Panel>
     </div>
+    <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
+        <table class="WholeWidth">
+            <tr>
+                <td align="center" class="no-wrap">
+                    <table>
+                        <tr>
+                            <td>
+                                <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                                    FromToDateFieldCssClass="Width70Px" />
+                            </td>
+                            <td>
+                                <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
+                                    Text="*" EnableClientScript="true" ValidationGroup="<%# ClientID %>" ToolTip="Period should not be more than three months"
+                                    ErrorMessage="Period should not be more than three months."></asp:CustomValidator>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="custBtns">
+                    <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid();"
+                        Text="OK" CausesValidation="true" />
+                    <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true"
+                        OnClientClick="return false;" />
+                    &nbsp; &nbsp;
+                    <asp:Button ID="btnCustDatesCancel" runat="server" Text="Cancel" />
+                </td>
+            </tr>
+            <tr>
+                <td class="textCenter">
+                    <asp:ValidationSummary ID="valSum" runat="server" />
+                </td>
+            </tr>
+        </table>
+    </asp:Panel>
     <asp:Panel ID="pnlFilters" runat="server">
         <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
             CssClass="CustomTabStyle">
@@ -447,22 +442,22 @@
                 <ContentTemplate>
                     <table class="WholeWidth">
                         <tr align="center">
-                            <td style="width: 125px; border-bottom: 1px solid black;" valign="top">
+                            <td class="Width125Px BorderBottom1px vTop">
                                 Person Status
                             </td>
-                            <td style="width: 30px;">
+                            <td class="Width30Px">
                             </td>
-                            <td style="width: 150px; border-bottom: 1px solid black;" valign="top">
+                            <td class="Width150px BorderBottom1px vTop">
                                 Pay Type
                             </td>
-                            <td style="width: 30px;">
+                            <td class="Width30Px">
                             </td>
-                            <td style="width: 320px; border-bottom: 1px solid black;" colspan="2" valign="top">
+                            <td class="Width320Px BorderBottom1px vTop" colspan="2">
                                 Project Type
                             </td>
-                            <td style="width: 30px;">
+                            <td class="Width30Px">
                             </td>
-                            <td style="width: 250px; border-bottom: 1px solid black;">
+                            <td class="Width250Px BorderBottom1px">
                                 Practice Area
                             </td>
                         </tr>
@@ -474,10 +469,9 @@
                             <td>
                             </td>
                             <td rowspan="2" class="floatRight">
-                                <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                    onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')" BackColor="White"
-                                    CellPadding="3" NoItemsType="All" SetDirty="False" Width="200px" DropDownListType="Pay Type"
-                                    Height="100px" BorderWidth="0" />
+                                <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" AllSelectedReturnType="AllItems"
+                                    onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')" CellPadding="3"
+                                    NoItemsType="All" SetDirty="False" DropDownListType="Pay Type" CssClass="UTilTimeLineFilterCblTimeScales" />
                                 <ext:ScrollableDropdownExtender ID="sdeTimeScales" runat="server" TargetControlID="cblTimeScales"
                                     UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="200px">
                                 </ext:ScrollableDropdownExtender>
@@ -494,11 +488,10 @@
                             </td>
                             <td>
                             </td>
-                            <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
-                                <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                    onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
-                                    CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
-                                    Width="260px" BorderWidth="0" />
+                            <td class="floatRight PaddingTop5 padLeft3">
+                                <cc2:ScrollingDropDown ID="cblPractices" runat="server" AllSelectedReturnType="AllItems"
+                                    onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" CellPadding="3"
+                                    NoItemsType="All" SetDirty="False" DropDownListType="Practice Area" CssClass="UTilTimeLineFilterCblPractices" />
                                 <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
                                     UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                 </ext:ScrollableDropdownExtender>
@@ -542,14 +535,14 @@
                                 Sort by &nbsp;&nbsp;
                             </td>
                             <td>
-                                <asp:DropDownList ID="ddlSortBy" runat="server" Style="width: 300px;" onchange="EnableResetButton(); EnableDisableRadioButtons();">
+                                <asp:DropDownList ID="ddlSortBy" runat="server" CssClass="Width300Px" onchange="EnableResetButton(); EnableDisableRadioButtons();">
                                     <asp:ListItem Value="0">Average Utilization by Period</asp:ListItem>
                                     <asp:ListItem Value="1">Alphabetical by User</asp:ListItem>
                                     <asp:ListItem Value="2">Pay Type</asp:ListItem>
                                     <asp:ListItem Value="3">Practice Area</asp:ListItem>
                                 </asp:DropDownList>
                             </td>
-                            <td style="width: 40px;">
+                            <td class="Width40Px">
                             </td>
                             <td>
                                 <asp:RadioButton ID="rbSortbyAsc" runat="server" Text="Ascending" onclick="EnableResetButton();ChangeSortByRadioButtons(this);"
