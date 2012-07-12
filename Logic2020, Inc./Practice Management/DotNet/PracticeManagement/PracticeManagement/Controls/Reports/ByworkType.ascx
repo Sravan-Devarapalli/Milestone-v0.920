@@ -2,76 +2,75 @@
     Inherits="PraticeManagement.Controls.Reports.ByworkType" %>
 <%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
     TagPrefix="uc" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
-    height: 115px;" id="tbHeader" runat="server">
+<table class="PaddingTenPx ProjectSummaryReportHeader" id="tbHeader" runat="server">
     <tr>
-        <td style="font-size: 14px; font-weight: bold;">
-            <table>
+        <td class="font14Px fontBold">
+            <table class="projectSummaryHeaderDetails">
                 <tr>
-                    <td style="vertical-align: top; color: Gray; padding-bottom: 5px;">
+                    <td class="account">
                         <asp:Literal ID="ltrlAccount" runat="server"></asp:Literal>
                         >
                         <asp:Literal ID="ltrlBusinessUnit" runat="server"></asp:Literal>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 5px; vertical-align: bottom;">
+                    <td>
                         <asp:Literal ID="ltrlProjectNumber" runat="server"></asp:Literal>-
                         <asp:Literal ID="ltrlProjectName" runat="server"></asp:Literal>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 5px; vertical-align: bottom;">
+                    <td>
                         <asp:Literal ID="ltrlProjectStatusAndBillingType" runat="server"></asp:Literal>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 5px; vertical-align: bottom;">
+                    <td class="PaddingTop5Imp vBottom">
                         <asp:Literal ID="ltrlProjectRange" runat="server"></asp:Literal>
                     </td>
                 </tr>
             </table>
         </td>
-        <td style="text-align: right; width: 470px; padding-bottom: 10px;">
-            <table style="table-layout: fixed; width: 100%;">
+        <td class="ProjectSummaryReportTotals">
+            <table class="tableFixed WholeWidth">
                 <tr>
-                    <td style="width: 27%; text-align: center;">
-                        <table width="100%">
+                    <td class="Width27Percent">
+                        <table class="ReportHeaderTotalsTable">
                             <tr>
-                                <td style="font-size: 15px; padding-bottom: 3px;">
+                                <td class="FirstTd">
                                     Projected Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px;">
+                                <td class="SecondTd">
                                     <asp:Literal ID="ltrlProjectedHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 27%; text-align: center;">
-                        <table width="100%">
+                    <td class="Width27Percent">
+                        <table class="ReportHeaderTotalsTable">
                             <tr>
-                                <td style="font-size: 15px; padding-bottom: 3px;">
+                                <td class="FirstTd">
                                     Total Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px;">
+                                <td class="SecondTd">
                                     <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 27%; vertical-align: bottom; text-align: center;">
-                        <table width="100%">
+                    <td class="Width27Percent vBottom">
+                        <table class="ReportHeaderBillAndNonBillTable">
                             <tr>
                                 <td>
                                     BILLABLE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding-bottom: 5px;">
+                                <td class="billingHours">
                                     <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
@@ -87,20 +86,20 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 8%; padding: 0px !important;">
-                        <table width="100%">
+                    <td class="ReportHeaderBandNBGraph">
+                        <table>
                             <tr>
-                                <td style="padding: 0px !important;">
-                                    <table width="100%" style="table-layout: fixed;">
+                                <td>
+                                    <table class="tableFixed">
                                         <tr>
-                                            <td style="text-align: center;">
+                                            <td>
                                                 <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
                                             </td>
                                         </tr>
                                     </table>
-                                    <table width="100%">
+                                    <table>
                                         <tr id="trBillable" runat="server" title="Billable Percentage.">
-                                            <td style="background-color: #7FD13B; border: 1px solid Gray;">
+                                            <td class="billingGraph">
                                             </td>
                                         </tr>
                                     </table>
@@ -108,20 +107,20 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 8%; padding: 0px;">
-                        <table width="100%">
+                    <td class="ReportHeaderBandNBGraph">
+                        <table>
                             <tr>
-                                <td style="padding: 0px !important;">
-                                    <table width="100%" style="table-layout: fixed;">
+                                <td>
+                                    <table class="tableFixed">
                                         <tr>
-                                            <td style="text-align: center;">
+                                            <td>
                                                 <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
                                             </td>
                                         </tr>
                                     </table>
-                                    <table width="100%">
+                                    <table>
                                         <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                            <td style="background-color: #BEBEBE; border: 1px solid Gray;">
+                                            <td class="nonBillingGraph">
                                             </td>
                                         </tr>
                                     </table>
@@ -129,7 +128,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 2%;">
+                    <td class="Width2Percent">
                     </td>
                 </tr>
             </table>
@@ -139,10 +138,10 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;">
+            <td colspan="4" class="Width90Percent">
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;">
-                <table width="100%" style="text-align: right;">
+            <td class="Width10Percent padRight5">
+                <table class="WholeWidth">
                     <tr>
                         <td>
                             Export:
@@ -162,25 +161,25 @@
     </table>
     <asp:Repeater ID="repWorkType" runat="server">
         <HeaderTemplate>
-            <div style="min-height: 250px;">
+            <div class="minheight250Px">
                 <table id="tblProjectSummaryByWorkType" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
-                            <th style="width: 460px; text-align: left;" class="padLeft5">
+                            <th class="padLeft5Imp Width460Px textLeft">
                                 WorkType
                             </th>
-                            <th style="width: 150px">
+                            <th class="Width150px">
                                 Billable
                             </th>
-                            <th style="width: 150px;">
+                            <th class="Width150px">
                                 Non-Billable
                             </th>
-                            <th style="width: 140px;">
+                            <th class="Width140px">
                                 Total
                             </th>
-                            <th style="width: 160px;">
+                            <th class="Width160px">
                             </th>
-                            <th style="width: 325px;">
+                            <th class="Width325Px">
                                 Percent of Total Hours
                             </th>
                         </tr>
@@ -189,7 +188,7 @@
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
-                <td class="padLeft5" style="text-align: left;">
+                <td class="padLeft5Imp textLeft">
                     <%# Eval("WorkType.Name")%>
                 </td>
                 <td>
@@ -204,24 +203,24 @@
                 <td>
                 </td>
                 <td sorttable_customkey='<%# Eval("WorkTypeTotalHoursPercent")%>'>
-                    <table class="TdLevelNoBorder" width="100%">
+                    <table class="TdLevelNoBorder WholeWidth">
                         <tr>
-                            <td style="width: 1%">
+                            <td class="Width1Percent">
                             </td>
-                            <td style="text-align: right; width: 80%">
-                                <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
+                            <td class="textRight Width80Percent">
+                                <table class="ByWorkTypeGraph">
                                     <tr>
-                                        <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("WorkTypeTotalHoursPercent")%>%">
+                                        <td class="FirstTd" width="<%# Eval("WorkTypeTotalHoursPercent")%>%">
                                         </td>
-                                        <td style="background-color: White; height: 18px;" width="<%# 100 - ((int)Eval("WorkTypeTotalHoursPercent") )%>%">
+                                        <td class="SecondTd" width="<%# 100 - ((int)Eval("WorkTypeTotalHoursPercent") )%>%">
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 17%; text-align: left; padding-left: 10px;">
+                            <td class="Width17Percent textLeft padLeft10Imp">
                                 <%# Eval("WorkTypeTotalHoursPercent")%>%
                             </td>
-                            <td style="width: 2%;">
+                            <td class="Width2Percent">
                             </td>
                         </tr>
                     </table>
@@ -232,8 +231,7 @@
             </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
-    <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-        runat="server">
+    <div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
         There are no Time Entries by any Employee for the selected range.
     </div>
 </div>
