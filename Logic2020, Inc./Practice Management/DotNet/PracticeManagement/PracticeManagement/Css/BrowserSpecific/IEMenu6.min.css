@@ -1,0 +1,10 @@
+﻿ul.AspNet-Menu li{float:left!important;height:1%!important}
+ul.AspNet-Menu li a,ul.AspNet-Menu li span{height:1%!important}
+.AspNet-Menu-Horizontal ul.AspNet-Menu li li{float:left!important}
+ul.AspNet-Menu ul{visibility:visible!important}
+ul.AspNet-Menu li:hover ul ul,ul.AspNet-Menu li.AspNet-Menu-Hover ul ul{visibility:visible!important}
+ul.AspNet-Menu li:hover ul,ul.AspNet-Menu li li:hover ul,ul.AspNet-Menu li li li:hover ul,ul.AspNet-Menu li.AspNet-Menu-Hover ul,ul.AspNet-Menu li li.AspNet-Menu-Hover ul,ul.AspNet-Menu li li li.AspNet-Menu-Hover ul{visibility:visible!important}
+ul.AspNet-Menu ul{display:none}
+ul.AspNet-Menu li:hover ul ul,ul.AspNet-Menu li:hover ul ul ul,ul.AspNet-Menu li.AspNet-Menu-Hover ul ul,ul.AspNet-Menu li.AspNet-Menu-Hover ul ul ul,ul.AspNet-Menu li.AspNet-Menu-Hover ul ul ul ul,ul.AspNet-Menu li.AspNet-Menu-Hover ul ul ul ul ul{display:none}
+ul.AspNet-Menu li:hover ul,ul.AspNet-Menu li li:hover ul,ul.AspNet-Menu li li li:hover ul,ul.AspNet-Menu li.AspNet-Menu-Hover ul,ul.AspNet-Menu li li.AspNet-Menu-Hover ul,ul.AspNet-Menu li li li.AspNet-Menu-Hover ul,ul.AspNet-Menu li li li li.AspNet-Menu-Hover ul,ul.AspNet-Menu li li li li li.AspNet-Menu-Hover ul{display:block}
+.AspNet-Menu-Horizontal ul.AspNet-Menu li li{float:none}
