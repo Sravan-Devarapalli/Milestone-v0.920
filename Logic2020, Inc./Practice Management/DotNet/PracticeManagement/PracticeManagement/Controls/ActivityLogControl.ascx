@@ -53,7 +53,7 @@
         lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
         if (ddlPeriod.value == '0') {
             imgCalender.attributes["class"].value = "";
-            lblCustomDateRange.attributes["class"].value = "";
+            lblCustomDateRange.attributes["class"].value = "fontBold";
             if (imgCalender.fireEvent) {
                 imgCalender.style.display = "";
                 lblCustomDateRange.style.display = "";
@@ -205,8 +205,7 @@
                                         Value="" />
                                     <asp:HiddenField ID="hdnEndDateCalExtenderBehaviourId" EnableViewState="true" runat="server"
                                         Value="" />
-                                    <asp:Label ID="lblCustomDateRange" EnableViewState="true" CssClass="fontBold" runat="server"
-                                        Text=""></asp:Label>
+                                    <asp:Label ID="lblCustomDateRange" EnableViewState="true" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" EnableViewState="true" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
                                 <td id="spnPersons" runat="server">
@@ -322,17 +321,9 @@
             Style="display: none;">
             <table class="WholeWidth">
                 <tr>
-                    <td class="textCenter">
-                        <table>
-                            <tr>
-                                <td>
-                                    <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                        EnableViewState="true" FromToDateFieldWidth="70" />
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                        </table>
+                    <td align="center">
+                        <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                            EnableViewState="true" FromToDateFieldWidth="70" />
                     </td>
                 </tr>
                 <tr>
