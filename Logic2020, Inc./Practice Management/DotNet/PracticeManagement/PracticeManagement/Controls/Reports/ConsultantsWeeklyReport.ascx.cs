@@ -266,7 +266,7 @@ namespace PraticeManagement.Controls.Reports
         {
             foreach (var legend in chart.Legends)
             {
-                if(IsCapacityMode)
+                if (IsCapacityMode)
                 {
                     Coloring.CapacityColorLegends(legend);
                 }
@@ -455,7 +455,7 @@ namespace PraticeManagement.Controls.Reports
 
             chart.Titles.Add(
                 string.Format(
-                    IsCapacityMode ? TITLE_FORMAT_WITHOUT_REPORT :TITLE_FORMAT,
+                    IsCapacityMode ? TITLE_FORMAT_WITHOUT_REPORT : TITLE_FORMAT,
                     IsCapacityMode ? Capacity : Utilization,
                     BegPeriod.ToString("MM/dd/yyyy"),
                     EndPeriod.ToString("MM/dd/yyyy"),
