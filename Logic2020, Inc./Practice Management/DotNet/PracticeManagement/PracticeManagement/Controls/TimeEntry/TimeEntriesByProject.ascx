@@ -176,7 +176,7 @@
                                                     Show only persons with time entered
                                                 </td>
                                                 <td style="text-align: right; padding-top: 30px;" id="report-date-interval">
-                                                    <uc:DateInterval ID="diRange" runat="server" FromToDateFieldWidth="70" />
+                                                    <uc:DateInterval ID="diRange" runat="server" FromToDateFieldCssClass="Width70Px" />
                                                 </td>
                                             </tr>
                                         </table>
