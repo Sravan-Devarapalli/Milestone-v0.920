@@ -48,9 +48,28 @@ namespace PraticeManagement.Controls.Clients
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (ClientId == 0)
+            {
+                groupDiv.Visible = false;
+            }
+            else
+            {
+                groupDiv.Visible = true;
+            }
+
             if (!IsPostBack)
             {
-                var groups = odsClientGroups.Select();
+                List<ProjectGroup> groups;
+                if (ClientId == 0)
+                {
+                    groups = new List<ProjectGroup>();
+
+                }
+                else
+                {
+                    groups = ServiceCallers.Custom.Group(g => g.GroupListAll(ClientId, null).ToList());
+
+                }
                 DisplayGroups((IEnumerable<ProjectGroup>)groups);
             }
         }
