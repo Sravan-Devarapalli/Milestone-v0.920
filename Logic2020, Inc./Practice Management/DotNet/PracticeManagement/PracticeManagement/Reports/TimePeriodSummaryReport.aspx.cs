@@ -266,7 +266,12 @@ namespace PraticeManagement.Reporting
         }
 
         #endregion
-       
+
+        protected string GetClientUrl(string url)
+        {
+            return ResolveClientUrl(url) + "?time=" + PraticeManagement.Utils.Generic.BinariesCreatedTime;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
         }
@@ -283,7 +288,7 @@ namespace PraticeManagement.Reporting
 
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
