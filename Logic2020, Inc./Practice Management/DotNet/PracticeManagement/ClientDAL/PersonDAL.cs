@@ -3177,7 +3177,8 @@ namespace DataAccess
             int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
             int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
             int objectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ObjectStatusId);
-            int descriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+            int opportunintyDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunintyDescription);
+            int projectDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectDescription);
             int linkedObjectIdIndex = reader.GetOrdinal(Constants.ColumnNames.LinkedObjectId);
             int linkedObjectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.LinkedObjectNumber);
 
@@ -3201,7 +3202,8 @@ namespace DataAccess
                         EndDate = reader.GetDateTime(endDateIndex),
                         LinkedObjectId = reader.IsDBNull(linkedObjectIdIndex) ? null : (int?)reader.GetInt32(linkedObjectIdIndex),
                         LinkedObjectNumber = reader.IsDBNull(linkedObjectNumberIndex) ? null : reader.GetString(linkedObjectNumberIndex),
-                        Description = !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : string.Empty
+                        OpportunintyDescription = !reader.IsDBNull(opportunintyDescriptionIndex) ? reader.GetString(opportunintyDescriptionIndex) : string.Empty,
+                        ProjectDescription = !reader.IsDBNull(projectDescriptionIndex) ? reader.GetString(projectDescriptionIndex) : string.Empty
 
                     };
                     var clientId = reader.GetInt32(clientIdIndex);
@@ -3747,3 +3749,4 @@ namespace DataAccess
         }
     }
 }
+
