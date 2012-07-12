@@ -16,16 +16,16 @@
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <table class="WholeWidth" style="background-color: #e2ebff;">
+            <table class="WholeWidth bgcolorE2EBFF">
                 <tr>
-                    <td style="width: 90%; font-size: 13px; padding: 5px; font-weight: bold;">
+                    <td class="AuditHeaderTd1">
                         <table>
                             <tr>
                                 <td>
                                     Display all time entries from&nbsp;
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlPeriod" runat="server" Width="160px" AutoPostBack="true"
+                                    <asp:DropDownList ID="ddlPeriod" runat="server" CssClass="Width160px" AutoPostBack="true"
                                         OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                                         <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
@@ -39,82 +39,80 @@
                             <tr>
                                 <td>
                                 </td>
-                                <td style="padding-top: 5px; height: 20px;">
+                                <td class="PaddingTop5 height20P">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                                    <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 10%; text-align: right; padding: 5px; vertical-align: top;">
+                    <td class="AuditHeaderTd2">
                         <asp:Button ID="btnUpdate" runat="server" OnClick="btnUpdate_OnClick" Text="Run Report"
-                            Width="150px" Enabled="false" ToolTip="Run Report" />
+                            CssClass="Width150px" Enabled="false" ToolTip="Run Report" />
                     </td>
                 </tr>
             </table>
             <table class="WholeWidth">
                 <tr>
-                    <td colspan="2" style="border-bottom: 3px solid black; width: 100%; height: 15px;">
+                    <td colspan="2" class="ReportBorderBottomHeight15Px">
                     </td>
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
                 DropShadow="false" />
-            <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
                             <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                FromToDateFieldWidth="70" />
+                                FromToDateFieldCssClass="Width70Px" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <td class="custBtns">
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
-                                Style="float: none !Important;" CausesValidation="true" />
+                                CausesValidation="true" />
                             &nbsp; &nbsp;
                             <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel"
-                                Style="float: none !Important;" OnClick="btnCustDatesCancel_OnClick" />
+                                OnClick="btnCustDatesCancel_OnClick" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center">
+                        <td class="textCenter">
                             <asp:ValidationSummary ID="valSumDateRange" runat="server" ValidationGroup='<%# ClientID %>' />
                         </td>
                     </tr>
                 </table>
             </asp:Panel>
-            <div id="divWholePage" runat="server" style="display: none; background-color: #e2ebff;">
-                <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;
-                    height: 90px;">
+            <div id="divWholePage" runat="server" style="display: none;" class="bgcolorE2EBFF">
+                <table class="PaddingTenPx TimePeriodSummaryReportHeader">
                     <tr>
-                        <td style="font-size: 16px; font-weight: bold;">
+                        <td class="font16Px fontBold">
                             <table>
                                 <tr>
-                                    <td style="vertical-align: top; padding-bottom: 10px;">
+                                    <td class="vtop PaddingBottom10Imp">
                                         <asp:Literal ID="ltrCount" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-top: 10px; vertical-align: bottom;">
+                                    <td class="PaddingTop10Imp vBottom">
                                         <asp:Literal ID="lbRange" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 10%; vertical-align: middle; text-align: center;">
-                            <table width="100%">
+                        <td class="AuditReportTotals">
+                            <table class="WholeWidth">
                                 <tr>
                                     <td>
                                         BILLABLE
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-bottom: 5px;">
+                                    <td class="PaddingBottom5Imp">
                                         <asp:Literal ID="ltrlBillableNetChange" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
@@ -130,21 +128,21 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 10%; text-align: center; vertical-align: middle;">
-                            <table width="100%">
+                        <td class="AuditHeaderTd3">
+                            <table class="WholeWidth">
                                 <tr>
-                                    <td style="font-size: 15px; padding-bottom: 3px;">
+                                    <td class='FontSize15PX PaddingBottom3Imp'>
                                         Net Change
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="font-size: 25px;">
+                                    <td class="font25Px">
                                         <asp:Literal ID="ltrlNetChange" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 2%;">
+                        <td class="Width2Percent">
                         </td>
                     </tr>
                 </table>
