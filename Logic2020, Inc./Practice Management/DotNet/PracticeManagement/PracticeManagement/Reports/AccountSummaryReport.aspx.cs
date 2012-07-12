@@ -330,7 +330,7 @@ namespace PraticeManagement.Reporting
 
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
