@@ -3,12 +3,12 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%; padding-top: 5px;">
+            <td colspan="4" class="Width90Percent PaddingTop5">
                 <asp:Button ID="btnGroupBy" runat="server" Text="Group By Person" UseSubmitBehavior="false"
-                    Width="130px" OnClick="btnGroupBy_OnClick" ToolTip="Group By Person" />
+                    CssClass="Width130px" OnClick="btnGroupBy_OnClick" ToolTip="Group By Person" />
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px; padding-top: 5px;">
-                <table width="100%" style="text-align: right;">
+            <td class="textRight Width10Percent padRight5 PaddingTop5">
+                <table class="textRight WholeWidth">
                     <tr>
                         <td>
                             Export:
@@ -31,16 +31,15 @@
         </HeaderTemplate>
         <ItemTemplate>
             <table class="WholeWidthWithHeight">
-                <tr style="text-align: left;">
-                    <td colspan="4" class="ProjectAccountName" style="width: 85%; white-space: nowrap;
-                        padding-left: 15px; font-size: 15px; font-weight: 1500;">
+                <tr class="textleft">
+                    <td colspan="4" class="AuditReportByProjectHeaderTd1">
                         <%# Eval("Project.ProjectNumber")%>
                         -
-                        <%# Eval("Project.Name")%><b style="font-style: normal;"> (<%# Eval("Project.Client.Name")%>
+                        <%# Eval("Project.Name")%><b class="fontStyleNormal"> (<%# Eval("Project.Client.Name")%>
                             >
                             <%# Eval("Project.Group.Name")%>)</b>
                     </td>
-                    <td style="width: 15%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 15px;">
+                    <td class="AuditReportByProjectHeaderTd2">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
                     </td>
                 </tr>
@@ -48,40 +47,40 @@
             <asp:Repeater ID="repProjectTimeEntriesHistory" DataSource='<%# GetModifiedDatasource(DataBinder.Eval(Container.DataItem, "PersonLevelTimeEntries")) %>'
                 runat="server">
                 <HeaderTemplate>
-                    <div style="padding-left: 5px; padding-right: 5px;">
+                    <div class="padLeft5 padRight5">
                         <table class="WidthWithHeightAndBorders CompPerfTable TableTextCenter" align="center">
                             <tr class="CompPerfHeader">
-                                <th style="width: 13%;">
+                                <th class="Width13Percent">
                                     Affected Date
                                 </th>
-                                <th style="width: 13%;">
+                                <th class="Width13Percent">
                                     Modified Date
                                 </th>
-                                <th style="width: 35%;">
+                                <th class="Width35Percent">
                                     Person Name
                                 </th>
-                                <th style="width: 12%;">
+                                <th class="Width12Percent">
                                     Work Type
                                 </th>
-                                <th style="width: 8%;">
+                                <th class="Width8Percent">
                                     Original Hours
                                 </th>
-                                <th style="width: 8%;">
+                                <th class="Width8Percent">
                                     New Hours
                                 </th>
-                                <th style="width: 8%;">
+                                <th class="Width8Percent">
                                     Net Change
                                 </th>
-                                <th style="width: 3%;">
+                                <th class="Width3Percent">
                                 </th>
                             </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <tr style="text-align: left; background-color: #D4D0C9;">
-                        <td style="text-align: left; padding-left: 5px;">
+                    <tr class="textLeft bgColorD4D0C9">
+                        <td class="AuditReportByPersonTd1">
                             <%# GetDateFormat((DateTime)Eval("Value.ChargeCodeDate"))%>
                         </td>
-                        <td style="text-align: left; padding-left: 10px;">
+                        <td class="AuditReportByPersonTd2">
                             <%# GetDateFormat((DateTime)Eval("Value.ModifiedDate"))%>
                         </td>
                         <td title='<%# Eval("Key.Status.Name")%>, <%# Eval("Key.CurrentPay.TimescaleName")%>'>
@@ -90,13 +89,13 @@
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
-                        <td style="vertical-align: middle;">
-                            <table width="100%">
+                        <td class="vMiddle">
+                            <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align: right; width: 60%">
+                                    <td class="AuditReportByPersonTd3">
                                         <%# GetDoubleFormat((double)Eval("Value.OldHours"))%>
                                     </td>
-                                    <td style="text-align: left; padding-left: 5px;">
+                                    <td class="AuditReportByPersonTd1">
                                         <asp:Image ID="imgNonBillableOldHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                             ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
                                     </td>
@@ -104,12 +103,12 @@
                             </table>
                         </td>
                         <td>
-                            <table width="100%">
+                            <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align: right; width: 60%">
+                                    <td class="AuditReportByPersonTd3">
                                         <%# GetDoubleFormat((double)Eval("Value.ActualHours"))%>
                                     </td>
-                                    <td style="text-align: left; padding-left: 5px;">
+                                    <td class="AuditReportByPersonTd1">
                                         <asp:Image ID="imgNonBillableActualHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                             ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
                                     </td>
@@ -117,9 +116,9 @@
                             </table>
                         </td>
                         <td>
-                            <table width="100%">
+                            <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align: right; width: 60%">
+                                    <td class="AuditReportByPersonTd3">
                                         <%# GetDoubleFormat((double)Eval("Value.NetChange"))%>
                                     </td>
                                     <td>
@@ -133,11 +132,11 @@
                     </tr>
                 </ItemTemplate>
                 <AlternatingItemTemplate>
-                    <tr style="text-align: left; background-color: #ECE9D9;">
-                        <td style="text-align: left; padding-left: 5px;">
+                    <tr class="textLeft bgcolor_ECE9D9">
+                        <td class="AuditReportByPersonTd1">
                             <%# GetDateFormat((DateTime)Eval("Value.ChargeCodeDate"))%>
                         </td>
-                        <td style="text-align: left; padding-left: 10px;">
+                        <td class="AuditReportByPersonTd2">
                             <%# GetDateFormat((DateTime)Eval("Value.ModifiedDate"))%>
                         </td>
                         <td title='<%# Eval("Key.Status.Name")%>, <%# Eval("Key.CurrentPay.TimescaleName")%>'>
@@ -146,13 +145,13 @@
                         <td>
                             <%# Eval("Value.ChargeCode.TimeType.Name")%>
                         </td>
-                        <td style="vertical-align: middle;">
-                            <table width="100%">
+                        <td class="vMiddle">
+                            <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align: right; width: 60%">
+                                    <td class="AuditReportByPersonTd3">
                                         <%# GetDoubleFormat((double)Eval("Value.OldHours"))%>
                                     </td>
-                                    <td style="text-align: left; padding-left: 5px;">
+                                    <td class="AuditReportByPersonTd1">
                                         <asp:Image ID="imgNonBillableOldHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                             ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
                                     </td>
@@ -160,12 +159,12 @@
                             </table>
                         </td>
                         <td>
-                            <table width="100%">
+                            <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align: right; width: 60%">
+                                    <td class="AuditReportByPersonTd3">
                                         <%# GetDoubleFormat((double)Eval("Value.ActualHours"))%>
                                     </td>
-                                    <td style="text-align: left; padding-left: 5px;">
+                                    <td class="AuditReportByPersonTd1">
                                         <asp:Image ID="imgNonBillableActualHours" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                             ToolTip="Non-Billable hours." Visible='<%# GetNonBillableImageVisibility((int)Eval("Value.ChargeCode.TimeEntrySection"),(bool)Eval("Value.IsChargeable"))%>' />
                                     </td>
@@ -173,9 +172,9 @@
                             </table>
                         </td>
                         <td>
-                            <table width="100%">
+                            <table class="WholeWidth">
                                 <tr>
-                                    <td style="text-align: right; width: 60%">
+                                    <td class="AuditReportByPersonTd3">
                                         <%# GetDoubleFormat((double)Eval("Value.NetChange"))%>
                                     </td>
                                     <td>
@@ -197,8 +196,7 @@
         </FooterTemplate>
     </asp:Repeater>
 </div>
-<div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-    runat="server">
+<div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
     There are no Time Entries that were changed afterwards by any Employee for the selected
     range.
 </div>
