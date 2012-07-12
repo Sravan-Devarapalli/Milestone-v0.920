@@ -17,7 +17,7 @@
                 <asp:Label ID="lblFilter" ToolTip="Show Filters" runat="server" />
             </td>
             <td>
-                <uc:DateInterval ID="diWeek" runat="server" FromToDateFieldWidth="70" />
+                <uc:DateInterval ID="diWeek" runat="server" FromToDateFieldCssClass="Width70Px" />
             </td>
             <td style="width: 350px;">
                 &nbsp;
@@ -147,7 +147,8 @@
                             Milestone Entered
                         </td>
                         <td class="tem-filter-control-cell">
-                            <uc:DateInterval ID="diEntered" runat="server" FromToDateFieldWidth="70"></uc:DateInterval>
+                            <uc:DateInterval ID="diEntered" runat="server" FromToDateFieldCssClass="Width70Px">
+                            </uc:DateInterval>
                         </td>
                         <td class="tem-filter-space-cell">
                         </td>
@@ -166,7 +167,8 @@
                             Last Modified
                         </td>
                         <td class="tem-filter-control-cell">
-                            <uc:DateInterval ID="diLastModified" runat="server" FromToDateFieldWidth="70"></uc:DateInterval>
+                            <uc:DateInterval ID="diLastModified" runat="server" FromToDateFieldCssClass="Width70Px">
+                            </uc:DateInterval>
                         </td>
                         <td class="tem-filter-space-cell">
                             &nbsp;
