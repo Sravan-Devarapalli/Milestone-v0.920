@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="By Account" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="AccountSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.AccountSummaryReport" %>
-
+    
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
@@ -13,8 +14,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src="../Scripts/ExpandOrCollapse.js" type="text/javascript"></script>
-    <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.js", this) %>" type="text/javascript"></script>
+    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
