@@ -120,6 +120,11 @@ namespace PraticeManagement.Reporting
 
         #region Control Methods
 
+        protected string GetClientUrl(string url)
+        {
+            return ResolveClientUrl(url) + "?time=" + PraticeManagement.Utils.Generic.BinariesCreatedTime;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -143,9 +148,9 @@ namespace PraticeManagement.Reporting
         {
             if (timeEntryReportHeader.Count == 2)
             {
-                tdFirst.Style["width"] = "20%";
-                tdSecond.Style["width"] = "30%";
-                tdThird.Style["width"] = "50%";
+                tdFirst.Attributes["class"] = "Width20Percent";
+                tdSecond.Attributes["class"] = "ReportTdSecond width30P";
+                tdThird.Attributes["class"] = "Width50Percent";
             }
 
             var now = Utils.Generic.GetNowWithTimeZone();
@@ -158,7 +163,7 @@ namespace PraticeManagement.Reporting
 
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
