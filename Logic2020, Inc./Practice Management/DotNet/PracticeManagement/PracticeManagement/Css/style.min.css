@@ -252,7 +252,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .DayTotalHoursBorderRight{border-right:1px solid #000}
 .TOTALTD{width:70%;text-align:right;font-weight:700}
 .Padding0{padding:0}
-.Padding0Imp{padding:0!important}
+.Padding0Imp,.DatePickerTable td{padding:0!important}
 .Padding2,.Padding2Px{padding:2px}
 .Padding3PX{padding:3px}
 .Padding4Px{padding:4px}
@@ -649,9 +649,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .DivPermissionDiffenrece{width:350px;overflow-x:scroll;overflow-y:auto;height:350px;margin-top:10px;margin-bottom:10px}
 .PermissionDiffenrece{background-color:White;border-collapse:collapse;border-style:none;border-width:0;width:100%}
 .DatePickerTable{border:medium none;display:inline}
-.DatePickerTable tr{height:17px!important}
-.DatePickerTable th{height:17px!important}
-.DatePickerTable td{height:17px!important}
+.DatePickerTable tr,.DatePickerTable th,.DatePickerTable td{height:17px!important}
 .WhatIfControlIcon{background-color:#D8EFF3;border-color:#000;border-style:solid;border-width:1px}
 .WhatIfControlStyle{padding-right:242px;padding-bottom:3px;text-align:right}
 .WhatIfGrossMarginComputing{vertical-align:top;width:340px;padding-left:10px;padding-top:10px;background-color:#DBEEF3}
