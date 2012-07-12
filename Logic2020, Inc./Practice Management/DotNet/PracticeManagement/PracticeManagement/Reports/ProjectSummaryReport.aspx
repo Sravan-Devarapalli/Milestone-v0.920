@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="By Project" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
-
+    
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
@@ -15,8 +16,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src='<%# GetClientUrl("~/Scripts/ExpandOrCollapse.js") %>' type="text/javascript"></script>
-    <link href="<%# GetClientUrl("~/Css/TableSortStyle.css") %>" rel="stylesheet" type="text/css" />
+    <script src='<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.js", this) %>' type="text/javascript"></script>
+    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
