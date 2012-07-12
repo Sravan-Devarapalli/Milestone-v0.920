@@ -1385,26 +1385,6 @@ namespace DataAccess
             }
         }
 
-        public static double? GetPersonTimeEnteredHoursByDay(int personId, DateTime date, bool includePTOAndHoliday)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetPersonTimeEnteredHoursByDay, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.DateParam, date);
-                command.Parameters.AddWithValue(Constants.ParameterNames.IncludePTOAndHolidayParam, includePTOAndHoliday);
-
-                connection.Open();
-
-                string result = command.ExecuteScalar().ToString();
-
-                return string.IsNullOrEmpty(result) ? null : (double?)Convert.ToDouble(result);
-            }
-        }
-
         #endregion
     }
 }
