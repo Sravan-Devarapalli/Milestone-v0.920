@@ -26,8 +26,8 @@ BEGIN
 		ISNULL(O.ProjectedEndDate, @FutureDate) [EndDate],
 		NULL [LinkedObjectId],
 		NULL [LinkedObjectNumber],
-		O.Description
-		
+		O.Description AS OpportunintyDescription,
+		'' AS ProjectDescription 
 	FROM dbo.OpportunityPersons OP
 	JOIN dbo.Opportunity O ON O.OpportunityId = OP.OpportunityId
 	JOIN dbo.Person P ON P.PersonId = OP.PersonId
@@ -55,7 +55,8 @@ BEGIN
 			P.EndDate [EndDate],
 			P.OpportunityId [LinkedObjectId],
 			O.OpportunityNumber [LinkedObjectNumber],
-			P.Description
+			O.Description AS OpportunintyDescription,
+			P.Description AS ProjectDescription 
 	FROM Project P
 	JOIN Client C ON C.ClientId = P.ClientId
 	JOIN Milestone M ON M.ProjectId = P.ProjectId
@@ -67,6 +68,6 @@ BEGIN
 		AND MPE.StartDate <= @EndDate AND MPE.StartDate >= @StartDate
 		AND P.StartDate <= @EndDate AND P.EndDate >= @StartDate
 		AND P.ProjectStatusId IN (2,3) -- Only Active and Projected status Projects.
-	GROUP BY P.ProjectId, Per.PersonId,  Per.LastName, Per.FirstName, P.ProjectStatusId, P.Name, P.ProjectNumber, P.ClientId, C.Name, P.StartDate, P.EndDate, P.OpportunityId, O.OpportunityNumber,P.Description
+	GROUP BY P.ProjectId, Per.PersonId,  Per.LastName, Per.FirstName, P.ProjectStatusId, P.Name, P.ProjectNumber, P.ClientId, C.Name, P.StartDate, P.EndDate, P.OpportunityId, O.OpportunityNumber,P.Description,O.Description 
 END
 
