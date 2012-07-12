@@ -5,16 +5,16 @@
 <asp:HiddenField ID="hdnCollapsed" runat="server" Value="true" />
 <table class="WholeWidthWithHeight">
     <tr>
-        <td colspan="4" style="width: 90%;">
-            <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false" Width="100px"
-                ToolTip="Collapse All" />
-                &nbsp;&nbsp;
-            <asp:Button ID="btnGroupBy" runat="server" Text="Group By Date" UseSubmitBehavior="false" Width="130px"
-                OnClick="btnGroupBy_OnClick" ToolTip="Group By Date" />
-            <asp:HiddenField ID="hdnGroupBy" runat="server"  />
+        <td colspan="4" class="Width90Percent">
+            <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
+                CssClass="Width100Px" ToolTip="Collapse All" />
+            &nbsp;&nbsp;
+            <asp:Button ID="btnGroupBy" runat="server" Text="Group By Date" UseSubmitBehavior="false"
+                CssClass="Width130px" OnClick="btnGroupBy_OnClick" ToolTip="Group By Date" />
+            <asp:HiddenField ID="hdnGroupBy" runat="server" />
         </td>
-        <td style="text-align: right; width: 10%; padding-right: 5px;">
-            <table width="100%" style="text-align: right;">
+        <td class="Width10Percent padRight5">
+            <table class="WholeWidth">
                 <tr>
                     <td>
                         Export:
@@ -35,18 +35,19 @@
 <asp:Repeater ID="repProjects" runat="server" OnItemDataBound="repProjects_ItemDataBound">
     <HeaderTemplate>
     </HeaderTemplate>
-     <ItemTemplate>
+    <ItemTemplate>
         <table class="WholeWidthWithHeight">
-            <tr style="text-align: left;">
-                <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;">
+            <tr class="textLeft">
+                <td colspan="4" class="ProjectAccountName Width95Percent no-wrap">
                     <%# Eval("Client.Name") %>
                     >
                     <%# Eval("Project.ProjectNumber")%>
                     -
                     <%# Eval("Project.Name")%>
-                    <b style="font-style:normal;"><%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
+                    <b class="fontStyleNormal">
+                        <%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
                 </td>
-                <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
+                <td class="PersonDetailTotal">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
             </tr>
@@ -57,8 +58,8 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <table class="WholeWidthWithHeight">
-                        <tr style="text-align: left; background-color: #D4D0C9;">
-                            <td style="width: 80%; padding-left: 20px;">
+                        <tr class="textLeft bgColorD4D0C9">
+                            <td class="Width80Percent padLeft20Imp">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDate" runat="Server" CollapsedText="Expand Date Details"
                                     ExpandedText="Collapse Date Details" EnableViewState="true" BehaviorID="cpeDate"
                                     Collapsed="true" TargetControlID="pnlDateDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -68,50 +69,50 @@
                                 <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                                 <%# GetDateFormat((DateTime)Eval("Date"))%>
                             </td>
-                            <td style="width: 10%; text-align: right; vertical-align: middle;">
-                                <table width="100%">
+                            <td class="Width10Percent textRight vMiddle">
+                                <table class="WholeWidth">
                                     <tr>
-                                        <td style="text-align: right; font-weight: bold;">
+                                        <td class="textRight fontBold">
                                             <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                                         </td>
-                                        <td style="width: 20px">
+                                        <td class="Width20Px">
                                             <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                                 ToolTip="Non-Billable hours are included." Visible='<%# GetNonBillableImageVisibility((int)-1,(double)Eval("NonBillableHours"))%>' />
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width:80px;"> </td>
+                            <td class="Width80Px">
+                            </td>
                         </tr>
                     </table>
                     <asp:Panel ID="pnlDateDetails" runat="server">
-                        <table class="WholeWidthWithHeight">
+                        <table class="WholeWidthWithHeight WorkTypeTable">
                             <asp:Repeater ID="repWorktype" runat="server">
                                 <ItemTemplate>
-                                    <tr style="text-align: left; background-color: White;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
                                             <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: White;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
+                                                    <td class="vTopImp">
                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
@@ -122,30 +123,29 @@
                                     </tr>
                                 </ItemTemplate>
                                 <AlternatingItemTemplate>
-                                    <tr style="text-align: left; background-color: #F0F0F1;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr AlternativeFirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
-                                            <%# GetDoubleFormat((double)Eval("BillableHours"))%>
+                                            <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: #F0F0F1;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
+                                                    <td class="vTopImp">
                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
@@ -161,8 +161,8 @@
                 </ItemTemplate>
                 <AlternatingItemTemplate>
                     <table class="WholeWidthWithHeight">
-                        <tr style="text-align: left; background-color: #ECE9D9;">
-                            <td style="width: 80%; padding-left: 20px;">
+                        <tr class="textLeft bgcolor_ECE9D9">
+                            <td class="Width80Percent padLeft20Imp">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDate" runat="Server" CollapsedText="Expand Date Details"
                                     ExpandedText="Collapse Date Details" EnableViewState="true" BehaviorID="cpeDate"
                                     Collapsed="true" TargetControlID="pnlDateDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -172,52 +172,51 @@
                                 <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                                 <%# GetDateFormat((DateTime)Eval("Date"))%>
                             </td>
-                            <td style="width: 10%; text-align: right; vertical-align: middle;">
-                                <table width="100%">
+                            <td class="Width10Percent textRight vMiddle">
+                                <table class="WholeWidth">
                                     <tr>
-                                        <td style="text-align: right; font-weight: bold;">
+                                        <td class="textRight fontBold">
                                             <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                                         </td>
-                                        <td style="width: 20px">
+                                        <td class="Width20Px">
                                             <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                                 ToolTip="Non-Billable hours are included." Visible='<%# GetNonBillableImageVisibility((int)-1,(double)Eval("NonBillableHours"))%>' />
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 80px;">
+                            <td class="Width80Px">
                             </td>
                         </tr>
                     </table>
                     <asp:Panel ID="pnlDateDetails" runat="server">
-                        <table class="WholeWidthWithHeight">
+                        <table class="WholeWidthWithHeight WorkTypeTable">
                             <asp:Repeater ID="repWorktype" runat="server">
                                 <ItemTemplate>
-                                    <tr style="text-align: left; background-color: White;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
                                             <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: White;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
-                                                          <%# Eval("HTMLNote")%>
+                                                    <td class="vTopImp">
+                                                        <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -227,31 +226,30 @@
                                     </tr>
                                 </ItemTemplate>
                                 <AlternatingItemTemplate>
-                                    <tr style="text-align: left; background-color: #F0F0F1;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr AlternativeFirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
-                                            <%# GetDoubleFormat((double)Eval("BillableHours"))%>
+                                            <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: #F0F0F1;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
-                                                          <%# Eval("HTMLNote")%>
+                                                    <td class="vTopImp">
+                                                        <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -276,10 +274,10 @@
     <ItemTemplate>
         <table class="WholeWidthWithHeight">
             <tr style="text-align: left;">
-                <td colspan="4" class="ProjectAccountName" style="width: 95%; white-space: nowrap;">
-                   <%# GetDateFormat((DateTime)Eval("Date"))%>
+                <td colspan="4" class="ProjectAccountName Width95Percent no-wrap">
+                    <%# GetDateFormat((DateTime)Eval("Date"))%>
                 </td>
-                <td style="width: 5%; font-weight: bolder; font-size: 15px; text-align: right; padding-right: 10px;">
+                <td class="PersonDetailTotal">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
             </tr>
@@ -290,13 +288,13 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <table class="WholeWidthWithHeight">
-                        <tr style="text-align: left; background-color: #D4D0C9;">
-                            <td style="width: 80%; padding-left: 20px;">
+                        <tr class="textLeft bgColorD4D0C9">
+                            <td class="Width80Percent padLeft20Imp">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProject" runat="Server" CollapsedText="Expand Project Details"
                                     ExpandedText="Collapse Project Details" EnableViewState="true" BehaviorID="cpeProject"
-                                    Collapsed="true" TargetControlID="pnlProjectDetails" ImageControlID="imgProject" CollapsedImage="~/Images/expand.jpg"
-                                    ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgProject" ExpandControlID="imgProject"
-                                    TextLabelID="lbProject" />
+                                    Collapsed="true" TargetControlID="pnlProjectDetails" ImageControlID="imgProject"
+                                    CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgProject"
+                                    ExpandControlID="imgProject" TextLabelID="lbProject" />
                                 <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Project Details" />
                                 <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
                                 <%# Eval("Client.Name") %>
@@ -304,54 +302,53 @@
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
                                 <%# Eval("Project.Name")%>
-                                <b style="font-style: normal;">
+                                <b class="fontStyleNormal">
                                     <%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
                             </td>
-                            <td style="width: 10%; text-align: right; vertical-align: middle;">
-                                <table width="100%">
+                            <td class="Width10Percent textRight vMiddle">
+                                <table class="WholeWidth">
                                     <tr>
-                                        <td style="text-align: right; font-weight: bold;">
+                                        <td class="textRight fontBold">
                                             <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                                         </td>
-                                        <td style="width: 20px">
+                                        <td class="Width20Px">
                                             <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                                 ToolTip="Non-Billable hours are included." Visible='<%# GetNonBillableImageVisibility((int)Eval("Project.TimeEntrySectionId"),(double)Eval("NonBillableHours"))%>' />
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 80px;">
+                            <td class="Width80Px">
                             </td>
                         </tr>
                     </table>
                     <asp:Panel ID="pnlProjectDetails" runat="server">
-                        <table class="WholeWidthWithHeight">
+                        <table class="WholeWidthWithHeight WorkTypeTable">
                             <asp:Repeater ID="repWorktype" runat="server">
                                 <ItemTemplate>
-                                    <tr style="text-align: left; background-color: White;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
                                             <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: White;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
+                                                    <td class="vTopImp">
                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
@@ -362,30 +359,29 @@
                                     </tr>
                                 </ItemTemplate>
                                 <AlternatingItemTemplate>
-                                    <tr style="text-align: left; background-color: #F0F0F1;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr AlternativeFirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
-                                            <%# GetDoubleFormat((double)Eval("BillableHours"))%>
+                                            <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: #F0F0F1;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
+                                                    <td class="vTopImp">
                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
@@ -401,13 +397,13 @@
                 </ItemTemplate>
                 <AlternatingItemTemplate>
                     <table class="WholeWidthWithHeight">
-                        <tr style="text-align: left; background-color: #ECE9D9;">
-                            <td style="width: 80%; padding-left: 20px;">
+                        <tr class="textLeft bgcolor_ECE9D9">
+                            <td class="Width80Percent padLeft20Imp">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProject" runat="Server" CollapsedText="Expand Project Details"
                                     ExpandedText="Collapse Project Details" EnableViewState="true" BehaviorID="cpeProject"
-                                    Collapsed="true" TargetControlID="pnlProjectDetails" ImageControlID="imgProject" CollapsedImage="~/Images/expand.jpg"
-                                    ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgProject" ExpandControlID="imgProject"
-                                    TextLabelID="lbProject" />
+                                    Collapsed="true" TargetControlID="pnlProjectDetails" ImageControlID="imgProject"
+                                    CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgProject"
+                                    ExpandControlID="imgProject" TextLabelID="lbProject" />
                                 <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Project Details" />
                                 <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
                                 <%# Eval("Client.Name") %>
@@ -415,54 +411,53 @@
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
                                 <%# Eval("Project.Name")%>
-                                <b style="font-style: normal;">
+                                <b class="fontStyleNormal">
                                     <%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
                             </td>
-                            <td style="width: 10%; text-align: right; vertical-align: middle;">
-                                <table width="100%">
+                            <td class="Width10Percent textRight vMiddle">
+                                <table class="WholeWidth">
                                     <tr>
-                                        <td style="text-align: right; font-weight: bold;">
+                                        <td class="textRight fontBold">
                                             <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                                         </td>
-                                        <td style="width: 20px">
+                                        <td class="Width20Px">
                                             <asp:Image ID="imgNonBillable" runat="server" ImageUrl="~/Images/Non-Billable-Icon.png"
                                                 ToolTip="Non-Billable hours are included." Visible='<%# GetNonBillableImageVisibility((int)Eval("Project.TimeEntrySectionId"),(double)Eval("NonBillableHours"))%>' />
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 80px;">
+                            <td class="Width80Px">
                             </td>
                         </tr>
                     </table>
                     <asp:Panel ID="pnlProjectDetails" runat="server">
-                        <table class="WholeWidthWithHeight">
+                        <table class="WholeWidthWithHeight WorkTypeTable">
                             <asp:Repeater ID="repWorktype" runat="server">
                                 <ItemTemplate>
-                                    <tr style="text-align: left; background-color: White;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
                                             <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: White;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
+                                                    <td class="vTopImp">
                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
@@ -473,30 +468,29 @@
                                     </tr>
                                 </ItemTemplate>
                                 <AlternatingItemTemplate>
-                                    <tr style="text-align: left; background-color: #F0F0F1;">
-                                        <td style="width: 72%; padding-left: 50px;">
+                                    <tr class="FirstTr AlternativeFirstTr">
+                                        <td class="FirstTrTd1">
                                             <%# Eval("TimeType.Name")%>
                                         </td>
-                                        <td style="width: 8%; color: #3BA153;">
+                                        <td class="FirstTrTd2">
                                             B -
-                                            <%# GetDoubleFormat((double)Eval("BillableHours"))%>
+                                            <%# GetDoubleFormat( (double)Eval("BillableHours")) %>
                                         </td>
-                                        <td style="width: 8%; color: Gray;">
+                                        <td class="FirstTrTd3">
                                             NB -
                                             <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                                         </td>
-                                        <td colspan="2" style="width: 12%">
+                                        <td colspan="2" class="FirstTrTd4">
                                         </td>
                                     </tr>
-                                    <tr style="text-align: left; background-color: #F0F0F1;" id="trNote" runat="server"
-                                        visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
-                                        <td style="padding-left: 55px;" class="wrapword">
+                                    <tr class="SecondTr" id="trNote" runat="server" visible='<%# (bool)GetNoteVisibility((String)Eval("Note"))%>'>
+                                        <td class="wrapword SecondTrTd1">
                                             <table>
                                                 <tr>
-                                                    <td style="width: 8%; vertical-align: top;">
+                                                    <td class="SecondTrTd2">
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
-                                                    <td style="vertical-align: top;">
+                                                    <td class="vTopImp">
                                                         <%# Eval("HTMLNote")%>
                                                     </td>
                                                 </tr>
@@ -516,8 +510,7 @@
     <FooterTemplate>
     </FooterTemplate>
 </asp:Repeater>
-<div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-    runat="server">
+<div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
     This person has not entered Time Entries for the selected period.
 </div>
 
