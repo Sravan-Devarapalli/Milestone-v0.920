@@ -74,6 +74,17 @@ namespace PraticeManagement.Controls
 
         }
 
+        public string CssClass
+        {
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    cbl.CssClass = "FilteredCheckBoxListScrollingDropDown " + value;
+                }
+            }
+        }
+
         public string SelectedIndexes
         {
             get
