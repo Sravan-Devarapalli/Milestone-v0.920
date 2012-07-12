@@ -398,12 +398,26 @@
     <Content Include="Controls\TimeEntry\NonBillableTimeEntryBar.ascx" />
     <Content Include="Controls\TimeEntry\SingleTimeEntry_New.ascx" />
     <Content Include="Controls\TimeEntry\WeekSelector_New.ascx" />
-    <Content Include="Css\datepicker.css" />
+    <Content Include="Css\BrowserSpecific\IEMenu6.chirp.css" />
+    <Content Include="Css\BrowserSpecific\IEMenu6.min.css">
+      <DependentUpon>IEMenu6.chirp.css</DependentUpon>
+    </Content>
+    <Content Include="Css\TableSortStyle.chirp.css" />
+    <Content Include="Css\Menu.chirp.css" />
+    <Content Include="Css\datepicker.chirp.css" />
+    <Content Include="Css\datepicker.min.css">
+      <DependentUpon>datepicker.chirp.css</DependentUpon>
+    </Content>
+    <Content Include="Css\Menu.min.css">
+      <DependentUpon>Menu.chirp.css</DependentUpon>
+    </Content>
     <Content Include="Css\style.chirp.css" />
     <Content Include="Css\style.min.css">
       <DependentUpon>style.chirp.css</DependentUpon>
     </Content>
-    <Content Include="Css\TableSortStyle.css" />
+    <Content Include="Css\TableSortStyle.min.css">
+      <DependentUpon>TableSortStyle.chirp.css</DependentUpon>
+    </Content>
     <Content Include="DashBoard.aspx" />
     <Content Include="Images\add_24.png" />
     <Content Include="Images\arrow_16x16.png" />
@@ -2958,9 +2972,6 @@
     <Content Include="Controls\Reports\PersonStats.ascx" />
     <Content Include="Controls\RestrictionPanel.ascx" />
     <Content Include="Controls\TimeEntry\TimeEntryBarHeader.ascx" />
-    <Content Include="Css\BrowserSpecific\IEMenu6.css" />
-    <Content Include="Css\DetailsView.css" />
-    <Content Include="Css\Menu.css" />
     <Content Include="Css\PracticeManagementIE.css" />
     <Content Include="Css\style-ie7.css" />
     <Content Include="Css\TreeView.css" />
