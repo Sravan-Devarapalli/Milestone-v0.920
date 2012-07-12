@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="By Project" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ProjectSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.ProjectSummaryReport" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register Src="~/Controls/Reports/TimeEntryReportsHeader.ascx" TagPrefix="uc"
@@ -12,84 +10,13 @@
     TagName="ByResource" %>
 <%@ Register Src="~/Controls/Reports/ByworkType.ascx" TagPrefix="uc" TagName="ByWorkType" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
-<%@ Register TagPrefix="cc3" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src="../Scripts/ExpandOrCollapse.js" type="text/javascript"></script>
-    <style>
-        /* --------- Tabs for person and project details pages ------ */
-        
-        .CustomTabStyle tr
-        {
-            height: 30px;
-        }
-        
-        .CustomTabStyle td
-        {
-            background-color: White;
-            float: left;
-            padding: 8px 0px 5px 0px;
-            position: relative;
-        }
-        
-        .CustomTabStyle td a
-        {
-            text-decoration: none;
-        }
-        
-        .CustomTabStyle td span a
-        {
-            border-bottom: 1px dashed #0898e6;
-        }
-        
-        .CustomTabStyle td span a:hover
-        {
-            border-bottom: 1px dashed #006699;
-        }
-        
-        .CustomTabStyle td a.collapse
-        {
-            display: none;
-            position: absolute;
-        }
-        
-        .CustomTabStyle .SelectedSwitch a.collapse
-        {
-            display: block;
-            right: 2px;
-            top: 10px;
-        }
-        
-        .CustomTabStyle td span.bg
-        {
-            padding: 8px 10px 7px 10px;
-        }
-        
-        .CustomTabStyle .SelectedSwitch span.bg
-        {
-            background-color: #e2ebff;
-        }
-        
-        .tab-pane
-        {
-            background-color: #e2ebff;
-            padding: 5px;
-        }
-        
-        .info-field
-        {
-            width: 152px;
-        }
-        
-        TABLE.CustomViewStyle TD
-        {
-            padding: 4px;
-        }
-    </style>
-    <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
+    <script src='<%# GetClientUrl("~/Scripts/ExpandOrCollapse.js") %>' type="text/javascript"></script>
+    <link href="<%# GetClientUrl("~/Css/TableSortStyle.css") %>" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -204,40 +131,38 @@
         }
 
     </script>
-    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server">
-    </uc:TimeEntryReportsHeader>
+    <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <table width="100%">
+            <table class="WholeWidth">
                 <tr>
                     <td class="height30P vBottom fontBold">
                         2.&nbsp;Select report parameters:
                     </td>
                 </tr>
             </table>
-            <table style="width: 100%; height: 160px;">
+            <table class="WholeWidth Height160Px">
                 <tr>
-                    <td id="tdFirst" runat="server" style="width: 35%;">
+                    <td id="tdFirst" runat="server" class="Width35Percent">
                         &nbsp;
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;" id="tdSecond"
-                        runat="server">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond" id="tdSecond" runat="server">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="width: 40%; text-align: right; font-weight: bold;">
+                                <td class="FirstTd40">
                                     Project Number:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
+                                <td class="SecondTd150">
                                     <table>
                                         <tr>
                                             <td>
-                                                <asp:TextBox ID="txtProjectNumber" Width="150px" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
+                                                <asp:TextBox ID="txtProjectNumber" AutoPostBack="true" OnTextChanged="txtProjectNumber_OnTextChanged"
                                                     runat="server"></asp:TextBox>
-                                                <ajaxToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
+                                                <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtProjectNumber" runat="server"
                                                     TargetControlID="txtProjectNumber" BehaviorID="waterMarkTxtProjectNumber" WatermarkCssClass="watermarkedtext"
                                                     WatermarkText="Ex: P1234767">
-                                                </ajaxToolkit:TextBoxWatermarkExtender>
+                                                </AjaxControlToolkit:TextBoxWatermarkExtender>
                                             </td>
                                             <td>
                                                 <asp:Image ID="imgProjectSearch" runat="server" ToolTip="Project Search" ImageUrl="~/Images/search_24.png" />
@@ -248,7 +173,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td id="tdThird" runat="server" style="width: 35%;">
+                    <td id="tdThird" runat="server" class="Width35Percent">
                         &nbsp;
                     </td>
                 </tr>
@@ -256,20 +181,19 @@
                     <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="width: 40%; text-align: right; font-weight: bold;">
+                                <td class="FirstTd40">
                                     Range:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
-                                    <cc2:CustomDropDown ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                                        Width="157px">
+                                <td class="SecondTd157">
+                                    <pmc:CustomDropDown ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Entire Project" Value="*">
                                         </asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0">
                                         </asp:ListItem>
-                                    </cc2:CustomDropDown>
+                                    </pmc:CustomDropDown>
                                 </td>
                             </tr>
                         </table>
@@ -282,16 +206,16 @@
                     <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="width: 40%;">
+                                <td class="FirstTd40">
                                     &nbsp;
                                 </td>
-                                <td style="text-align: left;">
+                                <td class="SecondTd157">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                                    <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                                    <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                                 </td>
                             </tr>
@@ -305,15 +229,14 @@
                     <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="width: 40%; text-align: right; font-weight: bold;">
+                                <td class="FirstTd40">
                                     View:&nbsp;
                                 </td>
-                                <td style="text-align: left;">
-                                    <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged"
-                                        Width="157px">
+                                <td class="SecondTd157">
+                                    <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Please Select" Value=""></asp:ListItem>
                                         <asp:ListItem Text="By Resource" Value="0"></asp:ListItem>
                                         <asp:ListItem Text="By WorkType" Value="1"></asp:ListItem>
@@ -330,10 +253,10 @@
                     <td>
                         &nbsp;
                     </td>
-                    <td style="text-align: center; height: 30px; vertical-align: top;">
-                        <table width="100%" align="center" style="vertical-align: top;">
+                    <td class="ReportTdSecond">
+                        <table class="ReportParametersTable">
                             <tr>
-                                <td style="width: 300px;" colspan="3">
+                                <td class="Width300Px" colspan="3">
                                     <uc:MessageLabel ID="msgError" runat="server" ErrorColor="Red" InfoColor="Green"
                                         WarningColor="Orange" EnableViewState="false" />
                                 </td>
@@ -345,33 +268,32 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="border-bottom: 3px solid black; width: 100%; height: 10px">
+                    <td colspan="3" class="ReportBorderBottom">
                     </td>
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
                 DropShadow="false" />
-            <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
                             <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                FromToDateFieldWidth="70" />
+                                FromToDateFieldCssClass="Width70Px" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <td class="custBtns">
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
-                                Style="float: none !Important;" CausesValidation="true" />
+                                CausesValidation="true" />
                             &nbsp; &nbsp;
                             <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel"
-                                Style="float: none !Important;" OnClick="btnCustDatesCancel_OnClick" />
+                                OnClick="btnCustDatesCancel_OnClick" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center">
+                        <td class="textCenter">
                             <asp:ValidationSummary ID="valSumDateRange" runat="server" ValidationGroup='<%# ClientID %>' />
                         </td>
                     </tr>
@@ -380,25 +302,24 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeProjectSearch" runat="server" TargetControlID="imgProjectSearch"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSearch" BehaviorID="mpeProjectSearch"
                 DropShadow="false" />
-            <asp:Panel ID="pnlProjectSearch" runat="server" BackColor="White" BorderColor="Black"
-                Style="display: none;" BorderWidth="2px" Width="430px">
-                <table width="100%" class="ProjectSearchPopup">
-                    <tr>
-                        <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
-                            <b style="font-size: 14px; padding-top: 2px;">Project Search</b>
-                            <asp:Button ID="btnclose" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                                Style="float: right;" OnClick="btnclose_OnClick" Text="X"></asp:Button>
+            <asp:Panel ID="pnlProjectSearch" runat="server" CssClass="popUp ProjectSearch">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
+                            Project Search
+                            <asp:Button ID="btnclose" runat="server" CssClass="mini-report-closeNew" ToolTip="Close"
+                                OnClick="btnclose_OnClick" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
                         <td class="WholeWidth">
                             <table class="WholeWidth">
                                 <tr>
-                                    <td style="width: 100px; text-align: right;">
+                                    <td class="Width100Px textRight">
                                         Account:
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlClients" runat="server" Width="250px" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
+                                        <asp:DropDownList ID="ddlClients" runat="server" CssClass="Width250Px" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
                                             AutoPostBack="true">
                                         </asp:DropDownList>
                                     </td>
@@ -410,15 +331,15 @@
                         <td class="WholeWidth">
                             <table class="WholeWidth">
                                 <tr>
-                                    <td style="width: 100px; text-align: right;">
+                                    <td class="Width100Px textRight">
                                         Project:
                                     </td>
                                     <td>
-                                        <cc3:CustomDropDown ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
-                                            Width="250px" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
+                                        <pmc:CustomDropDown ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
+                                            CssClass="Width250Px" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
                                             <asp:ListItem Text="-- Select a Project --" Value="">
                                             </asp:ListItem>
-                                        </cc3:CustomDropDown>
+                                        </pmc:CustomDropDown>
                                     </td>
                                 </tr>
                             </table>
@@ -430,10 +351,11 @@
                                 <tr>
                                     <td>
                                         <asp:TextBox ID="txtProjectSearch" onkeypress="return txtSearch_onkeypress(event);"
-                                            onkeyup="return txtSearch_onkeyup(event);" Width="330px" runat="server"></asp:TextBox>
-                                        <ajaxToolkit:TextBoxWatermarkExtender ID="wmeProjectSearch" runat="server" TargetControlID="txtProjectSearch"
-                                            WatermarkCssClass="watermarkedtext" WatermarkText="To search for a project, click here to begin typing...">
-                                        </ajaxToolkit:TextBoxWatermarkExtender>
+                                            onkeyup="return txtSearch_onkeyup(event);" CssClass="Width330Px" runat="server"></asp:TextBox>
+                                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmeProjectSearch" runat="server"
+                                            TargetControlID="txtProjectSearch" WatermarkCssClass="watermarkedtext Width330Px"
+                                            WatermarkText="To search for a project, click here to begin typing...">
+                                        </AjaxControlToolkit:TextBoxWatermarkExtender>
                                     </td>
                                     <td>
                                         <asp:Button ID="btnProjectSearch" UseSubmitBehavior="false" disabled="disabled" runat="server"
@@ -445,23 +367,23 @@
                     </tr>
                     <tr>
                         <td class="WholeWidth">
-                            <div style="max-height: 200px; overflow-y: auto;">
+                            <div class="ProjectSearchResultsDiv">
                                 <asp:Repeater ID="repProjectNamesList" runat="server">
                                     <HeaderTemplate>
-                                        <table id="tblProjectSearchResult" class="tablesorter CompPerfTable WholeWidth">
+                                        <table id="tblProjectSearchResult" class="tablesorter CompPerfTable ProjectSearchResultsTable">
                                             <thead>
                                                 <tr class="CompPerfHeader">
-                                                    <th style="width: 20%; text-align: center; background: url(../images/cp-header-bg.png) repeat-x 0px 0px;">
+                                                    <th class="Width20Percent">
                                                         <div class="ie-bg">
                                                             Project
                                                         </div>
                                                     </th>
-                                                    <th style="width: 50%; text-align: center; background: url(../images/cp-header-bg.png) repeat-x 0px 0px;">
+                                                    <th class="Width50Percent">
                                                         <div class="ie-bg">
                                                             Project Name
                                                         </div>
                                                     </th>
-                                                    <th style="text-align: center; background: url(../images/cp-header-bg.png) repeat-x 0px 0px;">
+                                                    <th>
                                                         <div class="ie-bg">
                                                             Account
                                                         </div>
@@ -472,7 +394,7 @@
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <tr>
-                                            <td style="text-align: center;">
+                                            <td class="textCenter">
                                                 <asp:LinkButton ID="lnkProjectNumber" ProjectNumber='<%# Eval("ProjectNumber")%>'
                                                     OnClick="lnkProjectNumber_OnClick" runat="server"><%# Eval("ProjectNumber")%></asp:LinkButton>
                                             </td>
@@ -492,7 +414,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding-left: 8px;">
+                        <td class="padLeft8">
                             <asp:Literal ID="ltrlNoProjectsText" Visible="false" runat="server" Text="No Projects found."></asp:Literal>
                         </td>
                     </tr>
@@ -501,21 +423,19 @@
             <div id="divWholePage" runat="server">
                 <asp:MultiView ID="mvProjectSummaryReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwResourceReport" runat="server">
-                        <asp:Panel Style="padding-top: 10px;" ID="pnlResourceReport" runat="server" CssClass="WholeWidth">
-                            <uc:ByResource ID="ucByResource" runat="server">
-                            </uc:ByResource>
+                        <asp:Panel ID="pnlResourceReport" runat="server" CssClass="WholeWidth PaddingTop10">
+                            <uc:ByResource ID="ucByResource" runat="server"></uc:ByResource>
                         </asp:Panel>
                     </asp:View>
                     <asp:View ID="vwProjectReport" runat="server">
                         <asp:Panel ID="pnlProjectReport" runat="server" CssClass="WholeWidth">
-                            <uc:ByWorkType ID="ucByWorktype" runat="server">
-                            </uc:ByWorkType>
+                            <uc:ByWorkType ID="ucByWorktype" runat="server"></uc:ByWorkType>
                         </asp:Panel>
                     </asp:View>
                 </asp:MultiView>
-                <table width="100%">
+                <table class="WholeWidth">
                     <tr>
-                        <td style="text-align: center; padding-top: 5px;">
+                        <td class="textCenter PaddingTop5">
                             <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" Text="Return To Pervious Report" />
                         </td>
                     </tr>
