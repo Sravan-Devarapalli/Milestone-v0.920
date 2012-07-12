@@ -21,6 +21,8 @@ namespace PraticeManagement.Controls.Reports
         private const string ReportContextKey = "ReportContext";
         private const string BenchListKey = "BenchList";
         private const string UserIsAdminKey = "UserIsAdmin";
+        private const string CompPerfDataWithPaddingRightCssClass = "CompPerfData padRight10Imp textRight";
+        
         private Dictionary<DateTime, Decimal> monthlyTotals;
         private BenchReportContext ReportContext
         {
@@ -157,7 +159,6 @@ namespace PraticeManagement.Controls.Reports
                 ViewState[BenchListKey] = value;
             }
         }
-
 
         private Dictionary<DateTime, Decimal> MonthlyTotals
         {
@@ -394,7 +395,7 @@ namespace PraticeManagement.Controls.Reports
                     );
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Add("class", "");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
             }
             else
@@ -492,10 +493,6 @@ namespace PraticeManagement.Controls.Reports
                 bool rowVisible = false;
                 if (project != null)
                 {
-
-                    if (project.Id.HasValue && project.Id.Value == 3834)
-                    {
-                    }
                     var monthBegin =
                         new DateTime(ReportContext.Start.Year,
                             ReportContext.Start.Month,
@@ -564,7 +561,7 @@ namespace PraticeManagement.Controls.Reports
                                             list.Add(Convert.ToDecimal(interestValue.Value.GrossMargin));
                                             if (interestValue.Value.GrossMargin.Value == 0M)
                                             {
-                                                e.Row.Cells[i].Attributes.Add("style", "color:green;");
+                                                e.Row.Cells[i].Attributes.Add("class", "colorGreen");
                                             }
                                         }
                                         else
@@ -603,18 +600,18 @@ namespace PraticeManagement.Controls.Reports
                                             {
                                                 if (interestValue.Value.GrossMargin.Value == 0M)
                                                 {
-                                                    e.Row.Cells[i].Text = "<span style='color:green;'>0.00" + "<sup style='font-size:11px;'>" + superScriptContent + "</sup></span>";
+                                                    e.Row.Cells[i].Text = "<span class=\"colorGreen\">0.00" + "<sup>" + superScriptContent + "</sup></span>";
                                                 }
                                                 else
                                                 {
-                                                    e.Row.Cells[i].Text = "<span style='color:red;'>" + interestValue.Value.GrossMargin.ToString() +
-                                                                            "<sup style='font-size:11px;'>" + superScriptContent + "</sup></span>";
+                                                    e.Row.Cells[i].Text = "<span class=\"colorRed\">" + interestValue.Value.GrossMargin.ToString() +
+                                                                            "<sup>" + superScriptContent + "</sup></span>";
                                                 }
 
                                             }
                                             else
                                             {
-                                                e.Row.Cells[i].Text += "<sup style='font-size:11px;'>" + superScriptContent + "</sup>";
+                                                e.Row.Cells[i].Text += "<sup>" + superScriptContent + "</sup>";
                                             }
                                         }
                                     }
@@ -625,8 +622,6 @@ namespace PraticeManagement.Controls.Reports
                                         list.Add(e.Row.Cells[i].Text);
                                     }
 
-                                    e.Row.Cells[i].HorizontalAlign = HorizontalAlign.Right;
-
                                     if (list.OfType<Decimal>().ToList().Count <= 0)
                                     {
                                         e.Row.Cells[grid.Columns.Count - 1].Text = string.Empty;
@@ -635,8 +630,6 @@ namespace PraticeManagement.Controls.Reports
                                     {
                                         e.Row.Cells[grid.Columns.Count - 1].Text = list.OfType<Decimal>().ToList().Sum().ToString();
                                     }
-
-                                    e.Row.Cells[grid.Columns.Count - 1].HorizontalAlign = HorizontalAlign.Right;
                                 }
                             }
                         }
@@ -646,7 +639,7 @@ namespace PraticeManagement.Controls.Reports
 
                 for (int i = 3; i < e.Row.Cells.Count; i++)
                 {
-                    e.Row.Cells[i].CssClass = CompPerfDataCssClass;
+                    e.Row.Cells[i].CssClass = CompPerfDataWithPaddingRightCssClass;
                 }
 
                 e.Row.Visible = rowVisible;
@@ -748,6 +741,7 @@ namespace PraticeManagement.Controls.Reports
             if (footer != null)
             {
                 footer.Cells[1].Text = "Grand Total :";
+                footer.Cells[1].CssClass = "Left";
                 for (int i = 3; i < grid.Columns.Count; i++)
                 {
                     //Decimal total = 0;
@@ -760,11 +754,8 @@ namespace PraticeManagement.Controls.Reports
 
                             if (isDecimal)
                             {
-                                //total += value;
-
                                 row.Cells[i].Text = ((PracticeManagementCurrency)Convert.ToDecimal(row.Cells[i].Text)).ToString();
                             }
-                            row.Cells[i].Style.Add("padding-right", "10px");
                         }
                     }
                     if (i < (3 + perodLenth))
@@ -774,11 +765,8 @@ namespace PraticeManagement.Controls.Reports
                     }
                     else if (i == grid.Columns.Count - 1)
                     {
-
                         footer.Cells[i].Text = ((PracticeManagementCurrency)MonthlyTotals.Values.Sum()).ToString();
                     }
-                    footer.Cells[i].HorizontalAlign = HorizontalAlign.Right;
-                    footer.Cells[i].Style.Add("padding-right", "10px");
                 }
                 MonthlyTotals = null;
             }
