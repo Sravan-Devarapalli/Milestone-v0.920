@@ -409,15 +409,6 @@ namespace PraticeManagement.Reporting {
         protected global::PraticeManagement.Controls.Reports.PersonDetailReport ucpersonDetailReport;
         
         /// <summary>
-        /// btnCancelAndReturn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.Buttons.CancelAndReturnButton btnCancelAndReturn;
-        
-        /// <summary>
         /// mpePersonSearch control.
         /// </summary>
         /// <remarks>
