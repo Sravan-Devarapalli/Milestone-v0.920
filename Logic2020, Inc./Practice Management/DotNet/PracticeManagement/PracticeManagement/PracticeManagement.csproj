@@ -372,7 +372,6 @@
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
-    <Content Include="Controls\Reports\BillableAndNonBillableGraph.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessUnit.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByProject.ascx" />
@@ -777,6 +776,7 @@
     </None>
     <Content Include="Scripts\Combined.js" />
     <Content Include="Scripts\ExpandOrCollapse.js" />
+    <Content Include="Scripts\FilteredCheckBoxList.js" />
     <Content Include="Scripts\FilterTable.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <None Include="Service References\TimeTypeService\TimeTypeService14.disco" />
@@ -1183,7 +1183,6 @@
     <Content Include="Third Party Tools\CKEditor.NET.dll" />
     <Content Include="Third Party Tools\FormsAuthenticationUserImpersonation.dll" />
     <Content Include="Third Party Tools\PdfGenerator\itextsharp.dll" />
-    <Content Include="TimeEnteredHoursHandler.ashx" />
     <Content Include="TimeEntryHandler.ashx" />
     <None Include="Service References\TimeTypeService\TimeTypeService14.wsdl" />
     <None Include="Service References\TimeTypeService\TimeTypeService416.xsd">
@@ -1331,13 +1330,6 @@
     </Compile>
     <Compile Include="Controls\Reports\AuditByProject.ascx.designer.cs">
       <DependentUpon>AuditByProject.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.cs">
-      <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Reports\BillableAndNonBillableGraph.ascx.designer.cs">
-      <DependentUpon>BillableAndNonBillableGraph.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx.cs">
       <DependentUpon>ByBusinessDevelopment.ascx</DependentUpon>
@@ -2269,9 +2261,6 @@
     </Compile>
     <Compile Include="StrawManDetails.aspx.designer.cs">
       <DependentUpon>StrawManDetails.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="TimeEnteredHoursHandler.ashx.cs">
-      <DependentUpon>TimeEnteredHoursHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="TimeEntryHandler.ashx.cs">
       <DependentUpon>TimeEntryHandler.ashx</DependentUpon>
