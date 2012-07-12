@@ -75,7 +75,7 @@ namespace PraticeManagement.Controls.Menu
                 Page.ClientScript.RegisterClientScriptInclude(resource, Page.ResolveUrl(filePath));
 
 			// Menu.css -- only add if it is embedded
-            resource = "Menu.css";
+            resource = "Menu.min.css";
             filePath = string.Empty;
 			
 			// if filePath is not empty, embedded CSS exists -- register it
@@ -87,7 +87,7 @@ namespace PraticeManagement.Controls.Menu
 			}
 
 			// IEMenu6.css -- only add if it is embedded
-            resource = "IEMenu6.css";
+            resource = "IEMenu6.min.css";
             filePath = string.Empty;
 			
 			// if filePath is not empty, embedded CSS exists -- register it
