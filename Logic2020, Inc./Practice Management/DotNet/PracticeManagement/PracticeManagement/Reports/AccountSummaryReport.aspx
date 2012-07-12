@@ -3,7 +3,6 @@
 
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
-<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register Src="~/Controls/Reports/ByAccount/ByBusinessUnit.ascx" TagPrefix="uc"
@@ -15,71 +14,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <script src="../Scripts/ExpandOrCollapse.js" type="text/javascript"></script>
-    <style>
-        /* --------- Tabs for person and project details pages ------ */
-        
-        .CustomTabStyle tr
-        {
-            height: 30px;
-        }
-        
-        .CustomTabStyle td
-        {
-            background-color: White;
-            float: left;
-            padding: 8px 0px 5px 0px;
-            position: relative;
-        }
-        
-        .CustomTabStyle td a
-        {
-            text-decoration: none;
-        }
-        
-        .CustomTabStyle td span a
-        {
-            border-bottom: 1px dashed #0898e6;
-        }
-        
-        .CustomTabStyle td span a:hover
-        {
-            border-bottom: 1px dashed #006699;
-        }
-        
-        .CustomTabStyle td a.collapse
-        {
-            display: none;
-            position: absolute;
-        }
-        
-        .CustomTabStyle .SelectedSwitch a.collapse
-        {
-            display: block;
-            right: 2px;
-            top: 10px;
-        }
-        
-        .CustomTabStyle td span.bg
-        {
-            padding: 8px 10px 7px 10px;
-        }
-        
-        .CustomTabStyle .SelectedSwitch span.bg
-        {
-            background-color: #e2ebff;
-        }
-        
-        .tab-pane
-        {
-            background-color: #e2ebff;
-            padding: 5px;
-        }
-        
-        .info-field
-        {
-            width: 152px;
-        }
-    </style>
     <link href="../Css/TableSortStyle.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
@@ -117,14 +51,14 @@
     <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <table width="100%">
+            <table class="WholeWidth">
                 <tr class="height30P">
-                    <td class="vBottom fontBold" style="width: 3%; white-space: nowrap;">
+                    <td class="vBottom fontBold Width3Percent no-wrap">
                         &nbsp;Select report parameters:&nbsp;
                     </td>
                     <td>
                     </td>
-                    <td style="width: 60%;">
+                    <td class="width60P">
                     </td>
                 </tr>
                 <tr class="height30P">
@@ -132,7 +66,7 @@
                         Account:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" Width="220"
+                        <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" CssClass="Width220Px"
                             OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
                         </asp:DropDownList>
                     </td>
@@ -140,16 +74,16 @@
                     </td>
                 </tr>
                 <tr class="height30P">
-                    <td class="ReportFilterLabels" style="vertical-align: top; line-height: 30px;">
+                    <td class="ReportFilterLabels vTop lineHeight30Px">
                         Business Unit:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                        <pmc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
-                            Height="160px" onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')"
-                            AutoPostBack="true" DropDownListType="Business Unit" CellPadding="3" />
+                            onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')" AutoPostBack="true"
+                            DropDownListType="Business Unit" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
-                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="217px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td>
@@ -161,7 +95,7 @@
                     </td>
                     <td class="textLeft">
                         <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                            Width="220px">
+                            CssClass="Width220Px">
                             <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                             <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
                             <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
@@ -183,7 +117,7 @@
                     <td class="textLeft">
                         <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                         <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                        <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                        <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                         <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                     </td>
                     <td>
@@ -202,7 +136,7 @@
                     <td>
                     </td>
                 </tr>
-                <tr style="border-bottom: 3px solid black;">
+                <tr class="ReportBorderBottomByAccount">
                     <td colspan="3">
                     </td>
                 </tr>
@@ -211,25 +145,25 @@
                 BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
                 DropShadow="false" />
             <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+                CssClass="ConfirmBoxClass CustomDatesPopUp" Style="display: none;">
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
                             <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                FromToDateFieldWidth="70" />
+                                FromToDateFieldCssClass="Width70Px" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <td class="custBtns">
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
-                                Style="float: none !Important;" CausesValidation="true" />
+                                CausesValidation="true" />
                             &nbsp; &nbsp;
                             <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel"
-                                Style="float: none !Important;" OnClick="btnCustDatesCancel_OnClick" />
+                                OnClick="btnCustDatesCancel_OnClick" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center">
+                        <td class="textCenter">
                             <asp:ValidationSummary ID="valSumDateRange" runat="server" ValidationGroup='<%# ClientID %>' />
                         </td>
                     </tr>
@@ -237,96 +171,96 @@
             </asp:Panel>
             <br />
             <div id="divWholePage" runat="server">
-                <table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;">
+                <table class="PaddingTenPx AccountSummaryReportHeader">
                     <tr>
-                        <td style="font-size: 16px; font-weight: bold;">
+                        <td class="FirstTrTd1">
                             <table>
                                 <tr>
-                                    <td style="vertical-align: top; padding-bottom: 2px; font-weight: bold;">
+                                    <td class="FirstTrTd2">
                                         <asp:Literal ID="ltAccount" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: top; padding-bottom: 10px;">
+                                    <td class="FirstTrTd3">
                                         <asp:Literal ID="ltHeaderCount" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-top: 10px; vertical-align: bottom; padding-bottom: 5px; float:left;">
+                                    <td class="FirstTrTd4">
                                         <asp:Literal ID="ltRange" runat="server"></asp:Literal>
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        <td style="text-align: right; width: 470px; padding-bottom: 10px;">
-                            <table style="table-layout: fixed; width: 100%;">
+                        <td class="FirstTrTd5">
+                            <table class="ReportHeaderTotals">
                                 <tr>
-                                    <td style="width: 27%;">
-                                        <table width="100%">
+                                    <td class="Width27Percent">
+                                        <table class="WholeWidth ReportHeaderTotalsTable">
                                             <tr>
-                                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px; white-space: nowrap;">
+                                                <td class="FirstTd no-wrap">
                                                     Total Project Hours
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="font-size: 25px; text-align: center;">
+                                                <td class="SecondTd">
                                                     <asp:Literal ID="ltrlTotalProjectHours" runat="server"></asp:Literal>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 27%;">
-                                        <table width="100%">
+                                    <td class="Width27Percent">
+                                        <table class="WholeWidth ReportHeaderTotalsTable">
                                             <tr>
-                                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                                <td class="FirstTd">
                                                     BD
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="font-size: 25px; text-align: center;">
+                                                <td class="SecondTd">
                                                     <asp:Literal ID="ltrlBDHours" runat="server"></asp:Literal>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 27%; vertical-align: bottom;">
-                                        <table width="100%">
+                                    <td class="Width27Percent vBottom">
+                                        <table class="ReportHeaderBillAndNonBillTable">
                                             <tr>
-                                                <td style="text-align: center;">
+                                                <td>
                                                     BILLABLE
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="padding-bottom: 5px; text-align: center;">
+                                                <td class="billingHours">
                                                     <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align: center;">
+                                                <td>
                                                     NON-BILLABLE
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align: center;">
+                                                <td>
                                                     <asp:Literal ID="ltrlNonBillableHours" runat="server"></asp:Literal>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="vertical-align: bottom; width: 8%; padding: 0px !important;">
-                                        <table width="100%">
+                                    <td class="ReportHeaderBandNBGraph">
+                                        <table>
                                             <tr>
-                                                <td style="padding: 0px !important;">
-                                                    <table width="100%" style="table-layout: fixed;">
+                                                <td>
+                                                    <table class="tableFixed">
                                                         <tr>
-                                                            <td style="text-align: center;">
+                                                            <td>
                                                                 <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <table width="100%">
+                                                    <table>
                                                         <tr id="trBillable" runat="server" title="Billable Percentage.">
-                                                            <td style="background-color: #7FD13B; border: 1px solid Gray;">
+                                                            <td class="billingGraph">
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -334,20 +268,20 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="vertical-align: bottom; width: 8%; padding: 0px;">
-                                        <table width="100%">
+                                    <td class="ReportHeaderBandNBGraph">
+                                        <table>
                                             <tr>
-                                                <td style="padding: 0px !important;">
-                                                    <table width="100%" style="table-layout: fixed;">
+                                                <td>
+                                                    <table class="tableFixed">
                                                         <tr>
-                                                            <td style="text-align: center;">
+                                                            <td>
                                                                 <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <table width="100%">
+                                                    <table>
                                                         <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                                            <td style="background-color: #BEBEBE; border: 1px solid Gray;">
+                                                            <td class="nonBillingGraph">
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -355,14 +289,14 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 2%;">
+                                    <td class="Width2Percent">
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                 </table>
-                <asp:Table ID="tblProjectViewSwitch" runat="server" CssClass="CustomTabStyle">
+                <asp:Table ID="tblProjectViewSwitch" runat="server" CssClass="CommonCustomTabStyle AccountSummaryReportCustomTabStyle">
                     <asp:TableRow ID="rowSwitcher" runat="server">
                         <asp:TableCell ID="cellBusinessUnit" CssClass="SelectedSwitch" runat="server">
                             <span class="bg"><span>
