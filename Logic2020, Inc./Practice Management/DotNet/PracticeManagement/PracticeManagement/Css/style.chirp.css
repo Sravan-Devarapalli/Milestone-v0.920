@@ -74,6 +74,15 @@ span.highlighted
     background-color: #e2ebff;
     padding: 10px;
 }
+.bgcolorE2EBFF
+{
+    background-color: #E2EBFF;
+}
+.bgcolorwhite
+{
+    background-color: White;
+}
+
 .fl-left
 {
     float: left !important;
@@ -366,7 +375,7 @@ a.control
     background-color: #e2ebff;
     padding: 5px;
 }
-div.Notes-panel
+.Margin5Px, div.Notes-panel
 {
     margin: 5px;
 }
@@ -1048,7 +1057,7 @@ td.te-modal-header
     height: 10px;
     text-align: right;
     width: 15px;
-    padding: 0;
+    padding: 0px;
 }
 .calendarWrapper
 {
@@ -1482,9 +1491,21 @@ TABLE.Section td
 {
     padding: 0px;
 }
-.Padding2
+.Padding0Imp
+{
+    padding: 0px !important;
+}
+.Padding2, .Padding2Px
 {
     padding: 2px;
+}
+.Padding3PX
+{
+    padding: 3px;
+}
+.Padding4Px
+{
+    padding: 4px;
 }
 .Padding5
 {
@@ -1494,21 +1515,33 @@ TABLE.Section td
 {
     padding: 6px;
 }
-.Padding10
+.Padding10, .Padding10Px
 {
     padding: 10px;
+}
+.Padding15Px
+{
+    padding: 15px;
+}
+.PaddingTop2Px
+{
+    padding-top: 2px;
 }
 .PaddingTop3
 {
     padding-top: 3px;
 }
-.PaddingTop4
+.PaddingTop4, .PaddingTop4Px
 {
     padding-top: 4px;
 }
 .PaddingTop5
 {
     padding-top: 5px;
+}
+.PaddingTop5Imp
+{
+    padding-top: 5px !important;
 }
 .PaddingTop6
 {
@@ -1522,9 +1555,13 @@ TABLE.Section td
 {
     padding-top: 8px;
 }
-.PaddingTop10
+.PaddingTop10, .PaddingTop10Px
 {
     padding-top: 10px;
+}
+.PaddingTop10Imp
+{
+    padding-top: 10px !important;
 }
 .PaddingTop20
 {
@@ -1532,7 +1569,7 @@ TABLE.Section td
 }
 .PaddingBottom0
 {
-    padding-bottom: 0px !important; 
+    padding-bottom: 0px !important;
 }
 .PaddingBottom2
 {
@@ -1542,9 +1579,17 @@ TABLE.Section td
 {
     padding-bottom: 3px;
 }
+.PaddingBottom3Imp
+{
+    padding-bottom: 3px !important;
+}
 .PaddingBottom5
 {
     padding-bottom: 5px;
+}
+.PaddingBottom5Imp
+{
+    padding-bottom: 5px !important;
 }
 .PaddingBottom6
 {
@@ -1554,27 +1599,35 @@ TABLE.Section td
 {
     padding-bottom: 8px;
 }
-.PaddingBottom10
+.PaddingBottom10, .paddingBottom10px
 {
     padding-bottom: 10px;
+}
+.PaddingBottom10Imp
+{
+    padding-bottom: 10px !important;
+}
+.PaddingBottom20Px
+{
+    padding-bottom: 20px;
 }
 .PaddingBottom31
 {
     padding-bottom: 31px;
 }
-.padRight0
+.padRight0, .PaddingRight0Px
 {
     padding-right: 0px !important;
 }
-.padRight2
+.padRight2, .PaddingRight2Px
 {
     padding-right: 2px;
 }
-.padRight3
+.padRight3, .PaddingRight3Px
 {
     padding-right: 3px;
 }
-.padRight5
+.padRight5, .wrap
 {
     padding-right: 5px;
 }
@@ -1582,9 +1635,13 @@ TABLE.Section td
 {
     padding-right: 8px;
 }
-.padRight10
+.padRight10, .PaddingRight10Px
 {
     padding-right: 10px;
+}
+.padRight10Imp
+{
+    padding-right: 10px !important;
 }
 .padRight15
 {
@@ -1594,19 +1651,27 @@ TABLE.Section td
 {
     padding-right: 25px;
 }
+.padRight60Imp
+{
+    padding-right: 60px !important;
+}
+.padRight110Imp
+{
+    padding-right: 110px !important;
+}
 .padRight242
 {
     padding-right: 242px;
 }
-.padLeft0
+.padLeft0, .PaddingLeft0Px
 {
     padding-left: 0px !important;
 }
-.padLeft2
+.padLeft2, .PaddingLeft2px
 {
     padding-left: 2px;
 }
-.padLeft3
+.padLeft3, .PaddingLeft3Px
 {
     padding-left: 3px;
 }
@@ -1614,7 +1679,7 @@ TABLE.Section td
 {
     padding-left: 3%;
 }
-.padLeft4
+.padLeft4, .PaddingLeft4Px
 {
     padding-left: 4px;
 }
@@ -1622,13 +1687,25 @@ TABLE.Section td
 {
     padding-left: 5px;
 }
+.padLeft5Imp
+{
+    padding-left: 5px !important;
+}
 .padLeft6
 {
     padding-left: 6px;
 }
-.padLeft10
+.padLeft8
+{
+    padding-left: 8px;
+}
+.padLeft10, .PaddingLeft10Px
 {
     padding-left: 10px;
+}
+.padLeft10Imp
+{
+    padding-left: 10px !important;
 }
 .padLeft12
 {
@@ -1638,6 +1715,10 @@ TABLE.Section td
 {
     padding-left: 15px;
 }
+.paddingLeft15Imp
+{
+    padding-left: 15px !important;
+}
 .padLeft16
 {
     padding-left: 16px;
@@ -1645,6 +1726,10 @@ TABLE.Section td
 .padLeft20
 {
     padding-left: 20px;
+}
+.padLeft20Imp
+{
+    padding-left: 20px !important;
 }
 .padLeft23
 {
@@ -1661,6 +1746,14 @@ TABLE.Section td
 .padLeft40
 {
     padding-left: 40px;
+}
+.padLeft40Imp
+{
+    padding-left: 40px !important;
+}
+.padLeft60
+{
+    padding-left: 60px;
 }
 .padLeft3P
 {
@@ -1682,7 +1775,7 @@ TABLE.Section td
 {
     width: 2%;
 }
-.Width3Percent
+.Width3Percent, .Width3Per
 {
     width: 3%;
 }
@@ -1698,19 +1791,23 @@ TABLE.Section td
 {
     width: 6%;
 }
+.Width6PercentImp
+{
+    width: 6% !important;
+}
 .Width7Percent
 {
     width: 7%;
 }
-.Width8Percent
+.Width8Percent, .Width8Per
 {
     width: 8%;
 }
-.Width9Percent
+.Width9Percent, .Width9Per
 {
     width: 9%;
 }
-.Width10Percent 
+.Width10Percent, .Width10Per
 {
     width: 10%;
 }
@@ -1718,7 +1815,7 @@ TABLE.Section td
 {
     width: 11%;
 }
-.Width12Percent
+.Width12Percent, .Width12Per
 {
     width: 12%;
 }
@@ -1730,13 +1827,17 @@ TABLE.Section td
 {
     width: 14%;
 }
-.Width15Percent
+.Width15Percent, .Width15Per
 {
     width: 15%;
 }
-.Width17Percent
+.Width17Percent, .Width17Per
 {
     width: 17%;
+}
+.Width18Percent
+{
+    width: 18%;
 }
 .Width20Percent
 {
@@ -1746,17 +1847,37 @@ TABLE.Section td
 {
     width: 21%;
 }
+.Width22Per
+{
+    width: 22%;
+}
+.Width23Percent
+{
+    width: 23%;
+}
+.Width24Percent
+{
+    width: 24%;
+}
 .Width25Percent
 {
     width: 25%;
 }
-.Width26Percent
+.Width26Percent, .Width26Per
 {
     width: 26%;
+}
+.Width27Percent
+{
+    width: 27%;
 }
 .width30P
 {
     width: 30%;
+}
+.Width31Percent
+{
+    width: 31%;
 }
 .Width35Percent
 {
@@ -1775,6 +1896,10 @@ TABLE.Section td
 {
     width: 45%;
 }
+.Width48Percent
+{
+    width: 48%;
+}
 .Width50Percent
 {
     width: 50%;
@@ -1792,9 +1917,21 @@ TABLE.Section td
 {
     width: 63%;
 }
-.Width66Percent
+.Width65Percent
+{
+    width: 65%;
+}
+.Width66Percent, .Width66Per
 {
     width: 66%;
+}
+.Width70Per, .Width70Percent, .width70P
+{
+    width: 70%;
+}
+.Width75Percent
+{
+    width: 75%;
 }
 .width77P
 {
@@ -1816,11 +1953,19 @@ TABLE.Section td
 {
     width: 92%;
 }
-.Width95Percent , .Width95Per
+.Width94Per
+{
+    width: 94%;
+}
+.Width95Percent, .Width95Per
 {
     width: 95%;
 }
-.Width97Percent
+.Width96Per
+{
+    width: 96%;
+}
+.Width97Percent, .Width97Per
 {
     width: 97%;
 }
@@ -1828,19 +1973,43 @@ TABLE.Section td
 {
     width: 98%;
 }
+.Width99Percent
+{
+    width: 99%;
+}
+.Width5Px, .BenchCostCustomValidator
+{
+    width: 5px;
+}
+.Width10PxImp
+{
+    width: 10px !important;
+}
 .Width15Px
 {
     width: 15px;
+}
+.Width20Px
+{
+    width: 20px;
 }
 .Width25Px
 {
     width: 25px;
 }
+.Width30Px
+{
+    width: 30px;
+}
+.Width40Px
+{
+    width: 40px;
+}
 .Width45Px
 {
     width: 45px;
 }
-.width50Px
+.width50Px, .Width50Px
 {
     width: 50px;
 }
@@ -1860,9 +2029,13 @@ TABLE.Section td
 {
     width: 67px;
 }
-.Width70Percent, .width70P
+.Width70Px
 {
-    width: 70%;
+    width: 70px;
+}
+.Width75PxImp
+{
+    width: 75px !important;
 }
 .Width80Px
 {
@@ -1872,6 +2045,14 @@ TABLE.Section td
 {
     width: 83px;
 }
+.Width90Px
+{
+    width: 90px;
+}
+.Width90PxImp
+{
+    width: 90px !important;
+}
 .Width95Px
 {
     width: 95px;
@@ -1880,13 +2061,49 @@ TABLE.Section td
 {
     width: 100px;
 }
+.Width110Px
+{
+    width: 110px;
+}
+.Width110PxImp
+{
+    width: 110px !important;
+}
 .Width120Px
 {
     width: 120px;
 }
+.Width125Px
+{
+    width: 125px;
+}
+.Width130px
+{
+    width: 130px;
+}
+.Width130pxImp
+{
+    width: 130px !important;
+}
+.Width140px
+{
+    width: 140px;
+}
+.Width150px
+{
+    width: 150px;
+}
+.Width150pxImp
+{
+    width: 150px !important;
+}
 .Width152px
 {
     width: 152px;
+}
+.Width155px
+{
+    width: 155px;
 }
 .Width158px
 {
@@ -1904,13 +2121,49 @@ TABLE.Section td
 {
     width: 180px;
 }
+.Width200Px
+{
+    width: 200px;
+}
+.Width220Px
+{
+    width: 220px;
+}
 .Width250Px
 {
     width: 250px;
 }
+.Width295Px
+{
+    width: 295px;
+}
+.Width295PxImp
+{
+    width: 295px !important;
+}
 .Width300Px
 {
     width: 300px;
+}
+.Width304Px
+{
+    width: 304px;
+}
+.Width320Px
+{
+    width: 320px;
+}
+.Width325Px
+{
+    width: 325px;
+}
+.Width330Px
+{
+    width: 330px;
+}
+.Width350Px
+{
+    width: 350px;
 }
 .Width355Px
 {
@@ -1920,9 +2173,33 @@ TABLE.Section td
 {
     width: 375px;
 }
+.Width400Px
+{
+    width: 400px;
+}
+.Width430Px, .ProjectSearch
+{
+    width: 430px;
+}
+.Width460Px
+{
+    width: 460px;
+}
+.Width550PxImp
+{
+    width: 550px !important;
+}
 .Width700Px
 {
     width: 700px;
+}
+.Width920Px
+{
+    width: 920px;
+}
+.height1Px
+{
+    height: 1px;
 }
 .height10P, .height10Px
 {
@@ -1935,6 +2212,42 @@ TABLE.Section td
 .height20P
 {
     height: 20px;
+}
+.Height25Px
+{
+    height: 25px;
+}
+.Height27Px
+{
+    height: 27px;
+}
+.Height30Px
+{
+    height: 30px;
+}
+.Height35Px
+{
+    height: 35px;
+}
+.Height40Px
+{
+    height: 40px;
+}
+.Height80Px
+{
+    height: 80px;
+}
+.Height125PxImp
+{
+    height: 125px !important;
+}
+.Height160Px
+{
+    height: 160px;
+}
+.minheight250Px
+{
+    min-height: 250px;
 }
 .ModalPopUpSideHeading
 {
@@ -1968,6 +2281,10 @@ TABLE.Section td
 {
     vertical-align: top;
 }
+.vTopImp
+{
+    vertical-align: top !important;
+}
 .vMiddle
 {
     vertical-align: middle;
@@ -1994,6 +2311,10 @@ TABLE.Section td
     background-color: #f0f0f1;
     border-bottom: 1px solid Gray;
 }
+.fontSize11px
+{
+    font-size: 11px;
+}
 .font12Px
 {
     color: #000;
@@ -2003,9 +2324,29 @@ TABLE.Section td
 {
     font-size: 13px;
 }
-.padLeft60
+.font14Px
 {
-    padding-left: 60px;
+    font-size: 14px;
+}
+.FontSize15PX
+{
+    font-size: 15px;
+}
+.font15PxImp
+{
+    font-size: 15px !important;
+}
+.font16Px
+{
+    font-size: 16px;
+}
+.font25Px, .FontSize25PX
+{
+    font-size: 25px;
+}
+.fontsize100P
+{
+    font-size: 100%;
 }
 .ApprovedManagerDropdown
 {
@@ -2047,6 +2388,126 @@ TABLE.PaddingTenPx td
 {
     padding: 0 5px;
 }
+.PersonDetailReportHeader
+{
+    width: 100%;
+    height: 90px;
+}
+.PersonDetailReportHeader TD.PersonDetails
+{
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.PersonDetailReportHeader TD.PersonTotals
+{
+    text-align: right;
+    width: 470px;
+}
+.TimePeriodSummaryReportHeader
+{
+    width: 100%;
+    background-color: White;
+    padding-bottom: 5px !important;
+    height: 90px;
+}
+.TimePeriodSummaryReportHeader .TimePeriodTotals
+{
+    text-align: right;
+    width: 610px;
+    padding-bottom: 10px !important;
+}
+.TimePeriodSummaryReportHeader .ByProject
+{
+    width: 470px !important;
+}
+.TimePeriodSummaryReportHeader .AuditReportTotals
+{
+    width: 10%;
+    vertical-align: middle;
+    text-align: center;
+}
+.ProjectSummaryReportHeader
+{
+    width: 100%;
+    height: 115px;
+}
+.projectSummaryHeaderDetails .account
+{
+    vertical-align: top !important;
+    padding-top: 0px !important;
+    padding-bottom: 5px !important;
+    color: Gray;
+}
+.projectSummaryHeaderDetails td
+{
+    vertical-align: bottom;
+    padding-top: 5px !important;
+}
+.ProjectSummaryReportTotals
+{
+    text-align: right;
+    width: 470px;
+    padding-bottom: 10px !important;
+}
+
+.ReportHeaderTotals
+{
+    table-layout: fixed;
+    width: 100%;
+}
+.ReportHeaderTotalsTable
+{
+    width: 100%;
+}
+.ReportHeaderTotalsTable .FirstTd
+{
+    text-align: center;
+    font-size: 15px;
+    padding-bottom: 3px !important;
+}
+.ReportHeaderTotalsTable .SecondTd
+{
+    text-align: center;
+    font-size: 25px;
+}
+.ReportHeaderBillAndNonBillTable
+{
+    width: 100%;
+}
+.ReportHeaderBillAndNonBillTable td
+{
+    text-align: center;
+}
+.ReportHeaderBillAndNonBillTable .billingHours
+{
+    padding-bottom: 5px !important;
+}
+.ReportHeaderBandNBGraph
+{
+    vertical-align: bottom;
+    width: 8%;
+    padding: 0px !important;
+}
+.ReportHeaderBandNBGraph table
+{
+    width: 100%;
+}
+.ReportHeaderBandNBGraph td
+{
+    padding: 0px !important;
+    text-align: center;
+}
+.ReportHeaderBandNBGraph .billingGraph
+{
+    background-color: #7FD13B;
+    border: 1px solid Gray;
+}
+.ReportHeaderBandNBGraph .nonBillingGraph
+{
+    background-color: #BEBEBE;
+    border: 1px solid Gray;
+}
 TABLE.PersonSummaryReport TD
 {
     border-bottom: 1px solid #000;
@@ -2063,10 +2524,88 @@ TABLE.PersonSummaryReport TH
     font-weight: 700;
     font-size: 14px;
     text-align: center;
-    width: 8%;
     height: 24px;
     vertical-align: middle;
     padding: 2px;
+}
+.PersonSummaryReport .ResourceColum
+{
+    text-align: left !important;
+    width: 210px !important;
+}
+
+.PersonSummaryReport .ProjectColum
+{
+    text-align: left !important;
+    width: 300px !important;
+    background-color: White;
+    padding-left: 5px;
+}
+.PersonSummaryReport .ResourceColum img
+{
+    padding-left: 2px;
+}
+.ResourceColumTable td
+{
+    padding-left: 5px !important;
+}
+.ResourceColumTable td a
+{
+    text-decoration: none;
+    color: Black !important;
+}
+.UtlizationGraph
+{
+    width: 100%;
+}
+.UtlizationGraph .GraphTd
+{
+    text-align: right;
+    width: 70%;
+}
+.UtlizationGraph .PersonSummaryGraphTd
+{
+    width: 65% !important;
+}
+
+.UtlizationGraph .GraphTd table
+{
+    border: 1px solid black;
+    width: 100%;
+    height: 18px;
+    padding-left: 5px;
+}
+.UtlizationGraph .GraphTd table .FirstTd
+{
+    background-color: #7FD13B;
+    height: 18px;
+}
+.UtlizationGraph .GraphTd table .SecondTd
+{
+    background-color: White;
+    height: 18px;
+}
+.UtlizationGraph .GraphTd table .ThirdTd
+{
+    background-color: #BEBEBE;
+    height: 18px;
+}
+.UtlizationGraph .GraphValueTd
+{
+    width: 20%;
+    text-align: left;
+    padding-left: 10px;
+}
+.UtlizationGraph .PersonSummaryGraphValueTd
+{
+    width: 15%;
+    text-align: right;
+    padding-left: 10px;
+}
+.EmptyMessagediv
+{
+    text-align: center;
+    font-size: 15px;
 }
 TABLE.TimePeriodByproject TD
 {
@@ -2084,10 +2623,15 @@ TABLE.TimePeriodByproject TH
     font-weight: 700;
     font-size: 14px;
     text-align: center;
-    width: 8%;
     height: 16px;
     vertical-align: middle;
     padding: 2px;
+}
+.TimePeriodByproject .ProjectColoum
+{
+    width: 500px;
+    height: 20px;
+    text-align: left;
 }
 TABLE.TdLevelNoBorder TD
 {
@@ -2107,25 +2651,26 @@ TABLE.TimeEntruReportHeader TH
     vertical-align: middle;
     width: 25%;
 }
-
+TABLE.TimeEntruReportHeader a
+{
+    color: Black;
+    display: inline-block;
+    height: 100%;
+    text-decoration: none;
+    width: 100%;
+}
 .NoBorder
 {
     border-right-width: 0 !important;
     border-right-style: none !important;
 }
-.Padding3PX
-{
-    padding: 3px;
-}
+
 .ReportFilterLabels
 {
     text-align: right;
     font-weight: 700;
 }
-.FontSize15PX
-{
-    font-size: 15px;
-}
+
 .CurrentPageDiv
 {
     height: 20px;
@@ -2264,11 +2809,11 @@ h1, h2, h3, h4, h5, h6, .container, .marginLineManager
 {
     margin-top: 10px;
 }
-.no-wrap, TABLE.CompPerfTable td .cell-pad table td, .tem-grid-date-cell
+.no-wrap, TABLE.CompPerfTable td .cell-pad table td, .tem-grid-date-cell, .WhiteSpaceNoWrap, .lblOverheadsBenchCost
 {
     white-space: nowrap;
 }
-.WholeWidth, .WholeWidthForAllColumns td, .tem-person-timeNew, .calendarPopup, .width100P, .WholeWidthWithHeight, TABLE.TimeEntruReportHeader
+.WholeWidth, .WholeWidthForAllColumns td, .tem-person-timeNew, .calendarPopup, .width100P, .WholeWidthWithHeight, TABLE.TimeEntruReportHeader, .Width100Per
 {
     width: 100%;
 }
@@ -2291,9 +2836,13 @@ a.main-logo, img.main-logo
     top: 20px;
     left: 10px;
 }
-.serv-info .date, .serv-info .authent, .serv-info .changePassword, .alignRight, .textRight
+.serv-info .date, .serv-info .authent, .serv-info .changePassword, .alignRight, .textRight, .TextAlignRight
 {
     text-align: right;
+}
+.textRightImp
+{
+    text-align: right !important;
 }
 ul.AspNet-Menu li.AspNet-Menu-Selected a span, ul.main-sub-menu li.selected a
 {
@@ -2339,7 +2888,7 @@ table.opportunity-description td, .filter-body .scroll-y table td, .filter-body 
 {
     padding: 2px;
 }
-.filter-body table td, TABLE.ProjectSearchPopup TD
+.filter-body table td
 {
     padding: 5px;
 }
@@ -2356,12 +2905,12 @@ tr.tb-header td, TR.CompPerfHeader, TR.CompPerfHeaderGroupBy, .bold, .fontBold
 }
 .clientsPage
 {
-    padding-left: 5px !important; 
+    padding-left: 5px !important;
     padding-right: 5px !important;
 }
 .clientsPage a
 {
-  text-decoration :none;
+    text-decoration: none;
 }
 TR.CompPerfHeader td, .CompPerfTable th, .CompPerfTotalHeader
 {
@@ -2383,9 +2932,13 @@ TD.CompPerfProjectNumber, TD.CompPerfPeriod
 {
     min-width: 70px;
 }
-.alignCenter, table.time-entry-person-projects td, .textCenter, .TableTextCenter th, .TableTextCenter td
+.alignCenter, table.time-entry-person-projects td, .textCenter, .TableTextCenter th, .TableTextCenter td, .TextAlignCenter
 {
     text-align: center;
+}
+.TextAlignCenterImp
+{
+    text-align: center !important;
 }
 .rowEven td, .ReportAlternateItemTemplate
 {
@@ -2441,7 +2994,7 @@ TD.CompanyDayOff, TH.CompanyDayOff, TD.WeekEndDayOn, TH.WeekEndDayOn
 {
     width: 85% !important;
 }
-.DisplayBlock, .tab-visible
+.DisplayBlock, .tab-visible, .displayBlock
 {
     display: block;
 }
@@ -2559,13 +3112,17 @@ div.scrollextLabel
     width: 190px;
     text-align: center;
 }
-.bgcolorGray
+.bgcolorGray, .BackGroundColorGray
 {
     background-color: Gray;
 }
-.floatright
+.floatright, .FloatRightCancel
 {
     float: right;
+}
+.FloatLeft
+{
+    float: left;
 }
 .popUp
 {
@@ -2609,13 +3166,13 @@ div.scrollextLabel
 {
     background-color: #e0e0e0;
 }
-.fontBold
-{
-    font-weight: bold;
-}
 .fontNormal
 {
     font-weight: normal;
+}
+.fontStyleNormal
+{
+    font-style: normal !important;
 }
 .MileStoneDetailPageDetailTab
 {
@@ -2661,6 +3218,10 @@ div.scrollextLabel
     white-space: nowrap;
     text-align: center;
 }
+.WhiteSpaceNormal
+{
+    white-space: normal;
+}
 .WS-Normal
 {
     white-space: normal !important;
@@ -2674,23 +3235,19 @@ div.scrollextLabel
 {
     height: 30px;
 }
-        
 .CommonCustomTabStyle td a
 {
     text-decoration: none;
 }
-        
-.CommonCustomTabStyle td span a 
+.CommonCustomTabStyle td span a
 {
     border-bottom: 1px dashed #0898e6;
 }
-        
-.CommonCustomTabStyle td span a:hover 
+.CommonCustomTabStyle td span a:hover
 {
     border-bottom: 1px dashed #006699;
 }
-        
-.CommonCustomTabStyle td a.collapse 
+.CommonCustomTabStyle td a.collapse
 {
     display: none;
     position: absolute;
@@ -2700,14 +3257,12 @@ div.scrollextLabel
 {
     background-color: #e2ebff;
 }
-        
 .CommonCustomTabStyle .SelectedSwitch a.collapse
 {
     display: block;
     right: 5px;
     top: 10px;
 }
-
 .CommonCustomTabStyle td
 {
     background-color: White;
@@ -2715,52 +3270,52 @@ div.scrollextLabel
     padding: 8px 0px 6px 0px;
     position: relative;
 }
-        
 .CommonCustomTabStyle td span.bg
 {
     padding: 8px 20px 7px 10px;
 }
-
-.PersonDetailPage_CustomTabStyle .SelectedSwitch a.collapse
+.ProjectSummaryReportPageCustomTabStyle td
+{
+    padding-bottom: 5px !important;
+}
+.ProjectSummaryReportPageCustomTabStyle .SelectedSwitch a.collapse
 {
     right: 2px !important;
 }
 
+.ProjectSummaryReportPageCustomTabStyle td span.bg
+{
+    padding-right: 10px !important;
+}
+.PersonDetailPage_CustomTabStyle .SelectedSwitch a.collapse
+{
+    right: 2px !important;
+}
 .PersonDetailPage_CustomTabStyle td
 {
     padding-bottom: 15px !important;
 }
-        
 .PersonDetailPage_CustomTabStyle td span.bg
 {
     padding-right: 10px !important;
-    padding-bottom:31px !important;
+    padding-bottom: 31px !important;
 }
-
 .PersonDetailPage_CustomTabStyle td span a
 {
-    display:inline-block;
-    text-align:center;
-    vertical-align:top;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
 }
-
 .PopUpPersonDetailPage
 {
-  min-width: 180px !important;
-  max-width : 450px !important;    
+    min-width: 180px !important;
+    max-width: 450px !important;
 }
-
-.TerminationPopUpPersonDetailPage
-{
-    max-width : 1000 !important;
-    padding : 8px;
-}
-
 .errorDivPersonDetailPage
 {
-    max-height: 200px; 
-    overflow-y: auto; 
-    color: Red;    
+    max-height: 200px;
+    overflow-y: auto;
+    color: Red;
 }
 .Margin-Left8Px
 {
@@ -2780,81 +3335,92 @@ div.scrollextLabel
 }
 .colorGray
 {
-   color : Gray;
+    color: Gray;
 }
 .CompensationHistory
 {
-    background-color:White;
-    border-collapse:collapse;
-    border-style:none;
-    border-width:0px;
-    width:100%;
+    background-color: White;
+    border-collapse: collapse;
+    border-style: none;
+    border-width: 0px;
+    width: 100%;
 }
 .CompensationHistory th
 {
-    text-align:center;
+    text-align: center;
 }
 .CompensationHistory td
 {
-    text-align:center;
-    vertical-align:middle;
-    height:20px;
-    white-space:nowrap;    
+    text-align: center;
+    vertical-align: middle;
+    height: 20px;
+    white-space: nowrap;
 }
 .bgColorNone
 {
-    background-color: none
+    background-color: none;
 }
 .DivPermissionDiffenrece
 {
     width: 350px;
-    overflow-x: scroll; 
-    overflow-y: auto; 
-    height: 350px; 
+    overflow-x: scroll;
+    overflow-y: auto;
+    height: 350px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 .PermissionDiffenrece
 {
-    background-color:White;
-    border-collapse:collapse;
-    border-style:none;
-    border-width:0px;
-    width:100%;
+    background-color: White;
+    border-collapse: collapse;
+    border-style: none;
+    border-width: 0px;
+    width: 100%;
 }
 .DatePickerTable
 {
-    border:medium none;
-    display:inline;
-    vertical-align:middle;
-}    
+    border: medium none;
+    display: inline;
+}
+.DatePickerTable tr
+{
+    height: 17px !important;
+}
+.DatePickerTable th
+{
+    height: 17px !important;
+}
+.DatePickerTable td
+{
+    height: 17px !important;
+}
 .WhatIfControlIcon
 {
     background-color: #D8EFF3;
-    border-color:#000000;
-    border-style:solid;
-    border-width:1px;
+    border-color: #000000;
+    border-style: solid;
+    border-width: 1px;
 }
 .WhatIfControlStyle
 {
     padding-right: 242px;
     padding-bottom: 3px;
-    text-align:right;
+    text-align: right;
 }
 
 .WhatIfGrossMarginComputing
 {
-    vertical-align:top;
-    width:340px;
+    vertical-align: top;
+    width: 340px;
     padding-left: 10px;
     padding-top: 10px;
     background-color: #DBEEF3;
 }
 .gvOverheadWhatIf
 {
-    background-color:White;
-    border-collapse:collapse;
-    border-style:none;
+    background-color: White;
+    border-collapse: collapse;
+    border-style: none;
 }
 
 .gvOverheadWhatIf td
@@ -2868,13 +3434,22 @@ div.scrollextLabel
     white-space: -moz-pre-wrap !important; /*Mozilla */
     white-space: normal;
 }
-
+.wrapword
+{
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: pre-wrap; /* css-3 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    word-break: break-all;
+    white-space: normal;
+}
 .gvActivitiesActivityLog
 {
-   background-color:White;
-  border-collapse:collapse;
-  border-style:none;
-  width:100%;
+    background-color: White;
+    border-collapse: collapse;
+    border-style: none;
+    width: 100%;
 }
 .gvActivitiesActivityLog td
 {
@@ -2882,47 +3457,47 @@ div.scrollextLabel
 }
 .CustomDatesPopUp
 {
-    background-color:White;
-    border-style:solid;
-    border-color:Black;
-    border-width:2px;
-    padding-top:20px;
+    background-color: White;
+    border-style: solid;
+    border-color: Black;
+    border-width: 2px;
+    padding-top: 20px;
 }
 .gvProjects_PersonProjects
 {
-   background-color:White;
-   border-collapse:collapse;
-   width:100%;
-   border-style:none;
+    background-color: White;
+    border-collapse: collapse;
+    width: 100%;
+    border-style: none;
 }
 .gvProjects_PersonProjects tr
 {
- white-space:nowrap;       
+    white-space: nowrap;
 }
-.fontColorBlack
+.fontColorBlack, .ColorBlack
 {
-    color: Black; 
+    color: Black;
 }
 .pnlTimeOutAlert
 {
-    background-color:White;
-    border-style:solid;
-    border-color:Black;
-    border-width:2px;
+    background-color: White;
+    border-style: solid;
+    border-color: Black;
+    border-width: 2px;
     padding: 15px;
 }
 .OpportunitySearchBar
 {
-    background: #E2EBFF; 
-    margin-bottom: 10px; 
+    background: #E2EBFF;
+    margin-bottom: 10px;
     padding: 5px;
 }
 .OpportunityToolTip
 {
     position: absolute;
-    z-index: 2000;    
+    z-index: 2000;
 }
-.bgColorWhite
+.bgColorWhite, .BackGroundColorWhite
 {
     background-color: White;
 }
@@ -2938,8 +3513,8 @@ div.scrollextLabel
     color: Black;
     font-size: 12px;
     padding: 0px;
-    vertical-align:middle;
-    font-weight:bold;
+    vertical-align: middle;
+    font-weight: bold;
 }
 .OpportunityPriorityDescription
 {
@@ -2951,16 +3526,16 @@ div.scrollextLabel
 }
 .PersonDetailPermissionsScrollingDropDown
 {
-    height:150px;
-    width:180px;
-    overflow-y:auto;
-    overflow-x:hidden;
-    border:1px solid #eee;
-    background-color:#fff;
-    padding:0;
-    display:inline-block;
-    z-index:20000;
- }
+    height: 150px;
+    width: 180px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #eee;
+    background-color: #fff;
+    padding: 0;
+    display: inline-block;
+    z-index: 20000;
+}
 .border-collapse
 {
     border-collapse: collapse;
@@ -2968,24 +3543,24 @@ div.scrollextLabel
 .MarginTestLabel
 {
     padding-left: 20px;
-    padding-right:20px; 
+    padding-right: 20px;
     text-align: right;
     font-weight: bold;
 }
 .GrossMarginComputingTable
 {
- margin-left: 8px;       
+    margin-left: 8px;
 }
 .GrossMarginComputingTable th
 {
-    text-align:left;
+    text-align: left;
     padding: 5px 0px 5px 0px;
 }
 .GrossMarginComputingTable td
 {
-    white-space:nowrap;
+    white-space: nowrap;
 }
-.PersonnelCompensationVerticalAlign tr td 
+.PersonnelCompensationVerticalAlign tr td
 {
     padding-top: 2px;
     padding-bottom: 2px;
@@ -3005,116 +3580,116 @@ div.scrollextLabel
 }
 .DefaultLineManagerSpan
 {
-    background-color:White;
-    border: 1px solid black; 
-    padding: 8px; 
-    display:block; 
-    width:430px;
+    background-color: White;
+    border: 1px solid black;
+    padding: 8px;
+    display: block;
+    width: 430px;
 }
 .gvStrawmen
 {
-    background-color:White;
-    border-collapse:collapse;
-    padding-top:10px;
-    text-align:center;
-    width:100%;
-    border-style:none;
+    background-color: White;
+    border-collapse: collapse;
+    padding-top: 10px;
+    text-align: center;
+    width: 100%;
+    border-style: none;
 }
 .gvStrawmen td
 {
-    height:20px;
-    white-space:nowrap;
-    text-align:center;
+    height: 20px;
+    white-space: nowrap;
+    text-align: center;
 }
 .gvStrawmen .Left
 {
-    text-align:left !important;
+    text-align: left !important;
 }
 .gvStrawmen .Right
 {
-    text-align:right !important;
+    text-align: right !important;
 }
 .EditStrawmenPopUp
 {
-    min-height: 140px !important; 
+    min-height: 140px !important;
     max-height: 170px !important;
-    width:300px !important;
+    width: 300px !important;
 }
 .ValidationPopUp
 {
     min-height: 100px !important;
     max-height: 400px !important;
-    min-width: 400px !important;   
-    max-width: 550px !important; 
+    min-width: 400px !important;
+    max-width: 550px !important;
 }
 .StrawmenCompensationPopUp
 {
-    max-height: 400px !important; 
-    max-width: 750px !important; 
+    max-height: 400px !important;
+    max-width: 750px !important;
     min-height: 100px !important;
     min-width: 500px !important;
 }
 .StrawmanName
 {
-    font-weight: 600; 
+    font-weight: 600;
     font-size: 14px;
 }
 .strawmenPageTd
 {
-    padding :2px 2px 10px 2px !important;
+    padding: 2px 2px 10px 2px !important;
 }
 .gvCompensationHistoryStrawmen
 {
-    background-color:White;
-    border-collapse:collapse;
-    border-style:none;
-    width:100%;
+    background-color: White;
+    border-collapse: collapse;
+    border-style: none;
+    width: 100%;
 }
 .gvCompensationHistoryStrawmen th
 {
-    width:19%;
-    text-align:center;
+    width: 19%;
+    text-align: center;
 }
 .gvCompensationHistoryStrawmen td
 {
-    text-align:center;
-    height:20px;
+    text-align: center;
+    height: 20px;
 }
 .gvCompensationHistoryStrawmen .width5
 {
-     width:5% !important;
+    width: 5% !important;
 }
 .gvPractices
 {
-    background-color:White;
-    border-collapse:collapse;
-    width:75%;
+    background-color: White;
+    border-collapse: collapse;
+    width: 75%;
 }
-.gvPractices td , .gvPractices th
+.gvPractices td, .gvPractices th
 {
- text-align :center;
+    text-align: center;
 }
 .gvPractices .Left
 {
-text-align :left !important;
+    text-align: left !important;
 }
 .gvOpportunityPriorities
 {
-    background-color:White;
-    border-collapse:collapse;
-    width:63%;
+    background-color: White;
+    border-collapse: collapse;
+    width: 63%;
 }
 .gvOpportunityPriorities td
 {
-    height:20px;
-    white-space:nowrap;
-    text-align:center;
+    height: 20px;
+    white-space: nowrap;
+    text-align: center;
 }
 .gvOpportunityPriorities .Left
 {
-    text-align:left !important;
+    text-align: left !important;
 }
-.OpportunityPrioritiesPopUp 
+.OpportunityPrioritiesPopUp
 {
     min-width: 450px !important;
     min-height: 60px !important;
@@ -3123,64 +3698,72 @@ text-align :left !important;
 .OpportunityPrioritiesPopUpTd
 {
     padding: 6px 6px 2px 2px;
-    text-align:center;
+    text-align: center;
 }
 .border1Px
 {
-    border:1px solid black;    
+    border: 1px solid black;
+}
+.borderRightImp
+{
+    border-right: 1px solid black !important;
+}
+.borderLeft
+{
+    border-left: 1px solid black;
 }
 .ClientAlphabeticAll
 {
-    padding-left: 10px; 
-    padding-top: 10px; 
-    padding-bottom: 10px; 
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
 }
 .ClientAlphabetic
 {
-    padding-left: 15px; 
-    padding-top: 10px; 
-    padding-bottom: 10px; 
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
 }
-.ClientAlphabetic a , ClientAlphabeticAll a
+.ClientAlphabetic a, ClientAlphabeticAll a
 {
-    text-decoration:none;
+    text-decoration: none;
 }
 .NoUnderline
 {
-    text-decoration:none;
+    text-decoration: none;
 }
 .gvClientsTd
 {
-  width: 45%;
-  padding:12px 5px 5px 5px;
-  vertical-align:top;
+    width: 45%;
+    padding: 12px 5px 5px 5px;
+    vertical-align: top;
 }
 .ClientsPageInfoTd
 {
-  width: 36%;
-  padding:15px 5px 25px 5px;
-  vertical-align:top;
+    width: 36%;
+    padding: 15px 5px 25px 5px;
+    vertical-align: top;
 }
 .ClientsPageInfoTd div
 {
-    border: 1px solid black; 
-    background-color: White; 
-    padding: 5px;    
+    border: 1px solid black;
+    background-color: White;
+    padding: 5px;
 }
 .gvClients
 {
-    border-collapse:collapse;
-    border-style:none;
+    border-collapse: collapse;
+    border-style: none;
 }
 .gvClients td
 {
-    text-align:center;
+    text-align: center;
 }
 .gvClients .Left
 {
-    text-align:left !important;
+    text-align: left !important;
     padding-left: 5px;
 }
 .color8F8F8F
@@ -3191,4 +3774,963 @@ text-align :left !important;
 .color0898E6
 {
     color: #0898E6;
+}
+/*Recently added
+BenchCosts.ascx*/
+
+.MinWidth
+{
+    min-width: 150px;
+}
+.ShowBenchCosts
+{
+    white-space: nowrap;
+    width: 118px;
+    text-align: left;
+}
+.custBtns
+{
+    padding: 10px 0px 10px 0px;
+    text-align: center;
+}
+.seperateInternalExternal
+{
+    padding: 10px 0px 10px 0px;
+}
+.floatNone, .custBtns input
+{
+    float: none !important;
+}
+
+.BenchcostProjectTypeTd
+{
+    width: 250px;
+    border-bottom: 1px solid black;
+    vertical-align: top;
+}
+.BenchcostpracticeAreaTd
+{
+    width: 250px;
+    border-bottom: 1px solid black;
+}
+.practicesTd
+{
+    padding-top: 5px;
+    padding-left: 3px;
+}
+.ScrollingDropDown_cblPractices
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 220px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 290px;
+    z-index: 20000;
+}
+.overflowAuto
+{
+    overflow: auto;
+}
+
+/*persons.aspx*/
+.upnlBodyPadding
+{
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+.PersonsSearch
+{
+    width: 36%;
+    padding-left: 5px;
+    padding-right: 0px;
+}
+.SearchTextBox input
+{
+    margin-right: 0px !important;
+    text-align: left !important;
+}
+.TdSpace
+{
+    width: 14%;
+    padding-left: 0px;
+}
+.ValSumSearch
+{
+    width: 90%;
+    padding-left: 3%;
+}
+.RecruiterTd
+{
+    padding-right: 5px;
+    border-bottom: 1px solid black;
+}
+.SddRecruiter
+{
+    padding-bottom: 8px;
+    padding-left: 3px;
+}
+.FilterBtnsTd
+{
+    padding: 5px;
+    padding-right: 0px;
+}
+/*Opportunity Summery-OpportunityListControl.ascx*/
+.PanelOppNameToolTipHolder
+{
+    display: none;
+    position: absolute;
+    z-index: 2000;
+}
+.TableOpportunitiesCount
+{
+    width: 100%;
+    margin-bottom: 10px;
+}
+.OverflowxAuto
+{
+    overflow-x: auto;
+}
+
+.ItemPlaceHolderContainer
+{
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.TdItemTemplate
+{
+    width: 100%;
+    padding-left: 2px !important;
+}
+.LabelPriority
+{
+    color: Black;
+    font-size: 12px !important;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+}
+.PaddingLeftRight0px
+{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.PaddingLeftRight2px
+{
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+.LabelRefreshMessage
+{
+    display: none;
+    font-style: italic;
+}
+.Team
+{
+    width: 4%;
+    white-space: normal;
+}
+.CursorPointer
+{
+    cursor: pointer;
+}
+.BtnClose
+{
+    font-size: 14px;
+    padding-top: 2px;
+}
+.TdRedirectToOppDetail
+{
+    padding: 6px 6px 15px 6px;
+}
+.AttachOpportunity
+{
+    font-size: 14px;
+    width: 100%;
+}
+.DdlProjects
+{
+    padding: 6px 6px 2px 2px;
+}
+.DescriptionError
+{
+    padding: 8px;
+    border-color: Black;
+    border-width: 1px;
+    border-style: solid;
+}
+.TeamResourcesPadding
+{
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 2px;
+}
+.TextSearchBoxResources
+{
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+}
+.CblPotentialResources
+{
+    height: 250px;
+    width: 350px;
+    overflow-y: scroll;
+    border: 1px solid black;
+    background: white;
+    padding-left: 3px;
+    text-align: left !important;
+}
+.BtnClearAll
+{
+    text-align: right;
+    width: 356px;
+    padding: 8px 0px 8px 0px;
+}
+.DivTeamResources
+{
+    text-align: left;
+    color: Red;
+    width: 356px;
+    padding: 8px 0px 10px 0px;
+}
+.DivTeamStructure
+{
+    height: 250px;
+    width: 400px;
+    overflow-y: scroll;
+    border: 1px solid black;
+    background: white;
+    padding-left: 3px;
+    text-align: left !important;
+}
+.TextNeedBy
+{
+    width: 80px;
+    float: left;
+}
+.DivClearAll
+{
+    text-align: right;
+    width: 404px;
+    padding: 8px 0px 10px 0px;
+}
+.TableSaveTeamStructure
+{
+    padding-right: 6px;
+    padding-bottom: 4px;
+}
+.DivNeedbyError
+{
+    text-align: left;
+    color: Red;
+    width: 404px;
+    padding: 8px 0px 10px 0px;
+}
+.ConfirmBoxClassErrorOpportunitySummery
+{
+    min-height: 60px;
+    min-width: 200px;
+    max-width: 600px;
+    max-height: 500px;
+}
+.strawmanTeamStructure tr td
+{
+    padding: 4px 0px 4px 0px;
+}
+.SpanDivWait
+{
+    color: Black;
+    font-weight: bold;
+}
+.TdResources
+{
+    padding: 0px 0px 4px 4px;
+    width: 100%;
+    background-color: #e2ebff;
+}
+.TdCblPotentialResources
+{
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+    width: 44%;
+}
+.DivCblPotentialResources
+{
+    height: 100px;
+    width: 100%;
+    overflow-y: scroll;
+    border: 1px solid black;
+    background: white;
+    padding-left: 3px;
+}
+.TdDivProposedResources
+{
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+    vertical-align: top;
+    width: 44%;
+}
+.DivProposedResources
+{
+    height: 100px;
+    width: 100%;
+    overflow-y: scroll;
+    border: 1px solid black;
+    background: white;
+    padding-left: 3px;
+}
+.HiddenFieldOpportunityIdPersonId
+{
+    width: 100%;
+    padding: 1px 0px 4px 0px;
+}
+.gvBenchCosts
+{
+    background-color: White;
+    border-collapse: collapse;
+    border-style: none;
+}
+.gvBenchCosts td a
+{
+    display: inline-block;
+    width: 220px;
+    padding-right: 5px;
+}
+.gvBenchCosts .PracticeArea
+{
+    min-width: 150px;
+    width: 220px;
+}
+.gvBenchCosts .Footer
+{
+    background-color: LightGrey;
+    font-weight: bold;
+    height: 25px;
+}
+.gvBenchCosts .Footer td
+{
+    text-align: right;
+    padding-right: 10px !important;
+}
+.gvBenchCosts .Footer .Left
+{
+    text-align: left !important;
+}
+.color888888
+{
+    color: #888888;
+}
+.colorGreen
+{
+    color: green;
+}
+.colorRed
+{
+    color: Red;
+}
+.ReportTdSecond
+{
+    height: 30px;
+    text-align: center;
+    vertical-align: top;
+}
+.ReportBorderBottom
+{
+    border-bottom: 3px solid black;
+    width: 100%;
+    height: 10px;
+}
+.ReportBorderBottomByAccount
+{
+    border-bottom: 3px solid black;
+}
+.ReportBorderBottomHeight15Px
+{
+    border-bottom: 3px solid black;
+    width: 100%;
+    height: 15px;
+}
+.ReportParametersTable
+{
+    width: 100%;
+    text-align: center;
+    vertical-align: top;
+}
+.ReportParametersTable .FirstTd
+{
+    width: 30%;
+    text-align: right;
+    font-weight: bold;
+}
+.ReportParametersTable .FirstTd40
+{
+    width: 40%;
+    text-align: right;
+    font-weight: bold;
+}
+.ReportParametersTable .SecondTd, .ReportParametersTable .SecondTd157, .ReportParametersTable .SecondTd150
+{
+    text-align: left !important;
+}
+.ReportParametersTable .SecondTd input, .ReportParametersTable .SecondTd select
+{
+    width: 160px;
+}
+
+.ReportParametersTable .SecondTd157 input, .ReportParametersTable .SecondTd157 select
+{
+    width: 157px;
+}
+.ReportParametersTable .SecondTd150 input
+{
+    width: 150px;
+}
+.PersonSearch
+{
+    min-height: 100px !important;
+    width: 400px;
+}
+.ProjectSearch td
+{
+    padding: 5px;
+}
+.ProjectSearchResultsDiv
+{
+    max-height: 200px;
+    overflow-y: auto;
+}
+.ProjectSearchResultsTable
+{
+    width: 100%;
+}
+.ProjectSearchResultsTable th, .PersonSearchResult th
+{
+    text-align: center;
+    background: url('../images/cp-header-bg.png') repeat-x scroll 0 0 transparent !important;
+}
+.PersonSearch .searchTextboxTd
+{
+    width: 95%;
+    padding: 10px;
+    padding-right: 0px;
+}
+.PersonSearch .searchTextbox
+{
+    text-align: left;
+    margin-right: 0px !important;
+    width: 300px;
+}
+.PersonSearch .searchButtonTd
+{
+    width: 5%;
+    padding: 0px;
+    padding-right: 10px;
+}
+.PersonSearchResultDiv
+{
+    max-height: 150px;
+    min-height: 50px;
+    overflow-y: auto;
+    width: 100%;
+}
+.PersonSearchResult
+{
+    width: 100%;
+}
+.PersonSearchResult td, .PersonSearchResult th
+{
+    text-align: center;
+}
+.PersonSearchResult .PersonName
+{
+    text-align: left !important;
+}
+.PersonDetailReportCustomTabStyle td
+{
+    padding-bottom: 5px !important;
+}
+.PersonDetailReportCustomTabStyle .SelectedSwitch a.collapse
+{
+    right: 2px !important;
+}
+.PersonDetailReportCustomTabStyle td span.bg
+{
+    padding-right: 10px !important;
+}
+.tableFixed
+{
+    table-layout: fixed;
+}
+
+.FilteredCheckBoxListScrollingDropDown
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 155px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 158px;
+    z-index: 20000;
+    text-align: center;
+}
+.FilteredCheckBoxListScrollingDropDown Table, .FilteredCheckBoxListScrollingDropDown Td
+{
+    text-align: left !important;
+}
+.FilteredCheckBoxListdivFilterPopUp
+{
+    border: 2px solid black;
+    background-color: #d4dff8;
+    width: 170px;
+}
+.PosAbsolute
+{
+    position: absolute;
+}
+.TimePeriodSummaryPersonDetailReportPopUp
+{
+    background-color: #E2EBFF;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    position: fixed;
+    width: 85%;
+    z-index: 100001;
+}
+.CloseButtonTable
+{
+    width: 100%;
+    padding: 5px;
+}
+.CloseButtonTable tr, .bgGroupByProjectHeader
+{
+    background-color: rgb(245, 250, 255);
+}
+.CloseButtonTable td
+{
+    width: 100%;
+    text-align: right;
+    padding: 3px;
+}
+.GroupByProjectHeaderTable .FirstTd
+{
+    width: 95%;
+    white-space: nowrap;
+}
+.GroupByProjectHeaderTable .FirstTd span
+{
+    font-weight: bold;
+    font-size: 16px !important;
+}
+.GroupByProjectHeaderTable .SecondTd
+{
+    width: 5%;
+    font-weight: bolder;
+    font-size: 16px;
+    text-align: right;
+    padding-right: 20px;
+}
+.GroupByProjectHeaderTable .SecondTd span
+{
+    font-weight: bold;
+}
+.GroupByProjectDiv
+{
+    max-height: 500px;
+    overflow-y: auto;
+    width: 100%;
+}
+.PersonDetailTotal
+{
+    width: 5%;
+    font-weight: bolder;
+    font-size: 15px;
+    text-align: right;
+    padding-right: 10px;
+}
+.bgColorD4D0C9
+{
+    background-color: #D4D0C9;
+}
+.WorkTypeTable .FirstTr
+{
+    text-align: left;
+    background-color: White;
+}
+.WorkTypeTable .FirstTrTd1_GroupByBusinessUnit
+{
+    width: 80%;
+    padding-left: 50px;
+}
+.WorkTypeTable .FirstTrTd1
+{
+    width: 72%;
+    padding-left: 50px;
+}
+.WorkTypeTable .FirstTrTd2
+{
+    width: 8%;
+    color: #3BA153;
+}
+.WorkTypeTable .FirstTrTd3
+{
+    width: 8%;
+    color: Gray;
+}
+.WorkTypeTable .FirstTrTd3_GroupByBusinessUnit
+{
+    width: 10%;
+    color: Gray;
+}
+.WorkTypeTable .FirstTrTd4
+{
+    width: 12%;
+}
+.WorkTypeTable .SecondTr
+{
+    text-align: left;
+    background-color: White;
+}
+.WorkTypeTable .SecondTrTd1
+{
+    padding-left: 55px;
+}
+.WorkTypeTable .SecondTrTd2
+{
+    width: 8%;
+    vertical-align: top;
+}
+.WorkTypeTable .AlternativeFirstTr
+{
+    background-color: #F0F0F1 !important;
+}
+.bgcolor_ECE9D9
+{
+    background-color: #ECE9D9 !important;
+}
+.PeronSummaryReport .FirstTd
+{
+    color: Gray;
+    padding-bottom: 3px;
+    padding-left: 2px;
+    text-align: left;
+}
+.PeronSummaryReport .SecondTd
+{
+    font-weight: bold;
+    padding-bottom: 5px;
+    padding-left: 2px;
+    text-align: left;
+}
+.PeronSummaryReport .ThirdTd
+{
+    padding-left: 3px;
+    vertical-align: middle;
+}
+.PeronSummaryReport .SecondTd a
+{
+    color: Black;
+    text-decoration: none;
+}
+.TimePeriodByProject_ProjectDetailReport
+{
+    background-color: #E2EBFF;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    position: fixed;
+    width: 85%;
+    z-index: 100001;
+}
+.bgColor_F5FAFF
+{
+    background-color: #F5FAFF;
+}
+.TimePeriodByProject_ProjectName
+{
+    width: 90%;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 3px !important;
+    padding-left: 10px !important;
+}
+.TimePeriodByProject_ProjectTotalHours
+{
+    width: 10%;
+    font-weight: bold;
+    text-align: right;
+    font-size: 15px;
+    padding: 3px;
+}
+.TimePeriodByProject_ProjectDetailsDiv
+{
+    max-height: 500px;
+    overflow-y: auto;
+    width: 100%;
+}
+.TimePeriodByProjectVariance
+{
+    text-align: right !important;
+    padding-right: 3px !important;
+}
+.ByWorkTypeGraph
+{
+    border: 1px solid black;
+    width: 100%;
+    height: 18px;
+    padding-left: 5px;
+}
+.ByWorkTypeGraph .FirstTd
+{
+    background-color: #7FD13B;
+    height: 18px;
+}
+.ByWorkTypeGraph .SecondTd
+{
+    background-color: White;
+    height: 18px;
+}
+.AuditHeaderTd1
+{
+    width: 90%;
+    font-size: 13px;
+    padding: 5px;
+    font-weight: bold;
+}
+.AuditHeaderTd2
+{
+    width: 10%;
+    text-align: right;
+    padding: 5px;
+    vertical-align: top;
+}
+.AuditHeaderTd3
+{
+    width: 10%;
+    text-align: center;
+    vertical-align: middle;
+}
+.AuditReportByPersonTd1
+{
+    text-align: left !important;
+    padding-left: 5px;
+}
+.AuditReportByPersonTd2
+{
+    text-align: left !important;
+    padding-left: 10px;
+}
+.AuditReportByPersonTd3
+{
+    text-align: right !important;
+    width: 60%;
+}
+.AuditReportByPersonHeaderTd1
+{
+    font-style: italic;
+    font-size: 14px;
+    width: 85%;
+    white-space: nowrap;
+    padding-left: 15px !important;
+    font-weight: bold;
+}
+.AuditReportByPersonHeaderTd2, .AuditReportByProjectHeaderTd2
+{
+    width: 15%;
+    font-weight: bolder;
+    font-size: 15px;
+    text-align: right;
+    padding-right: 15px;
+}
+.AuditReportByProjectHeaderTd1
+{
+    font-style: italic;
+    width: 85%;
+    white-space: nowrap;
+    padding-left: 15px !important;
+    font-size: 15px;
+    font-weight: 700;
+}
+.AccountSummaryReportCustomTabStyle td
+{
+    padding-bottom: 5px !important;
+}
+
+.AccountSummaryReportCustomTabStyle .SelectedSwitch a.collapse
+{
+    right: 2px !important;
+}
+
+.AccountSummaryReportCustomTabStyle td span.bg
+{
+    padding-right: 10px !important;
+}
+.lineHeight30Px
+{
+    line-height: 30px;
+}
+.AccountSummaryBusinessUnitsDiv
+{
+    background-color: #FFFFFF;
+    border: 1px solid #000000;
+    display: inline-block;
+    height: 160px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 200px;
+    z-index: 20000;
+}
+.AccountSummaryReportHeader
+{
+    width: 100%;
+    background-color: White;
+    padding-bottom: 5px !important;
+}
+.AccountSummaryReportHeader .FirstTrTd1
+{
+    font-size: 16px;
+    font-weight: bold;
+}
+.AccountSummaryReportHeader .FirstTrTd2
+{
+    vertical-align: top;
+    padding-bottom: 2px;
+    font-weight: bold;
+}
+.AccountSummaryReportHeader .FirstTrTd3
+{
+    vertical-align: top;
+    padding-bottom: 10px;
+}
+.AccountSummaryReportHeader .FirstTrTd4
+{
+    padding-top: 10px;
+    vertical-align: bottom;
+    padding-bottom: 5px;
+    float: left;
+}
+.AccountSummaryReportHeader .FirstTrTd5
+{
+    text-align: right;
+    width: 470px;
+    padding-bottom: 10px;
+}
+.FadingTooltip
+{
+    border-right: darkgray 1px outset;
+    border-top: darkgray 1px outset;
+    font-size: 10px;
+    border-left: darkgray 1px outset;
+    width: auto;
+    color: black;
+    border-bottom: darkgray 1px outset;
+    height: auto;
+    background-color: lemonchiffon;
+    borderbottomwidths: "3,3,3,3";
+    font-size: 11px;
+}
+
+.SetScrollRightButtonStyle
+{
+    padding-left: 10px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 8px;
+}
+.SetScrollLeftButtonStyle
+{
+    padding-left: 2px;
+    padding-right: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 8px;
+}
+.FadingTooltipDefault
+{
+    z-index: 999;
+    padding: 5px;
+    visibility: hidden;
+    position: absolute;
+}
+.ConsultingDemandchartDiv
+{
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: center;
+}
+.hide
+{
+    display: none;
+}
+.show
+{
+    display: inherit;
+}
+.ConsultantsWeeklyReportAlignCenter
+{
+    text-align: center !important;
+    width: 100%;
+}
+.ConsultantsWeeklyReportupdPersonDetails
+{
+    width: 95% !important;
+    text-align: center;
+    padding-left: 2%;
+}
+.BorderBottom1px
+{
+    border-bottom: 1px solid black;
+}
+.UTilTimeLineFilterCblTimeScales
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 100px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 200px;
+    z-index: 20000;
+}
+.UTilTimeLineFilterCblPractices
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 260px;
+    z-index: 20000;
+}
+.bgColor_d4dff8
+{
+    background-color: #d4dff8;
+}
+.BenchCostFooter
+{
+    padding-left: 15px !important;
+}
+.BenchCostFooter td
+{
+    padding-bottom: 5px;
+}
+.SupFont sup
+{
+    font-size: 11px;
+}
+.TimeperiodSummaryReportTr th
+{
+    width:100px;
+}
+.FilterImg
+{
+    position:absolute;
+    padding-left:2px;
 }
