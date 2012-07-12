@@ -134,9 +134,6 @@ namespace PraticeManagement.TimeEntryService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/PersonTimeEntriesByPeriod", ReplyAction="http://tempuri.org/ITimeEntryService/PersonTimeEntriesByPeriodResponse")]
         DataTransferObjects.TimeEntry.TimeEntrySection[] PersonTimeEntriesByPeriod(int personId, System.DateTime startDate, System.DateTime endDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDay", ReplyAction="http://tempuri.org/ITimeEntryService/GetPersonTimeEnteredHoursByDayResponse")]
-        System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -146,7 +143,9 @@ namespace PraticeManagement.TimeEntryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TimeEntryServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TimeEntryService.ITimeEntryService>, PraticeManagement.TimeEntryService.ITimeEntryService {
-       
+        
+      
+        
         public TimeEntryServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -257,10 +256,6 @@ namespace PraticeManagement.TimeEntryService {
         
         public DataTransferObjects.TimeEntry.TimeEntrySection[] PersonTimeEntriesByPeriod(int personId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.PersonTimeEntriesByPeriod(personId, startDate, endDate);
-        }
-        
-        public System.Nullable<double> GetPersonTimeEnteredHoursByDay(int personId, System.DateTime date, bool includePTOAndHoliday) {
-            return base.Channel.GetPersonTimeEnteredHoursByDay(personId, date, includePTOAndHoliday);
         }
     }
 }
