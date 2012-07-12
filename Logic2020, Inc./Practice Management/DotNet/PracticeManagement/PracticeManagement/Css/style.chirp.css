@@ -1491,7 +1491,7 @@ TABLE.Section td
 {
     padding: 0px;
 }
-.Padding0Imp
+.Padding0Imp, .DatePickerTable td
 {
     padding: 0px !important;
 }
@@ -3382,18 +3382,12 @@ div.scrollextLabel
     border: medium none;
     display: inline;
 }
-.DatePickerTable tr
+
+.DatePickerTable tr, .DatePickerTable th, .DatePickerTable td
 {
     height: 17px !important;
 }
-.DatePickerTable th
-{
-    height: 17px !important;
-}
-.DatePickerTable td
-{
-    height: 17px !important;
-}
+
 .WhatIfControlIcon
 {
     background-color: #D8EFF3;
