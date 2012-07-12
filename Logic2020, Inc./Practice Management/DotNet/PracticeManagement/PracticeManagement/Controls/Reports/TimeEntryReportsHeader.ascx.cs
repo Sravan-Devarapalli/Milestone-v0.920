@@ -14,57 +14,25 @@ namespace PraticeManagement.Controls.Reports
 
         public int Count { get; set; }
 
-        public string TdFirstWidth
-        {
-            get
-            {
-                return tdFirst.Style["width"];
-            }
-        }
-
-        public string TdSecondWidth
-        {
-            get
-            {
-                return tdSecond.Style["width"];
-            }
-        }
-
-        public string TdThirdWidth
-        {
-            get
-            {
-                return tdThird.Style["width"];
-            }
-        }
-
         private void ApplyCssHeader()
         {
             if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
             {
-                thTimePeriod.Style["background-color"] = "#e2ebff";
-                thProject.Style["background-color"] = "White";
-                thPerson.Style["background-color"] = "White";
-            }
-            else if (Page is PraticeManagement.Reporting.AccountSummaryReport)
-            {
-                thTimePeriod.Style["background-color"] = "White";
-                thProject.Style["background-color"] = "White";
-                thPerson.Style["background-color"] = "White";
+                thTimePeriod.Attributes["class"] = "bgcolorE2EBFF";
+                thProject.Attributes["class"] = "bgcolorwhite";
+                thPerson.Attributes["class"] = "bgcolorwhite";
             }
             else if (Page is PraticeManagement.Reporting.ProjectSummaryReport)
             {
-                thTimePeriod.Style["background-color"] = "White";
-                thProject.Style["background-color"] = "#e2ebff";
-                thPerson.Style["background-color"] = "White";
-
+                thTimePeriod.Attributes["class"] = "bgcolorwhite";
+                thProject.Attributes["class"] = "bgcolorE2EBFF";
+                thPerson.Attributes["class"] = "bgcolorwhite";
             }
             else if (Page is PraticeManagement.Reporting.PersonDetailTimeReport)
             {
-                thTimePeriod.Style["background-color"] = "White";
-                thProject.Style["background-color"] = "White";
-                thPerson.Style["background-color"] = "#e2ebff";
-
+                thTimePeriod.Attributes["class"] = "bgcolorwhite";
+                thProject.Attributes["class"] = "bgcolorwhite";
+                thPerson.Attributes["class"] = "bgcolorE2EBFF";
             }
 
         }
@@ -88,21 +56,21 @@ namespace PraticeManagement.Controls.Reports
 
             if (count == 1)
             {
-                tdFirst.Style["width"] = "35%";
-                tdSecond.Style["width"] = "30%";
-                tdThird.Style["width"] = "35%";
+                tdFirst.Attributes["class"] = "Width35Percent";
+                tdSecond.Attributes["class"] = "width30P";
+                tdThird.Attributes["class"] = "Width35Percent";
             }
             else if (count == 2)
             {
-                tdFirst.Style["width"] = "20%";
-                tdSecond.Style["width"] = "60%";
-                tdThird.Style["width"] = "20%";
+                tdFirst.Attributes["class"] = "Width20Percent";
+                tdSecond.Attributes["class"] = "width60P";
+                tdThird.Attributes["class"] = "Width20Percent";
             }
             else if (count == 3)
             {
-                tdFirst.Style["width"] = "1%";
-                tdSecond.Style["width"] = "98%";
-                tdThird.Style["width"] = "1%";
+                tdFirst.Attributes["class"] = "Width1Percent";
+                tdSecond.Attributes["class"] = "Width98Percent";
+                tdThird.Attributes["class"] = "Width1Percent";
             }
 
             Count = count;
