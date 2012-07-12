@@ -5,10 +5,10 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;">
+            <td colspan="4" class="Width90Percent">
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;">
-                <table width="100%" style="text-align: right;">
+            <td class="textRight Width10Percent padRight5">
+                <table class="textRight WholeWidth">
                     <tr>
                         <td>
                             Export:
@@ -27,40 +27,40 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterBusinessUnit" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblBusinessUnits" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblBusinessUnits" runat="server" CssClass="Height125PxImp" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repBusinessUnit" runat="server" OnItemDataBound="repBusinessUnit_ItemDataBound">
         <HeaderTemplate>
-            <div style="min-height: 250px;">
+            <div class="minheight250Px">
                 <table id="tblAccountSummaryByBusinessReport" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
-                            <th style="width: 210px; text-align: left;" class="padLeft5">
+                            <th class="ResourceColum">
                                 Business Unit
-                                <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" style="position: absolute;
-                                    padding-left: 2px;" runat="server" id="imgBusinessUnitFilter" />
+                                <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" class="PosAbsolute"
+                                    runat="server" id="imgBusinessUnitFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceBusinessUnitFilter" runat="server"
                                     TargetControlID="imgBusinessUnitFilter" BehaviorID="pceBusinessUnitFilter" PopupControlID="pnlFilterBusinessUnit"
                                     Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 130px;">
+                            <th class="Width130px">
                                 # of Projects
                             </th>
-                            <th style="width: 100px">
+                            <th class="Width100Px">
                                 Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th class="Width100Px">
                                 Non-Billable
                             </th>
-                            <th style="width: 100px;">
+                            <th class="Width100Px">
                                 BD
                             </th>
-                            <th style="width: 100px;">
+                            <th class="Width100Px">
                                 Total
                             </th>
-                            <th style="width: 295px;">
+                            <th class="Width295Px">
                                 Percent of Total Hours
                             </th>
                         </tr>
@@ -69,8 +69,9 @@
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
-                <td class="padLeft5" style="text-align: left;">
-                    <%# Eval("BusinessUnit.Name") %> (<%# ((Boolean)Eval("BusinessUnit.IsActive")) ? "Active" : "Inactive"%>)
+                <td class="padLeft5 textLeft">
+                    <%# Eval("BusinessUnit.Name") %>
+                    (<%# ((Boolean)Eval("BusinessUnit.IsActive")) ? "Active" : "Inactive"%>)
                 </td>
                 <td>
                     <%# Eval("ProjectsCount")%>
@@ -88,24 +89,24 @@
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
                 <td sorttable_customkey='<%# Eval("BusinessUnitTotalHoursPercent")%>'>
-                    <table class="TdLevelNoBorder" width="100%">
+                    <table class="TdLevelNoBorder UtlizationGraph">
                         <tr>
-                            <td style="width: 5%">
+                            <td class="Width5Percent">
                             </td>
-                            <td style="text-align: right; width: 70%">
-                                <table style="border: 1px solid black; width: 100%; height: 18px; padding-left: 5px;">
+                            <td class="GraphTd">
+                                <table>
                                     <tr>
-                                        <td style="background-color: #7FD13B; height: 18px;" width="<%# Eval("BusinessUnitTotalHoursPercent")%>%">
+                                        <td class="FirstTd" width="<%# Eval("BusinessUnitTotalHoursPercent")%>%">
                                         </td>
-                                        <td style="background-color: White; height: 18px;" width="<%# 100 - ((int)Eval("BusinessUnitTotalHoursPercent") )%>%">
+                                        <td class="SecondTd" width="<%# 100 - ((int)Eval("BusinessUnitTotalHoursPercent") )%>%">
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 20%; text-align: left; padding-left: 10px;">
+                            <td class="GraphValueTd">
                                 <%# Eval("BusinessUnitTotalHoursPercent")%>%
                             </td>
-                            <td style="width: 5%;">
+                            <td class="Width5Percent">
                             </td>
                         </tr>
                     </table>
@@ -116,8 +117,7 @@
             </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
-    <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-        runat="server">
+    <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
         There are no Time Entries towards this range selected.
     </div>
 </div>
