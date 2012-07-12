@@ -6,91 +6,91 @@
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Reports/ProjectDetailTabByResource.ascx" TagName="ProjectDetailTabByResource"
     TagPrefix="uc" %>
-<table class="PaddingTenPx" style="width: 100%; background-color: White; padding-bottom: 5px !important;">
+<table class="PaddingTenPx TimePeriodSummaryReportHeader">
     <tr>
-        <td style="font-size: 16px; font-weight: bold;">
+        <td class="font16Px fontBold">
             <table>
                 <tr>
-                    <td style="vertical-align: top; padding-bottom: 10px;">
+                    <td class="vtop PaddingBottom10Imp">
                         <asp:Literal ID="ltProjectCount" runat="server"></asp:Literal>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-top: 10px; vertical-align: bottom;">
+                    <td class="PaddingTop10Imp vBottom">
                         <asp:Literal ID="lbRange" runat="server"></asp:Literal>
                     </td>
                 </tr>
             </table>
         </td>
-        <td style="text-align: right; width: 470px; padding-bottom: 10px;">
-            <table style="table-layout: fixed; width: 100%;">
+        <td class="TimePeriodTotals ByProject">
+            <table class="tableFixed WholeWidth">
                 <tr>
-                    <td style="width: 27%;">
-                        <table width="100%">
+                    <td class="Width27Percent">
+                        <table class="ReportHeaderTotalsTable">
                             <tr>
-                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                <td class="FirstTd">
                                     Total Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px; text-align: center;">
+                                <td class="SecondTd">
                                     <asp:Literal ID="ltrlTotalHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 27%;">
-                        <table width="100%">
+                    <td class="Width27Percent">
+                        <table class="ReportHeaderTotalsTable">
                             <tr>
-                                <td style="font-size: 15px; text-align: center; padding-bottom: 3px;">
+                                <td class="FirstTd">
                                     Avg Hours
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-size: 25px; text-align: center;">
+                                <td class="SecondTd">
                                     <asp:Literal ID="ltrlAvgHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 27%; vertical-align: bottom;">
-                        <table width="100%">
+                    <td class="Width27Percent vBottom">
+                        <table class="ReportHeaderBillAndNonBillTable">
                             <tr>
-                                <td style="text-align: center;">
+                                <td>
                                     BILLABLE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding-bottom: 5px; text-align: center;">
+                                <td class="billingHours">
                                     <asp:Literal ID="ltrlBillableHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align: center;">
+                                <td>
                                     NON-BILLABLE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align: center;">
+                                <td>
                                     <asp:Literal ID="ltrlNonBillableHours" runat="server"></asp:Literal>
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 8%; padding: 0px !important;">
-                        <table width="100%">
+                    <td class="ReportHeaderBandNBGraph">
+                        <table>
                             <tr>
-                                <td style="padding: 0px !important;">
-                                    <table width="100%" style="table-layout: fixed;">
+                                <td>
+                                    <table class="tableFixed">
                                         <tr>
-                                            <td style="text-align: center;">
+                                            <td>
                                                 <asp:Literal ID="ltrlBillablePercent" runat="server"></asp:Literal>%
                                             </td>
                                         </tr>
                                     </table>
-                                    <table width="100%">
+                                    <table>
                                         <tr id="trBillable" runat="server" title="Billable Percentage.">
-                                            <td style="background-color: #7FD13B; border: 1px solid Gray;">
+                                            <td class="billingGraph">
                                             </td>
                                         </tr>
                                     </table>
@@ -98,20 +98,20 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="vertical-align: bottom; width: 8%; padding: 0px;">
-                        <table width="100%">
+                    <td class="ReportHeaderBandNBGraph">
+                        <table>
                             <tr>
-                                <td style="padding: 0px !important;">
-                                    <table width="100%" style="table-layout: fixed;">
+                                <td>
+                                    <table class="tableFixed">
                                         <tr>
-                                            <td style="text-align: center;">
+                                            <td>
                                                 <asp:Literal ID="ltrlNonBillablePercent" runat="server"></asp:Literal>%
                                             </td>
                                         </tr>
                                     </table>
-                                    <table width="100%">
+                                    <table>
                                         <tr id="trNonBillable" runat="server" title="Non-Billable Percentage.">
-                                            <td style="background-color: #BEBEBE; border: 1px solid Gray;">
+                                            <td class="nonBillingGraph">
                                             </td>
                                         </tr>
                                     </table>
@@ -119,7 +119,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 2%;">
+                    <td class="Width2Percent">
                     </td>
                 </tr>
             </table>
@@ -129,10 +129,10 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" style="width: 90%;">
+            <td colspan="4" class="Width90Percent">
             </td>
-            <td style="text-align: right; width: 10%; padding-right: 5px;">
-                <table width="100%" style="text-align: right;">
+            <td class="textRight Width10Percent padRight5">
+                <table class="textRight WholeWidth">
                     <tr>
                         <td>
                             Export:
@@ -151,47 +151,47 @@
         </tr>
     </table>
     <asp:Panel ID="pnlFilterResource" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblClients" runat="server" Height="155px" />
+        <uc:FilteredCheckBoxList ID="cblClients" runat="server" />
     </asp:Panel>
     <asp:Panel ID="pnlFilterProjectStatus" Style="display: none;" runat="server">
-        <uc:FilteredCheckBoxList ID="cblProjectStatus" runat="server" Height="125px" />
+        <uc:FilteredCheckBoxList ID="cblProjectStatus" runat="server" CssClass="Height125PxImp" />
     </asp:Panel>
     <asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
     <asp:Repeater ID="repProject" runat="server" OnItemDataBound="repProject_ItemDataBound">
         <HeaderTemplate>
-            <div style="min-height: 250px;">
+            <div class="minheight250Px">
                 <table id="tblProjectSummaryByProject" class="tablesorter TimePeriodByproject WholeWidth">
                     <thead>
                         <tr>
-                            <th class="t-left padLeft5" style="width: 500px; height: 20px;">
+                            <th class="ProjectColoum">
                                 Project
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server"
-                                    id="imgClientFilter" style="position: absolute; padding-left: 2px;" />
+                                    id="imgClientFilter" class="FilterImg" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceClient" runat="server" TargetControlID="imgClientFilter"
                                     PopupControlID="pnlFilterResource" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 110px; height: 20px;">
+                            <th class="Width110Px">
                                 Status
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server"
-                                    id="imgProjectStatusFilter" style="position: absolute; padding-left: 2px;" />
+                                    id="imgProjectStatusFilter" class="FilterImg" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th style="width: 110px; height: 20px;">
+                            <th class="Width110Px">
                                 Billing
                             </th>
-                            <th style="width: 100px; height: 20px;">
+                            <th class="Width100Px">
                                 Billable
                             </th>
-                            <th style="width: 100px; height: 20px;">
+                            <th class="Width100Px">
                                 Non-Billable
                             </th>
-                            <th style="width: 100px; height: 20px;">
+                            <th class="Width100Px">
                                 Total
                             </th>
-                            <th style="width: 325px; height: 20px;">
+                            <th class="Width325Px">
                                 Project Variance (in Hours)
                             </th>
                         </tr>
@@ -201,23 +201,22 @@
         <ItemTemplate>
             <tr class="ReportItemTemplate">
                 <td class="t-left padLeft5" sorttable_customkey='<%# Eval("Project.TimeEntrySectionId")%><%# Eval("Project.ProjectNumber")%>'>
-                    <table class="TdLevelNoBorder">
+                    <table class="TdLevelNoBorder PeronSummaryReport">
                         <tr>
-                            <td style="color: Gray; padding-bottom: 3px; padding-left: 2px; text-align: left;">
+                            <td class="FirstTd">
                                 <%# Eval("Project.Client.Name")%>
                                 >
                                 <%# Eval("Project.Group.Name")%>
                             </td>
-                            <td rowspan="2" style="padding-left: 3px;" valign="middle">
+                            <td rowspan="2" class="ThirdTd">
                                 <img id="imgZoomIn" runat="server" src="~/Images/Zoom-In-icon.png" style="display: none;" />
                             </td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold; padding-bottom: 5px; padding-left: 2px; text-align: left;">
+                            <td class="SecondTd">
                                 <asp:LinkButton ID="lnkProject" AccountId='<%# Eval("Project.Client.Id")%>' GroupId='<%# Eval("Project.Group.Id")%>'
-                                    Font-Underline="false" ForeColor="Black" ClientName=' <%# Eval("Project.Client.Name")%>'
-                                    GroupName=' <%# Eval("Project.Group.Name")%>' ProjectNumber='<%# Eval("Project.ProjectNumber")%>'
-                                    runat="server" ToolTip='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.Name"))%>'
+                                    ClientName=' <%# Eval("Project.Client.Name")%>' GroupName=' <%# Eval("Project.Group.Name")%>'
+                                    ProjectNumber='<%# Eval("Project.ProjectNumber")%>' runat="server" ToolTip='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.Name"))%>'
                                     OnClick="lnkProject_OnClick" Text='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.Name"))%>'></asp:LinkButton>
                             </td>
                         </tr>
@@ -239,15 +238,15 @@
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
                 <td sorttable_customkey='<%# GetVarianceSortValue((string)Eval("Variance"))%>'>
-                    <table class="WholeWidth  TdLevelNoBorder">
+                    <table class="WholeWidth TdLevelNoBorder">
                         <tr>
-                            <td style="width: 5%;">
+                            <td class="Width5Percent">
                             </td>
-                            <td style="width: 70%; text-align: right;">
+                            <td class="Width70Per textRight">
                                 <table class="WholeWidth">
-                                    <tr style="border: 1px solid black;">
-                                        <td style="width: 50%; border-right: 1px solid black;">
-                                            <table width="100%">
+                                    <tr class="border1Px">
+                                        <td class="Width50Percent borderRightImp">
+                                            <table class="WholeWidth">
                                                 <tr>
                                                     <td style="<%# Eval("BillableFirstHalfHtmlStyle")%>">
                                                     </td>
@@ -256,8 +255,8 @@
                                                 </tr>
                                             </table>
                                         </td>
-                                        <td style="width: 50%; border-left: 1px solid black;">
-                                            <table width="100%">
+                                        <td class="Width50Percent borderLeft">
+                                            <table class="WholeWidth">
                                                 <tr>
                                                     <td style="<%# Eval("ForecastedFirstHalfHtmlStyle")%>">
                                                     </td>
@@ -269,16 +268,16 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 20%;">
+                            <td class="Width20Percent">
                                 <table class="WholeWidth">
                                     <tr>
-                                        <td style="text-align: right; padding-right: 3px;">
+                                        <td class="TimePeriodByProjectVariance">
                                             <%# Eval("Variance")%>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 5%;">
+                            <td class="Width5Percent">
                             </td>
                         </tr>
                     </table>
@@ -290,8 +289,7 @@
         </FooterTemplate>
     </asp:Repeater>
     <br />
-    <div id="divEmptyMessage" style="text-align: center; font-size: 15px; display: none;"
-        runat="server">
+    <div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
         There are no Time Entries towards this range selected.
     </div>
 </div>
@@ -300,38 +298,38 @@
     TargetControlID="hdnTempField" CancelControlID="btnCancelProjectDetailReport"
     BackgroundCssClass="modalBackground" PopupControlID="pnlProjectDetailReport"
     DropShadow="false" />
-<asp:Panel ID="pnlProjectDetailReport" Style="background-color: rgb(226, 235, 255);
-    display: none;" runat="server" BorderColor="Black" BorderWidth="2px" Width="85%">
-    <table style="width: 100%; padding: 5px;">
+<asp:Panel ID="pnlProjectDetailReport" class="" Style="display: none;" runat="server"
+    CssClass="TimePeriodByProject_ProjectDetailReport">
+    <table class="WholeWidth Padding5">
         <tr>
-            <td style="width: 100%;">
+            <td class="WholeWidth">
                 <table class="WholeWidthWithHeight">
-                    <tr style="background-color: rgb(245, 250, 255);">
-                        <td style="width: 90%; font-weight: bold; font-size: 15px; padding: 3px; padding-left: 10px;">
+                    <tr class="bgColor_F5FAFF">
+                        <td class="TimePeriodByProject_ProjectName">
                             <asp:Literal ID="ltrlProject" runat="server"></asp:Literal>
                         </td>
-                        <td style="width: 10%; font-weight: bold; text-align: right; font-size: 15px; padding: 3px;">
+                        <td class="TimePeriodByProject_ProjectTotalHours">
                             <asp:Literal ID="ltrlProjectDetailTotalhours" runat="server"></asp:Literal>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="width: 100%;">
-                            <div style="max-height: 500px; overflow-y: auto; width: 100%;">
-                                <table style="width: 100%;">
+                        <td colspan="2" class="WholeWidth">
+                            <div class="TimePeriodByProject_ProjectDetailsDiv">
+                                <table class="WholeWidth">
                                     <tr>
-                                        <td style="width: 97%;">
+                                        <td class="Width97Percent">
                                             <uc:GroupByBusinessDevelopment ID="ucGroupByBusinessDevelopment" runat="server" Visible="false" />
                                             <uc:ProjectDetailTabByResource ID="ucProjectDetailReport" runat="server" Visible="false" />
                                         </td>
-                                        <td style="width: 3%;">
+                                        <td class="Width3Percent">
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                         </td>
                     </tr>
-                    <tr style="background-color: rgb(245, 250, 255);">
-                        <td colspan="2" style="width: 100%; text-align: right; padding: 3px;">
+                    <tr class="bgColor_F5FAFF">
+                        <td colspan="2" class="WholeWidth textRight Padding3PX">
                             <asp:Button ID="btnCancelProjectDetailReport" Text="Close" ToolTip="Close" runat="server" />
                         </td>
                     </tr>
