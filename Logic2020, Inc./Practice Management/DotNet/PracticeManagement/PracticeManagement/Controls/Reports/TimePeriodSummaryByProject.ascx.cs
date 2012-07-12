@@ -258,7 +258,7 @@ namespace PraticeManagement.Controls.Reports
                 ucProjectDetailReport.DataBindByResourceDetail(list);
             }
 
-            ltrlProject.Text = "<b style=\"color: Gray;\">" +
+            ltrlProject.Text = "<b class=\"colorGray\">" +
                 lnkProject.Attributes["ClientName"] + " > " + lnkProject.Attributes["GroupName"] + " > </b><b>" + lnkProject.Text + "</b>";
             ltrlProjectDetailTotalhours.Text = totalHours;
 
