@@ -44,9 +44,9 @@ BEGIN
 		SELECT DISTINCT P.PersonId
 						, P.FirstName
 						, P.LastName
-		FROM Person P
-		JOIN @PersonList PL ON PL.Id = P.PersonId
-		LEFT JOIN Pay pa ON pa.Person = P.PersonId  AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, dbo.GetFutureDate()) -1) >= @StartDate
+		FROM dbo.Person P
+		INNER JOIN @PersonList PL ON PL.Id = P.PersonId
+		LEFT JOIN Pay pa ON pa.Person = P.PersonId  AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, @FutureDate) -1) >= @StartDate
 		WHERE (@TimescaleIds IS NULL OR pa.Timescale IN (SELECT Id FROM @TimescaleIdList))
 		      AND (@PracticeIds IS NULL) OR ISNULL(pa.PracticeId,P.DefaultPractice) IN (SELECT Id FROM @PracticeIdsList)
 	)
