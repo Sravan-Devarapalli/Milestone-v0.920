@@ -54,7 +54,7 @@ AS
 															  END
 															  AND ( ( PC.CompanyDayOff = 0
 															  AND ISNULL(PC.TimeTypeId,
-															  0) != dbo.GetHolidayTimeTypeId()
+															  0) != @HolidayTimeType
 															  )
 															  OR ( PC.CompanyDayOff = 1
 															  AND PC.SubstituteDate IS NOT NULL
@@ -119,7 +119,7 @@ AS
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
 															  AND ISNULL(PTSH.EndDate,@FutureDate)
 					  WHERE     TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-															dbo.GetFutureDate())
+															@FutureDate)
 								AND ( CC.timeTypeId != @HolidayTimeType
 									  OR ( CC.timeTypeId = @HolidayTimeType
 										   AND PTSH.PersonStatusId = 1
