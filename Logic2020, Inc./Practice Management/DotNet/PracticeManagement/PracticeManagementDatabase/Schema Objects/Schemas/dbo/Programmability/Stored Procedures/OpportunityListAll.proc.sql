@@ -11,6 +11,8 @@
 AS
 BEGIN
 	SET NOCOUNT ON
+	DECLARE @FutureDate DATETIME 
+	SET @FutureDate = dbo.GetFutureDate()
 
 	IF @Looked IS NULL
 	BEGIN
@@ -28,9 +30,9 @@ BEGIN
 	AS
 	(
 		
-	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') 
+	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + ISNULL(O.BuyerName, '') 
 							ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END,
-									YEAR(ISNULL(O.ProjectedStartDate,dbo.GetFutureDate())),MONTH(ISNULL(O.ProjectedStartDate,dbo.GetFutureDate())),
+									YEAR(ISNULL(O.ProjectedStartDate,@FutureDate)),MONTH(ISNULL(O.ProjectedStartDate,@FutureDate)),
 									O.SalespersonLastName) RowNumber,
 							/* here sortOrder = 0 means 'PO' priority */
 			o.OpportunityId,
@@ -40,7 +42,7 @@ BEGIN
 			o.OpportunityStatusId,
 			o.[Priority],
 			o.PriorityId,
-			op.sortOrder PrioritySortOrder,
+			op.sortOrder AS [PrioritySortOrder],
 			o.ProjectedStartDate,
 			o.ProjectedEndDate,
 			o.OpportunityNumber,
@@ -66,12 +68,12 @@ BEGIN
 			o.GroupId,
 			o.GroupName,
 			o.PracticeManagerId,
-			p.LastName as 'OwnerLastName',
-			p.FirstName as 'OwnerFirstName',
-			os.Name as 'OwnerStatus',
+			p.LastName AS [OwnerLastName],
+			p.FirstName AS [OwnerFirstName],
+			os.Name AS [OwnerStatus],
 			o.EstimatedRevenue
 			--,o.OutSideResources
-		FROM v_Opportunity O
+		FROM dbo.v_Opportunity O
 		LEFT JOIN dbo.Person p ON o.OwnerId = p.PersonId
 		LEFT JOIN dbo.PersonStatus ps ON ps.PersonStatusId = o.SalespersonStatusId  
 		LEFT JOIN dbo.PersonStatus os ON os.PersonStatusId = o.OwnerStatusId 
@@ -83,7 +85,7 @@ BEGIN
 			AND (o.ClientId = @ClientId OR @ClientId IS NULL)
 			AND (o.SalespersonId = @SalespersonId OR @SalespersonId IS NULL)
 			AND (o.Name LIKE @Looked OR o.Description LIKE @Looked OR o.ClientName LIKE @Looked OR o.OpportunityNumber LIKE @Looked OR o.BuyerName LIKE @Looked)	
-			AND (o.OpportunityId in (select ot.OpportunityId from OpportunityTransition ot where ot.TargetPersonId = @TargetPersonId) OR @TargetPersonId IS NULL)
+			AND (o.OpportunityId in (SELECT ot.OpportunityId FROM OpportunityTransition ot WHERE ot.TargetPersonId = @TargetPersonId) OR @TargetPersonId IS NULL)
 		)
 		
 		SELECT 
@@ -93,8 +95,8 @@ BEGIN
 							AND A.RowNumber=1 AND A.PrioritySortOrder!=0 AND B.PrioritySortOrder != 0 ) 
 					   OR (A.OpportunityId = B.OpportunityId AND A.PrioritySortOrder=0)
 		ORDER BY A.PrioritySortOrder,
-				YEAR(ISNULL(A.ProjectedStartDate,dbo.GetFutureDate())),
-				MONTH(ISNULL(A.ProjectedStartDate,dbo.GetFutureDate())),
+				YEAR(ISNULL(A.ProjectedStartDate,@FutureDate)),
+				MONTH(ISNULL(A.ProjectedStartDate,@FutureDate)),
 				A.SalespersonLastName,
 				B.ClientName,
 				ISNULL(B.BuyerName, ''),
