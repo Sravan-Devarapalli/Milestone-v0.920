@@ -30,7 +30,7 @@ AS
 				@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
 	
         SELECT  @W2SalaryId = TimescaleId
-        FROM    Timescale
+        FROM    dbo.Timescale
         WHERE   Name = 'W2-Salary'
 
         SELECT  @IsW2SalaryPerson = 1
@@ -65,16 +65,16 @@ AS
                 AP.FirstName 'ApprovedByFirstName'
         FROM    dbo.TimeEntry TE
                 INNER JOIN dbo.TimeEntryHours AS TEH ON TE.TimeEntryId = TEH.TimeEntryId
-                INNER JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId
+                INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
                                             AND TE.PersonId = @PersonId
                                             AND TE.ChargeCodeDate BETWEEN @StartDateLocal
                                                               AND
                                                               @EndDateLocal
-                LEFT JOIN PersonCalendar PC ON PC.PersonId = @PersonId
+                LEFT JOIN dbo.PersonCalendar PC ON PC.PersonId = @PersonId
                                                AND PC.Date = TE.ChargeCodeDate
                                                AND PC.TimeTypeId = CC.TimeTypeId
                                                AND PC.TimeTypeId = @ORTTimeTypeId
-                LEFT JOIN Person AP ON AP.PersonId = PC.ApprovedBy
+                LEFT JOIN dbo.Person AP ON AP.PersonId = PC.ApprovedBy
         WHERE   ( ( @EndDateLocal < '20120401' )
                   OR ( ( @EndDateLocal >= '20120401' )
                        AND CC.ProjectId != 174
@@ -110,16 +110,16 @@ AS
                                                               AND StartDate < @EndDateLocal
                                                               AND EndDate > @StartDateLocal
                                                               AND PTRS.PersonId = TE.PersonId
-                INNER JOIN Client C ON C.ClientId = ISNULL(CC.ClientId,
+                INNER JOIN dbo.Client C ON C.ClientId = ISNULL(CC.ClientId,
                                                            PTRS.ClientId)
-                LEFT JOIN ProjectGroup PG ON PG.GroupId = ISNULL(CC.ProjectGroupId,
+                LEFT JOIN dbo.ProjectGroup PG ON PG.GroupId = ISNULL(CC.ProjectGroupId,
                                                               PTRS.ProjectGroupId)
-                INNER JOIN Project P ON P.ProjectId = ISNULL(CC.ProjectId,
+                INNER JOIN dbo.Project P ON P.ProjectId = ISNULL(CC.ProjectId,
                                                              PTRS.ProjectId)
         WHERE   ( ISNULL(PTRS.PersonId, @PersonId) = @PersonId
                   AND ( CC.Id IS NULL
                         AND PTRS.StartDate < @EndDateLocal
-                        AND ISNULL(PTRS.EndDate, dbo.GetFutureDate()) > @StartDateLocal
+                        AND ISNULL(PTRS.EndDate, @FutureDateLocal) > @StartDateLocal
                       )
                   OR CC.Id IS NOT NULL
                 )
@@ -141,14 +141,14 @@ AS
                 0 AS 'IsRecursive' ,
                 P.EndDate ,
                 P.IsNoteRequired
-        FROM    ChargeCode CC
-                INNER JOIN Client C ON C.ClientId = CC.ClientId
+        FROM    dbo.ChargeCode CC
+                INNER JOIN dbo.Client C ON C.ClientId = CC.ClientId
                                        AND CC.TimeEntrySectionId = 4 --Administrative Section 
                                        AND (  CC.TimeTypeId in (@HolidayTimeTypeId,@PTOTimeTypeId)
                                                AND @IsW2SalaryPerson = 1
                                            )
-                INNER JOIN Project P ON P.ProjectId = CC.ProjectId
-                INNER JOIN ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId 
+                INNER JOIN dbo.Project P ON P.ProjectId = CC.ProjectId
+                INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId 
 
 	--List of Charge codes with ISPTO and IsHoliday
         SELECT  CC.ProjectId AS 'ProjectId' ,
