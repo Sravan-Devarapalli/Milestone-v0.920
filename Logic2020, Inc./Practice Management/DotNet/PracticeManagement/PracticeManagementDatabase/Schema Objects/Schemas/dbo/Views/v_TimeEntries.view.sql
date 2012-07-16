@@ -37,5 +37,5 @@ AS
 	 INNER JOIN dbo.Project AS proj ON proj.ProjectId = m.ProjectId
 	 INNER JOIN dbo.TimeType AS tt ON tt.TimeTypeId = te.TimeTypeId
 	 INNER JOIN dbo.Client AS c ON proj.ClientId = c.ClientId
-	 WHERE te.MilestoneDate BETWEEN mpe.StartDate AND ISNULL(mpe.EndDate,m.ProjectedDeliveryDate)
+	 WHERE te.MilestoneDate BETWEEN mpe.StartDate AND mpe.EndDate
 
