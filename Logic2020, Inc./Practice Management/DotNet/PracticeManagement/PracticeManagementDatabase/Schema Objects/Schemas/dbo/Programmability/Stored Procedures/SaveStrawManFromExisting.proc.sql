@@ -17,7 +17,7 @@ BEGIN
 		DECLARE @ExistingPersonId INT,@Today DATETIME,@FutureDate  DATETIME
 		SELECT  @ExistingPersonId = @PersonId,
 				@Today = CONVERT(DATE,dbo.GettingPMTime(GETUTCDATE())),
-				@FutureDate = CONVERT(DATE, dbo.GetFutureDate())
+				@FutureDate = dbo.GetFutureDate()
 	
 		IF EXISTS (SELECT 1 FROM Person WHERE FirstName = @FirstName AND LastName = @LastName)
 		BEGIN
