@@ -29,6 +29,9 @@ BEGIN
 	BEGIN TRY
 	BEGIN TRAN tran_SaveSubstituteDay
 
+	DECLARE @FutureDate DATETIME
+	SET @FutureDate = dbo.GetFutureDate()
+
 	IF (EXISTS(SELECT 1 
 			  FROM Calendar AS C 
 			  WHERE C.Date = @SubstituteDayDate AND DayOff= 1) OR
@@ -46,7 +49,7 @@ BEGIN
 	SELECT @IsW2SalaryPerson = 1
 	FROM dbo.Pay pay 
 	INNER JOIN dbo.Timescale ts ON pay.Timescale = ts.TimescaleId  
-	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @SubstituteDayDate BETWEEN pay.StartDate AND ISNULL(pay.EndDate,dbo.GetFutureDate())
+	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @SubstituteDayDate BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
 
 	SELECT @Today = dbo.GettingPMTime(GETUTCDATE()),
 			@CurrentPMTime = dbo.InsertingTime(),
