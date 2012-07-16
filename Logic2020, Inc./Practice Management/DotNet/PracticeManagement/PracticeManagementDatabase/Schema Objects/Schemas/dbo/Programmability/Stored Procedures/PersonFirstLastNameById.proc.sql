@@ -6,8 +6,8 @@ CREATE PROCEDURE [dbo].[PersonFirstLastNameById]
 	@PersonId int
 AS
 BEGIN
-	DECLARE @NOW DATETIME 
-	SELECT @NOW = dbo.GettingPMTime(GETUTCDATE())
+	DECLARE @NOW DATETIME ,@FutureDate DATETIME
+	SELECT @NOW = dbo.GettingPMTime(GETUTCDATE()), @FutureDate = dbo.GetFutureDate()
 
 	SELECT	P.FirstName,
 			P.LastName,
@@ -18,7 +18,7 @@ BEGIN
 			ISNULL(P.Alias,'') AS Alias
 	FROM dbo.Person P
 	LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
-							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
+							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,@FutureDate) 
 	LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
 	WHERE PersonId = @PersonId
 END
