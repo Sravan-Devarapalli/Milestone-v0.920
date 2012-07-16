@@ -26,7 +26,7 @@ BEGIN
 		  WHERE PTR.PersonId = @PersonId 
 			AND PTR.ProjectGroupId = @ProjectGroupId 
 			AND PTR.StartDate <= @StartDateLocal
-			AND @EndDateLocal <= ISNULL(PTR.EndDate,dbo.GetFutureDate())  
+			AND @EndDateLocal <= ISNULL(PTR.EndDate,@FutureDateLocal)  
 		)
 	SELECT P.ProjectId,
 		   P.ProjectNumber +' - '+ P.Name as Name
