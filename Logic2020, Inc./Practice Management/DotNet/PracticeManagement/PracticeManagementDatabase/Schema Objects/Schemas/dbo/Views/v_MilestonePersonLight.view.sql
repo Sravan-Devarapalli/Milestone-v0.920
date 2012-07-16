@@ -11,7 +11,7 @@ AS
 	       mp.MilestoneId,
 	       mp.PersonId,
 	       mpe.StartDate,
-	       ISNULL(mpe.EndDate, m.ProjectedDeliveryDate) AS EndDate,
+	       mpe.EndDate AS EndDate,
 	       mpe.HoursPerDay,
 	       CASE m.IsHourlyAmount
 	           WHEN 1
