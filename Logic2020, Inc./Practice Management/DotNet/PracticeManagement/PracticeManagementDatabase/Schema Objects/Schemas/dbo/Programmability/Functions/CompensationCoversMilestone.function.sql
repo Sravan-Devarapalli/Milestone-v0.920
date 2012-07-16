@@ -35,8 +35,8 @@ AS BEGIN
     DECLARE @pay_end DATETIME
 
 	-- finding the last copmpensation record
-    DECLARE @Now DATETIME
-    SET @Now = GETDATE() ;
+    DECLARE @Now DATETIME ,@FutureDate DATETIME
+    SELECT  @Now = GETDATE(),@FutureDate = dbo.GetFutureDate();
 	
     WITH    LastPay
               AS ( SELECT p.StartDate, p.EndDate 
@@ -44,7 +44,7 @@ AS BEGIN
                    WHERE p.PersonId = @PersonId
                  )
         SELECT  @pay_start = MIN(StartDate),
-                @pay_end = MAX(ISNULL(EndDate, dbo.GetFutureDate()))
+                @pay_end = MAX(ISNULL(EndDate, @FutureDate))
         FROM    LastPay
         
     -- @pay_end = NULL means no end date, so set it to max datettime
