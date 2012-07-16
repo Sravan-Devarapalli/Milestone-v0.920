@@ -32,6 +32,10 @@ set enddate =
 DECLARE @ProjectEndDateWeekday DATETIME ,@ErrorMessage	NVARCHAR(MAX)
 BEGIN TRY
 	BEGIN TRAN tran_PersonTERecurSel
+		
+	DECLARE @FutureDate DATETIME
+	SET @FutureDate = dbo.GetFutureDate()
+
 --get the project enddate
 SELECT @ProjectEndDateWeekday = EndDate+(7-DATEPART(dw,EndDate))
 	  FROM [dbo].[Project]
@@ -44,7 +48,7 @@ SELECT @ProjectEndDateWeekday = EndDate+(7-DATEPART(dw,EndDate))
 
 --Delete all entries  after this @StartDate 
 	DELETE PTRS
-	FROM PersonTimeEntryRecursiveSelection PTRS
+	FROM dbo.PersonTimeEntryRecursiveSelection PTRS
 	WHERE PersonId = @PersonId 
 		AND ClientId = @ClientId 
 		AND ProjectGroupId = @ProjectGroupId
@@ -55,10 +59,10 @@ SELECT @ProjectEndDateWeekday = EndDate+(7-DATEPART(dw,EndDate))
 	DECLARE @RecursiveRecordStartDate  DATETIME
 
 	SELECT @RecursiveRecordStartDate  =	
-					CASE WHEN @StartDate BETWEEN startdate AND ISNULL(enddate,dbo.GetFutureDate()) THEN startdate -- given startdate is that record need to update that record
-					  	 WHEN @StartDate-1 BETWEEN startdate AND ISNULL(enddate,dbo.GetFutureDate())THEN startdate -- for prev record
+					CASE WHEN @StartDate BETWEEN startdate AND ISNULL(enddate,@FutureDate) THEN startdate -- given startdate is that record need to update that record
+					  	 WHEN @StartDate-1 BETWEEN startdate AND ISNULL(enddate,@FutureDate)THEN startdate -- for prev record
 						 ELSE NULL END  
-	FROM PersonTimeEntryRecursiveSelection
+	FROM dbo.PersonTimeEntryRecursiveSelection
 	WHERE PersonId = @PersonId 
 		  AND ClientId = @ClientId 
 		  AND ProjectId = @ProjectId 
@@ -68,7 +72,7 @@ SELECT @ProjectEndDateWeekday = EndDate+(7-DATEPART(dw,EndDate))
 
 	IF @RecursiveRecordStartDate  IS NULL
 	BEGIN
-		INSERT INTO PersonTimeEntryRecursiveSelection(StartDate,EndDate, PersonId, ClientId, ProjectGroupId, ProjectId, TimeEntrySectionId,IsRecursive)
+		INSERT INTO dbo.PersonTimeEntryRecursiveSelection(StartDate,EndDate, PersonId, ClientId, ProjectGroupId, ProjectId, TimeEntrySectionId,IsRecursive)
 		VALUES(@StartDate,@ProjectEndDateWeekday, @PersonId, @ClientId, @ProjectGroupId, @ProjectId, @TimeEntrySectionId,1)
 	END
 	ELSE
@@ -77,7 +81,7 @@ SELECT @ProjectEndDateWeekday = EndDate+(7-DATEPART(dw,EndDate))
 		SET EndDate = CASE WHEN @IsRecursive = 0 THEN @StartDate +6
 						   ELSE  @ProjectEndDateWeekday END,
 			IsRecursive = CASE WHEN @IsRecursive = 0 THEN 0 ELSE 1 END
-		FROM PersonTimeEntryRecursiveSelection PTRS
+		FROM dbo.PersonTimeEntryRecursiveSelection PTRS
 		WHERE PersonId = @PersonId 
 		AND ClientId = @ClientId 
 		AND ProjectGroupId = @ProjectGroupId
