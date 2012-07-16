@@ -150,7 +150,7 @@ AS
 														  )
 					WHERE   ( TE.ChargeCodeDate IS NULL
 							  OR ( TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-															  dbo.GetFutureDate())
+															  @FutureDate)
 								   AND ( CC.timeTypeId != @HolidayTimeType
 										 OR ( CC.timeTypeId = @HolidayTimeType
 											  AND PTSH.PersonStatusId = 1
