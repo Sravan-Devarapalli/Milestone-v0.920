@@ -3,7 +3,7 @@
 -- Create date: 9-15-2008
 -- Updated by:	Anatoliy Lokshin
 -- Update date:	9-22-2008
--- Description:	Selects summary financils for the specified milestone-person association.
+-- Description:	Selects summary financials for the specified milestone-person association.
 -- =============================================
 CREATE PROCEDURE [dbo].[FinancialsGetByMilestonePerson]
 (
@@ -17,7 +17,6 @@ AS
 	(
 	SELECT f.ProjectId,
 		   f.PersonId,
-		   f.MilestoneId,
 		   f.Date, 
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
@@ -33,16 +32,13 @@ AS
 		   f.PersonHoursPerDay,
 		   f.PracticeManagementCommissionSub,
 		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId,
-		   f.Discount
+		   f.PracticeManagerId
 	FROM v_FinancialsRetrospective f
 	WHERE f.MilestoneId = @MilestoneId AND f.PersonId = @PersonId         
 	)
 
 	SELECT f.ProjectId,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEnd,
-
+	       MIN(C.MonthStartDate) AS FinancialDate,
 	       ISNULL(SUM(f.PersonMilestoneDailyAmount), 0)AS Revenue,
 
 	       ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount), 0) AS RevenueNet,
@@ -69,5 +65,6 @@ AS
 	           0.0 AS 'actualhours',
 	           0.0 AS 'forecastedhours'
 	  FROM FinancialsRetro AS f
+	  INNER JOIN dbo.Calendar C ON C.date = f.date
 	  GROUP BY f.ProjectId
 
