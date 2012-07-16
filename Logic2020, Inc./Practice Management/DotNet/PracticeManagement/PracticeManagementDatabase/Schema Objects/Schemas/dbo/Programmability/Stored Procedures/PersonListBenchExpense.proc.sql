@@ -176,14 +176,15 @@ AS
 				 END FLHR,
 			HourlyRate,
 			PersonId,
-			Date,
+			C.Date,
 			CASE WHEN Timescale != 2 THEN 1 ELSE 2 END Timescale,
 			 Timescale TimescaleId,
-			MAX(Date) OVER (PARTITION BY PersonId, YEAR(Date), MONTH(Date), (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END )) TimeScaleMaxDate,
-			MIN(Date) OVER (PARTITION BY PersonId, YEAR(Date), MONTH(Date), (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END )) TimeScaleMinDate,
-			MAX(Date) OVER(PARTITION BY PersonId, YEAR(Date), MONTH(Date)) MonthMaxDate,
-			MIN(Date) OVER(PARTITION BY PersonId, YEAR(Date), MONTH(Date)) MonthMinDate
-		FROM CTEFinancials
+			MAX(C.Date) OVER (PARTITION BY PersonId, C.MonthStartDate, (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END )) TimeScaleMaxDate,
+			MIN(C.Date) OVER (PARTITION BY PersonId, C.MonthStartDate, (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END )) TimeScaleMinDate,
+			MAX(C.Date) OVER(PARTITION BY PersonId, C.MonthStartDate) MonthMaxDate,
+			MIN(C.Date) OVER(PARTITION BY PersonId, C.MonthStartDate) MonthMinDate
+		FROM CTEFinancials CTE
+		INNER JOIN dbo.Calendar C ON CTE.Date = C.Date
 	)
 	,
 	
@@ -246,8 +247,8 @@ AS
 			ISNULL(pr.IsCompanyInternal,0) IsCompanyInternal,
 			P.HireDate,
 			ISNULL(p.TerminationDate, @FutureDate) AS TerminationDate,
-			dbo.MakeDate(YEAR(MIN(FLHRD.Date)), MONTH(MIN(FLHRD.Date)), 1) AS [Month],
-			dbo.MakeDate(YEAR(MIN(FLHRD.Date)), MONTH(MIN(FLHRD.Date)), dbo.GetDaysInMonth(MIN(FLHRD.Date))) AS MonthEnd,
+			C.MonthStartDate AS [Month],
+			C.MonthEndDate AS MonthEnd,
 			P.PersonStatusId,
 			p.SeniorityId,
 			PersonStatusName = (SELECT Name FROM dbo.PersonStatus AS ps WHERE ps.PersonStatusId = p.PersonStatusId),
@@ -257,20 +258,21 @@ AS
 			CASE WHEN (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN FLHRD.BenchHours >0 Then FLHRD.BenchHours ELSE 0 END)),0))>0 THEN 0
 			ELSE (-1*ISNULL(SUM((CASE @IncludeOverheadsLocal WHEN 1 THEN FLHRD.FLHR ELSE FLHRD.HourlyRate END) *(CASE WHEN FLHRD.BenchHours >0 Then FLHRD.BenchHours ELSE 0 END)),0)) END Margin,
 			SUM(ISNULL(FLHRD.BenchHours,0)) MonthBenchHours,
-			RANK() OVER (PARTITION BY  FLHRD.PersonId, YEAR(FLHRD.Date), MONTH(FLHRD.Date) ORDER BY (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END ) DESC)  AS RowNumber,
+			RANK() OVER (PARTITION BY  FLHRD.PersonId, C.MonthStartDate ORDER BY (CASE WHEN Timescale != 2 THEN 1 ELSE 2 END ) DESC)  AS RowNumber,
 			TimeScaleMaxDate,
 			TimeScaleMinDate,
 			MonthMaxDate,
 			MonthMinDate
 	FROM CTEFLHRAndBenchHoursDaily FLHRD
-	JOIN Person P ON FLHRD.PersonId = P.PersonId
+	INNER JOIN dbo.Calendar C ON FLHRD.Date = C.Date
+	INNER JOIN Person P ON FLHRD.PersonId = P.PersonId
 	LEFT JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
 	WHERE   (@TimeScaleIdsLocal IS NULL 
 			OR  FLHRD.TimescaleId IN  (SELECT TimeScaleId FROM @TimeScaleIdsTable)
 		)
 	GROUP BY FLHRD.PersonId,
-				YEAR(FLHRD.Date),
-				MONTH(FLHRD.Date),
+				C.MonthStartDate,
+				C.MonthEndDate,
 				P.LastName,
 				P.FirstName,
 				pr.Name ,
