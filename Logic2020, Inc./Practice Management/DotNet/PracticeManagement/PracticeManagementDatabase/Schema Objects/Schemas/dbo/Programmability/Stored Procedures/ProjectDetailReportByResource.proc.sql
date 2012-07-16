@@ -103,7 +103,7 @@ AS
 										INNER JOIN dbo.Calendar AS CAL ON CAL.Date BETWEEN MPE.StartDate AND MPE.EndDate 
 																		AND CAL.Date >= P.HireDate
 																		AND CAL.Date <= ISNULL(P.TerminationDate,
-																		dbo.GetFutureDate())
+																		@FutureDate)
 										LEFT JOIN dbo.PersonCalendar AS PCAL ON PCAL.Date = CAL.Date
 																		AND PCAL.PersonId = P.PersonId
 							   WHERE    M.ProjectId = @ProjectId
@@ -116,7 +116,7 @@ AS
 											  OR ( CAL.Date BETWEEN @StartDateLocal AND @EndDateLocal )
 											)
 										AND ( ( CAL.DayOff = 0
-												AND ISNULL(PCAL.TimeTypeId, 0) != dbo.GetHolidayTimeTypeId()
+												AND ISNULL(PCAL.TimeTypeId, 0) != @HolidayTimeType
 											  )
 											  OR ( CAL.DayOff = 1
 												   AND PCAL.SubstituteDate IS NOT NULL
@@ -182,7 +182,7 @@ AS
 							LEFT  JOIN dbo.PersonRole AS PR ON PR.RoleValue = PMRV.MaxRoleValue
 					WHERE   ( TE.ChargeCodeDate IS NULL
 							  OR ( TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-															  dbo.GetFutureDate())
+															  @FutureDate)
 								   AND ( CC.timeTypeId != @HolidayTimeType
 										 OR ( CC.timeTypeId = @HolidayTimeType
 											  AND PTSH.PersonStatusId = 1
