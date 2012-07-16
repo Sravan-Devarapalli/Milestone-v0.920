@@ -11,11 +11,12 @@ CREATE FUNCTION GetDefaultHoursPerDay
 RETURNS INT
 AS
 BEGIN
-	DECLARE @res INT
+	DECLARE @res INT,@FutureDate DATETIME
+	SET @FutureDate = dbo.GetFutureDate()
 
 	SELECT @res = SUM(DefaultHoursPerDay) 
 	FROM dbo.v_Pay
-	WHERE @Date BETWEEN StartDate AND ISNULL(EndDate, dbo.GetFutureDate()) AND 
+	WHERE @Date BETWEEN StartDate AND ISNULL(EndDate, @FutureDate) AND 
 		  @PersonId = PersonId
 
 	RETURN ISNULL(@res, 8)
