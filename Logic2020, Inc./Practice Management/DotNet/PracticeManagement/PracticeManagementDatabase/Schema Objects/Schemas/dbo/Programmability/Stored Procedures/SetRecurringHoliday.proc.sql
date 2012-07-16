@@ -19,7 +19,9 @@ BEGIN
 		@CurrentPMTime DATETIME,
 		@PTOTimeTypeId INT,
 		@HolidayChargeCodeId INT,
-		@PTOChargeCodeId INT
+		@PTOChargeCodeId INT,
+		@FutureDate DATETIME
+
 
 	DECLARE @RecurringHolidaysDates TABLE( [Date] DATETIME, [Description] NVARCHAR(255), [Id] INT)
 
@@ -27,6 +29,7 @@ BEGIN
 		, @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 		, @CurrentPMTime = dbo.InsertingTime()
 		, @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
+		, @FutureDate = dbo.GetFutureDate()
 
 	SELECT @ModifiedBy = PersonId
 	FROM Person
@@ -127,17 +130,17 @@ BEGIN
 		
 	--Delete all administrative worktype timeEntries.
 	DELETE TEH
-	FROM TimeEntryHours TEH
-	JOIN TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId
-	JOIN @RecurringHolidaysDates rhd ON rhd.Date = TE.ChargeCodeDate
-	JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId
-	JOIN TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
+	FROM dbo.TimeEntryHours TEH
+	INNER JOIN dbo.TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId
+	INNER JOIN @RecurringHolidaysDates rhd ON rhd.Date = TE.ChargeCodeDate
+	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
+	INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 	
 	DELETE TE
-	FROM TimeEntry TE
-	JOIN @RecurringHolidaysDates rhd ON rhd.Date = TE.ChargeCodeDate
-	JOIN ChargeCode CC ON CC.Id = TE.ChargeCodeId
-	JOIN TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
+	FROM dbo.TimeEntry TE
+	INNER JOIN @RecurringHolidaysDates rhd ON rhd.Date = TE.ChargeCodeDate
+	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
+	INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 	
 	IF @IsSet = 1
 	BEGIN
@@ -151,7 +154,7 @@ BEGIN
 		FROM dbo.PersonCalendar AS PC 
 		INNER JOIN @RecurringHolidaysDates dates ON PC.SubstituteDate IS NOT NULL AND dates.date = PC.SubstituteDate  
 		LEFT JOIN  dbo.Pay pay  ON pay.Timescale = 2 /* 'W2-Salary' */ AND pay.Person = Pc.PersonId AND  
-									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,dbo.GetFutureDate())
+									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
 			
 		DELETE pc
 		FROM dbo.PersonCalendar pc 
@@ -217,12 +220,12 @@ BEGIN
 				,0 --Forecasted Hours.
 				,1
 				,1 --Here it is Auto generated.
-		FROM Person P
-		JOIN Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = 2 AND p.PersonId = pay.Person AND P.IsStrawman = 0
-		JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+		FROM dbo.Person P
+		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = 2 AND p.PersonId = pay.Person AND P.IsStrawman = 0
+		INNER JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		LEFT JOIN TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = rhd.Date
+		LEFT JOIN dbo.TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = rhd.Date
 		WHERE TE.TimeEntryId IS NULL
 
 		INSERT INTO [dbo].[TimeEntryHours] 
@@ -241,12 +244,12 @@ BEGIN
 				,@ModifiedBy
 				,0--Non Billable
 				,1--Pending ReviewStatusId
-		FROM Person P
-		JOIN Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = 2 AND p.PersonId = pay.Person AND P.IsStrawman = 0
-		JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+		FROM dbo.Person P
+		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = 2 AND p.PersonId = pay.Person AND P.IsStrawman = 0
+		INNER JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		JOIN TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = rhd.Date
+		INNER JOIN dbo.TimeEntry TE ON TE.PersonId = P.PersonId AND TE.ChargeCodeId = @HolidayChargeCodeId AND TE.ChargeCodeDate = rhd.Date
 		LEFT JOIN TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
 		WHERE TEH.TimeEntryId IS NULL
 		
@@ -282,7 +285,7 @@ BEGIN
 
 		DELETE PC
 		FROM dbo.PersonCalendar AS PC 
-		JOIN @RecurringHolidaysDates rhd ON rhd.Date = Pc.Date
+		INNER JOIN @RecurringHolidaysDates rhd ON rhd.Date = Pc.Date
 
 
 		INSERT  INTO [dbo].[TimeEntry]
@@ -302,12 +305,12 @@ BEGIN
 				1,
 				1
 		FROM dbo.PersonCalendar PC
-		JOIN @RecurringHolidaysDates d ON d.date = PC.Date AND PC.DayOff = 1
-		JOIN dbo.Person p ON p.PersonId = PC.PersonId AND P.IsStrawman = 0
-		JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+		INNER JOIN @RecurringHolidaysDates d ON d.date = PC.Date AND PC.DayOff = 1
+		INNER JOIN dbo.Person p ON p.PersonId = PC.PersonId AND P.IsStrawman = 0
+		INNER JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
+		INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
 		LEFT JOIN dbo.TimeEntry TE ON TE.PersonId = PC.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = PC.Date
 		WHERE TE.TimeEntryId IS NULL
 
@@ -328,13 +331,13 @@ BEGIN
 				0,--Non billable
 				CASE WHEN PC.IsFromTimeEntry <> 1 AND PC.TimeTypeId <> @HolidayTimeTypeId THEN 2 ELSE 1 END --ReviewStatusId 2 is Approved, 1 is Pending.
 		FROM dbo.PersonCalendar PC
-		JOIN @RecurringHolidaysDates d ON d.date = PC.Date AND PC.DayOff = 1
-		JOIN dbo.Person p ON p.PersonId = PC.PersonId AND P.IsStrawman = 0
-		JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+		INNER JOIN @RecurringHolidaysDates d ON d.date = PC.Date AND PC.DayOff = 1
+		INNER JOIN dbo.Person p ON p.PersonId = PC.PersonId AND P.IsStrawman = 0
+		INNER JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
-		JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
-		JOIN dbo.TimeEntry TE ON TE.PersonId = p.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = d.Date
+		INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
+		INNER JOIN dbo.TimeEntry TE ON TE.PersonId = p.PersonId AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = d.Date
 		LEFT JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
 		WHERE TEH.TimeEntryId IS NULL
 	END
