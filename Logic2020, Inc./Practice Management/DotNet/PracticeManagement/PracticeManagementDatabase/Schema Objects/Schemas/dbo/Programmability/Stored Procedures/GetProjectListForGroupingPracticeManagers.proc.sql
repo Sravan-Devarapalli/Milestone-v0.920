@@ -17,6 +17,9 @@ AS
 BEGIN
 	SET NOCOUNT ON ;
 
+	DECLARE @FutureDate DATETIME
+	SET @FutureDate = dbo.GetFutureDate()
+
 	-- Convert client ids from string to TABLE
 	DECLARE @ClientsList TABLE (Id INT)
 	INSERT INTO @ClientsList
@@ -306,7 +309,7 @@ BEGIN
 					INNER JOIN dbo.Pay AS p ON p.StartDate <= cal.Date 
 												AND p.EndDate > cal.date 
 												AND cal.PersonId = p.Person
-					LEFT JOIN V_WorkinHoursByYear HY1 ON HY1.[Year] = YEAR(cal.Date)
+					LEFT JOIN dbo.V_WorkinHoursByYear HY1 ON HY1.[Year] = YEAR(cal.Date)
 					WHERE cal.DayOff = 0
 					 AND cal.Date between @StartDate and @EndDate
 				   )AS p ON p.PersonId = m.PersonId AND p.Date = r.Date
@@ -320,10 +323,10 @@ BEGIN
 									t.TimescaleId
 								FROM  dbo.OverheadFixedRate AS r
 								INNER JOIN dbo.OverheadFixedRateTimescale AS t ON r.OverheadFixedRateId = t.OverheadFixedRateId
-						   ) AS o ON p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, dbo.GetFutureDate())
+						   ) AS o ON p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, @FutureDate)
 									  AND o.Inactive = 0
 									  AND o.TimescaleId = p.Timescale
-				 LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
+				 LEFT JOIN dbo.V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
 			GROUP BY m.EntryId,r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
 					 m.Amount, p.BonusAmount, p.BonusHoursToCollect, p.Timescale,p.PracticeId, r.HoursPerDay,
 					 r.IsHourlyAmount, m.HoursPerDay, m.PersonId,m.MilestonePersonId, m.EntryStartDate
@@ -335,12 +338,12 @@ BEGIN
 			SELECT pexp.ProjectId,
 				CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
 				CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
-				dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate,
-			   dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), dbo.GetDaysInMonth(MIN(C.Date))) AS MonthEnd
+				c.MonthStartDate AS FinancialDate,
+				c.MonthEndDate AS MonthEnd
 			FROM dbo.ProjectExpense as pexp
 			JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
 			WHERE ProjectId IN (SELECT ProjectId FROM @TempProjectResult) AND c.Date BETWEEN @StartDate	AND @EndDate
-			GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+			GROUP BY pexp.ProjectId,c.MonthStartDate,c.MonthEndDate
 		) 
 
 		SELECT temp.ProjectId,
@@ -373,8 +376,8 @@ BEGIN
 			   mile.Description MilestoneName,
 			   per.FirstName MilestonePersonFirstName,
 			   per.LastName MilestonePersonLastName,
-			   dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS MonthStartDate,
-			   dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEndDate,
+			   cal.MonthStartDate AS MonthStartDate,
+			   cal.MonthEndDate AS MonthEndDate,
 			   ISNULL(SUM(f.PersonMilestoneDailyAmount),0) AS Revenue,
 			   ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount-
 							(CASE WHEN f.SLHR  >=  f.PayRate +f.MLFOverheadRate 
@@ -403,24 +406,26 @@ BEGIN
 					   ,f.EntryId
 				FROM CTEFinancialsRetroSpective f 
 			 ) as f
-		  JOIN MilestonePerson MP ON MP.MilestoneId = f.MilestoneId AND MP.PersonId = f.PersonId 
-		  JOIN MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId  AND f.EntryId = MPE.Id 
+		  INNER JOIN dbo.Calendar cal ON f.Date = cal.Date
+		  INNER JOIN dbo.MilestonePerson MP ON MP.MilestoneId = f.MilestoneId AND MP.PersonId = f.PersonId 
+		  INNER JOIN dbo.MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId  AND f.EntryId = MPE.Id 
 											AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
-		  JOIN dbo.Milestone mile ON mile.MilestoneId = f.MilestoneId
-		  JOIN dbo.Practice pra ON pra.PracticeId = f.PracticeId
-		  JOIN dbo.Person PM ON PM.PersonId = pra.PracticeManagerId
-		  JOIN dbo.Person per ON per.PersonId = f.PersonId	  
-		  JOIN @TempProjectResult pr ON pr.ProjectId = f.ProjectId 
+		  INNER JOIN dbo.Milestone mile ON mile.MilestoneId = f.MilestoneId
+		  INNER JOIN dbo.Practice pra ON pra.PracticeId = f.PracticeId
+		  INNER JOIN dbo.Person PM ON PM.PersonId = pra.PracticeManagerId
+		  INNER JOIN dbo.Person per ON per.PersonId = f.PersonId	  
+		  INNER JOIN @TempProjectResult pr ON pr.ProjectId = f.ProjectId 
 		  WHERE  f.PersonId IS NOT NULL 
 			AND ( @PracticeIds IS NULL 
 					OR f.PracticeId IN (SELECT Id FROM @PracticesList)) 
 					AND f.Date BETWEEN @StartDate AND @EndDate
 		  GROUP BY f.ProjectId,f.MilestonePersonId, f.PersonId,f.PracticeId, pra.Name,
 					PM.LastName,PM.FirstName,pra.PracticeManagerId,f.MilestoneId,mile.Description,
-					per.FirstName,per.LastName,YEAR(f.Date), MONTH(f.Date)
+					per.FirstName,per.LastName,cal.MonthStartDate,cal.MonthEndDate
 	  ) Temp
 	  LEFT JOIN ProjectExpensesMonthly  PEM 
 	ON PEM.ProjectId = Temp.ProjectId AND Temp.MonthStartDate = PEM.FinancialDate  AND Temp.MonthEndDate = PEM.MonthEnd
 	ORDER BY Temp.MonthStartDate
 
 END
+
