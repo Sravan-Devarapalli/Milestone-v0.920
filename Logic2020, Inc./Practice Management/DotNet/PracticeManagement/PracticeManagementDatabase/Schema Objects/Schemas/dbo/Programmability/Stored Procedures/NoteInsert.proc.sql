@@ -7,7 +7,14 @@
 	@NoteId         INT OUT 
 )
 AS
+BEGIN
 	SET NOCOUNT ON
+	DECLARE @UserLogin NVARCHAR(255)
+
+	SELECT @UserLogin = Alias FROM dbo.Person WHERE PersonId = @PersonId
+
+	-- Start logging session
+	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin 
 
 	INSERT INTO dbo.Note
 	            (
@@ -23,4 +30,10 @@ AS
 				  @NoteText
 				  )
     SET @NoteId = SCOPE_IDENTITY()
-    SELECT @NoteId
+
+	-- End logging session
+	EXEC dbo.SessionLogUnprepare
+    
+	SELECT @NoteId
+
+END
