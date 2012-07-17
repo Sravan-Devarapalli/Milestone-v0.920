@@ -68,6 +68,7 @@ BEGIN
 				BEGIN
 					DECLARE @milestone INT
 					SET @milestone = (SELECT milestoneId FROM @milestones WHERE RowId = @index)
+					EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 					EXEC MilestoneDelete @milestone, @UserLogin 
 					
 					SET @index = @index + 1
@@ -76,6 +77,7 @@ BEGIN
 		
 			IF EXISTS (SELECT 1 FROM Opportunity WHERE ProjectId = @ProjectID)
 			BEGIN
+				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 				UPDATE Opportunity
 				SET ProjectId = NULL,
 					LastUpdated = GETDATE()
@@ -90,6 +92,7 @@ BEGIN
 			
 			IF EXISTS (SELECT ProjectId FROM ProjectAttachment WHERE ProjectId = @ProjectID)
 			BEGIN
+				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 				DELETE 
 				FROM	ProjectAttachment
 				WHERE ProjectId = @ProjectID
@@ -98,11 +101,9 @@ BEGIN
 			IF EXISTS (SELECT 1 FROM Note WHERE NoteTargetId = 2 AND TargetId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
-				
 				DELETE 
 				FROM Note
 				WHERE NoteTargetId = 2 AND TargetId = @ProjectID-- Here 2 is Project in NoteTarget table.
-				
 				EXEC dbo.SessionLogUnprepare
 			END
 			
@@ -115,6 +116,7 @@ BEGIN
 
 			IF EXISTS (SELECT ProjectId FROM Project WHERE ProjectId = @ProjectID)
 			BEGIN
+				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 				DELETE Project
 				WHERE ProjectId = @ProjectID
 			END
