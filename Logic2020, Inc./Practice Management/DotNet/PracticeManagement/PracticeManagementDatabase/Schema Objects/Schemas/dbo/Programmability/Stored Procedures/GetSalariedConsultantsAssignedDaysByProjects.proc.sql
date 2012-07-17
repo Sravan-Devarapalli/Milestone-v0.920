@@ -9,7 +9,10 @@
 CREATE PROCEDURE [dbo].[GetSalariedConsultantsAssignedDaysByProjects]
 AS
 BEGIN
-	WITH CTE AS 
+	DECLARE @FutureDate DATETIME ,@Date20120101 DATETIME
+	SELECT @FutureDate = dbo.GetFutureDate(), @Date20120101 = CAST('20120101' AS DATETIME)
+
+	;WITH CTE AS 
 	(
 		SELECT	P.ProjectNumber,
 				P.Name , 
@@ -24,9 +27,9 @@ BEGIN
 		JOIN Person Pers ON Pers.PersonId = MP.PersonId AND Pers.IsStrawman = 0
 		JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
 		JOIN Calendar C  ON C.Date Between MPE.StartDate AND MPE.EndDate
-		JOIN Pay pay ON pay.Person = MP.PersonId AND pay.Timescale = 2 AND C.Date Between pay.StartDate AND ISNULL(pay.EndDate-1,dbo.GetFutureDate())
+		JOIN Pay pay ON pay.Person = MP.PersonId AND pay.Timescale = 2 AND C.Date Between pay.StartDate AND ISNULL(pay.EndDate-1,@FutureDate)
 
-		WHERE P.ProjectStatusId = 3 AND PerS.PersonStatusId =1  AND P.ProjectId !=174 AND P.EndDate >= CAST('20120101' AS DATETIME)
+		WHERE P.ProjectStatusId = 3 AND PerS.PersonStatusId =1  AND P.ProjectId !=174 AND P.EndDate >= @Date20120101
 		GROUP BY P.ProjectId,P.ProjectNumber,Pers.LastName ,Pers.FirstName ,C.Date,P.Name,Pers.PersonId 
 
 
