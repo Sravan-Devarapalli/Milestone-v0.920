@@ -7,6 +7,9 @@
 AS
 BEGIN
 
+	DECLARE @FutureDate DATETIME
+	SET @FutureDate = dbo.GetFutureDate()
+
 	DECLARE @PersonList TABLE (Id int)
 	INSERT INTO @PersonList
 	SELECT * FROM dbo.ConvertStringListIntoTable(@PersonIds)
@@ -33,7 +36,7 @@ BEGIN
 			P.IsDefaultManager
 	FROM Person P
 	JOIN @PersonList PL ON PL.Id = P.PersonId
-	JOIN Pay pa ON pa.Person = P.PersonId AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, dbo.GetFutureDate()) - 1) >= @StartDate
+	JOIN Pay pa ON pa.Person = P.PersonId AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, @FutureDate) - 1) >= @StartDate
 	WHERE (@TimescaleIds IS NULL OR pa.Timescale IN (SELECT ID FROM @TimescaleIdList)) 
 	       AND ((@PracticeIds IS NULL) OR ISNULL(pa.PracticeId,P.DefaultPractice) IN (SELECT Id FROM @PracticeIdsList))
 END
