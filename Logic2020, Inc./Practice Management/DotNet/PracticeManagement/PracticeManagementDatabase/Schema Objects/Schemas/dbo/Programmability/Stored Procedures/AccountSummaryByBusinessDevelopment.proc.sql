@@ -11,12 +11,14 @@ BEGIN
 	DECLARE @StartDateLocal DATETIME ,
 		@EndDateLocal DATETIME,
 		@AccountIdLocal INT,
-		@BusinessUnitIdsLocal	NVARCHAR(MAX)
+		@BusinessUnitIdsLocal	NVARCHAR(MAX),
+		@FutureDate DATETIME
 
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 		 , @EndDateLocal = CONVERT(DATE, @EndDate)
 		 , @AccountIdLocal = @AccountId
 		 , @BusinessUnitIdsLocal = @BusinessUnitIds
+		 , @FutureDate = dbo.GetFutureDate()
 
 	SELECT PG.GroupId AS [BusinessUnitId]
 		 , PG.Name AS [BusinessUnitName]
@@ -41,7 +43,7 @@ BEGIN
 		INNER JOIN dbo.TimeType AS TT
 			ON TT.TimeTypeId = CC.TimeTypeId
 		INNER JOIN dbo.Person P
-			ON P.PersonId = TE.PersonId AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, dbo.GetFutureDate())
+			ON P.PersonId = TE.PersonId AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, @FutureDate)
 
 	WHERE
 		CC.ClientId = @AccountIdLocal
