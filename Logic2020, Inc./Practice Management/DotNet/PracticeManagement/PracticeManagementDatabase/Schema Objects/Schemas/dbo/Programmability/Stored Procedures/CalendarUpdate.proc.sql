@@ -39,12 +39,14 @@ AS
 			@ModifiedBy INT,
 			@HolidayTimeTypeId INT,
 			@PTOChargeCodeId INT,
-			@HolidayChargeCodeId INT
+			@HolidayChargeCodeId INT,
+			@FutureDate DATETIME
 
 	SELECT @Today = dbo.GettingPMTime(GETUTCDATE()),
 			@CurrentPMTime = dbo.InsertingTime(),
 			@PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
-			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
+			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
+			@FutureDate = dbo.GetFutureDate()
 				
 	SELECT @ModifiedBy = PersonId FROM Person WHERE Alias = @UserLogin
 	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
@@ -166,7 +168,7 @@ AS
 		FROM dbo.PersonCalendar AS PC 
 		INNER JOIN @Dates dates ON PC.SubstituteDate IS NOT NULL AND dates.date = PC.SubstituteDate  
 		LEFT JOIN  dbo.Pay pay  ON pay.Timescale = 2 /* 'W2-Salary' */ AND pay.Person = Pc.PersonId AND  
-									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,dbo.GetFutureDate())
+									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
 
 			
 		DELETE pc
