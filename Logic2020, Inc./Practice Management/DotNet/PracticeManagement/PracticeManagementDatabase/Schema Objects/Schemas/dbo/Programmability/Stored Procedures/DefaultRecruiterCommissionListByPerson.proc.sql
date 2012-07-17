@@ -10,12 +10,15 @@ CREATE PROCEDURE [dbo].[DefaultRecruiterCommissionListByPerson]
 	@PersonId   INT
 )
 AS
+BEGIN
 	SET NOCOUNT ON
+	DECLARE @FutureDate DATETIME
+	SET @FutureDate = dbo.GetFutureDate()
 
 	SELECT h.DefaultRecruiterCommissionHeaderId, h.PersonId, h.StartDate,
-	       CASE h.EndDate WHEN dbo.GetFutureDate() THEN CAST(NULL AS DATETIME) ELSE h.EndDate END AS EndDate,
+	       CASE h.EndDate WHEN @FutureDate THEN CAST(NULL AS DATETIME) ELSE h.EndDate END AS EndDate,
 	       dbo.MakeDefaultRecruiterCommissionText(h.defaultrecruitercommissionheaderid) AS TextLine
 	  FROM dbo.DefaultRecruiterCommissionHeader as h
 	 WHERE h.PersonId = @PersonId
 	ORDER BY h.StartDate
-
+END
