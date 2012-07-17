@@ -7,7 +7,6 @@ AS
 BEGIN 
 
     DECLARE @FutureDate DATETIME 
-
 	SET @FutureDate = dbo.GetFutureDate()
 
 	SELECT 
@@ -21,7 +20,7 @@ BEGIN
 		P.LastName,
 		P.FirstName,
 		dbo.GetDailyDemand(@StartDate, @EndDate, P.PersonId, O.OpportunityId, 1) QuantityString ,-- CONVERT(NVARCHAR,OP.Quantity)
-		CONVERT(INT,1) ObjectType,
+		1 ObjectType,
 		O.ProjectedStartDate [StartDate],
 		ISNULL(O.ProjectedEndDate, @FutureDate) [EndDate],
 		NULL [LinkedObjectId],
@@ -29,9 +28,9 @@ BEGIN
 		O.Description AS OpportunintyDescription,
 		'' AS ProjectDescription 
 	FROM dbo.OpportunityPersons OP
-	JOIN dbo.Opportunity O ON O.OpportunityId = OP.OpportunityId
-	JOIN dbo.Person P ON P.PersonId = OP.PersonId
-	JOIN dbo.Client C ON O.ClientId = C.ClientId 
+	INNER JOIN dbo.Opportunity O ON O.OpportunityId = OP.OpportunityId
+	INNER JOIN dbo.Person P ON P.PersonId = OP.PersonId
+	INNER JOIN dbo.Client C ON O.ClientId = C.ClientId 
 	WHERE OP.RelationTypeId = 2 -- Team Structure
 		AND OP.NeedBy <= @EndDate AND OP.NeedBy >= @StartDate
 		AND O.ProjectedStartDate <= @EndDate AND ISNULL(O.ProjectedEndDate, @FutureDate) >= @StartDate
@@ -50,20 +49,20 @@ BEGIN
 			Per.LastName, 
 			Per.FirstName, 
 			dbo.GetDailyDemand(@StartDate, @EndDate, Per.PersonId, P.ProjectId, 2) QuantityString, -- COUNT(MPE.MilestoneId)
-			CONVERT(INT,2) ObjectType,
+			2 ObjectType,
 			P.StartDate [StartDate],
 			P.EndDate [EndDate],
 			P.OpportunityId [LinkedObjectId],
 			O.OpportunityNumber [LinkedObjectNumber],
 			O.Description AS OpportunintyDescription,
 			P.Description AS ProjectDescription 
-	FROM Project P
-	JOIN Client C ON C.ClientId = P.ClientId
-	JOIN Milestone M ON M.ProjectId = P.ProjectId
-	JOIN MilestonePerson MP ON MP.MilestoneId = M.MilestoneId
-	JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
-	JOIN Person Per ON Per.PersonId = MP.PersonId
-	LEFT JOIN Opportunity O ON O.OpportunityId = P.OpportunityId
+	FROM dbo.Project P
+	INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
+	INNER JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
+	INNER JOIN dbo.MilestonePerson MP ON MP.MilestoneId = M.MilestoneId
+	INNER JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
+	INNER JOIN dbo.Person Per ON Per.PersonId = MP.PersonId
+	LEFT JOIN dbo.Opportunity O ON O.OpportunityId = P.OpportunityId
 	WHERE Per.IsStrawman = 1 
 		AND MPE.StartDate <= @EndDate AND MPE.StartDate >= @StartDate
 		AND P.StartDate <= @EndDate AND P.EndDate >= @StartDate
