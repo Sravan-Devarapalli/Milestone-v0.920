@@ -34,7 +34,8 @@ BEGIN
 	INSERT INTO @SalespersonsList
 	SELECT * FROM dbo.ConvertStringListIntoTable(@SalespersonIds)
 
-
+	DECLARE @FutureDate DATETIME
+	SET  @FutureDate = dbo.GetFutureDate()
 /*
 		Go to issue #2432 for more details on default opportunities order
 	*/
@@ -44,7 +45,7 @@ BEGIN
 		
 	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + isnull(O.BuyerName, '') 
 							ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END,
-									YEAR(ISNULL(O.ProjectedStartDate,dbo.GetFutureDate())),MONTH(ISNULL(O.ProjectedStartDate,dbo.GetFutureDate())),
+									YEAR(ISNULL(O.ProjectedStartDate,@FutureDate)),MONTH(ISNULL(O.ProjectedStartDate,@FutureDate)),
 									O.SalespersonLastName) RowNumber,
 							/* here sortOrder = 0 means 'PO' priority */
 			o.OpportunityId,
@@ -129,8 +130,8 @@ BEGIN
 							AND A.RowNumber=1 AND A.PrioritySortOrder!=0 AND B.PrioritySortOrder != 0 ) 
 					   OR (A.OpportunityId = B.OpportunityId AND A.PrioritySortOrder=0)
 		ORDER BY A.PrioritySortOrder,
-				YEAR(ISNULL(A.ProjectedStartDate,dbo.GetFutureDate())),
-				MONTH(ISNULL(A.ProjectedStartDate,dbo.GetFutureDate())),
+				YEAR(ISNULL(A.ProjectedStartDate,@FutureDate)),
+				MONTH(ISNULL(A.ProjectedStartDate,@FutureDate)),
 				A.SalespersonLastName,
 				B.ClientName,
 				ISNULL(B.BuyerName, ''),
