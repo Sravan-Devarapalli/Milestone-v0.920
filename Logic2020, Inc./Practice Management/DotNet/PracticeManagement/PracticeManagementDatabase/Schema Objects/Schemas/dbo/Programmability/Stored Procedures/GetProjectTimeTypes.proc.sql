@@ -11,6 +11,9 @@ CREATE PROCEDURE [dbo].[GetProjectTimeTypes]
 
 AS
 BEGIN
+		DECLARE @FutureDate DATETIME
+		SET @FutureDate = dbo.GetFutureDate()
+
 		;WITH DefaultTimeTypes AS
 		(
 			SELECT TT.TimeTypeId, TT.Name
@@ -49,7 +52,7 @@ BEGIN
 				) 
 				OR ( CCH.ChargeCodeId IS NULL 
 						OR NOT ( CCH.StartDate <= @StartDate 
-									AND @EndDate <= ISNULL(CCH.EndDate,dbo.GetFutureDate())
+									AND @EndDate <= ISNULL(CCH.EndDate,@FutureDate)
 							   )	
 					)
 			)
