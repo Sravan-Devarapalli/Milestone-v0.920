@@ -6,6 +6,9 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
+	DECLARE @FutureDate DATETIME , @BusinessDevelopmentProjectId INT 
+	SET @FutureDate = dbo.GetFutureDate()
+	SELECT @BusinessDevelopmentProjectId = ProjectId FROM dbo.Project WHERE ProjectNumber = 'P999918'--Business Development Project 
 
 	;WITH UsedProjectGroupIds
 	AS 
@@ -15,9 +18,8 @@ BEGIN
 	  WHERE PersonId = @PersonId 
 		AND ClientId = @ClientId 
 		AND StartDate <= @StartDate
-		AND @EndDate <= ISNULL(EndDate,dbo.GetFutureDate())  
-		AND ProjectId = (SELECT ProjectId FROM dbo.Project WHERE ProjectNumber = 'P999918')--Business Development Project
-
+		AND @EndDate <= ISNULL(EndDate,@FutureDate)  
+		AND ProjectId = @BusinessDevelopmentProjectId 
 	)
 	SELECT pg.GroupId
 		, pg.Name
