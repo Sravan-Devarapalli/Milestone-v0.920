@@ -4,6 +4,9 @@
 )
 AS
 BEGIN
+	DECLARE @FutureDate DATETIME 
+	SET @FutureDate = dbo.GetFutureDate()
+
 	IF EXISTS (SELECT 1 FROM Milestone WHERE MilestoneId = @MilestoneId)
 	BEGIN
 		SELECT 
@@ -42,8 +45,8 @@ BEGIN
 						FROM dbo.PersonStatusHistory PH
 						WHERE PH.PersonId = mp.PersonId
 								AND PH.PersonStatusId = 1 --Active
-								AND (@StartDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,dbo.GetFutureDate())
-									OR @EndDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,dbo.GetFutureDate())
+								AND (@StartDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,@FutureDate)
+									OR @EndDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,@FutureDate)
 									OR PH.StartDate BETWEEN @StartDate AND @EndDate
 									OR (PH.EndDate BETWEEN @StartDate AND @EndDate AND PH.EndDate IS NOT NULL)
 									)
