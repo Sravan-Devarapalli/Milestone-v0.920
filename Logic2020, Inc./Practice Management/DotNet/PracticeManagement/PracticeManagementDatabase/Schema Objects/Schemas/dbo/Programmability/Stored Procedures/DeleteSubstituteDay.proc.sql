@@ -21,9 +21,15 @@ BEGIN
 			@PTOChargeCodeId INT,
 			@HolidayChargeCodeId INT,
 			@IsW2SalaryPerson	BIT = 0,
-			@ModifiedBy INT
+			@ModifiedBy INT,
+			@FutureDate DATETIME
 
-	 SELECT @ParentHolidayDate = pc.Date, 
+	SELECT  @CurrentPMTime = dbo.InsertingTime(),
+			@PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
+			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
+			@FutureDate = dbo.GetFutureDate()
+
+	SELECT @ParentHolidayDate = pc.Date, 
 		   @ParentHolidayDescription = c.HolidayDescription
 	 FROM dbo.PersonCalendar pc 
 	 INNER JOIN dbo.Calendar c ON c.Date = pc.Date
@@ -33,11 +39,9 @@ BEGIN
 	SELECT @IsW2SalaryPerson = 1
 	FROM dbo.Pay pay 
 	INNER JOIN dbo.Timescale ts ON pay.Timescale = ts.TimescaleId  
-	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @ParentHolidayDate IS NOT NULL AND @ParentHolidayDate BETWEEN pay.StartDate AND ISNULL(pay.EndDate,dbo.GetFutureDate())
+	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @ParentHolidayDate IS NOT NULL AND @ParentHolidayDate BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
 
-	SELECT  @CurrentPMTime = dbo.InsertingTime(),
-			@PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
-			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
+	
 				
 	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
 	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
