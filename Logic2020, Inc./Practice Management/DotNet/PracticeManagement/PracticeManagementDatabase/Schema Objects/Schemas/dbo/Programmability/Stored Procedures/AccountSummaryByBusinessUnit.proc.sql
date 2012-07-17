@@ -51,7 +51,7 @@ BEGIN
 				LEFT JOIN dbo.Project Pro ON Pro.ProjectId = CC.ProjectId
 		WHERE CC.ClientId = @AccountId
 				AND	TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-											dbo.GetFutureDate())
+											@FutureDate)
 				AND ( CC.timeTypeId != @HolidayTimeType
 						OR ( CC.timeTypeId = @HolidayTimeType
 							AND PTSH.PersonStatusId = 1
@@ -86,7 +86,7 @@ BEGIN
 				INNER JOIN dbo.Client C ON C.ClientId = CC.ClientId
 		WHERE CC.ClientId = @AccountId
 				AND	TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-											dbo.GetFutureDate())
+											@FutureDate)
 				AND ( CC.timeTypeId != @HolidayTimeType
 						OR ( CC.timeTypeId = @HolidayTimeType
 							AND PTSH.PersonStatusId = 1
