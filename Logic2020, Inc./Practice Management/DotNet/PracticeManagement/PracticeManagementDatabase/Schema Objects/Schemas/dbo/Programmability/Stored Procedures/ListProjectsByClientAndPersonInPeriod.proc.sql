@@ -10,6 +10,10 @@
 AS
 BEGIN
 	SET NOCOUNT ON
+
+	DECLARE @FutureDate DATETIME 
+	SET @FutureDate = dbo.GetFutureDate()
+
 	/*
 		1	Inactive
 		2	Projected
@@ -26,7 +30,7 @@ BEGIN
 	  WHERE PersonId = @PersonId 
 		AND ClientId = @ClientId 
 		AND StartDate <= @StartDate
-		AND @EndDate <= ISNULL(EndDate,dbo.GetFutureDate())  
+		AND @EndDate <= ISNULL(EndDate,@FutureDate)  
 	),
 	AssignedProjects
 	AS
