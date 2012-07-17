@@ -12,9 +12,8 @@ CREATE PROCEDURE [dbo].[GetPersonListBySearchKeyword]
 AS
 BEGIN
 	
-		DECLARE @NOW DATETIME 
-
-		SELECT @NOW = dbo.GettingPMTime(GETUTCDATE())
+		DECLARE @NOW DATETIME ,@FutureDate DATETIME
+		SELECT @NOW = dbo.GettingPMTime(GETUTCDATE()),@FutureDate = dbo.GetFutureDate()
 
 		IF @Looked IS NOT NULL
 			SET @Looked = '%' + LTRIM(RTRIM(@Looked)) + '%'
@@ -29,7 +28,7 @@ BEGIN
 		FROM dbo.Person P
 		INNER JOIN dbo.PersonStatus PS ON PS.PersonStatusId = P.PersonStatusId AND P.IsStrawman = 0 
 		LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
-							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,dbo.GetFutureDate()) 
+							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,@FutureDate) 
 		LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
 		WHERE  P.FirstName LIKE @Looked OR P.LastName LIKE @Looked
 		ORDER BY P.LastName,P.FirstName
