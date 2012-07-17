@@ -98,7 +98,7 @@ BEGIN
 	left join dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
 	WHERE	    (c.CommissionType is NULL OR c.CommissionType = 1)
-		    AND (dbo.IsDateRangeWithingTimeInterval(p.StartDate, p.EndDate, @StartDate, @EndDate) = 1 OR (p.StartDate IS NULL AND p.EndDate IS NULL))
+		    AND ( (p.StartDate <= @EndDate AND p.EndDate <= @EndDate) OR (p.StartDate IS NULL AND p.EndDate IS NULL))
 			AND ( @ClientIds IS NULL OR p.ClientId IN (select Id from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @ProjectOwnerIds IS NULL 
@@ -309,7 +309,7 @@ BEGIN
 					INNER JOIN dbo.Pay AS p ON p.StartDate <= cal.Date 
 												AND p.EndDate > cal.date 
 												AND cal.PersonId = p.Person
-					LEFT JOIN dbo.V_WorkinHoursByYear HY1 ON HY1.[Year] = YEAR(cal.Date)
+					LEFT JOIN V_WorkinHoursByYear HY1 ON HY1.[Year] = YEAR(cal.Date)
 					WHERE cal.DayOff = 0
 					 AND cal.Date between @StartDate and @EndDate
 				   )AS p ON p.PersonId = m.PersonId AND p.Date = r.Date
@@ -326,7 +326,7 @@ BEGIN
 						   ) AS o ON p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, @FutureDate)
 									  AND o.Inactive = 0
 									  AND o.TimescaleId = p.Timescale
-				 LEFT JOIN dbo.V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
+				 LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
 			GROUP BY m.EntryId,r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
 					 m.Amount, p.BonusAmount, p.BonusHoursToCollect, p.Timescale,p.PracticeId, r.HoursPerDay,
 					 r.IsHourlyAmount, m.HoursPerDay, m.PersonId,m.MilestonePersonId, m.EntryStartDate
@@ -418,7 +418,7 @@ BEGIN
 		  WHERE  f.PersonId IS NOT NULL 
 			AND ( @PracticeIds IS NULL 
 					OR f.PracticeId IN (SELECT Id FROM @PracticesList)) 
-					AND f.Date BETWEEN @StartDate AND @EndDate
+			AND f.Date BETWEEN @StartDate AND @EndDate
 		  GROUP BY f.ProjectId,f.MilestonePersonId, f.PersonId,f.PracticeId, pra.Name,
 					PM.LastName,PM.FirstName,pra.PracticeManagerId,f.MilestoneId,mile.Description,
 					per.FirstName,per.LastName,cal.MonthStartDate,cal.MonthEndDate
