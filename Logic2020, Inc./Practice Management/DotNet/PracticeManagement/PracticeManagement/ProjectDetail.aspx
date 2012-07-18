@@ -569,7 +569,7 @@
                                                 Business Unit
                                             </td>
                                             <td style="width: 60%;">
-                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="Width95Per"
+                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="Width95Per" onchange="setDirty();"
                                                     OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true">
                                                 </asp:DropDownList>
                                             </td>
@@ -783,7 +783,7 @@
                                         <tr>
                                             <td style="height: 20px; padding-left: 10px; vertical-align: bottom; padding-bottom: 3px;">
                                                 Notes for this project are
-                                                <asp:DropDownList ID="ddlNotes" runat="server" Width="200">
+                                                <asp:DropDownList ID="ddlNotes" runat="server" Width="200" onchange="setDirty();">
                                                     <asp:ListItem Selected="True" Text="Required" Value="1"></asp:ListItem>
                                                     <asp:ListItem Text="Optional" Value="0"></asp:ListItem>
                                                 </asp:DropDownList>
@@ -1136,7 +1136,7 @@
                     <tr>
                         <td colspan="3" style="text-align: center; padding-bottom: 5px;">
                             <asp:Button ID="btnUpdateProjectName" runat="server" Text="Update" ToolTip="Update"
-                                OnClick="btnUpdateProjectName_OnClick" onchange="setDirty();" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                OnClick="btnUpdateProjectName_OnClick" OnClientClick="setDirty();" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:Button ID="btncloseEditProjectName" runat="server" ToolTip="Cancel" Text="Cancel">
                             </asp:Button>
                         </td>
