@@ -292,15 +292,36 @@
                     </tr>
                     <tr>
                         <td class="bg-light-frame strawmenPageTd">
+                            <asp:HiddenField ID="hdCompersationStrawman" runat="server" />
                             <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
-                                EmptyDataText="No compensation history for this person." CssClass="CompPerfTable gvCompensationHistoryStrawmen">
-                                
+                                OnRowDataBound="gvCompensationHistory_OnRowDataBound" EmptyDataText="No compensation history for this person."
+                                CssClass="CompPerfTable gvCompensationHistoryStrawmen">
                                 <AlternatingRowStyle CssClass="alterrow" />
                                 <Columns>
+                                    <asp:TemplateField>
+                                        <HeaderTemplate>
+                                            <div class="ie-bg">
+                                            </div>
+                                        </HeaderTemplate>
+                                        <HeaderStyle CssClass="width10" />
+                                        <ItemTemplate>
+                                            <asp:ImageButton ID="imgEditCompensation" ToolTip="Edit Compensation" runat="server"
+                                                OnClick="imgEditStrawmanCompersation_OnClick" ImageUrl="~/Images/icon-edit.png" />
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:ImageButton ID="imgUpdateCompensation" ToolTip="Save" runat="server" ImageUrl="~/Images/icon-check.png"
+                                                OnClick="imgUpdateStrawmanCompersation_OnClick" operation="Update" />
+                                            <asp:ImageButton ID="imgCancelCompensation" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
+                                                OnClick="imgCancelCompensation_OnClick" />
+                                        </EditItemTemplate>
+                                    </asp:TemplateField>
                                     <asp:TemplateField>
                                         <ItemTemplate>
                                             <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime?)Eval("StartDate")).HasValue ? ((DateTime?)Eval("StartDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
                                         </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime?)Eval("StartDate")).HasValue ? ((DateTime?)Eval("StartDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
+                                        </EditItemTemplate>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Start</div>
@@ -309,6 +330,8 @@
                                     <asp:TemplateField>
                                         <ItemTemplate>
                                             <%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %></ItemTemplate>
+                                        <EditItemTemplate>
+                                            <%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %></EditItemTemplate>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 End</div>
@@ -317,6 +340,15 @@
                                     <asp:TemplateField>
                                         <ItemTemplate>
                                             <%# Eval("TimescaleName") %></ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:DropDownList ID="ddlBasic" runat="server" CssClass="Width90Px" onchange="return EnableDisableVacationDays(this);"
+                                                OnSelectedIndexChanged="ddlBasic_OnSelectedIndexChanged" AutoPostBack="false">
+                                                <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
+                                                <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
+                                                <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
+                                                <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
+                                            </asp:DropDownList>
+                                        </EditItemTemplate>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Basis</div>
@@ -330,6 +362,15 @@
                                         <ItemTemplate>
                                             <%# Eval("Amount") %>
                                         </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtAmount" runat="server" Text=' <%# Eval("Amount") %>' CssClass="Width90Px textRight"></asp:TextBox>
+                                            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmount"
+                                                FilterMode="ValidChars" FilterType="Numbers,Custom" ValidChars=".">
+                                            </AjaxControlToolkit:FilteredTextBoxExtender>
+                                            <asp:RequiredFieldValidator ID="rqfvAmount" runat="server" Text="*" ErrorMessage="Amount is required."
+                                                ControlToValidate="txtAmount" ToolTip="Amount is required." SetFocusOnError="true"
+                                                ValidationGroup="StrawmanCompersationGroup"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
                                         <HeaderTemplate>
@@ -339,6 +380,16 @@
                                         <ItemTemplate>
                                             <%# ((int?)Eval("VacationDays")).HasValue ? (((int?)Eval("VacationDays")).Value * 8).ToString() : string.Empty %>
                                         </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtVacationDays" runat="server" Text=' <%# ((int?)Eval("VacationDays")).HasValue ? (((int?)Eval("VacationDays")).Value * 8).ToString() : string.Empty %>'
+                                                CssClass="textRight Width90Px"></asp:TextBox>
+                                            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtVacationDays" runat="server"
+                                                TargetControlID="txtVacationDays" FilterMode="ValidChars" FilterType="Numbers">
+                                            </AjaxControlToolkit:FilteredTextBoxExtender>
+                                            <asp:CustomValidator ID="cvVacationDaysCompersation" runat="server" Text="*" ErrorMessage="VacationDays(In Hours) must be in multiple of 8."
+                                                ToolTip="VacationDays(In Hours) must be in multiple of 8." ValidationGroup="StrawmanCompersationGroup"
+                                                SetFocusOnError="true" OnServerValidate="cvVacationDaysCompersation_ServerValidate"></asp:CustomValidator>
+                                        </EditItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
                                         <HeaderTemplate>
@@ -362,7 +413,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="Padding10 textCenter">
+                        <td class="StrawmanCompersationValidation">
+                            <uc:Label ID="mlConfirmationCompersation" runat="server" ErrorColor="Red" InfoColor="Green"
+                                WarningColor="Orange" />
+                            <asp:ValidationSummary ID="vsStrawmanCompersationSummary" runat="server" ValidationGroup="StrawmanCompersationGroup"
+                                CssClass="ApplyStyleForDashBoardLists" DisplayMode="BulletList" ShowMessageBox="false"
+                                ShowSummary="true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="PaddingTB5PxLR10Px textCenter">
                             <asp:Button ID="btnOkCompersation" runat="server" ToolTip="OK" Text="OK" CssClass="Width100Px" />
                         </td>
                     </tr>
