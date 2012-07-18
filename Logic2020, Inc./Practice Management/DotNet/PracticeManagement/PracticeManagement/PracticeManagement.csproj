@@ -1259,13 +1259,6 @@
     <Compile Include="ActivityLog.aspx.designer.cs">
       <DependentUpon>ActivityLog.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ActivityLog_Old.aspx.cs">
-      <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ActivityLog_Old.aspx.designer.cs">
-      <DependentUpon>ActivityLog_Old.aspx</DependentUpon>
-    </Compile>
     <Compile Include="AttachProjectToOpportunityHandler.ashx.cs">
       <DependentUpon>AttachProjectToOpportunityHandler.ashx</DependentUpon>
     </Compile>
@@ -1991,13 +1984,6 @@
     </Compile>
     <Compile Include="Controls\ExpenseListControl.ascx.designer.cs">
       <DependentUpon>ExpenseListControl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Generic\BecomeUser.ascx.cs">
-      <DependentUpon>BecomeUser.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Generic\BecomeUser.ascx.designer.cs">
-      <DependentUpon>BecomeUser.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Generic\Buttons\CancelAndReturnButton.cs" />
     <Compile Include="Controls\Generic\Buttons\IsCorrectImageButton.cs" />
@@ -2922,7 +2908,6 @@
     <None Include="Properties\DataSources\DataTransferObjects.Practice.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ActivityLog_Old.aspx" />
     <Content Include="Calendar.aspx" />
     <Content Include="ClientDetails.aspx" />
     <Content Include="CompanyPerfomanceServ.asmx" />
@@ -2935,7 +2920,6 @@
     <Content Include="Controls\DatePicker.ascx" />
     <EmbeddedResource Include="Controls\Generic\DirtyState\DirtyExtender.js" />
     <EmbeddedResource Include="Controls\Generic\ElementDisabler\ElementDisablerExtender.js" />
-    <Content Include="Controls\Generic\BecomeUser.ascx" />
     <Content Include="Controls\Generic\Filtering\DateInterval.ascx" />
     <Content Include="Controls\Generic\Filtering\Option.ascx" />
     <Content Include="Controls\Generic\Filtering\RealInterval.ascx" />
