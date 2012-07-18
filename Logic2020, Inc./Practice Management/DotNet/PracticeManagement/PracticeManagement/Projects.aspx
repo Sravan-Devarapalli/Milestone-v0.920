@@ -3,13 +3,8 @@
 
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
-<%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
-    TagPrefix="cc1" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register Src="Controls/PracticeFilter.ascx" TagName="PracticeFilter" TagPrefix="uc1" %>
-<%@ Register Src="Controls/MonthPicker.ascx" TagName="MonthPicker" TagPrefix="uc2" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
-<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
@@ -249,12 +244,12 @@
                 lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
                 if (imgCalender.fireEvent) {
                     imgCalender.attributes["class"].value = "";
-                    lblCustomDateRange.attributes["class"].value = "";
+                    lblCustomDateRange.attributes["class"].value = "fontBold";
                     imgCalender.click();
                 }
                 if (document.createEvent) {
                     imgCalender.attributes["class"].value = "";
-                    lblCustomDateRange.attributes["class"].value = "";
+                    lblCustomDateRange.attributes["class"].value = "fontBold";
                     var event = document.createEvent('HTMLEvents');
                     event.initEvent('click', true, true);
                     imgCalender.dispatchEvent(event);
@@ -273,8 +268,8 @@
                 <div class="buttons-block">
                     <table class="WholeWidth BorderNone LeftPadding10px">
                         <tr>
-                            <td style="width: 3%">
-                                <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
+                            <td class="Width3Percent">
+                                <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                                     ImageControlID="btnExpandCollapseFilter" CollapsedImage="Images/expand.jpg" ExpandedImage="Images/collapse.jpg"
                                     CollapseControlID="btnExpandCollapseFilter" ExpandControlID="btnExpandCollapseFilter"
                                     Collapsed="True" TextLabelID="lblFilter" />
@@ -282,10 +277,10 @@
                                 <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/collapse.jpg"
                                     ToolTip="Search, Filter and Calculation Options" />
                             </td>
-                            <td style="width: 8%;">
+                            <td class="Width8Percent">
                                 &nbsp;Show&nbsp;Projects&nbsp;for&nbsp;
                             </td>
-                            <td style="width: 8%;">
+                            <td class="Width8Percent">
                                 <asp:DropDownList ID="ddlPeriod" runat="server" Onchange=" return CheckAndShowCustomDatesPoup(this);">
                                     <asp:ListItem Text="Next 3 months" Value="3"></asp:ListItem>
                                     <asp:ListItem Text="Next 6 months" Value="6"></asp:ListItem>
@@ -308,11 +303,11 @@
                                 <asp:HiddenField ID="hdnStartDateTxtBoxId" runat="server" Value="" />
                                 <asp:HiddenField ID="hdnEndDateTxtBoxId" runat="server" Value="" />
                             </td>
-                            <td style="width: 48%; padding-left: 5px;" align="left">
-                                <asp:Label ID="lblCustomDateRange" Style="font-weight: bold;" runat="server" Text=""></asp:Label>
+                            <td class="Width48Percent padLeft5">
+                                <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                 <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             </td>
-                            <td style="width: 22%;" align="right">
+                            <td class="Width22Per" align="right">
                                 <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged">
                                     <asp:ListItem Text="View 10" Value="10"></asp:ListItem>
                                     <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -321,7 +316,7 @@
                                 </asp:DropDownList>
                                 &nbsp;&nbsp;
                                 <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn"
-                                    NavigateUrl="~/ProjectDetail.aspx?returnTo=Projects.aspx" />
+                                    NavigateUrl="~/ProjectDetail.aspx?from=sub_toolbar&returnTo=Projects.aspx" />
                             </td>
                         </tr>
                     </table>
@@ -329,19 +324,18 @@
                 <asp:Panel ID="pnlFilters" runat="server">
                     <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
                         CssClass="CustomTabStyle">
-                        <ajaxToolkit:TabPanel ID="tpSearch" runat="server">
+                        <AjaxControlToolkit:TabPanel ID="tpSearch" runat="server">
                             <HeaderTemplate>
                                 <span class="bg"><a href="#"><span>Search</span></a> </span>
                             </HeaderTemplate>
                             <ContentTemplate>
-                                <asp:Panel ID="pnlSearch" runat="server" Style="height: 80px;" CssClass="project-filter"
-                                    DefaultButton="btnSearchAll">
+                                <asp:Panel ID="pnlSearch" runat="server" CssClass="Height80Px" DefaultButton="btnSearchAll">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="padding-right: 8px; padding-left: 4px;">
+                                            <td class="padRight8 padLeft4">
                                                 <asp:TextBox ID="txtSearchText" runat="server" CssClass="WholeWidth" EnableViewState="False" />
                                             </td>
-                                            <td style="width: 10px;">
+                                            <td class="Width10Px">
                                                 <asp:RequiredFieldValidator ID="reqSearchText" runat="server" ControlToValidate="txtSearchText"
                                                     ErrorMessage="Please type text to be searched." ToolTip="Please type text to be searched."
                                                     Text="*" SetFocusOnError="true" ValidationGroup="Search" CssClass="searchError"
@@ -349,7 +343,7 @@
                                             </td>
                                             <td>
                                                 <asp:Button ID="btnSearchAll" runat="server" Text="Search All" ValidationGroup="Search"
-                                                    PostBackUrl="~/ProjectSearch.aspx" Width="100px" EnableViewState="False" />
+                                                    PostBackUrl="~/ProjectSearch.aspx" CssClass="Width100Px" EnableViewState="False" />
                                             </td>
                                             <td>
                                             </td>
@@ -363,48 +357,48 @@
                                     </table>
                                 </asp:Panel>
                             </ContentTemplate>
-                        </ajaxToolkit:TabPanel>
-                        <ajaxToolkit:TabPanel ID="tpAdvancedFilters" runat="server">
+                        </AjaxControlToolkit:TabPanel>
+                        <AjaxControlToolkit:TabPanel ID="tpAdvancedFilters" runat="server">
                             <HeaderTemplate>
                                 <span class="bg"><a href="#"><span>Filters</span></a> </span>
                             </HeaderTemplate>
                             <ContentTemplate>
-                                <div id="divProjectFilter" runat="server" class="project-filter">
-                                    <table class="WholeWidth" style="height: 80px;">
+                                <div id="divProjectFilter" runat="server">
+                                    <table class="WholeWidth Height80Px">
                                         <tr class="tb-header ProjectSummaryAdvancedFiltersHeader">
                                             <th>
                                                 Account / Business Unit
                                             </th>
-                                            <td style="padding: 5px; width: 10px;">
+                                            <td class="Padding5 Width10Px">
                                             </td>
                                             <th>
                                                 Sales Team
                                             </th>
-                                            <td style="padding: 5px; width: 10px;">
+                                            <td class="Padding5 Width10Px">
                                             </td>
                                             <th>
                                                 Practice Area
                                             </th>
-                                            <td rowspan="3" style="text-align: right;">
-                                                <table style="text-align: right; width: 100%;">
+                                            <td rowspan="3">
+                                                <table class="textRight WholeWidth">
                                                     <tr>
-                                                        <td style="padding-bottom: 5px;">
-                                                            <asp:Button ID="btnUpdateFilters" runat="server" Text="Update" Width="100px" OnClick="btnUpdateView_Click"
-                                                                ValidationGroup="Filter" EnableViewState="False" CssClass="pm-button" />
+                                                        <td>
+                                                            <asp:Button ID="btnUpdateFilters" runat="server" Text="Update" OnClick="btnUpdateView_Click"
+                                                                ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="padding-top: 5px;">
-                                                            <asp:Button ID="btnResetFilters" runat="server" Text="Reset" Width="100px" CausesValidation="False"
-                                                                OnClientClick="resetFiltersTab(); return false;" EnableViewState="False" CssClass="pm-button" />
+                                                        <td class="PaddingTop10">
+                                                            <asp:Button ID="btnResetFilters" runat="server" Text="Reset" CausesValidation="False"
+                                                                OnClientClick="resetFiltersTab(); return false;" EnableViewState="False" CssClass="Width100Px" />
                                                         </td>
                                                     </tr>
                                                 </table>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="padding: 5px;">
-                                                <uc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblProjectGroup"
+                                            <td class="Padding5">
+                                                <pmc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblProjectGroup"
                                                     SetDirty="false" CssClass="ProjectSummaryScrollingDropDown" onclick="scrollingDropdown_onclick('cblClient','Account');EnableOrDisableGroup();"
                                                     DropDownListType="Account" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblClient" runat="server" TargetControlID="cblClient"
@@ -414,7 +408,7 @@
                                             <td>
                                             </td>
                                             <td>
-                                                <uc:ScrollingDropDown ID="cblSalesperson" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                                <pmc:ScrollingDropDown ID="cblSalesperson" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
                                                     onclick="scrollingDropdown_onclick('cblSalesperson','Salesperson')" DropDownListType="Salesperson" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblSalesperson" runat="server" TargetControlID="cblSalesperson"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
@@ -423,7 +417,7 @@
                                             <td>
                                             </td>
                                             <td>
-                                                <uc:ScrollingDropDown ID="cblPractice" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                                <pmc:ScrollingDropDown ID="cblPractice" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
                                                     onclick="scrollingDropdown_onclick('cblPractice','Practice Area')" DropDownListType="Practice Area" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblPractice" runat="server" TargetControlID="cblPractice"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
@@ -431,8 +425,8 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="padding: 5px;">
-                                                <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                            <td class="Padding5">
+                                                <pmc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
                                                     onclick="custom_ScrollingDropdown_onclick('cblProjectGroup','Business Unit')"
                                                     DropDownListType="Business Unit" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectGroup" runat="server" TargetControlID="cblProjectGroup"
@@ -442,7 +436,7 @@
                                             <td>
                                             </td>
                                             <td>
-                                                <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
+                                                <pmc:ScrollingDropDown ID="cblProjectOwner" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
                                                     onclick="scrollingDropdown_onclick('cblProjectOwner','Project Manager')" DropDownListType="Project Manager" />
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectOwner" runat="server" TargetControlID="cblProjectOwner"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
@@ -456,73 +450,69 @@
                                     </table>
                                 </div>
                             </ContentTemplate>
-                        </ajaxToolkit:TabPanel>
-                        <ajaxToolkit:TabPanel runat="server" ID="tpMainFilters">
+                        </AjaxControlToolkit:TabPanel>
+                        <AjaxControlToolkit:TabPanel runat="server" ID="tpMainFilters">
                             <HeaderTemplate>
                                 <span class="bg"><a href="#"><span>Calculations</span></a> </span>
                             </HeaderTemplate>
                             <ContentTemplate>
                                 <div class="project-filter">
-                                    <table class="WholeWidth" cellpadding="5" style="height: 80px;">
+                                    <table class="WholeWidth Height80Px" cellpadding="5">
                                         <tr class="tb-header">
-                                            <td colspan="2" style="border-bottom: 1px solid black; text-align: center; width: 200px">
+                                            <td colspan="2" class="ProjectSummaryProjectTypeTd">
                                                 Project Types Included
                                             </td>
-                                            <td style="width: 20px;" rowspan="4">
+                                            <td class="Width20Px" rowspan="4">
                                             </td>
-                                            <td style="border-bottom: 1px solid black; text-align: center; width: 180px">
+                                            <td class="ProjectSummaryGrandTotalTd">
                                                 Calculated Grand Total
                                             </td>
-                                            <td rowspan="4" style="text-align: right;">
-                                                <table style="text-align: right; width: 100%;">
+                                            <td rowspan="4">
+                                                <table class="textRight WholeWidth">
                                                     <tr>
-                                                        <td style="padding-bottom: 5px;">
-                                                            <asp:Button ID="btnUpdateCalculations" runat="server" Text="Update" Width="100px"
-                                                                OnClick="btnUpdateView_Click" ValidationGroup="Filter" EnableViewState="False"
-                                                                CssClass="pm-button" />
+                                                        <td>
+                                                            <asp:Button ID="btnUpdateCalculations" runat="server" Text="Update" OnClick="btnUpdateView_Click"
+                                                                ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="padding-top: 5px;">
-                                                            <asp:Button ID="btnResetCalculations" runat="server" Text="Reset" Width="100px" CausesValidation="False"
+                                                        <td class="PaddingTop10">
+                                                            <asp:Button ID="btnResetCalculations" runat="server" Text="Reset" CausesValidation="False"
                                                                 OnClientClick="resetCalculationsTab(); return false;" EnableViewState="False"
-                                                                CssClass="pm-button" />
+                                                                CssClass="Width100Px" />
                                                         </td>
                                                     </tr>
                                                 </table>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="padding-left: 10px; width: 100px; padding-top: 1px;">
+                                            <td class="ProjectSummaryCheckboxTd">
                                                 <asp:CheckBox ID="chbActive" runat="server" Text="Active" Checked="True" EnableViewState="False" />
                                             </td>
-                                            <td style="padding-left: 10px; width: 100px; padding-top: 1px;">
+                                            <td class="ProjectSummaryCheckboxTd">
                                                 <asp:CheckBox ID="chbInternal" runat="server" Text="Internal" Checked="True" EnableViewState="False" />
                                             </td>
-                                            <td rowspan="2" style="text-align: center; padding-top: 5px;" valign="top">
-                                                <asp:DropDownList ID="ddlCalculateRange" runat="server" Style="font-family: Arial !Important;
-                                                    color: #333 !Important; font-size: 12px !Important;" AutoPostBack="false" Width="170px">
+                                            <td rowspan="2" class="ProjectSummaryCalculateRangeTd">
+                                                <asp:DropDownList ID="ddlCalculateRange" runat="server" AutoPostBack="false">
                                                     <asp:ListItem Text="Project Value in Range" Value="1"></asp:ListItem>
                                                     <asp:ListItem Text="Total Project Value" Value="2"></asp:ListItem>
                                                     <asp:ListItem Text="Current Fiscal Year" Value="3"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td style="padding-left: 10px;">
+                                        <tr class="PadLeft10Td">
+                                            <td>
                                                 <asp:CheckBox ID="chbProjected" runat="server" Text="Projected" Checked="True" EnableViewState="False" />
                                             </td>
-                                            <td style="padding-left: 10px;">
+                                            <td>
                                                 <asp:CheckBox ID="chbInactive" runat="server" Text="Inactive" EnableViewState="False" />
                                             </td>
-                                            <td>
-                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td style="padding-left: 10px;">
+                                        <tr class="PadLeft10Td">
+                                            <td>
                                                 <asp:CheckBox ID="chbCompleted" runat="server" Text="Completed" Checked="True" EnableViewState="False" />
                                             </td>
-                                            <td style="padding-left: 10px;">
+                                            <td>
                                                 <asp:CheckBox ID="chbExperimental" runat="server" Text="Experimental" EnableViewState="False" />
                                             </td>
                                             <td>
@@ -531,11 +521,11 @@
                                     </table>
                                 </div>
                             </ContentTemplate>
-                        </ajaxToolkit:TabPanel>
+                        </AjaxControlToolkit:TabPanel>
                     </AjaxControlToolkit:TabContainer>
                 </asp:Panel>
-                <asp:ValidationSummary ID="valsPerformance" runat="server" Width="100%" ValidationGroup="Filter"
-                    CssClass="searchError" />
+                <asp:ValidationSummary ID="valsPerformance" runat="server" ValidationGroup="Filter"
+                    CssClass="searchError WholeWidth" />
             </div>
         </ContentTemplate>
         <Triggers>
@@ -543,11 +533,10 @@
             <asp:PostBackTrigger ControlID="btnExportAllToExcel" />
         </Triggers>
     </asp:UpdatePanel>
-    <cc1:StyledUpdatePanel ID="StyledUpdatePanel" runat="server" CssClass="container"
+    <pmcg:StyledUpdatePanel ID="StyledUpdatePanel" runat="server" CssClass="container"
         UpdateMode="Conditional">
         <ContentTemplate>
-            <asp:Panel class="this value set OnPageLoad" runat="server" ID="horisontalScrollDiv"
-                CssClass="xScrollAuto">
+            <asp:Panel runat="server" ID="horisontalScrollDiv" CssClass="xScrollAuto">
                 <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound"
                     OnSorted="lvProjects_Sorted" OnDataBound="lvProjects_OnDataBound" OnSorting="lvProjects_Sorting"
                     OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
@@ -627,7 +616,7 @@
                         </table>
                     </LayoutTemplate>
                     <ItemTemplate>
-                        <tr runat="server" id="boundingRow" style="background-color: White">
+                        <tr runat="server" id="boundingRow" class="bgcolorwhite">
                             <td class="CompPerfProjectState">
                             </td>
                             <td class="CompPerfProjectNumber">
@@ -676,23 +665,23 @@
                 </asp:ListView>
                 <uc3:LoadingProgress ID="LoadingProgress1" runat="server" DisplayText="Refreshing Data..." />
             </asp:Panel>
-            <div style="padding: 5px 10px 5px 5px;">
+            <div class="padding5Right10">
                 <table class="WholeWidth">
                     <tr>
-                        <td style="padding-left: 40%;">
-                            <div style="font-weight: bold; width: 100%; padding-top: 5px; color: Black;">
+                        <td class="padLeft40Percent">
+                            <div class="ProjectSummaryPageCountTd">
                                 <asp:Label ID="lblPageCount" runat="server"></asp:Label>
                             </div>
                         </td>
                         <td align="right">
-                            <table cellpadding="0px" cellspacing="0px">
+                            <table>
                                 <tr>
-                                    <td style="padding: 0px;">
-                                        <asp:Button ID="btnExportToExcel" runat="server" Style="margin: 0px;" OnClick="btnExportToExcel_Click"
-                                            Text="Export" Width="100%" />
+                                    <td>
+                                        <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
+                                            Text="Export" CssClass="WholeWidth" />
                                     </td>
-                                    <td style="padding: 0px;">
-                                        <asp:Image ID="imgExportAllToExcel" runat="server" Style="margin: 0px;" ImageUrl="~/Images/Dropdown_Arrow_22.png"
+                                    <td>
+                                        <asp:Image ID="imgExportAllToExcel" runat="server" ImageUrl="~/Images/Dropdown_Arrow_22.png"
                                             onclick="imgArrow_click();" onmouseover="imgArrow_mouseOver();" onmouseout="imgArrow_mouseOut();" />
                                     </td>
                                 </tr>
@@ -701,8 +690,7 @@
                                         <ul id="popupmenu" class="pmenu">
                                             <li>
                                                 <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
-                                                    Text="Export All" Style="background-color: #CCCCCC; text-align: left!important;"
-                                                    CssClass="pm-button" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
+                                                    Text="Export All" CssClass="bgcolor_CCCCCC" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
                                             </li>
                                         </ul>
                                     </td>
@@ -712,17 +700,16 @@
                     </tr>
                 </table>
             </div>
-            <asp:Panel ID="pnlCustomDates" runat="server" BackColor="White" BorderColor="Black"
-                CssClass="ConfirmBoxClass" Style="padding-top: 20px; display: none;" BorderWidth="2px">
+            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
                 <table class="WholeWidth">
                     <tr>
-                        <td colspan="2" align="center">
+                        <td align="center">
                             <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                FromToDateFieldWidth="70" />
+                                FromToDateFieldCssClass="Width70Px" />
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="padding: 10px 0px 10px 0px;">
+                        <td class="custBtns">
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid();"
                                 Text="OK" OnClick="btnUpdateView_Click" />
                             <asp:Button ID="btnCustDatesClose" runat="server" Style="display: none;" CausesValidation="true" />
@@ -732,14 +719,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center">
+                        <td class="textCenter">
                             <asp:ValidationSummary ID="valSum" runat="server" />
                         </td>
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:Panel ID="pnlProjectToolTipHolder" Style="display: none; position: absolute;
-                z-index: 2000;" runat="server" CssClass="ToolTip WordWrap">
+            <asp:Panel ID="pnlProjectToolTipHolder" Style="display: none;" runat="server" CssClass="ToolTip WordWrap ProjectsToolTip">
                 <table>
                     <tr class="top">
                         <td class="lt">
@@ -773,6 +759,6 @@
                 </table>
             </asp:Panel>
         </ContentTemplate>
-    </cc1:StyledUpdatePanel>
+    </pmcg:StyledUpdatePanel>
 </asp:Content>
 
