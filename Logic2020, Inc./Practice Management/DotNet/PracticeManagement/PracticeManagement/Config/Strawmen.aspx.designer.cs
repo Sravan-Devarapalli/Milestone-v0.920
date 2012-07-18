@@ -265,6 +265,15 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.Label lblStrawmanName;
         
         /// <summary>
+        /// hdCompersationStrawman control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdCompersationStrawman;
+        
+        /// <summary>
         /// gvCompensationHistory control.
         /// </summary>
         /// <remarks>
@@ -272,6 +281,24 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvCompensationHistory;
+        
+        /// <summary>
+        /// mlConfirmationCompersation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.MessageLabel mlConfirmationCompersation;
+        
+        /// <summary>
+        /// vsStrawmanCompersationSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsStrawmanCompersationSummary;
         
         /// <summary>
         /// btnOkCompersation control.
