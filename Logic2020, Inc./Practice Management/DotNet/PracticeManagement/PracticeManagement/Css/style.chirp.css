@@ -1563,6 +1563,10 @@ TABLE.Section td
 {
     padding-top: 10px !important;
 }
+.PaddingTop15
+{
+    padding-top: 15px;
+}
 .PaddingTop20
 {
     padding-top: 20px;
@@ -1618,6 +1622,10 @@ TABLE.Section td
 .padRight0, .PaddingRight0Px
 {
     padding-right: 0px !important;
+}
+.padRight1
+{
+    padding-right: 1px;
 }
 .padRight2, .PaddingRight2Px
 {
@@ -1750,6 +1758,10 @@ TABLE.Section td
 .padLeft40Imp
 {
     padding-left: 40px !important;
+}
+.padLeft40Percent
+{
+    padding-left: 40%;
 }
 .padLeft60
 {
@@ -1981,6 +1993,10 @@ TABLE.Section td
 {
     width: 5px;
 }
+.Width10Px
+{
+    width: 10px;
+}
 .Width10PxImp
 {
     width: 10px !important;
@@ -2061,6 +2077,10 @@ TABLE.Section td
 {
     width: 100px;
 }
+.Width100PxImp
+{
+    width: 100px !important;
+}
 .Width110Px
 {
     width: 110px;
@@ -2088,6 +2108,10 @@ TABLE.Section td
 .Width140px
 {
     width: 140px;
+}
+.Width145px
+{
+    width: 145px;
 }
 .Width150px
 {
@@ -2129,9 +2153,17 @@ TABLE.Section td
 {
     width: 220px;
 }
+.Width235Px
+{
+    width: 235px;
+}
 .Width250Px
 {
     width: 250px;
+}
+.Width260Px
+{
+    width: 260px;
 }
 .Width295Px
 {
@@ -3621,12 +3653,13 @@ div.scrollextLabel
     max-height: 400px !important;
     max-width: 750px !important;
     min-height: 100px !important;
-    min-width: 500px !important;
+    min-width: 650px !important;
 }
 .StrawmanName
 {
     font-weight: 600;
     font-size: 14px;
+    padding : 5px 10px !important;  
 }
 .strawmenPageTd
 {
@@ -3641,7 +3674,7 @@ div.scrollextLabel
 }
 .gvCompensationHistoryStrawmen th
 {
-    width: 19%;
+    width: 17%;
     text-align: center;
 }
 .gvCompensationHistoryStrawmen td
@@ -3652,6 +3685,10 @@ div.scrollextLabel
 .gvCompensationHistoryStrawmen .width5
 {
     width: 5% !important;
+}
+.gvCompensationHistoryStrawmen .width10
+{
+    width: 10% !important;
 }
 .gvPractices
 {
@@ -4677,7 +4714,7 @@ BenchCosts.ascx*/
     text-align: center;
     padding-left: 2%;
 }
-.BorderBottom1px
+.BorderBottom1px, .BorderBottom1pxTd .border
 {
     border-bottom: 1px solid black;
 }
@@ -4721,10 +4758,137 @@ BenchCosts.ascx*/
 }
 .TimeperiodSummaryReportTr th
 {
-    width:100px;
+    width: 100px;
 }
 .FilterImg
 {
-    position:absolute;
-    padding-left:2px;
+    position: absolute;
+    padding-left: 2px;
+}
+.ProjectSummaryProjectTypeTd
+{
+    border-bottom: 1px solid black;
+    text-align: center;
+    width: 200px;
+}
+.ProjectSummaryGrandTotalTd
+{
+    border-bottom: 1px solid black;
+    text-align: center;
+    width: 180px;
+}
+.ProjectSummaryCheckboxTd
+{
+    padding-left: 10px;
+    width: 100px;
+    padding-top: 1px;
+}
+.ProjectSummaryCalculateRangeTd
+{
+    text-align: center;
+    padding-top: 5px;
+    vertical-align: top;
+}
+.ProjectSummaryCalculateRangeTd select
+{
+    font-family: Arial !important;
+    color: #333 !important;
+    font-size: 12px !important;
+    width: 170px;
+}
+.PadLeft10Td td
+{
+    padding-left: 10px;
+}
+.padding5Right10
+{
+    padding: 5px 10px 5px 5px;
+}
+.ProjectSummaryPageCountTd
+{
+    font-weight: bold;
+    width: 100%;
+    padding-top: 5px;
+    color: Black;
+}
+.ProjectsToolTip
+{
+    position: absolute;
+    z-index: 2000;
+}
+.scroll_cblPractice
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 260px;
+    z-index: 20000;
+}
+.scroll_cblBDMs
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 270px;
+    z-index: 20000;
+}
+.bgcolor_CCCCCC
+{
+    background-color: #CCCCCC;
+}
+.grandTotalRowInnerHtmlTd
+{
+    padding-left: 3px;
+    border-left: 2px solid black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    height: 35px;
+}
+.border_black
+{
+    border: 1px solid black;
+}
+.borderTopBottom_black
+{
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+.border_blackExceptLeft
+{
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+.borderLeftRight_black
+{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.border_blackExceptTop
+{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black !important;
+}
+.StrawmanCompersationValidation
+{
+    padding : 5px 10px 0px 10px;
+}
+.PaddingTB5PxLR10Px
+{
+  padding : 5px 10px !important;  
+}
+.TimeEntryPageTotalHours
+{
+    font-size: 14px; font-weight: bold; margin-left: 16px;
+}
+.PaddingTB10PxLR0Px
+{
+  padding : 10px 0px ;  
 }
