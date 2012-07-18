@@ -35,7 +35,7 @@ namespace PraticeManagement
                             </td>";
         private const string GrandTotalRowHTMLTemplate = "</tr><tr class='summary' style='border:1px solid black;' height = '40px'><td align='center' style='border-left:2px solid black;' >Grand Total</td><td></td>{0}<td align='right' style='padding-right:5px;'><table><tr><td>{1}</td></tr><tr><td>{2}</td></tr></table></td>";
         private const string CollpseExpandCellTemplate =
-                   @"<table><tr><td width='15px'>
+                   @"<table><tr><td width='15px' style='padding-left:3px;'>
                   <img alt='Collapse' name='Collapse' {0} onclick='ExpandCollapseChilds(this);' src='Images/collapse.jpg' class='hidden'  />
                   <img alt='Expand' name='Expand' {0} onclick='ExpandCollapseChilds(this);' src='Images/expand.jpg' {3} />
                     </td><td style='padding-left:6px;'><font style='{1}'>{2}</font>
@@ -63,7 +63,7 @@ namespace PraticeManagement
         private const string PersonAttributeTemplate = " Person = '{0}' ";
         private const string ClientAttributeTemplate = " Client = '{0}' ";
         private const string ExpandCollapseStatusAttribute = " ExpandCollapseStatus = 'Collapse' ";
-        private const string ClientGroupAttributeTemplate = " Business Unit = '{0}' ";
+        private const string ClientGroupAttributeTemplate = " ClientGroup = '{0}' ";
         private const string ProjectsWithoutDirectorText = "Projects Without Client Director";
         private const string IncludeProjectsWithoutDirectorItemKey = "ShowWithoutDirector";
         private const string LinkHTMLTemplate = "<a href='{0}' target='_blank'>{1}</a>";
@@ -1630,8 +1630,8 @@ namespace PraticeManagement
             //{
             //    expandImageClass = "class='hidden'";
             //}
-            var clientAttributes = attributes + string.Format(ClientAttributeTemplate, client.Name);
-            var clientNameHTML = string.Format(CollpseExpandCellTemplate, clientAttributes, string.Empty, client.Name, string.Empty);
+            var clientAttributes = attributes + string.Format(ClientAttributeTemplate, client.HtmlEncodedName);
+            var clientNameHTML = string.Format(CollpseExpandCellTemplate, clientAttributes, string.Empty, client.HtmlEncodedName, string.Empty);
 
             return clientNameHTML;
         }
