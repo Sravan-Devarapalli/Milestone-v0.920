@@ -227,9 +227,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td>
-                        from
-                    </td>
+                    <td align="right" style="padding-right:10px"> from </td>
                     <td style="width: 120px" align="left">
                         <asp:UpdatePanel ID="updFilters" runat="server">
                             <ContentTemplate>
@@ -238,7 +236,7 @@
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </td>
-                    <td style="width: 30px" align="left">
+                    <td style="width: 30px;padding-right:10px;" align="right">
                         to
                     </td>
                     <td style="width: 120px" align="left">
