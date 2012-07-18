@@ -21,7 +21,7 @@
                 ToolTip="The Period Start must be less than or equal to the Period End" Text="*"
                 EnableClientScript="false" OnServerValidate="custPeriod_ServerValidate" ValidationGroup="Filter"></asp:CustomValidator>
             <asp:CustomValidator ID="custPeriodLengthLimit" runat="server" EnableViewState="false"
-                ErrorMessage="The period length must be not more then {0} months." ToolTip="The period length must be not more then {0} months."
+                ErrorMessage="The period length must be not more then 24 months." ToolTip="The period length must be not more then 24 months."
                 Text="*" EnableClientScript="false" OnServerValidate="custPeriodLengthLimit_ServerValidate"
                 ValidationGroup="Filter"></asp:CustomValidator>
         </td>
