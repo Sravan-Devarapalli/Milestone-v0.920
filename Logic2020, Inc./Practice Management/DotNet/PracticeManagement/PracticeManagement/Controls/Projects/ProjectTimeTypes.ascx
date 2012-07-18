@@ -115,17 +115,17 @@
                         </div>
                     </td>
                     <td valign="middle" align="center" style="width: 8%">
-                        <asp:Button ID="btnAssignAll" UseSubmitBehavior="false" Text=">>" ToolTip="Add All"
+                        <asp:Button ID="btnAssignAll" UseSubmitBehavior="false" Text=">>" ToolTip="Add All" OnClientClick="setDirty();"
                             OnClick="btnAssignAll_OnClick" runat="server" />
                         <br />
-                        <asp:Button ID="btnAssign" UseSubmitBehavior="false" Text=">" ToolTip="Add Selected"
+                        <asp:Button ID="btnAssign" UseSubmitBehavior="false" Text=">" ToolTip="Add Selected" OnClientClick="setDirty();"
                             OnClick="btnAssign_OnClick" runat="server" />
                         <br />
                         <br />
-                        <asp:Button ID="btnUnAssign" UseSubmitBehavior="false" Text="<" ToolTip="Remove Selected"
+                        <asp:Button ID="btnUnAssign" UseSubmitBehavior="false" Text="<" ToolTip="Remove Selected" OnClientClick="setDirty();"
                             OnClick="btnUnAssign_OnClick" runat="server" />
                         <br />
-                        <asp:Button ID="btnUnAssignAll" UseSubmitBehavior="false" Text="<<" ToolTip="Remove All"
+                        <asp:Button ID="btnUnAssignAll" UseSubmitBehavior="false" Text="<<" ToolTip="Remove All" OnClientClick="setDirty();"
                             OnClick="btnUnAssignAll_OnClick" runat="server" />
                     </td>
                     <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;">
