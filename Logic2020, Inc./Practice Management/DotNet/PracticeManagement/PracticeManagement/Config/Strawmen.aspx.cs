@@ -26,9 +26,13 @@ namespace PraticeManagement.Config
 
         private List<Person> StrawmenList { get; set; }
 
+        private List<Pay> StrawmenCompersationList { get; set; }
+
         #endregion
 
         #region Methods
+
+        private bool IsEditCompersationEnable = false;
 
         private void GetStrawmenList()
         {
@@ -75,31 +79,43 @@ namespace PraticeManagement.Config
             {
                 strawman.CurrentPay.StartDate = SettingsHelper.GetCurrentPMTime().Date;
             }
+            PopulateCompensationBasicData(strawman.CurrentPay, txtAmount, txtVacationDays, ddlBasic);
+            strawman.CurrentPay.BonusAmount = (strawman.CurrentPay.Timescale != TimescaleType._1099Ctc && strawman.CurrentPay.Timescale != TimescaleType.PercRevenue) ? (decimal)strawman.CurrentPay.BonusAmount : 0;
+            strawman.CurrentPay.BonusHoursToCollect = (strawman.CurrentPay.Timescale != TimescaleType._1099Ctc && strawman.CurrentPay.Timescale != TimescaleType.PercRevenue && !strawman.CurrentPay.IsYearBonus) ? (int?)strawman.CurrentPay.BonusHoursToCollect : null;
+        }
 
+        private void PopulateCompensationBasicData(Pay pay, TextBox txtAmount, TextBox txtVacationDays, DropDownList ddlBasic)
+        {
             if (ddlBasic.SelectedIndex == 0)
             {
-                strawman.CurrentPay.Timescale = TimescaleType.Salary;
+                pay.Timescale = TimescaleType.Salary;
             }
             else if (ddlBasic.SelectedIndex == 1)
             {
-                strawman.CurrentPay.Timescale = TimescaleType.Hourly;
+                pay.Timescale = TimescaleType.Hourly;
             }
             else if (ddlBasic.SelectedIndex == 2)
             {
-                strawman.CurrentPay.Timescale = TimescaleType._1099Ctc;
+                pay.Timescale = TimescaleType._1099Ctc;
             }
             else
             {
-                strawman.CurrentPay.Timescale = TimescaleType.PercRevenue;
+                pay.Timescale = TimescaleType.PercRevenue;
             }
             PracticeManagementCurrency amt = new PracticeManagementCurrency();
             amt.Value = Convert.ToDecimal(txtAmount.Text);
-            strawman.CurrentPay.Amount = amt;
+            pay.Amount = amt;
             int vacationHours = 0;
             int.TryParse(txtVacationDays.Text, out vacationHours);
-            strawman.CurrentPay.VacationDays = (strawman.CurrentPay.Timescale != TimescaleType._1099Ctc && strawman.CurrentPay.Timescale != TimescaleType.PercRevenue) ? (int?)(vacationHours / 8) : null;
-            strawman.CurrentPay.BonusAmount = (strawman.CurrentPay.Timescale != TimescaleType._1099Ctc && strawman.CurrentPay.Timescale != TimescaleType.PercRevenue) ? (decimal)strawman.CurrentPay.BonusAmount : 0;
-            strawman.CurrentPay.BonusHoursToCollect = (strawman.CurrentPay.Timescale != TimescaleType._1099Ctc && strawman.CurrentPay.Timescale != TimescaleType.PercRevenue && !strawman.CurrentPay.IsYearBonus) ? (int?)strawman.CurrentPay.BonusHoursToCollect : null;
+            pay.VacationDays = (pay.Timescale != TimescaleType._1099Ctc && pay.Timescale != TimescaleType.PercRevenue) ? (int?)(vacationHours / 8) : null;
+        }
+
+        private void PopulateCompersationData(Pay pay)
+        {
+            var txtAmount = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex].FindControl("txtAmount") as TextBox;
+            var txtVacationDays = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex].FindControl("txtVacationDays") as TextBox;
+            var ddlBasic = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex].FindControl("ddlBasic") as DropDownList;
+            PopulateCompensationBasicData(pay, txtAmount, txtVacationDays, ddlBasic);
         }
 
         private void PopulateValidationPanel()
@@ -109,8 +125,11 @@ namespace PraticeManagement.Config
 
         private void PopulatePayHistoryPanel(int personId)
         {
+            hdCompersationStrawman.Value = personId.ToString();
             Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
             lblStrawmanName.Text = person.PersonLastFirstName;
+            StrawmenCompersationList = person.PaymentHistory;
+            IsEditCompersationEnable = StrawmenCompersationList.Count() == 1;
             gvCompensationHistory.DataSource = person.PaymentHistory;
             gvCompensationHistory.DataBind();
         }
@@ -150,6 +169,8 @@ namespace PraticeManagement.Config
             return string.Empty;
         }
 
+        #region Validation Control Events
+
         protected void cvDupliacteName_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             if (!string.IsNullOrEmpty(ExMessage) && ExMessage == DuplicatePersonName)
@@ -178,6 +199,79 @@ namespace PraticeManagement.Config
             }
         }
 
+        protected void cvVacationDaysCompersation_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = false;
+            var txtVacationDays = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex].FindControl("txtVacationDays") as TextBox;
+            var ddlBasic = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex].FindControl("ddlBasic") as DropDownList;
+            if (ddlBasic.SelectedIndex == 2 || ddlBasic.SelectedIndex == 3)
+            {
+                e.IsValid = true;
+                return;
+            }
+            int vacationDays;
+            if (int.TryParse(txtVacationDays.Text, out vacationDays))
+            {
+                if (vacationDays % 8 == 0)
+                {
+                    e.IsValid = true;
+                }
+            }
+        }
+
+        #endregion
+
+        #region gvStrawmen Control Events
+
+        protected void gvStrawmen_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow && gvStrawmen.EditIndex != e.Row.DataItemIndex)
+            {
+                var imgDeleteStrawman = e.Row.FindControl("imgDeleteStrawman") as ImageButton;
+                var Person = e.Row.DataItem as Person;
+                if (Person.InUse)
+                {
+                    imgDeleteStrawman.Visible = false;
+                }
+            }
+            if (gvStrawmen.EditIndex == e.Row.DataItemIndex && e.Row.RowType == DataControlRowType.DataRow)
+            {
+                var ddlBasic = e.Row.FindControl("ddlBasic") as DropDownList;
+                var txtVacationDays = e.Row.FindControl("txtVacationDays") as TextBox;
+                var editPerson = StrawmenList[gvStrawmen.EditIndex] as Person;
+                var pay = editPerson.CurrentPay;
+                PopulateTimeScale(ddlBasic, txtVacationDays, pay);
+            }
+        }
+
+        private void PopulateTimeScale(DropDownList ddlBasic, TextBox txtVacationDays, Pay pay)
+        {
+            ddlBasic.Attributes["vacationdaysId"] = txtVacationDays.ClientID;
+            if (pay != null)
+            {
+                if (pay.Timescale == TimescaleType.Salary)
+                {
+                    ddlBasic.SelectedIndex = 0;
+                    txtVacationDays.Enabled = true;
+                }
+                else if (pay.Timescale == TimescaleType.Hourly)
+                {
+                    ddlBasic.SelectedIndex = 1;
+                    txtVacationDays.Enabled = true;
+                }
+                else if (pay.Timescale == TimescaleType._1099Ctc)
+                {
+                    ddlBasic.SelectedIndex = 2;
+                    txtVacationDays.Enabled = false;
+                }
+                else
+                {
+                    ddlBasic.SelectedIndex = 3;
+                    txtVacationDays.Enabled = false;
+                }
+            }
+        }
+
         protected void imgCopyStrawman_OnClick(object sender, EventArgs e)
         {
             ImageButton imgCopy = sender as ImageButton;
@@ -201,21 +295,9 @@ namespace PraticeManagement.Config
         {
             ImageButton imgCompersation = sender as ImageButton;
             int strawmanId = Convert.ToInt32(imgCompersation.Attributes["strawmanId"]);
+            gvCompensationHistory.EditIndex = -1;
+            mlConfirmationCompersation.ClearMessage();
             PopulatePayHistoryPanel(strawmanId);
-            mpeCompensation.Show();
-        }
-
-        protected void imgCompensationDelete_OnClick(object sender, EventArgs e)
-        {
-            hdnCopyStrawman.Value = "";
-            ImageButton imgDelete = sender as ImageButton;
-            GridViewRow row = imgDelete.NamingContainer as GridViewRow;
-            var lblStartDate = row.FindControl("lblStartDate") as Label;
-            var startDate = Convert.ToDateTime(lblStartDate.Text);
-            int personId = Convert.ToInt32(imgDelete.Attributes["strawmanId"].ToString());
-            ServiceCallers.Custom.Person(p => p.DeletePay(personId, startDate));
-            DataBind_gvStrawmen();
-            PopulatePayHistoryPanel(personId);
             mpeCompensation.Show();
         }
 
@@ -311,6 +393,8 @@ namespace PraticeManagement.Config
             }
         }
 
+        #endregion
+
         protected void lnkEditStrawman_OnClick(object sender, EventArgs e)
         {
             var hdnLastName = gvStrawmen.Rows[gvStrawmen.EditIndex].FindControl("hdnLastName") as HiddenField;
@@ -341,51 +425,99 @@ namespace PraticeManagement.Config
             mpeEditStrawmanPopup.Hide();
         }
 
-        protected void gvStrawmen_RowDataBound(object sender, GridViewRowEventArgs e)
+        #region gvCompensationHistory Control Events
+
+        protected void gvCompensationHistory_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.DataRow && gvStrawmen.EditIndex != e.Row.DataItemIndex)
-            {
-                var imgDeleteStrawman = e.Row.FindControl("imgDeleteStrawman") as ImageButton;
-                var Person = e.Row.DataItem as Person;
-                if (Person.InUse)
-                {
-                    imgDeleteStrawman.Visible = false;
-                }
-            }
-            if (gvStrawmen.EditIndex == e.Row.DataItemIndex && e.Row.RowType == DataControlRowType.DataRow)
+            e.Row.Cells[0].Visible = IsEditCompersationEnable;
+            e.Row.Cells[e.Row.Cells.Count - 1].Visible = !IsEditCompersationEnable;
+            if (gvCompensationHistory.EditIndex == e.Row.DataItemIndex && e.Row.RowType == DataControlRowType.DataRow)
             {
                 var ddlBasic = e.Row.FindControl("ddlBasic") as DropDownList;
                 var txtVacationDays = e.Row.FindControl("txtVacationDays") as TextBox;
-                var editPerson = StrawmenList[gvStrawmen.EditIndex] as Person;
-                var pay = editPerson.CurrentPay;
-                
-                ddlBasic.Attributes["vacationdaysId"] = txtVacationDays.ClientID;
-                if (pay != null)
-                {
-                    if (pay.Timescale == TimescaleType.Salary)
-                    {
-                        ddlBasic.SelectedIndex = 0;
-                        txtVacationDays.Enabled = true;
-                    }
-                    else if (pay.Timescale == TimescaleType.Hourly)
-                    {
-                        ddlBasic.SelectedIndex = 1;
-                        txtVacationDays.Enabled = true;
-                    }
-                    else if (pay.Timescale == TimescaleType._1099Ctc)
-                    {
-                        ddlBasic.SelectedIndex = 2;
-                        txtVacationDays.Enabled = false;
-                    }
-                    else
-                    {
-                        ddlBasic.SelectedIndex = 3;
-                        txtVacationDays.Enabled = false;
-                    }
-                }
+                var pay = StrawmenCompersationList[gvCompensationHistory.EditIndex] as Pay;
+                PopulateTimeScale(ddlBasic, txtVacationDays, pay);
             }
         }
+
+        protected void imgEditStrawmanCompersation_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgEdit = sender as ImageButton;
+            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
+            int personId;
+            if (int.TryParse(hdCompersationStrawman.Value, out personId))
+            {
+                gvCompensationHistory.EditIndex = row.DataItemIndex;
+                mlConfirmationCompersation.ClearMessage();
+                PopulatePayHistoryPanel(personId);
+            }
+            mpeCompensation.Show();
+        }
+
+        protected void imgUpdateStrawmanCompersation_OnClick(object sender, EventArgs e)
+        {
+            ImageButton imgUpdate = sender as ImageButton;
+            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
+            int strawmanId;
+            if (int.TryParse(hdCompersationStrawman.Value, out strawmanId))
+            {
+                Page.Validate(vsStrawmanCompersationSummary.ValidationGroup);
+                if (Page.IsValid)
+                {
+                    Person strawman = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(strawmanId));
+                    strawman.Id = strawmanId;
+                    var lblStartDate = row.FindControl("lblStartDate") as Label;
+                    var startDate = Convert.ToDateTime(lblStartDate.Text);
+                    Pay pay = strawman.PaymentHistory.First(p => p.StartDate == startDate);
+                    PopulateCompersationData(pay);
+                    ServiceCallers.Custom.Person(s => s.SaveStrawman(strawman, pay, User.Identity.Name));
+                    mlConfirmationCompersation.ShowInfoMessage("Compensation details are saved successfully.");
+                    gvCompensationHistory.EditIndex = -1;
+                    PopulatePayHistoryPanel(strawmanId);
+                    DataBind_gvStrawmen();
+                }
+            }
+            mpeCompensation.Show();
+        }
+
+        protected void imgCancelCompensation_OnClick(object sender, EventArgs e)
+        {
+            gvCompensationHistory.EditIndex = -1;
+            mlConfirmationCompersation.ClearMessage();
+            int personId;
+            if (int.TryParse(hdCompersationStrawman.Value, out personId))
+            {
+                PopulatePayHistoryPanel(personId);
+            }
+            mpeCompensation.Show();
+        }
+
+        protected void imgCompensationDelete_OnClick(object sender, EventArgs e)
+        {
+            hdnCopyStrawman.Value = "";
+            ImageButton imgDelete = sender as ImageButton;
+            GridViewRow row = imgDelete.NamingContainer as GridViewRow;
+            var lblStartDate = row.FindControl("lblStartDate") as Label;
+            var startDate = Convert.ToDateTime(lblStartDate.Text);
+            int personId = Convert.ToInt32(imgDelete.Attributes["strawmanId"].ToString());
+            ServiceCallers.Custom.Person(p => p.DeletePay(personId, startDate));
+            DataBind_gvStrawmen();
+            PopulatePayHistoryPanel(personId);
+            mlConfirmationCompersation.ShowInfoMessage("Compensation successfully deleted.");
+            mpeCompensation.Show();
+        }
+
+        protected void ddlBasic_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            var ddlBasic = sender as DropDownList;
+            var row = ddlBasic.NamingContainer as GridViewRow;
+            var txtVacationDays = row.FindControl("txtVacationDays") as TextBox;
+            txtVacationDays.Enabled = !(ddlBasic.SelectedIndex == 2 || ddlBasic.SelectedIndex == 3);
+        }
+
+        #endregion
 
         #endregion
     }
 }
+
