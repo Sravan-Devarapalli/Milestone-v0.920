@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MonthPicker.ascx.cs" Inherits="PraticeManagement.Controls.MonthPicker" %>
 
-<div style="white-space: nowrap">
+<div class="no-wrap">
 <asp:DropDownList ID="ddlMonth" runat="server" AutoPostBack="true" 
 		onselectedindexchanged="ddlMonth_SelectedIndexChanged">
 	<asp:ListItem Text="Jan" Value="1"></asp:ListItem>
@@ -21,3 +21,4 @@
 		onselectedindexchanged="ddlYear_SelectedIndexChanged">
 </asp:DropDownList>
 </div>
+
