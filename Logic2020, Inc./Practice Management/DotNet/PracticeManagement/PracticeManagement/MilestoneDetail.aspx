@@ -833,7 +833,7 @@
                                                 <td>
                                                     <asp:Button ID="btnMoveMilestone" runat="server" OnClick="btnMoveMilestone_Click"
                                                         OnClientClick="if (!confirm('Do you really want to move the milestone?')) return false;"
-                                                        TabIndex="2" Text="Move Milestone" ValidationGroup="ShiftDays" CssClass="pm-button" />
+                                                        TabIndex="2" Text="Move Milestone" ValidationGroup="ShiftDays" />
                                                     <ext:ElementDisablerExtender ID="ElementDisablerExtender1" runat="server" TargetControlID="btnMoveMilestone"
                                                         ControlToDisableID="btnClone" />
                                                     <ext:ElementDisablerExtender ID="ElementDisablerExtender2" runat="server" TargetControlID="btnMoveMilestone"
@@ -870,7 +870,7 @@
                                             <tr>
                                                 <td>
                                                     <asp:Button ID="btnClone" runat="server" OnClick="btnClone_Click" TabIndex="3" Text="Clone Milestone"
-                                                        ValidationGroup="Clone" CssClass="pm-button" />
+                                                        ValidationGroup="Clone" />
                                                     <ext:ElementDisablerExtender ID="edeClone1" runat="server" TargetControlID="btnClone"
                                                         ControlToDisableID="btnClone" />
                                                     <ext:ElementDisablerExtender ID="edeClone2" runat="server" TargetControlID="btnClone"
