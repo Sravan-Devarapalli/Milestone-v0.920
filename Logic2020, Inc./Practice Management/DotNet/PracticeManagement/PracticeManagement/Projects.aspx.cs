@@ -396,7 +396,7 @@ namespace PraticeManagement
                     );
             if (ddlPeriod.SelectedValue == "0")
             {
-                lblCustomDateRange.Attributes.Remove("class");
+                lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Remove("class");
             }
             else
