@@ -931,7 +931,7 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-
+            thInsertMilestonePerson.Visible = (MilestonePersonsEntries == null || MilestonePersonsEntries.Count == 0);
         }
 
         protected override void OnInit(EventArgs e)
