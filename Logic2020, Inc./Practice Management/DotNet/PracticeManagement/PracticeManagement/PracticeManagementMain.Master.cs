@@ -25,7 +25,7 @@ namespace PraticeManagement
     {
         public const string Level1MenuItemTemplate = " <li class='l1' id='{2}'><a title='{0}' style='' {3}>{0}</a>{1}</li>";
         public const string Level2MenuItemTemplate = " <dd id='{2}'  class='l3'> <a title='{0}' {3}>{0}</a>{1}</dd>";
-        public const string Level3MenuItemTemplate = "<a  {1} >{0}</a>";
+        public const string Level3MenuItemTemplate = "<a  {1} title='{0}' >{0}</a>";
         public const string AnchorTagpropertiestemplate = " href = '{0}' onclick='return checkDirtyWithRedirect(this.href);'";
         public const string PopupTimebeforeFormsAuthTimeOutSecKey = "PopupTimebeforeFormsAuthTimeOutSec";
         public const string MailToSubjectFormat = "mailto:{0}?subject={1} Issue";
