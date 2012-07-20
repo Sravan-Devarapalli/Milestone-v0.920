@@ -36,7 +36,7 @@ AS
 	WHERE P.ProjectId = @ProjectId
 
 	UPDATE PTRS
-		SET EndDate = @EndDate + (7 - DATEPART(dw,EndDate))
+		SET EndDate = @EndDate + (7 - DATEPART(dw,@EndDate))
 	FROM [dbo].[PersonTimeEntryRecursiveSelection] PTRS
 	WHERE PTRS.ProjectId = @ProjectId AND PTRS.IsRecursive = 1
 	
