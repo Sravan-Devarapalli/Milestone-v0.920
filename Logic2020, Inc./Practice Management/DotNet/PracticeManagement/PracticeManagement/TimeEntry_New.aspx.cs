@@ -531,12 +531,12 @@ namespace PraticeManagement
                 sectionHeaderPanel.Visible = true;
                 sectionHeaderRepeater.DataSource = SelectedDates;
                 sectionHeaderRepeater.DataBind();
-                collapseImage.Style.Add("visibility", "");
+                collapseImage.Attributes.Add("class", "");
             }
             else
             {
                 sectionHeaderPanel.Visible = false;
-                collapseImage.Style.Add("visibility", "hidden");
+                collapseImage.Attributes.Add("class", "VisbleHidden");
             }
         }
 
