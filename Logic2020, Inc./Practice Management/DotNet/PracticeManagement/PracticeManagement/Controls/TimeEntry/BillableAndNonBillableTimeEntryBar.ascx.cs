@@ -111,11 +111,6 @@ namespace PraticeManagement.Controls.TimeEntry
             extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
         }
 
-        protected bool steItem_OnReadyToUpdateTE(object sender, ReadyToUpdateTeArguments args)
-        {
-            return false;
-        }
-
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
