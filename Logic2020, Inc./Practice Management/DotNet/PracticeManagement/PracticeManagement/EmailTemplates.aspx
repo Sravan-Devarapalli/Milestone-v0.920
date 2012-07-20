@@ -1,12 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="EmailTemplates.aspx.cs" Inherits="PraticeManagement.EmailTemplates" %>
 
-<%@ Register Src="~/Controls/Configuration/EmailTemplates.ascx" TagName="EmailTemplates"
-    TagPrefix="uc" %>
-<%@ Register Src="~/Controls/Configuration/SmtpPopSetUpControl.ascx" TagName="Smtp"
-    TagPrefix="uc" %>
 <%@ Register TagPrefix="uc1" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="act" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Email Templates | Practice Management</title>
 </asp:Content>
@@ -26,8 +21,8 @@
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <table>
-                <tr valign="top">
-                    <td style="overflow: auto; border: 1px solid #000000:width:200px">
+                <tr class="vTop">
+                    <td class="EmailTemplateTd">
                         <table>
                             <tr>
                                 <td>
@@ -63,9 +58,9 @@
                                     <strong>Name</strong>
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="txTemplateTitle" runat="server" Width="395px" />
+                                    <asp:TextBox ID="txTemplateTitle" runat="server" CssClass="Width395Px" />
                                 </td>
-                                <td valign="top">
+                                <td class="vTop">
                                     <asp:RequiredFieldValidator runat="server" ID="TemplateTitleRequiredFieldValidator"
                                         ControlToValidate="txTemplateTitle" Text="*" ErrorMessage="Template name is required"
                                         Display="Dynamic" ValidationGroup="TemplateFields" />
@@ -79,7 +74,7 @@
                                     <strong>To</strong>
                                 </td>
                                 <td colspan="2" align="left">
-                                    <asp:TextBox ID="txTemplateTo" runat="server" Width="395px" />
+                                    <asp:TextBox ID="txTemplateTo" runat="server" CssClass="Width395Px" />
                                 </td>
                             </tr>
                             <tr>
@@ -95,19 +90,18 @@
                                     <strong>Subject</strong>
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="txtEmailSubject" runat="server" Width="395px" />
+                                    <asp:TextBox ID="txtEmailSubject" runat="server" CssClass="Width395Px" />
                                 </td>
-                                <td valign="top">
+                                <td class="vTop">
                                     <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="txtEmailSubject"
                                         Text="*" ErrorMessage="Template subject is required" Display="Dynamic" ValidationGroup="TemplateFields" />
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <asp:TextBox ID="txtEmailBody" runat="server" Height="217px" TextMode="MultiLine"
-                                        Width="450px" Style="margin-bottom: 0px" />
+                                    <asp:TextBox ID="txtEmailBody" runat="server" TextMode="MultiLine" CssClass="EmailTemplateEmailBody" />
                                 </td>
-                                <td valign="top">
+                                <td class="vTop">
                                     <asp:RequiredFieldValidator runat="server" ID="TemplateBodyRequiredFieldValidator"
                                         ControlToValidate="txtEmailBody" Text="*" ErrorMessage="Template body is required"
                                         Display="Dynamic" ValidationGroup="TemplateFields" />
@@ -116,7 +110,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" valign="top">
+                                <td colspan="3" class="vTop">
                                     <asp:ValidationSummary ID="TemplateFieldsValidationSummary" runat="server" ValidationGroup="TemplateFields"
                                         DisplayMode="BulletList" />
                                 </td>
@@ -135,6 +129,6 @@
             </table>
         </ContentTemplate>
     </asp:UpdatePanel>
-    <uc1:loadingprogress id="LoadingProgress1" runat="server" />
+    <uc1:LoadingProgress ID="LoadingProgress1" runat="server" />
 </asp:Content>
 
