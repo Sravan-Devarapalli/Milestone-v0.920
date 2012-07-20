@@ -1,20 +1,21 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="RevenueGoals.aspx.cs" Inherits="PraticeManagement.RevenueGoals" %>
 
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/MonthPicker.ascx" TagPrefix="uc" TagName="MonthPicker" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Revenue Goals | Practice Management</title>
+</asp:Content>
+<asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.js", this) %>" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Revenue Goals
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/ScrollinDropDown.js" type="text/javascript"></script>
     <script type="text/javascript">
         function ChangeResetButton() {
             var button = document.getElementById("<%= btnResetFilter.ClientID%>");
@@ -30,12 +31,12 @@
             ChangeResetButton();
         }
     </script>
-    <div class="filters" style="margin-bottom: 10px;">
+    <div class="filters Margin-Bottom10Px">
         <div class="buttons-block">
             <table class="WholeWidth">
                 <tr>
-                    <td align="left" style="width: 30px; padding-top: 3px;">
-                        <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
+                    <td class="Width30Px PaddingTop3">
+                        <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                             ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                             ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
                             ExpandControlID="btnExpandCollapseFilter" Collapsed="True" TextLabelID="lblFilter" />
@@ -43,10 +44,10 @@
                         <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/expand.jpg"
                             ToolTip="Expand Filters" />
                     </td>
-                    <td style="width: 145px; white-space: nowrap;" align="left">
+                    <td class="Width145px no-wrap">
                         Show Revenue Goals for
                     </td>
-                    <td style="width: 235px;">
+                    <td class="Width235Px">
                         <asp:DropDownList ID="ddlGoalsFor" runat="server" onchange="ChangeResetButton();">
                             <asp:ListItem Text="Entire Company" Value="0"></asp:ListItem>
                             <asp:ListItem Text="Client Directors" Value="1"></asp:ListItem>
@@ -54,10 +55,10 @@
                             <asp:ListItem Text="Business Development Managers" Value="3"></asp:ListItem>
                         </asp:DropDownList>
                     </td>
-                    <td align="left" style="width: 40px">
+                    <td class="Width40Px">
                         from
                     </td>
-                    <td style="width: 120px" align="left">
+                    <td class="Width120Px">
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                             <ContentTemplate>
                                 <uc:MonthPicker ID="mpFromControl" runat="server" OnClientChange="EnableResetButton();"
@@ -65,10 +66,10 @@
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </td>
-                    <td style="width: 30px" align="left">
+                    <td class="Width30Px">
                         to
                     </td>
-                    <td style="width: 120px" align="left">
+                    <td class="Width120Px">
                         <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                             <ContentTemplate>
                                 <uc:MonthPicker ID="mpToControl" runat="server" OnClientChange="EnableResetButton();"
@@ -82,14 +83,14 @@
                                 <td>
                                     <asp:UpdatePanel ID="UpdatePanel2" runat="server">
                                         <ContentTemplate>
-                                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdate_OnClick"
-                                                EnableViewState="False" />
+                                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" CssClass="Width100PxImp"
+                                                OnClick="btnUpdate_OnClick" EnableViewState="False" />
                                         </ContentTemplate>
                                     </asp:UpdatePanel>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="100px"
-                                        CausesValidation="false" EnableViewState="False" CssClass="pm-button" OnClientClick="window.location.href = window.location.href;return false;" />
+                                    <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" CausesValidation="false"
+                                        EnableViewState="False" CssClass="Width100PxImp" OnClientClick="window.location.href = window.location.href;return false;" />
                                 </td>
                             </tr>
                         </table>
@@ -98,25 +99,26 @@
             </table>
         </div>
         <asp:Panel ID="pnlFilters" runat="server">
-            <ajaxToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0" CssClass="CustomTabStyle">
-                <ajaxToolkit:TabPanel runat="server" ID="tpFilters">
+            <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
+                CssClass="CustomTabStyle">
+                <AjaxControlToolkit:TabPanel runat="server" ID="tpFilters">
                     <HeaderTemplate>
                         <span class="bg"><a href="#"><span>Basic</span></a> </span>
                     </HeaderTemplate>
                     <ContentTemplate>
                         <table class="WholeWidth">
-                            <tr align="center">
-                                <td style="width: 330px !important; border-bottom: 1px solid black;" valign="top">
+                            <tr align="center" class="BorderBottom1pxTd">
+                                <td class="Width330Px vTop border">
                                     Project Type
                                 </td>
-                                <td style="width: 20px;">
+                                <td class="Width20Px">
                                 </td>
-                                <td style="width: 250px !important; border-bottom: 1px solid black;">
+                                <td class="Width250Px border">
                                     Practice Area
                                 </td>
-                                <td style="width: 20px;">
+                                <td class="Width20Px">
                                 </td>
-                                <td style="width: 260px !important; border-bottom: 1px solid black;">
+                                <td class="Width260Px border">
                                     Business Development Manager
                                 </td>
                                 <td>
@@ -126,11 +128,11 @@
                                 <td>
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="width: 100px;">
+                                            <td class="Width100Px">
                                                 <asp:CheckBox ID="chbActive" runat="server" AutoPostBack="false" Checked="True" onclick="EnableResetButton();"
                                                     Text="Active" ToolTip="Include active projects into report" />
                                             </td>
-                                            <td style="width: 100px;">
+                                            <td class="Width100Px">
                                                 <asp:CheckBox ID="chbInternal" runat="server" AutoPostBack="false" Checked="True"
                                                     onclick="EnableResetButton();" Text="Internal" ToolTip="Include internal projects into report" />
                                             </td>
@@ -158,11 +160,10 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <div style="padding-top: 5px; padding-left: 3px;">
-                                        <cc2:ScrollingDropDown ID="cblPractice" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                            onclick="scrollingDropdown_onclick('cblPractice','Practice Area')" BackColor="White"
-                                            CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
-                                            Width="260px" BorderWidth="0" />
+                                    <div class="PaddingTop5 padLeft3">
+                                        <pmc:ScrollingDropDown ID="cblPractice" runat="server" AllSelectedReturnType="AllItems"
+                                            onclick="scrollingDropdown_onclick('cblPractice','Practice Area')" NoItemsType="All"
+                                            SetDirty="False" DropDownListType="Practice Area" CssClass="scroll_cblPractice" />
                                         <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractice"
                                             UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                         </ext:ScrollableDropdownExtender>
@@ -170,16 +171,15 @@
                                     <asp:CheckBox ID="chbExcludeInternalPractices" runat="server" Text="Exclude Internal Practice Areas"
                                         onclick="EnableResetButton();" />
                                 </td>
-                                <td style="width: 30px;">
+                                <td class="Width30Px">
                                 </td>
-                                <td valign="top">
+                                <td class="vTop">
                                     <asp:UpdatePanel ID="UpdatePanel4" runat="server">
                                         <ContentTemplate>
-                                            <div style="padding-top: 5px; padding-left: 3px;">
-                                                <cc2:ScrollingDropDown ID="cblBDMs" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                                            <div class="PaddingTop5 padLeft3">
+                                                <pmc:ScrollingDropDown ID="cblBDMs" runat="server" AllSelectedReturnType="AllItems"
                                                     onclick="scrollingDropdown_onclick('cblBDMs','Business Development Manager')"
-                                                    BackColor="White" CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False"
-                                                    DropDownListType="Business Development Manager" Width="270px" BorderWidth="0" />
+                                                    NoItemsType="All" SetDirty="False" CssClass="scroll_cblBDMs" DropDownListType="Business Development Manager" />
                                                 <ext:ScrollableDropdownExtender ID="sdeBDMs" runat="server" TargetControlID="cblBDMs"
                                                     UseAdvanceFeature="true" Width="270px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
@@ -193,15 +193,15 @@
                             </tr>
                         </table>
                     </ContentTemplate>
-                </ajaxToolkit:TabPanel>
-            </ajaxToolkit:TabContainer>
+                </AjaxControlToolkit:TabPanel>
+            </AjaxControlToolkit:TabContainer>
         </asp:Panel>
     </div>
     <asp:HiddenField ID="hdnFiltersChanged" runat="server" Value="false" />
     <asp:HiddenField ID="hdnFiltersChangedSinceLastUpdate" runat="server" Value="false" />
     <asp:UpdatePanel ID="upDirectorRevenueGoals" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <div style="overflow-x: auto;padding-right:1px;">
+            <div class="xScrollAuto padRight1">
                 <asp:Label ID="lblDirectorEmptyMessage" Visible="false" runat="server" Text="There is nothing to be displayed here."></asp:Label>
                 <asp:ListView ID="lvDirectorBudget" runat="server" OnDataBinding="lvBudget_OnDataBinding"
                     OnItemDataBound="lvPersonBudget_OnItemDataBound" OnPreRender="lvBudget_OnPreRender"
@@ -209,8 +209,8 @@
                     <LayoutTemplate>
                         <table class="CompPerfTable WholeWidth">
                             <tr runat="server" id="lvHeader" class="CompPerfHeader">
-                                <td align="center" style="width: 170px!important;">
-                                    <div class="ie-bg" style="width: 170px!important;">
+                                <td align="center" class="Width170Px">
+                                    <div class="ie-bg Width170Px">
                                         <asp:LinkButton ID="btnSortDirector" CommandArgument="0" CommandName="Sort" runat="server"
                                             CssClass="arrow">
                                         Client Director
@@ -226,13 +226,13 @@
                         </table>
                     </LayoutTemplate>
                     <ItemTemplate>
-                        <tr id="testTr" runat="server" height="35px">
+                        <tr id="testTr" runat="server" class="Height35Px">
                             <td>
                             </td>
                         </tr>
                     </ItemTemplate>
                     <AlternatingItemTemplate>
-                        <tr id="testTr" runat="server" height="35px" class="rowEven">
+                        <tr id="testTr" runat="server" class="rowEven Height35Px">
                             <td>
                             </td>
                         </tr>
@@ -250,9 +250,9 @@
     </asp:UpdatePanel>
     <asp:UpdatePanel ID="upPracticeRevenueGoals" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <hr id="hrDirectorAndPracticeSeperator" runat="server" visible="false" size="2" color="#888888"
+            <hr id="hrDirectorAndPracticeSeperator" runat="server" visible="false" size="2" class="color888888"
                 align="center" />
-            <div style="overflow-x: auto; padding-right:1px;">
+            <div class="xScrollAuto padRight1">
                 <asp:Label ID="lblPracticeEmptyMessage" Visible="false" runat="server" Text="There is nothing to be displayed here."></asp:Label>
                 <asp:ListView ID="lvPracticeBudget" runat="server" OnDataBinding="lvBudget_OnDataBinding"
                     OnItemDataBound="lvPracticeBudget_OnItemDataBound" OnPreRender="lvBudget_OnPreRender"
@@ -260,8 +260,8 @@
                     <LayoutTemplate>
                         <table class="CompPerfTable WholeWidth">
                             <tr runat="server" id="lvHeader" class="CompPerfHeader">
-                                <td align="center" style="width: 170px!important;">
-                                    <div class="ie-bg" style="width: 170px!important;">
+                                <td align="center" class="Width170Px">
+                                    <div class="ie-bg Width170Px">
                                         <asp:LinkButton ID="btnSortPractice" CommandArgument="0" CommandName="Sort" runat="server"
                                             CssClass="arrow">
                                         Practice Area
@@ -277,13 +277,13 @@
                         </table>
                     </LayoutTemplate>
                     <ItemTemplate>
-                        <tr id="testTr" runat="server" height="35px">
+                        <tr id="testTr" runat="server" class="Height35Px">
                             <td>
                             </td>
                         </tr>
                     </ItemTemplate>
                     <AlternatingItemTemplate>
-                        <tr id="testTr" runat="server" height="35px" class="rowEven">
+                        <tr id="testTr" runat="server" class="rowEven Height35Px">
                             <td>
                             </td>
                         </tr>
@@ -301,9 +301,9 @@
     </asp:UpdatePanel>
     <asp:UpdatePanel ID="upBDMRevenueGoals" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <hr id="hrPracticeAndACMgrSeperator" runat="server" visible="false" size="2" color="#888888"
+            <hr id="hrPracticeAndACMgrSeperator" runat="server" visible="false" size="2" class="color888888"
                 align="center" />
-            <div style="overflow-x: auto;padding-right:1px;">
+            <div class="xScrollAuto padRight1">
                 <asp:Label ID="lblBDMEmptyMessage" Visible="false" runat="server" Text="There is nothing to be displayed here."></asp:Label>
                 <asp:ListView ID="lvBDMBudget" runat="server" OnDataBinding="lvBudget_OnDataBinding"
                     OnItemDataBound="lvPersonBudget_OnItemDataBound" OnPreRender="lvBudget_OnPreRender"
@@ -311,10 +311,10 @@
                     <LayoutTemplate>
                         <table class="CompPerfTable WholeWidth">
                             <tr runat="server" id="lvHeader" class="CompPerfHeaderGroupBy">
-                                <td align="center" style="width: 170px!important;">
-                                    <div class="ie-bg" style="width: 170px!important;">
+                                <td align="center" class="Width170Px">
+                                    <div class="ie-bg Width170Px">
                                         <asp:LinkButton ID="btnSortBDM" CommandArgument="0" CommandName="Sort" runat="server"
-                                            CssClass="arrow" Style="white-space: normal;">
+                                            CssClass="arrow WhiteSpaceNormal">
                                         Business Development Manager
                                         </asp:LinkButton>
                                     </div>
@@ -328,14 +328,14 @@
                         </table>
                     </LayoutTemplate>
                     <ItemTemplate>
-                        <tr id="testTr" runat="server" height="35px">
-                            <td style="width: 170px!important;">
+                        <tr id="testTr" runat="server" class="Height35Px">
+                            <td class="Width170Px">
                             </td>
                         </tr>
                     </ItemTemplate>
                     <AlternatingItemTemplate>
-                        <tr id="testTr" runat="server" height="35px" class="rowEven">
-                            <td style="width: 170px!important;">
+                        <tr id="testTr" runat="server" class="rowEven Height35Px">
+                            <td class="Width170Px">
                             </td>
                         </tr>
                     </AlternatingItemTemplate>
