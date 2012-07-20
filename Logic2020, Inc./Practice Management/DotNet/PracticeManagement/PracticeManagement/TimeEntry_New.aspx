@@ -38,21 +38,20 @@
             setFooterPlacementinLastItemTemplate();
 
             var pnlProjectSection = document.getElementById("<%=pnlProjectSection.ClientID %>");
-            if (pnlProjectSection.style.height != "0px") {
-                pnlProjectSection.style.height = "auto";
-            }
             var pnlBusinessDevelopmentSection = document.getElementById("<%=pnlBusinessDevelopmentSection.ClientID %>");
-            if (pnlBusinessDevelopmentSection.style.height != "0px") {
-                pnlBusinessDevelopmentSection.style.height = "auto";
-            }
             var pnlInternalSection = document.getElementById("<%=pnlInternalSection.ClientID %>");
-            if (pnlInternalSection.style.height != "0px") {
-                pnlInternalSection.style.height = "auto";
-            }
             var pnlAdministrativeSection = document.getElementById("<%=pnlAdministrativeSection.ClientID %>");
-            if (pnlAdministrativeSection != null && pnlAdministrativeSection != undefined) {
-                if (pnlAdministrativeSection.style.height != "0px") {
-                    pnlAdministrativeSection.style.height = "auto";
+            ExpandCollapseTimeEntryPage(pnlProjectSection);
+            ExpandCollapseTimeEntryPage(pnlBusinessDevelopmentSection);
+            ExpandCollapseTimeEntryPage(pnlInternalSection);
+            ExpandCollapseTimeEntryPage(pnlAdministrativeSection);
+
+        }
+
+        function ExpandCollapseTimeEntryPage(pnlSection) {
+            if (pnlSection !== null && pnlSection != undefined) {
+                if (pnlSection.style.height != "0px") {
+                    pnlSection.style.height = "auto";
                 }
             }
         }
@@ -225,8 +224,6 @@
                     </div>
                     <div class="clear0">
                     </div>
-                    <div style="text-align: center;">
-                    </div>
                 </div>
             </ContentTemplate>
             <Triggers>
@@ -384,7 +381,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size: 14px;">
+                                <td class="font14Px">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeProjectSection" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         TargetControlID="pnlProjectSection" ImageControlID="btnExpandCollapseFilter"
@@ -419,7 +416,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div style="float: right; padding-right: 5px;">
+                                        <div class="floatright padRight5">
                                             TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
@@ -519,7 +516,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size: 14px;">
+                                <td class="font14Px">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessDevelopmentSection" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         BehaviorID="cpeBusinessDevelopmentSection" TargetControlID="pnlBusinessDevelopmentSection"
@@ -554,7 +551,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div style="float: right; padding-right: 5px;">
+                                        <div class="floatright padRight5">
                                             TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
@@ -655,7 +652,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size: 14px;">
+                                <td class="font14Px">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeInternalSection" runat="Server"
                                         BehaviorID="cpeInternalSection" CollapsedText="Expand Section" ExpandedText="Collapse Section"
                                         EnableViewState="false" TargetControlID="pnlInternalSection" ImageControlID="Image2"
@@ -689,7 +686,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div style="float: right; padding-right: 5px;">
+                                        <div class="floatright padRight5">
                                             TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
@@ -790,7 +787,7 @@
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
-                                <td style="font-size: 14px;">
+                                <td class="font14Px">
                                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeAdministrative" runat="Server"
                                         CollapsedText="Expand Section" ExpandedText="Collapse Section" EnableViewState="false"
                                         TargetControlID="pnlAdministrativeSection" ImageControlID="btnAdmistrativeExpandCollapseFilter"
@@ -824,7 +821,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <td class="time-entry-bar-total-hoursNew">
-                                        <div style="float: right; padding-right: 5px;">
+                                        <div class="floatright padRight5">
                                             TOTAL</div>
                                     </td>
                                     <td class="DeleteWidth">
@@ -860,11 +857,10 @@
                         <label id="lblDupilcateOptionsRemoveExtenderAdministrative" runat="server" />
                     </asp:Panel>
                     <div class="buttons-block">
-                        <div style="font-size: 14px; font-weight: bold; margin-left: 16px;">
+                        <div class="TimeEntryPageTotalHours">
                             TOTAL HOURS</div>
                     </div>
-                    <asp:Panel ID="pnlTotalSection" runat="server" Style="padding: 10px 0px 10px 0px"
-                        CssClass="cp bg-white">
+                    <asp:Panel ID="pnlTotalSection" runat="server" CssClass="cp bg-white PaddingTB10PxLR0Px">
                         <table class="CompPerfTable WholeWidth">
                             <tr>
                                 <td class="DeleteWidth">
@@ -892,8 +888,7 @@
                                     runat="server">
                                     <ItemTemplate>
                                         <td class="time-entry-bar-single-teNew DayTotalHours <%# GetDayOffCssCalss(((DataTransferObjects.CalendarItem)Container.DataItem)) %>">
-                                            <asp:Label Width="36px" Height="18px" CssClass="DayTotalCSS" ID="lblDayTotal" TotalHours=""
-                                                runat="server"></asp:Label>
+                                            <asp:Label CssClass="DayTotalCSS" ID="lblDayTotal" TotalHours="" runat="server"></asp:Label>
                                             <ext:TotalCalculatorExtender ID="extDayTotal" runat="server" TargetControlID="lblDayTotal" />
                                             <asp:HiddenField ID="hdnDayTotal" runat="server"></asp:HiddenField>
                                             <ext3:MaxValueAllowedForTextBoxExtender ID="extMaxValueAllowedForTextBoxExtender"
@@ -916,7 +911,7 @@
                                     BILLABLE TOTAL :
                                 </td>
                                 <td class="time-entry-total-hoursNew-totalColoum">
-                                    <div style="float: right; padding-right: 10px;">
+                                    <div class="floatright padRight10">
                                         <label id="lblBillableGrandTotal" runat="server" />
                                     </div>
                                     <ext:TotalCalculatorExtender ID="extBillableGrandTotal" runat="server" TargetControlID="lblBillableGrandTotal" />
@@ -933,7 +928,7 @@
                                     NON-BILLABLE TOTAL :
                                 </td>
                                 <td class="time-entry-total-hoursNew-totalColoum">
-                                    <div style="float: right; padding-right: 10px;">
+                                    <div class="floatright padRight10">
                                         <label id="lblNonBillableGrandTotal" runat="server" />
                                     </div>
                                     <ext:TotalCalculatorExtender ID="extNonBillableGrandTotal" runat="server" TargetControlID="lblNonBillableGrandTotal" />
@@ -946,11 +941,11 @@
                                 </td>
                                 <td class="time-entry-bar-time-typesNew">
                                 </td>
-                                <td colspan="7" class="TOTALTD" style="padding-top: 15px;">
+                                <td colspan="7" class="TOTALTD PaddingTop15">
                                     TIME PERIOD GRAND TOTAL:
                                 </td>
-                                <td style="padding-top: 15px;" class="time-entry-total-hoursNew-totalColoum">
-                                    <div style="float: right; padding-right: 10px;">
+                                <td class="time-entry-total-hoursNew-totalColoum PaddingTop15">
+                                    <div class="floatright padRight10">
                                         <label id="lbltimePeriodGrandTotal" runat="server" />
                                     </div>
                                     <ext:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lbltimePeriodGrandTotal" />
@@ -979,7 +974,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="width: 50%;">
+                                <td colspan="3" class="Width50Percent">
                                     <asp:CustomValidator ID="custWorkType" runat="server" ErrorMessage="Please select Work Type."
                                         OnServerValidate="custWorkType_ServerValidate" EnableClientScript="false" ToolTip="Please select Work Type."
                                         SetFocusOnError="true" Text="*" ValidationGroup="TE" Display="None" />
@@ -1014,37 +1009,36 @@
                     TargetControlID="hdnAddProject" CancelControlID="btnCancelProjectSection" BehaviorID="mpeProjectSectionPopup"
                     BackgroundCssClass="modalBackground" PopupControlID="pnlProjectSectionPopup"
                     DropShadow="false" />
-                <asp:Panel ID="pnlProjectSectionPopup" runat="server" BackColor="White" BorderColor="Black"
-                    CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-                    <table width="100%">
-                        <tr>
-                            <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                                valign="bottom">
-                                <b style="font-size: 14px; padding-top: 2px;">Add Project</b>
-                                <asp:Button ID="btnCloseProjectSection" runat="server" CssClass="mini-report-close"
+                <asp:Panel ID="pnlProjectSectionPopup" runat="server" CssClass=" popUp TimeEntryAddPopUp"
+                    Style="display: none">
+                    <table class="WholeWidth">
+                        <tr class="PopUpHeader">
+                            <th>
+                                Add Project
+                                <asp:Button ID="btnCloseProjectSection" runat="server" CssClass="mini-report-closeNew"
                                     ToolTip="Cancel" OnClientClick="$find('mpeProjectSectionPopup').hide(); return false;"
-                                    Style="float: right;" Text="X"></asp:Button>
+                                    Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
-                            <td style="padding: 10px;" colspan="2">
-                                <table class="WholeWidth">
+                            <td class="Padding10" colspan="2">
+                                <table class="TimeEntryAddPopUpTable">
                                     <tr>
-                                        <td class="ModalPopUpSideHeading">
+                                        <td class="FirstTrTd1">
                                             Account :
                                         </td>
-                                        <td class="Width70Percent">
+                                        <td class="FirstTrTd2">
                                             <asp:DropDownList ID="ddlAccountProjectSection" AutoPostBack="true" OnSelectedIndexChanged="ddlAccountProjectSection_SelectedIndexChanged"
-                                                Width="250px" runat="server" />
+                                                runat="server" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
+                                        <td class="SecondTrTd1">
                                             Project :
                                         </td>
-                                        <td class="Width70Percent ModalPopUpDropDownPadding">
+                                        <td class="SecondTrTd2">
                                             <cc:CustomDropDown ID="ddlProjectProjectSection" onchange="ddlChild_onchange(this);"
-                                                Width="250px" runat="server">
+                                                runat="server">
                                             </cc:CustomDropDown>
                                         </td>
                                     </tr>
@@ -1052,14 +1046,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
-                                <table>
+                            <td colspan="2" align="center">
+                                <table class="TimeEntryAddPopUpButtonTable">
                                     <tr>
-                                        <td style="padding-right: 3px;">
+                                        <td class="FirstTd">
                                             <asp:Button ID="btnAddProjectSection" OnClick="btnAddProjectSection_OnClick" runat="server"
                                                 Enabled="false" Text="Add" ToolTip="Add" />
                                         </td>
-                                        <td style="padding-left: 3px;">
+                                        <td class="SecondTd">
                                             <asp:Button ID="btnCancelProjectSection" runat="server" Text="Cancel" ToolTip="Cancel"
                                                 OnClientClick="$find('mpeProjectSectionPopup').hide(); return false;" />
                                         </td>
@@ -1073,37 +1067,36 @@
                     TargetControlID="btnAddAccount" CancelControlID="btnCancelBusinessDevelopmentSection"
                     BehaviorID="mpeBusinessDevelopmentSectionPopup" BackgroundCssClass="modalBackground"
                     PopupControlID="pnlBusinessDevelopmentSectionPopup" DropShadow="false" />
-                <asp:Panel ID="pnlBusinessDevelopmentSectionPopup" runat="server" BackColor="White"
-                    BorderColor="Black" CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-                    <table width="100%">
-                        <tr>
-                            <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                                valign="bottom">
-                                <b style="font-size: 14px; padding-top: 2px;">Add Account</b>
-                                <asp:Button ID="btnCloseBusinessDevelopmentSection" runat="server" CssClass="mini-report-close"
+                <asp:Panel ID="pnlBusinessDevelopmentSectionPopup" runat="server" CssClass=" popUp TimeEntryAddPopUp"
+                    Style="display: none">
+                    <table class="WholeWidth">
+                        <tr class="PopUpHeader">
+                            <th>
+                                Add Account
+                                <asp:Button ID="btnCloseBusinessDevelopmentSection" runat="server" CssClass="mini-report-closeNew"
                                     ToolTip="Cancel" OnClientClick="$find('mpeBusinessDevelopmentSectionPopup').hide(); return false;"
-                                    Style="float: right;" Text="X"></asp:Button>
+                                    Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
-                            <td style="padding: 10px;" colspan="2">
-                                <table class="WholeWidth">
+                            <td class="Padding10" colspan="2">
+                                <table class="TimeEntryAddPopUpTable">
                                     <tr>
-                                        <td class="ModalPopUpSideHeading">
+                                        <td class="FirstTrTd1">
                                             Account :
                                         </td>
-                                        <td class="Width70Percent">
+                                        <td class="FirstTrTd2">
                                             <asp:DropDownList ID="ddlAccountBusinessDevlopmentSection" onchange="ddlParent_onchange(this);"
-                                                Width="250px" runat="server" />
+                                                runat="server" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
+                                        <td class="SecondTrTd1">
                                             Business Unit :
                                         </td>
-                                        <td class="Width70Percent ModalPopUpDropDownPadding">
+                                        <td class="SecondTrTd2">
                                             <asp:DropDownList ID="ddlBusinessUnitBusinessDevlopmentSection" onchange="ddlChild_onchange(this);"
-                                                Width="250px" runat="server">
+                                                runat="server">
                                             </asp:DropDownList>
                                             <AjaxControlToolkit:CascadingDropDown ID="cddBusinessUnitBDSection" runat="server"
                                                 BehaviorID="cddBusinessUnitBDSection" ParentControlID="ddlAccountBusinessDevlopmentSection"
@@ -1117,14 +1110,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
-                                <table>
+                            <td colspan="2" align="center">
+                                <table class="TimeEntryAddPopUpButtonTable">
                                     <tr>
-                                        <td style="padding-right: 3px;">
+                                        <td class="FirstTd">
                                             <asp:Button ID="btnAddBusinessDevelopmentSection" runat="server" Enabled="false"
                                                 OnClick="btnAddBusinessDevelopmentSection_OnClick" Text="Add" ToolTip="Add" />
                                         </td>
-                                        <td style="padding-left: 3px;">
+                                        <td class="SecondTd">
                                             <asp:Button ID="btnCancelBusinessDevelopmentSection" runat="server" Text="Cancel"
                                                 OnClientClick="$find('mpeBusinessDevelopmentSectionPopup').hide(); return false;"
                                                 ToolTip="Cancel" />
@@ -1139,37 +1132,35 @@
                     TargetControlID="btnAddInternalProject" CancelControlID="btnCancelInternalProjectSection"
                     BehaviorID="mpeInternalProjectSectionPopup" BackgroundCssClass="modalBackground"
                     PopupControlID="pnlInternalProjectSectionPopup" DropShadow="false" />
-                <asp:Panel ID="pnlInternalProjectSectionPopup" runat="server" BackColor="White" BorderColor="Black"
-                    CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-                    <table width="100%">
-                        <tr>
-                            <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                                valign="bottom">
-                                <b style="font-size: 14px; padding-top: 2px;">Add Project</b>
-                                <asp:Button ID="btnCloseInternalProjectSection" runat="server" CssClass="mini-report-close"
+                <asp:Panel ID="pnlInternalProjectSectionPopup" runat="server" CssClass=" popUp TimeEntryAddPopUp"
+                    Style="display: none">
+                    <table class="WholeWidth">
+                        <tr class="PopUpHeader">
+                            <th>
+                                Add Project
+                                <asp:Button ID="btnCloseInternalProjectSection" runat="server" CssClass="mini-report-closeNew"
                                     ToolTip="Cancel" OnClientClick="$find('mpeInternalProjectSectionPopup').hide(); return false;"
-                                    Style="float: right;" Text="X"></asp:Button>
+                                    Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
-                            <td style="padding: 10px;" colspan="2">
-                                <table class="WholeWidth">
+                            <td class="Padding10" colspan="2">
+                                <table class="TimeEntryAddPopUpTable">
                                     <tr>
-                                        <td class="ModalPopUpSideHeading">
+                                        <td class="FirstTrTd1">
                                             Business Unit :
                                         </td>
-                                        <td class="Width70Percent">
+                                        <td class="FirstTrTd2">
                                             <asp:DropDownList ID="ddlBusinessUnitInternal" onchange="ddlParent_onchange(this);"
-                                                Width="250px" runat="server" />
+                                                runat="server" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="ModalPopUpSideHeading ModalPopUpDropDownPadding">
+                                        <td class="SecondTrTd1">
                                             Project :
                                         </td>
-                                        <td class="Width70Percent ModalPopUpDropDownPadding">
-                                            <asp:DropDownList ID="ddlProjectInternal" onchange="ddlChild_onchange(this);" Width="250px"
-                                                runat="server" />
+                                        <td class="SecondTrTd2">
+                                            <asp:DropDownList ID="ddlProjectInternal" onchange="ddlChild_onchange(this);" runat="server" />
                                             <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
                                                 TargetControlID="ddlProjectInternal" Category="Group" LoadingText="Loading Projects..."
                                                 EmptyText="No Projects found" PromptText="- - Select Project - -" PromptValue="-1"
@@ -1182,14 +1173,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
-                                <table>
+                            <td colspan="2" align="center">
+                                <table class="TimeEntryAddPopUpButtonTable">
                                     <tr>
-                                        <td style="padding-right: 3px;">
+                                        <td class="FirstTd">
                                             <asp:Button ID="btnAddInternalProjectSection" runat="server" Enabled="false" Text="Add"
                                                 OnClick="btnAddInternalProjectSection_OnClick" ToolTip="Add" />
                                         </td>
-                                        <td style="padding-left: 3px;">
+                                        <td class="SecondTd">
                                             <asp:Button ID="btnCancelInternalProjectSection" runat="server" Text="Cancel" ToolTip="Cancel"
                                                 OnClientClick="$find('mpeInternalProjectSectionPopup').hide(); return false;" />
                                         </td>
@@ -1205,25 +1196,25 @@
                     BehaviorID="mpeTimetypeAlertMessage" TargetControlID="hdTimetypeAlertMessage"
                     BackgroundCssClass="modalBackground" PopupControlID="pnlTimetypeAlertMessage"
                     DropShadow="false" CancelControlID="btnClose" />
-                <asp:Panel ID="pnlTimetypeAlertMessage" runat="server" BackColor="White" BorderColor="Black"
-                    Style="display: none" BorderWidth="2px" Width="380px">
-                    <table width="100%" style="padding: 5px;">
-                        <tr>
-                            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
-                                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                                <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Close"
-                                    Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeTimetypeAlertMessage');"
-                                    Text="X"></asp:Button>
+                <asp:Panel ID="pnlTimetypeAlertMessage" runat="server" CssClass="popUp pnlPersonInactiveAlert"
+                    Style="display: none">
+                    <table class="WholeWidth Padding5">
+                        <tr class="PopUpHeader">
+                            <th>
+                                Attention!
+                                <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Close"
+                                    OnClientClick="return btnClose_OnClientClick('mpeTimetypeAlertMessage');" Text="X">
+                                </asp:Button>
                             </th>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold; padding: 8px;">
+                            <td class="fontBold Padding8">
                                 There is a time entry for a date on which the selected ChargeCode is turned off.Please
                                 reassign the time entry to other ChargeCode or delete the time entry before changing.
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; padding: 8px;">
+                            <td class="Padding8" align="center">
                                 <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick('mpeTimetypeAlertMessage');" />
                             </td>
                         </tr>
@@ -1233,24 +1224,24 @@
                 <AjaxControlToolkit:ModalPopupExtender ID="mpePersonInactiveAlert" runat="server"
                     BehaviorID="mpePersonInactiveAlert" TargetControlID="hdPersonInactiveAlert" BackgroundCssClass="modalBackground"
                     PopupControlID="pnlPersonInactiveAlert" DropShadow="false" CancelControlID="btnClosePersonInactive" />
-                <asp:Panel ID="pnlPersonInactiveAlert" runat="server" BackColor="White" BorderColor="Black"
-                    Style="display: none" BorderWidth="2px" Width="380px">
-                    <table width="100%" style="padding: 5px;">
-                        <tr>
-                            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
-                                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                                <asp:Button ID="btnClosePersonInactive" runat="server" CssClass="mini-report-close"
-                                    ToolTip="Close" Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpePersonInactiveAlert');"
+                <asp:Panel ID="pnlPersonInactiveAlert" runat="server" CssClass="popUp pnlPersonInactiveAlert"
+                    Style="display: none">
+                    <table class="WholeWidth Padding5">
+                        <tr class="PopUpHeader">
+                            <th>
+                                Attention!
+                                <asp:Button ID="btnClosePersonInactive" runat="server" CssClass="mini-report-closeNew"
+                                    ToolTip="Close" OnClientClick="return btnClose_OnClientClick('mpePersonInactiveAlert');"
                                     Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold; padding: 8px;">
+                            <td class="fontBold Padding8">
                                 <asp:Label ID="lbMessage" runat="server"></asp:Label>
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; padding: 8px;">
+                             <td class="Padding8" align="center">
                                 <asp:Button ID="btnOkPersonInactive" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick('mpePersonInactiveAlert');" />
                             </td>
                         </tr>
@@ -1260,26 +1251,26 @@
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeRecurringAllowed" runat="server" BehaviorID="mpeRecurringAllowed"
                     TargetControlID="hdRecurringAllowed" BackgroundCssClass="modalBackground" PopupControlID="pnlRecurringAllowed"
                     DropShadow="false" CancelControlID="btnCloseRecurringAllowed" />
-                <asp:Panel ID="pnlRecurringAllowed" runat="server" BackColor="White" BorderColor="Black"
-                    Style="display: none" BorderWidth="2px" Width="480px">
-                    <table width="100%" style="padding: 5px;">
-                        <tr>
-                            <th align="center" style="text-align: center; background-color: Gray;" valign="bottom">
-                                <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                                <asp:Button ID="btnCloseRecurringAllowed" runat="server" CssClass="mini-report-close"
-                                    ToolTip="Close" Style="float: right;" OnClientClick="return btnClose_OnClientClick('mpeRecurringAllowed');"
+                <asp:Panel ID="pnlRecurringAllowed" runat="server" CssClass="popUp pnlRecurringAllowedPopUp"
+                    Style="display: none">
+                    <table class="WholeWidth Padding5">
+                        <tr class="PopUpHeader">
+                            <th>
+                                Attention!
+                                <asp:Button ID="btnCloseRecurringAllowed" runat="server" CssClass="mini-report-closeNew"
+                                    ToolTip="Close" OnClientClick="return btnClose_OnClientClick('mpeRecurringAllowed');"
                                     Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;">
+                            <td class="Padding8">
                                 It is not possible to enable recurring behavior for this Project. This project has
                                 an end date of
                                 <asp:Label ID="ldProjectEnddate" runat="server" Font-Bold="true"></asp:Label>
                             . Please contact the Project Manager if this is incorrect.
                         </tr>
                         <tr>
-                            <td style="text-align: center; padding: 8px;">
+                            <td class="Padding8" align="center">
                                 <asp:Button ID="btnOkRecurringAllowed" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick('mpeRecurringAllowed');" />
                             </td>
                         </tr>
