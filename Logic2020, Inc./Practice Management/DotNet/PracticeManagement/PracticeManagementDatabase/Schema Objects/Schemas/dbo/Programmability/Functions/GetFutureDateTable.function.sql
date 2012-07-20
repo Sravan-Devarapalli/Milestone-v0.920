@@ -1,15 +1,7 @@
 ﻿CREATE FUNCTION [dbo].[GetFutureDateTable]
 (
 )
-RETURNS @Result TABLE 
-(
-	FutureDate DATETIME
-)
+RETURNS TABLE
 AS
-BEGIN
-	
-	INSERT INTO @Result
-	SELECT '2029-12-31'
-
-	RETURN
-END
+	RETURN SELECT '2029-12-31' AS FutureDate
+GO
