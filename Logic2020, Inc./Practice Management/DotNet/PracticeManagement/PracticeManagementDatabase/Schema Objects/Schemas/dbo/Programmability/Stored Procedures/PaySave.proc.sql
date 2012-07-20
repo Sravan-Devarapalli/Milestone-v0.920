@@ -41,11 +41,15 @@ AS
 	, @PreviousRecordStartDate DATETIME
 	, @NextRecordEndDate DateTIME
 	, @TempEndDate DATETIME
+	, @FutureDate	DATETIME
+	, @HoursPerYear	DECIMAL
 
  
 	
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
-	SET @CurrentPMTime = dbo.InsertingTime()
+		, @CurrentPMTime = dbo.InsertingTime()
+		, @FutureDate = dbo.GetFutureDate()
+		, @HoursPerYear = dbo.GetHoursPerYear()
 	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
 	SELECT @UserId = PersonId FROM Person WHERE Alias = @UserLogin
 	SELECT @TerminationDate = TerminationDate FROM Person WHERE PersonId = @PersonId
@@ -61,15 +65,15 @@ AS
 		RETURN
 	END
 
-	SELECT @EndDate = ISNULL(@EndDate, dbo.GetFutureDate())
-	SELECT @OLD_EndDate = ISNULL(@OLD_EndDate, dbo.GetFutureDate())
+	SELECT @EndDate = ISNULL(@EndDate, @FutureDate)
+	SELECT @OLD_EndDate = ISNULL(@OLD_EndDate, @FutureDate)
 
 	IF EXISTS(SELECT 1
 	            FROM dbo.Pay
 	           WHERE Person = @PersonId 
 	             AND StartDate >= @StartDate
 	             AND StartDate <> @OLD_StartDate
-	             AND ISNULL(EndDate, dbo.GetFutureDate()) <= @OLD_StartDate)
+	             AND ISNULL(EndDate, @FutureDate) <= @OLD_StartDate)
 	BEGIN
 		-- The record overlaps from begining
 		SELECT  @ErrorMessage = [dbo].[GetErrorMessage](70005)
@@ -80,7 +84,7 @@ AS
 	                 FROM dbo.Pay
 	                WHERE Person = @PersonId 
 	                  AND EndDate <= @EndDate
-	                  AND ISNULL(EndDate, dbo.GetFutureDate()) <> @OLD_EndDate
+	                  AND ISNULL(EndDate, @FutureDate) <> @OLD_EndDate
 	                  AND StartDate >= @OLD_EndDate)
 	BEGIN
 		-- The records overlaps from ending
@@ -91,8 +95,8 @@ AS
 	ELSE IF EXISTS(SELECT 1
 	                 FROM dbo.Pay
 	                WHERE Person = @PersonId
-	                  AND StartDate <= @StartDate AND ISNULL(EndDate, dbo.GetFutureDate()) >= @EndDate
-	                  AND StartDate <> @OLD_StartDate AND ISNULL(EndDate, dbo.GetFutureDate()) <> @OLD_EndDate)
+	                  AND StartDate <= @StartDate AND ISNULL(EndDate, @FutureDate) >= @EndDate
+	                  AND StartDate <> @OLD_StartDate AND ISNULL(EndDate, @FutureDate) <> @OLD_EndDate)
 	BEGIN
 		-- The record overlaps within the period
 		SELECT  @ErrorMessage = [dbo].[GetErrorMessage](70008)
@@ -153,7 +157,7 @@ AS
 		       Terms = @Terms,
 			   VacationDays = @VacationDays,
 			   BonusAmount = @BonusAmount,
-			   BonusHoursToCollect = ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear()),
+			   BonusHoursToCollect = ISNULL(@BonusHoursToCollect, @HoursPerYear),
 		       DefaultHoursPerDay = @DefaultHoursPerDay,
 			   SeniorityId = @SeniorityId,
 			   PracticeId = @PracticeId,
@@ -180,7 +184,7 @@ AS
 					AND NOT EXISTS (SELECT 1 FROM dbo.Pay
 									WHERE Person= @PersonId AND StartDate > @StartDate
 					)
-					 SELECT @TempEndDate = '2029-12-31'
+					 SELECT @TempEndDate = @FutureDate
 				  ELSE
 					SELECT @TempEndDate = @EndDate
 				 UPDATE  dbo.[DefaultCommission]
@@ -199,7 +203,7 @@ AS
 				AND NOT EXISTS (SELECT 1 FROM dbo.Pay
 								WHERE Person= @PersonId AND StartDate > @StartDate
 				)
-			  SELECT @TempEndDate = '2029-12-31'
+			  SELECT @TempEndDate = @FutureDate
 			  ELSE
 				SELECT @TempEndDate = @EndDate
 
@@ -227,7 +231,7 @@ AS
 					 VacationDays, BonusAmount, BonusHoursToCollect,
 					 DefaultHoursPerDay,SeniorityId,PracticeId)
 			 VALUES (@PersonId, @StartDate, @EndDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms,
-					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear()),
+					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, @HoursPerYear),
 					 @DefaultHoursPerDay,@SeniorityId,@PracticeId)
 		
 		
@@ -242,7 +246,7 @@ AS
 		DECLARE @DefaultCommissionEndDate DATETIME
 		 
 
-		SELECT @DefaultCommissionEndDate = '2029-12-31'
+		SELECT @DefaultCommissionEndDate = @FutureDate
 
 
 		IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
@@ -280,7 +284,7 @@ AS
 			FROM dbo.Person P
 			JOIN dbo.Pay Pa
 			ON P.PersonId = Pa.Person AND 
-			pa.StartDate <= @Today AND ISNULL(EndDate,dbo.GetFutureDate()) > @Today
+			pa.StartDate <= @Today AND ISNULL(EndDate, @FutureDate) > @Today
 			WHERE P.PersonId = @PersonId
 
 			UPDATE dbo.Pay
@@ -348,9 +352,6 @@ AS
 			,C.Date
 			,0
 			, ISNULL(C.HolidayDescription, ISNULL(PC.Description, ''))
-			--,CASE WHEN PC.PersonId IS NOT NULL AND PC.DayOff <> C.DayOff AND ISNULL(PC.IsFloatingHoliday,0) = 0 THEN 'PTO'
-			--	WHEN PC.PersonId IS NOT NULL AND PC.DayOff <> C.DayOff AND PC.IsFloatingHoliday = 1 THEN 'Floating Holiday'
-			--	ELSE ISNULL(C.HolidayDescription,'') END
 			,1
 			,1 --Here it is Auto generated.
 		FROM dbo.Calendar C
