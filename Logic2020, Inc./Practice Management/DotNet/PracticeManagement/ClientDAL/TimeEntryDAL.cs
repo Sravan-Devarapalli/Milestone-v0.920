@@ -487,8 +487,6 @@ namespace DataAccess
                     return ReadTimeEntrySums(reader);
                 }
             }
-
-            return null;
         }
 
         private static void InitTimeEntryCommand(TimeEntrySelectContext selectContext, SqlCommand command)
