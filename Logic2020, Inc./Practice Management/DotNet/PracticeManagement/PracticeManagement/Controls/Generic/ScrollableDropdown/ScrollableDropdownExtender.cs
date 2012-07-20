@@ -25,7 +25,6 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
         private const string EditImageUrl_Value = "EditImageUrlValue";
         private const string ExtenderWidth_Value = "ExtenderWidthValue";
 
-        private Color _extenderBorderColor;
 
         #endregion
         
