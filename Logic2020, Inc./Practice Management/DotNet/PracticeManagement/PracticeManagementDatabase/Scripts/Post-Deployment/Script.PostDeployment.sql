@@ -78,7 +78,22 @@ SELECT @sql = @sql
               + N';'
               + @newline + @newline
 FROM sys.objects AS obj
-WHERE obj.[type] IN (N'FN', N'IF', N'FS', N'FT')
+WHERE obj.[type] IN (N'FN', N'FS', N'FT')
+ORDER BY [name]
+
+EXEC sp_executesql @sql;
+  
+SET @sql = N''
+SELECT @sql = @sql
+              + N'GRANT SELECT ON '
+              + QUOTENAME(OBJECT_SCHEMA_NAME([object_id])) + '.'
+              + QUOTENAME([name])
+              + N' TO '
+              + QUOTENAME(@user_name)
+              + N';'
+              + @newline + @newline
+FROM sys.objects AS obj
+WHERE obj.[type] IN (N'IF')
 ORDER BY [name]
 
 EXEC sp_executesql @sql;
@@ -86,3 +101,4 @@ EXEC sp_executesql @sql;
 --PRINT @sql;
 
 GO
+
