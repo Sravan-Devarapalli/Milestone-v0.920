@@ -27,17 +27,18 @@
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="updSmtpSetup" runat="server">
         <ContentTemplate>
-            <table width="80%" class="PaddingClass">
+            <table class="PaddingClass Width80Percent">
                 <tr>
-                    <td width="43%">
-                        <table width="100%" class="PaddingClass">
+                    <td class="Width43Percent">
+                        <table class="PaddingClass SMTPTable">
                             <tr>
-                                <td style="white-space: nowrap; width: 34%;">
+                                <td class="Width34Percent">
                                     Mail Server
                                 </td>
-                                <td style="white-space: nowrap; width: 66%;">
-                                    <div style="padding-left: 2px;">
-                                        <asp:TextBox ID="txtMailServer" Width="100%" onchange="DisablSaveButton();" runat="server"></asp:TextBox>
+                                <td class="Width66Percent">
+                                    <div>
+                                        <asp:TextBox ID="txtMailServer" CssClass="WholeWidth" onchange="DisablSaveButton();"
+                                            runat="server"></asp:TextBox>
                                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="txtMailServer"
                                             WatermarkText="smtp.domain.com" EnableViewState="false" WatermarkCssClass="waterMarkItalicSmtp" />
                                         <asp:RequiredFieldValidator ID="reqMailServer" runat="server" ControlToValidate="txtMailServer"
@@ -47,12 +48,13 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="white-space: nowrap; width: 34%;">
+                                <td>
                                     Port Number
                                 </td>
-                                <td style="white-space: nowrap; width: 66%;">
-                                    <div style="padding-left: 2px;">
-                                        <asp:TextBox ID="txtPortNumber" Width="72%" onchange="DisablSaveButton();" runat="server"></asp:TextBox>
+                                <td>
+                                    <div>
+                                        <asp:TextBox ID="txtPortNumber" CssClass="Width72Percent" onchange="DisablSaveButton();"
+                                            runat="server"></asp:TextBox>
                                         (0-65535)
                                         <asp:RequiredFieldValidator ID="reqPortNumber" runat="server" ControlToValidate="txtPortNumber"
                                             ErrorMessage="The Port Number is required." ToolTip="The Port Number is required."
@@ -65,10 +67,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="white-space: nowrap; width: 34%;">
+                                <td>
                                     &nbsp;
                                 </td>
-                                <td style="white-space: nowrap; width: 66%;">
+                                <td>
                                     <asp:CheckBox ID="chbEnableSSl" AutoPostBack="true" onclick="DisablSaveButton();"
                                         OnCheckedChanged="chbEnableSSl_CheckedChanged" runat="server" />
                                     Enable SSL
@@ -76,10 +78,10 @@
                             </tr>
                         </table>
                     </td>
-                    <td width="12%">
+                    <td class="Width12Percent">
                     </td>
-                    <td valign="middle" width="45%">
-                        <div style="border: 1px solid black; background-color: White; padding: 5px;">
+                    <td class="Width45Percent vMiddle">
+                        <div class="SMTPAddressDesc">
                             <span>Enter your Mail Server's SMTP address here.<br />
                                 <br />
                                 By default, PM will attempt to use port 25 for SMTP traffic unless the "Enable SSL"
@@ -90,25 +92,26 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="100%" colspan="3">
+                    <td class="WholeWidth" colspan="3">
                         <br />
                     </td>
                 </tr>
                 <tr>
-                    <td width="100%" colspan="3">
+                    <td class="WholeWidth" colspan="3">
                         SMTP Authentication
                     </td>
                 </tr>
                 <tr>
-                    <td width="43%">
-                        <table width="100%" class="PaddingClass">
+                    <td class="Width43Percent">
+                        <table class="PaddingClass SMTPTable">
                             <tr>
-                                <td style="white-space: nowrap; width: 34%;">
+                                <td class="Width34Percent">
                                     User Name:
                                 </td>
-                                <td style="white-space: nowrap; width: 66%;">
-                                    <div style="padding-left: 2px;">
-                                        <asp:TextBox ID="txtUserName" Width="100%" onchange="DisablSaveButton();" runat="server"></asp:TextBox>
+                                <td class="Width66Percent">
+                                    <div>
+                                        <asp:TextBox ID="txtUserName" CssClass="WholeWidth" onchange="DisablSaveButton();"
+                                            runat="server"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="reqtxtUserName" runat="server" ControlToValidate="txtUserName"
                                             ErrorMessage="The User Name is required." ToolTip="The User Name is required."
                                             Text="*" SetFocusOnError="True" EnableClientScript="False" ValidationGroup="SmtpSetUp" />
@@ -119,14 +122,15 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="white-space: nowrap; width: 34%;">
+                                <td>
                                     Password:
                                 </td>
-                                <td style="white-space: nowrap; width: 66%;">
-                                    <div style="padding-left: 2px;">
-                                        <asp:TextBox ID="txtPasswordSingleLine" Style="display: none;" Width="100%" TextMode="SingleLine"
-                                            onchange="AssigntxtPasswordValue(this.value);DisablSaveButton();" runat="server"></asp:TextBox>
-                                        <asp:TextBox ID="txtPassword" Width="100%" TextMode="Password" onchange="AssigntxtPasswordSinleLineValue(this.value);DisablSaveButton();"
+                                <td>
+                                    <div>
+                                        <asp:TextBox ID="txtPasswordSingleLine" Style="display: none;" CssClass="WholeWidth"
+                                            TextMode="SingleLine" onchange="AssigntxtPasswordValue(this.value);DisablSaveButton();"
+                                            runat="server"></asp:TextBox>
+                                        <asp:TextBox ID="txtPassword" CssClass="WholeWidth" TextMode="Password" onchange="AssigntxtPasswordSinleLineValue(this.value);DisablSaveButton();"
                                             runat="server"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="reqtxtPassword" runat="server" ControlToValidate="txtPasswordSingleLine"
                                             ErrorMessage="Password is required." ToolTip="Password is required." Text="*"
@@ -135,9 +139,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="white-space: nowrap; width: 34%;">
+                                <td>
                                 </td>
-                                <td style="white-space: nowrap; width: 66%;">
+                                <td>
                                     <asp:CheckBox ID="chbShowCharacters" AutoPostBack="true" Checked="false" OnCheckedChanged="chbShowCharacters_CheckedChanged"
                                         runat="server" />
                                     Show Characters
@@ -145,10 +149,10 @@
                             </tr>
                         </table>
                     </td>
-                    <td width="12%">
+                    <td class="Width12Percent">
                     </td>
-                    <td width="45%">
-                        <div style="border: 1px solid black; background-color: White; padding: 5px;">
+                    <td class="Width45Percent">
+                        <div class="SMTPAddressDesc">
                             <span>Enter valid account credentials used to authenticate to your SMTP server.<br />
                                 <br />
                                 If you need to change the username or password in the future, simply replace the
@@ -157,25 +161,26 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="100%" colspan="3">
+                    <td class="WholeWidth" colspan="3">
                         <br />
                     </td>
                 </tr>
                 <tr>
-                    <td width="100%" colspan="3">
+                    <td class="WholeWidth" colspan="3">
                         PM Support Email Address
                     </td>
                 </tr>
                 <tr>
-                    <td width="40%">
-                        <table width="100%" class="PaddingClass">
+                    <td class="Width40P vTop">
+                        <table class="PaddingClass SMTPTable">
                             <tr>
-                                <td style="width: 34%;">
+                                <td class="Width34Percent">
                                     &nbsp;
                                 </td>
-                                <td style="width: 66%;">
-                                    <div style="padding-left: 2px;">
-                                        <asp:TextBox ID="txtPMSupportEmail" Width="100%" onchange="DisablSaveButton();" runat="server"></asp:TextBox>
+                                <td class="Width66Percent">
+                                    <div>
+                                        <asp:TextBox ID="txtPMSupportEmail" CssClass="WholeWidth" onchange="DisablSaveButton();"
+                                            runat="server"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="reqtxtEmailAddress" runat="server" ControlToValidate="txtPMSupportEmail"
                                             ErrorMessage="The PM Support Email Address is required." ToolTip="The PM Support Email Address is required."
                                             Text="*" SetFocusOnError="True" EnableClientScript="False" ValidationGroup="SmtpSetUp" />
@@ -188,64 +193,63 @@
                             </tr>
                         </table>
                     </td>
-                    <td width="10%">
+                    <td class="Width10Percent">
                     </td>
-                    <td width="50%">
-                        <div style="border: 1px solid black; background-color: White; padding: 5px;">
+                    <td class="Width50Percent">
+                        <div class="SMTPAddressDesc">
                             <span>Enter a valid e-mail address here that will be populated throughout PM as a means
                                 of allowing users to contact your company's support staff or help desk.</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td style="white-space: nowrap; padding-right: 0px;" width="43%">
-                        <table width="100%" class="PaddingClass">
+                    <td class="Width43Percent no-wrap padRight0">
+                        <table class="PaddingClass SMTPTable padRight0Table">
                             <tr>
-                                <td style="white-space: nowrap; width: 34%;">
+                                <td class="Width34Percent">
                                     Connection Test
                                 </td>
-                                <td style="width: 66%;">
+                                <td class="Width66Percent">
                                 </td>
                             </tr>
                             <tr>
-                                <td style="white-space: nowrap; padding-right: 0px; width: 34%;">
+                                <td class="Width34Percent">
                                 </td>
-                                <td align="right" style="white-space: nowrap; padding-right: 0px; width: 66%;">
+                                <td align="right" class="Width66Percent">
                                     <asp:Button ID="btnTestSettings" OnClick="btnTestSettings_Click" runat="server" Text="Test Settings"
                                         ValidationGroup="SmtpSetUp" />
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2" style="width: 100%; padding-right: 0px;">
-                                    <table width="100%">
+                                <td colspan="2" class="WholeWidth">
+                                    <table class="WholeWidth">
                                         <tr>
-                                            <td style="border: 1px solid black; width: 100%; height: 63px; background-color: White;
-                                                padding: 5px;">
-                                                <asp:Label ID="lbloutputBox" Style="white-space: normal" runat="server"></asp:Label>
+                                            <td class="SMTPAddressDesc1">
+                                                <asp:Label ID="lbloutputBox" CssClass="WS-Normal" runat="server"></asp:Label>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2" style="width: 100%;">
+                                <td colspan="2" class="WholeWidth">
                                     <br />
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width: 34%;">
+                                <td>
                                 </td>
-                                <td align="right" style="width: 66%;">
+                                <td align="right">
                                     <asp:Button ID="btnSave" runat="server" Enabled="false" OnClick="btnSave_Click" ValidationGroup="SmtpSetUp"
                                         Text="Save Changes" />
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td width="12%">
+                    <td class="Width12Percent">
                     </td>
-                    <td width="45%">
-                        <div style="border: 1px solid black; background-color: White; padding: 5px;">
+                    <td class="Width45Percent">
+                        <div class="SMTPAddressDesc">
                             <span>Once you've entered valid SMTP settings and a PM Support Email Address in the
                                 boxes above, you can click the "Test Settings " button to make sure everything works
                                 as expected. Results of the test will display in the box below.</span>
