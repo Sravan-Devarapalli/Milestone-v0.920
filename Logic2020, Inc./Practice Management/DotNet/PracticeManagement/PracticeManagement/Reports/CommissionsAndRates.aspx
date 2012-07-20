@@ -1,9 +1,10 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CommissionsAndRates.aspx.cs"
     Inherits="PraticeManagement.CommissionsAndRates" MasterPageFile="~/PracticeManagementMain.Master" %>
 
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Reports/CommissionsAndRates.ascx" TagPrefix="uc" TagName="CommissionsAndRates" %>
 <asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
-    <script src="../Scripts/Cookie.js" type="text/javascript"></script>
+    <script type="text/javascript" src='<%# Generic.GetClientUrl("~/Scripts/Cookie.js", this) %>'></script>
 </asp:Content>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Commissions and Rates | Practice Management</title>
