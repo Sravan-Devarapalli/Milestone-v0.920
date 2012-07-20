@@ -478,7 +478,6 @@
     <Content Include="Config\SupportLink.aspx" />
     <Content Include="Config\TimeTypes.aspx" />
     <Content Include="Config\TimeZones.aspx" />
-    <Content Include="Controls\Configuration\SmtpPopSetUpControl.ascx" />
     <Content Include="Controls\Opportunities\OpportunityListControl.ascx" />
     <Content Include="Controls\Opportunities\ProposedResources.ascx" />
     <Content Include="Controls\PersonsFilter.ascx" />
@@ -1748,13 +1747,6 @@
     <Compile Include="Config\TimeZones.aspx.designer.cs">
       <DependentUpon>TimeZones.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.cs">
-      <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Configuration\SmtpPopSetUpControl.ascx.designer.cs">
-      <DependentUpon>SmtpPopSetUpControl.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\CustomDropDown.cs" />
     <Compile Include="Controls\MultipleSelectionCheckBoxList.cs" />
     <Compile Include="Controls\Opportunities\OpportunityListControl.ascx.cs">
@@ -1948,13 +1940,6 @@
     </Compile>
     <Compile Include="Controls\Configuration\DefaultUser.ascx.designer.cs">
       <DependentUpon>DefaultUser.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Configuration\EmailTemplates.ascx.cs">
-      <DependentUpon>EmailTemplates.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Configuration\EmailTemplates.ascx.designer.cs">
-      <DependentUpon>EmailTemplates.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Configuration\PracticesHelper.cs" />
     <Compile Include="Controls\DatePicker.ascx.cs">
@@ -2413,14 +2398,6 @@
       <DependentUpon>RestrictionPanel.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\SerializationHelper.cs" />
-    <Compile Include="Controls\TimeEntry\ReadyToUpdateTeArguments.cs" />
-    <Compile Include="Controls\TimeEntry\TimeEntryBarHeader.ascx.cs">
-      <DependentUpon>TimeEntryBarHeader.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\TimeEntry\TimeEntryBarHeader.ascx.designer.cs">
-      <DependentUpon>TimeEntryBarHeader.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\TimeEntry\WeekChangedEventArguments.cs" />
     <Compile Include="DefaultRecruitingCommissionDetail.aspx.cs">
       <DependentUpon>DefaultRecruitingCommissionDetail.aspx</DependentUpon>
@@ -2916,7 +2893,6 @@
     <Content Include="Controls\Clients\ClientGroups.ascx" />
     <Content Include="Controls\Clients\ClientProjects.ascx" />
     <Content Include="Controls\Configuration\DefaultUser.ascx" />
-    <Content Include="Controls\Configuration\EmailTemplates.ascx" />
     <Content Include="Controls\DatePicker.ascx" />
     <EmbeddedResource Include="Controls\Generic\DirtyState\DirtyExtender.js" />
     <EmbeddedResource Include="Controls\Generic\ElementDisabler\ElementDisablerExtender.js" />
@@ -2955,7 +2931,6 @@
     <Content Include="Controls\Reports\ConsultantsWeeklyReport.ascx" />
     <Content Include="Controls\Reports\PersonStats.ascx" />
     <Content Include="Controls\RestrictionPanel.ascx" />
-    <Content Include="Controls\TimeEntry\TimeEntryBarHeader.ascx" />
     <Content Include="Css\PracticeManagementIE.css" />
     <Content Include="Css\style-ie7.css" />
     <Content Include="Css\TreeView.css" />
