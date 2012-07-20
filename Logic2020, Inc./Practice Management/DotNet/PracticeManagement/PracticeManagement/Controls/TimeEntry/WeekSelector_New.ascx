@@ -1,5 +1,4 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="WeekSelector_New.ascx.cs" Inherits="PraticeManagement.Controls.TimeEntry.WeekSelector_New" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <script type="text/javascript">
 
     function confirmSaveDirtyTimeEntry() {
@@ -23,19 +22,17 @@
                 <table>
                     <tr>
                         <td>
-                            <span style="font-size: xx-small; color: navy;">Week of</span>
-                            <asp:TextBox ID="txtDate" runat="server" AutoPostBack="true" Width="102px" Style="visibility: hidden;
-                                margin-left: -40px;" onchange="confirmSaveDirtyTimeEntry()" OnTextChanged="txtDate_TextChanged"></asp:TextBox>
+                            <span class="WeekSelectorLable">Week of</span>
+                            <asp:TextBox ID="txtDate" runat="server" AutoPostBack="true" class="WeekSelectorHiddenTextBox" onchange="confirmSaveDirtyTimeEntry()" OnTextChanged="txtDate_TextChanged"></asp:TextBox>
                             <asp:HyperLink ID="lnkCalendar" runat="server" ImageUrl="~/Images/calendar.gif" NavigateUrl="#"></asp:HyperLink>
-                            <ajaxToolkit:CalendarExtender ID="txtDate_CalendarExtender" runat="server" TargetControlID="txtDate"
+                            <AjaxControlToolkit:CalendarExtender ID="txtDate_CalendarExtender" runat="server" TargetControlID="txtDate"
                                 PopupButtonID="lnkCalendar">
-                            </ajaxToolkit:CalendarExtender>
+                            </AjaxControlToolkit:CalendarExtender>
                         </td>
                     </tr>
                     <tr>
                         <td nowrap="nowrap">
-                            <asp:Label ID="lblWeek" runat="server" EnableViewState="False" Font-Size="Large"
-                                Font-Bold="True" ForeColor="Navy" />
+                            <asp:Label ID="lblWeek" runat="server" EnableViewState="False" CssClass="WeekSelectorDateSpan" />
                         </td>
                     </tr>
                 </table>
