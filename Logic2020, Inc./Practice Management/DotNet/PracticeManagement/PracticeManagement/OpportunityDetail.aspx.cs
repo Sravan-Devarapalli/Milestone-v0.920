@@ -20,12 +20,7 @@ namespace PraticeManagement
 {
     public partial class OpportunityDetail : PracticeManagementPageBase, IPostBackEventHandler
     {
-        #region Events
-
-        public event EventHandler NoteAdded;
-
-        #endregion
-
+        
         #region Fields
 
         private bool _userIsAdministrator;
