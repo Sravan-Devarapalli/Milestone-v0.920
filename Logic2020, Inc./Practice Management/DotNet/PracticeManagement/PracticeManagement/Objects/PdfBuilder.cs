@@ -98,7 +98,6 @@ namespace PraticeManagement.Objects
 
         private List<HtmlPdfPage> _Pages;
         private StyleSheet _Styles;
-        private PdfPTable _HeaderTable;
 
         #endregion
 
