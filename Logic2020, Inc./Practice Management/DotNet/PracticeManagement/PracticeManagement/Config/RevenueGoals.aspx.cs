@@ -653,7 +653,6 @@ namespace PraticeManagement.Config
             foreach (TableRow row in grdPraticeAreaBugetEntries.Rows)
             {
                 string itemNode = string.Empty;
-                int itemId = 0;
                 for (int i = 1; i < row.Cells.Count; i++)
                 {
                     TableCell cell = row.Cells[i];
