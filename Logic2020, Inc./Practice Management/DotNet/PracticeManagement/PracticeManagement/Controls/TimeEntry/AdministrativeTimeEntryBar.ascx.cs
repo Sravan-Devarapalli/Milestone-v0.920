@@ -195,8 +195,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.IsORT = IsORT;
                 ste.IsUnpaid = IsUnpaid;
 
-                tdTimeTypes.Attributes["class"] ="time-entry-bar-time-typesNew " + GetDayCssClass();
-
                 DateTime date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
                 if (!HostingPage.AdminExtenderHoursControls.ContainsKey(date))
                 {
@@ -301,15 +299,6 @@ namespace PraticeManagement.Controls.TimeEntry
         protected string GetDayOffCssClass(XElement calendarItem)
         {
             return calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value;
-        }
-
-        private string GetDayCssClass()
-        {
-            if (IsPTO || IsHoliday || IsUnpaid)
-            {
-                return "textLeft padLeft3P";
-            }
-            return "textCenter";
         }
 
         private void InitTimeEntryControl(AdministrativeSingleTimeEntry ste, DateTime date, XElement terXlement)
