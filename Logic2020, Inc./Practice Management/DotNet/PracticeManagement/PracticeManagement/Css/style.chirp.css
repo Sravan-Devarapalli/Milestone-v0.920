@@ -413,6 +413,10 @@ a.control
     overflow-y: auto;
     height: 450px;
 }
+.xScrollAuto
+{
+    overflow-x: auto;
+}
 .cp
 {
     border: 1px solid #c5c5c5;
@@ -991,6 +995,7 @@ table.time-entry-person-projects tr
     -webkit-box-shadow: 5px 5px 15px #444;
     -moz-box-shadow: 5px 5px 15px #444;
     padding: 10px;
+    width: 375px;
 }
 td.te-modal-header
 {
@@ -1026,6 +1031,8 @@ td.te-modal-header
     color: #444;
     border: 1px solid gray;
     padding: 5px;
+    resize: none;
+    overflow-y: auto;
 }
 .te-modal-inner
 {
@@ -1316,6 +1323,7 @@ TR.CompPerfHeaderGroupBy td .ie-bg
 {
     color: Gray;
     font-style: italic;
+    width: 100%;
 }
 .cbfloatRight input
 {
@@ -1393,6 +1401,15 @@ TR.CompPerfHeaderGroupBy td .ie-bg
     border-right: 5px;
     padding-right: 0;
 }
+.time-entry-bar-time-typesNew .FirstTd
+{
+    width: 10%;
+    padding-left: 4px;
+}
+.time-entry-bar-time-typesNew .SecondTd
+{
+    width: 90%;
+}
 .time-entry-bar-time-typesNewHeader
 {
     width: 32%;
@@ -1415,6 +1432,12 @@ TR.CompPerfHeaderGroupBy td .ie-bg
     width: 6%;
     font-weight: 700;
 }
+.time-entry-total-hoursNew-totalColoum .TotalDiv
+{
+    float: right;
+    padding-right: 10px;
+}
+
 .time-entry-total-hoursNew
 {
     text-align: center;
@@ -1514,6 +1537,10 @@ TABLE.Section td
 .Padding6
 {
     padding: 6px;
+}
+.Padding8
+{
+    padding: 8px;
 }
 .Padding10, .Padding10Px
 {
@@ -1634,6 +1661,10 @@ TABLE.Section td
 .padRight3, .PaddingRight3Px
 {
     padding-right: 3px;
+}
+.padRight4
+{
+    padding-right: 4px;
 }
 .padRight5, .wrap
 {
@@ -1891,6 +1922,10 @@ TABLE.Section td
 {
     width: 31%;
 }
+.Width34Percent
+{
+    width: 34%;
+}
 .Width35Percent
 {
     width: 35%;
@@ -1899,10 +1934,18 @@ TABLE.Section td
 {
     width: 39%;
 }
+.Width40P
+{
+    width: 40%;
+}
 .Width40Percent
 {
     width: 40%;
     padding: 1px;
+}
+.Width43Percent
+{
+    width: 43%;
 }
 .Width45Percent
 {
@@ -1940,6 +1983,10 @@ TABLE.Section td
 .Width70Per, .Width70Percent, .width70P
 {
     width: 70%;
+}
+.Width72Percent
+{
+    width: 72%;
 }
 .Width75Percent
 {
@@ -2012,6 +2059,10 @@ TABLE.Section td
 .Width25Px
 {
     width: 25px;
+}
+.Width26Px
+{
+    width: 26px;
 }
 .Width30Px
 {
@@ -2088,6 +2139,10 @@ TABLE.Section td
 .Width110PxImp
 {
     width: 110px !important;
+}
+.Width115Px
+{
+    width: 115px;
 }
 .Width120Px
 {
@@ -2201,9 +2256,18 @@ TABLE.Section td
 {
     width: 355px;
 }
+.Width360Px
+{
+    width: 360px;
+}
+
 .Width375Px
 {
     width: 375px;
+}
+.Width395Px
+{
+    width: 395px;
 }
 .Width400Px
 {
@@ -2281,16 +2345,51 @@ TABLE.Section td
 {
     min-height: 250px;
 }
-.ModalPopUpSideHeading
+.TimeEntryAddPopUpTable
+{
+    width: 100%;
+}
+.TimeEntryAddPopUpTable .FirstTrTd1
 {
     width: 30%;
     font-weight: 700;
     text-align: right;
     padding-right: 4px;
 }
-.ModalPopUpDropDownPadding
+.TimeEntryAddPopUpTable .FirstTrTd2
 {
+    width: 70%;
+}
+.TimeEntryAddPopUpTable .FirstTrTd2 select, .TimeEntryAddPopUpTable .SecondTrTd2 select
+{
+    width: 250px;
+}
+.TimeEntryAddPopUpTable .SecondTrTd1
+{
+    width: 30%;
+    font-weight: 700;
+    text-align: right;
+    padding-right: 4px;
     padding-top: 8px;
+}
+.TimeEntryAddPopUpTable .SecondTrTd2
+{
+    width: 70%;
+    padding-top: 8px;
+}
+
+.TimeEntryAddPopUpButtonTable
+{
+    height: 45px;
+}
+
+.TimeEntryAddPopUpButtonTable .FirstTd
+{
+    padding-right: 3px;
+}
+.TimeEntryAddPopUpButtonTable .SecondTd
+{
+    padding-left: 3px;
 }
 .DayTotalCSS
 {
@@ -2298,6 +2397,9 @@ TABLE.Section td
     text-align: right;
     margin: 1px 7px 0 0;
     padding: 2px 0 0 1px;
+    display: inline-block;
+    height: 18px;
+    width: 36px;
 }
 .calendarPopup tr td
 {
@@ -4886,9 +4988,115 @@ BenchCosts.ascx*/
 }
 .TimeEntryPageTotalHours
 {
-    font-size: 14px; font-weight: bold; margin-left: 16px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 16px;
 }
 .PaddingTB10PxLR0Px
 {
-  padding : 10px 0px ;  
+    padding: 10px 0px;
 }
+.WeekSelectorLable
+{
+    font-size: xx-small;
+    color: navy;
+}
+.WeekSelectorDateSpan
+{
+    color: Navy;
+    font-size: large;
+    font-weight: bold;
+}
+.bgColorRed
+{
+    background-color: Red;
+}
+.bgColorWhite
+{
+    background-color: white;
+}
+.WeekSelectorHiddenTextBox
+{
+    width: 102px;
+    margin-left: -40px;
+    visibility: hidden;
+}
+.TimeEntryAddPopUp
+{
+    max-width: 700px;
+    min-height: 60px;
+    min-width: 450px;
+}
+.VisbleHidden
+{
+    visibility: hidden;
+}
+.pnlRecurringAllowedPopUp
+{
+    width: 480px !important;
+}
+.pnlPersonInactiveAlert
+{
+    width: 380px !important;
+}
+.personStats
+{
+    width: 100%;
+}
+.personStats .FirstTd
+{
+    padding-left: 10px;
+}
+.marginBT10Px
+{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.EmailTemplateTd
+{
+    overflow: auto;
+    border: 1px solid #000000;
+    width: 200px;
+}
+.EmailTemplateEmailBody
+{
+    height: 217px;
+    width: 450px;
+    margin-bottom: 0px;
+}
+.SMTPTable
+{
+    width: 100%;
+}
+.SMTPTable td
+{
+    white-space: nowrap;
+}
+.SMTPTable div
+{
+    padding-left: 2px;
+}
+.SMTPAddressDesc
+{
+    border: 1px solid black;
+    background-color: White;
+    padding: 5px;
+}
+.padRight0Table td
+{
+    padding-right: 0px !important;
+}
+.SMTPAddressDesc1
+{
+    border: 1px solid black;
+    width: 100%;
+    height: 63px;
+    background-color: White;
+    padding: 5px;
+}
+.gvCommissionsAndRates
+{
+    background-color: White;
+    border-collapse: collapse;
+}
+
