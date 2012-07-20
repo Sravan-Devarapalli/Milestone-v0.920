@@ -9,18 +9,17 @@
 <%@ Import Namespace="PraticeManagement.Controls.TimeEntry" %>
 <%@ Register TagPrefix="ext3" Namespace="PraticeManagement.Controls.Generic.SelectCutOff"
     Assembly="PraticeManagement" %>
-<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <table class="WholeWidth">
     <tr class="time-entry-bar">
         <td class="DeleteWidth">
         </td>
-        <td class="time-entry-bar-time-typesNewst" id="tdTimeTypes" runat="server" style="padding-left:3px !important;">
+        <td class="time-entry-bar-time-typesNew" id="tdTimeTypes" runat="server">
             <table class="WholeWidth">
                 <tr>
-                    <td style="width: 10%; padding-left: 4px;" id="tdPlusSection" runat="server">
+                    <td id="tdPlusSection" runat="server" class="FirstTd">
                     </td>
-                    <td style="width: 90%;text-align:left;">
-                        <uc:CustomDropDown ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
+                    <td class="SecondTd">
+                        <pmc:CustomDropDown ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                             OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
                             ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
                         <ext3:SelectCutOffExtender ID="SelectCutOffExtender1" runat="server" NormalCssClass="time-entry-bar-time-typesNew-select-Normal"
@@ -49,7 +48,7 @@
             </FooterTemplate>
         </asp:Repeater>
         <td class="time-entry-total-hoursNew-totalColoum">
-            <div style="float: right; padding-right: 10px;">
+            <div class="TotalDiv">
                 <label id="lblTotalHours" runat="server" />
             </div>
             <label id="lblEnableDisable" runat="server" />
