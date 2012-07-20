@@ -13,12 +13,12 @@
     <tr class="time-entry-bar">
         <td class="DeleteWidth">
         </td>
-        <td class="time-entry-bar-time-typesNewst">
+        <td class="time-entry-bar-time-typesNew">
             <table class="WholeWidth">
                 <tr>
-                    <td style="width: 10%;padding-left:4px;" id="tdplusProjectSection" runat="server">
+                    <td id="tdplusProjectSection" runat="server" class="FirstTd">
                     </td>
-                    <td style="width: 90%;">
+                     <td class="SecondTd">
                         <asp:DropDownList ID="ddlTimeTypes" runat="server" CssClass="time-entry-bar-time-typesNew-select-Normal"
                             OnDataBound="ddlTimeTypes_DataBound" DataTextField="Name" DataValueField="Id"
                             ValidationGroup='<%# ClientID %>' onchange="setDirty();EnableSaveButton(true);" />
@@ -42,7 +42,7 @@
             </ItemTemplate>
         </asp:Repeater>
         <td class="time-entry-total-hoursNew-totalColoum">
-            <div style="float: right; padding-right: 10px;">
+            <div class="TotalDiv">
                 <label id="lblTotalHours" runat="server" />
             </div>
             <ext1:TotalCalculatorExtender ID="extTotalHours" runat="server" TargetControlID="lblTotalHours" />
