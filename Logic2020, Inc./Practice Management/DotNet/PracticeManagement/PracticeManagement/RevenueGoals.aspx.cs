@@ -29,8 +29,8 @@ namespace PraticeManagement
         private const string viewStateGroupedDirectors = "GroupedDirectors";
         private const int NumberOfFixedColumns = 1;
         private const int PersonNameCellIndex = 0;
-        private const string PersonNameCellInnerHtmlTemplate = "<DIV style='WIDTH: 170px; PADDING-RIGHT: 2px'>{0}</DIV>";
-        private const string MonthCellInnerHtmlTemplate = "<TABLE {2} width='100%'> <TR><TD align='{3}'>{0}</TD></TR><TR><TD align='{3}'>{1}</TD></TR></TABLE>";
+        private const string PersonNameCellInnerHtmlTemplate = "<DIV class='Width170Px padRight2'>{0}</DIV>";
+        private const string MonthCellInnerHtmlTemplate = "<TABLE {2} class='WholeWidth'> <TR><TD align='{3}'>{0}</TD></TR><TR><TD align='{3}'>{1}</TD></TR></TABLE>";
 
         private const string STRDirectorReportSortExpression = "DirectorReportSortExpression";
         private const string STRDirectorReportSortDirection = "DirectorReportSortDirection";
@@ -637,7 +637,7 @@ namespace PraticeManagement
             var monthsInPeriod = GetPeriodLength();
             var row = budgetListview.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
             AddMonthColumn(row, periodStart, monthsInPeriod, NumberOfFixedColumns);
-            row.Cells[row.Cells.Count - 1].InnerHtml = " <div class='ie-bg' style='padding-right:3px;'>Grand Total</div>";
+            row.Cells[row.Cells.Count - 1].InnerHtml = " <div class='ie-bg padRight3'>Grand Total</div>";
         }
 
         protected void lvPersonBudget_OnItemDataBound(object sender, ListViewItemEventArgs e)
@@ -688,7 +688,7 @@ namespace PraticeManagement
 
         protected void lvBudget_OnPreRender(object sender, EventArgs e)
         {
-            var grandTotalRowInnerHtml = "</td></tr><tr class='summary' height='35px'><td style='padding-left:3px;border-left:2px solid black;border-bottom:1px solid black;border-top:1px solid black;'>";
+            var grandTotalRowInnerHtml = "</td></tr><tr class='summary'><td class='grandTotalRowInnerHtmlTd'>";
             var budgetListView = sender as ListView;
             int categoryType = 1;
             if (budgetListView.ID == "lvPracticeBudget")
@@ -717,11 +717,11 @@ namespace PraticeManagement
                     string toolTipInfo = (!String.IsNullOrEmpty(amountDiff) ? " title='Goal: " + GetGoalString(goal.ToString()) + "' " : string.Empty);
                     if (monthBegin.Month == DateTime.Now.Month && monthBegin.Year == DateTime.Now.Year)
                     {
-                        grandTotalRowInnerHtml += "</td><td style='border:1px solid black;'>";
+                        grandTotalRowInnerHtml += "</td><td class='border_black'>";
                     }
                     else
                     {
-                        grandTotalRowInnerHtml += "</td><td style='border-bottom:1px solid black;border-top:1px solid black;'>";
+                        grandTotalRowInnerHtml += "</td><td class='borderTopBottom_black'>";
                     }
                     grandTotalRowInnerHtml += string.Format(MonthCellInnerHtmlTemplate,
                                                         amountDiff,
@@ -735,7 +735,7 @@ namespace PraticeManagement
                 var grandTotalgoal = new PracticeManagementCurrency();
                 string grandTotalAmountDiff = GetGrandTotalAmountDiff(categoryType, ref  grandTotalgoal);
                 string grandTotalToolTipInfo = (!String.IsNullOrEmpty(grandTotalAmountDiff) ? " title='Goal: " + GetGoalString(grandTotalgoal.ToString()) + "' " : string.Empty);
-                grandTotalRowInnerHtml += ("</td><td style='border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;'>" + string.Format(MonthCellInnerHtmlTemplate,
+                grandTotalRowInnerHtml += ("</td><td class='border_blackExceptLeft'>" + string.Format(MonthCellInnerHtmlTemplate,
                                                    grandTotalAmountDiff,
                                                    GetGrandPrcntgAmountDiff(categoryType),
                                                    grandTotalToolTipInfo,
@@ -920,7 +920,7 @@ namespace PraticeManagement
 
                 if (monthBegin.Month == DateTime.Now.Month && monthBegin.Year == DateTime.Now.Year)
                 {
-                    row.Cells[monthIndex].Attributes["style"] = "border-left:1px solid black;border-right:1px solid black;";
+                    row.Cells[monthIndex].Attributes["class"] = "borderLeftRight_black CompPerfMonthSummary";
                 }
             }
         }
@@ -970,7 +970,7 @@ namespace PraticeManagement
                     row.Cells.RemoveAt(NumberOfFixedColumns);
                 }
 
-                row.Cells[row.Cells.Count - 1].Attributes["Style"] = "";
+                row.Cells[row.Cells.Count - 1].Attributes["class"] = "";
 
                 for (int i = insertPosition, k = 0; k < monthsInPeriod; i++, k++)
                 {
@@ -981,7 +981,7 @@ namespace PraticeManagement
                     row.Cells[i].Attributes["class"] = "ie-bg";
                     if (periodStart.Month == DateTime.Now.Month && periodStart.Year == DateTime.Now.Year)
                     {
-                        row.Cells[i].Attributes["Style"] = "border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;";
+                        row.Cells[i].Attributes["class"] = "border_blackExceptTop";
                     }
                     row.Cells[i].Attributes["align"] = "center";
                     periodStart = periodStart.AddMonths(1);
@@ -1157,3 +1157,4 @@ namespace PraticeManagement
         }
     }
 }
+
