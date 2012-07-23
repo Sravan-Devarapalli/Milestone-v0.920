@@ -517,7 +517,7 @@
                             <td>
                             </td>
                             <td>
-                                <asp:CheckBox ID="chkExcludeInternalPractices" runat="server" Text="Exclude Internal Practice Areas"
+                                <asp:CheckBox ID="chkExcludeInternalPractices" runat="server" Text="Exclude Internal Practice Areas" Checked="true"
                                     onclick="EnableResetButton();" />
                             </td>
                         </tr>
