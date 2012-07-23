@@ -16,6 +16,8 @@ namespace PraticeManagement.Controls.Reports
         private const int DEFAULT_STEP = 7;
         private const int DAYS_FORWARD = 184;
         private string RESOURE_DICTIONARY_FILTER_LIST_KEY = "RESOURE_DICTIONARY_FILTER_LIST_KEYS";
+        private const string W2Hourly = "W2-Hourly";
+        private const string W2Salary = "W2-Salary";
 
         public bool ActivePersons { get { return chbActivePersons.Checked; } }
 
@@ -264,7 +266,7 @@ namespace PraticeManagement.Controls.Reports
                 else if (!(Request.QueryString.AllKeys.Contains(Constants.FilterKeys.ApplyFilterFromCookieKey) && Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true"))
                 {
                     SelectAllItems(this.cblPractices);
-                    SelectAllItems(this.cblTimeScales);
+                    SelectDefaultTimeScaleItems(this.cblTimeScales);
                 }
             }
             lblMessage.Text = string.Empty;
@@ -400,6 +402,14 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        private void SelectDefaultTimeScaleItems(ScrollingDropDown cblTimeScales)
+        {
+            foreach (ListItem item in cblTimeScales.Items)
+            {
+                item.Selected = (item.Text == W2Hourly || item.Text == W2Salary);
+            }
+        }
+
         public void Resetfilter()
         {
             this.chbActivePersons.Checked = true;
@@ -408,9 +418,9 @@ namespace PraticeManagement.Controls.Reports
             this.chbInternalProjects.Checked = true;
             this.chbProjectedProjects.Checked = true;
             this.chbExperimentalProjects.Checked = false;
-            this.chkExcludeInternalPractices.Checked = false;
+            this.chkExcludeInternalPractices.Checked = true;
             SelectAllItems(this.cblPractices);
-            SelectAllItems(this.cblTimeScales);
+            SelectDefaultTimeScaleItems(this.cblTimeScales);            
         }
 
         public string PracticesFilterText()
