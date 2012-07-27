@@ -83,11 +83,11 @@
                                     Name</div>
                             </HeaderTemplate>
                             <ItemTemplate>
-                                <asp:Label ID="lblStrawmen" CssClass="Ws-Normal padLeft25" runat="server" Text='<%# Eval("Name")%>'></asp:Label>
+                                <asp:Label ID="lblStrawmen" CssClass="Ws-Normal padLeft25" runat="server" Text='<%# Eval("HtmlEncodedName")%>'></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
                                 <asp:LinkButton ID="lnkEditStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Click to edit Strawmen Role/Skill"
-                                    CssClass="padLeft25" runat="server" OnClick="lnkEditStrawman_OnClick" Text='<%# Eval("Name")%>' />
+                                    CssClass="padLeft25" runat="server" OnClick="lnkEditStrawman_OnClick" Text='<%# Eval("HtmlEncodedName")%>' />
                                 <asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another strawman with the same skill and role."
                                     ToolTip="There is another strawmen with the same skill and role." ValidationGroup="StrawmanGroup"
                                     SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>
