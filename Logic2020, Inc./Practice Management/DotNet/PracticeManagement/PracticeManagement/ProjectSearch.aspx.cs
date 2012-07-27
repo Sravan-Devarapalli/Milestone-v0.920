@@ -8,12 +8,16 @@ using DataTransferObjects;
 using System.Linq;
 using System.Collections.Generic;
 using PraticeManagement.Utils;
+using System.Web.UI.HtmlControls;
 
 namespace PraticeManagement
 {
     public partial class ProjectSearch : PracticeManagementPageBase
     {
+        private const int ProjectStateColumnIndex = 0;
         private const string RegexSpecialChars = ".[]()\\-*%+|$?^";
+        private const string PaddingClassForProjectName = "padLeft15Imp";
+        private const string CursorPointerClass = " CursorPointer";
 
         private string RegexReplace
         {
@@ -206,9 +210,40 @@ namespace PraticeManagement
                     var btnExpandCollapseMilestones = e.Item.FindControl("btnExpandCollapseMilestones") as Image;
                     collapsiblepanelextender.Enabled = btnExpandCollapseMilestones.Visible = false;
                     var btnProjectName = e.Item.FindControl("btnProjectName") as LinkButton;
-                    btnProjectName.Style.Add("padding-left", "15px");
+                    btnProjectName.Attributes["class"] = PaddingClassForProjectName;                   
+                }
+                string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
+                if (project.Status.Id == 3 && !project.HasAttachments)
+                {
+                    cssClass = "ActiveProjectWithoutSOW";
+                }
+                var htmlRow = e.Item.FindControl("boundingRow") as HtmlTableRow;
+                FillProjectStateCell(htmlRow, cssClass, project.Status);
+            }
+        }
+
+        private void FillProjectStateCell(HtmlTableRow row, string cssClass, ProjectStatus status)
+        {
+            var toolTip = status.Name;
+
+            if (status.Id == (int)ProjectStatusType.Active)
+            {
+                if (cssClass == "ActiveProjectWithoutSOW")
+                {
+                    toolTip = "Active without Attachment";
+                }
+                else
+                {
+                    toolTip = "Active with Attachment";
                 }
             }
+
+            HtmlAnchor anchor = new HtmlAnchor();
+            anchor.Attributes["class"] = cssClass + CursorPointerClass;
+            anchor.Attributes["Description"] = toolTip;
+            anchor.Attributes["onmouseout"] = "HidePanel();";
+            anchor.Attributes["onmouseover"] = "SetTooltipText(this.attributes['Description'].value,this);";
+            row.Cells[ProjectStateColumnIndex].Controls.Add(anchor);
         }
 
         protected string GetProjectNameCellToolTip(Project project)
