@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using System;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -16,6 +17,14 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public string Name { get; set; }
+
+        public string HtmlEncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
+        }
 
         [DataMember]
         public int ProjectId { get; set; }
