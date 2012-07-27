@@ -292,7 +292,7 @@
                     </div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:HyperLink ID="btnPersonName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
+                    <asp:HyperLink ID="btnPersonName" runat="server" Text='<%# (string)Eval("HtmlEncodedName") %>'
                         NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Client.Id")) %>' />
                 </ItemTemplate>
             </asp:TemplateField>
@@ -303,7 +303,7 @@
                     </div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblPracticeName" runat="server" CssClass="padRight5" Text='<%# Eval("Practice.Name") %>'></asp:Label>
+                    <asp:Label ID="lblPracticeName" runat="server" CssClass="padRight5" Text='<%# Eval("Practice.HtmlEncodedName") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField ItemStyle-CssClass="textCenter Width70Px">
