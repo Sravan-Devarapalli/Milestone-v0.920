@@ -400,10 +400,10 @@
                                                     OnClick="lnkProjectNumber_OnClick" runat="server"><%# Eval("ProjectNumber")%></asp:LinkButton>
                                             </td>
                                             <td>
-                                                <%# Eval("Name")%>
+                                                <%# Eval("HtmlEncodedName")%>
                                             </td>
                                             <td>
-                                                <%# Eval("Client.Name")%>
+                                                <%# Eval("Client.HtmlEncodedName")%>
                                             </td>
                                         </tr>
                                     </ItemTemplate>
