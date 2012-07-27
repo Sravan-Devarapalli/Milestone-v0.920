@@ -679,7 +679,7 @@ namespace PraticeManagement
                 }
                 if (groupedPractice != null)
                 {
-                    FillPersonCell(row, groupedPractice.Name);
+                    FillPersonCell(row, groupedPractice.HtmlEncodedName);
                     FillMonthCells(row, groupedPractice.ProjectedFinancialsByMonth);
                     FillTotalCell(row, groupedPractice.ProjectedFinancialsByMonth);
                 }
