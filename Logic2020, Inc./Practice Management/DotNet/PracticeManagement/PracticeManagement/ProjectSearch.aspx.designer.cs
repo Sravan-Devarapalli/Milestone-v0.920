@@ -13,6 +13,15 @@ namespace PraticeManagement {
     public partial class ProjectSearch {
         
         /// <summary>
+        /// Panel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel1;
+        
+        /// <summary>
         /// txtSearchText control.
         /// </summary>
         /// <remarks>
@@ -74,6 +83,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnExpandCollapseExtendersIds;
+        
+        /// <summary>
+        /// pnlProjectToolTipHolder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProjectToolTipHolder;
+        
+        /// <summary>
+        /// lblProjectTooltip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblProjectTooltip;
         
         /// <summary>
         /// PreviousPage property.
