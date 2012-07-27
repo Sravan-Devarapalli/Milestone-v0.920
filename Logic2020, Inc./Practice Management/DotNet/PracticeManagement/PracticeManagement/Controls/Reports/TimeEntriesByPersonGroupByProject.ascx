@@ -107,7 +107,7 @@
                                     Note</div>
                             </HeaderTemplate>
                             <ItemTemplate>
-                                <%# Eval("Note") %>
+                                <%# Eval("HtmlEncodedNote")%>
                             </ItemTemplate>
                             <ItemStyle Width="55%" />
                         </asp:TemplateField>
