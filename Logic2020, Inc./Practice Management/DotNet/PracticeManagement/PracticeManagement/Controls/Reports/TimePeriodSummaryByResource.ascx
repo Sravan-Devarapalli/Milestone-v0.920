@@ -250,13 +250,13 @@
         </HeaderTemplate>
         <ItemTemplate>
             <tr class="ReportItemTemplate">
-                <td sorttable_customkey='<%# Eval("Person.PersonLastFirstName")%>'>
+                <td sorttable_customkey='<%# Eval("Person.HtmlEncodedName")%>'>
                     <table class="TdLevelNoBorder ResourceColumTable">
                         <tr>
                             <td>
                                 <asp:LinkButton ID="lnkPerson" PersonId='<%# Eval("Person.Id")%>' runat="server"
-                                    ToolTip='<%# Eval("Person.PersonLastFirstName")%>' OnClick="lnkPerson_OnClick"
-                                    Text='<%# Eval("Person.PersonLastFirstName")%>'></asp:LinkButton>
+                                    ToolTip='<%# Eval("Person.HtmlEncodedName")%>' OnClick="lnkPerson_OnClick"
+                                    Text='<%# Eval("Person.HtmlEncodedName")%>'></asp:LinkButton>
                             </td>
                             <td>
                                 <asp:Image ID="imgIspersonTerminated" runat="server" ImageUrl="~/Images/Terminated.png"
@@ -268,10 +268,10 @@
                         </tr>
                     </table>
                 </td>
-                <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.PersonLastFirstName")%>'>
+                <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.HtmlEncodedName")%>'>
                     <%# Eval("Person.Seniority.Name")%>
                 </td>
-                <td sorttable_customkey='<%# GetPayTypeSortValue((string)Eval("Person.CurrentPay.TimescaleName"),(string)Eval("Person.PersonLastFirstName"))%>'>
+                <td sorttable_customkey='<%# GetPayTypeSortValue((string)Eval("Person.CurrentPay.TimescaleName"),(string)Eval("Person.HtmlEncodedName"))%>'>
                     <%# Eval("Person.CurrentPay.TimescaleName")%>
                 </td>
                 <td>
