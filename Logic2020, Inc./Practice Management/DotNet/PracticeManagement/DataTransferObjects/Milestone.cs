@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using DataTransferObjects.TimeEntry;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -59,6 +60,14 @@ namespace DataTransferObjects
         [DataMember]
         public string Description { get; set; }
 
+        public string HtmlEncodedDescription 
+        { 
+            get 
+            { 
+                return HttpUtility.HtmlEncode(Description); 
+            } 
+        }
+
         /// <summary>
         /// Gets or sets a <see cref="Milestone"/>'s cost.
         /// </summary>
@@ -96,7 +105,7 @@ namespace DataTransferObjects
         [Obsolete]
         public PracticeManagementCurrency EstimatedClientDiscount
         {
-            get { return Project.Discount*Amount.Value/100M; }
+            get { return Project.Discount * Amount.Value / 100M; }
         }
 
         /// <summary>
