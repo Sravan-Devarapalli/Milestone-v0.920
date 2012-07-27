@@ -569,7 +569,7 @@ namespace PraticeManagement
             Page.Validate("ProjectName");
             if (Page.IsValid)
             {
-                lblProjectNameLinkPopUp.Text = lblProjectName.Text = ProjectId.HasValue ? txtProjectName.Text : txtProjectNameFirstTime.Text;
+                lblProjectNameLinkPopUp.Text = lblProjectName.Text = ProjectId.HasValue ? HttpUtility.HtmlEncode(txtProjectName.Text) : HttpUtility.HtmlEncode(txtProjectNameFirstTime.Text);
             }
             else
             {
@@ -1389,7 +1389,8 @@ namespace PraticeManagement
             if (project != null)
             {
                 lblProjectNumber.Text = !string.IsNullOrEmpty(project.ProjectNumber) ? project.ProjectNumber + " - " : string.Empty;
-                lblProjectNameLinkPopUp.Text = txtProjectNameFirstTime.Text = txtProjectName.Text = lblProjectName.Text = project.Name;
+                lblProjectNameLinkPopUp.Text = lblProjectName.Text = project.HtmlEncodedName;
+                txtProjectNameFirstTime.Text = txtProjectName.Text = project.Name;
                 lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
                 txtDescription.Text = project.Description;
                 ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
@@ -1889,7 +1890,7 @@ namespace PraticeManagement
             Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(personId));
             string peronEmailId = person.Alias;
             string function = string.Format("mailTo('{0}');", string.Format(MailToSubjectFormat, peronEmailId, subject));
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Mailto", function,true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Mailto", function, true);
         }
 
         #endregion
