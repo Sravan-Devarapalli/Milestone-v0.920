@@ -124,7 +124,7 @@
                                 Account Name
                             </td>
                             <td>
-                                <asp:TextBox ID="txtClientName" runat="server" onchange="setDirty();" Width="194px"
+                                <asp:TextBox ID="txtClientName" runat="server" onchange="setDirty();" CssClass="Width194px"
                                     ValidationGroup="Client" />
                             </td>
                             <td>
@@ -148,7 +148,7 @@
                             </td>
                             <td>
                                 <asp:DropDownList ID="ddlDefaultSalesperson" runat="server" onchange="setDirty();"
-                                    Width="200px" ValidationGroup="Client" />
+                                    CssClass="Width200Px" ValidationGroup="Client" />
                             </td>
                             <td>
                                 <asp:RequiredFieldValidator ID="reqDefaultSalesperson" runat="server" ControlToValidate="ddlDefaultSalesperson"
@@ -161,7 +161,7 @@
                                 Default Client Director
                             </td>
                             <td colspan="2">
-                                <asp:DropDownList ID="ddlDefaultDirector" runat="server" onchange="setDirty();" Width="200px"
+                                <asp:DropDownList ID="ddlDefaultDirector" runat="server" onchange="setDirty();" CssClass="Width200Px"
                                     ValidationGroup="Client" />
                             </td>
                         </tr>
@@ -170,7 +170,7 @@
                                 Default Discount
                             </td>
                             <td>
-                                <asp:TextBox ID="txtDefaultDiscount" runat="server" onchange="setDirty();" Width="150"
+                                <asp:TextBox ID="txtDefaultDiscount" runat="server" onchange="setDirty();" CssClass="Width150px"
                                     ValidationGroup="Client" />%
                             </td>
                             <td>
@@ -195,7 +195,7 @@
                             </td>
                             <td>
                                 <asp:DropDownList ID="ddlDefaultTerms" runat="server" onchange="setDirty();" DataTextField="Name"
-                                    DataValueField="Frequency" AppendDataBoundItems="true" Width="155">
+                                    DataValueField="Frequency" AppendDataBoundItems="true" CssClass="Width155px">
                                     <asp:ListItem Text=""></asp:ListItem>
                                 </asp:DropDownList>
                             </td>
@@ -203,7 +203,7 @@
                             </td>
                         </tr>
                     </table>
-                    <div style="padding-top: 10px;">
+                    <div class="PaddingTop10Px">
                         <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                     </div>
                 </ContentTemplate>
@@ -214,29 +214,29 @@
                 </HeaderTemplate>
                 <ContentTemplate>
                     <asp:UpdatePanel ID="upnlClientThrsholds" runat="server">
-                        <contenttemplate>
-                            <table width="100%">
+                        <ContentTemplate>
+                            <table class="Width100Per">
                                 <tr>
-                                    <td valign="top" style="width: 50%;">
-                                        <table width="99%">
+                                    <td class="Width50Percent vTop">
+                                        <table class="Width99Percent">
                                             <tr>
-                                                <td colspan="3" style="padding-bottom: 15px; padding-top: 15px;">
+                                                <td colspan="3" class="PaddingBottomTop15Px">
                                                     <asp:CheckBox ID="chbMarginThresholds" AutoPostBack="true" OnCheckedChanged="cbMarginThresholds_OnCheckedChanged"
                                                         runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
                                                     Margin thresholds
                                                 </td>
-                                                <td align="right" style="padding-bottom: 15px; padding-top: 15px;">
+                                                <td class="PaddingBottomTop15Px TextAlignRight">
                                                     <asp:Button ID="btnAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
                                                         OnClientClick="setDirty();" OnClick="btnAddThreshold_OnClick" />
                                                 </td>
                                             </tr>
                                         </table>
-                                        <asp:GridView ID="gvClientThrsholds" Enabled="false" runat="server" Width="99%" OnRowDataBound="gvClientThrsholds_RowDataBound"
-                                            AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable"
+                                        <asp:GridView ID="gvClientThrsholds" Enabled="false" runat="server" OnRowDataBound="gvClientThrsholds_RowDataBound"
+                                            AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable Width99Percent"
                                             GridLines="None">
                                             <Columns>
                                                 <asp:TemplateField>
-                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                                    <ItemStyle HorizontalAlign="Center" CssClass="WidthHeight25" />
                                                     <HeaderTemplate>
                                                         <div class="ie-bg">
                                                             Start</div>
@@ -247,7 +247,7 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
-                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                                    <ItemStyle HorizontalAlign="Center" CssClass="WidthHeight25" />
                                                     <HeaderTemplate>
                                                         <div class="ie-bg">
                                                             End</div>
@@ -264,13 +264,13 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
-                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="42%" />
+                                                    <ItemStyle HorizontalAlign="Center" CssClass="Width42Height25" />
                                                     <HeaderTemplate>
                                                         <div class="ie-bg">
                                                             Color</div>
                                                     </HeaderTemplate>
                                                     <ItemTemplate>
-                                                        <cc2:CustomDropDown ID="gvddlColor" Width="85%" onclick="applyColor(this);" onchange="applyColor(this);setDirty();"
+                                                        <cc2:CustomDropDown ID="gvddlColor" CssClass="Width85Percent" onclick="applyColor(this);" onchange="applyColor(this);setDirty();"
                                                             runat="server">
                                                         </cc2:CustomDropDown>
                                                         <asp:CustomValidator ID="cvgvddlColor" runat="server" OnServerValidate="cvgvddlColor_ServerValidate"
@@ -279,7 +279,7 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
-                                                    <ItemStyle Height="25px" HorizontalAlign="Center" Width="8%" />
+                                                    <ItemStyle HorizontalAlign="Center" CssClass="Width8Height25" />
                                                     <HeaderTemplate>
                                                         <div class="ie-bg">
                                                         </div>
@@ -292,10 +292,10 @@
                                             </Columns>
                                         </asp:GridView>
                                     </td>
-                                    <td style="width: 3%;">
+                                    <td class="Width3Percent">
                                     </td>
-                                    <td  valign="top" style="width: 44%;">
-                                        <div style="background-color: White; padding: 10px;">
+                                    <td class="Width44Percent vTop">
+                                        <div class="MarginGoalsDescription">
                                             <p>
                                                 Enabling this feature and configuring color-coded ranges will allow persons without
                                                 unrestricted access to Project and Milestone margin calculations a visual indication
@@ -309,11 +309,11 @@
                                             </p>
                                         </div>
                                     </td>
-                                    <td style="width: 3%;">
+                                    <td class="Width3Percent">
                                     </td>
                                 </tr>
                             </table>
-                        </contenttemplate>
+                        </ContentTemplate>
                     </asp:UpdatePanel>
                 </ContentTemplate>
             </ajaxToolkit:TabPanel>
@@ -332,7 +332,7 @@
         <asp:CustomValidator ID="cvgvRangeClone" runat="server" ErrorMessage="The End must be greater than or equals to Start."
             Text="*" EnableClientScript="false" SetFocusOnError="false" Display="None" ValidationGroup="Client" />
     </div>
-    <div class="buttons-block" style="margin-bottom: 10px;">
+    <div class="buttons-block Margin-Bottom10Px">
         <div>
             <asp:ValidationSummary ID="vsumClient" runat="server" ValidationGroup="Client" />
         </div>
@@ -354,9 +354,9 @@
                 <ContentTemplate>
                     <div class="project-filter">
                         <asp:UpdatePanel ID="updprojects" runat="server">
-                            <contenttemplate>
+                            <ContentTemplate>
                                 <uc:ClientProjects ID="projects" runat="server" />
-                            </contenttemplate>
+                            </ContentTemplate>
                         </asp:UpdatePanel>
                     </div>
                 </ContentTemplate>
@@ -368,9 +368,9 @@
                 <ContentTemplate>
                     <div class="project-filter">
                         <asp:UpdatePanel ID="updGroups" runat="server">
-                            <contenttemplate>
+                            <ContentTemplate>
                                 <uc:ClientGroups ID="groups" runat="server" />
-                            </contenttemplate>
+                            </ContentTemplate>
                         </asp:UpdatePanel>
                     </div>
                 </ContentTemplate>
