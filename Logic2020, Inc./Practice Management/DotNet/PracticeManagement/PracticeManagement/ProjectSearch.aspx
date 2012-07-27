@@ -3,9 +3,8 @@
     Title="Project Search Results | Practice Management" %>
 
 <%@ Import Namespace="DataTransferObjects" %>
-<%@ Register TagPrefix="uc" TagName="ProjectNameCellRounded" Src="~/Controls/ProjectNameCellRounded.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
-<%@ PreviousPageType   TypeName="PraticeManagement.Controls.PracticeManagementSearchPageBase"  %>
+<%@ PreviousPageType TypeName="PraticeManagement.Controls.PracticeManagementSearchPageBase" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Project Search Results | Practice Management</title>
 </asp:Content>
@@ -14,6 +13,32 @@
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript" language="javascript">
+
+        function setPosition(item, ytop, xleft) {
+            item.offset({ top: ytop, left: xleft });
+        }
+
+        function SetTooltipText(descriptionText, hlinkObj) {
+            var hlinkObjct = $(hlinkObj);
+            var displayPanel = $('#<%= pnlProjectToolTipHolder.ClientID %>');
+            iptop = hlinkObjct.offset().top;
+            ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 5;
+            setPosition(displayPanel, iptop - 20, ipleft);
+            displayPanel.show();
+            setPosition(displayPanel, iptop - 20, ipleft);
+            displayPanel.show();
+
+            var lblProjectTooltip = document.getElementById('<%= lblProjectTooltip.ClientID %>');
+            lblProjectTooltip.innerHTML = descriptionText.toString();
+        }
+
+
+        function HidePanel() {
+            var displayPanel = $('#<%= pnlProjectToolTipHolder.ClientID %>');
+            displayPanel.hide();
+        }
+
+
         function ExpandAll(btn) {
             var hdnExpandCollapseExtendersIds = document.getElementById('<%= hdnExpandCollapseExtendersIds.ClientID %>');
             var isExpand = false;
@@ -47,18 +72,12 @@
             }
         });
     </script>
-    <style type="text/css">
-        .AddLeftPadding
-        {
-            padding-left: 4px;
-        }
-    </style>
-    <asp:Panel runat="server" DefaultButton="btnSearch">
-        <div class="project-filter" style="background: #E2EBFF; margin-bottom: 10px; padding: 5px;">
+    <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSearch">
+        <div class="project-filter DivProjectFilter">
             <table class="WholeWidth">
                 <tbody>
                     <tr>
-                        <td style="padding-right: 8px;">
+                        <td class="padRight8">
                             <asp:TextBox ID="txtSearchText" runat="server" CssClass="WholeWidth" MaxLength="255">
                             </asp:TextBox>
                         </td>
@@ -68,9 +87,9 @@
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic">
                             </asp:RequiredFieldValidator>
                         </td>
-                        <td style="width: 55px;">
+                        <td class="width55Px">
                             <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click"
-                                Width="55" />
+                                CssClass="width55Px" />
                         </td>
                     </tr>
                     <tr>
@@ -128,17 +147,15 @@
                 </table>
             </LayoutTemplate>
             <ItemTemplate>
-                <tr runat="server" id="boundingRow" valign="top" style="min-height: 25px;">
-                    <td style="padding-top: 4px;">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip(((Project) Container.DataItem)) %>' ButtonCssClass='<%# GetProjectNameCellCssClass(((Project) Container.DataItem))%>' />
+                <tr runat="server" id="boundingRow" class="MinHeight25Px vTop">
+                    <td class="PaddingTop4Px">                       
                     </td>
                     <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
                     <td class="CompPerfProjectNumber AddLeftPadding">
-                        <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.Name")) %>'
+                        <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.HtmlEncodedName")) %>'
                             CommandArgument='<%# Eval("Client.Id") %>' OnCommand="btnClientName_Command"></asp:LinkButton>
                     </td>
                     <td class="CompPerfClient AddLeftPadding">
@@ -149,14 +166,14 @@
                         <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
                         <asp:Image ID="btnExpandCollapseMilestones" runat="server" ImageUrl="~/Images/collapse.jpg"
                             ToolTip="Project Milestones" />
-                        <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("Name")) %>'
+                        <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("HtmlEncodedName")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                        <asp:Panel ID="pnlMilestones" runat="server" Style="padding-left: 30px;">
+                        <asp:Panel ID="pnlMilestones" runat="server" CssClass="padLeft30">
                             <asp:DataList ID="dtlProposedPersons" runat="server">
                                 <ItemTemplate>
                                     <%-- Eval("PersonLastFirstName") --%>
-                                    <div style="padding: 2px 0px 2px 0px;">
-                                        <asp:LinkButton ID="btnMilestoneNames" runat="server" Style="height: 10px;" Text='<%# HighlightFound(Eval("Description")) %>'
+                                    <div class="DivMileStoneNames">
+                                        <asp:LinkButton ID="btnMilestoneNames" runat="server" CssClass="height10Px" Text='<%# HighlightFound(Eval("HtmlEncodedDescription")) %>'
                                             CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Project.Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
                                     </div>
                                 </ItemTemplate>
@@ -179,17 +196,15 @@
                 </tr>
             </ItemTemplate>
             <AlternatingItemTemplate>
-                <tr runat="server" id="boundingRow" class="rowEven" valign="top" style="min-height: 20px;">
-                    <td style="padding-top: 4px;">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            ButtonProjectNameToolTip='<%# GetProjectNameCellToolTip(((Project) Container.DataItem)) %>' ButtonCssClass='<%# GetProjectNameCellCssClass(((Project) Container.DataItem))%>' />
+                <tr runat="server" id="boundingRow" class="rowEven MinHeight20Px vTop">
+                    <td class="PaddingTop4Px">                       
                     </td>
                     <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
                     </td>
                     <td class="CompPerfProjectNumber AddLeftPadding">
-                        <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.Name")) %>'
+                        <asp:LinkButton ID="LinkButton1" runat="server" Text='<%# HighlightFound(Eval("Client.HtmlEncodedName")) %>'
                             CommandArgument='<%# Eval("Client.Id") %>' OnCommand="btnClientName_Command"></asp:LinkButton>
                     </td>
                     <td class="CompPerfClient AddLeftPadding">
@@ -200,13 +215,13 @@
                         <asp:Label ID="lblFilter" runat="server"></asp:Label>&nbsp;
                         <asp:Image ID="btnExpandCollapseMilestones" runat="server" ImageUrl="~/Images/collapse.jpg"
                             ToolTip="Project Milestones" />
-                        <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("Name")) %>'
+                        <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("HtmlEncodedName")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                        <asp:Panel ID="pnlMilestones" runat="server" Style="padding-left: 30px;">
+                        <asp:Panel ID="pnlMilestones" runat="server"  CssClass="padLeft30">
                             <asp:DataList ID="dtlProposedPersons" runat="server">
                                 <ItemTemplate>
-                                    <div style="padding: 2px 0px 2px 0px;">
-                                       <asp:LinkButton ID="btnMilestoneNames" runat="server" Style="height: 10px;" Text='<%# HighlightFound(Eval("Description")) %>'
+                                    <div class="DivMileStoneNames">
+                                        <asp:LinkButton ID="btnMilestoneNames" runat="server" CssClass="height10Px" Text='<%# HighlightFound(Eval("HtmlEncodedDescription")) %>'
                                             CommandArgument='<%# string.Concat(Eval("Id"), "_", Eval("Project.Id")) %>' OnCommand="btnMilestoneName_Command"></asp:LinkButton>
                                     </div>
                                 </ItemTemplate>
@@ -232,6 +247,39 @@
             </EmptyDataTemplate>
         </asp:ListView>
         <asp:HiddenField ID="hdnExpandCollapseExtendersIds" runat="server" Value="" />
+    </asp:Panel>
+    <asp:Panel ID="pnlProjectToolTipHolder" runat="server" CssClass="ToolTip WordWrap PanelOppNameToolTipHolder">
+        <table>
+            <tr class="top">
+                <td class="lt">
+                    <div class="tail">
+                    </div>
+                </td>
+                <td class="tbor">
+                </td>
+                <td class="rt">
+                </td>
+            </tr>
+            <tr class="middle">
+                <td class="lbor">
+                </td>
+                <td class="content WordWrap">
+                    <pre>
+<asp:Label ID="lblProjectTooltip" CssClass="WordWrap" runat="server"></asp:Label>
+</pre>
+                </td>
+                <td class="rbor">
+                </td>
+            </tr>
+            <tr class="bottom">
+                <td class="lb">
+                </td>
+                <td class="bbor">
+                </td>
+                <td class="rb">
+                </td>
+            </tr>
+        </table>
     </asp:Panel>
 </asp:Content>
 
