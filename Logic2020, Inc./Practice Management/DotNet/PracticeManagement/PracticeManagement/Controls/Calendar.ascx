@@ -179,86 +179,62 @@
     }
 
 </script>
-<style>
-    .setCheckboxesLeft TD, .setCheckboxesLeft div
-    {
-        text-align: left !important;
-    }
-    
-    .setCheckboxesLeft input
-    {
-        vertical-align: middle;
-        float: right;
-    }
-    .setCheckboxesLeft Table
-    {
-        width: 100%;
-    }
-    .setColorToCalendar
-    {
-        background-color: #E9F0F9;
-    }
-    .AlertColor
-    {
-        color: Red;
-    }
-</style>
-<table width="98%">
+
+<table class="Width98Percent">
     <tr>
-        <td style="width: 15%;">
+        <td class="Width15Percent">
             &nbsp;
         </td>
-        <td id="tdDescription" align="center" runat="server" style="vertical-align: top;
-            width: 70%;">
-            <div style="border: 1px solid black; padding: 5px; white-space: normal;">
+        <td id="tdDescription" runat="server" class="vTop Width70Percent TextAlignCenter">
+            <div class="HolidaysDescription">
                 <p>
                     Days selected on this calendar will be highlighted as Company Holidays throughout
                     Practice Management.</p>
-                <p style="padding-top: 8px;">
+                <p  class="PaddingTop8">
                     Common Recurring Holidays can be selected from the drop-down as well. Once selected
                     they will be highlighted as Company Holidays throughout Practice Management for
                     the current year as well as in future years.</p>
             </div>
         </td>
-        <td style="width: 15%;">
+        <td class="Width15Percent">
             &nbsp;
         </td>
     </tr>
 </table>
-<table width="98%">
+<table class="Width98Percent">
     <tr>
-        <td style="width: 100%; text-align: center;">
+        <td class="Width100Per TextAlignCenter">
             <asp:UpdatePanel ID="upnlBody" runat="server" ChildrenAsTriggers="False" UpdateMode="Conditional">
                 <ContentTemplate>
                     <uc3:LoadingProgress ID="ldProgress" runat="server" />
-                    <table width="98%" align="center" style="text-align: center;" class="CalendarTable">
+                    <table class="CalendarTable Width98Percent TextAlignCenter">
                         <tr>
-                            <td colspan="3" align="center">
+                            <td colspan="3" class="TextAlignCenterImp">
                                 <asp:Label ID="lblConsultantMessage" runat="server" Visible="false" Text="You can review your vacation days, but cannot change them. Please see your Practice Manager for updates to your vacation schedule."></asp:Label>
                             </td>
                         </tr>
                     </table>
-                    <table width="98%" align="center">
+                    <table class="Width98Percent" align="center">
                         <tr>
-                            <td style="width: 15%">
+                            <td class="Width15Percent">
                                 &nbsp;
                             </td>
-                            <td style="width: 70%" align="center">
+                            <td class="Width70Percent TextAlignCenter">
                                 <table class="CalendarTable">
                                     <tr>
                                         <td colspan="3" align="center">
-                                            <table width="100%">
+                                            <table class="Width100Per">
                                                 <tr>
-                                                    <td valign="middle" style="text-align: right;">
+                                                    <td class="vMiddle textRightImp">
                                                         <asp:LinkButton ID="btnPrevYear" runat="server" CausesValidation="false" OnClick="btnPrevYear_Click"
                                                             ToolTip="Previous Year">
                                                             <asp:Image ID="imgPrevYear" runat="server" ImageUrl="~/Images/previous.gif" />
                                                         </asp:LinkButton>
                                                     </td>
-                                                    <td valign="middle" style="vertical-align: middle !important;" width="15px">
-                                                        <asp:Label ID="lblYear" Style="font-size: x-large;" runat="server"></asp:Label>
+                                                    <td class="vMiddle Width15Px">
+                                                        <asp:Label ID="lblYear" CssClass="FontSizeXLarge" runat="server"></asp:Label>
                                                     </td>
-                                                    <td valign="middle" style="text-align: left;">
+                                                    <td class="vMiddle textLeft">
                                                         <asp:LinkButton ID="btnNextYear" runat="server" CausesValidation="false" OnClick="btnNextYear_Click"
                                                             ToolTip="Next Year">
                                                             <asp:Image ID="imgNextYear" runat="server" ImageUrl="~/Images/next.gif" />
@@ -267,8 +243,7 @@
                                                 </tr>
                                             </table>
                                         </td>
-                                        <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft"
-                                            style="padding-top: 45px; padding-left: 2%;">
+                                        <td id="tdRecurringHolidaysDetails" runat="server" rowspan="9" class="setCheckboxesLeft PaddingTop45pxLeft2Per">
                                             <uc:ScrollingDropDown ID="cblRecurringHolidays" runat="server" SetDirty="false" AllSelectedReturnType="AllItems"
                                                 OnSelectedIndexChanged="cblRecurringHolidays_OnSelectedIndexChanged" AutoPostBack="true" />
                                         </td>
@@ -286,13 +261,13 @@
                                     </tr>
                                     <tr>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcJanuary" runat="server"  Month="1"  />
+                                            <uc1:MonthCalendar ID="mcJanuary" runat="server" Month="1" />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcFebruary" runat="server"  Month="2"  />
+                                            <uc1:MonthCalendar ID="mcFebruary" runat="server" Month="2" />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcMarch" runat="server"  Month="3"  />
+                                            <uc1:MonthCalendar ID="mcMarch" runat="server" Month="3" />
                                         </td>
                                     </tr>
                                     <tr class="HeadRow">
@@ -308,13 +283,13 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcApril" runat="server"  Month="4"  />
+                                            <uc1:MonthCalendar ID="mcApril" runat="server" Month="4" />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcMay" runat="server"  Month="5"  />
+                                            <uc1:MonthCalendar ID="mcMay" runat="server" Month="5" />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcJune" runat="server"  Month="6"  />
+                                            <uc1:MonthCalendar ID="mcJune" runat="server" Month="6" />
                                         </td>
                                     </tr>
                                     <tr class="HeadRow">
@@ -330,13 +305,13 @@
                                     </tr>
                                     <tr>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcJuly" runat="server"  Month="7"  />
+                                            <uc1:MonthCalendar ID="mcJuly" runat="server" Month="7" />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcAugust" runat="server"  Month="8"  />
+                                            <uc1:MonthCalendar ID="mcAugust" runat="server" Month="8" />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcSeptember" runat="server"  Month="9"  />
+                                            <uc1:MonthCalendar ID="mcSeptember" runat="server" Month="9" />
                                         </td>
                                     </tr>
                                     <tr class="HeadRow">
@@ -352,18 +327,18 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcOctober" runat="server"  Month="10"  />
+                                            <uc1:MonthCalendar ID="mcOctober" runat="server" Month="10" />
                                         </td>
                                         <td class="setColorToCalendar">
-                                            <uc1:MonthCalendar ID="mcNovember" runat="server"  Month="11"  />
+                                            <uc1:MonthCalendar ID="mcNovember" runat="server" Month="11" />
                                         </td>
                                         <td>
-                                            <uc1:MonthCalendar ID="mcDecember" runat="server"  Month="12"  />
+                                            <uc1:MonthCalendar ID="mcDecember" runat="server" Month="12" />
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 15%">
+                            <td class="Width15Percent">
                                 &nbsp;
                             </td>
                         </tr>
