@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -240,6 +241,14 @@ namespace DataTransferObjects
         {
             set;
             get;
+        }
+
+        public string HtmlEncodedPracticeName
+        {   
+             get
+            {
+                return HttpUtility.HtmlEncode(PracticeName);
+            }
         }
 
         [DataMember]
