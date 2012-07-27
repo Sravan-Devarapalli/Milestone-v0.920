@@ -39,11 +39,11 @@
         <table class="WholeWidthWithHeight">
             <tr class="textLeft">
                 <td colspan="4" class="ProjectAccountName Width95Percent no-wrap">
-                    <%# Eval("Client.Name") %>
+                    <%# Eval("Client.HtmlEncodedName")%>
                     >
                     <%# Eval("Project.ProjectNumber")%>
                     -
-                    <%# Eval("Project.Name")%>
+                    <%# Eval("Project.HtmlEncodedName")%>
                     <b class="fontStyleNormal">
                         <%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
                 </td>
@@ -113,7 +113,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# HttpUtility.HtmlEncode((string)Eval("HTMLNote"))%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -146,7 +146,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# HttpUtility.HtmlEncode((string)Eval("HTMLNote"))%>
                                                     </td>
                                                 </tr>
                                             </table>
