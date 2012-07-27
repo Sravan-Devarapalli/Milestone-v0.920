@@ -110,14 +110,14 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 lblProjectName.Visible = true;
                 var projectName = ddlProjects.SelectedItem.Text;
-                projectName = ddlClients.SelectedItem.Text + " - " + projectName;
+                projectName = HttpUtility.HtmlAttributeEncode(ddlClients.SelectedItem.Text) + " - " + HttpUtility.HtmlAttributeEncode(projectName);
                 var startDateMissing = !diRange.FromDate.HasValue;
                 var endDateMissing = !diRange.ToDate.HasValue;
                 var unrestricted = startDateMissing && endDateMissing;
 
                 if (ddlMilestones.SelectedValue != string.Empty)
                 {
-                    projectName = projectName + " - " + ddlMilestones.SelectedItem.Text;
+                    projectName = projectName + " - " + HttpUtility.HtmlAttributeEncode(ddlMilestones.SelectedItem.Text);
                 }
 
                 if (unrestricted)
@@ -479,7 +479,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     }
                 }
 
-                dlTimeEntries.DataSource = data.OrderBy(k => k.Key.PersonLastFirstName);
+                dlTimeEntries.DataSource = data.OrderBy(k => k.Key.HtmlEncodedName);
             }
 
             dlTimeEntries.DataBind();
