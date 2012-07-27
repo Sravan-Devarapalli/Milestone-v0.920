@@ -16,8 +16,8 @@
             AlternatingRowStyle-BackColor="#e0e0e0" DataKeyNames="Id" OnRowDataBound="gvProjectExpenses_OnRowDataBound"
             FooterStyle-Font-Bold="true" FooterStyle-VerticalAlign="Top" CssClass="CompPerfTable WholeWidth"
             GridLines="None" BackColor="White" OnRowUpdating="gvProjectExpenses_OnRowUpdating">
-            <AlternatingRowStyle BackColor="#F9FAFF" />
-            <RowStyle BackColor="White" />
+            <AlternatingRowStyle CssClass="alterrow" />
+            <RowStyle CssClass="BackGroundColorWhite" />
             <Columns>
                 <asp:TemplateField HeaderText="Name">
                     <HeaderTemplate>
@@ -26,12 +26,13 @@
                         </div>
                     </HeaderTemplate>
                     <ItemTemplate>
-                        <%# ((ProjectExpense) Container.DataItem).Name %>
+                        <%# ((ProjectExpense)Container.DataItem).HtmlEncodedName%>
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:TextBox ID="tbEditName" runat="server" Text='<%# Bind("Name") %>' ValidationGroup="ProjectExpensesEdit" />
-                        <asp:RequiredFieldValidator ID="valReqName" runat="server" ControlToValidate="tbEditName" ValidationGroup="ProjectExpensesEdit"
-                            ErrorMessage="Expense name is required" Text="*" />
+                        <asp:RequiredFieldValidator ID="valReqName" runat="server" ControlToValidate="tbEditName"
+                            ValidationGroup="ProjectExpensesEdit" ErrorMessage="Expense name is required"
+                            Text="*" />
                     </EditItemTemplate>
                     <FooterTemplate>
                         Total
@@ -56,7 +57,7 @@
                             <tr>
                                 <td>
                                     <asp:TextBox ID="txtStartDate" runat="server" Text='<%# Bind("StartDate", "{0:MM/dd/yyyy}") %>'
-                                        ValidationGroup="ProjectExpensesEdit" Width="80px" />
+                                        ValidationGroup="ProjectExpensesEdit" CssClass="Width80Px" />
                                 </td>
                                 <td>
                                     <asp:HyperLink ID="lnkCalendarStartDate" runat="server" ImageUrl="~/Images/calendar.gif"
@@ -81,11 +82,11 @@
                     <FooterTemplate>
                         <br />
                         <hr />
-                        <table style="font-weight: normal;">
+                        <table class="fontNormal">
                             <tr>
                                 <td>
                                     <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        Width="80px" />
+                                        CssClass="Width80Px" />
                                 </td>
                                 <td>
                                     <asp:HyperLink ID="lnkCalendarStartDate" runat="server" ImageUrl="~/Images/calendar.gif"
@@ -122,7 +123,7 @@
                             <tr>
                                 <td>
                                     <asp:TextBox ID="txtEndDate" runat="server" Text='<%# Bind("EndDate", "{0:MM/dd/yyyy}") %>'
-                                        ValidationGroup="ProjectExpensesEdit" Width="80px" />
+                                        ValidationGroup="ProjectExpensesEdit" CssClass="Width80Px" />
                                 </td>
                                 <td>
                                     <asp:HyperLink ID="lnkCalendarEndDate" runat="server" ImageUrl="~/Images/calendar.gif"
@@ -151,11 +152,11 @@
                     <FooterTemplate>
                         <br />
                         <hr />
-                        <table style="font-weight: normal;">
+                        <table class="fontNormal">
                             <tr>
                                 <td>
                                     <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        Width="80px" />
+                                        CssClass="Width80Px" />
                                 </td>
                                 <td>
                                     <asp:HyperLink ID="lnkCalendarEndDate" runat="server" ImageUrl="~/Images/calendar.gif"
@@ -192,7 +193,7 @@
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:TextBox ID="tbEditAmount" runat="server" Text='<%# Bind("Amount") %>' ValidationGroup="ProjectExpensesEdit"
-                            Width="80px" />
+                            CssClass="Width80Px" />
                         <asp:RequiredFieldValidator ID="valReqAmount" ValidationGroup="ProjectExpensesEdit"
                             runat="server" ControlToValidate="tbEditAmount" ErrorMessage="Expense amount is required"
                             Text="*" />
@@ -235,7 +236,7 @@
                     <FooterTemplate>
                         <asp:Label ID="lblTotalReimbursed" runat="server" Text="0%" />
                         <hr />
-                        <asp:TextBox ID="tbEditReimbursement" runat="server" Width="80px" ValidationGroup="ProjectExpensesAdd" />
+                        <asp:TextBox ID="tbEditReimbursement" runat="server" CssClass="Width80Px" ValidationGroup="ProjectExpensesAdd" />
                         <asp:RequiredFieldValidator ID="valReqReimbursement" ValidationGroup="ProjectExpensesAdd"
                             runat="server" ControlToValidate="tbEditReimbursement" ErrorMessage="Expense reimbursement is required"
                             Text="*" />
@@ -286,7 +287,7 @@
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
-            <AlternatingRowStyle BackColor="#E0E0E0" />
+            <AlternatingRowStyle CssClass="bgColor_e0e0e0" />
         </asp:GridView>
         <asp:ValidationSummary ID="vsProjectExpensesEdit" ValidationGroup="ProjectExpensesEdit"
             runat="server" />
