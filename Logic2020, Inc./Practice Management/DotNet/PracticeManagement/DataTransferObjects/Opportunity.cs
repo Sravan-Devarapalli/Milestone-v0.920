@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Diagnostics;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -71,6 +72,14 @@ namespace DataTransferObjects
         {
             get;
             set;
+        }
+
+        public string HtmlEncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
         }
 
         /// <summary>
@@ -310,6 +319,14 @@ namespace DataTransferObjects
                 return Group == null || Group.Name.Equals(ProjectGroup.DefaultGroupName, StringComparison.CurrentCultureIgnoreCase) ?
                     Client.Name :
                     string.Format(ClientAndGroupFormat, Client.Name, Group.Name);
+            }
+        }
+
+        public string HtmlEncodedClientAndGroup
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(ClientAndGroup);
             }
         }
 
