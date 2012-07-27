@@ -248,13 +248,13 @@ namespace PraticeManagement.Controls.Reports
                     ProjectId = item.Key.Project.Id,
                     GroupId = item.Key.ProjectGroup.Id,
                     ClientId = item.Key.Client.Id,
-                    DisplayName = item.Key.Client.Name +
+                    DisplayName = item.Key.Client.HtmlEncodedName +
                                   seperator +
-                                  item.Key.ProjectGroup.Name +
+                                  item.Key.ProjectGroup.HtmlEncodedName +
                                   seperator +
                                   item.Key.Project.ProjectNumber +
                                   seperator +
-                                  item.Key.Project.Name 
+                                  item.Key.Project.HtmlEncodedName 
                 })
                   .Select(group =>
                         new
