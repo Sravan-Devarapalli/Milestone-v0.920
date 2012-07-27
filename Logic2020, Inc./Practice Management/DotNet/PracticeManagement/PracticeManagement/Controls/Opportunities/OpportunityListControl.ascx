@@ -2,14 +2,10 @@
     Inherits="PraticeManagement.Controls.Opportunities.OpportunityListControl" %>
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Import Namespace="System.Data" %>
-<%@ Register Src="~/Controls/ProjectNameCellRounded.ascx" TagName="ProjectNameCellRounded"
-    TagPrefix="uc" %>
 <%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
     TagPrefix="cc2" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc1" %>
-<%@ Register Src="~/Controls/Opportunities/ProposedResources.ascx" TagName="ProposedResources"
-    TagPrefix="uc" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
@@ -43,6 +39,7 @@
 
         ddlStrawManOriginal = tblTeamStructure.rows[0].cells[0].children[0];
         ddlStrawMan.style.width = ddlStrawManOriginal.style.width;
+        ddlStrawMan.className = "Width220PxImp";
 
         var hdnStrawmanListInDropdown = document.getElementById('<%= hdnStrawmanListInDropdown.ClientID %>');
         var hdnColoumSpliter = document.getElementById('<%= hdnColoumSpliter.ClientID %>');
@@ -61,6 +58,7 @@
         ddlQuantityOriginal = tblTeamStructure.rows[0].cells[1].children[0];
         ddlQuantity.setAttribute("onchange", "this.style.backgroundColor = '';");
         ddlQuantity.style.width = ddlQuantityOriginal.style.width;
+        ddlQuantity.className = "Width50PxImp";
         for (var i = 0; i < ddlQuantityOriginal.children.length; i++) {
             var option = document.createElement("option");
             option.text = ddlQuantityOriginal.children[i].text;
@@ -79,7 +77,7 @@
         txtNeedBy.type = "text";
         txtNeedBy.style.width = tblTeamStructure.rows[0].cells[2].children[0].style.width;
         txtNeedBy.style.cssText = txtNeedBy.style.cssText + ";float:left;";
-        txtNeedBy.className = "date-pick";
+        txtNeedBy.className = "date-pick Width80Px FloatLeft";
         txtNeedBy.readOnly = true;
         cell3.appendChild(txtNeedBy);
         if (CurrentOptyStartDate != '')
@@ -141,7 +139,7 @@
         lblRefreshMessage.style.display = 'block';
         Array.add(refreshOpportunityIdsFromLastRefresh, oppId);
         var tblTeamStructure = document.getElementById('tblTeamStructure');
-        
+
         for (var i = tblTeamStructure.rows.length - 2; i >= 0; i--) {
             if (i == 0) {
                 var ddlPerson = tblTeamStructure.rows[i].cells[0].children[0];
@@ -155,7 +153,7 @@
                 ddlQuantity.value = 0;
                 if (CurrentOptyStartDate != '')
                     txtNeedBy.value = new Date(CurrentOptyStartDate).format('MM/dd/yyyy');
-                txtNeedBy.className = "date-pick";
+                txtNeedBy.className = "date-pick Width80Px FloatLeft";
                 txtNeedBy.readOnly = true;
                 setcalendar();
             }
@@ -1006,8 +1004,7 @@
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <ContentTemplate>
-        <asp:Panel ID="oppNameToolTipHolder" Style="display: none; position: absolute; z-index: 2000;"
-            runat="server" CssClass="ToolTip">
+        <asp:Panel ID="oppNameToolTipHolder" runat="server" CssClass="ToolTip PanelOppNameToolTipHolder">
             <table cellpadding="0" cellspacing="0">
                 <tr class="top">
                     <td class="lt">
@@ -1024,7 +1021,7 @@
                     </td>
                     <td class="content">
                         <pre>
-<asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap" Width="100%" runat="server"></asp:Label>
+<asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap Width100Per" runat="server"></asp:Label>
 </pre>
                     </td>
                     <td class="rbor">
@@ -1040,11 +1037,10 @@
                 </tr>
             </table>
         </asp:Panel>
-        <table cellpadding="0" cellspacing="0" align="center" style="width: 100%; padding-bottom: 10px;
-            margin-bottom: 10px;">
+        <table cellpadding="0" cellspacing="0" class="TableOpportunitiesCount paddingBottom10px TextAlignCenter">
             <tr>
-                <td align="center">
-                    <asp:Label ID="lblOpportunitiesCount" runat="server" Font-Bold="true" Font-Size="Medium"
+                <td>
+                    <asp:Label ID="lblOpportunitiesCount" runat="server" CssClass="fontBold FontSizeMedium"
                         Text="{0} Opportunities"></asp:Label>
                 </td>
             </tr>
@@ -1069,8 +1065,7 @@
                     </tr>
                 </table>
             </div>
-            <asp:Panel CssClass="summary" Style="white-space: nowrap; overflow-x: auto;" ID="pnlSummary"
-                runat="server">
+            <asp:Panel CssClass="summary WhiteSpaceNoWrap OverflowxAuto" ID="pnlSummary" runat="server">
             </asp:Panel>
         </div>
         <div id="opportunity-list">
@@ -1079,16 +1074,16 @@
                 <LayoutTemplate>
                     <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
                         <tr runat="server" id="lvHeader" class="CompPerfHeader">
-                            <td width="1%">
+                            <td class="Width1Percent">
                                 <div class="ie-bg no-wrap">
                                 </div>
                             </td>
-                            <td width="4%" align="center">
-                                <div class="ie-bg no-wrap" style="text-align: center;">
+                            <td class="Width4Percent">
+                                <div class="ie-bg no-wrap TextAlignCenter">
                                     <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
-                                        CssClass="arrow" CommandArgument="Priority" Style="padding-left: 10px !important;" />
+                                        CssClass="LeftPadding10px arrow" CommandArgument="Priority" />
                                     <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                    <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport" runat="server">
+                                    <asp:Panel ID="pnlPriority" CssClass="MiniReport displayNone" runat="server">
                                         <table>
                                             <tr>
                                                 <th align="right">
@@ -1100,9 +1095,8 @@
                                                 <td>
                                                     <asp:ListView ID="lvOpportunityPriorities" runat="server">
                                                         <LayoutTemplate>
-                                                            <div style="max-height: 150px; overflow-y: auto; overflow-x: hidden;">
-                                                                <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
-                                                                    class="WholeWidth">
+                                                            <div class="ItemPlaceHolderContainer">
+                                                                <table id="itemPlaceHolderContainer" runat="server" class="BackGroundColorWhite WholeWidth">
                                                                     <tr runat="server" id="itemPlaceHolder">
                                                                     </tr>
                                                                 </table>
@@ -1110,20 +1104,18 @@
                                                         </LayoutTemplate>
                                                         <ItemTemplate>
                                                             <tr>
-                                                                <td style="width: 100%; padding-left: 2px;">
+                                                                <td class="TdItemTemplate">
                                                                     <table class="WholeWidth">
                                                                         <tr>
-                                                                            <td align="center" valign="middle" style="text-align: center; color: Black; font-size: 12px;
-                                                                                padding: 0px;">
+                                                                            <td class="LabelPriority TextAlignCenterImp PaddingLeftRight0px vMiddle">
                                                                                 <asp:Label ID="lblPriority" Width="15px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                             </td>
-                                                                            <td align="center" valign="middle" style="text-align: center; color: Black; font-size: 12px;
-                                                                                padding: 0px; padding-left: 2px; padding-right: 2px;">
+                                                                            <td class="LabelPriority TextAlignCenter PaddingLeftRight2px vMiddle">
                                                                                 -
                                                                             </td>
-                                                                            <td style="padding: 0px; color: Black; font-size: 12px;">
-                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal;"
-                                                                                    Text='<%# Eval("Description") %>'></asp:Label>
+                                                                            <td class="LabelPriority PaddingLeftRight0px">
+                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" CssClass="WhiteSpaceNormal"
+                                                                                    Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -1132,7 +1124,7 @@
                                                         </ItemTemplate>
                                                         <EmptyDataTemplate>
                                                             <tr>
-                                                                <td valign="middle" style="padding-left: 2px;">
+                                                                <td class="PaddingLeft2px vMiddle">
                                                                     <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
                                                                 </td>
                                                             </tr>
@@ -1150,44 +1142,44 @@
                                     </AjaxControlToolkit:AnimationExtender>
                                 </div>
                             </td>
-                            <td width="4%" align="center">
-                                <div class="ie-bg no-wrap" style="text-align: center;">
+                            <td class="Width4Percent">
+                                <div class="ie-bg no-wrap TextAlignCenter">
                                     <asp:LinkButton ID="btnStartDateSort" runat="server" Text="Start" CommandName="Sort"
-                                        CssClass="arrow" Style="padding-left: 10px !important;" CommandArgument="StartDate" />
+                                        CssClass="arrow LeftPadding10px" CommandArgument="StartDate" />
                                 </div>
                             </td>
-                            <td width="13%">
+                            <td class="Width13Percent">
                                 <div class="ie-bg no-wrap">
                                     <asp:LinkButton ID="btnClientNameSort" runat="server" Text="Business Unit" CommandName="Sort"
                                         CssClass="arrow" CommandArgument="ClientName" />
                                 </div>
                             </td>
-                            <td width="9%">
+                            <td class="Width9Percent">
                                 <div class="ie-bg no-wrap">
                                     <asp:LinkButton ID="btnBuyerNameSort" runat="server" Text="Buyer Name" CommandName="Sort"
                                         CssClass="arrow" CommandArgument="BuyerName" />
                                 </div>
                             </td>
-                            <td width="23%">
-                                <div class="ie-bg no-wrap" style="white-space: nowrap">
+                            <td class="Width23Percent">
+                                <div class="ie-bg no-wrap WhiteSpaceNoWrap">
                                     <asp:LinkButton ID="btnOpportunityNameSort" runat="server" Text="Opportunity Name"
                                         CommandName="Sort" CssClass="arrow" CommandArgument="OpportunityName" />
                                 </div>
                             </td>
-                            <td width="7%">
+                            <td class="Width7Percent">
                                 <div class="ie-bg no-wrap">
                                     <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Sales Team" CommandName="Sort"
                                         CssClass="arrow" CommandArgument="Salesperson" />
                                 </div>
                             </td>
-                            <td align="center" width="10%">
-                                <div class="ie-bg no-wrap" style="text-align: center;">
+                            <td class="Width10Percent">
+                                <div class="ie-bg no-wrap TextAlignCenter">
                                     <asp:LinkButton ID="btnEstimatedRevenue" runat="server" Text="Est. Revenue" CommandName="Sort"
-                                        CssClass="arrow" Style="padding-left: 10px !important;" CommandArgument="EstimatedRevenue" />
+                                        CssClass="arrow LeftPadding10px" CommandArgument="EstimatedRevenue" />
                                 </div>
                             </td>
-                            <td align="center" width="29%">
-                                <div class="ie-bg no-wrap" style="color: Black;">
+                            <td class="Width29Percent TextAlignCenter">
+                                <div class="ie-bg no-wrap ColorBlack">
                                     Team Make-Up
                                 </div>
                             </td>
@@ -1199,21 +1191,21 @@
                     <tr id="trOpportunity" runat="server">
                         <td>
                             <div class="cell-pad">
-                                <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                                    ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>'
-                                    ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
-                                    ButtonProjectNameHref="<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>"
-                                    Target="_blank" />
+                                <asp:HyperLink ID="hlStatus" runat="server" CssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
+                                    Description='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem)%>'
+                                    onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
+                                   NavigateUrl='<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>'>                           
+                                </asp:HyperLink>
                             </div>
                         </td>
-                        <td align="center">
+                        <td class="TextAlignCenter">
                             <div class="cell-pad">
                                 <asp:DropDownList ID="ddlPriorityList" onchange="return ddlPriorityList_onchange(this);"
                                     runat="server">
                                 </asp:DropDownList>
                             </div>
                         </td>
-                        <td align="left">
+                        <td class="TextAlignLeft">
                             <div class="cell-pad">
                                 <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
                             </div>
@@ -1224,14 +1216,14 @@
                         </td>
                         <td class="WordWrap">
                             <div class="cell-pad">
-                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# GetWrappedText( HttpUtility.HtmlEncode((string)Eval("BuyerName")), 15) %>' /></div>
+                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# GetWrappedText( (string)Eval("BuyerName"), 15) %>' /></div>
                         </td>
                         <td class="WordWrap">
                             <div class="cell-pad">
                                 <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
                                     onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
                                     runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
-                            <%# GetWrappedText(HttpUtility.HtmlEncode((string)Eval("Name")), 25)%>
+                            <%# GetWrappedText((string)Eval("Name"), 25)%>
                                 </asp:HyperLink>
                             </div>
                         </td>
@@ -1239,16 +1231,16 @@
                             <div class="cell-pad">
                                 <asp:Label ID="lblSalesTeam" runat="server" Text='<%# GetSalesTeam((((Opportunity)Container.DataItem).Salesperson),(((Opportunity)Container.DataItem).Owner))%>' /></div>
                         </td>
-                        <td align="right" style="padding-right: 10px;">
+                        <td class="PaddingRight10Px TextAlignRight">
                             <div class="cell-pad">
                                 <asp:Label ID="lblEstimatedRevenue" runat="server" Text='<%# GetFormattedEstimatedRevenue((Decimal?)Eval("EstimatedRevenue")) %>' />
                             </div>
                         </td>
-                        <td align="left">
+                        <td class="TextAlignLeft">
                             <div class="cell-pad">
-                                <table width="100%" style="padding: 2px;">
+                                <table class="Padding2Px Width100Per">
                                     <tr>
-                                        <td style="width: 96%;">
+                                        <td class="Width96Per">
                                             <asp:DataList ID="dtlProposedPersons" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
                                                     <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
@@ -1266,17 +1258,17 @@
                                             </asp:DataList>
                                             <asp:Label ID="lblRefreshMessage" opportunityid='<%# Eval("Id") %>' runat="server"
                                                 Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
-                                                Style="display: none; font-style: italic;"></asp:Label>
+                                                CssClass="LabelRefreshMessage"></asp:Label>
                                         </td>
-                                        <td style="width: 4%; white-space: normal;" align="right">
+                                        <td class="Team TextAlignRight">
                                             <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png"
                                                 ToolTip="Select Team Resources" onclick="ShowPotentialResourcesModal(this);"
-                                                Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
+                                                CssClass="CursorPointer" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                         </td>
-                                        <td style="padding-left: 4px; width: 4%; white-space: normal;" align="right">
+                                        <td class="Team PaddingLeft4Px TextAlignRight">
                                             <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Strawman.png"
-                                                ToolTip="Select Team Structure" onclick="ShowTeamStructureModal(this);" Style="cursor: pointer;"
+                                                ToolTip="Select Team Structure" onclick="ShowTeamStructureModal(this);" CssClass="CursorPointer"
                                                 opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                             <asp:HiddenField ID="hdnStartDate" runat="server" />
@@ -1292,21 +1284,21 @@
                     <tr id="trOpportunity" runat="server" class="rowEven">
                         <td>
                             <div class="cell-pad">
-                                <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                                    ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>'
-                                    ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
-                                    ButtonProjectNameHref="<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>"
-                                    Target="_blank" />
+                                <asp:HyperLink ID="hlStatus" runat="server" CssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
+                                    Description='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem)%>'
+                                    onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
+                                    NavigateUrl='<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>'>                           
+                                </asp:HyperLink>
                             </div>
                         </td>
-                        <td align="center">
+                        <td class="TextAlignCenter">
                             <div class="cell-pad">
                                 <asp:DropDownList ID="ddlPriorityList" onchange="return ddlPriorityList_onchange(this);"
                                     runat="server">
                                 </asp:DropDownList>
                             </div>
                         </td>
-                        <td align="left">
+                        <td class="TextAlignLeft">
                             <div class="cell-pad">
                                 <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
                             </div>
@@ -1317,14 +1309,14 @@
                         </td>
                         <td class="WordWrap">
                             <div class="cell-pad">
-                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# GetWrappedText( HttpUtility.HtmlEncode((string)Eval("BuyerName")), 15)%>' /></div>
+                                <asp:Label ID="lblBuyerName" runat="server" Text='<%# GetWrappedText( (string)Eval("BuyerName"), 15)%>' /></div>
                         </td>
                         <td class="WordWrap">
                             <div class="cell-pad">
                                 <asp:HyperLink ID="hlName" Description='<%# GetWrappedText((string)((Opportunity) Container.DataItem).Description) %>'
                                     onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
                                     runat="server" NavigateUrl='<%# GetOpportunityDetailsLink((int) Eval("Id"), Container.DisplayIndex) %>'>
-                            <%# GetWrappedText(HttpUtility.HtmlEncode((string)Eval("Name")), 25)%>
+                            <%# GetWrappedText((string)Eval("Name"), 25)%>
                                 </asp:HyperLink>
                             </div>
                         </td>
@@ -1332,25 +1324,22 @@
                             <div class="cell-pad">
                                 <asp:Label ID="lblSalesTeam" runat="server" Text='<%# GetSalesTeam((((Opportunity)Container.DataItem).Salesperson),(((Opportunity)Container.DataItem).Owner))%>' /></div>
                         </td>
-                        <td align="right" style="padding-right: 10px;">
+                        <td class="PaddingRight10Px TextAlignRight">
                             <div class="cell-pad">
                                 <asp:Label ID="lblEstimatedRevenue" runat="server" Text='<%# GetFormattedEstimatedRevenue((Decimal?)Eval("EstimatedRevenue")) %>' />
                             </div>
                         </td>
-                        <td align="left">
+                        <td class="TextAlignLeft">
                             <div class="cell-pad">
-                                <table width="100%" style="padding: 2px;">
+                                <table class="Padding2Px Width100Per">
                                     <tr>
-                                        <td style="width: 96%;">
+                                        <td class="Width96Per">
                                             <asp:DataList ID="dtlProposedPersons" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
                                                     <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
                                                     ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20)%>
                                                 </ItemTemplate>
                                             </asp:DataList>
-                                            <%--<div style="white-space: normal;">
-                                                <asp:Literal ID="ltrlOutSideResources" runat="server"></asp:Literal>
-                                            </div>--%>
                                             <asp:DataList ID="dtlTeamStructure" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
                                                     <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
@@ -1361,17 +1350,17 @@
                                             </asp:DataList>
                                             <asp:Label ID="lblRefreshMessage" opportunityid='<%# Eval("Id") %>' runat="server"
                                                 Text="Please &lt;a href='javascript:location.reload(true)'&gt;refresh&lt;/a&gt; to see new changes."
-                                                Style="display: none; font-style: italic;"></asp:Label>
+                                                CssClass="LabelRefreshMessage"></asp:Label>
                                         </td>
-                                        <td style="width: 4%; white-space: normal;" align="right">
+                                        <td class="Team TextAlignRight">
                                             <asp:Image ID="imgPeople_icon" runat="server" ImageUrl="~/Images/People_icon.png"
                                                 ToolTip="Select Team Resources" onclick="ShowPotentialResourcesModal(this);"
-                                                Style="cursor: pointer;" opportunityid='<%# Eval("Id") %>' />
+                                                CssClass="CursorPointer" opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnProposedPersonsIndexes" runat="server" />
                                         </td>
-                                        <td style="padding-left: 4px; width: 4%; white-space: normal;" align="right">
+                                        <td class="Team PaddingLeft4Px TextAlignRight">
                                             <asp:Image ID="imgTeamStructure" runat="server" ImageUrl="~/Images/Strawman.png"
-                                                ToolTip="Select Team Structure" onclick="ShowTeamStructureModal(this);" Style="cursor: pointer;"
+                                                ToolTip="Select Team Structure" onclick="ShowTeamStructureModal(this);" CssClass="CursorPointer"
                                                 opportunityid='<%# Eval("Id") %>' />
                                             <asp:HiddenField ID="hdnTeamStructure" runat="server" />
                                             <asp:HiddenField ID="hdnStartDate" runat="server" />
@@ -1398,20 +1387,19 @@
         <AjaxControlToolkit:ModalPopupExtender ID="mpePopup" runat="server" TargetControlID="hdnCanShowPopup"
             CancelControlID="btnCancelTeamstructueMessagePopup" BehaviorID="mpePopup" BackgroundCssClass="modalBackground"
             PopupControlID="pnlTeamStructueMessagePopup" DropShadow="false" />
-        <asp:Panel ID="pnlTeamStructueMessagePopup" runat="server" BackColor="White" BorderColor="Black"
-            CssClass="ConfirmBoxClassError" Style="display: none" BorderWidth="2px">
-            <table width="100%">
+        <asp:Panel ID="pnlTeamStructueMessagePopup" runat="server" CssClass="ConfirmBoxClassError PanelPerson"
+            Style="display: none">
+            <table class="Width100Per">
                 <tr>
-                    <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                        valign="bottom">
-                        <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                        <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
-                            OnClientClick="$find('mpePopup').hide(); return false;" Style="float: right;"
-                            Text="X"></asp:Button>
+                    <th class="TextAlignCenterImp BackGroundColorGray vBottom" colspan="2">
+                        <b class="BtnClose">Attention!</b>
+                        <asp:Button ID="btnClose" runat="server" CssClass="mini-report-close floatright"
+                            ToolTip="Cancel" OnClientClick="$find('mpePopup').hide(); return false;" Text="X">
+                        </asp:Button>
                     </th>
                 </tr>
                 <tr>
-                    <td style="padding: 10px;" colspan="2">
+                    <td class="Padding10Px" colspan="2">
                         <table>
                             <tr>
                                 <td>
@@ -1432,14 +1420,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center" style="padding: 6px 6px 15px 6px;">
+                    <td colspan="2" align="center" class="TdRedirectToOppDetail">
                         <table>
                             <tr>
-                                <td style="padding-right: 3px;">
+                                <td class="PaddingRight3Px">
                                     <asp:Button ID="btnRedirectToOpportunityDetail" runat="server" Text="OK" ToolTip="OK"
                                         OpportunityID="" OnClick="btnRedirectToOpportunityDetail_OnClick" />
                                 </td>
-                                <td style="padding-left: 3px;">
+                                <td class="PaddingLeft3Px">
                                     <asp:Button ID="btnCancelTeamstructueMessagePopup" runat="server" Text="Cancel" ToolTip="Cancel"
                                         OnClientClick="return btnCancelTeamstructueMessagePopup_OnClientClick();" />
                                 </td>
@@ -1454,16 +1442,16 @@
             TargetControlID="hdMpePopupAttachToProject" CancelControlID="btnCancleAttachToProject"
             BehaviorID="mpePopupAttachToProject" BackgroundCssClass="modalBackground" PopupControlID="pnlAttachToProject"
             DropShadow="false" />
-        <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
-            CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-            <table width="100%">
-                <tr style="background-color: Gray; height: 27px;">
-                    <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
+        <asp:Panel ID="pnlAttachToProject" runat="server"
+            CssClass="ConfirmBoxClass PanelPerson" Style="display: none;">
+            <table class="Width100Per">
+                <tr class="BackGroundColorGray Height27Px">
+                    <td class="WhiteSpaceNoWrap AttachOpportunity TextAlignCenter">
                         Attach This Opportunity to Existing Project
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 10px;">
+                    <td class="Padding10Px">
                         <table>
                             <tr>
                                 <td>
@@ -1483,36 +1471,35 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="padding: 6px 6px 2px 2px;">
+                    <td class="DdlProjects TextAlignCenter">
                         <asp:DropDownList ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="ddlProjects_change(this);"
-                            OpportunityID="" AutoPostBack="false" Style="width: 350px">
+                            OpportunityID="" AutoPostBack="false" CssClass="Width350Px">
                         </asp:DropDownList>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div id="divDescription" runat="server" style="display: none; padding: 15px;">
-                            <table style="width: 100%;">
+                        <div id="divDescription" runat="server" class="displayNone Padding15Px">
+                            <table class="Width100Per">
                                 <tr>
-                                    <td style="width: 3%;">
+                                    <td class="Width3Per">
                                     </td>
-                                    <td style="width: 94%;">
-                                        <table style="width: 100%; padding: 8px; border-color: Black; border-width: 1px;
-                                            border-style: solid;">
+                                    <td class="Width94Per">
+                                        <table class="Width100Per DescriptionError">
                                             <tr>
-                                                <td style="width: 100%; padding: 4px;">
+                                                <td class="Width100Per Padding4Px">
                                                     <b>Please choose any one of the project/opportunity description.</b>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td valign="top" style="width: 100%; padding: 4px;">
+                                                <td class="Width100Per Padding4Px vTop">
                                                     <asp:RadioButton ID="rbtnOpportunityDescription" runat="server" GroupName="Description"
                                                         Checked="true" /><b>Opportunity :</b>
                                                     <asp:Label ID="lblOpportunityDescription" runat="server"></asp:Label>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td valign="top" style="width: 100%; padding: 4px;">
+                                                <td class="Width100Per Padding4Px vTop">
                                                     <asp:RadioButton ID="rbtnProjectDescription" runat="server" GroupName="Description"
                                                         Checked="false" /><b>Project &nbsp;:</b>
                                                     <asp:Label ID="lblProjectDescription" runat="server"></asp:Label>
@@ -1520,7 +1507,7 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 3%;">
+                                    <td class="Width3Per">
                                     </td>
                                 </tr>
                             </table>
@@ -1528,7 +1515,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
+                    <td class="DdlProjects WhiteSpaceNoWrap TextAlignCenter">
                         <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClientClick="return btnAttach_onclick();"
                             disabled="disabled" />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1552,52 +1539,50 @@
             EnableViewState="false" BackgroundCssClass="modalBackground" PopupControlID="pnlPotentialResources"
             CancelControlID="btnCancel" DropShadow="false" />
         <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8"
-            Style="display: none;" Width="372px" BorderWidth="1px">
-            <table width="100%">
+            Width="372px" BorderWidth="1px" stye="display:None">
+            <table class="Width100Per">
                 <tr>
-                    <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                    <td class="TeamResourcesPadding">
                         <center>
                             <b>Team Resources</b>
                         </center>
-                        <asp:TextBox ID="txtSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
-                            margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+                        <asp:TextBox ID="txtSearchBox" runat="server" CssClass="Width353Height16 TextSearchBoxResources"
+                            MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
                             WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
-                            WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
+                            WatermarkCssClass="watermarkedtext Width353Height16 TextSearchBoxResources" BehaviorID="wmbhSearchBox" />
                         <table>
                             <tr>
-                                <td style="width: 304px;">
+                                <td class="Width304Px">
                                 </td>
-                                <td style="padding-right: 2px;">
+                                <td class="PaddingRight2Px">
                                     <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
                                 </td>
-                                <td style="padding-left: 2px;">
+                                <td class="PaddingLeft3Px">
                                     <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
                                 </td>
                             </tr>
                         </table>
-                        <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
-                            border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
-                            <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Width="100%"
+                        <div class="cbfloatRight CblPotentialResources">
+                            <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" CssClass="Width100Per"
                                 BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
                                 CellPadding="3">
                             </uc:MultipleSelectionCheckBoxList>
                         </div>
-                        <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
+                        <div class="BtnClearAll">
                             <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
                         </div>
                         <br />
-                        <table width="356px;">
+                        <table class="Width356Px">
                             <tr>
-                                <td align="right">
+                                <td class="TextAlignRight">
                                     <input type="button" id="btnSaveProposedResources" value="Save" onclick="javascript:saveProposedResources();" />
                                     &nbsp;
                                     <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" />
                                 </td>
                             </tr>
                         </table>
-                        <div id="divTeamResources" style="text-align: left; display: none; color: Red; width: 356px;
-                            padding: 8px 0px 10px 0px">
+                        <div id="divTeamResources" class="DivTeamResources displayNone">
                             An Opportunity with a PO, A, or B priority must have a Team Make-Up.
                         </div>
                     </td>
@@ -1606,9 +1591,8 @@
         </asp:Panel>
         <asp:HiddenField ID="hdnCurrentOpportunityId" runat="server" Value="" />
         <asp:HiddenField ID="hdnProposedResourceIdsWithTypes" runat="server" Value="" />
-        <%--<asp:HiddenField ID="hdnProposedOutSideResources" runat="server" Value="" />--%>
         <asp:Button ID="btnSaveProposedResourcesHidden" runat="server" OnClick="btnSaveProposedResources_OnClick"
-            Style="display: none;" />
+            CssClass="displayNone" />
         <asp:HiddenField ID="hdnmpeTeamStructure" runat="server" Value="" />
         <asp:HiddenField ID="hdnRowSpliter" runat="server" Value="" />
         <asp:HiddenField ID="hdnColoumSpliter" runat="server" Value="" />
@@ -1619,58 +1603,57 @@
             PopupControlID="pnlTeamStructure" CancelControlID="btnTeamCancel" DropShadow="false" />
         <asp:Panel ID="pnlTeamStructure" runat="server" BorderColor="Black" BackColor="#d4dff8"
             Width="416px" BorderWidth="1px" Style="display: none;">
-            <table width="100%">
+            <table class="Width100Per">
                 <tr>
-                    <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                    <td class="TeamResourcesPadding">
                         <center>
                             <b>Team Structure</b>
                         </center>
                         <br />
-                        <div class="cbfloatRight" style="width: 400px;">
-                            <table width="100%">
+                        <div class="cbfloatRight Width400Px">
+                            <table class="Width100Per">
                                 <tr>
-                                    <td style="width: 220px;" align="center">
+                                    <td class="TextAlignCenter Width220Px">
                                         <b>Role / Skill</b>
                                     </td>
-                                    <td style="text-align: center; width: 70px;">
+                                    <td class="TextAlignCenter Width70Px">
                                         <b>QTY</b>
                                     </td>
-                                    <td align="center">
+                                    <td class="TextAlignCenter">
                                         <b>Needed By</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="cbfloatRight" style="height: 250px; width: 400px; overflow-y: scroll;
-                            border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
-                            <table width="100%" id="tblTeamStructure" class="strawman">
+                        <div class="cbfloatRight DivTeamStructure">
+                            <table id="tblTeamStructure" class="strawman Width100Per">
                                 <tr>
-                                    <td style="width: 220px;">
+                                    <td class="Width220PxImp">
                                         <asp:DropDownList ID="ddlStrawmen" runat="server" DataTextField="Name" DataValueField="Id"
-                                            Width="220px">
+                                            CssClass="Width220PxImp">
                                         </asp:DropDownList>
                                     </td>
-                                    <td style="width: 70px;" align="center">
-                                        <asp:DropDownList ID="ddlQuantity" runat="server" onchange="this.style.backgroundColor = '';"
-                                            DataTextField="Name" DataValueField="Id" Style="width: 50px;">
+                                    <td class="Width70Px TextAlignCenter">
+                                        <asp:DropDownList ID="ddlQuantity" runat="server" DataTextField="Name" DataValueField="Id"
+                                            CssClass="Width50PxImp">
                                         </asp:DropDownList>
                                     </td>
-                                    <td align="center">
-                                        <asp:TextBox ID="txtNeedBy" runat="server" Style="width: 80px; float: left;" CssClass="date-pick"></asp:TextBox>
+                                    <td class="TextAlignCenter FloatLeft">
+                                        <asp:TextBox ID="txtNeedBy" runat="server" CssClass="date-pick Width80Px FloatLeft"></asp:TextBox>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" align="left">
+                                    <td colspan="3" class="textLeft FloatLeft">
                                         <asp:ImageButton ID="imgAddStrawman" runat="server" ImageUrl="~/Images/add_16.png"
-                                            AlternateText="Add Strawman" Style="float: left;" OnClientClick=" return AddStrawmanRow();" />
+                                            AlternateText="Add Strawman" CssClass="FloatLeft" OnClientClick=" return AddStrawmanRow();" />
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div style="text-align: right; width: 404px; padding: 8px 0px 10px 0px">
+                        <div class="DivClearAll">
                             <input type="button" value="Clear All" onclick="javascript:ClearTeamStructure();" />
                         </div>
-                        <table width="404px;" style="padding-right: 6px; padding-bottom: 4px;">
+                        <table class="TableSaveTeamStructure Width404Px">
                             <tr>
                                 <td align="right">
                                     <input type="button" id="btnSaveTeamStructure" value="Save" onclick="javascript:saveTeamStructure();" />
@@ -1679,15 +1662,12 @@
                                 </td>
                             </tr>
                         </table>
-                        <div id="divNeedbyError" style="text-align: left; display: none; color: Red; width: 404px;
-                            padding: 8px 0px 10px 0px">
+                        <div id="divNeedbyError" class="DivNeedbyError displayNone">
                         </div>
-                        <div id="divQuantityError" style="text-align: left; display: none; color: Red; width: 404px;
-                            padding: 8px 0px 10px 0px">
+                        <div id="divQuantityError" class="DivNeedbyError displayNone">
                             Quantity for a Straw Man must be less than or equals to 10 for same Need By date.
                         </div>
-                        <div id="divOpportunityError" style="text-align: left; display: none; color: Red;
-                            width: 404px; padding: 8px 0px 10px 0px">
+                        <div id="divOpportunityError" class="DivNeedbyError displayNone">
                             An Opportunity with a PO, A, or B priority must have a Team Make-Up.
                         </div>
                     </td>
@@ -1696,7 +1676,7 @@
         </asp:Panel>
         <asp:HiddenField ID="hdnTeamStructure" runat="server" Value="" />
         <asp:Button ID="btnSaveTeamStructureHidden" runat="server" OnClick="btnSaveTeamStructureHidden_OnClick"
-            Style="display: none;" />
+            CssClass="displayNone" />
     </ContentTemplate>
 </asp:UpdatePanel>
 <uc1:LoadingProgress ID="LoadingProgress1" AssociatedUpdatePanelID="UpdatePanel1"
