@@ -87,16 +87,16 @@
                     <table class="TdLevelNoBorder PeronSummaryReport">
                         <tr>
                             <td class="FirstTd">
-                                <%# Eval("Project.Client.Name")%>
+                                <%# Eval("Project.Client.HtmlEncodedName")%>
                                 >
-                                <%# Eval("Project.Group.Name")%>
+                                <%# Eval("Project.Group.HtmlEncodedName")%>
                             </td>
                         </tr>
                         <tr>
                             <td class="SecondTd">
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
-                                <%# Eval("Project.Name")%>
+                                <%# Eval("Project.HtmlEncodedName")%>
                             </td>
                         </tr>
                     </table>
