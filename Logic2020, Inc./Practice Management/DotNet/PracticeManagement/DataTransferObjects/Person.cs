@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using DataTransferObjects.Skills;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -60,6 +61,14 @@ namespace DataTransferObjects
         {
             get { return PersonLastFirstName; }
             set { throw new NotImplementedException("Unable to set person name"); }
+        }
+       
+        public string HtmlEncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
         }
 
         /// <summary>
