@@ -330,7 +330,6 @@ namespace PraticeManagement.Controls.Generic
             }
             return string.Empty;
         }
-
     }
 }
 
