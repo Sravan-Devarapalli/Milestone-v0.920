@@ -269,7 +269,7 @@
                                             <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("Name") %>'></asp:TextBox>
                                         </EditItemTemplate>
                                         <ItemTemplate>
-                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("Name") %>'></asp:Label>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("EncodedName") %>'></asp:Label>
                                         </ItemTemplate>
                                         <FooterTemplate>
                                             <br />
