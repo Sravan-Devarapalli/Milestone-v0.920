@@ -37,14 +37,14 @@
                                 <ItemTemplate>
                                     <tr id="Tr1" runat="server">
                                         <td>
-                                            <asp:LinkButton ID="lnkEmailTitle" runat="server" Text='<%# Eval("Name") %>' CommandName="Select" />
+                                            <asp:LinkButton ID="lnkEmailTitle" runat="server" Text='<%# Eval("EncodedName") %>' CommandName="Select" />
                                         </td>
                                     </tr>
                                 </ItemTemplate>
                                 <AlternatingItemTemplate>
                                     <tr id="Tr2" runat="server" class="rowEven">
                                         <td>
-                                            <asp:LinkButton ID="lnkEmailTitle" runat="server" Text='<%# Eval("Name") %>' CommandName="Select" />
+                                            <asp:LinkButton ID="lnkEmailTitle" runat="server" Text='<%# Eval("EncodedName") %>' CommandName="Select" />
                                         </td>
                                     </tr>
                                 </AlternatingItemTemplate>
