@@ -4,10 +4,10 @@
     <asp:GridView ID="gvPeople" runat="server" AutoGenerateColumns="False" EmptyDataText="There is nothing to be displayed here."
         CssClass="CompPerfTable WholeWidth" GridLines="None"
         BackColor="White" DataSourceID="odsMilestonePersons">
-        <AlternatingRowStyle BackColor="#F9FAFF" />
+        <AlternatingRowStyle CssClass="alterrow"/>
         <Columns>
             <asp:TemplateField HeaderText="Person Name">
-                <HeaderStyle Width="20%" />
+                <HeaderStyle CssClass="Width20Percent"/>
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Person Name</div>
@@ -19,7 +19,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Role">
-                <HeaderStyle Width="10%" />
+                <HeaderStyle CssClass="Width10Percent"/>
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Role</div>
@@ -29,18 +29,18 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField>
-                <HeaderStyle Width="32%" />
+                <HeaderStyle CssClass="Width32Percent"/>
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Milestone Name</div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblMilestoneName" runat="server" Text=' <%# Eval("Milestone.Description") %>'></asp:Label>
+                    <asp:Label ID="lblMilestoneName" runat="server" Text=' <%# Eval("Milestone.HtmlEncodedDescription") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Start">
             <ItemStyle CssClass="alignCenter" />
-                <HeaderStyle Width="8%" />
+                <HeaderStyle CssClass="Width8Percent"/>
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Start</div>
@@ -51,7 +51,7 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="End">
             <ItemStyle CssClass="alignCenter" />
-                <HeaderStyle Width="8%" />
+                <HeaderStyle CssClass="Width8Percent" />
                 <HeaderTemplate>
                     <div class="ie-bg">
                         End</div>
@@ -62,7 +62,7 @@
             </asp:TemplateField>
             <asp:TemplateField>
             <ItemStyle CssClass="alignCenter" />
-                <HeaderStyle Width="11%" HorizontalAlign="Center" />
+                <HeaderStyle CssClass="Width11Percent TextAlignCenterImp"/>
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Assigned Hours</div>
@@ -73,7 +73,7 @@
             </asp:TemplateField>
             <asp:TemplateField>
             <ItemStyle CssClass="alignCenter" />
-                <HeaderStyle Width="11%" HorizontalAlign="Center" />
+                <HeaderStyle CssClass="Width11Percent TextAlignCenterImp" />
                 <HeaderTemplate>
                     <div class="ie-bg">
                         Assigned Per Day</div>
