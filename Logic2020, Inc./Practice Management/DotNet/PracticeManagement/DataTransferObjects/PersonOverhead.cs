@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -21,6 +22,14 @@ namespace DataTransferObjects
 			get;
 			set;
 		}
+
+        public string EncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets a total rate of the overhead.
