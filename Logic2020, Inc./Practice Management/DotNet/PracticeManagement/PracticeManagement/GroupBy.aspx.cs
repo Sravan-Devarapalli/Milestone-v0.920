@@ -22,23 +22,23 @@ namespace PraticeManagement
     {
         #region "Constants"
         private const int NumberOfFixedColumns = 2;
-        private const string GrandTotalCellTemplate = "<table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table>";
-        private const string MonthCellTemplate = "<td align='right' style='padding-right:3px;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
-        private const string CurrentMonthCellTemplate = "<td align='right' style='padding-right:3px;border-left:1px solid black;border-right:1px solid black;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
-        private const string CurrentMonthLastCellTemplate = "<td align='right' style='padding-right:3px;border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;'><table><tr><td align='right'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table></td>";
+        private const string GrandTotalCellTemplate = "<table><tr><td class='textRightImp'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table>";
+        private const string MonthCellTemplate = "<td class='PaddingRight3Px' align='right'><table><tr><td class='textRightImp'>{0}</td></tr><tr><td class='TextAlignRightImp'>{1}</td></tr></table></td>";
+        private const string CurrentMonthCellTemplate = "<td align='right' class='CurrentMonthCell'><table><tr><td class='textRightImp'>{0}</td></tr><tr><td class='TextAlignRightImp'>{1}</td></tr></table></td>";
+        private const string CurrentMonthLastCellTemplate = "<td align='right' class='CurrentMonthCell BorderBottom1Px'><table><tr><td class='textRightImp'>{0}</td></tr><tr><td class='TextAlignRightImp'>{1}</td></tr></table></td>";
         private const string RowHTMLTemplate =
-                            @"</tr><tr {5} height = '35px' class='hidden'>
-                            <td style='background-color : White !important;'></td>
+                            @"</tr><tr {5} class='hidden Height35Px'>
+                            <td class='BackGroundWhiteImp'></td>
                             <td style='padding-left:{0}px;'>{4}</td>{1}
-                            <td align='right' style='padding-right:5px;'>
-                                <table> <tr><td align='right'>{2}</td></tr><tr><td align='right'>{3}</td></tr></table>
+                            <td align='right' class='padRight5'>
+                                <table> <tr><td class='textRightImp'>{2}</td></tr><tr><td class='TextAlignRightImp'>{3}</td></tr></table>
                             </td>";
-        private const string GrandTotalRowHTMLTemplate = "</tr><tr class='summary' style='border:1px solid black;' height = '40px'><td align='center' style='border-left:2px solid black;' >Grand Total</td><td></td>{0}<td align='right' style='padding-right:5px;'><table><tr><td>{1}</td></tr><tr><td>{2}</td></tr></table></td>";
+        private const string GrandTotalRowHTMLTemplate = "</tr><tr class='summary border1Px Height40Px'><td class='TextAlignCenterImp BorderLeft2Px'>Grand Total</td><td></td>{0}<td class='textRightImp padRight5'><table><tr><td>{1}</td></tr><tr><td>{2}</td></tr></table></td>";
         private const string CollpseExpandCellTemplate =
-                   @"<table><tr><td width='15px' style='padding-left:3px;'>
+                   @"<table><tr><td class='Width15Px'>
                   <img alt='Collapse' name='Collapse' {0} onclick='ExpandCollapseChilds(this);' src='Images/collapse.jpg' class='hidden'  />
                   <img alt='Expand' name='Expand' {0} onclick='ExpandCollapseChilds(this);' src='Images/expand.jpg' {3} />
-                    </td><td style='padding-left:6px;'><font style='{1}'>{2}</font>
+                    </td><td class='padLeft6'><font style='{1}'>{2}</font>
                     </td></tr></table>";
         private const int ProjectCellLeftPadding = 50;
         private const int ClientCellLeftPadding = 0;
@@ -175,7 +175,7 @@ namespace PraticeManagement
                 groupedPractice.PracticeId = practiceId;
                 groupedPractice.PracticeManager = practice.PracticeOwner;
                 groupedPractice.PreviousPracticeManagers = practice.PracticeManagers;
-                groupedPractice.Name = practice.Name;
+                groupedPractice.Name = practice.HtmlEncodedName;
                 FillPracticeFinancalDetails(groupedPractice, milestonePersons.FindAll(mp => mp.PracticeList.Any(p => p.Id == practiceId)), AllPracticesGrandTotals);
                 GroupedPractices.Add(groupedPractice);
             }
@@ -218,7 +218,7 @@ namespace PraticeManagement
 
                 var client = clientMilestonePersons.First().Milestone.Project.Client;
 
-                groupedClient.Name = client.Name;
+                groupedClient.Name = client.HtmlEncodedName;
 
                 groupedClient.ComputedFinancials = new ComputedFinancials();
 
@@ -1190,7 +1190,7 @@ namespace PraticeManagement
             var monthsInPeriod = GetPeriodLength();
             var row = lvGroupByPerson.FindControl("lvHeader") as System.Web.UI.HtmlControls.HtmlTableRow;
             AddMonthColumn(row, periodStart, monthsInPeriod, NumberOfFixedColumns);
-            row.Cells[row.Cells.Count - 1].InnerHtml = " <div class='ie-bg' style='padding-right:3px;'>Grand Total</div>";
+            row.Cells[row.Cells.Count - 1].InnerHtml = " <div class='ie-bg PaddingRight3Px'>Grand Total</div>";
         }
 
         private void AddMonthColumn(HtmlTableRow row, DateTime periodStart, int monthsInPeriod, int insertPosition)
@@ -1214,7 +1214,7 @@ namespace PraticeManagement
 
                     if (periodStart.Month == DateTime.Now.Month && periodStart.Year == DateTime.Now.Year)
                     {
-                        row.Cells[i].Attributes["Style"] = "border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;";
+                        row.Cells[i].Attributes["class"] = "MonthSummary ie-bg MonthSummeryBorder";
                     }
 
                     periodStart = periodStart.AddMonths(1);
@@ -1581,7 +1581,7 @@ namespace PraticeManagement
                                     string.Format(Constants.ApplicationPages.DetailRedirectFormat,
                                                   ProjectDetailPagePath,
                                                   project.Id),
-                                    project.Name);
+                                    project.HtmlEncodedName);
 
         }
 
@@ -1638,9 +1638,9 @@ namespace PraticeManagement
 
         private string GetClientGroupNameCellHTML(ProjectsGroupedByClientGroup clientGroup, List<Project> projects, string attributes)
         {
-            var clientGroupAttributes = attributes + string.Format(ClientGroupAttributeTemplate, clientGroup.Name);
+            var clientGroupAttributes = attributes + string.Format(ClientGroupAttributeTemplate, clientGroup.HtmlEncodedName);
 
-            var clientGroupNameHTML = string.Format(CollpseExpandCellTemplate, clientGroupAttributes, string.Empty, clientGroup.Name, string.Empty);
+            var clientGroupNameHTML = string.Format(CollpseExpandCellTemplate, clientGroupAttributes, string.Empty, clientGroup.HtmlEncodedName, string.Empty);
 
             return clientGroupNameHTML;
         }
