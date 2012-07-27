@@ -266,6 +266,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Padding10,.Padding10Px{padding:10px}
 .Padding15Px{padding:15px}
 .PaddingTop2Px{padding-top:2px}
+.PaddingTop2PxImp{padding-top:2px!important}
 .PaddingTop3{padding-top:3px}
 .PaddingTop4,.PaddingTop4Px{padding-top:4px}
 .PaddingTop5{padding-top:5px}
@@ -281,8 +282,8 @@ TABLE.Section td{padding:4px 0 0 4px}
 .PaddingBottom2{padding-bottom:2px}
 .PaddingBottom3{padding-bottom:3px}
 .PaddingBottom3Imp{padding-bottom:3px!important}
-.PaddingBottom5{padding-bottom:5px}
-.PaddingBottom5Imp{padding-bottom:5px!important}
+.PaddingBottom5,.paddingBottom5px{padding-bottom:5px}
+.PaddingBottom5Imp,paddingBottom5pxImp,.ReportHeaderBillAndNonBillTable .billingHours,.PersonDetailReportCustomTabStyle td,.ProjectSummaryReportPageCustomTabStyle td,.AccountSummaryReportCustomTabStyle td{padding-bottom:5px!important}
 .PaddingBottom6{padding-bottom:6px}
 .PaddingBottom8{padding-bottom:8px}
 .PaddingBottom10,.paddingBottom10px{padding-bottom:10px}
@@ -295,6 +296,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .padRight3,.PaddingRight3Px{padding-right:3px}
 .padRight4{padding-right:4px}
 .padRight5,.wrap{padding-right:5px}
+.padRight5Imp{padding-right:5px!important}
 .padRight8{padding-right:8px}
 .padRight10,.PaddingRight10Px{padding-right:10px}
 .padRight10Imp{padding-right:10px!important}
@@ -305,7 +307,9 @@ TABLE.Section td{padding:4px 0 0 4px}
 .padRight242{padding-right:242px}
 .padLeft0,.PaddingLeft0Px{padding-left:0!important}
 .padLeft2,.PaddingLeft2px{padding-left:2px}
+.PaddingLeft2pxImp{padding-left:2px!important}
 .padLeft3,.PaddingLeft3Px{padding-left:3px}
+.PaddingLeft3PxImp{padding-left:3px!important}
 .padLeft3Per{padding-left:3%}
 .padLeft4,.PaddingLeft4Px{padding-left:4px}
 .padLeft5{padding-left:5px}
@@ -335,16 +339,19 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width3Percent,.Width3Per{width:3%}
 .Width4Percent{width:4%}
 .Width5Percent{width:5%}
+.Width5PercentImp{width:5%!important}
 .Width6Percent{width:6%}
 .Width6PercentImp{width:6%!important}
 .Width7Percent{width:7%}
 .Width8Percent,.Width8Per{width:8%}
 .Width9Percent,.Width9Per{width:9%}
 .Width10Percent,.Width10Per{width:10%}
+.Width10PerImp{width:10%!important}
 .Width11Percent{width:11%}
 .Width12Percent,.Width12Per{width:12%}
 .Width13Percent{width:13%}
 .Width14Percent{width:14%}
+.Width14PercentImp{width:14%!important}
 .Width15Percent,.Width15Per{width:15%}
 .Width17Percent,.Width17Per{width:17%}
 .Width18Percent{width:18%}
@@ -365,6 +372,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width40Percent{width:40%;padding:1px}
 .Width43Percent{width:43%}
 .Width45Percent{width:45%}
+.Width45PercentImp{width:45%!important}
 .Width48Percent{width:48%}
 .Width50Percent{width:50%}
 .Width58Percent{width:58%;padding:1px}
@@ -393,13 +401,18 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width20Px{width:20px}
 .Width25Px{width:25px}
 .Width26Px{width:26px}
-.Width30Px{width:30px}
+.Width15PxImp{width:15px!important}
+.Width25Px,.BenchCostCollapsiblePanel{width:25px}
+.Width30Px,.emptyTd{width:30px}
 .Width40Px{width:40px}
 .Width45Px{width:45px}
 .width50Px,.Width50Px{width:50px}
+.Width50PxImp{width:50px!important}
 .width55Px{width:55px}
 .width58Px{width:58px}
 .Width60Px{width:60px}
+.Width60PerImp{width:60%!important}
+.Width50PerImp{width:50%!important}
 .Width67Px{width:67px}
 .Width70Px{width:70px}
 .Width75PxImp{width:75px!important}
@@ -427,10 +440,12 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width160px{width:160px}
 .Width170Px{width:170px}
 .Width180Px{width:180px}
-.Width200Px{width:200px}
+.Width200Px,.lblOverheadsBenchCostTd{width:200px}
 .Width220Px{width:220px}
 .Width235Px{width:235px}
 .Width250Px{width:250px}
+.Width220PxImp{width:220px!important}
+.Width250Px,.btnsTable{width:250px}
 .Width260Px{width:260px}
 .Width295Px{width:295px}
 .Width295PxImp{width:295px!important}
@@ -456,6 +471,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .height20P{height:20px}
 .Height25Px{height:25px}
 .Height27Px{height:27px}
+.Height40Px{height:40px}
 .Height30Px{height:30px}
 .Height35Px{height:35px}
 .Height40Px{height:40px}
@@ -463,6 +479,8 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Height125PxImp{height:125px!important}
 .Height160Px{height:160px}
 .minheight250Px{min-height:250px}
+.ModalPopUpSideHeading{width:30%;font-weight:700;text-align:right;padding-right:4px}
+.ModalPopUpDropDownPadding{padding-top:8px}
 .TimeEntryAddPopUpTable{width:100%}
 .TimeEntryAddPopUpTable .FirstTrTd1{width:30%;font-weight:700;text-align:right;padding-right:4px}
 .TimeEntryAddPopUpTable .FirstTrTd2{width:70%}
@@ -486,6 +504,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .fontSize11px{font-size:11px}
 .font12Px{color:#000;font-size:12px}
 .font13Px{font-size:13px}
+.padLeft60{padding-left:60px}
 .font14Px{font-size:14px}
 .FontSize15PX{font-size:15px}
 .font15PxImp{font-size:15px!important}
@@ -517,7 +536,6 @@ TABLE.PaddingTenPx td{padding:0 5px}
 .ReportHeaderTotalsTable .SecondTd{text-align:center;font-size:25px}
 .ReportHeaderBillAndNonBillTable{width:100%}
 .ReportHeaderBillAndNonBillTable td{text-align:center}
-.ReportHeaderBillAndNonBillTable .billingHours{padding-bottom:5px!important}
 .ReportHeaderBandNBGraph{vertical-align:bottom;width:8%;padding:0!important}
 .ReportHeaderBandNBGraph table{width:100%}
 .ReportHeaderBandNBGraph td{padding:0!important;text-align:center}
@@ -548,7 +566,9 @@ TABLE.TdLevelNoBorder TH{border:0 solid #000;padding:2px 0}
 TABLE.TimeEntruReportHeader TH{border:1px solid #000;height:30px;font-size:15px;vertical-align:middle;width:25%}
 TABLE.TimeEntruReportHeader a{color:Black;display:inline-block;height:100%;text-decoration:none;width:100%}
 .NoBorder{border-right-width:0!important;border-right-style:none!important}
+.Padding3PX{padding:3px}
 .ReportFilterLabels{text-align:right;font-weight:700}
+.FontSize15PX{font-size:15px}
 .CurrentPageDiv{height:20px;vertical-align:middle}
 .Padding4pxWithNoWrap{white-space:nowrap;font-weight:700;padding:4px}
 .navSection table{margin-top:10px;margin-right:40px;margin-left:auto}
@@ -627,6 +647,8 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .ExportAndExportAll ul.pmenu li:hover ul,.ExportAndExportAll ul.pmenu li.over ul{display:block}
 .ExportAndExportAll ul.pmenu li ul{left:100px}
 .ProjectSummaryScrollingDropDown{height:240px;width:240px;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
+.PersonPayTypeScrollingDropDown{height:100px;width:190px;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
+.PersonPayTypeScrollingDropDown Table{width:100%!important}
 .ProjectSummaryAdvancedFiltersHeader TH{border-bottom:1px solid black;width:190px;text-align:center}
 .bgcolorGray,.BackGroundColorGray{background-color:Gray}
 .floatright,.FloatRightCancel{float:right}
@@ -637,7 +659,8 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .MilestoneDetailPopUpHR{padding-left:10px;padding-right:10px;border-color:Black}
 .MileStoneDetailBasicInfo{background-color:#E2EBFF;padding:5px;margin-bottom:10px;margin-top:10px}
 .bgColor_e0e0e0{background-color:#e0e0e0}
-.fontNormal{font-weight:normal}
+.fontBold{font-weight:bold}
+.fontNormal{font-weight:normal!important}
 .fontStyleNormal{font-style:normal!important}
 .MileStoneDetailPageDetailTab{background-color:White;border-style:none;border-width:1px;border-collapse:collapse;width:100%}
 .MileStoneDetailPageExpensesTab{background-color:White;border-style:none;border-collapse:collapse;width:100%}
@@ -657,7 +680,6 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .CommonCustomTabStyle .SelectedSwitch a.collapse{display:block;right:5px;top:10px}
 .CommonCustomTabStyle td{background-color:White;float:left;padding:8px 0 6px 0;position:relative}
 .CommonCustomTabStyle td span.bg{padding:8px 20px 7px 10px}
-.ProjectSummaryReportPageCustomTabStyle td{padding-bottom:5px!important}
 .ProjectSummaryReportPageCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
 .ProjectSummaryReportPageCustomTabStyle td span.bg{padding-right:10px!important}
 .PersonDetailPage_CustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
@@ -677,6 +699,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .bgColorNone{background-color:none}
 .DivPermissionDiffenrece{width:350px;overflow-x:scroll;overflow-y:auto;height:350px;margin-top:10px;margin-bottom:10px}
 .PermissionDiffenrece{background-color:White;border-collapse:collapse;border-style:none;border-width:0;width:100%}
+.Border0{border-width:0}
 .DatePickerTable{border:medium none;display:inline}
 .DatePickerTable tr,.DatePickerTable th,.DatePickerTable td{height:17px!important}
 .WhatIfControlIcon{background-color:#D8EFF3;border-color:#000;border-style:solid;border-width:1px}
@@ -746,14 +769,17 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .gvClients td{text-align:center}
 .gvClients .Left{text-align:left!important;padding-left:5px}
 .color8F8F8F{color:#8F8F8F}
-.color0898E6{color:#0898E6}
+.color0898E6{color:#0898E6!important}
 .MinWidth{min-width:150px}
 .ShowBenchCosts{white-space:nowrap;width:118px;text-align:left}
+.chbIncludeOverHeadsCheckBox{width:10px!important}
 .custBtns{padding:10px 0 10px 0;text-align:center}
-.seperateInternalExternal{padding:10px 0 10px 0}
+.custBtns,.seperateInternalExternal{padding:10px 0 10px 0}
 .floatNone,.custBtns input{float:none!important}
+.projectType{width:250px;border-bottom:1px solid black}
 .BenchcostProjectTypeTd{width:250px;border-bottom:1px solid black;vertical-align:top}
 .BenchcostpracticeAreaTd{width:250px;border-bottom:1px solid black}
+.practiceArea{width:250px;border-bottom:1px solid black}
 .practicesTd{padding-top:5px;padding-left:3px}
 .ScrollingDropDown_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:220px;overflow-x:hidden;overflow-y:auto;width:290px;z-index:20000}
 .overflowAuto{overflow:auto}
@@ -761,10 +787,11 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .PersonsSearch{width:36%;padding-left:5px;padding-right:0}
 .SearchTextBox input{margin-right:0!important;text-align:left!important}
 .TdSpace{width:14%;padding-left:0}
-.ValSumSearch{width:90%;padding-left:3%}
+.ValSumSearch{width:90%;padding-left:3%;white-space:nowrap;padding-top:10px}
 .RecruiterTd{padding-right:5px;border-bottom:1px solid black}
+.TdPersonFilter{padding-right:5px!important;border-bottom:1px solid black}
 .SddRecruiter{padding-bottom:8px;padding-left:3px}
-.FilterBtnsTd{padding:5px;padding-right:0}
+.FilterBtnsTd{padding:5px;padding-right:0;text-align:right}
 .PanelOppNameToolTipHolder{display:none;position:absolute;z-index:2000}
 .TableOpportunitiesCount{width:100%;margin-bottom:10px}
 .OverflowxAuto{overflow-x:auto}
@@ -783,17 +810,18 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .DescriptionError{padding:8px;border-color:Black;border-width:1px;border-style:solid}
 .TeamResourcesPadding{padding-left:5px;padding-top:5px;padding-bottom:5px;padding-right:2px}
 .TextSearchBoxResources{padding-bottom:4px;margin-bottom:4px}
-.CblPotentialResources{height:250px;width:350px;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px;text-align:left!important}
+.CblPotentialResources{height:250px;width:350px;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px!important;text-align:left!important}
 .BtnClearAll{text-align:right;width:356px;padding:8px 0 8px 0}
 .DivTeamResources{text-align:left;color:Red;width:356px;padding:8px 0 10px 0}
-.DivTeamStructure{height:250px;width:400px;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px;text-align:left!important}
-.TextNeedBy{width:80px;float:left}
+.DivTeamStructure{height:250px;width:400px!important;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px;text-align:left!important;overflow-x:hidden}
+.TextNeedBy{width:80px!important;float:left!important}
 .DivClearAll{text-align:right;width:404px;padding:8px 0 10px 0}
 .TableSaveTeamStructure{padding-right:6px;padding-bottom:4px}
 .DivNeedbyError{text-align:left;color:Red;width:404px;padding:8px 0 10px 0}
 .ConfirmBoxClassErrorOpportunitySummery{min-height:60px;min-width:200px;max-width:600px;max-height:500px}
 .strawmanTeamStructure tr td{padding:4px 0 4px 0}
-.SpanDivWait{color:Black;font-weight:bold}
+.strawman tr td{padding:4px 0 4px 0}
+.LoadingProgressText,.SpanDivWait{color:Black;font-weight:bold}
 .TdResources{padding:0 0 4px 4px;width:100%;background-color:#e2ebff}
 .TdCblPotentialResources{padding-left:6px;padding-right:6px;padding-top:2px;width:44%}
 .DivCblPotentialResources{height:100px;width:100%;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px}
@@ -832,7 +860,6 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .PersonSearchResult{width:100%}
 .PersonSearchResult td,.PersonSearchResult th{text-align:center}
 .PersonSearchResult .PersonName{text-align:left!important}
-.PersonDetailReportCustomTabStyle td{padding-bottom:5px!important}
 .PersonDetailReportCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
 .PersonDetailReportCustomTabStyle td span.bg{padding-right:10px!important}
 .tableFixed{table-layout:fixed}
@@ -885,7 +912,6 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .AuditReportByPersonHeaderTd1{font-style:italic;font-size:14px;width:85%;white-space:nowrap;padding-left:15px!important;font-weight:bold}
 .AuditReportByPersonHeaderTd2,.AuditReportByProjectHeaderTd2{width:15%;font-weight:bolder;font-size:15px;text-align:right;padding-right:15px}
 .AuditReportByProjectHeaderTd1{font-style:italic;width:85%;white-space:nowrap;padding-left:15px!important;font-size:15px;font-weight:700}
-.AccountSummaryReportCustomTabStyle td{padding-bottom:5px!important}
 .AccountSummaryReportCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
 .AccountSummaryReportCustomTabStyle td span.bg{padding-right:10px!important}
 .lineHeight30Px{line-height:30px}
@@ -957,3 +983,188 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .padRight0Table td{padding-right:0!important}
 .SMTPAddressDesc1{border:1px solid black;width:100%;height:63px;background-color:White;padding:5px}
 .gvCommissionsAndRates{background-color:White;border-collapse:collapse}
+.PaddingBottomTop15Px{padding-bottom:15px;padding-top:15px}
+.Width44Percent{width:44%}
+.MarginGoalsDescription{background-color:White;padding:10px}
+.TextAlignLeft{text-align:left}
+.Width194px{width:194px}
+.WidthHeight25{width:25%;height:25px}
+.Width8Height25{width:8%;height:25px}
+.Width42Height25{width:42%;height:25px}
+.Width16Percent{width:16%}
+.Width190pxHeight100px{width:190px!important;height:100px!important}
+.Width190px{width:190px!important}
+.Width240pxHeight250px{width:240px;height:250px}
+.Width29Percent{width:29%}
+.ConfirmBoxClassError{min-height:60px;min-width:200px;max-width:600px;max-height:500px}
+.Width353Height16{width:353px;height:16px}
+.Width356Px{width:356px}
+.Width404Px{width:404px}
+.HolidaysDescription{border:1px solid black;padding:5px;white-space:normal}
+.FontSizeXLarge{font-size:x-large}
+.PaddingTop45pxLeft2Per{padding-top:45px!important;padding-left:2%!important}
+.setCheckboxesLeft TD,.setCheckboxesLeft div{text-align:left!important}
+.setCheckboxesLeft input{vertical-align:middle;float:right}
+.setCheckboxesLeft Table{width:100%}
+.setColorToCalendar{background-color:#E9F0F9}
+.PanelHolidayDetails{padding-top:20px!important;padding-left:10px!important;padding-right:10px!important;min-width:250px;max-width:700px;min-height:60px}
+.TxtHolidayDescription{resize:none;width:300px;overflow:auto!important;margin-left:4px}
+.ResizeNone{resize:none}
+.Padding10px0px10px0px{padding:10px 0 10px 0!important}
+.ValignMiddleImp{vertical-align:middle!important}
+.BtnAddTimeOff{text-align:left!important;vertical-align:middle!important;width:30%}
+.PaddingTopBottom10PxImp{padding-top:10px!important;padding-bottom:10px!important}
+.PaddingTop45Left2{padding-top:45px!important;padding-left:2%!important}
+.Height175Width320Px{height:175px;width:320px}
+.RbEdit{padding-left:110px;text-align:left}
+.AddTimeOffStartDate{width:40%;text-align:right;font-weight:bold;padding-right:5px}
+.AddTimeOffDatePicker{width:40%;text-align:left;padding-left:5px}
+.PaddingBottomTop0PxImp{padding-bottom:0!important;padding-top:0!important}
+.AddTimeOffHours{padding-left:40px;text-align:left;padding-right:5px;vertical-align:middle}
+.ValSumTimeOff{text-align:left;padding-left:20px;padding-right:20px}
+.Padding10PxImp{padding:10px!important}
+.PnlHolidayAndSubStituteDayPadding{padding-top:20px;padding-left:10px;padding-right:10px}
+.HolidayLabel{width:40%;text-align:left;height:20px}
+.LabelHolidayDate{width:60%;text-align:left;padding-left:3px;height:20px}
+.DatepickerSubstituteDay{height:50px;text-align:center;vertical-align:middle}
+.Height5Px{height:5px}
+.LabelModifySubstituteDate{height:30px;text-align:right;vertical-align:middle;min-height:10px}
+.PnlDeleteSubstitutionDate{min-width:250px;max-width:700px;min-height:60px}
+.TdCompanyDayOn{margin-top:5px;padding-top:5px;padding-right:5px}
+.InnerTdCompanyDayOn{background-color:white;border:1px solid black}
+.DayDescription{margin-top:5px;padding-top:5px}
+.TdProjectName{width:65%;padding:3px 0 3px 0;padding-left:0}
+.LabelProject{font-size:15px;font-weight:bold}
+.TdProjectStatus{width:30%;padding-left:15px}
+.DdlProjectStatus{vertical-align:middle;line-height:1px;width:44%}
+.TdProjectDetailFeild{width:32%;padding:3px 0 3px 0}
+.TdValidators{width:10%;vertical-align:middle;padding-left:2px}
+.LableProjectManager{width:30%;vertical-align:top;line-height:20px}
+.TdProjectNotes{width:55%;height:120px}
+.Height100Percent{height:100%}
+.InnerTdProjectNotes{height:20px;font-size:15px;font-style:italic;vertical-align:bottom;padding-bottom:5px}
+.TextBoxProjectNotes{overflow-y:auto;resize:none;font-size:12px;font-family:Arial,Helvetica,sans-serif;width:98%;height:80px}
+.TdOpportunityLink{width:45%;padding-left:10px;height:120px}
+.LineHeight20Px{line-height:20px}
+.TdUTimeEntry{height:30px;font-size:15px;font-style:italic;vertical-align:bottom}
+.TdProjectNotesDescription{height:20px;padding-left:10px;vertical-align:bottom;padding-bottom:3px}
+.PaddingBottom35Px{padding-bottom:35px}
+.ListStyleNone{list-style:none}
+.ThEditProjectNameText{text-align:center;background-color:Gray;white-space:nowrap;font-weight:lighter;font-size:14px;padding:6px}
+.TdProjectNameText{text-align:right;width:20%;padding-bottom:5px;padding-right:5px}
+.paddingLeft5pxImp{padding-left:5px!important}
+.TdAddAttachmentText{white-space:nowrap;font-size:14px}
+.FileUploadAttachment{white-space:nowrap;padding-left:10px;padding-right:20px}
+.ProjectDetailErrorPanel{max-height:400px;max-width:550px;min-height:100px;min-width:400px}
+.projectTimeTypes tr{height:20px!important}
+.projectTimeTypes td{float:none!important;padding:0!important;height:20px!important}
+.CustomTabStyleProjectDetail tr{height:30px}
+.CustomTabStyleProjectDetail td{float:left;padding:8px 0 6px 0;position:relative}
+.CustomTabStyleProjectDetail td a{text-decoration:none}
+.CustomTabStyleProjectDetail td span a{border-bottom:1px dashed #0898e6}
+.CustomTabStyleProjectDetail td span a:hover{border-bottom:1px dashed #069}
+.CustomTabStyleProjectDetail td a.collapse{display:none;position:absolute}
+.CustomTabStyleProjectDetail .SelectedSwitch a.collapse{display:block;right:5px;top:10px}
+.CustomTabStyleProjectDetail td span.bg{padding:8px 20px 7px 10px}
+.CustomTabStyleProjectDetail .SelectedSwitch span.bg{background-color:#e2ebff}
+table.ProjectDetail-ProjectInfo-Table td{padding-left:4px}
+.ProjectAttachmentNameWrap{display:inline-block;white-space:normal!important;word-wrap:break-word}
+.Width92PerImp{width:92%!important}
+.wrapMilestoneName{word-wrap:break-word!important;word-break:break-all;white-space:normal}
+.BtnAddTimeType{padding-top:5px!important;width:100%;text-align:right}
+.TdAssignedWorkTypesText{padding:2px 6px 0 6px!important;text-align:center!important;width:44%!important}
+.HeightAuto{height:auto!important}
+.TdTimeTypesNotAssignedToProject{padding:0 6px 0 6px!important;width:44%;margin:auto;vertical-align:middle}
+.TbTimeTypesNotAssignedToProject{border:1px solid black;padding-left:1px!important;padding-right:1px!important;width:100%!important}
+.LineHeight19Px{line-height:19px}
+.DivTimeTypes{height:150px!important;margin:auto;width:100%!important;overflow-y:auto;border:1px solid black;background:white;padding:1px!important}
+.Height0pxImp{height:0!important}
+.TextDefault{padding-top:2px!important;padding-bottom:4px!important;font-weight:bold;font-style:italic}
+.PaddingBottom0pxImp{padding-bottom:0!important}
+.VisibilityHidden{visibility:hidden}
+.Height16Px{height:16px}
+.TdTimeTypesAssignedToProject{padding-left:6px!important;padding-right:6px!important;padding-top:0!important;width:44%!important;margin:auto}
+.TdTextAddWorkType{vertical-align:middle!important;text-align:center!important;color:Black;font-weight:bold;background-color:Gray}
+.Height5pxImp{height:5px!important}
+.TdTbNewTimeType{white-space:nowrap;height:25px!important;padding-left:10px!important}
+.Width90PercentImp{width:90%!important}
+.Padding5Imp{padding:5px!important}
+.Width15PercentImp{width:15%!important}
+.FontSize14px{font-size:14px}
+.Padding8{padding:8px!important}
+.TdLblAlertMessage{white-space:nowrap;padding-left:10px!important;padding-right:20px!important}
+.Width32Percent{width:32%}
+.FloatLeftImp{float:left!important}
+.TcPersons{padding-left:15px;padding-top:10px;padding-bottom:10px;text-align:center}
+.BackGroundColorWhite{background-color:White}
+.FontSizeMedium{font-size:medium}
+.TdProjectType{width:330px!important;border-bottom:1px solid black;vertical-align:top!important}
+.TdPracticeArea{width:256px!important;border-bottom:1px solid black}
+.Width110Px{width:110px}
+.yScrollAuto{overflow-y:auto}
+.Width170PxImp{width:170px!important}
+.Width180PxImp{width:180px!important}
+.Width100PxImp{width:100px!important}
+.Color888888{color:#888!important}
+.ShowRepCheckBox input{float:left;width:15px;text-align:left;margin-right:0}
+.CurrentMonthCell{padding-right:3px;border-left:1px solid black;border-right:1px solid black}
+.BorderBottom1Px{border-bottom:1px solid black}
+.BackGroundWhiteImp{background-color:White!important}
+.BorderLeft2Px{border-left:2px solid black}
+.MonthSummeryBorder{border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black}
+.AddLeftPadding{padding-left:4px}
+.DivProjectFilter{background:#E2EBFF;margin-bottom:10px;padding:5px}
+.MinHeight25Px{min-height:25px}
+.DivMileStoneNames{padding:2px 0 2px 0}
+.MinHeight20Px{min-height:20px}
+.padLeft15Imp{padding-left:15px!important}
+.PaddingRight4PxImp{padding-right:4px!important}
+.UcDatePickerPadding{padding-right:4px!important;padding-left:4px!important}
+.LblEndDate{padding-left:4px!important;padding-right:8px!important}
+.Width38Per{width:38%}
+.Width38PerImp{width:38%!important}
+.DivPriorityContainer{max-height:150px;overflow-y:auto;overflow-x:hidden}
+.TdLblPriority{text-align:center!important;padding:0!important;color:Black;font-size:12px;vertical-align:middle}
+.LblDescription{white-space:normal;color:Black;font-size:12px;width:180px}
+.PaddingLeft1Px{padding-left:1px}
+.Width97PercentImp{width:97%!important}
+.Width98PercentImp{width:98%!important}
+.DivDescription{width:99%;padding-left:4px;padding-right:4px;overflow-y:auto}
+.TxtDescriptionPadding{padding:0 5px 0 4px}
+.DivActivityLogControl{width:99%;height:310px;padding-left:4px;padding-right:4px;overflow-y:auto}
+.PaddingLeft8Px{padding-left:8px}
+.Backgrounde2ebff{background:#e2ebff!important}
+.FontSize16Px{font-size:16px!important}
+.DivProposedPersons{height:175px;width:100%;overflow-y:auto;border:1px solid black;background:white;padding-left:3px;line-height:19px;padding-top:3px;padding-bottom:3px}
+.Width76Px{width:76px}
+.TdConvertToProject{padding:10px 0 0 4px!important;width:100%!important;text-align:center!important}
+.TdAttachToProject{padding:6px 0 0 0!important;width:100%!important;text-align:center!important}
+.Width64Per{width:64%}
+.Width36Per{width:36%}
+image:hover:after{content:attr(title)}
+.strawmanOpportunityDetails tr td{padding:4px 0 4px 0}
+.Padding0Imp{padding:0!important}
+.TextAlignJustifyImp{text-align:center!important}
+.Width500PxImp{width:500px!important}
+.PanelPerson{background-color:White;border:2px solid Black!important}
+.HolidayAndSubstituteDay{min-height:100px;width:280px;max-height:205px}
+.GroupBySddPractice{border:1px solid #AAA;background-color:white;height:250px!important;width:260px!important;z-index:20000;position:fixed;overflow-y:auto;overflow-x:hidden}
+.AdvancedTabUc{width:170px!important;height:100px!important;background-color:White!important;overflow-y:auto;overflow-x:hidden;border:1px solid #AAA!important}
+.Width480Px{width:480px!important}
+.Width465Px{width:465px!important}
+.Width380px{width:380px!important}
+.FileUpload{background-color:White;width:435px!important}
+.Height50pxImp{height:50px!important}
+.WidthHeight200pxImp{height:200px!important;width:200px!important}
+.LnkBtnAll{text-decoration:none;font-weight:bold}
+.PersonFilterSddAllTypes{background-color:White;border:1px solid #AAA!important;width:190px;height:100px;z-index:2000}
+.PersonFilterSddAllTypes Table{width:100%!important}
+.LnkBtnPrevious{color:#8F8F8F;text-decoration:none}
+.InnerTableCompanyDay{background-color:Black;border:1px;width:20px}
+.TableCompPer{padding-top:6px;background-color:white;border-collapse:collapse;width:80%!important;border:0}
+.TdNotesOptional{padding-left:6px;padding-right:6px;text-align:center!important;padding-top:2px;width:44%}
+.TdExemtNotes{padding-left:6px;padding-right:6px;padding-top:0;width:44%;margin:auto}
+.DivExemtNotes{height:150px;margin:auto;width:100%;overflow-y:hidden;border:1px solid black;background:white;line-height:19px;vertical-align:middle;padding-left:1px}
+.BtnSave{padding:4px;padding-right:0;height:35px;width:30%;text-align:right!important}
+.CBMultipleSelection{padding:0;width:10px;text-align:left;vertical-align:top}
+.MilestoneHeaderText a{color:#000333;text-decoration:none}
