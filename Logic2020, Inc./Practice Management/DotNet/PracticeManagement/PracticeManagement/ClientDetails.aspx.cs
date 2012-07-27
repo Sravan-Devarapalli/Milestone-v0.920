@@ -244,7 +244,7 @@ namespace PraticeManagement
                 else
                 {
                     ddcolor.SelectedValue = string.Empty;
-                    ddcolor.Style["background-color"] = "White";
+                    ddcolor.Attributes["class"] = "BackGroundColorWhite";
                 }
             }
         }
