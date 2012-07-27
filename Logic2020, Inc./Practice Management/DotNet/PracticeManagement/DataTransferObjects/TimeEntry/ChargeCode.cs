@@ -21,14 +21,14 @@ namespace DataTransferObjects.TimeEntry
 
                 if (Client != null)
                 {
-                    sb.Append(Client.Name);
+                    sb.Append(Client.HtmlEncodedName);
                 }
 
                 sb.Append(seperator);
 
                 if (ProjectGroup != null)
                 {
-                    sb.Append(ProjectGroup.Name);
+                    sb.Append(ProjectGroup.HtmlEncodedName);
                 }
                 sb.Append(seperator);
 
@@ -40,7 +40,7 @@ namespace DataTransferObjects.TimeEntry
 
                 if (Project != null)
                 {
-                    sb.Append(Project.Name);
+                    sb.Append(Project.HtmlEncodedName);
                 }
 
              
