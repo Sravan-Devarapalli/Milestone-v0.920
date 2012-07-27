@@ -89,7 +89,7 @@
                         <HeaderStyle CssClass="Width63Percent" />
                         <ItemStyle CssClass="Left" />
                         <ItemTemplate>
-                            <asp:Label ID="lblPriorityDescription" CssClass="WS-Normal" runat="server" Text='<%# Eval("Description") %>' />
+                            <asp:Label ID="lblPriorityDescription" CssClass="WS-Normal" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
                             <asp:TextBox ID="tbEditPriorityDescription" MaxLength="100" runat="server" Text='<%# Eval("Description") %>'
