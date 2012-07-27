@@ -67,6 +67,7 @@ namespace PraticeManagement.Controls
 
         private const string DefaultIdFieldName = "Id";
         private const string DefaultNameFieldName = "Name";
+        private const string DefaultNameFieldEndodedName = "HtmlEncodedName";
         private const string CurrentPersonKey = "CurrentPerson";
 
         #endregion
@@ -524,7 +525,7 @@ namespace PraticeManagement.Controls
                 {
                     Practice[] practices = serviceClient.GetPracticeList();
 
-                    FillListDefault(control, firstItemText, practices, false);
+                    FillListDefaultWithEncodedName(control, firstItemText, practices, false);
                 }
                 catch (CommunicationException)
                 {
@@ -652,7 +653,7 @@ namespace PraticeManagement.Controls
         {
             Practice[] practices = GetPractices(person);
 
-            FillListDefault(control, firstItemText, practices, false);
+            FillListDefaultWithEncodedName(control, firstItemText, practices, false);
         }
 
         public static Practice[] GetPractices(Person person)
@@ -1485,7 +1486,7 @@ namespace PraticeManagement.Controls
                 try
                 {
                     ProjectGroup[] groups = serviceClient.GroupListAll(clientId, projectId).OrderBy(g => g.Name).ToArray();
-                    FillListDefault(control, firstItemText, groups, noFirstItem);
+                    FillListDefaultWithEncodedName(control, firstItemText, groups, noFirstItem);
 
                     // control.Items.Insert(0, new ListItem(Resources.Controls.DefaultGroup, string.Empty));
                 }
@@ -1653,7 +1654,7 @@ namespace PraticeManagement.Controls
                     //  Add item to the groups list
                     string itemText = String.Format(
                         Resources.Controls.GroupNameFormat,
-                        client.Name, group.Name);
+                        client.HtmlEncodedName, group.HtmlEncodedName);
                     groupList.Items.Add(
                         new ListItem(itemText, group.Id.Value.ToString()));
 
@@ -1682,7 +1683,7 @@ namespace PraticeManagement.Controls
         {
             clientList.Items.Clear();
 
-            clientList.DataTextField = DefaultNameFieldName;
+            clientList.DataTextField = DefaultNameFieldEndodedName;
             clientList.DataValueField = DefaultIdFieldName;
             clientList.DataSource = clients;
             clientList.DataBind();
@@ -1816,7 +1817,7 @@ namespace PraticeManagement.Controls
                 {
                     OpportunityTransitionStatus[] statuses = serviceClient.OpportunityTransitionStatusListAll();
 
-                    FillListDefault(control, firstItemText, statuses, false);
+                    FillListDefaultWithEncodedName(control, firstItemText, statuses, false);
                 }
                 catch (CommunicationException)
                 {
@@ -1830,6 +1831,12 @@ namespace PraticeManagement.Controls
                                             bool noFirstItem)
         {
             FillListDefault(control, firstItemText, statuses, noFirstItem, DefaultIdFieldName, DefaultNameFieldName);
+        }
+
+        public static void FillListDefaultWithEncodedName(ListControl control, string firstItemText, object[] statuses,
+                                            bool noFirstItem)
+        {
+            FillListDefault(control, firstItemText, statuses, noFirstItem, DefaultIdFieldName, DefaultNameFieldEndodedName);
         }
 
         public static void FillListDefault(ListControl control, string firstItemText, object[] statuses,
