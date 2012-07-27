@@ -282,9 +282,9 @@
     <asp:UpdatePanel ID="updNotes" runat="server">
         <ContentTemplate>
             <b>Time Entry Notes Policy</b>
-            <table width="100%" class="WholeWidth">
+            <table class="WholeWidth">
                 <tr>
-                    <td style="padding-top: 5px;">
+                    <td class="PaddingTop5Imp">
                         <asp:CheckBox ID="chbNotesRequired" onclick="chbNotesRequired_Change(this);setDirty();"
                             runat="server" Text="Notes are required for all of the practices selected below and all newly created practices by default."
                             Checked="true" />
@@ -296,36 +296,32 @@
             <br />
             <table class="WholeWidth">
                 <tr>
-                    <td align="left" valign="middle" style="width: 10%;">
+                    <td class="textLeft vMiddle Width10PerImp">
                     </td>
-                    <td align="left" valign="middle" style="width: 75%; vertical-align: middle;">
+                    <td class="textLeft vMiddle Width75Percent">
                         <table class="WholeWidth">
-                            <tr style="padding-top: 2px;">
-                                <td align="center" style="padding-left: 6px; padding-right: 6px; text-align: center;
-                                    padding-top: 2px; width: 44%">
+                            <tr class="PaddingTop2Px">
+                                <td class="TdNotesOptional">
                                     <b>Notes Optional</b>
                                 </td>
-                                <td valign="middle" align="center" style="width: 12%">
+                                <td class="vMiddle TextAlignCenterImp Width12Per">
                                 </td>
-                                <td align="center" style="padding-left: 6px; padding-right: 6px; padding-top: 2px;
-                                    vertical-align: top; text-align: center; width: 44%">
+                                <td class="TdNotesOptional">
                                     <b>Notes Required</b>
                                 </td>
                             </tr>
                         </table>
                         <table class="WholeWidth">
                             <tr>
-                                <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;">
-                                    <div id="divExemptNotes" runat="server" class="cbfloatRight" style="height: 150px;
-                                        margin: auto; width: 100%; overflow-y: hidden; border: 1px solid black; background: white;line-height: 19px; vertical-align: middle;
-                                        padding-left: 1px;">
-                                        <asp:CheckBoxList ID="cblExemptNotes" runat="server" Width="100%" BackColor="White"
-                                            CssClass="WholeWidth" AutoPostBack="false" DataTextField="Name" DataValueField="id"
-                                            CellSpacing="0" CellPadding="0" OnDataBound="cblExemptNotes_DataBound">
+                                <td class="TdExemtNotes">
+                                    <div id="divExemptNotes" runat="server" class="cbfloatRight DivExemtNotes">
+                                        <asp:CheckBoxList ID="cblExemptNotes" runat="server" CssClass="WholeWidthImp bgColorWhite"
+                                            AutoPostBack="false" DataTextField="HtmlEncodedName" DataValueField="id" CellSpacing="0"
+                                            CellPadding="0" OnDataBound="cblExemptNotes_DataBound">
                                         </asp:CheckBoxList>
                                     </div>
                                 </td>
-                                <td valign="middle" align="center" style="width: 12%">
+                                <td class="vMiddle TextAlignCenterImp Width12Per">
                                     <input id="btnExemptToMustEnterAll" type="button" onclick="ExemptToMustEnterAll_Click();GetpracticeIdsList();"
                                         title="Add All" value=">>" /><br />
                                     <input id="btnExemptToMustEnter" type="button" onclick="ExemptToMustEnter_Click();GetpracticeIdsList();"
@@ -338,14 +334,11 @@
                                     <input id="btnMustEnterToExemptAll" type="button" onclick="MustEnterToExemptAll_Click();GetpracticeIdsList();"
                                         title="Remove All" value="<<" />
                                 </td>
-                                <td style="padding-left: 6px; padding-right: 6px; padding-top: 0px; width: 44%; margin: auto;
-                                    line-height: 19px; vertical-align: middle;">
-                                    <div id="divMustEnterNotes" runat="server" class="cbfloatRight" style="height: 150px;
-                                        margin: auto; width: 100%; overflow-y: hidden; border: 1px solid black; background: white;
-                                        padding-left: 1px;">
-                                        <asp:CheckBoxList ID="cblMustEnterNotes" runat="server" AutoPostBack="false" BackColor="White"
-                                            CssClass="WholeWidth" Width="100%" DataTextField="Name" DataValueField="id" CellPadding="0"
-                                            CellSpacing="0" OnDataBound="cblMustEnterNotes_DataBound">
+                                <td class="TdExemtNotes">
+                                    <div id="divMustEnterNotes" runat="server" class="cbfloatRight DivExemtNotes">
+                                        <asp:CheckBoxList ID="cblMustEnterNotes" runat="server" AutoPostBack="false" CssClass="WholeWidthImp bgColorWhite"
+                                            DataTextField="HtmlEncodedName" DataValueField="id"
+                                            OnDataBound="cblMustEnterNotes_DataBound">
                                         </asp:CheckBoxList>
                                     </div>
                                 </td>
@@ -353,18 +346,18 @@
                         </table>
                         <table class="WholeWidth">
                             <tr>
-                                <td style="padding: 4px; height: 35px; width: 70%;">
+                                <td class="Padding4Px Height35Px Width70Per">
                                     <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                                     <asp:ValidationSummary ID="vsumNotes" runat="server" ValidationGroup="Notes" />
                                 </td>
-                                <td align="right" style="padding: 4px; padding-right: 0px; height: 35px; width: 30%;">
+                                <td class="BtnSave">
                                     <asp:Button ID="btnSave" Enabled="false" runat="server" Text="Save Changes" OnClientClick="hideSuccessMessage();"
                                         OnClick="btnSave_Click" />
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 15%;">
+                    <td class="Width15PercentImp">
                     </td>
                 </tr>
             </table>
