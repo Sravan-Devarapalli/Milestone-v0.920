@@ -22,11 +22,12 @@ namespace PraticeManagement.Controls.Opportunities
     }
     public partial class OpportunityListControl : PracticeManagementFilterControl<OpportunitySortingContext>
     {
-        #region Constants 
+        #region Constants
 
         private const string ViewStateSortOrder = "SortOrder";
         private const string ViewStateSortDirection = "SortDirection";
         private const string CssArrowClass = "arrow";
+        private const string CssLeftPadding10pxClass = "LeftPadding10px";
         private const string EDITED_OPPORTUNITY_NOTE_LIST_KEY = "EditedOpportunityNoteList";
         private const string EDITED_OPPORTUNITY_NOTEID_LIST_KEY = "EditedOpportunityNoteIdList";
         private const string NoteTextBoxID = "txtNote";
@@ -179,7 +180,7 @@ namespace PraticeManagement.Controls.Opportunities
 
         public Opportunity[] GetOpportunities()
         {
-            var opportunitys =  DataHelper.GetFilteredOpportunitiesForDiscussionReview2();
+            var opportunitys = DataHelper.GetFilteredOpportunitiesForDiscussionReview2();
             return opportunitys;
         }
 
@@ -246,19 +247,21 @@ namespace PraticeManagement.Controls.Opportunities
                             if (ctrl is LinkButton)
                             {
                                 var lb = ctrl as LinkButton;
-                                lb.CssClass = CssArrowClass;
+                                lb.CssClass = lb.CssClass.Contains(CssLeftPadding10pxClass) ? CssLeftPadding10pxClass : string.Empty;
+                                lb.CssClass += ' ' + CssArrowClass;
+
                                 if (lb.CommandArgument == OrderBy)
-                                    lb.CssClass = GetCssClass();
+                                    lb.CssClass = GetCssClass(lb.CssClass);
                             }
                         }
                     }
                 }
         }
 
-        protected string GetCssClass()
+        protected string GetCssClass(string cssClass)
         {
             return string.Format("{0} sort-{1}",
-                                CssArrowClass,
+                                cssClass,
                                 SortDirection.ToString() == SortDirection.Ascending.ToString() ? "up" : "down");
         }
 
@@ -346,7 +349,7 @@ namespace PraticeManagement.Controls.Opportunities
                 hdnColoumSpliter.Value = Guid.NewGuid().ToString();
                 var Strawmen = ServiceCallers.Custom.Person(c => c.GetStrawmenListAllShort(false));
                 hdnStrawmanListInDropdown.Value = GetStrawmanListInStringFormat(Strawmen);
-                
+
                 ddlStrawmen.DataSource = Strawmen;
                 ddlStrawmen.DataBind();
                 ddlStrawmen.Items.Insert(0, new ListItem { Text = "-Select Strawman-", Value = "0" });
@@ -626,8 +629,8 @@ namespace PraticeManagement.Controls.Opportunities
                 var oppty = (e.Item as ListViewDataItem).DataItem as Opportunity;
 
                 var ddlPriority = e.Item.FindControl("ddlPriorityList") as DropDownList;
-                
-                
+
+
 
                 if (oppty.ProjectedStartDate.HasValue)
                 {
@@ -668,18 +671,18 @@ namespace PraticeManagement.Controls.Opportunities
                     var propsedPersonsList = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.ProposedResource).OrderBy(op => op.Person.LastName + op.Person.FirstName);
                     var strawMansList = oppty.ProposedPersons.FindAll(op => op.RelationType == (int)OpportunityPersonRelationType.TeamStructure && op.NeedBy.HasValue).OrderBy(op => op.Person.LastName + op.Person.FirstName);
 
-                    hasProposedPersons =propsedPersonsList.Count() > 0;
+                    hasProposedPersons = propsedPersonsList.Count() > 0;
                     hasStrawMans = strawMansList.Count() > 0;
 
                     dtlProposedPersons.DataSource = propsedPersonsList;
- 		    if (!IsPostBack)
-            	   {
-                    var inactiveStrawMans = strawMansList.Where(p => p.Person.Status.Id != (int)PersonStatusType.Active);
-                    if (inactiveStrawMans.Count() > 0)
+                    if (!IsPostBack)
                     {
-                        UsedInactiveStrawMans.AddRange(inactiveStrawMans);
+                        var inactiveStrawMans = strawMansList.Where(p => p.Person.Status.Id != (int)PersonStatusType.Active);
+                        if (inactiveStrawMans.Count() > 0)
+                        {
+                            UsedInactiveStrawMans.AddRange(inactiveStrawMans);
+                        }
                     }
-		}
                     dtlTeamStructure.DataSource = strawMansList;
                     dtlProposedPersons.DataBind();
                     dtlTeamStructure.DataBind();
@@ -890,7 +893,11 @@ namespace PraticeManagement.Controls.Opportunities
             }
 
 
-            return string.Format(Description, descriptionText); ;
+            descriptionText = HttpUtility.HtmlEncode(descriptionText);
+
+            descriptionText = descriptionText.Replace("&lt;wbr /&gt;", "<wbr />");
+
+            return string.Format(Description, descriptionText);
         }
 
         protected static string GetWrappedText(string text, int wrapAfter)
@@ -907,9 +914,11 @@ namespace PraticeManagement.Controls.Opportunities
                         var spaceIndex = spaceExists ? previousIndex + subStringFromLastWrap.LastIndexOf(' ') : index;
 
                         result = result.Insert(spaceIndex, WordBreak);
-                        previousIndex = spaceIndex + WordBreak.Length + (spaceExists ? 1 : 0); 
+                        previousIndex = spaceIndex + WordBreak.Length + (spaceExists ? 1 : 0);
                     }
                 }
+                result = HttpUtility.HtmlEncode(result);
+                result = result.Replace("&lt;wbr /&gt;", "<wbr />");
             }
 
             return result;
