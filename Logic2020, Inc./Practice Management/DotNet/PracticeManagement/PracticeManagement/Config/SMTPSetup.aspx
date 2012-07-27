@@ -40,7 +40,7 @@
                                         <asp:TextBox ID="txtMailServer" CssClass="WholeWidth" onchange="DisablSaveButton();"
                                             runat="server"></asp:TextBox>
                                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="txtMailServer"
-                                            WatermarkText="smtp.domain.com" EnableViewState="false" WatermarkCssClass="waterMarkItalicSmtp" />
+                                            WatermarkText="smtp.domain.com" EnableViewState="false" WatermarkCssClass="waterMarkItalicSmtp WholeWidth" />
                                         <asp:RequiredFieldValidator ID="reqMailServer" runat="server" ControlToValidate="txtMailServer"
                                             ErrorMessage="The Mail Server Name is required." ToolTip="The Mail Server Name is required."
                                             Text="*" SetFocusOnError="True" EnableClientScript="False" ValidationGroup="SmtpSetUp" />
