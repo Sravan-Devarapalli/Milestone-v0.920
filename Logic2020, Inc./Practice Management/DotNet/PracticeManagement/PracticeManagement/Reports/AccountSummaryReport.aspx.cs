@@ -372,7 +372,7 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                DataHelper.FillListDefault(cblProjectGroup, "All Business Units", null,
+                DataHelper.FillListDefaultWithEncodedName(cblProjectGroup, "All Business Units", null,
                                              false);
             }
             ddlPeriod.SelectedValue = "Please Select";
