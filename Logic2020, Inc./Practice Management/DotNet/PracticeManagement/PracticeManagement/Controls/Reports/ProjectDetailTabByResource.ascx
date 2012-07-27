@@ -118,7 +118,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# HttpUtility.HtmlEncode((string)Eval("HTMLNote"))%>
                                                     </td>
                                                 </tr>
                                             </table>
