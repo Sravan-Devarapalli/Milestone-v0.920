@@ -26,84 +26,8 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <script src="<%# Generic.GetClientUrl("~/Scripts/date.js", this) %>" type="text/javascript"></script>
-    <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet" type="text/css" />
-    <style type="text/css">
-        .transitions
-        {
-            height: 100px;
-        }
-        .position
-        {
-            position: absolute;
-        }
-        .watermark-Text
-        {
-            font-style: italic;
-            color: Gray;
-        }
-        .noteWidthHeight
-        {
-            overflow-y: auto;
-            width: 100%;
-            height: 100px;
-        }
-        .black
-        {
-            color: Black !important;
-        }
-        
-        .selectLink, .selectLink:hover
-        {
-            text-decoration: none;
-            color: Black;
-        }
-        .FixedHeight
-        {
-            height: 15px;
-            vertical-align: middle;
-        }
-        .NoteWidth
-        {
-            padding-right: 3px;
-        }
-        .InActive
-        {
-            background-color: InactiveBorder;
-        }
-        .WordWrap
-        {
-            word-wrap: break-word !important; /* Internet Explorer 5.5+ */
-            word-break: break-all;
-            white-space: normal;
-        }
-        .NoWrap
-        {
-            white-space: nowrap;
-        }
-        .lblNoNotes
-        {
-            background-color: White;
-            text-align: left;
-            width: 100%;
-        }
-        .RevenueTextWidth
-        {
-            width: 98%;
-        }
-        .LblNoteWidth
-        {
-            width: 200px;
-        }
-        
-        image:hover:after
-        {
-            content: attr(title);
-        }
-        .strawman tr td
-        {
-            padding: 4px 0px 4px 0px;
-        }
-    </style>
+    <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet"
+        type="text/css" />
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/datepicker.js" type="text/javascript"></script>
@@ -138,6 +62,21 @@
             ddlProjects.value = optionList[0].value;
         }
 
+        function EncodeString(str) {
+
+            var rtn = null;
+
+            rtn = str.toString().replace(/&/g, "&amp;");
+
+            rtn = rtn.replace(/"/g, "&quot;")
+
+            rtn = rtn.replace(/</g, "&lt;")
+
+            rtn = rtn.replace(/>/g, "&gt;");
+
+            return rtn;
+        }
+
         function ShowDescriptionSelections(ddlProjects) {
 
             var divDescription = document.getElementById('<%= divDescription.ClientID %>');
@@ -169,17 +108,17 @@
                 lblProjectDescription.title = selectedProjectDescription;
 
                 if (txtDescription.value.length > 100) {
-                    lblOpportunityDescription.innerHTML = txtDescription.value.substring(0, 100) + "..";
+                    lblOpportunityDescription.innerHTML = EncodeString(txtDescription.value.substring(0, 100) + "..");
                 }
                 else {
-                    lblOpportunityDescription.innerHTML = txtDescription.value;
+                    lblOpportunityDescription.innerHTML = EncodeString(txtDescription.value);
                 }
 
                 if (selectedProjectDescription.length > 100) {
-                    lblProjectDescription.innerHTML = selectedProjectDescription.substring(0, 100) + "..";
+                    lblProjectDescription.innerHTML = EncodeString(selectedProjectDescription.substring(0, 100) + "..");
                 }
                 else {
-                    lblProjectDescription.innerHTML = selectedProjectDescription;
+                    lblProjectDescription.innerHTML = EncodeString(selectedProjectDescription);
                 }
 
                 divDescription.style.display = "";
@@ -205,6 +144,8 @@
 
             ddlStrawManOriginal = tblTeamStructure.rows[0].cells[0].children[0];
             ddlStrawMan.style.width = ddlStrawManOriginal.style.width;
+            ddlStrawMan.className = "Width220PxImp";
+
 
             var hdnStrawmanListInDropdown = document.getElementById('<%= hdnStrawmanListInDropdown.ClientID %>');
             var hdnColoumSpliter = document.getElementById('<%= hdnColoumSpliter.ClientID %>');
@@ -221,6 +162,7 @@
             var ddlQuantity = document.createElement("select");
             ddlQuantityOriginal = tblTeamStructure.rows[0].cells[1].children[0];
             ddlQuantity.style.width = ddlQuantityOriginal.style.width;
+            ddlQuantity.className = "Width50PxImp";
             ddlQuantity.setAttribute("onchange", "this.style.backgroundColor = '';");
             for (var i = 0; i < ddlQuantityOriginal.children.length; i++) {
                 var option = document.createElement("option");
@@ -240,7 +182,7 @@
             txtNeedBy.type = "text";
             txtNeedBy.style.width = tblTeamStructure.rows[0].cells[2].children[0].style.width;
             txtNeedBy.style.cssText = txtNeedBy.style.cssText + ";float:left;";
-            txtNeedBy.className = "date-pick";
+            txtNeedBy.className = "date-pick Width80Px FloatLeft";
             cell3.appendChild(txtNeedBy);
             OptyStartDate = document.getElementById('<%= (dpStartDate.FindControl("txtDate") as TextBox).ClientID %>').value;
             if (OptyStartDate != '')
@@ -352,7 +294,7 @@
                     OptyStartDate = document.getElementById('<%= (dpStartDate.FindControl("txtDate") as TextBox).ClientID %>').value;
                     if (OptyStartDate != '')
                         txtNeedBy.value = new Date(OptyStartDate).format('MM/dd/yyyy'); ;
-                    txtNeedBy.className = "date-pick";
+                    txtNeedBy.className = "date-pick Width80Px FloatLeft";
                     txtNeedBy.readOnly = true;
                     setcalendar();
                 }
@@ -383,8 +325,7 @@
                     var strawmanname = '';
                     for (var j = 0; j < strawmans.length; j++) {
                         var strawmanDetails = strawmans[j].split(hdnColoumSpliter.value);
-                        if(selectedValue == strawmanDetails[1])
-                        {
+                        if (selectedValue == strawmanDetails[1]) {
                             strawmanname = strawmanDetails[0];
                         }
                     }
@@ -818,29 +759,29 @@
             </td>
         </tr>
         <tr>
-            <td style="padding-left: 5px;" valign="top">
+            <td class="padLeft5 vTop">
                 <asp:UpdatePanel ID="upOpportunityDetail" UpdateMode="Conditional" runat="server">
                     <ContentTemplate>
                         <asp:HiddenField ID="hdnHasProjectIdOrPermission" runat="server" />
                         <asp:Label ID="lblReadOnlyWarning" runat="server" ForeColor="Red" Visible="false">Since you are not the designated owner of this opportunity, you will not be able to make any changes.</asp:Label>
-                        <table style="padding-left: 5px;" class="PaddingClass WholeWidth">
-                            <tr style="height: 30px;">
-                                <td style="width: 12%;">
+                        <table class="PaddingClass WholeWidth padLeft5">
+                            <tr class="height30P">
+                                <td class="Width12Per">
                                     Opportunity Number
                                 </td>
-                                <td style="width: 43%">
+                                <td class="Width43Percent">
                                     <asp:Label ID="lblOpportunityNumber" runat="server" />
                                     &nbsp;(last updated:
                                     <asp:Label ID="lblLastUpdate" runat="server" />) &nbsp;&nbsp;
                                     <asp:HyperLink ID="hpProject" runat="server"></asp:HyperLink>
                                 </td>
-                                <td colspan="2" style="white-space: nowrap; width: 45%;">
+                                <td colspan="2" class="Width45Percent no-wrap">
                                     <table cellpadding="4px;">
                                         <tr>
-                                            <td style="padding-right: 4px;">
+                                            <td class="PaddingRight4PxImp">
                                                 <b>Start Date</b>
                                             </td>
-                                            <td style="padding-left: 4px; padding-right: 4px;">
+                                            <td class="UcDatePickerPadding">
                                                 <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false"
                                                     BehaviorID="dpStartDateBehaviourId" OnClientChange="EnableSaveButton();setDirty();"
                                                     TextBoxWidth="62px" runat="server" />
@@ -854,8 +795,8 @@
                                                     ErrorMessage="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                     ToolTip="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                             </td>
-                                            <td style="padding-left: 4px; padding-right: 8px;">
-                                                <asp:Label ID="lbEndDate" Style="font-weight: bold;" runat="server" Text="End Date"></asp:Label>
+                                            <td class="LblEndDate">
+                                                <asp:Label ID="lbEndDate" CssClass="fontBold" runat="server" Text="End Date"></asp:Label>
                                             </td>
                                             <td>
                                                 <uc1:DatePicker ID="dpEndDate" ValidationGroup="Opportunity" AutoPostBack="false"
@@ -884,76 +825,76 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold; width: 12%">
+                                <td class="fontBold Width12Per">
                                     Name
                                 </td>
-                                <td style="width: 38%">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
+                                            <td class="Width97Per">
                                                 <asp:TextBox ID="txtOpportunityName" runat="server" onchange="EnableSaveButton();setDirty();"
-                                                    MaxLength="50" Width="98%"></asp:TextBox>
+                                                    MaxLength="50" CssClass="Width98Percent"></asp:TextBox>
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Per">
                                                 <asp:RequiredFieldValidator ID="reqOpportunityName" runat="server" ControlToValidate="txtOpportunityName"
                                                     ToolTip="The Opportunity Name is required." Text="*" EnableClientScript="false"
                                                     ErrorMessage="The Opportunity Name is required." SetFocusOnError="true" Display="Dynamic"
-                                                    Width="100%" ValidationGroup="Opportunity" />
+                                                    CssClass="Width100Per" ValidationGroup="Opportunity" />
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="width: 12%; font-weight: bold;">
+                                <td class="fontBold Width12Per">
                                     Status
                                 </td>
-                                <td style="width: 38% !important;">
-                                    <table width="100%">
+                                <td class="Width38PerImp">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
-                                                <asp:DropDownList ID="ddlStatus" Width="100%" runat="server" onchange="EnableSaveButton();EnableOrDisableConvertOrAttachToProj();setDirty();"
-                                                    CssClass="WholeWidth">
+                                            <td class="Width97Per">
+                                                <asp:DropDownList ID="ddlStatus" runat="server" onchange="EnableSaveButton();EnableOrDisableConvertOrAttachToProj();setDirty();"
+                                                    CssClass="WholeWidth Width100Per">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Per">
                                                 <asp:RequiredFieldValidator ID="reqStatus" runat="server" ControlToValidate="ddlStatus"
-                                                    Width="50%" ToolTip="The Status is required." Text="*" EnableClientScript="false"
+                                                    CssClass="Width50Percent" ToolTip="The Status is required." Text="*" EnableClientScript="false"
                                                     ErrorMessage="The Status is required." SetFocusOnError="true" Display="Dynamic"
                                                     ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
-                                                <asp:CustomValidator ID="custWonConvert" runat="server" Text="*" Width="50%" ErrorMessage="Cannot convert an opportunity with the status Won to project."
+                                                <asp:CustomValidator ID="custWonConvert" runat="server" Text="*" CssClass="Width50Percent"
+                                                    ErrorMessage="Cannot convert an opportunity with the status Won to project."
                                                     ValidationGroup="WonConvert" OnServerValidate="custWonConvert_OnServerValidate" />
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                             </tr>
-                            <tr style="height: 30px;">
-                                <td style="font-weight: bold; width: 12%;">
+                            <tr class="height30P">
+                                <td class="fontBold Width12Per">
                                     Account
                                 </td>
-                                <td style="width: 38%;">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
-                                                <asp:DropDownList ID="ddlClient" Width="100%" runat="server" AutoPostBack="true"
-                                                    onchange="EnableSaveButton();setDirty();" OnSelectedIndexChanged="ddlClient_SelectedIndexChanged"
-                                                    CssClass="WholeWidth" />
+                                            <td class="Width97Per">
+                                                <asp:DropDownList ID="ddlClient" runat="server" AutoPostBack="true" onchange="EnableSaveButton();setDirty();"
+                                                    OnSelectedIndexChanged="ddlClient_SelectedIndexChanged" CssClass="WholeWidth Width100Per" />
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Per">
                                                 <asp:RequiredFieldValidator ID="reqClient" runat="server" ControlToValidate="ddlClient"
-                                                    ErrorMessage="The Account is required." Width="100%" ToolTip="The Account is required."
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                    ValidationGroup="Opportunity" />
+                                                    ErrorMessage="The Account is required." ToolTip="The Account is required." Text="*"
+                                                    EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="Opportunity"
+                                                    CssClass="Width100Per" />
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="font-weight: bold; width: 12%">
+                                <td class="fontBold Width12Per">
                                     Priority
                                     <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
                                     <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport" runat="server">
                                         <table>
                                             <tr>
-                                                <th align="right">
+                                                <th class="textRightImp">
                                                     <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
                                                         Text="x" />
                                                 </th>
@@ -962,9 +903,8 @@
                                                 <td>
                                                     <asp:ListView ID="lvOpportunityPriorities" runat="server">
                                                         <LayoutTemplate>
-                                                            <div style="max-height: 150px; overflow-y: auto; overflow-x: hidden;">
-                                                                <table id="itemPlaceHolderContainer" runat="server" style="background-color: White;"
-                                                                    class="WholeWidth">
+                                                            <div class="DivPriorityContainer">
+                                                                <table id="itemPlaceHolderContainer" runat="server" class="WholeWidth BackGroundColorWhite">
                                                                     <tr runat="server" id="itemPlaceHolder">
                                                                     </tr>
                                                                 </table>
@@ -972,20 +912,18 @@
                                                         </LayoutTemplate>
                                                         <ItemTemplate>
                                                             <tr>
-                                                                <td style="width: 100%; padding-left: 2px;">
+                                                                <td class="TdItemTemplate">
                                                                     <table class="WholeWidth">
                                                                         <tr>
-                                                                            <td align="center" valign="middle" style="text-align: center; padding: 0px; color: Black;
-                                                                                font-size: 12px;">
+                                                                            <td class="LabelPriority TextAlignCenterImp PaddingLeftRight0px vMiddle">
                                                                                 <asp:Label ID="lblPriority" Width="15px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                             </td>
-                                                                            <td align="center" valign="middle" style="text-align: center; padding: 0px; padding-left: 2px;
-                                                                                padding-right: 2px; color: Black; font-size: 12px;">
+                                                                            <td class="LabelPriority TextAlignCenter PaddingLeftRight2px vMiddle">
                                                                                 -
                                                                             </td>
-                                                                            <td style="padding: 0px;">
-                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" Style="white-space: normal;
-                                                                                    color: Black; font-size: 12px;" Text='<%# Eval("Description") %>'></asp:Label>
+                                                                            <td class="LabelPriority PaddingLeftRight0px">
+                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" CssClass="WhiteSpaceNormal"
+                                                                                    Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -994,7 +932,7 @@
                                                         </ItemTemplate>
                                                         <EmptyDataTemplate>
                                                             <tr>
-                                                                <td valign="middle" style="padding-left: 2px;">
+                                                                <td class="PaddingLeft2px vMiddle">
                                                                     <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
                                                                 </td>
                                                             </tr>
@@ -1005,17 +943,17 @@
                                         </table>
                                     </asp:Panel>
                                 </td>
-                                <td style="width: 38%;">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
-                                                <asp:DropDownList ID="ddlPriority" runat="server" Width="100%" CssClass="WholeWidth"
+                                            <td class="Width97Percent">
+                                                <asp:DropDownList ID="ddlPriority" runat="server" CssClass="WholeWidth Width100Per"
                                                     onchange="return ddlPriority_OnSelectedIndexChanged(this);  ">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Percent">
                                                 <asp:RequiredFieldValidator ID="reqPriority" runat="server" ControlToValidate="ddlPriority"
-                                                    Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
+                                                    class="Width100Per" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
                                                     ErrorMessage="The Priority is required." Text="*" ToolTip="The Priority is required."
                                                     ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
@@ -1029,45 +967,45 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width: 12%;">
+                                <td class="Width12Percent">
                                     Group
                                 </td>
-                                <td style="width: 38%;">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 100%">
-                                                <asp:DropDownList ID="ddlClientGroup" Width="97%" runat="server" onchange="EnableSaveButton();setDirty();"
-                                                    DataTextField="Name" DataValueField="Id" CssClass="WholeWidth">
+                                            <td class="Width100Per">
+                                                <asp:DropDownList ID="ddlClientGroup" runat="server" onchange="EnableSaveButton();setDirty();"
+                                                    DataTextField="Name" DataValueField="Id" CssClass="WholeWidth Width97PercentImp">
                                                 </asp:DropDownList>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="width: 12%; padding-right: 0px !important;">
-                                    <table width="100%">
-                                        <tr style="width: 100%;">
-                                            <td style="font-weight: bold; padding-left: 1px; white-space: nowrap;">
+                                <td class="Width12Percent PaddingRight0Px">
+                                    <table class="Width100Per">
+                                        <tr class="Width100Per">
+                                            <td class="fontBold PaddingLeft1Px no-wrap">
                                                 Est. Revenue
                                             </td>
-                                            <td style="text-align: right; white-space: nowrap;">
+                                            <td class="no-wrap textRightImp">
                                                 $
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="width: 38%; white-space: nowrap;">
-                                    <table width="100%">
+                                <td class="Width38Per no-wrap">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
-                                                <asp:TextBox ID="txtEstRevenue" CssClass="alignRight" runat="server" onchange="EnableSaveButton();setDirty();"
-                                                    Width="98%"></asp:TextBox>
+                                            <td class="Width97Percent">
+                                                <asp:TextBox ID="txtEstRevenue" CssClass="alignRight Width98Percent" runat="server"
+                                                    onchange="EnableSaveButton();setDirty();"></asp:TextBox>
                                                 <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarkEstRevenue" runat="server"
                                                     TargetControlID="txtEstRevenue" WatermarkText="Ex: 15000, minimum 1000" EnableViewState="false"
-                                                    WatermarkCssClass="watermarkedtext" />
+                                                    WatermarkCssClass="watermarkedtext Width98Percent" />
                                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="fteEstRevenue" TargetControlID="txtEstRevenue"
                                                     FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server" ValidChars="." />
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Percent">
                                                 <asp:RequiredFieldValidator ID="reqEstRevenue" runat="server" ControlToValidate="txtEstRevenue"
                                                     ToolTip="The Est. Revenue is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     ErrorMessage="The Est. Revenue is required." Display="Dynamic" ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
@@ -1085,37 +1023,37 @@
                                     </table>
                                 </td>
                             </tr>
-                            <tr style="height: 30px;">
-                                <td style="font-weight: bold; width: 12%;">
+                            <tr class="height30P">
+                                <td class="fontBold Width12Per">
                                     Salesperson
                                 </td>
-                                <td style="width: 38%;">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
-                                                <asp:DropDownList ID="ddlSalesperson" Width="100%" runat="server" onchange="EnableSaveButton();setDirty();"
-                                                    CssClass="WholeWidth">
+                                            <td class="Width97Per">
+                                                <asp:DropDownList ID="ddlSalesperson" runat="server" onchange="EnableSaveButton();setDirty();"
+                                                    CssClass="WholeWidth Width100Per">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Per">
                                                 <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
-                                                    Width="100%" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
+                                                    CssClass="Width100Per" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
                                                     ErrorMessage="The Salesperson is required." Text="*" ToolTip="The Salesperson is required."
                                                     ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="font-weight: bold; width: 12%;">
+                                <td class="fontBold Width12Per">
                                     Owner
                                 </td>
-                                <td style="width: 38%;">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
+                                            <td class="Width97Per">
                                                 <asp:DropDownList ID="ddlOpportunityOwner" runat="server" CssClass="WholeWidth" onchange="EnableSaveButton();setDirty();" />
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Per">
                                                 <asp:RequiredFieldValidator ID="reqOpportunityOwner" runat="server" ControlToValidate="ddlOpportunityOwner"
                                                     EnableClientScript="false" ValidationGroup="Opportunity" ErrorMessage="The Owner is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Owner is required."></asp:RequiredFieldValidator>
@@ -1129,17 +1067,17 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="font-weight: bold; width: 12%;">
+                                <td class="fontBold Width12Per">
                                     Buyer Last Name
                                 </td>
-                                <td style="width: 38%">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
+                                            <td class="Width97Per">
                                                 <asp:TextBox ID="txtBuyerName" runat="server" onchange="EnableSaveButton();setDirty();"
-                                                    MaxLength="100" Width="98%"></asp:TextBox>
+                                                    MaxLength="100" CssClass="Width98Percent"></asp:TextBox>
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Per">
                                                 <asp:RequiredFieldValidator ID="reqBuyerName" runat="server" ControlToValidate="txtBuyerName"
                                                     ToolTip="The Buyer Name is required." Text="*" SetFocusOnError="true" Display="Dynamic"
                                                     ErrorMessage="The Buyer Name is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
@@ -1152,22 +1090,22 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="font-weight: bold; width: 12%;">
+                                <td class="fontBold Width12Per">
                                     Practice
                                 </td>
-                                <td style="width: 38%;">
-                                    <table width="100%">
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 97%">
+                                            <td class="Width97Per">
                                                 <asp:DropDownList ID="ddlPractice" runat="server" onchange="EnableSaveButton();setDirty();"
-                                                    Width="100%" CssClass="WholeWidth">
+                                                    CssClass="WholeWidth Width100Per">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td style="width: 3%">
+                                            <td class="Width3Per">
                                                 <asp:RequiredFieldValidator ID="reqPractice" runat="server" ControlToValidate="ddlPractice"
                                                     ToolTip="The Practice is required." Width="100%" Text="*" EnableClientScript="false"
                                                     ErrorMessage="The Practice is required." SetFocusOnError="true" Display="Dynamic"
-                                                    ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
+                                                    ValidationGroup="Opportunity" CssClass="Width100Per"></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -1182,20 +1120,17 @@
                         <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
                             TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
                             CancelControlID="btnCancelErrorPanel" DropShadow="false" />
-                        <asp:Panel ID="pnlErrorPanel" runat="server" BackColor="White" BorderColor="Black"
-                            Style="display: none; max-height: 400px; max-width: 550px; min-height: 100px;
-                            min-width: 400px" BorderWidth="2px">
-                            <table width="100%">
+                        <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
+                            <table class="Width100Per">
                                 <tr>
-                                    <th align="center" style="text-align: center; background-color: Gray;" colspan="2"
-                                        valign="bottom">
-                                        <b style="font-size: 14px; padding-top: 2px;">Attention!</b>
-                                        <asp:Button ID="btnCancelErrorPanel" runat="server" CssClass="mini-report-close"
-                                            ToolTip="Cancel" Style="float: right;" Text="X"></asp:Button>
+                                    <th class="bgcolorGray TextAlignCenterImp vBottom">
+                                        <b class="BtnClose">Attention!</b>
+                                        <asp:Button ID="btnCancelErrorPanel" runat="server" CssClass="mini-report-close floatright"
+                                            ToolTip="Cancel" Text="X"></asp:Button>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 10px;">
+                                    <td class="Padding10Px">
                                         <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                                         <asp:ValidationSummary ID="vsumOpportunity" runat="server" DisplayMode="BulletList"
                                             CssClass="ApplyStyleForDashBoardLists" ValidationGroup="Opportunity" ShowMessageBox="false"
@@ -1209,7 +1144,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 10px; text-align: center;">
+                                    <td class="Padding10Px TextAlignCenterImp">
                                         <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
                                     </td>
                                 </tr>
@@ -1224,17 +1159,17 @@
                         <asp:Panel ID="pnlStrawmansImpactedWithOpportunityStartDatePopUp" BackColor="White"
                             BorderColor="Black" BorderWidth="2px" runat="server" CssClass="ConfirmBoxErrorClass"
                             Style="display: none;">
-                            <table width="100%">
+                            <table class="Width100Per">
                                 <tr>
-                                    <td valign="bottom" class="AttentionPopUpHeaderStyle">
+                                    <td class="AttentionPopUpHeaderStyle vBottom">
                                         Attention!
-                                        <asp:Button ID="btnPopupClose" runat="server" CssClass="mini-report-close" ToolTip="Cancel"
-                                            OnClientClick="$find('mpeBehaviourStrawmansImpactedWithOpportunityStartDate').hide(); return false;"
-                                            Style="float: right;" Text="X"></asp:Button>
+                                        <asp:Button ID="btnPopupClose" runat="server" CssClass="mini-report-close floatright"
+                                            ToolTip="Cancel" OnClientClick="$find('mpeBehaviourStrawmansImpactedWithOpportunityStartDate').hide(); return false;"
+                                            Text="X"></asp:Button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 6px;">
+                                    <td class="Padding6">
                                         Following Strawman(s) Need by date will be Adjusted to Opportunity's New Start Date
                                         <asp:Label ID="lblNewOpportunityStartDate" Font-Bold="true" runat="server"></asp:Label>.
                                         <br />
@@ -1247,7 +1182,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center" style="padding: 6px;">
+                                    <td class="Padding6 TextAlignCenterImp">
                                         <asp:Button ID="btnStrawmansImpactOkSave" runat="server" Text="Ok" OnClick="btnStrawmansImpactOkSave_Click" />
                                         <asp:Button ID="btnStrawmansImpactCancel" runat="server" Text="Cancel" />
                                     </td>
@@ -1263,7 +1198,7 @@
                         <asp:AsyncPostBackTrigger ControlID="btnAttachToProject" />
                     </Triggers>
                 </asp:UpdatePanel>
-                <br style="height: 1px;" />
+                <br class="height1Px" />
                 <ajax:TabContainer ID="tcOpportunityDetails" runat="server" CssClass="CustomTabStyle"
                     ActiveTabIndex="0">
                     <ajax:TabPanel ID="tpDescription" runat="server">
@@ -1271,12 +1206,12 @@
                             <span class="bg"><a href="#"><span>Description</span></a></span>
                         </HeaderTemplate>
                         <ContentTemplate>
-                            <div style="width: 99%; padding-left: 4px; padding-right: 4px; overflow-y: auto;">
+                            <div class="DivDescription">
                                 <asp:UpdatePanel ID="upDescription" UpdateMode="Conditional" runat="server">
                                     <ContentTemplate>
                                         <table class="WholeWidth">
                                             <tr>
-                                                <td style="text-align: right">
+                                                <td class="textRightImp">
                                                     <asp:CustomValidator ID="custOppDesciption" runat="server" ControlToValidate="txtDescription"
                                                         Display="Dynamic" OnServerValidate="custOppDescription_ServerValidation" SetFocusOnError="True"
                                                         ErrorMessage="The opportunity description cannot be more than 2000 symbols" ToolTip="The opportunity description cannot be more than 2000 symbols"
@@ -1284,10 +1219,9 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="padding: 0px 5px 0px 4px;">
-                                                    <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="5" CssClass="WholeWidth"
-                                                        Height="80px" onchange="EnableSaveButton();setDirty();" MaxLength="2000" Style="overflow-y: auto;
-                                                        resize: none; font-size: 12px; font-family: Arial, Helvetica, sans-serif;"></asp:TextBox>
+                                                <td class="TxtDescriptionPadding">
+                                                    <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="5" CssClass="TextBoxProjectNotes WholeWidthImp"
+                                                        onchange="EnableSaveButton();setDirty();" MaxLength="2000"></asp:TextBox>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1315,7 +1249,7 @@
                         <ContentTemplate>
                             <asp:UpdatePanel ID="upActivityLog" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
-                                    <div style="width: 99%; height: 310px; padding-left: 4px; padding-right: 4px; overflow-y: auto;">
+                                    <div class="DivActivityLogControl">
                                         <uc:ActivityLogControl runat="server" ID="activityLog" DisplayDropDownValue="Opportunity"
                                             DateFilterValue="Year" ShowDisplayDropDown="false" ShowProjectDropDown="false" />
                                     </div>
@@ -1330,53 +1264,50 @@
                         </ContentTemplate>
                     </ajax:TabPanel>
                 </ajax:TabContainer>
-                <table class="WholeWidth" style="background: #e2ebff;">
+                <table class="WholeWidth Backgrounde2ebff">
                     <tr>
-                        <td align="center" style="padding-left: 8px; padding-right: 8px;">
+                        <td class="TextAlignCenter PaddingLeft8Px padRight8">
                             <asp:UpdatePanel ID="upTeamMakeUp" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
-                                    <table style="width: 100%;">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td align="center" style="padding-bottom: 5px;">
-                                                <b style="font-size: 16px;">Team Make-Up</b>
+                                            <td class="PaddingBottom5 TextAlignCenterImp">
+                                                <b class="FontSize16Px">Team Make-Up</b>
                                             </td>
                                         </tr>
                                     </table>
-                                    <table style="width: 100%;" width="100%">
+                                    <table class="Width100Per">
                                         <tr>
-                                            <td style="width: 15%;">
+                                            <td class="Width15Per">
                                             </td>
-                                            <td style="width: 70%;">
-                                                <table style="width: 100%;" width="100%">
-                                                    <tr style="padding-top: 2px;">
-                                                        <td align="right" style="width: 5%; padding-right: 15px;">
-                                                            <asp:Image ID="imgProposed" ToolTip="Select Team Resources" Style="cursor: pointer;"
-                                                                onclick="ShowPotentialResourcesModal(this);" ImageUrl="~/Images/People_Icon_Large.png"
-                                                                runat="server" />
+                                            <td class="Width70Per">
+                                                <table class="Width100Per">
+                                                    <tr class="PaddingTop2Px">
+                                                        <td class="padRight15 textRightImp Width5Percent">
+                                                            <asp:Image ID="imgProposed" ToolTip="Select Team Resources" onclick="ShowPotentialResourcesModal(this);"
+                                                                ImageUrl="~/Images/People_Icon_Large.png" runat="server" CssClass="CursorPointer" />
                                                         </td>
-                                                        <td style="width: 90%;">
-                                                            <table style="width: 100%">
+                                                        <td class="Width90Percent">
+                                                            <table class="Width100Per">
                                                                 <tr>
-                                                                    <td align="center">
+                                                                    <td class="TextAlignCenterImp">
                                                                         <b>Team Resources</b>
                                                                     </td>
-                                                                    <td align="center">
+                                                                    <td class="TextAlignCenterImp">
                                                                         <b>Team Structure</b>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style="width: 50%; padding-right: 2px;">
-                                                                        <div align="left" style="height: 175px; width: 100%; overflow-y: auto; border: 1px solid black;
-                                                                            background: white; padding-left: 3px; line-height: 19px; padding-top: 3px; padding-bottom: 3px;">
-                                                                            <asp:DataList ID="dtlProposedPersons" runat="server" Style="white-space: normal;
-                                                                                width: 100%;">
+                                                                    <td class="Width50Percent padRight2">
+                                                                        <div class="DivProposedPersons textLeft">
+                                                                            <asp:DataList ID="dtlProposedPersons" runat="server" CssClass="WhiteSpaceNormal WholeWidthImp">
                                                                                 <ItemTemplate>
                                                                                     <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
                                                                                 </ItemTemplate>
                                                                                 <AlternatingItemTemplate>
                                                                                     <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>
                                                                                 </AlternatingItemTemplate>
-                                                                                <AlternatingItemStyle BackColor="#f9faff" />
+                                                                                <AlternatingItemStyle CssClass="alterrow" />
                                                                             </asp:DataList>
                                                                             <table>
                                                                                 <tr>
@@ -1387,43 +1318,40 @@
                                                                             </table>
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width: 50%; padding-left: 2px;">
-                                                                        <div align="left" style="height: 175px; width: 100%; overflow-y: auto; line-height: 19px;
-                                                                            border: 1px solid black; background: white; padding-left: 3px; padding-top: 3px;
-                                                                            padding-bottom: 3px;">
-                                                                            <asp:DataList ID="dtlTeamStructure" runat="server" Style="white-space: normal; width: 100%;">
+                                                                    <td class="Width50Percent padRight2">
+                                                                        <div class="DivProposedPersons textLeft">
+                                                                            <asp:DataList ID="dtlTeamStructure" runat="server" CssClass="WhiteSpaceNormal WholeWidthImp">
                                                                                 <ItemTemplate>
-                                                                                    <div style="width: 100%;">
-                                                                                        <span style="float: left;">
+                                                                                    <div class="WholeWidthImp">
+                                                                                        <span class="FloatLeft">
                                                                                             <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>(<%# Eval("Quantity") %>)
-                                                                                        </span><span style="float: right; padding-right: 10px;">
+                                                                                        </span><span class="padRight10 floatright">
                                                                                             <%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%></span>
                                                                                     </div>
                                                                                 </ItemTemplate>
                                                                                 <AlternatingItemTemplate>
-                                                                                    <div style="width: 100%;">
-                                                                                        <span style="float: left;">
+                                                                                    <div class="WholeWidthImp">
+                                                                                        <span class="FloatLeft">
                                                                                             <%# GetFormattedPersonName((string)Eval("Name"), (int)Eval("PersonType"))%>(<%# Eval("Quantity") %>)
-                                                                                        </span><span style="float: right; padding-right: 10px;">
+                                                                                        </span><span class="padRight10 floatright">
                                                                                             <%# ((DateTime)Eval("NeedBy")).ToString("MM/dd/yyyy")%></span>
                                                                                     </div>
                                                                                 </AlternatingItemTemplate>
-                                                                                <AlternatingItemStyle BackColor="#f9faff" />
+                                                                                <AlternatingItemStyle CssClass="alterrow" />
                                                                             </asp:DataList>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
                                                             </table>
                                                         </td>
-                                                        <td align="left" style="width: 5%; padding-left: 15px;">
-                                                            <asp:Image ID="imgStrawMan" ToolTip="Select Team Structure" Style="cursor: pointer;"
-                                                                ImageUrl="~/Images/StrawMan_Large.png" onclick="ShowTeamStructureModal(this);"
-                                                                runat="server" />
+                                                        <td class="textLeft Width5Percent paddingLeft15Imp">
+                                                            <asp:Image ID="imgStrawMan" ToolTip="Select Team Structure" ImageUrl="~/Images/StrawMan_Large.png"
+                                                                onclick="ShowTeamStructureModal(this);" runat="server" CssClass="CursorPointer" />
                                                         </td>
                                                     </tr>
                                                 </table>
                                             </td>
-                                            <td style="width: 15%;">
+                                            <td class="Width15Percent">
                                             </td>
                                         </tr>
                                     </table>
@@ -1437,43 +1365,41 @@
                                         CancelControlID="btnCancelProposedResources" DropShadow="false" />
                                     <asp:Panel ID="pnlPotentialResources" runat="server" BorderColor="Black" BackColor="#d4dff8"
                                         Style="display: none;" Width="372px" BorderWidth="1px">
-                                        <table width="100%">
+                                        <table class="Width100Per">
                                             <tr>
-                                                <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                                                <td class="TeamResourcesPadding">
                                                     <center>
                                                         <b>Team Resources</b>
                                                     </center>
-                                                    <asp:TextBox ID="txtSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
-                                                        margin-bottom: 4px;" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSearchBox" runat="server" CssClass="TextSearchBoxResources Width353Height16" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
                                                     <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
                                                         WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
-                                                        WatermarkCssClass="watermarkedtext" BehaviorID="wmbhSearchBox" />
+                                                        WatermarkCssClass="watermarkedtext TextSearchBoxResources Width353Height16" BehaviorID="wmbhSearchBox" />
                                                     <table>
                                                         <tr>
-                                                            <td style="width: 304px;">
+                                                            <td class="Width304Px">
                                                             </td>
-                                                            <td style="padding-right: 2px;">
+                                                            <td class="PaddingRight2Px">
                                                                 <asp:Image ID="imgCheck" runat="server" ImageUrl="~/Images/right_icon.png" />
                                                             </td>
-                                                            <td style="padding-left: 2px;">
+                                                            <td class="PaddingLeft2px">
                                                                 <asp:Image ID="imgCross" runat="server" ImageUrl="~/Images/cross_icon.png" />
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
-                                                        border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
+                                                    <div class="cbfloatRight CblPotentialResources">
                                                         <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Width="100%"
                                                             BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
                                                             OnDataBound="cblPotentialResources_OnDataBound" CellPadding="3">
                                                         </uc:MultipleSelectionCheckBoxList>
                                                     </div>
-                                                    <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
+                                                    <div class="BtnClearAll">
                                                         <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
                                                     </div>
                                                     <br />
-                                                    <table width="356px;">
+                                                    <table class="Width356Px">
                                                         <tr>
-                                                            <td align="right">
+                                                            <td class="TextAlignRight">
                                                                 <asp:Button ID="btnAddProposedResources" OnClientClick="saveProposedResources();"
                                                                     OnClick="btnAddProposedResources_Click" runat="server" Text="Add/Update" ToolTip="Add/Update" />
                                                                 &nbsp;
@@ -1495,61 +1421,60 @@
                                         PopupControlID="pnlTeamStructure" CancelControlID="btnTeamCancel" DropShadow="false" />
                                     <asp:Panel ID="pnlTeamStructure" runat="server" BorderColor="Black" BackColor="#d4dff8"
                                         Width="416px" BorderWidth="1px" Style="display: none;">
-                                        <table width="100%">
+                                        <table class="Width100Per">
                                             <tr>
-                                                <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                                                <td class="TeamResourcesPadding">
                                                     <center>
                                                         <b>Team Structure</b>
                                                     </center>
                                                     <br />
-                                                    <div class="cbfloatRight" style="width: 400px;">
-                                                        <table width="100%">
+                                                    <div class="cbfloatRight Width400Px">
+                                                        <table class="Width100Per">
                                                             <tr>
-                                                                <td style="width: 220px;" align="center">
+                                                                <td class="TextAlignCenterImp Width220Px">
                                                                     <b>Role / Skill</b>
                                                                 </td>
-                                                                <td style="text-align: center; width: 70px;">
+                                                                <td class="TextAlignCenterImp Width70Px">
                                                                     <b>QTY</b>
                                                                 </td>
-                                                                <td align="center">
+                                                                <td class="TextAlignCenterImp">
                                                                     <b>Needed By</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                     </div>
-                                                    <div style="height: 250px; width: 400px; overflow-y: scroll; border: 1px solid black;
-                                                        background: white; padding-left: 3px; text-align: left !important;">
-                                                        <table width="100%" id="tblTeamStructure" class="strawman">
+                                                    <div class="DivTeamStructure">
+                                                        <table id="tblTeamStructure" class="strawman Width100Per strawmanOpportunityDetails">
                                                             <tr>
-                                                                <td style="width: 220px;">
+                                                                <td class="Width220PxImp">
                                                                     <asp:DropDownList ID="ddlStrawmen" runat="server" DataTextField="Name" DataValueField="Id"
-                                                                        Width="220px">
+                                                                        CssClass="Width220PxImp">
                                                                     </asp:DropDownList>
                                                                 </td>
-                                                                <td style="width: 76px;" align="center">
+                                                                <td class="Width76Px TextAlignCenter">
                                                                     <asp:DropDownList ID="ddlQuantity" onchange="this.style.backgroundColor = '';" runat="server"
-                                                                        DataTextField="Name" DataValueField="Id" Style="width: 50px;">
+                                                                        DataTextField="Name" DataValueField="Id" CssClass="Width50PxImp">
                                                                     </asp:DropDownList>
                                                                 </td>
-                                                                <td align="center">
-                                                                    <asp:TextBox ID="txtNeedBy" runat="server" Style="width: 80px; float: left;" CssClass="date-pick"></asp:TextBox>
+                                                                <td class="TextAlignCenter">
+                                                                    <asp:TextBox ID="txtNeedBy" runat="server" CssClass="date-pick Width80Px FloatLeft"></asp:TextBox>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="3" align="left">
+                                                                <td colspan="3" class="textLeft">
                                                                     <asp:ImageButton ID="imgAddStrawman" runat="server" ImageUrl="~/Images/add_16.png"
-                                                                        AlternateText="Add Strawman" Style="float: left;" OnClientClick=" return AddStrawmanRow();" />
+                                                                        AlternateText="Add Strawman" CssClass="FloatLeft" OnClientClick=" return AddStrawmanRow();" />
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                     </div>
                                                     </div>
-                                                    <div style="text-align: right; width: 404px; padding: 8px 0px 10px 0px">
+                                                    <div class="DivClearAll">
                                                         <input type="button" value="Clear All" onclick="javascript:ClearTeamStructure();" />
                                                     </div>
-                                                    <table width="404px;">
+                                                    <table class="Width404Px">
                                                         <tr>
-                                                            <td align="right">
+                                                            <td class="textRightImp">
                                                                 <asp:Button ID="btnSaveTeamStructure" runat="server" Text="Add/Update" ToolTip="Add/Update"
                                                                     OnClientClick="return saveTeamStructure();" OnClick="btnSaveTeamStructure_OnClick" />
                                                                 &nbsp;
@@ -1557,13 +1482,11 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <div id="divNeedbyError" style="text-align: left; display: none; color: Red; width: 404px;
-                                                        padding: 8px 0px 10px 0px">
+                                                    <div id="divNeedbyError" class="DivNeedbyError displayNone">
                                                         Need by Date must be greater than or equals to Opportunity start date and less than
                                                         or equals to Opportunity end date.
                                                     </div>
-                                                    <div id="divQuantityError" style="text-align: left; display: none; color: Red; width: 404px;
-                                                        padding: 8px 0px 10px 0px">
+                                                    <div id="divQuantityError" class="DivNeedbyError displayNone">
                                                         Quantity for a Straw Man must be less than or equals to 10 for same Need By date.
                                                     </div>
                                                 </td>
@@ -1585,16 +1508,16 @@
                 <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
                     <ContentTemplate>
                         <asp:HiddenField ID="hdnValueChanged" Value="false" runat="server" />
-                        <table class="WholeWidth" style="background: #e2ebff;">
+                        <table class="WholeWidth Backgrounde2ebff">
                             <tr>
-                                <td align="center" style="padding: 10px 0px 0px 4px; width: 100%;">
+                                <td class="TdConvertToProject">
                                     <asp:Button ID="btnConvertToProject" runat="server" Text="Convert This Opportunity To Project"
                                         OnClick="btnConvertToProject_Click" OnClientClick="if (!confirmSaveDirty(true)) return false;" />&nbsp;
                                     <asp:Image ID="hintConvertProject" runat="server" ImageUrl="~/Images/hint.png" ToolTip="When this button is clicked, Practice Management will attempt to create a new Project with the basic information already contained in this Opportunity. If any Proposed Resources have been selected, they will be attached to the new Project as well. " />
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" style="padding: 6px 0px 0px 0px; width: 100%;">
+                                <td class="TdAttachToProject">
                                     <asp:Button ID="btnAttachToProject" runat="server" Text="Attach This Opportunity to Existing Project"
                                         OnClick="btnAttachToProject_Click" ToolTip="Attach This Opportunity to Existing Project" />
                                     <asp:HiddenField ID="hdnField" runat="server" />
@@ -1605,7 +1528,7 @@
                             </tr>
                         </table>
                         <asp:HiddenField ID="hdnOpportunityId" runat="server" />
-                        <div style="background-color: #e2ebff; padding: 2px;">
+                        <div class="Backgrounde2ebff Padding2Px">
                             <asp:CustomValidator ID="custOpportunityNotSaved" runat="server" ErrorMessage="The opportunity must be saved at first."
                                 ToolTip="The opportunity must be saved at first." EnableClientScript="false"
                                 EnableViewState="false"></asp:CustomValidator>
@@ -1616,26 +1539,26 @@
                                         </script>
                             </asp:Literal>
                         </div>
-                        <table style="width: 100%; background: #e2ebff;">
+                        <table class="Backgrounde2ebff Width100Per">
                             <tr>
-                                <td style="padding: 4px; height: 35px; width: 64%;">
+                                <td class="Padding4Px Width64Per Height35Px">
                                 </td>
-                                <td style="width: 36%;">
-                                    <table style="float: right;">
+                                <td class="Width36Per">
+                                    <table class="floatright">
                                         <tr>
-                                            <td style="padding: 8px;">
+                                            <td class="Padding8">
                                                 <asp:HiddenField ID="hdnOpportunityDelete" runat="server"></asp:HiddenField>
                                                 <asp:Button ID="btnDelete" runat="server" Visible="false" Enabled="false" Text="Delete Opportunity"
                                                     OnClientClick="ConfirmToDeleteOpportunity();" OnClick="btnDelete_Click" />
                                             </td>
-                                            <td style="padding: 8px;">
+                                            <td class="Padding8">
                                                 <asp:UpdatePanel ID="upSave" runat="server">
                                                     <ContentTemplate>
                                                         <asp:Button ID="btnSave" runat="server" Text="Save Changes" OnClick="btnSave_Click" />
                                                     </ContentTemplate>
                                                 </asp:UpdatePanel>
                                             </td>
-                                            <td style="padding: 8px;">
+                                            <td class="Padding8">
                                                 <asp:UpdatePanel ID="upCancelChanges" runat="server">
                                                     <ContentTemplate>
                                                         <asp:Button ID="btnCancelChanges" runat="server" Text="Cancel" OnClientClick="if(getDirty()){return true;}else{return false;}"
@@ -1648,7 +1571,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="padding: 4px; width: 100%;">
+                                <td colspan="3" class="Padding4Px Width100Per">
                                 </td>
                             </tr>
                         </table>
@@ -1669,14 +1592,14 @@
         <ContentTemplate>
             <asp:Panel ID="pnlAttachToProject" runat="server" BackColor="White" BorderColor="Black"
                 CssClass="ConfirmBoxClass" Style="display: none" BorderWidth="2px">
-                <table width="100%">
-                    <tr style="background-color: Gray; height: 27px;">
-                        <td align="center" style="white-space: nowrap; font-size: 14px; width: 100%">
+                <table class="Width100Per">
+                    <tr class="bgcolorGray Height27Px">
+                        <td class="TdAddAttachmentText WholeWidthImp TextAlignCenterImp">
                             Attach This Opportunity to Existing Project
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding: 10px;">
+                        <td class="Padding10Px">
                             <table>
                                 <tr>
                                     <td>
@@ -1696,36 +1619,35 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="padding: 6px 6px 2px 2px;">
+                        <td class="OpportunityPrioritiesPopUpTd">
                             <cc2:CustomDropDown ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();ddlProjects_change(this);"
-                                AutoPostBack="false" Style="width: 350px">
+                                AutoPostBack="false" CssClass="Width350Px">
                             </cc2:CustomDropDown>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div id="divDescription" runat="server" style="display: none; padding: 15px;">
-                                <table style="width: 100%;">
+                            <div id="divDescription" runat="server" class="Padding15Px" Style="display: none;">
+                                <table class="Width100Per">
                                     <tr>
-                                        <td style="width: 3%;">
+                                        <td class="Width3Percent">
                                         </td>
-                                        <td style="width: 94%;">
-                                            <table style="width: 100%; padding: 8px; border-color: Black; border-width: 1px;
-                                                border-style: solid;">
+                                        <td class="Width94Per">
+                                            <table class="DescriptionError Width100Per">
                                                 <tr>
-                                                    <td style="width: 100%; padding: 4px;">
+                                                    <td class="Width100Per Padding4Px">
                                                         <b>Please choose any one of the project/opportunity description.</b>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td valign="top" style="width: 100%; padding: 4px;">
+                                                    <td class="Width100Per Padding4Px vTop">
                                                         <asp:RadioButton ID="rbtnOpportunityDescription" runat="server" GroupName="Description"
                                                             Checked="true" /><b>Opportunity :</b>
                                                         <asp:Label ID="lblOpportunityDescription" runat="server"></asp:Label>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td valign="top" style="width: 100%; padding: 4px;">
+                                                    <td class="Width100Per Padding4Px vTop">
                                                         <asp:RadioButton ID="rbtnProjectDescription" runat="server" GroupName="Description"
                                                             Checked="false" /><b>Project &nbsp;:</b>
                                                         <asp:Label ID="lblProjectDescription" runat="server"></asp:Label>
@@ -1733,7 +1655,7 @@
                                                 </tr>
                                             </table>
                                         </td>
-                                        <td style="width: 3%;">
+                                        <td class="Width3Percent">
                                         </td>
                                     </tr>
                                 </table>
@@ -1741,7 +1663,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="padding: 6px 6px 2px 2px; white-space: nowrap;">
+                        <td class="OpportunityPrioritiesPopUpTd no-wrap">
                             <asp:Button ID="btnAttach" runat="server" Text="Attach" OnClick="btnSave_Click" disabled="disabled" />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClientClick="return btnCancel_click()" />
