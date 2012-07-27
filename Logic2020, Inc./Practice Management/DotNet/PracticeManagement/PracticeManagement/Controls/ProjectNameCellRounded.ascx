@@ -5,7 +5,7 @@
     <asp:Panel ID="toolTipHolder" runat="server" CssClass="ToolTip">
         <table>
             <tr class="top">
-                <td class="lt" style="padding-left:0px;">
+                <td class="lt PaddingLeft0Px">
                     <div class="tail"></div>
                 </td>
                 <td class="tbor"></td>
@@ -14,7 +14,7 @@
             <tr class="middle">
                 <td class="lbor"></td>
                 <td class="content">
-                    <pre style="margin: 5px"><asp:Label ID="lblTooltipContent" runat="server"></asp:Label></pre>
+                    <pre class="Margin5Px"><asp:Label ID="lblTooltipContent" runat="server"></asp:Label></pre>
                 </td>
                 <td class="rbor"></td>
             </tr>
