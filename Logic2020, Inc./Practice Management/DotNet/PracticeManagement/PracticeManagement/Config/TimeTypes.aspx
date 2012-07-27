@@ -23,8 +23,8 @@
     </script>
     <asp:UpdatePanel ID="upnlTimeTypes" runat="server">
         <ContentTemplate>
-            <asp:GridView ID="gvTimeTypes" runat="server" Width="80%" BackColor="White" AutoGenerateColumns="False"
-                OnRowDataBound="gvTimeTypes_RowDataBound" CssClass="CompPerfTable" GridLines="None"
+            <asp:GridView ID="gvTimeTypes" runat="server" AutoGenerateColumns="False"
+                OnRowDataBound="gvTimeTypes_RowDataBound" CssClass="CompPerfTable Width80Percent bgColorWhite" GridLines="None"
                 EnableModelValidation="True">
                 <Columns>
                     <asp:TemplateField>
@@ -33,7 +33,7 @@
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" Width="6%" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width6PercentImp"/>
                         <ItemTemplate>
                             <asp:ImageButton ID="imgEdit" runat="server" ImageUrl="~/Images/icon-edit.png" OnClick="imgEdit_OnClick"
                                 ToolTip="Edit Work Type" Visible='<%# (bool)Eval("IsAllowedToEdit") %>' />
@@ -47,7 +47,7 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Left" Width="45%" Height="25px" />
+                        <ItemStyle CssClass="textLeft Width45PercentImp Height25Px"/>
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Work Type Name
@@ -57,7 +57,7 @@
                             <asp:Label ID="lblName" runat="server" Text='<%# Eval("Name") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="tbName" runat="server" Text='<%# Bind("Name") %>' Width="92%" />
+                            <asp:TextBox ID="tbName" runat="server" Text='<%# Bind("Name") %>' CssClass="Width92Per"/>
                             <asp:RequiredFieldValidator ID="rvUpdatedTimeType" runat="server" ControlToValidate="tbName"
                                 Display="Dynamic" ErrorMessage="Work Type Name is required" ToolTip="Work Type Name is required"
                                 ValidationGroup="UpdateTimeType">*</asp:RequiredFieldValidator>
@@ -71,12 +71,12 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="10%" />
+                        <ItemStyle CssClass="Width10Percent TextAlignCenterImp"/>
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Is Default</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width10Percent"/>
                         <ItemTemplate>
                             <asp:RadioButton ID="rbIsDefault" runat="server" Checked='<%# Eval("IsDefault") %>'
                                 Enabled="false" />
@@ -87,12 +87,12 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="10%" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width10Percent"/>
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Is Internal</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width10Percent" />
                         <ItemTemplate>
                             <asp:RadioButton ID="rbIsInternal" runat="server" Checked='<%# Eval("IsInternal") %>'
                                 Enabled="false" />
@@ -107,12 +107,12 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="14%" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width14PercentImp"/>
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Is Administrative</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width14PercentImp" />
                         <ItemTemplate>
                             <asp:RadioButton ID="rbIsAdministrative" runat="server" Checked='<%# Eval("IsAdministrative") %>'
                                 Enabled="false" />
@@ -123,12 +123,12 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle HorizontalAlign="Center" Width="10%" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width10PerImp"/>
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Is Active</div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" />
+                        <ItemStyle CssClass="TextAlignCenterImp" />
                         <ItemTemplate>
                             <asp:CheckBox ID="rbIsActive" runat="server" Checked='<%# Eval("IsActive") %>' Enabled="false" />
                         </ItemTemplate>
@@ -142,7 +142,7 @@
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
-                        <ItemStyle HorizontalAlign="Center" Width="5%" />
+                        <ItemStyle CssClass="TextAlignCenterImp Width5PercentImp"/>
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Work Type" Visible='<%# (bool)Eval("IsAllowedToEdit") %>'
@@ -152,12 +152,11 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                 </Columns>
-                <AlternatingRowStyle BackColor="#F9FAFF" />
+                <AlternatingRowStyle CssClass="alterrow"/>
             </asp:GridView>
-            <table width="80%" class="CompPerfTable" style="padding-top: 6px; background-color: white;
-                border-collapse: collapse;" border="0" cellspacing="0">
-                <tr style="background-color: #F9FAFF; height: 25px;">
-                    <td align="center" style="width: 6%">
+            <table class="CompPerfTable TableCompPer" cellspacing="0">
+                <tr class="alterrow Height25Px">
+                    <td class="TextAlignCenterImp Width6PercentImp">
                         <asp:ImageButton ID="ibtnInsertTimeType" runat="server" OnClick="ibtnInsertTimeType_Click"
                             ImageUrl="~/Images/add_16.png" OnClientClick="hideSuccessMessage();" ToolTip="Add Work Type" />
                         <asp:ImageButton ID="ibtnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
@@ -166,11 +165,11 @@
                         <asp:ImageButton ID="ibtnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="ibtnCancel_OnClick"
                             ToolTip="Cancel" Visible="false" />
                     </td>
-                    <td align="left" style="width: 45%">
-                        <asp:TextBox ID="tbNewTimeType" Style="width: 92%" Text="New work type" runat="server"
+                    <td class="textLeft Width45PercentImp">
+                        <asp:TextBox ID="tbNewTimeType" CssClass="Width92Per" Text="New work type" runat="server"
                             MaxLength="50" Visible="false" />
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarker" runat="server" TargetControlID="tbNewTimeType"
-                            WatermarkText="New work type" EnableViewState="false" WatermarkCssClass="watermarked" />
+                            WatermarkText="New work type" EnableViewState="false" WatermarkCssClass="watermarked Width92Per" />
                         <asp:RequiredFieldValidator ID="rvNewTimeType" runat="server" ControlToValidate="tbNewTimeType"
                             Display="Dynamic" ErrorMessage="Work Type Name is required" ToolTip="Work Type Name is required"
                             ValidationGroup="NewTimeType">*</asp:RequiredFieldValidator>
@@ -179,23 +178,23 @@
                             ValidChars=" ">
                         </AjaxControlToolkit:FilteredTextBoxExtender>
                     </td>
-                    <td align="center" style="width: 10%">
+                    <td class="TextAlignCenterImp Width10PerImp">
                         <asp:RadioButton ID="rbIsDefault" runat="server" Visible="false" GroupName="rbNewTimeType" />
                     </td>
-                    <td align="center" style="width: 10%">
+                    <td  class="TextAlignCenterImp Width10PerImp">
                         <asp:RadioButton ID="rbIsInternal" runat="server" Visible="false" GroupName="rbNewTimeType" />
                         <asp:CustomValidator ID="cvIsDefaultOrInternal" runat="server" Display="Dynamic"
                             ToolTip="WorkType should be Isdefalult Or IsInternal Or IsAdministrative." ErrorMessage="WorkType should be Isdefalult Or IsInternal Or IsAdministrative."
                             ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternal_Servervalidate"
                             Text="*" />
                     </td>
-                    <td align="center" style="width: 14%">
+                    <td class="TextAlignCenterImp Width14PercentImp">
                         <asp:RadioButton ID="rbIsAdministrative" runat="server" Visible="false" GroupName="rbNewTimeType" />
                     </td>
-                    <td align="center" style="width: 10%">
+                    <td  class="TextAlignCenterImp Width10PerImp">
                         <asp:CheckBox ID="rbIsActive" runat="server" Visible="false" />
                     </td>
-                    <td style="width: 5%">
+                    <td class="Width5PercentImp">
                         &nbsp;
                     </td>
                     <tr>
