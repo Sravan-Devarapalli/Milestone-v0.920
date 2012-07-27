@@ -253,7 +253,7 @@ Revenue Goals
                         </HeaderTemplate>
                         <ItemTemplate>
                             <div style="padding-right: 2px; width: 200px;">
-                                <%# Eval("Name")%></div>
+                                <%# Eval("HtmlEncodedName")%></div>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
