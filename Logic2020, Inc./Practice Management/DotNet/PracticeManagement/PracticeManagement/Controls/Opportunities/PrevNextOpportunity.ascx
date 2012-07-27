@@ -14,17 +14,17 @@
                     <tr>
     </HeaderTemplate>
     <ItemTemplate>
-        <td style="width: 100%">
+        <td class="Width100Per">
             <table>
                 <tr>
                     <td>
                         <asp:Panel ID="leftArrow" CssClass="scroll-left" runat="server" Visible='<%# Container.ItemIndex == 0 %>'>
                             <asp:HyperLink ID="link" NavigateUrl='<%# GetOpportinityDetailsLink((int) Eval("Id")) %>'
                                 onclick="return checkDirtyWithRedirect(this.href);" runat="server">
-                                <asp:Label ID="captionLeft" runat="server" Text='<%# Eval("Name") %>' />
+                                <asp:Label ID="captionLeft" runat="server" Text='<%# Eval("HtmlEncodedName") %>' />
                             </asp:HyperLink></asp:Panel>
                     </td>
-                    <td style="padding-right: 5px; padding-left: 5px">
+                    <td class="padRight5 padLeft5">
                         <uc:ProjectNameCellRounded ID="status" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25" Target="_blank"
                             ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((DataTransferObjects.Opportunity) Container.DataItem) %>'
                             ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((DataTransferObjects.Opportunity) Container.DataItem) %>' 
@@ -33,13 +33,13 @@
 
                     </td>
                     <td>
-                        <asp:Label ID="client" runat="server" Text='<%# Eval("Client.Name") %>' Style="white-space: nowrap" />
+                        <asp:Label ID="client" runat="server" Text='<%# Eval("Client.HtmlEncodedName") %>' CssClass="no-wrap" />
                     </td>
                     <td>
                         <asp:Panel ID="rigthArrow" CssClass="scroll-right" runat="server" Visible='<%# Container.ItemIndex > 0 %>'>
                             <asp:HyperLink ID="HyperLink1" NavigateUrl='<%# GetOpportinityDetailsLink((int) Eval("Id")) %>'
                                 onclick="return checkDirtyWithRedirect(this.href);" runat="server">
-                                <asp:Label ID="Label1" runat="server" Text='<%# Eval("Name") %>' Style="white-space: nowrap" />
+                                <asp:Label ID="Label1" runat="server" Text='<%# Eval("HtmlEncodedName") %>' CssClass="no-wrap" />
                             </asp:HyperLink></asp:Panel>
                     </td>
                 </tr>
@@ -50,45 +50,6 @@
         </tr> </table> </div> </div>
     </FooterTemplate>
 </asp:Repeater>
-<%--        <table class="WholeWidth">            
-            <tr>
-                <td style="width:50%">
-                    <table>            
-                        <tr> 
-                            <td>
-                                <div id="divLeft" class="scroll-left" runat="server">
-			                        <asp:HyperLink id="hlLeft" NavigateUrl="#" onclick="return checkDirtyWithRedirect(this.href);" runat="server" ><span id="captionLeft" runat="server"></span></asp:HyperLink>
-			                    </div>
-                            </td>                   
-                            <td style="padding-right:5px; padding-left:5px">
-                                <uc:ProjectNameCellRounded ID="crStatusLeft" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"/>
-                            </td>
-                            <td>
-                                <label id="lblLeft" runat="server"></label>
-                            </td>                
-                        </tr>
-                    </table>
-                </td>
-                <td style="width:50%;" align="right">
-                    <table>            
-                        <tr>                               
-                            <td style="padding-right:5px;">
-                                <uc:ProjectNameCellRounded ID="crStatusRight" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"/>                       
-                            </td>
-                            <td style="padding-right:5px;">
-                                <label id="lblRight" runat="server"></label>
-                            </td>
-                            <td>
-                                <div id="divRight" class="scroll-right" runat="server">	
-                                    <asp:HyperLink id="hlRight" NavigateUrl="#" onclick="return checkDirtyWithRedirect(this.href);" runat="server"><span id="captionRight" runat="server"></span></asp:HyperLink>	
-                                </div>
-                            </td>
-                        </tr>
-                    </table> 
-                </td>
-            </tr>
-        </table> 
---%>
 <asp:ObjectDataSource ID="odsPrevNext" runat="server" SelectMethod="GetOpportunitiesPrevNext"
     TypeName="PraticeManagement.Controls.DataHelper">
     <SelectParameters>
