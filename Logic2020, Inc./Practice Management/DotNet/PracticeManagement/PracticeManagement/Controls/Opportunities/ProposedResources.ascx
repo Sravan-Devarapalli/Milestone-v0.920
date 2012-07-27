@@ -133,28 +133,24 @@
     }    
 </script>
 <tr>
-    <td style="padding: 0px 0px 4px 4px; width: 100%; background-color: #e2ebff;">
-        <table width="100%">
-            <tr style=" padding-top: 2px;">
-                <td align="left" style="padding-left: 6px;padding-right: 6px; padding-top: 2px; width: 44%">
-                    <div class="cbfloatRight" style="height: 100px; width: 100%; overflow-y: scroll;
-                        border: 1px solid black; background: white; padding-left: 3px;">
+    <td class="TdResources">
+        <table class="Width100Per">
+            <tr class="PaddingTop2Px">
+                <td align="left" class="TdCblPotentialResources">
+                    <div class="cbfloatRight DivCblPotentialResources">
                         <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Height="100px"
                             Width="100%" BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
                             CellSpacing="0" CellPadding="0" OnDataBound="cblPotentialResources_DataBound">
                         </uc:MultipleSelectionCheckBoxList>
                     </div>
                 </td>
-                <td valign="middle" align="center" style="width: 12%">
+                <td valign="middle" align="center" class="Width12Per">
                     <input id="btnAdd" type="button" onclick="Add_Click();" value="Add =>" /><br />
                     <br />
                     <input id="btnRemove" type="button" onclick="Remove_Click();" value="<= Remove" />
                 </td>
-                <td align="left" style="padding-left: 6px;padding-right: 6px; padding-top: 2px; vertical-align: top;
-                    width: 44%">
-                    <div id="divProposedResources" runat="server" class="cbfloatRight" style="height: 100px;
-                        width: 100%; overflow-y: scroll; border: 1px solid black; background: white;
-                        padding-left: 3px;">
+                <td align="left" class="TdDivProposedResources">
+                    <div id="divProposedResources" runat="server" class="cbfloatRight DivProposedResources">
                         <asp:CheckBoxList ID="cblProposedResources" runat="server" AutoPostBack="false" BackColor="White"
                             Width="100%" DataTextField="Name" DataValueField="id" CellPadding="3" OnDataBound="cblProposedResources_DataBound">
                         </asp:CheckBoxList>
@@ -165,7 +161,7 @@
     </td>
 </tr>
 <tr>
-    <td style="width: 100%; padding: 1px 0px 4px 0px;">
+    <td class="HiddenFieldOpportunityIdPersonId">
         <asp:HiddenField ID="hdnOpportunityIdValue" runat="server" />
         <asp:HiddenField ID="hdnProposedPersonIdsList" runat="server" />
     </td>
