@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -57,6 +58,17 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Disaplay Encoded name of the practice
+        /// </summary>
+        public string HtmlEncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
+        }
 
         /// <summary>
         /// Practice manager
