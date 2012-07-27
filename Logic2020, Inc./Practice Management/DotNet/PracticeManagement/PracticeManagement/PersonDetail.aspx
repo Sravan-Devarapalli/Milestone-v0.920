@@ -392,7 +392,8 @@
                                         Status
                                     </td>
                                     <td>
-                                        <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width158px" onchange="setDirty();" AutoPostBack="true">
+                                        <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width158px" onchange="setDirty();"
+                                            AutoPostBack="true">
                                         </asp:DropDownList>
                                     </td>
                                     <td>
@@ -510,7 +511,7 @@
                                         Termination Date
                                     </td>
                                     <td class="Width158px">
-                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server"/>
+                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" />
                                     </td>
                                     <td>
                                         <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
@@ -618,7 +619,7 @@
                                             </HeaderTemplate>
                                             <ItemTemplate>
                                                 <li class="practices">
-                                                    <%# Eval("Name") %></li>
+                                                    <%# Eval("HtmlEncodedName") %></li>
                                             </ItemTemplate>
                                             <FooterTemplate>
                                                 </ul>
@@ -877,7 +878,7 @@
                                                         Practice Area</div>
                                                 </HeaderTemplate>
                                                 <ItemTemplate>
-                                                    <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("PracticeName")%>'></asp:Label></ItemTemplate>
+                                                    <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("HtmlEncodedPracticeName")%>'></asp:Label></ItemTemplate>
                                                 <EditItemTemplate>
                                                     <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
                                                         CssClass="Width85Percent">
@@ -1492,7 +1493,8 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeViewPersonTerminationPopup" runat="server"
                 TargetControlID="hdnOpenPopUP" CancelControlID="btnPersonTerminateCancel" BackgroundCssClass="modalBackground"
                 PopupControlID="pnlPersonTermination" DropShadow="false" />
-            <asp:Panel ID="pnlPersonTermination" runat="server" CssClass="popUp TerminationPopUpPersonDetailPage" Style="display: none;">
+            <asp:Panel ID="pnlPersonTermination" runat="server" CssClass="popUp TerminationPopUpPersonDetailPage"
+                Style="display: none;">
                 <table>
                     <tr>
                         <td class="textleft Padding6">
@@ -1500,16 +1502,15 @@
                         </td>
                         <td class="textleft Padding6 no-wrap">
                             :
-                            <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" BehaviorID="dtpPopUpTerminateDate"/>
+                            <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" BehaviorID="dtpPopUpTerminateDate" />
                             <asp:RequiredFieldValidator ID="rfvDtpPopUpTerminateDate" runat="server" ControlToValidate="dtpPopUpTerminateDate"
                                 Text="*" ErrorMessage="To terminate the person the Termination Date should be specified."
                                 ToolTip="To terminate the person the Termination Date should be specified." ValidationGroup="PersonTerminate"
                                 Display="Dynamic"></asp:RequiredFieldValidator>
                             <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="dtpPopUpTerminateDate"
-                                Display="Dynamic" Enabled="False" EnableTheming="True"
-                                ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'" Operator="DataTypeCheck"
-                                SetFocusOnError="True" ValidationGroup="PersonTerminate" ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'"
-                                Type="Date">*</asp:CompareValidator>
+                                Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'"
+                                Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="PersonTerminate"
+                                ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'" Type="Date">*</asp:CompareValidator>
                             <asp:CompareValidator ID="CompareValidator2" runat="server" ControlToValidate="dtpPopUpTerminateDate"
                                 ControlToCompare="dtpHireDate" Operator="GreaterThan" Type="Date" ErrorMessage="Termination date should be greater than Hire date."
                                 Display="Dynamic" Text="*" ValidationGroup="PersonTerminate" ToolTip="Termination date should be greater than Hire date."
@@ -1532,18 +1533,17 @@
                             </asp:DropDownList>
                             <asp:CustomValidator ID="custPopUpTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
                                 ToolTip="To terminate the person the Termination Reason should be specified."
-                                ValidationGroup="PersonTerminate" Text="*" Display="Dynamic"
-                                OnServerValidate="custPopUpTerminationReason_ServerValidate"></asp:CustomValidator>
+                                ValidationGroup="PersonTerminate" Text="*" Display="Dynamic" OnServerValidate="custPopUpTerminationReason_ServerValidate"></asp:CustomValidator>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" class="Padding6">
-                            <asp:ValidationSummary ID="valSummaryTerminationPopup" runat="server" ValidationGroup="PersonTerminate"/>
+                            <asp:ValidationSummary ID="valSummaryTerminationPopup" runat="server" ValidationGroup="PersonTerminate" />
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" class="alignCenter Padding6">
-                            <asp:Button ID="btnPersonTerminate" Text="OK" runat="server" OnClick="btnPersonTerminate_Click"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <asp:Button ID="btnPersonTerminate" Text="OK" runat="server" OnClick="btnPersonTerminate_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:Button ID="btnPersonTerminateCancel" Text="Cancel" runat="server" />
                         </td>
                     </tr>
