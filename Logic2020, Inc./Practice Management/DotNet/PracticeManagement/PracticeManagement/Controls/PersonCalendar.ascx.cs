@@ -576,10 +576,13 @@ namespace PraticeManagement.Controls
 
         protected void cvSubstituteDay_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (string.IsNullOrEmpty(dpSubstituteDay.TextValue) || !string.IsNullOrEmpty(ExceptionMessage))
-            {
-                args.IsValid = false;
-            }
+            //if (rfvSubstituteDay.IsValid)
+            //{
+                if (string.IsNullOrEmpty(dpSubstituteDay.TextValue) || !string.IsNullOrEmpty(ExceptionMessage))
+                {
+                    args.IsValid = false;
+                }
+            //}
         }
 
         protected void cvModifySubstituteday_ServerValidate(object source, ServerValidateEventArgs args)
@@ -647,20 +650,27 @@ namespace PraticeManagement.Controls
 
         protected void cvValidateSubDateWithHireDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            var substituteDate = dpSubstituteDay.DateValue.Date;
-            if (IsPersonNotHired(substituteDate))
-            {
-                args.IsValid = false;
-            }
+            //if (rfvSubstituteDay.IsValid)
+            //{
+                var substituteDate = dpSubstituteDay.DateValue.Date;
+                if (IsPersonNotHired(substituteDate))
+                {
+                    args.IsValid = false;
+                }
+            //}
+
         }
 
         protected void cvValidateSubDateWithTermDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            var substituteDate = dpSubstituteDay.DateValue.Date;
-            if (IsPersonTerminated(substituteDate))
-            {
-                args.IsValid = false;
-            }
+        //    if (rfvSubstituteDay.IsValid)
+        //    {
+                var substituteDate = dpSubstituteDay.DateValue.Date;
+                if (IsPersonTerminated(substituteDate))
+                {
+                    args.IsValid = false;
+                }
+            //}
         }
 
 
@@ -703,7 +713,7 @@ namespace PraticeManagement.Controls
                 return true;
             }
             return false;
-        }     
+        }
 
 
         protected void btnDeleteSubstituteDay_Click(object sender, EventArgs e)
@@ -855,7 +865,7 @@ namespace PraticeManagement.Controls
         internal void ShowHolidayAndSubStituteDay(DateTime date, string holiDayDescription)
         {
             hdnHolidayDate.Value = lblHolidayDate.Text = date.ToString(Constants.Formatting.EntryDateFormat);
-            lblHolidayName.Text = holiDayDescription;
+            lblHolidayName.Text = HttpUtility.HtmlEncode(holiDayDescription);
             dpSubstituteDay.TextValue = "";
             mpeHolidayAndSubStituteDay.Show();
             upnlValsummary.Update();
@@ -868,7 +878,7 @@ namespace PraticeManagement.Controls
             hdnSubstituteDate.Value = substituteDate.ToShortDateString();
             dpModifySubstituteday.DateValue = substituteDate;
             lblModifySubstituteday.Text = substituteDate.ToString(Constants.Formatting.EntryDateFormat);
-            lblHolidayDetails.Text = string.Format(HolidayDetails_Format, holidayDate.ToString(Constants.Formatting.EntryDateFormat), holidayDescription);
+            lblHolidayDetails.Text = string.Format(HolidayDetails_Format, holidayDate.ToString(Constants.Formatting.EntryDateFormat), HttpUtility.HtmlEncode(holidayDescription));
             btnModifySubstituteDayOk.Enabled = false;
 
             mpeModifySubstituteDay.Show();
