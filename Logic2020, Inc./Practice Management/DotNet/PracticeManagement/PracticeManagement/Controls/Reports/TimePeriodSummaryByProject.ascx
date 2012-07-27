@@ -204,9 +204,9 @@
                     <table class="TdLevelNoBorder PeronSummaryReport">
                         <tr>
                             <td class="FirstTd">
-                                <%# Eval("Project.Client.Name")%>
+                                <%# Eval("Project.Client.HtmlEncodedName")%>
                                 >
-                                <%# Eval("Project.Group.Name")%>
+                                <%# Eval("Project.Group.HtmlEncodedName")%>
                             </td>
                             <td rowspan="2" class="ThirdTd">
                                 <img id="imgZoomIn" runat="server" src="~/Images/Zoom-In-icon.png" style="display: none;" />
@@ -215,9 +215,9 @@
                         <tr>
                             <td class="SecondTd">
                                 <asp:LinkButton ID="lnkProject" AccountId='<%# Eval("Project.Client.Id")%>' GroupId='<%# Eval("Project.Group.Id")%>'
-                                    ClientName=' <%# Eval("Project.Client.Name")%>' GroupName=' <%# Eval("Project.Group.Name")%>'
-                                    ProjectNumber='<%# Eval("Project.ProjectNumber")%>' runat="server" ToolTip='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.Name"))%>'
-                                    OnClick="lnkProject_OnClick" Text='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.Name"))%>'></asp:LinkButton>
+                                    ClientName=' <%# Eval("Project.Client.HtmlEncodedName")%>' GroupName=' <%# Eval("Project.Group.HtmlEncodedName")%>'
+                                    ProjectNumber='<%# Eval("Project.ProjectNumber")%>' runat="server" ToolTip='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.HtmlEncodedName"))%>'
+                                    OnClick="lnkProject_OnClick" Text='<%# GetProjectName((string)Eval("Project.ProjectNumber"),(string)Eval("Project.HtmlEncodedName"))%>'></asp:LinkButton>
                             </td>
                         </tr>
                     </table>
