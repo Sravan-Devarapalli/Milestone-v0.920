@@ -36,7 +36,7 @@
                 <ItemStyle CssClass="Left no-wrap" />
                 <ItemTemplate>
                     <asp:Label ID="lblPractice" runat="server" CssClass="WS-Normal"
-                        Text='<%# Bind("Name") %>' />
+                        Text='<%# Bind("HtmlEncodedName") %>' />
                 </ItemTemplate>
                 <EditItemTemplate>
                     <asp:TextBox ID="tbEditPractice" runat="server" Text='<%# Bind("Name") %>' CssClass="WholeWidth"
