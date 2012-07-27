@@ -2,8 +2,6 @@
     Inherits="PraticeManagement.Controls.Generic.OpportunityList" %>
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Import Namespace="System.Data" %>
-<%@ Register Src="~/Controls/ProjectNameCellRounded.ascx" TagName="ProjectNameCellRounded"
-    TagPrefix="uc" %>
 <script type="text/javascript">
 
     function setHintPosition(img, displayPnl) {
@@ -131,7 +129,7 @@
                                                                     </td>
                                                                     <td class="Padding0">
                                                                         <asp:Label ID="lblDescription" runat="server" CssClass="OpportunityPriorityDescription"
-                                                                            Text='<%# Eval("Description") %>'></asp:Label>
+                                                                            Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -213,11 +211,11 @@
         <ItemTemplate>
             <tr>
                 <td>
-                    <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            Target="_blank" ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>'
-                            ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
-                            ButtonProjectNameHref="<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>" />
+                    <div class="cell-pad">                       
+                        <asp:HyperLink ID="hlStatus" runat="server" CssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
+                            Description='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem)%>'
+                            onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);">                           
+                        </asp:HyperLink>
                     </div>
                 </td>
                 <td>
@@ -274,10 +272,10 @@
             <tr class="alterrow">
                 <td>
                     <div class="cell-pad">
-                        <uc:ProjectNameCellRounded ID="crStatus" runat="server" ToolTipOffsetX="5" ToolTipOffsetY="-25"
-                            Target="_blank" ButtonProjectNameToolTip='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem) %>'
-                            ButtonCssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
-                            ButtonProjectNameHref="<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>" />
+                        <asp:HyperLink ID="hlStatus" runat="server" CssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
+                            Description='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem)%>'
+                            onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);">                           
+                        </asp:HyperLink>
                     </div>
                 </td>
                 <td>
