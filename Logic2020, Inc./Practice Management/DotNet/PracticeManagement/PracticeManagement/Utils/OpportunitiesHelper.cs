@@ -78,7 +78,7 @@ namespace PraticeManagement.Utils
         private const string WonKey = "Won";
         private const string ExcelDateFormat = "mso-number-format";
         private const string ExcelDateFormatStyle = "mm-dd-yyyy";
-        private const string BoldFormat = "&nbsp;<span style=\" font-weight:bold;\"> {0} </span>";
+        private const string BoldFormat = "&nbsp;<span class=\"fontBold\"> {0} </span>";
 
         private const int days = 7;
 
@@ -123,10 +123,8 @@ namespace PraticeManagement.Utils
             TableCell col4 = new TableCell();
             TableCell col5 = new TableCell();
 
-            col1.VerticalAlign = col2.VerticalAlign = col3.VerticalAlign = col4.VerticalAlign = col5.VerticalAlign = VerticalAlign.Top;
-
-            col1.Style["padding-left"] = "5px";
-            col1.Style["padding-right"] = col2.Style["padding-right"] = col3.Style["padding-right"] = col4.Style["padding-right"] = col5.Style["padding-right"] = "10px";
+            col1.CssClass = "padLeft5 PaddingRight10Px vTop";
+            col2.CssClass = col3.CssClass = col4.CssClass = col5.CssClass = "PaddingRight10Px vTop";
 
             var col1data = ExportSummaryColumn1(opportunityList, totalOpportunities, uniqueClientsCount);
 
@@ -148,8 +146,8 @@ namespace PraticeManagement.Utils
             tableRow.Controls.Add(col3);
             tableRow.Controls.Add(col4);
             tableRow.Controls.Add(col5);
-            summaryTable.Controls.Add(tableRow);
-            summaryTable.Width = Unit.Percentage(100);
+            summaryTable.Controls.Add(tableRow);         
+            summaryTable.CssClass = "WholeWidthImp";
 
             //return summaryTable;
             return summaryTable;
@@ -198,8 +196,8 @@ namespace PraticeManagement.Utils
         private static Table ExportSummaryColumn5(Opportunity[] opportunityList)
         {
             var data1 = AddTotalEstimateRevenueByPractice(opportunityList);
-            var table = ExportSummaryColumnWithMultipleRows(data1);
-            table.Width = Unit.Percentage(100);
+            var table = ExportSummaryColumnWithMultipleRows(data1);          
+            table.CssClass = "WholeWidthImp";
             return table;
         }
 
@@ -224,8 +222,7 @@ namespace PraticeManagement.Utils
             var headerRow = new TableRow();
             var td = new TableCell();
             td.Text = headerText;
-            td.Font.Bold = true;
-            td.HorizontalAlign = HorizontalAlign.Left;
+            td.CssClass = "fontBold textLeft";           
             if (needToOccupyTwoCells)
             {
                 td.ColumnSpan = 2;
@@ -240,8 +237,8 @@ namespace PraticeManagement.Utils
         {
             var dataRow = new TableRow();
             var dataCell = new TableCell();
-            dataCell.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
-            dataCell.Font.Bold = false;
+            //dataCell.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;            
+            dataCell.CssClass = "textRightImp fontNormal";
 
             if (key2 != null)
             {
@@ -277,9 +274,10 @@ namespace PraticeManagement.Utils
         private static void AddNameCell(string name, TableRow row, bool needEqualToSymbol = true)
         {
             var nameCell = new TableCell();
-            nameCell.HorizontalAlign = HorizontalAlign.Right;
-            nameCell.VerticalAlign = VerticalAlign.Top;
-            nameCell.Font.Bold = false;
+            nameCell.CssClass = "textRightImp vTop fontNormal";
+            //nameCell.HorizontalAlign = HorizontalAlign.Right;
+            //nameCell.VerticalAlign = VerticalAlign.Top;
+            //nameCell.Font.Bold = false;
             //nameCell.Wrap = true;
             //nameCell.Style.Add("white-space", "normal !important;");
             //nameCell.Style.Add("word-wrap", "break-word");
@@ -428,10 +426,10 @@ namespace PraticeManagement.Utils
 
             TableRow dataRow = new TableRow();
             TableCell dataCell = new TableCell();
-            dataCell.HorizontalAlign = HorizontalAlign.Justify;
+            dataCell.CssClass = "TextAlignJustifyImp";
 
             Table dataTable = new Table();
-            dataTable.Width = Unit.Percentage(60);
+            dataTable.CssClass = "Width60PerImp";
             var priorityTrendList = PriorityTrendList;
             AddDataRowByKeyValuePair(priorityTrendList, UpKey, dataTable);
             AddDataRowByKeyValuePair(priorityTrendList, DownKey, dataTable);
@@ -455,7 +453,7 @@ namespace PraticeManagement.Utils
             TableCell dataCell = new TableCell();
 
             Table dataTable = new Table();
-            dataTable.Width = Unit.Percentage(50);
+            dataTable.CssClass = "Width50PerImp";
             var list = StatusChangesList;
             AddDataRowByKeyValuePair(list, ActiveKey, dataTable);
             AddDataRowByKeyValuePair(list, InactiveKey, dataTable, LostKey);//Note:- Showing Lost and Inactive count in one cell as per the requirement
@@ -481,11 +479,7 @@ namespace PraticeManagement.Utils
             var headerRow = new TableRow();
             TableCell headerCell = new TableCell();
             headerCell.Text = "Opportunity Aging";
-            headerCell.Font.Bold = true;
-            headerCell.HorizontalAlign = HorizontalAlign.Left;
-            headerCell.Style.Add("padding-left", "0px !important");
-
-
+            headerCell.CssClass = "fontBold textLeft PaddingLeft0Px"; 
 
             TableRow age1 = new TableRow();
             TableRow age2 = new TableRow();
@@ -493,18 +487,15 @@ namespace PraticeManagement.Utils
 
             TableCell tblCell1 = new TableCell();
             tblCell1.Text = "00-30 Days =";
-            tblCell1.Font.Bold = false;
-            tblCell1.HorizontalAlign = HorizontalAlign.Right;
-
+            tblCell1.CssClass = "fontNormal textRightImp";
+            
             TableCell tblCell2 = new TableCell();
             tblCell2.Text = "31-60 Days =";
-            tblCell2.Font.Bold = false;
-            tblCell2.HorizontalAlign = HorizontalAlign.Right;
+            tblCell2.CssClass = "fontNormal textRightImp";
 
             TableCell tblCell3 = new TableCell();
             tblCell3.Text = "61-120+ Days =";
-            tblCell3.Font.Bold = false;
-            tblCell3.HorizontalAlign = HorizontalAlign.Right;
+            tblCell3.CssClass = "fontNormal textRightImp";
 
             headerRow.Controls.Add(headerCell);
 
@@ -515,8 +506,7 @@ namespace PraticeManagement.Utils
             foreach (var priorityName in priorities)
             {
                 TableCell headerLabel = new TableCell();
-                headerLabel.Font.Bold = true;
-                headerLabel.HorizontalAlign = HorizontalAlign.Center;
+                headerLabel.CssClass = "fontBold TextAlignCenterImp";
                 headerLabel.Text = priorityName;
                 headerRow.Controls.Add(headerLabel);
             }
@@ -572,8 +562,7 @@ namespace PraticeManagement.Utils
                 {
                     td.Text = ite.Select(a => a.priorityCount).First().ToString("#00");
                 }
-                td.HorizontalAlign = HorizontalAlign.Center;
-                td.Font.Bold = false;
+                td.CssClass = "TextAlignCenterImp fontNormal";
                 tr.Controls.Add(td);
             }
 
@@ -585,13 +574,10 @@ namespace PraticeManagement.Utils
             var headerRow = new TableRow();
             TableCell headerCell = new TableCell();
             headerCell.Text = "Opportunity Aging";
-            headerCell.Font.Bold = true;
-            headerCell.HorizontalAlign = HorizontalAlign.Left;
+            headerCell.CssClass = "fontBold textLeft";
 
             TableCell headerLabel = new TableCell();
-            headerLabel.Font.Bold = true;
-
-            headerLabel.HorizontalAlign = HorizontalAlign.Left;
+            headerLabel.CssClass = "fontBold textLeft";            
 
             TableRow age1 = new TableRow();
             TableRow age2 = new TableRow();
@@ -599,18 +585,15 @@ namespace PraticeManagement.Utils
 
             TableCell tblCell1 = new TableCell();
             tblCell1.Text = "&nbsp; 00-30 Days =";
-            tblCell1.Font.Bold = false;
-            tblCell1.HorizontalAlign = HorizontalAlign.Justify;
+            tblCell1.CssClass = "fontNormal TextAlignJustifyImp";
 
             TableCell tblCell2 = new TableCell();
             tblCell2.Text = "&nbsp; 31-60 Days =";
-            tblCell2.Font.Bold = false;
-            tblCell2.HorizontalAlign = HorizontalAlign.Justify;
+            tblCell2.CssClass = "fontNormal TextAlignJustifyImp";
 
             TableCell tblCell3 = new TableCell();
             tblCell3.Text = "&nbsp; 61-120+ Days =";
-            tblCell3.Font.Bold = false;
-            tblCell3.HorizontalAlign = HorizontalAlign.Justify;
+            tblCell3.CssClass = "fontNormal TextAlignJustifyImp";
 
             var priorityList = OpportunityPriorityHelper.GetOpportunityPriorities(true).OrderBy(p => p.SortOrder);
             var priorities = priorityList.Select(p => p.Priority).ToArray();
@@ -622,13 +605,13 @@ namespace PraticeManagement.Utils
 
             TableCell age1Count = new TableCell();
             age1Count.Text = FillOpportunityPriorityAgeCellForExport(priorityOrderList, null, 30, priorities);
-            age1Count.Font.Bold = false;
+            age1Count.CssClass = "fontNormal";
             TableCell age2Count = new TableCell();
             age2Count.Text = FillOpportunityPriorityAgeCellForExport(priorityOrderList, 31, 60, priorities);
-            age2Count.Font.Bold = false;
+            age2Count.CssClass = "fontNormal";
             TableCell age3Count = new TableCell();
             age3Count.Text = FillOpportunityPriorityAgeCellForExport(priorityOrderList, 61, null, priorities);
-            age3Count.Font.Bold = false;
+            age3Count.CssClass = "fontNormal";
 
             headerRow.Controls.Add(headerCell);
             headerRow.Controls.Add(headerLabel);
@@ -695,11 +678,10 @@ namespace PraticeManagement.Utils
         private static void AddDataRowWithTwoCells(string value, Table table)
         {
             TableRow dataRow = new TableRow();
-            TableCell cell = new TableCell();
-            cell.HorizontalAlign = HorizontalAlign.Left;
+            TableCell cell = new TableCell();           
             cell.Text = string.Format(ExcelSummaryValuesFormat, value);
             cell.ColumnSpan = 2;
-            cell.Font.Bold = false;
+            cell.CssClass = "textLeft fontNormal";
             dataRow.Controls.Add(cell);
 
             table.Controls.Add(dataRow);
@@ -714,24 +696,21 @@ namespace PraticeManagement.Utils
             {
                 TableCell cell1 = new TableCell();
                 cell1.Text = "&nbsp;=&nbsp;";
-                cell1.VerticalAlign = VerticalAlign.Middle;
+                cell1.CssClass = "vMiddle";
                 dataRow.Controls.Add(cell1);
             }
 
-            TableCell cell = new TableCell();
-            cell.HorizontalAlign = HorizontalAlign.Right;
-            cell.VerticalAlign = VerticalAlign.Middle;
+            TableCell cell = new TableCell();           
             cell.Text = value2;
-            cell.Font.Bold = false;
+            cell.CssClass = "textRightImp vMiddle fontNormal";
             dataRow.Controls.Add(cell);
 
             if (!string.IsNullOrEmpty(value3))
             {
                 TableCell cell2 = new TableCell();
-                cell2.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
-                cell2.Font.Bold = false;
+                //cell2.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;               
                 cell2.Text = value3;
-                cell2.VerticalAlign = VerticalAlign.Middle;
+                cell2.CssClass = "vMiddle fontNormal textRightImp";
 
                 dataRow.Controls.Add(cell2);
             }
@@ -739,10 +718,9 @@ namespace PraticeManagement.Utils
             if (!string.IsNullOrEmpty(value4))
             {
                 TableCell cell3 = new TableCell();
-                cell3.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
-                cell3.Font.Bold = false;
+                //cell3.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;               
                 cell3.Text = value4;
-                cell3.VerticalAlign = VerticalAlign.Middle;
+                cell3.CssClass = "vMiddle fontNormal textRightImp";
 
                 dataRow.Controls.Add(cell3);
             }
@@ -788,7 +766,7 @@ namespace PraticeManagement.Utils
         private static Table AddTotalEstimateRevenueByPractice(Opportunity[] opportunityList)
         {
             Table table = new Table();
-            table.Width = Unit.Percentage(100);
+            table.CssClass = "WholeWidthImp";
             AddHeaderRow("Total Estimated Revenue by Practice", table);
 
             var list = (from o in opportunityList
@@ -817,14 +795,13 @@ namespace PraticeManagement.Utils
             var cell1 = new TableCell();
             var cell2 = new TableCell();
             cell1.ColumnSpan = 2;
-            cell1.Font.Bold = false;
+            cell1.CssClass = "fontNormal";
 
             cell1.Text = name;
             dataRow.Controls.Add(cell1);
 
             cell2.Text = value;
-            cell2.Font.Bold = false;
-            cell2.HorizontalAlign = HorizontalAlign.Right;
+            cell2.CssClass = "fontNormal textRightImp";
             dataRow.Controls.Add(cell2);
             table.Controls.Add(dataRow);
         }
