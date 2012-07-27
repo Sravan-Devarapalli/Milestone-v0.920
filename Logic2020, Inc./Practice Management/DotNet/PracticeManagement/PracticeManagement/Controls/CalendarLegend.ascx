@@ -12,82 +12,52 @@
             ToolTip="Expand Legend" />
     </div>
     <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
-        <table>
-            <%--<tr>
-                <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
-                    <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
-                        <tr>
-                            <td style="background-color: white; border: 1px solid black;">
-                                <div class="DayOn">
-                                    &nbsp;</div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td style="margin-top: 5px; padding-top: 5px;">
-                    - This is a company work day, and the person is scheduled to work it.
-                </td>
-            </tr>--%>
+        <table>           
             <tr>
-                <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
-                    <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
+                <td class="TdCompanyDayOn">
+                    <table class="InnerTableCompanyDay" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td style="background-color: white; border: 1px solid black;">
+                            <td class="InnerTdCompanyDayOn">
                                 <div class="CompanyDayOn">
                                     &nbsp;</div>
                             </td>
                         </tr>
                     </table>
                 </td>
-                <td style="margin-top: 5px; padding-top: 5px;">
+                <td class="DayDescription">
                     - This is a company work day, and the person is taking paid or otherwise approved time off.
                 </td>
             </tr>
             <tr>
-                <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
-                    <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
+                <td class="TdCompanyDayOn">
+                    <table class="InnerTableCompanyDay" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td style="background-color: white; border: 1px solid black;">
+                            <td class="InnerTdCompanyDayOn">
                                 <div class="DayOff">
                                     &nbsp;</div>
                             </td>
                         </tr>
                     </table>
                 </td>
-                <td style="margin-top: 5px; padding-top: 5px;">
+                <td class="DayDescription">
                     - This is a company holiday, and the person is not scheduled to work it.
                 </td>
             </tr>
             <tr>
-                <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
-                    <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
+                <td class="TdCompanyDayOn">
+                    <table class="InnerTableCompanyDay" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td style="background-color: white; border: 1px solid black;">
+                            <td class="InnerTdCompanyDayOn">
                                 <div class="CompanyDayOff">
                                     &nbsp;</div>
                             </td>
                         </tr>
                     </table>
                 </td>
-                <td style="margin-top: 5px; padding-top: 5px;">
+                <td class="DayDescription">
                     - This is a company holiday, but the person is scheduled to work anyway.
                 </td>
-            </tr>
-            <%--<tr>
-                <td style="margin-top: 5px; padding-top: 5px; padding-right: 5px;">
-                    <table bgcolor="black" border="1" cellpadding="0" cellspacing="0" width="20">
-                        <tr>
-                            <td style="background-color: white; border: 1px solid black;">
-                                <div class="WeekEndDayOff">
-                                    &nbsp;</div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td style="margin-top: 5px; padding-top: 5px;">
-                    - This is a Weekend day.
-                </td>
-            </tr>--%>
+            </tr>           
         </table>
     </asp:Panel>
 </div>
