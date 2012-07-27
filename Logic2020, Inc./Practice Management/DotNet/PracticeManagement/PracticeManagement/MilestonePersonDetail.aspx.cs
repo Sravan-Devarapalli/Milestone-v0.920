@@ -1155,7 +1155,7 @@ namespace PraticeManagement
                 pdProjectInfo.Populate(milestone.Project);
             }
 
-            lblMilestoneName.Text = milestone.Description;
+            lblMilestoneName.Text = milestone.HtmlEncodedDescription;
             lblMilestoneStartDate.Text = milestone.StartDate.ToString("MM/dd/yyyy");
             lblMilestoneEndDate.Text = milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy");
 
