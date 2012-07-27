@@ -31,13 +31,13 @@ namespace PraticeManagement.Controls.Projects {
         protected global::AjaxControlToolkit.ModalPopupExtender mpeAddTimeType;
         
         /// <summary>
-        /// cvTimetype control.
+        /// CustomValidator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvTimetype;
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator1;
         
         /// <summary>
         /// txtTimeTypesNotAssignedToProject control.
@@ -211,13 +211,13 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.Panel pnlAddNewTimeType;
         
         /// <summary>
-        /// btnCloseWorkType control.
+        /// Button1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCloseWorkType;
+        protected global::System.Web.UI.WebControls.Button Button1;
         
         /// <summary>
         /// txtNewTimeType control.
