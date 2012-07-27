@@ -149,10 +149,10 @@ namespace PraticeManagement.Controls.Reports
                 nonBillablePercent = (100 - billablePercent);
             }
 
-            ltrlAccount.Text = project.Client.Name;
-            ltrlBusinessUnit.Text = project.Group.Name;
+            ltrlAccount.Text = project.Client.HtmlEncodedName;
+            ltrlBusinessUnit.Text = project.Group.HtmlEncodedName;
             ltrlProjectedHours.Text = projectedHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlProjectName.Text = project.Name;
+            ltrlProjectName.Text = project.HtmlEncodedName;
             ltrlProjectNumber.Text = project.ProjectNumber;
             ltrlProjectStatusAndBillingType.Text = string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType;
             ltrlProjectRange.Text = HostingPage.ProjectRange;
