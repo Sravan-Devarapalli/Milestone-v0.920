@@ -433,7 +433,7 @@
                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value) + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value)%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -476,7 +476,7 @@
                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value) + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " +HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value)%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -569,7 +569,7 @@
                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
+                                                <%#HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value) + " > " + HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value) %>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -612,7 +612,7 @@
                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value %>
+                                                <%#HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.AccountNameXname)).Value) + " > " + HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value) %>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -704,7 +704,7 @@
                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value) + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value)%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -747,7 +747,7 @@
                                                 <img alt="Note ?" id="imgNoteRequiredOrOptional" title="Notes Optional" src="Images/notes_optional.png" />
                                             </td>
                                             <td class="time-entry-bar-time-typesNew ProjectAccountName">
-                                                <%#((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value%>
+                                                <%#HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.BusinessUnitNameXname)).Value) + " > " + ((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNumberXname)).Value + " - " + HttpUtility.HtmlEncode(((System.Xml.Linq.XElement)Container.DataItem).Attribute(System.Xml.Linq.XName.Get(PraticeManagement.TimeEntry_New.ProjectNameXname)).Value)%>
                                             </td>
                                             <asp:Repeater ID="repAccountProjectSection" runat="server">
                                                 <ItemTemplate>
@@ -1241,7 +1241,7 @@
                             </td>
                         </tr>
                         <tr>
-                             <td class="Padding8" align="center">
+                            <td class="Padding8" align="center">
                                 <asp:Button ID="btnOkPersonInactive" runat="server" Text="OK" OnClientClick="return btnClose_OnClientClick('mpePersonInactiveAlert');" />
                             </td>
                         </tr>
