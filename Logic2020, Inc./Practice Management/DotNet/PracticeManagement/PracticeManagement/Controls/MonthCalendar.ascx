@@ -71,41 +71,42 @@
         <asp:HiddenField ID="hdnDate" runat="server" />
         <asp:HiddenField ID="hdnRecurringHolidayId" runat="server" />
         <asp:HiddenField ID="hdnRecurringHolidayDate" runat="server" />
-        <asp:Button ID="btnSaveDay" runat="server" OnClick="btnDayOK_OnClick" Style="display: none;" />
+        <asp:Button ID="btnSaveDay" runat="server" OnClick="btnDayOK_OnClick" CssClass="displayNone" />
         <AjaxControlToolkit:ModalPopupExtender ID="mpeHoliday" runat="server" TargetControlID="hdnDummyFieldForModalPopup"
             CancelControlID="btnDayCancel" OkControlID="hdnDummyFieldForModalPopup" BackgroundCssClass="modalBackground"
             PopupControlID="pnlHolidayDetails" BehaviorID="bhCompanyHoliday" DropShadow="false" />
-        <asp:Panel ID="pnlHolidayDetails" runat="server" BackColor="White" BorderColor="Black"
-            Style="padding-top: 20px; padding-left: 10px; padding-right: 10px; min-width:250px; max-width:700px; min-height:60px;
-            display: none;" BorderWidth="2px">
+        <asp:Panel ID="pnlHolidayDetails" runat="server" CssClass="PanelPerson PanelHolidayDetails"
+            Style="display: none;">
             <table class="WholeWidth">
                 <tr>
-                    <td colspan="2" align="left" style="font-weight: bold;">
+                    <td colspan="2" class="fontBold TextAlignLeft">
                         Date :
                         <label id="lblDate" runat="server" text="">
                         </label>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align:left;">
+                    <td colspan="2" class="TextAlignLeft">
                         <asp:TextBox ID="txtHolidayDescription" runat="server" placeholder="Enter Holiday Description."
-                            TextMode="MultiLine" Height="50px" Style="resize: none; width: 300px; overflow: auto; margin-left:4px;"></asp:TextBox>
-                        <asp:RadioButton ID="rbPTO" runat="server" Text="PTO" GroupName="PTO" onclick=""/>
+                            TextMode="MultiLine" CssClass="TxtHolidayDescription Height50pxImp"></asp:TextBox>
+                        <asp:RadioButton ID="rbPTO" runat="server" Text="PTO" GroupName="PTO" onclick="" />
                         <p>
-                        <asp:Label ID="lblActualHours" runat="server" Text="Hours : " style="padding-left:20px;"></asp:Label>
-                        <asp:TextBox ID="txtActualHours" runat="server" Width="50px" Style="resize: none;"></asp:TextBox></p>
+                            <asp:Label ID="lblActualHours" runat="server" Text="Hours : " CssClass="padLeft20"></asp:Label>
+                            <asp:TextBox ID="txtActualHours" runat="server" CssClass="ResizeNone Width50PxImp"></asp:TextBox></p>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: left;">
+                    <td colspan="2" class="textLeft">
                         <asp:CheckBox ID="chkMakeRecurringHoliday" runat="server" Text="Make Recurring" />
-                        <asp:RadioButton ID="rbFloatingHoliday" runat="server" Text="Floating Holiday" GroupName="PTO" onclick=""/>
+                        <asp:RadioButton ID="rbFloatingHoliday" runat="server" Text="Floating Holiday" GroupName="PTO"
+                            onclick="" />
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="padding: 10px 0px 10px 0px;">
-                        <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID="" PersonId="" Date=""
-                            SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId="" TxtActualHoursID="" RbFloatingID="" OnClientClick="ClickSaveDay(this, 'true'); return false;" />
+                    <td class="Padding10px0px10px0px TextAlignCenter">
+                        <asp:Button ID="btnDayOK" runat="server" Text="OK" HiddenDayOffID="" HiddenDateID=""
+                            PersonId="" Date="" SaveDayButtonID="" TextID="" ErrorMessageID="" ExtendarId=""
+                            TxtActualHoursID="" RbFloatingID="" OnClientClick="ClickSaveDay(this, 'true'); return false;" />
                         &nbsp; &nbsp;
                         <asp:Button ID="btnDayDelete" runat="server" Text="Delete" OnClick="btnDayOK_OnClick" />
                         &nbsp; &nbsp;
@@ -113,14 +114,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center">
+                    <td colspan="2" class="TextAlignCenter">
                         <asp:Label ID="lblValidationMessage" runat="server" Text="* Please Enter Holiday Description."
-                            ForeColor="Red" Style="display: none;"></asp:Label>
+                            ForeColor="Red" CssClass="displayNone"></asp:Label>
                     </td>
                 </tr>
             </table>
         </asp:Panel>
     </ContentTemplate>
 </asp:UpdatePanel>
-
 
