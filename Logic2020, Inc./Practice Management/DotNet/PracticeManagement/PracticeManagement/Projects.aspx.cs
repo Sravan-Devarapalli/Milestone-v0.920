@@ -822,7 +822,7 @@ namespace PraticeManagement
         private void FillProjectNameCell(HtmlTableRow row, Project project)
         {
             HtmlAnchor anchor = new HtmlAnchor();
-            anchor.InnerText = HttpUtility.HtmlEncode(project.Name);
+            anchor.InnerText = project.Name;
             anchor.HRef = GetRedirectUrl(project.Id.Value, Constants.ApplicationPages.ProjectDetail);
             anchor.Attributes["Description"] = PrepareToolTipView(project);
             anchor.Attributes["onmouseout"] = "HidePanel();";
@@ -845,7 +845,7 @@ namespace PraticeManagement
             // Client name cell content
             var btnClient = e.FindControl(ButtonClientNameId) as HyperLink;
 
-            btnClient.Text = HttpUtility.HtmlEncode(project.Client.Name);
+            btnClient.Text = project.Client.HtmlEncodedName;
             btnClient.NavigateUrl = GetRedirectUrl(project.Client.Id.Value, Constants.ApplicationPages.ClientDetails);
 
             row.Cells[ClientNameColumnIndex].Controls.Add(btnClient);
@@ -1525,7 +1525,7 @@ namespace PraticeManagement
                                 {
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                    Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
+                                    Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
@@ -1764,7 +1764,7 @@ namespace PraticeManagement
                                 {
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                    Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
+                                    Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
