@@ -15,6 +15,7 @@ using System.Collections;
 using PraticeManagement.Controls.Opportunities;
 using AjaxControlToolkit;
 using System.Web.UI.HtmlControls;
+using System.Web;
 
 namespace PraticeManagement
 {
@@ -379,11 +380,11 @@ namespace PraticeManagement
         {
             if (opportunityPersonTypeId == (int)OpportunityPersonType.NormalPerson)
             {
-                return personLastFirstName;
+                return HttpUtility.HtmlEncode(personLastFirstName);
             }
             else
             {
-                return "<strike>" + personLastFirstName + "</strike>";
+                return "<strike>" + HttpUtility.HtmlEncode(personLastFirstName) + "</strike>";
             }
 
         }
@@ -1155,7 +1156,7 @@ namespace PraticeManagement
         {
             txtEstRevenue.Text = opportunity.EstimatedRevenue != null ? opportunity.EstimatedRevenue.Value.ToString("###,###,###,###,##0") : string.Empty;
             txtOpportunityName.Text = opportunity.Name;
-            lblOpportunityName.Text = opportunity.Name;
+            lblOpportunityName.Text = opportunity.HtmlEncodedName;
             lblOpportunityNumber.Text = opportunity.OpportunityNumber;
             if (opportunity.Project != null)
             {
