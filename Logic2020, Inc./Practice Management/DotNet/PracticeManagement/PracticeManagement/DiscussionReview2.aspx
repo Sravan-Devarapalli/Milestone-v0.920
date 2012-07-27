@@ -14,21 +14,7 @@
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
     <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet" type="text/css" />
 </asp:Content>
-<asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <style type="text/css">
-        .ConfirmBoxClassError
-        {
-            min-height: 60px;
-            min-width: 200px;
-            max-width: 600px;
-            max-height: 500px;
-        }
-        .strawman tr td
-        {
-            padding: 4px 0px 4px 0px;
-        }
-    </style>
-   
+<asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">   
     <uc2:OpportunityList ID="opportunities" runat="server" FilterMode="GenericFilter"
         AllowAutoRedirectToDetails="true" OnFilterOptionsChanged="ofOpportunityList_OnFilterOptionsChanged" />
 </asp:Content>
