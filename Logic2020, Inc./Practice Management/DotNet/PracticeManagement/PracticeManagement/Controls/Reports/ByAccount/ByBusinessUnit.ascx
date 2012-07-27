@@ -70,7 +70,7 @@
         <ItemTemplate>
             <tr class="ReportItemTemplate">
                 <td class="padLeft5 textLeft">
-                    <%# Eval("BusinessUnit.Name") %>
+                    <%# Eval("BusinessUnit.HtmlEncodedName")%>
                     (<%# ((Boolean)Eval("BusinessUnit.IsActive")) ? "Active" : "Inactive"%>)
                 </td>
                 <td>
