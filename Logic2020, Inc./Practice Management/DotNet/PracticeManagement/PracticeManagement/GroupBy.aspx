@@ -1,6 +1,5 @@
-﻿<%@ Page Title="Projects Group by | Practice Management" Language="C#"
-    MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true" CodeBehind="GroupBy.aspx.cs"
-    Inherits="PraticeManagement.GroupByDirector" %>
+﻿<%@ Page Title="Projects Group by | Practice Management" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+    AutoEventWireup="true" CodeBehind="GroupBy.aspx.cs" Inherits="PraticeManagement.GroupByDirector" %>
 
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
@@ -174,25 +173,16 @@
             var updGroupByPractice = $get("<%=updGroupByPractice.ClientID %>");
             var div = updGroupByPractice.children[updGroupByPractice.children.length - 1];
             if (div != null) {
-                div.style.maxHeight = div.scrollHeight + 320+ "px";
+                div.style.maxHeight = div.scrollHeight + 320 + "px";
             }
         }
     </script>
-    <style type="text/css">
-        .ShowRepCheckBox input
-        {
-            float: left;
-            width: 15px;
-            text-align: left;
-            margin-right: 0px;
-        }
-    </style>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
-    <div class="filters" style="margin-bottom: 10px;">
+    <div class="filters Margin-Bottom10Px">
         <div class="buttons-block">
             <table class="WholeWidth">
                 <tr>
-                    <td align="left" style="width: 30px; padding-top: 3px;">
+                    <td class="textLeft Width30Px PaddingTop3">
                         <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                             ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                             ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -201,10 +191,10 @@
                         <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/expand.jpg"
                             ToolTip="Expand Filters" />
                     </td>
-                    <td style="width: 100px; white-space: nowrap;" align="left">
+                    <td class="textLeft Width100Px no-wrap">
                         Show Projects by
                     </td>
-                    <td style="width: 150px;" class="ShowRepCheckBox" align="left">
+                    <td class="ShowRepCheckBox textLeft Width150px">
                         <table>
                             <tr>
                                 <td>
@@ -219,7 +209,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td >
+                                <td>
                                     <asp:CheckBox ID="chkShowAccountManager" runat="server" Text="Business Development Manager"
                                         AutoPostBack="false" ToolTip="Show Group By Business Development Manager Report"
                                         Checked="true" onclick="ChangeResetButton();" />
@@ -227,8 +217,10 @@
                             </tr>
                         </table>
                     </td>
-                    <td align="right" style="padding-right:10px"> from </td>
-                    <td style="width: 120px" align="left">
+                    <td class="PaddingRight10Px textRightImp">
+                        from
+                    </td>
+                    <td class="textLeft Width120Px">
                         <asp:UpdatePanel ID="updFilters" runat="server">
                             <ContentTemplate>
                                 <uc:MonthPicker ID="mpFromControl" runat="server" OnClientChange="EnableResetButton();"
@@ -236,10 +228,10 @@
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </td>
-                    <td style="width: 30px;padding-right:10px;" align="right">
+                    <td class="textRightImp Width30Px PaddingRight10Px">
                         to
                     </td>
-                    <td style="width: 120px" align="left">
+                    <td class="textLeft Width120Px">
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                             <ContentTemplate>
                                 <uc:MonthPicker ID="mpToControl" runat="server" OnClientChange="EnableResetButton();"
@@ -253,15 +245,14 @@
                                 <td>
                                     <asp:UpdatePanel ID="UpdatePanel2" runat="server">
                                         <ContentTemplate>
-                                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdate_OnClick"
-                                                EnableViewState="False" />
+                                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" CssClass="Width100PxImp"
+                                                OnClick="btnUpdate_OnClick" EnableViewState="False" />
                                         </ContentTemplate>
                                     </asp:UpdatePanel>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="100px"
-                                        OnClientClick="this.disabled=true;Delete_Cookie('GroupByPersonFilterKey', '/', '');window.location.href = RemoveExtraCharAtEnd(window.location.href);return false;"
-                                        CausesValidation="false" EnableViewState="False" CssClass="pm-button" />
+                                    <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClientClick="this.disabled=true;Delete_Cookie('GroupByPersonFilterKey', '/', '');window.location.href = RemoveExtraCharAtEnd(window.location.href);return false;"
+                                        CausesValidation="false" EnableViewState="False" CssClass="pm-button Width100PxImp" />
                                 </td>
                             </tr>
                         </table>
@@ -277,13 +268,13 @@
                     </HeaderTemplate>
                     <ContentTemplate>
                         <table class="WholeWidth">
-                            <tr align="center">
-                                <td style="width: 330px !important; border-bottom: 1px solid black;" valign="top">
+                            <tr class="TextAlignCenterImp">
+                                <td class="TdProjectType">
                                     Project Type
                                 </td>
-                                <td style="width: 30px;">
+                                <td class="Width30Px">
                                 </td>
-                                <td style="width: 256px !important; border-bottom: 1px solid black;">
+                                <td class="TdPracticeArea">
                                     Practice Area
                                 </td>
                                 <td>
@@ -293,11 +284,11 @@
                                 <td>
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td style="width: 110px;">
+                                            <td class="Width110Px">
                                                 <asp:CheckBox ID="chbActive" runat="server" AutoPostBack="false" Checked="True" onclick="EnableResetButton();"
                                                     Text="Active" ToolTip="Include active projects into report" />
                                             </td>
-                                            <td style="width: 110px;">
+                                            <td class="Width110Px">
                                                 <asp:CheckBox ID="chbInternal" runat="server" AutoPostBack="false" Checked="True"
                                                     onclick="EnableResetButton();" Text="Internal" ToolTip="Include internal projects into report" />
                                             </td>
@@ -325,11 +316,10 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <div style="padding-top: 5px; padding-left: 3px;">
-                                        <cc2:ScrollingDropDown ID="cblPractice" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                            onclick="scrollingDropdown_onclick('cblPractice','Practice Area')" BackColor="White"
-                                            CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
-                                            Width="260px" BorderWidth="0" />
+                                    <div class="PaddingTop5 padLeft3">
+                                        <cc2:ScrollingDropDown ID="cblPractice" runat="server" AllSelectedReturnType="AllItems"
+                                            onclick="scrollingDropdown_onclick('cblPractice','Practice Area')" CellPadding="3"
+                                            NoItemsType="All" SetDirty="False" DropDownListType="Practice Area" CssClass="GroupBySddPractice" />
                                         <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractice"
                                             UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                         </ext:ScrollableDropdownExtender>
@@ -367,19 +357,18 @@
                                 <tr>
                                     <td>
                                         <uc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblProjectGroup"
-                                            SetDirty="false" Width="170" Height="100" />
+                                            SetDirty="false" CssClass="AdvancedTabUc" />
                                     </td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" Width="170"
-                                            Height="100" />
+                                        <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" CssClass="AdvancedTabUc" />
                                     </td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblSalesperson" runat="server" CssClass="scroll-y" SetDirty="false"
-                                            Width="170" Height="100" />
+                                        <uc:ScrollingDropDown ID="cblSalesperson" runat="server" CssClass="scroll-y AdvancedTabUc"
+                                            SetDirty="false" />
                                     </td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" CssClass="scroll-y" SetDirty="false"
-                                            Width="170" Height="100" />
+                                        <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" CssClass="scroll-y AdvancedTabUc"
+                                            SetDirty="false" />
                                     </td>
                                 </tr>
                             </table>
@@ -392,26 +381,26 @@
         <asp:HiddenField ID="hdnFiltersChangedSinceLastUpdate" runat="server" Value="false" />
         <asp:UpdatePanel ID="updGroupByDirector" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <div style="overflow-x: auto; overflow-y: auto;">
+                <div class="overflowAuto">
                     <asp:Label ID="lblDirectorEmptyMessage" Visible="false" runat="server" Text="There is nothing to be displayed here."></asp:Label>
                     <asp:ListView ID="lvGroupByDirector" runat="server" OnItemDataBound="lvGroupByPerson_OnItemDataBound"
                         OnDataBinding="lvGroupByPerson_OnDataBinding" OnPreRender="lvGroupByPerson_OnPreRender"
                         OnSorting="PersonListView_OnSorting" OnSorted="lvGroupByPerson_Sorted">
                         <LayoutTemplate>
                             <table class="CompPerfTable WholeWidth">
-                                <tr runat="server" id="lvHeader" class="CompPerfHeaderGroupBy" >
-                                    <td align="center" style="width: 170px!important;">
-                                        <div class="ie-bg" style="width: 170px!important;">
-                                            <asp:LinkButton ID="btnSortDirector" CommandArgument="0" CommandName="Sort" runat="server" 
+                                <tr runat="server" id="lvHeader" class="CompPerfHeaderGroupBy">
+                                    <td class="TextAlignCenterImp Width170PxImp">
+                                        <div class="ie-bg Width170PxImp">
+                                            <asp:LinkButton ID="btnSortDirector" CommandArgument="0" CommandName="Sort" runat="server"
                                                 CssClass="arrow">Client Director</asp:LinkButton>
                                         </div>
                                     </td>
-                                    <td align="center" style="width: 180px!important;">
-                                        <div class="ie-bg" style="width: 180px!important;white-space:normal;">
+                                    <td class="TextAlignCenterImp Width180PxImp">
+                                        <div class="ie-bg Width180PxImp">
                                             Account / Business Unit / Project</div>
                                     </td>
-                                    <td align="center" class="MonthSummary" >
-                                        <div class="ie-bg" >
+                                    <td class="MonthSummary TextAlignCenterImp">
+                                        <div class="ie-bg">
                                             Grand Total</div>
                                     </td>
                                 </tr>
@@ -419,12 +408,12 @@
                             </table>
                         </LayoutTemplate>
                         <ItemTemplate>
-                            <tr id="testTr" runat="server" class="summary" height="35px">
+                            <tr id="testTr" runat="server" class="summary Height35Px">
                                 <td>
                                 </td>
                                 <td>
                                 </td>
-                                <td align="right" style="padding-right: 3px;">
+                                <td class="PaddingRight3Px" align="right">
                                 </td>
                             </tr>
                         </ItemTemplate>
@@ -441,9 +430,8 @@
         </asp:UpdatePanel>
         <asp:UpdatePanel ID="updGroupByPractice" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <hr id="hrDirectorAndPracticeSeperator" runat="server" visible="false" size="2" color="#888888"
-                    align="center" />
-                <div style="overflow-x: auto; overflow-y: auto;">
+                <hr id="hrDirectorAndPracticeSeperator" runat="server" visible="false" size="2" class="TextAlignCenterImp Color888888" />
+                <div class="overflowAuto">
                     <asp:Label ID="lblPracticeEmptyMessage" Visible="false" runat="server" Text="There is nothing to be displayed here."></asp:Label>
                     <asp:ListView ID="lvGroupByPractice" runat="server" OnItemDataBound="lvGroupByPractice_OnItemDataBound"
                         OnDataBinding="lvGroupByPerson_OnDataBinding" OnPreRender="lvGroupByPractice_OnPreRender"
@@ -451,18 +439,18 @@
                         <LayoutTemplate>
                             <table class="CompPerfTable WholeWidth">
                                 <tr runat="server" id="lvHeader" class="CompPerfHeaderGroupBy">
-                                    <td align="center"  style="width: 170px!important;">
-                                        <div class="ie-bg" style="width: 170px!important;">
-                                            <asp:LinkButton ID="btnSortPracticeManager" CommandArgument="0" CommandName="Sort" style="white-space:normal;"
-                                                runat="server" CssClass="arrow">Practice Area<br />(Practice Area Manager)</asp:LinkButton>
+                                    <td class="TextAlignCenterImp Width170PxImp">
+                                        <div class="ie-bg Width170PxImp">
+                                            <asp:LinkButton ID="btnSortPracticeManager" CommandArgument="0" CommandName="Sort"
+                                                runat="server" CssClass="arrow WhiteSpaceNormal">Practice Area<br />(Practice Area Manager)</asp:LinkButton>
                                         </div>
                                     </td>
-                                    <td align="center" style="width: 180px!important; ">
-                                        <div class="ie-bg" style="width: 180px!important;white-space:normal;">
+                                    <td class="TextAlignCenterImp Width180PxImp">
+                                        <div class="ie-bg Width180PxImp WhiteSpaceNormal">
                                             Account / Business Unit / Project</div>
                                     </td>
-                                    <td align="center" class="MonthSummary" >
-                                        <div class="ie-bg" >
+                                    <td class="MonthSummary TextAlignCenterImp">
+                                        <div class="ie-bg">
                                             Grand Total</div>
                                     </td>
                                 </tr>
@@ -470,12 +458,12 @@
                             </table>
                         </LayoutTemplate>
                         <ItemTemplate>
-                            <tr id="testTr" runat="server" class="summary" height="35px">
+                            <tr id="testTr" runat="server" class="summary Height35Px">
                                 <td>
                                 </td>
                                 <td>
                                 </td>
-                                <td align="right" style="padding-right: 3px;">
+                                <td class="PaddingRight3Px" align="right">
                                 </td>
                             </tr>
                         </ItemTemplate>
@@ -492,28 +480,27 @@
         </asp:UpdatePanel>
         <asp:UpdatePanel ID="updGroupByAccountManager" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <hr id="hrPracticeAndACMgrSeperator" runat="server" visible="false" width="100%"
-                    size="2" color="#888888" align="center" />
-                <div style="overflow-x: auto; overflow-y: auto;">
+                <hr id="hrPracticeAndACMgrSeperator" runat="server" visible="false" size="2" class="TextAlignCenterImp Width100Per Color888888" />
+                <div class="overflowAuto">
                     <asp:Label ID="lblAccountManagerEmptyMessage" Visible="false" runat="server" Text="There is nothing to be displayed here."></asp:Label>
                     <asp:ListView ID="lvGroupByAccountManager" runat="server" OnItemDataBound="lvGroupByPerson_OnItemDataBound"
                         OnDataBinding="lvGroupByPerson_OnDataBinding" OnPreRender="lvGroupByPerson_OnPreRender"
                         OnSorting="PersonListView_OnSorting" OnSorted="lvGroupByPerson_Sorted">
                         <LayoutTemplate>
                             <table class="CompPerfTable WholeWidth">
-                                <tr runat="server" id="lvHeader" class="CompPerfHeaderGroupBy" >
-                                    <td   align="center" style="width: 170px!important;">
-                                        <div class="ie-bg" style="width: 170px!important;">
-                                            <asp:LinkButton ID="btnSortAccountManager" CommandArgument="0" CommandName="Sort" style="white-space:normal;"
-                                                runat="server" CssClass="arrow">Business Development Manager</asp:LinkButton>
+                                <tr runat="server" id="lvHeader" class="CompPerfHeaderGroupBy">
+                                    <td class="TextAlignCenterImp Width170PxImp">
+                                        <div class="ie-bg Width170PxImp">
+                                            <asp:LinkButton ID="btnSortAccountManager" CommandArgument="0" CommandName="Sort"
+                                                runat="server" CssClass="arrow WhiteSpaceNormal">Business Development Manager</asp:LinkButton>
                                         </div>
                                     </td>
-                                    <td align="center" style="width: 180px!important; ">
-                                        <div class="ie-bg" style="width: 180px!important;white-space:normal;">
+                                    <td class="TextAlignCenterImp Width180PxImp">
+                                        <div class="ie-bg  Width180PxImp WhiteSpaceNormal">
                                             Account / Business Unit / Project</div>
                                     </td>
-                                    <td align="center" class="MonthSummary" >
-                                        <div class="ie-bg" >
+                                    <td class="MonthSummary TextAlignCenterImp">
+                                        <div class="ie-bg">
                                             Grand Total</div>
                                     </td>
                                 </tr>
@@ -521,12 +508,12 @@
                             </table>
                         </LayoutTemplate>
                         <ItemTemplate>
-                            <tr id="testTr" runat="server" class="summary" height="35px">
+                            <tr id="testTr" runat="server" class="summary Height35Px">
                                 <td>
                                 </td>
                                 <td>
                                 </td>
-                                <td align="right" style="padding-right: 3px;">
+                                <td class="PaddingRight3Px" align="right">
                                 </td>
                             </tr>
                         </ItemTemplate>
@@ -542,8 +529,8 @@
             </ContentTemplate>
         </asp:UpdatePanel>
     </div>
-    <AjaxControlToolkit:UpdatePanelAnimationExtender ID="uaeGroupByDirector"
-        runat="server" TargetControlID="updGroupByDirector">
+    <AjaxControlToolkit:UpdatePanelAnimationExtender ID="uaeGroupByDirector" runat="server"
+        TargetControlID="updGroupByDirector">
         <Animations>
         <OnUpdating>
             <Sequence>
@@ -557,8 +544,8 @@
         </OnUpdated>
         </Animations>
     </AjaxControlToolkit:UpdatePanelAnimationExtender>
-    <AjaxControlToolkit:UpdatePanelAnimationExtender ID="uaeGroupByPractice"
-        runat="server" TargetControlID="updGroupByPractice">
+    <AjaxControlToolkit:UpdatePanelAnimationExtender ID="uaeGroupByPractice" runat="server"
+        TargetControlID="updGroupByPractice">
         <Animations>
         <OnUpdating>
             <Sequence>
