@@ -134,7 +134,7 @@ namespace PraticeManagement.Controls
 
             cb.Enabled = item.Enabled;
             base.RenderItem(itemType, repeatIndex, repeatInfo, writer);
-            writer.Write("</td><td style='padding:0px;width:10px;' align='left' valign='top'>");
+            writer.Write("</td><td class='CBMultipleSelection'>");
             cb.RenderControl(writer);
 
         }
