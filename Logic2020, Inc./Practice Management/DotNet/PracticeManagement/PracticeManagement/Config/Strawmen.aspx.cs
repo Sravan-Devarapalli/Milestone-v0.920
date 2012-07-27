@@ -414,7 +414,7 @@ namespace PraticeManagement.Config
                 var hdnFirstName = gvStrawmen.Rows[gvStrawmen.EditIndex].FindControl("hdnFirstName") as HiddenField;
                 hdnLastName.Value = tbLastName.Text;
                 hdnFirstName.Value = tbFirstName.Text;
-                lnkEditStrawman.Text = string.Format(Person.PersonNameFormat, hdnLastName.Value, hdnFirstName.Value);
+                lnkEditStrawman.Text = string.Format(Person.PersonNameFormat, HttpUtility.HtmlEncode(hdnLastName.Value), HttpUtility.HtmlEncode(hdnFirstName.Value));
                 mpeEditStrawmanPopup.Hide();
             }
         }
