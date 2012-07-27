@@ -248,7 +248,7 @@
             <ItemTemplate>
                 <div id="divPersonListSummary" runat="server">
                     <h3 style="font-weight: bold;">
-                        <asp:Label ID="lblPersonName" runat="server" Text='<%# Eval("Key.PersonLastFirstName") %>' /></h3>
+                        <asp:Label ID="lblPersonName" runat="server" Text='<%# Eval("Key.HtmlEncodedName") %>' /></h3>
                     <br class="NotVisible" />
                     <asp:GridView ID="gvPersonTimeEntries" runat="server" DataSource='<%# Eval("Value") %>'
                         AutoGenerateColumns="false" CssClass="CompPerfTable WholeWidth" GridLines="Both"
@@ -274,7 +274,7 @@
                                         Note</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <%# Eval("Note")%>
+                                    <%# Eval("HtmlEncodedNote")%>
                                 </ItemTemplate>
                                 <ItemStyle VerticalAlign="Middle" />
                                 <HeaderStyle VerticalAlign="Middle" HorizontalAlign="Center" />
