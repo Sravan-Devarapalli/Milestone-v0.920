@@ -850,6 +850,15 @@ namespace PraticeManagement.Controls {
         protected global::PraticeManagement.Controls.DatePicker dpSubstituteDay;
         
         /// <summary>
+        /// rfvSubstituteDay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvSubstituteDay;
+        
+        /// <summary>
         /// compdpSubstituteDay control.
         /// </summary>
         /// <remarks>
