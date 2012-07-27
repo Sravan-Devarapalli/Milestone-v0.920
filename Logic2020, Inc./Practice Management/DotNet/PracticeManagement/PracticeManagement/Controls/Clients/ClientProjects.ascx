@@ -1,19 +1,19 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ClientProjects.ascx.cs"
     Inherits="PraticeManagement.Controls.Clients.ClientProjects" %>
 <asp:GridView ID="gvProjects" runat="server" AutoGenerateColumns="False" EmptyDataText="No projects." OnRowDataBound="gvProjects_OnRowDataBound"
-    CssClass="CompPerfTable WholeWidth" GridLines="None" BackColor="White" AllowSorting="true"
+    CssClass="CompPerfTable WholeWidth BackGroundColorWhite" GridLines="None" AllowSorting="true"
     DataSourceID="odsProjects">
-    <AlternatingRowStyle BackColor="#F9FAFF" />
+    <AlternatingRowStyle CssClass="alterrow" />
     <Columns>
         <asp:TemplateField HeaderText="<div class='ie-bg' > Project Name </div>" SortExpression="Name">
             <ItemTemplate>
-                <asp:LinkButton ID="btnProjectName" runat="server" CausesValidation="false" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
+                <asp:LinkButton ID="btnProjectName" runat="server" CausesValidation="false" Text='<%# (string)Eval("HtmlEncodedName") %>'
                     CommandArgument='<%# Eval("Id") %>' OnCommand="btnProjectName_Command" Enabled='<%# !CheckIfDefaultProject(Eval("Id")) %>'></asp:LinkButton>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Business Unit</div>" SortExpression="GroupName">
             <ItemTemplate>
-                <asp:Label ID="lblGroup" runat="server" Text='<%# Eval("Group.Name") != null ? Eval("Group.Name").ToString() : string.Empty %>' />
+                <asp:Label ID="lblGroup" runat="server" Text='<%# Eval("Group.HtmlEncodedName") != null ? Eval("Group.HtmlEncodedName").ToString() : string.Empty %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Project Manager(s)</div>" >
@@ -48,7 +48,7 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Practice Area</div>" SortExpression="PracticeName">
             <ItemTemplate>
-                <asp:Label ID="lblProjectPractice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "Practice.Name") %>'></asp:Label>
+                <asp:Label ID="lblProjectPractice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "Practice.HtmlEncodedName") %>'></asp:Label>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField HeaderText="<div class='ie-bg' >Status</div>" SortExpression="ProjectStatusName">
