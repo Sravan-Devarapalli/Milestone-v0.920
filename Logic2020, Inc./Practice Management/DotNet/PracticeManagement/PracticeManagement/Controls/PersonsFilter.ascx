@@ -69,10 +69,10 @@
         <td class="Width15PxImp">
         </td>
         <td class="floatRight PaddingTop5 PaddingLeft3PxImp">
-            <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
-                CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
-                Width="240px" BorderWidth="0" />
+            <cc2:ScrollingDropDown ID="cblPractices" runat="server" CssClass="PersonPage_cblPractices" AllSelectedReturnType="AllItems"
+                onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" 
+                 NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
+                 />
             <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
                 UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
             </ext:ScrollableDropdownExtender>
