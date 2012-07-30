@@ -10,9 +10,8 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
-<script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
-<script src="Scripts/date.js" type="text/javascript"></script>
-<script src="Scripts/datepicker.js" type="text/javascript"></script>
+<script src="Scripts/date.min.js" type="text/javascript"></script>
+<script src="Scripts/datepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
     var isStrawmansExistForCurrentOpportunity = "false";
     var isProposedPersonsExistForCurrentOpportunity = "false";
