@@ -14,13 +14,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src='<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.js", this) %>' type="text/javascript"></script>
+    <script src='<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.min.js", this) %>' type="text/javascript"></script>
     <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script src="../Scripts/jquery.tablesorter.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#tblTimePeriodSummaryByResource").tablesorter(
