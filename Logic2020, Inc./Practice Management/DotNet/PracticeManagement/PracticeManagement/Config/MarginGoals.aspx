@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="MarginGoals.aspx.cs" Inherits="PraticeManagement.Config.MarginGoals" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Margin Goals | Practice Management</title>
@@ -33,34 +31,32 @@
 
         window.onload = SetBackGroundColorForDdls;
     </script>
-    <div style="background-color: #d4dff8; border-top: 1px solid #fff; border-bottom: 1px solid #eef2fc;
-        padding-left: 10px;">
-        <div style="padding-top: 10px; padding-bottom: 10px;">
+    <div class="MarginGoalsDiv">
+        <div class="PaddingTop10 PaddingBottom10">
             <b>Account Goal Default</b></div>
         <asp:UpdatePanel ID="upnlClientGoalDefault" runat="server">
             <ContentTemplate>
-                <table width="100%">
+                <table class="MargingoalsTable">
                     <tr>
-                        <td valign="top" style="width: 50%; padding-bottom: 10px;">
-                            <table width="99%">
+                        <td class="FirstTd">
+                            <table class="MarginGoalsHeaderTable">
                                 <tr>
-                                    <td colspan="3" style="padding-bottom: 15px; padding-top: 15px;">
+                                    <td colspan="3">
                                         <asp:CheckBox ID="chbClientGoalDefaultThreshold" AutoPostBack="true" OnCheckedChanged="chbClientGoalDefaultThreshold_OnCheckedChanged"
                                             runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
                                         Margin thresholds
                                     </td>
-                                    <td align="right" style="padding-bottom: 15px; padding-top: 15px;">
+                                    <td align="right">
                                         <asp:Button ID="btnClientGoalDefaultAddThreshold" Enabled="false" runat="server"
                                             Text="Add Threshold" OnClientClick="setDirty();" OnClick="btnClientGoalDefaultAddThreshold_OnClick" />
                                     </td>
                                 </tr>
                             </table>
-                            <asp:GridView ID="gvClientGoalDefaultThreshold" Enabled="false" runat="server" Width="99%"
-                                OnRowDataBound="gvClientGoalDefaultThreshold_RowDataBound" AutoGenerateColumns="False"
-                                EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable" GridLines="None">
+                            <asp:GridView ID="gvClientGoalDefaultThreshold" Enabled="false" runat="server" OnRowDataBound="gvClientGoalDefaultThreshold_RowDataBound"
+                                AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable gvClientGoalDefaultThreshold">
                                 <Columns>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                        <HeaderStyle CssClass="Width25Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Start</div>
@@ -71,7 +67,7 @@
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                        <HeaderStyle CssClass="Width25Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 End</div>
@@ -89,22 +85,22 @@
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="42%" />
+                                        <HeaderStyle CssClass="Width42Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Color</div>
                                         </HeaderTemplate>
                                         <ItemTemplate>
-                                            <cc2:CustomDropDown ID="gvClientddlColor" Width="85%" onclick="applyColor(this);"
+                                            <pmc:CustomDropDown ID="gvClientddlColor" CssClass="Width85Percent" onclick="applyColor(this);"
                                                 onchange="applyColor(this);setDirty();" runat="server">
-                                            </cc2:CustomDropDown>
+                                            </pmc:CustomDropDown>
                                             <asp:CustomValidator ID="cvgvClientddlColor" runat="server" OnServerValidate="cvgvClientddlColor_ServerValidate"
                                                 ToolTip="Please Select a Color." Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                 Display="Static" ValidationGroup="Client" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="8%" />
+                                        <HeaderStyle CssClass="Width8Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                             </div>
@@ -117,10 +113,10 @@
                                 </Columns>
                             </asp:GridView>
                         </td>
-                        <td style="width: 3%; padding-bottom: 10px;">
+                        <td class="SecondTd">
                         </td>
-                        <td valign="top" style="width: 44%; padding-bottom: 10px;">
-                            <div style="background-color: White; padding: 10px;">
+                        <td class="ThirdTd">
+                            <div>
                                 <p>
                                     Enabling this feature and configuring color-coded ranges will allow persons without
                                     unrestricted access to Project and Milestone margin calculations a visual indication
@@ -139,7 +135,7 @@
                                 </p>
                             </div>
                         </td>
-                        <td style="width: 3%; padding-bottom: 10px;">
+                        <td class="SecondTd">
                         </td>
                     </tr>
                 </table>
@@ -157,34 +153,33 @@
         <asp:CustomValidator ID="cvgvRangeClone" runat="server" ErrorMessage="The End must be greater than or equals to Start."
             Text="*" EnableClientScript="false" SetFocusOnError="false" Display="None" ValidationGroup="Client" />
     </div>
-    <div style="background-color: #d4dff8; border-top: 1px solid #fff; border-bottom: 1px solid #eef2fc;
-        padding-left: 10px;">
-        <div style="padding-top: 10px; padding-bottom: 10px;">
+    <div class="MarginGoalsDiv">
+        <div class="PaddingTop10 PaddingBottom10">
             <b>Person Goal</b></div>
         <asp:UpdatePanel ID="upnlPersonThrsholds" runat="server">
             <ContentTemplate>
-                <table width="100%">
+                <table class="MargingoalsTable">
                     <tr>
-                        <td valign="top" style="width: 50%; padding-bottom: 10px;">
-                            <table width="99%">
+                        <td class="FirstTd">
+                            <table class="MarginGoalsHeaderTable">
                                 <tr>
-                                    <td colspan="3" style="padding-bottom: 15px; padding-top: 15px;">
+                                    <td colspan="3">
                                         <asp:CheckBox ID="chbPersonMarginThresholds" AutoPostBack="true" OnCheckedChanged="chbPersonMarginThresholds_OnCheckedChanged"
                                             runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
                                         Margin thresholds
                                     </td>
-                                    <td align="right" style="padding-bottom: 15px; padding-top: 15px;">
+                                    <td align="right">
                                         <asp:Button ID="btnPersonAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
                                             OnClientClick="setDirty();" OnClick="btnPersonAddThreshold_OnClick" />
                                     </td>
                                 </tr>
                             </table>
-                            <asp:GridView ID="gvPersonThrsholds" Enabled="false" runat="server" Width="99%" OnRowDataBound="gvPersonThrsholds_RowDataBound"
-                                AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable"
+                            <asp:GridView ID="gvPersonThrsholds" Enabled="false" runat="server" OnRowDataBound="gvPersonThrsholds_RowDataBound"
+                                AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable gvClientGoalDefaultThreshold"
                                 GridLines="None">
                                 <Columns>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                        <HeaderStyle CssClass="Width25Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Start</div>
@@ -195,7 +190,7 @@
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="25%" />
+                                        <HeaderStyle CssClass="Width25Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 End</div>
@@ -213,22 +208,22 @@
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="42%" />
+                                        <HeaderStyle CssClass="Width42Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                                 Color</div>
                                         </HeaderTemplate>
                                         <ItemTemplate>
-                                            <cc2:CustomDropDown ID="gvPersonddlColor" Width="85%" onclick="applyColor(this);"
+                                            <pmc:CustomDropDown ID="gvPersonddlColor" CssClass="Width85Percent" onclick="applyColor(this);"
                                                 onchange="applyColor(this);setDirty();" runat="server">
-                                            </cc2:CustomDropDown>
+                                            </pmc:CustomDropDown>
                                             <asp:CustomValidator ID="cvgvPersonddlColor" runat="server" OnServerValidate="cvgvPersonddlColor_ServerValidate"
                                                 ToolTip="Please Select a Color." Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                 Display="Static" ValidationGroup="Client" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
-                                        <ItemStyle Height="25px" HorizontalAlign="Center" Width="8%" />
+                                        <HeaderStyle CssClass="Width8Percent" />
                                         <HeaderTemplate>
                                             <div class="ie-bg">
                                             </div>
@@ -241,10 +236,10 @@
                                 </Columns>
                             </asp:GridView>
                         </td>
-                        <td style="width: 3%; padding-bottom: 10px;">
+                        <td class="SecondTd">
                         </td>
-                        <td valign="top" style="width: 44%; padding-bottom: 10px;">
-                            <div style="background-color: White; padding: 10px;">
+                        <td class="ThirdTd">
+                            <div>
                                 <p>
                                     Enabling this feature and configuring color-coded ranges will allow persons without
                                     unrestricted access to the Margin Test page and its calculations a visual indication
@@ -259,7 +254,7 @@
                                 </p>
                             </div>
                         </td>
-                        <td style="width: 3%; padding-bottom: 10px;">
+                        <td class="SecondTd">
                         </td>
                     </tr>
                 </table>
@@ -273,14 +268,13 @@
             ErrorMessage="Color must not be selected more than once." ToolTip="Color must not be selected more than once."
             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="None" ValidationGroup="Client" />
     </div>
-    <div class="buttons-block" style="margin-bottom: 10px;">
+    <div class="buttons-block Margin-Bottom10Px">
         <div>
             <asp:ValidationSummary ID="vsumClient" runat="server" ValidationGroup="Client" />
             <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
         </div>
         &nbsp;
-        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CssClass="pm-button"
-            ValidationGroup="Client" />&nbsp;
+        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" ValidationGroup="Client" />&nbsp;
     </div>
 </asp:Content>
 
