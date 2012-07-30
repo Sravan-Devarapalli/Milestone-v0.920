@@ -65,7 +65,8 @@ a.control{display:block;width:11px;height:11px;background-repeat:no-repeat;backg
 .CustomTabStyle .ajax__tab_body{background-color:#e2ebff;padding:5px}
 .Margin5Px,div.Notes-panel{margin:5px}
 .scroll-y{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:170px}
-.floatRight input{float:right;width:50px;margin-right:10px}
+.floatRight input{float:right;width:16px!important;margin-right:0!important}
+.floatRight label{padding-left:2px!important}
 .buttons-block input{float:right;width:110px;text-align:center;margin-right:10px}
 .bScroll{height:450px;overflow-y:scroll}
 .xScroll{overflow-x:auto;overflow-y:auto;height:450px}
@@ -161,8 +162,9 @@ table.sortable thead{background-color:#eee;color:#666;font-weight:700;cursor:def
 .tem-filter-row{height:25px;vertical-align:middle}
 .tem-filter-table{border:0;border-collapse:separate}
 .ProjectDetailBlue{color:#1F4586;font-weight:700;font-size:150%}
-table.time-entry-person-projects th{border-bottom:1px solid gray;border-top:1px solid gray}
-table.time-entry-person-projects tr{border-bottom:1px solid lightgray;border-top:1px solid lightgray;padding:1px}
+table.time-entry-person-projects th{border-bottom:1px solid gray;border-top:1px solid gray;padding-left:5px;padding-right:5px;padding-top:3px;padding-bottom:3px;vertical-align:middle;text-align:center;font-weight:700;white-space:nowrap}
+table.time-entry-person-projects td{vertical-align:middle;border-bottom:1px solid lightgray;border-top:1px solid lightgray;padding-left:5px;text-align:right;padding-right:5px;padding-top:3px;padding-bottom:3px;white-space:nowrap}
+table.time-entry-person-projects tr{border-bottom:1px solid lightgray;border-top:1px solid lightgray;padding:1px;vertical-align:middle}
 .alterrow{background-color:#F9FAFF}
 .pnlTimeEntryCss{background:#444;box-shadow:5px 5px 15px #444;-webkit-box-shadow:5px 5px 15px #444;-moz-box-shadow:5px 5px 15px #444;padding:10px;width:375px}
 td.te-modal-header{color:#FFF;font-weight:700;padding-bottom:5px}
@@ -264,6 +266,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Padding6{padding:6px}
 .Padding8{padding:8px}
 .Padding10,.Padding10Px{padding:10px}
+.Padding10PxImp{padding:10px!important}
 .Padding15Px{padding:15px}
 .PaddingTop2Px{padding-top:2px}
 .PaddingTop2PxImp{padding-top:2px!important}
@@ -278,6 +281,8 @@ TABLE.Section td{padding:4px 0 0 4px}
 .PaddingTop10Imp{padding-top:10px!important}
 .PaddingTop15{padding-top:15px}
 .PaddingTop20{padding-top:20px}
+.PaddingTop30{padding-top:30px}
+.PaddingTop30Imp{padding-top:30px!important}
 .PaddingBottom0{padding-bottom:0!important}
 .PaddingBottom2{padding-bottom:2px}
 .PaddingBottom3{padding-bottom:3px}
@@ -302,6 +307,8 @@ TABLE.Section td{padding:4px 0 0 4px}
 .padRight10Imp{padding-right:10px!important}
 .padRight15{padding-right:15px}
 .padRight25{padding-right:25px}
+.padRight35{padding-right:35px}
+.padRight35Imp{padding-right:35px!important}
 .padRight60Imp{padding-right:60px!important}
 .padRight110Imp{padding-right:110px!important}
 .padRight242{padding-right:242px}
@@ -370,11 +377,14 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width39Percent{width:39%}
 .Width40P{width:40%}
 .Width40Percent{width:40%;padding:1px}
+.Width42Percent{width:42%}
 .Width43Percent{width:43%}
+.Width44Percent{width:44%}
 .Width45Percent{width:45%}
 .Width45PercentImp{width:45%!important}
 .Width48Percent{width:48%}
 .Width50Percent{width:50%}
+.Width55Percent{width:55%}
 .Width58Percent{width:58%;padding:1px}
 .width60P{width:60%}
 .Width63Percent{width:63%}
@@ -456,6 +466,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width330Px{width:330px}
 .Width350Px{width:350px}
 .Width355Px{width:355px}
+.Width356Px{width:356px}
 .Width360Px{width:360px}
 .Width375Px{width:375px}
 .Width395Px{width:395px}
@@ -463,6 +474,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width430Px,.ProjectSearch{width:430px}
 .Width460Px{width:460px}
 .Width550PxImp{width:550px!important}
+.Width670Px{width:670px}
 .Width700Px{width:700px}
 .Width920Px{width:920px}
 .height1Px{height:1px}
@@ -536,6 +548,7 @@ TABLE.PaddingTenPx td{padding:0 5px}
 .ReportHeaderTotalsTable .SecondTd{text-align:center;font-size:25px}
 .ReportHeaderBillAndNonBillTable{width:100%}
 .ReportHeaderBillAndNonBillTable td{text-align:center}
+.ReportHeaderBillAndNonBillTable .billingHours{padding-bottom:5px!important}
 .ReportHeaderBandNBGraph{vertical-align:bottom;width:8%;padding:0!important}
 .ReportHeaderBandNBGraph table{width:100%}
 .ReportHeaderBandNBGraph td{padding:0!important;text-align:center}
@@ -594,7 +607,7 @@ h1,h2,h3,h4,h5,h6,.container,.marginLineManager{margin-top:10px}
 .hidden,.ie-only-visible,.displayNone,.tab-invisible{display:none}
 .bg-white,.ReportItemTemplate{background-color:#FFF}
 a.main-logo,img.main-logo{display:block;position:absolute;top:20px;left:10px}
-.serv-info .date,.serv-info .authent,.serv-info .changePassword,.alignRight,.textRight,.TextAlignRight{text-align:right}
+.serv-info .date,.serv-info .authent,.serv-info .changePassword,.alignRight,.textRight,.TextAlignRight,.AlignRight{text-align:right}
 .textRightImp{text-align:right!important}
 ul.AspNet-Menu li.AspNet-Menu-Selected a span,ul.main-sub-menu li.selected a{color:#000;cursor:default}
 .filer-header ul,.CustomTabStyle .ajax__tab_header,.height30P,.WidthWithHeightAndBorders td{height:30px}
@@ -606,6 +619,7 @@ ul.AspNet-Menu li.AspNet-Menu-Selected a span,ul.main-sub-menu li.selected a{col
 .filer-header ul li span.bg,.CustomTabStyle .ajax__tab_tab span.bg{padding:8px 10px 7px}
 .filer-header ul li.active span.bg,.CustomTabStyle .ajax__tab_active span.bg{background-color:#e2ebff}
 table.opportunity-description td,.filter-body .scroll-y table td,.filter-body .custom-scroll-y table td,table.PaddingClass td{padding:2px}
+table.PaddingClass3px td{padding:3px}
 .filter-body table td{padding:5px}
 tr.tb-header td,TR.CompPerfHeader,TR.CompPerfHeaderGroupBy,.bold,.fontBold{font-weight:700}
 .buttons-block,.filter-section-color{background-color:#d4dff8;border-top:1px solid #fff;border-bottom:1px solid #eef2fc;padding:10px}
@@ -615,7 +629,7 @@ TR.CompPerfHeader td,.CompPerfTable th,.CompPerfTotalHeader{border-bottom:1px so
 .ie-bg-last-in-row,TD.CompPerfTotalSummary .ie-bg{background:none!important}
 .CompPerfHeader td a,.CompPerfHeader th a,.CompPerfHeaderGroupBy td a,.CompPerfHeaderGroupBy th a{color:#000;text-decoration:none}
 TD.CompPerfProjectNumber,TD.CompPerfPeriod{min-width:70px}
-.alignCenter,table.time-entry-person-projects td,.textCenter,.TableTextCenter th,.TableTextCenter td,.TextAlignCenter{text-align:center}
+.alignCenter,.textCenter,.TableTextCenter th,.TableTextCenter td,.TextAlignCenter{text-align:center}
 .TextAlignCenterImp{text-align:center!important}
 .rowEven td,.ReportAlternateItemTemplate{background-color:#f9faff}
 .time-entry-bar-single-te,.time-entry-bar-single-teNew{text-align:center;vertical-align:middle;width:8%}
@@ -634,6 +648,7 @@ TABLE.PersonSummaryReport,TABLE.TimePeriodByproject{border-left:1px solid #000;b
 li.l1 a:hover,.l2 dd div.flyout a:hover{color:#2a4753}
 .BorderNone{border:0}
 .xScrollAuto{overflow-x:auto}
+.xScrollOnly{overflow-x:scroll}
 div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;padding-left:2px}
 .ExportAndExportAll ul,.ExportAndExportAll li{margin:0;padding:0}
 .ExportAndExportAll ul.pmenu{position:absolute;margin:0;padding:1px;list-style:none;width:88px;border:1px solid #ccc;background:white;display:none;z-index:10}
@@ -680,6 +695,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .CommonCustomTabStyle .SelectedSwitch a.collapse{display:block;right:5px;top:10px}
 .CommonCustomTabStyle td{background-color:White;float:left;padding:8px 0 6px 0;position:relative}
 .CommonCustomTabStyle td span.bg{padding:8px 20px 7px 10px}
+.ProjectSummaryReportPageCustomTabStyle td{padding-bottom:5px!important}
 .ProjectSummaryReportPageCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
 .ProjectSummaryReportPageCustomTabStyle td span.bg{padding-right:10px!important}
 .PersonDetailPage_CustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
@@ -782,6 +798,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .practiceArea{width:250px;border-bottom:1px solid black}
 .practicesTd{padding-top:5px;padding-left:3px}
 .ScrollingDropDown_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:220px;overflow-x:hidden;overflow-y:auto;width:290px;z-index:20000}
+.ScrollingDropDown_cblPractices TABLE{width:100%}
 .overflowAuto{overflow:auto}
 .upnlBodyPadding{padding-left:5px!important;padding-right:5px!important}
 .PersonsSearch{width:36%;padding-left:5px;padding-right:0}
@@ -922,7 +939,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .AccountSummaryReportHeader .FirstTrTd3{vertical-align:top;padding-bottom:10px}
 .AccountSummaryReportHeader .FirstTrTd4{padding-top:10px;vertical-align:bottom;padding-bottom:5px;float:left}
 .AccountSummaryReportHeader .FirstTrTd5{text-align:right;width:470px;padding-bottom:10px}
-.FadingTooltip{border-right:darkgray 1px outset;border-top:darkgray 1px outset;font-size:10px;border-left:darkgray 1px outset;width:auto;color:black;border-bottom:darkgray 1px outset;height:auto;background-color:lemonchiffon;borderbottomwidths:"3,3,3,3";font-size:11px}
+.FadingTooltip{border-right:darkgray 1px outset;border-top:darkgray 1px outset;font-size:10px;border-left:darkgray 1px outset;width:auto;color:black;border-bottom:darkgray 1px outset;height:auto;background-color:lemonchiffon;font-size:11px}
 .SetScrollRightButtonStyle{padding-left:10px;padding-right:8px;padding-top:4px;padding-bottom:4px;width:8px}
 .SetScrollLeftButtonStyle{padding-left:2px;padding-right:12px;padding-top:4px;padding-bottom:4px;width:8px}
 .FadingTooltipDefault{z-index:999;padding:5px;visibility:hidden;position:absolute}
@@ -974,7 +991,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .personStats{width:100%}
 .personStats .FirstTd{padding-left:10px}
 .marginBT10Px{margin-bottom:10px;margin-top:10px}
-.EmailTemplateTd{overflow:auto;border:1px solid #000;width:200px}
+.EmailTemplateTd{overflow:auto}
 .EmailTemplateEmailBody{height:217px;width:450px;margin-bottom:0}
 .SMTPTable{width:100%}
 .SMTPTable td{white-space:nowrap}
@@ -1168,3 +1185,78 @@ image:hover:after{content:attr(title)}
 .BtnSave{padding:4px;padding-right:0;height:35px;width:30%;text-align:right!important}
 .CBMultipleSelection{padding:0;width:10px;text-align:left;vertical-align:top}
 .MilestoneHeaderText a{color:#000333;text-decoration:none}
+.mso-number-format{mso-number-format:MM\/dd\/yy}
+.divPersonName{padding-bottom:5px;font-size:20px;font-weight:bold}
+.divTeTable{overflow-x:auto;overflow-y:display}
+.NotVisible{display:none;visibility:hidden}
+.TimeEntrySummary{font-style:italic;font-size:16px;font-weight:bold;padding-top:4px;padding-bottom:4px}
+.divProjects{overflow-x:auto;padding-top:10px}
+.TimeEntryDetail{font-style:italic;font-size:16px;font-weight:bold;padding-top:4px;padding-bottom:4px}
+.ClientAndProjectName{font-size:14px;font-weight:bold;padding-top:3px;padding-bottom:3px}
+.divHrClass{padding-top:10px;padding-bottom:5px;padding-left:5px;padding-right:5px}
+.ClientProjectTimeType{text-align:left!important;white-space:nowrap}
+.HeaderDiv{text-align:center;font-weight:bold}
+.TextAlignRight{text-align:right;padding-right:15px}
+.AlignCentre{text-align:center;padding-right:-1px}
+.CheckBoxFloatLeft INPUT{float:left;width:20px;margin-right:6px}
+.CheckBoxFloatLeft LABEL{line-height:20px;vertical-align:middle}
+.Padding3PxTd td{padding-top:3px}
+.Padding0PxTd td,.Padding0PxTd{padding-top:0!important}
+.TimeEntryByperson_cblPersons{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:360px;overflow-x:hidden;overflow-y:auto;width:350px;z-index:20000}
+.marTop-2px{margin-top:-2px}
+.TimeEntryByperson_cblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.TimeEntryByperson_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
+.color_3BA153{color:#3BA153}
+.TimeEntryByPerson_gvTimeEntries{width:100%;background-color:White;border-collapse:collapse}
+.gvOverhead_OverheadsPage{width:100%;border-collapse:collapse}
+.gvOverhead_OverheadsPage th{text-align:left}
+.gvOverhead_OverheadsPage td.left{padding-left:10px!important}
+.OverheadsPageHr{margin-left:5px;margin-right:5px;color:Black;text-align:center}
+.OverheadsHistoryPopup{min-width:450px!important;min-height:60px!important;max-width:700px!important}
+.OverheadsHistoryPopup .result{padding:6px 6px 2px 6px;overflow-y:auto;height:300px}
+.OverHeadsPage_gvMLFHistory{width:100%;border-collapse:collapse}
+.OverHeadsPage_gvMLFHistory td,.OverHeadsPage_gvMLFHistory th{text-align:center}
+.OverheadsHiddenTd{color:White;height:1px!important;max-height:1px!important}
+.BecomeUserDiv{border:1px solid black;background-color:White;padding:5px}
+.ExpenceCategories_gvCategories{background-color:White;border-collapse:collapse;width:400px}
+.ExpenceCategories_gvCategories td,.ExpenceCategories_gvCategories th{height:25px}
+.WholeWidthTable,.WholeWidthTable table{width:100%}
+.ExpenceCategories_EmptyDataTd{padding-left:30px;padding-top:10px;padding-bottom:10px}
+.RevenueGoals_grdDirectorBudgetEntries{border-collapse:collapse}
+.RevenueGoals_grdDirectorBudgetEntries td{height:30px}
+.RevenueGoals_grdDirectorBudgetEntries th{height:26px!important;width:82px}
+.RevenueGoals_grdDirectorBudgetEntries .FirstTd{width:202px!important;white-space:nowrap}
+.RevenueGoals_grdDirectorBudgetEntries .FirstTdData{padding-right:2px}
+.RevenueGoals_grdDirectorBudgetEntries input{width:60px}
+.RevenueGoals_saveGoalsDiv{width:100%;padding:0 2px 6px 0;text-align:right}
+.RevenueGoals_saveGoalsDiv1{width:100%;padding:6px 2px 2px 0;text-align:right}
+.MarginGoalsDiv{background-color:#d4dff8;border-top:1px solid #fff;border-bottom:1px solid #eef2fc;padding-left:10px}
+.MarginGoalsHeaderTable{width:99%}
+.MarginGoalsHeaderTable td{padding-bottom:15px;padding-top:15px}
+.MargingoalsTable{width:100%}
+.MargingoalsTable .FirstTd{width:50%;padding-bottom:10px;vertical-align:top}
+.MargingoalsTable .SecondTd{width:3%;padding-bottom:10px}
+.MargingoalsTable .ThirdTd{width:44%;padding-bottom:10px;vertical-align:top}
+.MargingoalsTable .ThirdTd div{background-color:White;padding:10px}
+.gvClientGoalDefaultThreshold{width:99%;border-collapse:collapse}
+.gvClientGoalDefaultThreshold td{height:25px;text-align:center}
+.DashboardPageHeaderTable{width:100%;height:600px;background-color:#dbeef3}
+.DashboardPageHeaderTable .FirstTd{width:70%;padding-left:5px;border:2px solid White;border-top-width:0;border-bottom-width:0;vertical-align:top}
+.DashboardPageHeaderTable .SecondTd{width:100%;height:28px;padding-right:20px}
+.DashboardPageHeaderTable .ThirdTd{width:2%;padding-top:0}
+.DashboardPageHeaderTable .FourthTd{width:98%;padding-top:0;vertical-align:top}
+.DashboardPageHeaderTable .FourthTd .FirstPanel{padding:5px;width:100%}
+.DashboardPageHeaderTable .FourthTd .SecondPanel{padding:5px;width:95%}
+.DashboardPageHeaderTable .FivthTd{width:50%;padding-top:5px;padding-right:5px}
+.DashboardPageHeaderTable .SixthTd{width:50%;padding-left:5px;padding-top:5px}
+.DashboardPageHeaderTable .ThirdPanel{border-bottom:2px solid White;padding:5px;padding-top:15px;padding-bottom:15px}
+.Border2px{border-top:2px solid White}
+.DashboardPageHeaderTable .SeventhTd{width:100%;padding:5px;height:50px}
+.repQuickLinks{width:100%}
+.repQuickLinks .FirstRepTd{width:90%;padding-left:0;height:20px}
+.repQuickLinks .SecondRepTd{width:10%;padding-right:0;height:20px}
+.DashBoardQuickLinksPopUp{background-color:#D4DFF8;border-color:Black;border-style:solid;border-width:1px;position:fixed;width:372px;z-index:100001}
+.DashBoardQuickLinksPopUp .FirstTd{padding:5px 2px 5px 5px}
+.DashBoardQuickLinksPopUpTextBox{width:353px;height:16px;padding-bottom:4px;margin-bottom:4px}
+.cblQuickLinksDiv{height:250px;width:350px;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px;text-align:left!important}
+.cblQuickLinksClearButtonDiv{text-align:right;width:356px;padding:8px 0 8px 0}
