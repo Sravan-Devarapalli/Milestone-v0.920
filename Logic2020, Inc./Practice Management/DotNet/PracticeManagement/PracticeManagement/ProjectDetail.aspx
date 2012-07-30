@@ -1,7 +1,7 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="ProjectDetail.aspx.cs" Inherits="PraticeManagement.ProjectDetail"
     Title="Project Details | Practice Management" EnableEventValidation="false" ValidateRequest="False" %>
-
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register TagPrefix="extDisable" Namespace="PraticeManagement.Controls.Generic.ElementDisabler"
     Assembly="PraticeManagement" %>
@@ -26,10 +26,12 @@
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Project Details
 </asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
+</asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/ScrollinDropDown.js" type="text/javascript"></script>
-    <script src="Scripts/FilterTable.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.tablesorter.js" type="text/javascript"></script>
+    <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         function pageLoad() {
