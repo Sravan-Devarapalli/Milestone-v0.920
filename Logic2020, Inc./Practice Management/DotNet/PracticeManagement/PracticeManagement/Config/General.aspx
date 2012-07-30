@@ -9,17 +9,17 @@
     General
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <table width="100%" class="PaddingClass">
+    <table class="PaddingClass WholeWidthTable">
         <tr>
-            <td valign="top" width="60%">
-                <table width="100%" class="PaddingClass">
+            <td class="vTop width60P">
+                <table>
                     <tr>
                         <td colspan="2">
                             <b>Password Policy :</b>
                         </td>
                     </tr>
                 </table>
-                <table width="100%" class="PaddingClass">
+                <table>
                     <tr>
                         <td>
                             How many previous passwords should be remembered?
@@ -53,8 +53,8 @@
                     </tr>
                 </table>
             </td>
-            <td valign="top" width="40%">
-                <div style="border: 1px solid black; background-color: White; padding: 5px;">
+            <td class="Width40P vTop">
+                <div class="BecomeUserDiv">
                     <p>
                         Practice Management requires a secure password of at least 7 characters. A secure
                         password is one consisting of a mix of upper and lowercase letters, as well as numbers
@@ -69,26 +69,26 @@
         </tr>
         <tr>
             <td colspan="2">
-                <table width="100%" class="PaddingClass">
+                <table>
                     <tr>
-                        <td colspan="2" style="padding: 10px;">
+                        <td colspan="2" class="Padding10PxImp">
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
         <tr>
-            <td valign="top" width="60%">
-                <table width="100%" class="PaddingClass">
+            <td class="vTop">
+                <table>
                     <tr>
-                        <td valign="middle" colspan="2" style="text-align: left;">
+                        <td colspan="2" class="textLeft vMiddle">
                             <b>Lockout Policy :</b>
-                            <asp:CheckBox ID="chbLockOutPolicy" AutoPostBack="true" TextAlign="Left" onclick="setDirty();"
+                            <asp:CheckBox ID="chbLockOutPolicy" AutoPostBack="true" CssClass="textLeft" onclick="setDirty();"
                                 Checked="true" runat="server" OnCheckedChanged="chbLockOutPolicy_OnCheckedChanged" />
                         </td>
                     </tr>
                 </table>
-                <table width="100%" class="PaddingClass">
+                <table>
                     <tr>
                         <td colspan="2">
                             If the incorrect password is entered
@@ -140,8 +140,8 @@
                     </tr>
                 </table>
             </td>
-            <td valign="top" width="40%">
-                <div style="border: 1px solid black; background-color: White; padding: 5px;">
+            <td class="vTop">
+                <div class="BecomeUserDiv">
                     <p>
                         If enabled, the Lockout Policy determines how many incorrect attempts to login to
                         Practice Management a person can make before their account is disabled temporarily.</p>
@@ -160,11 +160,11 @@
         </tr>
         <tr>
             <td colspan="2">
-                <table width="100%" class="PaddingClass">
+                <table>
                     <tr>
                         <td colspan="2">
                             Log off the user if inactive for &nbsp;
-                            <asp:TextBox ID="txtFormsAuthenticationTimeOutMin" runat="server" Width="80px"></asp:TextBox>
+                            <asp:TextBox ID="txtFormsAuthenticationTimeOutMin" runat="server" CssClass="Width80Px"></asp:TextBox>
                             &nbsp;
                             <asp:RequiredFieldValidator ID="rqFormsAuthenticationTimeOutMin" runat="server" Text="*"
                                 ControlToValidate="txtFormsAuthenticationTimeOutMin" ErrorMessage="Inactivity period is required."
@@ -191,21 +191,21 @@
             </td>
         </tr>
         <tr>
-            <td valign="top" width="59%">
-                <table width="100%" class="PaddingClass">
+            <td class="vTop">
+                <table>
                     <tr>
-                        <td style="padding-top: 30px;">
+                        <td class="PaddingTop30">
                             <asp:ValidationSummary ID="vsumSave" runat="server" ValidationGroup="General" />
                             <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                         </td>
-                        <td align="right" style="padding-top: 30px; padding-right: 35px;">
+                        <td align="right" class="PaddingTop30Imp padRight35Imp">
                             <asp:Button ID="btnSave" Text="Save" ToolTip="Save" ValidationGroup="General" runat="server"
                                 OnClick="btnSave_OnClick" />
                         </td>
                     </tr>
                 </table>
             </td>
-            <td width="40%">
+            <td>
             </td>
         </tr>
     </table>
