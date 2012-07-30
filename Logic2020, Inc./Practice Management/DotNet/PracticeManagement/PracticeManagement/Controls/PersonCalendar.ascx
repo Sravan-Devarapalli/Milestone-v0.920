@@ -1,13 +1,10 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PersonCalendar.ascx.cs"
     Inherits="PraticeManagement.Controls.PersonCalendar" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
 <%@ Register Src="~/Controls/PersonMonthCalendar.ascx" TagName="MonthCalendar" TagPrefix="uc1" %>
-<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
 <%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc" %>
-<script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
 <script type="text/javascript">
     function EncodeString(str) {
 
@@ -155,8 +152,8 @@
                                 Select a Person:
                             </td>
                             <td class="textLeft no-wrap">
-                                <uc:CustomDropDown ID="ddlPerson" runat="server" IsOptionGroupRequired="false">
-                                </uc:CustomDropDown>
+                                <pmc:CustomDropDown ID="ddlPerson" runat="server" IsOptionGroupRequired="false">
+                                </pmc:CustomDropDown>
                                 <asp:UpdatePanel ID="pnlButton" runat="server" RenderMode="Inline">
                                     <ContentTemplate>
                                         <asp:Button ID="btnRetrieveCalendar" runat="server" Text="Retrieve Calendar" OnClick="btnRetrieveCalendar_Click" />
@@ -448,9 +445,9 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="padLeft40 TextAlignLeft">
-                                            <uc:CustomDropDown ID="ddlTimeTypesTimeOff" runat="server" IsOptionGroupRequired="false"
+                                            <pmc:CustomDropDown ID="ddlTimeTypesTimeOff" runat="server" IsOptionGroupRequired="false"
                                                 CssClass="width70P" onchange="btnDeleteTimeOffDisable();">
-                                            </uc:CustomDropDown>
+                                            </pmc:CustomDropDown>
                                             <asp:RequiredFieldValidator ID="reqTimeTypesTimeOff" runat="server" ControlToValidate="ddlTimeTypesTimeOff"
                                                 ErrorMessage="Work Type is required." ToolTip="Work Type is required." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="TimeOff"></asp:RequiredFieldValidator>
@@ -541,9 +538,9 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="textLeft padLeft40">
-                                            <uc:CustomDropDown ID="ddlTimeTypesSingleDay" IsOptionGroupRequired="false" CssClass="width70P"
+                                            <pmc:CustomDropDown ID="ddlTimeTypesSingleDay" IsOptionGroupRequired="false" CssClass="width70P"
                                                 runat="server" onchange="btnDeleteSingleDayDisable();">
-                                            </uc:CustomDropDown>
+                                            </pmc:CustomDropDown>
                                             <asp:RequiredFieldValidator ID="reqddlTimeTypesSingleDay" runat="server" ControlToValidate="ddlTimeTypesSingleDay"
                                                 ErrorMessage="Work Type is required." ToolTip="Work Type is required." Text="*"
                                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="SingleDay"></asp:RequiredFieldValidator>
