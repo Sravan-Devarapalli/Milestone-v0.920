@@ -10,7 +10,7 @@
     Change User Password
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.blockUI.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             hdnAreCredentialssaved = document.getElementById('<%= hdnAreCredentialssaved.ClientID %>');
