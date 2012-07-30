@@ -10,19 +10,19 @@
     Time Zone
 </asp:content>
 <asp:content id="Content4" contentplaceholderid="body" runat="server">
-    <table width="50%" style="padding: 5px;">
+    <table class="Width50Percent Padding5">
         <tr>
             <td>
                 <asp:dropdownlist id="ddlTimeZones" runat="server" datasourceid="odsTimezones" onchange="setDirty()"
-                    datatextfield="GMTName" datavaluefield="GMT" width="100%">
+                    datatextfield="GMTName" datavaluefield="GMT" CssClass="WholeWidth">
                 </asp:dropdownlist>
             </td>
-            <td style="padding-left:10px;">
+            <td class="padLeft10">
                 <asp:button id="btnSetTimeZone" runat="server" onclick="btnSetTimeZone_Clicked" text="Set TimeZone" />
             </td>
         </tr>
         <tr>
-            <td style="padding-top:10px; padding-bottom:5px;">
+            <td class="PaddingTop10 PaddingBottom5">
                 <asp:CheckBox id="cbIsDayLightSavingsTimeEffect" runat="server" Text="Daylight Savings Time is in effect for this location" ></asp:CheckBox>
             </td>
         </tr>
