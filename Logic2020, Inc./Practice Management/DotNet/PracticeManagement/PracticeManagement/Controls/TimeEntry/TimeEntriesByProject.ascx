@@ -5,8 +5,6 @@
 <%@ Import Namespace="DataTransferObjects.TimeEntry" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <script type="text/javascript">
     function SelectAllPersons() {
 
@@ -99,25 +97,6 @@
 
 
 </script>
-<style type="text/css">
-    .NotVisible
-    {
-        display: none;
-        visibility: hidden;
-    }
-    
-    .CheckBoxFloatLeft INPUT
-    {
-        float: left;
-        width: 20px;
-        margin-right: 6px;
-    }
-    .CheckBoxFloatLeft LABEL
-    {
-        line-height: 20px;
-        vertical-align: middle;
-    }
-</style>
 <uc3:LoadingProgress ID="LoadingProgress1" runat="server" />
 <asp:UpdatePanel ID="updReport" runat="server">
     <ContentTemplate>
@@ -191,10 +170,10 @@
                                     <asp:Label ID="lblPersons" runat="server" Text="Persons"></asp:Label>
                                 </td>
                                 <td style="padding-left: 10px;">
-                                    <cc2:ScrollingDropDown ID="cblPersons" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
+                                    <pmc:ScrollingDropDown ID="cblPersons" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
                                         BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False" Width="315"
                                         Height="99" BorderWidth="0">
-                                    </cc2:ScrollingDropDown>
+                                    </pmc:ScrollingDropDown>
                                 </td>
                             </tr>
                         </table>
