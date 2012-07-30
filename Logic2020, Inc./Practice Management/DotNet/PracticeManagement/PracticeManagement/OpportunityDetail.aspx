@@ -25,12 +25,11 @@
     Opportunity Details
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src="<%# Generic.GetClientUrl("~/Scripts/date.js", this) %>" type="text/javascript"></script>
-    <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet"
-        type="text/css" />
+    <script src="<%# Generic.GetClientUrl("~/Scripts/date.min.js", this) %>" type="text/javascript"></script>
+    <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/datepicker.js" type="text/javascript"></script>
+    <script src="Scripts/datepicker.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         function checkDirty(arg) {
             __doPostBack('__Page', arg);
