@@ -1,6 +1,7 @@
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Projects.aspx.cs" Inherits="PraticeManagement.Projects"
     Title="Projects Summary | Practice Management" MasterPageFile="~/PracticeManagementMain.Master" %>
 
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
@@ -13,7 +14,7 @@
     <title>Projects Summary | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
-    <script language="javascript" type="text/javascript" src="Scripts/ScrollinDropDown.js"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Projected Project Profit & Loss
