@@ -425,6 +425,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width50PerImp{width:50%!important}
 .Width67Px{width:67px}
 .Width70Px{width:70px}
+.Width70PxImp{width:70px!important}
 .Width75PxImp{width:75px!important}
 .Width80Px{width:80px}
 .Width83Px{width:83px}
@@ -798,7 +799,6 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .practiceArea{width:250px;border-bottom:1px solid black}
 .practicesTd{padding-top:5px;padding-left:3px}
 .ScrollingDropDown_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:220px;overflow-x:hidden;overflow-y:auto;width:290px;z-index:20000}
-.ScrollingDropDown_cblPractices TABLE{width:100%}
 .overflowAuto{overflow:auto}
 .upnlBodyPadding{padding-left:5px!important;padding-right:5px!important}
 .PersonsSearch{width:36%;padding-left:5px;padding-right:0}
@@ -1175,7 +1175,6 @@ image:hover:after{content:attr(title)}
 .WidthHeight200pxImp{height:200px!important;width:200px!important}
 .LnkBtnAll{text-decoration:none;font-weight:bold}
 .PersonFilterSddAllTypes{background-color:White;border:1px solid #AAA!important;width:190px;height:100px;z-index:2000}
-.PersonFilterSddAllTypes Table{width:100%!important}
 .LnkBtnPrevious{color:#8F8F8F;text-decoration:none}
 .InnerTableCompanyDay{background-color:Black;border:1px;width:20px}
 .TableCompPer{padding-top:6px;background-color:white;border-collapse:collapse;width:80%!important;border:0}
@@ -1260,3 +1259,6 @@ image:hover:after{content:attr(title)}
 .DashBoardQuickLinksPopUpTextBox{width:353px;height:16px;padding-bottom:4px;margin-bottom:4px}
 .cblQuickLinksDiv{height:250px;width:350px;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px;text-align:left!important}
 .cblQuickLinksClearButtonDiv{text-align:right;width:356px;padding:8px 0 8px 0}
+.PersonPage_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:280px;z-index:20000}
+.PersonPage_cblRecruiters{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:200px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table{width:100%!important}
