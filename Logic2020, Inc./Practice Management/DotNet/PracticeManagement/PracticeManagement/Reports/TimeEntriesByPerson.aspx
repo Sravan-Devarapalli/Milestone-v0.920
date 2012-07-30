@@ -140,7 +140,7 @@
                             &nbsp;&nbsp;Show Time Entered
                         </td>
                         <td class="Width20Percent Padding0PxTd">
-                            <uc:DateInterval ID="diRange" runat="server" FromToDateFieldCssClass="Width70Px"
+                            <uc:DateInterval ID="diRange" runat="server" FromToDateFieldCssClass="Width70PxImp"
                                 IsFromDateRequired="true" IsToDateRequired="true" />
                             <asp:ValidationSummary ID="valSum" runat="server" />
                         </td>
