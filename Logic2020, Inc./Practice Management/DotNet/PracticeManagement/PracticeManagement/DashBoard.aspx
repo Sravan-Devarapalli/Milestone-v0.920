@@ -139,15 +139,14 @@
     </script>
     <asp:UpdatePanel ID="upnlDashBoard" runat="server">
         <ContentTemplate>
-            <table class="CompPerfTable WholeWidth" style="width: 100%; height: 600px; background-color: #dbeef3;">
+            <table class="CompPerfTable DashboardPageHeaderTable">
                 <tr>
-                    <td valign="top" style="width: 70%; padding-left: 5px; border: 2px solid White; border-top-width: 0px;
-                        border-bottom-width: 0px;">
+                    <td class="FirstTd">
                         <h1>
                             Practice Management Announcements</h1>
                         <table class="WholeWidth">
                             <tr>
-                                <td align="right" style="width: 100%; height: 28px; padding-right: 20px;">
+                                <td align="right" class="SecondTd">
                                     <asp:Button ID="btnEditAnnouncement" runat="server" OnClick="btnEditAnnouncement_OnClick"
                                         Text="Edit Announcement" ToolTip="Edit Announcement" />
                                 </td>
@@ -155,26 +154,25 @@
                         </table>
                         <table class="WholeWidth">
                             <tr>
-                                <td style="width: 2%; padding-top: 0px;">
+                                <td class="ThirdTd">
                                 </td>
-                                <td valign="top" style="width: 98%; padding-top: 0px;">
-                                    <asp:Panel ID="pnlHtmlAnnounceMent" Width="100%" CssClass="ApplyStyleForDashBoardLists"
-                                        runat="server" Style="padding: 5px;">
+                                <td class="FourthTd">
+                                    <asp:Panel ID="pnlHtmlAnnounceMent" CssClass="ApplyStyleForDashBoardLists FirstPanel"
+                                        runat="server">
                                         <asp:Label ID="lblAnnounceMent" runat="server"></asp:Label>
                                     </asp:Panel>
-                                    <asp:Panel ID="pnlEditAnnounceMent" Width="95%" runat="server" Style="padding: 5px;
-                                        display: none;">
+                                    <asp:Panel ID="pnlEditAnnounceMent" runat="server" CssClass="SecondPanel" Style="display: none;">
                                         <CKEditor:CKEditorControl ID="ckeAnnouncementEditor" ResizeEnabled="false" Toolbar="Bold|Italic|Underline|Strike|-|NumberedList|BulletedList|Outdent|Indent|Format|Font|FontSize|TextColor|BGColor|Link|Unlink|-|Smiley|Cut|Copy|Paste|Undo|Redo|SpellChecker|"
                                             runat="server"></CKEditor:CKEditorControl>
-                                        <table style="width: 100%; padding: 5px;">
+                                        <table class="FirstPanel">
                                             <tr>
-                                                <td align="right" style="width: 50%; padding-top: 5px; padding-right: 5px;">
-                                                    <asp:Button ID="btnSaveAnnouncement" runat="server" OnClientClick="HidePanel();" OnClick="btnSaveAnnouncement_OnClick"
-                                                        Text="Save Announcement" ToolTip="Save Announcement" />
+                                                <td align="right" class="FivthTd">
+                                                    <asp:Button ID="btnSaveAnnouncement" runat="server" OnClientClick="HidePanel();"
+                                                        OnClick="btnSaveAnnouncement_OnClick" Text="Save Announcement" ToolTip="Save Announcement" />
                                                 </td>
-                                                <td align="left" style="width: 50%; padding-left: 5px; padding-top: 5px;">
-                                                    <asp:Button ID="btnCancelAnnouncement" runat="server" OnClientClick="HidePanel();" OnClick="btnCancelAnnouncement_OnClick"
-                                                        Text="Cancel" ToolTip="Cancel" />
+                                                <td align="left" class="SixthTd">
+                                                    <asp:Button ID="btnCancelAnnouncement" runat="server" OnClientClick="HidePanel();"
+                                                        OnClick="btnCancelAnnouncement_OnClick" Text="Cancel" ToolTip="Cancel" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -183,12 +181,11 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width: 30%;" valign="top">
-                        <table style="width: 100%;">
+                    <td class="width30P vTop">
+                        <table class="WholeWidth">
                             <tr>
-                                <td style="width: 100%;">
-                                    <asp:Panel ID="pnlDashBoard" Style="border-bottom: 2px solid White; padding: 5px;
-                                        padding-top: 15px; padding-bottom: 15px;" runat="server">
+                                <td class="WholeWidth">
+                                    <asp:Panel ID="pnlDashBoard" class="ThirdPanel" runat="server">
                                         <table class="WholeWidth">
                                             <tr>
                                                 <td align="center">
@@ -201,25 +198,26 @@
                                             </tr>
                                         </table>
                                     </asp:Panel>
-                                    <asp:Panel ID="pnlSearchSection" Style="padding: 5px;" runat="server">
-                                        <h1 style="text-align: center; width: 100%;">
+                                    <asp:Panel ID="pnlSearchSection" class="Padding5" runat="server">
+                                        <h1 class="WholeWidth textCenter">
                                             Search</h1>
                                         <table class="CompPerfTable WholeWidth">
                                             <tr>
-                                                <td align="right" style="padding-top: 5px;">
-                                                    <table style="width: 100%;">
+                                                <td align="right" class="PaddingTop5">
+                                                    <table class="WholeWidth">
                                                         <tr>
-                                                            <td style="width: 70%; white-space: nowrap;" align="left">
-                                                                <asp:TextBox ID="txtSearchText"  onkeypress="ChangeDefaultFocus(event);" Width="97%" runat="server"></asp:TextBox>
+                                                            <td class="Width70Per no-wrap" align="left">
+                                                                <asp:TextBox ID="txtSearchText" onkeypress="ChangeDefaultFocus(event);" CssClass="Width97Percent"
+                                                                    runat="server"></asp:TextBox>
                                                             </td>
                                                             <td>
                                                                 <asp:RequiredFieldValidator ID="reqSearchText" runat="server" ControlToValidate="txtSearchText"
                                                                     ErrorMessage="Please type text to be searched." ToolTip="Please type text to be searched."
                                                                     Text="*" SetFocusOnError="true" ValidationGroup="Search" Display="Dynamic" />
                                                             </td>
-                                                            <td style="width: 30%;" align="right">
-                                                                <asp:DropDownList Width="100px" onchange="ddlSearchType_onchange(this);" ID="ddlSearchType"
-                                                                    runat="server">
+                                                            <td class="width30P" align="right">
+                                                                <asp:DropDownList CssClass="Width100Px" onchange="ddlSearchType_onchange(this);"
+                                                                    ID="ddlSearchType" runat="server">
                                                                 </asp:DropDownList>
                                                             </td>
                                                         </tr>
@@ -227,8 +225,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td align="right" style="padding-top: 5px;">
-                                                    <asp:Button ID="btnSearchAll" runat="server" Text="Go" ToolTip="Go" ValidationGroup="Search" 
+                                                <td align="right" class="PaddingTop5">
+                                                    <asp:Button ID="btnSearchAll" runat="server" Text="Go" ToolTip="Go" ValidationGroup="Search"
                                                         PostBackUrl="~/ProjectSearch.aspx" EnableViewState="False" />
                                                 </td>
                                             </tr>
@@ -237,30 +235,30 @@
                                 </td>
                             </tr>
                         </table>
-                        <table style="width: 100%; border-top: 2px solid White;">
+                        <table class="WholeWidth Border2px">
                             <tr>
-                                <td style="width: 100%;">
-                                    <h1 style="text-align: center; width: 100%;">
+                                <td class="WholeWidth">
+                                    <h1 class="textCenter WholeWidth">
                                         Quick Links</h1>
-                                    <table width="100%">
+                                    <table class="WholeWidth">
                                         <tr>
-                                            <td style="width: 5%; padding-top: 5px;">
+                                            <td class="Width5Percent PaddingTop5">
                                             </td>
-                                            <td style="width: 90%; padding-top: 5px;">
-                                                <asp:Panel ID="pnlQuickLinks" Width="100%" BackColor="White" runat="server">
-                                                    <table style="border: 1px solid Black;" class="WholeWidth">
+                                            <td class="Width90Percent PaddingTop5">
+                                                <asp:Panel ID="pnlQuickLinks" CssClass="WholeWidth bgColorWhite" runat="server">
+                                                    <table class="WholeWidth border1Px">
                                                         <tr>
-                                                            <td style="width: 100%; padding: 5px; height: 50px;">
+                                                            <td class="SeventhTd">
                                                                 <asp:Repeater ID="repQuickLinks" OnItemDataBound="repQuickLinks_OnItemDataBound"
                                                                     runat="server">
                                                                     <ItemTemplate>
-                                                                        <table width="100%">
+                                                                        <table class="repQuickLinks">
                                                                             <tr>
-                                                                                <td style="width: 90%; padding-left: 0px; height: 20px;">
+                                                                                <td class="FirstRepTd">
                                                                                     <asp:HyperLink ID="hlnkPage" runat="server" NavigateUrl='<%# GetVirtualPath((string)Eval("VirtualPath")) %>'
                                                                                         Text='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>' ToolTip='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>'></asp:HyperLink>
                                                                                 </td>
-                                                                                <td align="right" style="width: 10%; padding-right: 0px; height: 20px;">
+                                                                                <td align="right" class="SecondRepTd">
                                                                                     <asp:ImageButton ID="imgDeleteQuickLink" QuickLinkId='<%# Eval("Id") %>' runat="server"
                                                                                         ImageUrl="~/Images/cross_icon.png" OnClick="imgDeleteQuickLink_OnClick" />
                                                                                 </td>
@@ -268,13 +266,13 @@
                                                                         </table>
                                                                     </ItemTemplate>
                                                                     <AlternatingItemTemplate>
-                                                                        <table width="100%" style="background-color: #F9FAFF;">
+                                                                        <table class="repQuickLinks alterrow">
                                                                             <tr>
-                                                                                <td style="width: 90%; padding-left: 0px; height: 20px;">
+                                                                                <td class="FirstRepTd">
                                                                                     <asp:HyperLink ID="hlnkPage" runat="server" NavigateUrl='<%# GetVirtualPath((string)Eval("VirtualPath")) %>'
                                                                                         Text='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>' ToolTip='<%# HttpUtility.HtmlEncode((string)Eval("LinkName")) %>'></asp:HyperLink>
                                                                                 </td>
-                                                                                <td align="right" style="width: 10%; padding-right: 0px; height: 20px;">
+                                                                                <td align="right" class="SecondRepTd">
                                                                                     <asp:ImageButton ID="imgDeleteQuickLink" QuickLinkId='<%# Eval("Id") %>' runat="server"
                                                                                         ImageUrl="~/Images/cross_icon.png" OnClick="imgDeleteQuickLink_OnClick" />
                                                                                 </td>
@@ -288,13 +286,13 @@
                                                 </asp:Panel>
                                                 <table class="WholeWidth">
                                                     <tr>
-                                                        <td valign="middle" style="padding-bottom: 5px; padding-top: 5px;" align="center">
+                                                        <td class="PaddingBottom5 vMiddle PaddingTop5" align="center">
                                                             <asp:Button ID="btnAddQuicklink" runat="server" Text="Add Quicklink" ToolTip="Add Quicklink" />
                                                         </td>
                                                     </tr>
                                                 </table>
                                             </td>
-                                            <td style="width: 5%; padding-top: 5px;">
+                                            <td class="Width5Percent PaddingTop5">
                                             </td>
                                         </tr>
                                     </table>
@@ -307,30 +305,28 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeQuicklink" runat="server" TargetControlID="btnAddQuicklink"
                 OnCancelScript="mpeQuicklink_OnCancelScript();" BackgroundCssClass="modalBackground"
                 PopupControlID="pnlQuicklink" CancelControlID="btnCancel" DropShadow="false" />
-            <asp:Panel ID="pnlQuicklink" runat="server" BorderColor="Black" BackColor="#d4dff8"
-                Style="display: none;" Width="372px" BorderWidth="1px">
-                <table width="100%">
+            <asp:Panel ID="pnlQuicklink" CssClass="DashBoardQuickLinksPopUp" runat="server" Style="display: none;">
+                <table class="WholeWidth">
                     <tr>
-                        <td style="padding-left: 5px; padding-top: 5px; padding-bottom: 5px; padding-right: 2px;">
+                        <td class="FirstTd">
                             <center>
                                 <b>Quick Links</b>
                             </center>
-                            <asp:TextBox ID="txtSearchBox" runat="server" Width="353px" Height="16px" Style="padding-bottom: 4px;
-                                margin-bottom: 4px;" MaxLength="50" onkeyup="filterQuickLinks(this);"></asp:TextBox>
+                            <asp:TextBox ID="txtSearchBox" runat="server" CssClass="DashBoardQuickLinksPopUpTextBox"
+                                MaxLength="50" onkeyup="filterQuickLinks(this);"></asp:TextBox>
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
-                                WatermarkText="Begin typing here to filter the list of Quick Links below." WatermarkCssClass="watermarkedtext"
+                                WatermarkText="Begin typing here to filter the list of Quick Links below." WatermarkCssClass="watermarkedtext DashBoardQuickLinksPopUpTextBox"
                                 BehaviorID="wmbhSearchBox" />
-                            <div class="cbfloatRight" style="height: 250px; width: 350px; overflow-y: scroll;
-                                border: 1px solid black; background: white; padding-left: 3px; text-align: left !important;">
-                                <asp:CheckBoxList ID="cblQuickLinks" runat="server" Width="100%" BackColor="White"
+                            <div class="cbfloatRight cblQuickLinksDiv">
+                                <asp:CheckBoxList ID="cblQuickLinks" runat="server" CssClass="WholeWidth bgColorWhite"
                                     AutoPostBack="false" DataTextField="Key" DataValueField="Value" CellPadding="3">
                                 </asp:CheckBoxList>
                             </div>
-                            <div style="text-align: right; width: 356px; padding: 8px 0px 8px 0px">
+                            <div class="cblQuickLinksClearButtonDiv">
                                 <input type="button" value="Clear All" onclick="javascript:ClearQuickLinks();" />
                             </div>
                             <br />
-                            <table width="356px;">
+                            <table class="Width356Px">
                                 <tr>
                                     <td align="right">
                                         <asp:Button ID="btnSaveQuickLinks" runat="server" OnClick="btnSaveQuickLinks_OnClick"
@@ -360,3 +356,4 @@
         Version.
         <asp:Label ID="lblCurrentVersion" runat="server"></asp:Label></div>
 </asp:Content>
+
