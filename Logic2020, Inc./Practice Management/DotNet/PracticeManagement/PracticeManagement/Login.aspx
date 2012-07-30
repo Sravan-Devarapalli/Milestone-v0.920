@@ -1,7 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
     CodeBehind="Login.aspx.cs" Inherits="PraticeManagement.Login" Title="Welcome to Practice Management" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Welcome to Practice Management</title>
@@ -28,7 +27,7 @@
             float: left;
         }
     </style>
-    <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.blockUI.min.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         function RaiseCustomForgotPasswordClick() {
