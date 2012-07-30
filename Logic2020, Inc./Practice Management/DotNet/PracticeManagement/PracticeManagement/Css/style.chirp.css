@@ -2211,6 +2211,10 @@ TABLE.Section td
 {
     width: 70px;
 }
+.Width70PxImp
+{
+    width: 70px !important;
+}
 .Width75PxImp
 {
     width: 75px !important;
@@ -4163,10 +4167,6 @@ BenchCosts.ascx*/
     overflow-y: auto;
     width: 290px;
     z-index: 20000;
-}
-.ScrollingDropDown_cblPractices TABLE
-{
-    width: 100%;
 }
 .overflowAuto
 {
@@ -6273,10 +6273,7 @@ image:hover:after
     height: 100px;
     z-index: 2000;
 }
-.PersonFilterSddAllTypes Table
-{
-    width: 100% !important;
-}
+
 .LnkBtnPrevious
 {
     color: #8F8F8F;
@@ -6776,5 +6773,30 @@ image:hover:after
     width: 356px;
     padding: 8px 0px 8px 0px;
 }
-
+.PersonPage_cblPractices
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 280px;
+    z-index: 20000;
+}
+.PersonPage_cblRecruiters
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 200px;
+    z-index: 20000;
+}
+.scroll_cblPractice table, .scroll_cblBDMs table, .UTilTimeLineFilterCblTimeScales table, .UTilTimeLineFilterCblPractices table, .TimeEntryByperson_cblPersons table, .TimeEntryByperson_cblPractices table, .TimeEntryByperson_cblTimeScales table, .ScrollingDropDown_cblPractices TABLE, .AccountSummaryBusinessUnitsDiv table, .ProjectSummaryScrollingDropDown table, .ProjectSummaryScrollingDropDown table, .GroupBySddPractice table, .PersonPage_cblRecruiters table, .PersonPage_cblPractices table, .PersonFilterSddAllTypes table
+{
+    width: 100% !important;
+}
 
