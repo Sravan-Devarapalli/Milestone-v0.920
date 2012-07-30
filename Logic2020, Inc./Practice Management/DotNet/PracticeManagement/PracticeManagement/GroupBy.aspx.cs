@@ -55,7 +55,7 @@ namespace PraticeManagement
         private const string STRPMReportSortDirection = "PMReportSortDirection";
         private const string STRPMReportSortColumnId = "PMReportSortColumnId";
 
-        private const string GroupByPersonFilterKey = "GroupByPersonFilterKey";
+        
         private const string ProjectsGroupedByPracticeKey = "ProjectsGroupedByPractice";
         private const string GroupedByPracticeGrandTotalKey = "GroupedByPracticeGrandTotal";
         private const string ProjectBagroundStyle = " style='background-color : #EEF3F9;'";
@@ -612,11 +612,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void Page_PreRender(object sender, EventArgs e)
-        {
-            SaveFilterSettings();
-        }
-
         /// <summary>
         /// Executes preliminary operations to the view be ready to display the data.
         /// </summary>
@@ -624,9 +619,7 @@ namespace PraticeManagement
         {
             if (!IsPostBack)
             {
-                System.Web.UI.ScriptManager.RegisterClientScriptBlock(this, this.GetType(), GroupByPersonFilterKey, "Delete_Cookie('" + GroupByPersonFilterKey + "', '/', '')", true);
-                HttpContext.Current.Request.Cookies.Remove(GroupByPersonFilterKey);
-                var filter = InitFilter();
+                var filter = new CompanyPerformanceFilterSettings();
 
                 //  If current user is administrator, don't apply restrictions
                 var person =
@@ -705,20 +698,6 @@ namespace PraticeManagement
             AddAttributesToCheckBoxes(this.cblClient);
         }
 
-        private static CompanyPerformanceFilterSettings InitFilter()
-        {
-            return SerializationHelper.DeserializeCookie(GroupByPersonFilterKey) as CompanyPerformanceFilterSettings ??
-                   new CompanyPerformanceFilterSettings();
-        }
-
-        /// <summary>
-        /// Stores a current filter set.
-        /// </summary>
-        private void SaveFilterSettings()
-        {
-            CompanyPerformanceFilterSettings filter = GetFilterSettings();
-            SerializationHelper.SerializeCookie(filter, GroupByPersonFilterKey);
-        }
 
         private void AddAttributesToCheckBoxes(ScrollingDropDown ddlpractices)
         {
