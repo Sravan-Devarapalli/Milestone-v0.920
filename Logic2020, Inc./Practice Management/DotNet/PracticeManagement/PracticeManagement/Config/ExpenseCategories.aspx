@@ -13,22 +13,20 @@
     <table>
         <tr>
             <td colspan="4">
-                <asp:GridView ID="gvCategories" runat="server" AutoGenerateColumns="False" Width="400px"
-                    DataKeyNames="Id" DataSourceID="odsCategories" OnRowUpdating="gvCategories_RowUpdating"
-                    CssClass="CompPerfTable" GridLines="None" BackColor="White">
-                    <AlternatingRowStyle BackColor="#F9FAFF" />
+                <asp:GridView ID="gvCategories" runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
+                    DataSourceID="odsCategories" OnRowUpdating="gvCategories_RowUpdating" CssClass="CompPerfTable ExpenceCategories_gvCategories">
+                    <AlternatingRowStyle CssClass="alterrow" />
                     <EmptyDataTemplate>
-                        <table id="tblfirst" class="CompPerfTable" width="400px">
+                        <table id="tblfirst" class="CompPerfTable Width400Px">
                             <tr>
-                                <th>
+                                <th class="Width20Percent">
                                 </th>
-                                <th style="width: 350px;">
+                                <th class="Width80Percent">
                                     <span>Category Name</span>
                                 </th>
                             </tr>
                             <tr>
-                                <td colspan="2" style="padding-left: 30px; padding-top: 10px; padding-bottom: 10px;"
-                                    class="GridViewPadding">
+                                <td colspan="2" class="ExpenceCategories_EmptyDataTd">
                                     <span>There are no Expense Categories.</span>
                                 </td>
                             </tr>
@@ -36,7 +34,8 @@
                     </EmptyDataTemplate>
                     <Columns>
                         <asp:TemplateField>
-                            <ItemStyle Width="20%" HorizontalAlign="Center" Height="25px" />
+                            <HeaderStyle CssClass="Width20Percent" />
+                            <ItemStyle CssClass="textCenter" />
                             <ItemTemplate>
                                 <asp:ImageButton ID="imgbtnEdit" CommandName="edit" runat="server" ToolTip="Edit Expense Category"
                                     ImageUrl="~/Images/icon-edit.png" />
@@ -49,12 +48,12 @@
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Category Name">
-                            <ItemStyle Width="80%" />
+                            <ItemStyle CssClass="Width80Percent" />
                             <ItemTemplate>
                                 <asp:Literal ID="litCategoryName" runat="Server" Text='<%# Server.HtmlEncode( (string) Eval("Name")) %>' />
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:TextBox ID="txtEditCategoryName" runat="Server" Text='<%# Bind("Name") %>' Width="90%"
+                                <asp:TextBox ID="txtEditCategoryName" runat="Server" Text='<%# Bind("Name") %>' CssClass="Width90Percent"
                                     MaxLength="25" />
                                 <asp:RequiredFieldValidator ID="rfvEditCategoryName" runat="server" ErrorMessage="The Name is required."
                                     ToolTip="The Name is required." SetFocusOnError="true" ControlToValidate="txtEditCategoryName"
@@ -69,15 +68,14 @@
                                 <asp:ImageButton ID="imgDelete" runat="server" CommandName="delete" ImageUrl="~/Images/icon-delete.png"
                                     ToolTip="Delete Expense Category" />
                             </ItemTemplate>
-                            <EditItemTemplate></EditItemTemplate>
+                            <EditItemTemplate>
+                            </EditItemTemplate>
                         </asp:TemplateField>
-                        <%--<asp:CommandField ButtonType="Image" DeleteImageUrl="~/Images/icon-delete.png" ShowInsertButton="false"
-                            ShowSelectButton="false" CausesValidation="True" ShowDeleteButton="True" ShowEditButton="false" />--%>
                     </Columns>
                 </asp:GridView>
-                <table width="400px">
-                    <tr style="background-color: #F9FAFF; height: 25px;">
-                        <td style="width: 20%; text-align: center;">
+                <table class="Width400Px">
+                    <tr class="alterrow Height25Px">
+                        <td class="Width20Percent textCenter">
                             <asp:ImageButton ID="ibtnInsertCategory" runat="server" Visible="true" ToolTip="Add Expense Category"
                                 ImageUrl="~/Images/add_16.png" OnClick="ibtnInsertCategory_Click" />
                             <asp:ImageButton ID="ibtnInsert" runat="server" Visible="false" OnClick="ibtnInsert_Clicked"
@@ -85,11 +83,11 @@
                             <asp:ImageButton ID="ibtnCancel" CommandName="cancel" runat="server" Visible="false"
                                 ToolTip="Cancel" ImageUrl="~/Images/no.png" OnClick="ibtnCancel_Clicked" />
                         </td>
-                        <td style="width: 80%;">
-                            <asp:TextBox ID="txtNewCategoryName" runat="server" Width="90%" Visible="false" ValidationGroup="NewCategory" />
-                            <ajaxcontroltoolkit:textboxwatermarkextender id="tbwmextender" runat="server" targetcontrolid="txtNewCategoryName"
-                                watermarktext="Add Expense Category" watermarkcssclass="watermarkedtext">
-                            </ajaxcontroltoolkit:textboxwatermarkextender>
+                        <td class="Width80Percent">
+                            <asp:TextBox ID="txtNewCategoryName" runat="server" CssClass="Width90Percent" Visible="false" ValidationGroup="NewCategory" />
+                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="tbwmextender" runat="server" TargetControlID="txtNewCategoryName"
+                                WatermarkText="Add Expense Category" WatermarkCssClass="watermarkedtext Width90Percent">
+                            </AjaxControlToolkit:TextBoxWatermarkExtender>
                             <asp:RequiredFieldValidator ID="reqNewCategoryName" runat="server" ControlToValidate="txtNewCategoryName"
                                 ErrorMessage="The Name is required." ToolTip="The Name is required." EnableClientScript="false"
                                 SetFocusOnError="true" Text="*" ValidationGroup="NewCategory"></asp:RequiredFieldValidator>
