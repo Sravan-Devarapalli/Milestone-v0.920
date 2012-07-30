@@ -787,11 +787,47 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\CascadingDropDownBehavior.min.js">
+      <DependentUpon>CascadingDropDownBehavior.yui.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\Combined.js" />
-    <Content Include="Scripts\ExpandOrCollapse.js" />
-    <Content Include="Scripts\FilteredCheckBoxList.js" />
-    <Content Include="Scripts\FilterTable.js" />
-    <Content Include="Scripts\jquery.tablesorter.js" />
+    <Content Include="Scripts\Cookie.min.js">
+      <DependentUpon>Cookie.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\corpNav.min.js">
+      <DependentUpon>corpNav.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\date.min.js">
+      <DependentUpon>date.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\datepicker.min.js">
+      <DependentUpon>datepicker.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\ExpandOrCollapse.yui.js" />
+    <Content Include="Scripts\ExpandOrCollapse.min.js">
+      <DependentUpon>ExpandOrCollapse.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\FilteredCheckBoxList.min.js">
+      <DependentUpon>FilteredCheckBoxList.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\FilteredCheckBoxList.yui.js" />
+    <Content Include="Scripts\FilterTable.min.js">
+      <DependentUpon>FilterTable.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\FilterTable.yui.js" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.min.js">
+      <DependentUpon>jquery-1.4.1-vsdoc.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.1.min.js">
+      <DependentUpon>jquery-1.4.1.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.blockUI.min.js">
+      <DependentUpon>jquery.blockUI.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.tablesorter.min.js">
+      <DependentUpon>jquery.tablesorter.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.tablesorter.yui.js" />
     <None Include="Service References\TimeTypeService\TimeTypeService14.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
@@ -801,7 +837,16 @@
     <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
-    <Content Include="Scripts\Master.js" />
+    <Content Include="Scripts\Master.min.js">
+      <DependentUpon>Master.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Master.yui.js" />
+    <Content Include="Scripts\MicrosoftAjax.min.js">
+      <DependentUpon>MicrosoftAjax.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\ScrollinDropDown.min.js">
+      <DependentUpon>ScrollinDropDown.yui.js</DependentUpon>
+    </Content>
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -837,13 +882,13 @@
     <Content Include="Reports\TimeEntriesByProject.aspx" />
     <Content Include="Reports\Xslt\RecentNoteItem.xslt" />
     <Content Include="Sandbox\ScrollingDropdownTest.aspx" />
-    <Content Include="Scripts\corpNav.js" />
-    <Content Include="Scripts\date.js" />
-    <Content Include="Scripts\datepicker.js" />
-    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.4.1.js" />
-    <Content Include="Scripts\jquery.blockUI.js" />
-    <Content Include="Scripts\ScrollinDropDown.js" />
+    <Content Include="Scripts\corpNav.yui.js" />
+    <Content Include="Scripts\date.yui.js" />
+    <Content Include="Scripts\datepicker.yui.js" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.yui.js" />
+    <Content Include="Scripts\jquery-1.4.1.yui.js" />
+    <Content Include="Scripts\jquery.blockUI.yui.js" />
+    <Content Include="Scripts\ScrollinDropDown.yui.js" />
     <Content Include="SecuritySetting.aspx" />
     <Content Include="Service References\ActivityLogService\ActivityLogService.disco" />
     <Content Include="Controls\CompanyLogoImage.ashx" />
@@ -3088,8 +3133,8 @@
     <None Include="Properties\DataSources\DataTransferObjects.Project.datasource" />
     <Content Include="Sandbox\TotalsTest.aspx" />
     <Content Include="Scripts\AdapterUtils.js" />
-    <Content Include="Scripts\CascadingDropDownBehavior.js" />
-    <Content Include="Scripts\Cookie.js" />
+    <Content Include="Scripts\CascadingDropDownBehavior.yui.js" />
+    <Content Include="Scripts\Cookie.yui.js" />
     <None Include="Service References\ActivityLogService\ActivityLogService11.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService11.xsd" />
     <None Include="Service References\ActivityLogService\ActivityLogService12.xsd" />
@@ -3419,7 +3464,7 @@
     <None Include="Service References\ProjectStatusService\configuration913.svcinfo" />
     <None Include="Service References\RoleService\configuration913.svcinfo" />
     <Content Include="Scripts\MenuAdapter.js" />
-    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.yui.js" />
     <Content Include="Scripts\sorttable.js" />
     <None Include="Service References\ConfigurationService\configuration91.svcinfo" />
     <None Include="Service References\ConfigurationService\configuration.svcinfo" />
@@ -3516,3 +3561,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
