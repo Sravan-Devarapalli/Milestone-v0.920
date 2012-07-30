@@ -4,6 +4,7 @@
 <%@ PreviousPageType VirtualPath="~/DashBoard.aspx" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Src="~/Controls/PersonsFilter.ascx" TagName="PersonsFilter" TagPrefix="uc1" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
@@ -14,12 +15,13 @@
     <title>Persons | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+<script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Person List
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <script type="text/javascript">
 
         function changeAlternateitemscolrsForCBL() {
