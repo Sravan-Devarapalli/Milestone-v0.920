@@ -15,12 +15,12 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <asp:UpdatePanel ID="pnlBody" runat="server">
         <ContentTemplate>
-            <table border="0" width="100%">
+            <table class="WholeWidth">
                 <tr>
-                    <td width="200px">
+                    <td class="Width200Px">
                         <asp:CheckBox ID="chbActive" runat="server" Checked="true" Text="Is Active?" onclick="setDirty();" />
                     </td>
-                    <td width="25px">
+                    <td class="Width25Px">
                         &nbsp;
                     </td>
                     <td colspan="3">
@@ -79,7 +79,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="5" width="670px">
+                    <td colspan="5" class="Width670Px">
                     <table>
                         <tr>
                             <td>
