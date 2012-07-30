@@ -146,10 +146,10 @@
                                             </tr>
                                             <tr>
                                                 <td rowspan="2" class="floatRight SddRecruiter">
-                                                    <cc2:ScrollingDropDown ID="cblRecruiters" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                                        onclick="scrollingDropdown_onclick('cblRecruiters','Recruiter')" BackColor="White"
-                                                        CellPadding="3" Height="200px" NoItemsType="All" SetDirty="False" DropDownListType="Recruiter"
-                                                        Width="200px" BorderWidth="0" />
+                                                    <cc2:ScrollingDropDown ID="cblRecruiters" runat="server"  AllSelectedReturnType="AllItems"
+                                                        onclick="scrollingDropdown_onclick('cblRecruiters','Recruiter')" 
+                                                         NoItemsType="All" SetDirty="False" DropDownListType="Recruiter" CssClass="PersonPage_cblRecruiters"
+                                                         />
                                                     <ext:ScrollableDropdownExtender ID="sdeRecruiters" runat="server" TargetControlID="cblRecruiters"
                                                         UseAdvanceFeature="True" Width="200px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                     </ext:ScrollableDropdownExtender>
