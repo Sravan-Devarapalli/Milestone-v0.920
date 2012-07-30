@@ -39,7 +39,6 @@
             overflow-y: auto;
         }
     </style>
-    <script type="text/javascript" src="~/Scripts/jquery-1.4.1-vsdoc.js"></script>
     <script type="text/javascript" language="javascript">
 
         $(document).ready(
