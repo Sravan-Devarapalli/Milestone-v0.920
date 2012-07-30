@@ -7,7 +7,7 @@
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src='<%# Generic.GetClientUrl("~/Scripts/Cookie.js", this) %>'></script>
+    <script type="text/javascript" src='<%# Generic.GetClientUrl("~/Scripts/Cookie.min.js", this) %>'></script>
 </asp:Content>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Person Stats | Practice Management</title>
