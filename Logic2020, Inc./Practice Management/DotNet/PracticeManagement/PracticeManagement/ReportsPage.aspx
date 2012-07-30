@@ -1,19 +1,22 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ReportsPage.aspx.cs" Inherits="PraticeManagement.ReportsPage" %>
 
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Reports/UTilTimelineFilter.ascx" TagName="UtilTimelineFilter"
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
-
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Reports | Practice Management</title>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Reports
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="Scripts/ScrollinDropDown.js"></script>
     <AjaxControlToolkit:TabContainer ID="tabSettings" runat="server" CssClass="CustomTabStyle">
         <AjaxControlToolkit:TabPanel runat="server" ID="tpnlConsUtilTimelinereport">
             <HeaderTemplate>
