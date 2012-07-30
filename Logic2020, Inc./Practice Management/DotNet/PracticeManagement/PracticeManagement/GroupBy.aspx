@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="Projects Group by | Practice Management" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="GroupBy.aspx.cs" Inherits="PraticeManagement.GroupByDirector" %>
 
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <%@ Register Src="~/Controls/MonthPicker.ascx" TagPrefix="uc" TagName="MonthPicker" %>
@@ -10,13 +11,12 @@
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
-    <script src="Scripts/Cookie.js" type="text/javascript"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Projects Group by | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="Scripts/ScrollinDropDown.js"></script>
     <script type="text/javascript">
         function ChangeResetButton() {
             var button = document.getElementById("<%= btnResetFilter.ClientID%>");
@@ -251,8 +251,8 @@
                                     </asp:UpdatePanel>
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClientClick="this.disabled=true;Delete_Cookie('GroupByPersonFilterKey', '/', '');window.location.href = RemoveExtraCharAtEnd(window.location.href);return false;"
-                                        CausesValidation="false" EnableViewState="False" CssClass="pm-button Width100PxImp" />
+                                    <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" OnClientClick="this.disabled=true;window.location.href = RemoveExtraCharAtEnd(window.location.href);return false;"
+                                        CausesValidation="false" EnableViewState="False" CssClass="Width100PxImp" />
                                 </td>
                             </tr>
                         </table>
