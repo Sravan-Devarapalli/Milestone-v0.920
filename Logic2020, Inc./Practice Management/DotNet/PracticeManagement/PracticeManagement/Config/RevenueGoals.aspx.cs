@@ -479,16 +479,16 @@ namespace PraticeManagement.Config
             return (projectedFinancialsDict != null && projectedFinancialsDict.Any(kvp => kvp.Key == monthstartDate));
         }
 
-        public System.Drawing.Color GetBackColor(object projectedFinancials, int Month)
+        public string GetBackColor(object projectedFinancials, int Month)
         {
             int selectedYear = int.Parse(lblYear.Text);
             var monthstartDate = new DateTime(selectedYear, Month, 1);
             var projectedFinancialsDict = projectedFinancials as Dictionary<DateTime, ComputedFinancials>;
             if (projectedFinancialsDict != null && projectedFinancialsDict.Any(kvp => kvp.Key == monthstartDate))
             {
-                return System.Drawing.Color.White;
+                return "bgColorWhite";
             }
-            return System.Drawing.Color.FromArgb(204, 204, 204);
+            return "bgcolor_CCCCCC";
         }
 
         private void DirectorSorting(string newOrder, int selectedYear)
