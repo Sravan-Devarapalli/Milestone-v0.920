@@ -69,7 +69,7 @@
                         Display="None" OnServerValidate="cvProjects_Validate">*</asp:CustomValidator>
                     <ajax:CascadingDropDown ID="cddClientProjects" runat="server" ParentControlID="ddlClients"
                         TargetControlID="ddlProjects" Category="Group" LoadingText="Loading Projects..."
-                        EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
+                        EmptyText="No Projects found" ScriptPath="~/Scripts/CascadingDropDownBehavior.min.js"
                         ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjects" UseContextKey="true"
                         PromptText="Please Select a Project" />
                 </td>
@@ -88,7 +88,7 @@
                         Display="None" OnServerValidate="cvMileStones_Validate">*</asp:CustomValidator>
                     <ajax:CascadingDropDown ID="cddProjectMileStones" runat="server" ParentControlID="ddlProjects"
                         TargetControlID="ddlMileStones" Category="Group" LoadingText="Loading Milestones..."
-                        EmptyText="No Milestones found" ScriptPath="~/Scripts/CascadingDropDownBehavior.js"
+                        EmptyText="No Milestones found" ScriptPath="~/Scripts/CascadingDropDownBehavior.min.js"
                         ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetMilestones" PromptText="Please Select a Milestone" />
                 </td>
                 <td>
