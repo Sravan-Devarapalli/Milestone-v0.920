@@ -4,19 +4,22 @@
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Import Namespace="DataTransferObjects.TimeEntry" %>
 <%@ Import Namespace="System.Collections.Generic" %>
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/CalendarLegend.ascx" TagName="CalendarLegend" TagPrefix="uc2" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="title" runat="server">
     <title>Time Entry By Person | Practice Management</title>
 </asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
+</asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script language="javascript" type="text/javascript" src="../Scripts/ScrollinDropDown.js"></script>
     <script language="javascript" type="text/javascript">
+
         function Excel_Click() {
             var hlnkExportToExcel = document.getElementById('<%= hlnkExportToExcel.ClientID %>');
             if (navigator.userAgent.indexOf(' Chrome/') > -1) {
@@ -78,7 +81,7 @@
             var hdnPracticeIds = document.getElementById("<%= hdnPracticeIds.ClientID%>");
             var ddlView = document.getElementById("<%= ddlView.ClientID%>");
             var loadingProgress = $get("<%= LoadingProgress1.ClientID%>" + '_upTimeEntries');
-          
+
             if (hdnPersonIds.value != "") {
                 var array = hdnPersonIds.value.split(',');
 
@@ -89,7 +92,7 @@
                 }
 
                 var temp = 0; for (var i = 0; i < array.length; i++) {
-                    
+
                     if (loadingProgress.style.display == "none") {
                         loadingProgress.style.display = 'block'
                     }
@@ -108,9 +111,6 @@
                             }
                         }
                            );
-
-
-
                 }
             }
         }
@@ -122,137 +122,13 @@
             }
         }
     </script>
-    <style type="text/css">
-        .AlignRight
-        {
-            text-align: right;
-        }
-        .AlignCentre
-        {
-            text-align: center;
-            padding-right: -1px;
-        }
-        
-        .TextAlignRight
-        {
-            text-align: right;
-            padding-right: 15px;
-        }
-        
-        .NotVisible
-        {
-            display: none;
-            visibility: hidden;
-        }
-        
-        table.PaddingClass td
-        {
-            padding: 3px;
-        }
-        table.time-entry-person-projects th
-        {
-            border-bottom: 1px solid gray;
-            border-top: 1px solid gray;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-top: 3px;
-            padding-bottom: 3px;
-            vertical-align: middle;
-            text-align: center;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        table.time-entry-person-projects tr
-        {
-            border-bottom: 1px solid lightgray;
-            border-top: 1px solid lightgray;
-            vertical-align: middle;
-        }
-        table.time-entry-person-projects td
-        {
-            vertical-align: middle;
-            border-bottom: 1px solid lightgray;
-            border-top: 1px solid lightgray;
-            padding-left: 5px;
-            text-align: right;
-            padding-right: 5px;
-            padding-top: 3px;
-            padding-bottom: 3px;
-            white-space: nowrap;
-        }
-        
-        .divPersonName
-        {
-            padding-bottom: 5px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        
-        .divTeTable
-        {
-            overflow-x: auto;
-            overflow-y: display;
-        }
-        .TimeEntrySummary
-        {
-            font-style: italic;
-            font-size: 16px;
-            font-weight: bold;
-            padding-top: 4px;
-            padding-bottom: 4px;
-        }
-        .divProjects
-        {
-            overflow-x: auto;
-            padding-top: 10px;
-        }
-        .TimeEntryDetail
-        {
-            font-style: italic;
-            font-size: 16px;
-            font-weight: bold;
-            padding-top: 4px;
-            padding-bottom: 4px;
-        }
-        .ClientAndProjectName
-        {
-            font-size: 14px;
-            font-weight: bold;
-            padding-top: 3px;
-            padding-bottom: 3px;
-        }
-        .HeaderDiv
-        {
-            text-align: center;
-            font-weight: bold;
-        }
-        .divHrClass
-        {
-            padding-top: 10px;
-            padding-bottom: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-        .hrClass
-        {
-            margin-left: 5px;
-            margin-right: 5px;
-            width: 100%;
-            color: #888888;
-        }
-        .ClientProjectTimeType
-        {
-            text-align: left !important;
-            white-space: nowrap;
-        }
-    </style>
     <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
         <ContentTemplate>
             <div class="buttons-block">
                 <table class="WholeWidth">
-                    <tr valign="top">
-                        <td align="left" style="width: 20px; padding-top: 3px;">
-                            <ajaxToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
+                    <tr class="vTop Padding3PxTd">
+                        <td class="Width20Px">
+                            <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                                 ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                                 ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
                                 ExpandControlID="btnExpandCollapseFilter" Collapsed="True" TextLabelID="lblFilter" />
@@ -260,48 +136,47 @@
                             <asp:Image ID="btnExpandCollapseFilter" runat="server" ImageUrl="~/Images/expand.jpg"
                                 ToolTip="Expand Filters" />
                         </td>
-                        <td style="width: 13%; padding-top: 3px; white-space: nowrap;" align="left">
+                        <td class="Width13Percent no-wrap">
                             &nbsp;&nbsp;Show Time Entered
                         </td>
-                        <td style="width: 20%" align="left">
+                        <td class="Width20Percent Padding0PxTd">
                             <uc:DateInterval ID="diRange" runat="server" FromToDateFieldCssClass="Width70Px"
                                 IsFromDateRequired="true" IsToDateRequired="true" />
                             <asp:ValidationSummary ID="valSum" runat="server" />
                         </td>
-                        <td style="width: 3%; padding-top: 3px; white-space: nowrap;" align="left">
+                        <td class="Width3Percent no-wrap">
                             &nbsp;&nbsp;for&nbsp;&nbsp;
                         </td>
-                        <td style="padding-top: 3px; width: 260px;" align="left">
-                            <div style="margin-top: -2px;">
-                                <cc2:ScrollingDropDown ID="cblPersons" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                    onclick="scrollingDropdown_onclick('cblPersons','Person')" BackColor="White"
-                                    CellPadding="3" NoItemsType="All" SetDirty="False" Width="350px" DropDownListType="Person"
-                                    BorderWidth="0" />
+                        <td class="Width260Px">
+                            <div class="marTop-2px floatRight">
+                                <pmc:ScrollingDropDown ID="cblPersons" runat="server" AllSelectedReturnType="AllItems"
+                                    onclick="scrollingDropdown_onclick('cblPersons','Person')" NoItemsType="All"
+                                    SetDirty="False" DropDownListType="Person" CssClass="TimeEntryByperson_cblPersons" />
                                 <ext:ScrollableDropdownExtender ID="sdePersons" runat="server" TargetControlID="cblPersons"
                                     Width="250px" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                 </ext:ScrollableDropdownExtender>
                             </div>
                         </td>
-                        <td>
+                        <td class="Padding0PxTd">
                             in &nbsp;
-                            <asp:DropDownList ID="ddlView" Width="125px" runat="server">
+                            <asp:DropDownList ID="ddlView" CssClass="Width125Px" runat="server">
                                 <asp:ListItem Text="Project Level" Value="1" title="Project Level" Selected="True"></asp:ListItem>
                                 <asp:ListItem onclick="EnableResetButton();" Text="Work Type Level" title="Work Type Level"
                                     Value="2"></asp:ListItem>
                             </asp:DropDownList>
                             &nbsp; view
                         </td>
-                        <td style="padding-top: 3px;" align="right">
-                            <div style="margin-top: -2px;">
-                                <table>
+                        <td align="right">
+                            <div class="marTop-2px">
+                                <table class="Padding0PxTd">
                                     <tr>
                                         <td>
-                                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" Width="100px" OnClick="btnUpdate_OnClick"
-                                                EnableViewState="False" />
+                                            <asp:Button ID="btnUpdateView" runat="server" Text="Update View" CssClass="Width100PxImp"
+                                                OnClick="btnUpdate_OnClick" EnableViewState="False" />
                                             <asp:HiddenField ID="hdnUpdateClicked" runat="server" />
                                         </td>
                                         <td>
-                                            <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" Width="100px"
+                                            <asp:Button ID="btnResetFilter" runat="server" Text="Reset Filter" CssClass="Width100PxImp"
                                                 OnClick="btnResetFilter_OnClick" CausesValidation="false" />
                                         </td>
                                     </tr>
@@ -316,13 +191,13 @@
                         </td>
                         <td>
                         </td>
-                        <td style="padding-top: 5px;">
+                        <td class="PaddingTop5">
                             <input type="button" runat="server" id="btnExportToXL" value="Export To Excel" disabled="disabled"
-                                enableviewstate="false" style="width: 100px" onclick="Excel_Click();" title="Export To Excel" />
+                                enableviewstate="false" class="Width100PxImp" onclick="Excel_Click();" title="Export To Excel" />
                             <asp:HyperLink ID="hlnkExportToExcel" runat="server" Style="display: none;" Text="Export To Excel"
                                 ToolTip="Export To Excel"></asp:HyperLink>
                             <asp:Button ID="btnExportToPDF" runat="server" Text="Export To PDF" OnClientClick="saveReport();"
-                                Enabled="false" Width="100px" OnClick="ExportToPDF" EnableViewState="False" /><asp:HiddenField
+                                Enabled="false" CssClass="Width100PxImp" OnClick="ExportToPDF" EnableViewState="False" /><asp:HiddenField
                                     ID="hdnSaveReportText" runat="server" />
                         </td>
                     </tr>
@@ -330,25 +205,26 @@
             </div>
             <div>
                 <asp:Panel ID="pnlFilters" runat="server">
-                    <ajaxToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0" CssClass="CustomTabStyle">
-                        <ajaxToolkit:TabPanel runat="server" ID="tpFilters">
+                    <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
+                        CssClass="CustomTabStyle">
+                        <AjaxControlToolkit:TabPanel runat="server" ID="tpFilters">
                             <HeaderTemplate>
                                 <span class="bg DefaultCursor"><span class="NoHyperlink">Filters</span> </span>
                             </HeaderTemplate>
                             <ContentTemplate>
                                 <table>
-                                    <tr align="center">
-                                        <td style="width: 200px; border-bottom: 1px solid black;" valign="top" colspan="2">
+                                    <tr align="center" class="BorderBottom1pxTd">
+                                        <td class="border vTop Width200Px" colspan="2">
                                             Person Status
                                         </td>
-                                        <td style="width: 30px;">
+                                        <td class="Width30Px">
                                         </td>
-                                        <td style="width: 150px; border-bottom: 1px solid black;" valign="top">
+                                        <td class="border vTop Width150px">
                                             Pay Type
                                         </td>
-                                        <td style="width: 30px;">
+                                        <td class="Width30Px">
                                         </td>
-                                        <td style="width: 250px; border-bottom: 1px solid black;">
+                                        <td class="border Width250Px">
                                             Practice Area
                                         </td>
                                     </tr>
@@ -364,22 +240,20 @@
                                         </td>
                                         <td>
                                         </td>
-                                        <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
-                                            <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
-                                                onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')" BackColor="White"
-                                                CellPadding="3" NoItemsType="All" SetDirty="False" Width="200px" DropDownListType="Pay Type"
-                                                Height="100px" BorderWidth="0" />
+                                        <td class="floatRight  practicesTd">
+                                            <pmc:ScrollingDropDown ID="cblTimeScales" runat="server" CssClass="TimeEntryByperson_cblTimeScales"
+                                                AllSelectedReturnType="Null" onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')"
+                                                NoItemsType="All" SetDirty="False" DropDownListType="Pay Type" />
                                             <ext:ScrollableDropdownExtender ID="sdeTimeScales" runat="server" TargetControlID="cblTimeScales"
                                                 UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="200px">
                                             </ext:ScrollableDropdownExtender>
                                         </td>
                                         <td>
                                         </td>
-                                        <td class="floatRight" style="padding-top: 5px; padding-left: 3px;">
-                                            <cc2:ScrollingDropDown ID="cblPractices" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="Null"
-                                                onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" BackColor="White"
-                                                CellPadding="3" Height="250px" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
-                                                Width="260px" BorderWidth="0" />
+                                        <td class="floatRight  practicesTd">
+                                            <pmc:ScrollingDropDown ID="cblPractices" runat="server" CssClass="TimeEntryByperson_cblPractices"
+                                                AllSelectedReturnType="Null" onclick="scrollingDropdown_onclick('cblPractices','Practice Area')"
+                                                NoItemsType="All" SetDirty="False" DropDownListType="Practice Area" />
                                             <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
                                                 UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                             </ext:ScrollableDropdownExtender>
@@ -390,19 +264,13 @@
                                             <asp:CheckBox ID="chbInactivePersons" runat="server" Text="Inactive" ToolTip="Include projected persons into report"
                                                 AutoPostBack="true" Checked="false" onclick="EnableResetButton();" OnCheckedChanged="PersonStatus_OnCheckedChanged" />
                                         </td>
-                                        <td>
-                                        </td>
-                                        <td>
-                                        </td>
-                                        <td>
-                                        </td>
-                                        <td>
+                                        <td colspan="4">
                                         </td>
                                     </tr>
                                 </table>
                             </ContentTemplate>
-                        </ajaxToolkit:TabPanel>
-                    </ajaxToolkit:TabContainer>
+                        </AjaxControlToolkit:TabPanel>
+                    </AjaxControlToolkit:TabContainer>
                 </asp:Panel>
                 <asp:HiddenField ID="hdnFiltersChanged" runat="server" Value="false" />
             </div>
