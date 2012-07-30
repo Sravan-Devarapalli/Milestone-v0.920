@@ -10,7 +10,7 @@
     <title>Revenue Goals | Practice Management</title>
 </asp:Content>
 <asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
-    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.js", this) %>" type="text/javascript"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Revenue Goals
