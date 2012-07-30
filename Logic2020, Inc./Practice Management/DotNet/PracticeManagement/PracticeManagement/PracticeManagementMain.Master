@@ -3,7 +3,6 @@
 
 <%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register TagPrefix="uc" Assembly="FormsAuthenticationUserImpersonation" Namespace="System.Web.UI.WebControls" %>
-<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Menu" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -20,7 +19,7 @@
     <AjaxControlToolkit:ToolkitScriptManager ID="scriptManager" runat="server" LoadScriptsBeforeUI="true"
         CombineScripts="False" EnablePageMethods="True" ScriptMode="Release" EnableScriptLocalization="False">
         <Scripts>
-            <asp:ScriptReference Name="MicrosoftAjax.js" Path="~/Scripts/MicrosoftAjax.js" />
+            <asp:ScriptReference Name="MicrosoftAjax.js" Path="~/Scripts/MicrosoftAjax.min.js" />
         </Scripts>
     </AjaxControlToolkit:ToolkitScriptManager>
     <asp:HiddenField ID="hidDirtyData" runat="server" />
