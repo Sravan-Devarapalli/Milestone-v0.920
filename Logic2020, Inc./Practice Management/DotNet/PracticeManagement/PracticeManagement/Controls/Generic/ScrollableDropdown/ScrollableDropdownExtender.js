@@ -42,7 +42,21 @@ PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownBehavior
     set_isScrollingDropdownClicked: function (value) {
         this._IsScrollingDropdownClicked = value;
     },
-
+    SetAlternateColors: function (chkboxList) {
+        var chkboxestd = chkboxList.getElementsByTagName('td');
+        var index = 0;
+        for (var i = 0; i < chkboxestd.length; i++) {
+            if (chkboxestd[i].style.display != "none") {
+                index++;
+                if ((index) % 2 == 0) {
+                    chkboxestd[i].style.backgroundColor = "#f9faff";
+                }
+                else {
+                    chkboxestd[i].style.backgroundColor = "";
+                }
+            }
+        }
+    },
     showOrHideScrollingDropdown: function () {
 
         var scrollingDropdown = this.get_scrollingDropdown();
@@ -53,6 +67,11 @@ PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownBehavior
         if (scrollingDropdown.style.display == 'none') {
             scrollingDropdown.style.display = '';
             this._setCheckBoxListPosition();
+            var alternateColors = scrollingDropdown.getAttribute('AlternateColors');
+            if (alternateColors === null || alternateColors === undefined) {
+                this.SetAlternateColors(scrollingDropdown);
+                scrollingDropdown.setAttribute('AlternateColors', 'true');
+            }
         }
         else {
             scrollingDropdown.style.display = 'none';
@@ -101,7 +120,7 @@ PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownBehavior
 
         if (labelControlPosition != null && scrollingDropdown) {
             scrollingDropdown.style.left = labelControlPosition.x - document.documentElement.scrollLeft + 'px';
-           
+
             scrollingDropdown.style.top = labelControlPosition.y + labelControlPosition.h - document.documentElement.scrollTop + 'px';
 
         }
