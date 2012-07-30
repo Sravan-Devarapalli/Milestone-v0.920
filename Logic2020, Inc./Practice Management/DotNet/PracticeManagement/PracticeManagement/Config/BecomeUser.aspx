@@ -9,9 +9,9 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <div id="dvBecomeUser" runat="server" visible="false" style="display: block">
-        <table width="80%">
+        <table class="Width80Percent">
             <tr>
-                <td style="width: 30%;">
+                <td class="width30P">
                     <table>
                         <tr>
                             <td>
@@ -31,10 +31,10 @@
                         </tr>
                     </table>
                 </td>
-                <td style="width: 5%;">
+                <td class="Width5Percent">
                 </td>
-                <td style="width: 65%;">
-                    <div style="border: 1px solid black; background-color: White; padding: 5px;">
+                <td class="Width65Percent">
+                    <div class="BecomeUserDiv">
                         <p>
                             To help troubleshoot issues that anothor person may be having in Practice Management
                             you can use the Become User functionality.
