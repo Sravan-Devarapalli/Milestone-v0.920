@@ -11,7 +11,7 @@ AS
 	SELECT p.Person AS PersonId,
 	       p.StartDate,
 	       CASE
-	           WHEN p.EndDate < dbo.GetFutureDate()
+	           WHEN p.EndDate < FT.FutureDate
 	           THEN p.EndDate
 	           ELSE CAST(NULL AS DATETIME)
 	       END AS EndDate,
@@ -19,7 +19,7 @@ AS
 	       p.Amount,
 	       p.Timescale,
 	       CAST(CASE p.Timescale
-	                WHEN 2 THEN p.Amount / dbo.GetHoursPerYear()
+	                WHEN 2 THEN p.Amount / HPY.HoursPerYear
 	                ELSE p.Amount
 	            END AS DECIMAL(18,2)) AS AmountHourly,
 	       p.TimesPaidPerMonth,
@@ -27,14 +27,15 @@ AS
 	       p.VacationDays,
 	       p.BonusAmount,
 	       p.BonusHoursToCollect,
-	       CAST(CASE p.BonusHoursToCollect WHEN dbo.GetHoursPerYear() THEN 1 ELSE 0 END AS BIT) AS IsYearBonus,
+	       CAST(CASE p.BonusHoursToCollect WHEN HPY.HoursPerYear THEN 1 ELSE 0 END AS BIT) AS IsYearBonus,
 	       p.DefaultHoursPerDay,
 	       t.Name AS TimescaleName,
 		   p.SeniorityId,
 		   p.PracticeId,
 		   DC.FractionOfMargin SalesCommissionFractionOfMargin
 	  FROM dbo.Pay AS p
+		   INNER JOIN dbo.GetFutureDateTable() FT ON 1 = 1
+		   INNER JOIN dbo.GetHoursPerYearTable() HPY ON 1 = 1
 	       INNER JOIN dbo.Timescale AS t ON p.Timescale = t.TimescaleId
 		   LEFT JOIN dbo.DefaultCommission DC
 		   ON DC.[type] = 1 AND DC.PersonId = p.Person AND DC.StartDate = p.StartDate
-
