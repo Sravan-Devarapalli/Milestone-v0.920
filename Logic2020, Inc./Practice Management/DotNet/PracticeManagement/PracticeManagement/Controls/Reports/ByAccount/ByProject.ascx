@@ -167,7 +167,6 @@
             </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
-    <br />
     <div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
         There are no Time Entries towards this range selected.
     </div>
