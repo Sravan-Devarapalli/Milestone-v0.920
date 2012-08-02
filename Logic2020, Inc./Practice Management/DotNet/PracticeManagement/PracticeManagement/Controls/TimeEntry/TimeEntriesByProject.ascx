@@ -104,14 +104,14 @@
         <asp:Panel ID="pnlFilters" runat="server" CssClass="buttons-block">
             <table class="opportunity-description">
                 <tr>
-                    <td valign="top">
+                    <td class="vTopImp">
                         <table class="opportunity-description">
                             <tr>
                                 <td>
                                     Account
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlClients" runat="server" Width="460" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
+                                    <asp:DropDownList ID="ddlClients" runat="server" CssClass="Width460Px" OnSelectedIndexChanged="ddlClients_OnSelectedIndexChanged"
                                         AutoPostBack="true">
                                     </asp:DropDownList>
                                 </td>
@@ -121,7 +121,7 @@
                                     </td>
                                     <td>
                                         <asp:DropDownList ID="ddlProjects" runat="server" Enabled="false" AutoPostBack="true"
-                                            Width="460" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
+                                            CssClass="Width460Px" OnSelectedIndexChanged="ddlProjects_OnSelectedIndexChanged">
                                             <asp:ListItem Text="-- Select a Project --" Value=""></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
@@ -142,7 +142,7 @@
                                     </td>
                                     <td>
                                         <asp:DropDownList ID="ddlMilestones" runat="server" Enabled="false" AutoPostBack="true"
-                                            Width="460px" OnSelectedIndexChanged="ddlMilestones_OnSelectedIndexChanged">
+                                            CssClass="Width460Px" OnSelectedIndexChanged="ddlMilestones_OnSelectedIndexChanged">
                                             <asp:ListItem Text="-- Select a Milestone --" Value="-1"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
@@ -151,11 +151,11 @@
                                     <td colspan="2">
                                         <table>
                                             <tr>
-                                                <td style="padding-top: 30px;">
+                                                <td class="PaddingTop30Imp">
                                                     Show only persons with time entered
                                                 </td>
-                                                <td style="text-align: right; padding-top: 30px;" id="report-date-interval">
-                                                    <uc:DateInterval ID="diRange" runat="server" FromToDateFieldCssClass="Width70Px" />
+                                                <td class="PaddingTop30Imp textRightImp" id="report-date-interval">
+                                                    <uc:DateInterval ID="diRange" runat="server" FromToDateFieldCssClass="Width70PxImp" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -163,16 +163,15 @@
                                 </tr>
                         </table>
                     </td>
-                    <td valign="top">
+                    <td class="vTopImp">
                         <table class="opportunity-description">
                             <tr>
-                                <td valign="top" style="padding-left: 5px;">
+                                <td class="vTopImp paddingLeft5pxImp">
                                     <asp:Label ID="lblPersons" runat="server" Text="Persons"></asp:Label>
                                 </td>
-                                <td style="padding-left: 10px;">
-                                    <pmc:ScrollingDropDown ID="cblPersons" runat="server" BorderColor="#aaaaaa" AllSelectedReturnType="AllItems"
-                                        BackColor="White" CellPadding="3" NoItemsType="All" SetDirty="False" Width="315"
-                                        Height="99" BorderWidth="0">
+                                <td class="LeftPadding10px">
+                                    <pmc:ScrollingDropDown ID="cblPersons" runat="server" AllSelectedReturnType="AllItems"
+                                        CellPadding="3" NoItemsType="All" SetDirty="False" CssClass="CblPersons">
                                     </pmc:ScrollingDropDown>
                                 </td>
                             </tr>
@@ -226,60 +225,60 @@
             runat="server" CssClass="WholeWidth">
             <ItemTemplate>
                 <div id="divPersonListSummary" runat="server">
-                    <h3 style="font-weight: bold;">
+                    <h3 class="fontBold">
                         <asp:Label ID="lblPersonName" runat="server" Text='<%# Eval("Key.HtmlEncodedName") %>' /></h3>
                     <br class="NotVisible" />
                     <asp:GridView ID="gvPersonTimeEntries" runat="server" DataSource='<%# Eval("Value") %>'
-                        AutoGenerateColumns="false" CssClass="CompPerfTable WholeWidth" GridLines="Both"
-                        OnRowDataBound="gvPersonTimeEntries_OnRowDataBound" BackColor="White" ShowFooter="true"
+                        AutoGenerateColumns="false" CssClass="bgcolorwhite CompPerfTable WholeWidth"
+                        GridLines="Both" OnRowDataBound="gvPersonTimeEntries_OnRowDataBound" ShowFooter="true"
                         OnDataBound="gvPersonTimeEntries_OnDataBound" EmptyDataText='<%# GetEmptyDataText() %>'>
-                        <AlternatingRowStyle BackColor="#F9FAFF" />
-                        <FooterStyle Font-Bold="true" HorizontalAlign="Center" />
+                        <AlternatingRowStyle CssClass="alterrow" />
+                        <FooterStyle CssClass="fontBold TextAlignCenterImp" />
                         <Columns>
                             <asp:TemplateField>
                                 <HeaderTemplate>
-                                    <div style="text-align: center; font-weight: bold; vertical-align: middle;" class="ie-bg">
+                                    <div class="ie-bg fontBold TextAlignCenterImp ValignMiddleImp">
                                         Date</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
                                     <%# ((TimeEntryRecord)Container.DataItem).ChargeCodeDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                                 </ItemTemplate>
-                                <HeaderStyle VerticalAlign="Middle" HorizontalAlign="Center" />
-                                <ItemStyle Wrap="False" HorizontalAlign="Left" VerticalAlign="Middle" Width="100" />
+                                <HeaderStyle CssClass="TextAlignCenterImp ValignMiddleImp" />
+                                <ItemStyle CssClass="ValignMiddleImp t-left Width100PxImp no-wrap" />
                             </asp:TemplateField>
                             <asp:TemplateField>
                                 <HeaderTemplate>
-                                    <div style="text-align: center; font-weight: bold; vertical-align: middle;" class="ie-bg">
+                                    <div class="ie-bg fontBold TextAlignCenterImp ValignMiddleImp">
                                         Note</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
                                     <%# Eval("HtmlEncodedNote")%>
                                 </ItemTemplate>
-                                <ItemStyle VerticalAlign="Middle" />
-                                <HeaderStyle VerticalAlign="Middle" HorizontalAlign="Center" />
-                                <FooterStyle BorderStyle="None" VerticalAlign="Middle" HorizontalAlign="Right" />
+                                <ItemStyle CssClass="ValignMiddleImp" />
+                                <HeaderStyle CssClass="TextAlignCenterImp ValignMiddleImp" />
+                                <FooterStyle CssClass="ValignMiddleImp textRightImp BorderNone" />
                                 <FooterTemplate>
                                     Total:</FooterTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
                                 <HeaderTemplate>
-                                    <div style="text-align: center; vertical-align: middle; font-weight: bold;" class="ie-bg">
+                                    <div class="ie-bg fontBold TextAlignCenterImp ValignMiddleImp">
                                         Hours</div>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <div style="text-align: center;">
+                                    <div class="TextAlignCenterImp">
                                         <%#((TimeEntryRecord)Container.DataItem).ActualHours.ToString(PraticeManagement.Constants.Formatting.DoubleFormat)%></div>
                                 </ItemTemplate>
-                                <HeaderStyle VerticalAlign="Middle" HorizontalAlign="Center" />
-                                <FooterStyle HorizontalAlign="Center" BorderStyle="None" VerticalAlign="Middle" />
-                                <ItemStyle Wrap="False" Width="50" HorizontalAlign="Center" />
+                                <HeaderStyle CssClass="TextAlignCenterImp ValignMiddleImp" />
+                                <FooterStyle CssClass="ValignMiddleImp TextAlignCenterImp BorderNone" />
+                                <ItemStyle CssClass="TextAlignCenterImp no-wrap Width50PxImp" />
                             </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
                 </div>
             </ItemTemplate>
         </asp:DataList>
-        <h3 style="text-align: right">
+        <h3 class="textRightImp">
             <asp:Label ID="lblGrandTotal" runat="server" /></h3>
         <asp:HiddenField ID="hdnGuid" runat="server" />
     </ContentTemplate>
