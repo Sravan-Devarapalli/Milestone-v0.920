@@ -109,18 +109,17 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (reportDataList.Count > 0 || cblBusinessUnits.Items.Count > 1)
             {
                 divEmptyMessage.Style["display"] = "none";
-                repBusinessUnit.Visible = true;
+                repBusinessUnit.Visible = btnExportToExcel.Enabled = true;
                 repBusinessUnit.DataSource = reportDataList;
                 repBusinessUnit.DataBind();
                 cblBusinessUnits.SaveSelectedIndexesInViewState();
                 ImgBusinessUnitFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblBusinessUnits.FilterPopupClientID,
                   cblBusinessUnits.SelectedIndexes, cblBusinessUnits.CheckBoxListObject.ClientID, cblBusinessUnits.WaterMarkTextBoxBehaviorID);
-
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
-                repBusinessUnit.Visible = false;
+                repBusinessUnit.Visible = btnExportToExcel.Enabled = false;
             }
         }
 
