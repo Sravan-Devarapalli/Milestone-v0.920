@@ -790,7 +790,7 @@ namespace PraticeManagement.Reporting
 
             HttpContext.Current.Response.ContentType = "Application/pdf";
             HttpContext.Current.Response.AddHeader(
-                "content-disposition", string.Format("attachment; filename={0}", filename));
+                "content-disposition", string.Format("attachment; filename={0}", Utils.Generic.EncodedFileName(filename)));
 
             int len = pdfDataInBytes.Length;
             int bytes;
