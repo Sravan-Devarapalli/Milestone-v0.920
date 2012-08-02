@@ -16,11 +16,6 @@
     One-Off Person Margin
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script type="text/javascript">        //<!--
-        //Overriding the getDirty with a dummy one
-        function getDirty() { return false; };
-        //-->
-    </script>
     <uc:loadingProgress ID="lpMarginTest" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
