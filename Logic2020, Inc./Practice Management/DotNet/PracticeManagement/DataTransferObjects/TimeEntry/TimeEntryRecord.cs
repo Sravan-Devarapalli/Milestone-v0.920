@@ -132,6 +132,14 @@ namespace DataTransferObjects.TimeEntry
             }
         }
 
+        public string HtmlEncodedNoteForExport
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(NoteForExport);
+            }
+        }
+
         #endregion
 
         #region Implementation of IComparable<TimeEntryRecord>
