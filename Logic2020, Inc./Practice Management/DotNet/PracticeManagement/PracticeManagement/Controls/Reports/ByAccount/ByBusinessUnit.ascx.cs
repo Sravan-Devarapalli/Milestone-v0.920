@@ -159,7 +159,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateBusinessUnitFilter(ProjectGroup[] businessUnits)
         {
-            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "Name");
+            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "HtmlEncodedName");
 
         }
 
@@ -185,7 +185,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 sb.Append("Account_ByBusinessUnit Report");
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(account.Name);
+                sb.Append(account.HtmlEncodedName);
                 sb.Append("\t");
                 sb.Append(account.Code);
                 sb.Append("\t");
@@ -245,11 +245,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     {
                         sb.Append(report.Account.Code);
                         sb.Append("\t");
-                        sb.Append(report.Account.Name);
+                        sb.Append(report.Account.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(businessUnitLevelGroupedHours.BusinessUnit.Code);
                         sb.Append("\t");
-                        sb.Append(businessUnitLevelGroupedHours.BusinessUnit.Name);
+                        sb.Append(businessUnitLevelGroupedHours.BusinessUnit.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(businessUnitLevelGroupedHours.ProjectsCount);
                         sb.Append("\t");
