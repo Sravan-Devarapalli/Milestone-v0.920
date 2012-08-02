@@ -95,19 +95,19 @@
                                 <tr>
                                     <td class="textCenter">
                                         <asp:Button ID="btnLogOutOnSessionTimeOutOK" runat="server" Text="Continue" CssClass="Width80Px"
-                                            CausesValidation="false" />
+                                            UseSubmitBehavior="false" CausesValidation="false" />
                                     </td>
                                     <td class="textCenter">
                                         <asp:Button ID="btnLogOutOnSessionTimeOutCancel" runat="server" Text="Exit" CssClass="Width80Px"
-                                            CausesValidation="false" />
+                                            UseSubmitBehavior="false" CausesValidation="false" />
                                     </td>
                                 </tr>
                             </table>
                         </asp:Panel>
                         <asp:Button ID="lnkHiddenLinkForTimeOutAlert" runat="server" Style="display: none;"
-                            CausesValidation="false"></asp:Button>
+                            UseSubmitBehavior="false" CausesValidation="false"></asp:Button>
                         <asp:Button ID="btnLogOutOnSessionTimeOut" runat="server" OnClick="btnLogOutOnSessionTimeOut_OnClick"
-                            Style="display: none;" CausesValidation="false" />
+                            UseSubmitBehavior="false" Style="display: none;" CausesValidation="false" />
                         <asp:HiddenField ID="hdnLastServerVisit" runat="server" />
                         <asp:HiddenField ID="hdnRedirectToLogedOutPage" runat="server" />
                         <asp:HiddenField ID="hdnRunTimeOutPopuUpScript" runat="server" Value="false" />
