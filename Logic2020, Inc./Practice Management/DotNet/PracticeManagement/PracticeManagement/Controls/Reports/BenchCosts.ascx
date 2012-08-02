@@ -4,7 +4,7 @@
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <script type="text/javascript">
-    function EnableResetButton() {
+    function EnableResetButton() {       
         var button = document.getElementById("<%= btnResetFilter.ClientID%>");
         var hiddenField = document.getElementById("<%= hdnFiltersChanged.ClientID%>")
         if (button != null) {
@@ -13,7 +13,7 @@
         }
     }
 
-    function CheckIfDatesValid() {
+    function CheckIfDatesValid() {       
         txtStartDate = document.getElementById('<%= (diRange.FindControl("tbFrom") as TextBox).ClientID %>');
         txtEndDate = document.getElementById('<%= (diRange.FindControl("tbTo") as TextBox).ClientID %>');
         var startDate = new Date(txtStartDate.value);
@@ -37,7 +37,7 @@
     }
 
 
-    function CheckAndShowCustomDatesPoup(ddlPeriod) {
+    function CheckAndShowCustomDatesPoup(ddlPeriod) {       
         imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
         lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
         if (ddlPeriod.value == '0') {
@@ -63,7 +63,7 @@
             }
         }
     }
-    function ReAssignStartDateEndDates() {
+    function ReAssignStartDateEndDates() {        
         hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
         hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
         hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
@@ -82,7 +82,7 @@
 
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
-    function endRequestHandle(sender, Args) {
+    function endRequestHandle(sender, Args) {        
         imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
         lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
         ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
@@ -380,7 +380,7 @@
                         </div>
                     </HeaderTemplate>
                     <ItemTemplate>
-                        <asp:HyperLink ID="btnPersonName" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Name")) %>'
+                        <asp:HyperLink ID="btnPersonName" runat="server" Text='<%# Eval("HtmlEncodedName") %>'
                             NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Client.Id")) %>' />
                     </ItemTemplate>
                 </asp:TemplateField>
@@ -391,7 +391,7 @@
                         </div>
                     </HeaderTemplate>
                     <ItemTemplate>
-                        <asp:Label ID="lblPracticeName" runat="server" CssClass="padRight5" Text='<%# Eval("Practice.Name") %>'></asp:Label>
+                        <asp:Label ID="lblPracticeName" runat="server" CssClass="padRight5" Text='<%# Eval("Practice.HtmlEncodedName") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField ItemStyle-CssClass="textCenter Width70Px">
