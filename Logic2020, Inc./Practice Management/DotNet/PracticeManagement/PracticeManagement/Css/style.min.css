@@ -370,6 +370,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width25Percent{width:25%}
 .Width26Percent,.Width26Per{width:26%}
 .Width27Percent{width:27%}
+.Width29Percent{width:29%}
 .width30P{width:30%}
 .Width31Percent{width:31%}
 .Width34Percent{width:34%}
@@ -930,7 +931,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .AuditReportByPersonHeaderTd2,.AuditReportByProjectHeaderTd2{width:15%;font-weight:bolder;font-size:15px;text-align:right;padding-right:15px}
 .AuditReportByProjectHeaderTd1{font-style:italic;width:85%;white-space:nowrap;padding-left:15px!important;font-size:15px;font-weight:700}
 .AccountSummaryReportCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
-.AccountSummaryReportCustomTabStyle td span.bg{padding-right:10px!important}
+.AccountSummaryReportCustomTabStyle td span.bg{padding-right:10px!important;padding-bottom:9px!important}
 .lineHeight30Px{line-height:30px}
 .AccountSummaryBusinessUnitsDiv{background-color:#FFF;border:1px solid #000;display:inline-block;height:160px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
 .AccountSummaryReportHeader{width:100%;background-color:White;padding-bottom:5px!important}
@@ -1264,8 +1265,7 @@ image:hover:after{content:attr(title)}
 .scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table{width:100%!important}
 .DisplayInline{display:inline-block}
 .BorderBottomNone td{border-bottom:none!important}
-input#ctl00_body_login_Password{width:180px}
-input#ctl00_body_login_UserName{width:180px}
+input#ctl00_body_login_Password,input#ctl00_body_login_UserName{width:180px}
 table#ctl00_body_login td,tr{padding:3px}
 table#ctl00_body_login tr td label{float:left}
 .DivLogin{margin-left:auto;margin-right:auto;width:300px;padding:5px}
