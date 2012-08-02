@@ -147,6 +147,13 @@
             GetDefault(document.getElementById("<%= cblSalesperson.ClientID %>"));
             GetDefault(document.getElementById("<%= cblPractice.ClientID %>"));
             GetDefault(document.getElementById("<%= cblProjectOwner.ClientID %>"));
+
+            var scrollingDropdownList = document.getElementById('cblProjectGroup');
+            var arrayOfTRs = scrollingDropdownList.getElementsByTagName("tr");
+            for (var i = 0; i < arrayOfTRs.length; i++) {
+                arrayOfTRs[i].removeAttribute('class');
+            }
+
             custom_ScrollingDropdown_onclick('cblProjectGroup', 'Business Unit');
         }
 
