@@ -31,6 +31,7 @@
     if (tblControl != null && searchtextBox != null) {
         var trControls = tblControl.getElementsByTagName('tr');
         var searchText = isWaterMarkTxtbox ? searchtextBox.get_Text() : searchtextBox.value.toLowerCase();
+        searchText = EncodeString(searchText);
         for (var i = 0; i < trControls.length; i++) {
 
             var rowText = '';
