@@ -23,9 +23,11 @@
                 text = "Please Choose " + type.toString() + "(s)";
             }
         }
+        text = DecodeString(text);
         if (text.length > 32) {
             text = text.substr(0, 30) + "..";
         }
         scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = text;
     }
 }
+
