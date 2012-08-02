@@ -102,15 +102,15 @@ namespace PraticeManagement.Controls.Reports
                     {
                         sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
                         sb.Append("\t");
-                        sb.Append(timeEntriesGroupByClientAndProject.Client.Name);
+                        sb.Append(timeEntriesGroupByClientAndProject.Client.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Code);
                         sb.Append("\t");
-                        sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Name);
+                        sb.Append(timeEntriesGroupByClientAndProject.Project.Group.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
                         sb.Append("\t");
-                        sb.Append(timeEntriesGroupByClientAndProject.Project.Name);
+                        sb.Append(timeEntriesGroupByClientAndProject.Project.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Project.Status.Name);
                         sb.Append("\t");
