@@ -155,7 +155,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             sb.Append("Account_ByBusinessDevelopment Report");
             sb.Append("\t");
             sb.AppendLine();
-            sb.Append(account.Name);
+            sb.Append(account.HtmlEncodedName);
             sb.Append("\t");
             sb.Append(account.Code);
             sb.Append("\t");
@@ -206,7 +206,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
                             foreach (var dateLevel in groupByDate.DayTotalHoursList)
                             {
-                                sb.Append(personLevelGroupedHoursList.Person.PersonLastFirstName);
+                                sb.Append(personLevelGroupedHoursList.Person.HtmlEncodedName);
                                 sb.Append("\t");
 
                                 sb.Append(groupByDate.Date.ToString("MM/dd/yyyy"));
@@ -217,13 +217,13 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                                 sb.Append("\t");
                                 sb.Append(buLevelGroupedHours.BusinessUnit.Code);
                                 sb.Append("\t");
-                                sb.Append(buLevelGroupedHours.BusinessUnit.Name);
+                                sb.Append(buLevelGroupedHours.BusinessUnit.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append(dateLevel.NonBillableHours);
                                 sb.Append("\t");
                                 sb.Append(dateLevel.TotalHours);
                                 sb.Append("\t");
-                                sb.Append(dateLevel.NoteForExport);
+                                sb.Append(dateLevel.HtmlEncodedNoteForExport);
                                 sb.Append("\t");
                                 sb.AppendLine();
 
@@ -240,7 +240,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             var filename = string.Format("{0}_{1}_{2}.xls", account.Code, account.Name, "_ByBusinessDevlopment");
             filename = filename.Replace(' ', '_');
-            GridViewExportUtil.Export(filename, sb);
+            GridViewExportUtil.Export(Utils.Generic.EncodedFileName(filename), sb);
 
         }
 
