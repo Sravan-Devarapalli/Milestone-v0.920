@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="OpportunitySearch.aspx.cs" Inherits="PraticeManagement.OpportunitySearch" %>
 
-<%@ PreviousPageType TypeName="PraticeManagement.Controls.PracticeManagementSearchPageBase" %>
 <%@ Register Src="Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/Generic/OpportunityList.ascx" TagName="OpportunityList"
