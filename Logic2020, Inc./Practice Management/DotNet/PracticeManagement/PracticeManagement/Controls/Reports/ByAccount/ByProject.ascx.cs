@@ -101,7 +101,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 sb.Append("Account_ByProject Report");
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(account.Name);
+                sb.Append(account.HtmlEncodedName);
                 sb.Append("\t");
                 sb.Append(account.Code);
                 sb.Append("\t");
@@ -165,15 +165,15 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     {
                         sb.Append(projectLevelGroupedHours.Project.Client.Code);
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Client.Name);
+                        sb.Append(projectLevelGroupedHours.Project.Client.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Project.Group.Code);
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Group.Name);
+                        sb.Append(projectLevelGroupedHours.Project.Group.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Project.ProjectNumber);
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Name);
+                        sb.Append(projectLevelGroupedHours.Project.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Project.Status.Name);
                         sb.Append("\t");
@@ -332,7 +332,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             int height = 17 * businessUnits.Length;
             Unit unitHeight = new Unit((height + 17) > 50 ? 50 : height + 17);
-            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "Name");
+            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "HtmlEncodedName");
             cblBusinessUnits.Height = unitHeight;
 
         }
