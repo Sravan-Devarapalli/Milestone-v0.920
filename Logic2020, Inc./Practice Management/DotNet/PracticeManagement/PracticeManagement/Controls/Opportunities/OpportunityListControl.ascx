@@ -1102,18 +1102,18 @@
                                                             </div>
                                                         </LayoutTemplate>
                                                         <ItemTemplate>
-                                                            <tr>
+                                                            <tr class="BorderBottomNone">
                                                                 <td class="TdItemTemplate">
                                                                     <table class="WholeWidth">
                                                                         <tr>
                                                                             <td class="LabelPriority TextAlignCenterImp PaddingLeftRight0px vMiddle">
-                                                                                <asp:Label ID="lblPriority" Width="15px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                                <asp:Label ID="lblPriority" CssClass="Width15Px DisplayInline" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                             </td>
                                                                             <td class="LabelPriority TextAlignCenter PaddingLeftRight2px vMiddle">
                                                                                 -
                                                                             </td>
                                                                             <td class="LabelPriority PaddingLeftRight0px">
-                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" CssClass="WhiteSpaceNormal"
+                                                                                <asp:Label ID="lblDescription" runat="server" CssClass="WhiteSpaceNormal Width180Px DisplayInline"
                                                                                     Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                             </td>
                                                                         </tr>
@@ -1193,7 +1193,7 @@
                                 <asp:HyperLink ID="hlStatus" runat="server" CssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
                                     Description='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem)%>'
                                     onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);"
-                                   NavigateUrl='<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>'>                           
+                                    NavigateUrl='<%# GetProjectDetailUrl((Opportunity) Container.DataItem) %>'>                           
                                 </asp:HyperLink>
                             </div>
                         </td>
@@ -1242,14 +1242,14 @@
                                         <td class="Width96Per">
                                             <asp:DataList ID="dtlProposedPersons" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20) %>
+                                                    <%# GetFormattedPersonName( GetWrappedText(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 20), 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ) %>
                                                 </ItemTemplate>
                                             </asp:DataList>
                                             <asp:DataList ID="dtlTeamStructure" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20)%>
+                                                    <%# GetFormattedPersonName( GetWrappedText(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 20), 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType )%>
                                                     (<%#((DataTransferObjects.OpportunityPerson)Container.DataItem).Quantity.ToString() %>)
                                                     <%-- By
                                                      ((DataTransferObjects.OpportunityPerson)Container.DataItem).NeedBy.Value.ToString("MM/dd/yyyy") %>--%>
@@ -1335,14 +1335,14 @@
                                         <td class="Width96Per">
                                             <asp:DataList ID="dtlProposedPersons" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20)%>
+                                                    <%# GetFormattedPersonName( GetWrappedText(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 20), 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType )%>
                                                 </ItemTemplate>
                                             </asp:DataList>
                                             <asp:DataList ID="dtlTeamStructure" runat="server" ItemStyle-CssClass="OpportunitySummaryWordWrap">
                                                 <ItemTemplate>
-                                                    <%# GetWrappedText( GetFormattedPersonName(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 
-                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType ), 20)%>
+                                                    <%# GetFormattedPersonName( GetWrappedText(((DataTransferObjects.OpportunityPerson)Container.DataItem).Person.PersonLastFirstName, 20), 
+                                                    ((DataTransferObjects.OpportunityPerson)Container.DataItem).PersonType )%>
                                                     (<%#((DataTransferObjects.OpportunityPerson)Container.DataItem).Quantity.ToString() %>)
                                                     <%--By  #((DataTransferObjects.OpportunityPerson)Container.DataItem).NeedBy.Value.ToString("MM/dd/yyyy") %>--%>
                                                 </ItemTemplate>
@@ -1441,8 +1441,8 @@
             TargetControlID="hdMpePopupAttachToProject" CancelControlID="btnCancleAttachToProject"
             BehaviorID="mpePopupAttachToProject" BackgroundCssClass="modalBackground" PopupControlID="pnlAttachToProject"
             DropShadow="false" />
-        <asp:Panel ID="pnlAttachToProject" runat="server"
-            CssClass="ConfirmBoxClass PanelPerson" Style="display: none;">
+        <asp:Panel ID="pnlAttachToProject" runat="server" CssClass="ConfirmBoxClass PanelPerson"
+            Style="display: none;">
             <table class="Width100Per">
                 <tr class="BackGroundColorGray Height27Px">
                     <td class="WhiteSpaceNoWrap AttachOpportunity TextAlignCenter">
