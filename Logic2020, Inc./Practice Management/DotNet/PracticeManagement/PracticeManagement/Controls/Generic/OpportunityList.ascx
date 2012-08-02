@@ -228,7 +228,7 @@
                 </td>
                 <td>
                     <div class="cell-pad">
-                        <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).ClientAndGroup %>' /></div>
+                        <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).HtmlEncodedClientAndGroup %>' /></div>
                 </td>
                 <td>
                     <div class="cell-pad">
@@ -288,7 +288,7 @@
                 </td>
                 <td>
                     <div class="cell-pad">
-                        <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).ClientAndGroup %>' /></div>
+                        <asp:Label ID="lblClientName" runat="server" Text='<%# ((Opportunity) Container.DataItem).HtmlEncodedClientAndGroup %>' /></div>
                 </td>
                 <td>
                     <div class="cell-pad">
