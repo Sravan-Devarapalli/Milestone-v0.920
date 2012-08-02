@@ -33,7 +33,7 @@ namespace PraticeManagement
                             <td align='right' class='padRight5'>
                                 <table> <tr><td class='textRightImp'>{2}</td></tr><tr><td class='TextAlignRightImp'>{3}</td></tr></table>
                             </td>";
-        private const string GrandTotalRowHTMLTemplate = "</tr><tr class='summary border1Px Height40Px'><td class='TextAlignCenterImp BorderLeft2Px'>Grand Total</td><td></td>{0}<td class='textRightImp padRight5'><table><tr><td>{1}</td></tr><tr><td>{2}</td></tr></table></td>";
+        private const string GrandTotalRowHTMLTemplate = "</tr><tr class='summary border1Px Height40Px'><td class='TextAlignCenterImp BorderLeft2Px'>Grand Total</td><td></td>{0}<td class='textRightImp padRight5'><table class='WholeWidth'><tr><td>{1}</td></tr><tr><td>{2}</td></tr></table></td>";
         private const string CollpseExpandCellTemplate =
                    @"<table><tr><td class='Width15Px'>
                   <img alt='Collapse' name='Collapse' {0} onclick='ExpandCollapseChilds(this);' src='Images/collapse.jpg' class='hidden'  />
