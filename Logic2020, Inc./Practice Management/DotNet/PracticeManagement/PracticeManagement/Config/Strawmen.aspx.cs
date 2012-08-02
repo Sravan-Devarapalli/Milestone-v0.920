@@ -127,7 +127,7 @@ namespace PraticeManagement.Config
         {
             hdCompersationStrawman.Value = personId.ToString();
             Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
-            lblStrawmanName.Text = person.PersonLastFirstName;
+            lblStrawmanName.Text = person.HtmlEncodedName;
             StrawmenCompersationList = person.PaymentHistory;
             IsEditCompersationEnable = StrawmenCompersationList.Count() == 1;
             gvCompensationHistory.DataSource = person.PaymentHistory;
