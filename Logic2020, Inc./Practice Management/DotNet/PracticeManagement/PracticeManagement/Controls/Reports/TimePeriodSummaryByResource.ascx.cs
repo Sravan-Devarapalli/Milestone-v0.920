@@ -156,7 +156,7 @@ namespace PraticeManagement.Controls.Reports
                     //Data
                     foreach (var personLevelGroupedHours in data)
                     {
-                        sb.Append(personLevelGroupedHours.Person.PersonLastFirstName);
+                        sb.Append(personLevelGroupedHours.Person.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(personLevelGroupedHours.Person.Seniority.Name);
                         sb.Append("\t");
