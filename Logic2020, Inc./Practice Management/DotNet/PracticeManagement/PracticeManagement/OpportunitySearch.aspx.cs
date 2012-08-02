@@ -28,15 +28,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (!IsPostBack && PreviousPage != null)
-            {
-                txtSearchText.Text = PreviousPage.SearchText;
-                DisplaySearch();
-            }
-        }
-
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             DisplaySearch();
@@ -53,14 +44,9 @@ namespace PraticeManagement
             Page.Validate();
             if (Page.IsValid)
             {
-
-                var opportunities = DataHelper.GetLookedOpportunities(txtSearchText.Text,
-                                 DataHelper.CurrentPerson.Id.Value);
+                var opportunities = DataHelper.GetLookedOpportunities(txtSearchText.Text, DataHelper.CurrentPerson.Id.Value);
                 Opportunities = opportunities.ToList();
-
                 ucOpportunityList.DataBindLookedOpportunities(opportunities.AsQueryable().ToArray());
-
-
             }
         }
 
@@ -70,3 +56,4 @@ namespace PraticeManagement
         }
     }
 }
+
