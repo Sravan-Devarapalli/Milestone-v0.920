@@ -11,6 +11,7 @@ using System.Web.UI.HtmlControls;
 using AjaxControlToolkit;
 using PraticeManagement.Controls.Opportunities;
 using System.Collections.Generic;
+using System.Web;
 
 namespace PraticeManagement.Controls.Generic
 {
@@ -314,6 +315,9 @@ namespace PraticeManagement.Controls.Generic
                 descriptionText = descriptionText.Insert(i, WordBreak);
             }
 
+            descriptionText = HttpUtility.HtmlEncode(descriptionText);
+
+            descriptionText = descriptionText.Replace("&lt;wbr /&gt;", "<wbr />");
 
             return string.Format(Description,descriptionText); ;
         }
