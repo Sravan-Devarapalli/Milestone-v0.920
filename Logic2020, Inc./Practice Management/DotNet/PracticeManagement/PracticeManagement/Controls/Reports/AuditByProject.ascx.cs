@@ -120,7 +120,7 @@ namespace PraticeManagement.Controls.Reports
                         {
                             foreach (TimeEntryRecord timeEntryRecord in personLevelTimeEntrie.TimeEntryRecords)
                             {
-                                sb.Append(personLevelTimeEntrie.Person.PersonLastFirstName);
+                                sb.Append(personLevelTimeEntrie.Person.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append(personLevelTimeEntrie.Person.Status.Name);
                                 sb.Append("\t");
@@ -130,13 +130,13 @@ namespace PraticeManagement.Controls.Reports
                                 sb.Append("\t");
                                 sb.Append(timeEntryRecord.ModifiedDate.ToString("MM/dd/yyyy"));
                                 sb.Append("\t");
-                                sb.Append(timeEntryRecord.ChargeCode.Client.Name);
+                                sb.Append(timeEntryRecord.ChargeCode.Client.HtmlEncodedName);
                                 sb.Append("\t");
-                                sb.Append(timeEntryRecord.ChargeCode.ProjectGroup.Name);
+                                sb.Append(timeEntryRecord.ChargeCode.ProjectGroup.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append(timeEntryRecord.ChargeCode.Project.ProjectNumber);
                                 sb.Append("\t");
-                                sb.Append(timeEntryRecord.ChargeCode.Project.Name);
+                                sb.Append(timeEntryRecord.ChargeCode.Project.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append(timeEntryRecord.ChargeCode.Phase);
                                 sb.Append("\t");
@@ -150,7 +150,7 @@ namespace PraticeManagement.Controls.Reports
                                 sb.Append("\t");
                                 sb.Append(timeEntryRecord.NetChange);
                                 sb.Append("\t");
-                                sb.Append(timeEntryRecord.NoteForExport);
+                                sb.Append(timeEntryRecord.HtmlEncodedNoteForExport);
                                 sb.Append("\t");
                                 sb.AppendLine();
                             }
