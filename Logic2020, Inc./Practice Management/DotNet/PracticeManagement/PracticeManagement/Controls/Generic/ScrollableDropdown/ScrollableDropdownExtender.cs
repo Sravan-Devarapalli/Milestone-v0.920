@@ -10,6 +10,7 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
     using System;
     using System.Web.UI.HtmlControls;
     using System.Drawing;
+    using System.Web;
 
     /// <summary>
     /// Extender that fixes width of select element in IE.
@@ -56,8 +57,9 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
             {
                 if (UseAdvanceFeature)
                 {
-                    string selectedString = ((ScrollingDropDown)this.TargetControl).SelectedString;
-                    return selectedString.Length > 32 ? selectedString.Substring(0, 30)+".." : selectedString;
+                    string selectedString =  HttpUtility.HtmlDecode(((ScrollingDropDown)this.TargetControl).SelectedString);
+
+                    return HttpUtility.HtmlEncode(selectedString.Length > 32 ? selectedString.Substring(0, 30)+".." : selectedString);
                 }
                 else
                 {
