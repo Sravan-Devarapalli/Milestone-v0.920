@@ -113,7 +113,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# HttpUtility.HtmlEncode((string)Eval("HTMLNote"))%>
+                                                        <%# Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -146,7 +146,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# HttpUtility.HtmlEncode((string)Eval("HTMLNote"))%>
+                                                        <%# (string)Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -216,7 +216,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -249,7 +249,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -297,11 +297,11 @@
                                     ExpandControlID="imgProject" TextLabelID="lbProject" />
                                 <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Project Details" />
                                 <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
-                                <%# Eval("Client.Name") %>
+                                <%# Eval("Client.HtmlEncodedName")%>
                                 >
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
-                                <%# Eval("Project.Name")%>
+                                <%# Eval("Project.HtmlEncodedName")%>
                                 <b class="fontStyleNormal">
                                     <%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
                             </td>
@@ -349,7 +349,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -382,7 +382,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -406,11 +406,11 @@
                                     ExpandControlID="imgProject" TextLabelID="lbProject" />
                                 <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Project Details" />
                                 <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
-                                <%# Eval("Client.Name") %>
+                                <%# Eval("Client.HtmlEncodedName")%>
                                 >
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
-                                <%# Eval("Project.Name")%>
+                                <%# Eval("Project.HtmlEncodedName")%>
                                 <b class="fontStyleNormal">
                                     <%# GetProjectStatus((string)Eval("Project.Status.Name"))%></b>
                             </td>
@@ -458,7 +458,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -491,7 +491,7 @@
                                                         <b>NOTE:&nbsp;</b>
                                                     </td>
                                                     <td class="vTopImp">
-                                                        <%# Eval("HTMLNote")%>
+                                                        <%# Eval("HtmlEncodedHTMLNote")%>
                                                     </td>
                                                 </tr>
                                             </table>
