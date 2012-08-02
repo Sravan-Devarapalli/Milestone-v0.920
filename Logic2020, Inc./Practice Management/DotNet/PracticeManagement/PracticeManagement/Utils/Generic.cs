@@ -9,6 +9,9 @@ using ErrorEventArgs = PraticeManagement.Events.ErrorEventArgs;
 using DataTransferObjects;
 using System.Web.Security;
 using System.Web.UI;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PraticeManagement.Utils
 {
@@ -240,6 +243,25 @@ namespace PraticeManagement.Utils
             }
 
             return res;
+        }
+
+        public static string EncodedFileName(string fileName)
+        {
+            List<char> invalidChars = Path.GetInvalidFileNameChars().ToList();
+
+            invalidChars.Add(';');
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < fileName.Length; i++)
+            {
+                if (!invalidChars.Any(c => c == fileName[i]))
+                {
+                    sb.Append(fileName[i]);
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }
