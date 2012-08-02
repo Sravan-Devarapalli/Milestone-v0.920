@@ -15,19 +15,19 @@
         $(document).ready(function () {
             hdnAreCredentialssaved = document.getElementById('<%= hdnAreCredentialssaved.ClientID %>');
             if (hdnAreCredentialssaved.value == 'true') {
-                $.blockUI({ message: '<div style="Padding:5px;">New password successfully saved.  Redirecting to landing page...</div>', css: { width: '380px'} });
+                $.blockUI({ message: '<div class="Padding5">New password successfully saved.  Redirecting to landing page...</div>', css: { width: '380px'} });
                 setTimeout('__doPostBack("__Page", "")', 2000);
             }
         }
     );
     </script>
-    <div style="width: 300px; margin-left: auto; margin-right: auto; padding: 5px;">
+    <div class="DivLogin">
         <asp:ChangePassword ID="changePassword" runat="server" MembershipProvider="PracticeManagementMembershipProvider"
             ContinueDestinationPageUrl="~/" OnChangingPassword="changePassword_OnChangingPassword"
             ChangePasswordFailureText="New Password should be should be at least {0} characters and should contain at least {1} non-alphanumeric characters (e.g. !, @, #, $ etc).">
         </asp:ChangePassword>
     </div>
-    <div style="width: 300px; margin-left: auto; margin-right: auto; padding: 5px;">
+    <div class="DivLogin">
         <uc:MessageLabel ID="msglblchangePasswordDetails" runat="server" ErrorColor="Red"
             InfoColor="Green" WarningColor="Orange" EnableViewState="false" />
     </div>
