@@ -8,16 +8,11 @@
     Assembly="PraticeManagement" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc1" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
-<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Opportunities.ViewProjectExtender" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Opportunities/PrevNextOpportunity.ascx" TagPrefix="uc"
     TagName="PrevNextOpportunity" %>
-<%@ Register TagPrefix="uc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
-<%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Opportunity Details | Practice Management</title>
 </asp:Content>
@@ -1097,10 +1092,10 @@
                                 </td>
                             </tr>
                         </table>
-                        <ajax:AnimationExtender ID="animHide" TargetControlID="btnClosePriority" runat="server">
-                        </ajax:AnimationExtender>
-                        <ajax:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint" runat="server">
-                        </ajax:AnimationExtender>
+                        <AjaxControlToolkit:AnimationExtender ID="animHide" TargetControlID="btnClosePriority" runat="server">
+                        </AjaxControlToolkit:AnimationExtender>
+                        <AjaxControlToolkit:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint" runat="server">
+                        </AjaxControlToolkit:AnimationExtender>
                         <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
                         <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
                             TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
@@ -1184,9 +1179,9 @@
                     </Triggers>
                 </asp:UpdatePanel>
                 <br class="height1Px" />
-                <ajax:TabContainer ID="tcOpportunityDetails" runat="server" CssClass="CustomTabStyle"
+                <AjaxControlToolkit:TabContainer ID="tcOpportunityDetails" runat="server" CssClass="CustomTabStyle"
                     ActiveTabIndex="0">
-                    <ajax:TabPanel ID="tpDescription" runat="server">
+                    <AjaxControlToolkit:TabPanel ID="tpDescription" runat="server">
                         <HeaderTemplate>
                             <span class="bg"><a href="#"><span>Description</span></a></span>
                         </HeaderTemplate>
@@ -1226,8 +1221,8 @@
                                 </asp:UpdatePanel>
                             </div>
                         </ContentTemplate>
-                    </ajax:TabPanel>
-                    <ajax:TabPanel ID="tpHistory" runat="server" Visible="true">
+                    </AjaxControlToolkit:TabPanel>
+                    <AjaxControlToolkit:TabPanel ID="tpHistory" runat="server" Visible="true">
                         <HeaderTemplate>
                             <span class="bg"><a href="#"><span>History</span></a></span>
                         </HeaderTemplate>
@@ -1247,8 +1242,8 @@
                                 </Triggers>
                             </asp:UpdatePanel>
                         </ContentTemplate>
-                    </ajax:TabPanel>
-                </ajax:TabContainer>
+                    </AjaxControlToolkit:TabPanel>
+                </AjaxControlToolkit:TabContainer>
                 <table class="WholeWidth Backgrounde2ebff">
                     <tr>
                         <td class="TextAlignCenter PaddingLeft8Px padRight8">
@@ -1356,8 +1351,7 @@
                                                     <center>
                                                         <b>Team Resources</b>
                                                     </center>
-                                                    <asp:TextBox ID="txtSearchBox" runat="server" CssClass="TextSearchBoxResources Width353Height16"
-                                                        MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSearchBox" runat="server" CssClass="TextSearchBoxResources Width353Height16" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
                                                     <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
                                                         WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
                                                         WatermarkCssClass="watermarkedtext TextSearchBoxResources Width353Height16" BehaviorID="wmbhSearchBox" />
@@ -1374,10 +1368,10 @@
                                                         </tr>
                                                     </table>
                                                     <div class="cbfloatRight CblPotentialResources">
-                                                        <uc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Width="100%"
+                                                        <pmc:MultipleSelectionCheckBoxList ID="cblPotentialResources" runat="server" Width="100%"
                                                             BackColor="White" AutoPostBack="false" DataTextField="Name" DataValueField="id"
                                                             OnDataBound="cblPotentialResources_OnDataBound" CellPadding="3">
-                                                        </uc:MultipleSelectionCheckBoxList>
+                                                        </pmc:MultipleSelectionCheckBoxList>
                                                     </div>
                                                     <div class="BtnClearAll">
                                                         <input type="button" value="Clear All" onclick="javascript:ClearProposedResources();" />
@@ -1606,9 +1600,9 @@
                     </tr>
                     <tr>
                         <td class="OpportunityPrioritiesPopUpTd">
-                            <cc2:CustomDropDown ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();ddlProjects_change(this);"
+                            <pmc:CustomDropDown ID="ddlProjects" runat="server" AppendDataBoundItems="true" onchange="setDirty();ddlProjects_change(this);"
                                 AutoPostBack="false" CssClass="Width350Px">
-                            </cc2:CustomDropDown>
+                            </pmc:CustomDropDown>
                         </td>
                     </tr>
                     <tr>
