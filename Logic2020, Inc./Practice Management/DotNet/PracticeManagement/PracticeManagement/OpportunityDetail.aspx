@@ -26,7 +26,8 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <script src="<%# Generic.GetClientUrl("~/Scripts/date.min.js", this) %>" type="text/javascript"></script>
-    <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet" type="text/css" />
+    <link href="<%# Generic.GetClientUrl("~/Css/datepicker.min.css", this) %>" rel="stylesheet"
+        type="text/css" />
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/datepicker.min.js" type="text/javascript"></script>
@@ -61,21 +62,6 @@
             ddlProjects.value = optionList[0].value;
         }
 
-        function EncodeString(str) {
-
-            var rtn = null;
-
-            rtn = str.toString().replace(/&/g, "&amp;");
-
-            rtn = rtn.replace(/"/g, "&quot;")
-
-            rtn = rtn.replace(/</g, "&lt;")
-
-            rtn = rtn.replace(/>/g, "&gt;");
-
-            return rtn;
-        }
-
         function ShowDescriptionSelections(ddlProjects) {
 
             var divDescription = document.getElementById('<%= divDescription.ClientID %>');
@@ -91,7 +77,7 @@
 
                 lblOpportunityDescription.innerHTML = "";
                 lblProjectDescription.innerHTML = "";
-                divDescription.style.display = "none";
+                divDescription.setAttribute("class", "Padding15Px displayNone");
                 var optionList = ddlProjects.getElementsByTagName('option');
 
                 var selectedProjectDescription = "";
@@ -119,11 +105,11 @@
                 else {
                     lblProjectDescription.innerHTML = EncodeString(selectedProjectDescription);
                 }
-
-                divDescription.style.display = "";
+               
+                divDescription.setAttribute("class", "Padding15Px");
             }
             else {
-                divDescription.style.display = "none";
+                divDescription.setAttribute("class", "Padding15Px displayNone");                
             }
         }
 
@@ -915,13 +901,13 @@
                                                                     <table class="WholeWidth">
                                                                         <tr>
                                                                             <td class="LabelPriority TextAlignCenterImp PaddingLeftRight0px vMiddle">
-                                                                                <asp:Label ID="lblPriority" Width="15px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                                <asp:Label ID="lblPriority" CssClass="Width15Px DisplayInline" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
                                                                             </td>
                                                                             <td class="LabelPriority TextAlignCenter PaddingLeftRight2px vMiddle">
                                                                                 -
                                                                             </td>
                                                                             <td class="LabelPriority PaddingLeftRight0px">
-                                                                                <asp:Label ID="lblDescription" runat="server" Width="180px" CssClass="WhiteSpaceNormal"
+                                                                                <asp:Label ID="lblDescription" runat="server" CssClass="WhiteSpaceNormal Width180Px DisplayInline"
                                                                                     Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                             </td>
                                                                         </tr>
@@ -1370,7 +1356,8 @@
                                                     <center>
                                                         <b>Team Resources</b>
                                                     </center>
-                                                    <asp:TextBox ID="txtSearchBox" runat="server" CssClass="TextSearchBoxResources Width353Height16" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSearchBox" runat="server" CssClass="TextSearchBoxResources Width353Height16"
+                                                        MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
                                                     <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
                                                         WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
                                                         WatermarkCssClass="watermarkedtext TextSearchBoxResources Width353Height16" BehaviorID="wmbhSearchBox" />
@@ -1626,7 +1613,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="divDescription" runat="server" class="Padding15Px" Style="display: none;">
+                            <div id="divDescription" runat="server" class="Padding15Px displayNone">
                                 <table class="Width100Per">
                                     <tr>
                                         <td class="Width3Percent">
