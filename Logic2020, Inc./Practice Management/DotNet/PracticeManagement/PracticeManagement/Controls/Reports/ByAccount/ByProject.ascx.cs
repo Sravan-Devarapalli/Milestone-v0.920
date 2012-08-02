@@ -260,7 +260,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (reportData.Length > 0 || cblBusinessUnits.Items.Count > 1 || cblProjectStatus.Items.Count > 1)
             {
                 divEmptyMessage.Style["display"] = "none";
-                repProject.Visible = true;
+                repProject.Visible = btnExportToExcel.Enabled = true;
                 repProject.DataSource = reportData;
                 repProject.DataBind();
 
@@ -278,7 +278,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             else
             {
                 divEmptyMessage.Style["display"] = "";
-                repProject.Visible = false;
+                repProject.Visible = btnExportToExcel.Enabled = false;
             }
         }
 
