@@ -14,7 +14,7 @@
                         TextLabelID="lbProject" />
                     <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
                     <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
-                    <%# Eval("Person.PersonLastFirstName")%>
+                    <%# Eval("Person.HtmlEncodedName")%>
                 </td>
                 <td class="PersonDetailTotal">
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
@@ -29,7 +29,7 @@
                 <ItemTemplate>
                     <table class="WholeWidthWithHeight">
                         <tr class="textLeft bgcolorwhite">
-                            <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft20">
+                            <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft20Imp">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessUnit" runat="server"
                                     CollapsedText="Expand Business Unit Details" ExpandedText="Collapse Business Unit Details"
                                     EnableViewState="false" Collapsed="true" TargetControlID="pnlBusinessUnitDetails"
@@ -37,7 +37,7 @@
                                     CollapseControlID="imgBusinessUnit" ExpandControlID="imgBusinessUnit" TextLabelID="lbBusinessUnit" />
                                 <asp:Image ID="imgBusinessUnit" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
                                 <asp:Label ID="lbBusinessUnit" Style="display: none;" runat="server"></asp:Label>
-                                <%# Eval("BusinessUnit.Name")%>
+                                <%# Eval("BusinessUnit.HtmlEncodedName")%>
                                 <b class="fontStyleNormal">
                                     <%# GetBusinessUnitStatus((bool)Eval("BusinessUnit.IsActive"))%></b>
                             </td>
@@ -54,7 +54,7 @@
                             <ItemTemplate>
                                 <table class="WholeWidthWithHeight">
                                     <tr class="textleft bgColorD4D0C9">
-                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40">
+                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40Imp">
                                             <%# GetDateFormat((DateTime)Eval("Date"))%>
                                         </td>
                                         <td class="PersonDetailTotal padRight110Imp">
@@ -84,7 +84,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -112,7 +112,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -128,7 +128,7 @@
                             <AlternatingItemTemplate>
                                 <table class="WholeWidthWithHeight">
                                     <tr class="textleft bgcolor_ECE9D9">
-                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40">
+                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40Imp">
                                             <%# GetDateFormat((DateTime)Eval("Date"))%>
                                         </td>
                                         <td class="PersonDetailTotal padRight110Imp">
@@ -158,7 +158,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -186,7 +186,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -205,7 +205,7 @@
                 <AlternatingItemTemplate>
                     <table class="WholeWidthWithHeight">
                         <tr class="textLeft bgColor_F5FAFF">
-                            <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft20">
+                            <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft20Imp">
                                 <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessUnit" runat="server"
                                     CollapsedText="Expand Business Unit Details" ExpandedText="Collapse Business Unit Details"
                                     EnableViewState="false" Collapsed="true" TargetControlID="pnlBusinessUnitDetails"
@@ -230,7 +230,7 @@
                             <ItemTemplate>
                                 <table class="WholeWidthWithHeight">
                                     <tr class="textleft bgColorD4D0C9">
-                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40">
+                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40Imp">
                                             <%# GetDateFormat((DateTime)Eval("Date"))%>
                                         </td>
                                         <td class="PersonDetailTotal padRight110Imp">
@@ -260,7 +260,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -288,7 +288,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -304,7 +304,7 @@
                             <AlternatingItemTemplate>
                                 <table class="WholeWidthWithHeight">
                                     <tr class="textleft bgcolor_ECE9D9">
-                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40">
+                                        <td colspan="4" class="ProjectAccountName Width95Percent no-wrap padLeft40Imp">
                                             <%# GetDateFormat((DateTime)Eval("Date"))%>
                                         </td>
                                         <td class="PersonDetailTotal padRight110Imp">
@@ -334,7 +334,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -362,7 +362,7 @@
                                                                     <b>NOTE:&nbsp;</b>
                                                                 </td>
                                                                 <td class="vTopImp">
-                                                                    <%# Eval("HTMLNote")%>
+                                                                    <%# Eval("HtmlEncodedHTMLNote")%>
                                                                 </td>
                                                             </tr>
                                                         </table>
