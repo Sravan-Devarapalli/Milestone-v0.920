@@ -46,13 +46,13 @@ namespace PraticeManagement.Controls.Reports
             data = data.OrderBy(p => p.WorkType.Name).ToArray();
             PopulateWorkTypeTotalHoursPercent(data);
             StringBuilder sb = new StringBuilder();
-            sb.Append(project.Client.Name);
+            sb.Append(project.Client.HtmlEncodedName);
             sb.Append("\t");
-            sb.Append(project.Group.Name);
+            sb.Append(project.Group.HtmlEncodedName);
             sb.Append("\t");
             sb.AppendLine();
             //P081003 - [ProjectName]
-            sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.Name));
+            sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.HtmlEncodedName));
             sb.Append("\t");
             sb.AppendLine();
             sb.Append(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType);
@@ -101,7 +101,7 @@ namespace PraticeManagement.Controls.Reports
             }
             var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByWorkType");
             filename = filename.Replace(' ', '_');
-            GridViewExportUtil.Export(filename, sb);
+            GridViewExportUtil.Export(Utils.Generic.EncodedFileName(filename), sb);
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
