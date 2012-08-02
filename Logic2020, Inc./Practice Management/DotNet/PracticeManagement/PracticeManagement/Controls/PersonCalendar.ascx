@@ -6,20 +6,6 @@
     TagPrefix="uc3" %>
 <%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc" %>
 <script type="text/javascript">
-    function EncodeString(str) {
-
-        var rtn = null;
-
-        rtn = str.toString().replace(/&/g, "&amp;");
-
-        rtn = rtn.replace(/"/g, "&quot;")
-
-        rtn = rtn.replace(/</g, "&lt;")
-
-        rtn = rtn.replace(/>/g, "&gt;");
-
-        return rtn;
-    }
 
     function ShowPopup(dayLink, hiddenDayOffID, hiddenDateID) {
         var hndDayOff = $get(hiddenDayOffID);
