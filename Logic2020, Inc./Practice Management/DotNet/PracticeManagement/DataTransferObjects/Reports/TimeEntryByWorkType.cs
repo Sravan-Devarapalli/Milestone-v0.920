@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using DataTransferObjects.TimeEntry;
+using System.Web;
 
 namespace DataTransferObjects.Reports
 {
@@ -42,6 +43,15 @@ namespace DataTransferObjects.Reports
             }
         }
 
+        public string HtmlEncodedNoteForExport
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(NoteForExport);
+            }
+        }
+
+
         public string HTMLNote
         {
             get
@@ -50,6 +60,14 @@ namespace DataTransferObjects.Reports
             }
         }
 
+        public string HtmlEncodedHTMLNote
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(HTMLNote).Replace("&lt;br/&gt;", "<br/>");
+            }
+        }
+        
 
 
     }
