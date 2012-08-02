@@ -8,37 +8,6 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <style>
-        .TabPadding td, .TabPadding th
-        {
-            padding: 4px;
-        }
-        
-        .ajax__tab_body
-        {
-            border-bottom: #999999 1px solid !important;
-            margin-top: 1px;
-            padding: 2px !important;
-        }
-        
-        .SkillsBody
-        {
-            background-color: #d4dff8;
-            padding: 10px;
-        }
-        
-        .SkillsDataBody
-        {
-            background-color: White;
-            height: 400px;
-            overflow: auto;
-        }
-        .PopupHeight
-        {
-            max-height: 150px;
-            overflow-y: auto;
-        }
-    </style>
     <script type="text/javascript" language="javascript">
 
         $(document).ready(
@@ -101,17 +70,16 @@
 
         function ClearAllFields(clearLink) {
             var row = $(clearLink.parentNode.parentNode);
-            if (clearLink.attributes['disable'].value == 'False')
-            {
-            row.find("select[id$='ddlLevel']")[0].value = 0;
-            row.find("select[id$='ddlExperience']")[0].value = 0;
-            row.find("select[id$='ddlLastUsed']")[0].value = 0;
-            var ddlLevel = clearLink;
-            clearLink.disabled = true;
-            clearLink.attributes['disable'].value = 'True';
-            clearLink.style.color = "#8F8F8F";
-            clearLink.style.cursor = "text";
-            ddlChanged(clearLink);
+            if (clearLink.attributes['disable'].value == 'False') {
+                row.find("select[id$='ddlLevel']")[0].value = 0;
+                row.find("select[id$='ddlExperience']")[0].value = 0;
+                row.find("select[id$='ddlLastUsed']")[0].value = 0;
+                var ddlLevel = clearLink;
+                clearLink.disabled = true;
+                clearLink.attributes['disable'].value = 'True';
+                clearLink.style.color = "#8F8F8F";
+                clearLink.style.cursor = "text";
+                ddlChanged(clearLink);
             }
         }
 
@@ -133,7 +101,7 @@
         }
 
     </script>
-    <div style="text-align: center; font-size: large;">
+    <div class="TextAlignCenterImp fontSizeLarge">
         Skills Entry for
         <asp:Label runat="server" ID="lblUserName"></asp:Label>
     </div>
@@ -144,21 +112,23 @@
                 AutoPostBack="true" OnActiveTabChanged="tcSkillsEntry_ActiveTabChanged">
                 <AjaxControlToolkit:TabPanel runat="server" ID="tpBusinessSkills" HeaderText="Business">
                     <ContentTemplate>
-                        <div class="SkillsBody">
-                            <div style="padding: 10px;">
+                        <div class="SkillsBodyEntry">
+                            <div class="Padding10">
                                 <asp:Label runat="server" ID="lblCategory" Text="Category"></asp:Label>
                                 <asp:DropDownList runat="server" ID="ddlBusinessCategory" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
                                     DataTextField="Description" DataValueField="Id" AutoPostBack="true">
                                 </asp:DropDownList>
                             </div>
-                            <div class="SkillsDataBody">
+                            <div class="SkillsEntryDataBody">
                                 <asp:GridView ID="gvBusinessSkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvSkills_RowDataBound"
-                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff" HeaderStyle-BackColor="#f9faff">
+                                    CssClass="WholeWidth TabPadding">
+                                    <AlternatingRowStyle CssClass="alterrow" />
+                                    <HeaderStyle CssClass="alterrow" />
                                     <Columns>
                                         <asp:TemplateField>
                                             <HeaderTemplate>
                                             </HeaderTemplate>
-                                            <ItemStyle Width="55%" />
+                                            <ItemStyle CssClass="Width55Percent" />
                                             <ItemTemplate>
                                                 <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("Id") %>' />
                                                 <asp:HiddenField ID="hdnDescription" runat="server" Value='<%# Eval("Description") %>' />
@@ -167,22 +137,22 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <HeaderStyle HorizontalAlign="Left" />
+                                            <HeaderStyle CssClass="textLeft" />
                                             <HeaderTemplate>
                                                 Level
                                                 <asp:Image ID="imgLevelyHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                                <div style="max-height: 160px; overflow-y: auto;">
+                                                <div class="DivLevel">
                                                     <asp:Panel ID="pnlLevel" Style="display: none;" CssClass="MiniReport" runat="server">
-                                                        <table style="width: 350px !important;">
+                                                        <table class="Width350pxImp">
                                                             <tr>
-                                                                <th align="right" style="padding-top: 0px; padding-bottom: 0px;">
+                                                                <th class="textRightImp PaddingBottomTop0PxImp">
                                                                     <asp:Button ID="btnCloseLevel" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
                                                                         Text="x" />
                                                                 </th>
                                                             </tr>
                                                             <tr>
-                                                                <td style="background-color: White; font-weight: normal; font-size: small;">
-                                                                    <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%" CssClass="PopupHeight">
+                                                                <td class="TdSkillLevel">
+                                                                    <asp:DataList ID="dtlSkillLevels" runat="server" CssClass="PopupHeight WholeWidthImp">
                                                                         <ItemTemplate>
                                                                             <b>
                                                                                 <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
@@ -201,7 +171,7 @@
                                                     runat="server">
                                                 </AjaxControlToolkit:AnimationExtender>
                                             </HeaderTemplate>
-                                            <ItemStyle Width="15%" />
+                                            <ItemStyle CssClass="Width15Per" />
                                             <ItemTemplate>
                                                 <asp:DropDownList runat="server" ID="ddlLevel" DataTextField="Description" DataValueField="Id"
                                                     DataSourceID="odsSkillLevel" onchange="ddlChanged(this);">
@@ -211,11 +181,11 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <HeaderStyle HorizontalAlign="Left" />
+                                            <HeaderStyle CssClass="textLeft" />
                                             <HeaderTemplate>
                                                 Experience
                                             </HeaderTemplate>
-                                            <ItemStyle Width="12%" />
+                                            <ItemStyle CssClass="Width12Per" />
                                             <ItemTemplate>
                                                 <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
                                                     DataTextField="Name" DataValueField="Id" onchange="ddlChanged(this);">
@@ -225,11 +195,11 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <HeaderStyle HorizontalAlign="Left" />
+                                            <HeaderStyle CssClass="textLeft" />
                                             <HeaderTemplate>
                                                 Last Used
                                             </HeaderTemplate>
-                                            <ItemStyle Width="10%" />
+                                            <ItemStyle CssClass="Width10Per" />
                                             <ItemTemplate>
                                                 <asp:DropDownList runat="server" ID="ddlLastUsed" DataSourceID="odsLastUsed" DataTextField="Name"
                                                     DataValueField="Id" onchange="ddlChanged(this);">
@@ -241,10 +211,11 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <ItemStyle Width="8%" />
+                                            <ItemStyle CssClass="Width8Per" />
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
-                                                    OnClientClick="ClearAllFields(this);  return false;" Font-Underline="true" disable="">
+                                                    OnClientClick="ClearAllFields(this);  return false;" CssClass="fontUnderline"
+                                                    disable="">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -256,21 +227,23 @@
                 </AjaxControlToolkit:TabPanel>
                 <AjaxControlToolkit:TabPanel runat="server" ID="tpTechnicalSkills" HeaderText="Technical">
                     <ContentTemplate>
-                        <div class="SkillsBody">
-                            <div style="padding: 10px;">
+                        <div class="SkillsBodyEntry">
+                            <div class="Padding10">
                                 <asp:Label runat="server" ID="Label1" Text="Category"></asp:Label>
                                 <asp:DropDownList runat="server" ID="ddlTechnicalCategory" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
                                     DataTextField="Description" DataValueField="Id" AutoPostBack="true">
                                 </asp:DropDownList>
                             </div>
-                            <div class="SkillsDataBody">
+                            <div class="SkillsEntryDataBody">
                                 <asp:GridView ID="gvTechnicalSkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvSkills_RowDataBound"
-                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff" HeaderStyle-BackColor="#f9faff">
+                                    CssClass="WholeWidth TabPadding">
+                                    <AlternatingRowStyle CssClass="alterrow" />
+                                    <HeaderStyle CssClass="alterrow" />
                                     <Columns>
                                         <asp:TemplateField>
                                             <HeaderTemplate>
                                             </HeaderTemplate>
-                                            <ItemStyle Width="55%" />
+                                            <ItemStyle CssClass="Width55Percent" />
                                             <ItemTemplate>
                                                 <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("Id") %>' />
                                                 <asp:HiddenField ID="hdnDescription" runat="server" Value='<%# Eval("Description") %>' />
@@ -279,22 +252,22 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <HeaderStyle HorizontalAlign="Left" />
+                                            <HeaderStyle CssClass="textLeft" />
                                             <HeaderTemplate>
                                                 Level
                                                 <asp:Image ID="imgLevelyHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                                <div style="max-height: 160px; overflow-y: auto;">
+                                                <div class="DivLevel">
                                                     <asp:Panel ID="pnlLevel" Style="display: none;" CssClass="MiniReport" runat="server">
-                                                        <table style="width: 350px !important;">
+                                                        <table class="Width350pxImp">
                                                             <tr>
-                                                                <th align="right" style="padding-top: 0px; padding-bottom: 0px;">
+                                                                <th class="textRightImp PaddingBottomTop0PxImp">
                                                                     <asp:Button ID="btnCloseLevel" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
                                                                         Text="x" />
                                                                 </th>
                                                             </tr>
                                                             <tr>
-                                                                <td style="background-color: White; font-weight: normal; font-size: small;">
-                                                                    <asp:DataList ID="dtlSkillLevels" runat="server" Width="100%">
+                                                                <td class="TdSkillLevel">
+                                                                    <asp:DataList ID="dtlSkillLevels" runat="server" CssClass="WholeWidthImp">
                                                                         <ItemTemplate>
                                                                             <b>
                                                                                 <%# ((DataTransferObjects.Skills.SkillLevel)Container.DataItem).Description%>:</b>
@@ -313,7 +286,7 @@
                                                     runat="server">
                                                 </AjaxControlToolkit:AnimationExtender>
                                             </HeaderTemplate>
-                                            <ItemStyle Width="15%" />
+                                            <ItemStyle CssClass="Width15Per" />
                                             <ItemTemplate>
                                                 <asp:DropDownList runat="server" ID="ddlLevel" DataTextField="Description" DataValueField="Id"
                                                     DataSourceID="odsSkillLevel" onchange="ddlChanged(this);">
@@ -323,11 +296,11 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <HeaderStyle HorizontalAlign="Left" />
+                                            <HeaderStyle CssClass="textLeft" />
                                             <HeaderTemplate>
                                                 Experience
                                             </HeaderTemplate>
-                                            <ItemStyle Width="12%" />
+                                            <ItemStyle CssClass="Width12Per" />
                                             <ItemTemplate>
                                                 <asp:DropDownList runat="server" ID="ddlExperience" DataSourceID="odsExperience"
                                                     DataTextField="Name" DataValueField="Id" onchange="ddlChanged(this);">
@@ -337,11 +310,11 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <HeaderStyle HorizontalAlign="Left" />
+                                            <HeaderStyle CssClass="textLeft" />
                                             <HeaderTemplate>
                                                 Last Used
                                             </HeaderTemplate>
-                                            <ItemStyle Width="10%" />
+                                            <ItemStyle CssClass="Width10Per" />
                                             <ItemTemplate>
                                                 <asp:DropDownList runat="server" ID="ddlLastUsed" DataSourceID="odsLastUsed" DataTextField="Name"
                                                     DataValueField="Id" onchange="ddlChanged(this);">
@@ -353,10 +326,11 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <ItemStyle Width="8%" />
+                                            <ItemStyle CssClass="Width8Per" />
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
-                                                    OnClientClick="ClearAllFields(this); return false;" Enabled="false" Font-Underline="true" disable="">
+                                                    OnClientClick="ClearAllFields(this); return false;" Enabled="false" Font-Underline="true"
+                                                    disable="">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -368,16 +342,18 @@
                 </AjaxControlToolkit:TabPanel>
                 <AjaxControlToolkit:TabPanel runat="server" ID="tpIndustrySkills" HeaderText="Industries">
                     <ContentTemplate>
-                        <div class="SkillsBody">
-                            <div style="padding: 10px;">
+                        <div class="SkillsBodyEntry">
+                            <div class="Padding10">
                                 &nbsp;
                             </div>
-                            <div class="SkillsDataBody">
+                            <div class="SkillsEntryDataBody">
                                 <asp:GridView ID="gvIndustrySkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvIndustrySkills_RowDataBound"
-                                    CssClass="WholeWidth TabPadding" AlternatingRowStyle-BackColor="#f9faff" HeaderStyle-BackColor="#f9faff">
+                                    CssClass="WholeWidth TabPadding">
+                                    <AlternatingRowStyle CssClass="alterrow" />
+                                    <HeaderStyle CssClass="alterrow" />
                                     <Columns>
                                         <asp:TemplateField>
-                                            <ItemStyle Width="55%" />
+                                            <ItemStyle CssClass="Width55Percent" />
                                             <ItemTemplate>
                                                 <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("Id") %>' />
                                                 <asp:HiddenField ID="hdnChanged" runat="server" Value="0" />
@@ -385,8 +361,8 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField>
-                                            <HeaderStyle HorizontalAlign="Left" />
-                                            <ItemStyle Width="45%" />
+                                            <HeaderStyle CssClass="textLeft" />
+                                            <ItemStyle CssClass="Width45Percent" />
                                             <HeaderTemplate>
                                                 Experience
                                             </HeaderTemplate>
@@ -406,9 +382,9 @@
             <br />
             <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Text=""></asp:Label>
             <div class="WholeWidth">
-                <div style="width: 98%; text-align: right;">
-                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click" EnableViewState="false"
-                        Enabled="false" />
+                <div class="Width98Percent AlignRight">
+                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click"
+                        EnableViewState="false" Enabled="false" />
                     <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" EnableViewState="false"
                         OnClick="btnCancel_Click" Enabled="false" />
                 </div>
@@ -419,28 +395,27 @@
                 ValidationGroup="TechnicalGroup" />
             <asp:HiddenField ID="hdnIsValid" runat="server" Value="true" />
             <asp:HiddenField ID="hdnValidationMessage" runat="server" Value="" />
-            <asp:Panel ID="pnlValidations" style="display:none;" runat="server">
-                <div style="border: 1px solid black;">
-                    <div style="text-align: center; font-weight: bold; padding: 3px; background-color: Gray;">
+            <asp:Panel ID="pnlValidations" Style="display: none;" runat="server">
+                <div class="border1Px">
+                    <div class="DivAlert">
                         Alert!
                     </div>
-                    <div style="vertical-align: top; max-height: 500px; overflow-y: auto; padding: 10px;
-                        background-color: White;">
+                    <div class="DivAlertText">
                         <b>Please select a value for ‘Level’, ‘Experience’, and ‘Last Used’ for the below skill(s):
                         </b>
                         <br />
                         <br />
-                        <div style="padding-left: 20px;">
+                        <div class="padLeft20">
                             <asp:Label ID="lblValidationMessage" runat="server"></asp:Label></div>
                     </div>
-                    <div style="text-align: center; background-color: White; padding-bottom: 10px; padding-top: 5px;">
+                    <div class="PnlValidations">
                         <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return false;" />
-                        <asp:Button ID="btnCancelValidations" runat="server" Style="display: none;" OnClientClick="return false;" /></div>
+                        </div>
                 </div>
             </asp:Panel>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeValidations" runat="server" TargetControlID="hdnIsValid"
                 BackgroundCssClass="modalBackground" BehaviorID="mpeValidationsBehaviourId" DropShadow="false"
-                PopupControlID="pnlValidations" OkControlID="btnOk" CancelControlID="btnCancelValidations">
+                PopupControlID="pnlValidations" OkControlID="btnOk">
             </AjaxControlToolkit:ModalPopupExtender>
         </ContentTemplate>
     </asp:UpdatePanel>
