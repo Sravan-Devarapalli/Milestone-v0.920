@@ -548,7 +548,7 @@ namespace PraticeManagement.Reporting
 
         private void PopulateHeaderSection()
         {
-            ltAccount.Text = AccountName;
+            ltAccount.Text = HttpUtility.HtmlEncode(AccountName);
             ltHeaderCount.Text = HeaderCountText;
             ltRange.Text = Range;
 
