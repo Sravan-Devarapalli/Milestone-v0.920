@@ -152,7 +152,7 @@ namespace PraticeManagement.Controls
                     return "";
 
                 // Check if All checkbox is checked
-                if (SelectedIndexesList.Any(s => s == 0))
+                if (SelectedIndexesList.Any(s => s == 0) || SelectedIndexesList.Max() >= cbl.Items.Count)
                     return null;
 
                 // If not, build comma separated list of values
