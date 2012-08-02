@@ -156,15 +156,15 @@ namespace PraticeManagement.Controls.Reports
                     {
                         sb.Append(projectLevelGroupedHours.Project.Client.Code);
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Client.Name);
+                        sb.Append(projectLevelGroupedHours.Project.Client.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Project.Group.Code);
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Group.Name);
+                        sb.Append(projectLevelGroupedHours.Project.Group.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Project.ProjectNumber);
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Name);
+                        sb.Append(projectLevelGroupedHours.Project.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.Project.Status.Name);
                         sb.Append("\t");
@@ -305,7 +305,7 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulateClientFilter(ProjectLevelGroupedHours[] reportData)
         {
-            var clients = reportData.Select(r => new { Id = r.Project.Client.Id, Name = r.Project.Client.Name }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
+            var clients = reportData.Select(r => new { Id = r.Project.Client.Id, Name = r.Project.Client.HtmlEncodedName }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
             int height = 17 * clients.Length;
             Unit unitHeight = new Unit((height + 17) > 50 ? 50 : height + 17);
             DataHelper.FillListDefault(cblClients.CheckBoxListObject, "All Clients", clients, false, "Id", "Name");
