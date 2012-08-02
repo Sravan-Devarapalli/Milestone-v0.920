@@ -16,7 +16,7 @@ namespace PraticeManagement
     public partial class MarginTest : PracticeManagementPageBase
     {
         private Person selectedPersonValue;
-
+        public const string DirtyFunctionScript = @" function getDirty() {{ return false; }}";
         private Person SelectedPerson
         {
             get
@@ -75,6 +75,7 @@ namespace PraticeManagement
         protected void Page_PreRender(object sender, EventArgs e)
         {
             ShowDetails();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), this.ClientID, DirtyFunctionScript, true);
         }
 
         protected void Reset_Clicked(object sender, EventArgs e)
