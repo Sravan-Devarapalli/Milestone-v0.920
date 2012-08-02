@@ -9,24 +9,6 @@
     Welcome to Practice Management - Please Log In
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <style type="text/css">
-        input#ctl00_body_login_Password
-        {
-            width: 180px;
-        }
-        input#ctl00_body_login_UserName
-        {
-            width: 180px;
-        }
-        table#ctl00_body_login td, tr
-        {
-            padding: 3px;
-        }
-        table#ctl00_body_login tr td label
-        {
-            float: left;
-        }
-    </style>
     <script src="Scripts/jquery.blockUI.min.js" type="text/javascript"></script>
     <script type="text/javascript">
 
@@ -60,7 +42,7 @@
 
             var button = document.getElementById('<%= Button1.ClientID%>');
             button.click();
-            $.blockUI({ message: '<div style="Padding:4px;">Resetting Password...</div>', css: { width: '300px'} });
+            $.blockUI({ message: '<div class="Padding4Px">Resetting Password...</div>', css: { width: '300px'} });
             return true;
         }
 
@@ -77,34 +59,33 @@
     </script>
     <asp:UpdatePanel ID="updPanel" runat="server">
         <ContentTemplate>
-            <div style="vertical-align: middle; margin-left: auto; margin-right: auto; width: 300px;
-                padding: 5px; background: #E2EBFF;">
-                <asp:Login ID="login" runat="server" OnLoggedIn="login_LoggedIn" OnLoginError="login_LoginError" OnLoggingIn="login_OnLoggingIn"
-                    RememberMeText="Remember me" Font-Bold="true" RememberMeSet="true"  />
-                <div style="padding-bottom: 5px;">
+            <div class="DivLogin bgcolorE2EBFF vMiddle">
+                <asp:Login ID="login" runat="server" OnLoggedIn="login_LoggedIn" OnLoginError="login_LoginError"
+                    OnLoggingIn="login_OnLoggingIn" RememberMeText="Remember me" Font-Bold="true"
+                    RememberMeSet="true" />
+                <div class="PaddingBottom5">
                     <asp:LinkButton ID="lnkbtnForgotPwd" runat="server" Text="Forgot your Password?"
                         OnClientClick="return ConfirmChangePwd('{0}','{1}');" OnClick="lnkbtnForgotPwd_OnClick">
                     </asp:LinkButton>
                     <br />
                     <br />
                     <asp:Label ID="loginErrorDetails" runat="server" />
-                    <asp:Button ID="Button1" runat="server" OnClick="lnkbtnForgotPwd_OnClick" Style="display: none;"
+                    <asp:Button ID="Button1" runat="server" OnClick="lnkbtnForgotPwd_OnClick" CssClass="displayNone"
                         Text="Reset Password" />
                 </div>
             </div>
-            <div style="vertical-align: middle; margin-left: auto; margin-right: auto; width: 300px;
-                padding: 5px;">
+            <div class="DivLogin vMiddle">
                 <uc:MessageLabel ID="msglblForgotPWDErrorDetails" runat="server" ErrorColor="Red"
                     InfoColor="Green" WarningColor="Orange" EnableViewState="false" />
             </div>
-            <div class="divConfirmation" id="divProgress" style="display: none;">
-                <table style="width: 385px; margin-bottom: 8px;">
+            <div class="divConfirmation displayNone" id="divProgress">
+                <table class="TableCofirm">
                     <tr>
-                        <td style="height: 15px; background-color: Gray;"  colspan="2" >
+                        <td class="bgcolorGray height15Px" colspan="2">
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 3px; padding: 3px;">
+                        <td colspan="2" class="Padding3PX">
                             <br />
                             <p>
                                 Please confirm that you would like your Practice Management password to be reset
@@ -114,10 +95,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" style="width: 50%">
+                        <td class="Width50Percent TextAlignCenterImp">
                             <input id="btnYes" type="button" name="btnYes" value="Reset Password" onclick="Yes();" />
                         </td>
-                        <td align="center">
+                        <td class="TextAlignCenterImp">
                             <input id="btnCancel" type="button" name="btnCancel" value="Cancel" onclick="Cancel();" />
                         </td>
                     </tr>
