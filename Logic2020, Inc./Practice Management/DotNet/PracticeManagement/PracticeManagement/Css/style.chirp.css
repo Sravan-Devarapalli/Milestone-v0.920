@@ -1660,7 +1660,7 @@ TABLE.Section td
 {
     padding-bottom: 5px;
 }
-.PaddingBottom5Imp, paddingBottom5pxImp, .ReportHeaderBillAndNonBillTable .billingHours, .PersonDetailReportCustomTabStyle td, .ProjectSummaryReportPageCustomTabStyle td, .AccountSummaryReportCustomTabStyle td
+.PaddingBottom5Imp, .paddingBottom5pxImp, .ReportHeaderBillAndNonBillTable .billingHours, .PersonDetailReportCustomTabStyle td, .ProjectSummaryReportPageCustomTabStyle td, .AccountSummaryReportCustomTabStyle td
 {
     padding-bottom: 5px !important;
 }
@@ -7039,5 +7039,21 @@ table#ctl00_body_login tr td label
     border-bottom: #999999 1px solid !important;
     margin-top: 1px !important;
     padding: 2px !important;
+}
+.gvStrawmen .headerSortUp span
+{
+    background-image: url(../images/asc.gif); 
+    background-position:right;
+    background-repeat:no-repeat;
+}
+.gvStrawmen .headerSortDown span
+{
+    background-position:right;
+    background-repeat:no-repeat;
+    background-image: url(../images/desc.gif);
+}
+.backGroundNone
+{
+    background-image:none !important;
 }
 
