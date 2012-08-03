@@ -671,7 +671,7 @@ namespace PraticeManagement.Controls
                 trSeniorityAndPractice.Visible = false;
                 trSalesCommisiion.Visible = false;
                 cvVacationDays.Enabled = true;
-                lblVacationDays.Text = "Vacation Days(In Hours)";
+                lblVacationDays.Text = "Vacation Days (In Hours)";
             }
             UpdateCompensationState();
         }
