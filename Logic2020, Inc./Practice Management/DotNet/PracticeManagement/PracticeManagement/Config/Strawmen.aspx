@@ -15,7 +15,62 @@
     Strawmen List
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
-    <script type="text/javascript" language="javascript">
+    <script src="../Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var currentSort = [[1,0]];
+
+        $(document).ready(function () {
+            $("#ctl00_body_gvStrawmen").tablesorter(
+                {
+                    headers: {
+                        0: {
+                            sorter: false
+                        },
+                        6: {
+                            sorter: false
+                        }
+                    },
+                    sortList: currentSort,
+                    sortForce: [[1, 0]]
+
+                }).bind("sortEnd", function (sorter) {
+                    currentSort = sorter.target.config.sortList;
+                    var spanName = $("#ctl00_body_gvStrawmen #name");
+                    if (currentSort != '1,0' && currentSort != '1,1') {
+                        spanName[0].setAttribute('class', 'backGroundNone');
+                    }
+                    else {
+                        spanName[0].setAttribute('class', '');
+                    }
+                });
+        });
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+        function endRequestHandle(sender, Args) {
+            $("#ctl00_body_gvStrawmen").tablesorter(
+                {
+                    headers: {
+                        0: {
+                            sorter: false
+                        },
+                        6: {
+                            sorter: false
+                        }
+                    },
+                    sortList: currentSort,
+                    sortForce: [[1, 0]]
+                }).bind("sortEnd", function (sorter) {
+                    currentSort = sorter.target.config.sortList;
+                    var spanName = $("#ctl00_body_gvStrawmen #name")[0];
+                    if (currentSort != '1,0' && currentSort != '1,1') {
+                        spanName.setAttribute('class', 'backGroundNone');
+                    }
+                    else {
+                        spanName.setAttribute('class', '');
+                    }
+                });
+            }
 
         function EnableDisableVacationDays(ddlBasic) {
             var vacationdaysId = ddlBasic.getAttribute("vacationdaysId");
@@ -42,7 +97,8 @@
                     </tr>
                 </table>
                 <asp:GridView ID="gvStrawmen" runat="server" EmptyDataText="There is nothing to be displayed here"
-                    AutoGenerateColumns="False" OnRowDataBound="gvStrawmen_RowDataBound" CssClass="CompPerfTable gvStrawmen">
+                    OnPreRender="gvStrawmen_PreRender" AutoGenerateColumns="False" OnRowDataBound="gvStrawmen_RowDataBound"
+                    CssClass="CompPerfTable gvStrawmen tablesorter">
                     <AlternatingRowStyle CssClass="alterrow" />
                     <Columns>
                         <asp:TemplateField>
@@ -69,18 +125,12 @@
                                     OnClick="imgCancel_OnClick" />
                             </EditItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Id" Visible="false">
-                            <ItemStyle CssClass="Width0Percent" />
-                            <ItemTemplate>
-                                <asp:Label ID="lblId" runat="server" Text='<%# Eval("Id") %>'></asp:Label>
-                            </ItemTemplate>
-                        </asp:TemplateField>
                         <asp:TemplateField>
-                            <HeaderStyle CssClass="Width39Percent" />
+                            <HeaderStyle CssClass="Width39Percent CursorPointer" />
                             <ItemStyle CssClass="Left" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
-                                    Name</div>
+                                    Name<span id="name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> </div>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="lblStrawmen" CssClass="Ws-Normal padLeft25" runat="server" Text='<%# Eval("HtmlEncodedName")%>'></asp:Label>
@@ -96,10 +146,10 @@
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
-                            <HeaderStyle CssClass="Width13Percent" />
+                            <HeaderStyle CssClass="Width13Percent CursorPointer" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
-                                    Basis</div>
+                                    Basis<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="lblBasic" runat="server" Text='<%# ((Pay)Eval("CurrentPay")) != null ? ((Pay)Eval("CurrentPay")).TimescaleName : string.Empty %>'></asp:Label>
@@ -115,10 +165,10 @@
                         </asp:TemplateField>
                         <asp:TemplateField>
                             <ItemStyle CssClass="Right" />
-                            <HeaderStyle CssClass="Width13Percent" />
+                            <HeaderStyle CssClass="Width13Percent CursorPointer" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
-                                    Amount</div>
+                                    Pay Rate<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="lblAmount" runat="server" Text='<%# ((Pay)Eval("CurrentPay")) != null ? ((Pay)Eval("CurrentPay")).Amount : 0 %>'
@@ -130,17 +180,17 @@
                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmount"
                                     FilterMode="ValidChars" FilterType="Numbers,Custom" ValidChars=".">
                                 </AjaxControlToolkit:FilteredTextBoxExtender>
-                                <asp:RequiredFieldValidator ID="rqfvAmount" runat="server" Text="*" ErrorMessage="Amount is required."
-                                    ControlToValidate="txtAmount" ToolTip="Amount is required." SetFocusOnError="true"
+                                <asp:RequiredFieldValidator ID="rqfvAmount" runat="server" Text="*" ErrorMessage="Pay Rate is required."
+                                    ControlToValidate="txtAmount" ToolTip="Pay Rate is required." SetFocusOnError="true"
                                     ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
                             </EditItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
-                            <HeaderStyle CssClass="Width13Percent" />
+                            <HeaderStyle CssClass="Width13Percent CursorPointer" />
                             <ItemStyle CssClass="Right" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
-                                    Vacation(In Hours)</div>
+                                    Vacation (In Hours)<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="lblVacationDays" runat="server" Text='<%# GetVacationDays((Pay)Eval("CurrentPay")) %>'
@@ -160,9 +210,9 @@
                         <asp:TemplateField>
                             <HeaderTemplate>
                                 <div class="ie-bg">
-                                    Active</div>
+                                    Active<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
                             </HeaderTemplate>
-                            <HeaderStyle CssClass="Width10Percent" />
+                            <HeaderStyle CssClass="Width10Percent CursorPointer" />
                             <ItemTemplate>
                                 <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# ((PersonStatus)Eval("Status")).ToStatusType() == PersonStatusType.Active ? true:false %>' />
                             </ItemTemplate>
@@ -357,7 +407,7 @@
                                     <asp:TemplateField>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
-                                                Amount</div>
+                                                Pay Rate</div>
                                         </HeaderTemplate>
                                         <ItemTemplate>
                                             <%# Eval("Amount") %>
@@ -367,15 +417,15 @@
                                             <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmount"
                                                 FilterMode="ValidChars" FilterType="Numbers,Custom" ValidChars=".">
                                             </AjaxControlToolkit:FilteredTextBoxExtender>
-                                            <asp:RequiredFieldValidator ID="rqfvAmount" runat="server" Text="*" ErrorMessage="Amount is required."
-                                                ControlToValidate="txtAmount" ToolTip="Amount is required." SetFocusOnError="true"
+                                            <asp:RequiredFieldValidator ID="rqfvAmount" runat="server" Text="*" ErrorMessage="Pay Rate is required."
+                                                ControlToValidate="txtAmount" ToolTip="Pay Rate is required." SetFocusOnError="true"
                                                 ValidationGroup="StrawmanCompersationGroup"></asp:RequiredFieldValidator>
                                         </EditItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
-                                                Vacation(In Hours)</div>
+                                                Vacation (In Hours)</div>
                                         </HeaderTemplate>
                                         <ItemTemplate>
                                             <%# ((int?)Eval("VacationDays")).HasValue ? (((int?)Eval("VacationDays")).Value * 8).ToString() : string.Empty %>
