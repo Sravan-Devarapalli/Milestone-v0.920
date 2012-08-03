@@ -32,7 +32,9 @@ namespace PracticeManagementService
         {
             List<MilestonePerson> result = MilestonePersonDAL.MilestonePersonListByProject(projectId,false);
             foreach (MilestonePerson milestonePerson in result)
-                milestonePerson.Person.CurrentPay = PayDAL.GetCurrentByPerson(milestonePerson.Person.Id.Value);
+                milestonePerson.Person.CurrentPay = result.Any(mp => mp.Person.Id == milestonePerson.Person.Id && mp.Person.CurrentPay != null) 
+                                                        ? result.First(mp => mp.Person.Id == milestonePerson.Person.Id && mp.Person.CurrentPay != null).Person.CurrentPay 
+                                                        : PayDAL.GetCurrentByPerson(milestonePerson.Person.Id.Value);
 
             return result;
         }
