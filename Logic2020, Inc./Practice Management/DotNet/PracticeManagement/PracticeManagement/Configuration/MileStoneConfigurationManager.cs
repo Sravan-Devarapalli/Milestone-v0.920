@@ -166,10 +166,10 @@ namespace PraticeManagement.Configuration
         /// <returns></returns>
         internal static int? GetClientId()
         {
-            string clientIdValue = HttpContext.Current.Cache[ClientKey] as string;
+            var clientIdValue = HttpContext.Current.Cache[ClientKey];
             int clientId;
 
-            if (clientIdValue != null && Int32.TryParse(clientIdValue, out clientId))
+            if (clientIdValue != null && Int32.TryParse(clientIdValue.ToString(), out clientId))
             {
                 return clientId;
             }
@@ -186,10 +186,10 @@ namespace PraticeManagement.Configuration
         /// <returns></returns>
         internal static int? GetProjectId()
         {
-            string projectIdValue = HttpContext.Current.Cache[ProjectKey] as string;
+            var projectIdValue = HttpContext.Current.Cache[ProjectKey];
             int projectId;
 
-            if (projectIdValue != null && Int32.TryParse(projectIdValue, out projectId))
+            if (projectIdValue != null && Int32.TryParse(projectIdValue.ToString(), out projectId))
             {
                 return projectId;
             }
@@ -206,10 +206,10 @@ namespace PraticeManagement.Configuration
         /// <returns></returns>
         internal static int? GetMileStoneId()
         {
-            string MileStoneIdValue = HttpContext.Current.Cache[MileStoneKey] as string;
+            var mileStoneIdValue = HttpContext.Current.Cache[MileStoneKey];
             int mileStoneId;
 
-            if (MileStoneIdValue != null && Int32.TryParse(MileStoneIdValue, out mileStoneId))
+            if (mileStoneIdValue != null && Int32.TryParse(mileStoneIdValue.ToString(), out mileStoneId))
             {
                 return mileStoneId;
             }
@@ -222,10 +222,10 @@ namespace PraticeManagement.Configuration
 
         internal static int? GetLowerBound()
         {
-            string strLowerBound = HttpContext.Current.Cache[LowerBoundkey] as string;
+            var strLowerBound = HttpContext.Current.Cache[LowerBoundkey];
             int lowerBound;
 
-            if (!string.IsNullOrEmpty(strLowerBound) && Int32.TryParse(strLowerBound, out lowerBound))
+            if (strLowerBound != null && !string.IsNullOrEmpty(strLowerBound.ToString()) && Int32.TryParse(strLowerBound.ToString(), out lowerBound))
             {
                 return lowerBound;
             }
@@ -239,10 +239,10 @@ namespace PraticeManagement.Configuration
 
         internal static int? GetUpperBound()
         {
-            string strUpperBound = HttpContext.Current.Cache[UpperBoundkey] as string;
+            var strUpperBound = HttpContext.Current.Cache[UpperBoundkey];
             int upperBound;
 
-            if (!string.IsNullOrEmpty(strUpperBound) && Int32.TryParse(strUpperBound, out upperBound))
+            if (strUpperBound != null && !string.IsNullOrEmpty(strUpperBound.ToString()) && Int32.TryParse(strUpperBound.ToString(), out upperBound))
             {
                 return upperBound;
             }
