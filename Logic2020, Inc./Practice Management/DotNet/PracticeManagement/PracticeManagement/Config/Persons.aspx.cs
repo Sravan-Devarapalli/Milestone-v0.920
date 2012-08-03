@@ -221,7 +221,6 @@ namespace PraticeManagement.Config
                     {
                         txtSearch.Text = PreviousPage.SearchText;
                     }
-                    gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
                     gvPersons.Sort(cookie.SortBy, cookie.SortOrder);
                     SetFilterValues();
 
@@ -313,7 +312,6 @@ namespace PraticeManagement.Config
             PayTypeIdsSelectedKey = null;
             hdnLooked.Value = txtSearch.Text;
             hdnAlphabet.Value = null;
-            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
             hdnCleartoDefaultView.Value = "true";
             btnClearResults.Enabled = true;
@@ -371,7 +369,6 @@ namespace PraticeManagement.Config
                 hdnCleartoDefaultView.Value = "false";
             }
             SaveFilterSettings();
-            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
         }
 
@@ -383,7 +380,6 @@ namespace PraticeManagement.Config
             CurrentIndex = 0;
             SetFilterValues();
             SaveFilterSettings();
-            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.DataBind();
         }
 
@@ -423,7 +419,6 @@ namespace PraticeManagement.Config
             hdnCleartoDefaultView.Value = "false";
             ResetFilterControlsToDefault();
             SetFilterValues();
-            gvPersons.PageSize = GetPageSize(ddlView.SelectedValue);
             gvPersons.Sort("LastName", SortDirection.Ascending);
             gvPersons.PageIndex = 0;
             CurrentIndex = 0;
@@ -434,7 +429,6 @@ namespace PraticeManagement.Config
         {
             gvPersons.PageIndex = 0;
             CurrentIndex = 0;
-            gvPersons.PageSize = GetPageSize(((DropDownList)sender).SelectedValue);
             gvPersons.DataBind();
             SaveFilterSettings();
         }
@@ -889,7 +883,7 @@ namespace PraticeManagement.Config
             activeOnly.Checked = true;
             projected.Checked = terminated.Checked = inactive.Checked = false;
             txtSearch.Text = string.Empty;
-            ddlView.SelectedIndex = 0;
+            ddlView.SelectedValue = "-1";
         }
 
         private void ResetFilterControlsToDefault()
@@ -971,7 +965,7 @@ namespace PraticeManagement.Config
         {
             e.InputParameters["practiceIdsSelected"] = PracticeIdsSelectedKey;
             e.InputParameters["active"] = hdnActive.Value;
-            e.InputParameters["pageSize"] = gvPersons.PageSize;
+            e.InputParameters["pageSize"] = GetPageSize(ddlView.SelectedValue);
             e.InputParameters["pageNo"] = CurrentIndex;
             e.InputParameters["looked"] = hdnLooked.Value;
             e.InputParameters["recruitersSelected"] = RecruiterIdsSelectedKey;
