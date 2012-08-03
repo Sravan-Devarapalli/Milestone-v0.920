@@ -223,10 +223,40 @@ namespace PraticeManagement.Config
 
         #region gvStrawmen Control Events
 
+        protected void gvStrawmen_PreRender(object sender, EventArgs e)
+        {
+            if (gvStrawmen.Rows.Count > 0)
+            {
+                //This replaces <td> with <th> and adds the scope attribute
+                gvStrawmen.UseAccessibleHeader = true;
+
+                //This will add the <thead> and <tbody> elements
+                gvStrawmen.HeaderRow.TableSection = TableRowSection.TableHeader;
+
+            }
+        }
+
         protected void gvStrawmen_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow && gvStrawmen.EditIndex != e.Row.DataItemIndex)
             {
+                var lblAmount = e.Row.FindControl("lblAmount") as Label;
+                var tdAmount = lblAmount.Parent as DataControlFieldCell;
+                tdAmount.Attributes["sorttable_customkey"] = lblAmount.Text;
+
+                var lblVacationDays = e.Row.FindControl("lblVacationDays") as Label;
+                var tdVacationDays = lblVacationDays.Parent as DataControlFieldCell;
+                tdVacationDays.Attributes["sorttable_customkey"] = string.IsNullOrEmpty(lblVacationDays.Text) ? "-1" : lblVacationDays.Text;
+
+                var lblBasic = e.Row.FindControl("lblBasic") as Label;
+                var tdBasic = lblBasic.Parent as DataControlFieldCell;
+                tdBasic.Attributes["sorttable_customkey"] = lblBasic.Text;
+
+                var chbIsActive = e.Row.FindControl("chbIsActive") as CheckBox;
+                var tdIsActive = chbIsActive.Parent as DataControlFieldCell;
+                tdIsActive.Attributes["sorttable_customkey"] = chbIsActive.Checked.ToString();
+
+
                 var imgDeleteStrawman = e.Row.FindControl("imgDeleteStrawman") as ImageButton;
                 var Person = e.Row.DataItem as Person;
                 if (Person.InUse)
@@ -238,9 +268,22 @@ namespace PraticeManagement.Config
             {
                 var ddlBasic = e.Row.FindControl("ddlBasic") as DropDownList;
                 var txtVacationDays = e.Row.FindControl("txtVacationDays") as TextBox;
+                var txtAmount = e.Row.FindControl("txtAmount") as TextBox;
+
                 var editPerson = StrawmenList[gvStrawmen.EditIndex] as Person;
                 var pay = editPerson.CurrentPay;
                 PopulateTimeScale(ddlBasic, txtVacationDays, pay);
+
+                var tdAmount = txtAmount.Parent as DataControlFieldCell;
+                tdAmount.Attributes["sorttable_customkey"] = txtAmount.Text;
+                var tdVacationDays = txtVacationDays.Parent as DataControlFieldCell;
+                tdVacationDays.Attributes["sorttable_customkey"] = string.IsNullOrEmpty(txtVacationDays.Text) ? "-1" : txtVacationDays.Text;
+                var tdBasic = ddlBasic.Parent as DataControlFieldCell;
+                tdBasic.Attributes["sorttable_customkey"] = ddlBasic.SelectedValue;
+
+                var chbIsActiveEd = e.Row.FindControl("chbIsActiveEd") as CheckBox;
+                var tdIsActive = chbIsActiveEd.Parent as DataControlFieldCell;
+                tdIsActive.Attributes["sorttable_customkey"] = chbIsActiveEd.Checked.ToString();
             }
         }
 
