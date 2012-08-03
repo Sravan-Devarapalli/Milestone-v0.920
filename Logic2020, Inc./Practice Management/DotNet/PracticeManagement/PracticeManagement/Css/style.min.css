@@ -288,7 +288,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .PaddingBottom3{padding-bottom:3px}
 .PaddingBottom3Imp{padding-bottom:3px!important}
 .PaddingBottom5,.paddingBottom5px{padding-bottom:5px}
-.PaddingBottom5Imp,paddingBottom5pxImp,.ReportHeaderBillAndNonBillTable .billingHours,.PersonDetailReportCustomTabStyle td,.ProjectSummaryReportPageCustomTabStyle td,.AccountSummaryReportCustomTabStyle td{padding-bottom:5px!important}
+.PaddingBottom5Imp,.paddingBottom5pxImp,.ReportHeaderBillAndNonBillTable .billingHours,.PersonDetailReportCustomTabStyle td,.ProjectSummaryReportPageCustomTabStyle td,.AccountSummaryReportCustomTabStyle td{padding-bottom:5px!important}
 .PaddingBottom6{padding-bottom:6px}
 .PaddingBottom8{padding-bottom:8px}
 .PaddingBottom10,.paddingBottom10px{padding-bottom:10px}
@@ -1305,3 +1305,6 @@ table#ctl00_body_login tr td label{float:left}
 .CblPersons{height:99px!important;width:315px!important;overflow-y:auto;overflow-x:hidden;border:1px solid #AAA!important;background-color:#FFF!important;padding:3!important;display:inline-block;z-index:20000}
 .CblPersons Table{width:315px!important}
 #ctl00_body_tcSkillsEntry_body{border-bottom:#999 1px solid!important;margin-top:1px!important;padding:2px!important}
+.gvStrawmen .headerSortUp span{background-image:url(../images/asc.gif);background-position:right;background-repeat:no-repeat}
+.gvStrawmen .headerSortDown span{background-position:right;background-repeat:no-repeat;background-image:url(../images/desc.gif)}
+.backGroundNone{background-image:none!important}
