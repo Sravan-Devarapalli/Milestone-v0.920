@@ -1653,7 +1653,7 @@ namespace PraticeManagement
         private void PopulateData(Project project)
         {
             project.Id = ProjectId;
-            project.Name = ProjectId.HasValue ? txtProjectName.Text : txtProjectNameFirstTime.Text;
+            project.Name = ProjectId.HasValue ? HttpUtility.HtmlDecode(lblProjectName.Text) : txtProjectNameFirstTime.Text;
             //project.Discount = !string.IsNullOrEmpty(txtClientDiscount.Text.Trim()) ? decimal.Parse(txtClientDiscount.Text) : 0;
             project.BuyerName = txtBuyerName.Text;
             project.Client = new Client { Id = int.Parse(ddlClientName.SelectedValue) };
