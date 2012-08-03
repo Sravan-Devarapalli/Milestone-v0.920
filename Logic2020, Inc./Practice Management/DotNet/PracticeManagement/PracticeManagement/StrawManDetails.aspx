@@ -103,7 +103,7 @@
                                     <asp:TemplateField HeaderText="Amount">
                                         <HeaderTemplate>
                                             <div class="ie-bg">
-                                                Amount</div>
+                                                Pay Rate</div>
                                         </HeaderTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                         <EditItemTemplate>
@@ -116,7 +116,7 @@
                                     <asp:TemplateField HeaderText="Vacation">
                                         <HeaderTemplate>
                                             <div class="ie-bg">
-                                                Vacation(In Hours)</div>
+                                                Vacation (In Hours)</div>
                                         </HeaderTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                         <EditItemTemplate>
