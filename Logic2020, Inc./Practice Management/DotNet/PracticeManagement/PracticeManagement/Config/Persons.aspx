@@ -114,7 +114,7 @@
                                 <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
                                 <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
                                 <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
-                                <asp:ListItem Text="View All" Value="-1"></asp:ListItem>
+                                <asp:ListItem Text="View All" Value="-1" Selected="True"></asp:ListItem>
                             </asp:DropDownList>
                         </td>
                     </tr>                   
@@ -188,7 +188,7 @@
             <div class="PaddingBottom20Px">
                 <asp:GridView ID="gvPersons" runat="server" AutoGenerateColumns="False" EmptyDataText="There is nothing to be displayed here"
                     DataKeyNames="Id" OnRowCommand="gvPersons_RowCommand" OnDataBinding="gvPersons_DataBound"
-                    OnRowDataBound="gvPersons_RowDataBound" AllowPaging="False" PageSize="25" DataSourceID="odsPersons"
+                    OnRowDataBound="gvPersons_RowDataBound" AllowPaging="False" DataSourceID="odsPersons"
                     AllowSorting="true" CssClass="CompPerfTable WholeWidth" OnPageIndexChanged="gvPersons_PageIndexChanged"
                     GridLines="None" OnSorting="gvPersons_Sorting" OnPreRender="gvPersons_PreRender">
                     <AlternatingRowStyle CssClass="alterrow"/>
