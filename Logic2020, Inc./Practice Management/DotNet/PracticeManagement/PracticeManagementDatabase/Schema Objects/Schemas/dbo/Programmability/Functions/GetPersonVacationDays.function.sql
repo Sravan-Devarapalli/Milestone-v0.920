@@ -17,7 +17,7 @@ BEGIN
 	WHERE Date BETWEEN @startDate AND @EndRange AND 
 		  @PersonId = PersonId AND 
 		  DayOff = 1 AND
-		  DATEPART(dw, Date) != 7 AND DATEPART(dw, Date) != 1 AND
+		  DATEPART(dw, Date) NOT IN (7, 1) AND
 		  DayOff != CompanyDayOff  
 
 	RETURN @result
