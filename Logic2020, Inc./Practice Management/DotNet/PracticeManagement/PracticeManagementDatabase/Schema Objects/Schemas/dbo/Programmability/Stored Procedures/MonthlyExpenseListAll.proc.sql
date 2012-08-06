@@ -13,25 +13,33 @@ CREATE PROCEDURE [dbo].[MonthlyExpenseListAll]
 AS
 	SET NOCOUNT ON
 
-	DECLARE @PivotDefinition VARCHAR(2000)
-	DECLARE @PivotColumns VARCHAR(2000)
-	DECLARE @Delimiter CHAR
+	DECLARE @PivotDefinition VARCHAR(2000),
+			@PivotColumns VARCHAR(2000),
+			@Delimiter CHAR,
+			@StartDateMonthStart DATETIME,
+			@EndDateMonthEnd	DATETIME
+
+	SELECT @StartDateMonthStart = C.MonthStartDate
+	FROM Calendar C
+	WHERE C.Date = @StartDate
+
+	SELECT @EndDateMonthEnd = C.MonthEndDate
+	FROM Calendar C
+	WHERE C.Date = @EndDate
 
 	-- Generate PIVOT definitions
 	SELECT @PivotDefinition =
 	          ISNULL(@PivotDefinition + @Delimiter, '') +
-	          '[' + CAST(YEAR(cal.Date) AS VARCHAR) + '-' +
-	          CASE WHEN MONTH(cal.Date) < 10 THEN '0' ELSE '' END + CAST(MONTH(cal.Date) AS VARCHAR) + '-01]',
+	          '[' + CONVERT(NVARCHAR, cal.MonthStartDate, 23) + ']',
 	       @PivotColumns =
 	          ISNULL(@PivotColumns + @Delimiter, '') +
-	          'ISNULL([' + CAST(YEAR(cal.Date) AS VARCHAR) + '-' +
-	          CASE WHEN MONTH(cal.Date) < 10 THEN '0' ELSE '' END + CAST(MONTH(cal.Date) AS VARCHAR) + '-01], 0) AS ' +
-	          '[' + CAST(YEAR(cal.Date) AS VARCHAR) + CASE WHEN MONTH(cal.Date) < 10 THEN '0' ELSE '' END + CAST(MONTH(cal.Date) AS VARCHAR) + ']',
-	       @Delimiter = ','
+	          'ISNULL([' + CONVERT(NVARCHAR, cal.MonthStartDate, 23) + '], 0) AS ' +
+	          '[' + CAST(cal.Year AS VARCHAR) + CASE WHEN MONTH(cal.MonthStartDate) < 10 THEN '0' ELSE '' END + CAST(MONTH(cal.MonthStartDate) AS VARCHAR) + ']',
+	       @Delimiter = ','	       
 	  FROM dbo.Calendar AS cal
 	 WHERE cal.Date BETWEEN @StartDate AND @EndDate
-	GROUP BY YEAR(cal.Date), MONTH(cal.Date)
-	ORDER BY YEAR(cal.Date), MONTH(cal.Date)
+	GROUP BY cal.MonthStartDate, cal.Year
+	ORDER BY cal.MonthStartDate, cal.Year
 
 	DECLARE @Expression VARCHAR(8000)
 
@@ -67,9 +75,8 @@ AS
              '     ON me.ExpenseCategoryId = c.ExpenseCategoryId' +
              ' LEFT JOIN dbo.WeekPaidOption AS po' +
              '     ON me.WeekPaidOptionId = po.WeekPaidOptionId' +
-		' WHERE cal.Date BETWEEN ''' +
-		CAST(YEAR(@StartDate) AS VARCHAR) + '-' + CAST(MONTH(@StartDate) AS VARCHAR) + '-01' + ''' AND ''' +
-		CAST(YEAR(@EndDate) AS VARCHAR) + '-' + CAST(MONTH(@EndDate) AS VARCHAR) + '-' + CAST(dbo.GetDaysInMonth(@EndDate) AS VARCHAR) + ''' AND me.ExpenseBasisId <> 1' +
+		' WHERE cal.Date BETWEEN ''' + CONVERT(NVARCHAR, @StartDateMonthStart, 23) + ''' AND ''' +
+		CONVERT(NVARCHAR, @EndDateMonthEnd, 23) + ''' AND me.ExpenseBasisId <> 1' +
 		' GROUP BY me.Name, me.Amount, me.Year, me.Month, me.ExpenseBasisId, b.Name, me.ExpenseCategoryId, c.Name, me.WeekPaidOptionId, po.Name ' +
      ' ) AS f' +
      ' PIVOT ' +
@@ -96,8 +103,8 @@ AS
              ' LEFT JOIN dbo.WeekPaidOption AS po' +
              '     ON me.WeekPaidOptionId = po.WeekPaidOptionId' +
 		' WHERE cal.Date BETWEEN ''' +
-		CAST(YEAR(@StartDate) AS VARCHAR) + '-' + CAST(MONTH(@StartDate) AS VARCHAR) + '-01' + ''' AND ''' +
-		CAST(YEAR(@EndDate) AS VARCHAR) + '-' + CAST(MONTH(@EndDate) AS VARCHAR) + '-' + CAST(dbo.GetDaysInMonth(@EndDate) AS VARCHAR) + ''' AND me.ExpenseBasisId = 1' +
+		CONVERT(NVARCHAR, @StartDateMonthStart, 23) + ''' AND ''' +
+		CONVERT(NVARCHAR, @EndDateMonthEnd, 23) + ''' AND me.ExpenseBasisId = 1' +
 		' GROUP BY me.Name, me.Amount, me.Year, me.Month, me.ExpenseBasisId, b.Name, me.ExpenseCategoryId, c.Name, me.WeekPaidOptionId, po.Name ' +
      ' ) AS f' +
      ' PIVOT ' +
