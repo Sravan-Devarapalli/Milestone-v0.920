@@ -4,8 +4,6 @@
 )
 AS
 BEGIN
-	DECLARE @FutureDate DATETIME 
-	SET @FutureDate = dbo.GetFutureDate()
 
 	IF EXISTS (SELECT 1 FROM Milestone WHERE MilestoneId = @MilestoneId)
 	BEGIN
@@ -20,6 +18,9 @@ BEGIN
 	END
 	ELSE
 	BEGIN
+	
+		DECLARE @FutureDate DATETIME 
+		SET @FutureDate = dbo.GetFutureDate()
 		--DECLARE @MileStonePersons
 		DECLARE @StartDate DATETIME,
 				@EndDate DATETIME,
