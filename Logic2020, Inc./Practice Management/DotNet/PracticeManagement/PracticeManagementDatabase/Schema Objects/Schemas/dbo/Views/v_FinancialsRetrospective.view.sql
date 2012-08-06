@@ -56,7 +56,7 @@ AS
 	           WHEN 0 THEN 0
 	           ELSE p.BonusAmount / (CASE WHEN p.IsYearBonus = 1 THEN HY.HoursInYear ELSE p.BonusHoursToCollect END)
 	       END AS BonusRate,
-	       (SELECT SUM(CASE o.OverheadRateTypeId
+	       SUM(CASE o.OverheadRateTypeId
 	                       -- Multipliers
 	                       WHEN 2 THEN
 	                           (CASE
@@ -70,7 +70,7 @@ AS
 	                       -- Fixed
 	                       WHEN 3 THEN o.Rate * 12 / HY.HoursInYear 
 	                       ELSE o.Rate
-	                   END)) AS OverheadRate,
+	                   END) AS OverheadRate,
 	                   
 			ISNULL((CASE MLFO.OverheadRateTypeId
 	                       -- Multipliers
@@ -107,19 +107,17 @@ AS
 	       ) AS RecruitingCommissionRate
 	  FROM dbo.v_MilestoneRevenueRetrospective AS r
 		   -- Linking to persons
-	       JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
-	       JOIN dbo.GetFutureDateTable() FD ON 1=1 --For improving query performance we are using table valued function instead of scalar function.
+	       INNER JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
+	       INNER JOIN dbo.GetFutureDateTable() FD ON 1=1 --For improving query performance we are using table valued function instead of scalar function.
 	       -- Salary
 		   LEFT JOIN dbo.v_PersonPayRetrospective AS p ON p.PersonId = m.PersonId AND p.Date = r.Date
-	       LEFT JOIN dbo.v_OverheadFixedRateTimescale AS o
-	           ON     p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, FD.FutureDate)
-	              AND o.Inactive = 0
-	              AND o.TimescaleId = p.Timescale
-		  LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
+	       LEFT JOIN dbo.v_OverheadFixedRateTimescale AS o ON p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, FD.FutureDate)
+															  AND o.Inactive = 0
+															  AND o.TimescaleId = p.Timescale
+		  INNER JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
 		  LEFT JOIN v_MLFOverheadFixedRateTimescale MLFO ON MLFO.TimescaleId = p.Timescale
 								AND r.Date >= MLFO.StartDate 
-								AND (r.Date <=MLFO.EndDate OR MLFO.EndDate IS NULL)
-	GROUP BY r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
+								AND (r.Date <= MLFO.EndDate OR MLFO.EndDate IS NULL)
+	GROUP BY r.ProjectId, r.MilestoneId, r.Date, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
 	         m.Amount, p.BonusAmount,p.IsYearBonus, p.BonusHoursToCollect, p.Timescale, r.HoursPerDay,
 	         r.IsHourlyAmount, m.HoursPerDay, m.PersonId,m.EntryId, m.EntryStartDate, r.PracticeManagerId,MLFO.OverheadRateTypeId,MLFO.Rate
-
