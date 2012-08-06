@@ -64,10 +64,11 @@ AS
     ---------------------------------------------------------
     -- Retrieve all consultants working at current month
 		SET @Query = @Query + '
-        DECLARE @CurrentConsultants TABLE ( ConsId INT ) ;
-        INSERT  INTO @CurrentConsultants ( ConsId )
-                SELECT  p.PersonId
+        DECLARE @CurrentConsultants TABLE ( ConsId INT, TimeScaleId INT, TimeScaleName NVARCHAR(50) ) ;
+        INSERT  INTO @CurrentConsultants ( ConsId, TimeScaleId, TimeScaleName )
+                SELECT  p.PersonId, T.TimescaleId, T.Name
                 FROM    dbo.Person AS p
+				INNER JOIN dbo.Timescale T ON T.TimescaleId = dbo.GetCurrentPayType(p.PersonId) AND T.TimescaleId IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 WHERE   (p.IsStrawman = 0) 
                         AND ( @ActivePersons = 1 AND p.PersonStatusId = 1 OR
@@ -75,8 +76,7 @@ AS
 						AND (					
 								p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))
 							 AND (pr.IsCompanyInternal = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)				
-							)
-						AND (dbo.GetCurrentPayType(p.PersonId) IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))) '
+							) '
 			
 				
 	-- @CurrentConsultants now contains ids of consultants
@@ -89,8 +89,8 @@ AS
                 p.LastName,
                 p.HireDate,
 				p.TerminationDate,
-                paytp.TimescaleId,
-                paytp.[Name] AS Timescale,
+                c.TimescaleId,
+                c.[TimeScaleName] AS Timescale,
                 st.[Name],
 				S.[Name] Seniorityname,
 				S.SeniorityId,
@@ -100,7 +100,6 @@ AS
         FROM    dbo.Person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
-                INNER JOIN dbo.Timescale AS paytp ON paytp.TimescaleId = dbo.GetCurrentPayType(c.ConsId)
 				INNER JOIN dbo.Seniority S ON P.SeniorityId = S.SeniorityId
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
         WHERE dbo.GetNumberAvaliableHours(c.ConsId, @StartDate, @EndDate, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) > 0 '
