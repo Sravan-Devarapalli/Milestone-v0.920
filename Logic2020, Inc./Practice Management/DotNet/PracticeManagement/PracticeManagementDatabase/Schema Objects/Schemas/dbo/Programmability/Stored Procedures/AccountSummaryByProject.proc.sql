@@ -17,35 +17,52 @@ BEGIN
 		@HolidayTimeType INT,
 		@FutureDate DATETIME
 
-SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
-	 , @EndDateLocal = CONVERT(DATE, @EndDate)
-	 , @Today = dbo.GettingPMTime(GETUTCDATE())
-	 , @HolidayTimeType = dbo.GetHolidayTimeTypeId()
-	 , @FutureDate = dbo.GetFutureDate()
+	DECLARE @ProjectBillingTypesTable TABLE( BillingType NVARCHAR(100) )
+	DECLARE @BusinessUnitIdsTable TABLE ( Ids INT )
+	DECLARE @ProjectStatusIdsTable TABLE ( Ids INT )
 
-		;WITH ProjectForeCastedHoursUntilToday
-		AS (
-			SELECT M.ProjectId
-				 , SUM(MPE.HoursPerDay) AS ForecastedHoursUntilToday
-				 , MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue
-				 , MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
-			FROM
-				dbo.MilestonePersonEntry AS MPE
-				INNER JOIN dbo.MilestonePerson AS MP
-					ON MP.MilestonePersonId = MPE.MilestonePersonId
-				INNER JOIN dbo.Milestone AS M
-					ON M.MilestoneId = MP.MilestoneId
-				INNER JOIN dbo.person AS P
-					ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
-				INNER JOIN dbo.v_PersonCalendar PC
-					ON PC.PersonId = MP.PersonId AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate AND PC.Date BETWEEN @StartDateLocal AND CASE
-						WHEN @EndDateLocal > DATEADD(DAY, -1, @Today) THEN
-							DATEADD(DAY, -1, @Today)
-						ELSE
-							@EndDateLocal
-					END AND ((PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType) OR (PC.CompanyDayOff = 1 AND PC.SubstituteDate IS NOT NULL))
-			GROUP BY
-				M.ProjectId
+	INSERT INTO @ProjectBillingTypesTable(BillingType)
+	SELECT ResultString
+	FROM [dbo].[ConvertXmlStringInToStringTable](@ProjectBillingTypes)
+
+	INSERT INTO @BusinessUnitIdsTable(Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@BusinessUnitIds)
+
+	INSERT INTO @ProjectStatusIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@ProjectStatusIds)
+
+
+	SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
+		 , @EndDateLocal = CONVERT(DATE, @EndDate)
+		 , @Today = dbo.GettingPMTime(GETUTCDATE())
+		 , @HolidayTimeType = dbo.GetHolidayTimeTypeId()
+		 , @FutureDate = dbo.GetFutureDate()
+
+	;WITH ProjectForeCastedHoursUntilToday
+	AS (
+		SELECT M.ProjectId
+				, SUM(MPE.HoursPerDay) AS ForecastedHoursUntilToday
+				, MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue
+				, MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
+		FROM
+			dbo.MilestonePersonEntry AS MPE
+			INNER JOIN dbo.MilestonePerson AS MP
+				ON MP.MilestonePersonId = MPE.MilestonePersonId
+			INNER JOIN dbo.Milestone AS M
+				ON M.MilestoneId = MP.MilestoneId
+			INNER JOIN dbo.person AS P
+				ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
+			INNER JOIN dbo.v_PersonCalendar PC
+				ON PC.PersonId = MP.PersonId AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate AND PC.Date BETWEEN @StartDateLocal AND CASE
+					WHEN @EndDateLocal > DATEADD(DAY, -1, @Today) THEN
+						DATEADD(DAY, -1, @Today)
+					ELSE
+						@EndDateLocal
+				END AND ((PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType) OR (PC.CompanyDayOff = 1 AND PC.SubstituteDate IS NOT NULL))
+		GROUP BY
+			M.ProjectId
 	),
 	HoursData
 	AS ( SELECT PRO.ProjectId
@@ -92,13 +109,13 @@ SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 			 OR (CC.timeTypeId = @HolidayTimeType
 			 AND PTSH.PersonStatusId = 1))
 			 AND (@BusinessUnitIds IS NULL
-			 OR CC.ProjectGroupId IN (SELECT ResultId
-									  FROM
-										  dbo.ConvertStringListIntoTable(@BusinessUnitIds)))
+					OR CC.ProjectGroupId IN (SELECT Ids
+											FROM @BusinessUnitIdsTable )
+				)
 			 AND (@ProjectStatusIds IS NULL
-			 OR PRO.ProjectStatusId IN (SELECT ResultId
-										FROM
-											dbo.ConvertStringListIntoTable(@ProjectStatusIds)))
+					 OR PRO.ProjectStatusId IN (SELECT Ids
+												FROM @ProjectStatusIdsTable )
+				)
 		 GROUP BY
 			 PRO.ProjectId
 		   , CC.ClientId
@@ -108,65 +125,66 @@ SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 		   , PRO.ProjectNumber
 		   , CC.ProjectGroupId
 
-)
-SELECT C.ClientId
-	 , C.Name AS ClientName
-	 , C.Code AS ClientCode
-	 , PG.GroupId AS GroupId
-	 , PG.Name AS GroupName
-	 , PG.Code AS GroupCode
-	 , HD.ProjectId
-	 , HD.ProjectName
-	 , HD.ProjectNumber
-	 , PS.ProjectStatusId
-	 , PS.Name AS ProjectStatusName
-	 , HD.BillableHours
-	 , HD.NonBillableHours
-	 , ISNULL(pfh.ForecastedHoursUntilToday, 0) AS ForecastedHoursUntilToday
-	 , BillableHoursUntilToday
-	 , HD.TimeEntrySectionId
-	 , (CASE
-		   WHEN (pfh.MinimumValue IS NULL) THEN
-			   ''
-		   WHEN (pfh.MinimumValue = pfh.MaximumValue AND pfh.MinimumValue = 0) THEN
-			   'Fixed'
-		   WHEN (pfh.MinimumValue = pfh.MaximumValue AND pfh.MinimumValue = 1) THEN
-			   'Hourly'
-		   ELSE
-			   'Both'
-	   END) AS BillingType
-FROM
-	HoursData HD
-	INNER JOIN Client C
-		ON C.ClientId = HD.ClientId
-	INNER JOIN ProjectStatus PS
-		ON PS.ProjectStatusId = HD.ProjectStatusId
-	INNER JOIN ProjectGroup PG
-		ON PG.GroupId = HD.GroupId
-	LEFT JOIN ProjectForeCastedHoursUntilToday pfh
-		ON pfh.ProjectId = HD.ProjectId
-WHERE
-	((@ProjectBillingTypes IS NULL)
-	OR ((CASE
-		WHEN (pfh.MinimumValue IS NULL) THEN
-			''
-		WHEN (pfh.MinimumValue = pfh.MaximumValue
-			AND pfh.MinimumValue = 0) THEN
-			'Fixed'
-		WHEN (pfh.MinimumValue = pfh.MaximumValue
-			AND pfh.MinimumValue = 1) THEN
-			'Hourly'
-		ELSE
-			'Both'
-	END) IN (SELECT ResultString
-			 FROM
-				 [dbo].[ConvertXmlStringInToStringTable](@ProjectBillingTypes))))
-ORDER BY
-	HD.TimeEntrySectionId
-  , HD.ProjectNumber
+	)
+	SELECT C.ClientId
+		 , C.Name AS ClientName
+		 , C.Code AS ClientCode
+		 , PG.GroupId AS GroupId
+		 , PG.Name AS GroupName
+		 , PG.Code AS GroupCode
+		 , HD.ProjectId
+		 , HD.ProjectName
+		 , HD.ProjectNumber
+		 , PS.ProjectStatusId
+		 , PS.Name AS ProjectStatusName
+		 , HD.BillableHours
+		 , HD.NonBillableHours
+		 , ISNULL(pfh.ForecastedHoursUntilToday, 0) AS ForecastedHoursUntilToday
+		 , BillableHoursUntilToday
+		 , HD.TimeEntrySectionId
+		 , (CASE
+			   WHEN (pfh.MinimumValue IS NULL) THEN
+				   ''
+			   WHEN (pfh.MinimumValue = pfh.MaximumValue AND pfh.MinimumValue = 0) THEN
+				   'Fixed'
+			   WHEN (pfh.MinimumValue = pfh.MaximumValue AND pfh.MinimumValue = 1) THEN
+				   'Hourly'
+			   ELSE
+				   'Both'
+		   END) AS BillingType
+	FROM
+		HoursData HD
+		INNER JOIN Client C
+			ON C.ClientId = HD.ClientId
+		INNER JOIN ProjectStatus PS
+			ON PS.ProjectStatusId = HD.ProjectStatusId
+		INNER JOIN ProjectGroup PG
+			ON PG.GroupId = HD.GroupId
+		LEFT JOIN ProjectForeCastedHoursUntilToday pfh
+			ON pfh.ProjectId = HD.ProjectId
+	WHERE
+		((@ProjectBillingTypes IS NULL)
+		OR ((CASE
+			WHEN (pfh.MinimumValue IS NULL) THEN
+				''
+			WHEN (pfh.MinimumValue = pfh.MaximumValue
+				AND pfh.MinimumValue = 0) THEN
+				'Fixed'
+			WHEN (pfh.MinimumValue = pfh.MaximumValue
+				AND pfh.MinimumValue = 1) THEN
+				'Hourly'
+			ELSE
+				'Both'
+			END) IN (SELECT PBT.BillingType
+					 FROM @ProjectBillingTypesTable PBT )
+			)
+		)
+	ORDER BY
+		HD.TimeEntrySectionId
+	  , HD.ProjectNumber
 
-;WITH ProjectForeCastedHoursUntilToday
-		AS (
+	;WITH ProjectForeCastedHoursUntilToday
+	AS (
 				SELECT M.ProjectId
 					 , MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue
 					 , MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
@@ -176,8 +194,7 @@ ORDER BY
 					M.ProjectId
 	),
 	PersonsCountCTE
-	AS ( SELECT
-			 COUNT(DISTINCT TE.PersonId) AS PersonsCount
+	AS ( SELECT COUNT(DISTINCT TE.PersonId) AS PersonsCount
 		 FROM
 			 dbo.TimeEntry TE
 			 INNER JOIN dbo.ChargeCode CC
@@ -197,13 +214,13 @@ ORDER BY
 			 OR (CC.timeTypeId = @HolidayTimeType
 			 AND PTSH.PersonStatusId = 1))
 			 AND (@BusinessUnitIds IS NULL
-			 OR CC.ProjectGroupId IN (SELECT ResultId
-									  FROM
-										  dbo.ConvertStringListIntoTable(@BusinessUnitIds)))
+					 OR CC.ProjectGroupId IN (SELECT Ids
+											  FROM @BusinessUnitIdsTable )
+				)
 			 AND (@ProjectStatusIds IS NULL
-			 OR PRO.ProjectStatusId IN (SELECT ResultId
-										FROM
-											dbo.ConvertStringListIntoTable(@ProjectStatusIds)))
+					 OR PRO.ProjectStatusId IN (SELECT Ids
+												FROM @ProjectStatusIdsTable )
+				)
 			 AND ((@ProjectBillingTypes IS NULL)
 			 OR ((CASE
 				 WHEN (pfh.MinimumValue IS NULL) THEN
@@ -216,20 +233,18 @@ ORDER BY
 					 'Hourly'
 				 ELSE
 					 'Both'
-			 END) IN (SELECT ResultString
-					  FROM
-						  [dbo].[ConvertXmlStringInToStringTable](@ProjectBillingTypes))))
-)
+				 END) IN (SELECT PBT.BillingType
+						  FROM @ProjectBillingTypesTable PBT )
+				)
+			)
+	)
 
-SELECT C.Name AS ClientName
-	 , C.Code AS ClientCode
-	 , C.ClientId AS ClientId
-	 , PC.PersonsCount
-FROM
-	dbo.Client C
-	INNER JOIN PersonsCountCTE AS PC
-		ON 1 = 1
-WHERE
-	C.ClientId = @AccountId
+	SELECT C.Name AS ClientName
+		 , C.Code AS ClientCode
+		 , C.ClientId AS ClientId
+		 , PC.PersonsCount
+	FROM dbo.Client C
+		INNER JOIN PersonsCountCTE AS PC ON 1 = 1
+	WHERE C.ClientId = @AccountId
 	
 END
