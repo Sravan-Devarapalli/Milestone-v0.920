@@ -35,10 +35,11 @@ AS
 		   f.PracticeManagerId
 	FROM v_FinancialsRetrospective f
 	WHERE f.MilestoneId = @MilestoneId AND f.PersonId = @PersonId         
-	)
-
+	),
+	FinancialsRetroByProjectId AS
+	(
 	SELECT f.ProjectId,
-	       MIN(C.MonthStartDate) AS FinancialDate,
+	       MIN(f.Date) AS FinancialDate,
 	       ISNULL(SUM(f.PersonMilestoneDailyAmount), 0)AS Revenue,
 
 	       ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount), 0) AS RevenueNet,
@@ -65,6 +66,19 @@ AS
 	           0.0 AS 'actualhours',
 	           0.0 AS 'forecastedhours'
 	  FROM FinancialsRetro AS f
-	  INNER JOIN dbo.Calendar C ON C.date = f.date
 	  GROUP BY f.ProjectId
+	  )
 
+	  SELECT FRP.ProjectId,
+			C.MonthStartDate AS FinancialDate,
+			FRP.Revenue,
+			FRP.RevenueNet,
+			FRP.GrossMargin,
+			FRP.Cogs,
+			FRP.Hours,
+			FRP.SalesCommission,
+			FRP.PracticeManagementCommission,
+			FRP.actualhours,
+			FRP.forecastedhours
+	  FROM FinancialsRetroByProjectId FRP
+	  INNER JOIN dbo.Calendar C ON C.[Date] = FRP.FinancialDate 
