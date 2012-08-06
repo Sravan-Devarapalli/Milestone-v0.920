@@ -42,11 +42,11 @@ BEGIN
 		   f.EntryId
 	FROM v_FinancialsRetrospective f
 	WHERE f.MilestoneId = @MilestoneId AND f.EntryId = @IdLocal  
-	)
-
+	),
+	FinancialsRetroByProjectId AS
+	(
 	SELECT f.ProjectId,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEnd,
+		   MIN(f.Date) AS [Date],
 
 	       ISNULL(SUM(f.PersonMilestoneDailyAmount), 0) AS Revenue,
 
@@ -75,5 +75,21 @@ BEGIN
 	           0.0 AS 'forecastedhours'
 	  FROM FinancialsRetro AS f
 	  GROUP BY f.ProjectId
+	  )
+
+	  SELECT ProjectId,
+			C.MonthStartDate AS FinancialDate,
+			C.MonthEndDate AS MonthEnd,
+			Revenue,
+			RevenueNet,
+			GrossMargin,
+			Cogs,
+			Hours,
+			SalesCommission,
+			PracticeManagementCommission,
+			actualhours,
+			forecastedhours
+	  FROM FinancialsRetroByProjectId FRP
+	  INNER JOIN dbo.Calendar C ON C.[Date] = FRP.[date]
 
 END
