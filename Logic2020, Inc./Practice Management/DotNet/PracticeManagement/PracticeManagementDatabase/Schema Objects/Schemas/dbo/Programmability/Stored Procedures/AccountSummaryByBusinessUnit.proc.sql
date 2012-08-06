@@ -15,6 +15,12 @@ BEGIN
 		@FutureDate DATETIME
 
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate), @HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
+
+	DECLARE @BusinessUnitIdsTable TABLE ( Id INT)
+
+	INSERT INTO @BusinessUnitIdsTable(Id)
+	SELECT BU.ResultId
+	FROM dbo.ConvertStringListIntoTable(@BusinessUnitIds) BU
 	
 	
 		SELECT    PG.GroupId, 
@@ -59,7 +65,7 @@ BEGIN
 					)
 				AND (@BusinessUnitIds IS NULL
 					OR CC.ProjectGroupId IN (SELECT *
-											FROM dbo.ConvertStringListIntoTable(@BusinessUnitIds)
+											FROM @BusinessUnitIdsTable
 											)
 					)
 		GROUP BY  PG.GroupId, PG.Name, PG.Active, PG.Code
@@ -72,11 +78,10 @@ BEGIN
 			C.Code AS ClientCode,
 			C.ClientId AS ClientId
 		FROM    dbo.TimeEntry TE
-				INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId
+				INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
 												AND TE.ChargeCodeDate BETWEEN @StartDateLocal
 												AND
 												@EndDateLocal
-				INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
 				INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
 				INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = P.PersonId
 												AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
@@ -94,7 +99,7 @@ BEGIN
 					)
 				AND (@BusinessUnitIds IS NULL
 					OR CC.ProjectGroupId IN (SELECT *
-											FROM dbo.ConvertStringListIntoTable(@BusinessUnitIds)
+											FROM @BusinessUnitIdsTable
 											)
 					)
 		GROUP BY C.ClientId, C.Name, C.Code
