@@ -49,30 +49,30 @@ BEGIN
 	FROM dbo.DefaultMilestoneSetting
 
 	DECLARE @TempProjectResult TABLE(
-	ClientId					INT,
-	ProjectId					INT,
-	Name						NVARCHAR(100),
-	PracticeManagerId			INT,
-	PracticeId					INT,
-	StartDate					DATETIME,
-	EndDate						DATETIME,
-	ClientName					NVARCHAR(100),
-	PracticeName				NVARCHAR(100),
-	ProjectStatusId				INT,
-	ProjectStatusName			NVARCHAR(25),
-	ProjectNumber				NVARCHAR(12),
-	GroupId						INT,
-	GroupName					NVARCHAR(100),
-	SalespersonId				INT,
-	SalespersonFirstName		NVARCHAR(40),
-	SalespersonLastName			NVARCHAR(40),
-	CommissionType				INT,
-	PracticeManagerFirstName	NVARCHAR(40),
-	PracticeManagerLastName		NVARCHAR(40),
-	DirectorId					INT,
-	DirectorLastName			NVARCHAR(40),
-	DirectorFirstName			NVARCHAR(40)
-	)
+									ClientId					INT,
+									ProjectId					INT PRIMARY KEY,
+									Name						NVARCHAR(100),
+									PracticeManagerId			INT,
+									PracticeId					INT,
+									StartDate					DATETIME,
+									EndDate						DATETIME,
+									ClientName					NVARCHAR(100),
+									PracticeName				NVARCHAR(100),
+									ProjectStatusId				INT,
+									ProjectStatusName			NVARCHAR(25),
+									ProjectNumber				NVARCHAR(12),
+									GroupId						INT,
+									GroupName					NVARCHAR(100),
+									SalespersonId				INT,
+									SalespersonFirstName		NVARCHAR(40),
+									SalespersonLastName			NVARCHAR(40),
+									CommissionType				INT,
+									PracticeManagerFirstName	NVARCHAR(40),
+									PracticeManagerLastName		NVARCHAR(40),
+									DirectorId					INT,
+									DirectorLastName			NVARCHAR(40),
+									DirectorFirstName			NVARCHAR(40)
+									)
 	INSERT INTO @TempProjectResult
 	SELECT  p.ClientId,
 			p.ProjectId,
@@ -98,23 +98,22 @@ BEGIN
 			p.DirectorLastName,
 			p.DirectorFirstName
 	FROM	dbo.v_Project AS p
-	JOIN dbo.Person pm
-	ON pm.PersonId = p.PracticeManagerId
-	JOIN dbo.Practice pr ON pr.PracticeId = p.PracticeId
+	INNER JOIN dbo.Person pm ON pm.PersonId = p.PracticeManagerId
+	INNER JOIN dbo.Practice pr ON pr.PracticeId = p.PracticeId
 	LEFT JOIN dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
 	LEFT JOIN  dbo.Person sp on sp.PersonId = c.PersonId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
-	WHERE	    (c.CommissionType is NULL OR c.CommissionType = 1)
-		    AND (dbo.IsDateRangeWithingTimeInterval(p.StartDate, p.EndDate, @StartDate, @EndDate) = 1 OR (p.StartDate IS NULL AND p.EndDate IS NULL))
+	WHERE P.ProjectId <> @DefaultProjectId
+			AND (c.CommissionType is NULL OR c.CommissionType = 1)
+			AND	( (p.StartDate IS NULL AND p.EndDate IS NULL) OR (p.StartDate <= @EndDate AND p.EndDate >= @StartDate))
 			AND ( @ClientIds IS NULL OR p.ClientId IN (SELECT Id from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @PracticeIds IS NULL OR p.PracticeId IN (SELECT Id FROM @PracticesList) OR p.PracticeId IS NULL )
 			AND ( @ProjectOwnerIds IS NULL 
-				  OR EXISTS (SELECT 1 FROM dbo.ProjectManagers AS projManagers
-							JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectManagerId
-								WHERE projManagers.ProjectId = p.ProjectId
-							)
 				  OR p.ProjectOwnerId IN (SELECT POL.Id  FROM @ProjectOwnersList POL)
+				  OR EXISTS (SELECT 1 FROM dbo.ProjectManagers AS projManagers
+								WHERE projManagers.ProjectId = p.ProjectId AND projManagers.ProjectManagerId IN (SELECT POL.Id FROM @ProjectOwnersList POL)
+							)
 				)
 			AND (    @SalespersonIds IS NULL 
 				  OR c.PersonId IN (SELECT Id FROM @SalespersonsList)
@@ -126,8 +125,7 @@ BEGIN
 				  OR ( @ShowExperimental = 1 AND p.ProjectStatusId = 5 )
 				  OR ( @ShowInactive = 1 AND p.ProjectStatusId = 1 ) -- Inactive
 			)
-			AND  (ISNULL(pr.IsCompanyInternal, 0) = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)				
-			AND P.ProjectId <> @DefaultProjectId
+			AND  (ISNULL(pr.IsCompanyInternal, 0) = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)
 			AND P.IsAllowedToShow = 1
 	ORDER BY CASE p.ProjectStatusId
 			   WHEN 2 THEN p.StartDate
@@ -143,61 +141,67 @@ BEGIN
 		   f.Date, 
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
-		   ISNULL((SELECT SUM(c.FractionOfMargin) 
-							  FROM dbo.Commission AS  c 
-							  WHERE c.ProjectId = f.ProjectId 
-									AND c.CommissionType = 1
-								),0) ProjectSalesCommisionFraction,
 		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)
 			+ISNULL(f.RecruitingCommissionRate,0)) SLHR,
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId,
-		   f.PersonId,
+		   --f.PracticeManagementCommissionSub,
+		   --f.PracticeManagementCommissionOwn ,
+		   --f.PracticeManagerId,
+		   --f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
-	WHERE f.ProjectId  IN (SELECT ProjectId FROM @TempProjectResult) 
+	WHERE f.ProjectId IN (SELECT ProjectId FROM @TempProjectResult)
 	),
 	ProjectFinancials
 	AS
 	(
 	SELECT f.ProjectId,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(f.Date)), MONTH(MIN(f.Date)), dbo.GetDaysInMonth(MIN(f.Date))) AS MonthEnd,
+	       C.MonthStartDate AS FinancialDate,
+	       C.MonthEndDate AS MonthEnd,
 
 	       SUM(f.PersonMilestoneDailyAmount) AS Revenue,
-
-	       SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount) AS RevenueNet,
 	       
 		   SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
 						(CASE WHEN f.SLHR >= f.PayRate + f.MLFOverheadRate 
 							  THEN f.SLHR ELSE  f.PayRate + f.MLFOverheadRate END) 
 					    *ISNULL(f.PersonHoursPerDay, 0)) GrossMargin,
-		   
-		   ISNULL(SUM((CASE WHEN f.SLHR >= f.PayRate + f.MLFOverheadRate THEN f.SLHR ELSE  f.PayRate + f.MLFOverheadRate END)*ISNULL(f.PersonHoursPerDay, 0)),0) Cogs,
-
-	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours,
 		   min(f.Discount) as Discount
+		   /*
+	       --SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount) AS RevenueNet,
+
+		   --ISNULL(SUM((CASE WHEN f.SLHR >= f.PayRate + f.MLFOverheadRate THEN f.SLHR ELSE  f.PayRate + f.MLFOverheadRate END)*ISNULL(f.PersonHoursPerDay, 0)),0) Cogs,
+
+	       --ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours,
+		   */
 	  FROM FinancialsRetro AS f
-	  
+	  INNER JOIN dbo.Calendar C ON C.Date = f.Date
 	  WHERE  f.Date BETWEEN @StartDate AND @EndDate
-	 GROUP BY f.ProjectId,YEAR(f.Date), MONTH(f.Date)
+	 GROUP BY f.ProjectId, C.MonthStartDate, C.MonthEndDate
 	),
 	ProjectExpensesMonthly
 	AS
 	(
+		--SELECT pexp.ProjectId,
+		--	CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
+		--	CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
+		--	c.MonthStartDate AS FinancialDate,
+	 --       c.MonthEndDate AS MonthEnd
+		--FROM dbo.ProjectExpense as pexp
+		--JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
+		--WHERE ProjectId IN (SELECT ProjectId FROM @TempProjectResult) AND c.Date BETWEEN @StartDate	AND @EndDate
+		--GROUP BY pexp.ProjectId, c.MonthStartDate, c.MonthEndDate
 		SELECT pexp.ProjectId,
 			CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
 			CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
-			dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), 1) AS FinancialDate,
-	       dbo.MakeDate(YEAR(MIN(c.Date)), MONTH(MIN(c.Date)), dbo.GetDaysInMonth(MIN(C.Date))) AS MonthEnd
-		FROM dbo.ProjectExpense as pexp
-		JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
-		WHERE ProjectId IN (SELECT ProjectId FROM @TempProjectResult) AND c.Date BETWEEN @StartDate	AND @EndDate
-		GROUP BY pexp.ProjectId,MONTH(c.Date),YEAR(c.Date)
+			c.MonthStartDate AS FinancialDate,
+	        c.MonthEndDate AS MonthEnd
+		FROM @TempProjectResult T
+		INNER JOIN dbo.ProjectExpense as pexp ON pexp.ProjectId = T.ProjectId
+		INNER JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
+		WHERE c.Date BETWEEN @StartDate	AND @EndDate
+		GROUP BY pexp.ProjectId, c.MonthStartDate, c.MonthEndDate
 	)
 
 	SELECT
@@ -211,7 +215,6 @@ BEGIN
 	FROM ProjectFinancials pf
 	JOIN Project p on (p.ProjectId = pf.ProjectId)
 	JOIN Practice pr on (pr.PracticeId = p.PracticeId)
-	FULL JOIN ProjectExpensesMonthly PEM 
-	ON PEM.ProjectId = pf.ProjectId AND pf.FinancialDate = PEM.FinancialDate  AND Pf.MonthEnd = PEM.MonthEnd
+	FULL JOIN ProjectExpensesMonthly PEM ON PEM.ProjectId = pf.ProjectId AND pf.FinancialDate = PEM.FinancialDate  AND Pf.MonthEnd = PEM.MonthEnd
 	
 END
