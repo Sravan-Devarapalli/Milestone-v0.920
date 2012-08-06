@@ -21,6 +21,7 @@ AS
 	       CAST(0 AS DECIMAL) AS BillRateMultiplier
 	  FROM dbo.Person AS ps
 	       CROSS JOIN dbo.v_OverheadFixedRate AS r
+		   INNER JOIN dbo.GetFutureDateTable() AS FD ON 1=1
 	 WHERE EXISTS (SELECT 1
 	                 FROM dbo.Pay AS p
 	                      INNER JOIN dbo.OverheadFixedRateTimescale AS rt ON p.Timescale = rt.TimescaleId
@@ -31,7 +32,7 @@ AS
 	   AND r.OverheadRateTypeId NOT IN (2, 4)
 	   AND r.[Inactive] = 0
 	   AND r.[StartDate] <= GETDATE()
-	   AND ISNULL(r.[EndDate], dbo.GetFutureDate()) > GETDATE()
+	   AND ISNULL(r.[EndDate], FD.FutureDate) > GETDATE()
 	   AND r.IsCogs = 1
 	UNION ALL
 	-- Dynamically calculated rates
@@ -39,7 +40,7 @@ AS
 	SELECT ps.PersonId,
 	       r.Description,
 	       r.Rate * p.[Amount] / 100 AS Rate,
-	       CAST(CASE p.[Timescale] WHEN 2 THEN dbo.GetHoursPerYear() ELSE 1 END AS INT) AS HoursToCollect,
+	       CAST(CASE p.[Timescale] WHEN 2 THEN HPY.HoursPerYear ELSE 1 END AS INT) AS HoursToCollect,
 	       r.StartDate,
 	       r.EndDate,
 	       CAST(0 AS BIT) AS IsPercentage,
@@ -53,12 +54,14 @@ AS
 	           ON ps.[PersonId] = p.[Person] AND p.StartDate <= GETDATE() AND p.EndDate > GETDATE()
 	       INNER JOIN dbo.OverheadFixedRateTimescale AS t
 	           ON t.OverheadFixedRateId = r.OverheadFixedRateId AND t.TimescaleId = p.Timescale
+		   INNER JOIN dbo.GetHoursPerYearTable() HPY ON 1=1
+		   INNER JOIN dbo.GetFutureDateTable() FD ON 1=1
 	 WHERE r.[OverheadRateTypeId] = 4
 	   AND r.[Inactive] = 0
 	   AND p.[StartDate] <= GETDATE()
 	   AND p.[EndDate] > GETDATE()
 	   AND r.[StartDate] <= GETDATE()
-	   AND ISNULL(r.[EndDate], dbo.GetFutureDate()) > GETDATE()
+	   AND ISNULL(r.[EndDate], FD.FutureDate) > GETDATE()
 	   AND r.IsCogs = 1
 	UNION ALL
 	-- Bill rate multiplier
@@ -69,7 +72,7 @@ AS
 	                WHERE mp.PersonId = ps.PersonId
 	                  AND mp.StartDate <= GETDATE()
 	                  AND mp.EndDate > GETDATE()), 0) AS Rate,
-	       CAST(CASE p.[Timescale] WHEN 2 THEN dbo.GetHoursPerYear() ELSE 1 END AS INT) AS HoursToCollect,
+	       CAST(CASE p.[Timescale] WHEN 2 THEN HPY.HoursPerYear ELSE 1 END AS INT) AS HoursToCollect,
 	       r.StartDate,
 	       r.EndDate,
 	       CAST(0 AS BIT) AS IsPercentage,
@@ -83,12 +86,14 @@ AS
 	           ON ps.[PersonId] = p.[Person] AND p.StartDate <= GETDATE() AND p.EndDate > GETDATE()
 	       INNER JOIN dbo.OverheadFixedRateTimescale AS t
 	           ON t.OverheadFixedRateId = r.OverheadFixedRateId AND t.TimescaleId = p.Timescale
+		   INNER JOIN dbo.GetHoursPerYearTable() HPY ON 1=1
+		   INNER JOIN dbo.GetFutureDateTable() FD ON 1=1
 	 WHERE r.[OverheadRateTypeId] = 2
 	   AND r.[Inactive] = 0
 	   AND p.[StartDate] <= GETDATE()
 	   AND p.[EndDate] > GETDATE()
 	   AND r.[StartDate] <= GETDATE()
-	   AND ISNULL(r.[EndDate], dbo.GetFutureDate()) > GETDATE()
+	   AND ISNULL(r.[EndDate], FD.FutureDate) > GETDATE()
 	   AND r.IsCogs = 1
 	UNION ALL
 	-- Recruiting overhead
