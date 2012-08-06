@@ -3,7 +3,7 @@
 -- Create date: 9-10-2008
 -- Updated by:	Anatoliy Lokshin
 -- Update date:	10-13-2008
--- Description:	Selects a revenue day-by-day
+-- Description:	Selects a revenue day-by-day 
 -- =============================================
 CREATE VIEW dbo.v_MilestoneRevenueRetrospective--Day level Milestone Amount & hours
 AS
@@ -28,7 +28,13 @@ AS
 		prac.PracticeManagerId,
 		d.HoursPerDay/* Milestone Total  Hours per day*/
 	FROM dbo.Milestone AS m
-		OUTER APPLY dbo.GetMilestoneNetAssignedHours(m.MilestoneId) AS MTHours 
+		OUTER APPLY (	SELECT SUM(MPE.HoursPerDay) AS TotalHours
+						FROM   dbo.MilestonePerson AS MP  
+						INNER JOIN dbo.MilestonePersonEntry AS  MPE ON MP.MileStonePersonId = MPE.MileStonePersonId
+						INNER JOIN dbo.PersonCalendarAuto AS pcal 	ON pcal.Date BETWEEN mpe.Startdate AND mpe.EndDate 
+															   AND pcal.DayOff=0 AND pcal.PersonId = mp.PersonId 
+						WHERE  mp.MileStoneId = m.MilestoneId
+						GROUP BY MP.MilestoneId) AS MTHours 
 		INNER JOIN dbo.Calendar AS cal ON cal.Date BETWEEN m.StartDate AND m.ProjectedDeliveryDate
 		INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
 		INNER JOIN dbo.Practice AS prac ON p.PracticeId = prac.PracticeId
