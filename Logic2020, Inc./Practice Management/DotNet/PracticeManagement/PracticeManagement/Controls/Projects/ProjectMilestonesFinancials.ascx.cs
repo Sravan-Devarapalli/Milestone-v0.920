@@ -23,8 +23,8 @@ namespace PraticeManagement.Controls.Projects
         public const string MILESTONE_TARGET = "milestone";
         protected const string ProjectIdFormat = "projectId={0}";
 
-        private const int GROSS_MARGIN_CELL_INDEX = 4;
-        private const int MARGIN_PERCENT_CELL_INDEX = 5;
+        private const int GROSS_MARGIN_CELL_INDEX = 5;
+        private const int MARGIN_PERCENT_CELL_INDEX = 6;
 
         private const string ViewSortExpression = "SortExpression";
         private const string ViewSortDirection = "SortDirection";
