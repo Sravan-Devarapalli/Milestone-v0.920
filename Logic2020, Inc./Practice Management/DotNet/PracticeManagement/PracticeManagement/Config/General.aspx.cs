@@ -12,12 +12,19 @@ using System.Web.Security;
 using System.Configuration;
 using PraticeManagement;
 using PraticeManagement.PersonService;
+using System.Collections;
 
 
 namespace PraticeManagement.Config
 {
     public partial class General : PracticeManagementPageBase, IPostBackEventHandler
     {
+        #region constants
+
+        private string QueryStringClearCacheKey = "ClearCache";
+        private string QueryStringClearCacheValue = "qwertasdfzxcv";
+
+        #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -25,6 +32,8 @@ namespace PraticeManagement.Config
             {
                 ResetDropdowns();
                 PopulateControls();
+
+                ResetCache();
             }
 
             mlConfirmation.ClearMessage();
@@ -59,6 +68,19 @@ namespace PraticeManagement.Config
             }
             txtFormsAuthenticationTimeOutMin.Text = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.FormsAuthenticationTimeOutKey);
             EnableOrDisableLockoutPolicyControls();
+        }
+
+        private void ResetCache()
+        {
+            if (!string.IsNullOrEmpty(Request.QueryString[QueryStringClearCacheKey]) && Request.QueryString[QueryStringClearCacheKey] == QueryStringClearCacheValue)
+            {
+                IDictionaryEnumerator enumerator = Cache.GetEnumerator();
+
+                while (enumerator.MoveNext())
+                {
+                    Cache.Remove(enumerator.Key.ToString());
+                }
+            }
         }
 
         protected override void Display()
