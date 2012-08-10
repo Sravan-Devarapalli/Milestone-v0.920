@@ -33,6 +33,7 @@
         <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx?from=reports" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
       </siteMapNode>
       <siteMapNode url="~/Reports/AccountSummaryReport.aspx" title="Account"  VirtualPath="~/Reports/AccountSummaryReport.aspx" QuickLinkTitle="Account"  description="Account" ShowURL="true"/>
+      <siteMapNode url="~/Reports/HumanCapital.aspx" title="Human Capital"  VirtualPath="~/Reports/HumanCapital.aspx" QuickLinkTitle="Human Capital"  description="Human Capital" ShowURL="true"/>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
