@@ -905,6 +905,11 @@ namespace PraticeManagement
                     statusCssClass = "ActiveProjectWithoutSOW";
                     iconTooltip = "Active without Attachment";
                 }
+                else if (statusId == 3 && HasAttachments)
+                {
+                    iconTooltip = "Active with Attachment";
+                    statusCssClass = ProjectHelper.GetIndicatorClassByStatusId(statusId);
+                }
                 else
                 {
                     statusCssClass = ProjectHelper.GetIndicatorClassByStatusId(statusId);
