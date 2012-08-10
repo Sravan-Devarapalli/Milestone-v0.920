@@ -380,6 +380,11 @@
     <Content Include="Controls\Reports\ByPerson\GroupByProject.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
+    <Content Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx" />
+    <Content Include="Controls\Reports\HumanCapital\NewHireReportGraphView.ascx" />
+    <Content Include="Controls\Reports\HumanCapital\NewHireReportSummaryView.ascx" />
+    <Content Include="Controls\Reports\HumanCapital\TerminationReportGraphView.ascx" />
+    <Content Include="Controls\Reports\HumanCapital\TerminationReportSummaryView.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
     <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
     <Content Include="Controls\Reports\ProjectDetailTabByResource.ascx" />
@@ -507,8 +512,11 @@
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\Expenses.aspx" />
+    <Content Include="Reports\HumanCapital.aspx" />
+    <Content Include="Reports\NewHireReport.aspx" />
     <Content Include="Reports\PersonDetailTimeReport.aspx" />
     <Content Include="Reports\ProjectSummaryReport.aspx" />
+    <Content Include="Reports\TerminationReport.aspx" />
     <Content Include="Reports\TimeEntryReport_new.aspx" />
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
     <Content Include="RevenueGoals.aspx" />
@@ -1438,6 +1446,41 @@
     <Compile Include="Controls\Reports\ConsultingDemand.ascx.designer.cs">
       <DependentUpon>ConsultingDemand.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx.cs">
+      <DependentUpon>HumanCapitalReportsHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx.designer.cs">
+      <DependentUpon>HumanCapitalReportsHeader.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\NewHireReportGraphView.ascx.cs">
+      <DependentUpon>NewHireReportGraphView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\NewHireReportGraphView.ascx.designer.cs">
+      <DependentUpon>NewHireReportGraphView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\NewHireReportSummaryView.ascx.cs">
+      <DependentUpon>NewHireReportSummaryView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\NewHireReportSummaryView.ascx.designer.cs">
+      <DependentUpon>NewHireReportSummaryView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\TerminationReportGraphView.ascx.cs">
+      <DependentUpon>TerminationReportGraphView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\TerminationReportGraphView.ascx.designer.cs">
+      <DependentUpon>TerminationReportGraphView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\TerminationReportSummaryView.ascx.cs">
+      <DependentUpon>TerminationReportSummaryView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\HumanCapital\TerminationReportSummaryView.ascx.designer.cs">
+      <DependentUpon>TerminationReportSummaryView.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\PersonDetailReport.ascx.cs">
       <DependentUpon>PersonDetailReport.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1876,6 +1919,20 @@
     <Compile Include="Reports\Expenses.aspx.designer.cs">
       <DependentUpon>Expenses.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\HumanCapital.aspx.cs">
+      <DependentUpon>HumanCapital.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\HumanCapital.aspx.designer.cs">
+      <DependentUpon>HumanCapital.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\NewHireReport.aspx.cs">
+      <DependentUpon>NewHireReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\NewHireReport.aspx.designer.cs">
+      <DependentUpon>NewHireReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\PersonDetailTimeReport.aspx.cs">
       <DependentUpon>PersonDetailTimeReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1889,6 +1946,13 @@
     </Compile>
     <Compile Include="Reports\ProjectSummaryReport.aspx.designer.cs">
       <DependentUpon>ProjectSummaryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\TerminationReport.aspx.cs">
+      <DependentUpon>TerminationReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\TerminationReport.aspx.designer.cs">
+      <DependentUpon>TerminationReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\TimeEntryReport_new.aspx.cs">
       <DependentUpon>TimeEntryReport_new.aspx</DependentUpon>
@@ -3561,4 +3625,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
