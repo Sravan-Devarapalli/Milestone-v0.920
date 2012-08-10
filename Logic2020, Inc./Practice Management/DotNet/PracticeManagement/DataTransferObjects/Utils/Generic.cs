@@ -117,6 +117,19 @@ namespace DataTransferObjects.Utils
             return (int)(100 * billableHours / (billableHours + nonBillableHours));
         }
 
+        public static List<int> GetProportionateRatio(List<int> ratioList, int height)
+        {
+            List<int> proportionateList = new List<int>();
+            int sum = ratioList.Sum();
+            foreach (int no in ratioList)
+            {
+                decimal noRatio = ((decimal)no / (decimal)sum) * (decimal) height ;
+                int i = (int)Math.Round(noRatio);
+                proportionateList.Add(i);
+            }
+            return proportionateList;
+        }
+
         public static List<GroupByDate> GetGroupByDateList(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
         {
             List<GroupByDate> groupByDateList = new List<GroupByDate>();
