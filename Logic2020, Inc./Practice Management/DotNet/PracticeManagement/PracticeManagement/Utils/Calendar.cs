@@ -98,7 +98,6 @@ namespace PraticeManagement.Utils
             }
         }
 
-
         public static DateTime MonthEndDate(DateTime now)
         {
             return now.AddMonths(1).AddDays(-now.AddMonths(1).Day);
@@ -143,6 +142,7 @@ namespace PraticeManagement.Utils
         {
             return now.AddDays(15 - now.Day);
         }
+
         public static DateTime LastMonthEndDate(DateTime now)
         {
             return now.AddDays(-now.Day);
@@ -157,5 +157,45 @@ namespace PraticeManagement.Utils
         {
             return now.AddDays(-now.DayOfYear);
         }
+
+        public static DateTime QuarterStartDate(DateTime now,int quater)
+        {
+            if (quater == 1)
+            {
+                return YearStartDate(now);
+            }
+            else if (quater == 2)
+            {
+                return new DateTime(now.Year, 4, 1);
+            }
+            else if (quater == 3)
+            {
+                return new DateTime(now.Year, 7, 1);
+            }
+            else
+            {
+                return new DateTime(now.Year, 10, 1);
+            }
+        }
+        public static DateTime QuarterEndDate(DateTime now, int quater)
+        {
+            if (quater == 1)
+            {
+                return new DateTime(now.Year, 3, 31);
+            }
+            else if (quater == 2)
+            {
+                return new DateTime(now.Year, 6, 30);
+            }
+            else if (quater == 3)
+            {
+                return new DateTime(now.Year, 9, 30);
+            }
+            else
+            {
+                return YearEndDate(now);
+            }
+        }
     }
 }
+
