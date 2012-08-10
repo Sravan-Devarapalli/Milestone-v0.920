@@ -950,7 +950,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .ConsultantsWeeklyReportAlignCenter{text-align:center!important;width:100%}
 .ConsultantsWeeklyReportupdPersonDetails{width:95%!important;text-align:center;padding-left:2%}
 .BorderBottom1px,.BorderBottom1pxTd .border{border-bottom:1px solid black}
-.UTilTimeLineFilterCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.UTilTimeLineFilterCblTimeScales,.NewHireReportCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
 .UTilTimeLineFilterCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
 .bgColor_d4dff8{background-color:#d4dff8}
 .BenchCostFooter{padding-left:15px!important}
@@ -1308,3 +1308,7 @@ table#ctl00_body_login tr td label{float:left}
 .gvStrawmen .headerSortUp span{background-image:url(../images/asc.gif);background-position:right;background-repeat:no-repeat}
 .gvStrawmen .headerSortDown span{background-position:right;background-repeat:no-repeat;background-image:url(../images/desc.gif)}
 .backGroundNone{background-image:none!important}
+.NewHireReportCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:300px;z-index:20000}
+.W2SalaryGraph{background-color:Black;border:1px solid Gray}
+.W2HourlyGraph{background-color:Green;border:1px solid Gray}
+.ContractorsGraph{background-color:Yellow;border:1px solid Gray}
