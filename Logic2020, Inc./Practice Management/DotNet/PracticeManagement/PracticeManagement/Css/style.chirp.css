@@ -5034,7 +5034,7 @@ BenchCosts.ascx*/
 {
     border-bottom: 1px solid black;
 }
-.UTilTimeLineFilterCblTimeScales
+.UTilTimeLineFilterCblTimeScales , .NewHireReportCblTimeScales
 {
     background-color: #FFFFFF;
     border: 1px solid #AAAAAA;
@@ -7056,4 +7056,29 @@ table#ctl00_body_login tr td label
 {
     background-image:none !important;
 }
-
+.NewHireReportCblPractices
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 300px;
+    z-index: 20000;
+}
+.W2SalaryGraph
+{
+    background-color: Black;
+    border: 1px solid Gray;
+}
+.W2HourlyGraph
+{
+    background-color: Green;
+    border: 1px solid Gray;
+}
+.ContractorsGraph
+{
+    background-color: Yellow;
+    border: 1px solid Gray;
+}
