@@ -1697,7 +1697,7 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var persons = new List<Person>();
-                    ReadPersons(reader, persons);
+                    ReadNewHiredPersons(reader, persons);
                     return persons;
                 }
             }
@@ -1733,7 +1733,8 @@ namespace DataAccess
                     person.RecruiterCommission = recruiterList;
 
                     person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex), Name = reader.GetString(personSeniorityNameIndex) };
-                    person.DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex);
+                    if (!reader.IsDBNull(divisionIdIndex))
+                        person.DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex);
                     person.HireDate = reader.GetDateTime(hireDateIndex);
 
                     result.Add(person);
