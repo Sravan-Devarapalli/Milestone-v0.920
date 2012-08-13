@@ -56,6 +56,13 @@ namespace DataTransferObjects
 			set;
 		}
 
+        [DataMember]
+        public Person Recruiter
+        {
+            get;
+            set;
+        }
+
 		/// <summary>
 		/// Gets or sets an old value of the HoursToCollect field.
 		/// </summary>
