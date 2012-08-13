@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
 using DataTransferObjects;
 using System.Web.UI.HtmlControls;
+using System.Text;
 
 namespace PraticeManagement.Reporting
 {
@@ -16,6 +17,7 @@ namespace PraticeManagement.Reporting
 
         private const string W2Hourly = "W2-Hourly";
         private const string W2Salary = "W2-Salary";
+        private string NewHireReportExport = "New Hire Report";
 
         #endregion
 
@@ -97,7 +99,7 @@ namespace PraticeManagement.Reporting
                         {
                             return Utils.Calendar.LastMonthEndDate(now);
                         }
-                        else if (selectedVal == 3 || selectedVal == 7)
+                        else if (selectedVal == 3)
                         {
                             return Utils.Calendar.QuarterEndDate(now, 1);
                         }
@@ -150,7 +152,10 @@ namespace PraticeManagement.Reporting
                         case 4:
                         case 5:
                         case 6:
-                            range = "Quater" + (RangeSelected - 2) + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                            range = "Quater " + GetRomanNumber(RangeSelected - 2) + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
+                            break;
+                        case 7:
+                            range = "Year To Date (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
                             break;
                         default:
                             range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
@@ -160,6 +165,40 @@ namespace PraticeManagement.Reporting
                 return range;
             }
         }
+
+        public string PersonStatus
+        {
+            get
+            {
+                return cblPersonStatus.SelectedItemsXmlFormat;
+            }
+        }
+
+        public string PayTypes
+        {
+            get
+            {
+                return cblTimeScales.SelectedItemsXmlFormat;
+            }
+        }
+
+        public string Practices
+        {
+            get
+            {
+                return cblPractices.SelectedItemsXmlFormat;
+            }
+        }
+
+        public bool ExcludeInternalProjects
+        {
+            get
+            {
+                return chbInternalProjects.Checked;
+            }
+        }
+
+        public bool SetSelectedFilters { get; set; }
 
         #endregion
 
@@ -178,19 +217,16 @@ namespace PraticeManagement.Reporting
                     DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
 
                 }
-                SelectDefaultTimeScaleItems(cblTimeScales);
+                if (this.cblPersonStatus != null && this.cblPersonStatus.Items.Count == 0)
+                {
+                    List<PersonStatus> personStatus = ServiceCallers.Custom.PersonStatus(p => p.GetPersonStatuses()).ToList();
+                    personStatus = personStatus.Where(p => p.Id == (int)PersonStatusType.Active || p.Id == (int)PersonStatusType.Projected || p.Id == (int)PersonStatusType.Terminated).ToList();
+                    DataHelper.FillPersonStatusList(this.cblPersonStatus, Resources.Controls.AllTypes, personStatus);
+                }
+                SetDefalultfilter();
+                LoadActiveView();
             }
 
-            AddAttributesToCheckBoxes(this.cblPractices);
-            AddAttributesToCheckBoxes(this.cblTimeScales);
-            if (hdnFiltersChanged.Value == "false")
-            {
-                btnResetFilter.Attributes.Add("disabled", "true");
-            }
-            else
-            {
-                btnResetFilter.Attributes.Remove("disabled");
-            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -213,14 +249,6 @@ namespace PraticeManagement.Reporting
             }
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
-            var tbFrom = diRange.FindControl("tbFrom") as TextBox;
-            var tbTo = diRange.FindControl("tbTo") as TextBox;
-            var clFromDate = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender;
-            var clToDate = diRange.FindControl("clToDate") as AjaxControlToolkit.CalendarExtender;
-            hdnStartDateTxtBoxId.Value = tbFrom.ClientID;
-            hdnEndDateTxtBoxId.Value = tbTo.ClientID;
-            hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
-            hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
         }
 
         #endregion
@@ -235,11 +263,11 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        private void AddAttributesToCheckBoxes(ScrollingDropDown ddl)
+        private void SelectDefaultPersonStatus(ScrollingDropDown cblPersonStatus)
         {
-            foreach (ListItem item in ddl.Items)
+            foreach (ListItem item in cblPersonStatus.Items)
             {
-                item.Attributes.Add("onclick", "EnableResetButton();");
+                item.Selected = (item.Text == "Active" || item.Text == "Projected");
             }
         }
 
@@ -251,16 +279,16 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        private void Resetfilter()
+        private void SetDefalultfilter()
         {
             ddlPeriod.SelectedValue = "7";
-            this.chbActivePersons.Checked = this.chbProjectedPersons.Checked = this.chbTerminatedPersons.Checked = true;
             this.chbInternalProjects.Checked = false;
             SelectAllItems(this.cblPractices);
             SelectDefaultTimeScaleItems(this.cblTimeScales);
+            SelectDefaultPersonStatus(this.cblPersonStatus);
         }
 
-        private void populateGraph(int count,int percentage,Literal ltr,HtmlTableRow tr)
+        private void populateGraph(int count, int percentage, Literal ltr, HtmlTableRow tr)
         {
             ltr.Text = count.ToString();
             if (percentage == 0)
@@ -269,15 +297,15 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                tr.Height = percentage +"px";
+                tr.Height = percentage + "px";
             }
         }
 
-        private void PopulateHeaderSection(List<Person> reportData)
+        public void PopulateHeaderSection(List<Person> reportData)
         {
             int w2SalaryCount = reportData.Count(p => p.CurrentPay.Timescale == TimescaleType.Salary);
             int w2HourlyCount = reportData.Count(p => p.CurrentPay.Timescale == TimescaleType.Hourly);
-            int contractorCount = reportData.Count(p => p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue );
+            int contractorCount = reportData.Count(p => p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue);
             List<int> ratioList = (new int[] { w2SalaryCount, w2HourlyCount, contractorCount }).ToList();
             int height = 80;
             List<int> percentageList = DataTransferObjects.Utils.Generic.GetProportionateRatio(ratioList, height);
@@ -296,22 +324,197 @@ namespace PraticeManagement.Reporting
             populateGraph(contractorCount, percentageList[2], ltrlContractorsCount, trContrator);
         }
 
+        private void LoadActiveView()
+        {
+            SetSelectedFilters = true;
+            if (mvNewHireReport.ActiveViewIndex == 0)
+            {
+                tpSummary.PopulateData();
+            }
+            else
+            {
+                tpGraph.PopulateGraph();
+            }
+        }
+
+        private void SwitchView(Control control, int viewIndex)
+        {
+            SelectView(control, viewIndex);
+            LoadActiveView();
+        }
+
+        private void SelectView(Control sender, int viewIndex)
+        {
+            mvNewHireReport.ActiveViewIndex = viewIndex;
+
+            SetCssClassEmpty();
+
+            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
+        }
+
+        private void SetCssClassEmpty()
+        {
+            foreach (TableCell cell in tblPersonViewSwitch.Rows[0].Cells)
+            {
+                cell.CssClass = string.Empty;
+            }
+        }
+
+        private String GetRomanNumber(int no)
+        {
+            switch (no)
+            {
+                case 1:
+                    return "I";
+                case 2:
+                    return "II";
+                case 3:
+                    return "III";
+                case 4:
+                    return "IV";
+            }
+            return "";
+        }
+
+        protected string GetDateFormat(DateTime date)
+        {
+            return date.ToString(Constants.Formatting.EntryDateFormat);
+        }
+
+        public void ExportToExcel(List<Person> data, List<string> filteredColoums)
+        {
+            if (cblPersonStatus.AllSelectedReturnType != ScrollingDropDown.AllSelectedType.AllItems)
+            {
+                filteredColoums.Add("Status");
+            }
+            if (cblTimeScales.AllSelectedReturnType != ScrollingDropDown.AllSelectedType.AllItems)
+            {
+                filteredColoums.Add("Pay Type");
+            }
+            if (cblPractices.AllSelectedReturnType != ScrollingDropDown.AllSelectedType.AllItems)
+            {
+                filteredColoums.Add("Practices");
+            }
+            filteredColoums = filteredColoums.Distinct().ToList();
+
+            DataHelper.InsertExportActivityLogMessage(NewHireReportExport);
+            string filterApplied = "Filters applied to columns: ";
+            StringBuilder sb = new StringBuilder();
+            sb.Append("New Hire Report");
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(data.Count + " New Hires");
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(Range);
+            sb.Append("\t");
+            if (filteredColoums.Count > 0)
+            {
+                sb.AppendLine();
+                for (int i = 0; i < filteredColoums.Count; i++)
+                {
+                    if (i == filteredColoums.Count - 1)
+                        filterApplied = filterApplied + filteredColoums[i] + ".";
+                    else
+                        filterApplied = filterApplied + filteredColoums[i] + ",";
+                }
+                sb.Append(filterApplied);
+                sb.Append("\t");
+            }
+            sb.AppendLine();
+            sb.AppendLine();
+
+            if (data.Count > 0)
+            {
+                //Header
+                sb.Append("Resource");
+                sb.Append("\t");
+                sb.Append("Seniority");
+                sb.Append("\t");
+                sb.Append("Pay Types");
+                sb.Append("\t");
+                sb.Append("Hire Date");
+                sb.Append("\t");
+                sb.Append("Status");
+                sb.Append("\t");
+                sb.Append("Recruiter");
+                sb.Append("\t");
+                sb.AppendLine();
+
+                //Data
+                foreach (var person in data)
+                {
+                    sb.Append(person.HtmlEncodedName);
+                    sb.Append("\t");
+                    sb.Append(person.Seniority.Name);
+                    sb.Append("\t");
+                    sb.Append(person.CurrentPay.TimescaleName);
+                    sb.Append("\t");
+                    sb.Append(GetDateFormat(person.HireDate));
+                    sb.Append("\t");
+                    sb.Append(person.Status.Name);
+                    sb.Append("\t");
+                    sb.Append("Recuriter");
+                    sb.Append("\t");
+                    sb.AppendLine();
+                }
+
+            }
+            else
+            {
+                sb.Append("There are no Persons Hired for the selected range.");
+            }
+            //“NewHireReport_[StartOfRange]_[EndOfRange].xls”.  
+            var filename = string.Format("{0}_{1}-{2}.xls", "NewHireReport", StartDate.Value.ToString("MM.dd.yyyy"), EndDate.Value.ToString("MM.dd.yyyy"));
+            GridViewExportUtil.Export(filename, sb);
+        }
+
         #endregion
 
         #region Control Events
 
-        protected void btnUpdateView_OnClick(object sender, EventArgs e)
+        protected void Filters_Changed(object sender, EventArgs e)
         {
-            List<Person> data = ServiceCallers.Custom.Person(r => r.GetStrawmenListAll()).ToList();
-
-            PopulateHeaderSection(data);
+            LoadActiveView();
         }
 
-        protected void btnResetFilter_OnClick(object sender, EventArgs e)
+        protected void btnView_Command(object sender, CommandEventArgs e)
         {
-            Resetfilter();
-            hdnFiltersChanged.Value = "false";
-            btnResetFilter.Attributes.Add("disabled", "true");
+            int viewIndex = int.Parse((string)e.CommandArgument);
+            SwitchView((Control)sender, viewIndex);
+        }
+
+        protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlPeriod.SelectedValue != "0")
+            {
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
+        protected void btnCustDatesOK_Click(object sender, EventArgs e)
+        {
+            Page.Validate(valSumDateRange.ValidationGroup);
+            if (Page.IsValid)
+            {
+                hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
+                hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
+                LoadActiveView();
+            }
+            else
+            {
+                mpeCustomDates.Show();
+            }
+        }
+
+        protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
+        {
+            diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
+            diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
         }
 
         #endregion
