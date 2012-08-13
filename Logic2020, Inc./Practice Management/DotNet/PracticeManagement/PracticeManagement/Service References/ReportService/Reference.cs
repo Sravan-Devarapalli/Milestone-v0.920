@@ -71,6 +71,9 @@ namespace PraticeManagement.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountReportGroupByPerson", ReplyAction="http://tempuri.org/IReportService/AccountReportGroupByPersonResponse")]
         DataTransferObjects.Reports.ByAccount.GroupByPerson[] AccountReportGroupByPerson(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/NewHireReport", ReplyAction="http://tempuri.org/IReportService/NewHireReportResponse")]
+        DataTransferObjects.Person[] NewHireReport(System.DateTime startDate, System.DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -81,6 +84,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
+    
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -171,6 +175,10 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Reports.ByAccount.GroupByPerson[] AccountReportGroupByPerson(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Person[] NewHireReport(System.DateTime startDate, System.DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds) {
+            return base.Channel.NewHireReport(startDate, endDate, personStatusIds, payTypeIds, practiceIds, excludeInternalPractices, personDivisionIds, seniorityIds, hireDates, recruiterIds);
         }
     }
 }
