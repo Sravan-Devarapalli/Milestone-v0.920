@@ -70,6 +70,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds);
     }
 }
 
