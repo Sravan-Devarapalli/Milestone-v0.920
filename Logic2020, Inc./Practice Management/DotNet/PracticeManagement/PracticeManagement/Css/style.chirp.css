@@ -2751,8 +2751,9 @@ TABLE.PaddingTenPx td
 .ReportHeaderTotalsTable .FirstTd
 {
     text-align: center;
-    font-size: 15px;
+    font-size: 20px;
     padding-bottom: 3px !important;
+    font-weight:bold;
 }
 .ReportHeaderTotalsTable .SecondTd
 {
@@ -2960,6 +2961,10 @@ TABLE.TimeEntruReportHeader a
 {
     text-align: right;
     font-weight: 700;
+}
+.FontSize8PX
+{
+    font-size: 8px;
 }
 .FontSize15PX
 {
@@ -4516,6 +4521,12 @@ BenchCosts.ascx*/
     text-align: center;
     vertical-align: top;
 }
+.ReportParametersTable .FirstTd20
+{
+    width: 20%;
+    text-align: right;
+    font-weight: bold;
+}
 .ReportParametersTable .FirstTd
 {
     width: 30%;
@@ -4528,7 +4539,7 @@ BenchCosts.ascx*/
     text-align: right;
     font-weight: bold;
 }
-.ReportParametersTable .SecondTd, .ReportParametersTable .SecondTd157, .ReportParametersTable .SecondTd150
+.ReportParametersTable .SecondTd, .ReportParametersTable .SecondTd157, .ReportParametersTable .SecondTd150 ,.ReportParametersTable .SecondTdNewHire
 {
     text-align: left !important;
 }
