@@ -364,6 +364,30 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public string SelectedItemsXmlFormat
+        {
+            get
+            {
+                // Check if nothing is displayed and what type should we return
+                if (Items.Count == 0 && NoItemsType == NoItemsBehaviour.All)
+                    return null;
+
+                // Check if All checkbox is checked
+                if (Items.Count > 0 && Items[0].Selected && AllSelectedReturnType == AllSelectedType.Null)
+                    return null;
+
+                // If not, build comma separated list of values
+                var clientList = new StringBuilder();
+                clientList.Append("<Names>");
+                foreach (ListItem item in Items)
+                    if (item.Selected)
+                        clientList.Append("<Name>" + item.Value + "</Name>");
+
+                clientList.Append("</Names>");
+                return clientList.ToString();
+            }
+        }
+
         public string DropDownListType
         {
             get;
