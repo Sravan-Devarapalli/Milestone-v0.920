@@ -334,6 +334,10 @@
             public const string VacationDaysColumn = "VacationDays";
             public const string OpportunintyDescription = "OpportunintyDescription";
             public const string ProjectDescription = "ProjectDescription";
+            public const string RecruiterIdColumn = "RecruiterId";
+            public const string RecruiterFirstNameColumn = "RecruiterFirstName";
+            public const string RecruiterLastNameColumn = "RecruiterLastName";
+
 
         }
 
@@ -621,6 +625,9 @@
             public const string InActiveParam = "@InActive";
             public const string StrawmanIdParam = "@StrawmanId";
             public const string FilterWithTodayPay = "@FilterWithTodayPay";
+            public const string PayTypeIdsParam = "@PayTypeIdsParam";
+            public const string HireDatesParam = "@HireDates";
+            public const string RecruiterIdsParam = "@RecruiterIds";
         }
 
         #endregion
@@ -881,8 +888,7 @@
                 public const string AccountSummaryReportByProject = "dbo.AccountSummaryByProject";
                 public const string AccountSummaryReportByBusinessUnit = "dbo.AccountSummaryByBusinessUnit";
                 public const string AccountSummaryByBusinessDevelopment = "dbo.AccountSummaryByBusinessDevelopment";
-
-
+                public const string NewHireReport = "dbo.NewHireReport";
             }
             #endregion
 
