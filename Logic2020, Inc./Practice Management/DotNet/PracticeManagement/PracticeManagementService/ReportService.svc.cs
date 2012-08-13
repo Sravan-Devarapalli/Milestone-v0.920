@@ -126,6 +126,11 @@ namespace PracticeManagementService
             return ReportDAL.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate);
         }
 
+        public List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds)
+        {
+            return ReportDAL.NewHireReport(startDate, endDate, personStatusIds, payTypeIds, practiceIds, excludeInternalPractices, personDivisionIds, seniorityIds, hireDates, recruiterIds);
+        }
+
     }
 }
 
