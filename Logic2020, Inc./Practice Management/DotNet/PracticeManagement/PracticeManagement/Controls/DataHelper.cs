@@ -582,7 +582,10 @@ namespace PraticeManagement.Controls
             }
         }
 
-
+        public static void FillPersonStatusList(ListControl control, string firstItemText,List<PersonStatus> personstatus)
+        {
+            FillListDefault(control, firstItemText, personstatus.ToArray(), false);
+        }
 
         /// <summary>
         /// Fills the list control with the list of practices.
