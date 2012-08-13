@@ -408,7 +408,6 @@ namespace DataAccess
             }
         }
 
-
         public static GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -541,8 +540,6 @@ namespace DataAccess
             }
         }
 
-
-
         public static GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -613,7 +610,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         private static void ReadByBusinessUnit(SqlDataReader reader, List<BusinessUnitLevelGroupedHours> result)
         {
@@ -906,7 +902,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         public static List<WorkTypeLevelGroupedHours> TimePeriodSummaryReportByWorkType(DateTime startDate, DateTime endDate)
         {
@@ -1647,26 +1642,100 @@ namespace DataAccess
 
                 while (reader.Read())
                 {
-                    var person = new Person
-                    {
-                        Id = reader.GetInt32(personIdIndex),
-                        FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex),
-                        Status = new PersonStatus
-                        {
-                            Id = reader.GetInt32(personStatusIdIndex),
-                            Name = reader.GetString(personStatusNameIndex)
-                        }
-                    };
-                    if (!reader.IsDBNull(timeScaleIndex))
-                    {
-                        Pay currentPay = new Pay
-                            {
-                                Timescale = (TimescaleType)reader.GetInt32(timeScaleIndex),
-                                TimescaleName = reader.GetString(timescaleNameIndex)
-                            };
-                        person.CurrentPay = currentPay;
-                    }
+                    var person = ReadBasicPersonDetails(reader, personIdIndex, firstNameIndex, lastNameIndex, personStatusIdIndex, personStatusNameIndex, timeScaleIndex, timescaleNameIndex);
+                    result.Add(person);
+                }
+            }
+        }
+
+        private static Person ReadBasicPersonDetails(SqlDataReader reader, int personIdIndex, int firstNameIndex, int lastNameIndex, int personStatusIdIndex, int personStatusNameIndex, int timeScaleIndex, int timescaleNameIndex)
+        {
+            var person = new Person
+            {
+                Id = reader.GetInt32(personIdIndex),
+                FirstName = reader.GetString(firstNameIndex),
+                LastName = reader.GetString(lastNameIndex),
+                Status = new PersonStatus
+                {
+                    Id = reader.GetInt32(personStatusIdIndex),
+                    Name = reader.GetString(personStatusNameIndex)
+                }
+            };
+            if (!reader.IsDBNull(timeScaleIndex))
+            {
+                Pay currentPay = new Pay
+                {
+                    Timescale = (TimescaleType)reader.GetInt32(timeScaleIndex),
+                    TimescaleName = reader.GetString(timescaleNameIndex)
+                };
+                person.CurrentPay = currentPay;
+            }
+
+            return person;
+        }
+
+        public static List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.NewHireReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeScaleIdsParam, payTypeIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonDivisionIdsParam, personDivisionIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.HireDatesParam, hireDates);
+                command.Parameters.AddWithValue(Constants.ParameterNames.RecruiterIdsParam, recruiterIds);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var persons = new List<Person>();
+                    ReadPersons(reader, persons);
+                    return persons;
+                }
+            }
+        }
+
+        private static void ReadNewHiredPersons(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int personStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
+                int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+                int timeScaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+                int recruiterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterIdColumn);
+                int recruiterFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterFirstNameColumn);
+                int recruiterLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterLastNameColumn);
+                int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
+                int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
+                int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+                int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+
+                while (reader.Read())
+                {
+                    var person = ReadBasicPersonDetails(reader, personIdIndex, firstNameIndex, lastNameIndex, personStatusIdIndex, personStatusNameIndex, timeScaleIndex, timescaleNameIndex);
+                    var recruiterCommission = new RecruiterCommission { Recruiter = new Person { Id = reader.GetInt32(recruiterIdIndex), FirstName = reader.GetString(recruiterFirstNameIndex), LastName = reader.GetString(recruiterLastNameIndex) } };
+
+                    var recruiterList = new List<RecruiterCommission>();
+                    recruiterList.Add(recruiterCommission);
+
+                    person.RecruiterCommission = recruiterList;
+
+                    person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex), Name = reader.GetString(personSeniorityNameIndex) };
+                    person.DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex);
+                    person.HireDate = reader.GetDateTime(hireDateIndex);
+
                     result.Add(person);
                 }
             }
