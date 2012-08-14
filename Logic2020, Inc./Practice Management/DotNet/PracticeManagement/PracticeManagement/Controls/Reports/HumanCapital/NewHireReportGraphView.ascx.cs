@@ -23,18 +23,13 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         public void PopulateGraph()
         {
             List<Person> data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
-                
-            
+
+
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
-            {
-                List<Person> data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
-                List<string> filteredColoums = new List<string>();
-                HostingPage.ExportToExcel(data, filteredColoums);
-            }
+            HostingPage.ExportToExcel();
         }
     }
 }
