@@ -117,7 +117,7 @@
                 <%# Eval("Status.Name")%>
             </td>
             <td>
-                Recruiter
+                <%# GetRecruiter((System.Collections.Generic.List<DataTransferObjects.RecruiterCommission>)Eval("RecruiterCommission"))%>
             </td>
         </tr>
     </ItemTemplate>
