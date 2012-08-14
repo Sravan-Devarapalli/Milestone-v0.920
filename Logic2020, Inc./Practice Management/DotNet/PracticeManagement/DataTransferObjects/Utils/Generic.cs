@@ -117,17 +117,31 @@ namespace DataTransferObjects.Utils
             return (int)(100 * billableHours / (billableHours + nonBillableHours));
         }
 
+        /// <summary>
+        /// Returns the ProportionateRatio List of the given Height for the given ration List
+        /// </summary>
+        /// <param name="ratioList"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static List<int> GetProportionateRatio(List<int> ratioList, int height)
         {
             List<int> proportionateList = new List<int>();
             int sum = ratioList.Sum();
-            foreach (int no in ratioList)
+            if (sum > 0)
             {
-                decimal noRatio = ((decimal)no / (decimal)sum) * (decimal) height ;
-                int i = (int)Math.Round(noRatio);
-                proportionateList.Add(i);
+                foreach (int no in ratioList)
+                {
+                    decimal noRatio = ((decimal)no / (decimal)sum) * (decimal)height;
+                    int i = (int)Math.Round(noRatio);
+                    proportionateList.Add(i);
+                }
+                return proportionateList;
             }
-            return proportionateList;
+            else
+            {
+                return ratioList;
+            }
+            
         }
 
         public static List<GroupByDate> GetGroupByDateList(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
