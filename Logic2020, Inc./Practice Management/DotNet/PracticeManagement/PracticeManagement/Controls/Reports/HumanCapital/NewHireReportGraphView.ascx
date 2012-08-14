@@ -57,12 +57,11 @@
                 <AxisX IsLabelAutoFit="true">
                     <MajorGrid Interval="Auto" LineDashStyle="Dot" />
                     <MajorTickMark Enabled="False" />
-                   
                 </AxisX>
                 <Area3DStyle Inclination="5" IsClustered="True" IsRightAngleAxes="False" LightStyle="Realistic"
                     WallWidth="30" Perspective="1" />
             </asp:ChartArea>
         </ChartAreas>
     </asp:Chart>
-</div>
---%>
+</div>--%>
+
