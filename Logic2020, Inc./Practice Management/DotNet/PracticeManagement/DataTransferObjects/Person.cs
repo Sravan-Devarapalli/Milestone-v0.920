@@ -62,7 +62,7 @@ namespace DataTransferObjects
             get { return PersonLastFirstName; }
             set { throw new NotImplementedException("Unable to set person name"); }
         }
-       
+
         public string HtmlEncodedName
         {
             get
@@ -410,6 +410,9 @@ namespace DataTransferObjects
 
         [DataMember]
         public int? TerminationReasonid { get; set; }
+
+        [DataMember]
+        public string TerminationReason { get; set; }
 
         #endregion
 
