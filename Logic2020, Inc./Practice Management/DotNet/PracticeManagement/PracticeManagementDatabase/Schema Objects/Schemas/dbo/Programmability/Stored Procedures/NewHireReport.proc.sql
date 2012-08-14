@@ -19,7 +19,7 @@ BEGIN
 			P.LastName,
 			Ps.PersonStatusId,
 			PS.Name AS PersonStatusName,
-			TS.TimescaleId,
+			TS.TimescaleId AS Timescale,
 			TS.Name AS TimescaleName,
 			RC.RecruiterId,
 			RCP.FirstName AS RecruiterFirstName ,
