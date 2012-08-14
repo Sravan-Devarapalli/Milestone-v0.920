@@ -337,6 +337,8 @@
             public const string RecruiterIdColumn = "RecruiterId";
             public const string RecruiterFirstNameColumn = "RecruiterFirstName";
             public const string RecruiterLastNameColumn = "RecruiterLastName";
+            public const string TerminationReasonIdColumn = "TerminationReasonId";
+            public const string TerminationReasonColumn = "TerminationReason";
 
 
         }
@@ -617,7 +619,7 @@
             public const string ProjectStatusIdsParam = "@ProjectStatusIds";
             public const string AccountIdParam = "@AccountId";
             public const string BusinessUnitIdsParam = "@BusinessUnitIds";
-            public static string ProjectBillingTypesParam = "@ProjectBillingTypes";
+            public const string ProjectBillingTypesParam = "@ProjectBillingTypes";
             public const string IncludeUnpaidParam = "@IncludeUnpaid";
             public const string SowBudgetParam = "@SowBudget";
             public const string CategoryIdParam = "@CategoryId";
@@ -628,6 +630,8 @@
             public const string PayTypeIdsParam = "@PayTypeIdsParam";
             public const string HireDatesParam = "@HireDates";
             public const string RecruiterIdsParam = "@RecruiterIds";
+            public const string TerminationReasonIdsParam = "@TerminationReasonIds";
+            public const string TerminationDatesParam = "@TerminationDates";
         }
 
         #endregion
@@ -889,6 +893,7 @@
                 public const string AccountSummaryReportByBusinessUnit = "dbo.AccountSummaryByBusinessUnit";
                 public const string AccountSummaryByBusinessDevelopment = "dbo.AccountSummaryByBusinessDevelopment";
                 public const string NewHireReport = "dbo.NewHireReport";
+                public const string TerminationReport = "dbo.TerminationReport";
             }
             #endregion
 
@@ -1125,3 +1130,4 @@
         #endregion
     }
 }
+
