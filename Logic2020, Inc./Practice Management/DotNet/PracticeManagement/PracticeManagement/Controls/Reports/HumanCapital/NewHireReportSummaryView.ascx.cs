@@ -163,8 +163,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateHireDateFilter(List<Person> reportData)
         {
-            var hireDateList = reportData.Select(r => new { Name = r.HireDate.ToString("yyyy MMM") }).ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblHireDate.CheckBoxListObject, "All Months ", hireDateList.ToArray(), false, "Name", "Name");
+            var hireDateList = reportData.Select(r => new { Text = r.HireDate.ToString("MMM yyyy"), Value = r.HireDate.ToString("MM/01/yyyy") }).ToList().OrderBy(s => s.Text);
+            DataHelper.FillListDefault(cblHireDate.CheckBoxListObject, "All Months ", hireDateList.ToArray(), false, "Value", "Text");
             cblHireDate.SelectAllItems(true);
         }
 
@@ -191,8 +191,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateRecruiterFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? "Unassigned" : r.CurrentPay.TimescaleName, Value = r.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Value);
-            DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Value", "Text");
+            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonFirstLastName : "Unassigned", Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : -1 }).Distinct().ToList().OrderBy(t => t.Value);
+            DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter", payTypes.ToArray(), false, "Value", "Text");
             cblRecruiter.SelectAllItems(true);
         }
 
