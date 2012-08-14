@@ -4088,6 +4088,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\NewHireReport.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TerminationReport.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4137,4 +4140,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
