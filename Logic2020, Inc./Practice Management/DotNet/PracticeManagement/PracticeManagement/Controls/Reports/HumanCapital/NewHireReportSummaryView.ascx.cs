@@ -47,40 +47,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            
-            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
-            {
-
-                var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPersonStatusType.SelectedItemsXmlFormat, cblPayTypes.SelectedItemsXmlFormat, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblSeniorities.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat)).ToList();
-
-                
-                List<string> filteredColoums = new List<string>();
-                if (!cblHireDate.AllItemsSelected)
-                {
-                    filteredColoums.Add("Hire Date");
-                }
-                if (!cblSeniorities.AllItemsSelected)
-                {
-                    filteredColoums.Add("Seniority");
-                }
-                if (!cblPayTypes.AllItemsSelected)
-                {
-                    filteredColoums.Add("Pay Type");
-                }
-                if (!cblDivision.AllItemsSelected)
-                {
-                    filteredColoums.Add("Resource");
-                }
-                if (!cblPersonStatusType.AllItemsSelected)
-                {
-                    filteredColoums.Add("Status");
-                }
-                if (!cblRecruiter.AllItemsSelected)
-                {
-                    filteredColoums.Add("Recruiter");
-                }
-                HostingPage.ExportToExcel(data, filteredColoums);
-            }
+            HostingPage.ExportToExcel();
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -110,6 +77,11 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             return date.ToString(Constants.Formatting.EntryDateFormat);
         }
 
+        protected string GetRecruiter(List<RecruiterCommission> recruiterCommission)
+        {
+            return recruiterCommission.Count > 0 ? recruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty;
+        }
+        
         public void PopulateData()
         {
             List<Person> data;
