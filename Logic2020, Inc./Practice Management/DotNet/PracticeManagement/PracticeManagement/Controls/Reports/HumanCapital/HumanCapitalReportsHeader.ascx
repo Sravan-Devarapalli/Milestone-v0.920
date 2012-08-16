@@ -2,7 +2,7 @@
 <table class="WholeWidth">
     <tr>
         <td colspan="3" class="height30P vTop fontBold">
-            1.&nbsp;Select a mode of reporting time:
+            1.&nbsp;Select a report:
         </td>
     </tr>
     <tr>
