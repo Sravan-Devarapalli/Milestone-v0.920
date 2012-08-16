@@ -32,6 +32,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             get { return ((PraticeManagement.Reporting.NewHireReport)Page); }
         }
 
+        public List<Person> PopUpFilteredPerson { get; set; }
+
         #endregion
 
         #region PageEvents
@@ -82,22 +84,39 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             return recruiterCommission.Count > 0 ? recruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty;
         }
         
-        public void PopulateData()
+        public void PopulateData(bool isPopUp = false)
         {
             List<Person> data;
-            if (HostingPage.SetSelectedFilters)
+            if (!isPopUp)
             {
-                data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
-                PopulateFilterPanels(data);
+                if (HostingPage.SetSelectedFilters)
+                {
+                    data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
+                    PopulateFilterPanels(data);
+                }
+                else
+                {
+                    data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPersonStatusType.SelectedItemsXmlFormat, cblPayTypes.SelectedItemsXmlFormat, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblSeniorities.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat)).ToList();
+                }
             }
-            else
-            {
-                data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPersonStatusType.SelectedItemsXmlFormat, cblPayTypes.SelectedItemsXmlFormat, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblSeniorities.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat)).ToList();
+            else 
+            {   
+                data = PopUpFilteredPerson;
             }
-            DataBindResource(data);
+            DataBindResource(data, isPopUp);
         }
 
-        public void DataBindResource(List<Person> reportData)
+        private void RemoveFilters()
+        {
+            ImgSeniorityFilter.Visible =
+            ImgPayTypeFilter.Visible =
+            ImgHiredateFilter.Visible =
+            ImgDivisionFilter.Visible =
+            ImgPersonStatusTypeFilter.Visible =
+            ImgRecruiterFilter.Visible = false;
+        }
+
+        public void DataBindResource(List<Person> reportData,bool isPopUp)
         {
             var reportDataList = reportData.ToList();
             if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1)
@@ -106,14 +125,24 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
-                SetAttribitesForFiltersImages();
+                if (!isPopUp)
+                {
+                    SetAttribitesForFiltersImages();
+                }
+                else
+                {
+                    RemoveFilters();
+                }
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
                 repResource.Visible = false;
             }
-            HostingPage.PopulateHeaderSection(reportDataList);
+            if (!isPopUp)
+            {
+                HostingPage.PopulateHeaderSection(reportDataList);
+            }
         }
 
         private void SetAttribitesForFiltersImages()
@@ -184,7 +213,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulatePayTypeFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? "Unassigned" : r.CurrentPay.TimescaleName, Value = r.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Value);
+            var payTypes = reportData.Select(r => new { Text = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? "Unassigned" : r.CurrentPay.TimescaleName, Value = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? -1 : (int)r.CurrentPay.Timescale }).Distinct().ToList().OrderBy(t => t.Text);
             DataHelper.FillListDefault(cblPayTypes.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Value", "Text");
             cblPayTypes.SelectAllItems(true);
         }
