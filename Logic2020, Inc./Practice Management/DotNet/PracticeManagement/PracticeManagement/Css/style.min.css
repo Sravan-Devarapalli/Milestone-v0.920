@@ -283,6 +283,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .PaddingTop20{padding-top:20px}
 .PaddingTop30{padding-top:30px}
 .PaddingTop30Imp{padding-top:30px!important}
+.PaddingTop75{padding-top:75px}
 .PaddingBottom0{padding-bottom:0!important}
 .PaddingBottom2{padding-bottom:2px}
 .PaddingBottom3{padding-bottom:3px}
@@ -583,7 +584,7 @@ TABLE.TimeEntruReportHeader a{color:Black;display:inline-block;height:100%;text-
 .NoBorder{border-right-width:0!important;border-right-style:none!important}
 .Padding3PX{padding:3px}
 .ReportFilterLabels{text-align:right;font-weight:700}
-.FontSize8PX{font-size:8px}
+.FontSize10PX{font-size:10px}
 .FontSize15PX{font-size:15px}
 .CurrentPageDiv{height:20px;vertical-align:middle}
 .Padding4pxWithNoWrap{white-space:nowrap;font-weight:700;padding:4px}
@@ -861,7 +862,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .ReportBorderBottomByAccount{border-bottom:3px solid black}
 .ReportBorderBottomHeight15Px{border-bottom:3px solid black;width:100%;height:15px}
 .ReportParametersTable{width:100%;text-align:center;vertical-align:top}
-.ReportParametersTable .FirstTd20{width:20%;text-align:right;font-weight:bold}
+.ReportParametersTable .FirstTd20{width:18%;text-align:right;font-weight:bold;vertical-align:top}
 .ReportParametersTable .FirstTd{width:30%;text-align:right;font-weight:bold}
 .ReportParametersTable .FirstTd40{width:40%;text-align:right;font-weight:bold}
 .ReportParametersTable .SecondTd,.ReportParametersTable .SecondTd157,.ReportParametersTable .SecondTd150,.ReportParametersTable .SecondTdNewHire{text-align:left!important}
@@ -952,7 +953,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .ConsultantsWeeklyReportAlignCenter{text-align:center!important;width:100%}
 .ConsultantsWeeklyReportupdPersonDetails{width:95%!important;text-align:center;padding-left:2%}
 .BorderBottom1px,.BorderBottom1pxTd .border{border-bottom:1px solid black}
-.UTilTimeLineFilterCblTimeScales,.NewHireReportCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.UTilTimeLineFilterCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
 .UTilTimeLineFilterCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
 .bgColor_d4dff8{background-color:#d4dff8}
 .BenchCostFooter{padding-left:15px!important}
@@ -1310,7 +1311,8 @@ table#ctl00_body_login tr td label{float:left}
 .gvStrawmen .headerSortUp span{background-image:url(../images/asc.gif);background-position:right;background-repeat:no-repeat}
 .gvStrawmen .headerSortDown span{background-position:right;background-repeat:no-repeat;background-image:url(../images/desc.gif)}
 .backGroundNone{background-image:none!important}
-.NewHireReportCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:300px;z-index:20000}
+.NewHireReportCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:250px;z-index:20000}
+.NewHireReportCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:250px;z-index:20000}
 .W2SalaryGraph{background-color:#7F7F7F;border:1px solid Gray}
 .W2HourlyGraph{background-color:#BEBEBE;border:1px solid Gray}
 .ContractorsGraph{background-color:#D9D9D9;border:1px solid Gray}
@@ -1318,3 +1320,5 @@ table#ctl00_body_login tr td label{float:left}
 .NewHireGraphPopUpTable .FirstTd span{font-weight:bold;font-size:16px!important}
 .NewHireGraphPopUpTable .SecondTd{width:20%;font-weight:bolder;font-size:16px;text-align:right;padding-right:20px}
 .NewHireGraphPopUpTable .SecondTd span{font-weight:bold;white-space:nowrap}
+.NewHireREportGraphDiv{overflow-y:scroll;max-height:300px}
+.NewHireREportGraphDiv .minheight250Px{min-height:10px!important}
