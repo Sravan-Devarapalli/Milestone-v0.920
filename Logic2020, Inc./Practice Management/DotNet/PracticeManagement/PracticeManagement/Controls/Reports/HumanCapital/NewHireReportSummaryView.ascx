@@ -72,7 +72,7 @@
                         </th>
                         <th>
                             Hire Date
-                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server"
+                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server" class="FilterImg"
                                 id="imgHiredateFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceHiredateFilter" runat="server" TargetControlID="imgHiredateFilter"
                                 BehaviorID="pceHiredateFilter" PopupControlID="pnlFilterHireDate" Position="Bottom">
@@ -80,7 +80,7 @@
                         </th>
                         <th>
                             Status
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status"
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status" class="FilterImg"
                                 id="imgPersonStatusTypeFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
                                 TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
@@ -89,7 +89,7 @@
                         </th>
                         <th>
                             Recruiter
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter"
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter" class="FilterImg"
                                 id="imgRecruiterFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceRecruiterFilter" runat="server" TargetControlID="imgRecruiterFilter"
                                 BehaviorID="pceRecruiterFilter" PopupControlID="pnlFilterRecruiter" Position="Bottom">
