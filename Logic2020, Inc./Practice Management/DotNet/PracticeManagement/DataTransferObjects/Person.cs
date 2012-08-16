@@ -552,6 +552,12 @@ namespace DataTransferObjects
             return false;
         }
 
+        public override bool Equals(Object other)
+        {
+            return Equals((Person)other);
+        }
+
+
         public int CompareTo(Person other)
         {
             return other == null ? 1 : PersonLastFirstName.CompareTo(other.PersonLastFirstName);
@@ -562,6 +568,11 @@ namespace DataTransferObjects
             return string.Format(
                 PersonNameFormat,
                 LastName, FirstName);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.HasValue ? Id.Value : base.GetHashCode();
         }
 
         #endregion
