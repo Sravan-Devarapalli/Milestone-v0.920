@@ -44,28 +44,26 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         }
 
-        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
-        {
-            HostingPage.ExportToExcel();
-        }
-
         protected void chrtNewHireReport_Click(object sender, ImageMapEventArgs e)
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
-            lbName.Text = postBackDetails[0];
+            
             lbTotalHires.Text = postBackDetails[1];
             var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
-            PopulateGraph(data);
             bool isSeniority;
             Boolean.TryParse(postBackDetails[2], out isSeniority);
             if (isSeniority)
             {
+                lbName.Text = "Seniority : " + postBackDetails[0];
                 data = data.Where(p => p.Seniority.Name == postBackDetails[0]).ToList();
             }
             else
             {
+                lbName.Text = "Recruiter : " + postBackDetails[0];
                 data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == postBackDetails[0] : false).ToList();
             }
+            tpSummary.BtnExportToExcelButton.Attributes["IsSeniority"] = isSeniority.ToString();
+            tpSummary.BtnExportToExcelButton.Attributes["FilterValue"] = postBackDetails[0];
             tpSummary.PopUpFilteredPerson = data;
             tpSummary.PopulateData(true);
             mpeDetailView.Show();
@@ -76,24 +74,9 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         #region Methods
 
-        //private void chrtNewHireReportAssignPostValues()
-        //{
-        //    int dpCount = chrtNewHireReportBySeniority.Series[0].Points.Count;
-        //    for (int x = 0; x < dpCount; x++)
-        //    {
-        //        DataPoint ptTarget = chrtNewHireReportBySeniority.Series["chartSeries"].Points[x];
-        //        string seniorityName = ptTarget.YValues[0].ToString();
-        //        int seniorityId = SeniorityList.First(p => p.Name == seniorityName).Id;
-        //        ptTarget.PostBackValue += string.Format(",{0}", seniorityId);
-        //    }
-        //}
-
-        public void PopulateGraph(List<Person> data = null)
+        public void PopulateGraph()
         {
-            if (data == null)
-            {
-                data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
-            }
+            List<Person>  data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
             HostingPage.PopulateHeaderSection(data);
             SeniorityList = data.Select(p => p.Seniority).Distinct().ToList();
             RecuriterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : null).Distinct().ToList();
@@ -119,6 +102,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             var seniorityList = Seniorities.Select(p => new { name = p.Key, count = p.Value }).ToList();
             var recruiterList = Recruiters.Select(p => new { name = p.Key, count = p.Value }).ToList();
+            seniorityList = seniorityList.OrderBy(p => p.name).ToList();
+            recruiterList = recruiterList.OrderBy(p => p.name).ToList();
             InitChart();
             chrtNewHireReportBySeniority.DataSource = seniorityList;
             chrtNewHireReportBySeniority.DataBind();
