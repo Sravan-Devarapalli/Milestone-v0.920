@@ -546,7 +546,7 @@ TABLE.PaddingTenPx td{padding:0 5px}
 .ProjectSummaryReportTotals{text-align:right;width:470px;padding-bottom:10px!important}
 .ReportHeaderTotals{table-layout:fixed;width:100%}
 .ReportHeaderTotalsTable{width:100%}
-.ReportHeaderTotalsTable .FirstTd{text-align:center;font-size:20px;padding-bottom:3px!important;font-weight:bold}
+.ReportHeaderTotalsTable .FirstTd{text-align:center;font-size:15px;padding-bottom:3px!important}
 .ReportHeaderTotalsTable .SecondTd{text-align:center;font-size:25px}
 .ReportHeaderBillAndNonBillTable{width:100%}
 .ReportHeaderBillAndNonBillTable td{text-align:center}
@@ -1311,6 +1311,10 @@ table#ctl00_body_login tr td label{float:left}
 .gvStrawmen .headerSortDown span{background-position:right;background-repeat:no-repeat;background-image:url(../images/desc.gif)}
 .backGroundNone{background-image:none!important}
 .NewHireReportCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:300px;z-index:20000}
-.W2SalaryGraph{background-color:Black;border:1px solid Gray}
-.W2HourlyGraph{background-color:Green;border:1px solid Gray}
-.ContractorsGraph{background-color:Yellow;border:1px solid Gray}
+.W2SalaryGraph{background-color:#7F7F7F;border:1px solid Gray}
+.W2HourlyGraph{background-color:#BEBEBE;border:1px solid Gray}
+.ContractorsGraph{background-color:#D9D9D9;border:1px solid Gray}
+.NewHireGraphPopUpTable .FirstTd{width:80%;white-space:nowrap;text-align:left!important}
+.NewHireGraphPopUpTable .FirstTd span{font-weight:bold;font-size:16px!important}
+.NewHireGraphPopUpTable .SecondTd{width:20%;font-weight:bolder;font-size:16px;text-align:right;padding-right:20px}
+.NewHireGraphPopUpTable .SecondTd span{font-weight:bold;white-space:nowrap}
