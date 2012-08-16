@@ -166,6 +166,37 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public String GraphRange
+        {
+            get
+            {
+                string range = string.Empty;
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    switch (RangeSelected)
+                    {
+                        case 1:
+                        case 2:
+                            range = StartDate.Value.ToString("MMMM yyyy");
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                            range = "Quater " + GetRomanNumber(RangeSelected - 2);
+                            break;
+                        case 7:
+                            range = "Year To Date";
+                            break;
+                        default:
+                            range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                            break;
+                    }
+                }
+                return range;
+            }
+        }
+
         public string PersonStatus
         {
             get
