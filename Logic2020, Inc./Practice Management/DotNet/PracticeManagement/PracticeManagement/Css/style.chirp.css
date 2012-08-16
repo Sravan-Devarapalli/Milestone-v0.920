@@ -2751,9 +2751,8 @@ TABLE.PaddingTenPx td
 .ReportHeaderTotalsTable .FirstTd
 {
     text-align: center;
-    font-size: 20px;
+    font-size: 15px;
     padding-bottom: 3px !important;
-    font-weight:bold;
 }
 .ReportHeaderTotalsTable .SecondTd
 {
@@ -7080,16 +7079,42 @@ table#ctl00_body_login tr td label
 }
 .W2SalaryGraph
 {
-    background-color: Black;
+    background-color: #7F7F7F;
     border: 1px solid Gray;
 }
 .W2HourlyGraph
 {
-    background-color: Green;
+    background-color: #BEBEBE;
     border: 1px solid Gray;
 }
 .ContractorsGraph
 {
-    background-color: Yellow;
+    background-color: #D9D9D9;
     border: 1px solid Gray;
 }
+.NewHireGraphPopUpTable .FirstTd
+{
+    width: 80%;
+    white-space: nowrap;
+    text-align:left !important;
+    
+}
+.NewHireGraphPopUpTable .FirstTd span
+{
+    font-weight: bold;
+    font-size: 16px !important;
+}
+.NewHireGraphPopUpTable .SecondTd
+{
+    width: 20%;
+    font-weight: bolder;
+    font-size: 16px;
+    text-align: right;
+    padding-right: 20px;
+}
+.NewHireGraphPopUpTable .SecondTd span
+{
+    font-weight: bold;
+    white-space: nowrap;
+}
+
