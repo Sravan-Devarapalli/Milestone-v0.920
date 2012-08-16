@@ -218,6 +218,11 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="textCenter">
+                            <asp:ValidationSummary ID="valSumDateRange" runat="server" ValidationGroup='<%# ClientID %>' />
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="custBtns">
                             <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
                                 CausesValidation="true" />
@@ -226,11 +231,7 @@
                                 OnClick="btnCustDatesCancel_OnClick" />
                         </td>
                     </tr>
-                    <tr>
-                        <td class="textCenter">
-                            <asp:ValidationSummary ID="valSumDateRange" runat="server" ValidationGroup='<%# ClientID %>' />
-                        </td>
-                    </tr>
+                    
                 </table>
             </asp:Panel>
             <table class="PaddingTenPx TimePeriodSummaryReportHeader">
@@ -255,7 +256,7 @@
                                 <td class="Width25Percent">
                                     <table class="ReportHeaderTotalsTable">
                                         <tr>
-                                            <td class="FirstTd">
+                                            <td class="FirstTd fontBold">
                                                 Total Employees
                                             </td>
                                         </tr>
@@ -269,7 +270,7 @@
                                 <td class="Width25Percent">
                                     <table class="ReportHeaderTotalsTable">
                                         <tr>
-                                            <td class="FirstTd">
+                                            <td class="FirstTd fontBold">
                                                 Total Contractors
                                             </td>
                                         </tr>
@@ -301,7 +302,7 @@
                                                 </table>
                                                 <table class="tableFixed">
                                                     <tr>
-                                                        <td class="FontSize8PX">
+                                                        <td class="FontSize10PX">
                                                             W2-Salary
                                                         </td>
                                                     </tr>
@@ -329,7 +330,7 @@
                                                 </table>
                                                 <table class="tableFixed">
                                                     <tr>
-                                                        <td class="FontSize8PX">
+                                                        <td class="FontSize10PX">
                                                             W2-Hourly
                                                         </td>
                                                     </tr>
@@ -357,7 +358,7 @@
                                                 </table>
                                                 <table class="tableFixed">
                                                     <tr>
-                                                        <td class="FontSize8PX">
+                                                        <td class="FontSize10PX">
                                                             Contractors
                                                         </td>
                                                     </tr>
@@ -406,7 +407,6 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="tpSummary$btnExportToExcel" />
-            <asp:PostBackTrigger ControlID="tpGraph$btnExportToExcel" />
              <asp:PostBackTrigger ControlID="tpGraph$tpSummary$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
