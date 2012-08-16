@@ -407,6 +407,7 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="tpSummary$btnExportToExcel" />
             <asp:PostBackTrigger ControlID="tpGraph$btnExportToExcel" />
+             <asp:PostBackTrigger ControlID="tpGraph$tpSummary$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
