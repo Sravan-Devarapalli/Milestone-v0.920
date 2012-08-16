@@ -12,7 +12,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 {
     public partial class NewHireReportSummaryView : System.Web.UI.UserControl
     {
-       
+
         #region Properties
 
         private HtmlImage ImgSeniorityFilter { get; set; }
@@ -26,6 +26,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         private HtmlImage ImgDivisionFilter { get; set; }
 
         private HtmlImage ImgRecruiterFilter { get; set; }
+
+        public Button BtnExportToExcelButton { get { return btnExportToExcel; } }
 
         private PraticeManagement.Reporting.NewHireReport HostingPage
         {
@@ -49,7 +51,23 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            HostingPage.ExportToExcel();
+            var btn = sender as Button;
+            bool isSeniority;
+            Boolean.TryParse(btn.Attributes["IsSeniority"], out isSeniority);
+            var filterValue = btn.Attributes["FilterValue"];
+            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+            {
+                var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, null, false, null, null, null, null)).ToList();
+                if (isSeniority)
+                {
+                    data = data.Where(p => p.Seniority.Name == filterValue).ToList();
+                }
+                else
+                {
+                    data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == filterValue : false).ToList();
+                }
+                HostingPage.ExportToExcel(data);
+            }
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -83,7 +101,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             return recruiterCommission.Count > 0 ? recruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty;
         }
-        
+
         public void PopulateData(bool isPopUp = false)
         {
             List<Person> data;
@@ -99,8 +117,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                     data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPersonStatusType.SelectedItemsXmlFormat, cblPayTypes.SelectedItemsXmlFormat, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblSeniorities.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat)).ToList();
                 }
             }
-            else 
-            {   
+            else
+            {
                 data = PopUpFilteredPerson;
             }
             DataBindResource(data, isPopUp);
@@ -116,7 +134,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             ImgRecruiterFilter.Visible = false;
         }
 
-        public void DataBindResource(List<Person> reportData,bool isPopUp)
+        public void DataBindResource(List<Person> reportData, bool isPopUp)
         {
             var reportDataList = reportData.ToList();
             if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1)
