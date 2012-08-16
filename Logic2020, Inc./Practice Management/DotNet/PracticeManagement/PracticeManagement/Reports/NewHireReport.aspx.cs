@@ -296,10 +296,7 @@ namespace PraticeManagement.Reporting
 
         private void SelectDefaultPersonStatus(ScrollingDropDown cblPersonStatus)
         {
-            foreach (ListItem item in cblPersonStatus.Items)
-            {
-                item.Selected = (item.Text == "Active" || item.Text == "Projected");
-            }
+            SelectAllItems(cblPersonStatus);
         }
 
         private void SelectAllItems(ScrollingDropDown ddlpractices)
@@ -412,69 +409,66 @@ namespace PraticeManagement.Reporting
             return date.ToString(Constants.Formatting.EntryDateFormat);
         }
 
-        public void ExportToExcel()
+        public void ExportToExcel(List<Person> data)
         {
-            if (StartDate.HasValue && EndDate.HasValue)
+
+            DataHelper.InsertExportActivityLogMessage(NewHireReportExport);
+            StringBuilder sb = new StringBuilder();
+            sb.Append("New Hire Report");
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(data.Count + " New Hires");
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.Append(Range);
+            sb.Append("\t");
+            sb.AppendLine();
+            sb.AppendLine();
+
+            if (data.Count > 0)
             {
-                var data = ServiceCallers.Custom.Report(r => r.NewHireReport(StartDate.Value, EndDate.Value, null, null, null, false, null, null, null, null)).ToList();
+                //Header
+                sb.Append("Resource");
+                sb.Append("\t");
+                sb.Append("Seniority");
+                sb.Append("\t");
+                sb.Append("Pay Types");
+                sb.Append("\t");
+                sb.Append("Hire Date");
+                sb.Append("\t");
+                sb.Append("Status");
+                sb.Append("\t");
+                sb.Append("Recruiter");
+                sb.Append("\t");
+                sb.AppendLine();
 
-                DataHelper.InsertExportActivityLogMessage(NewHireReportExport);
-                StringBuilder sb = new StringBuilder();
-                sb.Append("New Hire Report");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(data.Count + " New Hires");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(Range);
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.AppendLine();
-
-                if (data.Count > 0)
+                //Data
+                foreach (var person in data)
                 {
-                    //Header
-                    sb.Append("Resource");
+                    sb.Append(person.HtmlEncodedName);
                     sb.Append("\t");
-                    sb.Append("Seniority");
+                    sb.Append(person.Seniority.Name);
                     sb.Append("\t");
-                    sb.Append("Pay Types");
+                    sb.Append(person.CurrentPay.TimescaleName);
                     sb.Append("\t");
-                    sb.Append("Hire Date");
+                    sb.Append(GetDateFormat(person.HireDate));
                     sb.Append("\t");
-                    sb.Append("Status");
+                    sb.Append(person.Status.Name);
                     sb.Append("\t");
-                    sb.Append("Recruiter");
+                    sb.Append(person.RecruiterCommission.Count > 0 ? person.RecruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty);
                     sb.Append("\t");
                     sb.AppendLine();
-
-                    //Data
-                    foreach (var person in data)
-                    {
-                        sb.Append(person.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(person.Seniority.Name);
-                        sb.Append("\t");
-                        sb.Append(person.CurrentPay.TimescaleName);
-                        sb.Append("\t");
-                        sb.Append(GetDateFormat(person.HireDate));
-                        sb.Append("\t");
-                        sb.Append(person.Status.Name);
-                        sb.Append("\t");
-                        sb.Append(person.RecruiterCommission.Count > 0 ? person.RecruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty);
-                        sb.Append("\t");
-                        sb.AppendLine();
-                    }
-
                 }
-                else
-                {
-                    sb.Append("There are no Persons Hired for the selected range.");
-                }
-                //“NewHireReport_[StartOfRange]_[EndOfRange].xls”.  
-                var filename = string.Format("{0}_{1}-{2}.xls", "NewHireReport", StartDate.Value.ToString("MM.dd.yyyy"), EndDate.Value.ToString("MM.dd.yyyy"));
-                GridViewExportUtil.Export(filename, sb);
+
             }
+            else
+            {
+                sb.Append("There are no Persons Hired for the selected range.");
+            }
+            //“NewHireReport_[StartOfRange]_[EndOfRange].xls”.  
+            var filename = string.Format("{0}_{1}-{2}.xls", "NewHireReport", StartDate.Value.ToString("MM.dd.yyyy"), EndDate.Value.ToString("MM.dd.yyyy"));
+            GridViewExportUtil.Export(filename, sb);
+
         }
 
         #endregion
