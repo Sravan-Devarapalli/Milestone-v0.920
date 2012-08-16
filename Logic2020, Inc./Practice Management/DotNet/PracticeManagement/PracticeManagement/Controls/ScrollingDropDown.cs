@@ -533,6 +533,7 @@ namespace PraticeManagement.Controls
             string writeText = string.Empty;
             writeText = string.IsNullOrEmpty(CssClass) ?  string.Format("<div id='{0}' class='scroll_{0}' />" , ID) : string.Format("<div id='{0}' class='{1}' />", ID, CssClass);
             writer.WriteLine(writeText);
+            this.Width = new Unit(100d, UnitType.Percentage);
             base.RenderControl(writer);
             writer.WriteLine("</div>");
         }
