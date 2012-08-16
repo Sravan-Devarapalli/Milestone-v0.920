@@ -193,6 +193,15 @@ namespace PraticeManagement.Reporting {
         protected global::PraticeManagement.Controls.Generic.Filtering.DateInterval1 diRange;
         
         /// <summary>
+        /// valSumDateRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumDateRange;
+        
+        /// <summary>
         /// btnCustDatesOK control.
         /// </summary>
         /// <remarks>
@@ -209,15 +218,6 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCustDatesCancel;
-        
-        /// <summary>
-        /// valSumDateRange control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSumDateRange;
         
         /// <summary>
         /// ltPersonCount control.
@@ -391,13 +391,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Panel pnlSummary;
         
         /// <summary>
-        /// tpSummary  control.
+        /// tpSummary control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Reports.HumanCapital.NewHireReportSummaryView tpSummary ;
+        protected global::PraticeManagement.Controls.Reports.HumanCapital.NewHireReportSummaryView tpSummary;
         
         /// <summary>
         /// vwGraph control.
