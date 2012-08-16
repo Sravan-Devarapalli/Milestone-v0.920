@@ -46,7 +46,7 @@
             <table id="tblNewHireSummaryReport" class="tablesorter PersonSummaryReport WholeWidth zebra">
                 <thead>
                     <tr class="TimeperiodSummaryReportTr">
-                        <th class="ResourceColum">
+                        <th class="ResourceColum padLeft5Imp">
                             Resource
                             <img alt="Filter" src="../../../Images/divisions_16x16.png" title="Division" runat="server"
                                 id="imgDivisionFilter" />
@@ -101,7 +101,7 @@
     </HeaderTemplate>
     <ItemTemplate>
         <tr class="ReportItemTemplate">
-            <td style="text-align: left; padding-left: 2px;">
+            <td class="textLeft padLeft5Imp">
                 <%# Eval("HtmlEncodedName")%>
             </td>
             <td sorttable_customkey='<%# Eval("Seniority.Name") %> <%#Eval("HtmlEncodedName")%>'>
