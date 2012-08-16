@@ -86,6 +86,18 @@ namespace DataTransferObjects
 
             return seniorityValue;
         }
+
+        public override int  GetHashCode()
+        {
+            return Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var obj1 = (Seniority)obj;
+            return obj1.Id == Id;
+        }
+             
     }
 }
 
