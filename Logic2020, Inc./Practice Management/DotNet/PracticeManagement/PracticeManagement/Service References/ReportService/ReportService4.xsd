@@ -267,6 +267,7 @@
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
       <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReason" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationReasonid" nillable="true" type="xs:int" />
       <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q10:ArrayOfPersonTraining" />
       <xs:element minOccurs="0" name="UtlizationPercent" type="xs:double" />
