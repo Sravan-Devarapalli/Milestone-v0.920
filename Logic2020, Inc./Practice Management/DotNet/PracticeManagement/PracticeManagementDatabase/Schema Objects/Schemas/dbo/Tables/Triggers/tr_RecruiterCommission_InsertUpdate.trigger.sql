@@ -17,11 +17,11 @@
 		--										)
 		--VALUES
 
-		DECLARE @Today DATE,
+		DECLARE @Today DATETIME,
 				@InsertTime	DATETIME
 
 		SELECT @InsertTime = dbo.InsertingTime()
-		SELECT @Today = dbo.GettingPMTime(@InsertTime)
+		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,dbo.GettingPMTime(@InsertTime)))
 
 		UPDATE RCH
 			SET Amount = I.Amount,
