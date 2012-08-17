@@ -1964,6 +1964,10 @@ TABLE.Section td
 {
     width: 20%;
 }
+.Width78Percent
+{
+    width: 78%;
+}
 .Width21Percent
 {
     width: 21%;
@@ -3463,6 +3467,19 @@ div.scrollextLabel
     max-width: 600px;
     max-height: 500px;
 }
+
+.popUpAttrition
+{
+    background-color: White;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    min-height: 60px;
+    min-width: 200px;   
+    max-height: 500px;
+    max-width: 700px !important;
+    padding: 0px 12px 12px 12px !important;
+}
 .PopUpHeader
 {
     background-color: Gray;
@@ -4527,6 +4544,13 @@ BenchCosts.ascx*/
 .ReportParametersTable .FirstTd20
 {
     width: 18%;
+    text-align: right;
+    font-weight: bold;
+    vertical-align: top;
+}
+.ReportParametersTable .FirstTd70
+{
+    width: 70%;
     text-align: right;
     font-weight: bold;
     vertical-align: top;
