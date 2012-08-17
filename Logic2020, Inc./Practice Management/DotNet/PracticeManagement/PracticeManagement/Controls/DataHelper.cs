@@ -587,6 +587,12 @@ namespace PraticeManagement.Controls
             FillListDefault(control, firstItemText, personstatus.ToArray(), false);
         }
 
+        public static void FillTerminationReasonsList(ListControl control, string firstItemText)
+        {
+            var terminationReasons = ServiceCallers.Custom.Person(p => p.GetTerminationReasonsList()).Select(p => new { name = p.Key, Value = p.Value }).ToArray();
+            FillListDefault(control, firstItemText, terminationReasons, false, "value", DefaultNameFieldName);
+        }
+
         /// <summary>
         /// Fills the list control with the list of practices.
         /// </summary>
