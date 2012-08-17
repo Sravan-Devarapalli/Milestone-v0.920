@@ -74,6 +74,9 @@ namespace PraticeManagement.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/NewHireReport", ReplyAction="http://tempuri.org/IReportService/NewHireReportResponse")]
         DataTransferObjects.Person[] NewHireReport(System.DateTime startDate, System.DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TerminationReport", ReplyAction="http://tempuri.org/IReportService/TerminationReportResponse")]
+        DataTransferObjects.Person[] TerminationReport(System.DateTime startDate, System.DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -84,7 +87,8 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-    
+       
+        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -179,6 +183,10 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Person[] NewHireReport(System.DateTime startDate, System.DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds) {
             return base.Channel.NewHireReport(startDate, endDate, personStatusIds, payTypeIds, practiceIds, excludeInternalPractices, personDivisionIds, seniorityIds, hireDates, recruiterIds);
+        }
+        
+        public DataTransferObjects.Person[] TerminationReport(System.DateTime startDate, System.DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates) {
+            return base.Channel.TerminationReport(startDate, endDate, payTypeIds, personStatusIds, seniorityIds, terminationReasonIds, practiceIds, excludeInternalPractices, personDivisionIds, recruiterIds, hireDates, terminationDates);
         }
     }
 }
