@@ -4091,6 +4091,15 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TerminationReport.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\PersonHistory.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\RecruiterCommissionHistory.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_RecruiterCommission_InsertUpdate.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4140,3 +4149,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
