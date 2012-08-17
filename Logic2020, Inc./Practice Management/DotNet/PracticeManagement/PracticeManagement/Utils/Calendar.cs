@@ -127,6 +127,27 @@ namespace PraticeManagement.Utils
         {
             return now.AddMonths(-1).AddDays(1 - now.AddMonths(-1).Day);
         }
+
+        public static DateTime Last3MonthStartDate(DateTime now)
+        {
+            return MonthStartDate(now.AddMonths(-3));
+        }        
+
+        public static DateTime Last6MonthStartDate(DateTime now)
+        {
+            return MonthStartDate(now.AddMonths(-6));
+        }
+       
+        public static DateTime Last9MonthStartDate(DateTime now)
+        {
+            return MonthStartDate(now.AddMonths(-9));
+        }       
+
+        public static DateTime Last12MonthStartDate(DateTime now)
+        {
+            return MonthStartDate(now.AddMonths(-12));
+        }
+       
         //return 16th of the last month
         public static DateTime LastMonthSecondHalfStartDate(DateTime now)
         {
