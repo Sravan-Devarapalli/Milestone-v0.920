@@ -396,7 +396,7 @@
             </tr>
         </table>
     </div>
-    <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
+    <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" style="display:none;">
         <table class="WholeWidth">
             <tr>
                 <td align="center" class="no-wrap">
