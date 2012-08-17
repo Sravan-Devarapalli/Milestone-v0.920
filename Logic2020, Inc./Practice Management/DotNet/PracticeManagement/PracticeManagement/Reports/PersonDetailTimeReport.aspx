@@ -238,7 +238,7 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
                 DropShadow="false" />
-            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp">
+            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" style="display:none;">
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
@@ -421,7 +421,7 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpePersonSearch" runat="server" TargetControlID="imgSearch"
                 CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlPersonSearch"
                 BehaviorID="mpePersonSearch" DropShadow="false" />
-            <asp:Panel ID="pnlPersonSearch" runat="server" CssClass="popUp PersonSearch">
+            <asp:Panel ID="pnlPersonSearch" runat="server" CssClass="popUp PersonSearch" style="display:none;">
                 <table class="WholeWidth">
                     <tr class="PopUpHeader">
                         <th colspan="2">
