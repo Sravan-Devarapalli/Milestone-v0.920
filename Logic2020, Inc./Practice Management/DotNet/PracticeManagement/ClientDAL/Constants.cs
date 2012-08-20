@@ -339,8 +339,9 @@
             public const string RecruiterLastNameColumn = "RecruiterLastName";
             public const string TerminationReasonIdColumn = "TerminationReasonId";
             public const string TerminationReasonColumn = "TerminationReason";
-
-
+            public const string ActivePersonsAtTheBeginning = "ActivePersonsAtTheBeginning";
+            public const string NewHiredInTheRange = "NewHiredInTheRange";
+            public const string TerminationsInTheRange = "TerminationsInTheRange";
         }
 
         #endregion
