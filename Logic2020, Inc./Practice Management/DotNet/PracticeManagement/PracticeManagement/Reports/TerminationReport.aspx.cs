@@ -9,6 +9,7 @@ using DataTransferObjects;
 using System.Web.UI.HtmlControls;
 using System.Text;
 using AjaxControlToolkit;
+using DataTransferObjects.Reports.HumanCapital;
 
 namespace PraticeManagement.Reporting
 {
@@ -289,20 +290,18 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public void PopulateHeaderSection(List<Person> reportData)
+        public void PopulateHeaderSection(TerminationPersonsInRange reportData)
         {
-            int w2SalaryCount = reportData.Count(p => p.CurrentPay.Timescale == TimescaleType.Salary);
-            int w2HourlyCount = reportData.Count(p => p.CurrentPay.Timescale == TimescaleType.Hourly);
-            int contractorCount = reportData.Count(p => p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue);
+            int w2SalaryCount = reportData.PersonList.Count(p => p.CurrentPay.Timescale == TimescaleType.Salary);
+            int w2HourlyCount = reportData.PersonList.Count(p => p.CurrentPay.Timescale == TimescaleType.Hourly);
+            int contractorCount = reportData.PersonList.Count(p => p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue);
             List<int> ratioList = (new int[] { w2SalaryCount, w2HourlyCount, contractorCount }).ToList();
             int height = 80;
             List<int> percentageList = DataTransferObjects.Utils.Generic.GetProportionateRatio(ratioList, height);
 
-            ltPersonCount.Text = reportData.Count + " Terminations";
+            ltPersonCount.Text = reportData.PersonList.Count + " Terminations";
             lbRange.Text = Range;
-            int activePersonsAtTheBeginning = 5;//to do
-            int newPersonsHiredInTheSpecifiedPeriod = 5;//to do
-            ltrlAttrition.Text = ((reportData.Count) / (activePersonsAtTheBeginning + newPersonsHiredInTheSpecifiedPeriod - reportData.Count)).ToString() + "%";
+            ltrlAttrition.Text = reportData.Attrition.ToString() + "%";
             ltrlTotalEmployees.Text = (w2SalaryCount + w2HourlyCount).ToString();
             ltrlTotalContractors.Text = contractorCount.ToString();
 
@@ -412,7 +411,7 @@ namespace PraticeManagement.Reporting
         {
             if (StartDate.HasValue && EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.TerminationReport(StartDate.Value, EndDate.Value, null, null, null,null,null, false, null, null, null, null)).ToList();
+                var data = ServiceCallers.Custom.Report(r => r.TerminationReport(StartDate.Value, EndDate.Value, null, null, null,null,null, false, null, null, null, null)).PersonList;
 
                 DataHelper.InsertExportActivityLogMessage(TerminationReportExport);
                 StringBuilder sb = new StringBuilder();
