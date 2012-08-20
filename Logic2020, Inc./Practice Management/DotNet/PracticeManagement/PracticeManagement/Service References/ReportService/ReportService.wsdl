@@ -10,6 +10,7 @@
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
