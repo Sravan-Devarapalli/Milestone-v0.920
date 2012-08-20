@@ -246,13 +246,10 @@ namespace PraticeManagement.Reporting
                 if (this.cblTimeScales != null && this.cblTimeScales.Items.Count == 0)
                 {
                     DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
-
                 }
                 if (this.cblPersonStatus != null && this.cblPersonStatus.Items.Count == 0)
                 {
-                    List<PersonStatus> personStatus = ServiceCallers.Custom.PersonStatus(p => p.GetPersonStatuses()).ToList();
-                    personStatus = personStatus.Where(p => p.Id == (int)PersonStatusType.Active || p.Id == (int)PersonStatusType.Projected || p.Id == (int)PersonStatusType.Terminated).ToList();
-                    DataHelper.FillPersonStatusList(this.cblPersonStatus, Resources.Controls.AllTypes, personStatus);
+                    DataHelper.FillPersonStatusList(this.cblPersonStatus, Resources.Controls.AllTypes);
                 }
                 SetDefalultfilter();
                 LoadActiveView();
