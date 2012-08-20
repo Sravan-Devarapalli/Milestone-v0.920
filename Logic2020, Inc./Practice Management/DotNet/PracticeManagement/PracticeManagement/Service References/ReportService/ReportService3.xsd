@@ -3,6 +3,7 @@
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
+  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
   <xs:element name="PersonTimeEntriesDetails">
     <xs:complexType>
       <xs:sequence>
@@ -365,7 +366,7 @@
   <xs:element name="TerminationReportResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="TerminationReportResult" nillable="true" type="q21:ArrayOfPerson" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" minOccurs="0" name="TerminationReportResult" nillable="true" type="q21:TerminationPersonsInRange" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
