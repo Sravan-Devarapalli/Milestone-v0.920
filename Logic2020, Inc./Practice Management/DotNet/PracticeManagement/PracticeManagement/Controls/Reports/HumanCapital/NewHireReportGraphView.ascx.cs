@@ -47,23 +47,24 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         protected void chrtNewHireReport_Click(object sender, ImageMapEventArgs e)
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
-
+            string selectedValue = postBackDetails[0].Trim();
             lbTotalHires.Text = postBackDetails[1];
             var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
             bool isSeniority;
             Boolean.TryParse(postBackDetails[2], out isSeniority);
             if (isSeniority)
             {
-                lbName.Text = "Seniority : " + postBackDetails[0];
-                data = data.Where(p => p.Seniority.Name == postBackDetails[0]).ToList();
+                lbName.Text = "Seniority : " + selectedValue;
+                data = data.Where(p => p.Seniority != null ? p.Seniority.Name == selectedValue : selectedValue == Constants.FilterKeys.Unassigned).ToList();
             }
             else
             {
-                lbName.Text = "Recruiter : " + postBackDetails[0];
-                data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == postBackDetails[0] : false).ToList();
+                lbName.Text = "Recruiter : " + selectedValue;
+                bool isUnassigned = selectedValue.Equals(Constants.FilterKeys.Unassigned);
+                data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == selectedValue : isUnassigned).ToList();
             }
             tpSummary.BtnExportToExcelButton.Attributes["IsSeniority"] = isSeniority.ToString();
-            tpSummary.BtnExportToExcelButton.Attributes["FilterValue"] = postBackDetails[0];
+            tpSummary.BtnExportToExcelButton.Attributes["FilterValue"] = selectedValue;
             tpSummary.PopUpFilteredPerson = data;
             tpSummary.PopulateData(true);
             mpeDetailView.Show();
@@ -78,10 +79,16 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             List<Person> data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
             HostingPage.PopulateHeaderSection(data);
+            PopulateGraphAxisData(data);
+            LoadChartData(data);
+        }
+
+        private void PopulateGraphAxisData(List<Person> data)
+        {
             SeniorityList = ServiceCallers.Custom.Person(p => p.ListSeniorities()).ToList();
             RecuriterList = ServiceCallers.Custom.Person(p => p.GetRecruiterList(null, null)).ToList();
-            List<Seniority> _seniorityList = data.Select(p => p.Seniority != null ? p.Seniority : new Seniority { Id = 0, Name = "Unassigned" }).Distinct().ToList();
-            List<Person> _recurterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : new Person { FirstName = "Unassigned", Id = 0 }).Distinct().ToList();
+            List<Seniority> _seniorityList = data.Select(p => p.Seniority != null ? p.Seniority : new Seniority { Id = 0, Name = Constants.FilterKeys.Unassigned }).Distinct().ToList();
+            List<Person> _recurterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : new Person { FirstName = Constants.FilterKeys.Unassigned, Id = 0 }).Distinct().ToList();
             if (_recurterList.Count > 0)
             {
                 RecuriterList = RecuriterList.Concat(_recurterList).Distinct().ToList();
@@ -96,17 +103,16 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
             foreach (var S in SeniorityList)
             {
-                int count = data.Count(p => p.Seniority.Id == S.Id);
+                int count = data.Count(p => p.Seniority != null ? p.Seniority.Id == S.Id : S.Id == 0);
                 Seniorities.Add(S.Name, count);
             }
             if (Recruiters == null)
                 Recruiters = new Dictionary<string, int>();
             foreach (var R in RecuriterList)
             {
-                int count = data.Count(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.Id.Value == R.Id.Value : false);
+                int count = data.Count(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.Id.Value == R.Id.Value : R.Id.Value == 0);
                 Recruiters.Add(R.PersonFirstLastName, count);
             }
-            LoadChartData(data);
         }
 
         private void LoadChartData(List<Person> data)
