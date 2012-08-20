@@ -7,12 +7,12 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using DataTransferObjects;
 using System.Text;
+using DataTransferObjects.Reports.HumanCapital;
 
 namespace PraticeManagement.Controls.Reports.HumanCapital
 {
     public partial class TerminationReportSummaryView : System.Web.UI.UserControl
     {
-
 
         #region Properties
 
@@ -37,6 +37,32 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             get { return ((PraticeManagement.Reporting.TerminationReport)Page); }
         }
 
+        private string PayTypes
+        {
+            get
+            {
+                return cblPayTypes.SelectedItemsXmlFormat != null ? cblPayTypes.SelectedItemsXmlFormat : HostingPage.PayTypes;
+            }
+        }
+
+        private string Seniorities
+        {
+            get
+            {
+                return cblSeniorities.SelectedItemsXmlFormat != null ? cblSeniorities.SelectedItemsXmlFormat : HostingPage.Seniorities;
+            }
+        }
+
+        private string TerminationReasons
+        {
+            get
+            {
+                return cblTerminationReason.SelectedItemsXmlFormat != null ? cblTerminationReason.SelectedItemsXmlFormat : HostingPage.TerminationReasons;
+            }
+        }
+
+
+
         #endregion
 
         #region PageEvents
@@ -47,6 +73,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         }
 
         #endregion
+
         #region ControlEvents
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
@@ -84,24 +111,24 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         }
         public void PopulateData()
         {
-            List<Person> data;
+            TerminationPersonsInRange data;
             if (HostingPage.SetSelectedFilters)
             {
-                data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
-                PopulateFilterPanels(data);
+                data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
+                PopulateFilterPanels(data.PersonList);
             }
             else
             {
-                data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPayTypes.SelectedItemsXmlFormat,cblPersonStatusType.SelectedItemsXmlFormat, cblSeniorities.SelectedItemsXmlFormat, cblTerminationReason.SelectedItemsXmlFormat, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblTerminationDate.SelectedItemsXmlFormat)).ToList();                
+                data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, PayTypes, cblPersonStatusType.SelectedItemsXmlFormat, Seniorities, TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblTerminationDate.SelectedItemsXmlFormat));
             }
             DataBindResource(data);
         }
 
-        public void DataBindResource(List<Person> reportData)
+        public void DataBindResource(TerminationPersonsInRange reportData)
         {
-            var reportDataList = reportData.ToList();
+            var reportDataList = reportData.PersonList.ToList();
             if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1 || cblTerminationDate.Items.Count > 1 || cblTerminationReason.Items.Count > 1)
-            {               
+            {
                 divEmptyMessage.Attributes["class"] = "displayNone";
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
@@ -113,7 +140,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 divEmptyMessage.Attributes["class"] = "EmptyMessagediv";
                 repResource.Visible = false;
             }
-            HostingPage.PopulateHeaderSection(reportDataList);
+            HostingPage.PopulateHeaderSection(reportData);
         }
 
         private void SetAttribitesForFiltersImages()
@@ -180,7 +207,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateDivisionFilter(List<Person> reportData)
         {
-            var divisionList = reportData.Select(r => new { Value = (int)r.DivisionType == 0 ? string.Empty : ((int)r.DivisionType).ToString(), Name = (int)r.DivisionType == 0 ? "Unassigned" : r.DivisionType.ToString() }).Distinct().ToList().OrderBy(d => d.Value).ToArray();
+            var divisionList = reportData.Select(r => new { Value = (int)r.DivisionType == 0 ? string.Empty : ((int)r.DivisionType).ToString(), Name = (int)r.DivisionType == 0 ? Constants.FilterKeys.Unassigned : r.DivisionType.ToString() }).Distinct().ToList().OrderBy(d => d.Value).ToArray();
             DataHelper.FillListDefault(cblDivision.CheckBoxListObject, "All Division Types", divisionList, false, "Value", "Name");
             cblDivision.SelectAllItems(true);
         }
@@ -208,14 +235,14 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulatePayTypeFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? "Unassigned" : r.CurrentPay.TimescaleName, Value = r.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Value);
+            var payTypes = reportData.Select(r => new { Text = string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? Constants.FilterKeys.Unassigned : r.CurrentPay.TimescaleName, Value = r.CurrentPay.TimescaleName }).Distinct().ToList().OrderBy(t => t.Value);
             DataHelper.FillListDefault(cblPayTypes.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Value", "Text");
             cblPayTypes.SelectAllItems(true);
         }
 
         private void PopulateRecruiterFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonFirstLastName : "Unassigned", Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : -1 }).Distinct().ToList().OrderBy(t => t.Value);
+            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonFirstLastName : Constants.FilterKeys.Unassigned, Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : -1 }).Distinct().ToList().OrderBy(t => t.Value);
             DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter", payTypes.ToArray(), false, "Value", "Text");
             cblRecruiter.SelectAllItems(true);
         }
