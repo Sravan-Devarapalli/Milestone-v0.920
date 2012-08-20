@@ -10,6 +10,7 @@ using DataTransferObjects;
 using DataTransferObjects.TimeEntry;
 using System.Data.Common;
 using DataTransferObjects.Reports.ByAccount;
+using DataTransferObjects.Reports.HumanCapital;
 
 namespace DataAccess
 {
@@ -1760,10 +1761,8 @@ namespace DataAccess
                     {
                         var recruiterCommission = new RecruiterCommission { Recruiter = new Person { Id = reader.GetInt32(recruiterIdIndex), FirstName = reader.GetString(recruiterFirstNameIndex), LastName = reader.GetString(recruiterLastNameIndex) } };
                         recruiterList.Add(recruiterCommission);
-                        person.RecruiterCommission = recruiterList;
                     }
-                    person.RecruiterCommission = new List<RecruiterCommission>();
-
+                    person.RecruiterCommission = recruiterList;
                     if (!reader.IsDBNull(timeScaleIndex))
                     {
                         person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex), Name = reader.GetString(personSeniorityNameIndex) };
@@ -1787,7 +1786,7 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> TerminationReport(DateTime startDate, DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates)
+        public static TerminationPersonsInRange TerminationReport(DateTime startDate, DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TerminationReport, connection))
@@ -1807,13 +1806,41 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.RecruiterIdsParam, recruiterIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.HireDatesParam, hireDates);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDatesParam, terminationDates);
-
+                TerminationPersonsInRange result = new TerminationPersonsInRange();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var persons = new List<Person>();
                     ReadHumanCapitalPersons(reader, persons);
-                    return persons;
+                    result.PersonList = persons;
+                    reader.NextResult();
+                    ReadTerminationPersonsInRange(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadTerminationPersonsInRange(SqlDataReader reader, TerminationPersonsInRange result)
+        {
+            if (reader.HasRows)
+            {
+                int activePersonsAtTheBeginningIndex = reader.GetOrdinal(Constants.ColumnNames.ActivePersonsAtTheBeginning);
+                int newHiredInTheRangeIndex = reader.GetOrdinal(Constants.ColumnNames.NewHiredInTheRange);
+                int terminationsInTheRange = -1;
+                try
+                {
+                    terminationsInTheRange =reader.GetOrdinal(Constants.ColumnNames.TerminationsInTheRange);
+                }
+                catch
+                {
+                    terminationsInTheRange = -1;
+                }
+
+                while (reader.Read())
+                {
+                    result.ActivePersonsCountAtTheBeginning = reader.GetInt32(activePersonsAtTheBeginningIndex);
+                    result.NewHiresCountInTheRange = reader.GetInt32(newHiredInTheRangeIndex);
+                    result.TerminationsCountInTheRange =terminationsInTheRange > -1 ? reader.GetInt32(terminationsInTheRange) : result.PersonList.Count;
                 }
             }
         }
