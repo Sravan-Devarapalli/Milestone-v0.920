@@ -582,11 +582,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillPersonStatusList(ListControl control, string firstItemText,List<PersonStatus> personstatus)
-        {
-            FillListDefault(control, firstItemText, personstatus.ToArray(), false);
-        }
-
         public static void FillTerminationReasonsList(ListControl control, string firstItemText)
         {
             var terminationReasons = ServiceCallers.Custom.Person(p => p.GetTerminationReasonsList()).Select(p => new { name = p.Key, Value = p.Value }).ToArray();
@@ -1356,13 +1351,24 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         public static void FillPersonStatusList(ListControl control)
         {
+            FillPersonStatusList(control, string.Empty, true);
+        }
+
+        /// <summary>
+        /// Fills the list control with the list of project statuses and if noFirstItem is false then it will insert first item.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="firstItemText"></param>
+        /// <param name="noFirstItem"></param>
+        private static void FillPersonStatusList(ListControl control, string firstItemText, bool noFirstItem)
+        {
             using (var serviceClient = new PersonStatusServiceClient())
             {
                 try
                 {
                     PersonStatus[] statuses = serviceClient.GetPersonStatuses();
 
-                    FillListDefault(control, String.Empty, statuses, true);
+                    FillListDefault(control, firstItemText, statuses, noFirstItem);
                 }
                 catch (CommunicationException)
                 {
@@ -1370,6 +1376,16 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
+        }
+
+        /// <summary>
+        /// Fills the list control with the list of project statuses and if firstItemText exists then it will keep first item.
+        /// </summary>
+        /// <param name="control">The control to be filled.</param>
+        /// <param name="firstItemText">The text to be displayed by default.</param>
+        public static void FillPersonStatusList(ListControl control, string firstItemText)
+        {
+            FillPersonStatusList(control, firstItemText, false);
         }
 
         /// <summary>
