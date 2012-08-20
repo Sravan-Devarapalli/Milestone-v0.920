@@ -529,6 +529,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck1.datasource" />
@@ -748,6 +749,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService8.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
