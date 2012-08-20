@@ -9,6 +9,7 @@ using DataTransferObjects.Reports;
 using DataAccess;
 using DataTransferObjects;
 using DataTransferObjects.Reports.ByAccount;
+using DataTransferObjects.Reports.HumanCapital;
 
 namespace PracticeManagementService
 {
@@ -131,7 +132,7 @@ namespace PracticeManagementService
             return ReportDAL.NewHireReport(startDate, endDate, personStatusIds, payTypeIds, practiceIds, excludeInternalPractices, personDivisionIds, seniorityIds, hireDates, recruiterIds);
         }
 
-        public List<Person> TerminationReport(DateTime startDate, DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates)
+        public TerminationPersonsInRange TerminationReport(DateTime startDate, DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates)
         {
             return ReportDAL.TerminationReport(startDate, endDate, payTypeIds, personStatusIds, seniorityIds, terminationReasonIds, practiceIds, excludeInternalPractices, personDivisionIds, recruiterIds, hireDates, terminationDates);
         }
