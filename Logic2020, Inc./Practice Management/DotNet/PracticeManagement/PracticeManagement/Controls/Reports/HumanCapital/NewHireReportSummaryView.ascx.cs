@@ -109,7 +109,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             {
                 if (HostingPage.SetSelectedFilters)
                 {
-                    data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
+                    data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
                     PopulateFilterPanels(data);
                 }
                 else
@@ -140,6 +140,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1)
             {
                 divEmptyMessage.Style["display"] = "none";
+                btnExportToExcel.Enabled = 
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
@@ -155,6 +156,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             else
             {
                 divEmptyMessage.Style["display"] = "";
+                btnExportToExcel.Enabled = 
                 repResource.Visible = false;
             }
             if (!isPopUp)
@@ -203,14 +205,14 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateDivisionFilter(List<Person> reportData)
         {
-            var divisionList = reportData.Select(r => new { Value = (int)r.DivisionType == 0 ? string.Empty : ((int)r.DivisionType).ToString(), Name = (int)r.DivisionType == 0 ? "Unassigned" : r.DivisionType.ToString() }).Distinct().ToList().OrderBy(d => d.Value).ToArray();
+            var divisionList = reportData.Select(r => new { Value = ((int)r.DivisionType).ToString(), Name = (int)r.DivisionType == 0 ? "Unassigned" : r.DivisionType.ToString() }).Distinct().ToList().OrderBy(d => d.Value).ToArray();
             DataHelper.FillListDefault(cblDivision.CheckBoxListObject, "All Division Types", divisionList, false, "Value", "Name");
             cblDivision.SelectAllItems(true);
         }
 
         private void PopulateHireDateFilter(List<Person> reportData)
         {
-            var hireDateList = reportData.Select(r => new { Text = r.HireDate.ToString("MMM yyyy"), Value = r.HireDate.ToString("MM/01/yyyy") }).ToList().OrderBy(s => s.Text);
+            var hireDateList = reportData.Select(r => new { Text = r.HireDate.ToString("MMM yyyy"), Value = r.HireDate.ToString("MM/01/yyyy") }).Distinct().ToList().OrderBy(s => s.Text);
             DataHelper.FillListDefault(cblHireDate.CheckBoxListObject, "All Months ", hireDateList.ToArray(), false, "Value", "Text");
             cblHireDate.SelectAllItems(true);
         }
@@ -224,21 +226,21 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateSeniorityFilter(List<Person> reportData)
         {
-            var seniorities = reportData.Select(r => new { Id = r.Seniority.Id, Name = r.Seniority.Name }).Distinct().ToList().OrderBy(s => s.Name);
+            var seniorities = reportData.Select(r => new { Id = r.Seniority != null ? r.Seniority.Id : 0, Name = r.Seniority != null ? r.Seniority.Name : "Unassigned" }).Distinct().ToList().OrderBy(s => s.Name);
             DataHelper.FillListDefault(cblSeniorities.CheckBoxListObject, "All Seniorities", seniorities.ToArray(), false, "Id", "Name");
             cblSeniorities.SelectAllItems(true);
         }
 
         private void PopulatePayTypeFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? "Unassigned" : r.CurrentPay.TimescaleName, Value = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? -1 : (int)r.CurrentPay.Timescale }).Distinct().ToList().OrderBy(t => t.Text);
+            var payTypes = reportData.Select(r => new { Text = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? "Unassigned" : r.CurrentPay.TimescaleName, Value = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? 0 : (int)r.CurrentPay.Timescale }).Distinct().ToList().OrderBy(t => t.Text);
             DataHelper.FillListDefault(cblPayTypes.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Value", "Text");
             cblPayTypes.SelectAllItems(true);
         }
 
         private void PopulateRecruiterFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonFirstLastName : "Unassigned", Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : -1 }).Distinct().ToList().OrderBy(t => t.Value);
+            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonFirstLastName : "Unassigned", Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : 0 }).Distinct().ToList().OrderBy(t => t.Value);
             DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter", payTypes.ToArray(), false, "Value", "Text");
             cblRecruiter.SelectAllItems(true);
         }
