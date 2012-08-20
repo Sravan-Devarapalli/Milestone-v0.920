@@ -3,39 +3,34 @@
 <%@ Register Src="~/Controls/Reports/HumanCapital/NewHireReportSummaryView.ascx"
     TagPrefix="uc" TagName="SummaryView" %>
 <div style="background-color: White !important;">
-    <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
-            <div class="ConsultingDemandchartDiv">
-                <asp:Chart ID="chrtNewHireReportByRecruiter" runat="server" OnClick="chrtNewHireReport_Click" EnableViewState="true">
-                    <Series>
-                        <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                            Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY New Hires"
-                            XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
-                        </asp:Series>
-                    </Series>
-                    <ChartAreas>
-                        <asp:ChartArea Name="MainArea">
-                        </asp:ChartArea>
-                    </ChartAreas>
-                </asp:Chart>
-                <asp:Chart ID="chrtNewHireReportBySeniority" runat="server" OnClick="chrtNewHireReport_Click" EnableViewState="true"
-                    CssClass="PaddingTop75">
-                    <Series>
-                        <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                            Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,True" ToolTip="#VALY New Hires"
-                            XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
-                        </asp:Series>
-                    </Series>
-                    <ChartAreas>
-                        <asp:ChartArea Name="MainArea">
-                        </asp:ChartArea>
-                    </ChartAreas>
-                </asp:Chart>
-            </div>
-        </ContentTemplate>
-        <Triggers>
-        </Triggers>
-    </asp:UpdatePanel>
+    <div class="ConsultingDemandchartDiv">
+        <asp:Chart ID="chrtNewHireReportByRecruiter" runat="server" OnClick="chrtNewHireReport_Click"
+            EnableViewState="true">
+            <Series>
+                <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
+                    Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY New Hires"
+                    XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
+                </asp:Series>
+            </Series>
+            <ChartAreas>
+                <asp:ChartArea Name="MainArea">
+                </asp:ChartArea>
+            </ChartAreas>
+        </asp:Chart>
+        <asp:Chart ID="chrtNewHireReportBySeniority" runat="server" OnClick="chrtNewHireReport_Click"
+            EnableViewState="true" CssClass="PaddingTop75">
+            <Series>
+                <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
+                    Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,True" ToolTip="#VALY New Hires"
+                    XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
+                </asp:Series>
+            </Series>
+            <ChartAreas>
+                <asp:ChartArea Name="MainArea">
+                </asp:ChartArea>
+            </ChartAreas>
+        </asp:Chart>
+    </div>
 </div>
 <asp:HiddenField ID="hndDetailView" runat="server" />
 <AjaxControlToolkit:ModalPopupExtender ID="mpeDetailView" runat="server" TargetControlID="hndDetailView"
