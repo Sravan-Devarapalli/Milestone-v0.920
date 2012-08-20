@@ -81,6 +81,7 @@ namespace PraticeManagement
             public const string ConsultingCapacityFilterCookie = "ConsultingCapacityFilter";
             public const string ConsultingDemandFilterCookie = "ConsultingDemandFilter";
             public const string ByAccountReportFitlerCookie = "ByAccountReportFilter";
+            public const string Unassigned = "Unassigned";
         }
 
         /// <summary>
