@@ -114,7 +114,7 @@
                                     Person Status:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
-                                    <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" AllSelectedReturnType="AllItems"
+                                    <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Person Status"
                                         CssClass="NewHireReportCblTimeScales" />
@@ -139,7 +139,7 @@
                                     Pay Type:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
-                                    <pmc:ScrollingDropDown ID="cblTimeScales" runat="server" AllSelectedReturnType="AllItems"
+                                    <pmc:ScrollingDropDown ID="cblTimeScales" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Pay Type"
                                         CssClass="NewHireReportCblTimeScales" />
@@ -164,7 +164,7 @@
                                     Practices:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
-                                    <pmc:ScrollingDropDown ID="cblPractices" runat="server" AllSelectedReturnType="AllItems"
+                                    <pmc:ScrollingDropDown ID="cblPractices" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPractices','Practice Area')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area"
                                         CssClass="NewHireReportCblPractices" />
