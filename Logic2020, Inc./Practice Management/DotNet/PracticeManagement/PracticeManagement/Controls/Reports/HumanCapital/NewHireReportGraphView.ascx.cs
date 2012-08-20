@@ -47,9 +47,9 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         protected void chrtNewHireReport_Click(object sender, ImageMapEventArgs e)
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
-            
+
             lbTotalHires.Text = postBackDetails[1];
-            var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
+            var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
             bool isSeniority;
             Boolean.TryParse(postBackDetails[2], out isSeniority);
             if (isSeniority)
@@ -76,10 +76,21 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         public void PopulateGraph()
         {
-            List<Person>  data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PersonStatus, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
+            List<Person> data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
             HostingPage.PopulateHeaderSection(data);
-            SeniorityList = data.Select(p => p.Seniority).Distinct().ToList();
-            RecuriterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : null).Distinct().ToList();
+            SeniorityList = ServiceCallers.Custom.Person(p => p.ListSeniorities()).ToList();
+            RecuriterList = ServiceCallers.Custom.Person(p => p.GetRecruiterList(null, null)).ToList();
+            List<Seniority> _seniorityList = data.Select(p => p.Seniority != null ? p.Seniority : new Seniority { Id = 0, Name = "Unassigned" }).Distinct().ToList();
+            List<Person> _recurterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : new Person { FirstName = "Unassigned", Id = 0 }).Distinct().ToList();
+            if (_recurterList.Count > 0)
+            {
+                RecuriterList = RecuriterList.Concat(_recurterList).Distinct().ToList();
+            }
+            if (_seniorityList.Count > 0)
+            {
+                SeniorityList = SeniorityList.Concat(_seniorityList).Distinct().ToList();
+            }
+
             if (Seniorities == null)
                 Seniorities = new Dictionary<string, int>();
 
@@ -155,3 +166,4 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
     }
 }
+
