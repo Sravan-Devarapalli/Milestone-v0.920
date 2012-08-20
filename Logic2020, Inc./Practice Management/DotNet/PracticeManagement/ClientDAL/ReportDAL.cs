@@ -1754,20 +1754,29 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     var person = ReadBasicPersonDetails(reader, personIdIndex, firstNameIndex, lastNameIndex, personStatusIdIndex, personStatusNameIndex, timeScaleIndex, timescaleNameIndex);
-                    var recruiterCommission = new RecruiterCommission { Recruiter = new Person { Id = reader.GetInt32(recruiterIdIndex), FirstName = reader.GetString(recruiterFirstNameIndex), LastName = reader.GetString(recruiterLastNameIndex) } };
-
+                    
                     var recruiterList = new List<RecruiterCommission>();
-                    recruiterList.Add(recruiterCommission);
+                    if (!reader.IsDBNull(recruiterIdIndex))
+                    {
+                        var recruiterCommission = new RecruiterCommission { Recruiter = new Person { Id = reader.GetInt32(recruiterIdIndex), FirstName = reader.GetString(recruiterFirstNameIndex), LastName = reader.GetString(recruiterLastNameIndex) } };
+                        recruiterList.Add(recruiterCommission);
+                        person.RecruiterCommission = recruiterList;
+                    }
+                    person.RecruiterCommission = new List<RecruiterCommission>();
 
-                    person.RecruiterCommission = recruiterList;
-
-                    person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex), Name = reader.GetString(personSeniorityNameIndex) };
+                    if (!reader.IsDBNull(timeScaleIndex))
+                    {
+                        person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex), Name = reader.GetString(personSeniorityNameIndex) };
+                    }
+                    
                     if (!reader.IsDBNull(divisionIdIndex))
                     {
                         person.DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex);
                     }
+                    
                     person.HireDate = reader.GetDateTime(hireDateIndex);
-                    if (terminationDateIndex > -1)
+
+                    if (terminationDateIndex > -1 && !reader.IsDBNull(terminationDateIndex))
                     {
                         person.TerminationDate = reader.GetDateTime(terminationDateIndex);
                         person.TerminationReasonid = reader.GetInt32(terminationReasonIdIndex);
