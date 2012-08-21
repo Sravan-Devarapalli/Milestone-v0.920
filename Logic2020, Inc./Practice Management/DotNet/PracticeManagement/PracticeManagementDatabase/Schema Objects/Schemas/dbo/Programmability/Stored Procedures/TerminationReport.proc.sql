@@ -38,7 +38,7 @@ BEGIN
 	SELECT PH1.PersonId,
 			PH1.HireDate,
 			PH1.PersonStatusId,
-			PH1.TerminationDate ,
+			CASE WHEN ISNULL(PH1.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(PH1.TerminationDate,@FutureDate) END  AS TerminationDate,
 			PH1.TerminationReasonId ,
 			PH1.id,
 			PH1.DivisionId
@@ -77,10 +77,10 @@ BEGIN
 	INNER JOIN dbo.Person P ON FPH.PersonId = P.PersonId
 	INNER JOIN dbo.PersonStatus PS ON PS.PersonStatusId = FPH.PersonStatusId
 	INNER JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = FPH.TerminationReasonId
-	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND pa.EndDate >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
+	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
 	LEFT JOIN dbo.Timescale TS ON TS.TimescaleId = Pay.Timescale
 	LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
-	OUTER APPLY (SELECT TOP 1 RCH.* FROM dbo.RecruiterCommissionHistory RCH WHERE RCH.RecruitId = FPH.PersonId AND RCH.EndDate >= FPH.HireDate AND RCH.StartDate <= FPH.TerminationDate ORDER BY RCH.StartDate DESC ) RC
+	OUTER APPLY (SELECT TOP 1 RCH.* FROM dbo.RecruiterCommissionHistory RCH WHERE RCH.RecruitId = FPH.PersonId AND ISNULL(RCH.EndDate,@FutureDate) >= FPH.HireDate AND RCH.StartDate <= FPH.TerminationDate ORDER BY RCH.StartDate DESC ) RC
 	LEFT JOIN dbo.Person RCP ON RC.RecruiterId = RCP.PersonId
 	LEFT JOIN dbo.Seniority S ON S.[SeniorityId] = Pay.[SeniorityId]
 	WHERE	(
@@ -122,6 +122,11 @@ BEGIN
 				@RecruiterIds IS NULL
 				OR  ISNULL(RC.RecruiterId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@RecruiterIds))
 			)
+			AND
+			( 
+				@TerminationReasonIds IS NULL
+				OR TR.TerminationReasonId IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@TerminationReasonIds))
+			)
 			AND 
 			(
 				@ExcludeInternalPractices = 0 OR ( @ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0 )
@@ -153,7 +158,7 @@ BEGIN
 	SELECT PH1.PersonId,
 		PH1.HireDate,
 		PH1.PersonStatusId,
-		ISNULL(PH1.TerminationDate,@EndDate) AS TerminationDate,
+		CASE WHEN ISNULL(PH1.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(PH1.TerminationDate,@FutureDate) END  AS TerminationDate,
 		PH1.id,
 		PH1.DivisionId,
 		PH1.TerminationReasonId
@@ -174,8 +179,8 @@ BEGIN
 	INNER JOIN dbo.Calendar C ON C.Date = FPH.HireDate
 	INNER JOIN dbo.Calendar C1 ON C1.Date = FPH.TerminationDate
 	INNER JOIN dbo.Person P ON FPH.PersonId = P.PersonId
-	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND pa.EndDate >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
-	OUTER APPLY (SELECT TOP 1 RCH.* FROM dbo.RecruiterCommissionHistory RCH WHERE RCH.RecruitId = FPH.PersonId AND RCH.EndDate >= FPH.HireDate AND RCH.StartDate <= FPH.TerminationDate ORDER BY RCH.StartDate DESC ) RC
+	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
+	OUTER APPLY (SELECT TOP 1 RCH.* FROM dbo.RecruiterCommissionHistory RCH WHERE RCH.RecruitId = FPH.PersonId AND ISNULL(RCH.EndDate,@FutureDate) >= FPH.HireDate AND RCH.StartDate <= FPH.TerminationDate ORDER BY RCH.StartDate DESC ) RC
 	LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
 	WHERE	(
 				@PersonStatusIds IS NULL
