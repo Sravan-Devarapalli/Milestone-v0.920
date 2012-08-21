@@ -444,9 +444,9 @@ namespace PraticeManagement.Reporting
                 {
                     sb.Append(person.HtmlEncodedName);
                     sb.Append("\t");
-                    sb.Append(person.Seniority.Name);
+                    sb.Append(person.Seniority != null ? person.Seniority.Name : string .Empty);
                     sb.Append("\t");
-                    sb.Append(person.CurrentPay.TimescaleName);
+                    sb.Append(person.CurrentPay != null ? person.CurrentPay.TimescaleName :string.Empty );
                     sb.Append("\t");
                     sb.Append(GetDateFormat(person.HireDate));
                     sb.Append("\t");
