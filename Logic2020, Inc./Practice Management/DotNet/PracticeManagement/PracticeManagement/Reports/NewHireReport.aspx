@@ -84,7 +84,7 @@
                 <tr>
                     <td>
                     </td>
-                    <td class="ReportTdSecond" style="vertical-align:middle!important;">
+                    <td class="ReportTdSecond" style="vertical-align: middle!important;">
                         <table class="ReportParametersTable">
                             <tr>
                                 <td class="FirstTd20">
@@ -198,6 +198,11 @@
                     </td>
                 </tr>
                 <tr>
+                    <td colspan="3" class="Height30Px">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="3" class="ReportBorderBottom">
                     </td>
                 </tr>
@@ -231,7 +236,6 @@
                                 OnClick="btnCustDatesCancel_OnClick" />
                         </td>
                     </tr>
-                    
                 </table>
             </asp:Panel>
             <table class="PaddingTenPx TimePeriodSummaryReportHeader">
@@ -407,7 +411,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="tpSummary$btnExportToExcel" />
-             <asp:PostBackTrigger ControlID="tpGraph$tpSummary$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpGraph$tpSummary$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
