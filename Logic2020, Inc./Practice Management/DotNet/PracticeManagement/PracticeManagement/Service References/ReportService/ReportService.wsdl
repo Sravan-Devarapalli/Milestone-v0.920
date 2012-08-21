@@ -139,6 +139,12 @@
   <wsdl:message name="IReportService_TerminationReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:TerminationReportResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_TerminationReportGraph_InputMessage">
+    <wsdl:part name="parameters" element="tns:TerminationReportGraph" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TerminationReportGraph_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TerminationReportGraphResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
@@ -223,6 +229,10 @@
     <wsdl:operation name="TerminationReport">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TerminationReport" message="tns:IReportService_TerminationReport_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TerminationReportResponse" message="tns:IReportService_TerminationReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TerminationReportGraph">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TerminationReportGraph" message="tns:IReportService_TerminationReportGraph_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TerminationReportGraphResponse" message="tns:IReportService_TerminationReportGraph_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -409,6 +419,15 @@
     </wsdl:operation>
     <wsdl:operation name="TerminationReport">
       <soap:operation soapAction="http://tempuri.org/IReportService/TerminationReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TerminationReportGraph">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TerminationReportGraph" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
