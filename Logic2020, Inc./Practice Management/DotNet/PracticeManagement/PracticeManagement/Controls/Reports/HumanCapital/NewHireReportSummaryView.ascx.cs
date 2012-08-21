@@ -75,16 +75,18 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             string filterValue = btn.Attributes["FilterValue"];
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, null, false, null, null, null, null)).ToList();
+                var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
                 if (!string.IsNullOrEmpty(filterValue))
                 {
+                    filterValue = filterValue.Trim();
+                    bool isUnassigned = filterValue.Equals(Constants.FilterKeys.Unassigned);
                     if (isSeniority)
                     {
-                        data = data.Where(p => p.Seniority.Name == filterValue).ToList();
+                        data = data.Where(p => p.Seniority != null ? p.Seniority.Name == filterValue : isUnassigned).ToList();
                     }
                     else
                     {
-                        data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == filterValue : false).ToList();
+                        data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == filterValue : isUnassigned).ToList();
                     }
                 }
                 HostingPage.ExportToExcel(data);
