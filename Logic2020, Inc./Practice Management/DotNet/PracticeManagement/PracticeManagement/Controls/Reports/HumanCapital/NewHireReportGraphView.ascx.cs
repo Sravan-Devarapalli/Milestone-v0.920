@@ -84,12 +84,12 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 PopulateGraphAxisData(data);
                 LoadChartData(data);
                 divEmptyMessage.Style["display"] = "none";
-                chrtNewHireReportByRecruiter.Visible = chrtNewHireReportBySeniority.Visible = true;
+                NewHireReportChartDiv.Visible = true;
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
-                chrtNewHireReportByRecruiter.Visible = chrtNewHireReportBySeniority.Visible = false;
+                NewHireReportChartDiv.Visible = false;
             }
         }
 
@@ -141,12 +141,12 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void InitChart()
         {
-            chrtNewHireReportBySeniority.Width = Seniorities.Count * 80;
+            chrtNewHireReportBySeniority.Width = Seniorities.Count * 70;
             chrtNewHireReportBySeniority.Height = 500;
             InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Seniority", false);
             InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
 
-            chrtNewHireReportByRecruiter.Width = Recruiters.Count * 80;
+            chrtNewHireReportByRecruiter.Width = Recruiters.Count * 70;
             chrtNewHireReportByRecruiter.Height = 500;
             InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Recruiter", false);
             InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
@@ -158,11 +158,11 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             chrtNewHireReportBySeniority.Titles.Clear();
             chrtNewHireReportBySeniority.Titles.Add(string.Format("New Hires By Seniority {0}", HostingPage.GraphRange));
-            chrtNewHireReportBySeniority.Titles[0].Font = new Font("Arial", 18, FontStyle.Bold);
+            chrtNewHireReportBySeniority.Titles[0].Font = new Font("Arial", 16, FontStyle.Bold);
 
             chrtNewHireReportByRecruiter.Titles.Clear();
             chrtNewHireReportByRecruiter.Titles.Add(string.Format("New Hires By Recruiter {0}", HostingPage.GraphRange));
-            chrtNewHireReportByRecruiter.Titles[0].Font = new Font("Arial", 18, FontStyle.Bold);
+            chrtNewHireReportByRecruiter.Titles[0].Font = new Font("Arial", 16, FontStyle.Bold);
         }
 
         private void InitAxis(Axis horizAxis, string title, bool isVertical)
@@ -171,8 +171,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             if (!isVertical)
                 horizAxis.Interval = 1;
             horizAxis.TextOrientation = isVertical ? TextOrientation.Rotated270 : TextOrientation.Horizontal;
-            horizAxis.LabelStyle.Angle = 0;
-            horizAxis.TitleFont = new Font("Arial", 15, FontStyle.Bold);
+            horizAxis.LabelStyle.Angle = isVertical ? 0 : 45;
+            horizAxis.TitleFont = new Font("Arial", 14, FontStyle.Bold);
             horizAxis.ArrowStyle = AxisArrowStyle.None;
             horizAxis.MajorGrid.Enabled = false;
             horizAxis.ToolTip = horizAxis.Title = title;
