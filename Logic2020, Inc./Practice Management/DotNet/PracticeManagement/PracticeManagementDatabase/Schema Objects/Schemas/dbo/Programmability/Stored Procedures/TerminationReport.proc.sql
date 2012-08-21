@@ -44,7 +44,7 @@ BEGIN
 			PH1.DivisionId
 	FROM PersonHistoryWithRowNo  PH1
 	LEFT JOIN PersonHistoryWithRowNo PH2 ON PH1.PersonId = PH2.PersonId AND PH1.RowNumber + 1 = PH2.RowNumber
-	WHERE (PH1.PersonStatusId = 2 AND PH1.TerminationDate < PH2.HireDate)
+	WHERE PH1.PersonStatusId = 2  AND (PH2.PersonId IS NULL  OR  PH1.TerminationDate < PH2.HireDate)
 	),
 	FilteredPersonHistory
 	AS
