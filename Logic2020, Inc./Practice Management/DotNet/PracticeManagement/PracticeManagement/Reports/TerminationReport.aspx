@@ -137,7 +137,7 @@
                                     Seniority:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
-                                    <pmc:ScrollingDropDown ID="cblSeniorities" runat="server" AllSelectedReturnType="AllItems"
+                                    <pmc:ScrollingDropDown ID="cblSeniorities" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblSeniorities','Seniority')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Seniority"
                                         CssClass="NewHireReportCblTimeScales" />
@@ -162,10 +162,10 @@
                                     Termination Reason:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
-                                    <pmc:ScrollingDropDown ID="cblTerminationReasons" runat="server" AllSelectedReturnType="Null"
+                                    <pmc:ScrollingDropDown ID="cblTerminationReasons" runat="server" AllSelectedReturnType="AllItems"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblTerminationReasons','Termination Reason')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Termination Reason"
-                                        CssClass="NewHireReportCblTimeScales" />
+                                        CssClass="NewHireReportCblTimeScales Height160PxIMP" />
                                     <ext:ScrollableDropdownExtender ID="sdeTerminationReasons" runat="server" TargetControlID="cblTerminationReasons"
                                         BehaviorID="sdeTerminationReasons" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
                                         Width="250px">
@@ -343,7 +343,7 @@
                                                 </table>
                                                 <table class="tableFixed">
                                                     <tr>
-                                                        <td class="FontSize8PX">
+                                                        <td class="FontSize10PX">
                                                             W2-Salary
                                                         </td>
                                                     </tr>
@@ -371,7 +371,7 @@
                                                 </table>
                                                 <table class="tableFixed">
                                                     <tr>
-                                                        <td class="FontSize8PX">
+                                                        <td class="FontSize10PX">
                                                             W2-Hourly
                                                         </td>
                                                     </tr>
@@ -399,7 +399,7 @@
                                                 </table>
                                                 <table class="tableFixed">
                                                     <tr>
-                                                        <td class="FontSize8PX">
+                                                        <td class="FontSize10PX">
                                                             Contractors
                                                         </td>
                                                     </tr>
