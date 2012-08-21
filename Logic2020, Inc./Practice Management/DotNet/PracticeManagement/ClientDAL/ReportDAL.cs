@@ -1862,7 +1862,9 @@ namespace DataAccess
                     tpr.EndDate = reader.GetDateTime(endDateIndex);
                     tpr.ActivePersonsCountAtTheBeginning = reader.GetInt32(activePersonsAtTheBeginningIndex);
                     tpr.NewHiresCountInTheRange = reader.GetInt32(newHiredInTheRangeIndex);
-                    tpr.TerminationsCountInTheRange = reader.GetInt32(terminationsInTheRange); 
+                    tpr.TerminationsCountInTheRange = reader.GetInt32(terminationsInTheRange);
+
+                    result.Add(tpr);
                 }
             }
         }
