@@ -323,7 +323,7 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                //tpGraph.PopulateGraph();
+                tpGraph.PopulateGraph();
             }
         }
 
