@@ -49,7 +49,7 @@
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
     <HeaderTemplate>
         <div class="minheight250Px">
-            <table id="tblTerminationSummaryReport" class="tablesorter PersonSummaryReport WholeWidth zebra">
+            <table id="tblTerminationSummaryReport" class="tablesorter TerminationReport WholeWidth zebra">
                 <thead>
                     <tr class="TimeperiodSummaryReportTr">
                         <th class="ResourceColum">
@@ -60,9 +60,9 @@
                                 BehaviorID="pceDivision" PopupControlID="pnlDivision" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
-                        <th class="Width130pxImp">
+                        <th>
                             Seniority
-                            <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" class="FilterImg"
+                            <img alt="Filter" title="Seniority" src="../../../Images/search_filter.png" class="FilterImg"
                                 runat="server" id="imgSeniorityFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
                                 BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
@@ -70,7 +70,7 @@
                         </th>
                         <th class="Width110PxImp">
                             Pay Type
-                            <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" class="FilterImg"
+                            <img alt="Filter" title="Pay Type" src="../../../Images/search_filter.png" class="FilterImg"
                                 runat="server" id="imgPayTypeFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter"
                                 BehaviorID="pcePayTypeFilter" PopupControlID="pnlFilterPayType" Position="Bottom">
@@ -78,7 +78,7 @@
                         </th>
                         <th>
                             Status
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status"
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status" class="FilterImg"
                                 id="imgPersonStatusTypeFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
                                 TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
@@ -87,7 +87,7 @@
                         </th>
                         <th>
                             Recruiter
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter"
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter" class="FilterImg"
                                 id="imgRecruiterFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceRecruiterFilter" runat="server" TargetControlID="imgRecruiterFilter"
                                 BehaviorID="pceRecruiterFilter" PopupControlID="pnlFilterRecruiter" Position="Bottom">
@@ -95,24 +95,24 @@
                         </th>
                         <th>
                             Hire Date
-                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server"
+                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server" class="FilterImg"
                                 id="imgHiredateFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceHiredateFilter" runat="server" TargetControlID="imgHiredateFilter"
                                 BehaviorID="pceHiredateFilter" PopupControlID="pnlFilterHireDate" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
-                        <th>
+                        <th class="Width120PxImp">
                             Termination Date
-                            <img alt="Filter" src="../../../Images/search_filter.png" title="Terminaiton Date"
+                            <img alt="Filter" src="../../../Images/search_filter.png" title="Terminaiton Date" class="FilterImg"
                                 runat="server" id="imgTerminationdateFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceTerminationdateFilter" runat="server"
                                 TargetControlID="imgTerminationdateFilter" BehaviorID="pceTerminationdateFilter"
                                 PopupControlID="pnlFilterTerminationDate" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
-                        <th>
+                         <th class="Width160PxImp">
                             Termination Reason
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Termination Reason"
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Termination Reason" class="FilterImg"
                                 id="imgTerminationReasonFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceTermiantionReasonFilter" runat="server"
                                 TargetControlID="imgTerminationReasonFilter" BehaviorID="pceTermiantionReasonFilter"
