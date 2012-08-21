@@ -1844,6 +1844,54 @@ namespace DataAccess
                 }
             }
         }
+
+        private static void ReadTerminationPersonsInRange(SqlDataReader reader, List<TerminationPersonsInRange> result)
+        {
+            if (reader.HasRows)
+            {
+                int activePersonsAtTheBeginningIndex = reader.GetOrdinal(Constants.ColumnNames.ActivePersonsAtTheBeginning);
+                int newHiredInTheRangeIndex = reader.GetOrdinal(Constants.ColumnNames.NewHiredInTheRange);
+                int terminationsInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsInTheRange);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+
+                while (reader.Read())
+                {
+                    TerminationPersonsInRange tpr = new TerminationPersonsInRange();
+                    tpr.StartDate = reader.GetDateTime(startDateIndex);
+                    tpr.EndDate = reader.GetDateTime(endDateIndex);
+                    tpr.ActivePersonsCountAtTheBeginning = reader.GetInt32(activePersonsAtTheBeginningIndex);
+                    tpr.NewHiresCountInTheRange = reader.GetInt32(newHiredInTheRangeIndex);
+                    tpr.TerminationsCountInTheRange = reader.GetInt32(terminationsInTheRange); 
+                }
+            }
+        }
+
+        public static List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate, string payTypeIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TerminationReportGraph, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeScaleIdsParam, payTypeIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationReasonIdsParam, terminationReasonIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
+                List<TerminationPersonsInRange> result = new List<TerminationPersonsInRange>();
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var persons = new List<Person>();
+                    ReadTerminationPersonsInRange(reader, result);
+                    return result;
+                }
+            }
+        }
     }
 }
 
