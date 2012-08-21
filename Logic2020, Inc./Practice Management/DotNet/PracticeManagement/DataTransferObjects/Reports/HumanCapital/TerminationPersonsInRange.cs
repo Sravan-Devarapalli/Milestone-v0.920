@@ -11,10 +11,10 @@ namespace DataTransferObjects.Reports.HumanCapital
     public class TerminationPersonsInRange
     {
         [DataMember]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [DataMember]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [DataMember]
         public List<Person> PersonList { get; set; }
@@ -37,6 +37,14 @@ namespace DataTransferObjects.Reports.HumanCapital
                     return TerminationsCountInTheRange / (ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsCountInTheRange);
                 }
                 return 0;
+            }
+        }
+
+        public string Month
+        {
+            get
+            {
+                return StartDate.HasValue ? StartDate.Value.ToString("MMM yyyy") : string.Empty;
             }
         }
     }
