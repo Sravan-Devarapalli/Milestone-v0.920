@@ -94,7 +94,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void InitChart(int count)
         {
-            chrtTerminationAndAttritionLast12Months.Width = ((count < 4) ? 4 : count) * 80;
+            chrtTerminationAndAttritionLast12Months.Width = ((count < 4) ? 4 : count) * 70;
             chrtTerminationAndAttritionLast12Months.Height = 500;
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Terminations", true);
@@ -118,8 +118,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 chrtTerminationAndAttritionLast12Months.Titles.Add("Year To Date");
             }
 
-            chrtTerminationAndAttritionLast12Months.Titles[0].Font = new System.Drawing.Font("Arial", 18, FontStyle.Bold);
-            chrtTerminationAndAttritionLast12Months.Titles[1].Font = new System.Drawing.Font("Arial", 18, FontStyle.Bold);
+            chrtTerminationAndAttritionLast12Months.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
+            chrtTerminationAndAttritionLast12Months.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
         }
 
         private void InitAxis(Axis horizAxis, string title, bool isVertical)
@@ -128,8 +128,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             if (!isVertical)
                 horizAxis.Interval = 1;
             horizAxis.TextOrientation = isVertical ? TextOrientation.Rotated270 : TextOrientation.Horizontal;
-            horizAxis.LabelStyle.Angle = 0;
-            horizAxis.TitleFont = new System.Drawing.Font("Arial", 15, FontStyle.Bold);
+            horizAxis.LabelStyle.Angle = isVertical ? 0 : 45;
+            horizAxis.TitleFont = new System.Drawing.Font("Arial", 14, FontStyle.Bold);
             horizAxis.ArrowStyle = AxisArrowStyle.None;
             horizAxis.MajorGrid.Enabled = false;
             horizAxis.ToolTip = horizAxis.Title = title;
