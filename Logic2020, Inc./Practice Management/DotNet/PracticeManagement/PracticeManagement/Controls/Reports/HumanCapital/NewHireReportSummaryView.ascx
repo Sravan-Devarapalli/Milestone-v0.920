@@ -56,7 +56,7 @@
                         </th>
                         <th class="Width130pxImp">
                             Seniority
-                            <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" class="FilterImg"
+                            <img alt="Filter" title="Seniority" src="../../../Images/search_filter.png" class="FilterImg"
                                 runat="server" id="imgSeniorityFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
                                 BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
@@ -64,7 +64,7 @@
                         </th>
                         <th class="Width110PxImp">
                             Pay Type
-                            <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" class="FilterImg"
+                            <img alt="Filter" title="Pay Type" src="../../../Images/search_filter.png" class="FilterImg"
                                 runat="server" id="imgPayTypeFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pcePayTypeFilter" runat="server" TargetControlID="imgPayTypeFilter"
                                 BehaviorID="pcePayTypeFilter" PopupControlID="pnlFilterPayType" Position="Bottom">
