@@ -25,6 +25,6 @@
 	DivisionId			INT NULL,
 	TerminationReasonId	INT NULL,
 	CreatedDate			DATETIME NOT NULL,
-	CreatedBy			INT NOT NULL,
+	CreatedBy			INT NULL,
 	CONSTRAINT PK_PersonHistory PRIMARY KEY (Id)
 )
