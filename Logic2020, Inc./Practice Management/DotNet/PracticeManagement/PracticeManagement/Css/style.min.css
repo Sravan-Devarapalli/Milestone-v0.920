@@ -441,6 +441,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width110PxImp{width:110px!important}
 .Width115Px{width:115px}
 .Width120Px{width:120px}
+.Width120PxImp{width:120px!important}
 .Width125Px{width:125px}
 .Width130px{width:130px}
 .Width130pxImp{width:130px!important}
@@ -452,6 +453,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width155px{width:155px}
 .Width158px{width:158px}
 .Width160px{width:160px}
+.Width160PxImp{width:160px!important}
 .Width170Px{width:170px}
 .Width180Px{width:180px}
 .Width200Px,.lblOverheadsBenchCostTd{width:200px}
@@ -494,6 +496,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Height80Px{height:80px}
 .Height125PxImp{height:125px!important}
 .Height160Px{height:160px}
+.Height160PxIMP{height:160px!important}
 .minheight250Px{min-height:250px}
 .ModalPopUpSideHeading{width:30%;font-weight:700;text-align:right;padding-right:4px}
 .ModalPopUpDropDownPadding{padding-top:8px}
@@ -558,8 +561,8 @@ TABLE.PaddingTenPx td{padding:0 5px}
 .ReportHeaderBandNBGraph td{padding:0!important;text-align:center}
 .ReportHeaderBandNBGraph .billingGraph{background-color:#7FD13B;border:1px solid Gray}
 .ReportHeaderBandNBGraph .nonBillingGraph{background-color:#BEBEBE;border:1px solid Gray}
-TABLE.PersonSummaryReport TD{border-bottom:1px solid #000;text-align:center;height:24px;vertical-align:middle;padding:2px}
-TABLE.PersonSummaryReport TH{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
+TABLE.PersonSummaryReport TD,TABLE.TerminationReport TD{border-bottom:1px solid #000;text-align:center;height:24px;vertical-align:middle;padding:2px}
+TABLE.PersonSummaryReport TH,TABLE.TerminationReport TH{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
 .PersonSummaryReport .ResourceColum{text-align:left!important;width:210px!important}
 .PersonSummaryReport .ProjectColum{text-align:left!important;width:300px!important;background-color:White;padding-left:5px}
 .PersonSummaryReport .ResourceColum img{padding-left:2px}
@@ -865,7 +868,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .ReportBorderBottomHeight15Px{border-bottom:3px solid black;width:100%;height:15px}
 .ReportParametersTable{width:100%;text-align:center;vertical-align:top}
 .ReportParametersTable .FirstTd20{width:18%;text-align:right;font-weight:bold;vertical-align:top;padding-top:2px}
-.ReportParametersTable .FirstTd70{width:70%;text-align:right;font-weight:bold;vertical-align:top}
+.ReportParametersTable .FirstTd70{width:70%;text-align:right;font-weight:bold;vertical-align:top;padding-top:2px}
 .ReportParametersTable .FirstTd{width:30%;text-align:right;font-weight:bold}
 .ReportParametersTable .FirstTd40{width:40%;text-align:right;font-weight:bold}
 .ReportParametersTable .SecondTd,.ReportParametersTable .SecondTd157,.ReportParametersTable .SecondTd150,.ReportParametersTable .SecondTdNewHire{text-align:left!important}
@@ -1325,4 +1328,8 @@ table#ctl00_body_login tr td label{float:left}
 .NewHireGraphPopUpTable .SecondTd span{font-weight:bold;white-space:nowrap}
 .NewHireREportGraphDiv{overflow-y:scroll;max-height:300px}
 .NewHireREportGraphDiv .minheight250Px{min-height:10px!important}
-.NewHireGraphDiv{padding-top:5px;padding-bottom:5px}
+.NewHireGraphEmptyDiv{padding-top:5px;padding-bottom:5px}
+.NewHireReportChartDiv{overflow-x:auto;text-align:center;padding-top:5px;padding-bottom:5px}
+.TerminationReport .ResourceColum{text-align:left!important;width:190px!important}
+.TerminationReport .ResourceColum img{padding-left:2px}
+.TimeperiodSummaryReportTr th{width:100px}
