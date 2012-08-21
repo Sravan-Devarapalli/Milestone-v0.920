@@ -3320,7 +3320,7 @@ TD.CompanyDayOff, TH.CompanyDayOff, TD.WeekEndDayOn, TH.WeekEndDayOn
 {
     display: block;
 }
-TABLE.PersonSummaryReport, TABLE.TimePeriodByproject
+TABLE.PersonSummaryReport, TABLE.TimePeriodByproject ,TABLE.TerminationReport
 {
     border-left: 1px solid #000;
     border-right: 1px solid #000;
@@ -7205,3 +7205,4 @@ table#ctl00_body_login tr td label
 {
     width: 100px;
 }
+
