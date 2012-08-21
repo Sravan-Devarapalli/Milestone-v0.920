@@ -3,7 +3,7 @@
 <%@ Register Src="~/Controls/Reports/HumanCapital/NewHireReportSummaryView.ascx"
     TagPrefix="uc" TagName="SummaryView" %>
 <div class="BackGroundWhiteImp">
-    <div class="ConsultingDemandchartDiv">
+    <div class="NewHireReportChartDiv" id="NewHireReportChartDiv" runat="server">
         <asp:Chart ID="chrtNewHireReportByRecruiter" runat="server" OnClick="chrtNewHireReport_Click"
             EnableViewState="true">
             <Series>
@@ -17,6 +17,7 @@
                 </asp:ChartArea>
             </ChartAreas>
         </asp:Chart>
+        <br />
         <asp:Chart ID="chrtNewHireReportBySeniority" runat="server" OnClick="chrtNewHireReport_Click"
             EnableViewState="true" CssClass="PaddingTop75">
             <Series>
@@ -32,7 +33,8 @@
         </asp:Chart>
     </div>
 </div>
-<div id="divEmptyMessage" class="EmptyMessagediv NewHireGraphDiv" style="display: none;" runat="server">
+<div id="divEmptyMessage" class="EmptyMessagediv NewHireGraphEmptyDiv" style="display: none;"
+    runat="server">
     There are no Persons Hired for the selected range.
 </div>
 <asp:HiddenField ID="hndDetailView" runat="server" />
