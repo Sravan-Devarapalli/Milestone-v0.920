@@ -895,6 +895,7 @@
                 public const string AccountSummaryByBusinessDevelopment = "dbo.AccountSummaryByBusinessDevelopment";
                 public const string NewHireReport = "dbo.NewHireReport";
                 public const string TerminationReport = "dbo.TerminationReport";
+                public static string TerminationReportGraph = "dbo.TerminationReportGraph";
             }
             #endregion
 
