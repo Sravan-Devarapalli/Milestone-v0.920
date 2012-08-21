@@ -2,7 +2,7 @@
     Inherits="PraticeManagement.Controls.Reports.HumanCapital.NewHireGraphView" %>
 <%@ Register Src="~/Controls/Reports/HumanCapital/NewHireReportSummaryView.ascx"
     TagPrefix="uc" TagName="SummaryView" %>
-<div style="background-color: White !important;">
+<div class="BackGroundWhiteImp">
     <div class="ConsultingDemandchartDiv">
         <asp:Chart ID="chrtNewHireReportByRecruiter" runat="server" OnClick="chrtNewHireReport_Click"
             EnableViewState="true">
@@ -31,6 +31,9 @@
             </ChartAreas>
         </asp:Chart>
     </div>
+</div>
+<div id="divEmptyMessage" class="EmptyMessagediv NewHireGraphDiv" style="display: none;" runat="server">
+    There are no Persons Hired for the selected range.
 </div>
 <asp:HiddenField ID="hndDetailView" runat="server" />
 <AjaxControlToolkit:ModalPopupExtender ID="mpeDetailView" runat="server" TargetControlID="hndDetailView"
