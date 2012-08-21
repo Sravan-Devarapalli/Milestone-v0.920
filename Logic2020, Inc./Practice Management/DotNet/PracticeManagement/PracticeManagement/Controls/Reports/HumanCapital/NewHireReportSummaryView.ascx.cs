@@ -72,17 +72,20 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             var btn = sender as Button;
             bool isSeniority;
             Boolean.TryParse(btn.Attributes["IsSeniority"], out isSeniority);
-            var filterValue = btn.Attributes["FilterValue"];
+            string filterValue = btn.Attributes["FilterValue"];
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, null, false, null, null, null, null)).ToList();
-                if (isSeniority)
+                if (!string.IsNullOrEmpty(filterValue))
                 {
-                    data = data.Where(p => p.Seniority.Name == filterValue).ToList();
-                }
-                else
-                {
-                    data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == filterValue : false).ToList();
+                    if (isSeniority)
+                    {
+                        data = data.Where(p => p.Seniority.Name == filterValue).ToList();
+                    }
+                    else
+                    {
+                        data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == filterValue : false).ToList();
+                    }
                 }
                 HostingPage.ExportToExcel(data);
             }
@@ -230,7 +233,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateHireDateFilter(List<Person> reportData)
         {
-            var hireDateList = reportData.Select(r => new { Text = r.HireDate.ToString("MMM yyyy"), Value = r.HireDate.ToString("MM/01/yyyy") }).Distinct().ToList().OrderBy(s => s.Text);
+            var hireDateList = reportData.Select(r => new { Text = r.HireDate.ToString("MMM yyyy"), Value = r.HireDate.ToString("MM/01/yyyy"), orderby = r.HireDate.ToString("yyyy/MM") }).Distinct().ToList().OrderBy(s => s.orderby);
             DataHelper.FillListDefault(cblHireDate.CheckBoxListObject, "All Months ", hireDateList.ToArray(), false, "Value", "Text");
             cblHireDate.SelectAllItems(true);
         }
@@ -259,7 +262,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         private void PopulateRecruiterFilter(List<Person> reportData)
         {
             var recruiters = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonFirstLastName : Constants.FilterKeys.Unassigned, Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : 0 }).Distinct().ToList().OrderBy(t => t.Text);
-            DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter", recruiters.ToArray(), false, "Value", "Text");
+            DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter(s)", recruiters.ToArray(), false, "Value", "Text");
             cblRecruiter.SelectAllItems(true);
         }
 
