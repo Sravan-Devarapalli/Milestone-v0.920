@@ -79,8 +79,18 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             List<Person> data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
             HostingPage.PopulateHeaderSection(data);
-            PopulateGraphAxisData(data);
-            LoadChartData(data);
+            if (data.Count > 0)
+            {
+                PopulateGraphAxisData(data);
+                LoadChartData(data);
+                divEmptyMessage.Style["display"] = "none";
+                chrtNewHireReportByRecruiter.Visible = chrtNewHireReportBySeniority.Visible = true;
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+                chrtNewHireReportByRecruiter.Visible = chrtNewHireReportBySeniority.Visible = false;
+            }
         }
 
         private void PopulateGraphAxisData(List<Person> data)
