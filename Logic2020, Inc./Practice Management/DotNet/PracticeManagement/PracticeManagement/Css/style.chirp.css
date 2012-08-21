@@ -2275,6 +2275,10 @@ TABLE.Section td
 {
     width: 120px;
 }
+.Width120PxImp
+{
+    width: 120px !important;
+}
 .Width125Px
 {
     width: 125px;
@@ -2318,6 +2322,10 @@ TABLE.Section td
 .Width160px
 {
     width: 160px;
+}
+.Width160PxImp
+{
+    width:160px !important;    
 }
 .Width170Px
 {
@@ -2487,6 +2495,10 @@ TABLE.Section td
 .Height160Px
 {
     height: 160px;
+}
+.Height160PxIMP
+{
+    height: 160px !important;
 }
 .minheight250Px
 {
@@ -2804,7 +2816,7 @@ TABLE.PaddingTenPx td
     background-color: #BEBEBE;
     border: 1px solid Gray;
 }
-TABLE.PersonSummaryReport TD
+TABLE.PersonSummaryReport TD ,TABLE.TerminationReport TD
 {
     border-bottom: 1px solid #000;
     text-align: center;
@@ -2812,7 +2824,7 @@ TABLE.PersonSummaryReport TD
     vertical-align: middle;
     padding: 2px;
 }
-TABLE.PersonSummaryReport TH
+TABLE.PersonSummaryReport TH , TABLE.TerminationReport TH
 {
     border-bottom: 1px solid #000;
     border-top: 1px solid #000;
@@ -4555,6 +4567,7 @@ BenchCosts.ascx*/
     text-align: right;
     font-weight: bold;
     vertical-align: top;
+     padding-top: 2px;
 }
 .ReportParametersTable .FirstTd
 {
@@ -7166,9 +7179,29 @@ table#ctl00_body_login tr td label
 {
     min-height: 10px !important;
 }
-.NewHireGraphDiv
+.NewHireGraphEmptyDiv
 {
     padding-top: 5px;
     padding-bottom: 5px;
 }
+.NewHireReportChartDiv
+{
+    overflow-x: auto;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 
+.TerminationReport .ResourceColum
+{
+    text-align: left !important;
+    width: 190px !important;
+}
+.TerminationReport .ResourceColum img
+{
+    padding-left: 2px;
+}
+.TimeperiodSummaryReportTr th
+{
+    width: 100px;
+}
