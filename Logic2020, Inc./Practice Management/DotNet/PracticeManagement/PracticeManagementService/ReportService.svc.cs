@@ -137,6 +137,11 @@ namespace PracticeManagementService
             return ReportDAL.TerminationReport(startDate, endDate, payTypeIds, personStatusIds, seniorityIds, terminationReasonIds, practiceIds, excludeInternalPractices, personDivisionIds, recruiterIds, hireDates, terminationDates);
         }
 
+        public List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate, string payTypeIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices)
+        { 
+            return TerminationReportGraph(startDate, endDate,payTypeIds, seniorityIds, terminationReasonIds, practiceIds, excludeInternalPractices);
+        }
+
     }
 }
 
