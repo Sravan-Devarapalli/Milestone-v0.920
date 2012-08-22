@@ -180,7 +180,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             ImgTerminationDateFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTerminationDate.FilterPopupClientID,
              cblTerminationDate.SelectedIndexes, cblTerminationDate.CheckBoxListObject.ClientID, cblTerminationDate.WaterMarkTextBoxBehaviorID);
 
-            ImgTerminationReasonFilter.Attributes["onclick"] = string.Format("ClickHiddenImg({4});Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTerminationReason.FilterPopupClientID,
+            ImgTerminationReasonFilter.Attributes["onclick"] = string.Format("ClickHiddenImg(\'{4}\');Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTerminationReason.FilterPopupClientID,
              cblTerminationReason.SelectedIndexes, cblTerminationReason.CheckBoxListObject.ClientID, cblTerminationReason.WaterMarkTextBoxBehaviorID, ImgTerminationReasonFilterHidden.ClientID);
         }
 
