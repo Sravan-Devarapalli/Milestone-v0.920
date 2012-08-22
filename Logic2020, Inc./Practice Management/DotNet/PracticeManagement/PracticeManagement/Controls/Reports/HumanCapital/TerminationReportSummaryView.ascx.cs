@@ -34,6 +34,10 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private Label ImgTerminationReasonFilterHidden { get; set; }
 
+        public Button BtnExportToExcelButton { get { return btnExportToExcel; } }
+
+        public TerminationPersonsInRange PopUpFilteredPerson { get; set; }
+
         private PraticeManagement.Reporting.TerminationReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TerminationReport)Page); }
@@ -62,8 +66,6 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 return cblTerminationReason.SelectedItemsXmlFormat != null ? cblTerminationReason.SelectedItemsXmlFormat : HostingPage.TerminationReasons;
             }
         }
-
-
 
         #endregion
 
@@ -112,22 +114,41 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             return date.ToString(Constants.Formatting.EntryDateFormat);
         }
-        public void PopulateData()
+        public void PopulateData(bool isPopUp = false)
         {
             TerminationPersonsInRange data;
-            if (HostingPage.SetSelectedFilters)
+            if (!isPopUp)
             {
-                data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
-                PopulateFilterPanels(data.PersonList);
+                if (HostingPage.SetSelectedFilters)
+                {
+                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
+                    PopulateFilterPanels(data.PersonList);
+                }
+                else
+                {
+                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, PayTypes, cblPersonStatusType.SelectedItemsXmlFormat, Seniorities, TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblTerminationDate.SelectedItemsXmlFormat));
+                }
             }
             else
             {
-                data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, PayTypes, cblPersonStatusType.SelectedItemsXmlFormat, Seniorities, TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblTerminationDate.SelectedItemsXmlFormat));
+                data = PopUpFilteredPerson;
             }
-            DataBindResource(data);
+            DataBindResource(data, isPopUp);
         }
 
-        public void DataBindResource(TerminationPersonsInRange reportData)
+        private void RemoveFilters()
+        {
+            ImgSeniorityFilter.Visible =
+            ImgPayTypeFilter.Visible =
+            ImgHiredateFilter.Visible =
+            ImgDivisionFilter.Visible =
+            ImgPersonStatusTypeFilter.Visible =
+            ImgRecruiterFilter.Visible =
+            ImgTerminationDateFilter.Visible =
+            ImgTerminationReasonFilter.Visible = false;
+        }
+
+        public void DataBindResource(TerminationPersonsInRange reportData, bool isPopUp)
         {
             var reportDataList = reportData.PersonList.ToList();
             if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1 || cblTerminationDate.Items.Count > 1 || cblTerminationReason.Items.Count > 1)
@@ -137,7 +158,14 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
-                SetAttribitesForFiltersImages();
+                if (!isPopUp)
+                {
+                    SetAttribitesForFiltersImages();
+                }
+                else
+                {
+                    RemoveFilters();
+                }
             }
             else
             {
@@ -145,7 +173,10 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 btnExportToExcel.Enabled = 
                 repResource.Visible = false;
             }
-            HostingPage.PopulateHeaderSection(reportData);
+            if (!isPopUp)
+            {
+                HostingPage.PopulateHeaderSection(reportData);
+            }
         }
 
         private void SetAttribitesForFiltersImages()
