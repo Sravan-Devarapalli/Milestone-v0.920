@@ -78,8 +78,8 @@
                         </th>
                         <th>
                             Status
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status" class="FilterImg"
-                                id="imgPersonStatusTypeFilter" />
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status"
+                                class="FilterImg" id="imgPersonStatusTypeFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
                                 TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
                                 PopupControlID="pnlFilterPersonStatusType" Position="Bottom">
@@ -87,35 +87,37 @@
                         </th>
                         <th>
                             Recruiter
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter" class="FilterImg"
-                                id="imgRecruiterFilter" />
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter"
+                                class="FilterImg" id="imgRecruiterFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceRecruiterFilter" runat="server" TargetControlID="imgRecruiterFilter"
                                 BehaviorID="pceRecruiterFilter" PopupControlID="pnlFilterRecruiter" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th>
                             Hire Date
-                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server" class="FilterImg"
-                                id="imgHiredateFilter" />
+                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server"
+                                class="FilterImg" id="imgHiredateFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceHiredateFilter" runat="server" TargetControlID="imgHiredateFilter"
                                 BehaviorID="pceHiredateFilter" PopupControlID="pnlFilterHireDate" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th class="Width120PxImp">
                             Termination Date
-                            <img alt="Filter" src="../../../Images/search_filter.png" title="Terminaiton Date" class="FilterImg"
-                                runat="server" id="imgTerminationdateFilter" />
+                            <img alt="Filter" src="../../../Images/search_filter.png" title="Terminaiton Date"
+                                class="FilterImg" runat="server" id="imgTerminationdateFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceTerminationdateFilter" runat="server"
                                 TargetControlID="imgTerminationdateFilter" BehaviorID="pceTerminationdateFilter"
                                 PopupControlID="pnlFilterTerminationDate" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
-                         <th class="Width160PxImp">
+                        <th class="Width160PxImp">
+                            <asp:Label runat="server" Style="width: 20px; height: 16px; padding-bottom: 3px;"
+                                ID="imgTerminationReasonFilterHidden"> &nbsp;</asp:Label>
                             Termination Reason
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Termination Reason" class="FilterImg"
-                                id="imgTerminationReasonFilter" />
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Termination Reason"
+                                class="FilterImg" id="imgTerminationReasonFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceTermiantionReasonFilter" runat="server"
-                                TargetControlID="imgTerminationReasonFilter" BehaviorID="pceTermiantionReasonFilter"
+                                TargetControlID="imgTerminationReasonFilterHidden" BehaviorID="pceTermiantionReasonFilter"
                                 PopupControlID="pnlFilterTerminationReason" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
@@ -147,7 +149,7 @@
                 <%# GetDateFormat((DateTime)Eval("TerminationDate"))%>
             </td>
             <td>
-            <%# Eval("TerminationReason")%>  
+                <%# Eval("TerminationReason")%>
             </td>
         </tr>
     </ItemTemplate>
