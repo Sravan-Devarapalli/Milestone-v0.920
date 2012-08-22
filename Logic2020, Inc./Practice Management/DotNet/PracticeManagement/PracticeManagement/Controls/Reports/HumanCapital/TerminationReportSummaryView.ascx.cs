@@ -32,6 +32,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private HtmlImage ImgTerminationReasonFilter { get; set; }
 
+        private Label ImgTerminationReasonFilterHidden { get; set; }
+
         private PraticeManagement.Reporting.TerminationReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TerminationReport)Page); }
@@ -93,6 +95,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 ImgRecruiterFilter = e.Item.FindControl("imgRecruiterFilter") as HtmlImage;
                 ImgTerminationDateFilter = e.Item.FindControl("imgTerminationdateFilter") as HtmlImage;
                 ImgTerminationReasonFilter = e.Item.FindControl("imgTerminationReasonFilter") as HtmlImage;
+                ImgTerminationReasonFilterHidden = e.Item.FindControl("ImgTerminationReasonFilterHidden") as Label;
             }
         }
 
@@ -174,11 +177,11 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             ImgRecruiterFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblRecruiter.FilterPopupClientID,
               cblRecruiter.SelectedIndexes, cblRecruiter.CheckBoxListObject.ClientID, cblRecruiter.WaterMarkTextBoxBehaviorID);
 
-            ImgRecruiterFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTerminationDate.FilterPopupClientID,
+            ImgTerminationDateFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTerminationDate.FilterPopupClientID,
              cblTerminationDate.SelectedIndexes, cblTerminationDate.CheckBoxListObject.ClientID, cblTerminationDate.WaterMarkTextBoxBehaviorID);
 
-            ImgRecruiterFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTerminationReason.FilterPopupClientID,
-             cblTerminationReason.SelectedIndexes, cblTerminationReason.CheckBoxListObject.ClientID, cblTerminationReason.WaterMarkTextBoxBehaviorID);
+            ImgTerminationReasonFilter.Attributes["onclick"] = string.Format("ClickHiddenImg({4});Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTerminationReason.FilterPopupClientID,
+             cblTerminationReason.SelectedIndexes, cblTerminationReason.CheckBoxListObject.ClientID, cblTerminationReason.WaterMarkTextBoxBehaviorID, ImgTerminationReasonFilterHidden.ClientID);
         }
 
         private void PopulateFilterPanels(List<Person> reportData)
@@ -257,3 +260,4 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         #endregion
     }
 }
+
