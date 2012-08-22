@@ -124,11 +124,11 @@ namespace PraticeManagement.Reporting
                 {
                     switch (RangeSelected)
                     {
-                        case 1:                           
-                        case 2:                            
-                        case 3:                           
-                        case 4:                           
-                        case 5:  
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
                             range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
                             break;
                         case 6:
@@ -210,23 +210,23 @@ namespace PraticeManagement.Reporting
 
                 }
                 if (this.cblSeniorities != null && this.cblSeniorities.Items.Count == 0)
-                {                   
+                {
                     DataHelper.FillSenioritiesList(this.cblSeniorities, "All Seniorities");
                 }
                 if (this.cblTerminationReasons != null && this.cblTerminationReasons.Items.Count == 0)
-                {                   
+                {
                     DataHelper.FillTerminationReasonsList(this.cblTerminationReasons, "All Reasons");
                 }
                 if (this.cblPractices != null && this.cblPractices.Items.Count == 0)
                 {
                     DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
-                }              
+                }
                 SetDefalultfilter();
-                LoadActiveView(); 
+                LoadActiveView();
             }
         }
         protected void Page_PreRender(object sender, EventArgs e)
-        {            
+        {
             diRange.FromDate = StartDate;
             diRange.ToDate = EndDate;
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
@@ -246,7 +246,7 @@ namespace PraticeManagement.Reporting
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
         }
-     
+
         #endregion
 
         #region Methods
@@ -258,7 +258,7 @@ namespace PraticeManagement.Reporting
             SelectAllItems(this.cblPractices);
             SelectAllItems(this.cblSeniorities);
             SelectAllItems(this.cblTerminationReasons);
-            SelectDefaultTimeScaleItems(this.cblTimeScales);            
+            SelectDefaultTimeScaleItems(this.cblTimeScales);
         }
 
         private void SelectAllItems(ScrollingDropDown ddlItems)
@@ -301,13 +301,17 @@ namespace PraticeManagement.Reporting
 
             ltPersonCount.Text = reportData.PersonList.Count + " Terminations";
             lbRange.Text = Range;
-            ltrlAttrition.Text = reportData.Attrition.ToString() + "%";
+            lblAttrition.Text = lblPopUpArrition.Text = reportData.Attrition.ToString() + "%";
             ltrlTotalEmployees.Text = (w2SalaryCount + w2HourlyCount).ToString();
             ltrlTotalContractors.Text = contractorCount.ToString();
 
             ltrlW2SalaryCount.Text = w2SalaryCount.ToString();
             ltrlW2HourlyCount.Text = w2HourlyCount.ToString();
             ltrlContractorsCount.Text = contractorCount.ToString();
+
+            lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = reportData.PersonList.Count.ToString();
+            lblPopUPActivensCount.Text = lblPopUPActivens.Text = reportData.ActivePersonsCountAtTheBeginning.ToString();
+            lblPopUPNewHiresCount.Text = lblPopUPNewHires.Text = reportData.NewHiresCountInTheRange.ToString();
 
             populateGraph(w2SalaryCount, percentageList[0], ltrlW2SalaryCount, trW2Salary);
             populateGraph(w2HourlyCount, percentageList[1], ltrlW2HourlyCount, trW2Hourly);
@@ -340,7 +344,7 @@ namespace PraticeManagement.Reporting
             SetCssClassEmpty();
 
             ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
-        } 
+        }
 
         private void SetCssClassEmpty()
         {
@@ -355,7 +359,7 @@ namespace PraticeManagement.Reporting
         {
             return date.ToString(Constants.Formatting.EntryDateFormat);
         }
-        
+
 
         #endregion
 
@@ -411,7 +415,7 @@ namespace PraticeManagement.Reporting
         {
             if (StartDate.HasValue && EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.TerminationReport(StartDate.Value, EndDate.Value, null, null, null,null,null, false, null, null, null, null)).PersonList;
+                var data = ServiceCallers.Custom.Report(r => r.TerminationReport(StartDate.Value, EndDate.Value, null, null, null, null, null, false, null, null, null, null)).PersonList;
 
                 DataHelper.InsertExportActivityLogMessage(TerminationReportExport);
                 StringBuilder sb = new StringBuilder();
@@ -434,7 +438,7 @@ namespace PraticeManagement.Reporting
                     sb.Append("Seniority");
                     sb.Append("\t");
                     sb.Append("Pay Types");
-                    sb.Append("\t");                    
+                    sb.Append("\t");
                     sb.Append("Status");
                     sb.Append("\t");
                     sb.Append("Recruiter");
@@ -455,7 +459,7 @@ namespace PraticeManagement.Reporting
                         sb.Append(person.Seniority.Name);
                         sb.Append("\t");
                         sb.Append(person.CurrentPay.TimescaleName);
-                        sb.Append("\t");                       
+                        sb.Append("\t");
                         sb.Append(person.Status.Name);
                         sb.Append("\t");
                         sb.Append(person.RecruiterCommission.Count > 0 ? person.RecruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty);
@@ -482,3 +486,4 @@ namespace PraticeManagement.Reporting
         #endregion
     }
 }
+
