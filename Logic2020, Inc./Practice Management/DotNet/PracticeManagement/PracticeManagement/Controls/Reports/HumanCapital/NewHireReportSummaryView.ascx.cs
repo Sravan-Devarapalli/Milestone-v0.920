@@ -215,7 +215,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             ImgPersonStatusTypeFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblPersonStatusType.FilterPopupClientID,
                cblPersonStatusType.SelectedIndexes, cblPersonStatusType.CheckBoxListObject.ClientID, cblPersonStatusType.WaterMarkTextBoxBehaviorID);
 
-            ImgRecruiterFilter.Attributes["onclick"] = string.Format("ClickHiddenImg({4});Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblRecruiter.FilterPopupClientID,
+            ImgRecruiterFilter.Attributes["onclick"] = string.Format("ClickHiddenImg(\'{4}\');Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblRecruiter.FilterPopupClientID,
               cblRecruiter.SelectedIndexes, cblRecruiter.CheckBoxListObject.ClientID, cblRecruiter.WaterMarkTextBoxBehaviorID, ImgRecruiterFilterHidden.ClientID);
         }
 
