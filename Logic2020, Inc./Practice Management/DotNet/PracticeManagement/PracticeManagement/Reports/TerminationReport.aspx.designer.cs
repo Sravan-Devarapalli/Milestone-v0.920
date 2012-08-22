@@ -271,7 +271,7 @@ namespace PraticeManagement.Reporting {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgAttritionHint;
+        protected global::System.Web.UI.WebControls.Image imgAttritionHint;
         
         /// <summary>
         /// attritionHelp control.
