@@ -39,7 +39,10 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         #region Methods
 
-
+        /// <summary>
+        /// Changes link button's text when clicks on it.
+        /// </summary>  
+        
         protected void hlnkGraph_Click(object sender, EventArgs e)
         {
             if (hlnkGraph.Text == SeeYearToDate)
@@ -53,18 +56,28 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             PopulateGraph();
         }
 
+        /// <summary>
+        /// Opens modal window with the specific details When user clicks on bar.
+        /// </summary> 
         protected void chrtTerminationAndAttritionLast12Months_Click(object sender, ImageMapEventArgs e)
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
-
+            string selectedValue = postBackDetails[0].Trim();
             lbTotalTerminations.Text = postBackDetails[1];
             var startDate = Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0]));
             var endDate = Utils.Calendar.MonthEndDate(Convert.ToDateTime(postBackDetails[0]));
-            List<Person> data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).PersonList;
+            TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
             lbName.Text = "Month : " + postBackDetails[0];
+
+            tpSummary.BtnExportToExcelButton.Attributes["FilterValue"] = selectedValue;            
+            tpSummary.PopUpFilteredPerson = data;
+            tpSummary.PopulateData(true);
             mpeDetailView.Show();
         }
 
+        /// <summary>
+        /// populates the graph with the specific data.
+        /// </summary>
         public void PopulateGraph()
         {
             var now = Utils.Generic.GetNowWithTimeZone();
@@ -81,10 +94,15 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             }
             endDate = Utils.Calendar.LastMonthEndDate(now);
             terminationPersonInRange = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(startDate, endDate, HostingPage.PayTypes, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects)).ToList();
-            //HostingPage.PopulateHeaderSection(terminationPersonInRange);
-
+           
+            TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
+            HostingPage.PopulateHeaderSection(data);
             LoadChartData(terminationPersonInRange);
         }
+
+        /// <summary>
+        /// Loads the chart with the data.
+        /// </summary>
         private void LoadChartData(List<TerminationPersonsInRange> data)
         {
             InitChart(data.Count);
@@ -92,9 +110,12 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             chrtTerminationAndAttritionLast12Months.DataBind();
         }
 
+        /// <summary>
+        /// Initiates the chart's axises.
+        /// </summary>
         private void InitChart(int count)
         {
-            chrtTerminationAndAttritionLast12Months.Width = ((count < 4) ? 4 : count) * 70;
+            chrtTerminationAndAttritionLast12Months.Width = ((count < 4) ? 4 : count) * 85;
             chrtTerminationAndAttritionLast12Months.Height = 500;
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Terminations", true);
@@ -104,6 +125,9 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             UpdateChartTitle();
         }
 
+        /// <summary>
+        /// Updates the title of graph depends on link button's text.
+        /// </summary>
         private void UpdateChartTitle()
         {
             chrtTerminationAndAttritionLast12Months.Titles.Clear();
@@ -118,10 +142,13 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 chrtTerminationAndAttritionLast12Months.Titles.Add("Year To Date");
             }
 
-            chrtTerminationAndAttritionLast12Months.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
-            chrtTerminationAndAttritionLast12Months.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
+            chrtTerminationAndAttritionLast12Months.Titles[0].Font = new System.Drawing.Font("Arial", 18, FontStyle.Bold);
+            chrtTerminationAndAttritionLast12Months.Titles[1].Font = new System.Drawing.Font("Arial", 18, FontStyle.Bold);
         }
 
+        /// <summary>
+        /// Intiates axis's style.
+        /// </summary
         private void InitAxis(Axis horizAxis, string title, bool isVertical)
         {
             horizAxis.IsStartedFromZero = true;
@@ -139,3 +166,4 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         #endregion
     }
 }
+
