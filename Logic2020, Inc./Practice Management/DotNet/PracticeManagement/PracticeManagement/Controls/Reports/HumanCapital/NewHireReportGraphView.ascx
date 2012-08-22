@@ -8,7 +8,7 @@
             EnableViewState="true">
             <Series>
                 <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                    Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY New Hires"
+                   YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY New Hires"
                     XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
                 </asp:Series>
             </Series>
@@ -22,7 +22,7 @@
             EnableViewState="true" CssClass="PaddingTop75">
             <Series>
                 <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                    Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,True" ToolTip="#VALY New Hires"
+                   YValueType="Int32" PostBackValue="#VALX,#VALY,True" ToolTip="#VALY New Hires"
                     XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
                 </asp:Series>
             </Series>
