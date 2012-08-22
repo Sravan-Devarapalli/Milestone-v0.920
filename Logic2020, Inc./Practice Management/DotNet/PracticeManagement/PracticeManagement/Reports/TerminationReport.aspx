@@ -37,11 +37,27 @@
                     sortList: [[0, 0]]
                 }
                 );
-            }
-            function ClickHiddenImg(imgId) {
-                var img = document.getElementById(imgId);
-                img.click();
-            }
+        }
+        function ClickHiddenImg(imgId) {
+            var img = document.getElementById(imgId);
+            img.click();
+        }
+
+        function ShowPanel() {
+            var obj = $('#<%= lblAttrition.ClientID %>');
+            var displayPanel = $('#<%= pnlAtrritionCalculation.ClientID %>');
+            iptop = obj.offset().top + obj[0].offsetHeight;
+            ipleft = obj.offset().left;
+            displayPanel.offset({ top: iptop, left: ipleft });
+            displayPanel.show();
+            displayPanel.offset({ top: iptop, left: ipleft });
+        }
+
+        function HidePanel() {
+
+            var displayPanel = $('#<%= pnlAtrritionCalculation.ClientID %>');
+            displayPanel.hide();
+        }
     </script>
     <uc:HumanCapitalReportsHeader ID="humanCapitalReportsHeader" runat="server"></uc:HumanCapitalReportsHeader>
     <br />
@@ -288,15 +304,85 @@
                                         </tr>
                                         <tr>
                                             <td class="SecondTd">
-                                                <asp:Literal ID="ltrlAttrition" runat="server"></asp:Literal>
-                                                <asp:Image alt="Filter" src="../Images/hint.png" runat="server" ID="imgAttritionHint" />
-                                                <AjaxControlToolkit:ModalPopupExtender ID="attritionHelp" runat="server" TargetControlID="imgAttritionHint"
-                                                    BehaviorID="attritionHelp" PopupControlID="pnlAttrition" BackgroundCssClass="modalBackground"
-                                                    DropShadow="false" CancelControlID="btnCloseAttrition">
-                                                </AjaxControlToolkit:ModalPopupExtender>
+                                                <asp:Label ID="lblAttrition" runat="server" onmouseover="ShowPanel();" onmouseout="HidePanel();"></asp:Label>
+                                                <asp:Image alt="Filter" ImageUrl="~/Images/hint.png" runat="server" ID="imgAttritionHint"
+                                                    CssClass="CursorPointer" />
+                                                <AjaxControlToolkit:PopupControlExtender ID="attritionHelp" runat="server" TargetControlID="imgAttritionHint"
+                                                    BehaviorID="attritionHelp" PopupControlID="pnlAttrition" Position="Bottom">
+                                                </AjaxControlToolkit:PopupControlExtender>
                                             </td>
                                         </tr>
                                     </table>
+                                    <asp:Panel ID="pnlAtrritionCalculation" CssClass="pnlAttritionCalculation" runat="server"
+                                        Style="display: none;">
+                                        <table class="tblAttritionCalculation">
+                                            <tr>
+                                                <th class="Width50Percent PaddingBottom5Imp">
+                                                    Variables
+                                                </th>
+                                                <th class="Width3Percent PaddingBottom5Imp">
+                                                </th>
+                                                <th class="Width25Percent PaddingBottom5Imp">
+                                                    Calculation
+                                                </th>
+                                                <th class="Width2Percent PaddingBottom5Imp">
+                                                </th>
+                                                <th class="Width20Percent PaddingBottom5Imp">
+                                                    Attrition %
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td class="Width50Percent TextAlignLeft">
+                                                    # of employee terminations during specified period:
+                                                </td>
+                                                <td class="Width3Percent TextAlignCenter vMiddle">
+                                                    <asp:Label ID="lblPopUPTerminations" runat="server"></asp:Label>
+                                                </td>
+                                                <td class="Width25Percent">
+                                                </td>
+                                                <td class="Width2Percent">
+                                                </td>
+                                                <td class="Width20Percent">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="Width50Percent TextAlignLeft">
+                                                    # of active employees at beginning of specified period:
+                                                </td>
+                                                <td class="Width3Percent TextAlignCenter vMiddle">
+                                                    <asp:Label ID="lblPopUPActivens" runat="server"></asp:Label>
+                                                </td>
+                                                <td class="Width25Percent TextAlignCenter">
+                                                    <asp:Label ID="lblPopUPTerminationsCount" runat="server"></asp:Label><br />
+                                                    <hr class="hrArritionCalculation" />
+                                                    <asp:Label ID="lblPopUPActivensCount" runat="server"></asp:Label>
+                                                    +
+                                                    <asp:Label ID="lblPopUPNewHiresCount" runat="server"></asp:Label>-
+                                                    <asp:Label ID="lblPopUPTerminationsCountDenominator" runat="server"></asp:Label>
+                                                </td>
+                                                <td class="Width2Percent TextAlignCenter">
+                                                    =
+                                                </td>
+                                                <td class="Width20Percent TextAlignCenter">
+                                                    <asp:Label ID="lblPopUpArrition" runat="server"></asp:Label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="Width50Percent TextAlignLeft">
+                                                    # of new hires during specified period:
+                                                </td>
+                                                <td class="Width3Percent TextAlignCenter vMiddle">
+                                                    <asp:Label ID="lblPopUPNewHires" runat="server"></asp:Label>
+                                                </td>
+                                                <td class="Width25Percent">
+                                                </td>
+                                                <td class="Width2Percent">
+                                                </td>
+                                                <td class="Width20Percent">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </asp:Panel>
                                 </td>
                                 <td class="Width20Percent">
                                     <table class="ReportHeaderTotalsTable">
@@ -452,15 +538,11 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="tpSummary$btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="tpGraph$tpSummary$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
-    <asp:Panel ID="pnlAttrition" runat="server" Style="display: none;" CssClass="popUpAttrition">
-        <table>
-            <tr>
-                <td class="AlignRight" colspan="3">
-                    <asp:Button ID="btnCloseAttrition" runat="server" CssClass="mini-report-close" Text="x" />
-                </td>
-            </tr>
+    <asp:Panel ID="pnlAttrition" runat="server" CssClass="popUpAttrition" style="display: none;">
+        <table>           
             <tr>
                 <td class="Width20Percent">
                 </td>
@@ -477,7 +559,7 @@
                 <td class="Width2Percent">
                 </td>
                 <td class="Width78Percent textCenter">
-                    <hr width="100%" style="height: 2px; background-color: Black;" />
+                    <hr class="WholeWidth hrArrition" />
                 </td>
             </tr>
             <tr>
