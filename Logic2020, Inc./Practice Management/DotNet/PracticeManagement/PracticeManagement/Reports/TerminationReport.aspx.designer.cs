@@ -256,13 +256,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Literal lbRange;
         
         /// <summary>
-        /// ltrlAttrition control.
+        /// lblAttrition control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlAttrition;
+        protected global::System.Web.UI.WebControls.Label lblAttrition;
         
         /// <summary>
         /// imgAttritionHint control.
@@ -280,7 +280,88 @@ namespace PraticeManagement.Reporting {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender attritionHelp;
+        protected global::AjaxControlToolkit.PopupControlExtender attritionHelp;
+        
+        /// <summary>
+        /// pnlAtrritionCalculation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAtrritionCalculation;
+        
+        /// <summary>
+        /// lblPopUPTerminations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPTerminations;
+        
+        /// <summary>
+        /// lblPopUPActivens control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPActivens;
+        
+        /// <summary>
+        /// lblPopUPTerminationsCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPTerminationsCount;
+        
+        /// <summary>
+        /// lblPopUPActivensCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPActivensCount;
+        
+        /// <summary>
+        /// lblPopUPNewHiresCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPNewHiresCount;
+        
+        /// <summary>
+        /// lblPopUPTerminationsCountDenominator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPTerminationsCountDenominator;
+        
+        /// <summary>
+        /// lblPopUpArrition control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUpArrition;
+        
+        /// <summary>
+        /// lblPopUPNewHires control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPNewHires;
         
         /// <summary>
         /// ltrlTotalEmployees control.
@@ -479,15 +560,6 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlAttrition;
-        
-        /// <summary>
-        /// btnCloseAttrition control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCloseAttrition;
     }
 }
 
