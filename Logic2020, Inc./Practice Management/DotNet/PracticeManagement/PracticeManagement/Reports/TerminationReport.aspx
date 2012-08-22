@@ -37,7 +37,10 @@
                     sortList: [[0, 0]]
                 }
                 );
-        }
+            }
+            function ClickHiddenImg(img) {
+                img.click();
+            }
     </script>
     <uc:HumanCapitalReportsHeader ID="humanCapitalReportsHeader" runat="server"></uc:HumanCapitalReportsHeader>
     <br />
@@ -140,7 +143,7 @@
                                     <pmc:ScrollingDropDown ID="cblSeniorities" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblSeniorities','Seniority')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Seniority"
-                                        CssClass="NewHireReportCblTimeScales" />
+                                        CssClass="NewHireReportCblTimeScales Height160PxIMP" />
                                     <ext:ScrollableDropdownExtender ID="sdeSeniorities" runat="server" TargetControlID="cblSeniorities"
                                         BehaviorID="sdeSeniorities" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
                                         Width="250px">
@@ -285,7 +288,7 @@
                                         <tr>
                                             <td class="SecondTd">
                                                 <asp:Literal ID="ltrlAttrition" runat="server"></asp:Literal>
-                                                <asp:ImageButton alt="Filter" src="../Images/hint.png" runat="server" ID="imgAttritionHint" />
+                                                <asp:Image alt="Filter" src="../Images/hint.png" runat="server" ID="imgAttritionHint" />
                                                 <AjaxControlToolkit:ModalPopupExtender ID="attritionHelp" runat="server" TargetControlID="imgAttritionHint"
                                                     BehaviorID="attritionHelp" PopupControlID="pnlAttrition" BackgroundCssClass="modalBackground"
                                                     DropShadow="false" CancelControlID="btnCloseAttrition">
@@ -450,8 +453,7 @@
             <asp:PostBackTrigger ControlID="tpSummary$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
-    <asp:Panel ID="pnlAttrition" runat="server" Style="display: none;"
-        CssClass="popUpAttrition">
+    <asp:Panel ID="pnlAttrition" runat="server" Style="display: none;" CssClass="popUpAttrition">
         <table>
             <tr>
                 <td class="AlignRight" colspan="3">
@@ -483,16 +485,16 @@
                 <td class="Width2Percent">
                 </td>
                 <td class="Width78Percent">
-                    <span class="TextAlignLeft">(# of active employees at beginning of specified
-                        time period) + (# of new employee hires during the specified time period) – (# of
-                        employee terminations during specified time period) </span>
+                    <span class="TextAlignLeft">(# of active employees at beginning of specified time period)
+                        + (# of new employee hires during the specified time period) – (# of employee terminations
+                        during specified time period) </span>
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="font-size: 10px;padding-top:12px;">
-                    <span class="TextAlignLeft">Note: in this calculation, “employee” is defined as
-                        individuals with a Pay Type of “W2-Salary” and “W2-Hourly” (i.e., contractors do
-                        not factor into calculation) </span>
+                <td colspan="3" style="font-size: 10px; padding-top: 12px;">
+                    <span class="TextAlignLeft">Note: in this calculation, “employee” is defined as individuals
+                        with a Pay Type of “W2-Salary” and “W2-Hourly” (i.e., contractors do not factor
+                        into calculation) </span>
                 </td>
             </tr>
         </table>
