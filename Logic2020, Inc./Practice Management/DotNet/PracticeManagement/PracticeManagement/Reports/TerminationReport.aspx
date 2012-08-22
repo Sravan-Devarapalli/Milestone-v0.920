@@ -38,7 +38,8 @@
                 }
                 );
             }
-            function ClickHiddenImg(img) {
+            function ClickHiddenImg(imgId) {
+                var img = document.getElementById(imgId);
                 img.click();
             }
     </script>
