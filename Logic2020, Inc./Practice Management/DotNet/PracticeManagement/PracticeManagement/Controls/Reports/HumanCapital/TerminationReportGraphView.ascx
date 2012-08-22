@@ -14,15 +14,15 @@
                     EnableViewState="true">
                     <Series>
                         <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                            Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Terminations"
+                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Terminations"
                             XAxisType="Primary" YAxisType="Primary" XValueMember="Month" YValueMembers="TerminationsCountInTheRange">
                         </asp:Series>
                         <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Point" XValueType="String"
-                            Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Attrition"
+                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Attrition"
                             XAxisType="Primary" YAxisType="Secondary" XValueMember="Month" YValueMembers="Attrition">
                         </asp:Series>
                         <asp:Series Name="chartSeries2" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            Color="Gray" YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Attrition"
+                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Attrition"
                             XAxisType="Primary" YAxisType="Secondary" XValueMember="Month" YValueMembers="Attrition">
                         </asp:Series>
                     </Series>
