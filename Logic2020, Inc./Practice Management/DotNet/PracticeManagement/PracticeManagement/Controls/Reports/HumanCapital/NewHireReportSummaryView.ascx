@@ -72,26 +72,27 @@
                         </th>
                         <th>
                             Hire Date
-                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server" class="FilterImg"
-                                id="imgHiredateFilter" />
+                            <img alt="Filter" src="../../../Images/search_filter.png" title="Hire Date" runat="server"
+                                class="FilterImg" id="imgHiredateFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceHiredateFilter" runat="server" TargetControlID="imgHiredateFilter"
                                 BehaviorID="pceHiredateFilter" PopupControlID="pnlFilterHireDate" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th>
                             Status
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status" class="FilterImg"
-                                id="imgPersonStatusTypeFilter" />
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Person Status"
+                                class="FilterImg" id="imgPersonStatusTypeFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pcePersonStatusTypeFilter" runat="server"
                                 TargetControlID="imgPersonStatusTypeFilter" BehaviorID="pcePersonStatusTypeFilter"
                                 PopupControlID="pnlFilterPersonStatusType" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th>
+                            <asp:Label runat="server" style="width:20px;height:16px;padding-bottom:3px;" id="imgRecruiterFilterHidden"  > &nbsp;</asp:Label>
                             Recruiter
-                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter" class="FilterImg"
-                                id="imgRecruiterFilter" />
-                            <AjaxControlToolkit:PopupControlExtender ID="pceRecruiterFilter" runat="server" TargetControlID="imgRecruiterFilter"
+                            <img alt="Filter" src="../../../Images/search_filter.png" runat="server" title="Recruiter"
+                                class="FilterImg" id="imgRecruiterFilter" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pceRecruiterFilter" runat="server" TargetControlID="imgRecruiterFilterHidden"
                                 BehaviorID="pceRecruiterFilter" PopupControlID="pnlFilterRecruiter" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
