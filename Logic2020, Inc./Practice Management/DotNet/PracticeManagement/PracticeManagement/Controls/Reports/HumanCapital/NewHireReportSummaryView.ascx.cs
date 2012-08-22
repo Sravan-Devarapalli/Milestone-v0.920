@@ -27,6 +27,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private HtmlImage ImgRecruiterFilter { get; set; }
 
+        private Label ImgRecruiterFilterHidden { get; set; }
+
         public Button BtnExportToExcelButton { get { return btnExportToExcel; } }
 
         private string PayTypeIds
@@ -103,6 +105,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 ImgHiredateFilter = e.Item.FindControl("imgHiredateFilter") as HtmlImage;
                 ImgPersonStatusTypeFilter = e.Item.FindControl("imgPersonStatusTypeFilter") as HtmlImage;
                 ImgRecruiterFilter = e.Item.FindControl("imgRecruiterFilter") as HtmlImage;
+                ImgRecruiterFilterHidden = e.Item.FindControl("imgRecruiterFilterHidden") as Label;
             }
         }
 
@@ -212,8 +215,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             ImgPersonStatusTypeFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblPersonStatusType.FilterPopupClientID,
                cblPersonStatusType.SelectedIndexes, cblPersonStatusType.CheckBoxListObject.ClientID, cblPersonStatusType.WaterMarkTextBoxBehaviorID);
 
-            ImgRecruiterFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblRecruiter.FilterPopupClientID,
-              cblRecruiter.SelectedIndexes, cblRecruiter.CheckBoxListObject.ClientID, cblRecruiter.WaterMarkTextBoxBehaviorID);
+            ImgRecruiterFilter.Attributes["onclick"] = string.Format("ClickHiddenImg({4});Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblRecruiter.FilterPopupClientID,
+              cblRecruiter.SelectedIndexes, cblRecruiter.CheckBoxListObject.ClientID, cblRecruiter.WaterMarkTextBoxBehaviorID, ImgRecruiterFilterHidden.ClientID);
         }
 
         private void PopulateFilterPanels(List<Person> reportData)
