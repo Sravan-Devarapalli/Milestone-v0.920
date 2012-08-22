@@ -37,7 +37,10 @@
                     sortList: [[0, 0]]
                 }
                 );
-        }
+            }
+            function ClickHiddenImg(img) {
+                img.click();
+            }
 
     </script>
     <uc:HumanCapitalReportsHeader ID="humanCapitalReportsHeader" runat="server"></uc:HumanCapitalReportsHeader>
