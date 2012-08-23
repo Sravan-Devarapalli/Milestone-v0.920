@@ -297,14 +297,14 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateRecruiterFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonFirstLastName : Constants.FilterKeys.Unassigned, Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : 0 }).Distinct().ToList().OrderBy(t => t.Text);
+            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonLastFirstName : Constants.FilterKeys.Unassigned, Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : 0 }).Distinct().ToList().OrderBy(t => t.Text);
             DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter(s)", payTypes.ToArray(), false, "Value", "Text");
             cblRecruiter.SelectAllItems(true);
         }
 
         protected string GetRecruiter(List<RecruiterCommission> recruiterCommission)
         {
-            return recruiterCommission.Count > 0 ? recruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty;
+            return recruiterCommission.Count > 0 ? recruiterCommission.First().Recruiter.PersonLastFirstName : string.Empty;
         }
 
         #endregion
