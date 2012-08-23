@@ -61,7 +61,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             {
                 lbName.Text = "Recruiter : " + selectedValue;
                 bool isUnassigned = selectedValue.Equals(Constants.FilterKeys.Unassigned);
-                data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == selectedValue : isUnassigned).ToList();
+                data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonLastFirstName == selectedValue : isUnassigned).ToList();
             }
             tpSummary.BtnExportToExcelButton.Attributes["IsSeniority"] = isSeniority.ToString();
             tpSummary.BtnExportToExcelButton.Attributes["FilterValue"] = selectedValue;
@@ -121,7 +121,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             foreach (var R in RecuriterList)
             {
                 int count = data.Count(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.Id.Value == R.Id.Value : R.Id.Value == 0);
-                Recruiters.Add(R.PersonFirstLastName, count);
+                Recruiters.Add(R.PersonLastFirstName, count);
             }
         }
 
