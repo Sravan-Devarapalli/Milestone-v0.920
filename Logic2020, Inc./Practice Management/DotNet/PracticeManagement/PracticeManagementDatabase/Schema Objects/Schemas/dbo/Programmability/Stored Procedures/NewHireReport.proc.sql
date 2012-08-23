@@ -56,7 +56,7 @@ BEGIN
 			PS.Name AS PersonStatusName,
 			TS.TimescaleId AS Timescale,
 			TS.Name AS TimescaleName,
-			RC.RecruiterId,
+			FPH.RecruiterId,
 			RCP.FirstName AS RecruiterFirstName ,
 			RCP.LastName RecruiterLastName,
 			S.SeniorityId,
@@ -70,8 +70,7 @@ BEGIN
 	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1  >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
 	LEFT JOIN dbo.Timescale TS ON TS.TimescaleId = Pay.Timescale
 	LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
-	OUTER APPLY (SELECT TOP 1 RCH.* FROM dbo.RecruiterCommissionHistory RCH WHERE RCH.RecruitId = FPH.PersonId AND ISNULL(RCH.EndDate,@FutureDate) >= FPH.HireDate AND RCH.StartDate <= FPH.TerminationDate ORDER BY RCH.StartDate DESC ) RC
-	LEFT JOIN dbo.Person RCP ON RC.RecruiterId = RCP.PersonId
+	LEFT JOIN dbo.Person RCP ON FPH.RecruiterId = RCP.PersonId
 	LEFT JOIN dbo.Seniority S ON S.[SeniorityId] = Pay.[SeniorityId]
 	WHERE	(
 				@PersonStatusIds IS NULL
@@ -105,7 +104,7 @@ BEGIN
 			AND 
 			( 
 				@RecruiterIds IS NULL
-				OR  ISNULL(RC.RecruiterId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@RecruiterIds))
+				OR  ISNULL(FPH.RecruiterId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@RecruiterIds))
 			)
 			AND 
 			(
