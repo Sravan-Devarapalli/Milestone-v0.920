@@ -342,6 +342,9 @@
             public const string ActivePersonsAtTheBeginning = "ActivePersonsAtTheBeginning";
             public const string NewHiredInTheRange = "NewHiredInTheRange";
             public const string TerminationsInTheRange = "TerminationsInTheRange";
+            public const string TerminationsW2SalaryCountInTheRange = "TerminationsW2SalaryCountInTheRange";
+            public const string TerminationsW2HourlyCountInTheRange = "TerminationsW2HourlyCountInTheRange";
+            public const string TerminationsContractorsCountInTheRange = "TerminationsContractorsCountInTheRange";
         }
 
         #endregion
