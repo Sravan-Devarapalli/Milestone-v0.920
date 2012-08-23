@@ -82,7 +82,25 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            HostingPage.ExportToExcel();
+            var btn = sender as Button;
+            bool isGraphViewPopUp = false, generateExcel = false;
+            DateTime startDate = new DateTime();
+            DateTime endDate = new DateTime();
+            Boolean.TryParse(btn.Attributes["IsGraphViewPopUp"], out isGraphViewPopUp);
+            generateExcel = isGraphViewPopUp && DateTime.TryParse(btn.Attributes["startDate"], out startDate) && DateTime.TryParse(btn.Attributes["endDate"], out endDate);
+
+            if (!generateExcel && HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+            {
+                startDate = HostingPage.StartDate.Value;
+                endDate = HostingPage.EndDate.Value;
+                generateExcel = true;
+            }
+            if (generateExcel)
+            {
+                var data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, null, null, null, null, null, false, null, null, null, null)).PersonList;
+                HostingPage.ExportToExcel(data, isGraphViewPopUp, startDate.ToString("MMM yyyy"));
+            }
+
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -145,6 +163,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             ImgPersonStatusTypeFilter.Visible =
             ImgRecruiterFilter.Visible =
             ImgTerminationDateFilter.Visible =
+        ImgTerminationReasonFilterHidden.Visible =
             ImgTerminationReasonFilter.Visible = false;
         }
 
@@ -154,7 +173,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1 || cblTerminationDate.Items.Count > 1 || cblTerminationReason.Items.Count > 1)
             {
                 divEmptyMessage.Attributes["class"] = "displayNone";
-                btnExportToExcel.Enabled = 
+                btnExportToExcel.Enabled =
                 repResource.Visible = true;
                 repResource.DataSource = reportDataList;
                 repResource.DataBind();
@@ -170,7 +189,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             else
             {
                 divEmptyMessage.Attributes["class"] = "EmptyMessagediv";
-                btnExportToExcel.Enabled = 
+                btnExportToExcel.Enabled =
                 repResource.Visible = false;
             }
             if (!isPopUp)
@@ -271,7 +290,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulatePayTypeFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? Constants.FilterKeys.Unassigned : r.CurrentPay.TimescaleName, Value = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? 0 : (int)r.CurrentPay.Timescale }).Distinct().ToList().OrderBy(t => t.Text); 
+            var payTypes = reportData.Select(r => new { Text = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? Constants.FilterKeys.Unassigned : r.CurrentPay.TimescaleName, Value = r.CurrentPay == null || string.IsNullOrEmpty(r.CurrentPay.TimescaleName) ? 0 : (int)r.CurrentPay.Timescale }).Distinct().ToList().OrderBy(t => t.Text);
             DataHelper.FillListDefault(cblPayTypes.CheckBoxListObject, "All Pay Types", payTypes.ToArray(), false, "Value", "Text");
             cblPayTypes.SelectAllItems(true);
         }
