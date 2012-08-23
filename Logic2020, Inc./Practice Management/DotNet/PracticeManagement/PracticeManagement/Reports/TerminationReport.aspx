@@ -25,7 +25,8 @@
         $(document).ready(function () {
             $("#tblTerminationSummaryReport").tablesorter(
                 {
-                    sortList: [[0, 0]]
+                    sortList: [[0, 0]],
+                    sortForce: [[0, 0]]
                 }
                 );
         });
@@ -34,7 +35,8 @@
         function endRequestHandle(sender, Args) {
             $("#tblTerminationSummaryReport").tablesorter(
                 {
-                    sortList: [[0, 0]]
+                    sortList: [[0, 0]],
+                    sortForce: [[0, 0]]
                 }
                 );
         }
