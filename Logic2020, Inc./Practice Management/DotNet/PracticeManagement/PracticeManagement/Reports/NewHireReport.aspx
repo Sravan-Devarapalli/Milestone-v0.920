@@ -258,7 +258,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="TimePeriodTotals">
+                    <td class="TimePeriodTotals NewHireReportTotals">
                         <table class="tableFixed WholeWidth">
                             <tr>
                                 <td class="Width25Percent">
