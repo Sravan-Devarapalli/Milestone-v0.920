@@ -18,40 +18,12 @@ BEGIN
 	DECLARE @FutureDate DATETIME
 	SET @FutureDate = dbo.GetFutureDate()
 
-	;WITH PersonHistoryWithRowNo
-	AS 
-	(
-	SELECT ROW_NUMBER () OVER (partition by PH.PersonId ORDER BY PH.id) as RowNumber,
-			PersonId,
-			HireDate,
-			TerminationDate,
-			TerminationReasonId,
-			PersonStatusId,
-			PH.Id,
-			PH.DivisionId
-	FROM dbo.PersonHistory PH
-	WHERE HireDate BETWEEN @Startdate AND @Enddate
-	),
-	CorrectPersonHistory
-	AS 
-	(
-	SELECT PH1.PersonId,
-			PH1.HireDate,
-			PH1.PersonStatusId,
-			CASE WHEN ISNULL(PH1.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(PH1.TerminationDate,@FutureDate) END  AS TerminationDate,
-			PH1.TerminationReasonId ,
-			PH1.id,
-			PH1.DivisionId
-	FROM PersonHistoryWithRowNo  PH1
-	LEFT JOIN PersonHistoryWithRowNo PH2 ON PH1.PersonId = PH2.PersonId AND PH1.RowNumber + 1 = PH2.RowNumber
-	WHERE PH1.PersonStatusId = 2  AND (PH2.PersonId IS NULL  OR  PH1.TerminationDate < PH2.HireDate)
-	),
-	FilteredPersonHistory
+	;WITH FilteredPersonHistory
 	AS
 	(
 		SELECT CPH.*
-		FROM CorrectPErsonHistory CPH
-		WHERE CPH.HireDate BETWEEN @Startdate AND @Enddate
+		FROM v_PersonHistory CPH
+		WHERE CPH.TerminationDate BETWEEN @Startdate AND @Enddate
 	)
 
 	SELECT DISTINCT P.PersonId,
@@ -139,39 +111,18 @@ BEGIN
 		FROM dbo.PersonStatusHistory PSH 
 		WHERE @StartDate BETWEEN PSH.StartDate AND ISNULL(PSH.EndDate,@FutureDate)
 
-	;WITH PersonHistoryWithRowNo
-	AS 
-	(
-	SELECT ROW_NUMBER () OVER (partition by PH.PersonId ORDER BY PH.id) as RowNumber,
-		PersonId,
-		HireDate,
-		TerminationDate,
-		PersonStatusId,
-		PH.Id,
-		PH.DivisionId,
-		PH.TerminationReasonId
-	FROM dbo.PersonHistory PH
-	),
-	CorrectPersonHistory
-	AS 
-	(
-	SELECT PH1.PersonId,
-		PH1.HireDate,
-		PH1.PersonStatusId,
-		CASE WHEN ISNULL(PH1.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(PH1.TerminationDate,@FutureDate) END  AS TerminationDate,
-		PH1.id,
-		PH1.DivisionId,
-		PH1.TerminationReasonId
-	FROM PersonHistoryWithRowNo  PH1
-	LEFT JOIN PersonHistoryWithRowNo PH2 ON PH1.PersonId = PH2.PersonId AND PH1.RowNumber + 1 = PH2.RowNumber
-	WHERE (PH2.PersonId IS NULL) OR (PH1.PersonStatusId = 2 AND PH1.TerminationDate < PH2.HireDate)
-	),
-	FilteredPersonHistory
+	;WITH FilteredPersonHistory
 	AS
 	(
-	SELECT CPH.*
-	FROM CorrectPErsonHistory CPH
-	WHERE CPH.HireDate BETWEEN @Startdate AND @Enddate
+		SELECT CPH.PersonId,
+				CPH.HireDate,
+				CPH.PersonStatusId,
+				CASE WHEN ISNULL(CPH.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(CPH.TerminationDate,@FutureDate) END  AS TerminationDate,
+				CPH.Id,
+				CPH.DivisionId,
+				CPH.TerminationReasonId
+		FROM v_PersonHistory CPH
+		WHERE CPH.HireDate BETWEEN @Startdate AND @Enddate
 	)
 
 	SELECT @NewHiredInTheRange = COUNT(*)			
@@ -234,7 +185,7 @@ BEGIN
 			FPH.TerminationDate,
 			FPH.TerminationReasonId
 
-		SELECT ISNULL(@ActivePersonsAtTheBeginning,0) AS [ActivePersonsAtTheBeginning], ISNULL(@NewHiredInTheRange,0) AS [NewHiredInTheRange] 
+	SELECT ISNULL(@ActivePersonsAtTheBeginning,0) AS [ActivePersonsAtTheBeginning], ISNULL(@NewHiredInTheRange,0) AS [NewHiredInTheRange] 
 
 END
 
