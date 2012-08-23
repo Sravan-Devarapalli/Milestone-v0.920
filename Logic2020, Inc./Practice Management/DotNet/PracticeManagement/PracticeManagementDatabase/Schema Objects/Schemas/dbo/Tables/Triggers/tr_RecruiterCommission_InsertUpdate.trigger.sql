@@ -1,55 +1,128 @@
 ﻿CREATE TRIGGER [tr_RecruiterCommission_InsertUpdate]
     ON [dbo].[RecruiterCommission]
-    FOR INSERT, UPDATE 
+    FOR INSERT, UPDATE, DELETE 
     AS 
     BEGIN
     	SET NOCOUNT ON;
-
-		--IF EXISTS (SELECT *
-		--			FROM RecruiterCommissionHistory RCH
-		--			)
-		--INSERT INTO RecruiterCommissionHistory(    [RecruitId],
-		--											[RecruiterId],
-		--											[HoursToCollect],
-		--											[Amount],
-		--											[StartDate],
-		--											[EndDate]
-		--										)
-		--VALUES
-
-		DECLARE @Today DATETIME
-
-		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE, dbo.InsertingTime()))
-
-		UPDATE RCH
-			SET Amount = I.Amount,
-				HoursToCollect = I.HoursToCollect
-		FROM inserted I
-		INNER JOIN RecruiterCommissionHistory RCH ON RCH.RecruitId = I.RecruitId AND RCH.RecruiterId = I.RecruiterId AND RCH.EndDate IS NULL
-		WHERE RCH.Amount <> I.Amount AND RCH.HoursToCollect <> I.HoursToCollect
 		
-		--If exists with other recruiter then insert close the existing one and insert the new one.
-		Update RCH
-		SET EndDate = @Today - 1
-		FROM RecruiterCommissionHistory RCH
-		INNER JOIN inserted I ON I.RecruitId = RCH.RecruitId AND I.RecruiterId <> RCH.RecruiterId AND RCH.EndDate IS NULL
+		DECLARE @insertTime DATETIME
+		SELECT @insertTime = dbo.InsertingTime()
 
-		--If not exists then insert with start date as hiredate/today and enddate as NULL.
-		INSERT INTO RecruiterCommissionHistory(    [RecruitId],
-													[RecruiterId],
-													[HoursToCollect],
-													[Amount],
-													[StartDate]
-												)
-		SELECT I.RecruitId,
-				I.RecruiterId,
-				I.HoursToCollect,
-				I.Amount,
-				CASE WHEN PH.StartDate < @Today THEN PH.StartDate
-					ELSE @Today END
-		FROM inserted I
-		OUTER APPLY (SELECT top 1 * FROM PersonStatusHistory PSH WHERE PSH.PersonId = I.RecruitId ORDER BY PSH.StartDate) PH
-		LEFT JOIN RecruiterCommissionHistory RCH ON RCH.RecruitId = I.RecruitId AND I.RecruiterId = RCH.RecruiterId AND RCH.EndDate IS NULL
-		WHERE I.RecruitId IS NULL
+		INSERT INTO PersonHistory([PersonId]
+								  ,[HireDate]
+								  ,[TerminationDate]
+								  ,[Alias]
+								  ,[DefaultPractice]
+								  ,[FirstName]
+								  ,[LastName]
+								  ,[Notes]
+								  ,[PersonStatusId]
+								  ,[EmployeeNumber]
+								  ,[SeniorityId]
+								  ,[ManagerId]
+								  ,[PracticeOwnedId]
+								  ,[IsDefaultManager]
+								  ,[TelephoneNumber]
+								  ,[IsWelcomeEmailSent]
+								  ,[MiddleName]
+								  ,[ImageUrl]
+								  ,[IsStrawman]
+								  ,[IsOffshore]
+								  ,[PaychexID]
+								  ,[DivisionId]
+								  ,[TerminationReasonId]
+								  ,[RecruiterId]
+								  ,[CreatedDate]
+								  ,[CreatedBy])
+		SELECT P.[PersonId]
+			  ,P.[HireDate]
+			  ,P.[TerminationDate]
+			  ,P.[Alias]
+			  ,P.[DefaultPractice]
+			  ,P.[FirstName]
+			  ,P.[LastName]
+			  ,P.[Notes]
+			  ,P.[PersonStatusId]
+			  ,P.[EmployeeNumber]
+			  ,P.[SeniorityId]
+			  ,P.[ManagerId]
+			  ,P.[PracticeOwnedId]
+			  ,P.[IsDefaultManager]
+			  ,P.[TelephoneNumber]
+			  ,P.[IsWelcomeEmailSent]
+			  ,P.[MiddleName]
+			  ,P.[ImageUrl]
+			  ,P.[IsStrawman]
+			  ,P.[IsOffshore]
+			  ,P.[PaychexID]
+			  ,P.[DivisionId]
+			  ,P.[TerminationReasonId]
+			  ,i.[RecruiterId]
+			  ,@insertTime
+			  ,l.PersonID
+		FROM inserted i
+		INNER JOIN dbo.Person P ON P.PersonId = i.RecruitId
+		INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+		LEFT JOIN deleted d ON d.RecruitId = i.RecruitId
+		WHERE i.RecruiterId <> ISNULL(d.RecruiterId, 0)
+
+		INSERT INTO PersonHistory([PersonId]
+								  ,[HireDate]
+								  ,[TerminationDate]
+								  ,[Alias]
+								  ,[DefaultPractice]
+								  ,[FirstName]
+								  ,[LastName]
+								  ,[Notes]
+								  ,[PersonStatusId]
+								  ,[EmployeeNumber]
+								  ,[SeniorityId]
+								  ,[ManagerId]
+								  ,[PracticeOwnedId]
+								  ,[IsDefaultManager]
+								  ,[TelephoneNumber]
+								  ,[IsWelcomeEmailSent]
+								  ,[MiddleName]
+								  ,[ImageUrl]
+								  ,[IsStrawman]
+								  ,[IsOffshore]
+								  ,[PaychexID]
+								  ,[DivisionId]
+								  ,[TerminationReasonId]
+								  ,[RecruiterId]
+								  ,[CreatedDate]
+								  ,[CreatedBy])
+		SELECT P.[PersonId]
+			  ,P.[HireDate]
+			  ,P.[TerminationDate]
+			  ,P.[Alias]
+			  ,P.[DefaultPractice]
+			  ,P.[FirstName]
+			  ,P.[LastName]
+			  ,P.[Notes]
+			  ,P.[PersonStatusId]
+			  ,P.[EmployeeNumber]
+			  ,P.[SeniorityId]
+			  ,P.[ManagerId]
+			  ,P.[PracticeOwnedId]
+			  ,P.[IsDefaultManager]
+			  ,P.[TelephoneNumber]
+			  ,P.[IsWelcomeEmailSent]
+			  ,P.[MiddleName]
+			  ,P.[ImageUrl]
+			  ,P.[IsStrawman]
+			  ,P.[IsOffshore]
+			  ,P.[PaychexID]
+			  ,P.[DivisionId]
+			  ,P.[TerminationReasonId]
+			  ,i.[RecruiterId]
+			  ,@insertTime
+			  ,l.PersonID
+		FROM deleted d
+		INNER JOIN dbo.Person P ON P.PersonId = i.RecruitId
+		INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+		OUTER APPLY (SELECT * FROM RecruiterCommission RC WITH(NOLOCK) WHERE RC.RecruitId = d.RecruitId) R
+		LEFT JOIN inserted i ON d.RecruitId = i.RecruitId
+		WHERE i.RecruitId IS NULL AND R.RecruitId IS NULL
 
     END
