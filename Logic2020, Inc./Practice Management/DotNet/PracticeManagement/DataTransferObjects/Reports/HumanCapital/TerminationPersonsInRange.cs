@@ -26,19 +26,49 @@ namespace DataTransferObjects.Reports.HumanCapital
         public int NewHiresCountInTheRange { get; set; }
 
         [DataMember]
-        public int TerminationsCountInTheRange { get; set; }
+        public int TerminationsContractorsCountInTheRange { get; set; }
+
+        [DataMember]
+        public int TerminationsW2SalaryCountInTheRange { get; set; }
+
+        [DataMember]
+        public int TerminationsW2HourlyCountInTheRange { get; set; }
+
+        public int TerminationsCountInTheRange
+        {
+            get
+            {
+                return TerminationsEmployeeCountInTheRange + TerminationsContractorsCountInTheRange;
+            }
+        }
+
+        public int TerminationsEmployeeCountInTheRange
+        {
+            get
+            {
+                return TerminationsW2SalaryCountInTheRange + TerminationsW2HourlyCountInTheRange;
+            }
+        }
 
         public double Attrition
         {
             get
             {
-                int denominator = ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsCountInTheRange;
-                int numerator = TerminationsCountInTheRange * 100;
+                int denominator = ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsEmployeeCountInTheRange;
+                int numerator = TerminationsEmployeeCountInTheRange ;
                 if (denominator != 0)
                 {
-                    return (double)Math.Round(((decimal)(numerator) / (decimal)denominator), 2);
+                    return (double)((decimal)(numerator) / (decimal)denominator);
                 }
                 return 0d;
+            }
+        }
+
+        public double AttritionPercentage
+        {
+            get
+            {
+                return Attrition * 100;
             }
         }
 
