@@ -286,6 +286,7 @@ BEGIN
 								  ,[PaychexID]
 								  ,[DivisionId]
 								  ,[TerminationReasonId]
+								  ,[RecruiterId]
 								  ,[CreatedDate]
 								  ,[CreatedBy])
 		SELECT i.[PersonId]
@@ -311,10 +312,12 @@ BEGIN
 			  ,i.[PaychexID]
 			  ,i.[DivisionId]
 			  ,i.[TerminationReasonId]
+			  ,RC.[RecruiterId]
 			  ,@insertTime
 			  ,l.PersonID
 		FROM inserted i
 		INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+		OUTER APPLY(SELECT TOP 1 * FROM dbo.RecruiterCommission RC WHERE RC.RecruitId = i.PersonId) RC
 		LEFT JOIN deleted d ON d.PersonId = i.PersonId
 		WHERE ISNULL(i.HireDate,'') <> ISNULL(d.HireDate,'')
 					OR ISNULL(i.TerminationDate,'') <> ISNULL(d.TerminationDate,'')
