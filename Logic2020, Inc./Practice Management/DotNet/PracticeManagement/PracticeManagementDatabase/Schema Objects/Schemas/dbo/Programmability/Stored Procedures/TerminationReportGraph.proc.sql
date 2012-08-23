@@ -10,9 +10,13 @@
 )
 AS
 BEGIN
-	DECLARE @FutureDate DATETIME
+	DECLARE @FutureDate DATETIME,@W2SalaryId INT ,@W2HourlyId INT , @1099HourlyId INT , @1099PROId INT
 	SET @FutureDate = dbo.GetFutureDate()
-		
+	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
+	SELECT @W2HourlyId = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
+	SELECT @1099HourlyId = TimescaleId FROM Timescale WHERE Name = '1099 Hourly'
+	SELECT @1099PROId = TimescaleId FROM Timescale WHERE Name = '1099/POR'
+
 		;WITH RangeValue
 		AS
 		(
@@ -33,15 +37,15 @@ BEGIN
 		FilteredPersonTerminationHistory
 		AS
 		(
-			SELECT TT.StartDate, COUNT(*) TerminationsCount
-			FROM RangeValue TT
-			LEFT JOIN v_PersonHistory FPH ON FPH.TerminationDate BETWEEN TT.StartDate AND TT.EndDate
+			SELECT FPH.*,Pay.Timescale
+			FROM v_PersonHistory FPH 
 			INNER JOIN dbo.Person P ON FPH.PersonId = P.PersonId
 			INNER JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = FPH.TerminationReasonId
 			OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
-			OUTER APPLY (SELECT TOP 1 RCH.* FROM dbo.RecruiterCommissionHistory RCH WHERE RCH.RecruitId = FPH.PersonId AND ISNULL(RCH.EndDate,@FutureDate) >= FPH.HireDate AND RCH.StartDate <= FPH.TerminationDate ORDER BY RCH.StartDate DESC ) RC
 			LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
-			WHERE	(
+			WHERE	FPH.TerminationDate BETWEEN @StartDate AND @EndDate
+					AND
+					(
 						@TimeScaleIds IS NULL
 						OR ISNULL(Pay.Timescale,0) IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@TimeScaleIds))
 					)
@@ -64,7 +68,17 @@ BEGIN
 					(
 						@ExcludeInternalPractices = 0 OR ( @ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0 )
 					)
-			GROUP BY TT.StartDate, TT.EndDate
+		),
+		PersonTerminationInRange
+		AS 
+		(
+			SELECT TT.StartDate,
+					SUM(CASE WHEN FPT.Timescale = @W2SalaryId THEN 1 ELSE 0 END) AS TerminationsW2SalaryCountInTheRange,
+					SUM(CASE WHEN FPT.Timescale = @W2HourlyId THEN 1 ELSE 0 END) AS TerminationsW2HourlyCountInTheRange,
+					SUM(CASE WHEN FPT.Timescale IN (@1099HourlyId,@1099PROId) THEN 1 ELSE 0 END) AS TerminationsContractorsCountInTheRange
+			FROM RangeValue TT
+			LEFT JOIN  FilteredPersonTerminationHistory FPT  ON FPT.TerminationDate BETWEEN TT.StartDate AND TT.EndDate
+			GROUP BY TT.StartDate
 		),
 		FilteredPersonHireHistory
 		AS
@@ -75,21 +89,18 @@ BEGIN
 					CASE WHEN ISNULL(CPH.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(CPH.TerminationDate,@FutureDate) END  AS TerminationDate,
 					CPH.Id,
 					CPH.DivisionId,
-					CPH.TerminationReasonId,
-					TT.StartDate,
-					TT.EndDate
-			FROM RangeValue TT
-			LEFT JOIN v_PersonHistory CPH ON CPH.HireDAte BETWEEN TT.StartDate AND TT.EndDate
+					CPH.TerminationReasonId
+			FROM v_PersonHistory CPH 
+			WHERE CPH.HireDAte BETWEEN @StartDate AND @EndDate
 		),
 		FilteredPersonHireHistory1
 		AS
 		(
-			SELECT FPH.StartDate, COUNT(FPH.PersonId) NewHireCount
+			SELECT FPH.*
 			FROM FilteredPersonHireHistory FPH
 			INNER JOIN dbo.Person P ON FPH.PersonId = P.PersonId
 			INNER JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = FPH.TerminationReasonId
 			OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
-			OUTER APPLY (SELECT TOP 1 RCH.* FROM dbo.RecruiterCommissionHistory RCH WHERE RCH.RecruitId = FPH.PersonId AND ISNULL(RCH.EndDate,@FutureDate) >= FPH.HireDate AND RCH.StartDate <= FPH.TerminationDate ORDER BY RCH.StartDate DESC ) RC
 			LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
 			WHERE	(
 						@TimeScaleIds IS NULL
@@ -114,17 +125,25 @@ BEGIN
 					(
 						@ExcludeInternalPractices = 0 OR ( @ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0 )
 					)
-			GROUP BY FPH.StartDate, FPH.EndDate
-		)
-
-
-			SELECT TT.StartDate,
-					TT.EndDate,
-					FPHH.NewHireCount AS NewHiredInTheRange,
-					FPTH.TerminationsCount AS TerminationsInTheRange,
-					AP.ActivePersonsAtTheBeginning
+		),
+		PersonHiriesInRange
+		AS 
+		(
+			SELECT TT.StartDate , COUNT(FPT.PersonId) AS NewHiredInTheRange
 			FROM RangeValue TT
-			INNER JOIN FilteredPersonTerminationHistory FPTH ON FPTH.StartDate = TT.StartDate
-			INNER JOIN FilteredPersonHireHistory1 FPHH ON FPHH.StartDate = TT.StartDate
-			LEFT JOIN ActivePersonsAtTheBeginningCTE AP ON AP.StartDate = TT.StartDate
+			LEFT JOIN  FilteredPersonHireHistory1 FPT  ON FPT.HireDate BETWEEN TT.StartDate AND TT.EndDate
+			GROUP BY TT.StartDate
+		)
+		SELECT TT.StartDate,
+				TT.EndDate,
+				FPHH.NewHiredInTheRange,
+				FPTH.TerminationsW2SalaryCountInTheRange,
+				FPTH.TerminationsW2HourlyCountInTheRange,
+				FPTH.TerminationsContractorsCountInTheRange,
+				AP.ActivePersonsAtTheBeginning
+		FROM RangeValue TT
+		INNER JOIN PersonTerminationInRange FPTH ON FPTH.StartDate = TT.StartDate
+		INNER JOIN PersonHiriesInRange FPHH ON FPHH.StartDate = TT.StartDate
+		LEFT JOIN ActivePersonsAtTheBeginningCTE AP ON AP.StartDate = TT.StartDate
+
 END
