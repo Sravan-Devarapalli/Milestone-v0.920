@@ -98,33 +98,8 @@ BEGIN
 		(
 			SELECT FPH.*
 			FROM FilteredPersonHireHistory FPH
-			INNER JOIN dbo.Person P ON FPH.PersonId = P.PersonId
-			INNER JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = FPH.TerminationReasonId
 			OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
-			LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
-			WHERE	(
-						@TimeScaleIds IS NULL
-						OR ISNULL(Pay.Timescale,0) IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@TimeScaleIds))
-					)
-					AND
-					( 
-						@SeniorityIds IS NULL
-						OR ISNULL(Pay.SeniorityId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@SeniorityIds))
-					)
-					AND
-					( 
-						@TerminationReasonIds IS NULL
-						OR TR.TerminationReasonId IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@TerminationReasonIds))
-					)
-					AND 
-					(
-						@PracticeIds IS NULL
-						OR Pay.PracticeId IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@PracticeIds))
-					)
-					AND 
-					(
-						@ExcludeInternalPractices = 0 OR ( @ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0 )
-					)
+			WHERE	pay.Timescale IN (1,2)
 		),
 		PersonHiriesInRange
 		AS 
