@@ -4097,7 +4097,7 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\RecruiterCommissionHistory.table.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_RecruiterCommission_InsertUpdate.trigger.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_RecruiterCommission_InsertUpdateDelete.trigger.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\TerminationReportGraph.proc.sql">
