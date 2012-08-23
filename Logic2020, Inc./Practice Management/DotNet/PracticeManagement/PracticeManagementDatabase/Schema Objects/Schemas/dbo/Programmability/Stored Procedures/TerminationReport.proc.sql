@@ -127,62 +127,8 @@ BEGIN
 
 	SELECT @NewHiredInTheRange = COUNT(*)			
 	FROM FilteredPersonHistory FPH
-	INNER JOIN dbo.Calendar C ON C.Date = FPH.HireDate
-	INNER JOIN dbo.Calendar C1 ON C1.Date = FPH.TerminationDate
-	INNER JOIN dbo.Person P ON FPH.PersonId = P.PersonId
 	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
-	LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
-	WHERE	(
-				@PersonStatusIds IS NULL
-				OR FPH.PersonStatusId IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@PersonStatusIds))
-			)
-			AND 
-			(
-				@TimeScaleIds IS NULL
-				OR ISNULL(Pay.Timescale,0) IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@TimeScaleIds))
-			)
-			AND 
-			(
-				@PracticeIds IS NULL
-				OR Pay.PracticeId IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@PracticeIds))
-			)
-			AND 
-			(
-				@PersonDivisionIds IS NULL
-				OR ISNULL(FPH.DivisionId,0) IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@PersonDivisionIds))
-			)
-			AND
-			( 
-				@SeniorityIds IS NULL
-				OR ISNULL(Pay.SeniorityId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@SeniorityIds))
-			)
-			AND 
-			( 
-				@HireDates IS NULL
-				OR C.MonthStartDate IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@HireDates))
-			)
-			AND 
-			( 
-				@TerminationDates IS NULL
-				OR C1.MonthStartDate IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@TerminationDates))
-			)
-			AND 
-			( 
-				@RecruiterIds IS NULL
-				OR  ISNULL(FPH.RecruiterId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@RecruiterIds))
-			)
-			AND 
-			(
-				@ExcludeInternalPractices = 0 OR ( @ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0 )
-			)
-	GROUP BY P.PersonId,
-			FPH.PersonStatusId,
-			FPH.RecruiterId,
-			Pay.SeniorityId,
-			FPH.DivisionId,
-			FPH.HireDate,
-			FPH.TerminationDate,
-			FPH.TerminationReasonId
+	WHERE	pay.Timescale IN (1,2)
 
 	SELECT ISNULL(@ActivePersonsAtTheBeginning,0) AS [ActivePersonsAtTheBeginning], ISNULL(@NewHiredInTheRange,0) AS [NewHiredInTheRange] 
 
