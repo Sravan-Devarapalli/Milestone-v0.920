@@ -5,7 +5,7 @@
 <div style="background-color: White !important;">
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <div Style="text-align: left; padding: 15px;">
+            <div style="text-align: left; padding: 15px;">
                 <asp:LinkButton runat="server" Text="See Year To Date" ID="hlnkGraph" EnableViewState="true"
                     OnClick="hlnkGraph_Click"></asp:LinkButton>
             </div>
@@ -18,12 +18,12 @@
                             XAxisType="Primary" YAxisType="Primary" XValueMember="Month" YValueMembers="TerminationsCountInTheRange">
                         </asp:Series>
                         <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Point" XValueType="String"
-                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Attrition"
-                            XAxisType="Primary" YAxisType="Secondary" XValueMember="Month" YValueMembers="Attrition">
+                            YValueType="Double" ToolTip="#VALY{P} Attrition" XAxisType="Primary" YAxisType="Secondary"
+                            XValueMember="Month" YValueMembers="Attrition">
                         </asp:Series>
                         <asp:Series Name="chartSeries2" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Attrition"
-                            XAxisType="Primary" YAxisType="Secondary" XValueMember="Month" YValueMembers="Attrition">
+                            YValueType="Double" ToolTip="#VALY{P} Attrition" XAxisType="Primary" YAxisType="Secondary"
+                            XValueMember="Month" YValueMembers="Attrition">
                         </asp:Series>
                     </Series>
                     <ChartAreas>
