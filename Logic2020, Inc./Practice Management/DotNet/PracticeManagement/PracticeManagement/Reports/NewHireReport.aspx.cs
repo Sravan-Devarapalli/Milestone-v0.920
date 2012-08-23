@@ -452,7 +452,7 @@ namespace PraticeManagement.Reporting
                     sb.Append("\t");
                     sb.Append(person.Status.Name);
                     sb.Append("\t");
-                    sb.Append(person.RecruiterCommission.Count > 0 ? person.RecruiterCommission.First().Recruiter.PersonFirstLastName : string.Empty);
+                    sb.Append(person.RecruiterCommission.Count > 0 ? person.RecruiterCommission.First().Recruiter.PersonLastFirstName : string.Empty);
                     sb.Append("\t");
                     sb.AppendLine();
                 }
