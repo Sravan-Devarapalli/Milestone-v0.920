@@ -257,6 +257,91 @@ BEGIN
 			
 	END
 
+	IF EXISTS (SELECT 1
+				FROM inserted i)
+	BEGIN
+		DECLARE @insertTime DATETIME
+		SELECT @insertTime = dbo.InsertingTime()
+
+		INSERT INTO PersonHistory([PersonId]
+								  ,[HireDate]
+								  ,[TerminationDate]
+								  ,[Alias]
+								  ,[DefaultPractice]
+								  ,[FirstName]
+								  ,[LastName]
+								  ,[Notes]
+								  ,[PersonStatusId]
+								  ,[EmployeeNumber]
+								  ,[SeniorityId]
+								  ,[ManagerId]
+								  ,[PracticeOwnedId]
+								  ,[IsDefaultManager]
+								  ,[TelephoneNumber]
+								  ,[IsWelcomeEmailSent]
+								  ,[MiddleName]
+								  ,[ImageUrl]
+								  ,[IsStrawman]
+								  ,[IsOffshore]
+								  ,[PaychexID]
+								  ,[DivisionId]
+								  ,[TerminationReasonId]
+								  ,[CreatedDate]
+								  ,[CreatedBy])
+		SELECT i.[PersonId]
+			  ,i.[HireDate]
+			  ,i.[TerminationDate]
+			  ,i.[Alias]
+			  ,i.[DefaultPractice]
+			  ,i.[FirstName]
+			  ,i.[LastName]
+			  ,i.[Notes]
+			  ,i.[PersonStatusId]
+			  ,i.[EmployeeNumber]
+			  ,i.[SeniorityId]
+			  ,i.[ManagerId]
+			  ,i.[PracticeOwnedId]
+			  ,i.[IsDefaultManager]
+			  ,i.[TelephoneNumber]
+			  ,i.[IsWelcomeEmailSent]
+			  ,i.[MiddleName]
+			  ,i.[ImageUrl]
+			  ,i.[IsStrawman]
+			  ,i.[IsOffshore]
+			  ,i.[PaychexID]
+			  ,i.[DivisionId]
+			  ,i.[TerminationReasonId]
+			  ,@insertTime
+			  ,l.PersonID
+		FROM inserted i
+		INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+		LEFT JOIN deleted d ON d.PersonId = i.PersonId
+		WHERE ISNULL(i.HireDate,'') <> ISNULL(d.HireDate,'')
+					OR ISNULL(i.TerminationDate,'') <> ISNULL(d.TerminationDate,'')
+					OR ISNULL(i.Alias,'') <> ISNULL(d.Alias,'')
+					OR ISNULL(i.DefaultPractice,'') <> ISNULL(d.DefaultPractice,'')
+					OR ISNULL(i.FirstName,'') <> ISNULL(d.FirstName,'')
+					OR ISNULL(i.LastName,'') <> ISNULL(d.LastName,'')
+					OR ISNULL(i.Notes, '') <> ISNULL(d.Notes, '')
+					OR ISNULL(i.PersonStatusId,'') <> ISNULL(d.PersonStatusId,'')
+					OR ISNULL(i.EmployeeNumber,'') <> ISNULL(d.EmployeeNumber,'')
+					OR ISNULL(i.SeniorityId,0) <> ISNULL(d.SeniorityId,0)
+					OR ISNULL(i.ManagerId,0) <> ISNULL(d.ManagerId,0)
+					OR ISNULL(i.PracticeOwnedId, 0) <> ISNULL(d.PracticeOwnedId, 0)
+					OR ISNULL(i.IsDefaultManager,'') <> ISNULL(d.IsDefaultManager,'')
+					OR ISNULL(i.TelephoneNumber,'') <> ISNULL(d.TelephoneNumber,'')
+					OR ISNULL(i.IsWelcomeEmailSent, '') <> ISNULL(d.IsWelcomeEmailSent, '')
+					OR ISNULL(i.MiddleName, '') <> ISNULL(d.MiddleName, '')
+					OR ISNULL(i.ImageUrl, '') <> ISNULL(d.ImageUrl, '')
+					OR ISNULL(i.IsStrawman, '') <> ISNULL(d.IsStrawman, '')
+					OR ISNULL(i.IsOffshore, '') <> ISNULL(d.IsOffshore, '')
+					OR ISNULL(i.PayChexID,'') <> ISNULL(d.PayChexID,'')
+					OR ISNULL(i.DivisionId,0) <> ISNULL(d.DivisionId,0)
+					OR ISNULL(i.IsOffshore,'') <> ISNULL(d.IsOffshore,'')
+					OR ISNULL(i.TerminationReasonId, -1) <> ISNULL(d.TerminationReasonId, -1)
+									
+	END
+
 		-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
