@@ -315,70 +315,58 @@
                                     </table>
                                     <asp:Panel ID="pnlAtrritionCalculation" CssClass="pnlAttritionCalculation" runat="server"
                                         Style="display: none;">
-                                        <table class="tblAttritionCalculation">
-                                            <tr>
-                                                <th class="Width50Percent PaddingBottom5Imp">
+                                        <table>
+                                            <tr class="vTop font15PxImp PaddingBottom5Imp">
+                                                <th class="Width50Percent">
                                                     Variables
                                                 </th>
-                                                <th class="Width3Percent PaddingBottom5Imp">
+                                                <th class="Width3Percent">
                                                 </th>
-                                                <th class="Width25Percent PaddingBottom5Imp">
+                                                <th class="Width5Percent">
                                                     Calculation
                                                 </th>
-                                                <th class="Width2Percent PaddingBottom5Imp">
+                                                <th class="Width2Percent">
                                                 </th>
-                                                <th class="Width20Percent PaddingBottom5Imp">
+                                                <th class="Width18Percent">
                                                     Attrition %
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <td class="Width50Percent TextAlignLeft">
+                                                <td class="Width50Percent TextAlignLeft PaddingBottom10Imp">
                                                     # of employee terminations during specified period:
                                                 </td>
-                                                <td class="Width3Percent TextAlignCenter vMiddle">
+                                                <td class="Width5Percent TextAlignCenter vMiddle PaddingBottom10Imp">
                                                     <asp:Label ID="lblPopUPTerminations" runat="server"></asp:Label>
                                                 </td>
-                                                <td class="Width25Percent">
-                                                </td>
-                                                <td class="Width2Percent">
-                                                </td>
-                                                <td class="Width20Percent">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="Width50Percent TextAlignLeft">
-                                                    # of active employees at beginning of specified period:
-                                                </td>
-                                                <td class="Width3Percent TextAlignCenter vMiddle">
-                                                    <asp:Label ID="lblPopUPActivens" runat="server"></asp:Label>
-                                                </td>
-                                                <td class="Width25Percent TextAlignCenter">
-                                                    <asp:Label ID="lblPopUPTerminationsCount" runat="server"></asp:Label><br />
+                                                <td class="Width25Percent TextAlignCenter font15PxImp vMiddle" rowspan="3">
+                                                    <asp:Label ID="lblPopUPTerminationsCount" runat="server"></asp:Label>
                                                     <hr class="hrArritionCalculation" />
                                                     <asp:Label ID="lblPopUPActivensCount" runat="server"></asp:Label>
                                                     +
                                                     <asp:Label ID="lblPopUPNewHiresCount" runat="server"></asp:Label>-
                                                     <asp:Label ID="lblPopUPTerminationsCountDenominator" runat="server"></asp:Label>
                                                 </td>
-                                                <td class="Width2Percent TextAlignCenter">
+                                                <td class="Width2Percent TextAlignCenter vMiddle" rowspan="3">
                                                     =
                                                 </td>
-                                                <td class="Width20Percent TextAlignCenter">
+                                                <td class="Width18Percent TextAlignCenter font15PxImp vMiddle" rowspan="3">
                                                     <asp:Label ID="lblPopUpArrition" runat="server"></asp:Label>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="Width50Percent TextAlignLeft">
+                                                <td class="Width50Percent TextAlignLeft PaddingBottom10Imp">
+                                                    # of active employees at beginning of specified period:
+                                                </td>
+                                                <td class="Width5Percent TextAlignCenter PaddingBottom10Imp vMiddle">
+                                                    <asp:Label ID="lblPopUPActivens" runat="server"></asp:Label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="Width50Percent TextAlignLeft PaddingBottom10Imp">
                                                     # of new hires during specified period:
                                                 </td>
-                                                <td class="Width3Percent TextAlignCenter vMiddle">
+                                                <td class="Width5Percent TextAlignCenter vMiddle PaddingBottom10Imp">
                                                     <asp:Label ID="lblPopUPNewHires" runat="server"></asp:Label>
-                                                </td>
-                                                <td class="Width25Percent">
-                                                </td>
-                                                <td class="Width2Percent">
-                                                </td>
-                                                <td class="Width20Percent">
                                                 </td>
                                             </tr>
                                         </table>
@@ -541,8 +529,11 @@
             <asp:PostBackTrigger ControlID="tpGraph$tpSummary$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
-    <asp:Panel ID="pnlAttrition" runat="server" CssClass="popUpAttrition" style="display: none;">
-        <table>           
+    <div class="PaddingTop5">
+        *Attrition calculation does not include contractors
+    </div>
+    <asp:Panel ID="pnlAttrition" runat="server" CssClass="popUpAttrition" Style="display: none;">
+        <table>
             <tr>
                 <td class="Width20Percent">
                 </td>
@@ -553,12 +544,12 @@
                 </td>
             </tr>
             <tr>
-                <td class="Width20Percent">
+                <td class="Width25Percent LabelProject">
                     Attrition calculation :
                 </td>
                 <td class="Width2Percent">
                 </td>
-                <td class="Width78Percent textCenter">
+                <td class="Width73Percent textCenter">
                     <hr class="WholeWidth hrArrition" />
                 </td>
             </tr>
