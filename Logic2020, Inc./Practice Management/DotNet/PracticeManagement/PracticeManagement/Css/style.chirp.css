@@ -7229,4 +7229,14 @@ table#ctl00_body_login tr td label
     background-color: Black;
     width: 60%;
 }
+.TerminationReportHeaderTotals
+{
+    width: 750px !important;
+    height: 100%;
+}
+
+.NewHireReportTotals
+{
+    height: 100%;
+}
 
