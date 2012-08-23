@@ -28,15 +28,17 @@ namespace DataTransferObjects.Reports.HumanCapital
         [DataMember]
         public int TerminationsCountInTheRange { get; set; }
 
-        public int Attrition
+        public double Attrition
         {
             get
             {
-                if ((ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsCountInTheRange) != 0)
+                int denominator = ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsCountInTheRange;
+                int numerator = TerminationsCountInTheRange * 100;
+                if (denominator != 0)
                 {
-                    return TerminationsCountInTheRange / (ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsCountInTheRange);
+                    return (double)Math.Round(((decimal)(numerator) / (decimal)denominator), 2);
                 }
-                return 0;
+                return 0d;
             }
         }
 
