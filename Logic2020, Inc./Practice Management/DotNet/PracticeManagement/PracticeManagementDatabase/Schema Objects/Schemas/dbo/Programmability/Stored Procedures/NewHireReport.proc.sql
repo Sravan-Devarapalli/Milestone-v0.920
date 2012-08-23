@@ -20,7 +20,14 @@ BEGIN
 	;WITH FilteredPersonHistory
 	AS
 	(
-		SELECT CPH.*
+		SELECT CPH.PersonId,
+				CPH.HireDate,
+				CPH.PersonStatusId,
+				CASE WHEN ISNULL(CPH.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(CPH.TerminationDate,@FutureDate) END  AS TerminationDate,
+				CPH.Id,
+				CPH.DivisionId,
+				CPH.TerminationReasonId,
+				CPH.RecruiterId
 		FROM v_PersonHistory CPH
 		WHERE CPH.HireDate BETWEEN @Startdate AND @Enddate
 	)
