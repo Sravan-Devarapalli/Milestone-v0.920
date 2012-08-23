@@ -301,15 +301,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Label lblPopUPTerminations;
         
         /// <summary>
-        /// lblPopUPActivens control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPopUPActivens;
-        
-        /// <summary>
         /// lblPopUPTerminationsCount control.
         /// </summary>
         /// <remarks>
@@ -353,6 +344,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblPopUpArrition;
+        
+        /// <summary>
+        /// lblPopUPActivens control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPopUPActivens;
         
         /// <summary>
         /// lblPopUPNewHires control.
