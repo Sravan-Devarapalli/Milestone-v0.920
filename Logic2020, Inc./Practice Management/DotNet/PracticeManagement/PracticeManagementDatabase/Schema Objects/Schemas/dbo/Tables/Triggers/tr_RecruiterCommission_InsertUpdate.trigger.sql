@@ -17,11 +17,9 @@
 		--										)
 		--VALUES
 
-		DECLARE @Today DATETIME,
-				@InsertTime	DATETIME
+		DECLARE @Today DATETIME
 
-		SELECT @InsertTime = dbo.InsertingTime()
-		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,dbo.GettingPMTime(@InsertTime)))
+		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE, dbo.InsertingTime()))
 
 		UPDATE RCH
 			SET Amount = I.Amount,
@@ -47,10 +45,10 @@
 				I.RecruiterId,
 				I.HoursToCollect,
 				I.Amount,
-				CASE WHEN PH.StartDate < @InsertTime THEN PH.StartDate
-					ELSE @InsertTime END
+				CASE WHEN PH.StartDate < @Today THEN PH.StartDate
+					ELSE @Today END
 		FROM inserted I
-		OUTER APPLY (SELECT top 1 * FROM PersonStatusHistory PSH WHERE PSH.PersonId = I.RecruitId) PH
+		OUTER APPLY (SELECT top 1 * FROM PersonStatusHistory PSH WHERE PSH.PersonId = I.RecruitId ORDER BY PSH.StartDate) PH
 		LEFT JOIN RecruiterCommissionHistory RCH ON RCH.RecruitId = I.RecruitId AND I.RecruiterId = RCH.RecruiterId AND RCH.EndDate IS NULL
 		WHERE I.RecruitId IS NULL
 
