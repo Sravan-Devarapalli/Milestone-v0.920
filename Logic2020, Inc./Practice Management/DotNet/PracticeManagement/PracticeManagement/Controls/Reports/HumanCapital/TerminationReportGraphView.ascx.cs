@@ -32,17 +32,12 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         #endregion
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
         #region Methods
 
         /// <summary>
         /// Changes link button's text when clicks on it.
         /// </summary>  
-        
+
         protected void hlnkGraph_Click(object sender, EventArgs e)
         {
             if (hlnkGraph.Text == SeeYearToDate)
@@ -62,14 +57,16 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         protected void chrtTerminationAndAttritionLast12Months_Click(object sender, ImageMapEventArgs e)
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
-            string selectedValue = postBackDetails[0].Trim();
+
             lbTotalTerminations.Text = postBackDetails[1];
             var startDate = Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0]));
             var endDate = Utils.Calendar.MonthEndDate(Convert.ToDateTime(postBackDetails[0]));
+            tpSummary.BtnExportToExcelButton.Attributes["startDate"] = startDate.ToString();
+            tpSummary.BtnExportToExcelButton.Attributes["endDate"] = endDate.ToString();
+            tpSummary.BtnExportToExcelButton.Attributes["IsGraphViewPopUp"] = true.ToString();
             TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
             lbName.Text = "Month : " + postBackDetails[0];
 
-            tpSummary.BtnExportToExcelButton.Attributes["FilterValue"] = selectedValue;            
             tpSummary.PopUpFilteredPerson = data;
             tpSummary.PopulateData(true);
             mpeDetailView.Show();
@@ -94,7 +91,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             }
             endDate = Utils.Calendar.LastMonthEndDate(now);
             terminationPersonInRange = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(startDate, endDate, HostingPage.PayTypes, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects)).ToList();
-           
+
             TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
             HostingPage.PopulateHeaderSection(data);
             LoadChartData(terminationPersonInRange);
@@ -115,12 +112,12 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         /// </summary>
         private void InitChart(int count)
         {
-            chrtTerminationAndAttritionLast12Months.Width = ((count < 4) ? 4 : count) * 85;
+            chrtTerminationAndAttritionLast12Months.Width = ((count < 4) ? 4 : count) * 70;
             chrtTerminationAndAttritionLast12Months.Height = 500;
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Terminations", true);
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2, "Attrition Percentage", true);
-            chrtTerminationAndAttritionLast12Months.ChartAreas[0].AxisY2.LabelStyle.Format = "{#}%";
+            chrtTerminationAndAttritionLast12Months.ChartAreas[0].AxisY2.LabelStyle.Format = "P";
             chrtTerminationAndAttritionLast12Months.ChartAreas[0].AxisY2.TextOrientation = TextOrientation.Rotated90;
             UpdateChartTitle();
         }
@@ -142,8 +139,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 chrtTerminationAndAttritionLast12Months.Titles.Add("Year To Date");
             }
 
-            chrtTerminationAndAttritionLast12Months.Titles[0].Font = new System.Drawing.Font("Arial", 18, FontStyle.Bold);
-            chrtTerminationAndAttritionLast12Months.Titles[1].Font = new System.Drawing.Font("Arial", 18, FontStyle.Bold);
+            chrtTerminationAndAttritionLast12Months.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
+            chrtTerminationAndAttritionLast12Months.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
         }
 
         /// <summary>
