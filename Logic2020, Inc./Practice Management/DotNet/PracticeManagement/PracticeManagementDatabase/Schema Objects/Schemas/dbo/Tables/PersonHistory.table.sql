@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[PersonHistory]
 (
-	[Id]				INT IDENTITY(1,1) NOT NULL,
+	[Id]			   INT IDENTITY(1,1) NOT NULL,
 	[PersonId]         INT            NOT NULL,
 	[HireDate]         DATETIME       NOT NULL,
     [TerminationDate]  DATETIME       NULL,
@@ -24,6 +24,7 @@
 	PaychexID		   NVARCHAR (MAX) NULL,
 	DivisionId			INT NULL,
 	TerminationReasonId	INT NULL,
+	RecruiterId			INT NULL,
 	CreatedDate			DATETIME NOT NULL,
 	CreatedBy			INT NULL,
 	CONSTRAINT PK_PersonHistory PRIMARY KEY (Id)
