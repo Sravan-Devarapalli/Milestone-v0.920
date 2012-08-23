@@ -17,36 +17,11 @@ BEGIN
 	DECLARE @FutureDate DATETIME
 	SET @FutureDate = dbo.GetFutureDate()
 
-	;WITH PersonHistoryWithRowNo
-	AS 
-	(
-	SELECT ROW_NUMBER () OVER (partition by PH.PersonId ORDER BY PH.id) as RowNumber,
-			PersonId,
-			HireDate,
-			TerminationDate,
-			PersonStatusId,
-			PH.Id,
-			PH.DivisionId
-	FROM dbo.PersonHistory PH
-	),
-	CorrectPersonHistory
-	AS 
-	(
-	SELECT PH1.PersonId,
-			PH1.HireDate,
-			PH1.PersonStatusId,
-			CASE WHEN ISNULL(PH1.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(PH1.TerminationDate,@FutureDate) END  AS TerminationDate,
-			PH1.id,
-			PH1.DivisionId
-	FROM PersonHistoryWithRowNo  PH1
-	LEFT JOIN PersonHistoryWithRowNo PH2 ON PH1.PersonId = PH2.PersonId AND PH1.RowNumber + 1 = PH2.RowNumber
-	WHERE (PH2.PersonId IS NULL) OR (PH1.PersonStatusId = 2 AND PH1.TerminationDate < PH2.HireDate)
-	),
-	FilteredPersonHistory
+	;WITH FilteredPersonHistory
 	AS
 	(
 		SELECT CPH.*
-		FROM CorrectPErsonHistory CPH
+		FROM v_PersonHistory CPH
 		WHERE CPH.HireDate BETWEEN @Startdate AND @Enddate
 	)
 	SELECT DISTINCT P.PersonId,
