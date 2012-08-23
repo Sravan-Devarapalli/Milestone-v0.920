@@ -292,7 +292,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="TimePeriodTotals" style="width: 750px !important;">
+                    <td class="TimePeriodTotals TerminationReportHeaderTotals">
                         <table class="tableFixed WholeWidth">
                             <tr>
                                 <td class="Width20Percent">
