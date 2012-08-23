@@ -1755,7 +1755,7 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     var person = ReadBasicPersonDetails(reader, personIdIndex, firstNameIndex, lastNameIndex, personStatusIdIndex, personStatusNameIndex, timeScaleIndex, timescaleNameIndex);
-                    
+
                     var recruiterList = new List<RecruiterCommission>();
                     if (!reader.IsDBNull(recruiterIdIndex))
                     {
@@ -1767,12 +1767,12 @@ namespace DataAccess
                     {
                         person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex), Name = reader.GetString(personSeniorityNameIndex) };
                     }
-                    
+
                     if (!reader.IsDBNull(divisionIdIndex))
                     {
                         person.DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex);
                     }
-                    
+
                     person.HireDate = reader.GetDateTime(hireDateIndex);
 
                     if (terminationDateIndex > -1 && !reader.IsDBNull(terminationDateIndex))
@@ -1826,21 +1826,14 @@ namespace DataAccess
             {
                 int activePersonsAtTheBeginningIndex = reader.GetOrdinal(Constants.ColumnNames.ActivePersonsAtTheBeginning);
                 int newHiredInTheRangeIndex = reader.GetOrdinal(Constants.ColumnNames.NewHiredInTheRange);
-                int terminationsInTheRange = -1;
-                try
-                {
-                    terminationsInTheRange =reader.GetOrdinal(Constants.ColumnNames.TerminationsInTheRange);
-                }
-                catch
-                {
-                    terminationsInTheRange = -1;
-                }
 
                 while (reader.Read())
                 {
                     result.ActivePersonsCountAtTheBeginning = reader.GetInt32(activePersonsAtTheBeginningIndex);
                     result.NewHiresCountInTheRange = reader.GetInt32(newHiredInTheRangeIndex);
-                    result.TerminationsCountInTheRange =terminationsInTheRange > -1 ? reader.GetInt32(terminationsInTheRange) : result.PersonList.Count;
+                    result.TerminationsW2SalaryCountInTheRange = result.PersonList.Count(p => p.CurrentPay!= null && p.CurrentPay.Timescale == TimescaleType.Salary);
+                    result.TerminationsW2HourlyCountInTheRange = result.PersonList.Count(p => p.CurrentPay != null && p.CurrentPay.Timescale == TimescaleType.Hourly);
+                    result.TerminationsContractorsCountInTheRange = result.PersonList.Count(p => p.CurrentPay != null && (p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue));
                 }
             }
         }
@@ -1851,7 +1844,9 @@ namespace DataAccess
             {
                 int activePersonsAtTheBeginningIndex = reader.GetOrdinal(Constants.ColumnNames.ActivePersonsAtTheBeginning);
                 int newHiredInTheRangeIndex = reader.GetOrdinal(Constants.ColumnNames.NewHiredInTheRange);
-                int terminationsInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsInTheRange);
+                int terminationsW2SalaryCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsW2SalaryCountInTheRange);
+                int terminationsW2HourlyCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsW2HourlyCountInTheRange);
+                int terminationsContractorsCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsContractorsCountInTheRange);
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
 
@@ -1862,7 +1857,9 @@ namespace DataAccess
                     tpr.EndDate = reader.GetDateTime(endDateIndex);
                     tpr.ActivePersonsCountAtTheBeginning = reader.GetInt32(activePersonsAtTheBeginningIndex);
                     tpr.NewHiresCountInTheRange = reader.GetInt32(newHiredInTheRangeIndex);
-                    tpr.TerminationsCountInTheRange = reader.GetInt32(terminationsInTheRange);
+                    tpr.TerminationsW2SalaryCountInTheRange = reader.GetInt32(terminationsW2SalaryCountInTheRange);
+                    tpr.TerminationsW2HourlyCountInTheRange = reader.GetInt32(terminationsW2HourlyCountInTheRange);
+                    tpr.TerminationsContractorsCountInTheRange = reader.GetInt32(terminationsContractorsCountInTheRange);
 
                     result.Add(tpr);
                 }
