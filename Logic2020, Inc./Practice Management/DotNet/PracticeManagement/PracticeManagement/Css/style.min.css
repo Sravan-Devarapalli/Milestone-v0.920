@@ -1326,7 +1326,7 @@ table#ctl00_body_login tr td label{float:left}
 .NewHireGraphPopUpTable .FirstTd span{font-weight:bold;font-size:16px!important}
 .NewHireGraphPopUpTable .SecondTd{width:20%;font-weight:bolder;font-size:16px;text-align:right;padding-right:20px}
 .NewHireGraphPopUpTable .SecondTd span{font-weight:bold;white-space:nowrap}
-.NewHireREportGraphDiv{overflow-y:scroll;max-height:300px}
+.NewHireREportGraphDiv{overflow-y:auto;max-height:300px}
 .NewHireREportGraphDiv .minheight250Px{min-height:10px!important}
 .NewHireGraphEmptyDiv{padding-top:5px;padding-bottom:5px}
 .NewHireReportChartDiv{overflow-x:auto;text-align:center;padding-top:5px;padding-bottom:5px}
