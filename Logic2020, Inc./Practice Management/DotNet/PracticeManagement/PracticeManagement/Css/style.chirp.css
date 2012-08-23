@@ -7172,7 +7172,7 @@ table#ctl00_body_login tr td label
 }
 .NewHireREportGraphDiv
 {
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 300px;
 }
 .NewHireREportGraphDiv .minheight250Px
