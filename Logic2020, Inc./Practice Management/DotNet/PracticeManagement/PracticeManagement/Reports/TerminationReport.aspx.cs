@@ -292,30 +292,27 @@ namespace PraticeManagement.Reporting
 
         public void PopulateHeaderSection(TerminationPersonsInRange reportData)
         {
-            int w2SalaryCount = reportData.PersonList.Count(p => p.CurrentPay.Timescale == TimescaleType.Salary);
-            int w2HourlyCount = reportData.PersonList.Count(p => p.CurrentPay.Timescale == TimescaleType.Hourly);
-            int contractorCount = reportData.PersonList.Count(p => p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue);
-            List<int> ratioList = (new int[] { w2SalaryCount, w2HourlyCount, contractorCount }).ToList();
+            List<int> ratioList = (new int[] { reportData.TerminationsW2SalaryCountInTheRange, reportData.TerminationsW2HourlyCountInTheRange, reportData.TerminationsContractorsCountInTheRange }).ToList();
             int height = 80;
             List<int> percentageList = DataTransferObjects.Utils.Generic.GetProportionateRatio(ratioList, height);
 
             ltPersonCount.Text = reportData.PersonList.Count + " Terminations";
             lbRange.Text = Range;
             lblAttrition.Text = lblPopUpArrition.Text = reportData.Attrition.ToString("0.00%");
-            ltrlTotalEmployees.Text = (w2SalaryCount + w2HourlyCount).ToString();
-            ltrlTotalContractors.Text = contractorCount.ToString();
+            ltrlTotalEmployees.Text = reportData.TerminationsEmployeeCountInTheRange.ToString();
+            ltrlTotalContractors.Text = reportData.TerminationsContractorsCountInTheRange.ToString();
 
-            ltrlW2SalaryCount.Text = w2SalaryCount.ToString();
-            ltrlW2HourlyCount.Text = w2HourlyCount.ToString();
-            ltrlContractorsCount.Text = contractorCount.ToString();
+            ltrlW2SalaryCount.Text = reportData.TerminationsW2SalaryCountInTheRange.ToString();
+            ltrlW2HourlyCount.Text = reportData.TerminationsW2HourlyCountInTheRange.ToString();
+            ltrlContractorsCount.Text = reportData.TerminationsContractorsCountInTheRange.ToString();
 
             lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = reportData.PersonList.Count.ToString();
             lblPopUPActivensCount.Text = lblPopUPActivens.Text = reportData.ActivePersonsCountAtTheBeginning.ToString();
             lblPopUPNewHiresCount.Text = lblPopUPNewHires.Text = reportData.NewHiresCountInTheRange.ToString();
 
-            populateGraph(w2SalaryCount, percentageList[0], ltrlW2SalaryCount, trW2Salary);
-            populateGraph(w2HourlyCount, percentageList[1], ltrlW2HourlyCount, trW2Hourly);
-            populateGraph(contractorCount, percentageList[2], ltrlContractorsCount, trContrator);
+            populateGraph(reportData.TerminationsW2SalaryCountInTheRange, percentageList[0], ltrlW2SalaryCount, trW2Salary);
+            populateGraph(reportData.TerminationsW2HourlyCountInTheRange, percentageList[1], ltrlW2HourlyCount, trW2Hourly);
+            populateGraph(reportData.TerminationsContractorsCountInTheRange, percentageList[2], ltrlContractorsCount, trContrator);
         }
 
         private void LoadActiveView()
