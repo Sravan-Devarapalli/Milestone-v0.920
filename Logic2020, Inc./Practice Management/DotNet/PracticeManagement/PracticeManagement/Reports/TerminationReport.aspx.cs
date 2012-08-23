@@ -306,7 +306,7 @@ namespace PraticeManagement.Reporting
             ltrlW2HourlyCount.Text = reportData.TerminationsW2HourlyCountInTheRange.ToString();
             ltrlContractorsCount.Text = reportData.TerminationsContractorsCountInTheRange.ToString();
 
-            lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = reportData.PersonList.Count.ToString();
+            lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = reportData.TerminationsEmployeeCountInTheRange.ToString();
             lblPopUPActivensCount.Text = lblPopUPActivens.Text = reportData.ActivePersonsCountAtTheBeginning.ToString();
             lblPopUPNewHiresCount.Text = lblPopUPNewHires.Text = reportData.NewHiresCountInTheRange.ToString();
 
