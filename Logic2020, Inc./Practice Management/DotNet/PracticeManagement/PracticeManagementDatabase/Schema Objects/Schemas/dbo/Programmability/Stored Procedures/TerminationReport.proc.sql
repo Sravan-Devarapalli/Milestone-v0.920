@@ -15,8 +15,10 @@
 )
 AS
 BEGIN
-	DECLARE @FutureDate DATETIME
+	DECLARE @FutureDate DATETIME,@W2SalaryId INT ,@W2HourlyId INT 
 	SET @FutureDate = dbo.GetFutureDate()
+	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
+	SELECT @W2HourlyId = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
 
 	;WITH FilteredPersonHistory
 	AS
@@ -106,9 +108,10 @@ BEGIN
 
 		DECLARE @ActivePersonsAtTheBeginning INT , @NewHiredInTheRange INT
 		
-		SELECT @ActivePersonsAtTheBeginning = COUNT(PSH.PersonId)
+		SELECT @ActivePersonsAtTheBeginning = COUNT(DISTINCT PSH.PersonId)
 		FROM dbo.PersonStatusHistory PSH 
-		WHERE @StartDate BETWEEN PSH.StartDate AND ISNULL(PSH.EndDate,@FutureDate)
+		INNER JOIN dbo.Person P ON PSH.PersonId = P.PersonId AND P.IsStrawman = 0 AND PSH.personstatusId = 1 AND @StartDate BETWEEN PSH.StartDate AND ISNULL(PSH.EndDate,@FutureDate) 
+		INNER JOIN dbo.Pay pa ON pa.Person = PSH.PersonId AND @StartDate  BETWEEN pa.StartDate  AND ISNULL(pa.EndDate,@FutureDate) AND pa.Timescale IN (@W2SalaryId,@W2HourlyId) 
 
 	;WITH FilteredPersonHistory
 	AS
@@ -128,7 +131,7 @@ BEGIN
 	SELECT @NewHiredInTheRange = COUNT(*)			
 	FROM FilteredPersonHistory FPH
 	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
-	WHERE	pay.Timescale IN (1,2)
+	WHERE	pay.Timescale IN (@W2SalaryId,@W2HourlyId) 
 
 	SELECT ISNULL(@ActivePersonsAtTheBeginning,0) AS [ActivePersonsAtTheBeginning], ISNULL(@NewHiredInTheRange,0) AS [NewHiredInTheRange] 
 
