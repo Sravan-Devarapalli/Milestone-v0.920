@@ -6,7 +6,7 @@
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <div style="text-align: left; padding: 15px;">
-                <asp:LinkButton runat="server" Text="See Year To Date" ID="hlnkGraph" EnableViewState="true"
+                <asp:LinkButton runat="server" Text="See Last 12 Months" ID="hlnkGraph" EnableViewState="true"
                     OnClick="hlnkGraph_Click"></asp:LinkButton>
             </div>
             <div class="ConsultingDemandchartDiv">
