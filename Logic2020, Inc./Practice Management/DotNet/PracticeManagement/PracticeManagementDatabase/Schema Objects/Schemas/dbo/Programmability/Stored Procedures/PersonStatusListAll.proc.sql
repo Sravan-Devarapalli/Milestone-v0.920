@@ -10,5 +10,5 @@ AS
 	
 	SELECT s.PersonStatusId, s.Name
 	  FROM dbo.PersonStatus AS s
+	  WHERE s.IsPersonStatus = 1
 	ORDER BY s.PersonStatusId
-
