@@ -1866,7 +1866,7 @@ namespace DataAccess
             }
         }
 
-        public static List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate, string payTypeIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices)
+        public static List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TerminationReportGraph, connection))
@@ -1876,11 +1876,6 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TimeScaleIdsParam, payTypeIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationReasonIdsParam, terminationReasonIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
                 List<TerminationPersonsInRange> result = new List<TerminationPersonsInRange>();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
