@@ -97,7 +97,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             }
             if (generateExcel)
             {
-                var data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, null, null, null, null, null, false, null, null, null, null)).PersonList;
+                var data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).PersonList;
                 HostingPage.ExportToExcel(data, isGraphViewPopUp, startDate.ToString("MMM yyyy"));
             }
 
