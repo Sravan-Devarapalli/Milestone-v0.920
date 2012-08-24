@@ -18,11 +18,11 @@
                             XAxisType="Primary" YAxisType="Primary" XValueMember="Month" YValueMembers="TerminationsCountInTheRange">
                         </asp:Series>
                         <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Point" XValueType="String"
-                            YValueType="Double" ToolTip="#VALY{P} Attrition" XAxisType="Primary" YAxisType="Secondary"
+                            YValueType="Double" ToolTip="#VALY{0.00%} Attrition" XAxisType="Primary" YAxisType="Secondary"
                             XValueMember="Month" YValueMembers="Attrition">
                         </asp:Series>
                         <asp:Series Name="chartSeries2" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            YValueType="Double" ToolTip="#VALY{P} Attrition" XAxisType="Primary" YAxisType="Secondary"
+                            YValueType="Double" XAxisType="Primary" YAxisType="Secondary"
                             XValueMember="Month" YValueMembers="Attrition">
                         </asp:Series>
                     </Series>
