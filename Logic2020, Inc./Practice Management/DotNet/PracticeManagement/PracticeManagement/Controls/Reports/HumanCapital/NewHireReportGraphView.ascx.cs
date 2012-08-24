@@ -98,7 +98,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             SeniorityList = ServiceCallers.Custom.Person(p => p.ListSeniorities()).ToList();
             RecuriterList = ServiceCallers.Custom.Person(p => p.GetRecruiterList(null, null)).ToList();
             List<Seniority> _seniorityList = data.Select(p => p.Seniority != null ? p.Seniority : new Seniority { Id = 0, Name = Constants.FilterKeys.Unassigned }).Distinct().ToList();
-            List<Person> _recurterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : new Person { FirstName = Constants.FilterKeys.Unassigned, Id = 0 }).Distinct().ToList();
+            List<Person> _recurterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : new Person { LastName = Constants.FilterKeys.Unassigned, Id = 0 }).Distinct().ToList();
             if (_recurterList.Count > 0)
             {
                 RecuriterList = RecuriterList.Concat(_recurterList).Distinct().ToList();
