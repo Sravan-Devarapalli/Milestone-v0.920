@@ -79,7 +79,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange TerminationReport(System.DateTime startDate, System.DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TerminationReportGraph", ReplyAction="http://tempuri.org/IReportService/TerminationReportGraphResponse")]
-        DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange[] TerminationReportGraph(System.DateTime startDate, System.DateTime endDate, string payTypeIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices);
+        DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange[] TerminationReportGraph(System.DateTime startDate, System.DateTime endDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -90,8 +90,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-        
-        
+    
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -192,8 +191,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.TerminationReport(startDate, endDate, payTypeIds, personStatusIds, seniorityIds, terminationReasonIds, practiceIds, excludeInternalPractices, personDivisionIds, recruiterIds, hireDates, terminationDates);
         }
         
-        public DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange[] TerminationReportGraph(System.DateTime startDate, System.DateTime endDate, string payTypeIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices) {
-            return base.Channel.TerminationReportGraph(startDate, endDate, payTypeIds, seniorityIds, terminationReasonIds, practiceIds, excludeInternalPractices);
+        public DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange[] TerminationReportGraph(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.TerminationReportGraph(startDate, endDate);
         }
     }
 }
