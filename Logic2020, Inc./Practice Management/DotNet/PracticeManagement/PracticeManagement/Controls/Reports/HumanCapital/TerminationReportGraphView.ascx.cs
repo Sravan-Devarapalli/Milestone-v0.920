@@ -117,7 +117,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Terminations", true);
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2, "Attrition Percentage", true);
-            chrtTerminationAndAttritionLast12Months.ChartAreas[0].AxisY2.LabelStyle.Format = "P";
+            chrtTerminationAndAttritionLast12Months.ChartAreas[0].AxisY2.LabelStyle.Format = "0.00%";
             chrtTerminationAndAttritionLast12Months.ChartAreas[0].AxisY2.TextOrientation = TextOrientation.Rotated90;
             UpdateChartTitle();
         }
