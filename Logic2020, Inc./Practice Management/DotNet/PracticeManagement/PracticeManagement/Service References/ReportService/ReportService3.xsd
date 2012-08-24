@@ -375,11 +375,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
-        <xs:element minOccurs="0" name="payTypeIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="seniorityIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="terminationReasonIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
