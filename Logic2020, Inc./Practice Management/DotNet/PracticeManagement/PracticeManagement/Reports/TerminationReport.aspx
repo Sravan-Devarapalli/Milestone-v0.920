@@ -308,10 +308,10 @@
                                             <td class="SecondTd">
                                                 <asp:Label ID="lblAttrition" runat="server" onmouseover="ShowPanel();" onmouseout="HidePanel();"></asp:Label>
                                                 <asp:Image alt="Filter" ImageUrl="~/Images/hint.png" runat="server" ID="imgAttritionHint"
-                                                    CssClass="CursorPointer" />
-                                                <AjaxControlToolkit:PopupControlExtender ID="attritionHelp" runat="server" TargetControlID="imgAttritionHint"
-                                                    BehaviorID="attritionHelp" PopupControlID="pnlAttrition" Position="Bottom">
-                                                </AjaxControlToolkit:PopupControlExtender>
+                                                    CssClass="CursorPointer Width10Px" />
+                                                <AjaxControlToolkit:ModalPopupExtender ID="attritionHelpPopUp" runat="server" TargetControlID="imgAttritionHint"
+                                                    BehaviorID="attritionHelpPopUp" BackgroundCssClass="modalBackground" PopupControlID="pnlAttrition"
+                                                    CancelControlID="btnCancleAttrition" DropShadow="false" />
                                             </td>
                                         </tr>
                                     </table>
@@ -344,8 +344,9 @@
                                                     <asp:Label ID="lblPopUPTerminationsCount" runat="server"></asp:Label>
                                                     <hr class="hrArritionCalculation" />
                                                     <asp:Label ID="lblPopUPActivensCount" runat="server"></asp:Label>
-                                                    +
-                                                    <asp:Label ID="lblPopUPNewHiresCount" runat="server"></asp:Label>-
+                                                    &nbsp;+&nbsp;
+                                                    <asp:Label ID="lblPopUPNewHiresCount" runat="server"></asp:Label>
+                                                     &nbsp;-&nbsp;
                                                     <asp:Label ID="lblPopUPTerminationsCountDenominator" runat="server"></asp:Label>
                                                 </td>
                                                 <td class="Width2Percent TextAlignCenter vMiddle" rowspan="3">
@@ -505,8 +506,8 @@
                     </asp:TableCell>
                     <asp:TableCell ID="cellDetail" runat="server">
                         <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnGraph" runat="server" Text="Graph" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="1" ToolTip="Graph"></asp:LinkButton></span>
+                            <asp:LinkButton ID="lnkbtnGraph" runat="server" Text="Graphs" CausesValidation="false"
+                                OnCommand="btnView_Command" CommandArgument="1" ToolTip="Graphs"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                 </asp:TableRow>
@@ -537,6 +538,12 @@
     <asp:Panel ID="pnlAttrition" runat="server" CssClass="popUpAttrition" Style="display: none;">
         <table>
             <tr>
+                <th class="textRightImp" colspan="3">
+                    <asp:Button ID="btnCancleAttrition" runat="server" CssClass="mini-report-close floatright"
+                        ToolTip="Close" Text="X"></asp:Button>
+                </th>
+            </tr>
+            <tr>
                 <td class="Width20Percent">
                 </td>
                 <td class="Width2Percent">
@@ -546,8 +553,11 @@
                 </td>
             </tr>
             <tr>
-                <td class="Width25Percent LabelProject">
-                    Attrition calculation :
+                <td class="Width25Percent">
+                    <label class="LabelProject">
+                        Attrition percentage
+                    </label>
+                    =
                 </td>
                 <td class="Width2Percent">
                 </td>
