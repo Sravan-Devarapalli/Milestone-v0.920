@@ -8,7 +8,9 @@
       <xs:element minOccurs="0" name="NewHiresCountInTheRange" type="xs:int" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PersonList" nillable="true" type="q1:ArrayOfPerson" />
       <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="TerminationsCountInTheRange" type="xs:int" />
+      <xs:element minOccurs="0" name="TerminationsContractorsCountInTheRange" type="xs:int" />
+      <xs:element minOccurs="0" name="TerminationsW2HourlyCountInTheRange" type="xs:int" />
+      <xs:element minOccurs="0" name="TerminationsW2SalaryCountInTheRange" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TerminationPersonsInRange" nillable="true" type="tns:TerminationPersonsInRange" />
