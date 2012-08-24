@@ -79,7 +79,7 @@ namespace PracticeManagementService
         TerminationPersonsInRange TerminationReport(DateTime startDate, DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates);
 
         [OperationContract]
-        List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate, string payTypeIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices);
+        List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate);
 
     }
 }
