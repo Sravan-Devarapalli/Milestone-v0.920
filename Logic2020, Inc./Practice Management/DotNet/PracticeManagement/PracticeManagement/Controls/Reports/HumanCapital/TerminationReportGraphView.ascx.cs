@@ -90,7 +90,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 startDate = Utils.Calendar.YearStartDate(now);
             }
             endDate = Utils.Calendar.LastMonthEndDate(now);
-            terminationPersonInRange = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(startDate, endDate, HostingPage.PayTypes, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects)).ToList();
+            terminationPersonInRange = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(startDate, endDate)).ToList();
 
             TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
             HostingPage.PopulateHeaderSection(data);
