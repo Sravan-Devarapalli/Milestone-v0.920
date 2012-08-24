@@ -274,13 +274,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Image imgAttritionHint;
         
         /// <summary>
-        /// attritionHelp control.
+        /// attritionHelpPopUp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.PopupControlExtender attritionHelp;
+        protected global::AjaxControlToolkit.ModalPopupExtender attritionHelpPopUp;
         
         /// <summary>
         /// pnlAtrritionCalculation control.
@@ -560,6 +560,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlAttrition;
+        
+        /// <summary>
+        /// btnCancleAttrition control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancleAttrition;
     }
 }
 
