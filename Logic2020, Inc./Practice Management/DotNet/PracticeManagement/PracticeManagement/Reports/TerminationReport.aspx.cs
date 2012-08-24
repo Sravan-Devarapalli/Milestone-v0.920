@@ -223,6 +223,7 @@ namespace PraticeManagement.Reporting
                 }
                 SetDefalultfilter();
                 LoadActiveView();
+                LoadAttrition();
             }
         }
         protected void Page_PreRender(object sender, EventArgs e)
@@ -298,21 +299,39 @@ namespace PraticeManagement.Reporting
 
             ltPersonCount.Text = reportData.PersonList.Count + " Terminations";
             lbRange.Text = Range;
-            lblAttrition.Text = lblPopUpArrition.Text = reportData.Attrition.ToString("0.00%");
+
             ltrlTotalEmployees.Text = reportData.TerminationsEmployeeCountInTheRange.ToString();
             ltrlTotalContractors.Text = reportData.TerminationsContractorsCountInTheRange.ToString();
-
             ltrlW2SalaryCount.Text = reportData.TerminationsW2SalaryCountInTheRange.ToString();
             ltrlW2HourlyCount.Text = reportData.TerminationsW2HourlyCountInTheRange.ToString();
             ltrlContractorsCount.Text = reportData.TerminationsContractorsCountInTheRange.ToString();
 
-            lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = reportData.TerminationsEmployeeCountInTheRange.ToString();
-            lblPopUPActivensCount.Text = lblPopUPActivens.Text = reportData.ActivePersonsCountAtTheBeginning.ToString();
-            lblPopUPNewHiresCount.Text = lblPopUPNewHires.Text = reportData.NewHiresCountInTheRange.ToString();
-
             populateGraph(reportData.TerminationsW2SalaryCountInTheRange, percentageList[0], ltrlW2SalaryCount, trW2Salary);
             populateGraph(reportData.TerminationsW2HourlyCountInTheRange, percentageList[1], ltrlW2HourlyCount, trW2Hourly);
             populateGraph(reportData.TerminationsContractorsCountInTheRange, percentageList[2], ltrlContractorsCount, trContrator);
+        }
+
+        /// <summary>
+        /// Loads the attrition data with respect to date range.
+        /// </summary>
+        private void LoadAttrition()
+        {
+            List<TerminationPersonsInRange> data = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(StartDate.Value, EndDate.Value)).ToList();
+            double attrition = 0;
+            int terminationsEmployeeCountInTheRange = 0;
+            int activePersonsCountAtTheBeginning = data.First(s => s.StartDate == StartDate.Value.Date).ActivePersonsCountAtTheBeginning;
+            int newHiresCountInTheRange = 0;
+            foreach(var termiantionPerson in data)
+            {
+                attrition += termiantionPerson.Attrition;
+                terminationsEmployeeCountInTheRange += termiantionPerson.TerminationsEmployeeCountInTheRange;                
+                newHiresCountInTheRange += termiantionPerson.NewHiresCountInTheRange;
+            }
+            lblAttrition.Text = lblPopUpArrition.Text = attrition.ToString("0.00%");
+            lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = terminationsEmployeeCountInTheRange.ToString();
+            lblPopUPActivensCount.Text = lblPopUPActivens.Text = activePersonsCountAtTheBeginning.ToString();
+            lblPopUPNewHiresCount.Text = lblPopUPNewHires.Text = newHiresCountInTheRange.ToString();
+
         }
 
         private void LoadActiveView()
@@ -378,6 +397,7 @@ namespace PraticeManagement.Reporting
             if (ddlPeriod.SelectedValue != "0")
             {
                 LoadActiveView();
+                LoadAttrition();
             }
             else
             {
@@ -393,6 +413,7 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
+                LoadAttrition();
             }
             else
             {
