@@ -40,6 +40,8 @@ BEGIN
 			RCP.LastName RecruiterLastName,
 			S.SeniorityId,
 			S.Name AS SeniorityName,
+			SC.SeniorityCategoryId,
+			SC.Name AS SeniorityCategory,
 			FPH.DivisionId,
 			FPH.HireDate,
 			FPH.TerminationDate,
@@ -50,12 +52,13 @@ BEGIN
 	INNER JOIN dbo.Calendar C1 ON C1.Date = FPH.TerminationDate
 	INNER JOIN dbo.Person P ON FPH.PersonId = P.PersonId
 	INNER JOIN dbo.PersonStatus PS ON PS.PersonStatusId = FPH.PersonStatusId
-	INNER JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = FPH.TerminationReasonId
+	LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = FPH.TerminationReasonId
 	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
 	LEFT JOIN dbo.Timescale TS ON TS.TimescaleId = Pay.Timescale
 	LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
 	LEFT JOIN dbo.Person RCP ON FPH.RecruiterId = RCP.PersonId
 	LEFT JOIN dbo.Seniority S ON S.[SeniorityId] = Pay.[SeniorityId]
+	LEFT JOIN dbo.SeniorityCategory SC ON SC.SeniorityCategoryId = S.SeniorityCategoryId
 	WHERE	(
 				@PersonStatusIds IS NULL
 				OR PS.PersonStatusId IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@PersonStatusIds))
@@ -112,6 +115,7 @@ BEGIN
 		FROM dbo.PersonStatusHistory PSH 
 		INNER JOIN dbo.Person P ON PSH.PersonId = P.PersonId AND P.IsStrawman = 0 AND PSH.personstatusId = 1 AND @StartDate BETWEEN PSH.StartDate AND ISNULL(PSH.EndDate,@FutureDate) 
 		INNER JOIN dbo.Pay pa ON pa.Person = PSH.PersonId AND @StartDate  BETWEEN pa.StartDate  AND ISNULL(pa.EndDate,@FutureDate) AND pa.Timescale IN (@W2SalaryId,@W2HourlyId) 
+		INNER JOIN dbo.v_PersonHistory PH ON PH.PersonId = PSH.PersonId AND @StartDate BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) -- if status start date is less then person hire date we need to consider only hire date
 
 	;WITH FilteredPersonHistory
 	AS
