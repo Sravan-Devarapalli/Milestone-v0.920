@@ -4,11 +4,15 @@
     TagPrefix="uc" TagName="SummaryView" %>
 <div class="BackGroundWhiteImp">
     <div class="NewHireReportChartDiv" id="NewHireReportChartDiv" runat="server">
+        <div style="text-align: left; padding: 15px;">
+            <asp:LinkButton runat="server" Text="See New Hires by Recruiter" ID="hlnkGraph" EnableViewState="true"
+                OnClick="hlnkGraph_Click"></asp:LinkButton>
+        </div>
         <asp:Chart ID="chrtNewHireReportByRecruiter" runat="server" OnClick="chrtNewHireReport_Click"
             EnableViewState="true">
             <Series>
                 <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                   YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY New Hires"
+                    YValueType="Int32" PostBackValue="#VALX:#VALY:False" ToolTip="#VALY New Hires"
                     XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
                 </asp:Series>
             </Series>
@@ -17,12 +21,11 @@
                 </asp:ChartArea>
             </ChartAreas>
         </asp:Chart>
-        <br />
         <asp:Chart ID="chrtNewHireReportBySeniority" runat="server" OnClick="chrtNewHireReport_Click"
-            EnableViewState="true" CssClass="PaddingTop75">
+            EnableViewState="true" >
             <Series>
                 <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                   YValueType="Int32" PostBackValue="#VALX,#VALY,True" ToolTip="#VALY New Hires"
+                    YValueType="Int32" PostBackValue="#VALX:#VALY:True" ToolTip="#VALY New Hires"
                     XAxisType="Primary" YAxisType="Primary" XValueMember="name" YValueMembers="count">
                 </asp:Series>
             </Series>
