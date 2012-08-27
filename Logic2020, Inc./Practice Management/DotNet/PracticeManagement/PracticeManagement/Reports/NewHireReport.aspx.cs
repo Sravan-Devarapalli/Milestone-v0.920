@@ -394,7 +394,7 @@ namespace PraticeManagement.Reporting
 
         public void ExportToExcel(List<Person> data)
         {
-
+            data = data.OrderBy(p => p.PersonLastFirstName).ToList();
             DataHelper.InsertExportActivityLogMessage(NewHireReportExport);
             StringBuilder sb = new StringBuilder();
             sb.Append("New Hire Report");
