@@ -324,13 +324,13 @@
                                                 </th>
                                                 <th class="Width3Percent">
                                                 </th>
-                                                <th class="Width5Percent">
+                                                <th class="Width5Percent textCenter" >
                                                     Calculation
                                                 </th>
                                                 <th class="Width2Percent">
                                                 </th>
                                                 <th class="Width18Percent">
-                                                    Attrition %
+                                                    Attrition%
                                                 </th>
                                             </tr>
                                             <tr>
@@ -340,7 +340,7 @@
                                                 <td class="Width5Percent TextAlignCenter vMiddle PaddingBottom10Imp">
                                                     <asp:Label ID="lblPopUPTerminations" runat="server"></asp:Label>
                                                 </td>
-                                                <td class="Width25Percent TextAlignCenter font15PxImp vMiddle" rowspan="3">
+                                                <td class="Width25Percent TextAlignCenter font15PxImp vMiddle no-wrap" rowspan="3">
                                                     <asp:Label ID="lblPopUPTerminationsCount" runat="server"></asp:Label>
                                                     <hr class="hrArritionCalculation" />
                                                     <asp:Label ID="lblPopUPActivensCount" runat="server"></asp:Label>
