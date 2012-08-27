@@ -43,6 +43,8 @@ BEGIN
 			RCP.LastName RecruiterLastName,
 			S.SeniorityId,
 			S.Name AS SeniorityName,
+			SC.SeniorityCategoryId,
+			SC.Name AS SeniorityCategory,
 			FPH.DivisionId,
 			FPH.HireDate
 	FROM FilteredPersonHistory FPH
@@ -54,6 +56,7 @@ BEGIN
 	LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
 	LEFT JOIN dbo.Person RCP ON FPH.RecruiterId = RCP.PersonId
 	LEFT JOIN dbo.Seniority S ON S.[SeniorityId] = Pay.[SeniorityId]
+	LEFT JOIN dbo.SeniorityCategory SC ON SC.SeniorityCategoryId = S.SeniorityCategoryId
 	WHERE	(
 				@PersonStatusIds IS NULL
 				OR PS.PersonStatusId IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@PersonStatusIds))
