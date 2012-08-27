@@ -121,8 +121,8 @@
                                 </td>
                                 <td class="SecondTdNewHire">
                                     <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" AllSelectedReturnType="Null"
-                                        OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status')"
-                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Person Status"
+                                        OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')"
+                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Person Status" DropDownListTypePlurlForm="es"
                                         CssClass="NewHireReportCblTimeScales" />
                                     <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
                                         BehaviorID="sdePersonStatus" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
@@ -394,8 +394,8 @@
                     </asp:TableCell>
                     <asp:TableCell ID="cellDetail" runat="server">
                         <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnGraph" runat="server" Text="Graph" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="1" ToolTip="Graph"></asp:LinkButton></span>
+                            <asp:LinkButton ID="lnkbtnGraph" runat="server" Text="Graphs" CausesValidation="false"
+                                OnCommand="btnView_Command" CommandArgument="1" ToolTip="Graphs"></asp:LinkButton></span>
                         </span>
                     </asp:TableCell>
                 </asp:TableRow>
