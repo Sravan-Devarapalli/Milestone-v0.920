@@ -16,6 +16,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         #region constant
 
         private const string MAIN_CHART_AREA_NAME = "MainArea";
+        private const string SeeNewHiresbySeniority = "See New Hires by Seniority Category";
+        private const string SeeNewHiresbyRecruiter = "See New Hires by Recruiter";
 
         #endregion
 
@@ -26,13 +28,41 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             get { return ((PraticeManagement.Reporting.NewHireReport)Page); }
         }
 
-        private Dictionary<string, int> Seniorities { get; set; }
+        private Dictionary<string, int> SenioritiesCategory { get; set; }
 
         private Dictionary<string, int> Recruiters { get; set; }
 
-        private List<Seniority> SeniorityList { get; set; }
+        private List<SeniorityCategory> SeniorityCategoryList { get; set; }
 
         private List<Person> RecuriterList { get; set; }
+
+        private bool IsSeniorityGraph
+        {
+            get
+            {
+                if (hlnkGraph.Text == SeeNewHiresbySeniority)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        protected void hlnkGraph_Click(object sender, EventArgs e)
+        {
+            if (hlnkGraph.Text == SeeNewHiresbySeniority)
+            {
+                hlnkGraph.Text = SeeNewHiresbyRecruiter;
+            }
+            else
+            {
+                hlnkGraph.Text = SeeNewHiresbySeniority;
+            }
+            PopulateGraph();
+        }
 
         #endregion
 
@@ -46,7 +76,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         protected void chrtNewHireReport_Click(object sender, ImageMapEventArgs e)
         {
-            string[] postBackDetails = e.PostBackValue.Split(',');
+            string[] postBackDetails = e.PostBackValue.Split(':');
             string selectedValue = postBackDetails[0].Trim();
             lbTotalHires.Text = postBackDetails[1];
             var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
@@ -54,8 +84,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             Boolean.TryParse(postBackDetails[2], out isSeniority);
             if (isSeniority)
             {
-                lbName.Text = "Seniority : " + selectedValue;
-                data = data.Where(p => p.Seniority != null ? p.Seniority.Name == selectedValue : selectedValue == Constants.FilterKeys.Unassigned).ToList();
+                lbName.Text = "Seniority Category: " + selectedValue;
+                data = data.Where(p => p.Seniority != null ? p.Seniority.SeniorityCategory.Name == selectedValue : selectedValue == Constants.FilterKeys.Unassigned).ToList();
             }
             else
             {
@@ -95,74 +125,106 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateGraphAxisData(List<Person> data)
         {
-            SeniorityList = ServiceCallers.Custom.Person(p => p.ListSeniorities()).ToList();
-            RecuriterList = ServiceCallers.Custom.Person(p => p.GetRecruiterList(null, null)).ToList();
-            List<Seniority> _seniorityList = data.Select(p => p.Seniority != null ? p.Seniority : new Seniority { Id = 0, Name = Constants.FilterKeys.Unassigned }).Distinct().ToList();
-            List<Person> _recurterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : new Person { LastName = Constants.FilterKeys.Unassigned, Id = 0 }).Distinct().ToList();
-            if (_recurterList.Count > 0)
+            if (IsSeniorityGraph)
             {
-                RecuriterList = RecuriterList.Concat(_recurterList).Distinct().ToList();
-            }
-            if (_seniorityList.Count > 0)
-            {
-                SeniorityList = SeniorityList.Concat(_seniorityList).Distinct().ToList();
-            }
 
-            if (Seniorities == null)
-                Seniorities = new Dictionary<string, int>();
+                SeniorityCategoryList = ServiceCallers.Custom.Person(p => p.ListAllSeniorityCategories()).ToList();
+                if (data.Any(p => p.Seniority == null))
+                {
+                    SeniorityCategoryList.Add(new SeniorityCategory() { Id = 0, Name = Constants.FilterKeys.Unassigned });
+                }
 
-            foreach (var S in SeniorityList)
-            {
-                int count = data.Count(p => p.Seniority != null ? p.Seniority.Id == S.Id : S.Id == 0);
-                Seniorities.Add(S.Name, count);
+                if (SenioritiesCategory == null)
+                    SenioritiesCategory = new Dictionary<string, int>();
+
+                foreach (var S in SeniorityCategoryList)
+                {
+                    int count = data.Count(p => p.Seniority != null ? p.Seniority.SeniorityCategory.Id == S.Id : S.Id == 0);
+                    SenioritiesCategory.Add(S.Name, count);
+                }
             }
-            if (Recruiters == null)
-                Recruiters = new Dictionary<string, int>();
-            foreach (var R in RecuriterList)
+            else
             {
-                int count = data.Count(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.Id.Value == R.Id.Value : R.Id.Value == 0);
-                Recruiters.Add(R.PersonLastFirstName, count);
+                RecuriterList = ServiceCallers.Custom.Person(p => p.GetPersonListWithRole("Recruiter")).ToList();
+                List<Person> _recurterList = data.Select(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter : new Person { LastName = Constants.FilterKeys.Unassigned, Id = 0 }).Distinct().ToList();
+                if (_recurterList.Count > 0)
+                {
+                    RecuriterList = RecuriterList.Concat(_recurterList).Distinct().ToList();
+                }
+
+                if (Recruiters == null)
+                    Recruiters = new Dictionary<string, int>();
+                foreach (var R in RecuriterList)
+                {
+                    int count = data.Count(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.Id.Value == R.Id.Value : R.Id.Value == 0);
+                    Recruiters.Add(R.Id == 0 ? R.LastName : R.PersonLastFirstName, count);
+                }
+
             }
         }
 
         private void LoadChartData(List<Person> data)
         {
-            var seniorityList = Seniorities.Select(p => new { name = p.Key, count = p.Value }).ToList();
-            var recruiterList = Recruiters.Select(p => new { name = p.Key, count = p.Value }).ToList();
-            seniorityList = seniorityList.OrderBy(p => p.name).ToList();
-            recruiterList = recruiterList.OrderBy(p => p.name).ToList();
+            if (IsSeniorityGraph)
+            {
+                var seniorityList = SenioritiesCategory.Select(p => new { name = p.Key, count = p.Value }).ToList();
+                seniorityList = seniorityList.OrderBy(p => p.name).ToList();
+                chrtNewHireReportBySeniority.Visible = true;
+                chrtNewHireReportByRecruiter.Visible = false;
+                chrtNewHireReportBySeniority.DataSource = seniorityList;
+                chrtNewHireReportBySeniority.DataBind();
+            }
+            else
+            {
+                var recruiterList = Recruiters.Select(p => new { name = p.Key, count = p.Value }).ToList();
+                recruiterList = recruiterList.OrderBy(p => p.name).ToList();
+                chrtNewHireReportBySeniority.Visible = false;
+                chrtNewHireReportByRecruiter.Visible = true;
+                chrtNewHireReportByRecruiter.DataSource = recruiterList;
+                chrtNewHireReportByRecruiter.DataBind();
+            }
             InitChart();
-            chrtNewHireReportBySeniority.DataSource = seniorityList;
-            chrtNewHireReportBySeniority.DataBind();
-
-            chrtNewHireReportByRecruiter.DataSource = recruiterList;
-            chrtNewHireReportByRecruiter.DataBind();
         }
 
         private void InitChart()
         {
-            chrtNewHireReportBySeniority.Width = Seniorities.Count * 70;
-            chrtNewHireReportBySeniority.Height = 500;
-            InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Seniority", false);
-            InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
+            if (IsSeniorityGraph)
+            {
 
-            chrtNewHireReportByRecruiter.Width = Recruiters.Count * 70;
-            chrtNewHireReportByRecruiter.Height = 500;
-            InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Recruiter", false);
-            InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
-
+                chrtNewHireReportBySeniority.Width = SenioritiesCategory.Count * 70 < 400 ? 400 : SenioritiesCategory.Count * 70 ;
+                chrtNewHireReportBySeniority.Height = 500;
+                InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Seniority Category", false);
+                InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
+            }
+            else
+            {
+                chrtNewHireReportByRecruiter.Width = Recruiters.Count * 70;
+                chrtNewHireReportByRecruiter.Height = 500;
+                InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Recruiter", false);
+                InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
+            }
             UpdateChartTitle();
         }
 
         private void UpdateChartTitle()
         {
-            chrtNewHireReportBySeniority.Titles.Clear();
-            chrtNewHireReportBySeniority.Titles.Add(string.Format("New Hires By Seniority {0}", HostingPage.GraphRange));
-            chrtNewHireReportBySeniority.Titles[0].Font = new Font("Arial", 16, FontStyle.Bold);
+            if (IsSeniorityGraph)
+            {
 
-            chrtNewHireReportByRecruiter.Titles.Clear();
-            chrtNewHireReportByRecruiter.Titles.Add(string.Format("New Hires By Recruiter {0}", HostingPage.GraphRange));
-            chrtNewHireReportByRecruiter.Titles[0].Font = new Font("Arial", 16, FontStyle.Bold);
+                chrtNewHireReportBySeniority.Titles.Clear();
+                chrtNewHireReportBySeniority.Titles.Add("New Hires By Seniority Category ");
+                chrtNewHireReportBySeniority.Titles.Add(HostingPage.GraphRange);
+                chrtNewHireReportBySeniority.Titles[0].Font =
+                chrtNewHireReportBySeniority.Titles[1].Font = new Font("Arial", 16, FontStyle.Bold);
+            }
+            else
+            {
+                chrtNewHireReportByRecruiter.Titles.Clear();
+                chrtNewHireReportByRecruiter.Titles.Add("New Hires By Recruiter");
+                chrtNewHireReportByRecruiter.Titles.Add(HostingPage.GraphRange);
+                chrtNewHireReportByRecruiter.Titles[0].Font =
+                chrtNewHireReportByRecruiter.Titles[1].Font = new Font("Arial", 16, FontStyle.Bold);
+            }
         }
 
         private void InitAxis(Axis horizAxis, string title, bool isVertical)
