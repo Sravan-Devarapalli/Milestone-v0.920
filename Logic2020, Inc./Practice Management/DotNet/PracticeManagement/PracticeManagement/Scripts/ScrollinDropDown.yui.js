@@ -1,6 +1,9 @@
-﻿function scrollingDropdown_onclick(control, type) {
+﻿function scrollingDropdown_onclick(control, type,pluralform) {
     var temp = 0;
     var text = "";
+    if (isNaN(pluralform)) {
+        pluralform = "s";
+    }
     var scrollingDropdownList = document.getElementById(control.toString());
     var arrayOfCheckBoxes = scrollingDropdownList.getElementsByTagName("input");
     if (arrayOfCheckBoxes.length == 1 && arrayOfCheckBoxes[0].disabled) {
@@ -20,7 +23,7 @@
                 text = arrayOfCheckBoxes[0].parentNode.childNodes[1].innerHTML;
             }
             if (temp === 0) {
-                text = "Please Choose " + type.toString() + "(s)";
+                text = "Please Choose " + type.toString() + "("+pluralform +")";
             }
         }
         text = DecodeString(text);
