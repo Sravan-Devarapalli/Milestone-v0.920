@@ -12,6 +12,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timescale" nillable="true" type="tns:Timescale" />
+  <xs:complexType name="ArrayOfPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
@@ -56,6 +62,7 @@
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
       <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReason" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationReasonid" nillable="true" type="xs:int" />
       <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q9:ArrayOfPersonTraining" />
       <xs:element minOccurs="0" name="UtlizationPercent" type="xs:double" />
@@ -183,10 +190,18 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
       <xs:element minOccurs="0" name="SeniorityValue" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Seniority" nillable="true" type="tns:Seniority" />
+  <xs:complexType name="SeniorityCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
   <xs:complexType name="ArrayOfProjectAttachment">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
@@ -463,12 +478,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PracticeManagerHistory" nillable="true" type="tns:PracticeManagerHistory" />
-  <xs:complexType name="ArrayOfPerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="ProjectStatus">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
@@ -626,6 +635,7 @@
       <xs:element minOccurs="0" name="HoursToCollect" type="xs:int" />
       <xs:element minOccurs="0" name="Old_HoursToCollect" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Recruit" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Recruiter" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="RecruiterId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
@@ -637,36 +647,18 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
-  <xs:complexType name="ArrayOfConsultantDemandItem">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantDemandItem" nillable="true" type="tns:ConsultantDemandItem" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfConsultantDemandItem" nillable="true" type="tns:ArrayOfConsultantDemandItem" />
-  <xs:complexType name="ConsultantDemandItem">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
-      <xs:element minOccurs="0" name="Consultant" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="LinkedObjectId" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="LinkedObjectNumber" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ObjectId" type="xs:int" />
-      <xs:element minOccurs="0" name="ObjectName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ObjectNumber" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ObjectStatusId" type="xs:int" />
-      <xs:element minOccurs="0" name="ObjectType" type="xs:int" />
-      <xs:element minOccurs="0" name="QuantityString" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ConsultantDemandItem" nillable="true" type="tns:ConsultantDemandItem" />
   <xs:complexType name="ArrayOfTimescale">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Timescale" nillable="true" type="tns:Timescale" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfTimescale" nillable="true" type="tns:ArrayOfTimescale" />
+  <xs:complexType name="ArrayOfSeniorityCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSeniorityCategory" nillable="true" type="tns:ArrayOfSeniorityCategory" />
   <xs:complexType name="ComputedFinancialsEx">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ComputedFinancials">
@@ -863,6 +855,31 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="OpportunityStatus" nillable="true" type="tns:OpportunityStatus" />
+  <xs:complexType name="ArrayOfConsultantDemandItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantDemandItem" nillable="true" type="tns:ConsultantDemandItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantDemandItem" nillable="true" type="tns:ArrayOfConsultantDemandItem" />
+  <xs:complexType name="ConsultantDemandItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
+      <xs:element minOccurs="0" name="Consultant" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LinkedObjectId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="LinkedObjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ObjectId" type="xs:int" />
+      <xs:element minOccurs="0" name="ObjectName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ObjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ObjectStatusId" type="xs:int" />
+      <xs:element minOccurs="0" name="ObjectType" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunintyDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="QuantityString" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantDemandItem" nillable="true" type="tns:ConsultantDemandItem" />
   <xs:complexType name="ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="QuadrupleOfPersonArrayOfintintintlqlLCQKx" nillable="true" type="tns:QuadrupleOfPersonArrayOfintintintlqlLCQKx" />
