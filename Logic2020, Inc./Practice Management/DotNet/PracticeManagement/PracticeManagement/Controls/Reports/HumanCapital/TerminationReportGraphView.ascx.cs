@@ -18,8 +18,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         #region constant
 
         private const string MAIN_CHART_AREA_NAME = "MainArea";
-        private const string SeeYearToDate = "See Year To Date";
-        private const string SeeLast12Months = "See Last 12 Months";
+        public const string SeeYearToDate = "See Year To Date";
+        public const string SeeLast12Months = "See Last 12 Months";
 
         #endregion
 
@@ -28,6 +28,14 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         private PraticeManagement.Reporting.TerminationReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TerminationReport)Page); }
+        }
+
+        public LinkButton hlnkGraphHiddenField
+        {
+            get
+            {
+                return hlnkGraph;
+            }
         }
 
         #endregion
