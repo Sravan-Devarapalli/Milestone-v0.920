@@ -8,6 +8,7 @@ using PraticeManagement.Controls;
 using DataTransferObjects;
 using System.Web.UI.HtmlControls;
 using System.Text;
+using PraticeManagement.Controls.Reports.HumanCapital;
 
 namespace PraticeManagement.Reporting
 {
@@ -358,6 +359,7 @@ namespace PraticeManagement.Reporting
             }
             else
             {
+                tpGraph.hlnkGraphHiddenField.Text = NewHireGraphView.SeeNewHiresbyRecruiter;
                 tpGraph.PopulateGraph();
             }
         }
