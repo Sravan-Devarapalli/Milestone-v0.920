@@ -45,6 +45,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public SeniorityCategory SeniorityCategory
+        {
+            get;
+            set;
+        }
+
         public bool OtherHasGreaterOrEqualSeniority(Seniority other)
         {
             //  Currently in our database 
