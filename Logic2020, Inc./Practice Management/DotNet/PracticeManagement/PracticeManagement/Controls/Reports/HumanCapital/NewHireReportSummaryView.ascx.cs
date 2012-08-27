@@ -84,11 +84,11 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                     bool isUnassigned = filterValue.Equals(Constants.FilterKeys.Unassigned);
                     if (isSeniority)
                     {
-                        data = data.Where(p => p.Seniority != null ? p.Seniority.Name == filterValue : isUnassigned).ToList();
+                        data = data.Where(p => p.Seniority != null ? p.Seniority.SeniorityCategory.Name == filterValue : isUnassigned).ToList();
                     }
                     else
                     {
-                        data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonFirstLastName == filterValue : isUnassigned).ToList();
+                        data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonLastFirstName == filterValue : isUnassigned).ToList();
                     }
                 }
                 HostingPage.ExportToExcel(data);
