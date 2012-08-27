@@ -162,6 +162,7 @@
     <Compile Include="Reports\TimeEntryByWorkType.cs" />
     <Compile Include="Reports\TimeEntriesGroupByClientAndProject.cs" />
     <Compile Include="Reports\WorkTypeLevelGroupedHours.cs" />
+    <Compile Include="SeniorityCategory.cs" />
     <Compile Include="Skills\ContactInfoType.cs" />
     <Compile Include="Skills\DocumentType.cs" />
     <Compile Include="Skills\Employer.cs" />
