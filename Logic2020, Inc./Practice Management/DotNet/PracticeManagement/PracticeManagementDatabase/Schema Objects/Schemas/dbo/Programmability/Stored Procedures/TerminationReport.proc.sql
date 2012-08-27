@@ -15,6 +15,7 @@
 )
 AS
 BEGIN
+	SELECT @StartDate = CONVERT(DATETIME,CONVERT(DATE,@StartDate)),@EndDate = CONVERT(DATETIME,CONVERT(DATE,@EndDate))
 	DECLARE @FutureDate DATETIME,@W2SalaryId INT ,@W2HourlyId INT 
 	SET @FutureDate = dbo.GetFutureDate()
 	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
