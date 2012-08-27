@@ -1720,6 +1720,8 @@ namespace DataAccess
                 int recruiterLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterLastNameColumn);
                 int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
                 int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
+                int seniorityCategoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategoryId);
+                int seniorityCategoryIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategory);
                 int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
                 int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
 
@@ -1765,7 +1767,16 @@ namespace DataAccess
                     person.RecruiterCommission = recruiterList;
                     if (!reader.IsDBNull(timeScaleIndex))
                     {
-                        person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex), Name = reader.GetString(personSeniorityNameIndex) };
+                        person.Seniority = new Seniority
+                        {
+                            Id = reader.GetInt32(personSeniorityIdIndex),
+                            Name = reader.GetString(personSeniorityNameIndex),
+                            SeniorityCategory = new SeniorityCategory()
+                            {
+                                Id = reader.GetInt32(seniorityCategoryIdIndex),
+                                Name = reader.GetString(seniorityCategoryIndex)
+                            }
+                        };
                     }
 
                     if (!reader.IsDBNull(divisionIdIndex))
@@ -1778,8 +1789,11 @@ namespace DataAccess
                     if (terminationDateIndex > -1 && !reader.IsDBNull(terminationDateIndex))
                     {
                         person.TerminationDate = reader.GetDateTime(terminationDateIndex);
-                        person.TerminationReasonid = reader.GetInt32(terminationReasonIdIndex);
-                        person.TerminationReason = reader.GetString(terminationReasonIndex);
+                        if (! reader.IsDBNull(terminationReasonIdIndex))
+                        {
+                            person.TerminationReasonid = reader.GetInt32(terminationReasonIdIndex);
+                            person.TerminationReason = reader.GetString(terminationReasonIndex);
+                        }
                     }
                     result.Add(person);
                 }
@@ -1847,6 +1861,7 @@ namespace DataAccess
                 int terminationsW2SalaryCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsW2SalaryCountInTheRange);
                 int terminationsW2HourlyCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsW2HourlyCountInTheRange);
                 int terminationsContractorsCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsContractorsCountInTheRange);
+                int terminationsCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsCountInTheRange);
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
 
@@ -1860,7 +1875,7 @@ namespace DataAccess
                     tpr.TerminationsW2SalaryCountInTheRange = reader.GetInt32(terminationsW2SalaryCountInTheRange);
                     tpr.TerminationsW2HourlyCountInTheRange = reader.GetInt32(terminationsW2HourlyCountInTheRange);
                     tpr.TerminationsContractorsCountInTheRange = reader.GetInt32(terminationsContractorsCountInTheRange);
-
+                    tpr.TerminationsCountInTheRange = reader.GetInt32(terminationsCountInTheRange);
                     result.Add(tpr);
                 }
             }
