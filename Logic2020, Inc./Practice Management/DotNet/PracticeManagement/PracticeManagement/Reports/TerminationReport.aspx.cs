@@ -10,6 +10,7 @@ using System.Web.UI.HtmlControls;
 using System.Text;
 using AjaxControlToolkit;
 using DataTransferObjects.Reports.HumanCapital;
+using PraticeManagement.Controls.Reports.HumanCapital;
 
 namespace PraticeManagement.Reporting
 {
@@ -323,10 +324,10 @@ namespace PraticeManagement.Reporting
             int newHiresCountInTheRange = 0;
             foreach(var termiantionPerson in data)
             {
-                attrition += termiantionPerson.Attrition;
                 terminationsEmployeeCountInTheRange += termiantionPerson.TerminationsEmployeeCountInTheRange;                
                 newHiresCountInTheRange += termiantionPerson.NewHiresCountInTheRange;
             }
+            attrition = TerminationPersonsInRange.CalculateAttrition(activePersonsCountAtTheBeginning, newHiresCountInTheRange, terminationsEmployeeCountInTheRange);
             lblAttrition.Text = lblPopUpArrition.Text = attrition.ToString("0.00%");
             lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = terminationsEmployeeCountInTheRange.ToString();
             lblPopUPActivensCount.Text = lblPopUPActivens.Text = activePersonsCountAtTheBeginning.ToString();
@@ -343,6 +344,7 @@ namespace PraticeManagement.Reporting
             }
             else
             {
+                tpGraph.hlnkGraphHiddenField.Text = TerminationReportGraphView.SeeYearToDate;
                 tpGraph.PopulateGraph();
             }
         }
