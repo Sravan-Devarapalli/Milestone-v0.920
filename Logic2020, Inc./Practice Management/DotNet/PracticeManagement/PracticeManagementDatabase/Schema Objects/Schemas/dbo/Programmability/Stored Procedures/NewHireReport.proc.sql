@@ -13,6 +13,7 @@
 )
 AS
 BEGIN
+	SELECT @StartDate = CONVERT(DATETIME,CONVERT(DATE,@StartDate)),@EndDate = CONVERT(DATETIME,CONVERT(DATE,@EndDate))
 
 	DECLARE @FutureDate DATETIME
 	SET @FutureDate = dbo.GetFutureDate()
