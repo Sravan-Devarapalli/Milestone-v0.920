@@ -307,8 +307,8 @@
                                         <tr>
                                             <td class="SecondTd">
                                                 <asp:Label ID="lblAttrition" runat="server" onmouseover="ShowPanel();" onmouseout="HidePanel();"></asp:Label>
-                                                <asp:Image alt="Filter" ImageUrl="~/Images/hint.png" runat="server" ID="imgAttritionHint"
-                                                    CssClass="CursorPointer Width10Px" />
+                                                <asp:Image alt="Filter" ImageUrl="~/Images/hint1.png" runat="server" ID="imgAttritionHint"
+                                                    CssClass="CursorPointer" />
                                                 <AjaxControlToolkit:ModalPopupExtender ID="attritionHelpPopUp" runat="server" TargetControlID="imgAttritionHint"
                                                     BehaviorID="attritionHelpPopUp" BackgroundCssClass="modalBackground" PopupControlID="pnlAttrition"
                                                     CancelControlID="btnCancleAttrition" DropShadow="false" />
