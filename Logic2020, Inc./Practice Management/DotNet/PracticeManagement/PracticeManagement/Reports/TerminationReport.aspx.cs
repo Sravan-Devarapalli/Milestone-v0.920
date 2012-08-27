@@ -344,7 +344,7 @@ namespace PraticeManagement.Reporting
             }
             else
             {
-                tpGraph.hlnkGraphHiddenField.Text = TerminationReportGraphView.SeeYearToDate;
+                tpGraph.hlnkGraphHiddenField.Text = TerminationReportGraphView.SeeLast12Months;
                 tpGraph.PopulateGraph();
             }
         }
@@ -431,7 +431,7 @@ namespace PraticeManagement.Reporting
         #endregion
 
         #region Export
-        public void ExportToExcel(List<Person> data, bool isPopUp, string popUpRange)
+        public void ExportToExcel(List<Person> data, bool isPopUp, string popUpRange,DateTime startDate ,DateTime endDate)
         {
             data = data.OrderBy(p=>p.PersonLastFirstName).ToList();
 
@@ -474,9 +474,9 @@ namespace PraticeManagement.Reporting
                 {
                     sb.Append(person.HtmlEncodedName);
                     sb.Append("\t");
-                    sb.Append(person.Seniority.Name);
+                    sb.Append(person.Seniority != null ? person.Seniority.Name : string.Empty);
                     sb.Append("\t");
-                    sb.Append(person.CurrentPay.TimescaleName);
+                    sb.Append(person.CurrentPay != null ? person.CurrentPay.TimescaleName : string.Empty);
                     sb.Append("\t");
                     sb.Append(person.Status.Name);
                     sb.Append("\t");
@@ -497,7 +497,7 @@ namespace PraticeManagement.Reporting
                 sb.Append("There are no Person Terminations for the selected range.");
             }
             //“TerminationReport_[StartOfRange]_[EndOfRange].xls”.  
-            var filename = string.Format("{0}_{1}-{2}.xls", "TerminationReport", StartDate.Value.ToString("MM.dd.yyyy"), EndDate.Value.ToString("MM.dd.yyyy"));
+            var filename = string.Format("{0}_{1}-{2}.xls", "TerminationReport", startDate.ToString("MM.dd.yyyy"), endDate.ToString("MM.dd.yyyy"));
             GridViewExportUtil.Export(filename, sb);
         }
         #endregion
