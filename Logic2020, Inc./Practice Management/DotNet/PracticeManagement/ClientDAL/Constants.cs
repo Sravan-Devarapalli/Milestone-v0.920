@@ -345,6 +345,12 @@
             public const string TerminationsW2SalaryCountInTheRange = "TerminationsW2SalaryCountInTheRange";
             public const string TerminationsW2HourlyCountInTheRange = "TerminationsW2HourlyCountInTheRange";
             public const string TerminationsContractorsCountInTheRange = "TerminationsContractorsCountInTheRange";
+            public const string SeniorityIdColumn = "SeniorityId";
+            public static string Seniority = "Seniority";
+            public static string SeniorityCategoryId = "SeniorityCategoryId";
+            public static string SeniorityCategory = "SeniorityCategory";
+            public static string TerminationsCountInTheRange = "TerminationsCountInTheRange";
+
         }
 
         #endregion
@@ -636,6 +642,7 @@
             public const string RecruiterIdsParam = "@RecruiterIds";
             public const string TerminationReasonIdsParam = "@TerminationReasonIds";
             public const string TerminationDatesParam = "@TerminationDates";
+            public static string RoleNameParam = "@RoleName";
         }
 
         #endregion
@@ -784,6 +791,7 @@
                 public const string GetStrawmanListShortFilterWithTodayPay = "dbo.GetStrawmanListShortFilterWithTodayPay";
                 public const string GetTerminationReasonsList = "dbo.GetTerminationReasonsList";
                 public const string GetPersonHireAndTerminationDateById = "dbo.GetPersonHireAndTerminationDateById";
+                public static string GetPersonListWithRole = "dbo.GetPersonListWithRole";
             }
 
             #endregion
@@ -861,6 +869,17 @@
                 public const string PaySaveProcedure = "dbo.PaySave";
                 public const string PayDeleteProcedure = "dbo.PayDelete";
                 public const string IsPersonSalaryTypeListByPeriodProcedure = "dbo.IsPersonSalaryTypeListByPeriod";
+            }
+
+            #endregion
+
+            #region Nested type: Seniority
+
+            public class Seniority
+            {
+                public const string SeniorityListAllProcedure = "dbo.SeniorityListAll";
+                public const string ListAllSeniorityCategories = "dbo.ListAllSeniorityCategories";
+                
             }
 
             #endregion
