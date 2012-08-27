@@ -152,7 +152,7 @@ namespace PraticeManagement.Reporting
                         case 4:
                         case 5:
                         case 6:
-                            range = "Quater " + GetRomanNumber(RangeSelected - 2) + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
+                            range = "Quarter " + (RangeSelected - 2).ToString() + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
                             break;
                         case 7:
                             range = "Year To Date (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
@@ -183,7 +183,7 @@ namespace PraticeManagement.Reporting
                         case 4:
                         case 5:
                         case 6:
-                            range = "Quater " + GetRomanNumber(RangeSelected - 2);
+                            range = "Quarter " + (RangeSelected - 2).ToString();
                             break;
                         case 7:
                             range = "Year To Date";
@@ -383,22 +383,6 @@ namespace PraticeManagement.Reporting
             {
                 cell.CssClass = string.Empty;
             }
-        }
-
-        private String GetRomanNumber(int no)
-        {
-            switch (no)
-            {
-                case 1:
-                    return "I";
-                case 2:
-                    return "II";
-                case 3:
-                    return "III";
-                case 4:
-                    return "IV";
-            }
-            return "";
         }
 
         protected string GetDateFormat(DateTime date)
