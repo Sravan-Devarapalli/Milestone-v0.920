@@ -435,6 +435,7 @@
     <Content Include="Images\divisions_16x16.png" />
     <Content Include="Images\email_envelope.png" />
     <Content Include="Images\favicon.ico" />
+    <Content Include="Images\hint1.png" />
     <Content Include="Images\link.png" />
     <Content Include="Images\Non-Billable-Icon.png" />
     <Content Include="Images\notes.png" />
@@ -538,6 +539,8 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory1.datasource" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
       <SubType>Designer</SubType>
