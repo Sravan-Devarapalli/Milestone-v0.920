@@ -49,14 +49,20 @@ namespace DataTransferObjects.Reports.HumanCapital
         {
             get
             {
-                int denominator = ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsEmployeeCountInTheRange;
-                int numerator = TerminationsEmployeeCountInTheRange;
-                if (denominator != 0)
-                {
-                    return (double)((decimal)(numerator) / (decimal)denominator);
-                }
-                return 0d;
+                return CalculateAttrition(ActivePersonsCountAtTheBeginning, NewHiresCountInTheRange, TerminationsEmployeeCountInTheRange);
             }
+        }
+
+        public static double CalculateAttrition(int activePersonsCountAtTheBeginning, int newHiresCountInTheRange, int terminationsEmployeeCountInTheRange)
+        {
+            int denominator = activePersonsCountAtTheBeginning + newHiresCountInTheRange - terminationsEmployeeCountInTheRange;
+            int numerator = terminationsEmployeeCountInTheRange;
+            if (denominator != 0)
+            {
+                return (double)((decimal)(numerator) / (decimal)denominator);
+            }
+            return 0d;
+
         }
 
         public double AttritionPercentage
