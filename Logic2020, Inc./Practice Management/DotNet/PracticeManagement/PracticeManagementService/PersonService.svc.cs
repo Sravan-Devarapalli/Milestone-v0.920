@@ -1093,6 +1093,19 @@ namespace PracticeManagementService
             return result;
         }
 
+        /// <summary>
+        /// Selects a list of the seniority Categories.
+        /// </summary>
+        /// <returns>A list of the <see cref="Seniority"/> objects.</returns>
+        public List<SeniorityCategory> ListAllSeniorityCategories()
+        {
+            return SeniorityDAL.ListAllSeniorityCategories();
+        }
+
+        public List<Person> GetPersonListWithRole(string rolename)
+        {
+            return PersonDAL.GetPersonListWithRole(rolename);
+        }
 
         #endregion
     }
