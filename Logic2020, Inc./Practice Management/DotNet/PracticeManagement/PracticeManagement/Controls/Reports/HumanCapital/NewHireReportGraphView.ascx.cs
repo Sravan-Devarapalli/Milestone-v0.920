@@ -16,8 +16,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         #region constant
 
         private const string MAIN_CHART_AREA_NAME = "MainArea";
-        private const string SeeNewHiresbySeniority = "See New Hires by Seniority Category";
-        private const string SeeNewHiresbyRecruiter = "See New Hires by Recruiter";
+        public const string SeeNewHiresbySeniority = "See New Hires by Seniority Category";
+        public const string SeeNewHiresbyRecruiter = "See New Hires by Recruiter";
 
         #endregion
 
@@ -48,6 +48,13 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 {
                     return true;
                 }
+            }
+        }
+
+        public LinkButton hlnkGraphHiddenField
+        {
+            get {
+                return hlnkGraph;
             }
         }
 
