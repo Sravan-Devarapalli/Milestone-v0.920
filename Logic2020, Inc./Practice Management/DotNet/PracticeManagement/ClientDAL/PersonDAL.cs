@@ -3747,6 +3747,25 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<Person> GetPersonListWithRole(string rolename)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonListWithRole, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.RoleNameParam, rolename);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<Person>();
+                    ReadPersonsShort(reader, result);
+                    return result;
+                }
+            }
+        }
     }
 }
 
