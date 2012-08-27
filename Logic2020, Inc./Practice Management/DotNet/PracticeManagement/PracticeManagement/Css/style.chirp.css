@@ -2615,6 +2615,10 @@ TABLE.Section td
     background-color: #f0f0f1;
     border-bottom: 1px solid Gray;
 }
+.font10PxImp
+{
+    font-size: 10px !important;
+}
 .fontSize11px
 {
     font-size: 11px;
@@ -7225,9 +7229,9 @@ table#ctl00_body_login tr td label
 }
 .hrArritionCalculation
 {
-    height: 4px;
+    height: 3px;
     background-color: Black;
-    width: 60%;
+    width: 80%;
 }
 .TerminationReportHeaderTotals
 {
