@@ -64,7 +64,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             tpSummary.BtnExportToExcelButton.Attributes["startDate"] = startDate.ToString();
             tpSummary.BtnExportToExcelButton.Attributes["endDate"] = endDate.ToString();
             tpSummary.BtnExportToExcelButton.Attributes["IsGraphViewPopUp"] = true.ToString();
-            TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
+            TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, null,null,null,null,null,false, null, null, null, null));
             lbName.Text = "Month : " + postBackDetails[0];
 
             tpSummary.PopUpFilteredPerson = data;
@@ -90,7 +90,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 startDate = Utils.Calendar.YearStartDate(now);
             }
             endDate = Utils.Calendar.LastMonthEndDate(now);
-            terminationPersonInRange = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(startDate, endDate)).ToList();
+            terminationPersonInRange = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(startDate.Date, endDate.Date)).ToList();
 
             TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
             HostingPage.PopulateHeaderSection(data);
