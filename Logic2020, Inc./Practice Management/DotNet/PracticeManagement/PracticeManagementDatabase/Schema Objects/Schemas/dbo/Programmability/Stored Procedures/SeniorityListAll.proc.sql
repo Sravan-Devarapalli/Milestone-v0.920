@@ -9,7 +9,11 @@ CREATE PROCEDURE [dbo].[SeniorityListAll]
 AS
 	SET NOCOUNT ON
 
-	SELECT e.SeniorityId, e.Name
-	  FROM dbo.Seniority AS e
-	ORDER BY e.SeniorityValue,e.Name
+	SELECT S.SeniorityId,
+			S.Name AS Seniority,
+			S.SeniorityCategoryId,
+			SC.Name AS SeniorityCategory
+	FROM dbo.Seniority AS S
+	INNER JOIN dbo.SeniorityCategory SC ON S.SeniorityCategoryId = SC.SeniorityCategoryId
+	ORDER BY S.SeniorityValue,S.Name
 
