@@ -195,7 +195,6 @@ namespace PraticeManagement.Reporting
 
         public bool SetSelectedFilters { get; set; }
 
-
         #endregion
 
         #region Page Events
@@ -215,7 +214,7 @@ namespace PraticeManagement.Reporting
                 }
                 if (this.cblTerminationReasons != null && this.cblTerminationReasons.Items.Count == 0)
                 {
-                    DataHelper.FillTerminationReasonsList(this.cblTerminationReasons, "All Reasons");
+                    DataHelper.FillTerminationReasonsListForTerminationReport(this.cblTerminationReasons, "All Reasons");
                 }
                 if (this.cblPractices != null && this.cblPractices.Items.Count == 0)
                 {
@@ -226,6 +225,7 @@ namespace PraticeManagement.Reporting
                 LoadAttrition();
             }
         }
+
         protected void Page_PreRender(object sender, EventArgs e)
         {
             diRange.FromDate = StartDate;
@@ -319,7 +319,7 @@ namespace PraticeManagement.Reporting
             List<TerminationPersonsInRange> data = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(StartDate.Value, EndDate.Value)).ToList();
             double attrition = 0;
             int terminationsEmployeeCountInTheRange = 0;
-            int activePersonsCountAtTheBeginning = data.First(s => s.StartDate == StartDate.Value.Date).ActivePersonsCountAtTheBeginning;
+            int activePersonsCountAtTheBeginning = data.First(s => s.StartDate == PraticeManagement.Utils.Calendar.MonthStartDate(StartDate.Value.Date)).ActivePersonsCountAtTheBeginning;
             int newHiresCountInTheRange = 0;
             foreach(var termiantionPerson in data)
             {
@@ -431,6 +431,7 @@ namespace PraticeManagement.Reporting
         #region Export
         public void ExportToExcel(List<Person> data, bool isPopUp, string popUpRange)
         {
+            data = data.OrderBy(p=>p.PersonLastFirstName).ToList();
 
             DataHelper.InsertExportActivityLogMessage(TerminationReportExport);
             StringBuilder sb = new StringBuilder();
