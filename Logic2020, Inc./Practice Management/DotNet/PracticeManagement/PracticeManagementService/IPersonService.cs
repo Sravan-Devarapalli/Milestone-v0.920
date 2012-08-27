@@ -568,6 +568,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         Person GetPersonHireAndTerminationDate(int personId);
+
+        [OperationContract]
+        List<SeniorityCategory> ListAllSeniorityCategories();
+
+        [OperationContract]
+        List<Person> GetPersonListWithRole(string rolename);
     }
 }
 
