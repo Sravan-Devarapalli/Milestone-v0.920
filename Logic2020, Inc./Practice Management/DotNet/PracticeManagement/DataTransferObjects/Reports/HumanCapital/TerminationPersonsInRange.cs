@@ -34,13 +34,8 @@ namespace DataTransferObjects.Reports.HumanCapital
         [DataMember]
         public int TerminationsW2HourlyCountInTheRange { get; set; }
 
-        public int TerminationsCountInTheRange
-        {
-            get
-            {
-                return TerminationsEmployeeCountInTheRange + TerminationsContractorsCountInTheRange;
-            }
-        }
+        [DataMember]
+        public int TerminationsCountInTheRange { get; set; }
 
         public int TerminationsEmployeeCountInTheRange
         {
@@ -55,7 +50,7 @@ namespace DataTransferObjects.Reports.HumanCapital
             get
             {
                 int denominator = ActivePersonsCountAtTheBeginning + NewHiresCountInTheRange - TerminationsEmployeeCountInTheRange;
-                int numerator = TerminationsEmployeeCountInTheRange ;
+                int numerator = TerminationsEmployeeCountInTheRange;
                 if (denominator != 0)
                 {
                     return (double)((decimal)(numerator) / (decimal)denominator);
