@@ -394,6 +394,12 @@ namespace PraticeManagement.Controls
             set;
         }
 
+        public string DropDownListTypePlurlForm
+        {
+            get;
+            set;
+        }
+
         public string SelectedString
         {
             get
@@ -424,7 +430,8 @@ namespace PraticeManagement.Controls
 
                     if (counter == 0)
                     {
-                        text = "Please Choose " + this.DropDownListType + "(s)";
+                        this.DropDownListTypePlurlForm = string.IsNullOrEmpty(this.DropDownListTypePlurlForm) ? "s" : this.DropDownListTypePlurlForm;
+                        text = "Please Choose " + this.DropDownListType + "(" + this.DropDownListTypePlurlForm + ")";
                     }
                 }
                 return text;
