@@ -158,6 +158,6 @@
     </FooterTemplate>
 </asp:Repeater>
 <div id="divEmptyMessage" runat="server">
-    There are no Persons Terminated for the selected range.
+    No people were terminated in the time range selected and/or that match the selected filters.
 </div>
 
