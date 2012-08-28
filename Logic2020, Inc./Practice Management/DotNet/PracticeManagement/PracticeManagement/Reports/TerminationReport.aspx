@@ -302,16 +302,16 @@
                                         <tr>
                                             <td class="FirstTd fontBold">
                                                 Attrition*
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="SecondTd">
-                                                <asp:Label ID="lblAttrition" runat="server" onmouseover="ShowPanel();" onmouseout="HidePanel();"></asp:Label>
                                                 <asp:Image alt="Filter" ImageUrl="~/Images/hint1.png" runat="server" ID="imgAttritionHint"
                                                     CssClass="CursorPointer" />
                                                 <AjaxControlToolkit:ModalPopupExtender ID="attritionHelpPopUp" runat="server" TargetControlID="imgAttritionHint"
                                                     BehaviorID="attritionHelpPopUp" BackgroundCssClass="modalBackground" PopupControlID="pnlAttrition"
                                                     CancelControlID="btnCancleAttrition" DropShadow="false" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="SecondTd">
+                                                <asp:Label ID="lblAttrition" runat="server" onmouseover="ShowPanel();" onmouseout="HidePanel();"></asp:Label>
                                             </td>
                                         </tr>
                                     </table>
@@ -324,13 +324,13 @@
                                                 </th>
                                                 <th class="Width3Percent">
                                                 </th>
-                                                <th class="Width5Percent textCenter" >
+                                                <th class="Width5Percent textCenter">
                                                     Calculation
                                                 </th>
                                                 <th class="Width2Percent">
                                                 </th>
                                                 <th class="Width18Percent">
-                                                    Attrition%
+                                                    Attrition&nbsp;%
                                                 </th>
                                             </tr>
                                             <tr>
@@ -346,7 +346,7 @@
                                                     <asp:Label ID="lblPopUPActivensCount" runat="server"></asp:Label>
                                                     &nbsp;+&nbsp;
                                                     <asp:Label ID="lblPopUPNewHiresCount" runat="server"></asp:Label>
-                                                     &nbsp;-&nbsp;
+                                                    &nbsp;-&nbsp;
                                                     <asp:Label ID="lblPopUPTerminationsCountDenominator" runat="server"></asp:Label>
                                                 </td>
                                                 <td class="Width2Percent TextAlignCenter vMiddle" rowspan="3">
