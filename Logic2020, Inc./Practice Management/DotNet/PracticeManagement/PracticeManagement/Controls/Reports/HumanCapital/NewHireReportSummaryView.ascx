@@ -127,6 +127,6 @@
     </FooterTemplate>
 </asp:Repeater>
 <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
-    There are no Persons Hired for the selected range.
+    No people were hired in the time range selected and/or that match the selected filters.
 </div>
 
