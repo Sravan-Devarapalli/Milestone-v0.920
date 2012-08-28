@@ -256,15 +256,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Literal lbRange;
         
         /// <summary>
-        /// lblAttrition control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAttrition;
-        
-        /// <summary>
         /// imgAttritionHint control.
         /// </summary>
         /// <remarks>
@@ -281,6 +272,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender attritionHelpPopUp;
+        
+        /// <summary>
+        /// lblAttrition control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAttrition;
         
         /// <summary>
         /// pnlAtrritionCalculation control.
