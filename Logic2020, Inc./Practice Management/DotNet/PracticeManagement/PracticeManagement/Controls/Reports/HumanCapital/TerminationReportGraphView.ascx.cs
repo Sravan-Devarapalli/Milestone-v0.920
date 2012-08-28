@@ -73,7 +73,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             tpSummary.BtnExportToExcelButton.Attributes["endDate"] = endDate.ToString();
             tpSummary.BtnExportToExcelButton.Attributes["IsGraphViewPopUp"] = true.ToString();
             TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, null,null,null,null,null,false, null, null, null, null));
-            lbName.Text = "Month : " + postBackDetails[0];
+            lbName.Text = "Month: " + postBackDetails[0];
 
             tpSummary.PopUpFilteredPerson = data;
             tpSummary.PopulateData(true);
@@ -120,7 +120,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         /// </summary>
         private void InitChart(int count)
         {
-            chrtTerminationAndAttritionLast12Months.Width = ((count < 4) ? 4 : count) * 70;
+            chrtTerminationAndAttritionLast12Months.Width = ((count < 5) ? 5 : count) * 70;
             chrtTerminationAndAttritionLast12Months.Height = 500;
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
             InitAxis(chrtTerminationAndAttritionLast12Months.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Terminations", true);
