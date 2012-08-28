@@ -38,7 +38,7 @@
 </div>
 <div id="divEmptyMessage" class="EmptyMessagediv NewHireGraphEmptyDiv" style="display: none;"
     runat="server">
-    There are no Persons Hired for the selected range.
+    No people were hired in the time range selected and/or that match the selected filters.
 </div>
 <asp:HiddenField ID="hndDetailView" runat="server" />
 <AjaxControlToolkit:ModalPopupExtender ID="mpeDetailView" runat="server" TargetControlID="hndDetailView"
