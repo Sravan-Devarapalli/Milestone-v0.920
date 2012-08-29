@@ -272,7 +272,7 @@ namespace PracticeManagementService
                 benchProject.ProjectedFinancialsByMonth = person.ProjectedFinancialsByMonth;
 
                 benchProject.Status = new ProjectStatus();
-                if (person.Status != null && person.Status.Id == (int)PersonStatusType.Projected)
+                if (person.Status != null && person.Status.Id == (int)PersonStatusType.Contingent)
                 {
                     benchProject.Status.Id = (int)ProjectStatusType.Projected;
                 }
@@ -319,7 +319,7 @@ namespace PracticeManagementService
                 benchProject.ProjectedFinancialsByMonth = person.ProjectedFinancialsByMonth;
 
                 benchProject.Status = new ProjectStatus();
-                if (person.Status != null && person.Status.Id == (int)PersonStatusType.Projected)
+                if (person.Status != null && person.Status.Id == (int)PersonStatusType.Contingent)
                 {
                     benchProject.Status.Id = (int)ProjectStatusType.Projected;
                 }
