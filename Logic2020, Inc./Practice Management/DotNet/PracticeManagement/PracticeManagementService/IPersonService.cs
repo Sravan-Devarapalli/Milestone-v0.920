@@ -564,7 +564,7 @@ namespace PracticeManagementService
         List<Person> GetStrawmanListShortFilterWithTodayPay();
 
         [OperationContract]
-        Dictionary<string, int> GetTerminationReasonsList();
+        List<TerminationReason> GetTerminationReasonsList();
 
         [OperationContract]
         Person GetPersonHireAndTerminationDate(int personId);
@@ -574,6 +574,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> GetPersonListWithRole(string rolename);
+
+        [OperationContract]
+        List<Employment> GetPersonEmploymentHistoryById(int personId);
     }
 }
 
