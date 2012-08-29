@@ -49,7 +49,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
             if (this.cbInActive.Checked)
                 statusList += "," + ((int)PersonStatusType.Inactive).ToString();
             if (this.cbProjected.Checked)
-                statusList += "," + ((int)PersonStatusType.Projected).ToString();
+                statusList += "," + ((int)PersonStatusType.Contingent).ToString();
             if (this.cbTerminated.Checked)
                 statusList += "," + ((int)PersonStatusType.Terminated).ToString();
 
