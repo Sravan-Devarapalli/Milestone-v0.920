@@ -54,6 +54,30 @@ namespace PraticeManagement
             }
         }
 
+        protected Person PersonDetailData
+        {
+            get
+            {
+                return (Person)ViewState["PersonDetailPageData"];
+            }
+            set
+            {
+                ViewState["PersonDetailPageData"] = value;
+            }
+        }
+
+        protected string LoginPageUrl
+        {
+            get
+            {
+                return (string)ViewState["LoginPageUrl_ViewState"];
+            }
+            set
+            {
+                ViewState["LoginPageUrl_ViewState"] = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -84,6 +108,12 @@ namespace PraticeManagement
             {
                 try
                 {
+                    if (PreviousPage != null && PreviousPage.PersonUnsavedData != null && PreviousPage.LoginPageUrl != null)
+                    {
+                        PersonDetailData = PreviousPage.PersonUnsavedData;
+                        LoginPageUrl = PreviousPage.LoginPageUrl;
+                    }
+
                     Person person = serviceClient.GetPersonDetail(SelectedId.Value);
 
                     if (SelectedStartDate.HasValue)
@@ -185,6 +215,7 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            var person = PersonDetailData;
             if (ValidateAndSave())
             {
                 ClearDirty();
