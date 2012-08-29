@@ -90,6 +90,12 @@
   <wsdl:message name="IPersonService_GetPersonListWithRole_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonListWithRoleResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonEmploymentHistoryById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonEmploymentHistoryById" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonEmploymentHistoryById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonEmploymentHistoryByIdResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonRate_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonRate" />
   </wsdl:message>
@@ -578,6 +584,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithRole" message="tns:IPersonService_GetPersonListWithRole_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse" message="tns:IPersonService_GetPersonListWithRole_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonEmploymentHistoryById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById" message="tns:IPersonService_GetPersonEmploymentHistoryById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse" message="tns:IPersonService_GetPersonEmploymentHistoryById_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonRate">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonRate" message="tns:IPersonService_GetPersonRate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonRateResponse" message="tns:IPersonService_GetPersonRate_OutputMessage" />
@@ -980,6 +990,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonListWithRole">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListWithRole" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonEmploymentHistoryById">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1641,7 +1660,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system64.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://system68.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
