@@ -527,6 +527,7 @@
     <Content Include="Controls\ExpenseListControl.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
@@ -541,6 +542,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.TerminationReason.datasource" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
       <SubType>Designer</SubType>
@@ -1374,6 +1376,9 @@
       <DependentUpon>PersonMonthCalendar.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\PracticeManagementExtendedPageBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PracticeManagementPersonDetailPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\Projects\ProjectTimeTypes.ascx.cs">
