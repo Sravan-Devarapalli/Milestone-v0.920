@@ -42,6 +42,7 @@ namespace DataAccess
                 int seniorityIndex = reader.GetOrdinal(Constants.ColumnNames.Seniority);
                 int seniorityCategoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategoryId);
                 int seniorityCategoryIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategory);
+                int seniorityValueIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityValue);
 
                 while (reader.Read())
                 {
@@ -50,6 +51,7 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(seniorityIdIndex),
                             Name = reader.GetString(seniorityIndex),
+                            SeniorityValue = reader.GetInt32(seniorityValueIndex),
                             SeniorityCategory = new SeniorityCategory
                             {
                                 Id = reader.GetInt32(seniorityCategoryIdIndex),
