@@ -964,7 +964,7 @@ namespace PraticeManagement.Controls
 
         private static Person[] GetActivePersons(Person[] persons)
         {
-            return persons.AsQueryable().Where(p => p.Status.Id == 1).ToArray(); // Here Status.Id == 1 means only active person. (Not projected)
+            return persons.AsQueryable().Where(p => p.Status.Id == (int)PersonStatusType.Active).ToArray(); // Here Status.Id == 1 means only active person. (Not projected)
         }
         /// <summary>
         /// Fills the list control with the list of active salespersons.
