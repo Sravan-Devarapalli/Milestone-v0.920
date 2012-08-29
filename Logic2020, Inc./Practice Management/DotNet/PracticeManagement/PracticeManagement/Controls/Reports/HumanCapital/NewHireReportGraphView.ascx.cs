@@ -16,7 +16,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         #region constant
 
         private const string MAIN_CHART_AREA_NAME = "MainArea";
-        public const string SeeNewHiresbySeniority = "See New Hires by Seniority Category";
+        public const string SeeNewHiresbySeniority = "See New Hires by Seniority";
         public const string SeeNewHiresbyRecruiter = "See New Hires by Recruiter";
 
         #endregion
@@ -28,11 +28,13 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             get { return ((PraticeManagement.Reporting.NewHireReport)Page); }
         }
 
-        private Dictionary<string, int> SenioritiesCategory { get; set; }
+        private Dictionary<string, int> Seniorities { get; set; }
 
         private Dictionary<string, int> Recruiters { get; set; }
 
         private List<SeniorityCategory> SeniorityCategoryList { get; set; }
+
+        private List<Seniority> SeniorityList { get; set; }
 
         private List<Person> RecuriterList { get; set; }
 
@@ -53,7 +55,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         public LinkButton hlnkGraphHiddenField
         {
-            get {
+            get
+            {
                 return hlnkGraph;
             }
         }
@@ -91,12 +94,12 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             Boolean.TryParse(postBackDetails[2], out isSeniority);
             if (isSeniority)
             {
-                lbName.Text = "Seniority Category: " + selectedValue;
-                data = data.Where(p => p.Seniority != null ? p.Seniority.SeniorityCategory.Name == selectedValue : selectedValue == Constants.FilterKeys.Unassigned).ToList();
+                lbName.Text = "Seniority: " + selectedValue;
+                data = data.Where(p => p.Seniority != null ? p.Seniority.Name == selectedValue : selectedValue == Constants.FilterKeys.Unassigned).ToList();
             }
             else
             {
-                lbName.Text = "Recruiter : " + selectedValue;
+                lbName.Text = "Recruiter: " + selectedValue;
                 bool isUnassigned = selectedValue.Equals(Constants.FilterKeys.Unassigned);
                 data = data.Where(p => p.RecruiterCommission.Any() ? p.RecruiterCommission.First().Recruiter.PersonLastFirstName == selectedValue : isUnassigned).ToList();
             }
@@ -106,7 +109,6 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             tpSummary.PopulateData(true);
             mpeDetailView.Show();
         }
-
 
         #endregion
 
@@ -135,20 +137,29 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             if (IsSeniorityGraph)
             {
 
-                SeniorityCategoryList = ServiceCallers.Custom.Person(p => p.ListAllSeniorityCategories()).ToList();
+                SeniorityCategoryList = ServiceCallers.Custom.Person(p => p.ListAllSeniorityCategories()).OrderBy(s => s.Id).ToList();
+                SeniorityList = ServiceCallers.Custom.Person(p => p.ListSeniorities()).OrderBy(s => s.SeniorityCategory.Id).ThenByDescending(s=>s.SeniorityValue).ToList();
                 if (data.Any(p => p.Seniority == null))
                 {
                     SeniorityCategoryList.Add(new SeniorityCategory() { Id = 0, Name = Constants.FilterKeys.Unassigned });
+                    SeniorityList.Add(new Seniority { Id = 0, Name = Constants.FilterKeys.Unassigned, SeniorityCategory = new SeniorityCategory() { Id = 0, Name = Constants.FilterKeys.Unassigned } });
                 }
-
-                if (SenioritiesCategory == null)
-                    SenioritiesCategory = new Dictionary<string, int>();
-
-                foreach (var S in SeniorityCategoryList)
+                if (Seniorities == null)
+                    Seniorities = new Dictionary<string, int>();
+                foreach (var S in SeniorityList)
                 {
-                    int count = data.Count(p => p.Seniority != null ? p.Seniority.SeniorityCategory.Id == S.Id : S.Id == 0);
-                    SenioritiesCategory.Add(S.Name, count);
+                    int count = data.Count(p => p.Seniority != null ? p.Seniority.Id == S.Id : S.Id == 0);
+                    Seniorities.Add(S.Name, count);
                 }
+
+                int startPos = 1;
+                foreach (var sc in SeniorityCategoryList)
+                {
+                    sc.StartPosition = startPos;
+                    sc.EndPosition = startPos + SeniorityList.Count(p => p.SeniorityCategory.Id == sc.Id) - 1;
+                    startPos = sc.EndPosition + 1;
+                }
+
             }
             else
             {
@@ -174,10 +185,17 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             if (IsSeniorityGraph)
             {
-                var seniorityList = SenioritiesCategory.Select(p => new { name = p.Key, count = p.Value }).ToList();
-                seniorityList = seniorityList.OrderBy(p => p.name).ToList();
+                var seniorityList = Seniorities.Select(p => new { name = p.Key, count = p.Value }).ToList();
                 chrtNewHireReportBySeniority.Visible = true;
                 chrtNewHireReportByRecruiter.Visible = false;
+                foreach (var sc in SeniorityCategoryList)
+                {
+                    CustomLabel sCLabel = new CustomLabel(sc.StartPosition, sc.EndPosition, sc.Name, 1, LabelMarkStyle.LineSideMark, GridTickTypes.Gridline);
+                    sCLabel.ToolTip = sc.Name;
+                    sCLabel.MarkColor = Color.Black;
+                    sCLabel.ForeColor = Color.Black; 
+                    chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels.Add(sCLabel);
+                }
                 chrtNewHireReportBySeniority.DataSource = seniorityList;
                 chrtNewHireReportBySeniority.DataBind();
             }
@@ -193,22 +211,61 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             InitChart();
         }
 
+        private string GetSeniorityCategory(int i)
+        {
+            string seniorityCategory = string.Empty;
+            foreach (var sc in SeniorityCategoryList)
+            {
+                if (i >= sc.StartPosition && i <= sc.EndPosition)
+                {
+                    return sc.Name;
+                }
+            }
+            return seniorityCategory;
+        }
+
+        private Color GetSeniorityCategoryColor(string sc)
+        {
+            if (sc == "Business Track")
+            {
+                return Color.FromArgb(59, 100, 150);
+            }
+            else if (sc == "Internal")
+            {
+                return Color.MediumTurquoise;
+            }
+            else if (sc == "Technical Track")
+            {
+                return Color.FromArgb(59, 148, 237);
+            }
+            else
+            {
+                return Color.LightBlue;
+            }
+        }
+
         private void InitChart()
         {
             if (IsSeniorityGraph)
             {
+                for (int i = 0; i < chrtNewHireReportBySeniority.Series[0].Points.Count; i++)
+                {
+                    var point = chrtNewHireReportBySeniority.Series[0].Points[i];
+                    string sc = GetSeniorityCategory(i + 1);
+                    point.Color = GetSeniorityCategoryColor(sc);
+                }
 
-                chrtNewHireReportBySeniority.Width = SenioritiesCategory.Count * 70 < 400 ? 400 : SenioritiesCategory.Count * 70 ;
-                chrtNewHireReportBySeniority.Height = 500;
-                InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Seniority Category", false);
-                InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
+                chrtNewHireReportBySeniority.Width = Seniorities.Count * 70 < 400 ? 400 : Seniorities.Count * 70;
+                chrtNewHireReportBySeniority.Height = 600;
+                InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Seniority", false);
+                InitAxis(chrtNewHireReportBySeniority.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of New Hires", true);
             }
             else
             {
                 chrtNewHireReportByRecruiter.Width = Recruiters.Count * 70;
-                chrtNewHireReportByRecruiter.Height = 500;
+                chrtNewHireReportByRecruiter.Height = 600;
                 InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Recruiter", false);
-                InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Hires", true);
+                InitAxis(chrtNewHireReportByRecruiter.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of New Hires", true);
             }
             UpdateChartTitle();
         }
@@ -217,9 +274,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             if (IsSeniorityGraph)
             {
-
                 chrtNewHireReportBySeniority.Titles.Clear();
-                chrtNewHireReportBySeniority.Titles.Add("New Hires By Seniority Category ");
+                chrtNewHireReportBySeniority.Titles.Add("New Hires By Seniority");
                 chrtNewHireReportBySeniority.Titles.Add(HostingPage.GraphRange);
                 chrtNewHireReportBySeniority.Titles[0].Font =
                 chrtNewHireReportBySeniority.Titles[1].Font = new Font("Arial", 16, FontStyle.Bold);
@@ -240,7 +296,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             if (!isVertical)
                 horizAxis.Interval = 1;
             horizAxis.TextOrientation = isVertical ? TextOrientation.Rotated270 : TextOrientation.Horizontal;
-            horizAxis.LabelStyle.Angle = isVertical ? 0 : 45;
+            horizAxis.LabelStyle.Angle = isVertical ? 0 : 90;
+            horizAxis.LabelStyle.Font = new Font("Arial", 10, FontStyle.Regular);
             horizAxis.TitleFont = new Font("Arial", 14, FontStyle.Bold);
             horizAxis.ArrowStyle = AxisArrowStyle.None;
             horizAxis.MajorGrid.Enabled = false;
