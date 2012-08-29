@@ -346,15 +346,18 @@
             public const string TerminationsW2HourlyCountInTheRange = "TerminationsW2HourlyCountInTheRange";
             public const string TerminationsContractorsCountInTheRange = "TerminationsContractorsCountInTheRange";
             public const string SeniorityIdColumn = "SeniorityId";
-            public static string Seniority = "Seniority";
-            public static string SeniorityCategoryId = "SeniorityCategoryId";
-            public static string SeniorityCategory = "SeniorityCategory";
-            public static string TerminationsCountInTheRange = "TerminationsCountInTheRange";
-            public static string IsW2SalaryRule = "IsW2SalaryRule";
-            public static string IsW2HourlyRule = "IsW2HourlyRule";
-            public static string Is1099Rule = "Is1099Rule";
-            public static string IsContingentRule = "IsContingentRule";
-            public static string IsVisible = "IsVisible";
+            public const string Seniority = "Seniority";
+            public const string SeniorityCategoryId = "SeniorityCategoryId";
+            public const string SeniorityCategory = "SeniorityCategory";
+            public const string TerminationsCountInTheRange = "TerminationsCountInTheRange";
+            public const string IsW2SalaryRule = "IsW2SalaryRule";
+            public const string IsW2HourlyRule = "IsW2HourlyRule";
+            public const string Is1099Rule = "Is1099Rule";
+            public const string IsContingentRule = "IsContingentRule";
+            public const string IsVisible = "IsVisible";
+            public const string SeniorityValue = "SeniorityValue";
+            public const string Terminations1099HourlyCountInTheRange = "Terminations1099HourlyCountInTheRange";
+            public const string Terminations1099PORCountInTheRange = "Terminations1099PORCountInTheRange";
         }
 
         #endregion
@@ -646,7 +649,7 @@
             public const string RecruiterIdsParam = "@RecruiterIds";
             public const string TerminationReasonIdsParam = "@TerminationReasonIds";
             public const string TerminationDatesParam = "@TerminationDates";
-            public static string RoleNameParam = "@RoleName";
+            public const string RoleNameParam = "@RoleName";
         }
 
         #endregion
@@ -795,7 +798,7 @@
                 public const string GetStrawmanListShortFilterWithTodayPay = "dbo.GetStrawmanListShortFilterWithTodayPay";
                 public const string GetTerminationReasonsList = "dbo.GetTerminationReasonsList";
                 public const string GetPersonHireAndTerminationDateById = "dbo.GetPersonHireAndTerminationDateById";
-                public static string GetPersonListWithRole = "dbo.GetPersonListWithRole";
+                public const string GetPersonListWithRole = "dbo.GetPersonListWithRole";
                 public const string GetPersonEmploymentHistoryById = "dbo.GetPersonEmploymentHistoryById";
             }
 
@@ -884,7 +887,6 @@
             {
                 public const string SeniorityListAllProcedure = "dbo.SeniorityListAll";
                 public const string ListAllSeniorityCategories = "dbo.ListAllSeniorityCategories";
-                
             }
 
             #endregion
@@ -922,7 +924,7 @@
                 public const string AccountSummaryByBusinessDevelopment = "dbo.AccountSummaryByBusinessDevelopment";
                 public const string NewHireReport = "dbo.NewHireReport";
                 public const string TerminationReport = "dbo.TerminationReport";
-                public static string TerminationReportGraph = "dbo.TerminationReportGraph";
+                public const string TerminationReportGraph = "dbo.TerminationReportGraph";
             }
             #endregion
 
@@ -1159,3 +1161,4 @@
         #endregion
     }
 }
+
