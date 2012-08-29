@@ -105,7 +105,7 @@
             <td class="textLeft padLeft5Imp">
                 <%# Eval("HtmlEncodedName")%>
             </td>
-            <td sorttable_customkey='<%# Eval("Seniority.Name") %> <%#Eval("HtmlEncodedName")%>'>
+            <td>
                 <%# Eval("Seniority.Name")%>
             </td>
             <td>
