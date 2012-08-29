@@ -16,10 +16,11 @@
 AS
 BEGIN
 	SELECT @StartDate = CONVERT(DATETIME,CONVERT(DATE,@StartDate)),@EndDate = CONVERT(DATETIME,CONVERT(DATE,@EndDate))
-	DECLARE @FutureDate DATETIME,@W2SalaryId INT ,@W2HourlyId INT 
+	DECLARE @FutureDate DATETIME,@W2SalaryId INT ,@W2HourlyId INT ,@FormalyInactive INT
 	SET @FutureDate = dbo.GetFutureDate()
-	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
-	SELECT @W2HourlyId = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
+	SELECT @W2SalaryId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
+	SELECT @W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
+	SELECT @FormalyInactive = TerminationReasonId  FROM dbo.TerminationReasons WHERE TerminationReason = 'Formerly Inactive status '
 
 	;WITH FilteredPersonHistory
 	AS
@@ -27,6 +28,7 @@ BEGIN
 		SELECT CPH.*
 		FROM v_PersonHistory CPH
 		WHERE CPH.TerminationDate BETWEEN @Startdate AND @Enddate
+		AND ISNULL(CPH.TerminationReasonId,0) != @FormalyInactive
 	)
 
 	SELECT DISTINCT P.PersonId,
@@ -108,37 +110,6 @@ BEGIN
 			(
 				@ExcludeInternalPractices = 0 OR ( @ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0 )
 			)
-
-
-		DECLARE @ActivePersonsAtTheBeginning INT , @NewHiredInTheRange INT
-		
-		SELECT @ActivePersonsAtTheBeginning = COUNT(DISTINCT PSH.PersonId)
-		FROM dbo.PersonStatusHistory PSH 
-		INNER JOIN dbo.Person P ON PSH.PersonId = P.PersonId AND P.IsStrawman = 0 AND PSH.personstatusId = 1 AND @StartDate BETWEEN PSH.StartDate AND ISNULL(PSH.EndDate,@FutureDate) 
-		INNER JOIN dbo.Pay pa ON pa.Person = PSH.PersonId AND @StartDate  BETWEEN pa.StartDate  AND ISNULL(pa.EndDate,@FutureDate) AND pa.Timescale IN (@W2SalaryId,@W2HourlyId) 
-		INNER JOIN dbo.v_PersonHistory PH ON PH.PersonId = PSH.PersonId AND @StartDate BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) -- if status start date is less then person hire date we need to consider only hire date
-
-	;WITH FilteredPersonHistory
-	AS
-	(
-		SELECT CPH.PersonId,
-				CPH.HireDate,
-				CPH.PersonStatusId,
-				CASE WHEN ISNULL(CPH.TerminationDate,@FutureDate) > @EndDate THEN @EndDate ELSE ISNULL(CPH.TerminationDate,@FutureDate) END  AS TerminationDate,
-				CPH.Id,
-				CPH.DivisionId,
-				CPH.TerminationReasonId,
-				CPH.RecruiterId
-		FROM v_PersonHistory CPH
-		WHERE CPH.HireDate BETWEEN @Startdate AND @Enddate
-	)
-
-	SELECT @NewHiredInTheRange = COUNT(*)			
-	FROM FilteredPersonHistory FPH
-	OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPH.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPH.HireDate AND pa.StartDate <= FPH.TerminationDate ORDER BY pa.StartDate DESC ) pay
-	WHERE	pay.Timescale IN (@W2SalaryId,@W2HourlyId) 
-
-	SELECT ISNULL(@ActivePersonsAtTheBeginning,0) AS [ActivePersonsAtTheBeginning], ISNULL(@NewHiredInTheRange,0) AS [NewHiredInTheRange] 
 
 END
 
