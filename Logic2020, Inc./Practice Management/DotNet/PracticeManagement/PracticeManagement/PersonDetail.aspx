@@ -607,7 +607,7 @@
                                             ToolTip="To terminate the person the Termination Reason should be specified."
                                             ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
                                             OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>
-                                        <asp:Button ID="btnTerminatePerson" runat="server" Text="Terminate Employee" OnClick="btnTerminatePerson_Click" />
+                                        <asp:Button ID="btnTerminatePerson" runat="server" Text="Terminate Employee" Enabled="false" style="visibility:hidden;" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -1520,6 +1520,7 @@
                 </tr>
                 <tr>
                     <td align="center">
+                        <asp:HiddenField ID="hdnPersonStatus" runat="server" Value="" />
                         <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="if (!validateStatus()) return false;" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
                     </td>
@@ -1681,7 +1682,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:RadioButton ID="rbnCancleTermination" runat="server" Text="Cancle Termination"
+                            <asp:RadioButton ID="rbnCancleTermination" runat="server" Text="Cancel Termination"
                                 CssClass="displayNone" GroupName="rbtnsChangeStatus" />
                             <asp:RadioButton ID="rbnActive" runat="server" Text="Active" onclick="showDivActive()"
                                 CssClass="displayNone" GroupName="rbtnsChangeStatus" />
@@ -1701,8 +1702,8 @@
                                                 Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToActive"
                                                 ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
-                                            <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ErrorMessage="To Active the person the Hire Date should be greater than previous Termination date."
-                                                ToolTip="To Active the person the Hire Date should be greater than previous Termination date."
+                                            <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ErrorMessage="New Hire Date should be greater than previous Termination date."
+                                                ToolTip="New Hire Date should be greater than previous Termination date."
                                                 ValidationGroup="ChangePersonStatusToActive" Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate"
                                                 SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                                         </td>
@@ -1772,8 +1773,8 @@
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToContingent"
                                                 EnableClientScript="false">*</asp:CompareValidator>
                                             <asp:CompareValidator ID="cvWithTermiantionDate" runat="server" ControlToValidate="dtpContingentHireDate"
-                                                ControlToCompare="dtpTerminationDate" Operator="GreaterThan" Type="Date" ErrorMessage="Hire date should be greater than previous Termination date."
-                                                Display="Dynamic" Text="*" ValidationGroup="ChangePersonStatusToContingent" ToolTip="Hire date should be greater than previous Termination date."
+                                                ControlToCompare="dtpTerminationDate" Operator="GreaterThan" Type="Date" ErrorMessage="New Hire date should be greater than previous Termination date."
+                                                Display="Dynamic" Text="*" ValidationGroup="ChangePersonStatusToContingent" ToolTip="New Hire date should be greater than previous Termination date."
                                                 SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
                                         </td>
                                     </tr>
