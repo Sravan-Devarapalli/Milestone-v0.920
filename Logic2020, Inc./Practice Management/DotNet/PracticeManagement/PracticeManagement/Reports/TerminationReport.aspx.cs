@@ -215,7 +215,7 @@ namespace PraticeManagement.Reporting
                 }
                 if (this.cblTerminationReasons != null && this.cblTerminationReasons.Items.Count == 0)
                 {
-                    DataHelper.FillTerminationReasonsListForTerminationReport(this.cblTerminationReasons, "All Reasons");
+                    DataHelper.FillTerminationReasonsList(this.cblTerminationReasons, "All Reasons");
                 }
                 if (this.cblPractices != null && this.cblPractices.Items.Count == 0)
                 {
