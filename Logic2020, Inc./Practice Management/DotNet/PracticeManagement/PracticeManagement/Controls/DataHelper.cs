@@ -584,17 +584,8 @@ namespace PraticeManagement.Controls
 
         public static void FillTerminationReasonsList(ListControl control, string firstItemText)
         {
-            var terminationReasons = ServiceCallers.Custom.Person(p => p.GetTerminationReasonsList()).Select(p => new { name = p.Key, Value = p.Value }).ToArray();
-            FillListDefault(control, firstItemText, terminationReasons, false, "value", DefaultNameFieldName);
-        }
-
-        public static void FillTerminationReasonsListForTerminationReport(ListControl control, string firstItemText)
-        {
-            var terminationReasons = ServiceCallers.Custom.Person(p => p.GetTerminationReasonsList());
-            terminationReasons.Remove("Unknown");
-            terminationReasons.Remove("Formerly Inactive status");
-            var terminationReasonsArray = terminationReasons.Select(p => new { name = p.Key, Value = p.Value }).ToArray();
-            FillListDefault(control, firstItemText, terminationReasonsArray, false, "value", DefaultNameFieldName);
+            var terminationReasons = Utils.SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsVisible == true).ToArray();
+            FillListDefault(control, firstItemText, terminationReasons, false, DefaultIdFieldName, DefaultNameFieldName);
         }
 
         /// <summary>
@@ -807,7 +798,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        
+
         /// <summary>
         /// Fills the list control with the list of Line Manger persons.
         /// </summary>
@@ -2057,10 +2048,10 @@ namespace PraticeManagement.Controls
                     ddlColor.Items.Clear();
 
                     ListItem firstItem = new ListItem()
-                                            {
-                                                Text = "-- Select a Color --",
-                                                Value = "0"
-                                            };
+                    {
+                        Text = "-- Select a Color --",
+                        Value = "0"
+                    };
 
                     ddlColor.Items.Add(firstItem);
                     firstItem.Attributes.Add("style", string.Format("background-color:{0}", "white"));
@@ -2069,10 +2060,10 @@ namespace PraticeManagement.Controls
                     foreach (var color in colors)
                     {
                         var colorItem = new ListItem()
-                                            {
-                                                Text = string.Empty,
-                                                Value = color.ColorId.ToString()
-                                            };
+                        {
+                            Text = string.Empty,
+                            Value = color.ColorId.ToString()
+                        };
                         colorItem.Attributes.Add("style", string.Format("background-color:{0}", color.ColorValue));
                         colorItem.Attributes.Add("colorValue", string.Format(color.ColorValue));
                         colorItem.Attributes.Add("Description", string.Format(color.ColorDescription));
