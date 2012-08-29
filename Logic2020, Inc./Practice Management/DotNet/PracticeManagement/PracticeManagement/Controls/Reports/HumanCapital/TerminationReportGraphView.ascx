@@ -15,7 +15,7 @@
                     <Series>
                         <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
                             YValueType="Int32" PostBackValue="#VALX,#VALY,False" ToolTip="#VALY Terminations"
-                            XAxisType="Primary" YAxisType="Primary" XValueMember="Month" YValueMembers="TerminationsCountInTheRange">
+                            XAxisType="Primary" YAxisType="Primary" XValueMember="Month" YValueMembers="TerminationsCountForSelectedPaytypes">
                         </asp:Series>
                         <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Point" XValueType="String"
                             YValueType="Double" ToolTip="#VALY{0.00%} Attrition" XAxisType="Primary" YAxisType="Secondary"
