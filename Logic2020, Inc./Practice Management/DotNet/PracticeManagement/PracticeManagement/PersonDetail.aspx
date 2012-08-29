@@ -667,70 +667,203 @@
                     <td class="PersonMultiView">
                         <asp:Table ID="tblPersonViewSwitch" runat="server" CssClass="CommonCustomTabStyle PersonDetailPage_CustomTabStyle">
                             <asp:TableRow ID="rowSwitcher" runat="server">
+                                <asp:TableCell ID="cellSecurity" runat="server" CssClass="SelectedSwitch">
+                                    <span class="bg">
+                                        <asp:LinkButton ID="btnSecurity" runat="server" Text="Application Security" CausesValidation="false"
+                                            CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton>
+                                    </span>
+                                </asp:TableCell>
+                                <asp:TableCell ID="cellPermissions" runat="server">
+                                    <span class="bg">
+                                        <asp:LinkButton ID="btnPermissions" runat="server" Text="Project/Opportunity Permissions"
+                                            CssClass="Width120Px" CausesValidation="false" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton>
+                                    </span>
+                                </asp:TableCell>
                                 <asp:TableCell ID="cellCompensation" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnCompensation" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Compensation"
-                                            CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton>
+                                    </span>
+                                </asp:TableCell>
+                                <asp:TableCell ID="cellEmploymentHistory" runat="server">
+                                    <span class="bg">
+                                        <asp:LinkButton ID="btnEmploymentHistory" runat="server" Text="Employment History"
+                                            CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellRecruiting" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnViewRecruiting" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recruiter"
-                                            CausesValidation="false" CssClass="width58Px" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="width58Px" OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellCommissions" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnCommissions" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Commissions"
-                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellRates" runat="server" Visible="false">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnRates" runat="server" Text="Overhead and Margin" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton>
+                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellWhatIf" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnWhatIf" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; What-If?"
-                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="4"
+                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="7"
                                             OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjects" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnProjects" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Projects"
-                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellOpportunities" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnOppportunities" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Opportunities"
-                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellPermissions" runat="server">
-                                    <span class="bg">
-                                        <asp:LinkButton ID="btnPermissions" runat="server" Text="Project/Opportunity Permissions"
-                                            CssClass="Width120Px" CausesValidation="false" OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellSecurity" runat="server" CssClass="SelectedSwitch">
-                                    <span class="bg">
-                                        <asp:LinkButton ID="btnSecurity" runat="server" Text="Application Security" CausesValidation="false"
-                                            CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellActivityLog" runat="server" Visible="false">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnActivityLog" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History"
-                                            CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="10"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
                         </asp:Table>
-                        <asp:MultiView ID="mvPerson" runat="server" ActiveViewIndex="8">
+                        <asp:MultiView ID="mvPerson" runat="server" ActiveViewIndex="0">
+                            <asp:View ID="vwSecurity" runat="server" OnPreRender="vwPermissions_PreRender">
+                                <asp:Panel ID="Panel6" runat="server" CssClass="tab-pane WholeWidth">
+                                    <table cellpadding="3">
+                                        <tr>
+                                            <td class="Width60Px">
+                                                <strong>
+                                                    <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
+                                                <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                    ValidationGroup="Person" ErrorMessage="Any person who is projected should not have any roles checked."
+                                                    OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is projected should not have any roles checked."
+                                                    ValidateEmptyText="true"></asp:CustomValidator>
+                                                <asp:CustomValidator ID="valRecruterRole" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                    ValidationGroup="Person" ErrorMessage="Person with Recruiter role should have recruiting commission."
+                                                    OnServerValidate="valRecruterRole_OnServerValidate" SetFocusOnError="true" Text="*"
+                                                    ToolTip="Person with Recruiter role should have recruiting commission." ValidateEmptyText="true" />
+                                                <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                    ValidationGroup="Person" ErrorMessage="Any person who is active should have atleast one role checked."
+                                                    OnServerValidate="cvRolesActiveStatus_ServerValidate" SetFocusOnError="true"
+                                                    Text="*" ToolTip="Any person who is active should have atleast one role checked."></asp:CustomValidator>
+                                            </td>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                            <td>
+                                                <b>Seniority</b>
+                                            </td>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="Width60Px">
+                                                <asp:CheckBoxList ID="chblRoles" runat="server" AutoPostBack="true" OnSelectedIndexChanged="chblRoles_SelectedIndexChanged"
+                                                    CssClass="Width170Px">
+                                                </asp:CheckBoxList>
+                                            </td>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                            <td valign="top">
+                                                <asp:DropDownList ID="ddlSeniority" runat="server" onchange="setDirty();" />
+                                            </td>
+                                            <td>
+                                                <asp:CustomValidator ID="custSeniority" runat="server" ValidationGroup="Person" ControlToValidate="ddlPersonStatus"
+                                                    Display="Dynamic" EnableClientScript="true" ErrorMessage="The Seniority is required since the person's status is Active."
+                                                    OnServerValidate="custSeniority_ServerValidate" Text="*" ToolTip="The Seniority is required since the person's status is Active."></asp:CustomValidator>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="Width60Px">
+                                                <asp:Button ID="btnResetPassword" runat="server" OnClick="btnResetPassword_Click"
+                                                    OnClientClick="return confirm('Do you really want to reset user\'s password?');"
+                                                    Text="Reset Password" />
+                                            </td>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">
+                                                <asp:Label ID="lblPaswordResetted" runat="server" Text="The password was reset, and the person has been notified by email."
+                                                    Visible="false"></asp:Label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">
+                                                <div class="DivPermissionDiffenrece">
+                                                    <asp:GridView ID="gvPermissionDiffenrece" runat="server" AutoGenerateColumns="false"
+                                                        CssClass="CompPerfTable PermissionDiffenrece">
+                                                        <AlternatingRowStyle CssClass="alterrow" />
+                                                        <Columns>
+                                                            <asp:TemplateField>
+                                                                <HeaderTemplate>
+                                                                    <div class="ie-bg no-wrap">
+                                                                        Page</div>
+                                                                </HeaderTemplate>
+                                                                <ItemTemplate>
+                                                                    <%# Eval("Title") %>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField>
+                                                                <HeaderTemplate>
+                                                                    <div class="ie-bg no-wrap">
+                                                                        Current</div>
+                                                                </HeaderTemplate>
+                                                                <ItemTemplate>
+                                                                    <%# ((bool)Eval("Old")) ? "Yes" : "No" %>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField>
+                                                                <HeaderTemplate>
+                                                                    <div class="ie-bg no-wrap">
+                                                                        New</div>
+                                                                </HeaderTemplate>
+                                                                <ItemTemplate>
+                                                                    <%# ((bool)Eval("New")) ? "Yes" : "No" %>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField>
+                                                                <HeaderTemplate>
+                                                                    <div class="ie-bg no-wrap">
+                                                                        Diff.</div>
+                                                                </HeaderTemplate>
+                                                                <ItemTemplate>
+                                                                    <%# ((bool)Eval("IsDifferent")) ? "Yes" : "No"%>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                        </Columns>
+                                                    </asp:GridView>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </asp:Panel>
+                            </asp:View>
+                            <asp:View ID="vwPermissions" runat="server" OnPreRender="vwPermissions_PreRender">
+                                <asp:Panel ID="pnlPermissions" runat="server" CssClass="tab-pane">
+                                    <asp:HiddenField ID="hfReloadPerms" runat="server" Value="False" />
+                                    <uc:RestrictionPanel ID="rpPermissions" runat="server" />
+                                </asp:Panel>
+                            </asp:View>
                             <asp:View ID="vwCompensation" runat="server">
                                 <asp:Panel ID="pnlCompensation" runat="server" CssClass="tab-pane">
                                     <div class="filters Margin-Top5Px Margin-Bottom10Px">
@@ -1077,6 +1210,46 @@
                                     </asp:GridView>
                                 </asp:Panel>
                             </asp:View>
+                            <asp:View ID="vwEmploymentHistory" runat="server">
+                                <asp:Panel ID="pnlEmploymentHistory" runat="server" CssClass="tab-pane">
+                                    <asp:GridView ID="gvEmploymentHistory" runat="server" AutoGenerateColumns="false"
+                                        CssClass="CompPerfTable CompensationHistory" ShowFooter="false">
+                                        <AlternatingRowStyle CssClass="alterrow" />
+                                        <Columns>
+                                            <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Hire Date
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblHireDate" runat="server" Text='<%# ((DateTime)Eval("HireDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Termination Date
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblHireDate" runat="server" Text='<%# ((DateTime?)Eval("TerminationDate")).HasValue ? ((DateTime)Eval("TerminationDate")).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField>
+                                                <HeaderTemplate>
+                                                    <div class="ie-bg">
+                                                        Termination Reason
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblHireDate" runat="server" Text='<%# GetTerminationReasonById((int?)Eval("TerminationReasonId")) %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </asp:Panel>
+                            </asp:View>
                             <asp:View ID="vwRecruiter" runat="server">
                                 <asp:Panel ID="pnlRecruiter" runat="server" CssClass="tab-pane WholeWidth">
                                     <uc1:RecruiterInfo ID="recruiterInfo" NeedFirstItemForRecruiterDropDown="true" runat="server"
@@ -1237,133 +1410,6 @@
                                 <asp:Panel ID="pnOpportunities" runat="server" CssClass="tab-pane WholeWidth">
                                     <uc:OpportunityList ID="personOpportunities" runat="server" AllowAutoRedirectToDetails="false"
                                         FilterMode="ByTargetPerson" />
-                                </asp:Panel>
-                            </asp:View>
-                            <asp:View ID="vwPermissions" runat="server" OnPreRender="vwPermissions_PreRender">
-                                <asp:Panel ID="pnlPermissions" runat="server" CssClass="tab-pane">
-                                    <asp:HiddenField ID="hfReloadPerms" runat="server" Value="False" />
-                                    <uc:RestrictionPanel ID="rpPermissions" runat="server" />
-                                </asp:Panel>
-                            </asp:View>
-                            <asp:View ID="vwSecurity" runat="server" OnPreRender="vwPermissions_PreRender">
-                                <asp:Panel ID="Panel6" runat="server" CssClass="tab-pane WholeWidth">
-                                    <table cellpadding="3">
-                                        <tr>
-                                            <td class="Width60Px">
-                                                <strong>
-                                                    <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
-                                                <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Any person who is projected should not have any roles checked."
-                                                    OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is projected should not have any roles checked."
-                                                    ValidateEmptyText="true"></asp:CustomValidator>
-                                                <asp:CustomValidator ID="valRecruterRole" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Person with Recruiter role should have recruiting commission."
-                                                    OnServerValidate="valRecruterRole_OnServerValidate" SetFocusOnError="true" Text="*"
-                                                    ToolTip="Person with Recruiter role should have recruiting commission." ValidateEmptyText="true" />
-                                                <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Any person who is active should have atleast one role checked."
-                                                    OnServerValidate="cvRolesActiveStatus_ServerValidate" SetFocusOnError="true"
-                                                    Text="*" ToolTip="Any person who is active should have atleast one role checked."></asp:CustomValidator>
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td>
-                                                <b>Seniority</b>
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="Width60Px">
-                                                <asp:CheckBoxList ID="chblRoles" runat="server" AutoPostBack="true" OnSelectedIndexChanged="chblRoles_SelectedIndexChanged"
-                                                    CssClass="Width170Px">
-                                                </asp:CheckBoxList>
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td valign="top">
-                                                <asp:DropDownList ID="ddlSeniority" runat="server" onchange="setDirty();" />
-                                            </td>
-                                            <td>
-                                                <asp:CustomValidator ID="custSeniority" runat="server" ValidationGroup="Person" ControlToValidate="ddlPersonStatus"
-                                                    Display="Dynamic" EnableClientScript="true" ErrorMessage="The Seniority is required since the person's status is Active."
-                                                    OnServerValidate="custSeniority_ServerValidate" Text="*" ToolTip="The Seniority is required since the person's status is Active."></asp:CustomValidator>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="Width60Px">
-                                                <asp:Button ID="btnResetPassword" runat="server" OnClick="btnResetPassword_Click"
-                                                    OnClientClick="return confirm('Do you really want to reset user\'s password?');"
-                                                    Text="Reset Password" />
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4">
-                                                <asp:Label ID="lblPaswordResetted" runat="server" Text="The password was reset, and the person has been notified by email."
-                                                    Visible="false"></asp:Label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4">
-                                                <div class="DivPermissionDiffenrece">
-                                                    <asp:GridView ID="gvPermissionDiffenrece" runat="server" AutoGenerateColumns="false"
-                                                        CssClass="CompPerfTable PermissionDiffenrece">
-                                                        <AlternatingRowStyle CssClass="alterrow" />
-                                                        <Columns>
-                                                            <asp:TemplateField>
-                                                                <HeaderTemplate>
-                                                                    <div class="ie-bg no-wrap">
-                                                                        Page</div>
-                                                                </HeaderTemplate>
-                                                                <ItemTemplate>
-                                                                    <%# Eval("Title") %>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                            <asp:TemplateField>
-                                                                <HeaderTemplate>
-                                                                    <div class="ie-bg no-wrap">
-                                                                        Current</div>
-                                                                </HeaderTemplate>
-                                                                <ItemTemplate>
-                                                                    <%# ((bool)Eval("Old")) ? "Yes" : "No" %>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                            <asp:TemplateField>
-                                                                <HeaderTemplate>
-                                                                    <div class="ie-bg no-wrap">
-                                                                        New</div>
-                                                                </HeaderTemplate>
-                                                                <ItemTemplate>
-                                                                    <%# ((bool)Eval("New")) ? "Yes" : "No" %>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                            <asp:TemplateField>
-                                                                <HeaderTemplate>
-                                                                    <div class="ie-bg no-wrap">
-                                                                        Diff.</div>
-                                                                </HeaderTemplate>
-                                                                <ItemTemplate>
-                                                                    <%# ((bool)Eval("IsDifferent")) ? "Yes" : "No"%>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                        </Columns>
-                                                    </asp:GridView>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwActivityLog" runat="server">
@@ -1552,6 +1598,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
+            <asp:PostBackTrigger ControlID="btnSave" />
         </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
