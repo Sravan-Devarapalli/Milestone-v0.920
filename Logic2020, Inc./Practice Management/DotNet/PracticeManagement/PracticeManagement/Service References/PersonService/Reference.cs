@@ -46,7 +46,7 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetTerminationReasonsList", ReplyAction="http://tempuri.org/IPersonService/GetTerminationReasonsListResponse")]
-        System.Collections.Generic.Dictionary<string, int> GetTerminationReasonsList();
+        DataTransferObjects.TerminationReason[] GetTerminationReasonsList();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonHireAndTerminationDate", ReplyAction="http://tempuri.org/IPersonService/GetPersonHireAndTerminationDateResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -57,6 +57,9 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithRole", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse")]
         DataTransferObjects.Person[] GetPersonListWithRole(string rolename);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById", ReplyAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse")]
+        DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonRate", ReplyAction="http://tempuri.org/IPersonService/GetPersonRateResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -313,7 +316,6 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-     
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -366,7 +368,7 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetStrawmanListShortFilterWithTodayPay();
         }
         
-        public System.Collections.Generic.Dictionary<string, int> GetTerminationReasonsList() {
+        public DataTransferObjects.TerminationReason[] GetTerminationReasonsList() {
             return base.Channel.GetTerminationReasonsList();
         }
         
@@ -380,6 +382,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person[] GetPersonListWithRole(string rolename) {
             return base.Channel.GetPersonListWithRole(rolename);
+        }
+        
+        public DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId) {
+            return base.Channel.GetPersonEmploymentHistoryById(personId);
         }
         
         public DataTransferObjects.MilestonePerson GetPersonRate(DataTransferObjects.MilestonePerson milestonePerson) {
