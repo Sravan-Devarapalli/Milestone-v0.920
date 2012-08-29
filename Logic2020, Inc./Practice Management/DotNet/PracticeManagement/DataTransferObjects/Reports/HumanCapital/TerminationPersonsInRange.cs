@@ -19,20 +19,35 @@ namespace DataTransferObjects.Reports.HumanCapital
         [DataMember]
         public List<Person> PersonList { get; set; }
 
+        public List<int> PayTypesList { get; set; }
+
         [DataMember]
         public int ActivePersonsCountAtTheBeginning { get; set; }
 
         [DataMember]
         public int NewHiresCountInTheRange { get; set; }
 
-        [DataMember]
-        public int TerminationsContractorsCountInTheRange { get; set; }
+
+        public int TerminationsContractorsCountInTheRange
+        {
+            get
+            {
+
+                return Terminations1099HourlyCountInTheRange + Terminations1099PORCountInTheRange;
+            }
+        }
 
         [DataMember]
         public int TerminationsW2SalaryCountInTheRange { get; set; }
 
         [DataMember]
         public int TerminationsW2HourlyCountInTheRange { get; set; }
+
+        [DataMember]
+        public int Terminations1099HourlyCountInTheRange { get; set; }
+
+        [DataMember]
+        public int Terminations1099PORCountInTheRange { get; set; }
 
         [DataMember]
         public int TerminationsCountInTheRange { get; set; }
@@ -63,6 +78,40 @@ namespace DataTransferObjects.Reports.HumanCapital
             }
             return 0d;
 
+        }
+
+        public int TerminationsCountForSelectedPaytypes
+        {
+            get
+            {
+                int count = 0;
+                if (PayTypesList == null)
+                {
+                    count = TerminationsCountInTheRange;
+                }
+                else
+                {
+                    foreach (int i in PayTypesList)
+                    {
+                        switch (i)
+                        {
+                            case (int)TimescaleType.Hourly:
+                                count += TerminationsW2HourlyCountInTheRange;
+                                break;
+                            case (int)TimescaleType.Salary:
+                                count += TerminationsW2SalaryCountInTheRange;
+                                break;
+                            case (int)TimescaleType._1099Ctc:
+                                count += Terminations1099HourlyCountInTheRange;
+                                break;
+                            case (int)TimescaleType.PercRevenue:
+                                count += Terminations1099PORCountInTheRange;
+                                break;
+                        }
+                    }
+                }
+                return count;
+            }
         }
 
         public double AttritionPercentage
