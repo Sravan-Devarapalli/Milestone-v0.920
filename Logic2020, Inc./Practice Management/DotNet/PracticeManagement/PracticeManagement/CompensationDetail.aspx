@@ -10,6 +10,9 @@
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/PersonInfo.ascx" TagName="PersonInfo" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
+
+<%@ PreviousPageType TypeName="PraticeManagement.Controls.PracticeManagementPersonDetailPageBase" %>
+
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Compensation Details | Practice Management</title>
 </asp:Content>
