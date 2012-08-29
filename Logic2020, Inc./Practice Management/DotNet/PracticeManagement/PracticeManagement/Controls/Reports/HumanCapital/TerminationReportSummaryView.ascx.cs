@@ -100,7 +100,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 List<Person> data;
                 if (isGraphViewPopUp)
                 {
-                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, null, null, null,null,null,false,null,null,null,null)).PersonList;
+                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, HostingPage.PayTypes, null, null, null, null, false, null, null, null, null)).PersonList;
                 }
                 else
                 {
@@ -140,6 +140,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         {
             return date.ToString(Constants.Formatting.EntryDateFormat);
         }
+
         public void PopulateData(bool isPopUp = false)
         {
             TerminationPersonsInRange data;
