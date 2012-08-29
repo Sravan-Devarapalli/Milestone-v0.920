@@ -138,6 +138,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public List<Employment> EmploymentHistory
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Employee number
         /// </summary>
