@@ -162,6 +162,14 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public List<int> PayTypesList
+        {
+            get
+            {
+                return cblTimeScales.SelectedValues;
+            }
+        }
+
         public string Seniorities
         {
             get
@@ -322,9 +330,9 @@ namespace PraticeManagement.Reporting
             int terminationsEmployeeCountInTheRange = 0;
             int activePersonsCountAtTheBeginning = data.First(s => s.StartDate == PraticeManagement.Utils.Calendar.MonthStartDate(StartDate.Value.Date)).ActivePersonsCountAtTheBeginning;
             int newHiresCountInTheRange = 0;
-            foreach(var termiantionPerson in data)
+            foreach (var termiantionPerson in data)
             {
-                terminationsEmployeeCountInTheRange += termiantionPerson.TerminationsEmployeeCountInTheRange;                
+                terminationsEmployeeCountInTheRange += termiantionPerson.TerminationsEmployeeCountInTheRange;
                 newHiresCountInTheRange += termiantionPerson.NewHiresCountInTheRange;
             }
             attrition = TerminationPersonsInRange.CalculateAttrition(activePersonsCountAtTheBeginning, newHiresCountInTheRange, terminationsEmployeeCountInTheRange);
@@ -431,9 +439,9 @@ namespace PraticeManagement.Reporting
         #endregion
 
         #region Export
-        public void ExportToExcel(List<Person> data, bool isPopUp, string popUpRange,DateTime startDate ,DateTime endDate)
+        public void ExportToExcel(List<Person> data, bool isPopUp, string popUpRange, DateTime startDate, DateTime endDate)
         {
-            data = data.OrderBy(p=>p.PersonLastFirstName).ToList();
+            data = data.OrderBy(p => p.PersonLastFirstName).ToList();
 
             DataHelper.InsertExportActivityLogMessage(TerminationReportExport);
             StringBuilder sb = new StringBuilder();
