@@ -24,6 +24,7 @@ namespace PraticeManagement.Utils
         const string SkillLevel = "SkillLevel";
         const string SkillType = "SkillType";
         const string SkillsIndustry = "SkillIndustry";
+        const string Person_TerminationReasons_List_Key = "Person_TerminationReasons_List_Key";
 
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
@@ -298,6 +299,18 @@ namespace PraticeManagement.Utils
                 }
             }
             return HttpContext.Current.Cache[SkillType] as List<SkillType>;
+        }
+
+        public static List<TerminationReason> GetTerminationReasonsList()
+        {
+            if (HttpContext.Current.Cache[Person_TerminationReasons_List_Key] == null)
+            {
+                using (var serviceClient = new PersonService.PersonServiceClient())
+                {
+                    HttpContext.Current.Cache[Person_TerminationReasons_List_Key] = serviceClient.GetTerminationReasonsList().ToList();
+                }
+            }
+            return HttpContext.Current.Cache[Person_TerminationReasons_List_Key] as List<TerminationReason>;
         }
     }
 }
