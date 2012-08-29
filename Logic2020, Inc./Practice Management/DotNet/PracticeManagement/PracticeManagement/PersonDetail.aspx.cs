@@ -250,6 +250,18 @@ namespace PraticeManagement
             }
         }
 
+        private DateTime? PreviousHireDate
+        {
+            get
+            {
+                return (DateTime?)ViewState["ViewState_PreviousHireDate"];
+            }
+            set
+            {
+                ViewState["ViewState_PreviousHireDate"] = value;
+            }
+        }
+
         private string PreviousTerminationReason
         {
             get
@@ -298,6 +310,17 @@ namespace PraticeManagement
             personOpportunities.TargetPersonId = PersonId;
             mlError.ClearMessage();
             this.dvTerminationDateErrors.Visible = false;
+
+            if (!PersonId.HasValue)
+            {
+                //PersonStatus[] statuses = serviceClient.GetPersonStatuses();
+                DataHelper.FillPersonStatusList(ddlPersonStatus);
+                //DataHelper.FillListDefault(ddlPersonStatus, string.Empty, statuses, false);
+
+                ddlPersonStatus.Visible = true;
+                lblPersonStatus.Visible = false;
+                btnChangeEmployeeStatus.Visible = false;
+            }
         }
 
         private void FillTerminatinReasonsDropDowns()
@@ -332,10 +355,170 @@ namespace PraticeManagement
 
             ddlTerminationReason.Enabled = (ddlPersonStatus.SelectedValue == "2");
             dtpTerminationDate.ReadOnly = btnTerminatePerson.Enabled = !(ddlPersonStatus.SelectedValue == "2");
-            btnTerminatePerson.Visible = PersonId.HasValue;
+            ddlPersonStatus.Visible = !(btnTerminatePerson.Visible = PersonId.HasValue);
+        }
+
+        private void LoadChangeEmployeeStatusPopUpData()
+        {
+            DataHelper.FillTerminationReasonsList(ddlChangePersonStatusPopUpTerminationReason, TerminationReasonFirstItem);
+
+            if (PrevPersonStatusId == (int)PersonStatusType.Active)
+            {
+                rbnCancleTermination.CssClass = "displayNone";
+                rbnActive.CssClass = "displayNone";
+
+                rbnTerminate.CssClass = "";               
+                divTerminate.Attributes["class"] = "displayNone";
+
+                rbnContingent.CssClass = "displayNone";
+            }
+
+            if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
+            {
+                rbnCancleTermination.CssClass = "";
+                rbnActive.CssClass = "displayNone";
+                rbnTerminate.CssClass = "displayNone";
+                rbnContingent.CssClass = "displayNone";
+            }
+
+            if (PrevPersonStatusId == (int)PersonStatusType.Projected)//contingent
+            {
+                rbnCancleTermination.CssClass = "displayNone";
+
+                rbnActive.CssClass = "";               
+                rbnActive.Checked = true;
+                divActive.Attributes["class"] = "padLeft25 PaddingTop6";
+
+                rbnTerminate.CssClass = "";                
+                divTerminate.Attributes["class"] = "displayNone";
+                rbnContingent.CssClass = "displayNone";
+            }
+
+            if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
+            {
+                rbnCancleTermination.CssClass = "displayNone";
+
+                rbnActive.CssClass = "";              
+                rbnActive.Checked = true;
+                divActive.Attributes["class"] = "padLeft25 PaddingTop6";
+
+                rbnTerminate.CssClass = "displayNone";
+
+                rbnContingent.CssClass = "";               
+                divContingent.Attributes["class"] = "displayNone";
+            }
+
+
+            dtpChangePersonStatusPopUpTerminateDate.DateValue = dtpTerminationDate.DateValue;
+            dtpActiveHireDate.DateValue =  dtpContingentHireDate.DateValue = PreviousHireDate.Value;
+
         }
 
         #endregion
+
+        protected void btnChangeEmployeeStatus_Click(object sender, EventArgs e)
+        {
+            if (IsDirty)
+            {
+                ValidatePage();
+            }
+            if (Page.IsValid || !IsDirty)
+            {
+                LoadChangeEmployeeStatusPopUpData();
+                mpeViewPersonChangeStatus.Show();
+            }
+        }
+
+        protected void btnOkChangePersonStatus_Click(object source, EventArgs args)
+        {
+            if ((PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Projected) && rbnTerminate.Checked)
+            {
+                Page.Validate(valSummaryChangePersonStatusToTerminate.ValidationGroup);
+                if (Page.IsValid)
+                {
+                    //terminate employee.
+                    dtpTerminationDate.DateValue = dtpChangePersonStatusPopUpTerminateDate.DateValue;
+                    ddlTerminationReason.SelectedValue = ddlChangePersonStatusPopUpTerminationReason.SelectedValue;
+
+                    btnSave_Click(source, args);
+                    if (!custTerminateDateTE.IsValid)
+                    {
+                        IsFromTerminateEmployeePopup = true;
+                    }
+                    else
+                    {
+                        ResetTerminateEmployeeSavingViewState(false);
+                    }
+                }
+                else
+                {
+                    divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
+                    divActive.Attributes["class"] = "displayNone";
+                    divContingent.Attributes["class"] = "displayNone";
+                    mpeViewPersonChangeStatus.Show();
+                }
+                //btnPersonTerminate_Click(source, args);
+
+            }
+            if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending && rbnCancleTermination.Checked)
+            {
+                //cancle termination.
+            }
+            if (PrevPersonStatusId == (int)PersonStatusType.Projected && rbnActive.Checked)
+            {
+                //active employee with the selected hire date.
+                Page.Validate(valSummaryChangePersonStatusToActive.ValidationGroup);
+                if (Page.IsValid)
+                {
+                }
+                else
+                {
+                    divActive.Attributes["class"] = "padLeft25 PaddingTop6";
+                    divTerminate.Attributes["class"] = "displayNone";                   
+                    divContingent.Attributes["class"] = "displayNone";
+                    mpeViewPersonChangeStatus.Show();
+                }
+            }
+            if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
+            {
+                /*Retain previous hire date,termination date and termination reason.clear previous termination date and reason from the page.
+                Updates hire date on the page.*/
+
+                if (rbnActive.Checked)
+                {
+                    //change employee status to active.
+                    Page.Validate(valSummaryChangePersonStatusToActive.ValidationGroup);
+                    if (Page.IsValid)
+                    {
+                    }
+                    else
+                    {
+                        divActive.Attributes["class"] = "padLeft25 PaddingTop6";
+                        divTerminate.Attributes["class"] = "displayNone";
+                        divContingent.Attributes["class"] = "displayNone";
+
+                        mpeViewPersonChangeStatus.Show();
+                    }
+                }
+                else
+                {
+                    //change employee status to contingent.
+                    Page.Validate(valSummaryChangePersonStatusToContingent.ValidationGroup);
+                    if (Page.IsValid)
+                    {
+                    }
+                    else
+                    {
+                        divContingent.Attributes["class"] = "padLeft25 PaddingTop6";
+                        divActive.Attributes["class"] = "displayNone";
+                        divTerminate.Attributes["class"] = "displayNone";
+                        mpeViewPersonChangeStatus.Show();
+                    }
+                }
+
+                //system automatically opens new compensation record.                
+            }
+        }
 
         protected void btnTerminatePerson_Click(object sender, EventArgs e)
         {
@@ -988,6 +1171,7 @@ namespace PraticeManagement
             txtFirstName.Text = person.FirstName;
             txtLastName.Text = person.LastName;
             dtpHireDate.DateValue = person.HireDate;
+            PreviousHireDate = person.HireDate;
             PopulateTerminationDate(person.TerminationDate);
             PopulateTerminationReason(person.TerminationReasonid);
             txtEmailAddress.Text = person.Alias;
@@ -1003,6 +1187,7 @@ namespace PraticeManagement
 
             PersonStatusId = person.Status != null ? (PersonStatusType?)person.Status.Id : null;
             PrevPersonStatusId = (person.Status != null) ? person.Status.Id : -1;
+            lblPersonStatus.Text = PersonStatusId.HasValue ? Enum.Parse(typeof(PersonStatusType), PrevPersonStatusId.ToString()).ToString() : string.Empty;
 
             txtEmployeeNumber.Text = person.EmployeeNumber;
 
@@ -1448,6 +1633,22 @@ namespace PraticeManagement
         protected void custPopUpTerminationReason_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = (ddlPopUpTerminationReason.SelectedIndex != 0);
+        }
+
+        ///<summary>
+        ///validates change employee pop up controls.
+        ///</summary>
+        protected void cvTerminationReason_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = (ddlChangePersonStatusPopUpTerminationReason.SelectedIndex != 0);
+        }
+
+        protected void cvWithTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var terminationDate = dtpTerminationDate.DateValue;
+            var hireDate = dtpActiveHireDate.DateValue;
+            args.IsValid = (terminationDate != null && hireDate > terminationDate);            
+            
         }
 
         /// <summary>
