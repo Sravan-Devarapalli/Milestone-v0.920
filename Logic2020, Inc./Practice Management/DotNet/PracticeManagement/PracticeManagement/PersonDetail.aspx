@@ -357,6 +357,72 @@
                 control.disabled = '';
             }
         }
+
+        function showDivContingent()
+        {         
+            var rbn = document.getElementById('<%= rbnContingent.ClientID %>');
+            var div = document.getElementById('<%= divContingent.ClientID %>');
+            var divActv = document.getElementById('<%= divActive.ClientID %>');
+           
+            if( rbn.checked)
+            {
+                div.className = "padLeft25 PaddingTop6";
+                divActv.className = "displayNone";
+            }
+            else
+            {            
+                div.className = "displayNone";
+            }          
+        }
+
+        function showDivActive()
+        {             
+            var rbnContgn = document.getElementById('<%= rbnContingent.ClientID %>');
+            var rbnTermin = document.getElementById('<%= rbnTerminate.ClientID %>');
+            var rbn = document.getElementById('<%= rbnActive.ClientID %>');
+            var div = document.getElementById('<%= divActive.ClientID %>');
+            var divContgn = document.getElementById('<%= divContingent.ClientID %>');
+            var divTerm = document.getElementById('<%= divTerminate.ClientID %>');
+              
+
+            if( rbn.checked)
+            {
+                div.className = "padLeft25 PaddingTop6";
+                if(divContgn != null)
+                {
+                    divContgn.className = "displayNone";
+                }
+                if(divTerm != null)
+                {
+                    divTerm.className = "displayNone";
+                }
+            }
+            else
+            {            
+              div.className = "displayNone";
+            }
+        }
+
+        function showDivTerminate()
+        {             
+            var rbn = document.getElementById('<%= rbnTerminate.ClientID %>');
+            var div = document.getElementById('<%= divTerminate.ClientID %>');
+            var rbnActve = document.getElementById('<%= rbnActive.ClientID %>');
+            var divActv = document.getElementById('<%= divActive.ClientID %>'); 
+            if( rbn.checked)
+            {
+                div.className = "padLeft25 PaddingTop6";
+                if(divActv != null)
+                {                    
+                    divActv.className = "displayNone";
+                }
+            }
+            else
+            {            
+              div.className = "displayNone";
+            }
+        } 
+
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
@@ -393,10 +459,13 @@
                                     </td>
                                     <td>
                                         <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width158px" onchange="setDirty();"
-                                            AutoPostBack="true">
+                                            AutoPostBack="true" Visible="false">
                                         </asp:DropDownList>
+                                        <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
                                     </td>
                                     <td>
+                                        <asp:Button ID="btnChangeEmployeeStatus" runat="server" Text="Change Employee Status"
+                                            OnClick="btnChangeEmployeeStatus_Click" />&nbsp;
                                         <asp:RequiredFieldValidator ID="reqPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
                                             ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Person"
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
@@ -552,6 +621,7 @@
                                         </asp:DropDownList>
                                     </td>
                                     <td>
+                                        &nbsp;
                                     </td>
                                     <td>
                                         <asp:Label ID="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
@@ -563,6 +633,7 @@
                                             FilterType="Numbers" FilterMode="ValidChars" runat="server" />
                                     </td>
                                     <td>
+                                        &nbsp;
                                     </td>
                                 </tr>
                                 <tr>
@@ -1481,8 +1552,8 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlProjectMilestones" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Milestone)Container.DataItem).Project.Name+
-                                             "-" + ((DataTransferObjects.Milestone)Container.DataItem).Description%>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.Name)+
+                                             "-" + HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Description)%>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1491,7 +1562,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerProjects" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Project)Container.DataItem).Name %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).Name) %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1500,7 +1571,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# ((DataTransferObjects.Opportunity)Container.DataItem).Name %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).Name) %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1591,6 +1662,139 @@
                         <td colspan="2" class="alignCenter Padding6">
                             <asp:Button ID="btnPersonTerminate" Text="OK" runat="server" OnClick="btnPersonTerminate_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:Button ID="btnPersonTerminateCancel" Text="Cancel" runat="server" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnOpenChangeStatusPopUp" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeViewPersonChangeStatus" runat="server"
+                TargetControlID="hdnOpenChangeStatusPopUp" CancelControlID="btnCancelChangePersonStatus"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlChangeActivePersonStatus"
+                DropShadow="false" />
+            <asp:Panel ID="pnlChangeActivePersonStatus" runat="server" CssClass="popUpAttrition"
+                Style="display: none;">
+                <table>
+                    <tr>
+                        <th class="TextAlignLeft PaddingBottom10Imp">
+                            Change Employee Status:
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:RadioButton ID="rbnCancleTermination" runat="server" Text="Cancle Termination"
+                                CssClass="displayNone" GroupName="rbtnsChangeStatus" />
+                            <asp:RadioButton ID="rbnActive" runat="server" Text="Active" onclick="showDivActive()"
+                                CssClass="displayNone" GroupName="rbtnsChangeStatus" />
+                            <div id="divActive" runat="server" class="displayNone">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            Hire Date&nbsp;:&nbsp;
+                                        </td>
+                                        <td>
+                                            <uc2:DatePicker ID="dtpActiveHireDate" runat="server" BehaviorID="dtpActiveHireDate" />
+                                            <asp:RequiredFieldValidator ID="rfvActiveHireDate" runat="server" ControlToValidate="dtpActiveHireDate"
+                                                Text="*" ErrorMessage="To Active the person the Hire Date should be specified."
+                                                ToolTip="To Active the person the Hire Date should be specified." ValidationGroup="ChangePersonStatusToActive"
+                                                Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                            <asp:CompareValidator ID="cvActiveHireDateFormat" runat="server" ControlToValidate="dtpActiveHireDate"
+                                                Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
+                                                Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToActive"
+                                                ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+                                            <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ErrorMessage="To Active the person the Hire Date should be greater than previous Termination date."
+                                                ToolTip="To Active the person the Hire Date should be greater than previous Termination date."
+                                                ValidationGroup="ChangePersonStatusToActive" Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate"
+                                                SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:RadioButton ID="rbnTerminate" runat="server" Text="Terminate" CssClass="displayNone"
+                                onclick="showDivTerminate()" GroupName="rbtnsChangeStatus" />
+                            <div id="divTerminate" runat="server" class="displayNone">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            Termination Date&nbsp;:&nbsp;
+                                        </td>
+                                        <td>
+                                            <uc2:DatePicker ID="dtpChangePersonStatusPopUpTerminateDate" runat="server" BehaviorID="dtpChangePersonStatusPopUpTerminateDate" />
+                                            <asp:RequiredFieldValidator ID="rfvTerminationDate" runat="server" ControlToValidate="dtpChangePersonStatusPopUpTerminateDate"
+                                                Text="*" ErrorMessage="To Terminate the person the Termination Date should be specified."
+                                                ToolTip="To Terminate the person the Termination Date should be specified." ValidationGroup="ChangePersonStatusToTerminate"
+                                                Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                            <asp:CompareValidator ID="cvTerminationDateFormat" runat="server" ControlToValidate="dtpChangePersonStatusPopUpTerminateDate"
+                                                Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'"
+                                                Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToTerminate"
+                                                ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'" Type="Date"
+                                                EnableClientScript="false">*</asp:CompareValidator>
+                                            <asp:CompareValidator ID="cvWithHireDate" runat="server" ControlToValidate="dtpChangePersonStatusPopUpTerminateDate"
+                                                ControlToCompare="dtpHireDate" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Termination date should be greater than or equal to Hire date."
+                                                Display="Dynamic" Text="*" ValidationGroup="ChangePersonStatusToTerminate" ToolTip="Termination date should be greater than or equal to Hire date."
+                                                SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Termination Reason&nbsp;:&nbsp;
+                                        </td>
+                                        <td>
+                                            <asp:DropDownList ID="ddlChangePersonStatusPopUpTerminationReason" runat="server">
+                                            </asp:DropDownList>
+                                            <asp:CustomValidator ID="cvTerminationReason" runat="server" ErrorMessage="To Terminate the person the Termination Reason should be specified."
+                                                ToolTip="To Terminate the person the Termination Reason should be specified."
+                                                ValidationGroup="ChangePersonStatusToTerminate" Text="*" Display="Dynamic" SetFocusOnError="true"
+                                                OnServerValidate="cvTerminationReason_ServerValidate" EnableClientScript="false"></asp:CustomValidator>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <asp:RadioButton ID="rbnContingent" runat="server" Text="Contingent" CssClass="displayNone"
+                                onclick="showDivContingent()" GroupName="rbtnsChangeStatus" />
+                            <div id="divContingent" runat="server" class="displayNone">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            Hire Date&nbsp;:&nbsp;
+                                        </td>
+                                        <td>
+                                            <uc2:DatePicker ID="dtpContingentHireDate" runat="server" BehaviorID="dtpContingentHireDate" />
+                                            <asp:RequiredFieldValidator ID="rfvContingentHireDate" runat="server" ControlToValidate="dtpContingentHireDate"
+                                                Text="*" ErrorMessage="To Contingent the person the Hire Date should be specified."
+                                                ToolTip="To Contingent the person the Hire Date should be specified." ValidationGroup="ChangePersonStatusToContingent"
+                                                Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                            <asp:CompareValidator ID="cvContingentHireDateFormat" runat="server" ControlToValidate="dtpContingentHireDate"
+                                                Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
+                                                Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToContingent"
+                                                EnableClientScript="false">*</asp:CompareValidator>
+                                            <asp:CompareValidator ID="cvWithTermiantionDate" runat="server" ControlToValidate="dtpContingentHireDate"
+                                                ControlToCompare="dtpTerminationDate" Operator="GreaterThan" Type="Date" ErrorMessage="Hire date should be greater than previous Termination date."
+                                                Display="Dynamic" Text="*" ValidationGroup="ChangePersonStatusToContingent" ToolTip="Hire date should be greater than previous Termination date."
+                                                SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="Padding10">
+                            <asp:ValidationSummary ID="valSummaryChangePersonStatusToContingent" runat="server"
+                                ValidationGroup="ChangePersonStatusToContingent" EnableClientScript="false" SetFocusOnError="false" />
+                            <asp:ValidationSummary ID="valSummaryChangePersonStatusToTerminate" runat="server"
+                                ValidationGroup="ChangePersonStatusToTerminate" EnableClientScript="false" SetFocusOnError="false" />
+                            <asp:ValidationSummary ID="valSummaryChangePersonStatusToActive" runat="server" ValidationGroup="ChangePersonStatusToActive"
+                                EnableClientScript="false" SetFocusOnError="false" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="alignCenter PaddingTop5Imp">
+                            <asp:Button ID="btnOkChangePersonStatus" Text="OK" runat="server" OnClick="btnOkChangePersonStatus_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
+                            <asp:Button ID="btnCancelChangePersonStatus" Text="Cancel" runat="server" />
                         </td>
                     </tr>
                 </table>
