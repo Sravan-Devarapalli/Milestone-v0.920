@@ -350,7 +350,11 @@
             public static string SeniorityCategoryId = "SeniorityCategoryId";
             public static string SeniorityCategory = "SeniorityCategory";
             public static string TerminationsCountInTheRange = "TerminationsCountInTheRange";
-
+            public static string IsW2SalaryRule = "IsW2SalaryRule";
+            public static string IsW2HourlyRule = "IsW2HourlyRule";
+            public static string Is1099Rule = "Is1099Rule";
+            public static string IsContingentRule = "IsContingentRule";
+            public static string IsVisible = "IsVisible";
         }
 
         #endregion
@@ -792,6 +796,7 @@
                 public const string GetTerminationReasonsList = "dbo.GetTerminationReasonsList";
                 public const string GetPersonHireAndTerminationDateById = "dbo.GetPersonHireAndTerminationDateById";
                 public static string GetPersonListWithRole = "dbo.GetPersonListWithRole";
+                public const string GetPersonEmploymentHistoryById = "dbo.GetPersonEmploymentHistoryById";
             }
 
             #endregion
@@ -1154,4 +1159,3 @@
         #endregion
     }
 }
-
