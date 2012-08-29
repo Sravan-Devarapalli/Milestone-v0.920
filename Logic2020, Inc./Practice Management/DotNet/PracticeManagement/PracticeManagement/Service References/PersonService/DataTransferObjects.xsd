@@ -31,6 +31,7 @@
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q2:ArrayOfPersonDocument" />
       <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
+      <xs:element minOccurs="0" name="EmploymentHistory" nillable="true" type="tns:ArrayOfEmployment" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
@@ -588,6 +589,21 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PersonDivisionType" nillable="true" type="tns:PersonDivisionType" />
+  <xs:complexType name="ArrayOfEmployment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Employment" nillable="true" type="tns:Employment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmployment" nillable="true" type="tns:ArrayOfEmployment" />
+  <xs:complexType name="Employment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReasonId" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Employment" nillable="true" type="tns:Employment" />
   <xs:complexType name="ArrayOfPersonOverhead">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonOverhead" nillable="true" type="tns:PersonOverhead" />
@@ -653,6 +669,24 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfTimescale" nillable="true" type="tns:ArrayOfTimescale" />
+  <xs:complexType name="ArrayOfTerminationReason">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TerminationReason" nillable="true" type="tns:TerminationReason" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTerminationReason" nillable="true" type="tns:ArrayOfTerminationReason" />
+  <xs:complexType name="TerminationReason">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Is1099Rule" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsContigent" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsVisible" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsW2HourlyRule" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsW2SalaryRule" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TerminationReason" nillable="true" type="tns:TerminationReason" />
   <xs:complexType name="ArrayOfSeniorityCategory">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
