@@ -14,7 +14,7 @@ namespace DataTransferObjects
 		Terminated = 2,
 		[EnumMember]
         //Projected = Contingent
-		Projected = 3,
+        Contingent = 3,
 		[EnumMember]
 		Inactive = 4,
         [EnumMember]
