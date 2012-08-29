@@ -1460,7 +1460,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(DateTodayParam, today);
-              
+
                 connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -3671,7 +3671,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<string, int> GetTerminationReasonsList()
+        public static List<TerminationReason> GetTerminationReasonsList()
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetTerminationReasonsList, connection))
@@ -3682,17 +3682,30 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    var result = new Dictionary<string, int>();
+                    var result = new List<TerminationReason>();
 
                     if (reader.HasRows)
                     {
                         int terminationReasonIdIndex = reader.GetOrdinal(TerminationReasonIdColumn);
                         int terminationReasonIndex = reader.GetOrdinal(TerminationReasonColumn);
+                        int isW2SalaryRuleIndex = reader.GetOrdinal(Constants.ColumnNames.IsW2SalaryRule);
+                        int isW2HourlyRuleIndex = reader.GetOrdinal(Constants.ColumnNames.IsW2HourlyRule);
+                        int is1099RuleIndex = reader.GetOrdinal(Constants.ColumnNames.Is1099Rule);
+                        int isContingentRuleIndex = reader.GetOrdinal(Constants.ColumnNames.IsContingentRule);
+                        int isVisibleIndex = reader.GetOrdinal(Constants.ColumnNames.IsVisible);
+
                         while (reader.Read())
                         {
-                            int value = reader.GetInt32(terminationReasonIdIndex);
-                            string key = reader.GetString(terminationReasonIndex);
-                            result.Add(key, value);
+                            var terminationReason = new TerminationReason();
+                            terminationReason.Id = reader.GetInt32(terminationReasonIdIndex);
+                            terminationReason.Name = reader.GetString(terminationReasonIndex);
+                            terminationReason.IsW2SalaryRule = reader.GetBoolean(isW2SalaryRuleIndex);
+                            terminationReason.IsW2HourlyRule = reader.GetBoolean(isW2HourlyRuleIndex);
+                            terminationReason.Is1099Rule = reader.GetBoolean(is1099RuleIndex);
+                            terminationReason.IsContigent = reader.GetBoolean(isContingentRuleIndex);
+                            terminationReason.IsVisible = reader.GetBoolean(isVisibleIndex);
+
+                            result.Add(terminationReason);
                         }
                     }
                     return result;
@@ -3765,6 +3778,56 @@ namespace DataAccess
                     return result;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get Person's Hire/Rehire report(Employment History)
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns>list of Hire, Termination dates and Termination reasons</returns>
+        public static List<Employment> GetPersonEmploymentHistoryById(int personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonEmploymentHistoryById, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(PersonIdParam, personId);
+
+                    connection.Open();
+
+                    var result = new List<Employment>();
+                    var reader = command.ExecuteReader();
+                    ReadPersonEmploymentHistory(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadPersonEmploymentHistory(SqlDataReader reader, List<Employment> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
+                int terminationReasonIdIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationReasonIdColumn);
+
+                while (reader.Read())
+                {
+                    var employment = new Employment();
+                    employment.PersonId = reader.GetInt32(personIdIndex);
+                    employment.HireDate = reader.GetDateTime(hireDateIndex);
+                    employment.TerminationDate = reader.IsDBNull(terminationDateIndex) ? null : (DateTime?)reader.GetDateTime(terminationDateIndex);
+                    employment.TerminationReasonId = reader.IsDBNull(terminationReasonIdIndex) ? null : (int?)reader.GetInt32(terminationReasonIdIndex);
+
+                    result.Add(employment);
+                }
+            }
+
         }
     }
 }
