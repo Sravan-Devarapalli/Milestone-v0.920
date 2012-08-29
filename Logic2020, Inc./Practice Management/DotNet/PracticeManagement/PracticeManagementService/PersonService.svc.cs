@@ -449,6 +449,16 @@ namespace PracticeManagementService
         }
 
         /// <summary>
+        /// To get the history of person Hires to the company.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns></returns>
+        public List<Employment> GetPersonEmploymentHistoryById(int personId)
+        {
+            return PersonDAL.GetPersonEmploymentHistoryById(personId);
+        }
+
+        /// <summary>
         /// Retrives a <see cref="Person"/> by the Alias (email).
         /// </summary>
         /// <param name="alias">The EMail to search for.</param>
@@ -1081,7 +1091,7 @@ namespace PracticeManagementService
             return PersonDAL.GetStrawmanListShortFilterWithTodayPay();
         }
 
-        public Dictionary<string, int> GetTerminationReasonsList()
+        public List<TerminationReason> GetTerminationReasonsList()
         {
             return PersonDAL.GetTerminationReasonsList();
         }
