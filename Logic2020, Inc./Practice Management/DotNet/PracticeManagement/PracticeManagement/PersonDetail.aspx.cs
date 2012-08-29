@@ -52,8 +52,8 @@ namespace PraticeManagement
 				{{
                  var compensationEndDateStr = ""{5}"";
                  var terminationDateStr = document.getElementById(""{4}"").value;
-                 var ddl = document.getElementById(""{0}"");
-                 var statusId = ddl.selectedIndex >= 0 ? ddl.options[ddl.selectedIndex].value : '';                
+                 var hdnPersonStatus = document.getElementById(""{0}"");
+                 var statusId = hdnPersonStatus.value;                
                  var hasOpenEndedCompensation = {1};                 
                  var compensationEndDate = new Date(compensationEndDateStr);
                  var terminationDate = new Date(terminationDateStr);
@@ -85,14 +85,7 @@ namespace PraticeManagement
                          }}
 						if (!result)
 						{{
-							for (var i = 0; i < ddl.options.length; i++)
-							{{
-								if (ddl.options[i].value == ""{3}"")
-								{{
-									ddl.selectedIndex = i;
-									break;
-								}}
-							}}
+                            hdnPersonStatus.value = ""{3}"";
 						}}
 						return result;
 					}}
@@ -262,6 +255,18 @@ namespace PraticeManagement
             }
         }
 
+        private DateTime? PrevTerminationDate
+        {
+            get
+            {
+                return (DateTime?)ViewState["ViewState_PrevTerminationDate"];
+            }
+            set
+            {
+                ViewState["ViewState_PrevTerminationDate"] = value;
+            }
+        }
+
         private string PreviousTerminationReason
         {
             get
@@ -304,23 +309,29 @@ namespace PraticeManagement
                 FillTerminatinReasonsDropDowns();
                 txtFirstName.Focus();
                 UserIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
+
+                if (!PersonId.HasValue)
+                {
+                    var status = new List<PersonStatus>();
+                    status.Add(new PersonStatus { Id = (int)PersonStatusType.Active, Name = PersonStatusType.Active.ToString() });
+                    status.Add(new PersonStatus { Id = (int)PersonStatusType.Contingent, Name = PersonStatusType.Contingent.ToString() });
+                    DataHelper.FillListDefault(ddlPersonStatus, string.Empty, status.ToArray(), false);
+                    ddlPersonStatus.SelectedValue = ((int)PersonStatusType.Active).ToString();
+
+                    ddlPersonStatus.Visible = true;
+                    lblPersonStatus.Visible = false;
+                    btnChangeEmployeeStatus.Visible = false;
+                }
+                else
+                {
+                    DataHelper.FillPersonStatusList(ddlPersonStatus);
+                }
             }
 
             AllowContinueWithoutSave = cellActivityLog.Visible = PersonId.HasValue;
             personOpportunities.TargetPersonId = PersonId;
             mlError.ClearMessage();
             this.dvTerminationDateErrors.Visible = false;
-
-            if (!PersonId.HasValue)
-            {
-                //PersonStatus[] statuses = serviceClient.GetPersonStatuses();
-                DataHelper.FillPersonStatusList(ddlPersonStatus);
-                //DataHelper.FillListDefault(ddlPersonStatus, string.Empty, statuses, false);
-
-                ddlPersonStatus.Visible = true;
-                lblPersonStatus.Visible = false;
-                btnChangeEmployeeStatus.Visible = false;
-            }
         }
 
         private void FillTerminatinReasonsDropDowns()
@@ -344,7 +355,7 @@ namespace PraticeManagement
             if (!UserIsAdministrator && !UserIsHR && !PersonId.HasValue)//#2817 UserisHR is added as per requirement.
             {
                 // Recruiter should not be able to set the person active.
-                PersonStatusId = PersonStatusType.Projected;
+                PersonStatusId = PersonStatusType.Contingent;
             }
             recruiterInfo.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
             lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
@@ -354,64 +365,79 @@ namespace PraticeManagement
             AddScript();
 
             ddlTerminationReason.Enabled = (ddlPersonStatus.SelectedValue == "2");
-            dtpTerminationDate.ReadOnly = btnTerminatePerson.Enabled = !(ddlPersonStatus.SelectedValue == "2");
-            ddlPersonStatus.Visible = !(btnTerminatePerson.Visible = PersonId.HasValue);
+            dtpTerminationDate.ReadOnly = !(ddlPersonStatus.SelectedValue == "2");
+            ddlPersonStatus.Visible = !(lblPersonStatus.Visible = btnChangeEmployeeStatus.Visible = PersonId.HasValue);
+
         }
 
         private void LoadChangeEmployeeStatusPopUpData()
         {
             DataHelper.FillTerminationReasonsList(ddlChangePersonStatusPopUpTerminationReason, TerminationReasonFirstItem);
 
+            dtpChangePersonStatusPopUpTerminateDate.DateValue = dtpTerminationDate.DateValue;
+            if (PrevTerminationDate.HasValue)
+            {
+                dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PrevTerminationDate.Value.AddDays(1);
+            }
+
             if (PrevPersonStatusId == (int)PersonStatusType.Active)
             {
                 rbnCancleTermination.CssClass = "displayNone";
                 rbnActive.CssClass = "displayNone";
+                divActive.Attributes["class"] = "displayNone";
 
-                rbnTerminate.CssClass = "";               
-                divTerminate.Attributes["class"] = "displayNone";
+                rbnTerminate.CssClass = "";
+                rbnTerminate.Checked = true;
+                divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
 
                 rbnContingent.CssClass = "displayNone";
+                divContingent.Attributes["class"] = "displayNone";
             }
 
             if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
             {
                 rbnCancleTermination.CssClass = "";
+                rbnCancleTermination.Checked = true;
                 rbnActive.CssClass = "displayNone";
                 rbnTerminate.CssClass = "displayNone";
                 rbnContingent.CssClass = "displayNone";
+                divActive.Attributes["class"] = "displayNone";
+                divTerminate.Attributes["class"] = "displayNone";
+                divContingent.Attributes["class"] = "displayNone";
             }
 
-            if (PrevPersonStatusId == (int)PersonStatusType.Projected)//contingent
+            if (PrevPersonStatusId == (int)PersonStatusType.Contingent)//contingent
             {
                 rbnCancleTermination.CssClass = "displayNone";
 
-                rbnActive.CssClass = "";               
-                rbnActive.Checked = true;
-                divActive.Attributes["class"] = "padLeft25 PaddingTop6";
+                rbnActive.CssClass = "";
+                rbnActive.Checked = false;
+                divActive.Attributes["class"] = "displayNone";
+                //divActive.Attributes["class"] = "padLeft25 PaddingTop6";
 
-                rbnTerminate.CssClass = "";                
+                rbnTerminate.CssClass = "";
+                rbnTerminate.Checked = false;
                 divTerminate.Attributes["class"] = "displayNone";
+
                 rbnContingent.CssClass = "displayNone";
+                divContingent.Attributes["class"] = "displayNone";
             }
 
             if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
             {
                 rbnCancleTermination.CssClass = "displayNone";
 
-                rbnActive.CssClass = "";              
-                rbnActive.Checked = true;
-                divActive.Attributes["class"] = "padLeft25 PaddingTop6";
+                rbnActive.CssClass = "";
+                rbnActive.Checked = false;
+                divActive.Attributes["class"] = "displayNone";
+                //divActive.Attributes["class"] = "padLeft25 PaddingTop6";
 
                 rbnTerminate.CssClass = "displayNone";
+                divTerminate.Attributes["class"] = "displayNone";
 
-                rbnContingent.CssClass = "";               
+                rbnContingent.CssClass = "";
                 divContingent.Attributes["class"] = "displayNone";
             }
-
-
-            dtpChangePersonStatusPopUpTerminateDate.DateValue = dtpTerminationDate.DateValue;
-            dtpActiveHireDate.DateValue =  dtpContingentHireDate.DateValue = PreviousHireDate.Value;
-
         }
 
         #endregion
@@ -431,16 +457,17 @@ namespace PraticeManagement
 
         protected void btnOkChangePersonStatus_Click(object source, EventArgs args)
         {
-            if ((PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Projected) && rbnTerminate.Checked)
+            if ((PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Contingent) && rbnTerminate.Checked)
             {
                 Page.Validate(valSummaryChangePersonStatusToTerminate.ValidationGroup);
                 if (Page.IsValid)
                 {
+                    ddlPersonStatus.SelectedValue = dtpChangePersonStatusPopUpTerminateDate.DateValue.Date >= DateTime.Now.Date ? ((int)PersonStatusType.TerminationPending).ToString() : ((int)PersonStatusType.Terminated).ToString();
                     //terminate employee.
                     dtpTerminationDate.DateValue = dtpChangePersonStatusPopUpTerminateDate.DateValue;
                     ddlTerminationReason.SelectedValue = ddlChangePersonStatusPopUpTerminationReason.SelectedValue;
 
-                    btnSave_Click(source, args);
+                    Save_Click(source, args);
                     if (!custTerminateDateTE.IsValid)
                     {
                         IsFromTerminateEmployeePopup = true;
@@ -462,19 +489,29 @@ namespace PraticeManagement
             }
             if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending && rbnCancleTermination.Checked)
             {
+                ddlPersonStatus.SelectedValue = ((int)PersonStatusType.Active).ToString();
+                dtpTerminationDate.TextValue = string.Empty;
+                ddlTerminationReason.SelectedIndex = 0;
                 //cancle termination.
+
+                Save_Click(source, args);
             }
-            if (PrevPersonStatusId == (int)PersonStatusType.Projected && rbnActive.Checked)
+            if (PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnActive.Checked)
             {
                 //active employee with the selected hire date.
                 Page.Validate(valSummaryChangePersonStatusToActive.ValidationGroup);
                 if (Page.IsValid)
                 {
+                    ddlPersonStatus.SelectedValue = ((int)PersonStatusType.Active).ToString();
+                    dtpTerminationDate.TextValue = string.Empty;
+                    ddlTerminationReason.SelectedIndex = 0;
+
+                    Save_Click(source, args);
                 }
                 else
                 {
                     divActive.Attributes["class"] = "padLeft25 PaddingTop6";
-                    divTerminate.Attributes["class"] = "displayNone";                   
+                    divTerminate.Attributes["class"] = "displayNone";
                     divContingent.Attributes["class"] = "displayNone";
                     mpeViewPersonChangeStatus.Show();
                 }
@@ -490,6 +527,12 @@ namespace PraticeManagement
                     Page.Validate(valSummaryChangePersonStatusToActive.ValidationGroup);
                     if (Page.IsValid)
                     {
+                        dtpHireDate.TextValue = dtpActiveHireDate.TextValue;
+                        ddlPersonStatus.SelectedValue = ((int)PersonStatusType.Active).ToString();
+                        dtpTerminationDate.TextValue = string.Empty;
+                        ddlTerminationReason.SelectedIndex = 0;
+
+                        Save_Click(source, args);
                     }
                     else
                     {
@@ -500,12 +543,19 @@ namespace PraticeManagement
                         mpeViewPersonChangeStatus.Show();
                     }
                 }
-                else
+                
+                if (rbnContingent.Checked)
                 {
                     //change employee status to contingent.
                     Page.Validate(valSummaryChangePersonStatusToContingent.ValidationGroup);
                     if (Page.IsValid)
                     {
+                        dtpHireDate.TextValue = dtpActiveHireDate.TextValue;
+                        ddlPersonStatus.SelectedValue = ((int)PersonStatusType.Contingent).ToString();
+                        dtpTerminationDate.TextValue = string.Empty;
+                        ddlTerminationReason.SelectedIndex = 0;
+
+                        Save_Click(source, args);
                     }
                     else
                     {
@@ -545,7 +595,7 @@ namespace PraticeManagement
 
                 dtpTerminationDate.DateValue = dtpPopUpTerminateDate.DateValue;
                 ddlTerminationReason.SelectedValue = ddlPopUpTerminationReason.SelectedValue;
-                btnSave_Click(sender, e);
+                Save_Click(sender, e);
                 if (!custTerminateDateTE.IsValid)
                 {
                     IsFromTerminateEmployeePopup = true;
@@ -595,6 +645,20 @@ namespace PraticeManagement
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void btnSave_Click(object sender, EventArgs e)
+        {
+            var updatePersonStatusDropdown = true;
+            if (PersonId.HasValue)
+            {
+                updatePersonStatusDropdown = false;
+            }
+            Save_Click(sender, e);
+            if (PersonId.HasValue && updatePersonStatusDropdown)
+            {
+                DataHelper.FillPersonStatusList(ddlPersonStatus);
+            }
+        }
+
+        private void Save_Click(object sender, EventArgs e)
         {
             int viewindex = mvPerson.ActiveViewIndex;
             TableCell CssSelectCell = null;
@@ -924,7 +988,7 @@ namespace PraticeManagement
         {
             rpPermissions.Visible = false;
 
-            DataHelper.FillPersonStatusList(ddlPersonStatus);
+            //DataHelper.FillPersonStatusList(ddlPersonStatus);
             DataHelper.FillSenioritiesList(ddlSeniority);
 
             chblRoles.DataSource = Roles.GetAllRoles();
@@ -979,7 +1043,7 @@ namespace PraticeManagement
             string compensationEndDate = (PayHistory != null && PayHistory.Count > 0 && PayHistory[PayHistory.Count - 1].EndDate.HasValue)
                                                 ? PayHistory[PayHistory.Count - 1].EndDate.Value.AddDays(-1).ToString() : string.Empty;
             ScriptManager.RegisterStartupScript(this, this.GetType(), this.ClientID, (string.Format(ValidateStatusScript,
-                                                                                                  ddlPersonStatus.ClientID,
+                                                                                                  hdnPersonStatus.ClientID,
                                                                                                   hasNotClosedCompensation ? "true" : "false",
                                                                                                   (int)PersonStatusType.Terminated,
                                                                                                   (int)PersonStatusType.Active,
@@ -1172,6 +1236,7 @@ namespace PraticeManagement
             txtLastName.Text = person.LastName;
             dtpHireDate.DateValue = person.HireDate;
             PreviousHireDate = person.HireDate;
+            PrevTerminationDate = person.TerminationDate.HasValue ? person.TerminationDate : null;
             PopulateTerminationDate(person.TerminationDate);
             PopulateTerminationReason(person.TerminationReasonid);
             txtEmailAddress.Text = person.Alias;
@@ -1579,7 +1644,7 @@ namespace PraticeManagement
         protected void custRoles_ServerValidate(object source, ServerValidateEventArgs args)
         {
             if (!string.IsNullOrEmpty(ddlPersonStatus.SelectedValue) &&
-                int.Parse(ddlPersonStatus.SelectedValue) == (int)PersonStatusType.Projected)
+                int.Parse(ddlPersonStatus.SelectedValue) == (int)PersonStatusType.Contingent)
             {
                 // Roles
                 if (chblRoles.Items.Cast<ListItem>().Any(item => item.Selected))
@@ -1714,7 +1779,7 @@ namespace PraticeManagement
             e.IsValid =
                 // Only administrators can set a status to Active or Terminated
                 UserIsAdministrator || UserIsHR || !int.TryParse(e.Value, out statusId) ||
-                statusId == (int)PersonStatusType.Projected || statusId == (int)PersonStatusType.Inactive;//#2817 UserisHR is added as per requirement.
+                statusId == (int)PersonStatusType.Contingent || statusId == (int)PersonStatusType.Inactive;//#2817 UserisHR is added as per requirement.
         }
 
         protected void custHireDate_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -1910,7 +1975,7 @@ namespace PraticeManagement
         protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
         {
             DisableValidatecustTerminateDateTE = true;
-            btnSave_Click(source, args);
+            Save_Click(source, args);
             mpeViewTerminationDateErrors.Hide();
             if (IsFromTerminateEmployeePopup.HasValue && IsFromTerminateEmployeePopup.Value)
             {
