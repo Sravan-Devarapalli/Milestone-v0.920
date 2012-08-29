@@ -26,7 +26,7 @@ using System.Threading;
 
 namespace PraticeManagement
 {
-    public partial class PersonDetail : PracticeManagementPageBase, IPostBackEventHandler
+    public partial class PersonDetail : PracticeManagementPersonDetailPageBase, IPostBackEventHandler
     {
 
         #region Constants
@@ -45,6 +45,7 @@ namespace PraticeManagement
         private const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
         private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
         private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
+        private const string TerminationReasonFirstItem = "- - Select Termination Reason - -";
 
         private const string ValidateStatusScript = @"
                 function validateStatus()
@@ -265,13 +266,17 @@ namespace PraticeManagement
         {
             get
             {
-                return (bool?)ViewState["ViewState_IsFromTerminateEmployeePopup"]; 
+                return (bool?)ViewState["ViewState_IsFromTerminateEmployeePopup"];
             }
             set
             {
                 ViewState["ViewState_IsFromTerminateEmployeePopup"] = value;
             }
         }
+
+        public override Person PersonUnsavedData { get; set; }
+
+        public override string LoginPageUrl { get; set; }
 
         #endregion
 
@@ -297,28 +302,13 @@ namespace PraticeManagement
 
         private void FillTerminatinReasonsDropDowns()
         {
-            using (var serviceClient = new PersonService.PersonServiceClient())
-            {
-                var list = serviceClient.GetTerminationReasonsList();
-                FillTerminationReasonDropDown(ddlTerminationReason, list, "- - Select Termination Reason - -");
-                FillTerminationReasonDropDown(ddlPopUpTerminationReason, list, "- - Select Termination Reason - -");
-            }
+            FillTerminationReasonDropDown(ddlTerminationReason, TerminationReasonFirstItem);
+            FillTerminationReasonDropDown(ddlPopUpTerminationReason, TerminationReasonFirstItem);
         }
 
-        private void FillTerminationReasonDropDown(ListControl control, Dictionary<string, int> list, string firstItem)
+        private void FillTerminationReasonDropDown(ListControl control, string firstItem)
         {
-            control.Items.Clear();
-            control.AppendDataBoundItems = true;
-
-            if (!string.IsNullOrEmpty(firstItem))
-            {
-                control.Items.Add(new ListItem(firstItem, string.Empty));
-            }
-            control.DataSource = list;
-            control.DataValueField = "Value";
-            control.DataTextField = "Key";
-
-            control.DataBind();
+            DataHelper.FillTerminationReasonsList(control, firstItem);
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -821,7 +811,7 @@ namespace PraticeManagement
             {
                 btnPersonTerminate.OnClientClick = "if(!ValidateCompensationAndTerminationDate(this, '" + dtpPopUpTerminateDate.BehaviorID + "','" + ddlPopUpTerminationReason.ClientID + "')){ return false;}";
                 var txtDate = (TextBox)dtpPopUpTerminateDate.FindControl("txtDate");
-                var onChangeScript =  "EnableTerminateEmployeeOkButton('" + btnPersonTerminate.ClientID + "','" + txtDate.ClientID + "','" + ddlPopUpTerminationReason.ClientID + "');";
+                var onChangeScript = "EnableTerminateEmployeeOkButton('" + btnPersonTerminate.ClientID + "','" + txtDate.ClientID + "','" + ddlPopUpTerminationReason.ClientID + "');";
                 ddlPopUpTerminationReason.Attributes.Add("onchange", onChangeScript);
                 txtDate.Attributes.Add("onchange", onChangeScript);
             }
@@ -833,7 +823,9 @@ namespace PraticeManagement
             {
                 try
                 {
-                    return serviceClient.GetPersonDetail(id.Value);
+                    var person = serviceClient.GetPersonDetail(id.Value);
+                    person.EmploymentHistory = serviceClient.GetPersonEmploymentHistoryById(person.Id.Value).ToList();
+                    return person;
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -874,6 +866,9 @@ namespace PraticeManagement
 
             // Role/Seniority
             PopulateRolesAndSeniority(person);
+
+            // EmploymentHistory
+            PopulateEmploymentHistory(person);
         }
 
         /// <summary>
@@ -970,6 +965,12 @@ namespace PraticeManagement
             gvCompensationHistory.DataBind();
         }
 
+        private void PopulateEmploymentHistory(Person person)
+        {
+            gvEmploymentHistory.DataSource = person.EmploymentHistory;
+            gvEmploymentHistory.DataBind();
+        }
+
         private void PopulateRecruiterCommissions(Person person)
         {
             if (person.DefaultPersonRecruiterCommission != null)
@@ -1040,8 +1041,21 @@ namespace PraticeManagement
 
         private void PopulateTerminationReason(int? terminationReasonId)
         {
-            ddlTerminationReason.SelectedValue = terminationReasonId.HasValue ? terminationReasonId.Value.ToString() : string.Empty;
-            ddlPopUpTerminationReason.SelectedValue = ddlTerminationReason.SelectedValue;
+            string selectedValue = string.Empty;
+
+            if (terminationReasonId.HasValue)
+            {
+                selectedValue = terminationReasonId.Value.ToString();
+                var item = ddlTerminationReason.Items.FindByValue(terminationReasonId.Value.ToString());
+                if (item == null)
+                {
+                    var newItem = SettingsHelper.GetTerminationReasonsList().First(tr => tr.Id == terminationReasonId.Value);
+                    ddlTerminationReason.Items.Add(new ListItem { Value = newItem.Id.ToString(), Text = newItem.Name });
+                    ddlPopUpTerminationReason.Items.Add(new ListItem { Value = newItem.Id.ToString(), Text = newItem.Name });
+                }
+            }
+
+            ddlTerminationReason.SelectedValue = ddlPopUpTerminationReason.SelectedValue = selectedValue;
         }
 
         private void PopulateTerminationDate(DateTime? terminationDate)
@@ -1141,6 +1155,11 @@ namespace PraticeManagement
 
             var person = new Person();
             PopulateData(person);
+
+            if (PersonId.HasValue && PrevPersonStatusId != -1 && PrevPersonStatusId == (int)PersonStatusType.Terminated)
+            {
+                //TransferToCompesationDetailPage(person, loginPageUrl);
+            }
             using (var serviceClient = new PersonServiceClient())
             {
                 try
@@ -1164,7 +1183,6 @@ namespace PraticeManagement
                 }
                 catch (Exception ex)
                 {
-
                     serviceClient.Abort();
                     ExMessage = ex.Message;
                     Page.Validate();
@@ -1172,6 +1190,14 @@ namespace PraticeManagement
             }
 
             return null;
+        }
+
+        private void TransferToCompesationDetailPage(Person person, string loginPageUrl)
+        {
+            //To transfer the unsave person data to Compensation detail page.
+            PersonUnsavedData = person;
+            LoginPageUrl = loginPageUrl;
+            Server.Transfer("~/CompensationDetail.aspx?Id=" + PersonUnsavedData.Id + "&returnTo=" + Request.Url, true);
         }
 
         private static bool IsAzureWebRole()
@@ -2049,6 +2075,15 @@ namespace PraticeManagement
             PayFooter = pay;
             _gvCompensationHistory.DataSource = PayHistory;
             _gvCompensationHistory.DataBind();
+        }
+
+        protected string GetTerminationReasonById(int? terminationReasonId)
+        {
+            if (terminationReasonId.HasValue && Utils.SettingsHelper.GetTerminationReasonsList().Any(t => t.Id == terminationReasonId))
+            {
+                return Utils.SettingsHelper.GetTerminationReasonsList().First(t => t.Id == terminationReasonId).Name;
+            }
+            return string.Empty;
         }
 
         #endregion
