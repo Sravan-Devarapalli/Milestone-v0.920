@@ -93,7 +93,7 @@ BEGIN
 				FPTH.Terminations1099HourlyCountInTheRange,
 				FPTH.Terminations1099PORCountInTheRange,
 				FPTH.TerminationsCountInTheRange,
-				AP.ActivePersonsAtTheBeginning
+				ISNULL(AP.ActivePersonsAtTheBeginning,0) AS ActivePersonsAtTheBeginning
 		FROM RangeValue TT
 		INNER JOIN PersonTerminationInRange FPTH ON FPTH.StartDate = TT.StartDate
 		INNER JOIN PersonHiriesInRange FPHH ON FPHH.StartDate = TT.StartDate
