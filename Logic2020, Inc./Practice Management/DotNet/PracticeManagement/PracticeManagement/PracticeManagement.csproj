@@ -521,10 +521,7 @@
     <Content Include="Reports\TimeEntryReport_new.aspx" />
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
     <Content Include="RevenueGoals.aspx" />
-    <Content Include="Controls\BudgetEntries.ascx" />
     <Content Include="Controls\DefaultMilestoneSettingControl.ascx" />
-    <Content Include="Controls\ExpenseCategoryListControl.ascx" />
-    <Content Include="Controls\ExpenseListControl.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
@@ -870,12 +867,10 @@
     <EmbeddedResource Include="Controls\Generic\SearchHighlighting\SearchHighlightingExtender.js" />
     <EmbeddedResource Include="Controls\Generic\ScrollableDropdown\ScrollableDropdownExtender.js" />
     <Content Include="Controls\MilestonePersons\MilestonePersonFinancials.ascx" />
-    <Content Include="Controls\PersonOverheadCalculationControl.ascx" />
     <Content Include="Controls\Reports\UTilTimelineFilter.ascx" />
     <Content Include="Controls\TimeEntry\TimeEntriesByProject.ascx" />
     <Content Include="DefaultMilestoneSetting.aspx" />
     <Content Include="EmailTemplates.aspx" />
-    <Content Include="Financial.aspx" />
     <Content Include="GroupBy.aspx" />
     <Content Include="Images\balloon-ellipsis.png" />
     <Content Include="Images\balloon-plus.png" />
@@ -2028,13 +2023,6 @@
     <Compile Include="Controls\BrandingSettingsControl.ascx.designer.cs">
       <DependentUpon>BrandingSettingsControl.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\BudgetEntries.ascx.cs">
-      <DependentUpon>BudgetEntries.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\BudgetEntries.ascx.designer.cs">
-      <DependentUpon>BudgetEntries.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\CascadingMsdd.cs" />
     <Compile Include="Controls\Clients\ClientGroups.ascx.cs">
       <DependentUpon>ClientGroups.ascx</DependentUpon>
@@ -2076,20 +2064,6 @@
     </Compile>
     <Compile Include="Controls\DefaultMilestoneSettingControl.ascx.designer.cs">
       <DependentUpon>DefaultMilestoneSettingControl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ExpenseCategoryListControl.ascx.cs">
-      <DependentUpon>ExpenseCategoryListControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\ExpenseCategoryListControl.ascx.designer.cs">
-      <DependentUpon>ExpenseCategoryListControl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ExpenseListControl.ascx.cs">
-      <DependentUpon>ExpenseListControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\ExpenseListControl.ascx.designer.cs">
-      <DependentUpon>ExpenseListControl.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Generic\Buttons\CancelAndReturnButton.cs" />
     <Compile Include="Controls\Generic\Buttons\IsCorrectImageButton.cs" />
@@ -2226,13 +2200,6 @@
       <DependentUpon>MilestonePersonList.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\NavigatingEventArgs.cs" />
-    <Compile Include="Controls\PersonOverheadCalculationControl.ascx.cs">
-      <DependentUpon>PersonOverheadCalculationControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\PersonOverheadCalculationControl.ascx.designer.cs">
-      <DependentUpon>PersonOverheadCalculationControl.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PracticeManagementFilterControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -2263,13 +2230,6 @@
     </Compile>
     <Compile Include="EmailTemplates.aspx.designer.cs">
       <DependentUpon>EmailTemplates.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Financial.aspx.cs">
-      <DependentUpon>Financial.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Financial.aspx.designer.cs">
-      <DependentUpon>Financial.aspx</DependentUpon>
     </Compile>
     <Compile Include="GroupBy.aspx.cs">
       <DependentUpon>GroupBy.aspx</DependentUpon>
