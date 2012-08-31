@@ -231,7 +231,6 @@ namespace PraticeManagement.Reporting
                 }
                 SetDefalultfilter();
                 LoadActiveView();
-                LoadAttrition();
             }
         }
 
@@ -318,6 +317,7 @@ namespace PraticeManagement.Reporting
             populateGraph(reportData.TerminationsW2SalaryCountInTheRange, percentageList[0], ltrlW2SalaryCount, trW2Salary);
             populateGraph(reportData.TerminationsW2HourlyCountInTheRange, percentageList[1], ltrlW2HourlyCount, trW2Hourly);
             populateGraph(reportData.TerminationsContractorsCountInTheRange, percentageList[2], ltrlContractorsCount, trContrator);
+            LoadAttrition();
         }
 
         /// <summary>
@@ -407,7 +407,6 @@ namespace PraticeManagement.Reporting
             if (ddlPeriod.SelectedValue != "0")
             {
                 LoadActiveView();
-                LoadAttrition();
             }
             else
             {
@@ -423,7 +422,6 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
-                LoadAttrition();
             }
             else
             {
