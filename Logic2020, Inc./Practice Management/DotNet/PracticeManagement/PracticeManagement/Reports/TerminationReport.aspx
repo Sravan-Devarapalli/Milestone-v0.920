@@ -184,7 +184,7 @@
                                     Termination Reason:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
-                                    <pmc:ScrollingDropDown ID="cblTerminationReasons" runat="server" AllSelectedReturnType="AllItems"
+                                    <pmc:ScrollingDropDown ID="cblTerminationReasons" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblTerminationReasons','Termination Reason')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Termination Reason"
                                         CssClass="NewHireReportCblTimeScales Height160PxIMP" />
