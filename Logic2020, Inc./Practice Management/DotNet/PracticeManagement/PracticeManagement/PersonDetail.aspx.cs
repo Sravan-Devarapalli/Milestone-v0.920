@@ -301,6 +301,18 @@ namespace PraticeManagement
             }
         }
 
+        private DateTime? TerminationDateBeforeCurrentHireDate
+        {
+            get
+            {
+                return (DateTime?)ViewState["ViewState_TerminationDateBeforeCurrentHireDate"];
+            }
+            set
+            {
+                ViewState["ViewState_TerminationDateBeforeCurrentHireDate"] = value;
+            }
+        }
+
         public override Person PersonUnsavedData { get; set; }
 
         public override string LoginPageUrl { get; set; }
@@ -420,12 +432,6 @@ namespace PraticeManagement
         {
             DataHelper.FillTerminationReasonsList(ddlPopUpTerminationReason, TerminationReasonFirstItem);
 
-            dtpPopUpTerminateDate.DateValue = dtpTerminationDate.DateValue;
-            if (PreviousTerminationDate.HasValue)
-            {
-                dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PreviousTerminationDate.Value.AddDays(1);
-            }
-
             if (PrevPersonStatusId == (int)PersonStatusType.Active)
             {
                 rbnCancleTermination.CssClass = "displayNone";
@@ -454,6 +460,7 @@ namespace PraticeManagement
 
             if (PrevPersonStatusId == (int)PersonStatusType.Contingent)//contingent
             {
+                dtpActiveHireDate.DateValue = dtpHireDate.DateValue;
                 rbnCancleTermination.CssClass = "displayNone";
 
                 rbnActive.CssClass = "";
@@ -472,6 +479,8 @@ namespace PraticeManagement
 
             if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
             {
+                dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PreviousTerminationDate.Value.AddDays(1);
+
                 rbnCancleTermination.CssClass = "displayNone";
 
                 rbnActive.CssClass = "";
@@ -482,6 +491,7 @@ namespace PraticeManagement
                 divTerminate.Attributes["class"] = "displayNone";
 
                 rbnContingent.CssClass = "";
+                rbnContingent.Checked = false;
                 divContingent.Attributes["class"] = "displayNone";
             }
         }
@@ -1258,6 +1268,17 @@ namespace PraticeManagement
             dtpHireDate.DateValue = person.HireDate;
             PreviousHireDate = person.HireDate;
             PreviousTerminationDate = (person.EmploymentHistory != null && person.EmploymentHistory.Count > 0) ? person.EmploymentHistory.Last().TerminationDate : null;
+
+            //Last but one Termination date for Hire Date validation.
+            if (PreviousTerminationDate.HasValue)
+            {
+                TerminationDateBeforeCurrentHireDate = (person.EmploymentHistory.Where(s => s.TerminationDate != PreviousTerminationDate.Value).Count() > 0) ? person.EmploymentHistory.Where(s => s.TerminationDate != PreviousTerminationDate.Value).Last().TerminationDate : null;
+            }
+            else
+            {
+                TerminationDateBeforeCurrentHireDate = (person.EmploymentHistory.Where(s => s.TerminationDate != null).Count() > 0) ? person.EmploymentHistory.Where(s => s.TerminationDate != null).Last().TerminationDate : null;
+            }
+
             PopulateTerminationDate(person.TerminationDate);
             PopulateTerminationReason(person.TerminationReasonid);
             txtEmailAddress.Text = person.Alias;
@@ -1722,7 +1743,12 @@ namespace PraticeManagement
 
         protected void cvWithTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            args.IsValid = HireDate > PreviousTerminationDate;
+            args.IsValid = (PreviousTerminationDate.HasValue) ? HireDate > PreviousTerminationDate : ((TerminationDateBeforeCurrentHireDate.HasValue) ? HireDate > TerminationDateBeforeCurrentHireDate : true);
+        }
+
+        protected void custWithPreviousTermDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = (TerminationDateBeforeCurrentHireDate.HasValue) ? HireDate > TerminationDateBeforeCurrentHireDate : true;
         }
 
         /// <summary>
