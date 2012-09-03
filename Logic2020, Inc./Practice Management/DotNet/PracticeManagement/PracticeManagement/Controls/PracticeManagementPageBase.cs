@@ -29,7 +29,7 @@ namespace PraticeManagement.Controls
 			get
 			{
                 var queryString = Request.QueryString[ReturnUrlKey];
-                queryString = queryString.Replace(",", "&" + ReturnUrlKey + "=");
+                queryString = string.IsNullOrEmpty(queryString) ? queryString : queryString.Replace(",", "&" + ReturnUrlKey + "=");
                 return queryString;
 			}
 		}
