@@ -606,7 +606,7 @@
                                             Display="Dynamic" ValidateEmptyText="true" OnServerValidate="custReqEmailAddress_ServerValidate"></asp:CustomValidator>&nbsp;
                                     </td>
                                     <td nowrap="nowrap">
-                                        Termination Date
+                                        Termination Date&nbsp;
                                     </td>
                                     <td class="Width158px">
                                         <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged" />
@@ -636,8 +636,6 @@
                                             ToolTip="To terminate the person the Termination Reason should be specified."
                                             ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
                                             OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>
-                                        <%--<asp:Button ID="btnTerminatePerson" runat="server" Text="Terminate Employee" Enabled="false"
-                                            Style="visibility: hidden;" />--%>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1727,7 +1725,7 @@
                             </div>
                             <asp:RadioButton ID="rbnContingent" runat="server" Text="Contingent" CssClass="displayNone"
                                 onclick="showDivContingent()" GroupName="rbtnsChangeStatus" />
-                            <div id="divContingent" runat="server" class="displayNone">
+                            <div id="divContingent" runat="server">
                                 <table>
                                     <tr>
                                         <td>
