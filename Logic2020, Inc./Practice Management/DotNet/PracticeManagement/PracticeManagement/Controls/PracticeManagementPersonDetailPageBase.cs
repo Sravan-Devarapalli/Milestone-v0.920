@@ -23,5 +23,7 @@ namespace PraticeManagement.Controls
         }
 
         public abstract string LoginPageUrl { get; set; }
+
+        public abstract PersonPermission Permissions { get; set; }
     }
 }
