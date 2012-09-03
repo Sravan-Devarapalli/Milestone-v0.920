@@ -130,15 +130,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custPersonStatus;
         
         /// <summary>
-        /// cvInactiveStatus control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvInactiveStatus;
-        
-        /// <summary>
         /// txtLastName control.
         /// </summary>
         /// <remarks>
@@ -362,15 +353,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custTerminationReason;
-        
-        /// <summary>
-        /// btnTerminatePerson control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnTerminatePerson;
         
         /// <summary>
         /// ddlPersonType control.
@@ -1327,15 +1309,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hdnField;
         
         /// <summary>
-        /// hdnOpenPopUP control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnOpenPopUP;
-        
-        /// <summary>
         /// mpeViewTerminationDateErrors control.
         /// </summary>
         /// <remarks>
@@ -1516,105 +1489,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnTerminationProcessCancel;
         
         /// <summary>
-        /// mpeViewPersonTerminationPopup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpeViewPersonTerminationPopup;
-        
-        /// <summary>
-        /// pnlPersonTermination control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlPersonTermination;
-        
-        /// <summary>
-        /// dtpPopUpTerminateDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.DatePicker dtpPopUpTerminateDate;
-        
-        /// <summary>
-        /// rfvDtpPopUpTerminateDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDtpPopUpTerminateDate;
-        
-        /// <summary>
-        /// CompareValidator1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator CompareValidator1;
-        
-        /// <summary>
-        /// CompareValidator2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator CompareValidator2;
-        
-        /// <summary>
-        /// ddlPopUpTerminationReason control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPopUpTerminationReason;
-        
-        /// <summary>
-        /// custPopUpTerminationReason control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custPopUpTerminationReason;
-        
-        /// <summary>
-        /// valSummaryTerminationPopup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSummaryTerminationPopup;
-        
-        /// <summary>
-        /// btnPersonTerminate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPersonTerminate;
-        
-        /// <summary>
-        /// btnPersonTerminateCancel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPersonTerminateCancel;
-        
-        /// <summary>
         /// hdnOpenChangeStatusPopUp control.
         /// </summary>
         /// <remarks>
@@ -1723,13 +1597,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTerminate;
         
         /// <summary>
-        /// dtpChangePersonStatusPopUpTerminateDate control.
+        /// dtpPopUpTerminateDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.DatePicker dtpChangePersonStatusPopUpTerminateDate;
+        protected global::PraticeManagement.Controls.DatePicker dtpPopUpTerminateDate;
         
         /// <summary>
         /// rfvTerminationDate control.
@@ -1759,13 +1633,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator cvWithHireDate;
         
         /// <summary>
-        /// ddlChangePersonStatusPopUpTerminationReason control.
+        /// ddlPopUpTerminationReason control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlChangePersonStatusPopUpTerminationReason;
+        protected global::System.Web.UI.WebControls.DropDownList ddlPopUpTerminationReason;
         
         /// <summary>
         /// cvTerminationReason control.
