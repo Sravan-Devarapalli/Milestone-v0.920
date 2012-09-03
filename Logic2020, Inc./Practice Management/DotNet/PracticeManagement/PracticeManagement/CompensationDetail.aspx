@@ -10,9 +10,7 @@
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/PersonInfo.ascx" TagName="PersonInfo" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
-
 <%@ PreviousPageType TypeName="PraticeManagement.Controls.PracticeManagementPersonDetailPageBase" %>
-
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Compensation Details | Practice Management</title>
 </asp:Content>
@@ -50,6 +48,7 @@
     </cc1:StyledUpdatePanel>
     <div class="buttons-block">
         <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
+        <asp:CustomValidator ID="custUserName" runat="server" ValidationGroup="PersonDetailsSave"></asp:CustomValidator>
         <asp:ValidationSummary ID="vsumCompensation" runat="server" EnableClientScript="false" />
         <cc:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />&nbsp;
         <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" />
