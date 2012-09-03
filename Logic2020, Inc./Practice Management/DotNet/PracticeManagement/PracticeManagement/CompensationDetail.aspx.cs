@@ -176,7 +176,7 @@ namespace PraticeManagement
                     }
                     else
                     {
-                        if (person.PaymentHistory.Count == 0)
+                        if (person.PaymentHistory.Count == 0 || (PreviousPage != null && PersonDetailData != null))
                         {
                             personnelCompensation.StartDate = person.HireDate;
                             if (person.Seniority != null)
