@@ -580,7 +580,7 @@
                                         Termination Date
                                     </td>
                                     <td class="Width158px">
-                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" />
+                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged" />
                                     </td>
                                     <td>
                                         <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
@@ -1611,8 +1611,8 @@
             <asp:HiddenField ID="hdnOpenChangeStatusPopUp" runat="server" Value="" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeViewPersonChangeStatus" runat="server"
                 TargetControlID="hdnOpenChangeStatusPopUp" BackgroundCssClass="modalBackground"
-                PopupControlID="pnlChangeActivePersonStatus" DropShadow="false" />
-            <asp:Panel ID="pnlChangeActivePersonStatus" runat="server" CssClass="popUpAttrition"
+                PopupControlID="pnlChangeEmployeeStatus" DropShadow="false" />
+            <asp:Panel ID="pnlChangeEmployeeStatus" runat="server" CssClass="popUpAttrition"
                 Style="display: none;">
                 <table>
                     <tr>
@@ -1663,7 +1663,7 @@
                                             Termination Date&nbsp;:&nbsp;
                                         </td>
                                         <td>
-                                            <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" />
+                                            <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpPopUpTerminationDate_OnSelectionChanged" />
                                             <asp:RequiredFieldValidator ID="rfvTerminationDate" runat="server" ControlToValidate="dtpPopUpTerminateDate"
                                                 Text="*" ErrorMessage="To Terminate the person the Termination Date should be specified."
                                                 ToolTip="To Terminate the person the Termination Date should be specified." ValidationGroup="ChangePersonStatusToTerminate"
@@ -1743,7 +1743,8 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
-            <asp:PostBackTrigger ControlID="btnSave" />
+            <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
+            <asp:PostBackTrigger ControlID="btnTerminationProcessOK" />
         </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
