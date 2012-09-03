@@ -363,16 +363,23 @@
             var rbn = document.getElementById('<%= rbnContingent.ClientID %>');
             var div = document.getElementById('<%= divContingent.ClientID %>');
             var divActv = document.getElementById('<%= divActive.ClientID %>');
-           
+            var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
+            var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
+       
             if( rbn.checked)
             {
                 div.className = "padLeft25 PaddingTop6";
                 divActv.className = "displayNone";
-            }
-            else
-            {            
-                div.className = "displayNone";
-            }          
+
+                if(valSumActv != null)
+                {
+                    valSumActv.className = "displayNone"; 
+                }  
+                if(valSumCont != null)
+                {
+                    valSumCont.className = ""; 
+                } 
+            } 
         }
 
         function showDivActive()
@@ -383,6 +390,9 @@
             var div = document.getElementById('<%= divActive.ClientID %>');
             var divContgn = document.getElementById('<%= divContingent.ClientID %>');
             var divTerm = document.getElementById('<%= divTerminate.ClientID %>');
+            var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
+            var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
+            var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>'); 
               
 
             if( rbn.checked)
@@ -396,10 +406,18 @@
                 {
                     divTerm.className = "displayNone";
                 }
-            }
-            else
-            {            
-              div.className = "displayNone";
+                if(valSumActv != null)
+                {
+                 valSumActv.className = "";
+                }
+                if(valSumCont != null)
+                {
+                 valSumCont.className = "displayNone";
+                }
+                if(valSumTerm != null)
+                {
+                 valSumTerm.className = "displayNone";
+                }
             }
         }
 
@@ -409,18 +427,25 @@
             var div = document.getElementById('<%= divTerminate.ClientID %>');
             var rbnActve = document.getElementById('<%= rbnActive.ClientID %>');
             var divActv = document.getElementById('<%= divActive.ClientID %>'); 
+            var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
+            var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>');
             if( rbn.checked)
             {
                 div.className = "padLeft25 PaddingTop6";
+
+                if(valSumTerm != null)
+                {
+                    valSumTerm.className = ""; 
+                } 
                 if(divActv != null)
                 {                    
                     divActv.className = "displayNone";
                 }
-            }
-            else
-            {            
-              div.className = "displayNone";
-            }
+                if(valSumActv != null)
+                {
+                    valSumActv.className = "displayNone"; 
+                }                   
+            }           
         } 
 
     </script>
@@ -549,6 +574,10 @@
                                             ToolTip="Cannot set a Hire Date outside recruiting commissions period." ValidationGroup="Person"
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             OnServerValidate="custHireDate_ServerValidate"></asp:CustomValidator>&nbsp;
+                                        <asp:CustomValidator ID="custWithPreviousTermDate" runat="server" ControlToValidate="dtpHireDate"
+                                            ErrorMessage="Hire Date should be greater than previous Termination date." ToolTip="Hire Date should be greater than previous Termination date."
+                                            ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate" ValidateEmptyText="false"
+                                            SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -568,7 +597,7 @@
                                             ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                             Display="Dynamic" OnServerValidate="custEmailAddress_ServerValidate"></asp:CustomValidator>
                                         <asp:CustomValidator ID="custUserName" runat="server" ControlToValidate="txtEmailAddress"
-                                            ErrorMessage="Unknow error occures. Please contact your administrator." ToolTip="Unknow error occures. Please contact your administrator."
+                                            ErrorMessage="Unknown error occures. Please contact your administrator." ToolTip="Unknown error occures. Please contact your administrator."
                                             ValidateEmptyText="true" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                             Display="Dynamic" ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>
                                         <asp:CustomValidator ID="custReqEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
@@ -592,8 +621,8 @@
                                             ToolTip="To terminate the person the Termination Date should be specified." ValidationGroup="Person"
                                             Text="*" Display="Dynamic" EnableClientScript="false" OnServerValidate="custTerminationDate_ServerValidate"></asp:CustomValidator>
                                         <asp:CompareValidator ID="cmpTerminateDate" runat="server" ControlToValidate="dtpTerminationDate"
-                                            ControlToCompare="dtpHireDate" Operator="GreaterThan" Type="Date" ErrorMessage="Termination date should be greater than Hire date."
-                                            Display="Dynamic" Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than Hire date."
+                                            ControlToCompare="dtpHireDate" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Termination date should be greater than or equal to Hire date."
+                                            Display="Dynamic" Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than or equal to Hire date."
                                             SetFocusOnError="true"></asp:CompareValidator>
                                         <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
                                             Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
@@ -1511,6 +1540,7 @@
                 </tr>
                 <tr>
                     <td>
+                        &nbsp;
                     </td>
                 </tr>
                 <tr>
@@ -1642,9 +1672,10 @@
                                                 Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToActive"
                                                 ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
-                                            <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ErrorMessage="New Hire Date should be greater than previous Termination date."
+                                            <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ControlToValidate="dtpActiveHireDate"
+                                                ErrorMessage="New Hire Date should be greater than previous Termination date."
                                                 ToolTip="New Hire Date should be greater than previous Termination date." ValidationGroup="ChangePersonStatusToActive"
-                                                Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate"
+                                                Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate" ValidateEmptyText="false"
                                                 SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                                         </td>
                                     </tr>
