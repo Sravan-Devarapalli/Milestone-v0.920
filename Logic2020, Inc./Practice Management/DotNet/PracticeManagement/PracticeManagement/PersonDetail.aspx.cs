@@ -382,7 +382,6 @@ namespace PraticeManagement
             {
                 DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, string.Empty);
                 DataHelper.FillPersonDivisionList(ddlDivision);
-                FillTerminatinReasonsDropDowns();
                 txtFirstName.Focus();
                 UserIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
             }
@@ -392,17 +391,7 @@ namespace PraticeManagement
             mlError.ClearMessage();
             this.dvTerminationDateErrors.Visible = false;
         }
-
-        private void FillTerminatinReasonsDropDowns()
-        {
-            FillTerminationReasonDropDown(ddlTerminationReason, TerminationReasonFirstItem);
-        }
-
-        private void FillTerminationReasonDropDown(ListControl control, string firstItem)
-        {
-            DataHelper.FillTerminationReasonsList(control, firstItem);
-        }
-
+        
         protected void Page_PreRender(object sender, EventArgs e)
         {
             // Security
@@ -430,8 +419,6 @@ namespace PraticeManagement
 
         private void LoadChangeEmployeeStatusPopUpData()
         {
-            DataHelper.FillTerminationReasonsList(ddlPopUpTerminationReason, TerminationReasonFirstItem);
-
             if (PrevPersonStatusId == (int)PersonStatusType.Active)
             {
                 rbnCancleTermination.CssClass = "displayNone";
@@ -473,8 +460,6 @@ namespace PraticeManagement
 
                 rbnContingent.CssClass = "displayNone";
                 divContingent.Attributes["class"] = "displayNone";
-
-                DataHelper.FillListDefault(ddlPopUpTerminationReason, TerminationReasonFirstItem, SettingsHelper.GetTerminationReasonsList().Where(t => t.IsContigent).ToArray(), false);
             }
 
             if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
@@ -494,6 +479,8 @@ namespace PraticeManagement
                 rbnContingent.Checked = false;
                 divContingent.Attributes["class"] = "displayNone";
             }
+
+            FillTerminationReasonsByTerminationDate(dtpPopUpTerminateDate, ddlPopUpTerminationReason);
         }
 
         #endregion
@@ -506,6 +493,7 @@ namespace PraticeManagement
         private void FillTerminationReasonsByTerminationDate(DatePicker terminationDate, ListControl ddlTerminationReasons)
         {
             var reasons = new List<TerminationReason>();
+            ddlTerminationReasons.SelectedIndex = 0;
             if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
             {
                 reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsContigent == true).ToList();
@@ -533,7 +521,7 @@ namespace PraticeManagement
             {
             }
 
-            DataHelper.FillListDefault(ddlTerminationReasons, TerminationReasonFirstItem, reasons.ToArray(), false);
+            DataHelper.FillTerminationReasonsList(ddlTerminationReasons, TerminationReasonFirstItem, reasons.ToArray());
         }
 
         protected void dtpPopUpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
@@ -1270,16 +1258,10 @@ namespace PraticeManagement
             PreviousTerminationDate = (person.EmploymentHistory != null && person.EmploymentHistory.Count > 0) ? person.EmploymentHistory.Last().TerminationDate : null;
 
             //Last but one Termination date for Hire Date validation.
-            if (PreviousTerminationDate.HasValue)
-            {
-                TerminationDateBeforeCurrentHireDate = (person.EmploymentHistory.Where(s => s.TerminationDate != PreviousTerminationDate.Value).Count() > 0) ? person.EmploymentHistory.Where(s => s.TerminationDate != PreviousTerminationDate.Value).Last().TerminationDate : null;
-            }
-            else
-            {
-                TerminationDateBeforeCurrentHireDate = (person.EmploymentHistory.Where(s => s.TerminationDate != null).Count() > 0) ? person.EmploymentHistory.Where(s => s.TerminationDate != null).Last().TerminationDate : null;
-            }
+            TerminationDateBeforeCurrentHireDate = person.EmploymentHistory.Any(p => p.HireDate.Date < person.HireDate.Date) ? person.EmploymentHistory.Last(p => p.HireDate.Date < person.HireDate.Date).TerminationDate : null;
 
             PopulateTerminationDate(person.TerminationDate);
+            FillTerminationReasonsByTerminationDate(dtpTerminationDate, ddlTerminationReason);
             PopulateTerminationReason(person.TerminationReasonid);
             txtEmailAddress.Text = person.Alias;
             txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
@@ -1298,7 +1280,7 @@ namespace PraticeManagement
 
             txtEmployeeNumber.Text = person.EmployeeNumber;
 
-            //Set Locked-Out CheckBox value            
+            //Set Locked-Out CheckBox value
             chbLockedOut.Checked = person.LockedOut;
             defaultManager.EnsureDatabound();
             // Select manager and exclude self from the list
@@ -1719,7 +1701,7 @@ namespace PraticeManagement
 
         protected void custTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Terminated)
+            if (PersonStatusId.HasValue && (PersonStatusId.Value == PersonStatusType.Terminated || PersonStatusId.Value == PersonStatusType.TerminationPending))
             {
                 args.IsValid = TerminationDate.HasValue;
             }
@@ -1727,7 +1709,7 @@ namespace PraticeManagement
 
         protected void custTerminationReason_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Terminated)
+            if (PersonStatusId.HasValue && (PersonStatusId.Value == PersonStatusType.Terminated || PersonStatusId.Value == PersonStatusType.TerminationPending))
             {
                 args.IsValid = !string.IsNullOrEmpty(TerminationReasonId);//(ddlTerminationReason.SelectedIndex != 0);
             }
