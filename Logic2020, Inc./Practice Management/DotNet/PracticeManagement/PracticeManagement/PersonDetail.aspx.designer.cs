@@ -1507,13 +1507,13 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.ModalPopupExtender mpeViewPersonChangeStatus;
         
         /// <summary>
-        /// pnlChangeActivePersonStatus control.
+        /// pnlChangeEmployeeStatus control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlChangeActivePersonStatus;
+        protected global::System.Web.UI.WebControls.Panel pnlChangeEmployeeStatus;
         
         /// <summary>
         /// rbnCancleTermination control.
