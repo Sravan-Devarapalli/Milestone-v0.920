@@ -1888,6 +1888,29 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillTerminationReasonsList(ListControl control, string firstItemText, object[] statuses)
+        {
+            control.AppendDataBoundItems = true;
+            control.Items.Clear();
+            if (!string.IsNullOrEmpty(firstItemText))
+            {
+                control.Items.Add(new ListItem(firstItemText, String.Empty));
+            }
+            if (statuses == null || !statuses.Any())
+            {
+                var item = new ListItem(firstItemText, String.Empty);
+                item.Enabled = false;
+                control.Items.Add(item);
+            }
+            else
+            {
+                control.DataValueField = "Id";
+                control.DataTextField = "Name";
+                control.DataSource = statuses;
+                control.DataBind();
+            }
+        }
+
         public static void FillApprovedManagersList(ListControl control, string firstItemText, Person[] persons, bool noFirstItem)
         {
             control.AppendDataBoundItems = true;
