@@ -13,6 +13,8 @@ namespace PraticeManagement
     using System.Threading;
     using System.Web;
     using Utils;
+    using System.Web.Security;
+    using Resources;
 
     public partial class CompensationDetail : PracticeManagementPageBase
     {
@@ -30,6 +32,9 @@ namespace PraticeManagement
         #region Fields
 
         private ExceptionDetail internalException;
+        private int _saveCode;
+        private bool? _userIsAdministratorValue;
+        private bool? _userIsHRValue;
 
         #endregion
 
@@ -78,6 +83,49 @@ namespace PraticeManagement
             }
         }
 
+        protected PersonPermission Permissions
+        {
+            get
+            {
+                return (PersonPermission)ViewState["PersonPermissions_ViewState"];
+            }
+            set
+            {
+                ViewState["PersonPermissions_ViewState"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets whether the current user is in the Administrator role.
+        /// </summary>
+        protected bool UserIsAdministrator
+        {
+            get
+            {
+                if (!_userIsAdministratorValue.HasValue)
+                {
+                    _userIsAdministratorValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                }
+
+                return _userIsAdministratorValue.Value;
+            }
+        }
+
+        protected bool UserIsHR
+        {
+            get
+            {
+                if (!_userIsHRValue.HasValue)
+                {
+                    _userIsHRValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
+                }
+
+                return _userIsHRValue.Value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -108,13 +156,17 @@ namespace PraticeManagement
             {
                 try
                 {
+                    Person person;
                     if (PreviousPage != null && PreviousPage.PersonUnsavedData != null && PreviousPage.LoginPageUrl != null)
                     {
-                        PersonDetailData = PreviousPage.PersonUnsavedData;
+                        person = PersonDetailData = PreviousPage.PersonUnsavedData;
                         LoginPageUrl = PreviousPage.LoginPageUrl;
+                        Permissions = PreviousPage.Permissions;
                     }
-
-                    Person person = serviceClient.GetPersonDetail(SelectedId.Value);
+                    else
+                    {
+                        person = serviceClient.GetPersonDetail(SelectedId.Value);
+                    }
 
                     if (SelectedStartDate.HasValue)
                     {
@@ -215,11 +267,13 @@ namespace PraticeManagement
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            var person = PersonDetailData;
             if (ValidateAndSave())
             {
-                ClearDirty();
-                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
+                if (_saveCode == default(int))
+                {
+                    ClearDirty();
+                    mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
+                }
             }
             else
             {
@@ -322,6 +376,26 @@ namespace PraticeManagement
                     }
                     else
                     {
+                        if (PersonDetailData != null)
+                        {
+                            var person = PersonDetailData;
+                            int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl);
+                            SaveRoles(person);
+
+                            if (personId.Value < 0)
+                            {
+                                // Creating User error
+                                _saveCode = personId.Value;
+                                Page.Validate(custUserName.ValidationGroup);
+
+                                return true;
+                            }
+
+                            SavePersonsPermissions(person, serviceClient);
+
+                            IsDirty = false;
+                        }
+
                         serviceClient.SavePay(pay, HttpContext.Current.User.Identity.Name);
                         personnelCompensation.StartDate = personnelCompensation.StartDate;
                         personnelCompensation.EndDate = personnelCompensation.EndDate;
@@ -343,6 +417,85 @@ namespace PraticeManagement
                     return false;
                 }
             }
+        }
+        
+        private static void SaveRoles(Person person)
+        {
+            if (string.IsNullOrEmpty(person.Alias)) return;
+
+            // Saving roles
+            string[] currentRoles = Roles.GetRolesForUser(person.Alias);
+
+            if (person.RoleNames.Length > 0)
+            {
+                // New roles
+                string[] newRoles =
+                    Array.FindAll(person.RoleNames, value => Array.IndexOf(currentRoles, value) < 0);
+
+                if (newRoles.Length > 0)
+                    Roles.AddUserToRoles(person.Alias, newRoles);
+            }
+
+            if (currentRoles.Length > 0)
+            {
+                // Redundant roles
+                string[] redundantRoles =
+                    Array.FindAll(currentRoles, value => Array.IndexOf(person.RoleNames, value) < 0);
+
+                if (redundantRoles.Length > 0)
+                    Roles.RemoveUserFromRoles(person.Alias, redundantRoles);
+            }
+        }
+
+        private void SavePersonsPermissions(Person person, PersonServiceClient serviceClient)
+        {
+            if (UserIsAdministrator || UserIsHR)
+            {
+                serviceClient.SetPermissionsForPerson(person, Permissions);
+            }
+        }
+
+        protected void custUserName_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = _saveCode == default(int);
+
+            string message;
+            switch (-_saveCode)
+            {
+                case (int)MembershipCreateStatus.DuplicateEmail:
+                    message = Messages.DuplicateEmail;
+                    break;
+                case (int)MembershipCreateStatus.DuplicateUserName:
+                    //  Because we're using email as username in the system,
+                    //      DuplicateUserName is equal to our PersonEmailUniquenesViolation
+                    message = Messages.DuplicateEmail;
+                    break;
+                case (int)MembershipCreateStatus.InvalidAnswer:
+                    message = Messages.InvalidAnswer;
+                    break;
+                case (int)MembershipCreateStatus.InvalidEmail:
+                    message = Messages.InvalidEmail;
+                    break;
+                case (int)MembershipCreateStatus.InvalidPassword:
+                    message = Messages.InvalidPassword;
+                    break;
+                case (int)MembershipCreateStatus.InvalidQuestion:
+                    message = Messages.InvalidQuestion;
+                    break;
+                case (int)MembershipCreateStatus.InvalidUserName:
+                    message = Messages.InvalidUserName;
+                    break;
+                case (int)MembershipCreateStatus.ProviderError:
+                    message = Messages.ProviderError;
+                    break;
+                case (int)MembershipCreateStatus.UserRejected:
+                    message = Messages.UserRejected;
+                    break;
+                default:
+                    message = custUserName.ErrorMessage;
+                    return;
+            }
+            custUserName.ErrorMessage = custUserName.ToolTip = message;
         }
 
         #endregion
