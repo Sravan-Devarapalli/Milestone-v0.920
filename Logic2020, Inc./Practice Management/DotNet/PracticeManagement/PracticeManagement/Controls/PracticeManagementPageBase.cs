@@ -28,7 +28,9 @@ namespace PraticeManagement.Controls
 		{
 			get
 			{
-				return Request.QueryString[ReturnUrlKey];
+                var queryString = Request.QueryString[ReturnUrlKey];
+                queryString = queryString.Replace(",", "&" + ReturnUrlKey + "=");
+                return queryString;
 			}
 		}
 
