@@ -425,6 +425,7 @@ namespace PraticeManagement
                 rbnActive.CssClass = "displayNone";
                 divActive.Attributes["class"] = "displayNone";
 
+                dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
                 rbnTerminate.CssClass = "";
                 rbnTerminate.Checked = true;
                 divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
@@ -445,7 +446,7 @@ namespace PraticeManagement
                 divContingent.Attributes["class"] = "displayNone";
             }
 
-            if (PrevPersonStatusId == (int)PersonStatusType.Contingent)//contingent
+            if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
             {
                 dtpActiveHireDate.DateValue = dtpHireDate.DateValue;
                 rbnCancleTermination.CssClass = "displayNone";
@@ -454,6 +455,7 @@ namespace PraticeManagement
                 rbnActive.Checked = false;
                 divActive.Attributes["class"] = "displayNone";
 
+                dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
                 rbnTerminate.CssClass = "";
                 rbnTerminate.Checked = false;
                 divTerminate.Attributes["class"] = "displayNone";
@@ -527,6 +529,7 @@ namespace PraticeManagement
         protected void dtpPopUpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
             FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlPopUpTerminationReason);
+            divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
             mpeViewPersonChangeStatus.Show();
         }
 
