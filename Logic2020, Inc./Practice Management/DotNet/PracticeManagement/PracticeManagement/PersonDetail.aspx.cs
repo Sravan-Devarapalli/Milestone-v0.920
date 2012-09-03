@@ -32,7 +32,6 @@ namespace PraticeManagement
         #region Constants
 
         private const string PersonStatusKey = "PersonStatus";
-        private const int ActivePersonStatusId = 1;
         private const string UserNameParameterName = "userName";
         private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
         private const string DuplicateEmail = "There is another Person with the same Email.";
@@ -318,6 +317,8 @@ namespace PraticeManagement
 
         public override string LoginPageUrl { get; set; }
 
+        public override PersonPermission Permissions { get; set; }
+
         public bool IsStatusChangeClicked
         {
             get
@@ -421,8 +422,8 @@ namespace PraticeManagement
 
             AddScript();
 
-            ddlTerminationReason.Enabled = (ddlPersonStatus.SelectedValue == "2");
-            dtpTerminationDate.ReadOnly = !(ddlPersonStatus.SelectedValue == "2");
+            ddlTerminationReason.Enabled = PrevPersonStatusId == (int)PersonStatusType.Terminated || PrevPersonStatusId == (int)PersonStatusType.TerminationPending;// (ddlPersonStatus.SelectedValue == "2");
+            dtpTerminationDate.ReadOnly = !(PrevPersonStatusId == (int)PersonStatusType.Terminated || PrevPersonStatusId == (int)PersonStatusType.TerminationPending);// !(ddlPersonStatus.SelectedValue == "2");
             ddlPersonStatus.Visible = !(lblPersonStatus.Visible = btnChangeEmployeeStatus.Visible = PersonId.HasValue);
 
         }
@@ -477,6 +478,8 @@ namespace PraticeManagement
 
                 rbnContingent.CssClass = "displayNone";
                 divContingent.Attributes["class"] = "displayNone";
+
+                DataHelper.FillListDefault(ddlPopUpTerminationReason, TerminationReasonFirstItem, SettingsHelper.GetTerminationReasonsList().Where(t => t.IsContigent).ToArray(), false);
             }
 
             if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
@@ -496,6 +499,50 @@ namespace PraticeManagement
         }
 
         #endregion
+
+        protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
+        {
+            FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlTerminationReason);
+        }
+
+        private void FillTerminationReasonsByTerminationDate(DatePicker terminationDate, ListControl ddlTerminationReasons)
+        {
+            var reasons = new List<TerminationReason>();
+            if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
+            {
+                reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsContigent == true).ToList();
+            }
+            else if (PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && p.EndDate > terminationDate.DateValue.Date))
+            {
+                var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && p.EndDate > terminationDate.DateValue.Date);
+                switch (pay.Timescale)
+                {
+                    case TimescaleType.Hourly:
+                        reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2HourlyRule == true).ToList();
+                        break;
+                    case TimescaleType.Salary:
+                        reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2SalaryRule == true).ToList();
+                        break;
+                    case TimescaleType._1099Ctc:
+                    case TimescaleType.PercRevenue:
+                        reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.Is1099Rule == true).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+            }
+
+            DataHelper.FillListDefault(ddlTerminationReasons, TerminationReasonFirstItem, reasons.ToArray(), false);
+        }
+
+        protected void dtpPopUpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
+        {
+            FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlPopUpTerminationReason);
+            mpeViewPersonChangeStatus.Show();
+        }
 
         protected void btnChangeEmployeeStatus_Click(object sender, EventArgs e)
         {
@@ -520,6 +567,7 @@ namespace PraticeManagement
         {
             IsStatusChangeClicked = true;
             DisableValidatecustTerminateDateTE = false;
+            custCompensationCoversMilestone.Enabled = false;
 
             switch (PopupStatus)
             {
@@ -615,6 +663,8 @@ namespace PraticeManagement
         {
             var updatePersonStatusDropdown = true;
             IsStatusChangeClicked = false;
+            custCompensationCoversMilestone.Enabled = false;
+
             if (PersonId.HasValue)
             {
                 updatePersonStatusDropdown = false;
@@ -1428,8 +1478,14 @@ namespace PraticeManagement
         private void TransferToCompesationDetailPage(Person person, string loginPageUrl)
         {
             //To transfer the unsave person data to Compensation detail page.
+            person.PaymentHistory = PayHistory;
             PersonUnsavedData = person;
             LoginPageUrl = loginPageUrl;
+
+            if (bool.Parse(hfReloadPerms.Value))
+            {
+                Permissions = rpPermissions.GetPermissions();
+            }
             Server.Transfer("~/CompensationDetail.aspx?Id=" + PersonUnsavedData.Id + "&returnTo=" + Request.Url, true);
         }
 
@@ -1508,7 +1564,7 @@ namespace PraticeManagement
         protected void custCompensationCoversMilestone_ServerValidate(object source, ServerValidateEventArgs args)
         {
             // Checks if the person is active
-            if (PersonStatusId.Value == (PersonStatusType)ActivePersonStatusId)
+            if (PersonStatusId.Value == PersonStatusType.Active || PersonStatusId == PersonStatusType.TerminationPending)
             {
                 args.IsValid = !PersonId.HasValue || (PersonId.HasValue && DataHelper.CurrentPayExists(PersonId.Value));
             }
@@ -1677,7 +1733,7 @@ namespace PraticeManagement
 
         protected void cvWithTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            args.IsValid = (PreviousTerminationDate.HasValue && HireDate > PreviousTerminationDate);
+            args.IsValid = HireDate > PreviousTerminationDate;
         }
 
         /// <summary>
