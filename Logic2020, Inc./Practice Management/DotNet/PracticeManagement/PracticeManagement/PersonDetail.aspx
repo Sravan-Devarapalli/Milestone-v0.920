@@ -473,9 +473,9 @@
                                             ErrorMessage="Only administrator can set a status to Active or Terminated." ToolTip="Only administrator can set a status to Active or Terminated."
                                             ValidationGroup="Person" Text="*" ValidateEmptyText="false" EnableClientScript="false"
                                             SetFocusOnError="true" Display="Dynamic" OnServerValidate="custPersonStatus_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator ID="cvInactiveStatus" runat="server" ErrorMessage="" ToolTip=""
+                                        <%--<asp:CustomValidator ID="cvInactiveStatus" runat="server" ErrorMessage="" ToolTip=""
                                             Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
-                                            OnServerValidate="cvInactiveStatus_ServerValidate"></asp:CustomValidator>
+                                            OnServerValidate="cvInactiveStatus_ServerValidate"></asp:CustomValidator>--%>
                                         &nbsp;
                                     </td>
                                 </tr>
@@ -607,7 +607,8 @@
                                             ToolTip="To terminate the person the Termination Reason should be specified."
                                             ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
                                             OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>
-                                        <asp:Button ID="btnTerminatePerson" runat="server" Text="Terminate Employee" Enabled="false" style="visibility:hidden;" />
+                                        <%--<asp:Button ID="btnTerminatePerson" runat="server" Text="Terminate Employee" Enabled="false"
+                                            Style="visibility: hidden;" />--%>
                                     </td>
                                 </tr>
                                 <tr>
@@ -851,7 +852,7 @@
                                                 <asp:DropDownList ID="ddlSeniority" runat="server" onchange="setDirty();" />
                                             </td>
                                             <td>
-                                                <asp:CustomValidator ID="custSeniority" runat="server" ValidationGroup="Person" ControlToValidate="ddlPersonStatus"
+                                                <asp:CustomValidator ID="custSeniority" runat="server" ValidationGroup="Person"
                                                     Display="Dynamic" EnableClientScript="true" ErrorMessage="The Seniority is required since the person's status is Active."
                                                     OnServerValidate="custSeniority_ServerValidate" Text="*" ToolTip="The Seniority is required since the person's status is Active."></asp:CustomValidator>
                                             </td>
@@ -1527,7 +1528,6 @@
                 </tr>
             </table>
             <asp:HiddenField ID="hdnField" runat="server" />
-            <asp:HiddenField ID="hdnOpenPopUP" runat="server"></asp:HiddenField>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeViewTerminationDateErrors" runat="server"
                 TargetControlID="hdnField" CancelControlID="btnClose" BackgroundCssClass="modalBackground"
                 PopupControlID="pnlTerminationDateErrors" DropShadow="false" />
@@ -1608,70 +1608,10 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <AjaxControlToolkit:ModalPopupExtender ID="mpeViewPersonTerminationPopup" runat="server"
-                TargetControlID="hdnOpenPopUP" CancelControlID="btnPersonTerminateCancel" BackgroundCssClass="modalBackground"
-                PopupControlID="pnlPersonTermination" DropShadow="false" />
-            <asp:Panel ID="pnlPersonTermination" runat="server" CssClass="popUp TerminationPopUpPersonDetailPage"
-                Style="display: none;">
-                <table>
-                    <tr>
-                        <td class="textleft Padding6">
-                            Termination Date
-                        </td>
-                        <td class="textleft Padding6 no-wrap">
-                            :
-                            <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" BehaviorID="dtpPopUpTerminateDate" />
-                            <asp:RequiredFieldValidator ID="rfvDtpPopUpTerminateDate" runat="server" ControlToValidate="dtpPopUpTerminateDate"
-                                Text="*" ErrorMessage="To terminate the person the Termination Date should be specified."
-                                ToolTip="To terminate the person the Termination Date should be specified." ValidationGroup="PersonTerminate"
-                                Display="Dynamic"></asp:RequiredFieldValidator>
-                            <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="dtpPopUpTerminateDate"
-                                Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'"
-                                Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="PersonTerminate"
-                                ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'" Type="Date">*</asp:CompareValidator>
-                            <asp:CompareValidator ID="CompareValidator2" runat="server" ControlToValidate="dtpPopUpTerminateDate"
-                                ControlToCompare="dtpHireDate" Operator="GreaterThan" Type="Date" ErrorMessage="Termination date should be greater than Hire date."
-                                Display="Dynamic" Text="*" ValidationGroup="PersonTerminate" ToolTip="Termination date should be greater than Hire date."
-                                SetFocusOnError="true"></asp:CompareValidator>
-                            <%--<asp:CustomValidator ID="CustomValidator2" runat="server" ErrorMessage="" ToolTip=""
-                                Display="Dynamic" ValidationGroup="PersonTerminate" Text="*"
-                                OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
-                            <asp:CustomValidator ID="CustomValidator3" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
-                                Display="Dynamic" ValidationGroup="PersonTerminate" Text="*"
-                                OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>--%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="textleft Padding6">
-                            Termination Reason
-                        </td>
-                        <td class="textleft Padding6 no-wrap">
-                            :
-                            <asp:DropDownList ID="ddlPopUpTerminationReason" runat="server">
-                            </asp:DropDownList>
-                            <asp:CustomValidator ID="custPopUpTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
-                                ToolTip="To terminate the person the Termination Reason should be specified."
-                                ValidationGroup="PersonTerminate" Text="*" Display="Dynamic" OnServerValidate="custPopUpTerminationReason_ServerValidate"></asp:CustomValidator>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="Padding6">
-                            <asp:ValidationSummary ID="valSummaryTerminationPopup" runat="server" ValidationGroup="PersonTerminate" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="alignCenter Padding6">
-                            <asp:Button ID="btnPersonTerminate" Text="OK" runat="server" OnClick="btnPersonTerminate_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="btnPersonTerminateCancel" Text="Cancel" runat="server" />
-                        </td>
-                    </tr>
-                </table>
-            </asp:Panel>
             <asp:HiddenField ID="hdnOpenChangeStatusPopUp" runat="server" Value="" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeViewPersonChangeStatus" runat="server"
-                TargetControlID="hdnOpenChangeStatusPopUp" CancelControlID="btnCancelChangePersonStatus"
-                BackgroundCssClass="modalBackground" PopupControlID="pnlChangeActivePersonStatus"
-                DropShadow="false" />
+                TargetControlID="hdnOpenChangeStatusPopUp" BackgroundCssClass="modalBackground"
+                PopupControlID="pnlChangeActivePersonStatus" DropShadow="false" />
             <asp:Panel ID="pnlChangeActivePersonStatus" runat="server" CssClass="popUpAttrition"
                 Style="display: none;">
                 <table>
@@ -1693,7 +1633,7 @@
                                             Hire Date&nbsp;:&nbsp;
                                         </td>
                                         <td>
-                                            <uc2:DatePicker ID="dtpActiveHireDate" runat="server" BehaviorID="dtpActiveHireDate" />
+                                            <uc2:DatePicker ID="dtpActiveHireDate" runat="server" />
                                             <asp:RequiredFieldValidator ID="rfvActiveHireDate" runat="server" ControlToValidate="dtpActiveHireDate"
                                                 Text="*" ErrorMessage="To Active the person the Hire Date should be specified."
                                                 ToolTip="To Active the person the Hire Date should be specified." ValidationGroup="ChangePersonStatusToActive"
@@ -1703,8 +1643,8 @@
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToActive"
                                                 ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
                                             <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ErrorMessage="New Hire Date should be greater than previous Termination date."
-                                                ToolTip="New Hire Date should be greater than previous Termination date."
-                                                ValidationGroup="ChangePersonStatusToActive" Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate"
+                                                ToolTip="New Hire Date should be greater than previous Termination date." ValidationGroup="ChangePersonStatusToActive"
+                                                Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate"
                                                 SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                                         </td>
                                     </tr>
@@ -1723,17 +1663,17 @@
                                             Termination Date&nbsp;:&nbsp;
                                         </td>
                                         <td>
-                                            <uc2:DatePicker ID="dtpChangePersonStatusPopUpTerminateDate" runat="server" BehaviorID="dtpChangePersonStatusPopUpTerminateDate" />
-                                            <asp:RequiredFieldValidator ID="rfvTerminationDate" runat="server" ControlToValidate="dtpChangePersonStatusPopUpTerminateDate"
+                                            <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" />
+                                            <asp:RequiredFieldValidator ID="rfvTerminationDate" runat="server" ControlToValidate="dtpPopUpTerminateDate"
                                                 Text="*" ErrorMessage="To Terminate the person the Termination Date should be specified."
                                                 ToolTip="To Terminate the person the Termination Date should be specified." ValidationGroup="ChangePersonStatusToTerminate"
                                                 Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                            <asp:CompareValidator ID="cvTerminationDateFormat" runat="server" ControlToValidate="dtpChangePersonStatusPopUpTerminateDate"
+                                            <asp:CompareValidator ID="cvTerminationDateFormat" runat="server" ControlToValidate="dtpPopUpTerminateDate"
                                                 Display="Dynamic" Enabled="False" EnableTheming="True" ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'"
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToTerminate"
                                                 ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'" Type="Date"
                                                 EnableClientScript="false">*</asp:CompareValidator>
-                                            <asp:CompareValidator ID="cvWithHireDate" runat="server" ControlToValidate="dtpChangePersonStatusPopUpTerminateDate"
+                                            <asp:CompareValidator ID="cvWithHireDate" runat="server" ControlToValidate="dtpPopUpTerminateDate"
                                                 ControlToCompare="dtpHireDate" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Termination date should be greater than or equal to Hire date."
                                                 Display="Dynamic" Text="*" ValidationGroup="ChangePersonStatusToTerminate" ToolTip="Termination date should be greater than or equal to Hire date."
                                                 SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
@@ -1744,7 +1684,7 @@
                                             Termination Reason&nbsp;:&nbsp;
                                         </td>
                                         <td>
-                                            <asp:DropDownList ID="ddlChangePersonStatusPopUpTerminationReason" runat="server">
+                                            <asp:DropDownList ID="ddlPopUpTerminationReason" runat="server">
                                             </asp:DropDownList>
                                             <asp:CustomValidator ID="cvTerminationReason" runat="server" ErrorMessage="To Terminate the person the Termination Reason should be specified."
                                                 ToolTip="To Terminate the person the Termination Reason should be specified."
@@ -1763,7 +1703,7 @@
                                             Hire Date&nbsp;:&nbsp;
                                         </td>
                                         <td>
-                                            <uc2:DatePicker ID="dtpContingentHireDate" runat="server" BehaviorID="dtpContingentHireDate" />
+                                            <uc2:DatePicker ID="dtpContingentHireDate" runat="server" />
                                             <asp:RequiredFieldValidator ID="rfvContingentHireDate" runat="server" ControlToValidate="dtpContingentHireDate"
                                                 Text="*" ErrorMessage="To Contingent the person the Hire Date should be specified."
                                                 ToolTip="To Contingent the person the Hire Date should be specified." ValidationGroup="ChangePersonStatusToContingent"
@@ -1795,7 +1735,7 @@
                     <tr>
                         <td colspan="2" class="alignCenter PaddingTop5Imp">
                             <asp:Button ID="btnOkChangePersonStatus" Text="OK" runat="server" OnClick="btnOkChangePersonStatus_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="btnCancelChangePersonStatus" Text="Cancel" runat="server" />
+                            <asp:Button ID="btnCancelChangePersonStatus" Text="Cancel" runat="server" OnClick="btnCancelChangePersonStatus_Click" />
                         </td>
                     </tr>
                 </table>
