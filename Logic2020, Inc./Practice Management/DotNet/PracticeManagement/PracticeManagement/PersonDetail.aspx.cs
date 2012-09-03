@@ -301,18 +301,6 @@ namespace PraticeManagement
             }
         }
 
-        //private bool? IsFromTerminateEmployeePopup
-        //{
-        //    get
-        //    {
-        //        return (bool?)ViewState["ViewState_IsFromTerminateEmployeePopup"];
-        //    }
-        //    set
-        //    {
-        //        ViewState["ViewState_IsFromTerminateEmployeePopup"] = value;
-        //    }
-        //}
-
         public override Person PersonUnsavedData { get; set; }
 
         public override string LoginPageUrl { get; set; }
@@ -335,7 +323,7 @@ namespace PraticeManagement
         {
             get
             {
-                if (IsStatusChangeClicked && PersonStatusId == PersonStatusType.Active)
+                if (IsStatusChangeClicked && PersonStatusId == PersonStatusType.Active && PrevPersonStatusId != (int)PersonStatusType.TerminationPending)
                 {
                     return GetDate(dtpActiveHireDate.DateValue);
                 }
@@ -512,9 +500,9 @@ namespace PraticeManagement
             {
                 reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsContigent == true).ToList();
             }
-            else if (PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && p.EndDate > terminationDate.DateValue.Date))
+            else if (PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date)))
             {
-                var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && p.EndDate > terminationDate.DateValue.Date);
+                var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && ( !p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date));
                 switch (pay.Timescale)
                 {
                     case TimescaleType.Hourly:
@@ -1461,6 +1449,7 @@ namespace PraticeManagement
                     SavePersonsPermissions(person, serviceClient);
 
                     IsDirty = false;
+                    IsStatusChangeClicked = false;
 
                     return personId;
                 }
