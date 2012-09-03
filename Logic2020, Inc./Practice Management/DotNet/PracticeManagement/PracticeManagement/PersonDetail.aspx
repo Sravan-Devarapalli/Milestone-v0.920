@@ -1651,10 +1651,10 @@
                     <tr>
                         <td>
                             <asp:RadioButton ID="rbnCancleTermination" runat="server" Text="Cancel Termination"
-                                CssClass="displayNone" GroupName="rbtnsChangeStatus" />
+                                GroupName="rbtnsChangeStatus" />
                             <asp:RadioButton ID="rbnActive" runat="server" Text="Active" onclick="showDivActive()"
-                                CssClass="displayNone" GroupName="rbtnsChangeStatus" />
-                            <div id="divActive" runat="server" class="displayNone">
+                                GroupName="rbtnsChangeStatus" />
+                            <div id="divActive" runat="server">
                                 <table>
                                     <tr>
                                         <td>
@@ -1683,9 +1683,9 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:RadioButton ID="rbnTerminate" runat="server" Text="Terminate" CssClass="displayNone"
-                                onclick="showDivTerminate()" GroupName="rbtnsChangeStatus" />
-                            <div id="divTerminate" runat="server" class="displayNone">
+                            <asp:RadioButton ID="rbnTerminate" runat="server" Text="Terminate" onclick="showDivTerminate()"
+                                GroupName="rbtnsChangeStatus" />
+                            <div id="divTerminate" runat="server">
                                 <table>
                                     <tr>
                                         <td>
@@ -1723,8 +1723,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <asp:RadioButton ID="rbnContingent" runat="server" Text="Contingent" CssClass="displayNone"
-                                onclick="showDivContingent()" GroupName="rbtnsChangeStatus" />
+                            <asp:RadioButton ID="rbnContingent" runat="server" Text="Contingent" onclick="showDivContingent()"
+                                GroupName="rbtnsChangeStatus" />
                             <div id="divContingent" runat="server">
                                 <table>
                                     <tr>
@@ -1765,6 +1765,26 @@
                         <td colspan="2" class="alignCenter PaddingTop5Imp">
                             <asp:Button ID="btnOkChangePersonStatus" Text="OK" runat="server" OnClick="btnOkChangePersonStatus_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:Button ID="btnCancelChangePersonStatus" Text="Cancel" runat="server" OnClick="btnCancelChangePersonStatus_Click" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnMpe" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpe" runat="server" TargetControlID="hdnMpe"
+                PopupControlID="pnl" CancelControlID="btnCancle" BackgroundCssClass="modalBackground">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnl" runat="server" Style="display: none;">
+                <table>
+                    <tr>
+                        <td>
+                            <label id="lbl" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Button ID="bntOk" runat="server" Text="Ok" />
+                            <asp:Button ID="btnCancle" runat="server" Text="Cancle" />
                         </td>
                     </tr>
                 </table>
