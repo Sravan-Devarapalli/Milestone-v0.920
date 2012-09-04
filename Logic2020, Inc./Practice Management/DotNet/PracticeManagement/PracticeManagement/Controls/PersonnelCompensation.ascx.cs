@@ -791,7 +791,7 @@ namespace PraticeManagement.Controls
                 {
                     e.IsValid = false;
                     custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
-                        "Sales Commission % must be greater than or equal 0.";
+                        "Sales Commission % must be greater than or equal to 0.";
                     return;
                 }
             }
