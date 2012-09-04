@@ -1553,7 +1553,7 @@
                 <tr>
                     <td align="center">
                         <asp:HiddenField ID="hdnPersonStatus" runat="server" Value="" />
-                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="if (!validateStatus()) return false;" />&nbsp;
+                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" />&nbsp;
                         <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
                     </td>
                 </tr>
