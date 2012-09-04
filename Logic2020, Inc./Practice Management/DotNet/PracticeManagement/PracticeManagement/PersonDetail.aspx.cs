@@ -47,7 +47,7 @@ namespace PraticeManagement
         private const string TerminationReasonFirstItem = "- - Select Termination Reason - -";
         private const string CloseAnActiveCompensation = "This person still has an active compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
         private const string CloseAnOpenEndedCompensation = "This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
-
+        private const string displayNone = "displayNone";
         private const string ValidateStatusScript = @"
                 function validateStatus()
 				{{
@@ -422,61 +422,51 @@ namespace PraticeManagement
         {
             if (PrevPersonStatusId == (int)PersonStatusType.Active)
             {
-                rbnCancleTermination.CssClass = "displayNone";
-                rbnActive.CssClass = "displayNone";
-                divActive.Attributes["class"] = "displayNone";
+                rbnCancleTermination.CssClass =
+                rbnActive.CssClass =
+                divActive.Attributes["class"] =
+                rbnContingent.CssClass =
+                divContingent.Attributes["class"] = displayNone;
 
                 dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
                 rbnTerminate.CssClass = "";
                 rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = !(rbnTerminate.Checked = true);
                 divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
-
-                rbnContingent.CssClass = "displayNone";
-                divContingent.Attributes["class"] = "displayNone";
             }
             else if(PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
             {
                 rbnCancleTermination.CssClass = "";
                 rbnActive.Checked = rbnTerminate.Checked = rbnContingent.Checked = rbnCancleTermination.Checked = false;
-                rbnActive.CssClass = "displayNone";
-                rbnTerminate.CssClass = "displayNone";
-                rbnContingent.CssClass = "displayNone";
-                divActive.Attributes["class"] = "displayNone";
-                divTerminate.Attributes["class"] = "displayNone";
-                divContingent.Attributes["class"] = "displayNone";
+
+                rbnActive.CssClass =
+                rbnTerminate.CssClass =
+                rbnContingent.CssClass =
+                divActive.Attributes["class"] =
+                divTerminate.Attributes["class"] =
+                divContingent.Attributes["class"] = displayNone;
             }
             else if(PrevPersonStatusId == (int)PersonStatusType.Contingent)
             {
-                dtpActiveHireDate.DateValue = dtpHireDate.DateValue;
-                rbnCancleTermination.CssClass = "displayNone";
+                dtpActiveHireDate.DateValue = dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
 
-                rbnActive.CssClass = "";
-                divActive.Attributes["class"] = "displayNone";
-
-                dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
-                rbnTerminate.CssClass = "";
-                divTerminate.Attributes["class"] = "displayNone";
-
-                rbnContingent.CssClass = "displayNone";
-                divContingent.Attributes["class"] = "displayNone";
-
+                rbnActive.CssClass = rbnTerminate.CssClass = "";
+                rbnCancleTermination.CssClass =
+                rbnContingent.CssClass =
+                divActive.Attributes["class"] =
+                divContingent.Attributes["class"] =
+                divTerminate.Attributes["class"] = displayNone;
                 rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
             }
             else if(PrevPersonStatusId == (int)PersonStatusType.Terminated)
             {
                 dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PreviousTerminationDate.Value.AddDays(1);
 
-                rbnCancleTermination.CssClass = "displayNone";
-
-                rbnActive.CssClass = "";
-                divActive.Attributes["class"] = "displayNone";
-
-                rbnTerminate.CssClass = "displayNone";
-                divTerminate.Attributes["class"] = "displayNone";
-
-                rbnContingent.CssClass = "";
-                divContingent.Attributes["class"] = "displayNone";
-
+                rbnActive.CssClass = rbnContingent.CssClass = "";
+                rbnCancleTermination.CssClass =
+                divActive.Attributes["class"] =
+                rbnTerminate.CssClass =
+                divTerminate.Attributes["class"] =
+                divContingent.Attributes["class"] = displayNone;
                 rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
             }
 
@@ -2116,14 +2106,29 @@ namespace PraticeManagement
 
         protected void gvCompensationHistory_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
-
-            if (e.Row.RowType == DataControlRowType.DataRow && gvCompensationHistory.EditIndex == e.Row.DataItemIndex)
+            if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 var gvRow = e.Row;
                 var pay = gvRow.DataItem as Pay;
-                _gvCompensationHistory_OnRowDataBound(gvRow, pay);
 
+                var imgCopy = e.Row.FindControl("imgCopy") as Image;
+                var imgEditCompensation = e.Row.FindControl("imgEditCompensation") as Image;
+                var imgCompensationDelete = e.Row.FindControl("imgCompensationDelete") as Image;
+                var isVisible = (pay.EndDate.HasValue) ? !(pay.EndDate.Value.AddDays(-1) < dtpHireDate.DateValue) : true;
+
+                imgCopy.Visible = isVisible;
+
+                if (gvCompensationHistory.EditIndex == e.Row.DataItemIndex)
+                {
+                    _gvCompensationHistory_OnRowDataBound(gvRow, pay);
+                }
+                else
+                {
+                    imgCompensationDelete.Visible =
+                    imgEditCompensation.Visible = isVisible; 
+                }
             }
+
             if (e.Row.RowType == DataControlRowType.Footer && e.Row.Visible && PayFooter != null)
             {
                 var gvRow = e.Row;
