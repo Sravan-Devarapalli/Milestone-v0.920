@@ -45,6 +45,8 @@ namespace PraticeManagement
         private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
         private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
         private const string TerminationReasonFirstItem = "- - Select Termination Reason - -";
+        private const string CloseAnActiveCompensation = "This person still has an active compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
+        private const string CloseAnOpenEndedCompensation = "This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
 
         private const string ValidateStatusScript = @"
                 function validateStatus()
@@ -52,8 +54,8 @@ namespace PraticeManagement
                  var compensationEndDateStr = ""{5}"";
                  var terminationDateStr = document.getElementById(""{4}"").value;
                  var hdnPersonStatus = document.getElementById(""{0}"");
-                 var statusId = hdnPersonStatus.value;                
-                 var hasOpenEndedCompensation = {1};                 
+                 var statusId = hdnPersonStatus.value;
+                 var hasOpenEndedCompensation = {1};
                  var compensationEndDate = new Date(compensationEndDateStr);
                  var terminationDate = new Date(terminationDateStr);
                  var now = new Date();
@@ -71,7 +73,6 @@ namespace PraticeManagement
                               message =  'This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
                             else
                               message =  'This person has a status of Terminated, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
-                            
                             }}
                             else
                             {{
@@ -484,6 +485,20 @@ namespace PraticeManagement
 
         #endregion
 
+        protected void btnEndCompensationOk_Click(object sender, EventArgs e)
+        {
+            cvEndCompensation.Enabled = false;
+            mpeChangeStatusEndCompensation.Hide();
+            DisableValidatecustTerminateDateTE = false;
+            Save_Click(sender, e);
+        }
+
+        protected void btnEndCompensationCancel_Click(object source, EventArgs args)
+        {
+            ResetToPreviousData();
+            mpeChangeStatusEndCompensation.Hide();
+        }
+
         protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
             FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlTerminationReason);
@@ -554,6 +569,7 @@ namespace PraticeManagement
             IsStatusChangeClicked = true;
             DisableValidatecustTerminateDateTE = false;
             custCompensationCoversMilestone.Enabled = false;
+            cvEndCompensation.Enabled = true;
 
             switch (PopupStatus)
             {
@@ -649,7 +665,7 @@ namespace PraticeManagement
         {
             var updatePersonStatusDropdown = true;
             IsStatusChangeClicked = false;
-            custCompensationCoversMilestone.Enabled = true;
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = true;
 
             if (PersonId.HasValue)
             {
@@ -723,6 +739,13 @@ namespace PraticeManagement
                 }
             }
 
+            if (cvEndCompensation.Enabled && Page.IsValid)
+            {
+                //Page.Validate("EndCompensation");
+                cvEndCompensation.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
+            
             if (!DisableValidatecustTerminateDateTE && Page.IsValid)
             {
                 custTerminateDateTE.Enabled = true;
@@ -991,6 +1014,10 @@ namespace PraticeManagement
         protected override void Display()
         {
             rpPermissions.Visible = IsStatusChangeClicked = false;
+            if (PreviousPage != null)
+            {
+                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
+            }
 
             if (!PersonId.HasValue)
             {
@@ -1675,8 +1702,7 @@ namespace PraticeManagement
         // User should  uncheck their roles to save the record.
         protected void custRoles_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (!PersonStatusId.HasValue &&
-                PersonStatusId.Value == PersonStatusType.Contingent)
+            if (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Contingent)
             {
                 // Roles
                 args.IsValid = !chblRoles.Items.Cast<ListItem>().Any(item => item.Selected);
@@ -1806,7 +1832,38 @@ namespace PraticeManagement
                 UserIsAdministrator || UserIsHR ||
                 (current != null && current.Id.HasValue && commissions != null &&
                  commissions.Count > 0 &&
-                 commissions.Count(commission => commission.RecruiterId != current.Id.Value) == 0);//#2817 UserisHR is added as per requirement.
+                 commissions.Count(commission => commission.RecruiterId != current.Id.Value) == 0);//#2817 UserisHR This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.is added as per requirement.
+        }
+
+        protected void cvEndCompensation_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var validator = ((CustomValidator)sender);
+            if(TerminationDate.HasValue && (PersonStatusId == PersonStatusType.Terminated || PersonStatusId == PersonStatusType.TerminationPending))
+            {
+                if (PayHistory.Any(p => p.EndDate.HasValue && p.EndDate.Value.Date > TerminationDate.Value.Date))
+                {
+                    e.IsValid = false;
+                    validator.ErrorMessage = CloseAnActiveCompensation;
+                }
+                else if (PayHistory.Any(p => !p.EndDate.HasValue))
+                {
+                    e.IsValid = false;
+                    validator.ErrorMessage = CloseAnOpenEndedCompensation;
+                }
+                else
+                {
+                    e.IsValid = true;
+                }
+                //e.IsValid = PayHistory.Any(p => p.StartDate.Date >= TerminationDate.Value.Date) || PayHistory.Any(p => !p.EndDate.HasValue);
+                if (!e.IsValid)
+                {
+                    mpeChangeStatusEndCompensation.Show();
+                }
+
+                validator.Text = validator.ToolTip = validator.ErrorMessage;
+                
+                DisableValidatecustTerminateDateTE = !e.IsValid;
+            }
         }
 
         #endregion
@@ -1968,25 +2025,9 @@ namespace PraticeManagement
 
         protected void btnTerminationProcessCancel_OnClick(object source, EventArgs args)
         {
-            //if (IsFromTerminateEmployeePopup.HasValue && IsFromTerminateEmployeePopup.Value)
-            //{
-            //    //ResetTerminateEmployeeSavingViewState(true);
-            //}
             ResetToPreviousData();
             mpeViewTerminationDateErrors.Hide();
         }
-
-        //private void ResetTerminateEmployeeSavingViewState(bool populatePreviousValues)
-        //{
-        //    if (populatePreviousValues)
-        //    {
-        //        dtpTerminationDate.DateValue = PreviousTerminationDate.HasValue ? PreviousTerminationDate.Value : DateTime.MinValue;
-        //        ddlTerminationReason.SelectedValue = PreviousTerminationReason;
-        //    }
-        //    IsFromTerminateEmployeePopup = null;
-        //    PreviousTerminationDate = null;
-        //    PreviousTerminationReason = null;
-        //}
 
         protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
         {
@@ -2371,7 +2412,7 @@ namespace PraticeManagement
         public void RaisePostBackEvent(string eventArgument)
         {
             IsStatusChangeClicked = false;
-            custCompensationCoversMilestone.Enabled = true;
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = true;
             bool result = ValidateAndSavePersonDetails();
             if (result)
             {
