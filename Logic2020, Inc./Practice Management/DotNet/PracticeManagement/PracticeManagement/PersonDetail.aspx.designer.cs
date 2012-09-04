@@ -1759,58 +1759,58 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCancelChangePersonStatus;
         
         /// <summary>
-        /// hdnMpe control.
+        /// hdnChangeStatusEndCompensation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnMpe;
+        protected global::System.Web.UI.WebControls.HiddenField hdnChangeStatusEndCompensation;
         
         /// <summary>
-        /// mpe control.
+        /// mpeChangeStatusEndCompensation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpe;
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeChangeStatusEndCompensation;
         
         /// <summary>
-        /// pnl control.
+        /// pnlEndCompensation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnl;
+        protected global::System.Web.UI.WebControls.Panel pnlEndCompensation;
         
         /// <summary>
-        /// lbl control.
+        /// cvEndCompensation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lbl;
+        protected global::System.Web.UI.WebControls.CustomValidator cvEndCompensation;
         
         /// <summary>
-        /// bntOk control.
+        /// bntEndCompensationOk control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button bntOk;
+        protected global::System.Web.UI.WebControls.Button bntEndCompensationOk;
         
         /// <summary>
-        /// btnCancle control.
+        /// btnEndCompensationCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancle;
+        protected global::System.Web.UI.WebControls.Button btnEndCompensationCancel;
         
         /// <summary>
         /// odsActivePersons control.
