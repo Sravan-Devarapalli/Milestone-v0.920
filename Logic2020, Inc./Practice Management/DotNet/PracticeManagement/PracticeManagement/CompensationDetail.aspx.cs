@@ -172,6 +172,8 @@ namespace PraticeManagement
                     {
                         Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
 
+                        btnSave.Visible = (pay.StartDate >= person.HireDate);
+
                         PopulateControls(pay);
                     }
                     else
