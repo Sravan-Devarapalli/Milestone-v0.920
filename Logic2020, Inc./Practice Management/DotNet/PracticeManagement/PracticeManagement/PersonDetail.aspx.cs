@@ -427,17 +427,16 @@ namespace PraticeManagement
 
                 dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
                 rbnTerminate.CssClass = "";
-                rbnTerminate.Checked = true;
+                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = !(rbnTerminate.Checked = true);
                 divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
 
                 rbnContingent.CssClass = "displayNone";
                 divContingent.Attributes["class"] = "displayNone";
             }
-
-            if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
+            else if(PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
             {
                 rbnCancleTermination.CssClass = "";
-                rbnCancleTermination.Checked = true;
+                rbnActive.Checked = rbnTerminate.Checked = rbnContingent.Checked = rbnCancleTermination.Checked = false;
                 rbnActive.CssClass = "displayNone";
                 rbnTerminate.CssClass = "displayNone";
                 rbnContingent.CssClass = "displayNone";
@@ -445,41 +444,39 @@ namespace PraticeManagement
                 divTerminate.Attributes["class"] = "displayNone";
                 divContingent.Attributes["class"] = "displayNone";
             }
-
-            if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
+            else if(PrevPersonStatusId == (int)PersonStatusType.Contingent)
             {
                 dtpActiveHireDate.DateValue = dtpHireDate.DateValue;
                 rbnCancleTermination.CssClass = "displayNone";
 
                 rbnActive.CssClass = "";
-                rbnActive.Checked = false;
                 divActive.Attributes["class"] = "displayNone";
 
                 dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
                 rbnTerminate.CssClass = "";
-                rbnTerminate.Checked = false;
                 divTerminate.Attributes["class"] = "displayNone";
 
                 rbnContingent.CssClass = "displayNone";
                 divContingent.Attributes["class"] = "displayNone";
-            }
 
-            if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
+                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
+            }
+            else if(PrevPersonStatusId == (int)PersonStatusType.Terminated)
             {
                 dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PreviousTerminationDate.Value.AddDays(1);
 
                 rbnCancleTermination.CssClass = "displayNone";
 
                 rbnActive.CssClass = "";
-                rbnActive.Checked = false;
                 divActive.Attributes["class"] = "displayNone";
 
                 rbnTerminate.CssClass = "displayNone";
                 divTerminate.Attributes["class"] = "displayNone";
 
                 rbnContingent.CssClass = "";
-                rbnContingent.Checked = false;
                 divContingent.Attributes["class"] = "displayNone";
+
+                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
             }
 
             FillTerminationReasonsByTerminationDate(dtpPopUpTerminateDate, ddlPopUpTerminationReason);
@@ -500,7 +497,7 @@ namespace PraticeManagement
             {
                 reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsContigent == true).ToList();
             }
-            else if (PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date)))
+            else if (GetDate(terminationDate.DateValue).HasValue && PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date)))
             {
                 var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && ( !p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date));
                 switch (pay.Timescale)
@@ -652,7 +649,7 @@ namespace PraticeManagement
         {
             var updatePersonStatusDropdown = true;
             IsStatusChangeClicked = false;
-            custCompensationCoversMilestone.Enabled = false;
+            custCompensationCoversMilestone.Enabled = true;
 
             if (PersonId.HasValue)
             {
@@ -1000,8 +997,9 @@ namespace PraticeManagement
                 var status = new List<PersonStatus>();
                 status.Add(new PersonStatus { Id = (int)PersonStatusType.Active, Name = PersonStatusType.Active.ToString() });
                 status.Add(new PersonStatus { Id = (int)PersonStatusType.Contingent, Name = PersonStatusType.Contingent.ToString() });
-                DataHelper.FillListDefault(ddlPersonStatus, string.Empty, status.ToArray(), false);
+                DataHelper.FillListDefault(ddlPersonStatus, string.Empty, status.ToArray(), true);
                 PersonStatusId = PersonStatusType.Active;
+                FillTerminationReasonsByTerminationDate(dtpTerminationDate, ddlTerminationReason);
 
                 ddlPersonStatus.Visible = true;
                 lblPersonStatus.Visible = false;
@@ -1995,10 +1993,6 @@ namespace PraticeManagement
             DisableValidatecustTerminateDateTE = true;
             Save_Click(source, args);
             mpeViewTerminationDateErrors.Hide();
-            //if (IsFromTerminateEmployeePopup.HasValue && IsFromTerminateEmployeePopup.Value)
-            //{
-            //    //ResetTerminateEmployeeSavingViewState(false);
-            //}
         }
 
         #region gvCompensationHistory Events
@@ -2377,6 +2371,7 @@ namespace PraticeManagement
         public void RaisePostBackEvent(string eventArgument)
         {
             IsStatusChangeClicked = false;
+            custCompensationCoversMilestone.Enabled = true;
             bool result = ValidateAndSavePersonDetails();
             if (result)
             {
