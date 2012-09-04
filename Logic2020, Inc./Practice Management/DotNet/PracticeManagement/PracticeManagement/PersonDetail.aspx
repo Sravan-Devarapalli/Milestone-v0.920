@@ -365,15 +365,16 @@
             var divActv = document.getElementById('<%= divActive.ClientID %>');
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
+            var displayNoneClass = "displayNone";
        
             if( rbn.checked)
             {
                 div.className = "padLeft25 PaddingTop6";
-                divActv.className = "displayNone";
+                divActv.className = displayNoneClass;
 
                 if(valSumActv != null)
                 {
-                    valSumActv.className = "displayNone"; 
+                    valSumActv.className = displayNoneClass; 
                 }  
                 if(valSumCont != null)
                 {
@@ -393,18 +394,18 @@
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
             var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>'); 
-              
+            var displayNoneClass = "displayNone";                       
 
             if( rbn.checked)
             {
                 div.className = "padLeft25 PaddingTop6";
                 if(divContgn != null)
                 {
-                    divContgn.className = "displayNone";
+                    divContgn.className = displayNoneClass;
                 }
                 if(divTerm != null)
                 {
-                    divTerm.className = "displayNone";
+                    divTerm.className = displayNoneClass;
                 }
                 if(valSumActv != null)
                 {
@@ -412,11 +413,11 @@
                 }
                 if(valSumCont != null)
                 {
-                 valSumCont.className = "displayNone";
+                 valSumCont.className = displayNoneClass;
                 }
                 if(valSumTerm != null)
                 {
-                 valSumTerm.className = "displayNone";
+                 valSumTerm.className = displayNoneClass;
                 }
             }
         }
@@ -429,6 +430,8 @@
             var divActv = document.getElementById('<%= divActive.ClientID %>'); 
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>');
+            var displayNoneClass = "displayNone";
+           
             if( rbn.checked)
             {
                 div.className = "padLeft25 PaddingTop6";
@@ -439,11 +442,11 @@
                 } 
                 if(divActv != null)
                 {                    
-                    divActv.className = "displayNone";
+                    divActv.className = displayNoneClass;
                 }
                 if(valSumActv != null)
                 {
-                    valSumActv.className = "displayNone"; 
+                    valSumActv.className = displayNoneClass; 
                 }                   
             }           
         } 
