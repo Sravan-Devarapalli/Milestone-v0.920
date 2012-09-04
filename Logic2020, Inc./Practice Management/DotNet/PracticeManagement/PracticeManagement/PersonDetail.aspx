@@ -638,7 +638,7 @@
                                         <asp:CustomValidator ID="custTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
                                             ToolTip="To terminate the person the Termination Reason should be specified."
                                             ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
-                                            OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>
+                                            OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>&nbsp;
                                     </td>
                                 </tr>
                                 <tr>
@@ -1079,9 +1079,9 @@
                                                             TextBoxWidth="90%" AutoPostBack="false" />
                                                     </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
-                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
-                                                            ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
-                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThan" Type="Date"></asp:CompareValidator>
+                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
+                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
                                                         <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                             ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
@@ -1095,9 +1095,9 @@
                                                             TextBoxWidth="90%" AutoPostBack="false" />
                                                     </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
-                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
-                                                            ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
-                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThan" Type="Date"></asp:CompareValidator>
+                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
+                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
                                                         <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                             ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
