@@ -271,11 +271,18 @@ namespace PraticeManagement
         {
             if (ValidateAndSave())
             {
-                if (_saveCode == default(int))
+                if (PersonDetailData != null)
+                {
+                    if (_saveCode == default(int))
+                    {
+                        ClearDirty();
+                        Server.Transfer("~" + ReturnUrl.Substring(ReturnUrl.IndexOf("/PersonDetail.aspx?id="), ReturnUrl.Length - ReturnUrl.IndexOf("/PersonDetail.aspx?id=")));
+                    }
+                }
+                else
                 {
                     ClearDirty();
-                    Server.Transfer( "~" + ReturnUrl.Substring(ReturnUrl.IndexOf("/PersonDetail.aspx?id="), ReturnUrl.Length - ReturnUrl.IndexOf("/PersonDetail.aspx?id=")));
-                    //ReturnToPreviousPage();
+                    mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
                 }
             }
             else
