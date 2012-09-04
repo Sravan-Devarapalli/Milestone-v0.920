@@ -576,8 +576,8 @@
                                             OnServerValidate="custHireDate_ServerValidate"></asp:CustomValidator>&nbsp;
                                         <asp:CustomValidator ID="custWithPreviousTermDate" runat="server" ControlToValidate="dtpHireDate"
                                             ErrorMessage="Hire Date should be greater than previous Termination date." ToolTip="Hire Date should be greater than previous Termination date."
-                                            ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate" ValidateEmptyText="false"
-                                            SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                            ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate"
+                                            ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -844,8 +844,8 @@
                                                 <strong>
                                                     <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
                                                 <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Any person who is projected should not have any roles checked."
-                                                    OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is projected should not have any roles checked."
+                                                    ValidationGroup="Person" ErrorMessage="Any person who is contingent should not have any roles checked."
+                                                    OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is contingent should not have any roles checked."
                                                     ValidateEmptyText="true"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="valRecruterRole" runat="server" Display="Dynamic" EnableClientScript="false"
                                                     ValidationGroup="Person" ErrorMessage="Person with Recruiter role should have recruiting commission."
@@ -879,8 +879,8 @@
                                                 <asp:DropDownList ID="ddlSeniority" runat="server" onchange="setDirty();" />
                                             </td>
                                             <td>
-                                                <asp:CustomValidator ID="custSeniority" runat="server" ValidationGroup="Person"
-                                                    Display="Dynamic" EnableClientScript="true" ErrorMessage="The Seniority is required since the person's status is Active."
+                                                <asp:CustomValidator ID="custSeniority" runat="server" ValidationGroup="Person" Display="Dynamic"
+                                                    EnableClientScript="true" ErrorMessage="The Seniority is required since the person's status is Active."
                                                     OnServerValidate="custSeniority_ServerValidate" Text="*" ToolTip="The Seniority is required since the person's status is Active."></asp:CustomValidator>
                                             </td>
                                         </tr>
@@ -1673,8 +1673,8 @@
                                             <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ControlToValidate="dtpActiveHireDate"
                                                 ErrorMessage="New Hire Date should be greater than previous Termination date."
                                                 ToolTip="New Hire Date should be greater than previous Termination date." ValidationGroup="ChangePersonStatusToActive"
-                                                Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate" ValidateEmptyText="false"
-                                                SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                                Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate"
+                                                ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                                         </td>
                                     </tr>
                                 </table>
@@ -1769,22 +1769,24 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:HiddenField ID="hdnMpe" runat="server" Value="" />
-            <AjaxControlToolkit:ModalPopupExtender ID="mpe" runat="server" TargetControlID="hdnMpe"
-                PopupControlID="pnl" CancelControlID="btnCancle" BackgroundCssClass="modalBackground">
+            <asp:HiddenField ID="hdnChangeStatusEndCompensation" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeChangeStatusEndCompensation" runat="server"
+                TargetControlID="hdnChangeStatusEndCompensation" PopupControlID="pnlEndCompensation"
+                BackgroundCssClass="modalBackground" DropShadow="false">
             </AjaxControlToolkit:ModalPopupExtender>
-            <asp:Panel ID="pnl" runat="server" Style="display: none;">
+            <asp:Panel ID="pnlEndCompensation" runat="server" Style="display: none;" CssClass="popUpAttrition">
                 <table>
                     <tr>
                         <td>
-                            <label id="lbl" runat="server">
-                            </label>
+                            <asp:CustomValidator ID="cvEndCompensation" runat="server" Text="*" ErrorMessage="" ForeColor="Black"
+                                ToolTip="" OnServerValidate="cvEndCompensation_ServerValidate" ValidationGroup="EndCompensation"
+                                SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <asp:Button ID="bntOk" runat="server" Text="Ok" />
-                            <asp:Button ID="btnCancle" runat="server" Text="Cancle" />
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="bntEndCompensationOk" runat="server" Text="Ok" OnClick="btnEndCompensationOk_Click" />
+                            <asp:Button ID="btnEndCompensationCancel" runat="server" Text="Cancel" OnClick="btnEndCompensationCancel_Click" />
                         </td>
                     </tr>
                 </table>
@@ -1793,7 +1795,8 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
-            <asp:PostBackTrigger ControlID="btnTerminationProcessOK" />
+            <asp:AsyncPostBackTrigger ControlID="bntEndCompensationOk" />
+            <asp:AsyncPostBackTrigger ControlID="btnTerminationProcessOK" />
         </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
