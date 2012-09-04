@@ -29,9 +29,9 @@
         </td>
         <td colspan="2">
             <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
-                ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the Start Date."
-                ToolTip="The End Date must be greater than the Start Date." Text="*" EnableClientScript="false"
-                SetFocusOnError="true" Display="Static" Operator="GreaterThan" Type="Date"></asp:CompareValidator>
+                ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than or equal to the Start Date."
+                ToolTip="The End Date must be greater than or equal to the Start Date." Text="*" EnableClientScript="false"
+                SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
             <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
                 ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                 ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
