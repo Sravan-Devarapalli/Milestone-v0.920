@@ -1004,7 +1004,7 @@ namespace PraticeManagement
         protected override void Display()
         {
             rpPermissions.Visible = IsStatusChangeClicked = false;
-            if (PreviousPage != null)
+            if (PreviousPage != null && PreviousPage is CompensationDetail)
             {
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
             }
