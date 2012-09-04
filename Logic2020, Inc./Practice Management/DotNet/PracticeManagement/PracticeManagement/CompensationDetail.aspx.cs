@@ -187,7 +187,7 @@ namespace PraticeManagement
                             {
                                 personnelCompensation.PracticeId = person.DefaultPractice.Id;
                             }
-                            if (person.DefaultPersonCommissions != null && person.DefaultPersonCommissions.Any(cl => cl.TypeOfCommission == CommissionType.Sales))
+                            if (person.DefaultPersonCommissions != null && person.DefaultPersonCommissions.Any(cl => cl.TypeOfCommission == CommissionType.Sales) && PreviousPage == null && PreviousPage.PersonUnsavedData == null)
                             {
                                 var salesComm = person.DefaultPersonCommissions.First(cl => cl.TypeOfCommission == CommissionType.Sales);
                                 personnelCompensation.SalesCommissionFractionOfMargin = salesComm.FractionOfMargin;
@@ -272,7 +272,8 @@ namespace PraticeManagement
                 if (_saveCode == default(int))
                 {
                     ClearDirty();
-                    mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
+                    Server.Transfer( "~" + ReturnUrl.Substring(ReturnUrl.IndexOf("/PersonDetail.aspx?id="), ReturnUrl.Length - ReturnUrl.IndexOf("/PersonDetail.aspx?id=")));
+                    //ReturnToPreviousPage();
                 }
             }
             else
