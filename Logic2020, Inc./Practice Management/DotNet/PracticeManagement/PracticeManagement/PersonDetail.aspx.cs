@@ -372,6 +372,14 @@ namespace PraticeManagement
             }
         }
 
+        private bool IsLockOut
+        {
+            get
+            {
+                return IsStatusChangeClicked && (PopupStatus == PersonStatusType.Active || PopupStatus == PersonStatusType.Contingent) && PrevPersonStatusId == (int)PersonStatusType.Terminated ? false : chbLockedOut.Checked;
+            }
+        }
+
         #endregion
 
         #region Page Events
@@ -1382,7 +1390,7 @@ namespace PraticeManagement
             person.Status = new PersonStatus { Id = (int)PersonStatusId };
 
             //Set Locked-Out value
-            person.LockedOut = chbLockedOut.Checked;
+            person.LockedOut = IsLockOut;
 
             person.DefaultPractice =
                 !string.IsNullOrEmpty(ddlDefaultPractice.SelectedValue) ?
