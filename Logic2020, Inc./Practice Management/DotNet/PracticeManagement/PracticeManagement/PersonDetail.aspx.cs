@@ -410,7 +410,7 @@ namespace PraticeManagement
             btnAddDefaultRecruitingCommission.Enabled = UserIsAdministrator || UserIsRecruiter || UserIsHR;//#2817 UserisHR is added as per requirement.
             cellPermissions.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
 
-            AddScript();
+            //AddScript();
 
             ddlTerminationReason.Enabled = PrevPersonStatusId == (int)PersonStatusType.Terminated || PrevPersonStatusId == (int)PersonStatusType.TerminationPending;// (ddlPersonStatus.SelectedValue == "2");
             dtpTerminationDate.ReadOnly = !(PrevPersonStatusId == (int)PersonStatusType.Terminated || PrevPersonStatusId == (int)PersonStatusType.TerminationPending);// !(ddlPersonStatus.SelectedValue == "2");
@@ -590,8 +590,6 @@ namespace PraticeManagement
                     {
                         dtpPopUpTerminateDate.TextValue = string.Empty;
                         ddlPopUpTerminationReason.SelectedIndex = 0;
-
-                        Save_Click(source, args);
                     }
                     else
                     {
@@ -1578,11 +1576,6 @@ namespace PraticeManagement
             {
                 args.IsValid = !PersonId.HasValue || (PersonId.HasValue && DataHelper.CurrentPayExists(PersonId.Value));
             }
-        }
-
-        protected void odsActivePersons_Selecting(object sender, ObjectDataSourceSelectingEventArgs e)
-        {
-            e.InputParameters[UserNameParameterName] = DataHelper.CurrentPerson.Alias;
         }
 
         protected void lbSetPracticeOwner_Click(object sender, EventArgs e)
