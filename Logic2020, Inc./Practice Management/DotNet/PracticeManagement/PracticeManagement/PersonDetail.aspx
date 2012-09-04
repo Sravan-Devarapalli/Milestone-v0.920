@@ -588,7 +588,7 @@
                                         Email&nbsp;Address
                                     </td>
                                     <td>
-                                        <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>
+                                        <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>&nbsp;
                                     </td>
                                     <td>
                                         <asp:RegularExpressionValidator ID="regEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
@@ -1802,14 +1802,5 @@
             <asp:AsyncPostBackTrigger ControlID="btnTerminationProcessOK" />
         </Triggers>
     </asp:UpdatePanel>
-    <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListAllShort"
-        TypeName="PraticeManagement.PersonService.PersonServiceClient">
-        <SelectParameters>
-            <asp:Parameter Name="practice" Type="Int32" />
-            <asp:Parameter DefaultValue="1" Name="statusId" Type="Int32" />
-            <asp:Parameter Name="startDate" Type="DateTime" />
-            <asp:Parameter Name="endDate" Type="DateTime" />
-        </SelectParameters>
-    </asp:ObjectDataSource>
 </asp:Content>
 
