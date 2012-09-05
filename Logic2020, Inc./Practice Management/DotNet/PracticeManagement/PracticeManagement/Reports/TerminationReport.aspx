@@ -45,19 +45,20 @@
             img.click();
         }
 
-        function ShowPanel() {
-            var obj = $('#<%= lblAttrition.ClientID %>');
-            var displayPanel = $('#<%= pnlAtrritionCalculation.ClientID %>');
+        function ShowPanel(object, displaypnl, position) {
+
+            var obj = $("#" + object);
+            var displayPanel = $("#" + displaypnl);
             iptop = obj.offset().top + obj[0].offsetHeight;
-            ipleft = obj.offset().left;
+            ipleft = obj.offset().left - position;
             displayPanel.offset({ top: iptop, left: ipleft });
             displayPanel.show();
             displayPanel.offset({ top: iptop, left: ipleft });
         }
 
-        function HidePanel() {
+        function HidePanel(hiddenpnl) {
 
-            var displayPanel = $('#<%= pnlAtrritionCalculation.ClientID %>');
+            var displayPanel = $("#" + hiddenpnl);
             displayPanel.hide();
         }
     </script>
@@ -302,16 +303,12 @@
                                         <tr>
                                             <td class="FirstTd fontBold">
                                                 Attrition*
-                                                <asp:Image alt="Filter" ImageUrl="~/Images/hint1.png" runat="server" ID="imgAttritionHint"
-                                                    CssClass="CursorPointer" />
-                                                <AjaxControlToolkit:ModalPopupExtender ID="attritionHelpPopUp" runat="server" TargetControlID="imgAttritionHint"
-                                                    BehaviorID="attritionHelpPopUp" BackgroundCssClass="modalBackground" PopupControlID="pnlAttrition"
-                                                    CancelControlID="btnCancleAttrition" DropShadow="false" />
+                                                <asp:Image alt="Attrition Hint" ImageUrl="~/Images/hint1.png" runat="server" ID="imgAttritionHint" />                                               
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="SecondTd">
-                                                <asp:Label ID="lblAttrition" runat="server" onmouseover="ShowPanel();" onmouseout="HidePanel();"></asp:Label>
+                                                <asp:Label ID="lblAttrition" runat="server"></asp:Label>
                                             </td>
                                         </tr>
                                     </table>
@@ -537,12 +534,6 @@
     </div>
     <asp:Panel ID="pnlAttrition" runat="server" CssClass="popUpAttrition" Style="display: none;">
         <table>
-            <tr>
-                <th class="textRightImp" colspan="3">
-                    <asp:Button ID="btnCancleAttrition" runat="server" CssClass="mini-report-close floatright"
-                        ToolTip="Close" Text="X"></asp:Button>
-                </th>
-            </tr>
             <tr>
                 <td class="Width20Percent">
                 </td>
