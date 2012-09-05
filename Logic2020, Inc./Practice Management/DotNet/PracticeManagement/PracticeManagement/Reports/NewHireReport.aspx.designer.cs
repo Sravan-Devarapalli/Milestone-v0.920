@@ -220,6 +220,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Button btnCustDatesCancel;
         
         /// <summary>
+        /// pnlNewHiresHelp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNewHiresHelp;
+        
+        /// <summary>
         /// ltPersonCount control.
         /// </summary>
         /// <remarks>
@@ -227,6 +236,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltPersonCount;
+        
+        /// <summary>
+        /// imgNewHiresHelp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgNewHiresHelp;
         
         /// <summary>
         /// lbRange control.
