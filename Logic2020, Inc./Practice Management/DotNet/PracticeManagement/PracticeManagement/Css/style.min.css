@@ -678,7 +678,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .floatright,.FloatRightCancel{float:right}
 .FloatLeft{float:left}
 .popUp{background-color:White;border-color:Black;border-style:solid;border-width:2px;min-height:60px;min-width:200px;max-width:600px;max-height:500px}
-.popUpAttrition{background-color:White;border-color:#375D89;border-style:solid;border-width:4px;min-height:60px;min-width:200px;max-height:500px;max-width:700px!important;padding:12px 12px 12px 12px!important}
+.popUpAttrition{background-color:White;border-color:#375D89;border-style:solid;border-width:4px;min-height:60px;min-width:200px;max-height:500px;max-width:630px!important;padding:12px 12px 12px 12px!important}
 .PopUpHeader{background-color:Gray;height:28px}
 .PopUpHeader th{text-align:center;font-size:14px;padding-top:5px;padding-bottom:5px}
 .MilestoneDetailPopUpHR{padding-left:10px;padding-right:10px;border-color:Black}
@@ -1340,3 +1340,4 @@ table#ctl00_body_login tr td label{float:left}
 .hrArritionCalculation{height:3px;background-color:Black;width:80%}
 .TerminationReportHeaderTotals{width:750px!important;height:100%}
 .NewHireReportTotals{height:100%}
+.pnlNewHireHelp{z-index:2000;position:absolute;padding:12px 0 12px 12px;height:30px;width:500px;background-color:White;border-color:#375D89;border-style:solid;border-width:4px}
