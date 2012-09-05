@@ -39,11 +39,27 @@
                     sortForce: [[0, 0]]
                 }
                 );
-            }
-            function ClickHiddenImg(imgId) {
-                var img = document.getElementById(imgId);
-                img.click();
-            }
+        }
+        function ClickHiddenImg(imgId) {
+            var img = document.getElementById(imgId);
+            img.click();
+        }
+
+        function ShowPanel() {
+            var obj = $('#<%= imgNewHiresHelp.ClientID %>');
+            var displayPanel = $('#<%= pnlNewHiresHelp.ClientID %>');
+            iptop = obj.offset().top + obj[0].offsetHeight;
+            ipleft = obj.offset().left;
+            displayPanel.offset({ top: iptop, left: ipleft });
+            displayPanel.show();
+            displayPanel.offset({ top: iptop, left: ipleft });
+        }
+
+        function HidePanel() {
+
+            var displayPanel = $('#<%= pnlNewHiresHelp.ClientID %>');
+            displayPanel.hide();
+        }
 
     </script>
     <uc:HumanCapitalReportsHeader ID="humanCapitalReportsHeader" runat="server"></uc:HumanCapitalReportsHeader>
@@ -122,8 +138,8 @@
                                 <td class="SecondTdNewHire">
                                     <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')"
-                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Person Status" DropDownListTypePlurlForm="es"
-                                        CssClass="NewHireReportCblTimeScales" />
+                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Person Status"
+                                        DropDownListTypePlurlForm="es" CssClass="NewHireReportCblTimeScales" />
                                     <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
                                         BehaviorID="sdePersonStatus" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
                                         Width="250px">
@@ -244,6 +260,10 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:Panel ID="pnlNewHiresHelp" runat="server" CssClass="pnlNewHireHelp" Style="display: none;">
+                New hires are individuals who had a status of "Active" or "Contingent" at some point
+                during the selected time period. Their current status may be different.
+            </asp:Panel>
             <table class="PaddingTenPx TimePeriodSummaryReportHeader">
                 <tr>
                     <td class="font16Px fontBold">
@@ -251,6 +271,8 @@
                             <tr>
                                 <td class="vtop PaddingBottom10Imp">
                                     <asp:Literal ID="ltPersonCount" runat="server"></asp:Literal>
+                                    <asp:Image alt="New Hires Hint" ImageUrl="~/Images/hint1.png" runat="server" ID="imgNewHiresHelp"
+                                        onmouseover="ShowPanel();" onmouseout="HidePanel();" />
                                 </td>
                             </tr>
                             <tr>
