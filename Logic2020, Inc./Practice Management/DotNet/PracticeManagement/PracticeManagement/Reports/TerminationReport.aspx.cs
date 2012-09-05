@@ -21,6 +21,10 @@ namespace PraticeManagement.Reporting
         private const string W2Hourly = "W2-Hourly";
         private const string W2Salary = "W2-Salary";
         private string TerminationReportExport = "Termination Report";
+        private string ShowPanel = "ShowPanel('{0}', '{1}','{2}');";
+        private string HidePanel = "HidePanel('{0}');";
+        private string OnMouseOver = "onmouseover";
+        private string OnMouseOut = "onmouseout";
 
         #endregion
 
@@ -231,6 +235,13 @@ namespace PraticeManagement.Reporting
                 }
                 SetDefalultfilter();
                 LoadActiveView();
+
+                lblAttrition.Attributes[OnMouseOver] = string.Format(ShowPanel, lblAttrition.ClientID, pnlAtrritionCalculation.ClientID, 0);
+                lblAttrition.Attributes[OnMouseOut] = string.Format(HidePanel, pnlAtrritionCalculation.ClientID);
+
+                imgAttritionHint.Attributes[OnMouseOver] = string.Format(ShowPanel, imgAttritionHint.ClientID, pnlAttrition.ClientID, 175);
+                imgAttritionHint.Attributes[OnMouseOut] = string.Format(HidePanel, pnlAttrition.ClientID);
+
             }
         }
 
