@@ -7247,12 +7247,20 @@ table#ctl00_body_login tr td label
 {
     z-index: 2000;
     position: absolute;
-    padding:12px 0px 12px 12px;
+    padding: 12px 0px 12px 12px;
     height: 30px;
     width: 500px;
     background-color: White;
     border-color: #375D89;
     border-style: solid;
     border-width: 4px;
+}
+.PersonInfo tr td
+{
+    padding-bottom: 4px;    
+}
+.PersonInfo td.PersonDefaultUser 
+{
+    padding-bottom: 0px !important;
 }
 
