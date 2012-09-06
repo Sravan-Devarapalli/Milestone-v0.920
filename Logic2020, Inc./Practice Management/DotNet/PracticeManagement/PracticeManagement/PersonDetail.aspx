@@ -460,7 +460,7 @@
                 <tr>
                     <td>
                         <asp:Panel ID="pnlPersonalInfo" runat="server">
-                            <table>
+                            <table class="PersonInfo">
                                 <tr>
                                     <td>
                                         First Name
@@ -543,7 +543,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td nowrap="nowrap">
+                                    <td nowrap="nowrap" class="padRight10Imp">
                                         Default Practice Area
                                     </td>
                                     <td>
@@ -611,7 +611,7 @@
                                     <td nowrap="nowrap">
                                         Termination Date&nbsp;
                                     </td>
-                                    <td class="Width158px">
+                                    <td class="Width158px padRight10Imp">
                                         <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged" />
                                     </td>
                                     <td>
@@ -711,7 +711,7 @@
                                             OnServerValidate="custEmployeeNumber_ServerValidate" SetFocusOnError="true" Text="*"
                                             ToolTip="There is another Person with the same Employee Number."></asp:CustomValidator>&nbsp;
                                     </td>
-                                    <td>
+                                    <td class="padRight10Imp">
                                         Practice Areas Owned
                                     </td>
                                     <td class="Width152px">
@@ -1080,8 +1080,9 @@
                                                     </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
-                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*" EnableClientScript="false"
-                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual"
+                                                            Type="Date"></asp:CompareValidator>
                                                         <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                             ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
@@ -1096,8 +1097,9 @@
                                                     </span><span class="Width15Percent vMiddle">
                                                         <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
-                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*" EnableClientScript="false"
-                                                            SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*"
+                                                            EnableClientScript="false" SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual"
+                                                            Type="Date"></asp:CompareValidator>
                                                         <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
                                                             ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                             ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
@@ -1661,7 +1663,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            Hire Date&nbsp;:&nbsp;
+                                            Hire Date:&nbsp;
                                         </td>
                                         <td>
                                             <uc2:DatePicker ID="dtpActiveHireDate" runat="server" />
@@ -1692,7 +1694,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            Termination Date&nbsp;:&nbsp;
+                                            Termination Date:&nbsp;
                                         </td>
                                         <td>
                                             <uc2:DatePicker ID="dtpPopUpTerminateDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpPopUpTerminationDate_OnSelectionChanged" />
@@ -1712,10 +1714,10 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            Termination Reason&nbsp;:&nbsp;
+                                        <td class="PaddingTop5Imp">
+                                            Termination Reason:&nbsp;
                                         </td>
-                                        <td>
+                                        <td class="PaddingTop5Imp">
                                             <asp:DropDownList ID="ddlPopUpTerminationReason" runat="server">
                                             </asp:DropDownList>
                                             <asp:CustomValidator ID="cvTerminationReason" runat="server" ErrorMessage="To Terminate the person the Termination Reason should be specified."
@@ -1732,7 +1734,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            Hire Date&nbsp;:&nbsp;
+                                            Hire Date:&nbsp;
                                         </td>
                                         <td>
                                             <uc2:DatePicker ID="dtpContingentHireDate" runat="server" />
@@ -1781,9 +1783,9 @@
                 <table>
                     <tr>
                         <td>
-                            <asp:CustomValidator ID="cvEndCompensation" runat="server" Text="*" ErrorMessage="" ForeColor="Black"
-                                ToolTip="" OnServerValidate="cvEndCompensation_ServerValidate" ValidationGroup="EndCompensation"
-                                SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                            <asp:CustomValidator ID="cvEndCompensation" runat="server" Text="*" ErrorMessage=""
+                                ForeColor="Black" ToolTip="" OnServerValidate="cvEndCompensation_ServerValidate"
+                                ValidationGroup="EndCompensation" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                         </td>
                     </tr>
                     <tr>
