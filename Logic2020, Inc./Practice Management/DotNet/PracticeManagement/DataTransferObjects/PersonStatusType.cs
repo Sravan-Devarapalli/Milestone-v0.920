@@ -1,4 +1,6 @@
 using System.Runtime.Serialization;
+using System.ComponentModel;
+
 
 namespace DataTransferObjects
 {
@@ -18,6 +20,8 @@ namespace DataTransferObjects
 		[EnumMember]
 		Inactive = 4,
         [EnumMember]
+        [Description("Termination Pending")]
         TerminationPending = 5
 	}
 }
+
