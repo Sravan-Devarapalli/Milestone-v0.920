@@ -14,7 +14,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="textRight">
+                <td class="textRight PersonDefaultUser">
                     <asp:Button ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false" CssClass="marginLineManager"
                         Text="Save Default Career Counselor" />
                 </td>
