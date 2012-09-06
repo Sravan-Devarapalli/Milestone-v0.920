@@ -436,12 +436,12 @@ namespace PraticeManagement
                 rbnContingent.CssClass =
                 divContingent.Attributes["class"] = displayNone;
 
-                dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
+                dtpPopUpTerminateDate.DateValue = DateTime.Now.Date;
                 rbnTerminate.CssClass = "";
                 rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = !(rbnTerminate.Checked = true);
                 divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
             }
-            else if(PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
+            else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
             {
                 rbnCancleTermination.CssClass = "";
                 rbnActive.Checked = rbnTerminate.Checked = rbnContingent.Checked = rbnCancleTermination.Checked = false;
@@ -453,9 +453,10 @@ namespace PraticeManagement
                 divTerminate.Attributes["class"] =
                 divContingent.Attributes["class"] = displayNone;
             }
-            else if(PrevPersonStatusId == (int)PersonStatusType.Contingent)
+            else if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
             {
-                dtpActiveHireDate.DateValue = dtpPopUpTerminateDate.DateValue = dtpHireDate.DateValue;
+                dtpActiveHireDate.DateValue = dtpHireDate.DateValue;
+                dtpPopUpTerminateDate.DateValue = DateTime.Now.Date;
 
                 rbnActive.CssClass = rbnTerminate.CssClass = "";
                 rbnCancleTermination.CssClass =
@@ -465,7 +466,7 @@ namespace PraticeManagement
                 divTerminate.Attributes["class"] = displayNone;
                 rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
             }
-            else if(PrevPersonStatusId == (int)PersonStatusType.Terminated)
+            else if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
             {
                 dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PreviousTerminationDate.Value.AddDays(1);
 
@@ -512,7 +513,7 @@ namespace PraticeManagement
             }
             else if (GetDate(terminationDate.DateValue).HasValue && PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date)))
             {
-                var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && ( !p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date));
+                var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date));
                 switch (pay.Timescale)
                 {
                     case TimescaleType.Hourly:
@@ -741,7 +742,7 @@ namespace PraticeManagement
                 cvEndCompensation.Validate();
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
-            
+
             if (!DisableValidatecustTerminateDateTE && Page.IsValid)
             {
                 custTerminateDateTE.Enabled = true;
@@ -1271,7 +1272,8 @@ namespace PraticeManagement
 
             // Recruiter commissions for the given person
             recruiterInfo.Person = person;
-        }
+        }    
+
 
         private void PopulateBasicData(Person person)
         {
@@ -1300,7 +1302,7 @@ namespace PraticeManagement
 
             PersonStatusId = person.Status != null ? (PersonStatusType?)person.Status.Id : null;
             PrevPersonStatusId = (person.Status != null) ? person.Status.Id : -1;
-            lblPersonStatus.Text = PersonStatusId.HasValue ? Enum.Parse(typeof(PersonStatusType), PrevPersonStatusId.ToString()).ToString() : string.Empty;
+            lblPersonStatus.Text = PersonStatusId.HasValue ? DataHelper.GetDescription((PersonStatusType)PrevPersonStatusId) : string.Empty;
 
             txtEmployeeNumber.Text = person.EmployeeNumber;
 
@@ -1829,9 +1831,9 @@ namespace PraticeManagement
         protected void cvEndCompensation_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             var validator = ((CustomValidator)sender);
-            if(TerminationDate.HasValue && (PersonStatusId == PersonStatusType.Terminated || PersonStatusId == PersonStatusType.TerminationPending))
+            if (TerminationDate.HasValue && (PersonStatusId == PersonStatusType.Terminated || PersonStatusId == PersonStatusType.TerminationPending))
             {
-                if (PayHistory.Any(p => p.EndDate.HasValue && p.EndDate.Value.Date > TerminationDate.Value.Date))
+                if (PayHistory.Any(p => p.EndDate.HasValue && p.EndDate.Value.AddDays(-1).Date > TerminationDate.Value.Date))
                 {
                     e.IsValid = false;
                     validator.ErrorMessage = CloseAnActiveCompensation;
@@ -1852,7 +1854,7 @@ namespace PraticeManagement
                 }
 
                 validator.Text = validator.ToolTip = validator.ErrorMessage;
-                
+
                 DisableValidatecustTerminateDateTE = !e.IsValid;
             }
         }
@@ -2126,7 +2128,7 @@ namespace PraticeManagement
                 else
                 {
                     imgCompensationDelete.Visible =
-                    imgEditCompensation.Visible = isVisible; 
+                    imgEditCompensation.Visible = isVisible;
                 }
             }
 
