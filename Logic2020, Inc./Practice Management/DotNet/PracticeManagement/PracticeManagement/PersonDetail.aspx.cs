@@ -141,7 +141,7 @@ namespace PraticeManagement
                 if ((PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Contingent) && rbnTerminate.Checked)
                 {
                     //Employee with terminated / termination Pending.
-                    return dtpPopUpTerminateDate.DateValue.Date >= DateTime.Now.Date ? PersonStatusType.TerminationPending : PersonStatusType.Terminated;
+                    return dtpPopUpTerminateDate.DateValue.Date >= DateTime.Now.Date ? (PrevPersonStatusId == (int)PersonStatusType.Active ? PersonStatusType.TerminationPending : PersonStatusType.Contingent) : PersonStatusType.Terminated;
                 }
                 else if ((PrevPersonStatusId == (int)PersonStatusType.TerminationPending && rbnCancleTermination.Checked) || ((PrevPersonStatusId == (int)PersonStatusType.Contingent || PrevPersonStatusId == (int)PersonStatusType.Terminated) && rbnActive.Checked))
                 {
@@ -340,7 +340,7 @@ namespace PraticeManagement
                 {
                     return GetDate(dtpActiveHireDate.DateValue);
                 }
-                else if (IsStatusChangeClicked && PersonStatusId == PersonStatusType.Contingent)
+                else if (IsStatusChangeClicked && PersonStatusId == PersonStatusType.Contingent && PrevPersonStatusId != (int)PersonStatusType.Contingent)
                 {
                     return GetDate(dtpContingentHireDate.DateValue);
                 }
@@ -355,7 +355,7 @@ namespace PraticeManagement
         {
             get
             {
-                return IsStatusChangeClicked ? ( (PopupStatus.Value == PersonStatusType.Terminated || PopupStatus.Value == PersonStatusType.TerminationPending) ? GetDate(dtpPopUpTerminateDate.DateValue) : null) : GetDate(dtpTerminationDate.DateValue);
+                return IsStatusChangeClicked ? ((PopupStatus.Value == PersonStatusType.Terminated || PopupStatus.Value == PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && PopupStatus.Value == PersonStatusType.Contingent)) ? GetDate(dtpPopUpTerminateDate.DateValue) : null) : GetDate(dtpTerminationDate.DateValue);
             }
         }
 
@@ -368,7 +368,7 @@ namespace PraticeManagement
         {
             get
             {
-                return IsStatusChangeClicked ? ( (PopupStatus.Value == PersonStatusType.Terminated || PopupStatus.Value == PersonStatusType.TerminationPending) ? ddlPopUpTerminationReason.SelectedValue : string.Empty) : ddlTerminationReason.SelectedValue;
+                return IsStatusChangeClicked ? ((PopupStatus.Value == PersonStatusType.Terminated || PopupStatus.Value == PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && PopupStatus.Value == PersonStatusType.Contingent)) ? ddlPopUpTerminationReason.SelectedValue : string.Empty) : ddlTerminationReason.SelectedValue;
             }
         }
 
@@ -400,7 +400,7 @@ namespace PraticeManagement
             mlError.ClearMessage();
             this.dvTerminationDateErrors.Visible = false;
         }
-        
+
         protected void Page_PreRender(object sender, EventArgs e)
         {
             // Security
@@ -570,7 +570,9 @@ namespace PraticeManagement
             custCompensationCoversMilestone.Enabled = false;
             cvEndCompensation.Enabled = true;
 
-            switch (PopupStatus)
+            var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent ? PersonStatusType.TerminationPending : PopupStatus.Value;
+
+            switch (popupStatus)
             {
                 case PersonStatusType.TerminationPending:
                 case PersonStatusType.Terminated:
@@ -1272,8 +1274,7 @@ namespace PraticeManagement
 
             // Recruiter commissions for the given person
             recruiterInfo.Person = person;
-        }    
-
+        }
 
         private void PopulateBasicData(Person person)
         {
@@ -1831,7 +1832,7 @@ namespace PraticeManagement
         protected void cvEndCompensation_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             var validator = ((CustomValidator)sender);
-            if (TerminationDate.HasValue && (PersonStatusId == PersonStatusType.Terminated || PersonStatusId == PersonStatusType.TerminationPending))
+            if (TerminationDate.HasValue && (PersonStatusId == PersonStatusType.Terminated || PersonStatusId == PersonStatusType.TerminationPending || PersonStatusId == PersonStatusType.Contingent))
             {
                 if (PayHistory.Any(p => p.EndDate.HasValue && p.EndDate.Value.AddDays(-1).Date > TerminationDate.Value.Date))
                 {
@@ -1847,7 +1848,6 @@ namespace PraticeManagement
                 {
                     e.IsValid = true;
                 }
-                //e.IsValid = PayHistory.Any(p => p.StartDate.Date >= TerminationDate.Value.Date) || PayHistory.Any(p => !p.EndDate.HasValue);
                 if (!e.IsValid)
                 {
                     mpeChangeStatusEndCompensation.Show();
