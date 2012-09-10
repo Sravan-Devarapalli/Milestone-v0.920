@@ -96,6 +96,8 @@ namespace PraticeManagement
         private const string HintDivCssClass = "hint";
         private const string AlternatingRowCssClass = "rowEven";
         private const string OneGreaterSeniorityExistsKey = "ProjectsListOneGreaterSeniorityExists";
+        private const string Revenue = "Revenue";
+        private const string Margin = "Margin";
 
         private const string CompanyPerformanceFilterKey = "CompanyPerformanceFilterKey";
 
@@ -1530,11 +1532,38 @@ namespace PraticeManagement
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
+                                    StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                    EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                    Type = Revenue,
                                     ProjectManagers = string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
+
+
+            var projectsDataWithMargin = (from pro in ExportProjectList
+                                 where pro != null
+                                 select new
+                                 {
+                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
+                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
+                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
+                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
+                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                     EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                     Type = Margin,
+                                     ProjectManagers = string.Empty,
+                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                 }).ToList();
+
+            projectsData.AddRange(projectsDataWithMargin);
+            projectsData = projectsData.OrderBy(s => (s.Status == ProjectStatusType.Projected.ToString()) ? s.StartDate : s.EndDate).ThenBy(s => s.ProjectNumber).ThenByDescending(s => s.Type).ToList();
 
             GridView projectsGrid = new GridView();
             projectsGrid.ID = ExportId;
@@ -1565,7 +1594,7 @@ namespace PraticeManagement
             var id = ((GridView)sender).ID;
             var periodStart = GetMonthBegin();
             var monthsInPeriod = GetPeriodLength();
-            int insertPosition = 8;//Change this if any new columns added to Exportfile.
+            int insertPosition = 11;//Change this if any new columns added to Exportfile.
             var row = e.Row;
             if (row != null)//Hide Unnecessary columns in Report.
             {
@@ -1688,7 +1717,15 @@ namespace PraticeManagement
                 }
             }
 
-            monthCell = FormatExcelFinancialsCell(revenue, margin, greaterSeniorityExists);
+            if (row.Cells[10].Text == Revenue)
+            {
+                monthCell = FormatExcelFinancialsCell(revenue, margin, greaterSeniorityExists, true, false);
+            }
+            else
+            {
+                monthCell = FormatExcelFinancialsCell(revenue, margin, greaterSeniorityExists, false, true);
+            }
+
             row.Cells.AddAt(insertPosition, monthCell);
         }
 
@@ -1706,42 +1743,60 @@ namespace PraticeManagement
                 totalRevenue = project.ComputedFinancials.Revenue;
                 totalMargin = project.ComputedFinancials.GrossMargin;
             }
-
-            totalCell = FormatExcelFinancialsCell(totalRevenue, totalMargin, greaterSeniorityExists);
+            if (row.Cells[10].Text == Revenue)
+            {
+                totalCell = FormatExcelFinancialsCell(totalRevenue, totalMargin, greaterSeniorityExists, true, false);
+            }
+            else
+            {
+                totalCell = FormatExcelFinancialsCell(totalRevenue, totalMargin, greaterSeniorityExists, false, true);
+            }
 
             row.Cells.AddAt(insertPosition, totalCell);
         }
 
-        private TableCell FormatExcelFinancialsCell(PracticeManagementCurrency revenue, PracticeManagementCurrency grossMargin, bool isGreaterSeniorityExists)
+        private TableCell FormatExcelFinancialsCell(PracticeManagementCurrency revenue, PracticeManagementCurrency grossMargin, bool isGreaterSeniorityExists, bool isRevenue, bool isMargin)
         {
-            string outterHtml;
-            Decimal revenueValue = Convert.ToDecimal(revenue.Value.ToString());
-            Decimal marginValue = Convert.ToDecimal(grossMargin.Value.ToString());
-            //Table to stringformat
-            string revenueText = revenueValue.ToString(CurrencyExcelReportFormat);
-            Label revenueLabel = new Label()
-            {
-                Text = revenue < 0 ? revenueText.Replace('-', '(') + ')' : revenueText,
-                ForeColor = revenue < 0 ? Color.Red : Color.Green
-            };
-            string marginText = marginValue.ToString(CurrencyExcelReportFormat);
-            Label marginLabel = new Label()
-            {
-                Text = isGreaterSeniorityExists ? Resources.Controls.HiddenCellText : ((marginValue < 0) ? marginText.Replace('-', '(') + ')' : marginText),
-                ForeColor = ((marginValue >= 0) || isGreaterSeniorityExists) ? Color.Purple : Color.Red
-            };
-
+            string outterHtml = null;
             var stringWriter = new StringWriter();
-            using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
+
+            if (isRevenue)
             {
-                revenueLabel.RenderControl(wr);
-                outterHtml = stringWriter.ToString();
+                Decimal revenueValue = Convert.ToDecimal(revenue.Value.ToString());
+                string revenueText = revenueValue.ToString(CurrencyExcelReportFormat);
+                Label revenueLabel = new Label()
+                {
+                    Text = revenue < 0 ? revenueText.Replace('-', '(') + ')' : revenueText,
+                    ForeColor = revenue < 0 ? Color.Red : Color.Green
+                };
+
+                using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
+                {
+                    revenueLabel.RenderControl(wr);
+                    outterHtml = stringWriter.ToString();
+                }
+
             }
-            stringWriter = new StringWriter();
-            using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
+            if (isMargin)
             {
-                marginLabel.RenderControl(wr);
-                outterHtml = outterHtml + singleCellBreak + stringWriter.ToString();
+                Decimal marginValue = Convert.ToDecimal(grossMargin.Value.ToString());
+                //Table to stringformat
+
+                string marginText = marginValue.ToString(CurrencyExcelReportFormat);
+                Label marginLabel = new Label()
+                {
+                    Text = isGreaterSeniorityExists ? Resources.Controls.HiddenCellText : ((marginValue < 0) ? marginText.Replace('-', '(') + ')' : marginText),
+                    ForeColor = ((marginValue >= 0) || isGreaterSeniorityExists) ? Color.Purple : Color.Red
+                };
+
+
+                stringWriter = new StringWriter();
+                using (HtmlTextWriter wr = new HtmlTextWriter(stringWriter))
+                {
+                    marginLabel.RenderControl(wr);
+                    outterHtml = (outterHtml == null) ? stringWriter.ToString() : outterHtml + singleCellBreak + stringWriter.ToString();
+                }
+
             }
 
             TableCell monthCell = new TableCell();
@@ -1769,11 +1824,38 @@ namespace PraticeManagement
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
+                                    StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                    EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                    Type = Revenue,
                                     ProjectManagers = string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
                                 }).ToList();//Note:- Change insertPosition Of Total cell in RowDataBound if any modifications in projectsData.
+
+            var projectsDataWithMargin = (from pro in projectsList
+                                 where pro != null
+                                 select new
+                                 {
+                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
+                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
+                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
+                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
+                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                     EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                     Type = Margin,
+                                     ProjectManagers = string.Empty,
+                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                 }).ToList();
+
+            projectsData.AddRange(projectsDataWithMargin);
+            projectsData = projectsData.OrderBy(s => s.ProjectID).ThenByDescending(s => s.Type).ToList();
+
 
             GridView projectsGrid = new GridView();
             projectsGrid.ID = ExportAllId;
