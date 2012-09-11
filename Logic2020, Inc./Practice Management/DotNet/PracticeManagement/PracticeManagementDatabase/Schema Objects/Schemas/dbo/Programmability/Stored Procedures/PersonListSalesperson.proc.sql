@@ -60,7 +60,7 @@ BEGIN
 		LEFT JOIN Commission C ON C.ProjectId = P.ProjectId AND C.CommissionType = 1
 		JOIN v_Person SP ON SP.PersonId = C.PersonId
 		WHERE (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId OR P.projectOwnerId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
-			AND (SP.PersonStatusId = 1 /* Active person only */
+			AND (SP.PersonStatusId IN (1,5) /* Active person only */
 					OR @IncludeInactive = 1)
 
 	END
@@ -132,7 +132,7 @@ BEGIN
 									p.PracticeOwnedName,
 									p.TelephoneNumber
 						   FROM     dbo.v_Person AS p
-						   WHERE    ( p.PersonStatusId = 1 /* Active person only */
+						   WHERE    ( p.PersonStatusId IN (1,5) /* Active person only */
 									  OR @IncludeInactive = 1
 									)
 									AND ( @PersonId IS NULL
@@ -179,7 +179,7 @@ BEGIN
 									INNER JOIN dbo.aspnet_UsersInRoles AS ur ON u.UserId = ur.UserId
 									INNER JOIN dbo.aspnet_Roles AS r ON ur.RoleId = r.RoleId
 						   WHERE    r.RoleName = 'Salesperson' AND 
-									(p.PersonStatusId = 1 OR p.PersonStatusId = 3)
+									(p.PersonStatusId IN (1,3,5))
 									AND ( @PersonId IS NULL
 										  OR p.PersonId IN (
 										  SELECT sp.PersonId
