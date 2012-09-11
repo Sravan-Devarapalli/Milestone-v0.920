@@ -29,7 +29,7 @@ BEGIN
 		JOIN Calendar C  ON C.Date Between MPE.StartDate AND MPE.EndDate
 		JOIN Pay pay ON pay.Person = MP.PersonId AND pay.Timescale = 2 AND C.Date Between pay.StartDate AND ISNULL(pay.EndDate-1,@FutureDate)
 
-		WHERE P.ProjectStatusId = 3 AND PerS.PersonStatusId =1  AND P.ProjectId !=174 AND P.EndDate >= @Date20120101
+		WHERE P.ProjectStatusId = 3 AND PerS.PersonStatusId IN(1,5)  AND P.ProjectId !=174 AND P.EndDate >= @Date20120101
 		GROUP BY P.ProjectId,P.ProjectNumber,Pers.LastName ,Pers.FirstName ,C.Date,P.Name,Pers.PersonId 
 
 
