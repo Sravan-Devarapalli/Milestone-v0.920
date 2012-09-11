@@ -37,7 +37,7 @@ BEGIN
 															   ISNULL(URH.EndDate,@FutureDateLocal) >= @StartDateLocal
 				INNER JOIN dbo.aspnet_Roles R ON URH.RoleId = R.RoleId AND R.RoleName = 'Salesperson'
 				INNER JOIN dbo.PersonStatusHistory PSH ON PSH.PersonId = P.PersonId AND 
-														 PSH.PersonStatusId =1  AND 
+														 PSH.PersonStatusId IN (1,5)  AND 
 														 PSH.StartDate <=  @EndDateLocal AND 
 														 ISNULL(PSH.EndDate,@FutureDateLocal) >= @StartDateLocal
 
