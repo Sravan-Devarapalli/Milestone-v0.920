@@ -153,6 +153,14 @@ namespace PraticeManagement.Controls.TimeEntry
             extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
 
             AddAttributesToTimeTypesDropdown(ddlTimeTypes, TimeTypes);
+            if (!(IsPTO || IsHoliday || IsUnpaid))
+            {
+                if (!string.IsNullOrEmpty(imgDropTes.Attributes[TimeEntry_New.workTypeOldId]))
+                {
+                    imgDropTes.Visible =
+                    ddlTimeTypes.Enabled = !HostingPage.IsReadOnly;
+                }
+            }
         }
 
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
