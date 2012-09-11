@@ -208,7 +208,7 @@ namespace PraticeManagement.Config
                 {
                     CurrentIndex = cookie.CurrentIndex;
                     personsFilter.Active = cookie.ShowActive;
-                    personsFilter.Inactive = cookie.ShowInactive;
+                    personsFilter.TerminationPending = cookie.ShowTerminationPending;
                     personsFilter.Projected = cookie.ShowProjected;
                     personsFilter.Terminated = cookie.ShowTerminated;
                     personsFilter.PracticeIds = cookie.SelectedPracticeIds;
@@ -245,7 +245,7 @@ namespace PraticeManagement.Config
                     {
                         txtSearch.Text = PreviousPage.SearchText;
                         personsFilter.Projected = true;
-                        personsFilter.Inactive = true;
+                        personsFilter.TerminationPending = true;
                         personsFilter.Terminated = true;
                     }
 
@@ -306,7 +306,7 @@ namespace PraticeManagement.Config
             hdnActive.Value = istrue.ToString();
             hdnProjected.Value = istrue.ToString();
             hdnTerminated.Value = istrue.ToString();
-            hdnInactive.Value = istrue.ToString();
+            hdnTerminatedPending.Value = istrue.ToString();
             PracticeIdsSelectedKey = null;
             RecruiterIdsSelectedKey = null;
             PayTypeIdsSelectedKey = null;
@@ -400,7 +400,7 @@ namespace PraticeManagement.Config
                 SelectedPracticeIds = personsFilter.PracticeIds,
                 SelectedRecruiterIds = cblRecruiters.Items[0].Selected ? null : cblRecruiters.SelectedItems,
                 ShowActive = personsFilter.Active,
-                ShowInactive = personsFilter.Inactive,
+                ShowTerminationPending = personsFilter.TerminationPending,
                 ShowProjected = personsFilter.Projected,
                 ShowTerminated = personsFilter.Terminated,
                 Alphabet = Alphabet,
@@ -594,7 +594,7 @@ namespace PraticeManagement.Config
         /// <param name="recruiterId">The recruiter filter.</param>
         /// <returns>The total number of records to be paged.</returns>
         public static int GetPersonCount(string practiceIdsSelected, bool active, int pageSize, int pageNo, string looked,
-                                         string recruitersSelected, string payTypeIdsSelected, bool projected, bool terminated, bool inactive, char? alphabet)
+                                         string recruitersSelected, string payTypeIdsSelected, bool projected, bool terminated, bool terminatedPending, char? alphabet)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -610,7 +610,7 @@ namespace PraticeManagement.Config
                             payTypeIdsSelected,
                             projected,
                             terminated,
-                            inactive,
+                            terminatedPending,
                             alphabet);
                 }
                 catch (FaultException<ExceptionDetail>)
@@ -637,7 +637,7 @@ namespace PraticeManagement.Config
         [DataObjectMethod(DataObjectMethodType.Select)]
         public static Person[] GetPersons(string practiceIdsSelected, bool active, int pageSize, int pageNo, string looked,
                                           int startRow, int maxRows, string recruitersSelected, string sortBy, string payTypeIdsSelected,
-                                            bool projected, bool terminated, bool inactive, char? alphabet)
+                                            bool projected, bool terminated, bool terminatedPending, char? alphabet)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -656,7 +656,7 @@ namespace PraticeManagement.Config
                             payTypeIdsSelected,
                             projected,
                             terminated,
-                            inactive,
+                            terminatedPending,
                             alphabet);
 
                     //Array.Sort(result, (x, y) => SortFunction(sortBy, x, y));
@@ -858,7 +858,7 @@ namespace PraticeManagement.Config
             PayTypeIdsSelectedKey = personsFilter.PayTypeIds;
             hdnProjected.Value = personsFilter.Projected.ToString();
             hdnTerminated.Value = personsFilter.Terminated.ToString();
-            hdnInactive.Value = personsFilter.Inactive.ToString();
+            hdnTerminatedPending.Value = personsFilter.TerminationPending.ToString();
             hdnLooked.Value = txtSearch.Text;
         }
 
@@ -875,13 +875,13 @@ namespace PraticeManagement.Config
             CheckBox activeOnly = (CheckBox)personsFilter.FindControl("chbShowActive");
             CheckBox projected = (CheckBox)personsFilter.FindControl("chbProjected");
             CheckBox terminated = (CheckBox)personsFilter.FindControl("chbTerminated");
-            CheckBox inactive = (CheckBox)personsFilter.FindControl("chbInactive");
+            CheckBox terminatedPending = (CheckBox)personsFilter.FindControl("chbTerminationPending");
 
             personsFilter.ResetFilterControlsToDefault();
             SelectAllItems(this.cblRecruiters);
 
-            activeOnly.Checked = true;
-            projected.Checked = terminated.Checked = inactive.Checked = false;
+            activeOnly.Checked = terminatedPending.Checked = true;
+            projected.Checked = terminated.Checked = false;
             txtSearch.Text = string.Empty;
             ddlView.SelectedValue = "-1";
         }
@@ -930,7 +930,7 @@ namespace PraticeManagement.Config
                                             PayTypeIdsSelectedKey,
                                             Convert.ToBoolean(hdnProjected.Value),
                                             Convert.ToBoolean(hdnTerminated.Value),
-                                            Convert.ToBoolean(hdnInactive.Value),
+                                            Convert.ToBoolean(hdnTerminatedPending.Value),
                                             Alphabet);
             }
 
@@ -972,7 +972,7 @@ namespace PraticeManagement.Config
             e.InputParameters["payTypeIdsSelected"] = PayTypeIdsSelectedKey;
             e.InputParameters["projected"] = hdnProjected.Value;
             e.InputParameters["terminated"] = hdnTerminated.Value;
-            e.InputParameters["inactive"] = hdnInactive.Value;
+            e.InputParameters["terminatedPending"] = hdnTerminatedPending.Value;
             e.InputParameters["alphabet"] = hdnAlphabet.Value;
 
         }
