@@ -454,6 +454,55 @@ namespace PraticeManagement
             }
         }
 
+        private bool? _isAdminstrator;
+        public bool IsAdminstrator
+        {
+            get
+            {
+                if (!_isAdminstrator.HasValue)
+                {
+                    _isAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                }
+                return _isAdminstrator.Value;
+            }
+        }
+
+        private bool? _isReadOnly;
+        public bool IsReadOnly
+        {
+            get
+            {
+                if (!_isReadOnly.HasValue)
+                {
+                    _isReadOnly = false;
+                    if (!IsAdminstrator)
+                    {
+                        _isReadOnly = DataHelper.IsReadOnlyInPersonEmployeeHistory(SelectedPerson, SelectedDates);
+                    }
+                }
+                return _isReadOnly.Value;
+            }
+        }
+
+        private Dictionary<DateTime, bool> _IsDateInPersonEmployeeHistoryList;
+        public Dictionary<DateTime, bool> IsDateInPersonEmployeeHistoryList
+        {
+            get
+            {
+                if (_IsDateInPersonEmployeeHistoryList == null)
+                {
+                    _IsDateInPersonEmployeeHistoryList = new Dictionary<DateTime, bool>();
+                    foreach (var date in SelectedDates)
+                    {
+                        _IsDateInPersonEmployeeHistoryList.Add(date.Date, DataHelper.IsDateInPersonEmployeeHistory(SelectedPerson, date.Date, IsAdminstrator));
+                    }
+                }
+                return _IsDateInPersonEmployeeHistoryList;
+            }
+        }
+
+
+
         #endregion
 
         #region Control events
@@ -629,6 +678,7 @@ namespace PraticeManagement
                 var imgBtnDeleteProjectSection = e.Item.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
                 imgBtnDeleteProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
                 imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Project");
+                imgBtnDeleteProjectSection.Visible = !IsReadOnly;
             }
         }
 
@@ -676,7 +726,7 @@ namespace PraticeManagement
                 var imgBtnDeleteBusinessDevelopmentSection = e.Item.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
                 imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Account");
-
+                imgBtnDeleteBusinessDevelopmentSection.Visible = !IsReadOnly;
             }
         }
 
@@ -726,6 +776,7 @@ namespace PraticeManagement
                 var imgBtnDeleteInternalSection = e.Item.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
                 imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Project");
+                imgBtnDeleteInternalSection.Visible = !IsReadOnly;
             }
         }
 
@@ -890,9 +941,9 @@ namespace PraticeManagement
 
                 var workTypeElement = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
 
-                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false,false));
+                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false, false));
 
-                if (bar.IsPTO || bar.IsHoliday )
+                if (bar.IsPTO || bar.IsHoliday)
                 {
                     bar.SelectedTimeType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(projectId), true, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]))[0];
                 }
@@ -928,7 +979,7 @@ namespace PraticeManagement
                 var imgPlus = e.Item.FindControl(imgPlusAdministrativeSectionImage) as ImageButton;
                 if (!IsPostBack)
                 {
-                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false,false));
+                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false, false));
 
                     if (AdministrativeTimeTypes.Count() < 1)
                         imgPlus.Style["display"] = "none";
@@ -1831,7 +1882,7 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString(),teSection.Project.IsUnpaidProject.ToString()));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString(), teSection.Project.IsUnpaidProject.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
@@ -2051,7 +2102,8 @@ namespace PraticeManagement
 
             var isSelectedActive =
                  SelectedPerson.Status != null &&
-                 SelectedPerson.Status.ToStatusType() == PersonStatusType.Active;
+                 (SelectedPerson.Status.ToStatusType() == PersonStatusType.Active
+                 || SelectedPerson.Status.ToStatusType() == PersonStatusType.TerminationPending);
             var currentIsAdmin =
                 Roles.IsUserInRole(
                     DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
