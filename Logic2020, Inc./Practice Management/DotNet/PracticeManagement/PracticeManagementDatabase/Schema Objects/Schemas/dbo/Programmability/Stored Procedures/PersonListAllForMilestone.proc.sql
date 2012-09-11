@@ -26,7 +26,7 @@ AS
 		  p.IsStrawman AS IsStrawman
 	  FROM dbo.Person AS p
 	 WHERE 
-	 ( (p.PersonStatusId = 1 OR p.PersonStatusId = 3)
+	  (p.PersonStatusId IN (1,3,5)
 	        OR EXISTS (SELECT 1
 	                     FROM dbo.MilestonePerson AS mp
 	                    WHERE mp.MilestonePersonId = @MilestonePersonId AND mp.PersonId = p.PersonId))
