@@ -40,13 +40,13 @@
                     </td>
                     <td class="no-wrap padLeft20Imp">
                         <asp:CheckBox ID="chbProjected" runat="server" />
-                        <span class="padRight5Imp">Projected</span>
+                        <span class="padRight5Imp">Contingent</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="no-wrap">
-                        <asp:CheckBox ID="chbInactive" runat="server" />
-                        <span class="padRight5Imp">Inactive</span>
+                        <asp:CheckBox ID="chbTerminationPending" runat="server" Checked="true" />
+                        <span class="padRight5Imp">Termination Pending</span>
                     </td>
                     <td class="no-wrap padLeft20Imp">
                         <asp:CheckBox ID="chbTerminated" runat="server" />
