@@ -1,8 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[PersonListShortByRoleAndStatus]
-	@PersonStatusId	INT = NULL,
+	@PersonStatusIdsList NVARCHAR(50) = NULL,
 	@RoleName		NVARCHAR(256) = NULL
 AS
 BEGIN
+	DECLARE @PersonStatusIds TABLE(ID INT)
+	INSERT INTO @PersonStatusIds (ID)
+	SELECT ResultId 
+	FROM dbo.ConvertStringListIntoTable(@PersonStatusIdsList)
+
 	SELECT DISTINCT p.PersonId,
 					p.FirstName,
 					p.LastName,
@@ -14,7 +19,7 @@ BEGIN
 	ON u.UserId = uir.UserId
 	LEFT JOIN dbo.aspnet_Roles ur
 	ON ur.RoleId = uir.RoleId
-	WHERE (p.PersonStatusId = @PersonStatusId OR @PersonStatusId IS NULL)
+	WHERE (p.PersonStatusId IN (SELECT ResultId FROM @PersonStatusIds) OR @PersonStatusIdsList IS NULL)
 			AND (ur.RoleName = @RoleName OR @RoleName IS NULL)
 	ORDER BY LastName, FirstName
 END
