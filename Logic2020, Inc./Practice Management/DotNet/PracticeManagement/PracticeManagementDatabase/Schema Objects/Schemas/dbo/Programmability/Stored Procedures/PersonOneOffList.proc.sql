@@ -22,7 +22,7 @@ BEGIN
 	       p.LastName	       
 	  FROM dbo.Person AS p
       LEFT  JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
-	  WHERE p.PersonStatusId in (1,2,3) AND ISNULL(pr.IsCompanyInternal, 0) = 0
+	  WHERE p.PersonStatusId in (1,2,3,5) AND ISNULL(pr.IsCompanyInternal, 0) = 0
 		   AND EXISTS (SELECT 1 FROM dbo.Pay y
 						WHERE p.PersonId = y.Person 
 						AND  (@DateToday <= y.StartDate
