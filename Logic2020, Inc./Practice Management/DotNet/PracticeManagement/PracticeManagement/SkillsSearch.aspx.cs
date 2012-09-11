@@ -18,7 +18,8 @@ namespace PraticeManagement
             {
                 var companyTitle = HttpUtility.HtmlDecode(BrandingConfigurationManager.GetCompanyTitle());
                 lblSearchTitle.Text = string.Format("{0} Employee Skills Search", companyTitle);
-                DataHelper.FillPersonListWithPersonFirstLastName(ddlEmployees, null, null, (int)PersonStatusType.Active);
+                string statusIds = (int)PersonStatusType.Active + "," + (int)PersonStatusType.TerminationPending;
+                DataHelper.FillPersonListWithPersonFirstLastName(ddlEmployees, null, null, statusIds);
             }
         }
 
