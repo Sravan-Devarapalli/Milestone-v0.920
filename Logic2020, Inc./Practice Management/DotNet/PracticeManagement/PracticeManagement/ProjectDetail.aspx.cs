@@ -1328,7 +1328,8 @@ namespace PraticeManagement
             DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
-            Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort((int)DataTransferObjects.PersonStatusType.Active));
+            string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
+            Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
             DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
             DataHelper.FillListDefault(ddlProjectOwner, "-- Select Project Owner --", persons, false, "Id", "PersonLastFirstName");
 
