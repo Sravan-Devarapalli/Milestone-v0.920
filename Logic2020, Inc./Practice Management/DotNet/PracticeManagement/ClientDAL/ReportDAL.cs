@@ -1847,6 +1847,8 @@ namespace DataAccess
                 int terminations1099HourlyCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.Terminations1099HourlyCountInTheRange);
                 int terminations1099PORCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.Terminations1099PORCountInTheRange);
                 int terminationsCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsCountInTheRange);
+                int newHiredCumulativeInTheRange = reader.GetOrdinal(Constants.ColumnNames.NewHiredCumulativeInTheRange);
+                int terminationsCumulativeEmployeeCountInTheRange = reader.GetOrdinal(Constants.ColumnNames.TerminationsCumulativeEmployeeCountInTheRange);
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
 
@@ -1862,6 +1864,8 @@ namespace DataAccess
                     tpr.Terminations1099HourlyCountInTheRange = reader.GetInt32(terminations1099HourlyCountInTheRange);
                     tpr.Terminations1099PORCountInTheRange = reader.GetInt32(terminations1099PORCountInTheRange);
                     tpr.TerminationsCountInTheRange = reader.GetInt32(terminationsCountInTheRange);
+                    tpr.NewHiredCumulativeInTheRange = reader.GetInt32(newHiredCumulativeInTheRange);
+                    tpr.TerminationsCumulativeEmployeeCountInTheRange = reader.GetInt32(terminationsCumulativeEmployeeCountInTheRange);
                     result.Add(tpr);
                 }
             }
