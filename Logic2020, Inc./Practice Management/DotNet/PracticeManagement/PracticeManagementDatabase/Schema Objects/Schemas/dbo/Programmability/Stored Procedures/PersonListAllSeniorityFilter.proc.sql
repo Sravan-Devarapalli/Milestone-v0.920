@@ -55,8 +55,8 @@ BEGIN
 			   p.PracticeOwnedName,
 			   p.TelephoneNumber
 		  FROM dbo.v_Person AS p
-		 WHERE (   ( (p.PersonStatusId = 1 AND @ShowAll = 0) AND @PracticeId IS NULL )
-		        OR ((p.PersonStatusId = 1 AND @ShowAll = 0) AND @PracticeId = p.DefaultPractice)
+		 WHERE (   ( (p.PersonStatusId IN (1,5) AND @ShowAll = 0) AND @PracticeId IS NULL )
+		        OR ((p.PersonStatusId IN (1,5) AND @ShowAll = 0) AND @PracticeId = p.DefaultPractice)
 		        OR ( @ShowAll = 1 AND @PracticeId IS NULL )
 		        OR ( @ShowAll = 1 AND @PracticeId = p.DefaultPractice ) )
 		   AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
@@ -120,8 +120,8 @@ BEGIN
 					   p.PracticeOwnedName,
 					   p.TelephoneNumber
 				  FROM dbo.v_Person AS p
-				 WHERE (   ( p.PersonStatusId = 1 AND @ShowAll = 0 AND @PracticeId IS NULL )
-		                OR ( p.PersonStatusId = 1 AND @ShowAll = 0 AND @PracticeId = p.DefaultPractice)
+				 WHERE (   ( p.PersonStatusId IN (1,5) AND @ShowAll = 0 AND @PracticeId IS NULL )
+		                OR ( p.PersonStatusId IN (1,5) AND @ShowAll = 0 AND @PracticeId = p.DefaultPractice)
 		                OR ( @ShowAll = 1 AND @PracticeId IS NULL )
 		                OR ( @ShowAll = 1 AND @PracticeId = p.DefaultPractice ) ) 
 					AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
