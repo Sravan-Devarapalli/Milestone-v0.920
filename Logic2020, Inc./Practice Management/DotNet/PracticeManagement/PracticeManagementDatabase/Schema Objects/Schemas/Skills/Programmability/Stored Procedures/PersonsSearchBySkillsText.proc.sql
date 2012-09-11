@@ -46,7 +46,7 @@ BEGIN
 	LEFT JOIN [skills].Skill S ON PS.SkillId = S.SkillId 
 	LEFT JOIN [skills].PersonIndustry [PI] ON [PI].PersonId = P.PersonId
 	LEFT JOIN [skills].Industry I ON I.IndustryId = [PI].IndustryId
-	'+@Query +') AND P.PersonStatusId IN (1,3)'
+	'+@Query +') AND P.PersonStatusId IN (1,3,5)'
 	 
 
 	EXEC SP_EXECUTESQL @Query
