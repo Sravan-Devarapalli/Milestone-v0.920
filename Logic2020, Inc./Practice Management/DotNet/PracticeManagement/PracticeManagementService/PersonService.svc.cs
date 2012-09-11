@@ -103,37 +103,6 @@ namespace PracticeManagementService
             return permission;
         }
 
-        /// <summary>
-        /// Get all persons
-        /// </summary>
-        /// <param name="practice">identifies a practice to limit results</param>
-        /// <param name="active"><value>true</value> limits to active persons only</param>
-        /// <param name="pageNo">Determines a page index to be retrieved.</param>
-        /// <param name="pageSize">Determines a page size to be retrieved.</param>
-        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-        /// <param name="userName">A current user.</param>
-        /// <returns>A list of <see cref="Person"/>s in the system matching filters</returns>
-        public List<Person> GetPersonList(
-            int? practice,
-            bool active,
-            int pageSize,
-            int pageNo,
-            string looked,
-            int? recruiterId,
-            string userName)
-        {
-            return
-                GetPersonListActiveDate(practice,
-                active,
-                pageSize,
-                pageNo,
-                looked,
-                DateTime.MinValue,
-                DateTime.MinValue,
-                recruiterId,
-                userName);
-        }
-
         public List<Person> GetPersonListWithCurrentPay(
             int? practice,
             bool active,
@@ -166,12 +135,12 @@ namespace PracticeManagementService
             string timeScaleIdsSelected,
             bool projected,
             bool terminated,
-            bool inactive,
+            bool terminatedPending,
             char? alphabet)
         {
             PersonRateCalculator.VerifyPrivileges(userName, ref recruiterIdsSelected);
             return
-                PersonDAL.PersonListFilteredWithCurrentPayByCommaSeparatedIdsList(practiceIdsSelected, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterIdsSelected, null, sortBy, timeScaleIdsSelected, projected, terminated, inactive, alphabet);
+                PersonDAL.PersonListFilteredWithCurrentPayByCommaSeparatedIdsList(practiceIdsSelected, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterIdsSelected, null, sortBy, timeScaleIdsSelected, projected, terminated, terminatedPending, alphabet);
         }
 
         /// <summary>
@@ -186,77 +155,26 @@ namespace PracticeManagementService
             return result;
         }
 
-
-        /// <summary>
-        /// Get all persons able to work on Milestone
-        /// </summary>
-        /// <param name="practice">identifies a practice to limit results</param>
-        /// <param name="active"><value>true</value> limits to active persons only</param>        
-        /// <param name="pageNo">Determines a page index to be retrieved.</param>
-        /// <param name="pageSize">Determines a page size to be retrieved.</param>
-        /// <param name="startDate">Determines a start date when persons in the list must are available.</param>
-        /// <param name="endDate">Determines an end date when persons in the list must are available.</param>
-        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-        /// <param name="userName">A current user.</param>
-        /// <returns>A list of <see cref="Person"/>s in the system matching filters</returns>
-        public List<Person> GetPersonListActiveDate(
-            int? practice,
-            bool active,
-            int pageSize,
-            int pageNo,
-            string looked,
-            DateTime startDate,
-            DateTime endDate,
-            int? recruiterId,
-            string userName)
-        {
-            PersonRateCalculator.VerifyPrivileges(userName, ref recruiterId);
-            List<Person> list =
-                PersonDAL.PersonListFiltered(practice, !active, pageSize, pageNo, looked, startDate, endDate, recruiterId, null);
-            List<Person> detailedList = new List<Person>();
-
-            foreach (Person person in list)
-            {
-                // TODO: skips: calculate additional values
-                Person personExt = new PersonRateCalculator(person).Person;
-                MembershipUser user = Membership.GetUser(person.Alias);
-                personExt.LockedOut = user != null && user.IsLockedOut;
-                detailedList.Add(personExt);
-            }
-            return detailedList;
-        }
-
         /// <summary>
         /// Retrives a short info on persons.
         /// </summary>
         /// <param name="practice">Practice filter, null meaning all practices</param>
-        /// <param name="statusId">Person status id</param>
+        /// <param name="statusIds">Person status ids</param>
         /// <param name="startDate">Determines a start date when persons in the list must are available.</param>
         /// <param name="endDate">Determines an end date when persons in the list must are available.</param>
         /// <returns>A list of the <see cref="Person"/> objects.</returns>
-        public List<Person> PersonListAllShort(int? practice, int? statusId, DateTime startDate, DateTime endDate)
+        public List<Person> PersonListAllShort(int? practice, string statusIds, DateTime startDate, DateTime endDate)
         {
             return PersonDAL
-                .PersonListAllShort(practice, statusId, startDate, endDate)
+                .PersonListAllShort(practice, statusIds, startDate, endDate)
                 .OrderBy(p => p.LastName + p.FirstName)
                 .ToList();
         }
 
 
-        public List<Person> OwnerListAllShort(int? statusId)
+        public List<Person> OwnerListAllShort(string statusIds)
         {
-            return PersonDAL.OwnerListAllShort(statusId);
-        }
-
-        /// <summary>
-        /// Retrieves a short info on persons.
-        /// </summary>
-        /// <param name="seniorityId">Person seniority id</param>
-        /// <param name="statusId">Person status id</param>
-        /// <returns></returns>
-        public List<Person> PersonsGetBySeniorityAndStatus(int seniorityId, int? statusId)
-        {
-            return PersonDAL.PersonsGetBySeniorityAndStatus(seniorityId, statusId);
+            return PersonDAL.OwnerListAllShort(statusIds);
         }
 
         /// <summary>
@@ -265,10 +183,10 @@ namespace PracticeManagementService
         /// <param name="statusId">Person status id</param>
         /// <param name="roleName">Person role</param>
         /// <returns>A list of the <see cref="Person"/> objects</returns>
-        public List<Person> PersonListShortByRoleAndStatus(int? statusId, string roleName)
+        public List<Person> PersonListShortByRoleAndStatus(string statusIds, string roleName)
         {
             return PersonDAL
-                .PersonListShortByRoleAndStatus(statusId, roleName)
+                .PersonListShortByRoleAndStatus(statusIds, roleName)
                 .OrderBy(p => p.LastName + p.FirstName)
                 .ToList();
         }
@@ -319,17 +237,17 @@ namespace PracticeManagementService
         /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
         /// <param name="userName">A current user.</param>
         /// <returns>The number of the persons those match with the specified conditions.</returns>
-        public int GetPersonCount(int? practice, bool active, string looked, int? recruiterId, string userName, int? timeScaleId, bool projected, bool terminated, bool inactive, char? alphabet)
+        public int GetPersonCount(int? practice, bool active, string looked, int? recruiterId, string userName, int? timeScaleId, bool projected, bool terminated, bool terminatedPending, char? alphabet)
         {
             PersonRateCalculator.VerifyPrivileges(userName, ref recruiterId);
-            return PersonDAL.PersonGetCount(practice, !active, looked, recruiterId, timeScaleId, projected, terminated, inactive, alphabet);
+            return PersonDAL.PersonGetCount(practice, !active, looked, recruiterId, timeScaleId, projected, terminated, terminatedPending, alphabet);
         }
 
 
-        public int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool inactive, char? alphabet)
+        public int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool terminatedPending, char? alphabet)
         {
             PersonRateCalculator.VerifyPrivileges(userName, ref recruiterIds);
-            return PersonDAL.PersonGetCount(practiceIds, !active, looked, recruiterIds, timeScaleIds, projected, terminated, inactive, alphabet);
+            return PersonDAL.PersonGetCount(practiceIds, !active, looked, recruiterIds, timeScaleIds, projected, terminated, terminatedPending, alphabet);
         }
 
         /// <summary>
@@ -680,24 +598,6 @@ namespace PracticeManagementService
                 PersonDAL.UpdateIsWelcomeEmailSentForPerson(person.Id);
             }
 
-        }
-
-        /// <summary>
-        /// Deactivates the specified person.
-        /// </summary>
-        /// <param name="person">The data for the person to be deactivated.</param>
-        public void PersonInactivate(Person person)
-        {
-            PersonDAL.PersonInactivate(person);
-        }
-
-        /// <summary>
-        /// Activates the specified person.
-        /// </summary>
-        /// <param name="person">The data for the person to be activated.</param>
-        public void PersonReactivate(Person person)
-        {
-            PersonDAL.PersonReactivate(person);
         }
 
         /// <summary>
