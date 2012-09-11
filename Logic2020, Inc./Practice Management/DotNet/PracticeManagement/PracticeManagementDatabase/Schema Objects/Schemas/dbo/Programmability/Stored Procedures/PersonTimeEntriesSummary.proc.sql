@@ -71,7 +71,7 @@ BEGIN
 		AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
 		AND (
 				CC.timeTypeId != @HolidayTimeType
-				OR (CC.timeTypeId = @HolidayTimeType AND PTSH.PersonStatusId = 1 )
+				OR (CC.timeTypeId = @HolidayTimeType AND PTSH.PersonStatusId IN (1,5) )
 			)	
 	GROUP BY CC.TimeEntrySectionId,
 			C.Name,
