@@ -16,6 +16,12 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string DateBehindViewstate = "7555B3A7-8713-490F-8D5B-368A02E6A205";
         private const string DefaultIdFieldName = "Id";
         private const string DefaultNameFieldName = "Name";
+        private const string IsEmpDisableAttribute = "IsEmpDisable";
+        private const string IsPersonSalaryTypeDisableAttribute = "IsPersonSalaryTypeDisable";
+        private const string IsChargeCodeTurnOffDisableAttribute = "isChargeCodeTurnOffDisable";
+        private const string ImgNoteClientIdAttribute = "imgNoteClientId";
+        
+        
         #endregion
 
         #region Properties
@@ -184,7 +190,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            tbNotes.Attributes["imgNoteClientId"] = imgNote.ClientID;
+            tbNotes.Attributes[ImgNoteClientIdAttribute] = imgNote.ClientID;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -197,17 +203,14 @@ namespace PraticeManagement.Controls.TimeEntry
             {
                 if (!IsPostBack)
                 {
-                    tbActualHours.Attributes["isChargeCodeTurnOffDisable"] = "1";
+                    tbActualHours.Attributes[IsChargeCodeTurnOffDisableAttribute] = "1";
                 }
                 tbActualHours.Enabled = false;
                 tbActualHours.BackColor = Color.Gray;
             }
-            tbActualHours.Attributes["IsHireDateDisable"] = HostingPage.SelectedPerson.HireDate > DateBehind ? "1" : "0";
-            tbActualHours.Attributes["IsTerminationDateDisable"] = !HostingPage.SelectedPerson.TerminationDate.HasValue ||
-                        (HostingPage.SelectedPerson.TerminationDate.HasValue &&
-                                    HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind
-                         ) ? "0" : "1";
-            tbActualHours.Attributes["IsPersonSalaryTypeDisable"] = HostingPage.IsPersonSalaryTypeList[DateBehind] ? "0" : "1";
+
+            tbActualHours.Attributes[IsEmpDisableAttribute] = HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date] ? "0" : "1";
+            tbActualHours.Attributes[IsPersonSalaryTypeDisableAttribute] = HostingPage.IsPersonSalaryTypeList[DateBehind] ? "0" : "1";
         }
 
         public void CanelControlStyle()
@@ -231,7 +234,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
             if (IsPTO)
             {
-                tbActualHours.Enabled = HostingPage.IsPersonSalaryTypeList[DateBehind];
+                tbActualHours.Enabled = HostingPage.IsPersonSalaryTypeList[DateBehind]
+                                        && HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date];
+
+
             }
 
             if (IsHoliday || IsUnpaid)
