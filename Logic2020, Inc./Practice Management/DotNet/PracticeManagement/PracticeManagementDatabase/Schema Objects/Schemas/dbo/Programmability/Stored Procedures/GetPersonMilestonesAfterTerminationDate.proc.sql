@@ -2,13 +2,13 @@
 (
 	@PersonId	INT,
 	@TerminationDate	DATETIME 
-	
 )
 AS
 BEGIN 
 	
 	SELECT DISTINCT
 			ProjectId,
+			ProjectNumber,
 			ProjectName,
 			MilestoneId,
 			MilestoneName			
