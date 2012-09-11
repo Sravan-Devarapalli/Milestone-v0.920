@@ -355,6 +355,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlTerminationReason;
         
         /// <summary>
+        /// txtTerminationReason control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTerminationReason;
+        
+        /// <summary>
+        /// waterMarkTxtTerminationReason control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtTerminationReason;
+        
+        /// <summary>
         /// custTerminationReason control.
         /// </summary>
         /// <remarks>
@@ -769,15 +787,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Localize locRolesLabel;
         
         /// <summary>
-        /// custRoles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custRoles;
-        
-        /// <summary>
         /// valRecruterRole control.
         /// </summary>
         /// <remarks>
@@ -787,13 +796,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator valRecruterRole;
         
         /// <summary>
-        /// cvRolesActiveStatus control.
+        /// cvRoles control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvRolesActiveStatus;
+        protected global::System.Web.UI.WebControls.CustomValidator cvRoles;
         
         /// <summary>
         /// chblRoles control.
@@ -1811,6 +1820,159 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnEndCompensationCancel;
+        
+        /// <summary>
+        /// hdHireDateChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdHireDateChange;
+        
+        /// <summary>
+        /// mpeHireDateChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeHireDateChange;
+        
+        /// <summary>
+        /// pnlHireDateChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlHireDateChange;
+        
+        /// <summary>
+        /// cvHireDateChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvHireDateChange;
+        
+        /// <summary>
+        /// btnHireDateChangeOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnHireDateChangeOk;
+        
+        /// <summary>
+        /// btnHireDateChangeCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnHireDateChangeCancel;
+        
+        /// <summary>
+        /// hdpnlCancelTermination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdpnlCancelTermination;
+        
+        /// <summary>
+        /// mpeCancelTermination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeCancelTermination;
+        
+        /// <summary>
+        /// pnlCancelTermination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlCancelTermination;
+        
+        /// <summary>
+        /// dvCancelTerminationDateErrors control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dvCancelTerminationDateErrors;
+        
+        /// <summary>
+        /// custCancelTermination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custCancelTermination;
+        
+        /// <summary>
+        /// dtlCancelProjectMilestones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataList dtlCancelProjectMilestones;
+        
+        /// <summary>
+        /// imgPrinterCancelTermination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgPrinterCancelTermination;
+        
+        /// <summary>
+        /// lnkSaveReportCancelTermination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton lnkSaveReportCancelTermination;
+        
+        /// <summary>
+        /// hdnSaveReportTextCancelTermination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportTextCancelTermination;
+        
+        /// <summary>
+        /// btnCancleTerminationOKButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancleTerminationOKButton;
+        
+        /// <summary>
+        /// btnCancelTerminationCancelButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelTerminationCancelButton;
     }
 }
 
