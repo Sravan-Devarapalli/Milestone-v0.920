@@ -64,8 +64,16 @@
             displayPanel.hide();
         }
 
-        function printform() {
-            var printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
+        function printform(popup) {
+        var printContent;
+         if(popup == 1)
+            {
+                printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
+            }
+            else
+            {
+                printContent = document.getElementById('<%= dvCancelTerminationDateErrors.ClientID %>');
+            }
             var windowUrl = 'about:blank';
             var uniqueName = new Date();
             var windowName = 'Print' + uniqueName.getTime();
@@ -79,10 +87,21 @@
             return false;
         }
 
-        function saveReport() {
-            var printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
-            var hdnSaveReportText = document.getElementById('<%= hdnSaveReportText.ClientID %>');
-            hdnSaveReportText.value = printContent.innerHTML;
+        function saveReport(popup) {
+        var printContent;
+        var hdnSaveReportText ;
+
+        if(popup == 1)
+        {
+            printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
+            hdnSaveReportText = document.getElementById('<%= hdnSaveReportText.ClientID %>');
+        }
+        else
+        {
+            printContent = document.getElementById('<%= dvCancelTerminationDateErrors.ClientID %>');
+            hdnSaveReportText = document.getElementById('<%= hdnSaveReportTextCancelTermination.ClientID %>');
+        }
+        hdnSaveReportText.value = printContent.innerHTML;
 
         }
 
@@ -451,6 +470,17 @@
             }           
         } 
 
+        function enterPressed(evn) {
+            if (window.event && window.event.keyCode == 13) {
+                    return false;
+            } else if (evn && evn.keyCode == 13) {
+                    return false;
+            }
+        }
+
+        function pageLoad() {
+            document.onkeypress = enterPressed;
+        }
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
@@ -493,7 +523,7 @@
                                     </td>
                                     <td>
                                         <asp:Button ID="btnChangeEmployeeStatus" runat="server" Text="Change Employee Status"
-                                            OnClick="btnChangeEmployeeStatus_Click" />&nbsp;
+                                            UseSubmitBehavior="false" OnClick="btnChangeEmployeeStatus_Click" />&nbsp;
                                         <asp:RequiredFieldValidator ID="reqPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
                                             ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Person"
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
@@ -612,7 +642,7 @@
                                         Termination Date&nbsp;
                                     </td>
                                     <td class="Width158px padRight10Imp">
-                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged" />
+                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged" EnabledTextBox="false" ReadOnly="true"/>
                                     </td>
                                     <td>
                                         <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
@@ -633,8 +663,13 @@
                                         <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
                                             Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                             OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
-                                        <asp:DropDownList ID="ddlTerminationReason" runat="server">
+                                        <asp:DropDownList ID="ddlTerminationReason" runat="server" Visible="false">
                                         </asp:DropDownList>
+                                        <asp:TextBox ID="txtTerminationReason" runat="server" Visible="true" Enabled="false"></asp:TextBox>
+                                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtTerminationReason" runat="server"
+                                            TargetControlID="txtTerminationReason" BehaviorID="waterMarkTxtTerminationReason"
+                                            WatermarkCssClass="watermarkedtext Width158px" WatermarkText="No Reason Selected">
+                                        </AjaxControlToolkit:TextBoxWatermarkExtender>
                                         <asp:CustomValidator ID="custTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
                                             ToolTip="To terminate the person the Termination Reason should be specified."
                                             ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
@@ -846,15 +881,11 @@
                                             <td class="Width60Px">
                                                 <strong>
                                                     <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
-                                                <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Any person who is contingent should not have any roles checked."
-                                                    OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is contingent should not have any roles checked."
-                                                    ValidateEmptyText="true"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="valRecruterRole" runat="server" Display="Dynamic" EnableClientScript="false"
                                                     ValidationGroup="Person" ErrorMessage="Person with Recruiter role should have recruiting commission."
                                                     OnServerValidate="valRecruterRole_OnServerValidate" SetFocusOnError="true" Text="*"
                                                     ToolTip="Person with Recruiter role should have recruiting commission." ValidateEmptyText="true" />
-                                                <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                 <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
                                                     ValidationGroup="Person" ErrorMessage="Any person who is active should have atleast one role checked."
                                                     OnServerValidate="cvRolesActiveStatus_ServerValidate" SetFocusOnError="true"
                                                     Text="*" ToolTip="Any person who is active should have atleast one role checked."></asp:CustomValidator>
@@ -890,7 +921,7 @@
                                         <tr>
                                             <td class="Width60Px">
                                                 <asp:Button ID="btnResetPassword" runat="server" OnClick="btnResetPassword_Click"
-                                                    OnClientClick="return confirm('Do you really want to reset user\'s password?');"
+                                                    UseSubmitBehavior="false" OnClientClick="return confirm('Do you really want to reset user\'s password?');"
                                                     Text="Reset Password" />
                                             </td>
                                             <td>
@@ -975,7 +1006,7 @@
                                             <asp:ShadowedTextButton ID="btnAddCompensation" runat="server" Text="Add Compensation"
                                                 OnClick="btnAddCompensation_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;" />
                                             &nbsp;<asp:CustomValidator ID="custCompensationCoversMilestone" runat="server" ValidationGroup="Person"
-                                                ErrorMessage="This person has a status of Active, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Projected or Terminated."
+                                                ErrorMessage="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
                                                 OnServerValidate="custCompensationCoversMilestone_ServerValidate" Text="*"> </asp:CustomValidator>
                                             <div class="clear0">
                                             </div>
@@ -1555,8 +1586,8 @@
                 <tr>
                     <td align="center">
                         <asp:HiddenField ID="hdnPersonStatus" runat="server" Value="" />
-                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" />&nbsp;
-                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
+                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" UseSubmitBehavior="false" />&nbsp;
+                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" UseSubmitBehavior="false" />
                     </td>
                 </tr>
             </table>
@@ -1571,7 +1602,7 @@
                         <th>
                             Error
                             <asp:Button ID="btnClose" ToolTip="Close" runat="server" CssClass="mini-report-closeNew"
-                                Text="X"></asp:Button>
+                                UseSubmitBehavior="false" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
@@ -1586,8 +1617,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlProjectMilestones" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.Name)+
-                                             "-" + HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Description)%>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.ProjectNumber) + " - "+HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.Name)+ " - " + HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Description)%>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1623,17 +1653,17 @@
                                 <tr>
                                     <td class="textCenter Width50Percent">
                                         <asp:ImageButton ID="imgPrinter" runat="server" ImageUrl="~/Images/printer.png" ToolTip="Print"
-                                            OnClientClick="return printform();" />
+                                            OnClientClick="return printform(1);" />
                                         <asp:ImageButton ID="lnkSaveReport" runat="server" ImageUrl="~/Images/saveToDisk.png"
-                                            class="Margin-Left10Px" OnClientClick="saveReport();" OnClick="lnkSaveReport_OnClick"
+                                            class="Margin-Left10Px" OnClientClick="saveReport(1);" OnClick="lnkSaveReport_OnClick"
                                             ToolTip="Save Report" /><asp:HiddenField ID="hdnSaveReportText" runat="server" />
                                     </td>
                                     <td class="textCenter Width50Percent">
                                         <asp:Button ID="btnTerminationProcessOK" runat="server" Text="OK" OnClick="btnTerminationProcessOK_OnClick"
-                                            CssClass="Width60Px" />
+                                            UseSubmitBehavior="false" CssClass="Width60Px" />
                                         &nbsp;
                                         <asp:Button ID="btnTerminationProcessCancel" runat="server" Text="Cancel" OnClick="btnTerminationProcessCancel_OnClick"
-                                            CssClass="Width60Px" />
+                                            UseSubmitBehavior="false" CssClass="Width60Px" />
                                     </td>
                                 </tr>
                             </table>
@@ -1768,8 +1798,10 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="alignCenter PaddingTop5Imp">
-                            <asp:Button ID="btnOkChangePersonStatus" Text="OK" runat="server" OnClick="btnOkChangePersonStatus_Click" />&nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="btnCancelChangePersonStatus" Text="Cancel" runat="server" OnClick="btnCancelChangePersonStatus_Click" />
+                            <asp:Button ID="btnOkChangePersonStatus" Text="OK" runat="server" OnClick="btnOkChangePersonStatus_Click"
+                                UseSubmitBehavior="false" />&nbsp;&nbsp;&nbsp;&nbsp;
+                            <asp:Button ID="btnCancelChangePersonStatus" Text="Cancel" runat="server" OnClick="btnCancelChangePersonStatus_Click"
+                                UseSubmitBehavior="false" />
                         </td>
                     </tr>
                 </table>
@@ -1790,8 +1822,84 @@
                     </tr>
                     <tr>
                         <td style="text-align: center; padding: 4px;">
-                            <asp:Button ID="bntEndCompensationOk" runat="server" Text="Ok" OnClick="btnEndCompensationOk_Click" />
-                            <asp:Button ID="btnEndCompensationCancel" runat="server" Text="Cancel" OnClick="btnEndCompensationCancel_Click" />
+                            <asp:Button ID="bntEndCompensationOk" runat="server" Text="Ok" OnClick="btnEndCompensationOk_Click"
+                                UseSubmitBehavior="false" />
+                            <asp:Button ID="btnEndCompensationCancel" runat="server" Text="Cancel" OnClick="btnEndCompensationCancel_Click"
+                                UseSubmitBehavior="false" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+
+
+            <asp:HiddenField ID="hdHireDateChange" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeHireDateChange" runat="server"
+                TargetControlID="hdHireDateChange" PopupControlID="pnlHireDateChange"
+                BackgroundCssClass="modalBackground" DropShadow="false">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnlHireDateChange" runat="server" Style="display: none;" CssClass="popUpAttrition">
+                <table>
+                    <tr>
+                        <td>
+                            <asp:CustomValidator ID="cvHireDateChange" runat="server" Text="*" ErrorMessage=""
+                                ForeColor="Black" ToolTip="" OnServerValidate="cvHireDateChange_ServerValidate"
+                                ValidationGroup="HireDateChange" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="btnHireDateChangeOk" runat="server" Text="Ok" OnClick="btnHireDateChangeOk_Click"
+                                UseSubmitBehavior="false" />
+                            <asp:Button ID="btnHireDateChangeCancel" runat="server" Text="Cancel" OnClick="btnHireDateChangeCancel_Click"
+                                UseSubmitBehavior="false" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+
+            <asp:HiddenField ID="hdpnlCancelTermination" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeCancelTermination" runat="server" TargetControlID="hdpnlCancelTermination"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlCancelTermination" DropShadow="false" />
+            <asp:Panel ID="pnlCancelTermination" runat="server" CssClass="popUp PopUpPersonDetailPage"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr>
+                        <td class="Padding6">
+                            <div id="dvCancelTerminationDateErrors" runat="server" class="PaddingTop5">
+                                <asp:CustomValidator ID="custCancelTermination" runat="server" Text="*" ErrorMessage=""
+                                    ForeColor="Black" ToolTip="" OnServerValidate="custCancelTermination_ServerValidate"
+                                    ValidationGroup="CancelTermination" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                <br />
+                                <br />
+                                <asp:DataList ID="dtlCancelProjectMilestones" runat="server" CssClass="WS-Normal">
+                                    <ItemTemplate>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.ProjectNumber) + " - "+HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.Name)+ " - " + HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Description)%>
+                                    </ItemTemplate>
+                                </asp:DataList>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="Padding6">
+                            <table class="Width70Percent">
+                                <tr>
+                                    <td class="textCenter Width50Percent">
+                                        <asp:ImageButton ID="imgPrinterCancelTermination" runat="server" ImageUrl="~/Images/printer.png"
+                                            ToolTip="Print" OnClientClick="return printform(2);" />
+                                        <asp:ImageButton ID="lnkSaveReportCancelTermination" runat="server" ImageUrl="~/Images/saveToDisk.png"
+                                            class="Margin-Left10Px" OnClientClick="saveReport(2);" OnClick="lnkSaveReportCancelTermination_OnClick"
+                                            ToolTip="Save Report" /><asp:HiddenField ID="hdnSaveReportTextCancelTermination"
+                                                runat="server" />
+                                    </td>
+                                    <td class="textCenter Width50Percent">
+                                        <asp:Button ID="btnCancleTerminationOKButton" runat="server" Text="OK" OnClick="btnCancleTerminationOKButton_OnClick"
+                                            UseSubmitBehavior="false" CssClass="Width60Px" />
+                                        &nbsp;
+                                        <asp:Button ID="btnCancelTerminationCancelButton" runat="server" Text="Cancel" OnClick="btnCancelTerminationCancelButton_OnClick"
+                                            UseSubmitBehavior="false" CssClass="Width60Px" />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>
@@ -1799,6 +1907,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
+            <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" />
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
             <asp:AsyncPostBackTrigger ControlID="bntEndCompensationOk" />
             <asp:AsyncPostBackTrigger ControlID="btnTerminationProcessOK" />
