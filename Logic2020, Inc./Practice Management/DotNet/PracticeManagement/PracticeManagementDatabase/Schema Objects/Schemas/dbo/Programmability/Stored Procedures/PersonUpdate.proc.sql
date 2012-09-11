@@ -73,10 +73,10 @@
 			-- Start logging session
 			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 		
-			IF @PersonStatusId = 2
+			IF @PersonStatusId = 2 OR @PersonStatusId = 5 OR ( @PersonStatusId = 3 AND @TerminationDate IS NOT NULL)
 			BEGIN
 
-				EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate
+				EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = @PersonStatusId
 
 			END
 
@@ -247,22 +247,7 @@
 
 			IF(@IsHireDateChanged =  1)
 			BEGIN
-				
-				;WITH FirstPSHRow  AS 
-				(
-				 SELECT MIN(StartDate) AS StartDate,
-						@PersonId AS PersonId				 
-				 FROM dbo.PersonStatusHistory AS PSH 
-				 WHERE  PSH.PersonId = @PersonId
-				)
-
-				UPDATE PSH 
-				SET PSH.startdate = CONVERT(DATE,P.HireDate)
-				FROM dbo.Person AS P 
-				INNER JOIN FirstPSHRow AS FPSHR ON P.PersonId = FPSHR.PersonId
-				INNER JOIN dbo.PersonStatusHistory AS PSH ON P.PersonId = FPSHR.PersonId   AND  FPSHR.startdate = PSH.startdate    
-				WHERE  P.HireDate < PSH.startdate  
-
+				EXEC dbo.OnPersonHireDateChange	@PersonId = @PersonId , @NewHireDate = @HireDate
 			END
 
 
