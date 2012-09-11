@@ -499,7 +499,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <asp:CheckBox ID="chbProjectedPersons" runat="server" Text="Projected" ToolTip="Include projected persons into report"
+                                <asp:CheckBox ID="chbProjectedPersons" runat="server" Text="Contingent" ToolTip="Include contingent persons into report"
                                     AutoPostBack="false" Checked="false" onclick="EnableResetButton();" />
                             </td>
                             <td>
