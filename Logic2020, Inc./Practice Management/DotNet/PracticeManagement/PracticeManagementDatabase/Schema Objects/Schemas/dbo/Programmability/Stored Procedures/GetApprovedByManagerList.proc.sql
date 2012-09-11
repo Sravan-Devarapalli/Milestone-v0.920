@@ -15,6 +15,6 @@ BEGIN
 	INNER JOIN dbo.aspnet_UsersInRoles AS ur ON u.UserId = ur.UserId
 	INNER JOIN dbo.aspnet_Roles AS r ON ur.RoleId = r.RoleId
 	WHERE r.RoleName IN ('Administrator','Practice Area Manager','Business Unit Manager','Client Director','HR')
-		AND p.PersonStatusId = 1
+		AND p.PersonStatusId IN (1,5)
 	ORDER BY p.LastName,p.FirstName 
 END
