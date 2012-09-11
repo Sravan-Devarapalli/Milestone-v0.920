@@ -12,7 +12,7 @@
 	@SortBy			NVARCHAR(225) = NULL,
 	@TimescaleIdsList   NVARCHAR(MAX),
 	@Projected		BIT,
-	@Inactive		BIT,
+	@TerminationPending BIT,
 	@Terminated		BIT,
 	@Alphabet		NVARCHAR(5)
 ) 
@@ -123,7 +123,7 @@ BEGIN
 				 WHERE (   (p.PersonStatusId = 1 AND @ShowAll = 0) 
 							OR (p.PersonStatusId = 2 AND @Terminated = 1)
 							OR (p.PersonStatusId = 3 AND @Projected = 1)
-							OR (p.PersonStatusId = 4 AND @Inactive = 1) 
+							OR (p.PersonStatusId = 5 AND @TerminationPending = 1) 
 						) 
 		            AND (@PracticeIdsList IS NULL OR p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsList)))
 					AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
@@ -144,10 +144,10 @@ BEGIN
 				@SqlQuery,		
 				N'@FirstRecord	INT, @LastRecord	INT, @Looked	NVARCHAR(40), @Now	DATETIME, 
 				@MaxSeniorityLevel	INT,   @ShowAll	BIT, 
-				@Projected BIT, @Terminated BIT, @Inactive BIT, @Alphabet NVARCHAR(5),@TimescaleIdsList NVARCHAR(MAX),@PracticeIdsList NVARCHAR(MAX),@RecruiterIdsList NVARCHAR(MAX)',				
+				@Projected BIT, @Terminated BIT, @TerminationPending BIT, @Alphabet NVARCHAR(5),@TimescaleIdsList NVARCHAR(MAX),@PracticeIdsList NVARCHAR(MAX),@RecruiterIdsList NVARCHAR(MAX)',				
 				@FirstRecord = @FirstRecord, @LastRecord = @LastRecord,
 				@Looked = @Looked,@MaxSeniorityLevel = @MaxSeniorityLevel, @ShowAll = @ShowAll, @Now = @Now, 
-				@Projected = @Projected, @Terminated = @Terminated, @Inactive = @Inactive, @Alphabet = @Alphabet,
+				@Projected = @Projected, @Terminated = @Terminated, @TerminationPending = @TerminationPending, @Alphabet = @Alphabet,
 				@TimescaleIdsList = @TimescaleIdsList,@PracticeIdsList =@PracticeIdsList,@RecruiterIdsList =@RecruiterIdsList
 				
 	END
