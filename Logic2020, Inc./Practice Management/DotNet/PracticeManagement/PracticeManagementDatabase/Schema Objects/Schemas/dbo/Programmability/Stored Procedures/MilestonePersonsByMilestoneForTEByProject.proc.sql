@@ -45,7 +45,7 @@ BEGIN
 						SELECT 1 
 						FROM dbo.PersonStatusHistory PH
 						WHERE PH.PersonId = mp.PersonId
-								AND PH.PersonStatusId = 1 --Active
+								AND PH.PersonStatusId IN (1,5) --Active
 								AND (@StartDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,@FutureDate)
 									OR @EndDate BETWEEN PH.StartDate AND ISNULL(PH.EndDate,@FutureDate)
 									OR PH.StartDate BETWEEN @StartDate AND @EndDate
