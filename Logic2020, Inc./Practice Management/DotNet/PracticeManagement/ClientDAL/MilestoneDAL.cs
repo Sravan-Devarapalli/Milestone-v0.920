@@ -209,6 +209,8 @@ namespace DataAccess
                 int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
                 int descriptionIndex = reader.GetOrdinal("MilestoneName");
                 int projectNameIndex = reader.GetOrdinal("ProjectName");
+                int projectNumberIndex = reader.GetOrdinal("ProjectNumber");
+                
 
                 while (reader.Read())
                 {
@@ -220,6 +222,7 @@ namespace DataAccess
                     milestone.Project = new Project();
                     milestone.Project.Id = reader.GetInt32(projectIdIndex);
                     milestone.Project.Name = reader.GetString(projectNameIndex);
+                    milestone.Project.ProjectNumber = reader.GetString(projectNumberIndex);
                     result.Add(milestone);
                 }
             }
