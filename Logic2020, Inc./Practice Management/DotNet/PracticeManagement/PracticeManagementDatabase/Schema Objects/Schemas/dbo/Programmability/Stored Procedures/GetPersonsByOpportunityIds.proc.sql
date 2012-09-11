@@ -31,7 +31,7 @@ BEGIN
 		INNER JOIN dbo.Person p ON p.PersonId = op.PersonId
 		INNER JOIN @OpportunityIdTable O ON O.OpportunityId = op.OpportunityId
 		WHERE (
-				p.PersonStatusId IN(1,3)
+				p.PersonStatusId IN(1,3,5)
 				OR
 				p.IsStrawman = 1
 			)
