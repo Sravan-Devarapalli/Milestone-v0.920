@@ -237,7 +237,8 @@ namespace PraticeManagement.Reporting
 
                 if (userIsAdministrator || userIsDirector || userIsBusinessUnitManager)
                 {
-                    DataHelper.FillPersonList(ddlPerson, null, 1, false);
+                    string statusIds = (int)PersonStatusType.Active + "," + (int)PersonStatusType.TerminationPending;
+                    DataHelper.FillPersonList(ddlPerson, null, statusIds, false);
                 }
                 else
                 {
