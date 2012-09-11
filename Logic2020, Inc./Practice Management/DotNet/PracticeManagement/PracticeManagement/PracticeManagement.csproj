@@ -2128,13 +2128,6 @@
       <DependentUpon>RealInterval.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Generic\Filtering\SingleOption.cs" />
-    <Compile Include="Controls\Generic\Filtering\TERFilter.ascx.cs">
-      <DependentUpon>TERFilter.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Generic\Filtering\TERFilter.ascx.designer.cs">
-      <DependentUpon>TERFilter.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Generic\Filtering\TextAlike.ascx.cs">
       <DependentUpon>TextAlike.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2980,7 +2973,6 @@
     <Content Include="Controls\Generic\Filtering\DateInterval.ascx" />
     <Content Include="Controls\Generic\Filtering\Option.ascx" />
     <Content Include="Controls\Generic\Filtering\RealInterval.ascx" />
-    <Content Include="Controls\Generic\Filtering\TERFilter.ascx" />
     <Content Include="Controls\Generic\Filtering\TextAlike.ascx" />
     <EmbeddedResource Include="Controls\Generic\Sorting\MultisortExtender\MultisortExtender.js" />
     <EmbeddedResource Include="Controls\Generic\SelectCutOff\SelectCutOffExtender.js" />
