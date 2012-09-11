@@ -48,7 +48,7 @@ AS
             p.PracticeOwnedName,
             p.TelephoneNumber
     FROM    dbo.v_Person AS p
-    WHERE   p.PersonStatusId = 1	-- Active person only
+    WHERE   p.PersonStatusId IN (1,5)	-- Active person only
 	   AND (   EXISTS (SELECT 1
 	                     FROM dbo.DefaultRecruiterCommissionHeader AS c
 	                    WHERE p.PersonId = c.PersonId
