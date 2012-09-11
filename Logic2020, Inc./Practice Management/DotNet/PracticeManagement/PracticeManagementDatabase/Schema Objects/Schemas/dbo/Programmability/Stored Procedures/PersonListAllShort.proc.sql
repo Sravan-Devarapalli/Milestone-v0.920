@@ -31,7 +31,7 @@ AS
 	 WHERE 
 	 p.IsStrawman = 0
 	 AND  (@PracticeId IS NULL OR p.DefaultPractice = @PracticeId)
-	   AND (@PersonStatusIdsList IS NULL OR p.PersonStatusId IN (SELECT ResultId FROM @PersonStatusIds))
+	   AND (@PersonStatusIdsList IS NULL OR p.PersonStatusId IN (SELECT ID FROM @PersonStatusIds))
 	   AND (   @StartDate IS NULL
 	        OR @EndDate IS NULL
 	        OR (@StartDate <= ISNULL(p.TerminationDate,@FutureDate) AND p.HireDate <= @EndDate)
