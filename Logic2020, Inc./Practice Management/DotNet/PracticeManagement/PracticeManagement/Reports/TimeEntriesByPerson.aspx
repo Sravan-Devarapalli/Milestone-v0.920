@@ -261,7 +261,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <asp:CheckBox ID="chbInactivePersons" runat="server" Text="Inactive" ToolTip="Include projected persons into report"
+                                            <asp:CheckBox ID="chbTerminationPendingPersons" runat="server" Text="Termination Pending" ToolTip="Include termination pending persons into report"
                                                 AutoPostBack="true" Checked="false" onclick="EnableResetButton();" OnCheckedChanged="PersonStatus_OnCheckedChanged" />
                                         </td>
                                         <td colspan="4">
