@@ -275,7 +275,7 @@ namespace PraticeManagement
                         {
                             LogLoginResult(4);
                             Person person = serviceClient.GetPersonByAlias(login.UserName);
-                            if (person != null && person.Status != null && person.Status.Id != (int)PersonStatusType.Active)
+                            if (person != null && person.Status != null && person.Status.Id != (int)PersonStatusType.Active && person.Status.Id != (int)PersonStatusType.TerminationPending)
                                 loginErrorDetails.Text = MessageLoginErrorNotActive;
                         }
                         catch (CommunicationException)
