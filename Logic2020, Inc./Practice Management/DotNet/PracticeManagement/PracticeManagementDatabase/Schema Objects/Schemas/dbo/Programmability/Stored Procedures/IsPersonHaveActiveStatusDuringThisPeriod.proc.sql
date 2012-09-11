@@ -14,10 +14,10 @@ BEGIN
 			@FutureDate = dbo.GetFutureDate()
 
 	SELECT @IsPersonHasActiveStatus = 1
-	FROM dbo.Person AS p
-	INNER JOIN dbo.PersonStatusHistory PSH ON  PSH.PersonId = p.PersonId AND p.IsStrawman = 0 AND P.PersonId = @PersonId AND PSH.PersonStatusId = 1 -- ACTIVE Status
-	WHERE P.HireDate <= @EndDate AND ISNULL(P.TerminationDate,@FutureDate)  >= @StartDate 
-		  AND PSH.StartDate <= @EndDate AND ISNULL(PSH.EndDate,@FutureDate)  >= @StartDate
+	FROM dbo.v_PersonHistory AS p
+	INNER JOIN dbo.PersonStatusHistory PSH ON  PSH.PersonId = p.PersonId  AND P.PersonId = @PersonId AND PSH.PersonStatusId IN (1,5) -- ACTIVE And TerminationPending Status
+	WHERE  P.HireDate <= @EndDate AND ISNULL(P.TerminationDate,@FutureDate)  >= @StartDate AND 
+		PSH.StartDate <= @EndDate AND ISNULL(PSH.EndDate,@FutureDate)  >= @StartDate
 
     SELECT @IsPersonHasActiveStatus 
 END
