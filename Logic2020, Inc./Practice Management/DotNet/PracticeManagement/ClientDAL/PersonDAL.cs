@@ -204,35 +204,6 @@ namespace DataAccess
         /// <summary>
         /// Checks if the person is a manager to somebody
         /// </summary>
-        public static bool IsSomeonesManager(Person person)
-        {
-            string query = string.Format(
-                Constants.Queries.SingleParameter,
-                Constants.FunctionNames.IsSomeonesManager,
-                Constants.ParameterNames.PersonId);
-
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(query, connection))
-            {
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(
-                    Constants.ParameterNames.PersonId,
-                    person.Id.Value);
-
-                connection.Open();
-
-                object result = command.ExecuteScalar();
-                if (result == null)
-                    return false;
-
-                return (bool)result;
-            }
-        }
-
-        /// <summary>
-        /// Checks if the person is a manager to somebody
-        /// </summary>
         public static Person[] ListManagersSubordinates(Person person)
         {
             var result = new List<Person>();
@@ -1394,30 +1365,6 @@ namespace DataAccess
             }
         }
 
-
-        /// <summary>
-        /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
-        /// </summary>
-        /// <param name="practiceManagerId">An ID of the manager(Counselor) to the data be retrieved for.</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public static List<Person> GetCareerCounselorHierarchiPersons(int managerId)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetCareerCounselorHierarchiPersonsProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(CounselorIdParam, managerId);
-
-                connection.Open();
-
-                var result = new List<Person>();
-                ReadPersons(command, result);
-                return result;
-            }
-        }
-
         /// <summary>
         /// Retrieves person one-off list.
         /// </summary>
@@ -1490,47 +1437,6 @@ namespace DataAccess
                 connection.Open();
 
                 return (int)command.ExecuteScalar();
-            }
-        }
-
-        /// <summary>
-        /// Retrives a number of persons who were active in the specified period
-        /// </summary>
-        /// <param name="startDate">The period start date.</param>
-        /// <param name="endDate">The period end date.</param>
-        /// <param name="employeesCount">The total number of prosons who were active.</param>
-        /// <param name="consultantsCount">
-        /// The number of persons who were active and who not in the Admin practice.
-        /// </param>
-        public static void PersonGetCountActive(DateTime startDate,
-                                                DateTime endDate,
-                                                out int employeesCount,
-                                                out int consultantsCount)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetCountActiveProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(StartDateParam, startDate);
-                command.Parameters.AddWithValue(EndDateParam, endDate);
-
-                connection.Open();
-
-                using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
-                {
-                    if (reader.Read())
-                    {
-                        employeesCount = Convert.ToInt32(reader[EmployeesNumberColumn]);
-                        consultantsCount = Convert.ToInt32(reader[ConsultantsNumberColumn]);
-                    }
-                    else
-                    {
-                        employeesCount = 0;
-                        consultantsCount = 0;
-                    }
-                }
             }
         }
 
@@ -1639,43 +1545,6 @@ namespace DataAccess
 
                     person.ProjectedFinancialsByMonth.Add(month, financials);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Calculates a number of <see cref="Person"/>s match with the specified conditions.
-        /// </summary>
-        /// <param name="practice">The <see cref="Person"/>'s default practice.</param>
-        /// <param name="showAll">List all <see cref="Person"/>s if true and the only active otherwise.</param>
-        /// <param name="looked">List all <see cref="Person"/>s by search string that matches for first name or last name  .</param>
-        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-        /// <returns>The number of the persons those match with the specified conditions.</returns>
-        public static int PersonGetCount(int? practice, bool showAll, string looked, int? recruiterId, int? timeScaleId, bool projected, bool terminated, bool terminatedPending, char? alphabet)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetCountProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(ShowAllParam, showAll);
-                if (practice.HasValue)
-                {
-                    command.Parameters.AddWithValue(PracticeIdParam, practice.Value);
-                }
-                command.Parameters.AddWithValue(LookedParam,
-                                                !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
-                command.Parameters.AddWithValue(RecruiterIdParam,
-                                                recruiterId.HasValue ? (object)recruiterId.Value : DBNull.Value);
-                command.Parameters.AddWithValue(TimescaleIdParam,
-                                                timeScaleId.HasValue ? (object)timeScaleId.Value : DBNull.Value);
-                command.Parameters.AddWithValue(ProjectedParam, projected);
-                command.Parameters.AddWithValue(TerminatedParam, terminated);
-                command.Parameters.AddWithValue(TerminationPendingParam, terminatedPending);
-                command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
-
-                connection.Open();
-                return (int)command.ExecuteScalar();
             }
         }
 
