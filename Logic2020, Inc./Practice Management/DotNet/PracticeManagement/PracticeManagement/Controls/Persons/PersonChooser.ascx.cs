@@ -3,6 +3,9 @@ using System.Web.Security;
 using System.Web.UI;
 using DataTransferObjects;
 using System.Web.UI.WebControls;
+using PraticeManagement.PersonService;
+using System.Linq;
+
 
 namespace PraticeManagement.Controls.Persons
 {
@@ -32,7 +35,15 @@ namespace PraticeManagement.Controls.Persons
         public Person SelectedPerson
         {
             get { return (Person)ViewState[SELECTED_PERSON_ID]; }
-            set { ViewState[SELECTED_PERSON_ID] = value; }
+            set
+            {
+                Person person = value;
+                using (var serviceClient = new PersonServiceClient())
+                {
+                    person.EmploymentHistory = serviceClient.GetPersonEmploymentHistoryById(person.Id.Value).ToList();
+                }
+                ViewState[SELECTED_PERSON_ID] = person;
+            }
         }
 
         public DropDownList ddlPersonsDropDown
@@ -121,3 +132,4 @@ namespace PraticeManagement.Controls.Persons
         }
     }
 }
+
