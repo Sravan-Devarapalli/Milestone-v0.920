@@ -154,7 +154,7 @@ public class GridViewExportUtil
         if (cellMaxHeight != null)
         {
             foreach (TableRow trow in table.Rows)
-                trow.Style.Add(HtmlTextWriterStyle.Height, "20px");
+                trow.Style.Add(HtmlTextWriterStyle.Height, cellMaxHeight);
         }
 
         return table;
