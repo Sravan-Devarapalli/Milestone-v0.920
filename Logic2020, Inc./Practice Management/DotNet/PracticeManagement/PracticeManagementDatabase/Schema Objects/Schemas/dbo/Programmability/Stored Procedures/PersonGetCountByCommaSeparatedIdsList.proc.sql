@@ -7,7 +7,7 @@
 	@TimescaleIdsList   NVARCHAR(MAX),
 	@Projected		BIT,
 	@Terminated		BIT,
-	@Inactive		BIT,
+	@TerminationPending BIT,
 	@Alphabet		NVARCHAR(5)
 )
 AS
@@ -55,7 +55,7 @@ AS
 	 WHERE (   (p.PersonStatusId = 1 AND @ShowAll = 0)  --@ShowAll is reverse of Active
 				OR (p.PersonStatusId = 2 AND @Terminated = 1)
 				OR (p.PersonStatusId = 3 AND @Projected = 1)
-				OR (p.PersonStatusId = 4 AND @Inactive = 1) 
+				OR (p.PersonStatusId = 5 AND @TerminationPending  = 1) 
 			) 
 		AND ( p.DefaultPractice  IN (SELECT PracticeId FROM @PracticeIdsTable)  OR @PracticeIdsList IS NULL )
 		AND (p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
