@@ -19,7 +19,7 @@ AS BEGIN
     --SET @PersonId = 3587
         
     DECLARE @isActive BIT 
-    SELECT TOP 1 @isActive = CASE WHEN PersonStatusId = 1 THEN 1 ELSE 0 END 
+    SELECT TOP 1 @isActive = CASE WHEN PersonStatusId IN (1,5) THEN 1 ELSE 0 END 
     FROM dbo.Person WHERE PersonId = @PersonId
     
     --needed for debugging purposes
