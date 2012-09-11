@@ -149,9 +149,9 @@ AS
 				AND ISNULL(OVH.EndDate, @FutureDate) AND OVH.Inactive = 0
 		 WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
 				AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
-				AND ((p.PersonStatusId = 1 AND @ActivePersonsLocal = 1 )
+				AND ((p.PersonStatusId IN (1,5) AND @ActivePersonsLocal = 1 )
 					 OR (p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1 )
-					 OR(( @ApplyPersonStatusFilter = 0 AND P.PersonStatusId IN(1,2))
+					 OR(( @ApplyPersonStatusFilter = 0 AND P.PersonStatusId IN(1,2,5))
 					))
 				 AND P.PersonStatusId<>4
 				AND (@PracticeIdsLocal IS NULL 
