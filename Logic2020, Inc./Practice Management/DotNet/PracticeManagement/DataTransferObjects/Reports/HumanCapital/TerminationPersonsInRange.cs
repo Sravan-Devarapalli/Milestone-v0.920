@@ -52,6 +52,12 @@ namespace DataTransferObjects.Reports.HumanCapital
         [DataMember]
         public int TerminationsCountInTheRange { get; set; }
 
+        [DataMember]
+        public int TerminationsCumulativeEmployeeCountInTheRange { get; set; }
+
+        [DataMember]
+        public int NewHiredCumulativeInTheRange { get; set; }
+
         public int TerminationsEmployeeCountInTheRange
         {
             get
@@ -64,7 +70,7 @@ namespace DataTransferObjects.Reports.HumanCapital
         {
             get
             {
-                return CalculateAttrition(ActivePersonsCountAtTheBeginning, NewHiresCountInTheRange, TerminationsEmployeeCountInTheRange);
+                return CalculateAttrition(ActivePersonsCountAtTheBeginning, NewHiredCumulativeInTheRange, TerminationsCumulativeEmployeeCountInTheRange);
             }
         }
 
