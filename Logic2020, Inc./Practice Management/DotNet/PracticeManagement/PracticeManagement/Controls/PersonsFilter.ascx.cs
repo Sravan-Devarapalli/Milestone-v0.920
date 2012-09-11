@@ -60,17 +60,17 @@ namespace PraticeManagement.Controls
 
 
         /// <summary>
-        /// Gets if the Inactive filter was checked.
+        /// Gets if the TerminationPending filter was checked.
         /// </summary>
-        public bool Inactive
+        public bool TerminationPending
         {
             get
             {
-                return chbInactive.Checked;
+                return chbTerminationPending.Checked;
             }
             set
             {
-                chbInactive.Checked = value;
+                chbTerminationPending.Checked = value;
             }
         }
 
