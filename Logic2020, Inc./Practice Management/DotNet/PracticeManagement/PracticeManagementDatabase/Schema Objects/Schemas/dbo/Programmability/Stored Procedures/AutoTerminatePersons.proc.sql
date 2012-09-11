@@ -52,7 +52,7 @@ BEGIN
 				WHERE P1.DefaultPractice = Manager.DefaultPractice
 						AND P.PersonId <> P1.PersonId
 						AND S.SeniorityValue <= 65
-						AND P1.PersonStatusId = 1
+						AND P1.PersonStatusId IN (1,5)
 						AND P1.PersonId <> Manager.PersonID
 						AND (p1.TerminationDate > @Today OR p1.TerminationDate IS NULL)
 				ORDER BY ISNULL(p1.TerminationDate,@FutureDate) DESC
@@ -63,7 +63,7 @@ BEGIN
 				WHERE P2.IsDefaultManager = 1
 						AND P.PersonId <> P2.PersonId
 						AND P2.PersonId <> manager.PersonID
-						AND P2.PersonStatusId = 1
+						AND P2.PersonStatusId IN (1,5)
 						AND (p2.TerminationDate > @Today OR p2.TerminationDate IS NULL)
 				ORDER BY ISNULL(p2.TerminationDate,@FutureDate) DESC
 				) DefalutManager
