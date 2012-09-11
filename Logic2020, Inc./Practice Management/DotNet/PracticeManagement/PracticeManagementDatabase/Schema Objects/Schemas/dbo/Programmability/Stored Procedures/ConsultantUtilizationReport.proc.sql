@@ -50,7 +50,7 @@ AS
 			(
 				p.PersonStatusId = CASE WHEN @ProjectedPersons = 1 THEN 3 ELSE 0 END
 				OR 
-				p.PersonStatusId = CASE WHEN @ActivePersons = 1 THEN 1 ELSE 0 END
+				(@ActivePersons = 1  AND p.PersonStatusId  IN (1,5))
 			)
 			
 		-- @CurrentConsultants now contains ids of consultants
