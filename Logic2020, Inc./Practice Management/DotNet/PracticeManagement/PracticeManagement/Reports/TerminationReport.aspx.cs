@@ -337,21 +337,14 @@ namespace PraticeManagement.Reporting
         private void LoadAttrition()
         {
             List<TerminationPersonsInRange> data = ServiceCallers.Custom.Report(r => r.TerminationReportGraph(StartDate.Value, EndDate.Value)).ToList();
-            double attrition = 0;
-            int terminationsEmployeeCountInTheRange = 0;
-            int activePersonsCountAtTheBeginning = data.First(s => s.StartDate == PraticeManagement.Utils.Calendar.MonthStartDate(StartDate.Value.Date)).ActivePersonsCountAtTheBeginning;
-            int newHiresCountInTheRange = 0;
-            foreach (var termiantionPerson in data)
+            if (data.Any())
             {
-                terminationsEmployeeCountInTheRange += termiantionPerson.TerminationsEmployeeCountInTheRange;
-                newHiresCountInTheRange += termiantionPerson.NewHiresCountInTheRange;
+                TerminationPersonsInRange trp = data.Last();
+                lblAttrition.Text = lblPopUpArrition.Text = trp.Attrition.ToString("0.00%");
+                lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = trp.TerminationsCumulativeEmployeeCountInTheRange.ToString();
+                lblPopUPActivensCount.Text = lblPopUPActivens.Text = trp.ActivePersonsCountAtTheBeginning.ToString();
+                lblPopUPNewHiresCount.Text = lblPopUPNewHires.Text = trp.NewHiredCumulativeInTheRange.ToString();
             }
-            attrition = TerminationPersonsInRange.CalculateAttrition(activePersonsCountAtTheBeginning, newHiresCountInTheRange, terminationsEmployeeCountInTheRange);
-            lblAttrition.Text = lblPopUpArrition.Text = attrition.ToString("0.00%");
-            lblPopUPTerminations.Text = lblPopUPTerminationsCount.Text = lblPopUPTerminationsCountDenominator.Text = terminationsEmployeeCountInTheRange.ToString();
-            lblPopUPActivensCount.Text = lblPopUPActivens.Text = activePersonsCountAtTheBeginning.ToString();
-            lblPopUPNewHiresCount.Text = lblPopUPNewHires.Text = newHiresCountInTheRange.ToString();
-
         }
 
         private void LoadActiveView()
