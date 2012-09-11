@@ -220,8 +220,8 @@ namespace PraticeManagement.Sandbox
             string statusList = string.Empty;
             if (chbActivePersons.Checked)
                 statusList += ((int)PersonStatusType.Active).ToString();
-            if (chbInactivePersons.Checked)
-                statusList += (string.IsNullOrEmpty(statusList) ? string.Empty : ",") + ((int)PersonStatusType.Inactive).ToString();
+            if (chbTerminationPendingPersons.Checked)
+                statusList += (string.IsNullOrEmpty(statusList) ? string.Empty : ",") + ((int)PersonStatusType.TerminationPending).ToString();
             if (chbTerminatedPersons.Checked)
                 statusList += (string.IsNullOrEmpty(statusList) ? string.Empty : ",") + ((int)PersonStatusType.Terminated).ToString();
             if (string.IsNullOrEmpty(statusList))
@@ -234,7 +234,7 @@ namespace PraticeManagement.Sandbox
         {
             Utils.Generic.InitStartEndDate(diRange);
             this.chbActivePersons.Checked = true;
-            this.chbInactivePersons.Checked = this.chbTerminatedPersons.Checked = false;
+            this.chbTerminationPendingPersons.Checked = this.chbTerminatedPersons.Checked = false;
             SelectAllItems(this.cblPractices);
             SelectAllItems(this.cblTimeScales);
             Populatepersons(false);
