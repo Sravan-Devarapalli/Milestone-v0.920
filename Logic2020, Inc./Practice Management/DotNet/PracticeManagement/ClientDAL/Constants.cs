@@ -358,6 +358,8 @@
             public const string SeniorityValue = "SeniorityValue";
             public const string Terminations1099HourlyCountInTheRange = "Terminations1099HourlyCountInTheRange";
             public const string Terminations1099PORCountInTheRange = "Terminations1099PORCountInTheRange";
+            public const string NewHiredCumulativeInTheRange = "NewHiredCumulativeInTheRange";
+            public const string TerminationsCumulativeEmployeeCountInTheRange = "TerminationsCumulativeEmployeeCountInTheRange";
         }
 
         #endregion
