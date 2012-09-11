@@ -175,7 +175,7 @@
                             </table>
                             <asp:HiddenField ID="hdnActive" runat="server" Value="true" />
                             <asp:HiddenField ID="hdnProjected" runat="server" Value="false" />
-                            <asp:HiddenField ID="hdnInactive" runat="server" Value="false" />
+                            <asp:HiddenField ID="hdnTerminatedPending" runat="server" Value="false" />
                             <asp:HiddenField ID="hdnTerminated" runat="server" Value="false" />
                             <asp:HiddenField ID="hdnLooked" runat="server" />
                             <asp:HiddenField ID="hdnAlphabet" runat="server" />
@@ -324,7 +324,7 @@
                     <asp:Parameter Name="payTypeIdsSelected" Type="String" />
                     <asp:Parameter Name="projected" />
                     <asp:Parameter Name="terminated" />
-                    <asp:Parameter Name="inactive" />
+                    <asp:Parameter Name="terminatedPending" />
                     <asp:Parameter Name="alphabet" />
                 </SelectParameters>
             </asp:ObjectDataSource>
