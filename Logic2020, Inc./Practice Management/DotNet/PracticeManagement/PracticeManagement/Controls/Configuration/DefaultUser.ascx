@@ -25,7 +25,7 @@
             TypeName="PraticeManagement.PersonService.PersonServiceClient" OnSelecting="odsPersons_OnSelecting"
             OnSelected="odsPersons_OnSelected" CacheDuration="5" EnableCaching="true">
             <SelectParameters>
-                <asp:Parameter DefaultValue="1" Name="statusId" Type="Int32" />
+                <asp:Parameter DefaultValue="1,5" Name="statusIds" Type="String" />
                 <asp:Parameter Name="roleName" Type="String" />
             </SelectParameters>
         </asp:ObjectDataSource>
