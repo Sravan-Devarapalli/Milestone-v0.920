@@ -316,9 +316,9 @@ namespace PraticeManagement.Controls
 
             if (!IsPostBack)
             {
-
+                string statusIds = (int)PersonStatusType.Active +","+ (int)PersonStatusType.TerminationPending;
                 //#2961: allowing all persons to be in the dropdown list irrespective of role.
-                DataHelper.FillPersonList(ddlPerson, null, (int)PersonStatusType.Active);
+                DataHelper.FillPersonList(ddlPerson, null, statusIds);
                 Person current = DataHelper.CurrentPerson;
 
                 ddlPerson.SelectedValue = current.Id.Value.ToString();
