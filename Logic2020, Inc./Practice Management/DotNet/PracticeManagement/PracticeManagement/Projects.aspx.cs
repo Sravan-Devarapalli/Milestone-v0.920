@@ -269,7 +269,7 @@ namespace PraticeManagement
                                  filterSet.ProjectOwnerIdsList,
                                  filterSet.PracticeIdsList,
                                  filterSet.ProjectGroupIdsList,
-                                 ProjectCalculateRangeType.TotalProjectValue,
+                                 ProjectCalculateRangeType.ProjectValueInRange,
                                  filterSet.ExcludeInternalPractices,
                                  DataHelper.CurrentPerson.Alias);
                         }
@@ -1586,6 +1586,7 @@ namespace PraticeManagement
                 names += person.Name + singleCellBreak;
             }
 
+            names = names.Remove(names.LastIndexOf(singleCellBreak));
             return names;
         }
 
@@ -1801,8 +1802,7 @@ namespace PraticeManagement
 
             TableCell monthCell = new TableCell();
             monthCell.Text = outterHtml;
-            monthCell.HorizontalAlign = HorizontalAlign.Right;
-            monthCell.Height = Unit.Pixel(40);
+            monthCell.HorizontalAlign = HorizontalAlign.Right;           
             monthCell.Width = Unit.Pixel(120);
             return monthCell;
         }
