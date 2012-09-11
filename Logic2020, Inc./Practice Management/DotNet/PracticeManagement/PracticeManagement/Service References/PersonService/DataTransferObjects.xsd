@@ -12,12 +12,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timescale" nillable="true" type="tns:Timescale" />
-  <xs:complexType name="ArrayOfPerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
@@ -479,6 +473,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PracticeManagerHistory" nillable="true" type="tns:PracticeManagerHistory" />
+  <xs:complexType name="ArrayOfPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="ProjectStatus">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
@@ -663,12 +663,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
-  <xs:complexType name="ArrayOfTimescale">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Timescale" nillable="true" type="tns:Timescale" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfTimescale" nillable="true" type="tns:ArrayOfTimescale" />
   <xs:complexType name="ArrayOfTerminationReason">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="TerminationReason" nillable="true" type="tns:TerminationReason" />
@@ -693,24 +687,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfSeniorityCategory" nillable="true" type="tns:ArrayOfSeniorityCategory" />
-  <xs:complexType name="ComputedFinancialsEx">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ComputedFinancials">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="CogsWithoutRecruiting" type="tns:PracticeManagementCurrency" />
-          <xs:element minOccurs="0" name="LoadedHourlyRate" type="tns:PracticeManagementCurrency" />
-          <xs:element minOccurs="0" name="MarginWithoutRecruiting" type="tns:PracticeManagementCurrency" />
-          <xs:element minOccurs="0" name="OverheadList" nillable="true" type="tns:ArrayOfPersonOverhead" />
-          <xs:element minOccurs="0" name="SaleCommissionPerHour" type="tns:PracticeManagementCurrency" />
-          <xs:element minOccurs="0" name="SemiCOGS" type="tns:PracticeManagementCurrency" />
-          <xs:element minOccurs="0" name="SemiCOGSWithoutRecruiting" type="tns:PracticeManagementCurrency" />
-          <xs:element minOccurs="0" name="SemiLoadedHourlyRate" type="tns:PracticeManagementCurrency" />
-          <xs:element minOccurs="0" name="SemiLoadedHourlyRateWithoutRecruiting" type="tns:PracticeManagementCurrency" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ComputedFinancialsEx" nillable="true" type="tns:ComputedFinancialsEx" />
   <xs:complexType name="ArrayOfSeniority">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Seniority" nillable="true" type="tns:Seniority" />
@@ -914,6 +890,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConsultantDemandItem" nillable="true" type="tns:ConsultantDemandItem" />
+  <xs:complexType name="ArrayOfTimescale">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Timescale" nillable="true" type="tns:Timescale" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTimescale" nillable="true" type="tns:ArrayOfTimescale" />
   <xs:complexType name="ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="QuadrupleOfPersonArrayOfintintintlqlLCQKx" nillable="true" type="tns:QuadrupleOfPersonArrayOfintintintlqlLCQKx" />
@@ -1088,4 +1070,22 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ErrorCode" nillable="true" type="tns:ErrorCode" />
+  <xs:complexType name="ComputedFinancialsEx">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ComputedFinancials">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CogsWithoutRecruiting" type="tns:PracticeManagementCurrency" />
+          <xs:element minOccurs="0" name="LoadedHourlyRate" type="tns:PracticeManagementCurrency" />
+          <xs:element minOccurs="0" name="MarginWithoutRecruiting" type="tns:PracticeManagementCurrency" />
+          <xs:element minOccurs="0" name="OverheadList" nillable="true" type="tns:ArrayOfPersonOverhead" />
+          <xs:element minOccurs="0" name="SaleCommissionPerHour" type="tns:PracticeManagementCurrency" />
+          <xs:element minOccurs="0" name="SemiCOGS" type="tns:PracticeManagementCurrency" />
+          <xs:element minOccurs="0" name="SemiCOGSWithoutRecruiting" type="tns:PracticeManagementCurrency" />
+          <xs:element minOccurs="0" name="SemiLoadedHourlyRate" type="tns:PracticeManagementCurrency" />
+          <xs:element minOccurs="0" name="SemiLoadedHourlyRateWithoutRecruiting" type="tns:PracticeManagementCurrency" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ComputedFinancialsEx" nillable="true" type="tns:ComputedFinancialsEx" />
 </xs:schema>
