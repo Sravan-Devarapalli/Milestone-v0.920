@@ -23,7 +23,7 @@ namespace PracticeManagementService
 			Person person = PersonDAL.PersonGetByAlias(username);
             if (person == null)
                 return false;
-		    if (person.Status != null && person.Status.Id == (int)PersonStatusType.Active)
+		    if (person.Status != null && (person.Status.Id == (int)PersonStatusType.Active || person.Status.Id == (int)PersonStatusType.TerminationPending))
 				return Membership.ValidateUser(username, password);
 			else
 				return false;
