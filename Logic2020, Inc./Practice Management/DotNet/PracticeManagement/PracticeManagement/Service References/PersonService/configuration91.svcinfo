@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="gX8KuaAb7hBIZzu1oS2/Z934jGI=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="8qhTqHGl40Fl25+ifTYgmenUbOk=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_IPersonService">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_IPersonService" contract="PersonService.IPersonService" bindingType="basicHttpBinding" address="http://system64.ggk.com/PracticeManagementService/PersonService.svc" bindingConfiguration="BasicHttpBinding_IPersonService">
+    <endpoint name="BasicHttpBinding_IPersonService" contract="PersonService.IPersonService" bindingType="basicHttpBinding" address="http://system68.ggk.com/PracticeManagementService/PersonService.svc" bindingConfiguration="BasicHttpBinding_IPersonService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://system64.ggk.com/PracticeManagementService/PersonService.svc</serializedValue>
+          <serializedValue>http://system68.ggk.com/PracticeManagementService/PersonService.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
