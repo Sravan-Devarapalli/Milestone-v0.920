@@ -84,6 +84,7 @@ namespace DataAccess
         private const string PersonIdsParam = "@PersonIds";
         private const string ProjectedParam = "@Projected";
         private const string TerminatedParam = "@Terminated";
+        private const string TerminationPendingParam = "@TerminationPending";
         private const string InactiveParam = "@Inactive";
         private const string AlphabetParam = "@Alphabet";
         private const string CounselorIdParam = "@CounselorId";
@@ -164,7 +165,7 @@ namespace DataAccess
         private const string DivisionIdColumn = "DivisionId";
         private const string TerminationReasonIdColumn = "TerminationReasonId";
         private const string TerminationReasonColumn = "TerminationReason";
-
+        private const string PersonStatusId = "PersonStatusId";
         #endregion
 
         #region Functions
@@ -394,6 +395,7 @@ namespace DataAccess
             {
                 if (reader.HasRows)
                 {
+                    int personStatusIdIndex = reader.GetOrdinal(PersonStatusId);
                     int personStatusNameIndex = reader.GetOrdinal(NameColumn);
                     int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                     int lastNameIndex = reader.GetOrdinal(LastNameColumn);
@@ -416,9 +418,7 @@ namespace DataAccess
                                 EmployeeNumber = (string)reader[employeeNumberIndex],
                                 Status = new PersonStatus
                                 {
-                                    Id = (int)Enum.Parse(
-                                        typeof(PersonStatusType),
-                                        (string)reader[personStatusNameIndex]),
+                                    Id = (int)reader[personStatusIdIndex],
                                     Name = (string)reader[personStatusNameIndex]
                                 },
                                 CurrentPay = new Pay
@@ -450,6 +450,7 @@ namespace DataAccess
             {
                 if (reader.HasRows)
                 {
+                    int personStatusIdIndex = reader.GetOrdinal(PersonStatusId);
                     int personStatusNameIndex = reader.GetOrdinal(NameColumn);
                     int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                     int lastNameIndex = reader.GetOrdinal(LastNameColumn);
@@ -475,9 +476,7 @@ namespace DataAccess
                                 EmployeeNumber = (string)reader[employeeNumberIndex],
                                 Status = new PersonStatus
                                 {
-                                    Id = (int)Enum.Parse(
-                                        typeof(PersonStatusType),
-                                        (string)reader[personStatusNameIndex]),
+                                    Id = (int)reader[personStatusIdIndex],
                                     Name = (string)reader[personStatusNameIndex]
                                 },
                                 CurrentPay = new Pay
@@ -1180,7 +1179,7 @@ namespace DataAccess
            string timeScaleIdsSelected,
            bool projected,
            bool terminated,
-           bool inactive,
+           bool terminatedPending,
            char? alphabet)
         {
             var personList = new List<Person>();
@@ -1218,7 +1217,7 @@ namespace DataAccess
                                                     timeScaleIdsSelected != null ? (object)timeScaleIdsSelected : DBNull.Value);
                     command.Parameters.AddWithValue(ProjectedParam, projected);
                     command.Parameters.AddWithValue(TerminatedParam, terminated);
-                    command.Parameters.AddWithValue(InactiveParam, inactive);
+                    command.Parameters.AddWithValue(TerminationPendingParam, terminatedPending);
                     command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
 
                     connection.Open();
@@ -1236,7 +1235,7 @@ namespace DataAccess
         /// <param name="startDate">Determines a start date when persons in the list must are available.</param>
         /// <param name="endDate">Determines an end date when persons in the list must are available.</param>
         /// <returns>A list of the <see cref="Person"/> objects.</returns>
-        public static List<Person> PersonListAllShort(int? practice, int? statusId, DateTime startDate, DateTime endDate)
+        public static List<Person> PersonListAllShort(int? practice, string statusIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListAllShortProcedure, connection))
@@ -1250,36 +1249,8 @@ namespace DataAccess
                                                 startDate > DateTime.MinValue ? (object)startDate : DBNull.Value);
                 command.Parameters.AddWithValue(EndDateParam,
                                                 endDate > DateTime.MinValue ? (object)endDate : DBNull.Value);
-                command.Parameters.AddWithValue(PersonStatusIdParam,
-                                                statusId.HasValue ? (object)statusId.Value : DBNull.Value);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    var result = new List<Person>();
-                    ReadPersonsShort(reader, result);
-                    return result;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Retrives a short info on persons.
-        /// </summary>
-        /// <param name="seniorityId"></param>
-        /// <param name="statusId"></param>
-        /// <returns></returns>
-        public static List<Person> PersonsGetBySeniorityAndStatus(int seniorityId, int? statusId)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonsGetBySeniorityAndStatusProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(SeniorityIdParam, seniorityId);
-                command.Parameters.AddWithValue(PersonStatusIdParam,
-                                                statusId.HasValue ? (object)statusId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(PersonStatusIdsListParam,
+                                                !string.IsNullOrEmpty(statusIds) ? (object)statusIds : DBNull.Value);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -1679,7 +1650,7 @@ namespace DataAccess
         /// <param name="looked">List all <see cref="Person"/>s by search string that matches for first name or last name  .</param>
         /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
         /// <returns>The number of the persons those match with the specified conditions.</returns>
-        public static int PersonGetCount(int? practice, bool showAll, string looked, int? recruiterId, int? timeScaleId, bool projected, bool terminated, bool inactive, char? alphabet)
+        public static int PersonGetCount(int? practice, bool showAll, string looked, int? recruiterId, int? timeScaleId, bool projected, bool terminated, bool terminatedPending, char? alphabet)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetCountProcedure, connection))
@@ -1700,55 +1671,11 @@ namespace DataAccess
                                                 timeScaleId.HasValue ? (object)timeScaleId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(ProjectedParam, projected);
                 command.Parameters.AddWithValue(TerminatedParam, terminated);
-                command.Parameters.AddWithValue(InactiveParam, inactive);
+                command.Parameters.AddWithValue(TerminationPendingParam, terminatedPending);
                 command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
 
                 connection.Open();
                 return (int)command.ExecuteScalar();
-            }
-        }
-
-        /// <summary>
-        /// Inactivate (logically delete) a person
-        /// </summary>
-        /// <param name="person"><see cref="Person"/> to delete</param>
-        public static void PersonInactivate(Person person)
-        {
-            var status = new PersonStatus { Id = (int)PersonStatusType.Terminated };
-            person.Status = status;
-            PersonSetStatus(person);
-        }
-
-        /// <summary>
-        /// Make a <see cref="Person"/> active
-        /// </summary>
-        /// <param name="person">person to activate</param>
-        public static void PersonReactivate(Person person)
-        {
-            var status = new PersonStatus { Id = (int)PersonStatusType.Active };
-            person.Status = status;
-            PersonSetStatus(person);
-        }
-
-        /// <summary>
-        /// Set status of person
-        /// </summary>
-        /// <param name="person"><see cref="Person"/> to delete</param>
-        public static void PersonSetStatus(Person person)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonSetStatusProcedure, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(PersonIdParam, person.Id);
-                    command.Parameters.AddWithValue(PersonStatusIdParam, person.Status.Id);
-
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
             }
         }
 
@@ -2525,11 +2452,20 @@ namespace DataAccess
                 int personIdIndex = reader.GetOrdinal(PersonIdColumn);
                 int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 int lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                int isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
+                int isDefManagerIndex;
                 int hireDateIndex;
                 int terminationDateIndex;
                 int isStrawManIndex;
                 int personStatusIdIndex;
+                try
+                {
+                    isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
+                }
+                catch
+                {
+                    isDefManagerIndex = -1;
+                }
+
                 try
                 {
                     personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
@@ -2590,11 +2526,12 @@ namespace DataAccess
                             Id = reader.GetInt32(personStatusIdIndex)
                         };
                     }
-
-                    var isDefaultManager = reader.GetBoolean(isDefManagerIndex);
-                    if (isDefaultManager)
-                        person.Manager = new Person { Id = personId };
-
+                    if (isDefManagerIndex > -1)
+                    {
+                        var isDefaultManager = reader.GetBoolean(isDefManagerIndex);
+                        if (isDefaultManager)
+                            person.Manager = new Person { Id = personId };
+                    }
                     result.Add(person);
                 }
             }
@@ -2654,15 +2591,15 @@ namespace DataAccess
         /// <param name="statusId">Person status id</param>
         /// <param name="rolename">Person role</param>
         /// <returns>A list of the <see cref="Person"/> objects</returns>
-        public static List<Person> PersonListShortByRoleAndStatus(int? statusId, string rolename)
+        public static List<Person> PersonListShortByRoleAndStatus(string statusIds, string rolename)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListShortByRoleAndStatusProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(PersonStatusIdParam,
-                                                statusId.HasValue ? (object)statusId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(PersonStatusIdsListParam,
+                                                !string.IsNullOrEmpty(statusIds) ? (object)statusIds : DBNull.Value);
                 command.Parameters.AddWithValue(RoleNameParam,
                                                 !string.IsNullOrEmpty(rolename) ? (object)rolename : DBNull.Value);
 
@@ -2824,7 +2761,7 @@ namespace DataAccess
 
         }
 
-        public static int PersonGetCount(string practiceIds, bool showAll, string looked, string recruiterIds, string timeScaleIds, bool projected, bool terminated, bool inactive, char? alphabet)
+        public static int PersonGetCount(string practiceIds, bool showAll, string looked, string recruiterIds, string timeScaleIds, bool projected, bool terminated, bool terminatedPending, char? alphabet)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonGetCountByCommaSeparatedIdsListProcedure, connection))
@@ -2844,7 +2781,7 @@ namespace DataAccess
                                                     timeScaleIds != null ? (object)timeScaleIds : DBNull.Value);
                 command.Parameters.AddWithValue(ProjectedParam, projected);
                 command.Parameters.AddWithValue(TerminatedParam, terminated);
-                command.Parameters.AddWithValue(InactiveParam, inactive);
+                command.Parameters.AddWithValue(TerminationPendingParam, terminatedPending);
                 command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
 
                 connection.Open();
@@ -2982,15 +2919,14 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> OwnerListAllShort(int? statusId)
+        public static List<Person> OwnerListAllShort(string statusIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.OwnerListAllShortProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(PersonStatusIdParam,
-                                                statusId.HasValue ? (object)statusId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(PersonStatusIdsParam, !string.IsNullOrEmpty(statusIds) ? (object)statusIds : DBNull.Value);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
