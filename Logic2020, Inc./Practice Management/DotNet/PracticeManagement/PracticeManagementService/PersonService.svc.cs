@@ -43,14 +43,6 @@ namespace PracticeManagementService
         }
 
         /// <summary>
-        /// Checks if the person is a manager to somebody
-        /// </summary>
-        public bool IsSomeonesManager(Person person)
-        {
-            return PersonDAL.IsSomeonesManager(person);
-        }
-
-        /// <summary>
         /// Lists managers subordinates
         /// </summary>
         /// <param name="person">Manager</param>
@@ -231,19 +223,17 @@ namespace PracticeManagementService
         /// <summary>
         /// Calculates a number of <see cref="Person"/>s match with the specified conditions.
         /// </summary>
-        /// <param name="practice">The <see cref="Person"/>'s default practice.</param>
-        /// <param name="showAll">List all <see cref="Person"/>s if true and the only active otherwise.</param>
-        /// <param name="looked">List all <see cref="Person"/>s by search string that matches for first name or last name  .</param>
-        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-        /// <param name="userName">A current user.</param>
-        /// <returns>The number of the persons those match with the specified conditions.</returns>
-        public int GetPersonCount(int? practice, bool active, string looked, int? recruiterId, string userName, int? timeScaleId, bool projected, bool terminated, bool terminatedPending, char? alphabet)
-        {
-            PersonRateCalculator.VerifyPrivileges(userName, ref recruiterId);
-            return PersonDAL.PersonGetCount(practice, !active, looked, recruiterId, timeScaleId, projected, terminated, terminatedPending, alphabet);
-        }
-
-
+        /// <param name="practiceIds">List of practice Ids</param>
+        /// <param name="active">Is active or not</param>
+        /// <param name="looked">search text</param>
+        /// <param name="recruiterIds">List of recruiter Ids</param>
+        /// <param name="userName">Logged in user</param>
+        /// <param name="timeScaleIds">List of Time scale Ids</param>
+        /// <param name="projected">Is Contingent or not</param>
+        /// <param name="terminated">Is terminatied or not</param>
+        /// <param name="terminatedPending">Is Termination Pending or not</param>
+        /// <param name="alphabet">person starts with the letter</param>
+        /// <returns></returns>
         public int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool terminatedPending, char? alphabet)
         {
             PersonRateCalculator.VerifyPrivileges(userName, ref recruiterIds);
@@ -305,18 +295,7 @@ namespace PracticeManagementService
         {
             return PersonDAL.PersonListProjectOwner(includeInactive, person);
         }
-
-
-        /// <summary>
-        /// Retrieves all Heirarchi persons for a specified manager(Career Counselor).
-        /// </summary>
-        /// <param name="practiceManagerId">An ID of the manager(Counselor) to teh data be retrieved for.</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public List<Person> GetCareerCounselorHierarchiPersons(int managerId)
-        {
-            return PersonDAL.GetCareerCounselorHierarchiPersons(managerId);//Here managerId is counselorId.
-        }
-
+        
         /// <summary>
         /// Read All persons firstname and last name  except having inactive status and must have compensation for today or in future.
         /// </summary>
