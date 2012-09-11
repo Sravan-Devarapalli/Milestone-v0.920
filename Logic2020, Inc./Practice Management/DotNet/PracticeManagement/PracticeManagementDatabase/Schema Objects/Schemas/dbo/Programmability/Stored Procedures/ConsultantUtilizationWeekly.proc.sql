@@ -71,8 +71,10 @@ AS
 				INNER JOIN dbo.Timescale T ON T.TimescaleId = dbo.GetCurrentPayType(p.PersonId) AND T.TimescaleId IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 WHERE   (p.IsStrawman = 0) 
-                        AND ( @ActivePersons = 1 AND p.PersonStatusId = 1 OR
-                              @ProjectedPersons = 1 AND p.PersonStatusId = 3)
+                        AND ( (@ActivePersons = 1 AND p.PersonStatusId IN (1,5)) 
+								OR
+                              (@ProjectedPersons = 1 AND p.PersonStatusId = 3)
+							)
 						AND (					
 								p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))
 							 AND (pr.IsCompanyInternal = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)				
@@ -91,6 +93,7 @@ AS
 				p.TerminationDate,
                 c.TimescaleId,
                 c.[TimeScaleName] AS Timescale,
+				st.PersonStatusId,
                 st.[Name],
 				S.[Name] Seniorityname,
 				S.SeniorityId,
