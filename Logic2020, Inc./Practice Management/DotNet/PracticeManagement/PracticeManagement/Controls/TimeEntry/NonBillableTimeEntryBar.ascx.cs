@@ -85,6 +85,12 @@ namespace PraticeManagement.Controls.TimeEntry
             extEnableDisable.WeekStartDate = HostingPage.SelectedDates[0].ToString();
             extEnableDisable.PersonId = HostingPage.SelectedPerson.Id.ToString();
             extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
+
+            if (!string.IsNullOrEmpty(imgDropTes.Attributes[TimeEntry_New.workTypeOldId]) && imgDropTes.Attributes[TimeEntry_New.workTypeOldId] != "-1")
+            {
+                imgDropTes.Visible =
+                ddlTimeTypes.Enabled = !HostingPage.IsReadOnly;
+            }
         }
 
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
