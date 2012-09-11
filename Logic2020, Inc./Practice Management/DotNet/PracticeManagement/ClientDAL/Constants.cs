@@ -368,7 +368,6 @@
 
         public class FunctionNames
         {
-            public const string IsSomeonesManager = "dbo.IsSomeonesManager";
         }
 
         #endregion
@@ -753,7 +752,6 @@
                 public const string PersonListAllSeniorityFilterProcedure = "dbo.PersonListAllSeniorityFilter";
                 public const string PersonListAllShortProcedure = "dbo.PersonListAllShort";
                 public const string OwnerListAllShortProcedure = "dbo.OwnerListAllShort";
-                public const string PersonsGetBySeniorityAndStatusProcedure = "dbo.PersonsGetBySeniorityAndStatus";
                 public const string PersonListShortByRoleAndStatusProcedure = "dbo.PersonListShortByRoleAndStatus";
                 public const string PersonListByStatusListProcedure = "dbo.PersonListAllByStatusList";
                 public const string GetPersonListByPersonIdListProcedure = "dbo.GetPersonListByPersonIds";
@@ -762,17 +760,14 @@
                 public const string PersonGetByIdProcedure = "dbo.PersonGetById";
                 public const string PersonOverheadByPersonProcedure = "dbo.PersonOverheadByPerson";
                 public const string PersonOverheadByTimescaleProcedure = "dbo.PersonOverheadByTimescale";
-                public const string PersonGetCountProcedure = "dbo.PersonGetCount";
                 public const string PersonGetCountByCommaSeparatedIdsListProcedure = "dbo.PersonGetCountByCommaSeparatedIdsList";
                 public const string PersonListBenchExpenseProcedure = "dbo.PersonListBenchExpense";
                 public const string UpdateLastPasswordChangedDateForPersonProcedure = "dbo.UpdateLastPasswordChangedDateForPerson";
                 public const string GetPersonListByPersonIdsAndPayTypeIdsProcedure = "dbo.GetPersonListByPersonIdsAndPayTypeIds";
                 public const string MilestonePersonListOverheadByPersonProcedure = "dbo.MilestonePersonListOverheadByPerson";
-                public const string PersonSetStatusProcedure = "dbo.PersonSetStatus";
                 public const string PersonListSalespersonProcedure = "dbo.PersonListSalesperson";
                 public const string PersonListProjectOwnerProcedure = "dbo.PersonListProjectOwner";
                 public const string PersonWorkDaysNumberProcedure = "dbo.PersonWorkDaysNumber";
-                public const string PersonGetCountActiveProcedure = "dbo.PersonGetCountActive";
                 public const string PersonGetByAliasProcedure = "dbo.PersonGetByAlias";
                 public const string MembershipDeleteProcedure = "dbo.MembershipDelete";
                 public const string aspnetUsersDeleteUserProcedure = "dbo.aspnet_Users_DeleteUser";
@@ -787,7 +782,6 @@
                 public const string GetTemporaryCredentialsByUserNameProcedure = "dbo.GetTemporaryCredentialsByUserName";
                 public const string SetNewPasswordForUserProcedure = "dbo.aspnet_Membership_SetPassword";
                 public const string DeleteTemporaryCredentialsByUserNameProcedure = "dbo.DeleteTemporaryCredentialsByUserName";
-                public const string GetCareerCounselorHierarchiPersonsProcedure = "dbo.GetCareerCounselorHierarchiPersons";
                 public const string PermissionsGetAllowedPracticeManagersProcedure = "dbo.PermissionsGetAllowedPracticeManagers";
                 public const string PermissionsGetAllowedPracticesProcedure = "dbo.PermissionsGetAllowedPractices";
                 public const string PermissionsGetAllowedSalespersonsProcedure = "dbo.PermissionsGetAllowedSalespersons";
