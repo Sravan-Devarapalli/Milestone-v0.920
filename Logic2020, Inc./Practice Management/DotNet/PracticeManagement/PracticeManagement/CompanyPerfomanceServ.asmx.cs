@@ -39,22 +39,7 @@ namespace PraticeManagement
                             group.Name,
                             group.Id.ToString())).ToArray();
         }
-
-        [WebMethod]
-        [ScriptMethod]
-        public CascadingDropDownNameValue[] GetPersons(string prefixText, int count)
-        {
-            var persons =
-                ServiceCallers.Custom.Person(
-                    client => client.GetPersonListWithCurrentPay(
-                            null, true, int.MaxValue, 0, prefixText, null, DataHelper.CurrentPerson.Alias, null, null, false, false, false, null));
-
-            return persons.Select(person =>
-                new CascadingDropDownNameValue(
-                            person.PersonLastFirstName,
-                            person.Id.ToString())).ToArray();
-        }
-
+        
         [WebMethod]
         [ScriptMethod]
         public CascadingDropDownNameValue[] GetClients(string knownCategoryValues, string category)
