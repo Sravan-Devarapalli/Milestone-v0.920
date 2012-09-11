@@ -31,13 +31,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CheckBox chbProjected;
         
         /// <summary>
-        /// chbInactive control.
+        /// chbTerminationPending control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbInactive;
+        protected global::System.Web.UI.WebControls.CheckBox chbTerminationPending;
         
         /// <summary>
         /// chbTerminated control.
