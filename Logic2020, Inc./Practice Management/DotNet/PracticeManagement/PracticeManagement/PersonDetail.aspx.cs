@@ -50,49 +50,6 @@ namespace PraticeManagement
         private const string HireDateChangeMessage = "This person has compensation record(s) before/after the new hire date. Click OK to adjust the compensation record to reflect the new hire date, or click Cancel to exit without saving changes.";
         private const string CancelTerminationMessage = "Following are the list of projects in which {0} resource's end date(s)  were set to his/her previous termination date automatically. Please reset the end dates for {0} in the below listed 'Projects-Milestones' if applicable.";
         private const string displayNone = "displayNone";
-        private const string ValidateStatusScript = @"
-                function validateStatus()
-				{{
-                 var compensationEndDateStr = ""{5}"";
-                 var terminationDateStr = document.getElementById(""{4}"").value;
-                 var hdnPersonStatus = document.getElementById(""{0}"");
-                 var statusId = hdnPersonStatus.value;
-                 var hasOpenEndedCompensation = {1};
-                 var compensationEndDate = new Date(compensationEndDateStr);
-                 var terminationDate = new Date(terminationDateStr);
-                 var now = new Date();
-					if (terminationDateStr!='' && (now >= terminationDate || statusId == ""{2}"")  &&
-                            ( compensationEndDateStr != '' && compensationEndDate>terminationDate || hasOpenEndedCompensation )
-                        )
-					{{
-						var result = (statusId != ""{2}"" && terminationDateStr=='');
-                        if(!result)
-                        {{
-                            var  message =  '';
-                            if(statusId == ""{2}"")
-                            {{
-                            if(hasOpenEndedCompensation)
-                              message =  'This person has a status of Terminated, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
-                            else
-                              message =  'This person has a status of Terminated, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
-                            }}
-                            else
-                            {{
-                            if(hasOpenEndedCompensation)
-                                message =  'This person has Termination Date, but still has an open-ended compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
-                             else
-                                message =  'This person has Termination Date, but still has an active compensation record. Click OK to close their compensation as of their termination date, or click Cancel to not to save changes.';
-                            }}
-                            result= confirm(message);
-                         }}
-						if (!result)
-						{{
-                            hdnPersonStatus.value = ""{3}"";
-						}}
-						return result;
-					}}
-					return true;
-				}}";
 
         #endregion
 
@@ -527,7 +484,6 @@ namespace PraticeManagement
             mpeChangeStatusEndCompensation.Hide();
         }
 
-
         protected void btnHireDateChangeOk_Click(object sender, EventArgs e)
         {
             cvHireDateChange.Enabled = false;
@@ -540,9 +496,6 @@ namespace PraticeManagement
             ResetToPreviousData();
             mpeHireDateChange.Hide();
         }
-
-
-
 
         protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
@@ -1944,8 +1897,7 @@ namespace PraticeManagement
                 DisableValidatecustTerminateDateTE = !e.IsValid;
             }
         }
-
-
+        
         protected void cvHireDateChange_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             var validator = ((CustomValidator)sender);
@@ -1955,20 +1907,18 @@ namespace PraticeManagement
                 if (PayHistory.Any(p => p.EndDate.HasValue && p.EndDate.Value.AddDays(-1).Date < HireDate.Value.Date
                                         &&
                                         (
-                                            (PreviousTerminationDate.HasValue && p.StartDate > PreviousTerminationDate.Value.Date)
-                                            || !PreviousTerminationDate.HasValue
+                                            (TerminationDateBeforeCurrentHireDate.HasValue && p.StartDate > TerminationDateBeforeCurrentHireDate.Value.Date)
+                                            || !TerminationDateBeforeCurrentHireDate.HasValue
                                         )
                                 )
                     )
                 {
                     e.IsValid = false;
                 }
-                Pay firstPay = PayHistory.Where(p =>
-                                        (PreviousTerminationDate.HasValue && p.StartDate > PreviousTerminationDate.Value.Date)
-                                        || !PreviousTerminationDate.HasValue
-                                    ).OrderBy(p=>p.StartDate).First() ;
-                //else if (PayHistory.Any(p => p.StartDate.Date < HireDate && ((p.EndDate.HasValue &&  p.EndDate.Value.AddDays(-1).Date > HireDate) || !p.EndDate.HasValue )))
-                if (firstPay.StartDate != HireDate)
+                Pay firstPay = PayHistory.OrderBy(p => p.StartDate).Where(p =>
+                                        (TerminationDateBeforeCurrentHireDate.HasValue && p.StartDate > TerminationDateBeforeCurrentHireDate.Value.Date)
+                                        || !TerminationDateBeforeCurrentHireDate.HasValue).FirstOrDefault();
+                if (firstPay != null && firstPay.StartDate != HireDate)
                 {
                     e.IsValid = false;
                 }
@@ -1981,8 +1931,7 @@ namespace PraticeManagement
                 validator.Text = validator.ToolTip = validator.ErrorMessage;
             }
         }
-
-
+        
         #endregion
 
         #region Commissions
@@ -2016,11 +1965,6 @@ namespace PraticeManagement
 
         #endregion
 
-        //protected void valNotes_OnServerValidate(object source, ServerValidateEventArgs args)
-        //{
-        //    args.IsValid = args.Value.Length <= 5000;
-        //}
-
         protected void valRecruterRole_OnServerValidate(object source, ServerValidateEventArgs args)
         {
             // This is a stub for the issue #1858
@@ -2031,26 +1975,6 @@ namespace PraticeManagement
         {
             activityLog.Update();
         }
-
-        //protected void cvInactiveStatus_ServerValidate(object source, ServerValidateEventArgs args)
-        //{
-        //    args.IsValid = true;
-        //    if (ddlPersonStatus.SelectedValue == 4.ToString() && PrevPersonStatusId == 1)//active to inactive status
-        //    {
-        //        //check future timeentries exists or not(Current date can not have time entries)
-        //        bool tEsExistsAfterNow = false;
-        //        DateTime now = DateTime.Now;
-        //        using (PersonServiceClient serviceClient = new PersonServiceClient())
-        //        {
-        //            tEsExistsAfterNow = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, now.AddDays(-1));
-        //        }
-        //        if (tEsExistsAfterNow)
-        //        {
-        //            cvInactiveStatus.ToolTip = cvInactiveStatus.ErrorMessage = string.Format(lblTimeEntriesExistFormat, now.ToString("MM/dd/yyy"));
-        //            args.IsValid = false;
-        //        }
-        //    }
-        //}
 
         protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
         {
