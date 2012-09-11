@@ -14,7 +14,7 @@ namespace PraticeManagement.FilterObjects
             set;
             get;
         }
-        public bool ShowInactive
+        public bool ShowTerminationPending
         {
             set;
             get;
