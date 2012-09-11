@@ -21,8 +21,7 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string txtboxNoteClienIdAttribute = "txtboxNoteClienId";
         private const string isChargeCodeTurnOffDisableAttribute = "isChargeCodeTurnOffDisable";
         private const string isHourlyRevenueDisableAttribute = "isHourlyRevenueDisable";
-        private const string IsTerminationDateDisableAttribute = "IsTerminationDateDisable";
-        private const string IsHireDateDisableAttribute = "IsHireDateDisable";
+        private const string IsEmpDisableAttribute = "IsEmpDisable";
          
         #endregion
 
@@ -166,7 +165,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            tbNotes.Attributes[imgNoteClientIdAttribute] = imgNote.ClientID;
+            tbNotes.Attributes[imgNoteClientIdAttribute] = imgNote.ClientID; 
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -208,16 +207,8 @@ namespace PraticeManagement.Controls.TimeEntry
             tbNonBillableHours.Attributes[isChargeCodeTurnOffDisableAttribute] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
             tbBillableHours.Attributes[isChargeCodeTurnOffDisableAttribute] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
 
-            tbNonBillableHours.Attributes[IsHireDateDisableAttribute] = 
-                tbBillableHours.Attributes[IsHireDateDisableAttribute] = 
-                    HostingPage.SelectedPerson.HireDate > DateBehind ? "1" : "0";
-
-            tbNonBillableHours.Attributes[IsTerminationDateDisableAttribute] = 
-                tbBillableHours.Attributes[IsTerminationDateDisableAttribute] = 
-                !HostingPage.SelectedPerson.TerminationDate.HasValue || 
-                        ( HostingPage.SelectedPerson.TerminationDate.HasValue && 
-                                    HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind 
-                         ) ? "0" : "1";
+            tbNonBillableHours.Attributes[IsEmpDisableAttribute] =
+            tbBillableHours.Attributes[IsEmpDisableAttribute] = HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date]  ? "0" : "1";
         }
 
         private void MaintainEditedtbHoursStyle()
