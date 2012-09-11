@@ -14,6 +14,7 @@ namespace PraticeManagement.Controls.TimeEntry
         #region Constants
 
         private const string DateBehindViewstate = "7555B3A7-8713-490F-8D5B-368A02E6A205";
+        private const string IsEmpDisableAttribute = "IsEmpDisable";
 
         #endregion
 
@@ -146,11 +147,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 tbActualHours.Enabled = false;
                 tbActualHours.BackColor = Color.Gray;
             }
-            tbActualHours.Attributes["IsHireDateDisable"] = HostingPage.SelectedPerson.HireDate > DateBehind ? "1" : "0";
-            tbActualHours.Attributes["IsTerminationDateDisable"] = !HostingPage.SelectedPerson.TerminationDate.HasValue ||
-                        (HostingPage.SelectedPerson.TerminationDate.HasValue &&
-                                    HostingPage.SelectedPerson.TerminationDate.Value >= DateBehind
-                         ) ? "0" : "1";
+            tbActualHours.Attributes[IsEmpDisableAttribute] = HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date] ? "0" : "1";
         }
 
         public void CanelControlStyle()
