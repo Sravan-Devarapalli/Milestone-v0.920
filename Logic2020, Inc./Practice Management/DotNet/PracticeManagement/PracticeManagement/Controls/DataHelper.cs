@@ -697,9 +697,9 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static void FillPersonList(ListControl control, string firstItemText, int? statusId = null, bool fillWithPersonFirstLastName = false)
+        public static void FillPersonList(ListControl control, string firstItemText, string statusIds, bool fillWithPersonFirstLastName = false)
         {
-            FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue, statusId, fillWithPersonFirstLastName);
+            FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue, statusIds, fillWithPersonFirstLastName);
         }
 
         /// <summary>
@@ -710,13 +710,13 @@ namespace PraticeManagement.Controls
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
         public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate,
-                                          DateTime endDate, int? statusId = null, bool fillWithPersonFirstLastName = false)
+                                          DateTime endDate, string statusIds, bool fillWithPersonFirstLastName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    Person[] persons = serviceClient.PersonListAllShort(null, statusId, startDate, endDate);
+                    Person[] persons = serviceClient.PersonListAllShort(null, statusIds, startDate, endDate);
 
                     Array.Sort(persons);
 
@@ -750,7 +750,7 @@ namespace PraticeManagement.Controls
                     else
                         foreach (Person person in persons)
                         {
-                            if (person.Status != null && person.Status.Id == (int)PersonStatusType.Active &&
+                            if (person.Status != null && (person.Status.Id == (int)PersonStatusType.Active || person.Status.Id == (int)PersonStatusType.TerminationPending) &&
                                 !person.LockedOut)
                                 control.Items.Add(new ListItem(
                                                       person.PersonLastFirstName,
@@ -932,7 +932,8 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    Person[] persons = serviceClient.PersonListShortByRoleAndStatus((int)DataTransferObjects.PersonStatusType.Active, DataTransferObjects.Constants.RoleNames.DirectorRoleName);
+                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
+                    Person[] persons = serviceClient.PersonListShortByRoleAndStatus(statusids, DataTransferObjects.Constants.RoleNames.DirectorRoleName);
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -964,7 +965,7 @@ namespace PraticeManagement.Controls
 
         private static Person[] GetActivePersons(Person[] persons)
         {
-            return persons.AsQueryable().Where(p => p.Status.Id == (int)PersonStatusType.Active).ToArray(); // Here Status.Id == 1 means only active person. (Not projected)
+            return persons.AsQueryable().Where(p => p.Status.Id == (int)PersonStatusType.Active || p.Status.Id == (int)PersonStatusType.TerminationPending).ToArray(); // Here Status.Id == 1 means only active person. (Not projected)
         }
         /// <summary>
         /// Fills the list control with the list of active salespersons.
@@ -1043,7 +1044,8 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    Person[] persons = serviceClient.OwnerListAllShort((int)DataTransferObjects.PersonStatusType.Active);
+                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
+                    Person[] persons = serviceClient.OwnerListAllShort(statusids);
 
                     FillListDefault(control, firstItemText, persons, false, "Id", "PersonLastFirstName");
                 }
@@ -1145,13 +1147,13 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillPersonListWithPersonFirstLastName(ListControl control, string firstItemText, string firstItemValue, int statusId)
+        public static void FillPersonListWithPersonFirstLastName(ListControl control, string firstItemText, string firstItemValue, string statusIds)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    Person[] persons = serviceClient.PersonListAllShort(null, statusId, DateTime.MinValue, DateTime.MinValue);
+                    Person[] persons = serviceClient.PersonListAllShort(null, statusIds, DateTime.MinValue, DateTime.MinValue);
                     control.Items.Clear();
                     if (!string.IsNullOrEmpty(firstItemText))
                     {
@@ -1468,6 +1470,33 @@ namespace PraticeManagement.Controls
                 try
                 {
                     var seniorities = serviceClient.ListSeniorities();
+
+                    FillListDefault(control, firstItemText, seniorities, firstItemText == null);
+                    if (firstItemText == null)
+                        control.SelectedIndex = control.Items.Count - 1;
+                    else
+                        control.SelectedIndex = 0;
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fills the list control with the list of person's seniorities.
+        /// </summary>
+        /// <param name="control">The control to be filled.</param>
+        public static void FillSenioritiesListOrderByName(ListControl control, string firstItemText = null)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var seniorities = serviceClient.ListSeniorities();
+                    seniorities = seniorities.OrderBy(p => p.Name).ToArray();
 
                     FillListDefault(control, firstItemText, seniorities, firstItemText == null);
                     if (firstItemText == null)
@@ -2192,7 +2221,8 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    Person[] persons = serviceClient.OwnerListAllShort((int)DataTransferObjects.PersonStatusType.Active);
+                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
+                    Person[] persons = serviceClient.OwnerListAllShort(statusids);
 
                     FillListDefault(ddlProjectManager, firstItemText, persons, false, "Id", "PersonLastFirstName");
                 }
@@ -2412,6 +2442,72 @@ namespace PraticeManagement.Controls
             //if there's no description, return the string value of the enum
             return enumerator.ToString();
         }
+
+        public static bool IsDateInPersonEmployeeHistory(Person person, DateTime date, bool checkWholeHistory, bool dontCheckActiveRecord = false)
+        {
+            bool check = false;
+            if (person != null)
+            {
+                if (person.EmploymentHistory != null)
+                {
+                    if (checkWholeHistory)
+                    {
+                        DateTime? activeHireDate = null;
+                        if (dontCheckActiveRecord && (person.Status.Id == (int)PersonStatusType.Active || person.Status.Id == (int)PersonStatusType.TerminationPending))
+                        {
+                            //person is active 
+                            activeHireDate = person.EmploymentHistory.Max(e => e.HireDate);
+                        }
+
+                        foreach (var emp in person.EmploymentHistory)
+                        {
+                            if (emp.HireDate <= date &&
+                                ((emp.TerminationDate.HasValue && emp.TerminationDate.Value >= date) || (!emp.TerminationDate.HasValue)))
+                            {
+                                if ((dontCheckActiveRecord && activeHireDate != emp.HireDate) || !dontCheckActiveRecord)
+                                {
+                                    check = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        check = person.HireDate <= date &&
+                                ((person.TerminationDate.HasValue && person.TerminationDate.Value >= date) || (!person.TerminationDate.HasValue));
+
+                    }
+                }
+            }
+
+            return check;
+        }
+
+        public static bool IsReadOnlyInPersonEmployeeHistory(Person person, DateTime[] dates)
+        {
+            bool check = true;
+            if (person != null && person.EmploymentHistory != null && (person.Status.Id == (int)PersonStatusType.Active || person.Status.Id == (int)PersonStatusType.TerminationPending))
+            {
+                //person is active 
+                int i = 0;
+                foreach (var date in dates)
+                {
+                    if (!DataHelper.IsDateInPersonEmployeeHistory(person, date, true, true))
+                    {
+                        i++;
+                    }
+                }
+                if (i == dates.Length)
+                {
+                    check = false;
+                }
+            }
+
+            return check;
+        }
+
     }
 }
+
 
