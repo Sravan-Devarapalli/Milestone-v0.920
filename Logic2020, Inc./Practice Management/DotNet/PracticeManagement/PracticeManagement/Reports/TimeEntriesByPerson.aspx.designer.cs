@@ -238,13 +238,13 @@ namespace PraticeManagement.Sandbox {
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePractices;
         
         /// <summary>
-        /// chbInactivePersons control.
+        /// chbTerminationPendingPersons control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbInactivePersons;
+        protected global::System.Web.UI.WebControls.CheckBox chbTerminationPendingPersons;
         
         /// <summary>
         /// hdnFiltersChanged control.
