@@ -85,7 +85,7 @@ AS
 					   FROM     dbo.PersonStatusHistory PTSH
 					   WHERE    PTSH.StartDate < @EndDateLocal
 								AND @StartDateLocal <  ISNULL(PTSH.EndDate,@FutureDate)
-								AND PTSH.PersonStatusId = 1 --ACTIVE STATUS
+								AND PTSH.PersonStatusId IN (1,5) --ACTIVE STATUS
 								
 					 ),
 				    PersonPayDuringSelectedRange
@@ -196,7 +196,7 @@ AS
 															@FutureDate)
 								AND ( CC.timeTypeId != @HolidayTimeType
 									  OR ( CC.timeTypeId = @HolidayTimeType
-										   AND PTSH.PersonStatusId = 1
+										   AND PTSH.PersonStatusId IN (1,5)
 										 )
 									)
 					  GROUP BY  TE.PersonId
