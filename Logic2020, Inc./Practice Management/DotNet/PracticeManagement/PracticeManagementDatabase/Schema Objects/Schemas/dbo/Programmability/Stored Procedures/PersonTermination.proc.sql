@@ -6,7 +6,8 @@
 CREATE PROCEDURE [dbo].[PersonTermination]
 (
 	@PersonId			INT,
-	@TerminationDate    DATETIME
+	@TerminationDate    DATETIME,
+	@PersonStatusId     INT
 )
 AS
 BEGIN
@@ -14,7 +15,7 @@ BEGIN
 		1.Delete time entries after termination date.
 		2.Adjust the person milestone end date with the given termination date.
 			if milestone person start date is greater than person termination date deleted the milestone person record
-		3.Set client director as project owner to the adjusted projects.
+		3.Set client director as project owner to the adjusted projects.(Note If person status is terminated perform this action else if person status termination pending/contigent(with termination date) dont perform it)
 		4.Close a current compensation for the terminated persons
 		5.Delete all the Compensation records later @TerminationDate
 		6.Delete all the Recursive records later @TerminationDate
@@ -58,7 +59,7 @@ BEGIN
 		  AND @TerminationDate < MPE.StartDate 
 	  
 	--3.Set client director as project owner to the projects for which the person is project owner.
-
+	
 	UPDATE Pro
 	SET Pro.ProjectOwnerId = Pro.DirectorId
 	FROM dbo.Project Pro 
@@ -66,6 +67,7 @@ BEGIN
 								AND Pro.ProjectOwnerId = P.PersonId
 								AND Pro.DirectorId IS NOT NULL
 								AND Pro.ProjectOwnerId != Pro.DirectorId
+	WHERE @PersonStatusId = 2 -- termination status
 
 
 	--4.Close a current compensation for the terminated persons
