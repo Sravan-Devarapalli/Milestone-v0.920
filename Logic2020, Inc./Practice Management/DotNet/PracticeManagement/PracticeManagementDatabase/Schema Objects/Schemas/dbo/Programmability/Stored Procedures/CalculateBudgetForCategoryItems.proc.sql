@@ -61,7 +61,8 @@ BEGIN
 			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDateLocal) 
 									AND C.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
 			LEFT JOIN dbo.PersonStatusHistory PSH 
-				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId =1  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
+				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5) -- ACTIVE And Terminated Pending
+				  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
 			LEFT JOIN dbo.aspnet_Users U ON P.Alias = U.UserName
 			LEFT JOIN dbo.aspnet_UsersRolesHistory  UIR
 			ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
@@ -73,7 +74,8 @@ BEGIN
 							AND MONTH(CIB.MonthStartDate) = MONTH(C.Date)
 								AND CIB.ItemId = P.PersonId 
 			WHERE (UR.RoleId IS NOT NULL OR Proj.ProjectId IS NOT NULL)
-				  AND (PSH.PersonStatusId = 1 OR (PSH.PersonId IS NULL AND Proj.ProjectId IS NOT NULL ))
+				  AND (PSH.PersonStatusId IN (1,5) -- ACTIVE And Terminated Pending
+				   OR (PSH.PersonId IS NULL AND Proj.ProjectId IS NOT NULL ))
 			GROUP BY P.PersonId,
 					 P.LastName,
 					 P.FirstName,
@@ -256,7 +258,8 @@ BEGIN
 			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDateLocal) 
 									AND C.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
 			LEFT JOIN dbo.PersonStatusHistory PSH 
-				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId =1  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
+				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5) -- ACTIVE And Terminated Pending
+				  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
 			LEFT JOIN dbo.aspnet_Users U ON P.Alias = U.UserName
 			LEFT JOIN dbo.aspnet_UsersRolesHistory  UIR
 			ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
