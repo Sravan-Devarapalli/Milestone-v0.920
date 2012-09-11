@@ -13,6 +13,7 @@ AS
 	       p.SeniorityId,
 	       m.ProjectId,
 	       m.ProjectName,
+		   m.ProjectNumber,
 	       m.ProjectStartDate,
 	       m.ProjectEndDate,
 	       m.Discount,
