@@ -20,7 +20,7 @@ BEGIN
 		JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate, @FutureDate) 
 								AND YEAR(C.Date) = @Year
 		LEFT JOIN dbo.PersonStatusHistory PSH 
-			ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId =1  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
+			ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5)  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
 		LEFT JOIN dbo.aspnet_Users U ON P.Alias = U.UserName
 		LEFT JOIN dbo.aspnet_UsersRolesHistory  UIR
 		ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
@@ -54,7 +54,7 @@ BEGIN
 		JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate, @FutureDate) 
 								AND YEAR(C.Date) = @Year
 		LEFT JOIN dbo.PersonStatusHistory PSH 
-			ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId =1  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
+			ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5)  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
 		LEFT JOIN dbo.aspnet_Users U ON P.Alias = U.UserName
 		LEFT JOIN dbo.aspnet_UsersRolesHistory  UIR
 		ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
