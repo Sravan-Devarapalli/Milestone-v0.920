@@ -19,7 +19,7 @@ BEGIN
 	ON u.UserId = uir.UserId
 	LEFT JOIN dbo.aspnet_Roles ur
 	ON ur.RoleId = uir.RoleId
-	WHERE (p.PersonStatusId IN (SELECT ResultId FROM @PersonStatusIds) OR @PersonStatusIdsList IS NULL)
+	WHERE (p.PersonStatusId IN (SELECT ID FROM @PersonStatusIds) OR @PersonStatusIdsList IS NULL)
 			AND (ur.RoleName = @RoleName OR @RoleName IS NULL)
 	ORDER BY LastName, FirstName
 END
