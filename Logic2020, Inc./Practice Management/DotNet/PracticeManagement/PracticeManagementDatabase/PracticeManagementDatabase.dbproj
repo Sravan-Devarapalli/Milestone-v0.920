@@ -4093,6 +4093,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\OnPersonHireDateChange.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\AdjustTimeEntriesForTerminationDateChanged.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
