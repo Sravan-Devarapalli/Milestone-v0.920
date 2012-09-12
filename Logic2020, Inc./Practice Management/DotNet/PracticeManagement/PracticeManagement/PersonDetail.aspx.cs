@@ -381,7 +381,13 @@ namespace PraticeManagement
 
             if (PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Terminated || (PrevPersonStatusId == (int)PersonStatusType.Contingent && dtpTerminationDate.DateValue == DateTime.MinValue))
             {
-                if (PrevPersonStatusId != (int)PersonStatusType.Terminated)
+                if (PrevPersonStatusId != (int)PersonStatusType.Terminated && IsStatusChangeClicked && PersonStatusId == PersonStatusType.Terminated)
+                {
+                    ddlTerminationReason.Visible = true;
+                    txtTerminationReason.Visible = false;
+                    ddlTerminationReason.Enabled = false;
+                }
+                else if (PrevPersonStatusId != (int)PersonStatusType.Terminated)
                 {
                     //FillTerminationReasonsByTerminationDate(null, ddlTerminationReason);
                     ddlTerminationReason.Visible = false;
@@ -638,10 +644,16 @@ namespace PraticeManagement
                 }
                 if (Page.IsValid && IsStatusChangeClicked)
                 {
-                    lblPersonStatus.Text = PopupStatus.Value.ToString();
+                    PersonStatusId = PopupStatus.Value;
+                    lblPersonStatus.Text = DataHelper.GetDescription(PopupStatus.Value);
                     dtpHireDate.DateValue = HireDate.Value;
                     dtpTerminationDate.TextValue = TerminationDate.HasValue? TerminationDate.Value.ToShortDateString() : string.Empty;
-                    ddlTerminationReason.SelectedValue = TerminationReasonId;
+                    if (TerminationDate.HasValue)
+                    {
+                        ddlTerminationReason.Visible = true;
+                        txtTerminationReason.Visible = false;
+                        ddlTerminationReason.SelectedValue = TerminationReasonId;
+                    }
                     AddTriggersToUpdatePanel(IsStatusChangeClicked);
                     Save_Click(source, args);
                 }
