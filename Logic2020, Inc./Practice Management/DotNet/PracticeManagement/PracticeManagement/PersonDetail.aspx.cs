@@ -48,9 +48,11 @@ namespace PraticeManagement
         private const string CloseAnActiveCompensation = "This person still has an active compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
         private const string CloseAnOpenEndedCompensation = "This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
         private const string HireDateChangeMessage = "This person has compensation record(s) before/after the new hire date. Click OK to adjust the compensation record to reflect the new hire date, or click Cancel to exit without saving changes.";
+        private const string ReHireMessage = "On switching contractor status from 1099 Hourly or 1099 POR to W2-Hourly or W2-Salary he/she will be terminated on the end date of the latest compensation record and will be considered as Re-Hired from the start date of new compensation record. Click ok to continue or click cancel to exit without saving changes.";
         private const string CancelTerminationMessage = "Following are the list of projects in which {0} resource's end date(s)  were set to his/her previous termination date automatically. Please reset the end dates for {0} in the below listed 'Projects-Milestones' if applicable.";
         private const string displayNone = "displayNone";
         private const string SalaryToContractException = "Salary Type to Contract Type Violation";
+        private const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\"";
 
         #endregion
 
@@ -340,6 +342,22 @@ namespace PraticeManagement
             }
         }
 
+        private bool IsRehire
+        {
+            get
+            {
+                if (ViewState["View_IsRehire"] == null)
+                {
+                    ViewState["View_IsRehire"] = false;
+                }
+                return (bool)ViewState["View_IsRehire"];
+            }
+            set
+            {
+                ViewState["View_IsRehire"] = value;
+            }
+        }
+
         #endregion
 
         #region Page Events
@@ -505,6 +523,43 @@ namespace PraticeManagement
             mpeHireDateChange.Hide();
         }
 
+        protected void btnRehireConfirmationOk_Click(object sender, EventArgs e)
+        {
+            cvRehireConfirmation.Enabled = false;
+            mpeRehireConfirmation.Hide();
+            IsRehire = true;
+            DisableValidatecustTerminateDateTE = false;
+            GridViewRow gvRow = null;
+            if (gvCompensationHistory.EditIndex != -1)
+            {
+                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+            }
+            else
+            {
+                if (gvCompensationHistory.ShowFooter)
+                {
+                    gvRow = gvCompensationHistory.FooterRow;
+                }
+            }
+            if (gvRow != null)
+            {
+                var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                imgUpdateCompensation_OnClick((Object)imgUpdate, new EventArgs());
+            }
+        }
+
+        protected void btnRehireConfirmationCancel_Click(object source, EventArgs args)
+        {
+            ResetToPreviousData();
+            cvRehireConfirmation.Enabled = true;
+            gvCompensationHistory.EditIndex = -1;
+            gvCompensationHistory.ShowFooter = false;
+            gvCompensationHistory.DataSource = PayHistory;
+            gvCompensationHistory.DataBind();
+            mpeRehireConfirmation.Hide();
+        }
+
+
         protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
             if (dtpTerminationDate.DateValue != DateTime.MinValue && PreviousTerminationDate.HasValue && PreviousTerminationDate.Value != GetDate(dtpTerminationDate.DateValue).Value)
@@ -647,7 +702,7 @@ namespace PraticeManagement
                     PersonStatusId = PopupStatus.Value;
                     lblPersonStatus.Text = DataHelper.GetDescription(PopupStatus.Value);
                     dtpHireDate.DateValue = HireDate.Value;
-                    dtpTerminationDate.TextValue = TerminationDate.HasValue? TerminationDate.Value.ToShortDateString() : string.Empty;
+                    dtpTerminationDate.TextValue = TerminationDate.HasValue ? TerminationDate.Value.ToShortDateString() : string.Empty;
                     if (TerminationDate.HasValue)
                     {
                         ddlTerminationReason.Visible = true;
@@ -1703,7 +1758,6 @@ namespace PraticeManagement
                 milestonesAfterTerminationDate.AddRange(ServiceCallers.Custom.Person(p => p.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, terminationDate)));
                 if (milestonesAfterTerminationDate.Any<Milestone>())
                 {
-                    //this.lblProjectMilestomesExist.Text = string.Format(lblProjectMilestomesExistFormat, person.Name, terminationDate.Value.ToString("MM/dd/yyy"));
                     this.dtlCancelProjectMilestones.DataSource = milestonesAfterTerminationDate;
                     this.dtlCancelProjectMilestones.DataBind();
                     custCancelTermination.Text = string.Format(CancelTerminationMessage, txtLastName.Text + ", " + txtFirstName.Text);
@@ -1995,6 +2049,93 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvRehireConfirmation_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            var validator = ((CustomValidator)sender);
+            var payHistory = PayHistory;
+            if (payHistory != null && payHistory.Any(p => p.StartDate >= HireDate))
+            {
+                payHistory = payHistory.OrderBy(p => p.StartDate).ToList();
+                PopulateUnCommitedPay(payHistory);
+                Pay firstPay = payHistory.Where(p => p.StartDate >= HireDate).FirstOrDefault();
+                if (firstPay.Timescale == TimescaleType.PercRevenue || firstPay.Timescale == TimescaleType._1099Ctc)
+                {
+                    if (payHistory.Any(p => p.StartDate > firstPay.StartDate && p.StartDate <= DateTime.Now.Date && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly)))
+                    {
+                        e.IsValid = false;
+                    }
+                }
+            }
+
+            if (!e.IsValid)
+            {
+                validator.ErrorMessage = ReHireMessage;
+                mpeRehireConfirmation.Show();
+            }
+
+            validator.Text = validator.ToolTip = validator.ErrorMessage;
+        }
+
+        private void PopulateUnCommitedPay(List<Pay> payHistory)
+        {
+            Pay pay = null;
+            GridViewRow gvRow = null;
+            if (gvCompensationHistory.EditIndex != -1)
+            {
+                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+            }
+            else
+            {
+                if (gvCompensationHistory.ShowFooter)
+                {
+                    gvRow = gvCompensationHistory.FooterRow;
+                }
+            }
+            if (gvRow != null)
+            {
+                pay = new Pay();
+
+                DateTime startDate;
+                var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
+                var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
+                var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+                var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
+
+                pay.StartDate = dpStartDate.DateValue;
+                pay.EndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue.AddDays(1) : null;
+
+                if (ddlBasis.SelectedIndex == 0)
+                {
+                    pay.Timescale = TimescaleType.Salary;
+                }
+                else if (ddlBasis.SelectedIndex == 1)
+                {
+                    pay.Timescale = TimescaleType.Hourly;
+                }
+                else if (ddlBasis.SelectedIndex == 2)
+                {
+                    pay.Timescale = TimescaleType._1099Ctc;
+                }
+                else
+                {
+                    pay.Timescale = TimescaleType.PercRevenue;
+                }
+                var index = 0;
+                if (operation == "Update")
+                {
+                    startDate = Convert.ToDateTime(imgUpdate.Attributes["StartDate"]);
+                    index = PayHistory.FindIndex(p => p.StartDate.Date == startDate);
+                    payHistory[index] = pay;
+                }
+                else
+                {
+                    payHistory.Add(pay);
+                }
+            }
+        }
+
         #endregion
 
         #region Commissions
@@ -2041,7 +2182,23 @@ namespace PraticeManagement
 
         protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            DateTime? terminationDate = TerminationDate;// (this.dtpTerminationDate.DateValue != DateTime.MinValue) ? new DateTime?(this.dtpTerminationDate.DateValue) : null;
+            Pay latestPay = null;
+            var payHistory = PayHistory;
+            if (payHistory != null && payHistory.Any(p => p.StartDate >= HireDate))
+            {
+                payHistory = payHistory.OrderBy(p => p.StartDate).ToList();
+                PopulateUnCommitedPay(payHistory);
+                Pay firstPay = payHistory.Where(p => p.StartDate >= HireDate).FirstOrDefault();
+                if (firstPay.Timescale == TimescaleType.PercRevenue || firstPay.Timescale == TimescaleType._1099Ctc)
+                {
+                    if (payHistory.Any(p => p.StartDate > firstPay.StartDate && p.StartDate <= DateTime.Now.Date && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly)))
+                    {
+                        latestPay = payHistory.Where(p => p.StartDate >= firstPay.StartDate && p.StartDate < DateTime.Today && (p.Timescale == TimescaleType.PercRevenue || p.Timescale == TimescaleType._1099Ctc)).LastOrDefault();
+                    }
+                }
+            }
+            DateTime? terminationDate = !IsRehire ? TerminationDate : (latestPay != null && latestPay.EndDate.HasValue ? (DateTime?)latestPay.EndDate.Value.AddDays(-1) : null);
+
             bool TEsExistsAfterTerminationDate = false;
             List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
             List<Project> ownerProjects = new List<Project>();
@@ -2130,6 +2287,7 @@ namespace PraticeManagement
         protected void btnTerminationProcessCancel_OnClick(object source, EventArgs args)
         {
             ResetToPreviousData();
+            cvRehireConfirmation.Enabled = true;
             mpeViewTerminationDateErrors.Hide();
         }
 
@@ -2137,7 +2295,30 @@ namespace PraticeManagement
         {
             DisableValidatecustTerminateDateTE = true;
             cvEndCompensation.Enabled = false;
-            Save_Click(source, args);
+            if (!IsRehire)
+            {
+                Save_Click(source, args);
+            }
+            else
+            {
+                GridViewRow gvRow = null;
+                if (gvCompensationHistory.EditIndex != -1)
+                {
+                    gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+                }
+                else
+                {
+                    if (gvCompensationHistory.ShowFooter)
+                    {
+                        gvRow = gvCompensationHistory.FooterRow;
+                    }
+                }
+                if (gvRow != null)
+                {
+                    var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                    imgUpdateCompensation_OnClick((Object)imgUpdate, new EventArgs());
+                }
+            }
             mpeViewTerminationDateErrors.Hide();
         }
 
@@ -2345,6 +2526,18 @@ namespace PraticeManagement
                 txtVacationDays.Enabled = true;
             }
             Page.Validate(valSumCompensation.ValidationGroup);
+
+            if (cvRehireConfirmation.Enabled)
+            {
+                cvRehireConfirmation.Validate();
+                DisableValidatecustTerminateDateTE = true;
+            }
+            if (!DisableValidatecustTerminateDateTE)
+            {
+                custTerminateDateTE.Enabled = true;
+                custTerminateDateTE.Validate();
+            }
+
             if (Page.IsValid)
             {
                 var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
@@ -2461,6 +2654,8 @@ namespace PraticeManagement
             mlConfirmation.ClearMessage();
             if (validateAndSave(sender, e))
             {
+                IsRehire = false;
+                cvRehireConfirmation.Enabled = true;
                 ImageButton imgUpdate = sender as ImageButton;
                 GridViewRow gvRow = imgUpdate.NamingContainer as GridViewRow;
                 var _gvCompensationHistory = gvRow.NamingContainer as GridView;
@@ -2566,3 +2761,4 @@ namespace PraticeManagement
 
     }
 }
+
