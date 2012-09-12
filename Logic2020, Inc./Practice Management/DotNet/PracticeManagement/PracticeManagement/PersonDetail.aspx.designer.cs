@@ -787,6 +787,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Localize locRolesLabel;
         
         /// <summary>
+        /// custRoles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custRoles;
+        
+        /// <summary>
         /// valRecruterRole control.
         /// </summary>
         /// <remarks>
@@ -796,13 +805,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator valRecruterRole;
         
         /// <summary>
-        /// cvRoles control.
+        /// cvRolesActiveStatus control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvRoles;
+        protected global::System.Web.UI.WebControls.CustomValidator cvRolesActiveStatus;
         
         /// <summary>
         /// chblRoles control.
@@ -1271,6 +1280,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valSumCompensation;
+        
+        /// <summary>
+        /// ValSumSalaryToContractVoilation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValSumSalaryToContractVoilation;
         
         /// <summary>
         /// mlConfirmation control.
