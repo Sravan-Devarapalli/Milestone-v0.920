@@ -43,6 +43,7 @@ AS
 	, @TempEndDate DATETIME
 	, @FutureDate	DATETIME
 	, @HoursPerYear	DECIMAL
+	, @FirstCompensationStartDate DATETIME
 
  
 	
@@ -64,7 +65,6 @@ AS
 		RAISERROR (@ErrorMessage, 16, 1)
 		RETURN
 	END
-
 	SELECT @EndDate = ISNULL(@EndDate, @FutureDate)
 	SELECT @OLD_EndDate = ISNULL(@OLD_EndDate, @FutureDate)
 
@@ -396,6 +396,102 @@ AS
 		INNER JOIN dbo.TimeEntry TE ON TE.PersonId = p.Person AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = C.Date
 		LEFT JOIN dbo.TimeEntryHours TEH ON  TEH.TimeEntryId = TE.TimeEntryId						   
 		WHERE TEH.TimeEntryId IS NULL
+
+
+		/*
+		Rehire Logic
+		1.Need to check weather  the first compensation is contract or not
+		2.If Yes Check weather the person has any compensation start date as salary type after the contract type before today(i.e. not the future compensation)
+		3.If Yes Terminate the person with latest compensation start date with contract type. And
+		4.Re-hire the person with hire date as salary type compensation start date.
+		*/
+
+		DECLARE @TerminationReasonId INT,@HireDate DATETIME,@PreviousTerminationDate DATETIME,@FirstSalaryCompensationStartDate DATETIME
+		SELECT @TerminationReasonId = TR.TerminationReasonId FROM dbo.TerminationReasons TR WHERE TR.TerminationReason = 'Voluntary - 1099 Contract Ended'
+		SELECT @PreviousTerminationDate = TerminationDate FROM dbo.Person AS P WHERE P.PersonId = @PersonId
+
+		SELECT @FirstCompensationStartDate = MIN(pay.StartDate)
+		FROM dbo.Pay pay WITH(NOLOCK)
+		INNER JOIN dbo.Person P ON pay.person = P.personid AND pay.Person = @PersonId
+		WHERE pay.StartDate >= P.HireDate
+
+		--Constraint Violation "Salary Type to Contract Type Violation" 
+		SELECT @FirstSalaryCompensationStartDate = MIN(pay.StartDate)
+		FROM dbo.Pay pay WITH(NOLOCK)
+		INNER JOIN dbo.Person P ON pay.person = P.personid AND pay.Person = @PersonId 
+		INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale AND T.IsContractType = 0
+		WHERE pay.StartDate >= P.HireDate
+
+		--Check weather the person has any compensation start date as contract type after the First salary type
+		IF EXISTS (SELECT 1
+					FROM dbo.Pay pay 
+					INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+					WHERE pay.Person = @PersonId AND pay.StartDate > @FirstSalaryCompensationStartDate AND T.IsContractType = 1
+					)
+		BEGIN
+			SELECT  @ErrorMessage = 'Salary Type to Contract Type Violation'
+			RAISERROR (@ErrorMessage, 16, 1)
+			RETURN
+		END
+		
+		--1.Need to check weather  the first compensation is contract or not
+		IF EXISTS (SELECT 1
+					FROM dbo.Pay pay WITH(NOLOCK)
+					INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+					WHERE pay.Person = @PersonId AND @FirstCompensationStartDate = pay.StartDate AND T.IsContractType = 1
+				  )
+		BEGIN
+		--2.If Yes Check weather the person has any compensation start date as salary type after the contract type before today(i.e. not the future compensation)
+			IF EXISTS (SELECT 1
+						FROM dbo.Pay pay WITH(NOLOCK)
+						INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+						WHERE pay.Person = @PersonId AND pay.StartDate > @FirstCompensationStartDate AND T.IsContractType = 0 AND pay.StartDate <= @Today
+					  )
+			BEGIN
+				
+		--3.If Yes Terminate the person with latest compensation end date  with contract type.
+				SELECT @TerminationDate = MAX(pay.EndDate) -1 
+				FROM dbo.Pay pay WITH(NOLOCK)
+				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+				WHERE pay.Person = @PersonId AND @FirstCompensationStartDate = pay.StartDate AND T.IsContractType = 1 AND pay.StartDate < @Today
+				
+				EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1 -- terminating the person
+
+				UPDATE dbo.Person
+					SET TerminationDate = @TerminationDate,
+						PersonStatusId = 2,
+						SeniorityId = @SeniorityId,
+						PracticeOwnedId = @PracticeId,
+						TerminationReasonId = @TerminationReasonId
+					WHERE PersonId = @PersonId
+
+				EXEC dbo.PersonStatusHistoryUpdate
+					@PersonId = @PersonId,
+					@PersonStatusId = 2
+
+				EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @PreviousTerminationDate,@UserLogin = @UserLogin	
+
+		--4.Re-hire the person with hire date as salary type compensation start date.
+				SELECT @HireDate = MIN(pay.StartDate)
+				FROM dbo.Pay pay WITH(NOLOCK)
+				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+				WHERE pay.Person = @PersonId AND @FirstCompensationStartDate <= pay.StartDate AND T.IsContractType = 0 AND pay.StartDate < @Today
+
+				UPDATE dbo.Person
+					SET HireDate = ISNULL(@HireDate,@StartDate),
+						TerminationDate = NULL,
+						PersonStatusId = 1,
+						TerminationReasonId = NULL
+					WHERE PersonId = @PersonId
+
+				EXEC dbo.PersonStatusHistoryUpdate
+					@PersonId = @PersonId,
+					@PersonStatusId = 1
+
+				EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @TerminationDate,@UserLogin = @UserLogin	
+
+			END			
+		END
 
 	COMMIT TRAN Tran_PaySave
 	END TRY
