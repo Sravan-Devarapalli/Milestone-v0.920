@@ -7,7 +7,8 @@ CREATE PROCEDURE [dbo].[PersonTermination]
 (
 	@PersonId			INT,
 	@TerminationDate    DATETIME,
-	@PersonStatusId     INT
+	@PersonStatusId     INT,
+	@FromPaySaveSproc	BIT = 0
 )
 AS
 BEGIN
@@ -74,11 +75,11 @@ BEGIN
 	UPDATE dbo.Pay
 		SET EndDate = @TerminationDate + 1
 		WHERE Person = @PersonId AND EndDate > @TerminationDate + 1
-			AND StartDate < @TerminationDate + 1
+			AND StartDate < @TerminationDate + 1 AND @FromPaySaveSproc = 0
 
 	--5.Delete all the Compensation records later @TerminationDate
 	DELETE FROM dbo.Pay
-	WHERE Person = @PersonId AND StartDate >= @TerminationDate + 1
+	WHERE Person = @PersonId AND StartDate >= @TerminationDate + 1 AND @FromPaySaveSproc = 0
 						
 
 	--6.Delete all the Recursive records later @TerminationDate
