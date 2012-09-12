@@ -1900,6 +1900,8 @@ namespace PraticeManagement
         
         protected void cvHireDateChange_ServerValidate(object sender, ServerValidateEventArgs e)
         {
+            DateTime? terminationDate = IsStatusChangeClicked ? PreviousTerminationDate : TerminationDateBeforeCurrentHireDate;
+
             var validator = ((CustomValidator)sender);
             e.IsValid = true;
             if (PreviousHireDate.HasValue && HireDate != PreviousHireDate && PayHistory != null)
@@ -1907,8 +1909,8 @@ namespace PraticeManagement
                 if (PayHistory.Any(p => p.EndDate.HasValue && p.EndDate.Value.AddDays(-1).Date < HireDate.Value.Date
                                         &&
                                         (
-                                            (TerminationDateBeforeCurrentHireDate.HasValue && p.StartDate > TerminationDateBeforeCurrentHireDate.Value.Date)
-                                            || !TerminationDateBeforeCurrentHireDate.HasValue
+                                            (terminationDate.HasValue && p.StartDate > terminationDate.Value.Date)
+                                            || !terminationDate.HasValue
                                         )
                                 )
                     )
@@ -1916,8 +1918,8 @@ namespace PraticeManagement
                     e.IsValid = false;
                 }
                 Pay firstPay = PayHistory.OrderBy(p => p.StartDate).Where(p =>
-                                        (TerminationDateBeforeCurrentHireDate.HasValue && p.StartDate > TerminationDateBeforeCurrentHireDate.Value.Date)
-                                        || !TerminationDateBeforeCurrentHireDate.HasValue).FirstOrDefault();
+                                        (terminationDate.HasValue && p.StartDate > terminationDate.Value.Date)
+                                        || !terminationDate.HasValue).FirstOrDefault();
                 if (firstPay != null && firstPay.StartDate != HireDate)
                 {
                     e.IsValid = false;
