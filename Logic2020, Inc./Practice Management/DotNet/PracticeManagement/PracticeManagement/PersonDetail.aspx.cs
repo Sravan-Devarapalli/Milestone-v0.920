@@ -596,8 +596,7 @@ namespace PraticeManagement
                         }
                         else
                         {
-                            ddlTerminationReason.DataSource = ddlPopUpTerminationReason.Items;
-                            ddlTerminationReason.DataBind();
+                            FillTerminationReasonsByTerminationDate(dtpPopUpTerminateDate, ddlTerminationReason);
                         }
                         break;
                     case PersonStatusType.Contingent:
@@ -609,10 +608,6 @@ namespace PraticeManagement
                             divActive.Attributes["class"] = "displayNone";
                             divTerminate.Attributes["class"] = "displayNone";
                             mpeViewPersonChangeStatus.Show();
-                        }
-                        else
-                        {
-                            dtpHireDate.DateValue = dtpContingentHireDate.DateValue;
                         }
                         break;
                     case PersonStatusType.Active:
@@ -634,10 +629,6 @@ namespace PraticeManagement
 
                                 mpeViewPersonChangeStatus.Show();
                             }
-                            else
-                            {
-                                dtpHireDate.DateValue = dtpActiveHireDate.DateValue;
-                            }
                         }
                         break;
                     default:
@@ -648,8 +639,9 @@ namespace PraticeManagement
                 if (Page.IsValid && IsStatusChangeClicked)
                 {
                     lblPersonStatus.Text = PopupStatus.Value.ToString();
-                    dtpTerminationDate.DateValue = dtpPopUpTerminateDate.DateValue;
-                    ddlTerminationReason.SelectedIndex = ddlPopUpTerminationReason.SelectedIndex;
+                    dtpHireDate.DateValue = HireDate.Value;
+                    dtpTerminationDate.TextValue = TerminationDate.HasValue? TerminationDate.Value.ToShortDateString() : string.Empty;
+                    ddlTerminationReason.SelectedValue = TerminationReasonId;
                     AddTriggersToUpdatePanel(IsStatusChangeClicked);
                     Save_Click(source, args);
                 }
