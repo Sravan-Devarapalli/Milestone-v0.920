@@ -50,6 +50,7 @@ namespace PraticeManagement
         private const string HireDateChangeMessage = "This person has compensation record(s) before/after the new hire date. Click OK to adjust the compensation record to reflect the new hire date, or click Cancel to exit without saving changes.";
         private const string CancelTerminationMessage = "Following are the list of projects in which {0} resource's end date(s)  were set to his/her previous termination date automatically. Please reset the end dates for {0} in the below listed 'Projects-Milestones' if applicable.";
         private const string displayNone = "displayNone";
+        private const string SalaryToContractException = "Salary Type to Contract Type Violation";
 
         #endregion
 
@@ -1386,7 +1387,6 @@ namespace PraticeManagement
             PreviousTerminationDate = terminationDate;
         }
 
-
         #endregion
 
         /// <summary>
@@ -1742,6 +1742,17 @@ namespace PraticeManagement
             }
         }
 
+        // Any person who is projected should not have any roles checked.  
+        // User should  uncheck their roles to save the record.
+        protected void custRoles_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Contingent)
+            {
+                // Roles
+                args.IsValid = !chblRoles.Items.Cast<ListItem>().Any(item => item.Selected);
+            }
+        }
+
         protected void cvRolesActiveStatus_ServerValidate(object source, ServerValidateEventArgs args)
         {
             if (PersonStatusId.HasValue && PersonStatusId == PersonStatusType.Active)
@@ -1897,7 +1908,7 @@ namespace PraticeManagement
                 DisableValidatecustTerminateDateTE = !e.IsValid;
             }
         }
-        
+
         protected void cvHireDateChange_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             DateTime? terminationDate = IsStatusChangeClicked ? PreviousTerminationDate : TerminationDateBeforeCurrentHireDate;
@@ -1933,7 +1944,7 @@ namespace PraticeManagement
                 validator.Text = validator.ToolTip = validator.ErrorMessage;
             }
         }
-        
+
         #endregion
 
         #region Commissions
@@ -2168,7 +2179,7 @@ namespace PraticeManagement
                 var imgCopy = e.Row.FindControl("imgCopy") as Image;
                 var imgEditCompensation = e.Row.FindControl("imgEditCompensation") as Image;
                 var imgCompensationDelete = e.Row.FindControl("imgCompensationDelete") as Image;
-                var isVisible = (pay.EndDate.HasValue) ? !(pay.EndDate.Value.AddDays(-1) < dtpHireDate.DateValue) : true;
+                var isVisible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < dtpHireDate.DateValue) || (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Terminated)) : true;
 
                 imgCopy.Visible = isVisible;
 
@@ -2362,14 +2373,25 @@ namespace PraticeManagement
                     {
                         internalException = ex.Detail;
                         serviceClient.Abort();
-                        Logging.LogErrorMessage(
-                            ex.Message,
-                            ex.Source,
-                            internalException.InnerException != null ? internalException.InnerException.Message : string.Empty,
-                            string.Empty,
-                            HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
-                            string.Empty,
-                            Thread.CurrentPrincipal.Identity.Name);
+                        string exceptionMessage = internalException.InnerException != null ? internalException.InnerException.Message : string.Empty;
+                        if (exceptionMessage == SalaryToContractException)
+                        {
+                            var row = ((ImageButton)sender).NamingContainer;
+                            CustomValidator cVSalaryToContractVoilation = row.FindControl("cvSalaryToContractVoilation") as CustomValidator;
+                            if (cVSalaryToContractVoilation != null)
+                                cVSalaryToContractVoilation.IsValid = false;
+                        }
+                        else
+                        {
+                            Logging.LogErrorMessage(
+                                ex.Message,
+                                ex.Source,
+                                internalException.InnerException != null ? internalException.InnerException.Message : string.Empty,
+                                string.Empty,
+                                HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                                string.Empty,
+                                Thread.CurrentPrincipal.Identity.Name);
+                        }
                         resultreturn = false;
                     }
                 }
