@@ -453,9 +453,13 @@ AS
 				SELECT @TerminationDate = MAX(pay.EndDate) -1 
 				FROM dbo.Pay pay WITH(NOLOCK)
 				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
-				WHERE pay.Person = @PersonId AND pay.StartDate > @FirstCompensationStartDate AND T.IsContractType = 1 AND pay.StartDate < @Today
+				WHERE pay.Person = @PersonId AND pay.StartDate >= @FirstCompensationStartDate AND T.IsContractType = 1 AND pay.StartDate < @Today
 				
 				EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1 -- terminating the person
+
+				
+				-- Ensure the temporary table exists
+				EXEC SessionLogPrepare @UserLogin = @UserLogin
 
 				UPDATE dbo.Person
 					SET TerminationDate = @TerminationDate,
@@ -476,6 +480,10 @@ AS
 				FROM dbo.Pay pay WITH(NOLOCK)
 				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
 				WHERE pay.Person = @PersonId AND @FirstCompensationStartDate <= pay.StartDate AND T.IsContractType = 0 AND pay.StartDate < @Today
+
+				
+				-- Ensure the temporary table exists
+				EXEC SessionLogPrepare @UserLogin = @UserLogin
 
 				UPDATE dbo.Person
 					SET HireDate = ISNULL(@HireDate,@StartDate),
