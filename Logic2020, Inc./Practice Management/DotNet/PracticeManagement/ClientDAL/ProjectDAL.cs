@@ -2515,12 +2515,13 @@ namespace DataAccess
             {
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
-
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
                 while (reader.Read())
                 {
                     var Project = new Project();
                     Project.Id = reader.GetInt32(projectIdIndex);
                     Project.Name = reader.GetString(projectNameIndex);
+                    Project.ProjectNumber = reader.GetString(projectNumberIndex);
                     result.Add(Project);
                 }
             }
