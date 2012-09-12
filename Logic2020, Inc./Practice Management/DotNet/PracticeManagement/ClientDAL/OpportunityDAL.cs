@@ -1125,13 +1125,15 @@ namespace DataAccess
             if (reader.HasRows)
             {
                 int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
-                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityName);
+                int opportunityNameIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityName);
+                int OpportunityNumberIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityNumberColumn);
 
                 while (reader.Read())
                 {
                     var opportunity = new Opportunity();
                     opportunity.Id = reader.GetInt32(opportunityIdIndex);
-                    opportunity.Name = reader.GetString(projectNameIndex);
+                    opportunity.Name = reader.GetString(opportunityNameIndex);
+                    opportunity.OpportunityNumber = reader.GetString(OpportunityNumberIndex);
                     result.Add(opportunity);
                 }
             }
