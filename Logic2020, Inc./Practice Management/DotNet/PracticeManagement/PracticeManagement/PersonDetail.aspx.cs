@@ -353,6 +353,7 @@ namespace PraticeManagement
                 DataHelper.FillPersonDivisionList(ddlDivision);
                 txtFirstName.Focus();
                 UserIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
+                AddTriggersToUpdatePanel(false);
             }
 
             AllowContinueWithoutSave = cellActivityLog.Visible = PersonId.HasValue;
@@ -593,6 +594,11 @@ namespace PraticeManagement
                             divContingent.Attributes["class"] = "displayNone";
                             mpeViewPersonChangeStatus.Show();
                         }
+                        else
+                        {
+                            ddlTerminationReason.DataSource = ddlPopUpTerminationReason.Items;
+                            ddlTerminationReason.DataBind();
+                        }
                         break;
                     case PersonStatusType.Contingent:
                         //change employee status to contingent.
@@ -603,6 +609,10 @@ namespace PraticeManagement
                             divActive.Attributes["class"] = "displayNone";
                             divTerminate.Attributes["class"] = "displayNone";
                             mpeViewPersonChangeStatus.Show();
+                        }
+                        else
+                        {
+                            dtpHireDate.DateValue = dtpContingentHireDate.DateValue;
                         }
                         break;
                     case PersonStatusType.Active:
@@ -624,6 +634,10 @@ namespace PraticeManagement
 
                                 mpeViewPersonChangeStatus.Show();
                             }
+                            else
+                            {
+                                dtpHireDate.DateValue = dtpActiveHireDate.DateValue;
+                            }
                         }
                         break;
                     default:
@@ -633,6 +647,10 @@ namespace PraticeManagement
                 }
                 if (Page.IsValid && IsStatusChangeClicked)
                 {
+                    lblPersonStatus.Text = PopupStatus.Value.ToString();
+                    dtpTerminationDate.DateValue = dtpPopUpTerminateDate.DateValue;
+                    ddlTerminationReason.SelectedIndex = ddlPopUpTerminationReason.SelectedIndex;
+                    AddTriggersToUpdatePanel(IsStatusChangeClicked);
                     Save_Click(source, args);
                 }
             }
@@ -676,6 +694,34 @@ namespace PraticeManagement
             HttpContext.Current.Response.WriteFile(Request.PhysicalApplicationPath + @"\" + filename + ".pdf");
         }
 
+        private void AddTriggersToUpdatePanel(bool addPostBackTrigger)
+        {
+            //if (upnlBody.Triggers.Count > 3)
+            //{
+            //    upnlBody.Triggers.RemoveAt(3);
+            //    upnlBody.Triggers.RemoveAt(3);
+            //    upnlBody.Triggers.RemoveAt(3);
+            //}
+            //if (addPostBackTrigger)
+            //{
+            //    var trBtnsave = new PostBackTrigger { ControlID = "btnSave" };
+            //    var trBntEndCompensationOk = new PostBackTrigger { ControlID = "bntEndCompensationOk" };
+            //    var trBtnTerminationProcessOk = new PostBackTrigger { ControlID = "btnTerminationProcessOK" };
+            //    upnlBody.Triggers.Add(trBtnsave);
+            //    upnlBody.Triggers.Add(trBntEndCompensationOk);
+            //    upnlBody.Triggers.Add(trBtnTerminationProcessOk);
+            //}
+            //else
+            //{
+            //    var trBtnsave = new AsyncPostBackTrigger { ControlID = "btnSave", EventName = "click" };
+            //    var trBntEndCompensationOk = new AsyncPostBackTrigger { ControlID = "bntEndCompensationOk", EventName = "click" };
+            //    var trBtnTerminationProcessOk = new AsyncPostBackTrigger { ControlID = "btnTerminationProcessOK", EventName = "click" };
+            //    upnlBody.Triggers.Add(trBtnsave);
+            //    upnlBody.Triggers.Add(trBntEndCompensationOk);
+            //    upnlBody.Triggers.Add(trBtnTerminationProcessOk);
+            //}
+        }
+
         /// <summary>
         /// Saves the user's input.
         /// </summary>
@@ -684,7 +730,7 @@ namespace PraticeManagement
         protected void btnSave_Click(object sender, EventArgs e)
         {
             var updatePersonStatusDropdown = true;
-            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = true;
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = !IsStatusChangeClicked;
             custCancelTermination.Enabled = false;
             if (PreviousTerminationDate.HasValue && dtpTerminationDate.DateValue != DateTime.MinValue && PreviousTerminationDate.Value != GetDate(dtpTerminationDate.DateValue).Value)
             {
@@ -1046,11 +1092,11 @@ namespace PraticeManagement
                 if (description != null && !string.IsNullOrEmpty(description.Title))
                 {
                     permDiff.Add(new PermissionDiffeneceItem
-                                     {
-                                         Title = description.Title,
-                                         Old = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userNew, "GET"),
-                                         New = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userCurrent, "GET")
-                                     });
+                    {
+                        Title = description.Title,
+                        Old = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userNew, "GET"),
+                        New = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userCurrent, "GET")
+                    });
                 }
             }
 
@@ -1424,23 +1470,23 @@ namespace PraticeManagement
 
             // Filling the default commissions info
             var salesCommission = new DefaultCommission
-                                      {
-                                          TypeOfCommission = CommissionType.Sales,
-                                          FractionOfMargin =
-                                              chbSalesCommissions.Checked
-                                                  ? decimal.Parse(txtSalesCommissionsGross.Text)
-                                                  : -1
-                                      };
+            {
+                TypeOfCommission = CommissionType.Sales,
+                FractionOfMargin =
+                    chbSalesCommissions.Checked
+                        ? decimal.Parse(txtSalesCommissionsGross.Text)
+                        : -1
+            };
 
             var managementCommission = new DefaultCommission
-                                           {
-                                               TypeOfCommission = CommissionType.PracticeManagement,
-                                               FractionOfMargin =
-                                                   chbManagementCommissions.Checked
-                                                       ? decimal.Parse(txtManagementCommission.Text)
-                                                       : 0,
-                                               MarginTypeId = int.Parse(rlstManagementCommission.SelectedValue)
-                                           };
+            {
+                TypeOfCommission = CommissionType.PracticeManagement,
+                FractionOfMargin =
+                    chbManagementCommissions.Checked
+                        ? decimal.Parse(txtManagementCommission.Text)
+                        : 0,
+                MarginTypeId = int.Parse(rlstManagementCommission.SelectedValue)
+            };
 
             person.DefaultPersonCommissions = new List<DefaultCommission> { salesCommission, managementCommission };
 
@@ -1498,8 +1544,8 @@ namespace PraticeManagement
 
                     SavePersonsPermissions(person, serviceClient);
 
-                    IsDirty = false;
-                    IsStatusChangeClicked = false;
+                    IsDirty = IsStatusChangeClicked = false;
+                    AddTriggersToUpdatePanel(IsStatusChangeClicked);
 
                     return personId;
                 }
@@ -2516,4 +2562,3 @@ namespace PraticeManagement
 
     }
 }
-
