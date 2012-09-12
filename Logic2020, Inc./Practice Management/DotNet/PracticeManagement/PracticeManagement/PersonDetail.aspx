@@ -642,7 +642,8 @@
                                         Termination Date&nbsp;
                                     </td>
                                     <td class="Width158px padRight10Imp">
-                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged" EnabledTextBox="false" ReadOnly="true"/>
+                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged"
+                                            EnabledTextBox="false" ReadOnly="true" />
                                     </td>
                                     <td>
                                         <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
@@ -881,11 +882,15 @@
                                             <td class="Width60Px">
                                                 <strong>
                                                     <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
+                                                 <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                    ValidationGroup="Person" ErrorMessage="Any person who is contingent should not have any roles checked."
+                                                    OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is contingent should not have any roles checked."
+                                                    ValidateEmptyText="true"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="valRecruterRole" runat="server" Display="Dynamic" EnableClientScript="false"
                                                     ValidationGroup="Person" ErrorMessage="Person with Recruiter role should have recruiting commission."
                                                     OnServerValidate="valRecruterRole_OnServerValidate" SetFocusOnError="true" Text="*"
                                                     ToolTip="Person with Recruiter role should have recruiting commission." ValidateEmptyText="true" />
-                                                 <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
                                                     ValidationGroup="Person" ErrorMessage="Any person who is active should have atleast one role checked."
                                                     OnServerValidate="cvRolesActiveStatus_ServerValidate" SetFocusOnError="true"
                                                     Text="*" ToolTip="Any person who is active should have atleast one role checked."></asp:CustomValidator>
@@ -1209,6 +1214,8 @@
                                                         <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
                                                         <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="Salary Type to Contract Type Violation"
+                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="Salary Type to Contract Type Violation"></asp:CustomValidator>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
                                                     <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" onchange="return EnableDisableVacationDays(this);">
@@ -1217,6 +1224,8 @@
                                                         <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
                                                         <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="Salary Type to Contract Type Violation"
+                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="Salary Type to Contract Type Violation"></asp:CustomValidator>
                                                 </FooterTemplate>
                                                 <ItemStyle CssClass="Width8Percent" />
                                             </asp:TemplateField>
@@ -1568,6 +1577,8 @@
                             ValidationGroup="CompensationDelete" />
                         <asp:ValidationSummary ID="valSumCompensation" runat="server" EnableClientScript="false"
                             ValidationGroup="CompensationUpdate" />
+                        <asp:ValidationSummary ID="ValSumSalaryToContractVoilation" runat="server" EnableClientScript="false"
+                            ValidationGroup="SalaryToContractVoilation" />
                         <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
                             WarningColor="Orange" />
                     </td>
@@ -1830,12 +1841,9 @@
                     </tr>
                 </table>
             </asp:Panel>
-
-
             <asp:HiddenField ID="hdHireDateChange" runat="server" Value="change" />
-            <AjaxControlToolkit:ModalPopupExtender ID="mpeHireDateChange" runat="server"
-                TargetControlID="hdHireDateChange" PopupControlID="pnlHireDateChange"
-                BackgroundCssClass="modalBackground" DropShadow="false">
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeHireDateChange" runat="server" TargetControlID="hdHireDateChange"
+                PopupControlID="pnlHireDateChange" BackgroundCssClass="modalBackground" DropShadow="false">
             </AjaxControlToolkit:ModalPopupExtender>
             <asp:Panel ID="pnlHireDateChange" runat="server" Style="display: none;" CssClass="popUpAttrition">
                 <table>
@@ -1856,7 +1864,6 @@
                     </tr>
                 </table>
             </asp:Panel>
-
             <asp:HiddenField ID="hdpnlCancelTermination" runat="server" Value="" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCancelTermination" runat="server" TargetControlID="hdpnlCancelTermination"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlCancelTermination" DropShadow="false" />
