@@ -1916,8 +1916,8 @@
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
             <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" />
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
-            <asp:AsyncPostBackTrigger ControlID="bntEndCompensationOk" />
-            <asp:AsyncPostBackTrigger ControlID="btnTerminationProcessOK" />
+            <asp:PostBackTrigger ControlID="bntEndCompensationOk" />
+            <asp:PostBackTrigger ControlID="btnTerminationProcessOK" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
