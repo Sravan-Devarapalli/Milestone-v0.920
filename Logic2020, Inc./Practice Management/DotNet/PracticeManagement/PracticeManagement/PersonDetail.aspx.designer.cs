@@ -1894,6 +1894,60 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnHireDateChangeCancel;
         
         /// <summary>
+        /// hdRehireConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdRehireConfirmation;
+        
+        /// <summary>
+        /// mpeRehireConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeRehireConfirmation;
+        
+        /// <summary>
+        /// pnlRehireConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRehireConfirmation;
+        
+        /// <summary>
+        /// cvRehireConfirmation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvRehireConfirmation;
+        
+        /// <summary>
+        /// btnRehireConfirmationOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRehireConfirmationOk;
+        
+        /// <summary>
+        /// btnRehireConfirmationCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRehireConfirmationCancel;
+        
+        /// <summary>
         /// hdpnlCancelTermination control.
         /// </summary>
         /// <remarks>
