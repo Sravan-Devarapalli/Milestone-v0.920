@@ -531,9 +531,6 @@
                                             ErrorMessage="Only administrator can set a status to Active or Terminated." ToolTip="Only administrator can set a status to Active or Terminated."
                                             ValidationGroup="Person" Text="*" ValidateEmptyText="false" EnableClientScript="false"
                                             SetFocusOnError="true" Display="Dynamic" OnServerValidate="custPersonStatus_ServerValidate"></asp:CustomValidator>
-                                        <%--<asp:CustomValidator ID="cvInactiveStatus" runat="server" ErrorMessage="" ToolTip=""
-                                            Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
-                                            OnServerValidate="cvInactiveStatus_ServerValidate"></asp:CustomValidator>--%>
                                         &nbsp;
                                     </td>
                                 </tr>
@@ -882,7 +879,7 @@
                                             <td class="Width60Px">
                                                 <strong>
                                                     <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
-                                                 <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
                                                     ValidationGroup="Person" ErrorMessage="Any person who is contingent should not have any roles checked."
                                                     OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is contingent should not have any roles checked."
                                                     ValidateEmptyText="true"></asp:CustomValidator>
@@ -1214,8 +1211,8 @@
                                                         <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
                                                         <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
                                                     </asp:DropDownList>
-                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="Salary Type to Contract Type Violation"
-                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="Salary Type to Contract Type Violation"></asp:CustomValidator>
+                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
+                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
                                                 </EditItemTemplate>
                                                 <FooterTemplate>
                                                     <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" onchange="return EnableDisableVacationDays(this);">
@@ -1224,8 +1221,8 @@
                                                         <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
                                                         <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
                                                     </asp:DropDownList>
-                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="Salary Type to Contract Type Violation"
-                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="Salary Type to Contract Type Violation"></asp:CustomValidator>
+                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
+                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
                                                 </FooterTemplate>
                                                 <ItemStyle CssClass="Width8Percent" />
                                             </asp:TemplateField>
@@ -1637,7 +1634,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerProjects" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).Name) %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).ProjectNumber)+ " - "+HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).Name) %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1646,7 +1643,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).Name) %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).OpportunityNumber) + " - " + HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).Name) %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1864,6 +1861,30 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:HiddenField ID="hdRehireConfirmation" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeRehireConfirmation" runat="server"
+                TargetControlID="hdRehireConfirmation" PopupControlID="pnlRehireConfirmation"
+                BackgroundCssClass="modalBackground" DropShadow="false">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnlRehireConfirmation" runat="server" Style="display: none;" CssClass="popUpAttrition">
+                <table>
+                    <tr>
+                        <td>
+                            <asp:CustomValidator ID="cvRehireConfirmation" runat="server" Text="*" ErrorMessage=""
+                                ForeColor="Black" ToolTip="" OnServerValidate="cvRehireConfirmation_ServerValidate"
+                                ValidationGroup="RehireConfirmation" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="btnRehireConfirmationOk" runat="server" Text="Ok" OnClick="btnRehireConfirmationOk_Click"
+                                UseSubmitBehavior="false" />
+                            <asp:Button ID="btnRehireConfirmationCancel" runat="server" Text="Cancel" OnClick="btnRehireConfirmationCancel_Click"
+                                UseSubmitBehavior="false" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <asp:HiddenField ID="hdpnlCancelTermination" runat="server" Value="" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCancelTermination" runat="server" TargetControlID="hdpnlCancelTermination"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlCancelTermination" DropShadow="false" />
@@ -1918,6 +1939,7 @@
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
             <asp:PostBackTrigger ControlID="bntEndCompensationOk" />
             <asp:PostBackTrigger ControlID="btnTerminationProcessOK" />
+            <asp:PostBackTrigger ControlID="btnSave" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
