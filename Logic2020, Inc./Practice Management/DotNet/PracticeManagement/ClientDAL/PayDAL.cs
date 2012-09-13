@@ -137,34 +137,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Pertieves a payment for the specified person.
-        /// </summary>
-        /// <param name="personId">The <see cref="Person"/> to the data be retrieved for.</param>
-        /// <param name="startDate">The StartDate since the payment is active.</param>
-        /// <returns>The <see cref="Pay"/> object when found and null otherwise.</returns>
-        public static Pay GetByPersonStartDate(int personId, DateTime startDate)
-        {
-            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.PayGetByPersonStartDateProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    List<Pay> result = new List<Pay>();
-                    ReadPay(reader, result);
-
-                    return result.Count > 0 ? result[0] : null;
-                }
-            }
-        }
-
-        /// <summary>
         /// Saves a <see cref="Pay"/> object to the database.
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
