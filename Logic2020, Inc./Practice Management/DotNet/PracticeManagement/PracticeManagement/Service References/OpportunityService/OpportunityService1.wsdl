@@ -71,12 +71,6 @@
   <wsdl:message name="IOpportunityService_OpportunityListAll_OutputMessage">
     <wsdl:part name="parameters" element="tns:OpportunityListAllResponse" />
   </wsdl:message>
-  <wsdl:message name="IOpportunityService_OpportunityListAllShort_InputMessage">
-    <wsdl:part name="parameters" element="tns:OpportunityListAllShort" />
-  </wsdl:message>
-  <wsdl:message name="IOpportunityService_OpportunityListAllShort_OutputMessage">
-    <wsdl:part name="parameters" element="tns:OpportunityListAllShortResponse" />
-  </wsdl:message>
   <wsdl:message name="IOpportunityService_GetOpportunityPrioritiesListAll_InputMessage">
     <wsdl:part name="parameters" element="tns:GetOpportunityPrioritiesListAll" />
   </wsdl:message>
@@ -237,10 +231,6 @@
     <wsdl:operation name="OpportunityListAll">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityListAll" message="tns:IOpportunityService_OpportunityListAll_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityListAllResponse" message="tns:IOpportunityService_OpportunityListAll_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="OpportunityListAllShort">
-      <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityListAllShort" message="tns:IOpportunityService_OpportunityListAllShort_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IOpportunityService/OpportunityListAllShortResponse" message="tns:IOpportunityService_OpportunityListAllShort_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetOpportunityPrioritiesListAll">
       <wsdl:input wsaw:Action="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesListAll" message="tns:IOpportunityService_GetOpportunityPrioritiesListAll_InputMessage" />
@@ -408,15 +398,6 @@
     </wsdl:operation>
     <wsdl:operation name="OpportunityListAll">
       <soap:operation soapAction="http://tempuri.org/IOpportunityService/OpportunityListAll" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="OpportunityListAllShort">
-      <soap:operation soapAction="http://tempuri.org/IOpportunityService/OpportunityListAllShort" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
