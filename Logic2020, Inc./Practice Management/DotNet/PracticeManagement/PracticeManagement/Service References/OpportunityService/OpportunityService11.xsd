@@ -154,20 +154,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="OpportunityListAllShort">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" minOccurs="0" name="context" nillable="true" type="q7:OpportunityListContext" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="OpportunityListAllShortResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunityListAllShortResult" nillable="true" type="q8:ArrayOfOpportunity" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetOpportunityPrioritiesListAll">
     <xs:complexType>
       <xs:sequence />
@@ -176,7 +162,7 @@
   <xs:element name="GetOpportunityPrioritiesListAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOpportunityPrioritiesListAllResult" nillable="true" type="q9:ArrayOfOpportunityPriority" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOpportunityPrioritiesListAllResult" nillable="true" type="q7:ArrayOfOpportunityPriority" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -190,14 +176,14 @@
   <xs:element name="GetOpportunityPrioritiesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOpportunityPrioritiesResult" nillable="true" type="q10:ArrayOfOpportunityPriority" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOpportunityPrioritiesResult" nillable="true" type="q8:ArrayOfOpportunityPriority" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="InsertOpportunityPriority">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="opportunityPriority" nillable="true" type="q11:OpportunityPriority" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="opportunityPriority" nillable="true" type="q9:OpportunityPriority" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -210,7 +196,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="oldPriorityId" type="xs:int" />
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="opportunityPriority" nillable="true" type="q12:OpportunityPriority" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="opportunityPriority" nillable="true" type="q10:OpportunityPriority" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -244,14 +230,14 @@
   <xs:element name="GetByIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetByIdResult" nillable="true" type="q13:Opportunity" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetByIdResult" nillable="true" type="q11:Opportunity" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OpportunitySave">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="opportunity" nillable="true" type="q14:Opportunity" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="opportunity" nillable="true" type="q12:Opportunity" />
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -271,7 +257,7 @@
   <xs:element name="OpportunityStatusListAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunityStatusListAllResult" nillable="true" type="q15:ArrayOfOpportunityStatus" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunityStatusListAllResult" nillable="true" type="q13:ArrayOfOpportunityStatus" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -283,7 +269,7 @@
   <xs:element name="OpportunityTransitionStatusListAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunityTransitionStatusListAllResult" nillable="true" type="q16:ArrayOfOpportunityTransitionStatus" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunityTransitionStatusListAllResult" nillable="true" type="q14:ArrayOfOpportunityTransitionStatus" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -311,7 +297,7 @@
   <xs:element name="GetOpportunityPersonsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOpportunityPersonsResult" nillable="true" type="q17:ArrayOfOpportunityPerson" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetOpportunityPersonsResult" nillable="true" type="q15:ArrayOfOpportunityPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -382,7 +368,7 @@
   <xs:element name="GetOpportunityPriorityTransitionCountResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetOpportunityPriorityTransitionCountResult" nillable="true" type="q18:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q16="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetOpportunityPriorityTransitionCountResult" nillable="true" type="q16:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -396,7 +382,7 @@
   <xs:element name="GetOpportunityStatusChangeCountResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetOpportunityStatusChangeCountResult" nillable="true" type="q19:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetOpportunityStatusChangeCountResult" nillable="true" type="q17:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -418,7 +404,7 @@
   <xs:element name="FilteredOpportunityListAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="FilteredOpportunityListAllResult" nillable="true" type="q20:ArrayOfOpportunity" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="FilteredOpportunityListAllResult" nillable="true" type="q18:ArrayOfOpportunity" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -433,7 +419,7 @@
   <xs:element name="OpportunitySearchTextResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunitySearchTextResult" nillable="true" type="q21:ArrayOfOpportunity" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunitySearchTextResult" nillable="true" type="q19:ArrayOfOpportunity" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -448,7 +434,7 @@
   <xs:element name="OpportunityListWithMinimumDetailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunityListWithMinimumDetailsResult" nillable="true" type="q22:ArrayOfOpportunity" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="OpportunityListWithMinimumDetailsResult" nillable="true" type="q20:ArrayOfOpportunity" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
