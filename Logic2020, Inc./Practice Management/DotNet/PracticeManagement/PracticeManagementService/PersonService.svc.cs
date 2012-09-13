@@ -295,7 +295,7 @@ namespace PracticeManagementService
         {
             return PersonDAL.PersonListProjectOwner(includeInactive, person);
         }
-        
+
         /// <summary>
         /// Read All persons firstname and last name  except having inactive status and must have compensation for today or in future.
         /// </summary>
@@ -713,17 +713,6 @@ namespace PracticeManagementService
         }
 
         /// <summary>
-        /// Pertieves a payment for the specified person.
-        /// </summary>
-        /// <param name="personId">The <see cref="Person"/> to the data be retrieved for.</param>
-        /// <param name="startDate">The StartDate since the payment is active.</param>
-        /// <returns>The <see cref="Pay"/> object when found and null otherwise.</returns>
-        public Pay GetPayment(int personId, DateTime startDate)
-        {
-            return PayDAL.GetByPersonStartDate(personId, startDate);
-        }
-
-        /// <summary>
         /// Saves a payment data.
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
@@ -999,4 +988,3 @@ namespace PracticeManagementService
         #endregion
     }
 }
-
