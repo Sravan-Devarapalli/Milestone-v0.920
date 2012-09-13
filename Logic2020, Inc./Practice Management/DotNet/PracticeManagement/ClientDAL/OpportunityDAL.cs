@@ -83,27 +83,6 @@ namespace DataAccess
 
         }
 
-        public static List<Opportunity> OpportunityListAllShort(OpportunityListContext context)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Opportunitites.OpportunityListAllShort, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.ActiveOnlyParam, context.ActiveClientsOnly);
-
-
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                {
-                    var result = new List<Opportunity>();
-                    ReadOpportunityListAllShort(reader, result);
-                    return result;
-                }
-            }
-        }
-
         private static void ReadOpportunityPriorityListAll(DbDataReader reader, List<OpportunityPriority> result)
         {
             if (reader.HasRows)
@@ -146,89 +125,6 @@ namespace DataAccess
 
 
                     result.Add(opportunityPriority);
-
-                }
-            }
-        }
-
-        private static void ReadOpportunityListAllShort(DbDataReader reader, List<Opportunity> result)
-        {
-            if (reader.HasRows)
-            {
-                var opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
-                var nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
-                var priorityIndex = reader.GetOrdinal(Constants.ColumnNames.PriorityColumn);
-                var clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
-                var clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
-                var opportunityIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIndexColumn);
-                var groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
-                var groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
-                var salespersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonIdColumn);
-                var salespersonFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonFirstNameColumn);
-                var salespersonLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonLastNameColumn);
-                var ownerIdIndex = reader.GetOrdinal(Constants.ColumnNames.OwnerIdColumn);
-                var ownerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.OwnerFirstNameColumn);
-                var ownerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.OwnerLastNameColumn);
-                var EstimatedRevenueiIndex = reader.GetOrdinal(Constants.ColumnNames.EstimatedRevenueColumn);
-                var buyerNameIndex = reader.GetOrdinal(Constants.ColumnNames.BuyerNameColumn);
-                var prioritySortOrderIndex = reader.GetOrdinal(Constants.ColumnNames.PrioritySortOrderColumn);
-
-                while (reader.Read())
-                {
-                    // Reading the item
-                    var opportunity =
-                        new Opportunity
-                        {
-                            Id = reader.GetInt32(opportunityIdIndex),
-                            Name = reader.GetString(nameIndex),
-                            BuyerName = !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : string.Empty,
-                            Priority = new OpportunityPriority
-                            {
-                                Priority = reader.GetString(priorityIndex),
-                                SortOrder = reader.GetInt32(prioritySortOrderIndex)
-                            },
-                            Client = new Client
-                            {
-                                Id = reader.GetInt32(clientIdIndex),
-                                Name = reader.GetString(clientNameIndex)
-                            },
-
-                            OpportunityIndex =
-                                !reader.IsDBNull(opportunityIndex) ? (int?)reader.GetInt32(opportunityIndex) : null,
-                            Salesperson =
-                                !reader.IsDBNull(salespersonIdIndex)
-                                    ? new Person
-                                    {
-                                        Id = reader.GetInt32(salespersonIdIndex),
-                                        FirstName = reader.GetString(salespersonFirstNameIndex),
-                                        LastName = reader.GetString(salespersonLastNameIndex),
-                                    }
-                                    : null,
-                            Owner =
-                                    !reader.IsDBNull(ownerIdIndex)
-                                        ? new Person
-                                        {
-                                            Id = reader.GetInt32(ownerIdIndex),
-                                            LastName = !reader.IsDBNull(ownerLastNameIndex) ? reader.GetString(ownerLastNameIndex) : null,
-                                            FirstName = !reader.IsDBNull(ownerFirstNameIndex) ? reader.GetString(ownerFirstNameIndex) : null,
-                                        }
-                                        : null,
-                            Group = !reader.IsDBNull(groupIdIndex)
-                                        ? new ProjectGroup
-                                        {
-                                            Id = reader.GetInt32(groupIdIndex),
-                                            Name = reader.GetString(groupNameIndex)
-                                        }
-                                        : null
-
-                        };
-
-                    if (!reader.IsDBNull(EstimatedRevenueiIndex))
-                    {
-                        opportunity.EstimatedRevenue = reader.GetDecimal(EstimatedRevenueiIndex);
-                    }
-
-                    result.Add(opportunity);
 
                 }
             }
