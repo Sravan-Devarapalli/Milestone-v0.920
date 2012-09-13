@@ -681,7 +681,6 @@
                 public const string FinancialsListByProjectPeriod = "dbo.FinancialsListByProjectPeriod";
                 public const string FinancialsListByProjectPeriodTotal = "dbo.FinancialsListByProjectPeriodTotal";
                 public const string FinancialsGetByProject = "dbo.FinancialsGetByProject";
-                public const string FinancialsGetByMilestonePersonPeriod = "dbo.FinancialsGetByMilestonePersonPeriod";
                 public const string FinancialsGetByMilestonePersonEntry = "dbo.FinancialsGetByMilestonePersonEntry";
                 public const string FinancialsGetByMilestone = "dbo.FinancialsGetByMilestone";
                 public const string FinancialsGetByMilestonePerson = "dbo.FinancialsGetByMilestonePerson";
@@ -869,7 +868,6 @@
                 public const string PayGetCurrentByPersonProcedure = "dbo.PayGetCurrentByPerson";
                 public const string PayGetHistoryByPersonProcedure = "dbo.PayGetHistoryByPerson";
                 public const string GetPayHistoryShortByPersonProcedure = "dbo.GetPayHistoryShortByPerson";
-                public const string PayGetByPersonStartDateProcedure = "dbo.PayGetByPersonStartDate";
                 public const string PaySaveProcedure = "dbo.PaySave";
                 public const string PayDeleteProcedure = "dbo.PayDelete";
                 public const string IsPersonSalaryTypeListByPeriodProcedure = "dbo.IsPersonSalaryTypeListByPeriod";
@@ -1076,7 +1074,6 @@
                 public const string OpportunityTransitionDelete = "dbo.OpportunityTransitionDelete";
                 public const string OpportunityListAll = "dbo.OpportunityListAll";
                 public const string FilteredOpportunityListAll = "dbo.FilteredOpportunityListAll";
-                public const string OpportunityListAllShort = "dbo.OpportunityListAllShort";
                 public const string OpportunityListWithMinimumDetails = "dbo.OpportunityListWithMinimumDetails";
                 public const string OpportunityGetById = "dbo.OpportunityGetById";
                 public const string OpportunityInsert = "dbo.OpportunityInsert";
