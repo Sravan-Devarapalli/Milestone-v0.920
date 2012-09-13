@@ -12,12 +12,6 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IPersonService_GetStrawmanListShortFilterWithTodayPay_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrawmanListShortFilterWithTodayPay" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetStrawmanListShortFilterWithTodayPay_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrawmanListShortFilterWithTodayPayResponse" />
-  </wsdl:message>
   <wsdl:message name="IPersonService_GetTerminationReasonsList_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTerminationReasonsList" />
   </wsdl:message>
@@ -47,12 +41,6 @@
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonEmploymentHistoryById_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonEmploymentHistoryByIdResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SetPermissionsForPerson_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetPermissionsForPerson" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_SetPermissionsForPerson_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetPermissionsForPersonResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonById_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonById" />
@@ -264,6 +252,12 @@
   <wsdl:message name="IPersonService_GetHistoryByPerson_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetHistoryByPersonResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawmanListShortFilterWithTodayPay_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawmanListShortFilterWithTodayPay" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetStrawmanListShortFilterWithTodayPay_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrawmanListShortFilterWithTodayPayResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
   </wsdl:message>
@@ -459,12 +453,6 @@
   <wsdl:message name="IPersonService_CalculateProposedFinancialsPersonTargetMargin_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateProposedFinancialsPersonTargetMarginResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetPayment_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPayment" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPayment_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPaymentResponse" />
-  </wsdl:message>
   <wsdl:message name="IPersonService_SavePay_InputMessage">
     <wsdl:part name="parameters" element="tns:SavePay" />
   </wsdl:message>
@@ -483,11 +471,13 @@
   <wsdl:message name="IPersonService_ListSeniorities_OutputMessage">
     <wsdl:part name="parameters" element="tns:ListSenioritiesResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_SetPermissionsForPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetPermissionsForPerson" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SetPermissionsForPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetPermissionsForPersonResponse" />
+  </wsdl:message>
   <wsdl:portType name="IPersonService">
-    <wsdl:operation name="GetStrawmanListShortFilterWithTodayPay">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay" message="tns:IPersonService_GetStrawmanListShortFilterWithTodayPay_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPayResponse" message="tns:IPersonService_GetStrawmanListShortFilterWithTodayPay_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetTerminationReasonsList">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetTerminationReasonsList" message="tns:IPersonService_GetTerminationReasonsList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetTerminationReasonsListResponse" message="tns:IPersonService_GetTerminationReasonsList_OutputMessage" />
@@ -507,10 +497,6 @@
     <wsdl:operation name="GetPersonEmploymentHistoryById">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById" message="tns:IPersonService_GetPersonEmploymentHistoryById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse" message="tns:IPersonService_GetPersonEmploymentHistoryById_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetPermissionsForPerson">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SetPermissionsForPerson" message="tns:IPersonService_SetPermissionsForPerson_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SetPermissionsForPersonResponse" message="tns:IPersonService_SetPermissionsForPerson_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonById">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonById" message="tns:IPersonService_GetPersonById_InputMessage" />
@@ -652,6 +638,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetHistoryByPerson" message="tns:IPersonService_GetHistoryByPerson_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetHistoryByPersonResponse" message="tns:IPersonService_GetHistoryByPerson_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetStrawmanListShortFilterWithTodayPay">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay" message="tns:IPersonService_GetStrawmanListShortFilterWithTodayPay_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPayResponse" message="tns:IPersonService_GetStrawmanListShortFilterWithTodayPay_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse" message="tns:IPersonService_GetPersonMilestoneWithFinancials_OutputMessage" />
@@ -781,10 +771,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonTargetMargin" message="tns:IPersonService_CalculateProposedFinancialsPersonTargetMargin_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonTargetMarginResponse" message="tns:IPersonService_CalculateProposedFinancialsPersonTargetMargin_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetPayment">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPayment" message="tns:IPersonService_GetPayment_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPaymentResponse" message="tns:IPersonService_GetPayment_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="SavePay">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SavePay" message="tns:IPersonService_SavePay_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SavePayResponse" message="tns:IPersonService_SavePay_OutputMessage" />
@@ -797,18 +783,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/ListSeniorities" message="tns:IPersonService_ListSeniorities_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/ListSenioritiesResponse" message="tns:IPersonService_ListSeniorities_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SetPermissionsForPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SetPermissionsForPerson" message="tns:IPersonService_SetPermissionsForPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SetPermissionsForPersonResponse" message="tns:IPersonService_SetPermissionsForPerson_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPersonService" type="tns:IPersonService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetStrawmanListShortFilterWithTodayPay">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetTerminationReasonsList">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetTerminationReasonsList" style="document" />
       <wsdl:input>
@@ -847,15 +828,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonEmploymentHistoryById">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetPermissionsForPerson">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/SetPermissionsForPerson" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1178,6 +1150,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetStrawmanListShortFilterWithTodayPay">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" style="document" />
       <wsdl:input>
@@ -1469,15 +1450,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetPayment">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPayment" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="SavePay">
       <soap:operation soapAction="http://tempuri.org/IPersonService/SavePay" style="document" />
       <wsdl:input>
@@ -1498,6 +1470,15 @@
     </wsdl:operation>
     <wsdl:operation name="ListSeniorities">
       <soap:operation soapAction="http://tempuri.org/IPersonService/ListSeniorities" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPermissionsForPerson">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SetPermissionsForPerson" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
