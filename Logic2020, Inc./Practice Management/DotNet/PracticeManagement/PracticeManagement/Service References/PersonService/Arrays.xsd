@@ -25,30 +25,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring" />
-  <xs:complexType name="ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz">
-    <xs:annotation>
-      <xs:appinfo>
-        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
-      </xs:appinfo>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfPermissionTargetArrayOfintrdkL8Uaz">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" type="q2:PermissionTarget" />
-            <xs:element name="Value" nillable="true" type="tns:ArrayOfint" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" nillable="true" type="tns:ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" />
-  <xs:complexType name="ArrayOfint">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
   <xs:complexType name="ArrayOfKeyValueOfdateTimeboolean">
     <xs:annotation>
       <xs:appinfo>
@@ -67,4 +43,28 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfdateTimeboolean" nillable="true" type="tns:ArrayOfKeyValueOfdateTimeboolean" />
+  <xs:complexType name="ArrayOfint">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
+  <xs:complexType name="ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfPermissionTargetArrayOfintrdkL8Uaz">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" type="q2:PermissionTarget" />
+            <xs:element name="Value" nillable="true" type="tns:ArrayOfint" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" nillable="true" type="tns:ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" />
 </xs:schema>
