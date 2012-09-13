@@ -67,10 +67,7 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref="Opportunity"/> objects.</returns>
         [OperationContract]
         List<Opportunity> OpportunityListAll(OpportunityListContext context);
-
-        [OperationContract]
-        List<Opportunity> OpportunityListAllShort(OpportunityListContext context);
-
+        
         [OperationContract]
         List<OpportunityPriority> GetOpportunityPrioritiesListAll();
 
