@@ -72,11 +72,6 @@ namespace PracticeManagementService
             return opportunities;
         }
 
-        public List<Opportunity> OpportunityListAllShort(OpportunityListContext context)
-        {
-            return OpportunityDAL.OpportunityListAllShort(context);
-        }
-
         public List<OpportunityPriority> GetOpportunityPrioritiesListAll()
         {
             return OpportunityDAL.GetOpportunityPrioritiesListAll();
