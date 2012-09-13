@@ -45,9 +45,6 @@ namespace PraticeManagement.OpportunityService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityListAll", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityListAllResponse")]
         DataTransferObjects.Opportunity[] OpportunityListAll(DataTransferObjects.ContextObjects.OpportunityListContext context);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/OpportunityListAllShort", ReplyAction="http://tempuri.org/IOpportunityService/OpportunityListAllShortResponse")]
-        DataTransferObjects.Opportunity[] OpportunityListAllShort(DataTransferObjects.ContextObjects.OpportunityListContext context);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesListAll", ReplyAction="http://tempuri.org/IOpportunityService/GetOpportunityPrioritiesListAllResponse")]
         DataTransferObjects.OpportunityPriority[] GetOpportunityPrioritiesListAll();
         
@@ -173,10 +170,6 @@ namespace PraticeManagement.OpportunityService {
         
         public DataTransferObjects.Opportunity[] OpportunityListAll(DataTransferObjects.ContextObjects.OpportunityListContext context) {
             return base.Channel.OpportunityListAll(context);
-        }
-        
-        public DataTransferObjects.Opportunity[] OpportunityListAllShort(DataTransferObjects.ContextObjects.OpportunityListContext context) {
-            return base.Channel.OpportunityListAllShort(context);
         }
         
         public DataTransferObjects.OpportunityPriority[] GetOpportunityPrioritiesListAll() {
