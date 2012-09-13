@@ -109,42 +109,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Retrives the list of the computed financials for the milestone-person association
-        /// and the specified period grouped by months.
-        /// </summary>
-        /// <param name="milestoneId">An ID of the milestone to retrive the data for.</param>
-        /// <param name="personId">An ID of the person to retrive the data for.</param>
-        /// <param name="startDate">A period start.</param>
-        /// <param name="endDate">A period end.</param>
-        /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static Dictionary<DateTime, ComputedFinancials> FinancialsGetByMilestonePersonPeriod(
-            int milestoneId,
-            int personId,
-            DateTime entryStartDate)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(
-                Constants.ProcedureNames.ComputedFinancials.FinancialsGetByMilestonePersonPeriod, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneIdParam, milestoneId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.EntryStartDateParam, entryStartDate);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    var result =
-                        new Dictionary<DateTime, ComputedFinancials>();
-                    ReadFinancials(reader, result);
-                    return result;
-                }
-            }
-        }
-
-        /// <summary>
         /// Retrives the list of the computed financials for the milestone persons association
         /// and the specified period grouped by months.
         /// </summary>
