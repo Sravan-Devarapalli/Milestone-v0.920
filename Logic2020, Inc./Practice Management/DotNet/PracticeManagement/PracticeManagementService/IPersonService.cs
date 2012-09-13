@@ -320,16 +320,7 @@ namespace PracticeManagementService
         /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
         [OperationContract]
         ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
-
-        /// <summary>
-        /// Pertieves a payment for the specified person.
-        /// </summary>
-        /// <param name="personId">The <see cref="Person"/> to the data be retrieved for.</param>
-        /// <param name="startDate">The StartDate since the payment is active.</param>
-        /// <returns>The <see cref="Pay"/> object when found and null otherwise.</returns>
-        [OperationContract]
-        Pay GetPayment(int personId, DateTime startDate);
-
+        
         /// <summary>
         /// Saves a payment data.
         /// </summary>
