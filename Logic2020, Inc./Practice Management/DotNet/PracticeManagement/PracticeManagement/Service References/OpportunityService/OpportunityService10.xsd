@@ -146,10 +146,12 @@
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q2:ArrayOfPersonDocument" />
       <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
+      <xs:element minOccurs="0" name="EmploymentHistory" nillable="true" type="tns:ArrayOfEmployment" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ImageUrl" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q4:ArrayOfPersonIndustry" />
       <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOffshore" type="xs:boolean" />
@@ -176,6 +178,8 @@
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
       <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TerminationReasonid" nillable="true" type="xs:int" />
       <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q9:ArrayOfPersonTraining" />
       <xs:element minOccurs="0" name="UtlizationPercent" type="xs:double" />
     </xs:sequence>
@@ -302,10 +306,18 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
       <xs:element minOccurs="0" name="SeniorityValue" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Seniority" nillable="true" type="tns:Seniority" />
+  <xs:complexType name="SeniorityCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
   <xs:complexType name="ArrayOfProjectAttachment">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectAttachment" nillable="true" type="tns:ProjectAttachment" />
@@ -640,6 +652,21 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PersonDivisionType" nillable="true" type="tns:PersonDivisionType" />
+  <xs:complexType name="ArrayOfEmployment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Employment" nillable="true" type="tns:Employment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmployment" nillable="true" type="tns:ArrayOfEmployment" />
+  <xs:complexType name="Employment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReasonId" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Employment" nillable="true" type="tns:Employment" />
   <xs:complexType name="ArrayOfPersonOverhead">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonOverhead" nillable="true" type="tns:PersonOverhead" />
@@ -687,6 +714,7 @@
       <xs:element minOccurs="0" name="HoursToCollect" type="xs:int" />
       <xs:element minOccurs="0" name="Old_HoursToCollect" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Recruit" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Recruiter" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="RecruiterId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
