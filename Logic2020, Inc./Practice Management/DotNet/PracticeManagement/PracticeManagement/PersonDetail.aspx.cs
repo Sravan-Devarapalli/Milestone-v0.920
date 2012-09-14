@@ -562,11 +562,6 @@ namespace PraticeManagement
 
         protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
-            if (dtpTerminationDate.DateValue != DateTime.MinValue && PreviousTerminationDate.HasValue && PreviousTerminationDate.Value != GetDate(dtpTerminationDate.DateValue).Value)
-            {
-                custCancelTermination.Enabled = PreviousTerminationDate.Value < GetDate(dtpTerminationDate.DateValue).Value;
-            }
-
             FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlTerminationReason);
         }
 
@@ -575,7 +570,7 @@ namespace PraticeManagement
             var reasons = new List<TerminationReason>();
             if (terminationDate != null)
             {
-                ddlTerminationReasons.SelectedIndex = 0;
+                ddlTerminationReasons.SelectedValue = string.Empty;
                 if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
                 {
                     reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsContigent == true).ToList();
@@ -637,9 +632,7 @@ namespace PraticeManagement
                 IsStatusChangeClicked = true;
                 DisableValidatecustTerminateDateTE = false;
                 custCompensationCoversMilestone.Enabled = false;
-                cvEndCompensation.Enabled = true;
-                cvHireDateChange.Enabled = true;
-                custCancelTermination.Enabled = false;
+                cvEndCompensation.Enabled = cvHireDateChange.Enabled = custCancelTermination.Enabled = true;
 
                 var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent ? PersonStatusType.TerminationPending : PopupStatus.Value;
 
@@ -674,9 +667,7 @@ namespace PraticeManagement
                     case PersonStatusType.Active:
                         if (rbnCancleTermination.Checked)
                         {
-                            custCancelTermination.Enabled = true;
-                            dtpPopUpTerminateDate.TextValue = string.Empty;
-                            ddlPopUpTerminationReason.SelectedIndex = 0;
+                            dtpPopUpTerminateDate.TextValue = ddlPopUpTerminationReason.SelectedValue = string.Empty;
                         }
                         else
                         {
@@ -699,6 +690,7 @@ namespace PraticeManagement
                 }
                 if (Page.IsValid && IsStatusChangeClicked)
                 {
+                    IsRehire = PrevPersonStatusId == (int)PersonStatusType.Terminated;
                     PersonStatusId = PopupStatus.Value;
                     lblPersonStatus.Text = DataHelper.GetDescription(PopupStatus.Value);
                     dtpHireDate.DateValue = HireDate.Value;
@@ -790,11 +782,8 @@ namespace PraticeManagement
         {
             var updatePersonStatusDropdown = true;
             custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = !IsStatusChangeClicked;
-            custCancelTermination.Enabled = false;
-            if (PreviousTerminationDate.HasValue && dtpTerminationDate.DateValue != DateTime.MinValue && PreviousTerminationDate.Value != GetDate(dtpTerminationDate.DateValue).Value)
-            {
-                custCancelTermination.Enabled = true;
-            }
+            custCancelTermination.Enabled = true;
+
             if (PersonId.HasValue)
             {
                 updatePersonStatusDropdown = false;
@@ -810,8 +799,6 @@ namespace PraticeManagement
         protected void btnCancleTerminationOKButton_OnClick(object source, EventArgs args)
         {
             custCancelTermination.Enabled = false;
-            dtpPopUpTerminateDate.TextValue = string.Empty;
-            ddlPopUpTerminationReason.SelectedIndex = 0;
             Save_Click(source, args);
             mpeCancelTermination.Hide();
         }
@@ -895,16 +882,16 @@ namespace PraticeManagement
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
 
+            if (custCancelTermination.Enabled && Page.IsValid)
+            {
+                custCancelTermination.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
+
             if (!DisableValidatecustTerminateDateTE && Page.IsValid)
             {
                 custTerminateDateTE.Enabled = true;
                 Page.Validate(valsPerson.ValidationGroup);
-                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
-            }
-            if (custCancelTermination.Enabled && Page.IsValid)
-            {
-                //Page.Validate("EndCompensation");
-                custCancelTermination.Validate();
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
         }
@@ -1742,20 +1729,12 @@ namespace PraticeManagement
         protected void custCancelTermination_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
-            if (dtpTerminationDate.DateValue != DateTime.MinValue)
+
+            if (PreviousTerminationDate.HasValue && ( (PrevPersonStatusId == (int)PersonStatusType.Contingent && PersonStatusId == PersonStatusType.Contingent && !TerminationDate.HasValue) || (TerminationDate.HasValue && PreviousTerminationDate.Value < TerminationDate.Value)))
             {
                 List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
-                DateTime terminationDate;
-                if (PreviousTerminationDate.HasValue && PreviousTerminationDate.Value != GetDate(dtpTerminationDate.DateValue).Value)
-                {
-                    terminationDate = PreviousTerminationDate.Value < GetDate(dtpTerminationDate.DateValue).Value ? PreviousTerminationDate.Value : GetDate(dtpTerminationDate.DateValue).Value;
-                }
-                else
-                {
-                    terminationDate = GetDate(dtpTerminationDate.DateValue).Value;
-                }
 
-                milestonesAfterTerminationDate.AddRange(ServiceCallers.Custom.Person(p => p.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, terminationDate)));
+                milestonesAfterTerminationDate.AddRange(ServiceCallers.Custom.Person(p => p.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, PreviousTerminationDate.Value)));
                 if (milestonesAfterTerminationDate.Any<Milestone>())
                 {
                     this.dtlCancelProjectMilestones.DataSource = milestonesAfterTerminationDate;
@@ -1765,7 +1744,6 @@ namespace PraticeManagement
                     mpeCancelTermination.Show();
                 }
             }
-
         }
 
         protected void custValSeniority_OnServerValidate(object sender, ServerValidateEventArgs e)
@@ -1884,7 +1862,7 @@ namespace PraticeManagement
 
         protected void custTerminationReason_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (PersonStatusId.HasValue && (PersonStatusId.Value == PersonStatusType.Terminated || PersonStatusId.Value == PersonStatusType.TerminationPending))
+            if (TerminationDate.HasValue)
             {
                 args.IsValid = !string.IsNullOrEmpty(TerminationReasonId);//(ddlTerminationReason.SelectedIndex != 0);
             }
@@ -2737,12 +2715,7 @@ namespace PraticeManagement
 
         public void RaisePostBackEvent(string eventArgument)
         {
-            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = true;
-            custCancelTermination.Enabled = false;
-            if (PreviousTerminationDate.HasValue && dtpTerminationDate.DateValue != DateTime.MinValue && PreviousTerminationDate.Value != GetDate(dtpTerminationDate.DateValue).Value)
-            {
-                custCancelTermination.Enabled = true;
-            }
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = custCancelTermination.Enabled = true;
             bool result = ValidateAndSavePersonDetails();
             if (result)
             {
