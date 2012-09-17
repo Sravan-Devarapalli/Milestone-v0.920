@@ -28,9 +28,10 @@ BEGIN
 				P.FirstName,
 				P.IsDefaultManager	
 		 FROM	dbo.aspnet_Users U 
-				INNER JOIN dbo.Person P ON P.Alias = U.UserName AND
-										   P.HireDate <=  @EndDateLocal AND 
-											ISNULL(P.TerminationDate,@FutureDateLocal) >= @StartDateLocal
+				INNER JOIN dbo.Person P ON P.Alias = U.UserName 
+				INNER JOIN dbo.v_PersonHistory PH ON PH.PersonId = P.PersonId AND
+													   PH.HireDate <=  @EndDateLocal AND 
+													   ISNULL(PH.TerminationDate,@FutureDateLocal) >= @StartDateLocal
 				INNER JOIN dbo.aspnet_UsersInRoles UR ON UR.UserId = u.UserId 
 				INNER JOIN dbo.aspnet_UsersRolesHistory URH ON U.UserId = URH.UserId  AND 
 															   URH.StartDate <=  @EndDateLocal AND 
