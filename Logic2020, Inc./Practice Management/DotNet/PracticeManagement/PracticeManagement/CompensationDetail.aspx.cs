@@ -276,7 +276,16 @@ namespace PraticeManagement
                     if (_saveCode == default(int))
                     {
                         ClearDirty();
-                        Server.Transfer("~" + ReturnUrl.Substring(ReturnUrl.IndexOf("/PersonDetail.aspx?id="), ReturnUrl.Length - ReturnUrl.IndexOf("/PersonDetail.aspx?id=")));
+
+                        //var returnUrl = Request.Url.AbsoluteUri.Substring(Request.Url.AbsoluteUri.LastIndexOf("&returnTo="));
+                        var returnUrl = Request.UrlReferrer.ToString();
+                        returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("&returnTo="));
+                        string redirectUrl = "PersonDetail.aspx?id=" + PersonDetailData.Id + "&ShowConfirmMessage=1";
+                        redirectUrl = redirectUrl + (returnUrl.Contains("persons.aspx") ? returnUrl : string.Empty);
+
+                        Response.Redirect(redirectUrl);
+
+                        //Server.Transfer("~" + ReturnUrl.Substring(ReturnUrl.IndexOf("/PersonDetail.aspx?id="), ReturnUrl.Length - ReturnUrl.IndexOf("/PersonDetail.aspx?id=")));
                     }
                 }
                 else
@@ -403,6 +412,8 @@ namespace PraticeManagement
 
                             SavePersonsPermissions(person, serviceClient);
 
+                            if(!PersonDetailData.Id.HasValue)
+                                PersonDetailData.Id = personId.Value;
                             IsDirty = false;
                         }
 
