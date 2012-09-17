@@ -112,7 +112,7 @@ namespace PraticeManagement
                     //Active employee with new Hire Date. with new compensation record.
                     return PersonStatusType.Active;
                 }
-                else if (PrevPersonStatusId == (int)PersonStatusType.Terminated && rbnContingent.Checked)
+                else if ((PrevPersonStatusId == (int)PersonStatusType.Terminated && rbnContingent.Checked) || (PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnCancleTermination.Checked))
                 {
                     //system automatically opens new compensation record.  
                     return PersonStatusType.Contingent;
@@ -397,6 +397,15 @@ namespace PraticeManagement
             btnAddDefaultRecruitingCommission.Enabled = UserIsAdministrator || UserIsRecruiter || UserIsHR;//#2817 UserisHR is added as per requirement.
             cellPermissions.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
 
+            //Disable TerminationDate, TerminationReason
+            DisableTerminationDateAndReason();
+
+            ddlPersonStatus.Visible = !(lblPersonStatus.Visible = btnChangeEmployeeStatus.Visible = PersonId.HasValue);
+            btnAddCompensation.Visible = !(PersonStatusId == PersonStatusType.Terminated);
+        }
+
+        private void DisableTerminationDateAndReason()
+        {
             if (PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Terminated || (PrevPersonStatusId == (int)PersonStatusType.Contingent && dtpTerminationDate.DateValue == DateTime.MinValue))
             {
                 if (PrevPersonStatusId != (int)PersonStatusType.Terminated && IsStatusChangeClicked && PersonStatusId == PersonStatusType.Terminated)
@@ -434,8 +443,6 @@ namespace PraticeManagement
                 dtpHireDate.ReadOnly = true;
                 dtpHireDate.EnabledTextBox = false;
             }
-            ddlPersonStatus.Visible = !(lblPersonStatus.Visible = btnChangeEmployeeStatus.Visible = PersonId.HasValue);
-
         }
 
         private void LoadChangeEmployeeStatusPopUpData()
@@ -453,7 +460,7 @@ namespace PraticeManagement
                 rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = !(rbnTerminate.Checked = true);
                 divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
             }
-            else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending)
+            else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && PreviousTerminationDate.HasValue))
             {
                 rbnCancleTermination.CssClass = "";
                 rbnActive.Checked = rbnTerminate.Checked = rbnContingent.Checked = rbnCancleTermination.Checked = false;
@@ -634,7 +641,7 @@ namespace PraticeManagement
                 custCompensationCoversMilestone.Enabled = false;
                 cvEndCompensation.Enabled = cvHireDateChange.Enabled = custCancelTermination.Enabled = true;
 
-                var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent ? PersonStatusType.TerminationPending : PopupStatus.Value;
+                var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnTerminate.Checked ? PersonStatusType.TerminationPending : PopupStatus.Value;
 
                 switch (popupStatus)
                 {
@@ -654,14 +661,21 @@ namespace PraticeManagement
                         }
                         break;
                     case PersonStatusType.Contingent:
-                        //change employee status to contingent.
-                        Page.Validate(valSummaryChangePersonStatusToContingent.ValidationGroup);
-                        if (!Page.IsValid)
+                        //change employee status to contingent.                        
+                        if (rbnCancleTermination.Checked)
                         {
-                            divContingent.Attributes["class"] = "padLeft25 PaddingTop6";
-                            divActive.Attributes["class"] = "displayNone";
-                            divTerminate.Attributes["class"] = "displayNone";
-                            mpeViewPersonChangeStatus.Show();
+                            dtpPopUpTerminateDate.TextValue = ddlPopUpTerminationReason.SelectedValue = string.Empty;
+                        }
+                        else
+                        {
+                            Page.Validate(valSummaryChangePersonStatusToContingent.ValidationGroup);
+                            if (!Page.IsValid)
+                            {
+                                divContingent.Attributes["class"] = "padLeft25 PaddingTop6";
+                                divActive.Attributes["class"] = "displayNone";
+                                divTerminate.Attributes["class"] = "displayNone";
+                                mpeViewPersonChangeStatus.Show();
+                            }
                         }
                         break;
                     case PersonStatusType.Active:
@@ -2037,7 +2051,7 @@ namespace PraticeManagement
                 payHistory = payHistory.OrderBy(p => p.StartDate).ToList();
                 PopulateUnCommitedPay(payHistory);
                 Pay firstPay = payHistory.Where(p => p.StartDate >= HireDate).FirstOrDefault();
-                if (firstPay.Timescale == TimescaleType.PercRevenue || firstPay.Timescale == TimescaleType._1099Ctc)
+                if (firstPay != null && (firstPay.Timescale == TimescaleType.PercRevenue || firstPay.Timescale == TimescaleType._1099Ctc))
                 {
                     if (payHistory.Any(p => p.StartDate > firstPay.StartDate && p.StartDate <= DateTime.Now.Date && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly)))
                     {
