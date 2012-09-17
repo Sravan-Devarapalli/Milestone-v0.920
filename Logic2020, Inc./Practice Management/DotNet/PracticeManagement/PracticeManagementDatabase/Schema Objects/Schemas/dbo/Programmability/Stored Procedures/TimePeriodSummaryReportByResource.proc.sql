@@ -57,7 +57,7 @@ AS
 											PCAL.TimeTypeId ,
 											PCAL.SubstituteDate
 								  FROM      dbo.Calendar AS CAL
-											INNER JOIN dbo.Person AS P ON CAL.Date >= P.HireDate
+											INNER JOIN dbo.v_PersonHistory AS P ON CAL.Date >= P.HireDate
 															  AND CAL.Date <= ISNULL(P.TerminationDate,
 															  @FutureDate)
 											LEFT JOIN dbo.PersonCalendar AS PCAL ON PCAL.Date = CAL.Date
