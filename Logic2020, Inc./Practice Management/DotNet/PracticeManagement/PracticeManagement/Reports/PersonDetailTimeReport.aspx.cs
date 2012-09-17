@@ -69,7 +69,7 @@ namespace PraticeManagement.Reporting
                             }
                             else if (selectedVal == -1)
                             {
-                                return SelectedPerson.HireDate;
+                                return SelectedPersonFirstHireDate;
                             }
                         }
                         else
@@ -201,6 +201,25 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public DateTime SelectedPersonFirstHireDate
+        {
+            get
+            {
+                if (ViewState["SelectedPersonFirstHireDate"] == null)
+                {
+                    var employeeHistory = ServiceCallers.Custom.Person(p => p.GetPersonEmploymentHistoryById(SelectedPersonId));
+                    DateTime minHireDate = employeeHistory.Min(p => p.HireDate);
+                    ViewState["SelectedPersonFirstHireDate"] = minHireDate;
+                }
+                return (DateTime)ViewState["SelectedPersonFirstHireDate"];
+            }
+            set
+            {
+                ViewState["SelectedPersonFirstHireDate"] = value;
+            }
+
+        }
+
         public Person SelectedPerson
         {
             get
@@ -209,6 +228,7 @@ namespace PraticeManagement.Reporting
                 if (ViewState["SelectedPerson"] == null)
                 {
                     person = ServiceCallers.Custom.Person(p => p.GetPersonById(SelectedPersonId));
+                    SelectedPersonFirstHireDate = null;
                     ViewState["SelectedPerson"] = person;
                 }
                 else
@@ -217,6 +237,7 @@ namespace PraticeManagement.Reporting
                     if (person.Id != SelectedPersonId)
                     {
                         person = ServiceCallers.Custom.Person(p => p.GetPersonById(SelectedPersonId));
+                        SelectedPersonFirstHireDate = null;
                         ViewState["SelectedPerson"] = person;
                     }
                 }
