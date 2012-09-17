@@ -96,8 +96,7 @@ AS
 							   FROM     dbo.MilestonePersonEntry AS MPE
 										INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 										INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-										INNER JOIN dbo.person AS P ON P.personId = MP.PersonId
-															  AND P.IsStrawman = 0
+										INNER JOIN dbo.v_PersonHistory AS P ON P.personId = MP.PersonId
 										INNER JOIN dbo.Calendar AS CAL ON CAL.Date BETWEEN MPE.StartDate AND MPE.EndDate 
 																		AND CAL.Date >= P.HireDate
 																		AND CAL.Date <= ISNULL(P.TerminationDate,
