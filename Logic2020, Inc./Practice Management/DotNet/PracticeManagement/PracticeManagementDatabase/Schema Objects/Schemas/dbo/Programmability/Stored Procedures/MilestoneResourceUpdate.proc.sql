@@ -9,27 +9,36 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-		DECLARE @TempTable TABLE(MilestonePersonId INT)
 		
-		INSERT INTO @TempTable
+		DECLARE @FutureDate DATETIME
+		SET @FutureDate = dbo.GetFutureDate()
+
+		--Get the active start date and active end date of the mile stone person in the selected date range.
+		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME)
+		INSERT INTO @PersonActiveDates 
+		SELECT MP.PersonId,MIN(C.Date) AS ActiveStartDate,MAX(C.Date) AS ActiveEndDate
+		FROM dbo.MilestonePerson MP 
+		INNER JOIN dbo.Calendar C ON C.Date BETWEEN @StartDate AND @ProjectedDeliveryDate AND MP.MilestoneId = @MilestoneId
+		LEFT JOIN dbo.v_PersonHistory PH ON MP.PersonId = PH.PersonId	
+											AND C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) 
+		GROUP BY MP.PersonId
+
+		--Delete milestone person entries which don't have atleast 1 active day in the selected range.
+		DECLARE @DeleteMileStonePersonEntriesTable TABLE(MilestonePersonId INT)
+		
+		INSERT INTO @DeleteMileStonePersonEntriesTable
 		SELECT   mp.MilestonePersonId
 		FROM [dbo].[MilestonePerson] AS mp
-		INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
-		WHERE  (mp.MilestoneId = @MilestoneId) 
-		  AND  (
-			    (p.TerminationDate < @StartDate) 
-			    OR (p.HireDate > @ProjectedDeliveryDate)
-			   )
-	
+		INNER JOIN @PersonActiveDates AS p ON mp.PersonId = p.PersonId
+		WHERE  P.ActiveStartDate IS NULL AND P.ActiveEndDate IS NULL
 		 
 		DELETE MPE FROM dbo.MilestonePersonEntry MPE
-		JOIN @TempTable Temp ON Temp.MilestonePersonId = MPE.MilestonePersonId
-
+		JOIN @DeleteMileStonePersonEntriesTable Temp ON Temp.MilestonePersonId = MPE.MilestonePersonId
 		 
 		DELETE MP FROM dbo.MilestonePerson MP
-		JOIN @TempTable Temp ON Temp.MilestonePersonId = MP.MilestonePersonId
+		JOIN @DeleteMileStonePersonEntriesTable Temp ON Temp.MilestonePersonId = MP.MilestonePersonId
 
+		--When the milestone person entries are out of the range of the selected milestone range,Keep atleast one record with granularity(milestone person,role)
 		DECLARE @TempMPE TABLE
 		(MilestonePersonId INT,PersonRoleId INT,Amount DECIMAL(18,2),HoursPerDay DECIMAL(4,2))
 		
@@ -43,7 +52,8 @@ BEGIN
 		GROUP BY MPE.MilestonePersonId,MPE.PersonRoleId
 		
 		
-		DELETE  MPE FROM dbo.MilestonePersonEntry MPE
+		DELETE  MPE 
+		FROM dbo.MilestonePersonEntry MPE
 		JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
 		INNER JOIN dbo.Person AS p ON p.PersonId = MP.PersonId AND p.IsStrawman = 0
 		WHERE MP.MilestoneId = @MilestoneId 
@@ -56,7 +66,8 @@ BEGIN
 						 WHERE  TEMPmpe.MilestonePersonId = MPE.MilestonePersonId 
 								AND TEMPmpe.PersonRoleId = MPE.PersonRoleId)
 		
-		DELETE MP FROM dbo.MilestonePerson MP
+		DELETE MP 
+		FROM dbo.MilestonePerson MP
 		LEFT JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
 		WHERE MPE.MilestonePersonId IS NULL AND MP.MilestoneId = @MilestoneId
 
@@ -87,11 +98,7 @@ BEGIN
 		-- Update For Persons
 
 	    UPDATE mpentry
-			   SET StartDate = CASE
-									 WHEN ( P.HireDate > @StartDate) THEN  P.HireDate
-									 ELSE @StartDate
-								   END
-								
+			   SET StartDate = P.ActiveStartDate
 			  FROM MilestonePersonEntry as mpentry
 			  INNER JOIN 
 						(
@@ -102,15 +109,11 @@ BEGIN
 						 FROM dbo.MilestonePersonEntry AS mpe
 						 INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
 						 ) AS q ON mpentry.Id = q.Id
-			  INNER JOIN dbo.Person AS p ON p.PersonId = q.PersonId AND p.IsStrawman = 0
-
+			  INNER JOIN @PersonActiveDates AS p ON p.PersonId = q.PersonId
 			  WHERE 1 = q.RANKnO AND q.MilestoneId = @MilestoneId  AND @IsStartDateChangeReflectedForMilestoneAndPersons = 1 
 
 		UPDATE mpentry
-				SET EndDate =  CASE
-									WHEN ( @ProjectedDeliveryDate > p.TerminationDate ) THEN  p.TerminationDate
-									ELSE (@ProjectedDeliveryDate)
-								  END
+				SET EndDate =  P.ActiveEndDate
 			    FROM MilestonePersonEntry as mpentry
 				INNER JOIN 
 					(
@@ -121,7 +124,7 @@ BEGIN
 					 FROM dbo.MilestonePersonEntry AS mpe
 					 INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
 					 ) AS q ON mpentry.Id = q.Id
-				INNER JOIN dbo.Person AS p ON p.PersonId = q.PersonId AND p.IsStrawman = 0
+				INNER JOIN @PersonActiveDates AS p ON p.PersonId = q.PersonId
 				WHERE  1 = q.RANKnO AND q.MilestoneId = @MilestoneId AND  @IsEndDateChangeReflectedForMilestoneAndPersons = 1 
 
 		--Ensure that now wrong data is present
