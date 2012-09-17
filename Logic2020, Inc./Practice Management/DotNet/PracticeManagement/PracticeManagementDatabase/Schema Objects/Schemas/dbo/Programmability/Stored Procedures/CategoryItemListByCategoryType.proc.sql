@@ -17,7 +17,8 @@ BEGIN
 				C.MonthStartDate MonthStartDate,
 				CIB.Amount
 		FROM dbo.Person P
-		JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate, @FutureDate) 
+		INNER JOIN dbo.v_PersonHistory PH ON PH.PersonId = P.PersonId
+		INNER JOIN dbo.Calendar C ON C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate, @FutureDate) 
 								AND YEAR(C.Date) = @Year
 		LEFT JOIN dbo.PersonStatusHistory PSH 
 			ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5)  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
@@ -51,7 +52,8 @@ BEGIN
 				C.MonthStartDate MonthStartDate,
 				CIB.Amount
 		FROM dbo.Person P
-		JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate, @FutureDate) 
+		INNER JOIN dbo.v_PersonHistory PH ON PH.PersonId = P.PersonId
+		INNER JOIN dbo.Calendar C ON C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate, @FutureDate) 
 								AND YEAR(C.Date) = @Year
 		LEFT JOIN dbo.PersonStatusHistory PSH 
 			ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5)  AND C.Date >= PSH.StartDate AND (C.Date <= PSH.EndDate OR PSH.EndDate IS NULL)
