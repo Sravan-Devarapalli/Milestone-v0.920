@@ -58,7 +58,8 @@ BEGIN
 				C.MonthStartDate,
 				CIB.Amount
 			FROM dbo.Person P
-			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDateLocal) 
+			INNER JOIN dbo.v_PersonHistory PH ON PH.PersonId = P.PersonId 
+			JOIN dbo.Calendar C ON C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDateLocal) 
 									AND C.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
 			LEFT JOIN dbo.PersonStatusHistory PSH 
 				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5) -- ACTIVE And Terminated Pending
@@ -255,7 +256,8 @@ BEGIN
 				C.MonthStartDate MonthStartDate,
 				CIB.Amount
 			FROM dbo.Person P
-			JOIN dbo.Calendar C ON C.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDateLocal) 
+			INNER JOIN dbo.v_PersonHistory PH ON PH.PersonId = P.PersonId 
+			JOIN dbo.Calendar C ON C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDateLocal) 
 									AND C.Date  BETWEEN @StartDateLocal AND	 @EndDateLocal
 			LEFT JOIN dbo.PersonStatusHistory PSH 
 				ON PSH.PersonId = P.PersonId AND PSH.PersonStatusId IN (1,5) -- ACTIVE And Terminated Pending
