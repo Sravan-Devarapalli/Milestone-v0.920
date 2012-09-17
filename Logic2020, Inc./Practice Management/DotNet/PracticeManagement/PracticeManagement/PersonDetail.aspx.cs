@@ -401,7 +401,7 @@ namespace PraticeManagement
             DisableTerminationDateAndReason();
 
             ddlPersonStatus.Visible = !(lblPersonStatus.Visible = btnChangeEmployeeStatus.Visible = PersonId.HasValue);
-            btnAddCompensation.Visible = !(PersonStatusId == PersonStatusType.Terminated);
+            btnAddCompensation.Enabled = !(PersonStatusId == PersonStatusType.Terminated);
         }
 
         private void DisableTerminationDateAndReason()
@@ -1170,7 +1170,7 @@ namespace PraticeManagement
         protected override void Display()
         {
             rpPermissions.Visible = IsStatusChangeClicked = false;
-            if (PreviousPage != null && PreviousPage is CompensationDetail)
+            if (Request.QueryString["ShowConfirmMessage"] != null && Request.QueryString["ShowConfirmMessage"] == "1")
             {
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
             }
@@ -1583,7 +1583,7 @@ namespace PraticeManagement
             var person = new Person();
             PopulateData(person);
 
-            if (PersonId.HasValue && PrevPersonStatusId != -1 && PrevPersonStatusId == (int)PersonStatusType.Terminated && (PersonStatusId.Value == PersonStatusType.Active || PersonStatusId.Value == PersonStatusType.Contingent))
+            if (PersonId.HasValue && PrevPersonStatusId == (int)PersonStatusType.Terminated && (PersonStatusId.Value == PersonStatusType.Active || PersonStatusId.Value == PersonStatusType.Contingent))
             {
                 TransferToCompesationDetailPage(person, loginPageUrl);
             }
