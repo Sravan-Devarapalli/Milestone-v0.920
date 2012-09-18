@@ -228,7 +228,7 @@ namespace PraticeManagement.Reporting
                 if (ViewState["SelectedPerson"] == null)
                 {
                     person = ServiceCallers.Custom.Person(p => p.GetPersonById(SelectedPersonId));
-                    SelectedPersonFirstHireDate = null;
+                    ViewState["SelectedPersonFirstHireDate"] = null;
                     ViewState["SelectedPerson"] = person;
                 }
                 else
@@ -237,7 +237,7 @@ namespace PraticeManagement.Reporting
                     if (person.Id != SelectedPersonId)
                     {
                         person = ServiceCallers.Custom.Person(p => p.GetPersonById(SelectedPersonId));
-                        SelectedPersonFirstHireDate = null;
+                        ViewState["SelectedPersonFirstHireDate"] = null;
                         ViewState["SelectedPerson"] = person;
                     }
                 }
