@@ -62,6 +62,8 @@ namespace PraticeManagement
         private int _saveCode;
         private bool? _userIsAdministratorValue;
         private bool? _userIsHRValue;
+        private bool IsErrorPanelDisplay;
+        private bool IsOtherPanelDisplay;
 
         #endregion Fields
 
@@ -404,6 +406,15 @@ namespace PraticeManagement
             btnAddCompensation.Enabled = !(PersonStatusId == PersonStatusType.Terminated);
         }
 
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            if (IsErrorPanelDisplay && !IsOtherPanelDisplay)
+            {
+                PopulateErrorPanel();
+            }
+        }
+
         private void DisableTerminationDateAndReason()
         {
             if (PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Terminated || (PrevPersonStatusId == (int)PersonStatusType.Contingent && dtpTerminationDate.DateValue == DateTime.MinValue))
@@ -565,7 +576,6 @@ namespace PraticeManagement
             gvCompensationHistory.DataBind();
             mpeRehireConfirmation.Hide();
         }
-
 
         protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
@@ -839,6 +849,7 @@ namespace PraticeManagement
             {
                 ClearDirty();
                 mlError.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
+                IsErrorPanelDisplay = true;
             }
             if (!string.IsNullOrEmpty(ExMessage) || Page.IsValid)
             {
@@ -907,6 +918,10 @@ namespace PraticeManagement
                 custTerminateDateTE.Enabled = true;
                 Page.Validate(valsPerson.ValidationGroup);
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
+            if (!Page.IsValid)
+            {
+                IsErrorPanelDisplay = true;
             }
         }
 
@@ -1173,6 +1188,7 @@ namespace PraticeManagement
             if (Request.QueryString["ShowConfirmMessage"] != null && Request.QueryString["ShowConfirmMessage"] == "1")
             {
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
+                IsErrorPanelDisplay = true;
             }
 
             if (!PersonId.HasValue)
@@ -1317,6 +1333,7 @@ namespace PraticeManagement
                         {
                             btnSave.Enabled = false;
                             mlError.ShowErrorMessage(e.Message);
+                            IsErrorPanelDisplay = true;
                         }
                     }
                 }
@@ -1599,6 +1616,10 @@ namespace PraticeManagement
                         // Creating User error
                         _saveCode = personId.Value;
                         Page.Validate();
+                        if (!Page.IsValid)
+                        {
+                            IsErrorPanelDisplay = true;
+                        }
                         return null;
                     }
 
@@ -1614,9 +1635,13 @@ namespace PraticeManagement
                     serviceClient.Abort();
                     ExMessage = ex.Message;
                     Page.Validate();
+
+                    if (!Page.IsValid)
+                    {
+                        IsErrorPanelDisplay = true;
+                    }
                 }
             }
-
             return null;
         }
 
@@ -1744,7 +1769,13 @@ namespace PraticeManagement
         {
             args.IsValid = true;
 
-            if (PreviousTerminationDate.HasValue && ( (PrevPersonStatusId == (int)PersonStatusType.Contingent && PersonStatusId == PersonStatusType.Contingent && !TerminationDate.HasValue) || (TerminationDate.HasValue && PreviousTerminationDate.Value < TerminationDate.Value)))
+            if (PreviousTerminationDate.HasValue &&
+                    (
+                        (PrevPersonStatusId == (int)PersonStatusType.Contingent && PersonStatusId == PersonStatusType.Contingent && !TerminationDate.HasValue)
+                        || (TerminationDate.HasValue && PreviousTerminationDate.Value < TerminationDate.Value)
+                        || (PrevPersonStatusId == (int)PersonStatusType.TerminationPending && (PersonStatusId == PersonStatusType.Active || PersonStatusId == PersonStatusType.Contingent) && !TerminationDate.HasValue)
+                        )
+                )
             {
                 List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
 
@@ -1756,6 +1787,7 @@ namespace PraticeManagement
                     custCancelTermination.Text = string.Format(CancelTerminationMessage, txtLastName.Text + ", " + txtFirstName.Text);
                     args.IsValid = false;
                     mpeCancelTermination.Show();
+                    IsOtherPanelDisplay = true;
                 }
             }
         }
@@ -1997,6 +2029,7 @@ namespace PraticeManagement
                 if (!e.IsValid)
                 {
                     mpeChangeStatusEndCompensation.Show();
+                    IsOtherPanelDisplay = true;
                 }
 
                 validator.Text = validator.ToolTip = validator.ErrorMessage;
@@ -2035,6 +2068,7 @@ namespace PraticeManagement
                 {
                     validator.ErrorMessage = HireDateChangeMessage;
                     mpeHireDateChange.Show();
+                    IsOtherPanelDisplay = true;
                 }
 
                 validator.Text = validator.ToolTip = validator.ErrorMessage;
@@ -2064,6 +2098,7 @@ namespace PraticeManagement
             {
                 validator.ErrorMessage = ReHireMessage;
                 mpeRehireConfirmation.Show();
+                IsOtherPanelDisplay = true;
             }
 
             validator.Text = validator.ToolTip = validator.ErrorMessage;
@@ -2126,6 +2161,11 @@ namespace PraticeManagement
                     payHistory.Add(pay);
                 }
             }
+        }
+
+        private void PopulateErrorPanel()
+        {
+            mpeErrorPanel.Show();
         }
 
         #endregion
@@ -2214,6 +2254,7 @@ namespace PraticeManagement
                 lblTerminationDateError.Text = string.Format(lblTerminationDateErrorFormat, person.Name);
 
                 mpeViewTerminationDateErrors.Show();
+                IsOtherPanelDisplay = true;
 
                 if (TEsExistsAfterTerminationDate)
                 {
@@ -2636,8 +2677,10 @@ namespace PraticeManagement
             {
                 resultreturn = false;
             }
-
-
+            if (!Page.IsValid)
+            {
+                IsErrorPanelDisplay = true;
+            }
             return resultreturn;
         }
 
@@ -2666,6 +2709,7 @@ namespace PraticeManagement
                     PopulateControls(person);
                 }
                 mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
+                IsErrorPanelDisplay = true;
             }
             else
             {
@@ -2679,10 +2723,12 @@ namespace PraticeManagement
                         if (data.Contains("CK_Pay_DateRange"))
                         {
                             mlConfirmation.ShowErrorMessage("Compensation for the same period already exists.");
+                            IsErrorPanelDisplay = true;
                         }
                         else if (innerexceptionMessage == StartDateIncorrect || innerexceptionMessage == EndDateIncorrect || innerexceptionMessage == PeriodIncorrect || innerexceptionMessage == HireDateInCorrect)
                         {
                             mlConfirmation.ShowErrorMessage(innerexceptionMessage);
+                            IsErrorPanelDisplay = true;
                         }
                     }
                 }
