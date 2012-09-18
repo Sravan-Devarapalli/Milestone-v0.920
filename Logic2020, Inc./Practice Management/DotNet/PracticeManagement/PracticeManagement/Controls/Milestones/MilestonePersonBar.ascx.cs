@@ -307,14 +307,7 @@ namespace PraticeManagement.Controls.Milestones
         protected void custPersonInsert_ServerValidate(object sender, ServerValidateEventArgs args)
         {
             Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
-
-            if (person == null ||
-                person.HireDate.Date > dpPersonStartInsert.DateValue.Date ||
-                (person.TerminationDate.HasValue  &&
-                 person.TerminationDate.Value.Date < dpPersonEndInsert.DateValue.Date))
-            {
-                args.IsValid = false;
-            }
+            args.IsValid = HostingControl.IsRangeInThePersonEmpHistory(person, dpPersonStartInsert.DateValue.Date, dpPersonEndInsert.DateValue.Date);
         }
 
         protected void cvHoursInPeriod_ServerValidate(object source, ServerValidateEventArgs e)
