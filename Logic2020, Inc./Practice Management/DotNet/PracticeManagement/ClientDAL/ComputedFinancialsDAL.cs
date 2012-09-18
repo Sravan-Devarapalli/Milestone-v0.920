@@ -7,6 +7,7 @@ using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.Financials;
 using DataTransferObjects.Utils;
+using System.Linq;
 
 namespace DataAccess
 {
@@ -346,6 +347,11 @@ namespace DataAccess
             foreach (var persFin in ReadFinancialsByOneForPerson(reader))
             {
                 var fin = persFin;
+                if (milestonePersons.Any(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value
+                                                            && milestonePerson.Entries[0].Id == fin.Key.Entries[0].Id
+
+                                        )
+                    )
                 milestonePersons.Find(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value
                                                             && milestonePerson.Entries[0].Id == fin.Key.Entries[0].Id
                                                         
