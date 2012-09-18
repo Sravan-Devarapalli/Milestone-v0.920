@@ -625,6 +625,26 @@ namespace DataAccess
                 var milestoneHourlyRevenueIndex = reader.GetOrdinal(MilestoneHourlyRevenueColumn);
                 var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
 
+                int firstHireDateIndex;
+                try
+                {
+                    firstHireDateIndex = reader.GetOrdinal(Constants.ColumnNames.FirstHireDate);
+                }
+                catch
+                {
+                    firstHireDateIndex = -1;
+                }
+
+                int lastTerminationDateIndex;
+                try
+                {
+                    lastTerminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.LastTerminationDate);
+                }
+                catch
+                {
+                    lastTerminationDateIndex = -1;
+                }
+
                 int milestonePersonEntryIdIndex;
                 try
                 {
@@ -688,6 +708,7 @@ namespace DataAccess
                         entry.Id = reader.GetInt32(milestonePersonEntryIdIndex);
                     }
 
+                  
                     if (!reader.IsDBNull(personRoleIdIndex))
                     {
                         entry.Role = new PersonRole
@@ -722,6 +743,7 @@ namespace DataAccess
                                                      FirstName = reader.GetString(firstNameIndex),
                                                      LastName = reader.GetString(lastNameIndex)
                                                  };
+
                     if (hireDateIndex >= 0 && terminationDateIndex >= 0)
                     {
                         milestonePerson.Person.HireDate = reader.GetDateTime(hireDateIndex);
@@ -729,6 +751,17 @@ namespace DataAccess
                                                                  ? (DateTime?)reader.GetDateTime(terminationDateIndex)
                                                                  : null;
                     }
+
+                    if (firstHireDateIndex > -1)
+                    {
+                        milestonePerson.Person.FirstHireDate = reader.GetDateTime(firstHireDateIndex);
+                    }
+
+                    if (lastTerminationDateIndex > -1)
+                    {
+                        milestonePerson.Person.LastTerminationDate = reader.GetDateTime(lastTerminationDateIndex);
+                    }
+
 
                     // Seniority
                     if (!reader.IsDBNull(personSeniorityIdIndex))
