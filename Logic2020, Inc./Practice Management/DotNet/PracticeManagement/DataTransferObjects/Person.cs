@@ -139,6 +139,14 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public DateTime? FirstHireDate
+        {
+            get;
+            set;
+        }
+
+
+        [DataMember]
         public List<Employment> EmploymentHistory
         {
             get;
@@ -188,6 +196,13 @@ namespace DataTransferObjects
         {
             get { return _terminationDate; }
             set { _terminationDate = value; }
+        }
+
+        [DataMember]
+        public DateTime? LastTerminationDate
+        {
+            get;
+            set;
         }
 
         [DataMember]
