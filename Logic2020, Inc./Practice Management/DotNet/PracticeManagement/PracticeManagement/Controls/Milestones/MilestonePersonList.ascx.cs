@@ -304,14 +304,20 @@ namespace PraticeManagement.Controls.Milestones
             var dpPersonStart = ((Control)sender).Parent.FindControl("dpPersonStart") as DatePicker;
             var dpPersonEnd = ((Control)sender).Parent.FindControl("dpPersonEnd") as DatePicker;
             Person person = GetPersonBySelectedValue(ddl.SelectedValue);
+            args.IsValid = IsRangeInThePersonEmpHistory(person, dpPersonStart.DateValue.Date, dpPersonEnd.DateValue.Date);
+        }
 
-            if (person == null ||
-                person.HireDate.Date > dpPersonStart.DateValue.Date ||
-                (person.TerminationDate.HasValue &&
-                 person.TerminationDate.Value < dpPersonEnd.DateValue.Date))
+        public bool IsRangeInThePersonEmpHistory(Person person, DateTime startDate, DateTime endDate)
+        {
+            bool check = false;
+            if (person != null && startDate != null && endDate != null && person.EmploymentHistory != null)
             {
-                args.IsValid = false;
+                if (person.EmploymentHistory.Any(p => p.HireDate <= startDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && endDate <= p.TerminationDate))))
+                {
+                    check = true;
+                }
             }
+            return check;
         }
 
         protected void reqHourlyRevenue_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -916,6 +922,7 @@ namespace PraticeManagement.Controls.Milestones
                     try
                     {
                         var person = serviceCLient.GetPersonById(int.Parse(id));
+                        person.EmploymentHistory = serviceCLient.GetPersonEmploymentHistoryById(person.Id.Value).ToList();
                         ViewState[PERSON_ID_KEY] = person;
                         return person;
                     }
