@@ -310,11 +310,18 @@ namespace PraticeManagement.Controls.Milestones
         public bool IsRangeInThePersonEmpHistory(Person person, DateTime startDate, DateTime endDate)
         {
             bool check = false;
-            if (person != null && startDate != null && endDate != null && person.EmploymentHistory != null)
+            if (person != null && startDate != null && endDate != null)
             {
-                if (person.EmploymentHistory.Any(p => p.HireDate <= startDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && endDate <= p.TerminationDate))))
+                if (person.IsStrawMan)
                 {
                     check = true;
+                }
+                else if(person.EmploymentHistory != null)
+                {
+                    if (person.EmploymentHistory.Any(p => p.HireDate <= startDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && endDate <= p.TerminationDate))))
+                    {
+                        check = true;
+                    }
                 }
             }
             return check;
