@@ -360,6 +360,8 @@
             public const string Terminations1099PORCountInTheRange = "Terminations1099PORCountInTheRange";
             public const string NewHiredCumulativeInTheRange = "NewHiredCumulativeInTheRange";
             public const string TerminationsCumulativeEmployeeCountInTheRange = "TerminationsCumulativeEmployeeCountInTheRange";
+            public const string FirstHireDate = "FirstHireDate";
+            public const string LastTerminationDate = "LastTerminationDate";
         }
 
         #endregion
