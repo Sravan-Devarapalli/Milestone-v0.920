@@ -1591,7 +1591,7 @@ namespace PraticeManagement
                             {
                                 List<Person> personlist = new List<Person>();
 
-                                personlist = Milestone.MilestonePersons.Where(mp => mp.Person.TerminationDate.HasValue && mp.Person.TerminationDate.Value < dtpPeriodFrom.DateValue).Select(mp => mp.Person).ToList();
+                                personlist = Milestone.MilestonePersons.Where(mp => mp.Person.LastTerminationDate.HasValue && mp.Person.LastTerminationDate.Value < dtpPeriodFrom.DateValue).Select(mp => mp.Person).ToList();
 
                                 if (personlist.Count > 0)
                                 {
@@ -1611,7 +1611,7 @@ namespace PraticeManagement
                             {
                                 List<Person> personlist = new List<Person>();
 
-                                personlist = Milestone.MilestonePersons.Where(mp => mp.Person.HireDate > dtpPeriodTo.DateValue).Select(mp => mp.Person).ToList();
+                                personlist = Milestone.MilestonePersons.Where(mp => mp.Person.FirstHireDate > dtpPeriodTo.DateValue).Select(mp => mp.Person).ToList();
 
                                 if (personlist.Count > 0)
                                 {
