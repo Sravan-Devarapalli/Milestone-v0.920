@@ -16,7 +16,7 @@ BEGIN
 	IF EXISTS (SELECT 1
 				FROM inserted i
 				LEFT JOIN deleted d ON d.PersonId = i.PersonId
-				WHERE i.HireDate <> d.HireDate OR ISNULL(i.TerminationDate, '') <> ISNULL(d.TerminationDate, ''))
+				WHERE ISNULL(i.HireDate, '') <> ISNULL(d.HireDate, '') OR ISNULL(i.TerminationDate, '') <> ISNULL(d.TerminationDate, ''))
 	BEGIN
 
 		-- Deleting redundand records
