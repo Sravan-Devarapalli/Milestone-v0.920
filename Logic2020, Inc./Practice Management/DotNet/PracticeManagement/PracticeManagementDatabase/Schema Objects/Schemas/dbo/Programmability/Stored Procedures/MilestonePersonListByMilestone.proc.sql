@@ -46,10 +46,10 @@ AS
 	       p.HireDate,
 	       p.TerminationDate,
 		   mp.EntryId,
-		   MPAD.FirstHireDate,
-		   MPAD.LastTerminationDate
+		   ISNULL(MPAD.FirstHireDate,'19000101') AS FirstHireDate,
+		   ISNULL(MPAD.LastTerminationDate,'20121231') AS LastTerminationDate
 	  FROM dbo.v_MilestonePerson AS mp
 	  INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
-	  INNER JOIN MileStonePersonActiveDates AS MPAD ON MPAD.PersonId = P.PersonId
+	  LEFT JOIN MileStonePersonActiveDates AS MPAD ON MPAD.PersonId = P.PersonId
 	  WHERE mp.MilestoneId = @MilestoneIdLocal
 
