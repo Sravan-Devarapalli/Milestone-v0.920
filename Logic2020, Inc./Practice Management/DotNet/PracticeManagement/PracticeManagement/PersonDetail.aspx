@@ -1009,6 +1009,7 @@
                                                 OnClick="btnAddCompensation_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;" />
                                             &nbsp;<asp:CustomValidator ID="custCompensationCoversMilestone" runat="server" ValidationGroup="Person"
                                                 ErrorMessage="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
+                                                ToolTip = "This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
                                                 OnServerValidate="custCompensationCoversMilestone_ServerValidate" Text="*"> </asp:CustomValidator>
                                             <div class="clear0">
                                             </div>
@@ -1566,29 +1567,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <asp:ValidationSummary ID="valsPerson" runat="server" EnableClientScript="false"
-                            ValidationGroup="Person" />
-                        <asp:ValidationSummary ID="valsManager" runat="server" EnableClientScript="false"
-                            ValidationGroup="ActiveManagers" />
-                        <asp:ValidationSummary ID="valSumCompensationDelete" runat="server" EnableClientScript="false"
-                            ValidationGroup="CompensationDelete" />
-                        <asp:ValidationSummary ID="valSumCompensation" runat="server" EnableClientScript="false"
-                            ValidationGroup="CompensationUpdate" />
-                        <asp:ValidationSummary ID="ValSumSalaryToContractVoilation" runat="server" EnableClientScript="false"
-                            ValidationGroup="SalaryToContractVoilation" />
-                        <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
-                            WarningColor="Orange" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
                         &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <uc:MessageLabel ID="mlError" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
-                            WarningColor="Orange" EnableViewState="false" />
                     </td>
                 </tr>
                 <tr>
@@ -1634,7 +1613,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerProjects" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).ProjectNumber)+ " - "+HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).Name) %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).ProjectNumber)+ " - "+HttpUtility.HtmlEncode(((DataTransferObjects.Project)Container.DataItem).Name) %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1643,7 +1622,7 @@
                                     </asp:Label><br />
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-<%# HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).OpportunityNumber) + " - " + HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).Name) %>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).OpportunityNumber) + " - " + HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).Name) %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1832,6 +1811,7 @@
                         <td style="text-align: center; padding: 4px;">
                             <asp:Button ID="bntEndCompensationOk" runat="server" Text="Ok" OnClick="btnEndCompensationOk_Click"
                                 UseSubmitBehavior="false" />
+                                &nbsp;
                             <asp:Button ID="btnEndCompensationCancel" runat="server" Text="Cancel" OnClick="btnEndCompensationCancel_Click"
                                 UseSubmitBehavior="false" />
                         </td>
@@ -1855,6 +1835,7 @@
                         <td style="text-align: center; padding: 4px;">
                             <asp:Button ID="btnHireDateChangeOk" runat="server" Text="Ok" OnClick="btnHireDateChangeOk_Click"
                                 UseSubmitBehavior="false" />
+                                &nbsp;
                             <asp:Button ID="btnHireDateChangeCancel" runat="server" Text="Cancel" OnClick="btnHireDateChangeCancel_Click"
                                 UseSubmitBehavior="false" />
                         </td>
@@ -1879,6 +1860,7 @@
                         <td style="text-align: center; padding: 4px;">
                             <asp:Button ID="btnRehireConfirmationOk" runat="server" Text="Ok" OnClick="btnRehireConfirmationOk_Click"
                                 UseSubmitBehavior="false" />
+                                &nbsp;
                             <asp:Button ID="btnRehireConfirmationCancel" runat="server" Text="Cancel" OnClick="btnRehireConfirmationCancel_Click"
                                 UseSubmitBehavior="false" />
                         </td>
@@ -1928,6 +1910,44 @@
                                     </td>
                                 </tr>
                             </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
+                TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
+                CancelControlID="btnCancelErrorPanel" DropShadow="false" />
+            <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
+                <table class="Width100Per">
+                    <tr>
+                        <th class="bgcolorGray TextAlignCenterImp vBottom">
+                            <b class="BtnClose">Attention!</b>
+                            <asp:Button ID="btnCancelErrorPanel" runat="server" CssClass="mini-report-close floatright"
+                                ToolTip="Cancel" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="Padding10Px">
+                            <asp:ValidationSummary ID="valsPerson" runat="server" EnableClientScript="false"
+                                CssClass="ApplyStyleForDashBoardLists" ValidationGroup="Person" />
+                            <asp:ValidationSummary ID="valsManager" runat="server" EnableClientScript="false"
+                                CssClass="ApplyStyleForDashBoardLists" ValidationGroup="ActiveManagers" />
+                            <asp:ValidationSummary ID="valSumCompensationDelete" runat="server" EnableClientScript="false"
+                                CssClass="ApplyStyleForDashBoardLists" ValidationGroup="CompensationDelete" />
+                            <asp:ValidationSummary ID="valSumCompensation" runat="server" EnableClientScript="false"
+                                CssClass="ApplyStyleForDashBoardLists" ValidationGroup="CompensationUpdate" />
+                            <asp:ValidationSummary ID="ValSumSalaryToContractVoilation" runat="server" EnableClientScript="false"
+                                CssClass="ApplyStyleForDashBoardLists" ValidationGroup="SalaryToContractVoilation" />
+                            <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
+                                WarningColor="Orange" />
+                            <uc:MessageLabel ID="mlError" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
+                                WarningColor="Orange" EnableViewState="false" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Padding10Px TextAlignCenterImp">
+                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
                         </td>
                     </tr>
                 </table>
