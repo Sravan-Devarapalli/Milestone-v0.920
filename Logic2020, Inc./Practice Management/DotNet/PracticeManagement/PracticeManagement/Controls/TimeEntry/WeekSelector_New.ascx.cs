@@ -326,7 +326,7 @@ namespace PraticeManagement.Controls.TimeEntry
                     HostingPage.lbMessageControl.Text = message;
                     HostingPage.mpePersonInactiveAlertControl.Show();
                     if (PreviousWeekSelectedDay.Value == DateTime.MinValue)
-                        PreviousWeekSelectedDay = Convert.ToDateTime(strSelectedDate);
+                        PreviousWeekSelectedDay = Convert.ToDateTime(string.IsNullOrEmpty(strSelectedDate) ? DateTime.Now.ToShortDateString() : strSelectedDate);
                     OnWeekChanged(PreviousWeekSelectedDay.Value);
                 }
             }
