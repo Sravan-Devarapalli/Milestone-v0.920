@@ -28,8 +28,9 @@ BEGIN
 		INSERT INTO @DeleteMileStonePersonEntriesTable
 		SELECT   mp.MilestonePersonId
 		FROM [dbo].[MilestonePerson] AS mp
-		LEFT JOIN @PersonActiveDates AS p ON mp.PersonId = p.PersonId
-		WHERE  p.PersonId IS NULL AND mp.MilestoneId = @MilestoneId
+		INNER JOIN dbo.Person P ON mp.PersonId = P.PersonId AND P.IsStrawman = 0
+		LEFT JOIN @PersonActiveDates AS PA ON mp.PersonId = PA.PersonId
+		WHERE  PA.PersonId IS NULL AND mp.MilestoneId = @MilestoneId 
 		 
 		DELETE MPE FROM dbo.MilestonePersonEntry MPE
 		JOIN @DeleteMileStonePersonEntriesTable Temp ON Temp.MilestonePersonId = MPE.MilestonePersonId
