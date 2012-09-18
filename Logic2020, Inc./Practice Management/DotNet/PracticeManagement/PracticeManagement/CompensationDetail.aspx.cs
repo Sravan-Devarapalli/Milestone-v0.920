@@ -279,6 +279,7 @@ namespace PraticeManagement
 
                         //var returnUrl = Request.Url.AbsoluteUri.Substring(Request.Url.AbsoluteUri.LastIndexOf("&returnTo="));
                         var returnUrl = Request.UrlReferrer.ToString();
+                        if(returnUrl.LastIndexOf("&returnTo=") != -1)
                         returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("&returnTo="));
                         string redirectUrl = "PersonDetail.aspx?id=" + PersonDetailData.Id + "&ShowConfirmMessage=1";
                         redirectUrl = redirectUrl + (returnUrl.Contains("persons.aspx") ? returnUrl : string.Empty);
