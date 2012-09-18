@@ -4,9 +4,18 @@
 )
 AS
 	SET NOCOUNT ON
-	DECLARE @MilestoneIdLocal INT
-	SELECT @MilestoneIdLocal = @MilestoneId
-	
+	DECLARE @MilestoneIdLocal INT,@FutureDate DATETIME
+	SELECT @MilestoneIdLocal = @MilestoneId,@FutureDate = dbo.GetFutureDate()
+
+	;WITH MileStonePersonActiveDates
+	AS 
+	(
+		SELECT PH.PersonId,MIN(PH.HireDate) AS FirstHireDate,MAX(ISNULL(PH.TerminationDate,@FutureDate)) AS LastTerminationDate
+		FROM dbo.v_PersonHistory PH  
+		INNER JOIN dbo.MilestonePerson MP ON MP.PersonId = PH.PersonId	AND MP.MilestoneId = @MilestoneIdLocal
+		GROUP BY PH.PersonId
+	)
+
 	SELECT mp.MilestonePersonId,
 	       mp.MilestoneId,
 	       mp.PersonId,
@@ -36,8 +45,11 @@ AS
 	       mp.MilestoneHourlyRevenue,
 	       p.HireDate,
 	       p.TerminationDate,
-		   mp.EntryId
+		   mp.EntryId,
+		   MPAD.FirstHireDate,
+		   MPAD.LastTerminationDate
 	  FROM dbo.v_MilestonePerson AS mp
-	  INNER JOIN Person AS p ON mp.PersonId = p.PersonId
+	  INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
+	  INNER JOIN MileStonePersonActiveDates AS MPAD ON MPAD.PersonId = P.PersonId
 	  WHERE mp.MilestoneId = @MilestoneIdLocal
 
