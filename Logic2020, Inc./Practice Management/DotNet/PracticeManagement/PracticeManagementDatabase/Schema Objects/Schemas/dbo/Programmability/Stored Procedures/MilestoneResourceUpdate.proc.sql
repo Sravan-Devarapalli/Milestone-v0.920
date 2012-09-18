@@ -19,8 +19,7 @@ BEGIN
 		SELECT MP.PersonId,MIN(C.Date) AS ActiveStartDate,MAX(C.Date) AS ActiveEndDate
 		FROM dbo.MilestonePerson MP 
 		INNER JOIN dbo.Calendar C ON C.Date BETWEEN @StartDate AND @ProjectedDeliveryDate AND MP.MilestoneId = @MilestoneId
-		LEFT JOIN dbo.v_PersonHistory PH ON MP.PersonId = PH.PersonId	
-											AND C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) 
+		INNER JOIN dbo.v_PersonHistory PH ON MP.PersonId = PH.PersonId AND C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) 
 		GROUP BY MP.PersonId
 
 		--Delete milestone person entries which don't have atleast 1 active day in the selected range.
@@ -29,8 +28,8 @@ BEGIN
 		INSERT INTO @DeleteMileStonePersonEntriesTable
 		SELECT   mp.MilestonePersonId
 		FROM [dbo].[MilestonePerson] AS mp
-		INNER JOIN @PersonActiveDates AS p ON mp.PersonId = p.PersonId
-		WHERE  P.ActiveStartDate IS NULL AND P.ActiveEndDate IS NULL
+		LEFT JOIN @PersonActiveDates AS p ON mp.PersonId = p.PersonId
+		WHERE  p.PersonId IS NULL AND mp.MilestoneId = @MilestoneId
 		 
 		DELETE MPE FROM dbo.MilestonePersonEntry MPE
 		JOIN @DeleteMileStonePersonEntriesTable Temp ON Temp.MilestonePersonId = MPE.MilestonePersonId
@@ -147,3 +146,4 @@ BEGIN
 			 WHERE mp.MilestoneId = @MilestoneId AND (@IsStartDateChangeReflectedForMilestoneAndPersons = 1 OR @IsEndDateChangeReflectedForMilestoneAndPersons = 1 )
 
  END
+
