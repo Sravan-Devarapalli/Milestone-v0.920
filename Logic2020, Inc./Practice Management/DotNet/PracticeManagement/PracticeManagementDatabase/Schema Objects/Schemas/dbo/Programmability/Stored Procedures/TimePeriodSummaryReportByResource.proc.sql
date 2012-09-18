@@ -83,8 +83,8 @@ AS
 				  AS ( SELECT DISTINCT
 								PTSH.PersonId
 					   FROM     dbo.PersonStatusHistory PTSH
-					   WHERE    PTSH.StartDate < @EndDateLocal
-								AND @StartDateLocal <  ISNULL(PTSH.EndDate,@FutureDate)
+					   WHERE    PTSH.StartDate <= @EndDateLocal
+								AND @StartDateLocal <=  ISNULL(PTSH.EndDate,@FutureDate)
 								AND PTSH.PersonStatusId IN (1,5) --ACTIVE STATUS
 								
 					 ),
