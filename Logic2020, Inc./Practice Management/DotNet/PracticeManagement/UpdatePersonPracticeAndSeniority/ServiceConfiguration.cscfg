@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="UpdatePersonPracticeAndSeniority" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="1" osVersion="*">
+  <Role name="UpdatePracticeAndSeniority">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="DBConnection" value="Server=tcp:gdl05wmfhe.database.windows.net;Database=PracticeManagement;User ID=pracadmin@gdl05wmfhe;Password=Meatballs#;Trusted_Connection=False;Encrypt=True;" />
+      <Setting name="LogEnabled" value="true" />
+      <Setting name="RunSchedularDailyAtTime" value="00:01:00" /> <!--HH:mm:ss and 24 hour time format-->
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
