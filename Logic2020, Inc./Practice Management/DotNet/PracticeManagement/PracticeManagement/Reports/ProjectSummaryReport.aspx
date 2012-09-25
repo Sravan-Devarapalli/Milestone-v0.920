@@ -192,6 +192,14 @@
                                     <pmc:CustomDropDown ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                                         <asp:ListItem Selected="True" Text="Entire Project" Value="*">
                                         </asp:ListItem>
+                                        <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
+                                        <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
+                                        <asp:ListItem Text="This Week" Value="7"></asp:ListItem>
+                                        <asp:ListItem Text="This Month" Value="30"></asp:ListItem>
+                                        <asp:ListItem Text="This Year" Value="365"></asp:ListItem>
+                                        <asp:ListItem Text="Last Week" Value="-7"></asp:ListItem>
+                                        <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
+                                        <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0">
                                         </asp:ListItem>
                                     </pmc:CustomDropDown>
