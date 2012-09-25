@@ -2,8 +2,8 @@
 -- Author:		ThulasiRam.P
 -- Create date: 03-15-2012
 -- Description:  Time Entries grouped by workType and Resource for a Project.
--- Updated by : Sainath.CH
--- Update Date: 05-01-2012
+-- Updated by : Srinivas.M
+-- Update Date: 09-25-2012
 -- =========================================================================
 CREATE PROCEDURE [dbo].[ProjectSummaryReportByResource]
 	(
@@ -121,21 +121,37 @@ AS
 											)
 							   GROUP BY MP.PersonId
 							 )
+					,TimeEntryPersons AS
+					(
+						SELECT TE.*, TEH.IsChargeable, TEH.ActualHours, CC.*, PTSH.PersonStatusId
+						FROM TimeEntry TE
+						INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TE.ChargeCodeId AND CC.ProjectId = @ProjectId
+						INNER JOIN dbo.TimeEntryHours AS TEH ON TEH.TimeEntryId = TE.TimeEntryId
+																  AND ( ( @MilestoneIdLocal IS NULL )
+																	OR ( TE.ChargeCodeDate BETWEEN @MilestoneStartDate AND @MilestoneEndDate )
+																  )
+																  AND ( ( @StartDateLocal IS NULL AND @EndDateLocal IS NULL )
+																	OR ( TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal )
+																  )
+						INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = TE.PersonId
+															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
+															  AND ISNULL(PTSH.EndDate,@FutureDate)
+					)
 					SELECT  P.PersonId ,
 							P.LastName ,
 							P.FirstName ,
 							P.IsOffshore ,
-							ROUND(SUM(CASE WHEN ( TEH.IsChargeable = 1 AND @ProjectNumberLocal != 'P031000'
-												  AND TE.ChargeCodeDate < @Today
-												) THEN TEH.ActualHours
+							ROUND(SUM(CASE WHEN ( TEP.IsChargeable = 1 AND @ProjectNumberLocal != 'P031000'
+												  AND TEP.ChargeCodeDate < @Today
+												) THEN TEP.ActualHours
 										   ELSE 0
 									  END), 2) AS BillableHoursUntilToday ,
-							ROUND(SUM(CASE WHEN TEH.IsChargeable = 1  AND @ProjectNumberLocal != 'P031000'
-										   THEN TEH.ActualHours
+							ROUND(SUM(CASE WHEN TEP.IsChargeable = 1  AND @ProjectNumberLocal != 'P031000'
+										   THEN TEP.ActualHours
 										   ELSE 0
 									  END), 2) AS BillableHours ,
-							ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 OR @ProjectNumberLocal = 'P031000'
-										   THEN TEH.ActualHours
+							ROUND(SUM(CASE WHEN TEP.IsChargeable = 0 OR @ProjectNumberLocal = 'P031000'
+										   THEN TEP.ActualHours
 										   ELSE 0
 									  END), 2) AS NonBillableHours ,
 							ISNULL(PR.Name, '') AS ProjectRoleName ,
@@ -151,42 +167,22 @@ AS
 							ROUND(MAX(ISNULL(PFH.ForecastedHoursUntilToday, 0)),
 								  2) AS ForecastedHoursUntilToday ,
 							ROUND(MAX(ISNULL(PFH.ForecastedHours, 0)), 2) AS ForecastedHours
-					FROM    dbo.TimeEntry AS TE
-							INNER JOIN dbo.TimeEntryHours AS TEH ON TEH.TimeEntryId = TE.TimeEntryId
-															  AND ( ( @MilestoneIdLocal IS NULL )
-															  OR ( TE.ChargeCodeDate BETWEEN @MilestoneStartDate
-															  AND
-															  @MilestoneEndDate )
-															  )
-															  AND ( ( @StartDateLocal IS NULL
-															  AND @EndDateLocal IS NULL
-															  )
-															  OR ( TE.ChargeCodeDate BETWEEN @StartDateLocal
-															  AND
-															  @EndDateLocal )
-															  )
-							INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TE.ChargeCodeId
-															  AND CC.ProjectId = @ProjectId
-							INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = TE.PersonId
-															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
-															  AND ISNULL(PTSH.EndDate,@FutureDate)
-							FULL  JOIN PersonMaxRoleValues AS PMRV ON PMRV.PersonId = TE.PersonId
-							INNER JOIN dbo.Person AS P ON ( P.PersonId = TE.PersonId
-															OR PMRV.PersonId = P.PersonId
-														  )
-														  AND p.IsStrawman = 0
-							LEFT  JOIN PersonForeCastedHours AS PFH ON PFH.PersonId = P.PersonId
+					FROM    dbo.Person P
+					LEFT JOIN TimeEntryPersons TEP ON TEP.PersonId = P.PersonId
+					LEFT  JOIN PersonMaxRoleValues AS PMRV ON P.PersonId = PMRV.PersonId
+					LEFT  JOIN PersonForeCastedHours AS PFH ON PFH.PersonId = P.PersonId
 															  AND PFH.PersonId = PMRV.PersonId
-							LEFT  JOIN dbo.PersonRole AS PR ON PR.RoleValue = PMRV.MaxRoleValue
-					WHERE   ( TE.ChargeCodeDate IS NULL
-							  OR ( TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
-															  @FutureDate)
-								   AND ( CC.timeTypeId != @HolidayTimeType
-										 OR ( CC.timeTypeId = @HolidayTimeType
-											  AND PTSH.PersonStatusId IN (1,5)
+					LEFT  JOIN dbo.PersonRole AS PR ON PR.RoleValue = PMRV.MaxRoleValue
+					WHERE P.IsStrawman = 0
+						AND ( (TEP.Id IS NOT NULL 
+									AND TEP.ChargeCodeDate <= ISNULL(P.TerminationDate,@FutureDate)
+								    AND ( TEP.timeTypeId != @HolidayTimeType
+										 OR ( TEP.timeTypeId = @HolidayTimeType
+											  AND TEP.PersonStatusId IN (1,5)
 											)
 									   )
 								 )
+							 OR PMRV.PersonId IS NOT NULL
 							)
 							AND ( @PersonRoleNames IS NULL
 								  OR ISNULL(PR.Name, '') IN (
