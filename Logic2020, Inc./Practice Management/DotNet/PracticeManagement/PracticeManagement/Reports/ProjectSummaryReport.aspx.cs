@@ -24,14 +24,69 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                int selectedVal = 0;
-                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal) && selectedVal == 0)
+                System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
+
+                if (li.Attributes["milestone"] == null)
                 {
-                    return diRange.FromDate.Value;
+                    int selectedVal = 0;
+
+                    if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
+                    {
+                        if (selectedVal == 0)
+                        {
+                            return diRange.FromDate.Value;
+                        }
+                        else
+                        {
+                            var now = Utils.Generic.GetNowWithTimeZone();
+                            if (selectedVal > 0)
+                            {
+                                if (selectedVal == 7)
+                                {
+                                    return Utils.Calendar.WeekStartDate(now);
+                                }
+                                else if (selectedVal == 30)
+                                {
+                                    return Utils.Calendar.MonthStartDate(now);
+                                }
+                                else if (selectedVal == 15)
+                                {
+                                    return Utils.Calendar.PayrollCurrentStartDate(now);
+                                }
+                                else
+                                {
+                                    return Utils.Calendar.YearStartDate(now);
+                                }
+
+                            }
+                            else if (selectedVal < 0)
+                            {
+                                if (selectedVal == -7)
+                                {
+                                    return Utils.Calendar.LastWeekStartDate(now);
+                                }
+                                else if (selectedVal == -15)
+                                {
+                                    return Utils.Calendar.PayrollPerviousStartDate(now);
+                                }
+                                else if (selectedVal == -30)
+                                {
+                                    return Utils.Calendar.LastMonthStartDate(now);
+                                }
+                                else
+                                {
+                                    return Utils.Calendar.LastYearStartDate(now);
+                                }
+                            }
+                            else
+                            {
+                                return diRange.FromDate.Value;
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
                     string startDateString = li.Attributes["startdate"];
                     DateTime startDate;
                     if (DateTime.TryParse(startDateString, out startDate))
@@ -47,14 +102,68 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                int selectedVal = 0;
-                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal) && selectedVal == 0)
+                System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
+
+                if (li.Attributes["milestone"] == null)
                 {
-                    return diRange.ToDate.Value;
+                    int selectedVal = 0;
+
+                    if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
+                    {
+                        if (selectedVal == 0)
+                        {
+                            return diRange.ToDate.Value;
+                        }
+                        else
+                        {
+                            var now = Utils.Generic.GetNowWithTimeZone();
+                            if (selectedVal > 0)
+                            {
+                                if (selectedVal == 7)
+                                {
+                                    return Utils.Calendar.WeekEndDate(now);
+                                }
+                                else if (selectedVal == 15)
+                                {
+                                    return Utils.Calendar.PayrollCurrentEndDate(now);
+                                }
+                                else if (selectedVal == 30)
+                                {
+                                    return Utils.Calendar.MonthEndDate(now);
+                                }
+                                else
+                                {
+                                    return Utils.Calendar.YearEndDate(now);
+                                }
+                            }
+                            else if (selectedVal < 0)
+                            {
+                                if (selectedVal == -7)
+                                {
+                                    return Utils.Calendar.LastWeekEndDate(now);
+                                }
+                                else if (selectedVal == -15)
+                                {
+                                    return Utils.Calendar.PayrollPerviousEndDate(now);
+                                }
+                                else if (selectedVal == -30)
+                                {
+                                    return Utils.Calendar.LastMonthEndDate(now);
+                                }
+                                else
+                                {
+                                    return Utils.Calendar.LastYearEndDate(now);
+                                }
+                            }
+                            else
+                            {
+                                return diRange.ToDate.Value;
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
                     string enddateString = li.Attributes["enddate"];
                     DateTime enddate;
                     if (DateTime.TryParse(enddateString, out enddate))
@@ -83,14 +192,26 @@ namespace PraticeManagement.Reporting
                 {
                     return string.Empty;
                 }
-                else if (li.Value != "0")
+                else if (li.Attributes["milestone"] != null)
                 {
                     string milestoneName = li.Attributes["milestone"];
                     return milestoneName + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
                 }
                 else
                 {
-                    return StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                    if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
+                    {
+                        return StartDate.Value.ToString("MMMM yyyy");
+                    }
+                    else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
+                    {
+                        return StartDate.Value.ToString("yyyy");
+                    }
+                    else
+                    {
+                        return StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                    }
+
                 }
             }
         }
@@ -99,7 +220,7 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                return (ddlPeriod.SelectedValue != "*" && ddlPeriod.SelectedValue != "0") ? (int?)Convert.ToInt32(ddlPeriod.SelectedValue) : null;
+                return (ddlPeriod.SelectedItem.Attributes["milestone"] != null && ddlPeriod.SelectedValue != "*") ? (int?)Convert.ToInt32(ddlPeriod.SelectedValue) : null;
             }
         }
 
@@ -377,6 +498,25 @@ namespace PraticeManagement.Reporting
                 listItem.Attributes.Add("milestone", listItem.Text);
             }
             ddlPeriod.Items.Add(listItem);
+            
+            //adding additional time phrases as a part of #3074
+            var payrollCurrent = new System.Web.UI.WebControls.ListItem("Payroll – Current", "15");
+            var payrollPrevious = new System.Web.UI.WebControls.ListItem("Payroll – Previous", "-15");
+            var thisWeek = new System.Web.UI.WebControls.ListItem("This Week", "7");
+            var thisMonth = new System.Web.UI.WebControls.ListItem("This Month", "30");
+            var thisYear = new System.Web.UI.WebControls.ListItem("This Year", "365");
+            var lastWeek = new System.Web.UI.WebControls.ListItem("Last Week", "-7");
+            var lastMonth = new System.Web.UI.WebControls.ListItem("Last Month", "-30");
+            var lastYear = new System.Web.UI.WebControls.ListItem("Last Year", "-365");
+            ddlPeriod.Items.Add(payrollCurrent);
+            ddlPeriod.Items.Add(payrollPrevious);
+            ddlPeriod.Items.Add(thisWeek);
+            ddlPeriod.Items.Add(thisMonth);
+            ddlPeriod.Items.Add(thisYear);
+            ddlPeriod.Items.Add(lastWeek);
+            ddlPeriod.Items.Add(lastMonth);
+            ddlPeriod.Items.Add(lastYear);
+
             foreach (var milestone in list)
             {
 
@@ -778,10 +918,10 @@ namespace PraticeManagement.Reporting
         {
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(ProjectNumber, MilestoneId, StartDate, EndDate));
             List<PersonLevelGroupedHours> summaryData = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(ProjectNumber,
-                MilestoneId, PeriodSelected == "0" ? StartDate : null,
-                PeriodSelected == "0" ? EndDate : null, ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
+                MilestoneId, PeriodSelected == "*" ? null : StartDate,
+                PeriodSelected == "*" ? null : EndDate, ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
             List<PersonLevelGroupedHours> detailData = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(ProjectNumber, MilestoneId,
-               PeriodSelected == "0" ? StartDate : null, PeriodSelected == "0" ? EndDate : null,
+               PeriodSelected == "*" ? null : StartDate, PeriodSelected == "*" ? null : EndDate,
                ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
 
             HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
