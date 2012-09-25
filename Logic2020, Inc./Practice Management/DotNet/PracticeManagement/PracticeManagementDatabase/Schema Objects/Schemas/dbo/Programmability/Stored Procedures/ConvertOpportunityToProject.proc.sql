@@ -38,12 +38,11 @@ BEGIN
 	       @SalespersonId = o.SalespersonId,
 	       @OpportunityStatusId = o.OpportunityStatusId,
 	       @BuyerName = o.BuyerName,
-	       @GroupId = pg.GroupId,
+	       @GroupId = ISNULL(o.GroupId, (SELECT PG.GroupId FROM dbo.ProjectGroup PG WHERE PG.ClientId = o.ClientId and PG.Code = 'B0001')),
 	       @IsChargeable = 1,
 	       @ProjectManagerId = CONVERT(NVARCHAR(255),ISNULL(o.OwnerId, pr.PracticeManagerId)),
 		   @Description =Description
 	  FROM dbo.v_Opportunity AS o
-	  inner join dbo.ProjectGroup as pg on pg.ClientId = o.ClientId
 	  inner join dbo.Practice as pr on pr.PracticeId = o.PracticeId
 	 WHERE o.OpportunityId = @OpportunityId
 
