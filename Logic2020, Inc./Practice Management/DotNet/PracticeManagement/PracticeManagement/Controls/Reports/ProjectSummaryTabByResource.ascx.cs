@@ -104,8 +104,7 @@ namespace PraticeManagement.Controls.Reports
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
             List<PersonLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByResource(HostingPage.ProjectNumber,
-                HostingPage.MilestoneId, HostingPage.PeriodSelected == "0" ? HostingPage.StartDate : null,
-                HostingPage.PeriodSelected == "0" ? HostingPage.EndDate : null, cblProjectRoles.SelectedItemsXmlFormat)).ToList();
+                HostingPage.MilestoneId, HostingPage.PeriodSelected == "*" ? null : HostingPage.StartDate, HostingPage.PeriodSelected == "*" ? null : HostingPage.EndDate, cblProjectRoles.SelectedItemsXmlFormat)).ToList();
 
             string filterApplied = "Filters applied to columns: ";
             bool isFilterApplied = false;
