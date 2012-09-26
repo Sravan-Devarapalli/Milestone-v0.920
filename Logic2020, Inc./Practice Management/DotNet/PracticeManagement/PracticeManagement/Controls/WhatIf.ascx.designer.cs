@@ -22,6 +22,60 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Panel pnlWhatIf;
         
         /// <summary>
+        /// tblEffectiveDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblEffectiveDate;
+        
+        /// <summary>
+        /// dtpEffectiveDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.DatePicker dtpEffectiveDate;
+        
+        /// <summary>
+        /// compEffectiveDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compEffectiveDate;
+        
+        /// <summary>
+        /// reqEffectiveDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqEffectiveDate;
+        
+        /// <summary>
+        /// cvWithTerminationDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvWithTerminationDate;
+        
+        /// <summary>
+        /// cvNotHavingCompensation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvNotHavingCompensation;
+        
+        /// <summary>
         /// imgDecrBillRate control.
         /// </summary>
         /// <remarks>
