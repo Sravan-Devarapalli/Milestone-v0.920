@@ -1121,6 +1121,8 @@ namespace PraticeManagement
                 //Person person = GetPerson(SelectedId);
 
                 var fakePerson = new Person { Id = PersonId };
+                fakePerson.PaymentHistory = PayHistory;
+                fakePerson.TerminationDate = TerminationDate;
                 whatIf.Person = fakePerson; // person;
             }
         }
