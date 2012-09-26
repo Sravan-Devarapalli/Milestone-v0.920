@@ -281,7 +281,7 @@ namespace PracticeManagementService
         /// <param name="timescale">The <see cref="Timescale"/> to retrive the data for.</param>
         /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
         [OperationContract]
-        List<PersonOverhead> GetPersonOverheadByTimescale(TimescaleType timescale);
+        List<PersonOverhead> GetPersonOverheadByTimescale(TimescaleType timescale, DateTime? effectiveDate);
 
         /// <summary>
         /// Retrieves the person's rate.
@@ -309,7 +309,7 @@ namespace PracticeManagementService
         /// <param name="proposedRate">A proposed person's hourly rate.</param>
         /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
         [OperationContract]
-        ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
+        ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage, DateTime? effectiveDate);
 
         /// <summary>
         /// Calculates the person's rate.
