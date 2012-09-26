@@ -1384,20 +1384,22 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<Person>();
-                    ReadPersonsIdFirstNameLastName(reader, result);
+                    ReadPersonsIdFirstNameLastNameAndSeniority(reader, result);
                     return result;
                 }
             }
         }
 
 
-        private static void ReadPersonsIdFirstNameLastName(SqlDataReader reader, List<Person> result)
+        private static void ReadPersonsIdFirstNameLastNameAndSeniority(SqlDataReader reader, List<Person> result)
         {
             if (reader.HasRows)
             {
                 int personIdIndex = reader.GetOrdinal(PersonIdColumn);
                 int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
+                int seniorityNameIndex = reader.GetOrdinal(SeniorityNameColumn);
 
                 while (reader.Read())
                 {
@@ -1409,10 +1411,18 @@ namespace DataAccess
                         LastName = reader.GetString(lastNameIndex),
                     };
 
+                    person.Seniority =
+                                new Seniority
+                                {
+                                    Id = reader.GetInt32(seniorityIdIndex),
+                                    Name = reader.GetString(seniorityNameIndex)
+                                };
+
                     result.Add(person);
                 }
             }
         }
+
 
 
         /// <summary>
