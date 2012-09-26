@@ -329,13 +329,13 @@ namespace PraticeManagement
                 txtProjectName.Focus();
                 txtSowBudget.Enabled = (userIsAdministrator || userIsSalesPerson);
 
-                int clientId = -1;
-                if (int.TryParse(Page.Request.QueryString["clientId"], out clientId))
-                {
-                    ddlClientName.SelectedValue = clientId.ToString();
-                    SetClientDefaultValues(clientId);
-                    DataHelper.FillProjectGroupList(ddlProjectGroup, clientId, null);
-                }
+                //int clientId = -1;
+                //if (int.TryParse(Page.Request.QueryString["clientId"], out clientId))
+                //{
+                //    ddlClientName.SelectedValue = clientId.ToString();
+                //    SetClientDefaultValues(clientId);
+                //    DataHelper.FillProjectGroupList(ddlProjectGroup, clientId, null);
+                //}
 
                 if (ProjectId.HasValue)
                 {
@@ -1343,7 +1343,12 @@ namespace PraticeManagement
             }
             else
             {
-
+                int clientId = -1;
+                if (int.TryParse(Page.Request.QueryString["clientId"], out clientId))
+                {
+                    ddlClientName.SelectedValue = clientId.ToString();
+                    SetClientDefaultValues(clientId);                   
+                }
                 // Default values for new projects.
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
