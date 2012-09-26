@@ -16,7 +16,10 @@ namespace PraticeManagement
     public partial class MarginTest : PracticeManagementPageBase
     {
         private Person selectedPersonValue;
+
         public const string DirtyFunctionScript = @" function getDirty() {{ return false; }}";
+        private const string TblEffectiveDate = "tblEffectiveDate";
+
         private Person SelectedPerson
         {
             get
@@ -45,7 +48,7 @@ namespace PraticeManagement
             }
         }
 
-        private string Selectedman 
+        private string Selectedman
         {
             get
             {
@@ -98,6 +101,7 @@ namespace PraticeManagement
             ddlPersonName.SelectedIndex = 0;
             ddlStrawmanName.SelectedIndex = 0;
             ClearControls();
+            whatIf.Person = null;
             whatIf.ClearContents();
             personnelCompensation.Timescale = TimescaleType.Hourly;
         }
@@ -107,6 +111,7 @@ namespace PraticeManagement
             ddlPersonName.Visible = rbSelectPerson.Checked;
             ddlStrawmanName.Visible = rbSelectStrawman.Checked;
             personnelCompensation.Visible = !(rbSelectPerson.Checked || rbSelectStrawman.Checked);
+            whatIf.FindControl(TblEffectiveDate).Visible = !(personnelCompensation.Visible);
         }
 
         private void DoCompute(Person selectedPerson)
@@ -121,6 +126,8 @@ namespace PraticeManagement
                 if (selectedPerson != null)
                 {
                     person.Seniority = selectedPerson.Seniority;
+                    person.PaymentHistory = selectedPerson.PaymentHistory;
+                    person.TerminationDate = selectedPerson.TerminationDate;
                 }
 
                 // Payment
@@ -142,7 +149,7 @@ namespace PraticeManagement
                     try
                     {
                         person.OverheadList =
-                            new List<PersonOverhead>(serviceClient.GetPersonOverheadByTimescale(person.CurrentPay.Timescale));
+                            new List<PersonOverhead>(serviceClient.GetPersonOverheadByTimescale(person.CurrentPay.Timescale, whatIf.EffectiveDate));
                     }
                     catch (FaultException<ExceptionDetail>)
                     {
@@ -157,10 +164,14 @@ namespace PraticeManagement
                     whatIf.Person = person;
                 }
             }
+            else
+            {
+                whatIf.ClearContents();
+            }
             Page.Validate();
         }
 
-       protected void ddlPersonName_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlPersonName_SelectedIndexChanged(object sender, EventArgs e)
         {
             var ddl = sender as DropDownList;
 
@@ -181,7 +192,7 @@ namespace PraticeManagement
                         person.PaymentHistory.FirstOrDefault(c => today >= c.StartDate && (!c.EndDate.HasValue || today < c.EndDate))
                         ?? person.PaymentHistory.First(c => today < c.StartDate);
                     PopulateControls(compensation);
-                    
+
 
                     var personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
                     if (personListAnalyzer.IsOtherGreater(person))
@@ -198,8 +209,7 @@ namespace PraticeManagement
                 else
                 {
                     personnelCompensation.Visible = true;
-                }
-
+                }                
                 DoCompute(person);
             }
         }
