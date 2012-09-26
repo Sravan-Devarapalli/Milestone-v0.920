@@ -24,6 +24,7 @@ namespace PraticeManagement.Controls
         private const string MLFText = "Minimum Load Factor (MLF)";
         private const string ClientDiscountDefaultValue = "0";
         private const string LoggedInPersonSalesCommissionKey = "LoggedInPersonSalesCommission";
+        private const string ComputeRate = "ComputeRate";
         private Regex validatePercentage =
             new Regex("(\\d+\\.?\\d*)%?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -39,8 +40,24 @@ namespace PraticeManagement.Controls
                 if (value != null)
                 {
                     txtClientDiscount.Text = ClientDiscountDefaultValue;
-                    DisplayCalculatedRate();
+                    Page.Validate(ComputeRate);
+                    if (Page.IsValid)
+                    {
+                        DisplayCalculatedRate();
+                    }
+                    else
+                    {
+                        ClearContents();
+                    }
                 }
+            }
+        }
+
+        public DateTime EffectiveDate
+        {
+            get
+            {
+                return dtpEffectiveDate.DateValue != DateTime.MinValue ? dtpEffectiveDate.DateValue : DateTime.Now.Date;
             }
         }
 
@@ -113,6 +130,8 @@ namespace PraticeManagement.Controls
         {
             txtHorsPerWeekSlider.Text = HorsPerWeekDefaultValue;
             txtBillRateSlider.Text = BillRateDefaultValue;
+            dtpEffectiveDate.DateValue = DateTime.Now.Date;
+            txtClientDiscount.Text = ClientDiscountDefaultValue;
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -127,6 +146,11 @@ namespace PraticeManagement.Controls
             // Security            
             bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             gvOverheadWhatIf.Visible = isAdmin;
+
+            if (!IsPostBack)
+            {
+                dtpEffectiveDate.DateValue = DateTime.Now.Date;
+            }
         }
 
         protected void custDefaultSalesCommision_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -143,20 +167,43 @@ namespace PraticeManagement.Controls
 
         protected void txtBillRateSlider_TextChanged(object sender, EventArgs e)
         {
-            Page.Validate("ComputeRate");
+            Page.Validate(ComputeRate);
             if (Page.IsValid && Person != null)
             {
                 DisplayCalculatedRate();
+            }
+            else
+            {
+                ClearContents();
+            }
+        }
+
+
+
+        protected void dtpEffectiveDate_SelectionChanged(object sender, EventArgs e)
+        {
+            Page.Validate(ComputeRate);
+            if (Page.IsValid && Person != null)
+            {
+                DisplayCalculatedRate();
+            }
+            else
+            {
+                ClearContents();
             }
         }
 
         protected void txtClientDiscount_TextChanged(object sender, EventArgs e)
         {
-            Page.Validate("ComputeRate");
-            if (Page.IsValid && Person != null && (validatePercentage.IsMatch(txtClientDiscount.Text) ||
+            Page.Validate(ComputeRate);
+            if ((Page.IsValid && Person != null && validatePercentage.IsMatch(txtClientDiscount.Text) ||
                                                     string.IsNullOrEmpty(txtClientDiscount.Text)))
             {
                 DisplayCalculatedRate();
+            }
+            else
+            {
+                ClearContents();
             }
         }
 
@@ -181,7 +228,13 @@ namespace PraticeManagement.Controls
                     Person tmpPerson = Person;
                     tmpPerson.OverheadList = null;
 
-                    ComputedFinancialsEx rate = serviceClient.CalculateProposedFinancialsPerson(tmpPerson, billRate, hoursPerWeek, ClientDiscount, IsMarginTestPage);
+                    if (tmpPerson.PaymentHistory != null && tmpPerson.PaymentHistory.Count > 0)
+                    {
+                        tmpPerson.CurrentPay = tmpPerson.PaymentHistory.FirstOrDefault(c => EffectiveDate >= c.StartDate && (!c.EndDate.HasValue || EffectiveDate < c.EndDate))
+                           ?? tmpPerson.PaymentHistory.First(c => EffectiveDate < c.StartDate);
+
+                    }
+                    ComputedFinancialsEx rate = serviceClient.CalculateProposedFinancialsPerson(tmpPerson, billRate, hoursPerWeek, ClientDiscount, IsMarginTestPage, EffectiveDate);
 
                     DisplayRate(rate);
 
@@ -254,7 +307,7 @@ namespace PraticeManagement.Controls
                 lblMonthlyCogsWithoutRecruiting.CssClass = "Cogs";
                 lblMonthlyGrossMarginWithoutRecruiting.CssClass = "Margin";
             }
-            
+
             SetBackgroundColorForMargin(rate.TargetMarginWithoutRecruiting, tdTargetMarginWithoutRecruiting);
 
             var overheads = rate.OverheadList;
@@ -280,18 +333,33 @@ namespace PraticeManagement.Controls
             lblMonthlyRevenueWithoutRecruiting.Text =
             lblMonthlyGrossMarginWithoutRecruiting.Text =
             lblMonthlyCogsWithoutRecruiting.Text =
-            lblTargetMarginWithoutRecruiting.Text = 
-            lblMonthlyRevenueWithoutRecruiting.CssClass = 
+            lblTargetMarginWithoutRecruiting.Text =
+            lblMonthlyRevenueWithoutRecruiting.CssClass =
             lblMonthlyCogsWithoutRecruiting.CssClass =
             lblMonthlyGrossMarginWithoutRecruiting.CssClass = string.Empty;
-
-            Person = null;
-            txtClientDiscount.Text = ClientDiscountDefaultValue;
+           
             gvOverheadWhatIf.Visible = false;
             gvOverheadWhatIf.DataBind();
         }
 
         #endregion
+
+        protected void cvWithTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (Person != null && Person.TerminationDate.HasValue)
+            {
+                args.IsValid = EffectiveDate <= Person.TerminationDate;
+            }
+        }
+
+        protected void cvNotHavingCompensation_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (Person != null && cvWithTerminationDate.IsValid && Person.PaymentHistory != null)
+            {
+                args.IsValid = Person.PaymentHistory.Any(c => EffectiveDate >= c.StartDate && (!c.EndDate.HasValue || EffectiveDate < c.EndDate));
+            }
+
+        }
 
     }
 }
