@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="WhatIf.ascx.cs" Inherits="PraticeManagement.Controls.WhatIf" %>
 <%@ Register Src="GrossMarginComputing.ascx" TagName="GrossMarginComputing" TagPrefix="uc1" %>
 <%@ Register TagPrefix="uc" TagName="MessageLabel" Src="~/Controls/MessageLabel.ascx" %>
+<%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
 <script type="text/javascript" language="javascript">
     function ChangeHourlyBillRate(IsIncrement) {
         var txtBillRate = $get("<%= txtBillRateSlider_BoundControl.ClientID %>");
@@ -74,7 +75,46 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="vTop PaddingTop3" >
+                        <td colspan="6">
+                            <table id="tblEffectiveDate" runat="server">
+                                <tr>
+                                    <td>
+                                        Effective&nbsp;Date
+                                    </td>
+                                    <td class="padLeft15">
+                                        <uc2:DatePicker ID="dtpEffectiveDate" runat="server" OnSelectionChanged="dtpEffectiveDate_SelectionChanged"
+                                            AutoPostBack="true" />
+                                    </td>
+                                    <td>
+                                        <asp:CompareValidator ID="compEffectiveDate" runat="server" ControlToValidate="dtpEffectiveDate"
+                                            EnableClientScript="False" ErrorMessage="The Effective Date must be in the format 'MM/dd/yyyy'"
+                                            Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ComputeRate"
+                                            ToolTip="The Effective Date must be in the format 'MM/dd/yyyy'" Type="Date">*</asp:CompareValidator>
+                                        <asp:RequiredFieldValidator ID="reqEffectiveDate" runat="server" ControlToValidate="dtpEffectiveDate"
+                                            Display="Dynamic" EnableClientScript="False" ErrorMessage="The Effective Date is required."
+                                            SetFocusOnError="True" ValidationGroup="ComputeRate" ToolTip="The Effective Date is required.">*</asp:RequiredFieldValidator>
+                                        <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ControlToValidate="dtpEffectiveDate"
+                                            ErrorMessage="Effective Date should be less than or equal to the Termination Date."
+                                            ToolTip="Effective Date should be less than or equal to the Termination Date."
+                                            ValidationGroup="ComputeRate" Text="*" Display="Dynamic" OnServerValidate="cvWithTerminationDate_ServerValidate"
+                                            ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                        <asp:CustomValidator ID="cvNotHavingCompensation" runat="server" ControlToValidate="dtpEffectiveDate"
+                                            ErrorMessage="Person doesn't have compensation for the selected Effective Date."
+                                            ToolTip="Person doesn't have compensation for the selected Effective Date." ValidationGroup="ComputeRate"
+                                            Text="*" Display="Dynamic" OnServerValidate="cvNotHavingCompensation_ServerValidate"
+                                            ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vTop PaddingTop3">
                             Hourly Bill Rate (HBR)
                         </td>
                         <td colspan="5" class="padLeft5">
@@ -108,8 +148,8 @@
                                                     $<asp:Label ID="lblBillRateMin" runat="server"></asp:Label>
                                                 </td>
                                                 <td class="textCenter PaddingTop3">
-                                                    <asp:TextBox ID="txtBillRateSlider_BoundControl" runat="server" CssClass="Width60Px textCenter" AutoPostBack="true"
-                                                        OnTextChanged="txtBillRateSlider_TextChanged" Text="120" ></asp:TextBox>
+                                                    <asp:TextBox ID="txtBillRateSlider_BoundControl" runat="server" CssClass="Width60Px textCenter"
+                                                        AutoPostBack="true" OnTextChanged="txtBillRateSlider_TextChanged" Text="120"></asp:TextBox>
                                                     <asp:CompareValidator ID="compBillRateSlider_BoundControl" runat="server" ControlToValidate="txtBillRateSlider_BoundControl"
                                                         ErrorMessage="A number with 2 decimal digits is allowed for the Bill Rate." ToolTip="A number with 2 decimal digits is allowed for the Bill Rate."
                                                         Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="ComputeRate"
@@ -133,7 +173,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="vTop PaddingTop3" >
+                        <td class="vTop PaddingTop3">
                             Hours per Week (HPW)
                         </td>
                         <td colspan="5" class="padLeft5">
@@ -162,9 +202,9 @@
                                     <td class="Width25Px textleft">
                                         <asp:Label ID="lblHoursMin" runat="server"></asp:Label>
                                     </td>
-                                   <td class="textCenter PaddingTop3">
-                                        <asp:TextBox ID="txtHorsPerWeekSlider_BoundControl" runat="server" CssClass="Width60Px textCenter" AutoPostBack="true"
-                                            Text="40" OnTextChanged="txtBillRateSlider_TextChanged" ></asp:TextBox>
+                                    <td class="textCenter PaddingTop3">
+                                        <asp:TextBox ID="txtHorsPerWeekSlider_BoundControl" runat="server" CssClass="Width60Px textCenter"
+                                            AutoPostBack="true" Text="40" OnTextChanged="txtBillRateSlider_TextChanged"></asp:TextBox>
                                         <asp:CompareValidator ID="compHorsPerWeekSlider_BoundControl" runat="server" ControlToValidate="txtHorsPerWeekSlider_BoundControl"
                                             ErrorMessage="A number with 2 decimal digits is allowed for the Hours Per Week."
                                             ToolTip="A number with 2 decimal digits is allowed for the Hours Per Week." Text="*"
@@ -246,7 +286,7 @@
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="ComputeRate"
                                 Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
                         </td>
-                    </tr>
+                    </tr> 
                     <tr>
                         <td colspan="6">
                             &nbsp;
@@ -304,7 +344,7 @@
                     </tr>
                 </table>
             </td>
-            <td id="tdgrossMarginComputing" visible="false" runat="server" class="WhatIfGrossMarginComputing" >
+            <td id="tdgrossMarginComputing" visible="false" runat="server" class="WhatIfGrossMarginComputing">
                 <uc1:GrossMarginComputing ID="grossMarginComputing" runat="server" />
             </td>
         </tr>
