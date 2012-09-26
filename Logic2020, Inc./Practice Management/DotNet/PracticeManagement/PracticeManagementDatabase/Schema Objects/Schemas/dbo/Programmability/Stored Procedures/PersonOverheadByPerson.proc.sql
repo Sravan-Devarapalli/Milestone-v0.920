@@ -7,14 +7,19 @@
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonOverheadByPerson]
 (
-	@PersonId   INT
+	@PersonId   INT,
+	@EffectiveDate DATETIME = null
 )
 AS
 	SET NOCOUNT ON
 
-	DECLARE @today DATETIME, @FutureDate DATETIME
-	SELECT @today = dbo.Today(),
-			@FutureDate = dbo.GetFutureDate()
+	DECLARE @FutureDate DATETIME
+ 	SELECT @FutureDate = dbo.GetFutureDate()
+
+    IF @EffectiveDate = null
+	BEGIN
+		SELECT @EffectiveDate = dbo.Today()
+	END
 
 	SELECT o.PersonId,
 	       o.Description,
@@ -28,5 +33,5 @@ AS
 	       o.BillRateMultiplier
 	  FROM dbo.v_PersonOverhead AS o
 	 WHERE o.PersonId = @PersonId
-	   AND o.StartDate <= @today AND ISNULL(o.EndDate, @FutureDate) > @today
+	   AND o.StartDate <= @EffectiveDate AND ISNULL(o.EndDate, @FutureDate) > @EffectiveDate
 
