@@ -786,7 +786,7 @@ namespace PraticeManagement.Controls
                 }
             }
         }
-        
+
         /// <summary>
         /// Fills the list control with the list of One-Off persons.
         /// </summary>
@@ -802,8 +802,8 @@ namespace PraticeManagement.Controls
                     var persons = serviceClient.GetOneOffList(today);
 
                     Array.Sort(persons);
+                    FillPersonListWithSeniority(control, firstItemText, persons, "-1");                   
 
-                    FillPersonList(control, firstItemText, persons, "-1");
                 }
                 catch (CommunicationException)
                 {
@@ -1146,6 +1146,32 @@ namespace PraticeManagement.Controls
                 }
             }
 
+        }
+
+        public static void FillPersonListWithSeniority(ListControl control, string firstItemText, Person[] persons, string firstItemValue)
+        {
+            control.Items.Clear();
+            if (!string.IsNullOrEmpty(firstItemText))
+            {
+                var listitem = new ListItem() { Text = firstItemText, Value = firstItemValue };
+                listitem.Attributes[Constants.Variables.IsStrawMan] = "false";
+                control.Items.Add(listitem);
+            }
+            if (persons.Length > 0)
+            {
+                persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonLastFirstName).ToArray();
+
+                foreach (Person person in persons)
+                {
+                    var personitem = new ListItem();
+                    personitem.Value = person.Id.Value.ToString();
+                    var personSeniority = person.Seniority.Name;
+                    personitem.Attributes[Constants.Variables.IsStrawMan] = person.IsStrawMan.ToString().ToLowerInvariant();
+                    personitem.Attributes[Constants.Variables.OptionGroup] = person.IsStrawMan ? "Strawmen" : "Persons";
+                    personitem.Text = person.PersonLastFirstName + " (" + personSeniority + ") ";
+                    control.Items.Add(personitem);
+                }
+            }
         }
 
         /// <summary>
