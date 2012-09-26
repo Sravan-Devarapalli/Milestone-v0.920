@@ -93,7 +93,7 @@ namespace DataAccess
         private const string IsOffshoreParam = "@IsOffshore";
         private const string PaychexIDParam = "@PaychexID";
         private const string PersonDivisionIdParam = "@PersonDivisionId";
-
+        private const string EffectiveDateParam = "@EffectiveDate";
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
         private const string TimescaleParam = "@Timescale";
@@ -1553,7 +1553,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="personId">An ID of the person to retrieve the data for.</param>
         /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
-        public static List<PersonOverhead> PersonOverheadListByPerson(int personId)
+        public static List<PersonOverhead> PersonOverheadListByPerson(int personId, DateTime? effectiveDate = null)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonOverheadByPersonProcedure, connection))
@@ -1562,6 +1562,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(PersonIdParam, personId);
+                command.Parameters.AddWithValue(EffectiveDateParam, (effectiveDate.HasValue) ? (object)effectiveDate.Value : DBNull.Value);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -1580,7 +1581,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="timescale">The <see cref="Timescale"/> to retrive the data for.</param>
         /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
-        public static List<PersonOverhead> PersonOverheadListByTimescale(TimescaleType timescale)
+        public static List<PersonOverhead> PersonOverheadListByTimescale(TimescaleType timescale, DateTime? effectiveDate = null)
         {
             // Because % of Revenue type has the same list of overheads,
             //  exctract them as if it was 1099
@@ -1594,6 +1595,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(TimescaleIdParam, timescale);
+                command.Parameters.AddWithValue(EffectiveDateParam, (effectiveDate.HasValue) ? (object)effectiveDate.Value : DBNull.Value);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
