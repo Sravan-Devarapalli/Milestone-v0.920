@@ -7,13 +7,19 @@
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonOverheadByTimescale]
 (
-	@TimescaleId   INT
+	@TimescaleId   INT,
+	@EffectiveDate DATETIME = null
 )
 AS
 	SET NOCOUNT ON
 
-	DECLARE @today DATETIME,@FutureDate DATETIME
- 	SELECT @today = dbo.Today(),@FutureDate = dbo.GetFutureDate()
+	DECLARE @FutureDate DATETIME
+ 	SELECT @FutureDate = dbo.GetFutureDate()
+
+    IF @EffectiveDate = null
+	BEGIN
+		SELECT @EffectiveDate = dbo.Today()
+	END
 
 	SELECT o.Description,
 	       o.Rate,
@@ -33,7 +39,7 @@ AS
 	  JOIN dbo.OverheadRateType AS t ON o.RateType = t.OverheadRateTypeId
 	  JOIN dbo.OverheadFixedRateTimescale AS ot  ON ot.OverheadFixedRateId = o.OverheadFixedRateId
 	 WHERE  ot.TimescaleId = @TimescaleId AND o.IsMinimumLoadFactor = 0
-			AND o.StartDate <= @today AND ISNULL(o.EndDate, @FutureDate) > @today
+			AND o.StartDate <= @EffectiveDate AND ISNULL(o.EndDate, @FutureDate) > @EffectiveDate
 			AND o.Inactive = 0
 
 	UNION ALL
@@ -57,5 +63,5 @@ AS
 	WHERE o.IsMinimumLoadFactor = 1
 			AND o.Inactive = 0
 			AND  MH.TimescaleId = @TimescaleId
-			AND @today >= MH.StartDate AND (@today<= MH.EndDate OR MH.EndDate  IS NULL)
+			AND @EffectiveDate >= MH.StartDate AND (@EffectiveDate<= MH.EndDate OR MH.EndDate  IS NULL)
 
