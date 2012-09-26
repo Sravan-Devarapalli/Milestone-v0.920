@@ -6,16 +6,24 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.ProjectGroupService;
+using System.Text;
 
 namespace PraticeManagement.Controls.Clients
 {
     public partial class ClientGroups : UserControl
     {
         private const string CLIENT_GROUPS_KEY = "ClientGroupsList";
+        private const string DefaultGroup = "Default Group";
+
 
         #region ProjectGroupsProperties
 
-        private Dictionary<int, ProjectGroup> ClientGroupsList
+        private PraticeManagement.ClientDetails HostingPage
+        {
+            get { return ((PraticeManagement.ClientDetails)Page); }
+        }
+
+        public Dictionary<int, ProjectGroup> ClientGroupsList
         {
             get
             {
@@ -48,22 +56,13 @@ namespace PraticeManagement.Controls.Clients
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (ClientId == 0)
-            {
-                groupDiv.Visible = false;
-            }
-            else
-            {
-                groupDiv.Visible = true;
-            }
 
             if (!IsPostBack)
             {
                 List<ProjectGroup> groups;
                 if (ClientId == 0)
                 {
-                    groups = new List<ProjectGroup>();
-
+                    groups = new List<ProjectGroup>() { new ProjectGroup() { Id = 0, Name = DefaultGroup, Code = "B0001", IsActive = true } };
                 }
                 else
                 {
@@ -76,9 +75,14 @@ namespace PraticeManagement.Controls.Clients
 
         #region ProjectGroupsMethods
 
+        private bool ValidateBusinessGroupName(string businessGroupName)
+        {
+            return ClientGroupsList.Where(p => p.Value.Name.Replace(" ", "").ToLowerInvariant() == businessGroupName.Replace(" ", "").ToLowerInvariant()).Count() == 0;
+        }
+
         protected void custNewGroupName_ServerValidate(object sender, ServerValidateEventArgs e)
         {
-            e.IsValid = ClientGroupsList.Where(p => p.Value.Name.ToLowerInvariant() == e.Value.ToLowerInvariant()).Count() == 0;
+            e.IsValid = ValidateBusinessGroupName(e.Value);
         }
 
         protected void gvGroups_RowEditing(object sender, GridViewEditEventArgs e)
@@ -100,17 +104,18 @@ namespace PraticeManagement.Controls.Clients
 
             if (oldGroupName.ToLowerInvariant() != groupName.ToLowerInvariant())
             {
-                custGroupName.IsValid = ClientGroupsList.Where(p => p.Value.Name.ToLowerInvariant() == groupName.ToLowerInvariant()).Count() == 0;
+                custGroupName.IsValid = ValidateBusinessGroupName(groupName);
             }
 
-            
+
             if (Page.IsValid)
             {
                 bool isActive = ((CheckBox)gvGroups.Rows[e.RowIndex].FindControl("chbIsActiveEd")).Checked;
-                UpDateProductGroup(groupId,groupName, isActive);
+                UpDateProductGroup(groupId, groupName, isActive);
                 tmp[groupId].Name = groupName;
                 tmp[groupId].IsActive = isActive;
                 ClientGroupsList = tmp;
+                HostingPage.ProjectsControl.DataBind();
                 gvGroups.EditIndex = -1;
                 gvGroups.DataSource = ClientGroupsList;
                 gvGroups.DataBind();
@@ -159,61 +164,75 @@ namespace PraticeManagement.Controls.Clients
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                bool inUse = ((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value")).InUse;
-                e.Row.Cells[gvGroups.Columns.Count - 1].Visible = !inUse;
-                try
+                if (((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value")).Name == DefaultGroup)
                 {
-                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Business Unit";
-
+                    e.Row.Cells[0].Controls[0].Visible = false;
+                    e.Row.Cells[gvGroups.Columns.Count - 1].Visible = false;
                 }
-                catch
+                else
                 {
-                    e.Row.Cells[0].ToolTip = "Edit Business Unit";
-                }
+                    bool inUse = ((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value")).InUse;
+                    e.Row.Cells[gvGroups.Columns.Count - 1].Visible = !inUse;
+                    if (!inUse)
+                    {
+                        try
+                        {
+                            ((ImageButton)e.Row.Cells[gvGroups.Columns.Count - 1].Controls[0]).ToolTip = "Delete Business Unit";
 
+                        }
+                        catch
+                        {
+                            e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "Delete Business Unit";
+                        }
 
-                if (!inUse)
-                {
+                    }
+
                     try
                     {
-                        ((ImageButton)e.Row.Cells[gvGroups.Columns.Count - 1].Controls[0]).ToolTip = "Delete Business Unit";
+                        ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Business Unit";
 
                     }
                     catch
                     {
-                        e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "Delete Business Unit";
+                        e.Row.Cells[0].ToolTip = "Edit Business Unit";
                     }
-
                 }
-            }
 
-            if ((e.Row.RowState & DataControlRowState.Edit) != 0)
-            {
-                try
+                if ((e.Row.RowState & DataControlRowState.Edit) != 0)
                 {
-                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Confirm";
-                    ((ImageButton)e.Row.Cells[0].Controls[2]).ToolTip = "Cancel";
-                    e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "";
-                }
-                catch
-                {
-                    e.Row.Cells[0].ToolTip = "";
-                    e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "";
+                    try
+                    {
+                        ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Confirm";
+                        ((ImageButton)e.Row.Cells[0].Controls[2]).ToolTip = "Cancel";
+                        e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "";
+                    }
+                    catch
+                    {
+                        e.Row.Cells[0].ToolTip = "";
+                        e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "";
+                    }
                 }
             }
         }
+
 
         protected void btnAddGroup_Click(object sender, EventArgs e)
         {
             Page.Validate("NewGroup");
             if (Page.IsValid)
             {
-                Dictionary<int, ProjectGroup> tmp = ClientGroupsList;
                 string groupName = txtNewGroupName.Text;
-                var group = new ProjectGroup { Id = AddProjectGroup(groupName, chbGroupActive.Checked), Name = groupName,IsActive=chbGroupActive.Checked, InUse = false };
-                tmp.Add(group.Id.Value, group);
-                ClientGroupsList = tmp;
-                txtNewGroupName.Text = string.Empty;
+                ProjectGroup group;
+                if (ClientId == 0)
+                {
+                    group = new ProjectGroup { Id = (ClientGroupsList.Keys.Count() > 0 ? ClientGroupsList.Keys.Min() - 1 : 0), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
+                    plusMakeVisible(true);
+                }
+                else
+                {
+                    group = new ProjectGroup { Id = AddProjectGroup(groupName, chbGroupActive.Checked), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
+                }                
+                ClientGroupsList.Add(group.Id.Value, group);               
                 gvGroups.DataSource = ClientGroupsList;
                 gvGroups.DataBind();
             }
@@ -228,8 +247,8 @@ namespace PraticeManagement.Controls.Clients
             gvGroups.DataSource = ClientGroupsList;
             gvGroups.DataBind();
         }
-              
-        private int AddProjectGroup(string groupName,bool isActive)
+
+        private int AddProjectGroup(string groupName, bool isActive)
         {
             if (ClientId.HasValue)
                 using (var serviceGroups = new ProjectGroupServiceClient())
@@ -240,7 +259,7 @@ namespace PraticeManagement.Controls.Clients
                         plusMakeVisible(true);
                         return result;
                     }
-                    catch (FaultException<ExceptionDetail> )
+                    catch (FaultException<ExceptionDetail>)
                     {
                         serviceGroups.Abort();
                         throw;
@@ -250,14 +269,14 @@ namespace PraticeManagement.Controls.Clients
             return -1;
         }
 
-        private void UpDateProductGroup(int groupId,string groupName, bool isActive)
+        private void UpDateProductGroup(int groupId, string groupName, bool isActive)
         {
             if (ClientId.HasValue)
                 using (var serviceClient = new ProjectGroupServiceClient())
                 {
                     try
                     {
-                        serviceClient.UpDateProductGroup(ClientId.Value,groupId, groupName, isActive);
+                        serviceClient.UpDateProductGroup(ClientId.Value, groupId, groupName, isActive);
                     }
                     catch (FaultException<ExceptionDetail>)
                     {
