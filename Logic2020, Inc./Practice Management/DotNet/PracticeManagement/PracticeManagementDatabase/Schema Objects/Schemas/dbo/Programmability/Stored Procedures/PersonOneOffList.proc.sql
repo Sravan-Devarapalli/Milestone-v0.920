@@ -19,9 +19,12 @@ BEGIN
 
 	SELECT p.PersonId,
 	       p.FirstName,
-	       p.LastName	       
+	       p.LastName,
+		   p.SeniorityId,
+		   s.Name AS SeniorityName
 	  FROM dbo.Person AS p
-      LEFT  JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
+      LEFT  JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId	 
+	  LEFT JOIN dbo.Seniority AS s ON s.SeniorityId = p.SeniorityId
 	  WHERE p.PersonStatusId in (1,2,3,5) AND ISNULL(pr.IsCompanyInternal, 0) = 0
 		   AND EXISTS (SELECT 1 FROM dbo.Pay y
 						WHERE p.PersonId = y.Person 
