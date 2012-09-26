@@ -594,9 +594,9 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="timescale">The <see cref="Timescale"/> to retrive the data for.</param>
         /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
-        public List<PersonOverhead> GetPersonOverheadByTimescale(TimescaleType timescale)
+        public List<PersonOverhead> GetPersonOverheadByTimescale(TimescaleType timescale, DateTime? effectiveDate)
         {
-            return PersonDAL.PersonOverheadListByTimescale(timescale);
+            return PersonDAL.PersonOverheadListByTimescale(timescale, effectiveDate);
         }
 
         /// <summary>
@@ -629,9 +629,9 @@ namespace PracticeManagementService
         /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
         /// <param name="proposedRate">A proposed person's hourly rate.</param>
         /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage)
+        public ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage, DateTime? effectiveDate)
         {
-            PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, proposedRate, proposedHoursPerWeek, isMarginTestPage);
+            PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, proposedRate, proposedHoursPerWeek, isMarginTestPage, effectiveDate);
 
             return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
         }
@@ -646,16 +646,17 @@ namespace PracticeManagementService
         /// Not Using.
         public ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage)
         {
-            PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, 0M, proposedHoursPerWeek, isMarginTestPage);
+            PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, 0M, proposedHoursPerWeek, isMarginTestPage, null);
             return calculator.CalculateProposedFinancialsTargetMargin(targetMargin, proposedHoursPerWeek, clientDiscount);
         }
 
-        private static PersonRateCalculator GetCalculatorForProposedFinancials(Person person, decimal proposedRate, decimal proposedHoursPerWeek, bool isMarginTestPage)
+        private static PersonRateCalculator GetCalculatorForProposedFinancials(Person person, decimal proposedRate, decimal proposedHoursPerWeek, bool isMarginTestPage, DateTime? effectiveDate)
         {
-            PersonRateCalculator calculator = new PersonRateCalculator(person, false, isMarginTestPage);
+            PersonRateCalculator calculator = new PersonRateCalculator(person, false, isMarginTestPage, effectiveDate);           
+
             if (person.CurrentPay != null)
             {
-                person.OverheadList = PersonDAL.PersonOverheadListByTimescale(person.CurrentPay.Timescale);
+                person.OverheadList = PersonDAL.PersonOverheadListByTimescale(person.CurrentPay.Timescale, effectiveDate);
 
                 //Remove over MLF Over head if it has 0 rate
                 foreach (var overhead in person.OverheadList.FindAll(OH => OH.IsMLF && OH.Rate == 0))
@@ -988,3 +989,4 @@ namespace PracticeManagementService
         #endregion
     }
 }
+
