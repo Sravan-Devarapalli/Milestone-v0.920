@@ -34,6 +34,14 @@ namespace PraticeManagement
 
         private ExceptionDetail InnerException { get; set; }
 
+        public PraticeManagement.Controls.Clients.ClientProjects ProjectsControl
+        {
+            get
+            {
+                return projects;
+            }
+        }
+
         private const string CLIENT_THRESHOLDS_LIST_KEY = "CLIENT_THRESHOLDS_LIST_KEY";
 
         private List<ClientMarginColorInfo> ClientMarginColorInfoList
@@ -611,7 +619,21 @@ namespace PraticeManagement
             {
                 try
                 {
-                    return serviceClient.SaveClientDetail(client, User.Identity.Name);
+                    var id = serviceClient.SaveClientDetail(client, User.Identity.Name);
+                    if (!ClientId.HasValue)
+                    {
+                        foreach (var g in groups.ClientGroupsList.Values.ToList())
+                        {
+                            if (g.Code != "B0001")
+                            {
+                                using (var serviceGroups = new PraticeManagement.ProjectGroupService.ProjectGroupServiceClient())
+                                {
+                                    int result = serviceGroups.ProjectGroupInsert(id.Value, g.Name, g.IsActive);
+                                }
+                            }
+                        }
+                    }
+                    return id;
                 }
                 catch (Exception ex)
                 {
@@ -717,7 +739,6 @@ namespace PraticeManagement
             client.IsMarginColorInfoEnabled = chbMarginThresholds.Checked;
 
             client.ClientMarginInfo = ClientMarginColorInfoList;
-
         }
 
         #region Projects
