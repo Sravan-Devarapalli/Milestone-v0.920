@@ -62,10 +62,10 @@ namespace PracticeManagementService
         /// <param name="person">The <see cref="Person"/>'s data the rate be calculated on.</param>
         /// <param name="recalculateOverhead">Whether to recalculate overhead</param>
         /// <param name="loadAll">Load all comissions</param>
-        public PersonRateCalculator(Person person, bool recalculateOverhead, bool isMarginTest = false)
+        public PersonRateCalculator(Person person, bool recalculateOverhead, bool isMarginTest = false, DateTime? effectiveDate = null)
         {
             Person = person;
-            GetPersonDetail(Person, recalculateOverhead, isMarginTest);
+            GetPersonDetail(Person, recalculateOverhead, isMarginTest, effectiveDate);
         }
 
         /// <summary>
@@ -93,13 +93,18 @@ namespace PracticeManagementService
 
         #region Data flow
 
-        public void GetPersonDetail(Person person, bool recalculateOverhead, bool isMarginTest)
+        public void GetPersonDetail(Person person, bool recalculateOverhead, bool isMarginTest, DateTime? effectiveDate)
         {
             if (person != null && person.Id.HasValue && !isMarginTest)
             {
                 person.DefaultPersonRecruiterCommission =
                     DefaultRecruiterCommissionDAL.DefaultRecruiterCommissionListByPerson(person.Id.Value);
-                person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
+
+                if (effectiveDate == null)
+                {
+                    person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
+                }
+
                 person.RecruiterCommission =
                         RecruiterCommissionDAL.DefaultRecruiterCommissionListByRecruitId(person.Id.Value);
 
@@ -107,8 +112,8 @@ namespace PracticeManagementService
 
                 person.OverheadList =
                     recalculateOverhead && person.CurrentPay != null ?
-                    PersonDAL.PersonOverheadListByTimescale(person.CurrentPay.Timescale) :
-                    PersonDAL.PersonOverheadListByPerson(person.Id.Value);
+                    PersonDAL.PersonOverheadListByTimescale(person.CurrentPay.Timescale, effectiveDate) :
+                    PersonDAL.PersonOverheadListByPerson(person.Id.Value, effectiveDate);
 
                 foreach (PersonOverhead overhead in person.OverheadList)
                 {
