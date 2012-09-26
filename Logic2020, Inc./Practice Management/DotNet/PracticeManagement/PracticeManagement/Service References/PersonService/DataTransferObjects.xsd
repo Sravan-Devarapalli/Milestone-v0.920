@@ -12,24 +12,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timescale" nillable="true" type="tns:Timescale" />
-  <xs:complexType name="ArrayOfTerminationReason">
+  <xs:complexType name="ArrayOfPerson">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="TerminationReason" nillable="true" type="tns:TerminationReason" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfTerminationReason" nillable="true" type="tns:ArrayOfTerminationReason" />
-  <xs:complexType name="TerminationReason">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Is1099Rule" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsContigent" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsVisible" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsW2HourlyRule" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsW2SalaryRule" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="TerminationReason" nillable="true" type="tns:TerminationReason" />
+  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
@@ -44,6 +32,7 @@
       <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
       <xs:element minOccurs="0" name="EmploymentHistory" nillable="true" type="tns:ArrayOfEmployment" />
+      <xs:element minOccurs="0" name="FirstHireDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
@@ -56,6 +45,7 @@
       <xs:element minOccurs="0" name="IsWelcomeEmailSent" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastTerminationDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LockedOut" type="xs:boolean" />
       <xs:element minOccurs="0" name="Manager" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
@@ -491,12 +481,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PracticeManagerHistory" nillable="true" type="tns:PracticeManagerHistory" />
-  <xs:complexType name="ArrayOfPerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="ProjectStatus">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
@@ -681,12 +665,88 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
+  <xs:complexType name="ArrayOfTimescale">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Timescale" nillable="true" type="tns:Timescale" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTimescale" nillable="true" type="tns:ArrayOfTimescale" />
+  <xs:complexType name="ArrayOfTerminationReason">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TerminationReason" nillable="true" type="tns:TerminationReason" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTerminationReason" nillable="true" type="tns:ArrayOfTerminationReason" />
+  <xs:complexType name="TerminationReason">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Is1099Rule" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsContigent" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsVisible" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsW2HourlyRule" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsW2SalaryRule" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TerminationReason" nillable="true" type="tns:TerminationReason" />
   <xs:complexType name="ArrayOfSeniorityCategory">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfSeniorityCategory" nillable="true" type="tns:ArrayOfSeniorityCategory" />
+  <xs:complexType name="ArrayOfSeniority">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Seniority" nillable="true" type="tns:Seniority" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSeniority" nillable="true" type="tns:ArrayOfSeniority" />
+  <xs:complexType name="PersonPermission">
+    <xs:sequence>
+      <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="permissions" nillable="true" type="q12:ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonPermission" nillable="true" type="tns:PersonPermission" />
+  <xs:simpleType name="PermissionTarget">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Client">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Group">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Salesperson">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PracticeManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Practice">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PermissionTarget" nillable="true" type="tns:PermissionTarget" />
   <xs:simpleType name="BudgetCategoryType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="ClientDirector">
@@ -838,12 +898,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConsultantDemandItem" nillable="true" type="tns:ConsultantDemandItem" />
-  <xs:complexType name="ArrayOfTimescale">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Timescale" nillable="true" type="tns:Timescale" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfTimescale" nillable="true" type="tns:ArrayOfTimescale" />
   <xs:complexType name="ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="QuadrupleOfPersonArrayOfintintintlqlLCQKx" nillable="true" type="tns:QuadrupleOfPersonArrayOfintintintlqlLCQKx" />
@@ -864,7 +918,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="First" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="Fourth" type="xs:int" />
-      <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Second" nillable="true" type="q12:ArrayOfint" />
+      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Second" nillable="true" type="q13:ArrayOfint" />
       <xs:element minOccurs="0" name="Third" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
@@ -887,57 +941,11 @@
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" name="First" nillable="true" type="tns:Person" />
-      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Second" nillable="true" type="q13:ArrayOfint" />
+      <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Second" nillable="true" type="q14:ArrayOfint" />
       <xs:element minOccurs="0" name="Third" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TripleOfPersonArrayOfintintfnyeTkk6" nillable="true" type="tns:TripleOfPersonArrayOfintintfnyeTkk6" />
-  <xs:complexType name="PersonPermission">
-    <xs:sequence>
-      <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="permissions" nillable="true" type="q14:ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PersonPermission" nillable="true" type="tns:PersonPermission" />
-  <xs:simpleType name="PermissionTarget">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Client">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Group">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Salesperson">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PracticeManager">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Practice">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="PermissionTarget" nillable="true" type="tns:PermissionTarget" />
   <xs:complexType name="DataAccessFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="ErrorCode" type="tns:ErrorCode" />
@@ -1082,10 +1090,4 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ComputedFinancialsEx" nillable="true" type="tns:ComputedFinancialsEx" />
-  <xs:complexType name="ArrayOfSeniority">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Seniority" nillable="true" type="tns:Seniority" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfSeniority" nillable="true" type="tns:ArrayOfSeniority" />
 </xs:schema>
