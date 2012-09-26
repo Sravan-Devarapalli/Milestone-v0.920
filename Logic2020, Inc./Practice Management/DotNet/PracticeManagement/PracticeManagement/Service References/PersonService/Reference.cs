@@ -15,6 +15,33 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListBySearchKeyword", ReplyAction="http://tempuri.org/IPersonService/GetPersonListBySearchKeywordResponse")]
+        DataTransferObjects.Person[] GetPersonListBySearchKeyword(string looked);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetAllPayTypes", ReplyAction="http://tempuri.org/IPersonService/GetAllPayTypesResponse")]
+        DataTransferObjects.Timescale[] GetAllPayTypes();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPayHistoryShortByPerson", ReplyAction="http://tempuri.org/IPersonService/GetPayHistoryShortByPersonResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person GetPayHistoryShortByPerson(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/IsPersonSalaryTypeListByPeriod", ReplyAction="http://tempuri.org/IPersonService/IsPersonSalaryTypeListByPeriodResponse")]
+        System.Collections.Generic.Dictionary<System.DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetailsShort", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailsShortResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person GetPersonDetailsShort(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdWithCurrentPay", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdWithCurrentPayResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.Person GetStrawmanDetailsByIdWithCurrentPay(int id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetHistoryByPerson", ReplyAction="http://tempuri.org/IPersonService/GetHistoryByPersonResponse")]
+        DataTransferObjects.Pay[] GetHistoryByPerson(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPayResponse")]
+        DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetTerminationReasonsList", ReplyAction="http://tempuri.org/IPersonService/GetTerminationReasonsListResponse")]
         DataTransferObjects.TerminationReason[] GetTerminationReasonsList();
         
@@ -30,6 +57,19 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById", ReplyAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse")]
         DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SavePay", ReplyAction="http://tempuri.org/IPersonService/SavePayResponse")]
+        void SavePay(DataTransferObjects.Pay pay, string user);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeletePay", ReplyAction="http://tempuri.org/IPersonService/DeletePayResponse")]
+        void DeletePay(int personId, System.DateTime startDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ListSeniorities", ReplyAction="http://tempuri.org/IPersonService/ListSenioritiesResponse")]
+        DataTransferObjects.Seniority[] ListSeniorities();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SetPermissionsForPerson", ReplyAction="http://tempuri.org/IPersonService/SetPermissionsForPersonResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        void SetPermissionsForPerson(DataTransferObjects.Person person, DataTransferObjects.PersonPermission permissions);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonById", ReplyAction="http://tempuri.org/IPersonService/GetPersonByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -125,33 +165,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetApprovedByManagerList", ReplyAction="http://tempuri.org/IPersonService/GetApprovedByManagerListResponse")]
         DataTransferObjects.Person[] GetApprovedByManagerList();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListBySearchKeyword", ReplyAction="http://tempuri.org/IPersonService/GetPersonListBySearchKeywordResponse")]
-        DataTransferObjects.Person[] GetPersonListBySearchKeyword(string looked);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetAllPayTypes", ReplyAction="http://tempuri.org/IPersonService/GetAllPayTypesResponse")]
-        DataTransferObjects.Timescale[] GetAllPayTypes();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPayHistoryShortByPerson", ReplyAction="http://tempuri.org/IPersonService/GetPayHistoryShortByPersonResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person GetPayHistoryShortByPerson(int personId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/IsPersonSalaryTypeListByPeriod", ReplyAction="http://tempuri.org/IPersonService/IsPersonSalaryTypeListByPeriodResponse")]
-        System.Collections.Generic.Dictionary<System.DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, System.DateTime startDate, System.DateTime endDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDetailsShort", ReplyAction="http://tempuri.org/IPersonService/GetPersonDetailsShortResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person GetPersonDetailsShort(int personId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdWithCurrentPay", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanDetailsByIdWithCurrentPayResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person GetStrawmanDetailsByIdWithCurrentPay(int id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetHistoryByPerson", ReplyAction="http://tempuri.org/IPersonService/GetHistoryByPersonResponse")]
-        DataTransferObjects.Pay[] GetHistoryByPerson(int personId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPay", ReplyAction="http://tempuri.org/IPersonService/GetStrawmanListShortFilterWithTodayPayResponse")]
-        DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay();
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
         
@@ -246,7 +259,7 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.PersonOverhead[] GetPersonOverheadByPerson(int personId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonOverheadByTimescale", ReplyAction="http://tempuri.org/IPersonService/GetPersonOverheadByTimescaleResponse")]
-        DataTransferObjects.PersonOverhead[] GetPersonOverheadByTimescale(DataTransferObjects.TimescaleType timescale);
+        DataTransferObjects.PersonOverhead[] GetPersonOverheadByTimescale(DataTransferObjects.TimescaleType timescale, System.Nullable<System.DateTime> effectiveDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonRate", ReplyAction="http://tempuri.org/IPersonService/GetPersonRateResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -257,25 +270,12 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CalculateProposedFinancialsPerson", ReplyAction="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
+        DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage, System.Nullable<System.DateTime> effectiveDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonTargetMargin", ReplyAction="http://tempuri.org/IPersonService/CalculateProposedFinancialsPersonTargetMarginRe" +
             "sponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(DataTransferObjects.Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SavePay", ReplyAction="http://tempuri.org/IPersonService/SavePayResponse")]
-        void SavePay(DataTransferObjects.Pay pay, string user);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeletePay", ReplyAction="http://tempuri.org/IPersonService/DeletePayResponse")]
-        void DeletePay(int personId, System.DateTime startDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ListSeniorities", ReplyAction="http://tempuri.org/IPersonService/ListSenioritiesResponse")]
-        DataTransferObjects.Seniority[] ListSeniorities();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SetPermissionsForPerson", ReplyAction="http://tempuri.org/IPersonService/SetPermissionsForPersonResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        void SetPermissionsForPerson(DataTransferObjects.Person person, DataTransferObjects.PersonPermission permissions);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -284,7 +284,7 @@ namespace PraticeManagement.PersonService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
+    public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {     
         
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -300,6 +300,38 @@ namespace PraticeManagement.PersonService {
         
         public PersonServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.Person[] GetPersonListBySearchKeyword(string looked) {
+            return base.Channel.GetPersonListBySearchKeyword(looked);
+        }
+        
+        public DataTransferObjects.Timescale[] GetAllPayTypes() {
+            return base.Channel.GetAllPayTypes();
+        }
+        
+        public DataTransferObjects.Person GetPayHistoryShortByPerson(int personId) {
+            return base.Channel.GetPayHistoryShortByPerson(personId);
+        }
+        
+        public System.Collections.Generic.Dictionary<System.DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.IsPersonSalaryTypeListByPeriod(personId, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Person GetPersonDetailsShort(int personId) {
+            return base.Channel.GetPersonDetailsShort(personId);
+        }
+        
+        public DataTransferObjects.Person GetStrawmanDetailsByIdWithCurrentPay(int id) {
+            return base.Channel.GetStrawmanDetailsByIdWithCurrentPay(id);
+        }
+        
+        public DataTransferObjects.Pay[] GetHistoryByPerson(int personId) {
+            return base.Channel.GetHistoryByPerson(personId);
+        }
+        
+        public DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay() {
+            return base.Channel.GetStrawmanListShortFilterWithTodayPay();
         }
         
         public DataTransferObjects.TerminationReason[] GetTerminationReasonsList() {
@@ -320,6 +352,22 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId) {
             return base.Channel.GetPersonEmploymentHistoryById(personId);
+        }
+        
+        public void SavePay(DataTransferObjects.Pay pay, string user) {
+            base.Channel.SavePay(pay, user);
+        }
+        
+        public void DeletePay(int personId, System.DateTime startDate) {
+            base.Channel.DeletePay(personId, startDate);
+        }
+        
+        public DataTransferObjects.Seniority[] ListSeniorities() {
+            return base.Channel.ListSeniorities();
+        }
+        
+        public void SetPermissionsForPerson(DataTransferObjects.Person person, DataTransferObjects.PersonPermission permissions) {
+            base.Channel.SetPermissionsForPerson(person, permissions);
         }
         
         public DataTransferObjects.Person GetPersonById(int personId) {
@@ -434,38 +482,6 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetApprovedByManagerList();
         }
         
-        public DataTransferObjects.Person[] GetPersonListBySearchKeyword(string looked) {
-            return base.Channel.GetPersonListBySearchKeyword(looked);
-        }
-        
-        public DataTransferObjects.Timescale[] GetAllPayTypes() {
-            return base.Channel.GetAllPayTypes();
-        }
-        
-        public DataTransferObjects.Person GetPayHistoryShortByPerson(int personId) {
-            return base.Channel.GetPayHistoryShortByPerson(personId);
-        }
-        
-        public System.Collections.Generic.Dictionary<System.DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.IsPersonSalaryTypeListByPeriod(personId, startDate, endDate);
-        }
-        
-        public DataTransferObjects.Person GetPersonDetailsShort(int personId) {
-            return base.Channel.GetPersonDetailsShort(personId);
-        }
-        
-        public DataTransferObjects.Person GetStrawmanDetailsByIdWithCurrentPay(int id) {
-            return base.Channel.GetStrawmanDetailsByIdWithCurrentPay(id);
-        }
-        
-        public DataTransferObjects.Pay[] GetHistoryByPerson(int personId) {
-            return base.Channel.GetHistoryByPerson(personId);
-        }
-        
-        public DataTransferObjects.Person[] GetStrawmanListShortFilterWithTodayPay() {
-            return base.Channel.GetStrawmanListShortFilterWithTodayPay();
-        }
-        
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
             return base.Channel.GetPersonMilestoneWithFinancials(personId);
         }
@@ -574,8 +590,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetPersonOverheadByPerson(personId);
         }
         
-        public DataTransferObjects.PersonOverhead[] GetPersonOverheadByTimescale(DataTransferObjects.TimescaleType timescale) {
-            return base.Channel.GetPersonOverheadByTimescale(timescale);
+        public DataTransferObjects.PersonOverhead[] GetPersonOverheadByTimescale(DataTransferObjects.TimescaleType timescale, System.Nullable<System.DateTime> effectiveDate) {
+            return base.Channel.GetPersonOverheadByTimescale(timescale, effectiveDate);
         }
         
         public DataTransferObjects.MilestonePerson GetPersonRate(DataTransferObjects.MilestonePerson milestonePerson) {
@@ -586,28 +602,12 @@ namespace PraticeManagement.PersonService {
             return base.Channel.CalculateProposedFinancials(personId, proposedRate, proposedHoursPerWeek, clientDiscount);
         }
         
-        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage) {
-            return base.Channel.CalculateProposedFinancialsPerson(person, proposedRate, proposedHoursPerWeek, clientDiscount, isMarginTestPage);
+        public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPerson(DataTransferObjects.Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage, System.Nullable<System.DateTime> effectiveDate) {
+            return base.Channel.CalculateProposedFinancialsPerson(person, proposedRate, proposedHoursPerWeek, clientDiscount, isMarginTestPage, effectiveDate);
         }
         
         public DataTransferObjects.ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(DataTransferObjects.Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage) {
             return base.Channel.CalculateProposedFinancialsPersonTargetMargin(person, targetMargin, proposedHoursPerWeek, clientDiscount, isMarginTestPage);
-        }
-        
-        public void SavePay(DataTransferObjects.Pay pay, string user) {
-            base.Channel.SavePay(pay, user);
-        }
-        
-        public void DeletePay(int personId, System.DateTime startDate) {
-            base.Channel.DeletePay(personId, startDate);
-        }
-        
-        public DataTransferObjects.Seniority[] ListSeniorities() {
-            return base.Channel.ListSeniorities();
-        }
-        
-        public void SetPermissionsForPerson(DataTransferObjects.Person person, DataTransferObjects.PersonPermission permissions) {
-            base.Channel.SetPermissionsForPerson(person, permissions);
         }
     }
 }
