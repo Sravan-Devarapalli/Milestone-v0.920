@@ -425,7 +425,8 @@ namespace PraticeManagement.Controls
 
                     if (counter > 1)
                     {
-                        text = "Multiple " + this.DropDownListType + "s selected";
+                        this.DropDownListTypePlurlForm = string.IsNullOrEmpty(this.DropDownListTypePlurlForm) ? "s" : this.DropDownListTypePlurlForm;
+                        text = "Multiple " + this.DropDownListType + this.DropDownListTypePlurlForm + " selected";
                     }
 
                     if (counter == 0)
