@@ -161,8 +161,8 @@
                                 </td>
                                 <td class="SecondTdNewHire">
                                     <pmc:ScrollingDropDown ID="cblSeniorities" runat="server" AllSelectedReturnType="Null"
-                                        OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblSeniorities','Seniority')"
-                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Seniority"
+                                        OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblSeniorities','Seniority','','Seniorities')"
+                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Seniority" DropDownListTypePluralForm="Seniorities"
                                         CssClass="NewHireReportCblTimeScales Height160PxIMP" />
                                     <ext:ScrollableDropdownExtender ID="sdeSeniorities" runat="server" TargetControlID="cblSeniorities"
                                         BehaviorID="sdeSeniorities" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
