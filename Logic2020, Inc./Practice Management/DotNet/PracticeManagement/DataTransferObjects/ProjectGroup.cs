@@ -26,6 +26,11 @@ namespace DataTransferObjects
             get { return Constants.GroupNames.DefaultGroupName; }
         }
 
+        public static string DefaultGroupCode
+        {
+            get { return Constants.GroupCodes.DefaultGroupCode; }
+        }
+
         /// <summary>
         /// System-generated identifier for the client
         /// </summary>
