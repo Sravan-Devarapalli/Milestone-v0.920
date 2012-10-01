@@ -262,7 +262,8 @@ namespace DataAccess
                            Id = (int)reader[GroupIdColumn],
                            Name = (string)reader[groupNameColumn],
                            IsActive = (bool)reader[IsActiveColumn],
-                           InUse = (int)reader[InUseColumn] == 1
+                           InUse = (int)reader[InUseColumn] == 1,
+                           Code = (string)reader[CodeColumn]
                        };
         }
 
