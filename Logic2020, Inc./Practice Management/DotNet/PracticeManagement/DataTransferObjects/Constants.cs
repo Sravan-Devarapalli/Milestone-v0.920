@@ -34,6 +34,11 @@ namespace DataTransferObjects
             public const string DefaultGroupName = "Default Group";
         }
 
+        public class GroupCodes
+        {
+            public const string DefaultGroupCode = "B0001";
+        }
+
         public static class ResourceKeys
         {
             # region Report
