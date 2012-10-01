@@ -1,7 +1,7 @@
-﻿function scrollingDropdown_onclick(control, type,pluralform) {
+﻿function scrollingDropdown_onclick(control, type,pluralform,pluralformType) {
     var temp = 0;
     var text = "";
-    if (isNaN(pluralform)) {
+    if (pluralform == undefined || pluralform == null || pluralform == '') {
         pluralform = "s";
     }
     var scrollingDropdownList = document.getElementById(control.toString());
@@ -16,7 +16,10 @@
                 text = arrayOfCheckBoxes[i].parentNode.childNodes[1].innerHTML;
             }
             if (temp > 1) {
-                text = "Multiple " + type.toString() + pluralform + " selected";
+                if (pluralformType == undefined || pluralformType == null || pluralformType == '') {
+                    pluralformType = type.toString() + pluralform;
+                }
+                text = "Multiple " + pluralformType + " selected";
 
             }
             if (arrayOfCheckBoxes[0].checked) {
