@@ -12,9 +12,7 @@ namespace PraticeManagement.Controls.Clients
 {
     public partial class ClientGroups : UserControl
     {
-        private const string CLIENT_GROUPS_KEY = "ClientGroupsList";
-        private const string DefaultGroup = "Default Group";
-
+        private const string CLIENT_GROUPS_KEY = "ClientGroupsList";       
 
         #region ProjectGroupsProperties
 
@@ -62,7 +60,7 @@ namespace PraticeManagement.Controls.Clients
                 List<ProjectGroup> groups;
                 if (ClientId == 0)
                 {
-                    groups = new List<ProjectGroup>() { new ProjectGroup() { Id = 0, Name = DefaultGroup, Code = "B0001", IsActive = true } };
+                    groups = new List<ProjectGroup>() { new ProjectGroup() { Id = 0, Name = ProjectGroup.DefaultGroupName, Code = ProjectGroup.DefaultGroupCode, IsActive = true } };
                 }
                 else
                 {
@@ -164,9 +162,8 @@ namespace PraticeManagement.Controls.Clients
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value")).Name == DefaultGroup)
+                if (((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value")).Code == ProjectGroup.DefaultGroupCode)
                 {
-                    e.Row.Cells[0].Controls[0].Visible = false;
                     e.Row.Cells[gvGroups.Columns.Count - 1].Visible = false;
                 }
                 else
@@ -186,17 +183,18 @@ namespace PraticeManagement.Controls.Clients
                         }
 
                     }
-
-                    try
-                    {
-                        ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Business Unit";
-
-                    }
-                    catch
-                    {
-                        e.Row.Cells[0].ToolTip = "Edit Business Unit";
-                    }
                 }
+
+                try
+                {
+                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Business Unit";
+
+                }
+                catch
+                {
+                    e.Row.Cells[0].ToolTip = "Edit Business Unit";
+                }
+
 
                 if ((e.Row.RowState & DataControlRowState.Edit) != 0)
                 {
@@ -231,8 +229,8 @@ namespace PraticeManagement.Controls.Clients
                 else
                 {
                     group = new ProjectGroup { Id = AddProjectGroup(groupName, chbGroupActive.Checked), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
-                }                
-                ClientGroupsList.Add(group.Id.Value, group);               
+                }
+                ClientGroupsList.Add(group.Id.Value, group);
                 gvGroups.DataSource = ClientGroupsList;
                 gvGroups.DataBind();
             }
