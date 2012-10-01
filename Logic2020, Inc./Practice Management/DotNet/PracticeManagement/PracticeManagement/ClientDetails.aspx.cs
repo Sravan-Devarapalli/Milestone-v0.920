@@ -624,13 +624,19 @@ namespace PraticeManagement
                     {
                         foreach (var g in groups.ClientGroupsList.Values.ToList())
                         {
-                            if (g.Code != "B0001")
+                            using (var serviceGroups = new PraticeManagement.ProjectGroupService.ProjectGroupServiceClient())
                             {
-                                using (var serviceGroups = new PraticeManagement.ProjectGroupService.ProjectGroupServiceClient())
+                                if (g.Code != ProjectGroup.DefaultGroupCode)
                                 {
-                                    int result = serviceGroups.ProjectGroupInsert(id.Value, g.Name, g.IsActive);
+                                    int result = serviceGroups.ProjectGroupInsert(id.Value, g.Name, g.IsActive); 
                                 }
+                                else if (g.Code == ProjectGroup.DefaultGroupCode && g.Name != ProjectGroup.DefaultGroupName)
+                                {
+                                    int groupId = ServiceCallers.Custom.Group(s => s.GroupListAll(id.Value, null).ToList()).First(s => s.Code == ProjectGroup.DefaultGroupCode).Id.Value;
+                                    serviceGroups.UpDateProductGroup(id.Value, groupId, g.Name, g.IsActive);
+                                }                                
                             }
+
                         }
                     }
                     return id;
