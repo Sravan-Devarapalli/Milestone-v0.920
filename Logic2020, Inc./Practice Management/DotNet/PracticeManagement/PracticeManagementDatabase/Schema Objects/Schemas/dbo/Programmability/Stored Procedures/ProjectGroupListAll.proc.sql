@@ -25,6 +25,7 @@ AS
 		SELECT
 				pg.GroupId
 				, pg.ClientId
+				, pg.Code
 				, pg.Name
 				, 1 InUse
 				,pg.Active
@@ -37,6 +38,7 @@ AS
 			SELECT
 				GroupId
 				, ClientId
+				, Code
 				, Name
 				,dbo.IsProjectGroupInUse(ProjectGroup.GroupId) AS InUse
 				,Active
@@ -60,6 +62,7 @@ AS
 				  pg.ClientId
 				, cl.[Name] AS 'ClientName'
 				, pg.GroupId
+				,pg.Code
 				, pg.[Name]
 				, dbo.IsProjectGroupInUse(pg.GroupId) AS InUse
 				,pg.Active
