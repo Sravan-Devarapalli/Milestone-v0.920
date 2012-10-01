@@ -59,7 +59,7 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
                 {
                     string selectedString =  HttpUtility.HtmlDecode(((ScrollingDropDown)this.TargetControl).SelectedString);
 
-                    return HttpUtility.HtmlEncode(selectedString.Length > 32 ? selectedString.Substring(0, 30)+".." : selectedString);
+                    return HttpUtility.HtmlEncode(selectedString.Length > 33 ? selectedString.Substring(0, 31)+".." : selectedString);
                 }
                 else
                 {
