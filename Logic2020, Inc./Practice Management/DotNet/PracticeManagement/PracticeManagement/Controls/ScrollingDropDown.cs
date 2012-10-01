@@ -400,13 +400,19 @@ namespace PraticeManagement.Controls
             set;
         }
 
+        public string DropDownListTypePluralForm
+        {
+            get;
+            set;
+        }
+
         public string SelectedString
         {
             get
             {
                 int counter = 0;
                 string text = null;
-                if (Items.Count==0 ||(Items.Count == 1 && !Items[0].Enabled))
+                if (Items.Count == 0 || (Items.Count == 1 && !Items[0].Enabled))
                 {
                     return "No " + DropDownListType + "s to select";
                 }
@@ -425,8 +431,12 @@ namespace PraticeManagement.Controls
 
                     if (counter > 1)
                     {
-                        this.DropDownListTypePlurlForm = string.IsNullOrEmpty(this.DropDownListTypePlurlForm) ? "s" : this.DropDownListTypePlurlForm;
-                        text = "Multiple " + this.DropDownListType + this.DropDownListTypePlurlForm + " selected";
+                        if (string.IsNullOrEmpty(this.DropDownListTypePluralForm))
+                        {
+                            this.DropDownListTypePlurlForm = string.IsNullOrEmpty(this.DropDownListTypePlurlForm) ? "s" : this.DropDownListTypePlurlForm;
+                            this.DropDownListTypePluralForm = this.DropDownListType + this.DropDownListTypePlurlForm;
+                        }
+                        text = "Multiple " + this.DropDownListTypePluralForm + " selected";
                     }
 
                     if (counter == 0)
@@ -539,7 +549,7 @@ namespace PraticeManagement.Controls
         public override void RenderControl(HtmlTextWriter writer)
         {
             string writeText = string.Empty;
-            writeText = string.IsNullOrEmpty(CssClass) ?  string.Format("<div id='{0}' class='scroll_{0}' />" , ID) : string.Format("<div id='{0}' class='{1}' />", ID, CssClass);
+            writeText = string.IsNullOrEmpty(CssClass) ? string.Format("<div id='{0}' class='scroll_{0}' />", ID) : string.Format("<div id='{0}' class='{1}' />", ID, CssClass);
             writer.WriteLine(writeText);
             this.Width = new Unit(100d, UnitType.Percentage);
             base.RenderControl(writer);
