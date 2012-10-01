@@ -16,7 +16,7 @@
                 text = arrayOfCheckBoxes[i].parentNode.childNodes[1].innerHTML;
             }
             if (temp > 1) {
-                text = "Multiple " + type.toString() + "s selected";
+                text = "Multiple " + type.toString() + pluralform + " selected";
 
             }
             if (arrayOfCheckBoxes[0].checked) {
@@ -27,8 +27,8 @@
             }
         }
         text = DecodeString(text);
-        if (text.length > 32) {
-            text = text.substr(0, 30) + "..";
+        if (text.length > 33) {
+            text = text.substr(0, 31) + "..";
         }
         scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = text;
     }
