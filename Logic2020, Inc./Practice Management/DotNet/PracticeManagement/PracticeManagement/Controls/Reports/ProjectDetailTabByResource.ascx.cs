@@ -222,23 +222,9 @@ namespace PraticeManagement.Controls.Reports
             {
                 var repDate = e.Item.FindControl("repDate") as Repeater;
                 PersonLevelGroupedHours dataitem = (PersonLevelGroupedHours)e.Item.DataItem;
-
-                var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
-                cpePerson.BehaviorID = cpePerson.ClientID + e.Item.ItemIndex.ToString();
-
                 sectionId = dataitem.TimeEntrySectionId;
                 repDate.DataSource = dataitem.DayTotalHours != null ? dataitem.DayTotalHours.OrderBy(p => p.Date).ToList() : dataitem.DayTotalHours;
                 repDate.DataBind();
-                if (dataitem.DayTotalHours == null || dataitem.DayTotalHours.Count == 0)
-                {
-                    var image = e.Item.FindControl("imgProject") as Image;
-                    image.Style.Add(HtmlTextWriterStyle.Visibility, "hidden");
-                }
-                else
-                {
-                    CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
-                }
-
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -262,9 +248,9 @@ namespace PraticeManagement.Controls.Reports
                 TimeEntriesGroupByDate dataitem = (TimeEntriesGroupByDate)e.Item.DataItem;
                 var rep = sender as Repeater;
 
-                //var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
-                //cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
-                // CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
+                var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
+                cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
+                CollapsiblePanelExtenderClientIds.Add(cpeDate.BehaviorID);
 
 
                 repWorktype.DataSource = dataitem.DayTotalHoursList;
@@ -283,6 +269,9 @@ namespace PraticeManagement.Controls.Reports
                 GroupByPersonByWorktype dataitem = (GroupByPersonByWorktype)e.Item.DataItem;
                 var rep = sender as Repeater;
                 repWorktype.DataSource = dataitem.ProjectTotalHoursList;
+                var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
+                cpePerson.BehaviorID = Guid.NewGuid().ToString();
+                CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
                 repWorktype.DataBind();
             }
         }
@@ -296,10 +285,6 @@ namespace PraticeManagement.Controls.Reports
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-
-                var cpeDate = e.Item.FindControl("cpeDate") as CollapsiblePanelExtender;
-                cpeDate.BehaviorID = cpeDate.ClientID + e.Item.ItemIndex.ToString();
-                CollapsiblePanelExtenderClientIds.Add(cpeDate.BehaviorID);
                 var repPerson2 = e.Item.FindControl("repPerson2") as Repeater;
                 GroupByDateByPerson dataitem = (GroupByDateByPerson)e.Item.DataItem;
                 sectionId = dataitem.TimeEntrySectionId;
