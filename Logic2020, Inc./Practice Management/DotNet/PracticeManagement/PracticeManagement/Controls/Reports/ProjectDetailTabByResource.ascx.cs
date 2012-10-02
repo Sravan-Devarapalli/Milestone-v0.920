@@ -504,7 +504,7 @@ namespace PraticeManagement.Controls.Reports
         {
             List<PersonLevelGroupedHours> list =
                 ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(ProjectNumber, MilestoneId,
-                    PeriodSelected == "0" ? StartDate : null, PeriodSelected == "0" ? EndDate : null,
+                    PeriodSelected == "*" ? null : StartDate, PeriodSelected == "*" ? null : EndDate,
                     ProjectRoles)).ToList();
 
             if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
