@@ -7,3 +7,5 @@ AS
 	FROM Skills.SkillCategory S
 	WHERE S.IsActive = 1
 		AND S.IsDeleted = 0
+	ORDER BY S.[Description] 
+
