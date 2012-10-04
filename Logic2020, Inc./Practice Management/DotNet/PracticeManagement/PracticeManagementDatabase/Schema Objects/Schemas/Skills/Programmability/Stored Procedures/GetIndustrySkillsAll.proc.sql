@@ -6,4 +6,6 @@ BEGIN
 			I.DisplayOrder
 	FROM Skills.Industry I
 	WHERE I.IsActive = 1 AND I.IsDeleted = 0
+	ORDER BY I.Description
 END
+
