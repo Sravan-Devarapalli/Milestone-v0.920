@@ -189,7 +189,7 @@ namespace PraticeManagement
                             {
                                 personnelCompensation.PracticeId = person.DefaultPractice.Id;
                             }
-                            if (person.DefaultPersonCommissions != null && person.DefaultPersonCommissions.Any(cl => cl.TypeOfCommission == CommissionType.Sales) && PreviousPage == null && PreviousPage.PersonUnsavedData == null)
+                            if (person.DefaultPersonCommissions != null && person.DefaultPersonCommissions.Any(cl => cl.TypeOfCommission == CommissionType.Sales) && PreviousPage == null && PersonDetailData == null)
                             {
                                 var salesComm = person.DefaultPersonCommissions.First(cl => cl.TypeOfCommission == CommissionType.Sales);
                                 personnelCompensation.SalesCommissionFractionOfMargin = salesComm.FractionOfMargin;
