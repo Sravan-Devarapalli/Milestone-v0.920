@@ -23,5 +23,8 @@
 	IsOffshore		   BIT			  NOT NULL CONSTRAINT DF_Person_IsOffshore DEFAULT(0),
 	PaychexID		   NVARCHAR (MAX) NULL,
 	DivisionId			INT NULL,
-	TerminationReasonId	INT NULL
+	TerminationReasonId	INT NULL,
+	PictureUrl         NVARCHAR(MAX) NULL,
+	PictureModifiedDate DATETIME	 NULL
 );
+
