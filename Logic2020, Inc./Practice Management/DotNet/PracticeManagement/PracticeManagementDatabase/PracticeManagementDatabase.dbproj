@@ -3493,11 +3493,6 @@
     <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonSkill_LogUpdateDelete.trigger.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\PersonsSearchBySkillsText.proc.sql">
-      <SubType>Code</SubType>
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetSkillTypesAll.proc.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4066,6 +4061,30 @@
     <Build Include="Schema Objects\Schemas\dbo\Views\v_PersonHistoryAndStrawman.view.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonProfileLink_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonPictureUrl.proc.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonProfiles.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Tables\PersonProfile.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\SavePersonProfiles.proc.sql">
+      <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\SavePersonPictureUrl.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\PersonsSearchBySkills.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4115,3 +4134,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
