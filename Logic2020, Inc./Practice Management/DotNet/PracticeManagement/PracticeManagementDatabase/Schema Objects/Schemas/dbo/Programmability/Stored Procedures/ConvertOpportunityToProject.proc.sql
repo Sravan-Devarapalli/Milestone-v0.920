@@ -141,9 +141,9 @@ BEGIN
 	END
 
 	-- Set opportunity status
+	-- As per #3083 opportunity status is not changed
 	UPDATE dbo.Opportunity
-	   SET OpportunityStatusId = 4 /* Won */
-	       ,ProjectId = @ProjectID
+	   SET ProjectId = @ProjectID
 	 WHERE OpportunityId = @OpportunityId
 
 	DECLARE @PersonId INT
