@@ -32,8 +32,7 @@
 		DECLARE @ErrorMessage NVARCHAR(2048),
 				@Today			DATETIME,
 				@CurrentPayEndDate DATETIME,
-				@CurrentSalesCommEndDate DATETIME,
-				@IsHireDateChanged BIT
+				@CurrentSalesCommEndDate DATETIME
 
 		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
 		
@@ -112,12 +111,14 @@
 
 			DECLARE @ExistingSeniorityId INT,
 					@ExistingPracticeId  INT,
-					@PreviousTerminationDate DATETIME
+					@PreviousTerminationDate DATETIME,
+					@PreviousHireDate DATETIME
 				
 
 			SELECT @ExistingSeniorityId = SeniorityId,
 					@ExistingPracticeId = DefaultPractice,
-					@PreviousTerminationDate = TerminationDate
+					@PreviousTerminationDate = TerminationDate,
+					@PreviousHireDate = HireDate
 			FROM dbo.Person AS P
 			WHERE P.PersonId = @PersonId
 
@@ -211,15 +212,17 @@
 				END CATCH
 			END
 			
-			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-			SET @IsHireDateChanged =  0
-
-			IF NOT EXISTS(SELECT 1 FROM dbo.Person AS P WHERE P.PersonId = @PersonId AND P.HireDate = @HireDate)
+			IF(@PreviousTerminationDate >= @Today AND (@PersonStatusId = 1 OR (@PersonStatusId = 3 AND @TerminationDate IS NULL)))
 			BEGIN
-			 SET @IsHireDateChanged =  1
+					UPDATE dbo.Pay
+					SET EndDate = dbo.GetFutureDate()
+					WHERE Person = @PersonId 		
+					AND StartDate = (SELECT TOP(1) StartDate FROM dbo.Pay WHERE Person = @PersonId AND  StartDate >= @HireDate ORDER BY StartDate DESC)
 			END
 
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+			
 			UPDATE dbo.Person
 			   SET FirstName = @FirstName,
 				   LastName = @LastName,
@@ -244,7 +247,8 @@
 					@PersonId = @PersonId,
 					@PersonStatusId = @PersonStatusId
 
-			IF(@IsHireDateChanged =  1)
+			--Hire Date Changed.
+			IF(@PreviousHireDate <> @HireDate)
 			BEGIN
 				EXEC dbo.OnPersonHireDateChange	@PersonId = @PersonId , @NewHireDate = @HireDate
 			END
