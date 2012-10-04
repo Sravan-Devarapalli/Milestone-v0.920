@@ -10,5 +10,6 @@ BEGIN
 	WHERE PInd.PersonId = @PersonId
 		AND I.IsActive = 1
 		AND I.IsDeleted = 0
-
+	ORDER BY I.Description
 END
+
