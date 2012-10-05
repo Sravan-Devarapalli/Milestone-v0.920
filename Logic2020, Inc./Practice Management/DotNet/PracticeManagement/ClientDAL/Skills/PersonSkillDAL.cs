@@ -488,7 +488,7 @@ namespace DataAccess.Skills
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureUrl, pictureUrl);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureUrl, string.IsNullOrEmpty(pictureUrl.Trim()) ? DBNull.Value : (object)pictureUrl.Trim());
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
 
                     connection.Open();
