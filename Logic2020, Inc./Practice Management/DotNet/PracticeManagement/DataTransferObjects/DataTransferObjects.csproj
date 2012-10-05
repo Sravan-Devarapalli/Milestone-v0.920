@@ -177,6 +177,7 @@
     <Compile Include="Skills\PersonQualification.cs" />
     <Compile Include="Skills\PersonSkill.cs" />
     <Compile Include="Skills\PersonTraining.cs" />
+    <Compile Include="Skills\Profile.cs" />
     <Compile Include="Skills\QualificationType.cs" />
     <Compile Include="Skills\Skill.cs" />
     <Compile Include="Skills\SkillCategory.cs" />
