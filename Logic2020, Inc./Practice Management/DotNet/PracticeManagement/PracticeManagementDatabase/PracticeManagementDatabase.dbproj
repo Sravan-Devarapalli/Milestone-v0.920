@@ -4087,7 +4087,7 @@
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetUpdatedProfilesList.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonProfile_log.ddltrigger.sql">
+    <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonProfile_Log.trigger.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
@@ -4139,4 +4139,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
