@@ -394,7 +394,7 @@ namespace PraticeManagement.Controls
             set;
         }
 
-        public string DropDownListTypePlurlForm
+        public string PluralForm
         {
             get;
             set;
@@ -433,16 +433,16 @@ namespace PraticeManagement.Controls
                     {
                         if (string.IsNullOrEmpty(this.DropDownListTypePluralForm))
                         {
-                            this.DropDownListTypePlurlForm = string.IsNullOrEmpty(this.DropDownListTypePlurlForm) ? "s" : this.DropDownListTypePlurlForm;
-                            this.DropDownListTypePluralForm = this.DropDownListType + this.DropDownListTypePlurlForm;
+                            this.PluralForm = string.IsNullOrEmpty(this.PluralForm) ? "s" : this.PluralForm;
+                            this.DropDownListTypePluralForm = this.DropDownListType + this.PluralForm;
                         }
                         text = "Multiple " + this.DropDownListTypePluralForm + " selected";
                     }
 
                     if (counter == 0)
                     {
-                        this.DropDownListTypePlurlForm = string.IsNullOrEmpty(this.DropDownListTypePlurlForm) ? "s" : this.DropDownListTypePlurlForm;
-                        text = "Please Choose " + this.DropDownListType + "(" + this.DropDownListTypePlurlForm + ")";
+                        this.PluralForm = string.IsNullOrEmpty(this.PluralForm) ? "s" : this.PluralForm;
+                        text = "Please Choose " + this.DropDownListType + "(" + this.PluralForm + ")";
                     }
                 }
                 return text;
