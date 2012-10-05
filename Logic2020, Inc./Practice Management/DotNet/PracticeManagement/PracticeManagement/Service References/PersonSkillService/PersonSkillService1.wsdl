@@ -2,11 +2,11 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PersonSkillService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/PersonSkillService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IPersonSkillService_SkillCategoriesAll_InputMessage">
@@ -39,6 +39,18 @@
   <wsdl:message name="IPersonSkillService_GetIndustrySkillsAll_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetIndustrySkillsAllResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonSkillService_GetPersonProfilesWithSkills_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonProfilesWithSkills" />
+  </wsdl:message>
+  <wsdl:message name="IPersonSkillService_GetPersonProfilesWithSkills_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonProfilesWithSkillsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonSkillService_GetPersonProfiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonProfiles" />
+  </wsdl:message>
+  <wsdl:message name="IPersonSkillService_GetPersonProfiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonProfilesResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonSkillService_GetPersonWithSkills_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonWithSkills" />
   </wsdl:message>
@@ -57,11 +69,23 @@
   <wsdl:message name="IPersonSkillService_SavePersonIndustrySkills_OutputMessage">
     <wsdl:part name="parameters" element="tns:SavePersonIndustrySkillsResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonSkillService_PersonsSearchBySkillsText_InputMessage">
-    <wsdl:part name="parameters" element="tns:PersonsSearchBySkillsText" />
+  <wsdl:message name="IPersonSkillService_PersonsSearchBySkills_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonsSearchBySkills" />
   </wsdl:message>
-  <wsdl:message name="IPersonSkillService_PersonsSearchBySkillsText_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PersonsSearchBySkillsTextResponse" />
+  <wsdl:message name="IPersonSkillService_PersonsSearchBySkills_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonsSearchBySkillsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonSkillService_SavePersonProfiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonProfiles" />
+  </wsdl:message>
+  <wsdl:message name="IPersonSkillService_SavePersonProfiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonProfilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonSkillService_SavePersonPictureUrl_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonPictureUrl" />
+  </wsdl:message>
+  <wsdl:message name="IPersonSkillService_SavePersonPictureUrl_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePersonPictureUrlResponse" />
   </wsdl:message>
   <wsdl:portType name="IPersonSkillService">
     <wsdl:operation name="SkillCategoriesAll">
@@ -84,6 +108,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/GetIndustrySkillsAll" message="tns:IPersonSkillService_GetIndustrySkillsAll_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/GetIndustrySkillsAllResponse" message="tns:IPersonSkillService_GetIndustrySkillsAll_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonProfilesWithSkills">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/GetPersonProfilesWithSkills" message="tns:IPersonSkillService_GetPersonProfilesWithSkills_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/GetPersonProfilesWithSkillsResponse" message="tns:IPersonSkillService_GetPersonProfilesWithSkills_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonProfiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/GetPersonProfiles" message="tns:IPersonSkillService_GetPersonProfiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/GetPersonProfilesResponse" message="tns:IPersonSkillService_GetPersonProfiles_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonWithSkills">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/GetPersonWithSkills" message="tns:IPersonSkillService_GetPersonWithSkills_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/GetPersonWithSkillsResponse" message="tns:IPersonSkillService_GetPersonWithSkills_OutputMessage" />
@@ -96,9 +128,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkills" message="tns:IPersonSkillService_SavePersonIndustrySkills_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/SavePersonIndustrySkillsResponse" message="tns:IPersonSkillService_SavePersonIndustrySkills_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PersonsSearchBySkillsText">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/PersonsSearchBySkillsText" message="tns:IPersonSkillService_PersonsSearchBySkillsText_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/PersonsSearchBySkillsTextResponse" message="tns:IPersonSkillService_PersonsSearchBySkillsText_OutputMessage" />
+    <wsdl:operation name="PersonsSearchBySkills">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/PersonsSearchBySkills" message="tns:IPersonSkillService_PersonsSearchBySkills_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/PersonsSearchBySkillsResponse" message="tns:IPersonSkillService_PersonsSearchBySkills_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonProfiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/SavePersonProfiles" message="tns:IPersonSkillService_SavePersonProfiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/SavePersonProfilesResponse" message="tns:IPersonSkillService_SavePersonProfiles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonPictureUrl">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonSkillService/SavePersonPictureUrl" message="tns:IPersonSkillService_SavePersonPictureUrl_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonSkillService/SavePersonPictureUrlResponse" message="tns:IPersonSkillService_SavePersonPictureUrl_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPersonSkillService" type="tns:IPersonSkillService">
@@ -148,6 +188,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetPersonProfilesWithSkills">
+      <soap:operation soapAction="http://tempuri.org/IPersonSkillService/GetPersonProfilesWithSkills" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonProfiles">
+      <soap:operation soapAction="http://tempuri.org/IPersonSkillService/GetPersonProfiles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPersonWithSkills">
       <soap:operation soapAction="http://tempuri.org/IPersonSkillService/GetPersonWithSkills" style="document" />
       <wsdl:input>
@@ -175,8 +233,26 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="PersonsSearchBySkillsText">
-      <soap:operation soapAction="http://tempuri.org/IPersonSkillService/PersonsSearchBySkillsText" style="document" />
+    <wsdl:operation name="PersonsSearchBySkills">
+      <soap:operation soapAction="http://tempuri.org/IPersonSkillService/PersonsSearchBySkills" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonProfiles">
+      <soap:operation soapAction="http://tempuri.org/IPersonSkillService/SavePersonProfiles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonPictureUrl">
+      <soap:operation soapAction="http://tempuri.org/IPersonSkillService/SavePersonPictureUrl" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -187,7 +263,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonSkillService">
     <wsdl:port name="BasicHttpBinding_IPersonSkillService" binding="tns:BasicHttpBinding_IPersonSkillService">
-      <soap:address location="http://system68.ggk.com/PracticeManagementService/PersonSkillService.svc" />
+      <soap:address location="http://system64.ggk.com/PracticeManagementService/PersonSkillService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
