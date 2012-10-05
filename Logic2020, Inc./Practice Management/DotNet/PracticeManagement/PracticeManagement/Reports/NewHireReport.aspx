@@ -139,7 +139,7 @@
                                     <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" AllSelectedReturnType="Null"
                                         OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')"
                                         CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Person Status"
-                                        DropDownListTypePlurlForm="es" CssClass="NewHireReportCblTimeScales" />
+                                        PluralForm="es" CssClass="NewHireReportCblTimeScales" />
                                     <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
                                         BehaviorID="sdePersonStatus" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
                                         Width="250px">
