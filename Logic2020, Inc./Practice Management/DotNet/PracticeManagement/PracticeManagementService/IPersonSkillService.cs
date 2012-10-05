@@ -34,6 +34,12 @@ namespace PracticeManagementService
         List<Industry> GetIndustrySkillsAll();
 
         [OperationContract]
+        Person GetPersonProfilesWithSkills(int personId);
+
+        [OperationContract]
+        List<Profile> GetPersonProfiles(int personId);
+
+        [OperationContract]
         Person GetPersonWithSkills(int personId);
 
         [OperationContract]
@@ -43,7 +49,14 @@ namespace PracticeManagementService
         void SavePersonIndustrySkills(int personId, string industrySkillsXml, string userLogin);
 
         [OperationContract]
-        List<Person> PersonsSearchBySkillsText(string skillsSearchText);
+        List<Person> PersonsSearchBySkills(string skillsSearchXML);
+
+        [OperationContract]
+        void SavePersonProfiles(int personId, string profilesXml, string userLogin);
+
+        [OperationContract]
+        void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin);
+
     }
 }
 
