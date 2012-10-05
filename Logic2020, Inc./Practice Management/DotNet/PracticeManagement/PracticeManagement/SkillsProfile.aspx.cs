@@ -20,6 +20,7 @@ namespace PraticeManagement
         #endregion
 
         #region Datamembers
+
         private List<Industry> industries;
 
         private List<SkillType> skillTypes;
@@ -115,7 +116,7 @@ namespace PraticeManagement
                 {
                     using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
                     {
-                        ViewState[SessionPersonWithSkills] = serviceClient.GetPersonWithSkills(personId);
+                        ViewState[SessionPersonWithSkills] = serviceClient.GetPersonProfilesWithSkills(personId);
                     }
                 }
                 return (Person)ViewState[SessionPersonWithSkills];
@@ -168,12 +169,12 @@ namespace PraticeManagement
                 var lblTypesMsg = e.Item.FindControl("lblTypesMsg") as Label;
                 //if (dataItem.DisplayOrder == 1)
                 //{
-                    var lblLevel = e.Item.FindControl("lblLevel") as Label;
-                    var lblLastUsed = e.Item.FindControl("lblLastUsed") as Label;
-                    var lblYearsUsed = e.Item.FindControl("lblYearsUsed") as Label;
-                    lblLevel.Text = "Level";
-                    lblLastUsed.Text = "Last Used";
-                    lblYearsUsed.Text = "Years Used";
+                var lblLevel = e.Item.FindControl("lblLevel") as Label;
+                var lblLastUsed = e.Item.FindControl("lblLastUsed") as Label;
+                var lblYearsUsed = e.Item.FindControl("lblYearsUsed") as Label;
+                lblLevel.Text = "Level";
+                lblLastUsed.Text = "Last Used";
+                lblYearsUsed.Text = "Years Used";
                 //}
                 lblTypes.Text = dataItem.Description;
                 if (Person.Skills.Any(s => s.Skill.Category.SkillType.Id == dataItem.Id))
@@ -223,6 +224,20 @@ namespace PraticeManagement
             }
         }
 
+        protected void repProfiles_OnLoad(object sender, EventArgs e)
+        {
+            var lblProfileMsg = repProfiles.Controls[0].Controls[0].FindControl("lblProfileMsg") as Label;
+            if (repProfiles.Items.Count == 0)
+            {
+                lblProfileMsg.Text = "Consultant profile not entered.";
+                lblProfileMsg.Visible = true;
+            }
+            else
+            {
+                lblProfileMsg.Visible = false;
+            }
+        }
+
         #endregion
 
         #region page_events
@@ -236,12 +251,16 @@ namespace PraticeManagement
                 {
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
-                lblPersonName.Text = Person.FirstName + " " + Person.LastName;
+                lblPersonName.Text = Person.LastName + " " + Person.FirstName;
+                imgPersonPicture.ImageUrl = Person.PictureUrl;
+                imgPersonPicture.AlternateText = lblPersonName.Text;
+                repProfiles.DataSource = Person.Profiles;
+                repProfiles.DataBind();
                 repIndustries.DataSource = Person.Industries;
                 repIndustries.DataBind();
                 repTypes.DataSource = SkillTypes;
                 repTypes.DataBind();
-                if (PersonId.HasValue && (DataHelper.CurrentPerson == null || ( PersonId != DataHelper.CurrentPerson.Id && !(Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)))))
+                if (PersonId.HasValue && (DataHelper.CurrentPerson == null || (PersonId != DataHelper.CurrentPerson.Id && !(Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)))))
                 {
                     btnUpdate.Visible = false;
                 }
