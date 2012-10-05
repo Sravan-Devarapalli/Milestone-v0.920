@@ -45,7 +45,7 @@ namespace UpdatePracticeAndSeniority
         {
             get
             {
-                return WorkerRole.GetConfigValue(EmailSubject_For_ProfilesUpdatedList) ?? "Practice Management: List of consultants who were updated their profiles";
+                return WorkerRole.GetConfigValue(EmailSubject_For_ProfilesUpdatedList) ?? "Practice Management: Added/Updated Skill profile's persons list";
             }
         }
 
