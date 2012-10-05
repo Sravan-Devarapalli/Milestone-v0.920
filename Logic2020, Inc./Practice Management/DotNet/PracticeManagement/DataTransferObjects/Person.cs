@@ -436,6 +436,19 @@ namespace DataTransferObjects
         [DataMember]
         public string TerminationReason { get; set; }
 
+        [DataMember]
+        public List<Profile> Profiles
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public bool IsHighlighted { get; set; }
+
+        [DataMember]
+        public string PictureUrl { get; set; }
+
         #endregion
 
         #region Properties - calculated
