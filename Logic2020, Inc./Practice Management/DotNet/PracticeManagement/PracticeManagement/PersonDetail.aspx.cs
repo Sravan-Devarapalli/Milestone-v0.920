@@ -2218,12 +2218,12 @@ namespace PraticeManagement
         {
             Pay latestPay = null;
             var payHistory = PayHistory;
-            if (payHistory != null && payHistory.Any(p => p.StartDate >= HireDate))
+            if (IsRehire && payHistory != null && payHistory.Any(p => p.StartDate >= HireDate))
             {
                 payHistory = payHistory.OrderBy(p => p.StartDate).ToList();
                 PopulateUnCommitedPay(payHistory);
                 Pay firstPay = payHistory.Where(p => p.StartDate >= HireDate).FirstOrDefault();
-                if (firstPay.Timescale == TimescaleType.PercRevenue || firstPay.Timescale == TimescaleType._1099Ctc)
+                if (firstPay != null && (firstPay.Timescale == TimescaleType.PercRevenue || firstPay.Timescale == TimescaleType._1099Ctc))
                 {
                     if (payHistory.Any(p => p.StartDate > firstPay.StartDate && p.StartDate <= DateTime.Now.Date && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly)))
                     {
@@ -2562,7 +2562,7 @@ namespace PraticeManagement
             }
             Page.Validate(valSumCompensation.ValidationGroup);
 
-            if (cvRehireConfirmation.Enabled)
+            if (Page.IsValid && cvRehireConfirmation.Enabled)
             {
                 cvRehireConfirmation.Validate();
                 DisableValidatecustTerminateDateTE = true;
