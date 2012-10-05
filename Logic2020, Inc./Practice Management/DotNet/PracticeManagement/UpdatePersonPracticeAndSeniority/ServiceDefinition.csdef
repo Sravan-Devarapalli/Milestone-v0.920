@@ -7,7 +7,10 @@
     <ConfigurationSettings>
       <Setting name="DBConnection" />
       <Setting name="LogEnabled" />
-      <Setting name="RunSchedularDailyAtTime" />      
+      <Setting name="RunSchedularDailyAtTime" />
+      <Setting name="SkillsProfilePagePath"/>
+      <Setting name="UpdatedProfilesListEmailReciever" />
+      <Setting name="EmailSubjectForProfilesUpdatedList"/>
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
