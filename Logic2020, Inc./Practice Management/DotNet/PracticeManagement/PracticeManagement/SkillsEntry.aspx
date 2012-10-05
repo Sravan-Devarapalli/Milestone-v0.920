@@ -3,6 +3,9 @@
 
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
+<%@ Register Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic"
+    TagPrefix="pcg" %>
+<%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -17,11 +20,17 @@
         );
 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
-
         function endRequestHandle(sender, Args) {
             CheckAndShowPopUp();
         }
 
+        function enterPressed(evn) {
+            if (window.event && window.event.keyCode == 13) {
+                return false;
+            } else if (evn && evn.keyCode == 13) {
+                return false;
+            }
+        }
 
         function CheckAndShowPopUp() {
             var hdnIsValid = document.getElementById('<%= hdnIsValid.ClientID %>');
@@ -100,6 +109,16 @@
             item.offset({ top: ytop, left: xleft });
         }
 
+        function btnCancelPictureLink_OnClientClick() {
+            var popup = $find('mpePictureLinkPopup');
+            var hdPictureLink = document.getElementById('<%= hdPictureLink.ClientID %>');
+            var txtPictureLink = document.getElementById('<%= txtPictureLink.ClientID %>');
+            txtPictureLink.value = hdPictureLink.value;
+            popup.hide();
+        }
+        function pageLoad() {
+            document.onkeypress = enterPressed;
+        }
     </script>
     <div class="TextAlignCenterImp fontSizeLarge">
         Skills Entry for
@@ -380,12 +399,15 @@
                 </AjaxControlToolkit:TabPanel>
             </AjaxControlToolkit:TabContainer>
             <br />
-            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Text=""></asp:Label>
             <div class="WholeWidth">
-                <div class="Width98Percent AlignRight">
-                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click"
+                <div class="Width50Percent displayInline">
+                    <asp:Button ID="btnPictureLink" runat="server" Text="Add/Update Consultant Picture URL" CssClass="Width220Px" />
+                    <asp:Button ID="btnProfileLink" runat="server" Text="Add/Update Consultant Profiles" CssClass="Width220Px" />
+                </div>
+                <div class="Width50Percent textRight floatright">
+                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click" CssClass="width55Px"
                         EnableViewState="false" Enabled="false" />
-                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" EnableViewState="false"
+                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" EnableViewState="false" CssClass="width55Px"
                         OnClick="btnCancel_Click" Enabled="false" />
                 </div>
             </div>
@@ -410,13 +432,213 @@
                     </div>
                     <div class="PnlValidations">
                         <asp:Button ID="btnOk" runat="server" Text="OK" OnClientClick="return false;" />
-                        </div>
+                    </div>
                 </div>
             </asp:Panel>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeValidations" runat="server" TargetControlID="hdnIsValid"
                 BackgroundCssClass="modalBackground" BehaviorID="mpeValidationsBehaviourId" DropShadow="false"
                 PopupControlID="pnlValidations" OkControlID="btnOk">
             </AjaxControlToolkit:ModalPopupExtender>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpePictureLinkPopup" runat="server" TargetControlID="btnPictureLink"
+                CancelControlID="btnCancelPictureLink" BehaviorID="mpePictureLinkPopup" BackgroundCssClass="modalBackground"
+                PopupControlID="pnlPictureLinkPopup" DropShadow="false" />
+            <asp:Panel ID="pnlPictureLinkPopup" runat="server" CssClass="popUp" Style="display: none">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
+                            Add/Update
+                            <asp:Literal ID="ltrlPersonname1" runat="server"></asp:Literal>'s Profile Picture
+                            Url
+                            <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel"
+                                OnClientClick="btnCancelPictureLink_OnClientClick();" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="PicturePanelTd">
+                            <asp:HiddenField ID="hdPictureLink" runat="server"></asp:HiddenField>
+                            <asp:TextBox ID="txtPictureLink" runat="server" Width="400"></asp:TextBox>
+                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="txwPictureLink" runat="server" BehaviorID="txwPictureLink"
+                                WatermarkText="Add your PM Profile Picture here..." WatermarkCssClass="watermarkedtext"
+                                TargetControlID="txtPictureLink" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="TdRedirectToOppDetail">
+                            <table>
+                                <tr>
+                                    <td class="padRight3">
+                                        <asp:Button ID="btnUpdatePictureLink" OnClick="btnUpdatePictureLink_OnClick" runat="server"
+                                            CssClass="Width100Px" TabIndex="0" Text="Add/Update" ToolTip="Add/Update" />
+                                    </td>
+                                    <td class="padLeft3">
+                                        <asp:Button ID="btnCancelPictureLink" runat="server" Text="Cancel" ToolTip="Cancel"
+                                            CssClass="Width100Px" OnClientClick="btnCancelPictureLink_OnClientClick();" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeProfilePopUp" runat="server" TargetControlID="btnProfileLink"
+                BehaviorID="mpeProfilePopUp" BackgroundCssClass="modalBackground" PopupControlID="pnlProfilePopup"
+                DropShadow="false" />
+            <asp:Panel ID="pnlProfilePopup" runat="server" CssClass="popUp ProfilesPanel" Style="display: none">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
+                            Add/Update
+                            <asp:Literal ID="ltrlPersonname" runat="server"></asp:Literal>'s Profile Links
+                            <asp:Button ID="btnProfilePopupClose" runat="server" CssClass="mini-report-closeNew"
+                                ToolTip="Cancel" OnClick="btnCancelProfile_OnClick" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="ProfilesPanelTd">
+                            <asp:Repeater ID="repProfiles" runat="server" OnItemDataBound="repProfiles_OnItemDataBound"
+                                EnableViewState="true">
+                                <HeaderTemplate>
+                                    <table class="repProfilesTable" id="repProfilesTable">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Profile Name
+                                                </th>
+                                                <th>
+                                                    Profile Link
+                                                </th>
+                                                <th>
+                                                    Is Default
+                                                    <asp:CustomValidator ID="cvIsDefault" runat="server" ValidationGroup="ProfileValidationGroup"
+                                                        Text="*" ToolTip="One of the profile should be default profile." OnServerValidate="cvIsDefault_OnServerValidate"></asp:CustomValidator>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <tr>
+                                        <td>
+                                            <asp:HiddenField ID="hdProfileId" runat="server" Value='<%# ((int?)Eval("ProfileId")).HasValue ? ((int?)Eval("ProfileId")).Value : 0 %>' />
+                                            <asp:TextBox ID="txtProfileName" runat="server" Text='<%# Eval("ProfileName") %>'
+                                                CssClass="Width175Px">
+                                            </asp:TextBox>
+                                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="tbWProfileName" runat="server" TargetControlID="txtProfileName"
+                                                WatermarkCssClass="watermarkedtext Width175Px" WatermarkText="Enter your Profile Name here..">
+                                            </AjaxControlToolkit:TextBoxWatermarkExtender>
+                                            <asp:CustomValidator ID="cvProfileName" runat="server" ValidationGroup="ProfileValidationGroup"
+                                                Text="*" ToolTip="Profile name is required." OnServerValidate="cvProfileName_OnServerValidate"></asp:CustomValidator>
+                                            <asp:CustomValidator ID="cvProfileNameDuplicate" runat="server" ValidationGroup="ProfileValidationGroup"
+                                                Text="*" ToolTip="Profile name should be unique." OnServerValidate="cvProfileNameDuplicate_OnServerValidate"></asp:CustomValidator>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="txtProfileLink" runat="server" Text='<%# Eval("ProfileUrl") %>'
+                                                CssClass="Width175Px">
+                                            </asp:TextBox>
+                                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="tbWProfileLink" runat="server" TargetControlID="txtProfileLink"
+                                                WatermarkCssClass="watermarkedtext Width175Px" WatermarkText="Enter your Profile Link here..">
+                                            </AjaxControlToolkit:TextBoxWatermarkExtender>
+                                            <asp:CustomValidator ID="cvProfileLink" runat="server" ValidationGroup="ProfileValidationGroup"
+                                                Text="*" ToolTip="Profile Link is required." OnServerValidate="cvProfileLink_OnServerValidate"></asp:CustomValidator>
+                                        </td>
+                                        <td class="textCenter">
+                                            <pcg:RepeatableRadioButton ID="rbprofileIsDefault" Checked='<%# (bool)Eval("IsDefault") %>'
+                                                runat="server" GroupName="rbprofileIsDefault" />
+                                        </td>
+                                    </tr>
+                                </ItemTemplate>
+                                <AlternatingItemTemplate>
+                                    <tr>
+                                        <td>
+                                            <asp:HiddenField ID="hdProfileId" runat="server" Value='<%# ((int?)Eval("ProfileId")).HasValue ? ((int?)Eval("ProfileId")).Value : 0 %>' />
+                                            <asp:TextBox ID="txtProfileName" runat="server" Text='<%# Eval("ProfileName") %>'
+                                                CssClass="Width175Px">
+                                            </asp:TextBox>
+                                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="tbWProfileName" runat="server" TargetControlID="txtProfileName"
+                                                WatermarkCssClass="watermarkedtext Width175Px" WatermarkText="Enter your Profile Name here..">
+                                            </AjaxControlToolkit:TextBoxWatermarkExtender>
+                                            <asp:CustomValidator ID="cvProfileName" runat="server" ValidationGroup="ProfileValidationGroup"
+                                                Text="*" ToolTip="Profile name is required." OnServerValidate="cvProfileName_OnServerValidate"></asp:CustomValidator>
+                                            <asp:CustomValidator ID="cvProfileNameDuplicate" runat="server" ValidationGroup="ProfileValidationGroup"
+                                                Text="*" ToolTip="Profile name should be unique." OnServerValidate="cvProfileNameDuplicate_OnServerValidate"></asp:CustomValidator>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="txtProfileLink" runat="server" Text='<%# Eval("ProfileUrl") %>'
+                                                CssClass="Width175Px">
+                                            </asp:TextBox>
+                                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="tbWProfileLink" runat="server" TargetControlID="txtProfileLink"
+                                                WatermarkCssClass="watermarkedtext Width175Px" WatermarkText="Enter your Profile Link here..">
+                                            </AjaxControlToolkit:TextBoxWatermarkExtender>
+                                            <asp:CustomValidator ID="cvProfileLink" runat="server" ValidationGroup="ProfileValidationGroup"
+                                                Text="*" ToolTip="Profile Link is required." OnServerValidate="cvProfileLink_OnServerValidate"></asp:CustomValidator>
+                                        </td>
+                                        <td class="textCenter">
+                                            <pcg:RepeatableRadioButton ID="rbprofileIsDefault" Checked='<%# (bool)Eval("IsDefault") %>'
+                                                runat="server" GroupName="rbprofileIsDefault" />
+                                        </td>
+                                    </tr>
+                                </AlternatingItemTemplate>
+                                <FooterTemplate>
+                                    </tbody> </table>
+                                </FooterTemplate>
+                            </asp:Repeater>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="padLeft8">
+                            <asp:ImageButton ID="ibtnAddProfile" runat="server" OnClick="ibtnAddProfile_Click"
+                                ImageUrl="~/Images/add_16.png" ToolTip="Add New Profile" />
+                        </td>
+                    </tr>
+                    <%--  <tr>
+                        <td class="padLeft8">
+                            <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
+                                WarningColor="Orange" />
+                        </td>
+                    </tr>--%>
+                    <tr>
+                        <td align="center" class="TdRedirectToOppDetail">
+                            <table>
+                                <tr>
+                                    <td class="padRight3">
+                                        <asp:Button ID="btnProfilePopupUpdate" runat="server" Text="Add/Update" ToolTip="Add/Update"
+                                            CssClass="Width100Px" OnClick="btnProfilePopupUpdate_OnClick" />
+                                    </td>
+                                    <td class="padLeft3">
+                                        <asp:Button ID="btnCancelProfile" runat="server" Text="Cancel" ToolTip="Cancel" OnClick="btnCancelProfile_OnClick"
+                                            CssClass="Width100Px" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
+                TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
+                CancelControlID="btnCancelErrorPanel" DropShadow="false" />
+            <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
+                <table class="Width100Per">
+                    <tr>
+                        <th class="bgcolorGray TextAlignCenterImp vBottom">
+                            <b class="BtnClose">Attention!</b>
+                            <asp:Button ID="btnCancelErrorPanel" runat="server" CssClass="mini-report-close floatright"
+                                ToolTip="Cancel" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="Padding10Px">
+                            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Text="" CssClass="padLeft20"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Padding10Px TextAlignCenterImp">
+                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
         </ContentTemplate>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsSkillLevel" runat="server" TypeName="PraticeManagement.SkillsEntry"
