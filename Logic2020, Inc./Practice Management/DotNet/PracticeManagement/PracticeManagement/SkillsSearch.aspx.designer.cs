@@ -13,6 +13,24 @@ namespace PraticeManagement {
     public partial class SkillsSearch {
         
         /// <summary>
+        /// LoadingProgress1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
+        
+        /// <summary>
+        /// updSkillSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updSkillSearch;
+        
+        /// <summary>
         /// lblSearchTitle control.
         /// </summary>
         /// <remarks>
@@ -31,31 +49,67 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlSearch;
         
         /// <summary>
-        /// txtSearch control.
+        /// tcSkillsEntry control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        protected global::AjaxControlToolkit.TabContainer tcSkillsEntry;
         
         /// <summary>
-        /// rqSearch control.
+        /// tpBusinessSkills control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rqSearch;
+        protected global::AjaxControlToolkit.TabPanel tpBusinessSkills;
         
         /// <summary>
-        /// valSumSearch control.
+        /// gvBusinessSkills control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSumSearch;
+        protected global::System.Web.UI.WebControls.GridView gvBusinessSkills;
+        
+        /// <summary>
+        /// tpTechnicalSkills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel tpTechnicalSkills;
+        
+        /// <summary>
+        /// gvTechnicalSkills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvTechnicalSkills;
+        
+        /// <summary>
+        /// tpIndustrySkills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel tpIndustrySkills;
+        
+        /// <summary>
+        /// gvIndustrySkills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvIndustrySkills;
         
         /// <summary>
         /// btnSearch control.
@@ -65,6 +119,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSearch;
+        
+        /// <summary>
+        /// btnClearAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClearAll;
         
         /// <summary>
         /// ddlEmployees control.
