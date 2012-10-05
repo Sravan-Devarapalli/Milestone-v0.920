@@ -30,29 +30,34 @@ namespace PracticeManagementService
         {
             return PersonSkillDAL.GetSkillLevelsAll();
         }
+
         public List<SkillType> SkillTypesAll()
         {
             return PersonSkillDAL.GetSkillTypesAll();
         }
+
         public List<Industry> GetIndustrySkillsAll()
         {
             return PersonSkillDAL.GetIndustrySkillsAll();
         }
 
+        public Person GetPersonProfilesWithSkills(int personId)
+        {
+            Person person = GetPersonWithSkills(personId);
+            person.Profiles = PersonSkillDAL.GetPersonProfiles(personId);
+            return person;
+        }
+
+        public List<Profile> GetPersonProfiles(int personId)
+        {
+            return PersonSkillDAL.GetPersonProfiles(personId);
+        }
+
         public Person GetPersonWithSkills(int personId)
         {
-
-            var p = PersonDAL.GetById(personId);
-            var person = new Person()
-            {
-                Id = personId,
-                LastName = p.LastName,
-                FirstName = p.FirstName
-            };
-
+            Person person = PersonSkillDAL.GetPersonWithPictureUrl(personId);
             person.Skills = PersonSkillDAL.GetPersonSkillsByPersonId(personId);
             person.Industries = PersonSkillDAL.GetPersonIndustriesByPersonId(personId);
-
             return person;
         }
 
@@ -66,9 +71,19 @@ namespace PracticeManagementService
             PersonSkillDAL.SavePersonIndustrySkills(personId, industrySkillsXml, userLogin);
         }
 
-        public List<Person> PersonsSearchBySkillsText(string skillsSearchText)
+        public List<Person> PersonsSearchBySkills(string skillsSearchXML)
         {
-            return PersonSkillDAL.PersonsSearchBySkillsText(skillsSearchText);
+            return PersonSkillDAL.PersonsSearchBySkills(skillsSearchXML);
+        }
+
+        public void SavePersonProfiles(int personId, string profilesXml, string userLogin)
+        {
+            PersonSkillDAL.SavePersonProfiles(personId, profilesXml, userLogin);
+        }
+
+        public void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin)
+        {
+            PersonSkillDAL.SavePersonPictureUrl(personId, pictureUrl, userLogin);
         }
     }
 }
