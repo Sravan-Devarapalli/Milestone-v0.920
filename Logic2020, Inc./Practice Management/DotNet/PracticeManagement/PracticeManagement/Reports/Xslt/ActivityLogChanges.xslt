@@ -52,7 +52,7 @@
       <xsl:variable name="value" select="." />
       <xsl:variable name="attrName" select="name()" />
 
-      <xsl:if test="$attrName = 'SkillsDescription' or $attrName = 'IndustryDescription' or $attrName = 'Person' or $attrName = 'SkillCategory' or $attrName = 'SkillType'">
+      <xsl:if test="$attrName = 'SkillsDescription' or $attrName = 'IndustryDescription' or $attrName = 'Person' or $attrName = 'SkillCategory' or $attrName = 'SkillType' or $attrName = 'ProfileName'">
         <xsl:call-template name="FriendlyName">
           <xsl:with-param name="attrName" select="name()" />
         </xsl:call-template>:
