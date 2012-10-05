@@ -56,20 +56,20 @@ BEGIN
 				l.LastName,
 				l.FirstName,
 				Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.PersonId,
-									NEW_VALUES.PictureUrl ,
 									NEW_VALUES.LastName + ','+ NEW_VALUES.FirstName AS Person,
+									NEW_VALUES.PictureUrl ,
 									OLD_VALUES.PersonId,
-									OLD_VALUES.PictureUrl,
-									OLD_VALUES.LastName + ','+ OLD_VALUES.FirstName AS Person
+									OLD_VALUES.LastName + ','+ OLD_VALUES.FirstName AS Person,
+									OLD_VALUES.PictureUrl
 							FROM inserted AS NEW_VALUES
 									INNER JOIN deleted AS OLD_VALUES ON NEW_VALUES.PersonID = OLD_VALUES.PersonID 
 							FOR XML AUTO, ROOT('PersonSkill'))),
 				LogData = (SELECT NEW_VALUES.PersonId,
-									NEW_VALUES.PictureUrl,
 									NEW_VALUES.LastName + ','+ NEW_VALUES.FirstName AS Person,
+									NEW_VALUES.PictureUrl,
 									OLD_VALUES.PersonId,
-									OLD_VALUES.PictureUrl,
-									OLD_VALUES.LastName + ','+ OLD_VALUES.FirstName AS Person
+									OLD_VALUES.LastName + ','+ OLD_VALUES.FirstName AS Person,
+									OLD_VALUES.PictureUrl
 							FROM inserted AS NEW_VALUES
 									INNER JOIN deleted AS OLD_VALUES ON NEW_VALUES.PersonID = OLD_VALUES.PersonID 
 							FOR XML AUTO, ROOT('PersonSkill'), TYPE),
