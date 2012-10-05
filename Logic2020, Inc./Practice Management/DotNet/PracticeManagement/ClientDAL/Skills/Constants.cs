@@ -19,7 +19,7 @@ namespace DataAccess.Skills
             public const string SkillId = "SkillId";
             public const string SkillCategoryName = "SkillCategoryName";
             public const string SkillLevelName = "SkillLevelName";
-            public const string SkillLevelDefinition = "SkillLevelDefinition";            
+            public const string SkillLevelDefinition = "SkillLevelDefinition";
             public const string SkillName = "SkillName";
             public const string YearsExperience = "YearsExperience";
             public const string LastUsed = "LastUsed";
@@ -28,6 +28,15 @@ namespace DataAccess.Skills
             public const string PersonId = "PersonId";
             public const string LastName = "LastName";
             public const string FirstName = "FirstName";
+            public const string ProfileId = "ProfileId";
+            public const string ProfileName = "ProfileName";
+            public const string ProfileUrl = "ProfileUrl";
+            public const string ModifiedBy = "ModifiedBy";
+            public const string ModifiedDate = "ModifiedDate";
+            public const string IsHighlighted = "IsHighlighted";
+            public const string PictureUrl = "PictureUrl";
+            public const string ModifiedByName = "ModifiedByName";
+            public const string IsDefault = "IsDefault";
         }
 
         public class FunctionNames
@@ -40,7 +49,10 @@ namespace DataAccess.Skills
             public const string Skills = "@Skills";
             public const string IndustrySkills = "@IndustrySkills";
             public const string UserLogin = "@UserLogin";
-            public const string SkillsSearchText = "@SkillsSearchText";            
+            public const string SkillsSearchXML = "@SkillsSearchXML";
+            public const string ProfileUrl = "@ProfileUrl";
+            public const string ProfilesXml = "@ProfilesXml";
+            public const string PictureUrl = "@PictureUrl";
         }
 
         public class ProcedureNames
@@ -54,7 +66,11 @@ namespace DataAccess.Skills
             public const string GetPersonIndustriesByPersonId = "Skills.GetPersonIndustriesByPersonId";
             public const string SavePersonSkills = "Skills.SavePersonSkills";
             public const string SavePersonIndustrySkills = "Skills.SavePersonIndustrySkills";
-            public const string PersonsSearchBySkillsText = "Skills.PersonsSearchBySkillsText";
+            public const string PersonsSearchBySkills = "Skills.PersonsSearchBySkills";
+            public const string SavePersonProfiles = "Skills.SavePersonProfiles";
+            public const string GetPersonProfiles = "Skills.GetPersonProfiles";
+            public const string SavePersonPictureUrl = "Skills.SavePersonPictureUrl";
+            public const string GetPersonWithPictureUrl = "Skills.GetPersonWithPictureUrl";
         }
 
         #endregion
