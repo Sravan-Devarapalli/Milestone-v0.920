@@ -344,6 +344,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width0Percent{width:0}
 .Width1Percent{width:1%}
 .Width2Percent{width:2%}
+.Width2PercentImp{width:2%!important}
 .Width3Percent,.Width3Per{width:3%}
 .Width4Percent{width:4%}
 .Width5Percent{width:5%}
@@ -379,6 +380,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width35Percent{width:35%}
 .Width39Percent{width:39%}
 .Width40P{width:40%}
+.Width40PImp{width:40%!important}
 .Width40Percent{width:40%;padding:1px}
 .Width42Percent{width:42%}
 .Width43Percent{width:43%}
@@ -397,10 +399,12 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width72Percent{width:72%}
 .Width75Percent{width:75%}
 .width77P{width:77%}
+.width77PImp{width:77%!important}
 .Width80Percent{width:80%}
 .Width85Percent{width:85%}
 .Width90Percent{width:90%}
 .Width92Per{width:92%}
+.Width93Per{width:93%}
 .Width94Per{width:94%}
 .Width95Percent,.Width95Per{width:95%}
 .Width96Per{width:96%}
@@ -455,6 +459,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width160px{width:160px}
 .Width160PxImp{width:160px!important}
 .Width170Px{width:170px}
+.Width175Px{width:175px}
 .Width180Px{width:180px}
 .Width200Px,.lblOverheadsBenchCostTd{width:200px}
 .Width220Px{width:220px}
@@ -1304,7 +1309,12 @@ table#ctl00_body_login tr td label{float:left}
 .Width40PImp{width:40%!important}
 .WidthInherit{width:inherit!important}
 .SkillsSearchBody{background-color:#d4dff8;padding:10px;padding-top:25px!important;border-color:-moz-use-text-color #999 #999999;border:1px solid #999}
-.SkillsSearchDataBody{background-color:White;height:430px;padding-left:10%;padding-top:1%;text-align:center}
+.SkillsSearchDataBody{background-color:White;min-height:430px;padding-left:2%;padding-right:2%;padding-top:1%;text-align:center}
+.SkillsSearchDataBody .ajax__tab_container{padding-bottom:1%;width:90%}
+.SkillsSearchDataBody .ajax__tab_header{text-align:left!important}
+.SkillsSearchDataBody .ajax__tab_tab{min-width:100Px}
+.SkillsSearchDataBody .ajax__tab_panel{max-height:165px;overflow-y:auto}
+.SkillsSearchDataBody select{height:20px}
 .searchResult{height:150px;overflow:auto;width:100%}
 .TextSkillSearch{border-right:1px solid black;width:55%;padding-bottom:20px;text-align:left!important;vertical-align:top!important}
 .MarginTop20Px{margin-top:20px!important}
@@ -1343,3 +1353,16 @@ table#ctl00_body_login tr td label{float:left}
 .pnlNewHireHelp{z-index:2000;position:absolute;padding:12px 0 12px 12px;height:30px;width:500px;background-color:White;border-color:#375D89;border-style:solid;border-width:4px}
 .PersonInfo tr td{padding-bottom:4px}
 .PersonInfo td.PersonDefaultUser{padding-bottom:0!important}
+.dlPerson,.dlPerson table{width:100%!important}
+.dlPerson th div{white-space:nowrap}
+.dlPerson td{height:20px!important}
+.dlPerson .firstTd{width:30%;text-align:left!important}
+.dlPerson .secondTd{width:70%;text-align:left!important}
+.displayInline{display:inline-block}
+.repProfilesTable{width:100%}
+.repProfilesTable td,.repProfilesTable th{padding-top:1px;padding-bottom:1px;vertical-align:middle}
+.ProfilesPanel{min-width:500px!important;max-width:700px!important}
+.ProfilesPanel .ProfilesPanelTd{padding:10px 0 10px 8px}
+.PicturePanelTd{padding:10px;padding-left:30px}
+.PersonPictureDiv{width:100px;height:120px;border:1px solid Black}
+.SkillSerachTd{padding-top:5px;padding-bottom:10px}
