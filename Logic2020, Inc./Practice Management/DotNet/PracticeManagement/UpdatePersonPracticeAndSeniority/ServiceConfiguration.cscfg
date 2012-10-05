@@ -9,7 +9,7 @@
       <Setting name="RunSchedularDailyAtTime" value="00:01:00" /> <!--HH:mm:ss and 24 hour time format-->
       <Setting name="SkillsProfilePagePath" value="https://practice.logic2020.com/SkillsProfile.aspx"/>
       <Setting name="UpdatedProfilesListEmailReciever" value="Skills@logic2020.com"/>
-      <Setting name="EmailSubjectForProfilesUpdatedList" value="Practice Management: List of consultants who were updated their profiles"/>
+      <Setting name="EmailSubjectForProfilesUpdatedList" value="Practice Management: Added/Updated Skill profile's persons list"/>
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
