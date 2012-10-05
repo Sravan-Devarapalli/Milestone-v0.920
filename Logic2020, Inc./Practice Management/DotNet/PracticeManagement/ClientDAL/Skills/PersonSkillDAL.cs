@@ -134,16 +134,16 @@ namespace DataAccess.Skills
             return personIndustries;
         }
 
-        public static List<Person> PersonsSearchBySkillsText(string skillsSearchText)
+        public static List<Person> PersonsSearchBySkills(string skillsSearchXML)
         {
             var persons = new List<Person>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(Constants.ProcedureNames.PersonsSearchBySkillsText, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.PersonsSearchBySkills, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
-                    command.Parameters.AddWithValue(Constants.ParameterNames.SkillsSearchText, skillsSearchText ?? string.Empty);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SkillsSearchXML, skillsSearchXML);
                     connection.Open();
                     var reader = command.ExecuteReader();
                     ReadPersonsShort(reader, persons);
@@ -158,19 +158,42 @@ namespace DataAccess.Skills
             var personIdColumn = reader.GetOrdinal(Constants.ColumnNames.PersonId);
             var LastNameColumn = reader.GetOrdinal(Constants.ColumnNames.LastName);
             var firstNameColumn = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            var profileIdColumn = reader.GetOrdinal(Constants.ColumnNames.ProfileId);
+            var profileNameColumn = reader.GetOrdinal(Constants.ColumnNames.ProfileName);
+            var profileUrlColumn = reader.GetOrdinal(Constants.ColumnNames.ProfileUrl);
+            var isHighlighted = reader.GetOrdinal(Constants.ColumnNames.IsHighlighted);
+
             if (reader.HasRows)
             {
                 while (reader.Read())
                 {
-                    var person = new Person
+                    int personId = reader.GetInt32(personIdColumn);
+                    Person person;
+                    if (!persons.Any(p => p.Id.Value == personId))
                     {
+                        person = new Person
+                        {
+                            Id = personId,
+                            LastName = reader.GetString(LastNameColumn),
+                            FirstName = reader.GetString(firstNameColumn),
+                            IsHighlighted = reader.GetInt32(isHighlighted) == 1
+                        };
+                        person.Profiles = new List<Profile>();
+                        persons.Add(person);
+                    }
+                    else
+                    {
+                        person = persons.First(p => p.Id.Value == personId);
+                    }
 
-                        Id = reader.GetInt32(personIdColumn),
-                        LastName = reader.GetString(LastNameColumn),
-                        FirstName = reader.GetString(firstNameColumn)
-
-                    };
-                    persons.Add(person);
+                    if (!reader.IsDBNull(profileIdColumn))
+                    {
+                        Profile profile = new Profile();
+                        profile.ProfileId = reader.GetInt32(profileIdColumn);
+                        profile.ProfileName = reader.GetString(profileNameColumn);
+                        profile.ProfileUrl = reader.GetString(profileUrlColumn);
+                        person.Profiles.Add(profile);
+                    }
                 }
             }
         }
@@ -257,6 +280,7 @@ namespace DataAccess.Skills
                 }
             }
         }
+
         private static void ReadSkillTypes(SqlDataReader reader, List<SkillType> skillTypes)
         {
             var skillTypeIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SkillTypeId);
@@ -386,6 +410,131 @@ namespace DataAccess.Skills
                 }
             }
         }
+
+        public static void SavePersonProfiles(int personId, string profilesXml, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonProfiles, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProfilesXml, profilesXml);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
+
+                    connection.Open();
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<Profile> GetPersonProfiles(int personId)
+        {
+            List<Profile> result = new List<Profile>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.GetPersonProfiles, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    ReadPersonProfiles(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static void ReadPersonProfiles(SqlDataReader reader, List<Profile> profiles)
+        {
+            var profileIdColumn = reader.GetOrdinal(Constants.ColumnNames.ProfileId);
+            var profileNameColumn = reader.GetOrdinal(Constants.ColumnNames.ProfileName);
+            var profileUrlColumn = reader.GetOrdinal(Constants.ColumnNames.ProfileUrl);
+            var modifiedByColumn = reader.GetOrdinal(Constants.ColumnNames.ModifiedBy);
+            var modifiedByNameColumn = reader.GetOrdinal(Constants.ColumnNames.ModifiedByName);
+            var modifiedDateColumn = reader.GetOrdinal(Constants.ColumnNames.ModifiedDate);
+            var isDefaultColumn = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Profile profile = new Profile();
+                    profile.ProfileId = reader.GetInt32(profileIdColumn);
+                    profile.ProfileName = reader.GetString(profileNameColumn);
+                    profile.ProfileUrl = reader.GetString(profileUrlColumn);
+                    profile.ModifiedBy = reader.GetInt32(modifiedByColumn);
+                    profile.ModifiedByName = reader.GetString(modifiedByNameColumn);
+                    profile.ModifiedDate = reader.GetDateTime(modifiedDateColumn);
+                    profile.IsDefault = reader.GetBoolean(isDefaultColumn);
+                    profiles.Add(profile);
+                }
+            }
+        }
+
+        public static void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonPictureUrl, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureUrl, pictureUrl);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
+
+                    connection.Open();
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static Person GetPersonWithPictureUrl(int personId)
+        {
+            Person person = null;
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.GetPersonWithPictureUrl, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    var personIdColoum = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                    var firstNameColoum = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                    var lastNameColoum = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                    var pictureUrlColoum = reader.GetOrdinal(Constants.ColumnNames.PictureUrl);
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            person = new Person()
+                            {
+                                Id = reader.GetInt32(personIdColoum),
+                                LastName = reader.GetString(lastNameColoum),
+                                FirstName = reader.GetString(firstNameColoum),
+                                PictureUrl = !reader.IsDBNull(pictureUrlColoum) ? reader.GetString(pictureUrlColoum) : string.Empty
+                            };
+                        }
+                    }
+                }
+            }
+            return person;
+        }
+
     }
 }
 
