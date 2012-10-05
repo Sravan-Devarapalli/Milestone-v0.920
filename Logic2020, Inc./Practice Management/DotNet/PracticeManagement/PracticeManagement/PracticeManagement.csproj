@@ -445,6 +445,7 @@
     <Content Include="Images\Offshore_Icon.png" />
     <Content Include="Images\People_Icon_Large.png" />
     <Content Include="Images\printer.png" />
+    <Content Include="Images\Profile-16x16.png" />
     <Content Include="Images\Recursive.png" />
     <Content Include="Images\save24.png" />
     <Content Include="Images\saveToDisk.png" />
@@ -539,6 +540,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Skills.Profile.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TerminationReason.datasource" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
@@ -848,7 +850,6 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
-    <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <Content Include="Scripts\Master.min.js">
@@ -861,6 +862,7 @@
     <Content Include="Scripts\ScrollinDropDown.min.js">
       <DependentUpon>ScrollinDropDown.yui.js</DependentUpon>
     </Content>
+    <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1348,6 +1350,7 @@
     <Compile Include="Controls\Generic\EnableDisableExtender\EnableDisableExtender.cs" />
     <Compile Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.cs" />
     <Compile Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.cs" />
+    <Compile Include="Controls\Generic\RepeatableRadioButton.cs" />
     <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.cs">
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
