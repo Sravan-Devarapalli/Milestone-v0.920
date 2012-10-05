@@ -4064,10 +4064,6 @@
     <Build Include="Schema Objects\Schemas\Skills\Tables\Keys\FK_PersonProfileLink_PersonId.fkey.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonPictureUrl.proc.sql">
-      <SubType>Code</SubType>
-      <AnsiNulls>ProjectDefault</AnsiNulls>
-    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonProfiles.proc.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4083,6 +4079,9 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\PersonsSearchBySkills.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonWithPictureUrl.proc.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
