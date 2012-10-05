@@ -11,14 +11,66 @@ using Microsoft.WindowsAzure.StorageClient;
 using System.Timers;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Mail;
+using DataTransferObjects;
 
 namespace UpdatePracticeAndSeniority
 {
     public class WorkerRole : RoleEntryPoint
     {
+        #region Constants
+
         public const string applicationSettingsType = "Application";
         public const string timeZoneKey = "TimeZone";
         public const string IsDayLightSavingsKey = "IsDayLightSavingsTimeEffect";
+        public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
+        public const string UPDATED_PROFILES_LIST_EMAIL_RECIEVER = "UpdatedProfilesListEmailReciever";
+        public const string EmailSubject_For_ProfilesUpdatedList = "EmailSubjectForProfilesUpdatedList";
+        public const string Skills_Profile_PagePath = "SkillsProfilePagePath";
+
+        #endregion
+
+        #region Properties
+
+        public static string UpdatedProfilesListEmailReciever
+        {
+            get
+            {
+                //Skills@logic2020.com
+                return WorkerRole.GetConfigValue(UPDATED_PROFILES_LIST_EMAIL_RECIEVER) ?? "Skills@logic2020.com";
+            }
+        }
+
+        public static string EmailSubjectForProfilesUpdatedList
+        {
+            get
+            {
+                return WorkerRole.GetConfigValue(EmailSubject_For_ProfilesUpdatedList) ?? "Practice Management: List of consultants who were updated their profiles";
+            }
+        }
+
+        public static string SkillsProfilePagePath
+        {
+            get
+            {
+                return WorkerRole.GetConfigValue(Skills_Profile_PagePath) ?? "https://practice.logic2020.com/SkillsProfile.aspx";
+            }
+        }
+
+        #endregion
+
+        #region Override Methods
+
+        public override bool OnStart()
+        {
+            // Set the maximum number of concurrent connections 
+            ServicePointManager.DefaultConnectionLimit = 12;
+
+            // For information on handling configuration changes
+            // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
+
+            return base.OnStart();
+        }
 
         public override void Run()
         {
@@ -35,9 +87,13 @@ namespace UpdatePracticeAndSeniority
                     currentDateTimeWithTimeZone - nextRun;
                 Thread.Sleep(sleepTimeSpan);
                 var currentDateTimeWithTimeZoneAfterSleep = currentDateTimeWithTimeZone.Add(sleepTimeSpan);
-                WorkerRole.StartAutomaticUpdation(currentDateTimeWithTimeZoneAfterSleep);
+                RunTasks(currentDateTimeWithTimeZoneAfterSleep);
             }
         }
+
+        #endregion
+
+        #region Private Methods
 
         public static DateTime GetNextRunDate(DateTime currentDateTimeWithTimeZone)
         {
@@ -77,10 +133,16 @@ namespace UpdatePracticeAndSeniority
 
         }
 
-        public static void StartAutomaticUpdation(DateTime currentWithTimeZone)
+        public static void RunTasks(DateTime currentWithTimeZone)
+        {
+            var nextRun = GetNextRunDate(currentWithTimeZone);
+            WorkerRole.StartAutomaticUpdation(currentWithTimeZone, nextRun);
+            WorkerRole.EmailUpdatedProfilesList(currentWithTimeZone, nextRun);
+        }
+
+        public static void StartAutomaticUpdation(DateTime currentWithTimeZone, DateTime nextRun)
         {
             SqlConnection connection = null;
-            var nextRun = GetNextRunDate(currentWithTimeZone);
             try
             {
                 var connectionString = WorkerRole.GetConnectionString();
@@ -98,6 +160,7 @@ namespace UpdatePracticeAndSeniority
                 cmd.Parameters.Add(nextRunParam);
                 int rowsAffected = cmd.ExecuteNonQuery();
                 connection.Close();
+                
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, "Success", "Successfully completed running the procedure dbo.AutoUpdateObjects", nextRun);
             }
             catch (Exception ex)
@@ -138,7 +201,7 @@ namespace UpdatePracticeAndSeniority
 
                 if (!string.IsNullOrEmpty(errorMessage))
                 {
-                    SqlParameter errorParam = new SqlParameter("@ErrorMessage", errorMessage);
+                    SqlParameter errorParam = new SqlParameter("@Comments", errorMessage);
                     cmd.Parameters.Add(errorParam);
                 }
 
@@ -152,7 +215,6 @@ namespace UpdatePracticeAndSeniority
             }
             catch
             {
-                return;
             }
             finally
             {
@@ -179,15 +241,7 @@ namespace UpdatePracticeAndSeniority
         public static bool LogEnabled()
         {
             bool result = false;
-            try
-            {
-                result = bool.Parse(GetConfigValue("LogEnabled"));
-
-            }
-            catch
-            {
-                result = false;
-            }
+            bool.TryParse(GetConfigValue("LogEnabled"), out result);
             return result;
         }
 
@@ -214,24 +268,12 @@ namespace UpdatePracticeAndSeniority
             try
             {
                 result = RoleEnvironment.GetConfigurationSettingValue(key);
-
             }
             catch
             {
                 result = string.Empty;
             }
             return result;
-        }
-
-        public override bool OnStart()
-        {
-            // Set the maximum number of concurrent connections 
-            ServicePointManager.DefaultConnectionLimit = 12;
-
-            // For information on handling configuration changes
-            // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
-
-            return base.OnStart();
         }
 
         public static string GetResourceValueByKeyAndType(string key, string type)
@@ -262,7 +304,7 @@ namespace UpdatePracticeAndSeniority
             catch (Exception ex)
             {
                 WorkerRole.SaveSchedularLog(DateTime.Now, "Error",
-                    "Error Occured while retrieving data from settings table whth Key '"
+                    "Error Occured while retrieving data from settings table with Key '"
                     + key + "' and setting type '" + type + "'. The error message is  "
                     + ex.Message, DateTime.Now);
             }
@@ -275,6 +317,148 @@ namespace UpdatePracticeAndSeniority
             }
             return result;
         }
+
+        public static string GetResourceValueByKeyAndType(SettingsType type, string key)
+        {
+            return GetResourceValueByKeyAndType(key, type.ToString());
+        }
+
+        public static void EmailUpdatedProfilesList(DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            WorkerRole.SaveSchedularLog(currentWithTimeZone, "Success", "Started emailing updated profiles list.", nextRun);
+
+            try
+            {
+                var list = GetUpdatedProfilesList(currentWithTimeZone);
+                if (list != null && list.Count() > 0)
+                {
+                    string body = GetUpdatedProfilesListEmailBody(list);
+                    Email(EmailSubjectForProfilesUpdatedList, body, true, UpdatedProfilesListEmailReciever);
+                }
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, "Success", "Finished emailing updated profiles list.", nextRun);
+            }
+            catch(Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, "Failed", "Failed to send an email of updated profiles list due to: " + ex.Message , nextRun);
+            }
+        }
+
+        public static void Email(string subject, string body, bool isBodyHtml, string toAddress)
+        {
+            var smtpSettings = GetSMTPSettings();
+
+            MailMessage message = new MailMessage();
+            message.To.Add(new MailAddress(toAddress));
+            message.Subject = subject;
+
+            message.Body = body;
+
+            message.IsBodyHtml = isBodyHtml;
+
+            SmtpClient client = GetSmtpClient(smtpSettings);
+
+            message.From = new MailAddress(smtpSettings.PMSupportEmail);
+            client.Send(message);
+        }
+
+        private static string GetUpdatedProfilesListEmailBody(Dictionary<string, int> list)
+        {
+            string emailBody = string.Empty;
+            foreach (var key in list)
+            {
+                emailBody = emailBody + string.Format(UpdatedProfileLinkFormat, SkillsProfilePagePath, key.Value, key.Key);
+            }
+            return emailBody;
+        }
+
+        private static Dictionary<string, int> GetUpdatedProfilesList(DateTime currentWithTimeZone)
+        {
+            var list = new Dictionary<string, int>();
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+
+                if (string.IsNullOrEmpty(connectionString))
+                    return null;
+
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand("Skills.GetUpdatedProfilesList", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter typeParam = new SqlParameter("@Today", currentWithTimeZone.Date);
+                cmd.Parameters.Add(typeParam);
+
+                connection.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        int personIdIndex = reader.GetOrdinal("PersonId");
+                        int personNameIndex = reader.GetOrdinal("PersonName");
+                        while (reader.Read())
+                        {
+                            list.Add(reader.GetString(personNameIndex), reader.GetInt32(personIdIndex));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            catch(Exception ex)
+            {
+                connection.Close();
+                throw ex;
+            }
+            return list;
+        }
+
+        public static SmtpClient GetSmtpClient(SMTPSettings smtpSettings)
+        {
+            SmtpClient client = new SmtpClient(smtpSettings.MailServer, smtpSettings.PortNumber);
+            client.EnableSsl = smtpSettings.SSLEnabled;
+            client.Credentials = new NetworkCredential(smtpSettings.UserName, smtpSettings.Password);
+
+            return client;
+        }
+        
+        public static SMTPSettings GetSMTPSettings()
+        {
+            var sMTPSettings = new SMTPSettings();
+            sMTPSettings.MailServer = GetResourceValueByKeyAndType(SettingsType.SMTP, Constants.ResourceKeys.MailServerKey);
+
+            var sslEnabledString = GetResourceValueByKeyAndType(SettingsType.SMTP, Constants.ResourceKeys.SSLEnabledKey);
+            bool sSLEnabled;
+            if (!string.IsNullOrEmpty(sslEnabledString) && bool.TryParse(sslEnabledString, out sSLEnabled))
+            {
+                sMTPSettings.SSLEnabled = sSLEnabled;
+            }
+
+            int portNumber;
+            var portNumberString = GetResourceValueByKeyAndType(SettingsType.SMTP, Constants.ResourceKeys.PortNumberKey);
+            if (!string.IsNullOrEmpty(portNumberString) && Int32.TryParse(portNumberString, out portNumber))
+            {
+                sMTPSettings.PortNumber = portNumber;
+            }
+            else
+            {
+                if (sMTPSettings.SSLEnabled)
+                    sMTPSettings.PortNumber = 25;
+                else
+                    sMTPSettings.PortNumber = 465;
+            }
+
+            sMTPSettings.UserName =
+                GetResourceValueByKeyAndType(SettingsType.SMTP, Constants.ResourceKeys.UserNameKey);
+
+            sMTPSettings.Password =
+                GetResourceValueByKeyAndType(SettingsType.SMTP, Constants.ResourceKeys.PasswordKey);
+
+            sMTPSettings.PMSupportEmail =
+                GetResourceValueByKeyAndType(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
+
+            return sMTPSettings;
+        }
+
+        #endregion
     }
 }
 
