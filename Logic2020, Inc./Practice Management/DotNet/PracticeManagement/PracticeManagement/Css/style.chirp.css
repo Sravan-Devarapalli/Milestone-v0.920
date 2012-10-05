@@ -1884,6 +1884,10 @@ TABLE.Section td
 {
     width: 2%;
 }
+.Width2PercentImp
+{
+    width: 2% !important;
+}
 .Width3Percent, .Width3Per
 {
     width: 3%;
@@ -2024,6 +2028,10 @@ TABLE.Section td
 {
     width: 40%;
 }
+.Width40PImp
+{
+    width: 40% !important;
+}
 .Width40Percent
 {
     width: 40%;
@@ -2098,6 +2106,10 @@ TABLE.Section td
 {
     width: 77%;
 }
+.width77PImp
+{
+    width: 77% !important;
+}
 .Width80Percent
 {
     width: 80%;
@@ -2113,6 +2125,10 @@ TABLE.Section td
 .Width92Per
 {
     width: 92%;
+}
+.Width93Per
+{
+    width: 93%;
 }
 .Width94Per
 {
@@ -2330,6 +2346,10 @@ TABLE.Section td
 .Width170Px
 {
     width: 170px;
+}
+.Width175Px
+{
+    width: 175px;
 }
 .Width180Px
 {
@@ -7035,11 +7055,35 @@ table#ctl00_body_login tr td label
 .SkillsSearchDataBody
 {
     background-color: White;
-    height: 430px;
-    padding-left: 10%;
+    min-height: 430px;
+    padding-left: 2%;
+    padding-right: 2%;
     padding-top: 1%;
     text-align: center;
 }
+.SkillsSearchDataBody .ajax__tab_container
+{
+    padding-bottom : 1%;
+    width: 90%;
+}
+.SkillsSearchDataBody .ajax__tab_header
+{
+    text-align : left !important;
+}
+.SkillsSearchDataBody .ajax__tab_tab
+{
+    min-width:100Px;
+}
+.SkillsSearchDataBody .ajax__tab_panel
+{
+    max-height : 165px;
+    overflow-y:auto;
+}
+.SkillsSearchDataBody select
+{
+    height : 20px;
+}
+
 .searchResult
 {
     height: 150px;
@@ -7257,10 +7301,70 @@ table#ctl00_body_login tr td label
 }
 .PersonInfo tr td
 {
-    padding-bottom: 4px;    
+    padding-bottom: 4px;
 }
-.PersonInfo td.PersonDefaultUser 
+.PersonInfo td.PersonDefaultUser
 {
     padding-bottom: 0px !important;
 }
-
+.dlPerson, .dlPerson table
+{
+    width: 100% !important;
+}
+.dlPerson th div
+{
+    white-space: nowrap;
+}
+.dlPerson td
+{
+    height: 20px !important;
+}
+.dlPerson .firstTd
+{
+    width: 30%;
+    text-align: left !important;
+}
+.dlPerson .secondTd
+{
+    width: 70%;
+    text-align: left !important;
+}
+.displayInline
+{
+    display: inline-block;
+}
+.repProfilesTable
+{
+    width: 100%;
+}
+.repProfilesTable td, .repProfilesTable th
+{
+    padding-top: 1px;
+    padding-bottom: 1px;
+    vertical-align: middle;
+}
+.ProfilesPanel
+{
+    min-width: 500px !important;
+    max-width: 700px !important;
+}
+.ProfilesPanel .ProfilesPanelTd
+{
+    padding: 10px 0px 10px 8px;
+}
+.PicturePanelTd
+{
+    padding: 10px;
+    padding-left: 30px;
+}
+.PersonPictureDiv
+{
+    width: 100px;
+    height: 120px;
+    border: 1px solid Black;
+}
+.SkillSerachTd
+{
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
