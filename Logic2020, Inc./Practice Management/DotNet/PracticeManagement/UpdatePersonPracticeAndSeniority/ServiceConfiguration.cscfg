@@ -7,6 +7,9 @@
       <Setting name="DBConnection" value="Server=tcp:gdl05wmfhe.database.windows.net;Database=PracticeManagement;User ID=pracadmin@gdl05wmfhe;Password=Password;Trusted_Connection=False;Encrypt=True;" />
       <Setting name="LogEnabled" value="true" />
       <Setting name="RunSchedularDailyAtTime" value="00:01:00" /> <!--HH:mm:ss and 24 hour time format-->
+      <Setting name="SkillsProfilePagePath" value="https://practice.logic2020.com/SkillsProfile.aspx"/>
+      <Setting name="UpdatedProfilesListEmailReciever" value="Skills@logic2020.com"/>
+      <Setting name="EmailSubjectForProfilesUpdatedList" value="Practice Management: List of consultants who were updated their profiles"/>
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
