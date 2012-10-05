@@ -4084,6 +4084,9 @@
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonWithPictureUrl.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetUpdatedProfilesList.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4133,4 +4136,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
