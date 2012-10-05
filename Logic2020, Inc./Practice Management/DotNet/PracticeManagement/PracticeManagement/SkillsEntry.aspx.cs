@@ -12,6 +12,10 @@ using DataTransferObjects.Skills;
 using System.Xml;
 using AjaxControlToolkit;
 using System.Web.Security;
+using System.Net;
+using System.Xml.Linq;
+using System.Text;
+using System.Web.UI.HtmlControls;
 
 namespace PraticeManagement
 {
@@ -24,6 +28,8 @@ namespace PraticeManagement
         private const string ViewStatePreviousCategoryIndex = "PreviousCategoryIndex";
         private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, and ‘Last Used’ for the below skill(s):";
         private const string SuccessMessage = "Skills Saved Successfully.";
+        private const string ProfileXml = @"<Profile Id=""{0}"" ProfileName=""{1}"" ProfileURL=""{2}"" IsDefault=""{3}"" > </Profile>";
+
 
         //scripts
         private const string ANIMATION_SHOW_SCRIPT =
@@ -118,7 +124,7 @@ namespace PraticeManagement
                 {
                     using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
                     {
-                        ViewState[SessionPersonWithSkills] = serviceClient.GetPersonWithSkills(personId);
+                        ViewState[SessionPersonWithSkills] = serviceClient.GetPersonProfilesWithSkills(personId);
                     }
                 }
                 return (Person)ViewState[SessionPersonWithSkills];
@@ -126,6 +132,22 @@ namespace PraticeManagement
             set
             {
                 ViewState[SessionPersonWithSkills] = value;
+            }
+        }
+
+        public List<Profile> PersonProfiles
+        {
+            get
+            {
+                if (ViewState["PersonProfiles"] == null)
+                {
+                    ViewState["PersonProfiles"] = Person.Profiles.Count > 0 ? Person.Profiles : new List<Profile> { new Profile() { ProfileId = -1 } };
+                }
+                return (List<Profile>)ViewState["PersonProfiles"];
+            }
+            set
+            {
+                ViewState["PersonProfiles"] = value;
             }
         }
 
@@ -179,6 +201,8 @@ namespace PraticeManagement
 
         #endregion
 
+        #region Control Events
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -188,7 +212,10 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
-                lblUserName.Text = Person.FirstName + " " + Person.LastName;
+                ltrlPersonname1.Text = ltrlPersonname.Text = lblUserName.Text = Person.LastName + " " + Person.FirstName;
+                hdPictureLink.Value = txtPictureLink.Text = Person.PictureUrl;
+                repProfiles.DataSource = PersonProfiles;
+                repProfiles.DataBind();
                 RenderSkills(tcSkillsEntry.ActiveTabIndex);
 
                 if (ddlTechnicalCategory.DataSource == null && ddlTechnicalCategory.Items.Count == 0)
@@ -374,6 +401,7 @@ namespace PraticeManagement
             if (ValidateAndSave(activeTabIndex))
             {
                 lblMessage.Text = SuccessMessage;
+                mpeErrorPanel.Show();
                 lblMessage.Focus();
             }
         }
@@ -383,6 +411,163 @@ namespace PraticeManagement
             BindSkills(tcSkillsEntry.ActiveTabIndex);
             ClearDirty();
         }
+
+        protected void btnUpdatePictureLink_OnClick(object sender, EventArgs e)
+        {
+            ServiceCallers.Custom.PersonSkill(s => s.SavePersonPictureUrl(Person.Id.Value, txtPictureLink.Text, User.Identity.Name));
+            Person.PictureUrl = hdPictureLink.Value = txtPictureLink.Text;
+        }
+
+        protected void btnProfilePopupUpdate_OnClick(object sender, EventArgs e)
+        {
+            //mlConfirmation.ClearMessage();
+            UpdatePersonProfilesFromRep(false);
+            Page.Validate("ProfileValidationGroup");
+            if (Page.IsValid)
+            {
+
+                string profilesXml = GetProfilesLinksXml();
+                ServiceCallers.Custom.PersonSkill(p => p.SavePersonProfiles(Person.Id.Value, profilesXml, DataHelper.CurrentPerson.Alias));
+                var personProfiles = ServiceCallers.Custom.PersonSkill(p => p.GetPersonProfiles(Person.Id.Value)).ToList();
+                Person.Profiles = personProfiles;
+                PersonProfiles = null;
+                repProfiles.DataSource = PersonProfiles;
+                repProfiles.DataBind();
+                //mlConfirmation.ShowInfoMessage("Profiles updated successfully.");
+            }
+            else
+            {
+                mpeProfilePopUp.Show();
+            }
+        }
+
+        protected void btnCancelProfile_OnClick(object sender, EventArgs e)
+        {
+            //mlConfirmation.ClearMessage();
+            PersonProfiles = null;
+            repProfiles.DataSource = PersonProfiles;
+            repProfiles.DataBind();
+        }
+
+        protected void ibtnAddProfile_Click(object sender, EventArgs e)
+        {
+            //mlConfirmation.ClearMessage();
+            UpdatePersonProfilesFromRep(true);
+            repProfiles.DataSource = PersonProfiles;
+            repProfiles.DataBind();
+            mpeProfilePopUp.Show();
+        }
+
+        protected void cvProfileName_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            var validator = source as CustomValidator;
+            var row = validator.NamingContainer;
+            var txtProfileName = row.FindControl("txtProfileName") as TextBox;
+            var txtProfileLink = row.FindControl("txtProfileLink") as TextBox;
+            var rbprofileIsDefault = row.FindControl("rbprofileIsDefault") as RadioButton;
+            RepeaterItemCollection items = repProfiles.Items;
+
+            if (string.IsNullOrEmpty(txtProfileName.Text) && (!string.IsNullOrEmpty(txtProfileLink.Text) || rbprofileIsDefault.Checked))
+            {
+                args.IsValid = false;
+                if (items.Count == 1 && string.IsNullOrEmpty(txtProfileLink.Text))
+                {
+                    args.IsValid = true;
+                }
+            }
+        }
+
+        protected void cvProfileNameDuplicate_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            var validator = source as CustomValidator;
+            var row = validator.NamingContainer;
+            var currentRowProfileName = row.FindControl("txtProfileName") as TextBox;
+            var currentRowProfileId = row.FindControl("hdProfileId") as HiddenField;
+            if (string.IsNullOrEmpty(currentRowProfileName.Text))
+            {
+                return;
+            }
+            RepeaterItemCollection items = repProfiles.Items;
+            foreach (RepeaterItem item in items)
+            {
+                if (item.ItemType == ListItemType.Item || item.ItemType == ListItemType.AlternatingItem)
+                {
+                    var hdProfileId = item.FindControl("hdProfileId") as HiddenField;
+                    var txtProfileName = item.FindControl("txtProfileName") as TextBox;
+                    if (!string.IsNullOrEmpty(txtProfileName.Text) && currentRowProfileId.Value != hdProfileId.Value && txtProfileName.Text == currentRowProfileName.Text)
+                    {
+                        args.IsValid = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        protected void cvProfileLink_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            var validator = source as CustomValidator;
+            var row = validator.NamingContainer;
+            var txtProfileName = row.FindControl("txtProfileName") as TextBox;
+            var txtProfileLink = row.FindControl("txtProfileLink") as TextBox;
+            var rbprofileIsDefault = row.FindControl("rbprofileIsDefault") as RadioButton;
+            RepeaterItemCollection items = repProfiles.Items;
+
+            if (string.IsNullOrEmpty(txtProfileLink.Text) && (!string.IsNullOrEmpty(txtProfileName.Text) || rbprofileIsDefault.Checked))
+            {
+                args.IsValid = false;
+                if (items.Count == 1 && string.IsNullOrEmpty(txtProfileName.Text))
+                {
+                    args.IsValid = true;
+                }
+            }
+        }
+
+        protected void cvIsDefault_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = false;
+            RepeaterItemCollection items = repProfiles.Items;
+            int i = 0;
+            foreach (RepeaterItem item in items)
+            {
+                if (item.ItemType == ListItemType.Item || item.ItemType == ListItemType.AlternatingItem)
+                {
+                    var txtProfileName = item.FindControl("txtProfileName") as TextBox;
+                    var txtProfileLink = item.FindControl("txtProfileLink") as TextBox;
+                    var rbprofileIsDefault = item.FindControl("rbprofileIsDefault") as RadioButton;
+                    if (!string.IsNullOrEmpty(txtProfileName.Text) || !string.IsNullOrEmpty(txtProfileName.Text))
+                    {
+                        i++;
+                    }
+                    if (rbprofileIsDefault.Checked)
+                    {
+                        args.IsValid = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!args.IsValid && i == 0)
+            {
+                args.IsValid = true;
+            }
+        }
+
+        protected void repProfiles_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var rbprofileIsDefault = e.Item.FindControl("rbprofileIsDefault") as RadioButton;
+                rbprofileIsDefault.Attributes["value"] = rbprofileIsDefault.UniqueID;
+            }
+        }
+
+        #endregion
+
+        #region Methods
 
         private bool ValidateAndSave(int activeTabIndex)
         {
@@ -415,6 +600,7 @@ namespace PraticeManagement
             hdnIsValid.Value = result.ToString().ToLower();
             return result;
         }
+
         private void EnableClickLinkButton()
         {
             var rows = gvBusinessSkills.Rows;
@@ -444,6 +630,7 @@ namespace PraticeManagement
                 }
             }
         }
+
         private void EnableSaveAndCancelButtons(bool enable)
         {
             btnSave.Enabled = enable;
@@ -663,6 +850,65 @@ namespace PraticeManagement
             }
         }
 
+        /*
+            <Profiles>
+            <Profile Id='' ProfileName='' ProfileURL='' > </Profile>
+            <Profile Id='' ProfileName='' ProfileURL='' > </Profile>
+            ....
+            </Profiles>
+        */
+        private string GetProfilesLinksXml()
+        {
+            StringBuilder profilesXml = new StringBuilder();
+            profilesXml.Append("<Profiles>");
+            foreach (var profile in PersonProfiles)
+            {
+                if (!string.IsNullOrEmpty(profile.ProfileName) && !string.IsNullOrEmpty(profile.ProfileUrl))
+                {
+                    int profileId = profile.ProfileId.HasValue && profile.ProfileId.Value > 0 ? profile.ProfileId.Value : -1;
+                    string profileXml = string.Format(ProfileXml, profileId, profile.ProfileName, HttpUtility.HtmlEncode(profile.ProfileUrl).Trim(), profile.IsDefault);
+                    profilesXml.Append(profileXml);
+                }
+            }
+            profilesXml.Append("</Profiles>");
+            return profilesXml.ToString();
+
+        }
+
+        private void UpdatePersonProfilesFromRep(bool addNewRow)
+        {
+            var personProfiles = PersonProfiles;
+            RepeaterItemCollection items = repProfiles.Items;
+
+            foreach (RepeaterItem item in items)
+            {
+                if (item.ItemType == ListItemType.Item || item.ItemType == ListItemType.AlternatingItem)
+                {
+                    var hdProfileId = item.FindControl("hdProfileId") as HiddenField;
+                    var txtProfileName = item.FindControl("txtProfileName") as TextBox;
+                    var txtProfileLink = item.FindControl("txtProfileLink") as TextBox;
+                    var rbprofileIsDefault = item.FindControl("rbprofileIsDefault") as RadioButton;
+                    int profileId = 0;
+                    if (!string.IsNullOrEmpty(hdProfileId.Value) && int.TryParse(hdProfileId.Value, out profileId) && personProfiles.Any(p => p.ProfileId.HasValue && p.ProfileId.Value == profileId))
+                    {
+                        Profile profile = personProfiles.First(p => p.ProfileId.Value == profileId);
+                        profile.ProfileName = txtProfileName.Text;
+                        profile.ProfileUrl = txtProfileLink.Text;
+                        profile.IsDefault = rbprofileIsDefault.Checked;
+                    }
+                }
+            }
+            if (addNewRow)
+            {
+                Profile profile = new Profile();
+                profile.ProfileId = personProfiles.Count == 0 ? -1 : personProfiles.Any(p => p.ProfileId.HasValue && p.ProfileId.Value < 0) ? personProfiles.Min(p => p.ProfileId.HasValue ? p.ProfileId.Value : 0) - 1 : -1;
+                personProfiles.Add(profile);
+            }
+            PersonProfiles = personProfiles;
+        }
+
+        #endregion
+
         #region ObjectDataSource Select Methods
 
         [DataObjectMethod(DataObjectMethodType.Select)]
@@ -695,7 +941,7 @@ namespace PraticeManagement
             var emptyItem = new NameValuePair();
             emptyItem.Id = 0;
             years.Add(emptyItem);
-            for (var index = 1990; index <= currentYear; index++)
+            for (var index = currentYear; index >= 1990; index--)
             {
                 var item = new NameValuePair();
                 item.Id = index;
@@ -716,6 +962,8 @@ namespace PraticeManagement
 
         #endregion
 
+        #region RaisePostBackEvents
+
         public void RaisePostBackEvent(string eventArgument)
         {
             if (IsDirty)
@@ -727,6 +975,8 @@ namespace PraticeManagement
             }
             Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
         }
+
+        #endregion
     }
 }
 
