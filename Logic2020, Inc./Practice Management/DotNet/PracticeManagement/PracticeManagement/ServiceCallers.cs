@@ -14,6 +14,7 @@ using PraticeManagement.TimeEntryService;
 using PraticeManagement.TimeTypeService;
 using PraticeManagement.ReportService;
 using PraticeManagement.PersonStatusService;
+using PraticeManagement.PersonSkillService;
 
 namespace PraticeManagement
 {
@@ -180,6 +181,15 @@ namespace PraticeManagement
             }
 
             public static void PersonStatus(Action<PersonStatusServiceClient> action)
+            {
+                Invoke(action);
+            }
+            public static TResult PersonSkill<TResult>(Func<PersonSkillServiceClient, TResult> func)
+            {
+                return Invoke(func);
+            }
+
+            public static void PersonSkill(Action<PersonSkillServiceClient> action)
             {
                 Invoke(action);
             }
