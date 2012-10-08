@@ -139,15 +139,16 @@ AS
 						   cal.Date,
 						   pay.Timescale
 
-		FROM Person P
+		FROM Person P		
 		INNER JOIN dbo.PersonCalendarAuto AS cal 
 				ON  P.PersonId = cal.PersonId
 		INNER JOIN  dbo.Pay ON Pay.StartDate <= cal.Date AND Pay.EndDate > cal.date AND P.PersonId = Pay.Person
 		LEFT JOIN [dbo].V_WorkinHoursByYear HY ON HY.Year = YEAR(cal.Date)
 		LEFT JOIN [dbo].[v_OverheadFixedRateTimescale] OVH
 				ON OVH.TimescaleId = pay.Timescale AND cal.Date BETWEEN OVH.StartDate 
-				AND ISNULL(OVH.EndDate, @FutureDate) AND OVH.Inactive = 0
-		 WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
+					AND ISNULL(OVH.EndDate, @FutureDate) AND OVH.Inactive = 0
+		LEFT JOIN TerminationReasons t ON p.TerminationReasonId = t.TerminationReasonId
+		WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
 				AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
 				AND ((p.PersonStatusId IN (1,5) AND @ActivePersonsLocal = 1 )
 					 OR (p.PersonStatusId = 3 AND @ProjectedPersonsLocal = 1 )
@@ -156,7 +157,8 @@ AS
 				 AND P.PersonStatusId<>4
 				AND (@PracticeIdsLocal IS NULL 
 					OR p.DefaultPractice IN (SELECT PracticeId FROM @PracticeIdsTable)
-					)
+					) 
+				AND (P.TerminationReasonId IS NULL OR t.IsContingentRule != 1)
 		 GROUP BY P.PersonId,
 					cal.Date, 
 					pay.Timescale,
