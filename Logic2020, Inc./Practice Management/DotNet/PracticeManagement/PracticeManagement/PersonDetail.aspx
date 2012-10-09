@@ -923,7 +923,7 @@
                                         <tr>
                                             <td class="Width60Px">
                                                 <asp:Button ID="btnResetPassword" runat="server" OnClick="btnResetPassword_Click"
-                                                    UseSubmitBehavior="false" OnClientClick="return confirm('Do you really want to reset user\'s password?');"
+                                                    UseSubmitBehavior="false" OnClientClick="if( !confirm('Do you really want to reset user\'s password?')) return false;"
                                                     Text="Reset Password" />
                                             </td>
                                             <td>
