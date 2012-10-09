@@ -148,7 +148,7 @@
     <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListShortByRoleAndStatus"
         TypeName="PraticeManagement.PersonService.PersonServiceClient">
         <SelectParameters>
-            <asp:Parameter DefaultValue="1" Name="statusId" Type="Int32" />
+            <asp:Parameter DefaultValue="1,5" Name="statusIds" Type="String" />
             <asp:Parameter DefaultValue="Practice Area Manager" Name="roleName" Type="String" />
         </SelectParameters>
     </asp:ObjectDataSource>
