@@ -22,7 +22,6 @@ namespace PraticeManagement.Controls.Projects
         #region Fields
 
         private SeniorityAnalyzer _milestonesSeniorityAnalyzer;
-        private SeniorityAnalyzer _peopleSeniorityAnalyzer;
         private ComputedFinancials _financials;
 
         #endregion
@@ -40,7 +39,6 @@ namespace PraticeManagement.Controls.Projects
         private void InitSeniorityAnalyzers()
         {
             var currentPerson = DataHelper.CurrentPerson;
-            _peopleSeniorityAnalyzer = new SeniorityAnalyzer(currentPerson);
             _milestonesSeniorityAnalyzer = new SeniorityAnalyzer(currentPerson);
             if (Project != null)
             {
@@ -60,9 +58,7 @@ namespace PraticeManagement.Controls.Projects
             // Interest values            
             if (Financials != null)
             {
-                var hide =
-                    _milestonesSeniorityAnalyzer.GreaterSeniorityExists ||
-                    _peopleSeniorityAnalyzer.GreaterSeniorityExists;
+                var hide =_milestonesSeniorityAnalyzer.GreaterSeniorityExists;
                 var ht = Resources.Controls.HiddenCellText;
 
                 var nfi = new NumberFormatInfo { CurrencyDecimalDigits = 0, CurrencySymbol = "$" };
