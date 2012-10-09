@@ -150,7 +150,21 @@ namespace PraticeManagement
         {
             get
             {
+                if (seniorityAnalyzer == null && MilestoneId.HasValue)
+                {
+                    seniorityAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                    if (Milestone != null)
+                    {
+                        PersonListSeniorityAnalyzer.OneWithGreaterSeniorityExists(
+                                GetMilestonePersons(Milestone)
+                                );
+                    }
+                }
                 return seniorityAnalyzer;
+            }
+            set
+            {
+                seniorityAnalyzer = value;
             }
         }
 
@@ -324,18 +338,8 @@ namespace PraticeManagement
         {
             if (MilestoneId.HasValue)
             {
-                seniorityAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
                 activityLog.MilestoneId = MilestoneId;
-                if (Milestone != null)
-                {
-                    PersonListSeniorityAnalyzer.OneWithGreaterSeniorityExists(
-                            GetMilestonePersons(Milestone)
-                            );
-                }
-
-
                 InitPrevNextButtons();
-
             }
         }
 
@@ -1256,6 +1260,7 @@ namespace PraticeManagement
 
         public void FillComputedFinancials(Milestone milestone)
         {
+            PersonListSeniorityAnalyzer = null;
             //Fill Projected Sales Commission Cell
             SetFooterLabelWithSeniority(
                 milestone.ComputedFinancials == null ? string.Empty : milestone.ComputedFinancials.SalesCommission.ToString(),
