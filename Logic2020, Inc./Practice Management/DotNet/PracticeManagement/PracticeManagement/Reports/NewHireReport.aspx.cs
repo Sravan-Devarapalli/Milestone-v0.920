@@ -260,6 +260,21 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            if (humanCapitalReportsHeader.Count == 1)
+            {
+                tdFirst.Attributes["class"] = "width30P";
+                tdSecond.Attributes["class"] = "Width40P";
+                tdThird.Attributes["class"] = "width30P";
+                ParametersTable.Attributes["class"] = "WholeWidth ParametersTable";
+            }
+            else if (humanCapitalReportsHeader.Count == 2)
+            {
+                tdFirst.Attributes["class"] = "Width10Percent";
+                tdSecond.Attributes["class"] = "Width80Percent";
+                tdThird.Attributes["class"] = "Width10Percent";
+                ParametersTable.Attributes["class"] = "WholeWidth";
+            }
+
             diRange.FromDate = StartDate;
             diRange.ToDate = EndDate;
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
