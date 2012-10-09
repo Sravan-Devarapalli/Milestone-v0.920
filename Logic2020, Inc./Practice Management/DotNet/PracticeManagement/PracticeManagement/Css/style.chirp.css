@@ -2020,6 +2020,11 @@ TABLE.Section td
 {
     width: 35%;
 }
+/* Used in new hire report */
+.ParametersTable .FirstTd38
+{
+    width: 38% !important;
+}
 .Width39Percent
 {
     width: 39%;
@@ -7368,3 +7373,4 @@ table#ctl00_body_login tr td label
     padding-top: 5px;
     padding-bottom: 10px;
 }
+
