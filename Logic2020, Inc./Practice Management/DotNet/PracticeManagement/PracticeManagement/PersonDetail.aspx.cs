@@ -816,8 +816,14 @@ namespace PraticeManagement
             Save_Click(sender, e);
             if (PersonId.HasValue && updatePersonStatusDropdown)
             {
-                DataHelper.FillPersonStatusList(ddlPersonStatus);
+                FillAllPersonStatuses(PersonStatusId.Value);
             }
+        }
+
+        private void FillAllPersonStatuses(PersonStatusType PersonStatusId)
+        {
+            DataHelper.FillPersonStatusList(ddlPersonStatus);
+            ddlPersonStatus.SelectedValue = ((int)PersonStatusId).ToString();
         }
 
         protected void btnCancleTerminationOKButton_OnClick(object source, EventArgs args)
