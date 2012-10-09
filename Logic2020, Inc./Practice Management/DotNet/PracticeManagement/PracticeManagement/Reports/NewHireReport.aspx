@@ -74,14 +74,14 @@
                     </td>
                 </tr>
             </table>
-            <table class="WholeWidth">
+            <table class="WholeWidth" id="ParametersTable" runat="server">
                 <tr>
                     <td id="tdFirst" runat="server" class="Width10Percent">
                     </td>
                     <td id="tdSecond" runat="server" class="Width80Percent">
                         <table class="ReportParametersTable">
                             <tr>
-                                <td class="FirstTd20">
+                                <td class="FirstTd20 FirstTd38">
                                     Show Report for:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
@@ -100,7 +100,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td>
+                    <td id="tdThird" runat="server" class="Width10Percent">
                     </td>
                 </tr>
                 <tr>
@@ -109,7 +109,7 @@
                     <td class="ReportTdSecond" style="vertical-align: middle!important;">
                         <table class="ReportParametersTable">
                             <tr>
-                                <td class="FirstTd20">
+                                <td class="FirstTd20 FirstTd38">
                                 </td>
                                 <td class="SecondTdNewHire">
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
@@ -132,7 +132,7 @@
                     <td class="ReportTdSecond">
                         <table class="ReportParametersTable">
                             <tr>
-                                <td class="FirstTd20">
+                                <td class="FirstTd20 FirstTd38">
                                     Person Status:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
@@ -157,7 +157,7 @@
                     <td class="ReportTdSecond">
                         <table class="ReportParametersTable">
                             <tr>
-                                <td class="FirstTd20">
+                                <td class="FirstTd20 FirstTd38">
                                     Pay Type:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
@@ -182,7 +182,7 @@
                     <td class="ReportTdSecond">
                         <table class="ReportParametersTable">
                             <tr>
-                                <td class="FirstTd20">
+                                <td class="FirstTd20 FirstTd38">
                                     Practices:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
@@ -206,7 +206,7 @@
                     <td class="ReportTdSecond">
                         <table class="ReportParametersTable">
                             <tr>
-                                <td class="FirstTd20">
+                                <td class="FirstTd20 FirstTd38">
                                     &nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
