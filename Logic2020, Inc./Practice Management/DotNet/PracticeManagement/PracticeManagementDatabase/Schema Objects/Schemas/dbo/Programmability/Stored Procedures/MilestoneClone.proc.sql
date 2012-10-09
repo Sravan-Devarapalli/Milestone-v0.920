@@ -44,9 +44,10 @@ begin transaction
 	       FROM dbo.MilestonePerson AS mp
 	      WHERE mp.MilestoneId = @MilestoneId
 
+	--insert milestonepersonentries for Persons.
 	INSERT INTO dbo.MilestonePersonEntry
 	            (MilestonePersonId, StartDate, EndDate, PersonRoleId, Amount, HoursPerDay)
-	     SELECT mp.MilestonePersonId, mp.StartDate, mp.ProjectedDeliveryDate, mp.PersonRoleId, mp.Amount, mp.HoursPerDay
+	     (SELECT mp.MilestonePersonId, mp.StartDate, mp.ProjectedDeliveryDate, mp.PersonRoleId, mp.Amount, mp.HoursPerDay
 	       FROM (
 	             SELECT mpc.MilestonePersonId,
 	                    m.StartDate,
@@ -62,9 +63,28 @@ begin transaction
 	                        ON mp.PersonId = mpc.PersonId AND mpc.MilestoneId = @MilestoneCloneId
 	                    INNER JOIN dbo.Milestone AS m
 	                        ON m.MilestoneId = mpc.MilestoneId
+						INNER JOIN dbo.Person AS p on p.PersonId = mp.PersonId AND p.IsStrawman = 0						
+
 	            ) AS mp
 	      -- Take a last mileston-person entry if several exists
 	      WHERE mp.RowNum = 1
+		UNION ALL		
+		--insert milestonepersonentries for Strawman.
+		  SELECT mpc.MilestonePersonId,
+	            m.StartDate,
+	            m.ProjectedDeliveryDate,
+	            mpe.PersonRoleId,
+	            mpe.Amount,
+	            mpe.HoursPerDay
+	        FROM dbo.MilestonePersonEntry AS mpe
+	            INNER JOIN dbo.MilestonePerson AS mp
+	                ON mp.MilestonePersonId = mpe.MilestonePersonId AND mp.MilestoneId = @MilestoneId
+	            INNER JOIN dbo.MilestonePerson AS mpc
+	                ON mp.PersonId = mpc.PersonId AND mpc.MilestoneId = @MilestoneCloneId
+	            INNER JOIN dbo.Milestone AS m
+	                ON m.MilestoneId = mpc.MilestoneId
+				INNER JOIN dbo.Person AS p on p.PersonId = mp.PersonId AND p.IsStrawman = 1 )
+
 
 	--exec dbo.ExpensesClone @OldMilestoneId = @MilestoneId, @NewMilestoneId = @MilestoneCloneId
 	
