@@ -1756,6 +1756,7 @@ namespace PraticeManagement.Controls.Milestones
             // Get latest data in detail tab
 
             HostingPage.Milestone = null;
+            HostingPage.FillComputedFinancials(HostingPage.Milestone);
         }
 
 
@@ -1797,6 +1798,7 @@ namespace PraticeManagement.Controls.Milestones
             // Get latest data in detail tab
 
             HostingPage.Milestone = null;
+            HostingPage.FillComputedFinancials(HostingPage.Milestone);
 
 
         }
