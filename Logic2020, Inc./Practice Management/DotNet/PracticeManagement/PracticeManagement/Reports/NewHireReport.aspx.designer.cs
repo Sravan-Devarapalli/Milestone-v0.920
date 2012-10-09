@@ -40,6 +40,15 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
+        /// ParametersTable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable ParametersTable;
+        
+        /// <summary>
         /// tdFirst control.
         /// </summary>
         /// <remarks>
@@ -65,6 +74,15 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
+        
+        /// <summary>
+        /// tdThird control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdThird;
         
         /// <summary>
         /// hdnStartDate control.
