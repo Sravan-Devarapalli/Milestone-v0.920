@@ -65,7 +65,7 @@ namespace DataTransferObjects
 
         public int ValueWithSeparation
         {
-            get { return GetSeniorityValueById(Id) + Separation; }
+            get { return GetSeniorityValueById(Id) + GetSeniorityValueSeparationById(Id); }
         }
 
         public static int GetSeniorityValueById(int id)
@@ -92,6 +92,16 @@ namespace DataTransferObjects
             }
 
             return seniorityValue;
+        }
+
+        public static int GetSeniorityValueSeparationById(int id)
+        {
+            //In over all pm person can able to access two level below his seniority.
+            //As per the Defect 3086 : person with "Senior Manager" seniority should able to access one level below his seniority.
+            if (id == 55)
+                return Separation - 10;
+            else
+                return Separation;
         }
 
         public override int  GetHashCode()
