@@ -62,6 +62,7 @@ BEGIN
 					RANK() OVER (ORDER BY CONVERT(INT,SUBSTRING(Code,2,5))) + @LowerLimitRange - 1 AS  TimeTypeNumberRank
 			FROM dbo.TimeType AS TT
 			WHERE TT.IsDefault = @IsDefault AND TT.IsInternal = @IsInternal AND ISNUMERIC( SUBSTRING(Code,2,5)) = 1
+			AND Convert(INT,SUBSTRING(Code,2,5)) BETWEEN @LowerLimitRange AND @HigherLimitRange
 
 
 			INSERT INTO @TimeTypeRanksList 
