@@ -16,7 +16,7 @@ BEGIN
 	SET PictureUrl = @PictureUrl,
 		PictureModifiedDate = @Now
 	WHERE PersonId = @PersonId 
-		AND PictureUrl <> @PictureUrl
+		AND ISNULL(PictureUrl,0) <> ISNULL(@PictureUrl,0)
 
 	EXEC dbo.SessionLogUnprepare
 END
