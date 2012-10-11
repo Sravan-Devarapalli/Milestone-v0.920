@@ -26,6 +26,8 @@ namespace PraticeManagement
         private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
         private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
         private const string IsStawman = "Isstrawman";
+        private const string SalaryToContractException = "Salary Type to Contract Type Violation";
+        private const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\"";
 
         #endregion
 
@@ -340,6 +342,11 @@ namespace PraticeManagement
                         else if (innerexceptionMessage == HireDateInCorrect)
                         {
                             cvc2.ErrorMessage = HireDateInCorrect;
+                            pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
+                        }
+                        else if (innerexceptionMessage == SalaryToContractException)
+                        {
+                            cvc2.ErrorMessage = SalaryToContractMessage;
                             pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
                         }
                         else
