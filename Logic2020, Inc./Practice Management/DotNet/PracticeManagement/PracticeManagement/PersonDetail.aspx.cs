@@ -1439,9 +1439,16 @@ namespace PraticeManagement
             //Last but one Termination date for Hire Date validation.
             TerminationDateBeforeCurrentHireDate = person.EmploymentHistory.Any(p => p.HireDate.Date < person.HireDate.Date) ? person.EmploymentHistory.Last(p => p.HireDate.Date < person.HireDate.Date).TerminationDate : null;
 
+            //Populate PersonStatus.
+            PersonStatusId = person.Status != null ? (PersonStatusType?)person.Status.Id : null;
+            PrevPersonStatusId = (person.Status != null) ? person.Status.Id : -1;
+            lblPersonStatus.Text = PersonStatusId.HasValue ? DataHelper.GetDescription((PersonStatusType)PrevPersonStatusId) : string.Empty;
+
+            //Populate Termination date and termination reason.
             PopulateTerminationDate(person.TerminationDate);
             FillTerminationReasonsByTerminationDate(dtpTerminationDate, ddlTerminationReason);
             PopulateTerminationReason(person.TerminationReasonid);
+
             txtEmailAddress.Text = person.Alias;
             txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
             ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
@@ -1452,11 +1459,7 @@ namespace PraticeManagement
             }
 
             PopulatePracticeDropDown(person);
-
-            PersonStatusId = person.Status != null ? (PersonStatusType?)person.Status.Id : null;
-            PrevPersonStatusId = (person.Status != null) ? person.Status.Id : -1;
-            lblPersonStatus.Text = PersonStatusId.HasValue ? DataHelper.GetDescription((PersonStatusType)PrevPersonStatusId) : string.Empty;
-
+            
             txtEmployeeNumber.Text = person.EmployeeNumber;
 
             //Set Locked-Out CheckBox value
@@ -2573,7 +2576,7 @@ namespace PraticeManagement
                 cvRehireConfirmation.Validate();
                 DisableValidatecustTerminateDateTE = true;
             }
-            if (!DisableValidatecustTerminateDateTE)
+            if (Page.IsValid && !DisableValidatecustTerminateDateTE)
             {
                 custTerminateDateTE.Enabled = true;
                 custTerminateDateTE.Validate();
