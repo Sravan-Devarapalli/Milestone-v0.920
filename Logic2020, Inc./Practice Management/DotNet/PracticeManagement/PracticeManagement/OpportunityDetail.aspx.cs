@@ -310,7 +310,7 @@ namespace PraticeManagement
 
         public void FillPotentialResources()
         {
-            var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3", null));
+            var potentialPersons = ServiceCallers.Custom.Person(c => c.GetPersonListByStatusList("1,3,5", null));
             cblPotentialResources.DataSource = potentialPersons.OrderBy(c => c.LastName);
             cblPotentialResources.DataBind();
         }
