@@ -358,7 +358,14 @@ namespace DataAccess
                 int projectNonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNonBillableHours);
                 int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
                 int internalHoursIndex = reader.GetOrdinal(Constants.ColumnNames.InternalHours);
-                int adminstrativeHoursIndex = reader.GetOrdinal(Constants.ColumnNames.AdminstrativeHours);
+
+                int pTOHoursIndex = reader.GetOrdinal(Constants.ColumnNames.PTOHours);
+                int holidayHoursIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayHours);
+                int juryDutyHoursIndex = reader.GetOrdinal(Constants.ColumnNames.JuryDutyHours);
+                int bereavementHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BereavementHours);
+                int oRTHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ORTHours);
+                int unpaidHoursIndex = reader.GetOrdinal(Constants.ColumnNames.UnpaidHours);
+
                 int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
                 int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
                 int utlizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.UtlizationPercent);
@@ -402,7 +409,13 @@ namespace DataAccess
                     PLGH.ProjectNonBillableHours = reader.GetDouble(projectNonBillableHoursIndex);
                     PLGH.BusinessDevelopmentHours = reader.GetDouble(businessDevelopmentHoursIndex);
                     PLGH.InternalHours = reader.GetDouble(internalHoursIndex);
-                    PLGH.AdminstrativeHours = reader.GetDouble(adminstrativeHoursIndex);
+
+                    PLGH.PTOHours = reader.GetDouble(pTOHoursIndex);
+                    PLGH.HolidayHours = reader.GetDouble(holidayHoursIndex);
+                    PLGH.BereavementHours = reader.GetDouble(bereavementHoursIndex);
+                    PLGH.JuryDutyHours = reader.GetDouble(juryDutyHoursIndex);
+                    PLGH.ORTHours = reader.GetDouble(oRTHoursIndex);
+                    PLGH.UnpaidHours = reader.GetDouble(unpaidHoursIndex);
                     PLGH.Person = person;
                     result.Add(PLGH);
                 }
