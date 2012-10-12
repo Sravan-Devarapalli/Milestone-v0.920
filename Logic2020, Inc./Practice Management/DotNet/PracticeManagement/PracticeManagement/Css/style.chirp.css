@@ -2292,6 +2292,10 @@ TABLE.Section td
 {
     width: 115px;
 }
+.Width115PxImp
+{
+    width: 115px !important;
+}
 .Width120Px
 {
     width: 120px;
@@ -2885,6 +2889,7 @@ TABLE.PersonSummaryReport TH, TABLE.TerminationReport TH
 .ResourceColumTable td
 {
     padding-left: 5px !important;
+    text-align: left !important;
 }
 .ResourceColumTable td a
 {
@@ -7372,5 +7377,25 @@ table#ctl00_body_login tr td label
 {
     padding-top: 5px;
     padding-bottom: 10px;
+}
+.Width740px
+{
+    width: 740px !important;
+}
+.pnlTotal
+{
+    border: 2px solid #375D89;
+    z-index: 2000;
+    position: absolute;
+    padding: 6px !important;
+    background-color: White !important;
+}
+.zindex2001Imp
+{
+    z-index: 2001 !important;
+}
+.pnlTotal tr td
+{
+    padding-bottom: 2px !important;
 }
 
