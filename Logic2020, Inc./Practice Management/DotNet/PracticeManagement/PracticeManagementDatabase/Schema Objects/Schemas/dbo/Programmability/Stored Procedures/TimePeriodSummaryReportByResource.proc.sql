@@ -140,7 +140,12 @@ AS
 					ISNULL(Data.ProjectNonBillableHours, 0) AS ProjectNonBillableHours ,
 					ISNULL(Data.BusinessDevelopmentHours, 0) AS BusinessDevelopmentHours ,
 					ISNULL(Data.InternalHours, 0) AS InternalHours ,
-					ISNULL(Data.AdminstrativeHours, 0) AS AdminstrativeHours ,
+					ISNULL(Data.PTOHours, 0) AS PTOHours ,
+					ISNULL(Data.HolidayHours, 0) AS HolidayHours ,
+					ISNULL(Data.JuryDutyHours, 0) AS JuryDutyHours ,
+					ISNULL(Data.BereavementHours, 0) AS BereavementHours ,
+					ISNULL(Data.ORTHours, 0) AS ORTHours ,
+					ISNULL(Data.UnpaidHours, 0) AS UnpaidHours ,
 					ISNULL(ROUND(CASE WHEN ISNULL(PDH.DefaultHours, 0) = 0
 									  THEN 0
 									  ELSE ( Data.ActualHours * 100 )
@@ -171,10 +176,36 @@ AS
 											   THEN TEH.ActualHours
 											   ELSE 0
 										  END), 2) AS InternalHours ,
-								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4
+								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 
+													AND TT.Code = 'W9310'
 											   THEN TEH.ActualHours
 											   ELSE 0
-										  END), 2) AS AdminstrativeHours ,
+										  END), 2) AS PTOHours ,
+								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 
+													AND TT.Code = 'W9320'
+											  THEN TEH.ActualHours
+									          ELSE 0
+									     END), 2) AS HolidayHours ,
+								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 
+													AND TT.Code = 'W9340'
+									THEN TEH.ActualHours
+									ELSE 0
+									     END), 2) AS BereavementHours ,
+								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 
+													AND TT.Code = 'W9330'
+									THEN TEH.ActualHours
+									ELSE 0
+									     END), 2) AS JuryDutyHours ,
+								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 
+													AND TT.Code = 'W9300'
+									THEN TEH.ActualHours
+									ELSE 0
+									     END), 2) AS ORTHours ,
+							    ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 
+													AND TT.Code = 'W9350'
+									THEN TEH.ActualHours
+									ELSE 0
+									     END), 2) AS UnpaidHours ,
 								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 1
 													AND @NOW > TE.ChargeCodeDate
 													AND Pro.ProjectNumber != 'P031000'
@@ -187,6 +218,7 @@ AS
 															  AND
 															  @EndDateLocal
 								INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
+								INNER JOIN dbo.TimeType TT ON CC.TimeTypeId = TT.TimeTypeId
 								INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 								INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
 								INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = P.PersonId
