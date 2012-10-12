@@ -19,12 +19,17 @@ namespace PraticeManagement.Controls.Reports
 
         private string TimePeriodSummaryReportPayCheckExport = "TimePeriod Summary Report By Resource(Pay Chex)";
 
+        private string ShowPanel = "ShowPanel('{0}', '{1}');";
+        private string HidePanel = "HidePanel('{0}');";
+        private string OnMouseOver = "onmouseover";
+        private string OnMouseOut = "onmouseout";      
+
         public ModalPopupExtender PersonDetailPopup
         {
             get
             {
                 return mpePersonDetailReport;
-                
+
             }
         }
 
@@ -414,6 +419,8 @@ namespace PraticeManagement.Controls.Reports
                 ImgPersonStatusTypeFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblPersonStatusType.FilterPopupClientID,
                    cblPersonStatusType.SelectedIndexes, cblPersonStatusType.CheckBoxListObject.ClientID, cblPersonStatusType.WaterMarkTextBoxBehaviorID);
 
+                PopulateSumLabels(reportDataList);
+
             }
             else
             {
@@ -422,6 +429,27 @@ namespace PraticeManagement.Controls.Reports
             }
 
             PopulateHeaderSection(reportDataList);
+        }
+
+        private void PopulateSumLabels(List<PersonLevelGroupedHours> reportData)
+        {            
+            lblBillable.Text =
+            pthLblBillable.Text = reportData.Sum(p => p.BillableHours).ToString(Constants.Formatting.DoubleValue); 
+          
+            lblNonBillable.Text =
+            pthLblNonBillable.Text = reportData.Sum(p => p.ProjectNonBillableHours).ToString(Constants.Formatting.DoubleValue);
+
+            lblBD.Text = 
+            pthLblBD.Text = reportData.Sum(p => p.BusinessDevelopmentHours).ToString(Constants.Formatting.DoubleValue);
+
+            lblInternal.Text = 
+            pthLblInternal.Text = reportData.Sum(p => p.InternalHours).ToString(Constants.Formatting.DoubleValue);
+
+            lblTimeOff.Text = 
+            pthLblTimeOff.Text = reportData.Sum(p => p.AdminstrativeHours).ToString(Constants.Formatting.DoubleValue);
+
+            pthLblGrandTotal.Text = reportData.Sum(p => p.TotalHours).ToString(Constants.Formatting.DoubleValue);
+
         }
 
         private void PopulateFilterPanels(List<PersonLevelGroupedHours> reportData)
@@ -472,6 +500,14 @@ namespace PraticeManagement.Controls.Reports
         {
             double billableHours = reportData.Sum(p => p.BillableHours);
             double nonBillableHours = reportData.Sum(p => p.NonBillableHours);
+            double totalTimeOffHours = reportData.Sum(p => p.AdminstrativeHours);
+            double pTOHours = reportData.Sum(p => p.PTOHours);
+            double bereavementHours = reportData.Sum(p => p.BereavementHours);
+            double juryDutyHours = reportData.Sum(p => p.JuryDutyHours);
+            double oRTHours = reportData.Sum(p => p.ORTHours);
+            double unpaidHours = reportData.Sum(p => p.UnpaidHours);
+            double holidayHours = reportData.Sum(p => p.HolidayHours);
+
             int noOfEmployees = reportData.Count;
             double totalUtlization = reportData.Sum(p => p.Person.UtlizationPercent);
             var billablePercent = 0;
@@ -484,6 +520,7 @@ namespace PraticeManagement.Controls.Reports
             ltPersonCount.Text = noOfEmployees + " Employees";
             lbRange.Text = HostingPage.Range;
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
+            ltrlTotalTimeoffHours.Text = totalTimeOffHours.ToString(Constants.Formatting.DoubleValue);
             ltrlAvgHours.Text = noOfEmployees > 0 ? ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValue) : "0.00";
             ltrlAvgUtilization.Text = noOfEmployees > 0 ? Math.Round((totalUtlization / noOfEmployees), 0).ToString() + "%" : "0%";
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
@@ -513,6 +550,15 @@ namespace PraticeManagement.Controls.Reports
                 trNonBillable.Height = (80 - billablebarHeight).ToString() + "px";
             }
 
+            lblPtoHours.Text = pTOHours.ToString(Constants.Formatting.DoubleValue);
+            lblBereavementHours.Text = bereavementHours.ToString(Constants.Formatting.DoubleValue);
+            lblJuryDutyHours.Text = juryDutyHours.ToString(Constants.Formatting.DoubleValue);
+            lblOrtHours.Text = oRTHours.ToString(Constants.Formatting.DoubleValue);
+            lblUnpaidHours.Text = unpaidHours.ToString(Constants.Formatting.DoubleValue);
+            lblHolidayHours.Text = holidayHours.ToString(Constants.Formatting.DoubleValue);
+
+            ltrlTotalTimeoffHours.Attributes[OnMouseOver] = string.Format(ShowPanel, ltrlTotalTimeoffHours.ClientID, pnlTotalTimeOff.ClientID);
+            ltrlTotalTimeoffHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalTimeOff.ClientID);
         }
 
     }
