@@ -25,6 +25,48 @@ namespace DataTransferObjects.Reports
             set;
 
         }
+        [DataMember]
+        public double PTOHours
+        {
+            get;
+            set;
+
+        }
+        [DataMember]
+        public double HolidayHours
+        {
+            get;
+            set;
+
+        }
+        [DataMember]
+        public double BereavementHours
+        {
+            get;
+            set;
+
+        }
+        [DataMember]
+        public double JuryDutyHours
+        {
+            get;
+            set;
+
+        }
+        [DataMember]
+        public double ORTHours
+        {
+            get;
+            set;
+
+        }
+
+        [DataMember]
+        public double UnpaidHours
+        {
+            get;
+            set;
+        }
 
         [DataMember]
         public int TimeEntrySectionId { get; set; }
@@ -80,11 +122,12 @@ namespace DataTransferObjects.Reports
 
         }
 
-        [DataMember]
+        
         public double AdminstrativeHours
         {
-            get;
-            set;
+            get {
+                return PTOHours + HolidayHours + BereavementHours + JuryDutyHours + ORTHours + UnpaidHours;
+            }
 
         }
 
