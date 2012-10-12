@@ -445,6 +445,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width110Px{width:110px}
 .Width110PxImp{width:110px!important}
 .Width115Px{width:115px}
+.Width115PxImp{width:115px!important}
 .Width120Px{width:120px}
 .Width120PxImp{width:120px!important}
 .Width125Px{width:125px}
@@ -573,7 +574,7 @@ TABLE.PersonSummaryReport TH,TABLE.TerminationReport TH{border-bottom:1px solid 
 .PersonSummaryReport .ResourceColum{text-align:left!important;width:210px!important}
 .PersonSummaryReport .ProjectColum{text-align:left!important;width:300px!important;background-color:White;padding-left:5px}
 .PersonSummaryReport .ResourceColum img{padding-left:2px}
-.ResourceColumTable td{padding-left:5px!important}
+.ResourceColumTable td{padding-left:5px!important;text-align:left!important}
 .ResourceColumTable td a{text-decoration:none;color:Black!important}
 .UtlizationGraph{width:100%}
 .UtlizationGraph .GraphTd{text-align:right;width:70%}
@@ -1367,3 +1368,7 @@ table#ctl00_body_login tr td label{float:left}
 .PicturePanelTd{padding:10px;padding-left:30px}
 .PersonPictureDiv{width:100px;height:120px;border:1px solid Black}
 .SkillSerachTd{padding-top:5px;padding-bottom:10px}
+.Width740px{width:740px!important}
+.pnlTotal{border:2px solid #375D89;z-index:2000;position:absolute;padding:6px!important;background-color:White!important}
+.zindex2001Imp{z-index:2001!important}
+.pnlTotal tr td{padding-bottom:2px!important}
