@@ -4,6 +4,25 @@
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Reports/ByPerson/GroupByProject.ascx" TagName="GroupByProject"
     TagPrefix="uc" %>
+<script type="text/javascript">
+    function ShowPanel(object, displaypnl) {
+
+        var obj = $("#" + object);
+        var displayPanel = $("#" + displaypnl);
+        iptop = obj.offset().top + obj[0].offsetHeight;
+        ipleft = obj.offset().left;
+        displayPanel.offset({ top: iptop, left: ipleft });
+        displayPanel.show();
+        displayPanel.offset({ top: iptop, left: ipleft });
+    }
+
+    function HidePanel(hiddenpnl) {
+
+        var displayPanel = $("#" + hiddenpnl);
+        displayPanel.hide();
+    }
+   
+</script>
 <table class="PaddingTenPx TimePeriodSummaryReportHeader">
     <tr>
         <td class="font16Px fontBold">
@@ -20,10 +39,10 @@
                 </tr>
             </table>
         </td>
-        <td class="TimePeriodTotals">
+        <td class="TimePeriodTotals Width740px">
             <table class="tableFixed WholeWidth">
                 <tr>
-                    <td class="Width21Percent">
+                    <td class="Width17Percent">
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
@@ -37,7 +56,21 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="Width21Percent">
+                    <td class="Width17Percent">
+                        <table class="ReportHeaderTotalsTable">
+                            <tr>
+                                <td class="FirstTd">
+                                    Total Time-Off
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="SecondTd">
+                                    <asp:Label ID="ltrlTotalTimeoffHours" runat="server"></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="Width17Percent">
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
@@ -51,7 +84,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="Width21Percent">
+                    <td class="Width17Percent">
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
@@ -65,7 +98,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="Width23Percent vBottom">
+                    <td class="Width20Percent vBottom">
                         <table class="ReportHeaderBillAndNonBillTable">
                             <tr>
                                 <td>
@@ -89,7 +122,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="ReportHeaderBandNBGraph Width6PercentImp">
+                    <td class="ReportHeaderBandNBGraph Width5PercentImp">
                         <table>
                             <tr>
                                 <td>
@@ -110,7 +143,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="ReportHeaderBandNBGraph Width6PercentImp">
+                    <td class="ReportHeaderBandNBGraph Width5PercentImp">
                         <table>
                             <tr>
                                 <td>
@@ -225,21 +258,53 @@
                             </th>
                             <th>
                                 Billable
+                                <img alt="Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Billable"
+                                    id="imgTotalBillable" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalBillableHours" runat="server"
+                                    TargetControlID="imgTotalBillable" BehaviorID="pceTotalBillableHours" PopupControlID="pnlTotalBillableHours"
+                                    Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th>
+                            <th class="Width115PxImp">
                                 Non-Billable
+                                <img alt="Non-Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Non-Billable"
+                                    id="imgTotalNonBillable" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalNonBillableHours" runat="server"
+                                    TargetControlID="imgTotalNonBillable" BehaviorID="pceTotalNonBillableHours" PopupControlID="pnlTotalNonBillableHours"
+                                    Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th>
                                 BD
+                                <img alt="BD Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total BD" id="imgTotalBD" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalBDHours" runat="server" TargetControlID="imgTotalBD"
+                                    BehaviorID="pceTotalBDHours" PopupControlID="pnlTotalBD" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th>
                                 Internal
+                                <img alt="Internal Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Internal"
+                                    id="imgTotalInternal" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalInternalHours" runat="server"
+                                    TargetControlID="imgTotalInternal" BehaviorID="pceTotalInternalHours" PopupControlID="pnlTotalInternalHours"
+                                    Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th>
                                 Time-Off
+                                <img alt="Time-Off Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Time-Off"
+                                    id="imgTotalTimeOff" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalTimeOffHours" runat="server"
+                                    TargetControlID="imgTotalTimeOff" BehaviorID="pceTotalTimeOffHours" PopupControlID="pnlTotalTimeOffHours"
+                                    Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th>
                                 Total
+                                <img alt="Total Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Hours" id="imgTotalHours" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalHours" runat="server" TargetControlID="imgTotalHours"
+                                    BehaviorID="pceTotalHours" PopupControlID="pnlTotalHours" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th class="Width295PxImp">
                                 Utilization Percent this Period
@@ -336,6 +401,140 @@
         <tr>
             <td>
                 <asp:Button ID="btnCancelPersonDetailReport" Text="Close" ToolTip="Close" runat="server" />
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+<asp:Panel ID="pnlTotalTimeOff" Style="display: none;" runat="server" CssClass="pnlTotal zindex2001Imp">
+    <table>
+        <tr>
+            <td class="fontBold">
+                PTO:
+            </td>
+            <td>
+                <asp:Label ID="lblPtoHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Holiday:
+            </td>
+            <td>
+                <asp:Label ID="lblHolidayHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold padRight15">
+                Bereavement:
+            </td>
+            <td>
+                <asp:Label ID="lblBereavementHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                JuryDuty:
+            </td>
+            <td>
+                <asp:Label ID="lblJuryDutyHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                ORT:
+            </td>
+            <td>
+                <asp:Label ID="lblOrtHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Unpaid:
+            </td>
+            <td>
+                <asp:Label ID="lblUnpaidHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+<asp:Panel ID="pnlTotalBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Billable:
+    </label>
+    <asp:Label ID="lblBillable" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalNonBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Non-Billable:
+    </label>
+    <asp:Label ID="lblNonBillable" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalBD" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total BD:
+    </label>
+    <asp:Label ID="lblBD" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalInternalHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Internal:
+    </label>
+    <asp:Label ID="lblInternal" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalTimeOffHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Time-Off:
+    </label>
+    <asp:Label ID="lblTimeOff" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <table>
+        <tr>
+            <td class="fontBold">
+                Total Billable:
+            </td>
+            <td>
+                <asp:Label ID="pthLblBillable" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold padRight15">
+                Total Non-Billable: 
+            </td>
+            <td>
+                <asp:Label ID="pthLblNonBillable" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Total BD:
+            </td>
+            <td>
+                <asp:Label ID="pthLblBD" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Total Internal:
+            </td>
+            <td>
+                <asp:Label ID="pthLblInternal" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Total Time-Off:
+            </td>
+            <td>
+                <asp:Label ID="pthLblTimeOff" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Grand Total:
+            </td>
+            <td>
+                <asp:Label ID="pthLblGrandTotal" runat="server"></asp:Label>
             </td>
         </tr>
     </table>
