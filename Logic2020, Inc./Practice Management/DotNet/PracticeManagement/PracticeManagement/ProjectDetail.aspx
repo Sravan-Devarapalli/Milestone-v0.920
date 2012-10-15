@@ -440,7 +440,7 @@
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 &nbsp;&nbsp;
                                                 <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="Width95Per"
-                                                    Enabled="false" onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
+                                                    onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                             </td>
@@ -463,7 +463,7 @@
                                                 Client Director
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlDirector" runat="server" Enabled="false" CssClass="Width95Per"
+                                                <asp:DropDownList ID="ddlDirector" runat="server"  CssClass="Width95Per"
                                                     onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
@@ -486,7 +486,7 @@
                                                 Business Unit
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" Enabled="false" CssClass="Width95Per"
+                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per"
                                                     OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true"
                                                     onchange="setDirty();">
                                                 </asp:DropDownList>
