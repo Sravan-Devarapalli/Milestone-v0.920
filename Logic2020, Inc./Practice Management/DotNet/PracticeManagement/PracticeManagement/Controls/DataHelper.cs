@@ -927,6 +927,24 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillSalespersonListOnlyActiveForLoginPerson(ListControl control,Person person, string firstItemText)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    Person[] persons = GetActivePersons(serviceClient.PersonListSalesperson(person,false));
+
+                    FillPersonList(control, firstItemText, persons, String.Empty);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         private static Person[] GetActivePersons(Person[] persons)
         {
             return persons.AsQueryable().Where(p => p.Status.Id == (int)PersonStatusType.Active || p.Status.Id == (int)PersonStatusType.TerminationPending).ToArray(); // Here Status.Id == 1 means only active person. (Not projected)
