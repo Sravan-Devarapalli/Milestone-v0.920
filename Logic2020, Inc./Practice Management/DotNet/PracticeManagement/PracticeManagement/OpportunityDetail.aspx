@@ -100,11 +100,11 @@
                 else {
                     lblProjectDescription.innerHTML = EncodeString(selectedProjectDescription);
                 }
-               
+
                 divDescription.setAttribute("class", "Padding15Px");
             }
             else {
-                divDescription.setAttribute("class", "Padding15Px displayNone");                
+                divDescription.setAttribute("class", "Padding15Px displayNone");
             }
         }
 
@@ -758,8 +758,24 @@
                                 <td colspan="2" class="Width45Percent no-wrap">
                                     <table cellpadding="4px;">
                                         <tr>
+                                            <td class="LblEndDate">
+                                                <asp:Label ID="lblCloseDate" CssClass="fontBold" runat="server" Text="Close Date"></asp:Label>
+                                            </td>
+                                            <td>
+                                                <uc1:DatePicker ID="dpCloseDate" ValidationGroup="Opportunity" AutoPostBack="false"
+                                                    OnClientChange="EnableSaveButton();setDirty();" TextBoxWidth="62px" runat="server" />
+                                            </td>
+                                            <td>
+                                                <asp:RequiredFieldValidator ID="reqCloseDate" runat="server" ControlToValidate="dpCloseDate"
+                                                    ErrorMessage="The Close Date is required" ToolTip="The Close Date is required."
+                                                    ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
+                                                <asp:CompareValidator ID="cmpCloseDateFormatCheck" runat="server" ControlToValidate="dpCloseDate"
+                                                    ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
+                                                    ErrorMessage="The Close Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                    ToolTip="The Close Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
+                                            </td>
                                             <td class="PaddingRight4PxImp">
-                                                <b>Start Date</b>
+                                                <b>Project Start Date</b>
                                             </td>
                                             <td class="UcDatePickerPadding">
                                                 <uc1:DatePicker ID="dpStartDate" ValidationGroup="Opportunity" AutoPostBack="false"
@@ -776,13 +792,13 @@
                                                     ToolTip="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                             </td>
                                             <td class="LblEndDate">
-                                                <asp:Label ID="lbEndDate" CssClass="fontBold" runat="server" Text="End Date"></asp:Label>
+                                                <asp:Label ID="lbEndDate" CssClass="fontBold" runat="server" Text="Project End Date"></asp:Label>
                                             </td>
                                             <td>
                                                 <uc1:DatePicker ID="dpEndDate" ValidationGroup="Opportunity" AutoPostBack="false"
                                                     OnClientChange="EnableSaveButton();setDirty();" TextBoxWidth="62px" runat="server" />
                                             </td>
-                                            <td>
+                                            <td class="padRight7Imp">
                                                 <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
                                                     ErrorMessage="The Projected End date is required" ToolTip="The Projected End date is required."
                                                     ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
@@ -791,10 +807,10 @@
                                                     ErrorMessage="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                                     ToolTip="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                                 <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
-                                                    ControlToCompare="dpStartDate" ErrorMessage="Opportunity End Date must greater or Equal to Opportunity Start Date."
-                                                    ToolTip="Opportunity End Date must greater or Equal to Opportunity Start Date."
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                    Operator="GreaterThanEqual" Type="Date" ValidationGroup="Opportunity"></asp:CompareValidator>
+                                                    ControlToCompare="dpStartDate" ErrorMessage="Project End Date must greater or Equal to Project Start Date."
+                                                    ToolTip="Project End Date must greater or Equal to Project Start Date." Text="*"
+                                                    EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="GreaterThanEqual"
+                                                    Type="Date" ValidationGroup="Opportunity"></asp:CompareValidator>
                                                 <asp:CustomValidator ID="cvOpportunityStrawmanEndDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanEndDateCheck_ServerValidate"
                                                     ErrorMessage="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
                                                     ToolTip="Some exsisting Strawman Need By date is Greater than New Opportunity EndDate."
@@ -1351,7 +1367,8 @@
                                                     <center>
                                                         <b>Team Resources</b>
                                                     </center>
-                                                    <asp:TextBox ID="txtSearchBox" runat="server" CssClass="TextSearchBoxResources Width353Height16" MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSearchBox" runat="server" CssClass="TextSearchBoxResources Width353Height16"
+                                                        MaxLength="4000" onkeyup="filterPotentialResources(this);"></asp:TextBox>
                                                     <AjaxControlToolkit:TextBoxWatermarkExtender ID="wmSearch" runat="server" TargetControlID="txtSearchBox"
                                                         WatermarkText="Begin typing here to filter the list of resources below." EnableViewState="false"
                                                         WatermarkCssClass="watermarkedtext TextSearchBoxResources Width353Height16" BehaviorID="wmbhSearchBox" />
