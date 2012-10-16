@@ -48,6 +48,16 @@ namespace PracticeManagementService
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
         [OperationContract]
         void RemovePractice(Practice practice);
+
+        /// <summary>
+        /// Gets the list of practicecapabilities for the given practiceid and capabilityid
+        /// If the practiceid and capabilityid are nulls then returns all practicecapabilities.
+        /// </summary>
+        /// <param name="practiceId"></param>
+        /// <param name="capabilityId"></param>
+        /// <returns>list of practicecapabilities</returns>
+        [OperationContract]
+        List<PracticeCapability> GetPracticeCapabilities(int? practiceId, int? capabilityId);
     }
 }
 
