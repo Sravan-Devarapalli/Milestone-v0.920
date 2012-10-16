@@ -23,7 +23,8 @@
     [LastUpdated]         DATETIME       NOT NULL,
 	[EstimatedRevenue]    DECIMAL(18, 2) NULL,
 	[OutSideResources]	  NVARCHAR(4000) NULL,
-	PriorityId			  INT NOT NULL
+	PriorityId			  INT NOT NULL,
+	[CloseDate]			  DATETIME       NULL
 );
  
 
