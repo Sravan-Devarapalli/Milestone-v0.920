@@ -415,7 +415,8 @@
                 </tr>
             </table>
         </div>
-        <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" style="display:none;">
+        <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp"
+            Style="display: none;">
             <table class="WholeWidth">
                 <tr>
                     <td align="center" class="no-wrap">
@@ -460,14 +461,15 @@
             <asp:Chart ID="chrtConsultingDemand" runat="server" CssClass="Width920Px">
                 <Legends>
                     <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
-                        Alignment="Center">
+                        Alignment="Center" TextWrapThreshold="50">
                         <CellColumns>
                             <asp:LegendCellColumn Name="Weeks" Text="">
                                 <Margins Left="15" Right="15"></Margins>
                             </asp:LegendCellColumn>
                         </CellColumns>
                     </asp:Legend>
-                    <asp:Legend LegendStyle="Row" Name="Top Legend" TableStyle="Wide" Docking="Top" Alignment="Center">
+                    <asp:Legend LegendStyle="Row" Name="Top Legend" TableStyle="Wide" Docking="Top" Alignment="Center"
+                        TextWrapThreshold="50">
                         <CellColumns>
                             <asp:LegendCellColumn Name="Weeks" Text="">
                                 <Margins Left="15" Right="15" Bottom="1"></Margins>
