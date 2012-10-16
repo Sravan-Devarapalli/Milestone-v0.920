@@ -6,7 +6,9 @@
     [PersonId]                      INT             NOT NULL,
     [NoteText]                      NVARCHAR (2000) NULL,
     [OpportunityTransitionTypeId]   INT             NOT NULL,
-    [TargetPersonId]                INT             NULL
+    [TargetPersonId]                INT             NULL,
+	PreviousChangedId				INT				NULL,
+	NextChangedId					INT				NULL
 );
 
 
