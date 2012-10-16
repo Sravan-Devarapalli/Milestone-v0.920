@@ -6,6 +6,7 @@ AS
 	       o.SalespersonId,
 	       o.OpportunityStatusId,
 	       OP.Priority,
+		   OP.DisplayName,
 		   o.PriorityId,
 	       o.ProjectedStartDate,
 	       o.ProjectedEndDate,
