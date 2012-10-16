@@ -253,7 +253,10 @@ namespace DataAccess
                                                 opportunity.EstimatedRevenue != null && opportunity.EstimatedRevenue.HasValue
                                                     ? (object)opportunity.EstimatedRevenue
                                                     : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.CloseDateParam,
+                                                 opportunity.CloseDate.HasValue
+                                                    ? (object)opportunity.CloseDate
+                                                    : DBNull.Value);
 
                 command.Parameters.AddWithValue(
                     Constants.ParameterNames.OwnerId,
@@ -376,6 +379,10 @@ namespace DataAccess
                                                 opportunity.OpportunityIndex.HasValue
                                                     ? (object)opportunity.OpportunityIndex.Value
                                                     : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CloseDateParam,
+                                                 opportunity.CloseDate.HasValue
+                                                    ? (object)opportunity.CloseDate
+                                                    : DBNull.Value);
 
                 command.Parameters.AddWithValue(
                     Constants.ParameterNames.OwnerId,
@@ -449,10 +456,21 @@ namespace DataAccess
                 var lastUpdateIndex = reader.GetOrdinal(Constants.ColumnNames.LastUpdateColumn);
                 var groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                 var practManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn);
+                var closeDateIndex = -1;
                 int priorityIdIndex = -1;
                 var prioritySortOrderIndex = -1;
                 int EstimatedRevenueiIndex = -1;
                 int OutSideResourcesIndex = -1;
+                try
+                {
+                    closeDateIndex = reader.GetOrdinal(Constants.ColumnNames.CloseDateColumn);
+
+                }
+                catch
+                {
+                    closeDateIndex = -1;
+                }
+
                 try
                 {
                     EstimatedRevenueiIndex = reader.GetOrdinal(Constants.ColumnNames.EstimatedRevenueColumn);
@@ -577,6 +595,17 @@ namespace DataAccess
                                         }
                                         : null
                         };
+
+                    if (closeDateIndex > -1)
+                    {
+                        if (!reader.IsDBNull(closeDateIndex))
+                        {
+                            opportunity.CloseDate = !reader.IsDBNull(closeDateIndex)
+                                    ? (DateTime?)reader.GetDateTime(closeDateIndex)
+                                    : null;
+
+                        }
+                    }
 
                     if (EstimatedRevenueiIndex > -1)
                     {
