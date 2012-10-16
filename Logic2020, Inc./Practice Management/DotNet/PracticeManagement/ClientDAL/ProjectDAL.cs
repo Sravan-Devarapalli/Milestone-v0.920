@@ -855,6 +855,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds: string.Empty );
 
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
@@ -911,6 +912,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                    project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
@@ -1027,6 +1029,15 @@ namespace DataAccess
                     int opportunityNumberIndex = -1;
                     int sowBudgetIndex = -1;
                     int clientIsNoteRequiredIndex = -1;
+
+
+                    int projectCapabilityIdsIndex = -1;
+                    try
+                    {
+                        projectCapabilityIdsIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectCapabilityIds);
+                    }
+                    catch
+                    { }
 
                     try
                     {
@@ -1177,8 +1188,12 @@ namespace DataAccess
                                 Name = reader.GetString(practiceNameIndex)
                             },
                             ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
-
                         };
+
+                        if(projectCapabilityIdsIndex > -1)
+                        {
+                            project.ProjectCapabilityIds = reader.GetString(projectCapabilityIdsIndex);
+                        }
 
                         if (sowBudgetIndex != -1)
                         {
@@ -1200,7 +1215,6 @@ namespace DataAccess
 
                             project.Description = !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : string.Empty;
                         }
-
 
                         if (hasAttachmentsIndex >= 0)
                         {
