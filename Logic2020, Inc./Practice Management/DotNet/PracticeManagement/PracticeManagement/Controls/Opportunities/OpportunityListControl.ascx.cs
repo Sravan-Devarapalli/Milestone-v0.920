@@ -12,6 +12,7 @@ using AjaxControlToolkit;
 using System.Text;
 using PraticeManagement.OpportunityService;
 using PraticeManagement.Controls.Generic.Filtering;
+using System.ServiceModel;
 
 namespace PraticeManagement.Controls.Opportunities
 {
@@ -36,6 +37,9 @@ namespace PraticeManagement.Controls.Opportunities
         private const string Watermarker = "watermarker";
         private const string WordBreak = "<wbr />";
         private const string Description = "<b>Description : </b>{0}";
+        private const string LblTeamResourcesText = "An Opportunity with a {0} sales stage must have a Team Make-Up.";
+        private const string LblTeamMakeUpText = "opportunity before it can be saved with a {0} sales stage.";
+
 
         private const string ANIMATION_SHOW_SCRIPT =
                      @"<OnClick>
@@ -293,6 +297,30 @@ namespace PraticeManagement.Controls.Opportunities
             var lvOp = row.FindControl("lvOpportunityPriorities") as ListView;
             lvOp.DataSource = opportunityPriorities;
             lvOp.DataBind();
+
+            //text changes related to #3092
+            List<OpportunityPriority> priorityList = opportunityPriorities.Where(p => p.Id == Constants.OpportunityPriorityIds.PriorityIdOfPO || p.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || p.Id == Constants.OpportunityPriorityIds.PriorityIdOfB).ToList();
+            
+
+            if (priorityList != null && priorityList.Count > 0)
+            {
+                string displayNames = priorityList.First().DisplayName;               
+                if (priorityList.Count > 1)
+                {
+                    for (int i = 1; i < priorityList.Count - 1; i++)
+                    {
+                        displayNames += " , " + priorityList[i].DisplayName;
+                    }
+                    displayNames = displayNames + " or " + priorityList[priorityList.Count - 1].DisplayName;
+                }
+
+
+                lblTeamResources.Text =
+                lblTeamStructerError.Text =
+                    string.Format(LblTeamResourcesText, displayNames);
+                lblTeamMakeUp.Text = string.Format(LblTeamMakeUpText, displayNames);
+            }
+
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
@@ -645,7 +673,7 @@ namespace PraticeManagement.Controls.Opportunities
                 if (ddlPriority != null)
                 {
                     OpportunityPriority[] priorities = GetOpportunityPriorities();
-                    DataHelper.FillListDefault(ddlPriority, string.Empty, priorities, true, "Id", "Priority");
+                    DataHelper.FillListDefault(ddlPriority, string.Empty, priorities, true, "Id", "DisplayName");
                     ddlPriority.SelectedValue = oppty.Priority.Id.ToString();
                     ddlPriority.Attributes["Description"] = oppty.Description;
                     ddlPriority.Attributes["lblRefreshMessageClientId"] = lblRefreshMessage.ClientID;
@@ -929,6 +957,36 @@ namespace PraticeManagement.Controls.Opportunities
             var opportunities = DataHelper.GetFilteredOpportunitiesForDiscussionReview2(false);
             return OpportunitiesHelper.GetFormatedSummaryDetails(opportunities, PriorityTrendList, StatusChangesList);
         }
+
+
+        #region export
+        protected void btnExportToExcel_Click(object sender, EventArgs e)
+        {
+            using (var serviceClient = new OpportunityServiceClient())
+            {
+                try
+                {
+                    DataHelper.InsertExportActivityLogMessage("Opportunity");
+
+                    System.Data.DataSet excelData =
+                        serviceClient.OpportunityGetExcelSet();
+                    GridView excelGrid = new GridView();
+                    excelGrid.DataSource = excelData;
+                    excelGrid.DataMember = "excelDataTable";
+                    excelGrid.DataBind();
+                    excelGrid.Visible = true;
+                    GridViewExportUtil.Export("Opportunity_List.xls", excelGrid);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+
+        }
+
+        #endregion
     }
 }
 
