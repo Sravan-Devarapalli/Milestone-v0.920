@@ -103,6 +103,15 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.ListView lvOpportunities;
         
         /// <summary>
+        /// btnExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        
+        /// <summary>
         /// hdnRedirectOpportunityId control.
         /// </summary>
         /// <remarks>
@@ -164,6 +173,15 @@ namespace PraticeManagement.Controls.Opportunities {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblOpportunityName;
+        
+        /// <summary>
+        /// lblTeamMakeUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTeamMakeUp;
         
         /// <summary>
         /// lblOpportunityName1 control.
@@ -391,6 +409,15 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
+        /// lblTeamResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTeamResources;
+        
+        /// <summary>
         /// hdnCurrentOpportunityId control.
         /// </summary>
         /// <remarks>
@@ -524,6 +551,15 @@ namespace PraticeManagement.Controls.Opportunities {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnTeamCancel;
+        
+        /// <summary>
+        /// lblTeamStructerError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTeamStructerError;
         
         /// <summary>
         /// hdnTeamStructure control.
