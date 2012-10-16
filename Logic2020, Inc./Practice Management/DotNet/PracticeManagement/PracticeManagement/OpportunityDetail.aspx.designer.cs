@@ -76,6 +76,42 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HyperLink hpProject;
         
         /// <summary>
+        /// lblCloseDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCloseDate;
+        
+        /// <summary>
+        /// dpCloseDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.DatePicker dpCloseDate;
+        
+        /// <summary>
+        /// reqCloseDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqCloseDate;
+        
+        /// <summary>
+        /// cmpCloseDateFormatCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator cmpCloseDateFormatCheck;
+        
+        /// <summary>
         /// dpStartDate control.
         /// </summary>
         /// <remarks>
