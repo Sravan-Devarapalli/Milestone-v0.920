@@ -28,7 +28,13 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
 
 
         #endregion
-        
+
+        #region Fields
+
+        private int _maxNoOfCharacters;
+
+        #endregion
+
         [ExtenderControlProperty]
         [ClientPropertyName("labelValue")]
         [Browsable(false)]
@@ -57,9 +63,7 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
             {
                 if (UseAdvanceFeature)
                 {
-                    string selectedString =  HttpUtility.HtmlDecode(((ScrollingDropDown)this.TargetControl).SelectedString);
-
-                    return HttpUtility.HtmlEncode(selectedString.Length > 33 ? selectedString.Substring(0, 31)+".." : selectedString);
+                    return HttpUtility.HtmlEncode(IsMaxLimitExceded ? DecodedSelectedString.Substring(0, MaxNoOfCharacters - 2) + ".." : DecodedSelectedString);
                 }
                 else
                 {
@@ -69,10 +73,54 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
             set { SetPropertyValue(DisplayText_Value, value); }
         }
 
+        public string DecodedSelectedString
+        {
+            get
+            {
+
+                return HttpUtility.HtmlDecode(((ScrollingDropDown)this.TargetControl).SelectedString);
+            }
+        }
+
+        public bool IsMaxLimitExceded
+        {
+            get
+            {
+                return DecodedSelectedString.Length > MaxNoOfCharacters;
+            }
+        }
+
+        public string SelectedStringToolTip
+        {
+            get
+            {
+                if (UseAdvanceFeature)
+                {
+                    if (IsMaxLimitExceded)
+                    {
+                        return ((ScrollingDropDown)this.TargetControl).SelectedString;
+                    }
+                }
+                return string.Empty;
+            }
+        }
+
         public bool UseAdvanceFeature
         {
             get;
             set;
+        }
+
+        public int MaxNoOfCharacters
+        {
+            get
+            {
+                return _maxNoOfCharacters == 0 ? 33 : _maxNoOfCharacters;
+            }
+            set
+            {
+                _maxNoOfCharacters = value;
+            }
         }
 
         [ExtenderControlProperty]
@@ -102,11 +150,11 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
         private string GetHTMLToRender()
         {
             string htmlWithoutImageFormat = "<div ID={0} class=\"scrollextLabel\"{2}><label class=\"vTop\">{1}</label></div>";
-            string htmlWithImageFormat = "<div ID={0} class=\"scrollextLabel\"{3}><label class=\"vTop\">{1}</label><span class=\"padLeft20 fl-right\"><image src={2} /></span></div>";
+            string htmlWithImageFormat = "<div ID={0} class=\"scrollextLabel\"{3}><label class=\"vTop\" title=\"{4}\">{1}</label><span class=\"padLeft20 fl-right\"><image src={2} /></span></div>";
 
             if (!string.IsNullOrEmpty(EditImageUrl))
             {
-                return string.Format(htmlWithImageFormat, LabelId, DisplayText, ResolveUrl(EditImageUrl), !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + "\"" : string.Empty);
+                return string.Format(htmlWithImageFormat, LabelId, DisplayText, ResolveUrl(EditImageUrl), !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + "\"" : string.Empty, SelectedStringToolTip);
             }
             else
             {
@@ -115,3 +163,4 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
         }
     }
 }
+
