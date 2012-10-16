@@ -656,13 +656,7 @@
             var optionList = ddlPriority.getElementsByTagName('option');
             var selectedText = "";
 
-            for (var i = 0; i < optionList.length; ++i) {
-                if (optionList[i].value == ddlPriority.value) {
-                    selectedText = optionList[i].innerHTML.toLowerCase();
-                    break;
-                }
-            }
-            if (selectedText != "po") {
+            if (ddlPriority.value != "5") {
                 ddlPriority.setAttribute("selectedPriorityText", selectedText);
             }
             else {
@@ -684,6 +678,7 @@
                 var optionList = ddlPriority.getElementsByTagName('option');
                 var selectedText = "";
                 var selectedPriorityId = "";
+
                 //PervTextValue
                 for (var i = 0; i < optionList.length; ++i) {
                     if (optionList[i].value == ddlPriority.value) {
@@ -691,7 +686,7 @@
                         break;
                     }
                 }
-                if (selectedText == "po") {
+                if (ddlPriority.value == "5") {
                     for (var i = 0; i < optionList.length; ++i) {
                         if (optionList[i].innerHTML.toLowerCase() == selectedPriorityText) {
                             PervValue = optionList[i].value;
@@ -885,9 +880,10 @@
                                     </table>
                                 </td>
                                 <td class="fontBold Width12Per">
-                                    Priority
+                                    Sales Stage
                                     <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                    <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport" runat="server">
+                                    <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport Width323PxImp"
+                                        runat="server">
                                         <table>
                                             <tr>
                                                 <th class="textRightImp">
@@ -911,13 +907,13 @@
                                                                 <td class="TdItemTemplate">
                                                                     <table class="WholeWidth">
                                                                         <tr>
-                                                                            <td class="LabelPriority TextAlignCenterImp PaddingLeftRight0px vMiddle">
-                                                                                <asp:Label ID="lblPriority" CssClass="Width15Px DisplayInline" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                            <td class="LabelPriority">
+                                                                                <asp:Label ID="lblPriority" CssClass="Width100Px DisplayInline" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>'></asp:Label>
                                                                             </td>
-                                                                            <td class="LabelPriority TextAlignCenter PaddingLeftRight2px vMiddle">
+                                                                            <td class="LabelPriority">
                                                                                 -
                                                                             </td>
-                                                                            <td class="LabelPriority PaddingLeftRight0px">
+                                                                            <td class="LabelPriority">
                                                                                 <asp:Label ID="lblDescription" runat="server" CssClass="WhiteSpaceNormal Width180Px DisplayInline"
                                                                                     Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                             </td>
@@ -950,11 +946,9 @@
                                             <td class="Width3Percent">
                                                 <asp:RequiredFieldValidator ID="reqPriority" runat="server" ControlToValidate="ddlPriority"
                                                     class="Width100Per" Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"
-                                                    ErrorMessage="The Priority is required." Text="*" ToolTip="The Priority is required."
+                                                    ErrorMessage="The Sales Stage is required." Text="*" ToolTip="The Sales Stage is required."
                                                     ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvPriority" runat="server" ControlToValidate="ddlPriority"
-                                                    ToolTip="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority."
-                                                    ErrorMessage="You must add a Team Make-Up to this opportunity before it can be saved with a PO, A, or B priority."
                                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="cvPriority_ServerValidate" ValidationGroup="Opportunity" />
                                             </td>
@@ -1108,9 +1102,11 @@
                                 </td>
                             </tr>
                         </table>
-                        <AjaxControlToolkit:AnimationExtender ID="animHide" TargetControlID="btnClosePriority" runat="server">
+                        <AjaxControlToolkit:AnimationExtender ID="animHide" TargetControlID="btnClosePriority"
+                            runat="server">
                         </AjaxControlToolkit:AnimationExtender>
-                        <AjaxControlToolkit:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint" runat="server">
+                        <AjaxControlToolkit:AnimationExtender ID="animShow" TargetControlID="imgPriorityHint"
+                            runat="server">
                         </AjaxControlToolkit:AnimationExtender>
                         <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
                         <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
