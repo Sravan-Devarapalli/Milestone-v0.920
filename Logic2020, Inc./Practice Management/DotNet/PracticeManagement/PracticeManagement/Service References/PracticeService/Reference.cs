@@ -32,6 +32,9 @@ namespace PraticeManagement.PracticeService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/RemovePractice", ReplyAction="http://tempuri.org/IPracticeService/RemovePracticeResponse")]
         void RemovePractice(DataTransferObjects.Practice practice);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/GetPracticeCapabilities", ReplyAction="http://tempuri.org/IPracticeService/GetPracticeCapabilitiesResponse")]
+        DataTransferObjects.PracticeCapability[] GetPracticeCapabilities(System.Nullable<int> practiceId, System.Nullable<int> capabilityId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -41,6 +44,8 @@ namespace PraticeManagement.PracticeService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PracticeServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PracticeService.IPracticeService>, PraticeManagement.PracticeService.IPracticeService {
+        
+       
         
         public PracticeServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -80,6 +85,10 @@ namespace PraticeManagement.PracticeService {
         
         public void RemovePractice(DataTransferObjects.Practice practice) {
             base.Channel.RemovePractice(practice);
+        }
+        
+        public DataTransferObjects.PracticeCapability[] GetPracticeCapabilities(System.Nullable<int> practiceId, System.Nullable<int> capabilityId) {
+            return base.Channel.GetPracticeCapabilities(practiceId, capabilityId);
         }
     }
 }
