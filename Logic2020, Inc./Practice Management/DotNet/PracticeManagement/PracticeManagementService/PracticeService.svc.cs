@@ -69,7 +69,19 @@ namespace PracticeManagementService
         public List<Practice> PracticeGetById(int? id)
         {
             return PracticeDAL.PracticeGetById(id);
-        } 
+        }
+
+        /// <summary>
+        /// Gets the list of practicecapabilities for the given practiceid and capabilityid
+        /// If the practiceid and capabilityid are nulls then returns all practicecapabilities.
+        /// </summary>
+        /// <param name="practiceId"></param>
+        /// <param name="capabilityId"></param>
+        /// <returns>list of practicecapabilities</returns>
+        public List<PracticeCapability> GetPracticeCapabilities(int? practiceId, int? capabilityId)
+        {
+            return PracticeDAL.GetPracticeCapabilities(practiceId, capabilityId);
+        }
 
 	    #endregion               
     }
