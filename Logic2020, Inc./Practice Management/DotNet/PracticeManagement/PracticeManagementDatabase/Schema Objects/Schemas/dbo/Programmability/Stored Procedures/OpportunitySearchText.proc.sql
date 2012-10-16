@@ -25,6 +25,7 @@ BEGIN
 			o.OpportunityStatusId,
 			o.[Priority],
 			o.PriorityId,
+			o.DisplayName,
 			op.sortOrder PrioritySortOrder,
 			o.ProjectedStartDate,
 			o.ProjectedEndDate,
