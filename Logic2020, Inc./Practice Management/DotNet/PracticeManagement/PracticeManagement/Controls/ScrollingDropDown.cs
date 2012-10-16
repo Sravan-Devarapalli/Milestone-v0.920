@@ -360,6 +360,16 @@ namespace PraticeManagement.Controls
                         if (listItm != null)
                             listItm.Selected = true;
                     }
+                    bool allSelected = true;
+                    foreach (ListItem item in Items)
+                    {
+                        if (!item.Selected && item.Value != Items[0].Value)
+                        {
+                            allSelected = false;
+                            break;
+                        }
+                    }
+                    Items[0].Selected = allSelected;
                 }
             }
         }
