@@ -17,7 +17,7 @@
     var isProposedPersonsExistForCurrentOpportunity = "false";
     var image_icon1 = null;
     var image_icon2 = null;
-    var CurrentOpportunityPriorityName;
+    var CurrentOpportunityPriorityId;
     var currenthdnProposedPersonsIndexesId = "";
     var currenthdnTeamStructurePersonsId = "";
     var refreshOpportunityIdsFromLastRefresh = new Array();
@@ -113,16 +113,8 @@
 
         var optionList = ddlPriority.getElementsByTagName('option');
 
-        var selectedText = "";
-
-        for (var i = 0; i < optionList.length; ++i) {
-            if (optionList[i].value == ddlPriority.value) {
-                selectedText = optionList[i].innerHTML.toLowerCase();
-                break;
-            }
-        }
-
-        CurrentOpportunityPriorityName = selectedText;
+        //3092
+        CurrentOpportunityPriorityId = ddlPriority.value;
 
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
         var hdnClickedRowIndex = document.getElementById('<%=hdnClickedRowIndex.ClientID %>');
@@ -218,16 +210,8 @@
 
         var optionList = ddlPriority.getElementsByTagName('option');
 
-        var selectedText = "";
-
-        for (var i = 0; i < optionList.length; ++i) {
-            if (optionList[i].value == ddlPriority.value) {
-                selectedText = optionList[i].innerHTML.toLowerCase();
-                break;
-            }
-        }
-
-        CurrentOpportunityPriorityName = selectedText;
+        //3092
+        CurrentOpportunityPriorityId = ddlPriority.value;
 
 
         var hdnCurrentOpportunityId = document.getElementById('<%=hdnCurrentOpportunityId.ClientID %>');
@@ -422,7 +406,7 @@
     }
 
     function validateOpportunity() {
-        if (CurrentOpportunityPriorityName == "po" || CurrentOpportunityPriorityName == "a" || CurrentOpportunityPriorityName == "b") {
+        if (CurrentOpportunityPriorityId == "5" || CurrentOpportunityPriorityId == "1" || CurrentOpportunityPriorityId == "2") {
             if (isProposedPersonsExistForCurrentOpportunity == "false" && isStrawmansExistForCurrentOpportunity == "false") {
                 return false;
             }
@@ -826,7 +810,7 @@
         var ddlPriority = document.getElementById(ddlPriorityClientId);
         var opportunityID = ddlPriority.attributes["OpportunityID"].value;
         var rbtnOpportunityDescription = document.getElementById('<%= rbtnOpportunityDescription.ClientID %>');
-        var priorityId = getvalueinDropDownForGivenText(ddlPriority, 'po');
+        var priorityId = "5";
 
         if (opportunityID != null && opportunityID != 'undefined' && projectId != null && projectId != 'undefined' && priorityId != null && priorityId != 'undefined') {
             var urlVal = "AttachProjectToOpportunityHandler.ashx?opportunityID=" + opportunityID + "&projectId=" + projectId + "&priorityId=" + priorityId + "&isOpportunityDescriptionSelected=" + (rbtnOpportunityDescription.checked ? "true" : "false");
@@ -871,20 +855,12 @@
     }
 
     function ddlPriorityList_onchange(ddlPriority) {
-        var optionList = ddlPriority.getElementsByTagName('option');
 
-        var selectedText = "";
 
-        for (var i = 0; i < optionList.length; ++i) {
-            if (optionList[i].value == ddlPriority.value) {
-                selectedText = optionList[i].innerHTML.toLowerCase();
-                break;
-            }
-        }
-
+        var selectedValue = ddlPriority.value;
         var opportunityID = ddlPriority.attributes["OpportunityID"].value;
 
-        if (!(selectedText == "po" || selectedText == "a" || selectedText == "b")) {
+        if (!(selectedValue == "5" || selectedValue == "1" || selectedValue == "2")) {
             changeOpportunityStatus(opportunityID, ddlPriority);
             return true;
         }
@@ -915,7 +891,7 @@
             return false;
         }
 
-        if (selectedText != "po") {
+        if (selectedValue != "5") {
             changeOpportunityStatus(opportunityID, ddlPriority);
             return true;
         }
@@ -1002,6 +978,9 @@
 
 </script>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+    <Triggers>
+        <asp:PostBackTrigger ControlID="btnExportToExcel" />
+    </Triggers>
     <ContentTemplate>
         <asp:Panel ID="oppNameToolTipHolder" runat="server" CssClass="ToolTip PanelOppNameToolTipHolder">
             <table cellpadding="0" cellspacing="0">
@@ -1079,10 +1058,10 @@
                             </td>
                             <td class="Width4Percent">
                                 <div class="ie-bg no-wrap TextAlignCenter">
-                                    <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
+                                    <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Sales Stage" CommandName="Sort"
                                         CssClass="LeftPadding10px arrow" CommandArgument="Priority" />
                                     <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                    <asp:Panel ID="pnlPriority" CssClass="MiniReport displayNone" runat="server">
+                                    <asp:Panel ID="pnlPriority" CssClass="MiniReport Width320PxImp displayNone" runat="server">
                                         <table>
                                             <tr>
                                                 <th align="right">
@@ -1106,14 +1085,14 @@
                                                                 <td class="TdItemTemplate">
                                                                     <table class="WholeWidth">
                                                                         <tr>
-                                                                            <td class="LabelPriority TextAlignCenterImp PaddingLeftRight0px vMiddle">
-                                                                                <asp:Label ID="lblPriority" CssClass="Width15Px DisplayInline" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                            <td class="LabelPriority">
+                                                                                <asp:Label ID="lblPriority" CssClass="Width100Px DisplayInline" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>'></asp:Label>
                                                                             </td>
-                                                                            <td class="LabelPriority TextAlignCenter PaddingLeftRight2px vMiddle">
+                                                                            <td class="LabelPriority">
                                                                                 -
                                                                             </td>
-                                                                            <td class="LabelPriority PaddingLeftRight0px">
-                                                                                <asp:Label ID="lblDescription" runat="server" CssClass="WhiteSpaceNormal Width180Px DisplayInline"
+                                                                            <td class="LabelPriority">
+                                                                                <asp:Label ID="lblDescription" runat="server" CssClass="Width180Px DisplayInline"
                                                                                     Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                             </td>
                                                                         </tr>
@@ -1380,6 +1359,10 @@
                 </EmptyDataTemplate>
             </asp:ListView>
         </div>
+        <div class="textRightImp">
+            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
+                Text="Export" />
+        </div>
         <asp:HiddenField ID="hdnRedirectOpportunityId" runat="server" />
         <asp:HiddenField ID="hdnClickedRowIndex" runat="server" />
         <asp:HiddenField ID="hdnCanShowPopup" Value="false" runat="server" />
@@ -1405,7 +1388,7 @@
                                     <p>
                                         You must add a Team Make-Up to
                                         <asp:Label ID="lblOpportunityName" runat="server" Font-Bold="true"></asp:Label>
-                                        opportunity before it can be saved with a PO, A, or B priority.
+                                        <asp:Label ID="lblTeamMakeUp" runat="server"></asp:Label>
                                     </p>
                                     <br />
                                     <p>
@@ -1582,7 +1565,7 @@
                             </tr>
                         </table>
                         <div id="divTeamResources" class="DivTeamResources displayNone">
-                            An Opportunity with a PO, A, or B priority must have a Team Make-Up.
+                            <asp:Label ID="lblTeamResources" runat="server"></asp:Label>
                         </div>
                     </td>
                 </tr>
@@ -1667,7 +1650,7 @@
                             Quantity for a Straw Man must be less than or equals to 10 for same Need By date.
                         </div>
                         <div id="divOpportunityError" class="DivNeedbyError displayNone">
-                            An Opportunity with a PO, A, or B priority must have a Team Make-Up.
+                            <asp:Label ID="lblTeamStructerError" runat="server"></asp:Label>
                         </div>
                     </td>
                 </tr>
