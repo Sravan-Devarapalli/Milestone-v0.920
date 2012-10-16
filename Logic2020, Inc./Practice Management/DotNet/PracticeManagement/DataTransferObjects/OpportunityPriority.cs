@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -39,6 +40,24 @@ namespace DataTransferObjects
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Sales Stage
+        /// </summary>
+        [DataMember]
+        public string DisplayName
+        {
+            get;
+            set;
+        }
+
+        public string HtmlEncodedDisplayName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(DisplayName);
+            }
         }
     }
 }
