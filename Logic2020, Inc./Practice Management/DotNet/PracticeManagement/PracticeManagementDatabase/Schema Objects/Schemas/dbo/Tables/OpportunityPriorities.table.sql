@@ -3,6 +3,7 @@
     Priority			 NVARCHAR(255) NOT NULL,
     Description          NVARCHAR(MAX) NULL,
 	sortOrder			 INT	,
-	[IsInserted]        bit NOT NULL
+	[IsInserted]        bit NOT NULL,
+	DisplayName			NVARCHAR(15) NULL
    CONSTRAINT PK_OpportunityPriorities_Id PRIMARY KEY CLUSTERED(Id)
 );
