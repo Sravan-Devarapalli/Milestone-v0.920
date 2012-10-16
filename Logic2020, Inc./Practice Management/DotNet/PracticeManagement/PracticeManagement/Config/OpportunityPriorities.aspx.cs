@@ -17,8 +17,8 @@ namespace PraticeManagement.Config
 
         private const int DDL_OPPORTUNITY_PRIORITY_INDEX = 1;
         private const string OPPORTUNITY_PRIORITY_LIST_KEY = "OPPORTUNITY_PRIORITY_LIST_KEY";
-        private const string popupMessage = "This priority is linked to existing opportunities already.  Changing this value will also change the status for all existing opportunities that are using the old value.";
-
+        private const string popupMessage = "This Priority Order is assigned to a Sales Stage, Which is linked to existing opportunities already.  Changing this value will also change the status for all existing opportunities that are using the old value.";
+       
         #endregion constants
 
         #region properties
@@ -156,6 +156,8 @@ namespace PraticeManagement.Config
                 ddlInsertOpportunityPriority.Enabled = false;
                 tbInsertPriorityDescription.Text = "";
                 tbInsertPriorityDescription.Enabled = false;
+                tdInsertDisplayName.Text = "";
+                tdInsertDisplayName.Enabled = false;
             }
             else
             {
@@ -164,6 +166,8 @@ namespace PraticeManagement.Config
                 btnCancel.Visible = true;
                 tbInsertPriorityDescription.Text = string.Empty;
                 tbInsertPriorityDescription.Enabled = true;
+                tdInsertDisplayName.Text = string.Empty;
+                tdInsertDisplayName.Enabled = true;
                 ddlInsertOpportunityPriority.Enabled = true;
             }
 
@@ -176,13 +180,26 @@ namespace PraticeManagement.Config
 
         protected void btnInsert_Click(object sender, EventArgs e)
         {
-            OpportunityPriority opportunityPriority = new OpportunityPriority();
-            opportunityPriority.Id = Convert.ToInt32(ddlInsertOpportunityPriority.SelectedValue);
-            opportunityPriority.Description = tbInsertPriorityDescription.Text;
-            OpportunityPriorityHelper.InsertOpportunityPriority(opportunityPriority);
-            ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
-            DatabindOpportunityPriorities();
-            plusMakeVisible(true);
+            Page.Validate(valSummarySalesStageAdd.ValidationGroup);
+            if (Page.IsValid)
+            {
+
+                if (IsSalesStageAlreadyExisting(tdInsertDisplayName.Text))
+                {
+                    cvInsertUniqueDisplayName.IsValid = false;
+                }
+                else
+                {
+                    OpportunityPriority opportunityPriority = new OpportunityPriority();
+                    opportunityPriority.Id = Convert.ToInt32(ddlInsertOpportunityPriority.SelectedValue);
+                    opportunityPriority.Description = tbInsertPriorityDescription.Text;
+                    opportunityPriority.DisplayName = tdInsertDisplayName.Text;
+                    OpportunityPriorityHelper.InsertOpportunityPriority(opportunityPriority);
+                    ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
+                    DatabindOpportunityPriorities();
+                    plusMakeVisible(true);
+                }
+            }
         }
 
         protected void imgCancel_OnClick(object sender, EventArgs e)
@@ -201,21 +218,37 @@ namespace PraticeManagement.Config
 
         protected void imgUpdatePriority_OnClick(object sender, EventArgs e)
         {
-            ImageButton imgUpdate = sender as ImageButton;
-            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
+            Page.Validate(valSummaryEditSalesStage.ValidationGroup);
+            if (Page.IsValid)
+            {
+                ImageButton imgUpdate = sender as ImageButton;
+                GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
 
-            int oldPriorityId = Convert.ToInt32(imgUpdate.Attributes["PriorityId"]);
-            var ddl = row.FindControl("ddlOpportunityPriority") as DropDownList;
-            var tbox = row.FindControl("tbEditPriorityDescription") as TextBox;
+                int oldPriorityId = Convert.ToInt32(imgUpdate.Attributes["PriorityId"]);
+                var ddl = row.FindControl("ddlOpportunityPriority") as DropDownList;
+                var tbox = row.FindControl("tbEditPriorityDescription") as TextBox;
+                var tboxDisplayName = row.FindControl("tbEditDisplayName") as TextBox;
+                var oldDisplayName = tboxDisplayName.Attributes["OldName"].ToLower().Trim();
+                var newDisplayName = tboxDisplayName.Text.ToLower().Trim();
 
-            OpportunityPriority opportunityPriority = new OpportunityPriority();
-            opportunityPriority.Id = Convert.ToInt32(ddl.SelectedValue);
-            opportunityPriority.Description = tbox.Text;
+                if (oldDisplayName != newDisplayName && IsSalesStageAlreadyExisting(tboxDisplayName.Text))
+                {
+                    CustomValidator CvUniquesDisplayName = row.FindControl("cvUniquesDisplayName") as CustomValidator;
+                    CvUniquesDisplayName.IsValid = false;
+                }
+                else
+                {
+                    OpportunityPriority opportunityPriority = new OpportunityPriority();
+                    opportunityPriority.Id = Convert.ToInt32(ddl.SelectedValue);
+                    opportunityPriority.Description = tbox.Text;
+                    opportunityPriority.DisplayName = tboxDisplayName.Text;
 
-            OpportunityPriorityHelper.UpdateOpportunityPriority(oldPriorityId, opportunityPriority,User.Identity.Name);
-            gvOpportunityPriorities.EditIndex = -1;
-            ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
-            DatabindOpportunityPriorities();
+                    OpportunityPriorityHelper.UpdateOpportunityPriority(oldPriorityId, opportunityPriority, User.Identity.Name);
+                    gvOpportunityPriorities.EditIndex = -1;
+                    ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
+                    DatabindOpportunityPriorities();
+                }
+            }
         }
 
         protected void btnOK_Click(object sender, EventArgs e)
@@ -224,7 +257,7 @@ namespace PraticeManagement.Config
 
             int deletedPriorityId = Convert.ToInt32(btnOK.Attributes["PriorityId"]);
 
-            OpportunityPriorityHelper.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId,User.Identity.Name);
+            OpportunityPriorityHelper.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId, User.Identity.Name);
 
             ViewState.Remove(OPPORTUNITY_PRIORITY_LIST_KEY);
             DatabindOpportunityPriorities();
@@ -246,7 +279,7 @@ namespace PraticeManagement.Config
                 var opportunityPrioritiesList = OpportunityPriorityHelper.GetOpportunityPriorities(true).ToList();
 
                 OpportunityPriority[] prioritiesList = opportunityPrioritiesList.AsQueryable().Where(op => op.Id != priorityId).ToArray();
-                DataHelper.FillListDefault(ddlOpportunityPriorities, "", prioritiesList, true, "Id", "Priority");
+                DataHelper.FillListDefault(ddlOpportunityPriorities, "", prioritiesList, true, "Id", "DisplayName");
                 mpeOpportunityPriorities.Show();
             }
             else
@@ -256,6 +289,11 @@ namespace PraticeManagement.Config
                 DatabindOpportunityPriorities();
             }
 
+        }
+
+        private bool IsSalesStageAlreadyExisting(string salesStage)
+        {
+            return OpportunityPriorityList.Any(p => p.DisplayName.ToLower().Trim() == salesStage.ToLower().Trim());
         }
 
         #endregion Methods
