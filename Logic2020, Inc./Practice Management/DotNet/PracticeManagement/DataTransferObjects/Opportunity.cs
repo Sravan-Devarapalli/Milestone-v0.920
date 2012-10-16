@@ -174,6 +174,16 @@ namespace DataTransferObjects
         }
 
         /// <summary>
+        /// Gets or sets a close date.
+        /// </summary>
+        [DataMember]
+        public DateTime? CloseDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets an Opportunity Number.
         /// </summary>
         [DataMember]
