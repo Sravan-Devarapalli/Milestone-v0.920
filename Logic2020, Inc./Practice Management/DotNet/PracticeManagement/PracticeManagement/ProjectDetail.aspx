@@ -1,6 +1,7 @@
 <%@ Page Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="True"
     CodeBehind="ProjectDetail.aspx.cs" Inherits="PraticeManagement.ProjectDetail"
     Title="Project Details | Practice Management" EnableEventValidation="false" ValidateRequest="False" %>
+
 <%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register TagPrefix="extDisable" Namespace="PraticeManagement.Controls.Generic.ElementDisabler"
@@ -27,7 +28,8 @@
     Project Details
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
@@ -333,7 +335,8 @@
                         <table class="WholeWidth">
                             <tr>
                                 <td class="TdProjectName">
-                                    <asp:TextBox ID="txtProjectNameFirstTime" CssClass="Width500PxImp" runat="server" Visible="false"></asp:TextBox>
+                                    <asp:TextBox ID="txtProjectNameFirstTime" CssClass="Width500PxImp" runat="server"
+                                        Visible="false"></asp:TextBox>
                                     <AjaxControlToolkit:TextBoxWatermarkExtender ID="txtweProjectNameFirstTime" runat="server"
                                         TargetControlID="txtProjectNameFirstTime" WatermarkText="Enter a Project Name here..."
                                         EnableViewState="false" WatermarkCssClass="watermarkedtext Width500PxImp" />
@@ -463,8 +466,7 @@
                                                 Client Director
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlDirector" runat="server"  CssClass="Width95Per"
-                                                    onchange="setDirty();">
+                                                <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width95Per" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width2Percent">
@@ -486,9 +488,8 @@
                                                 Business Unit
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per"
-                                                    OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged" AutoPostBack="true"
-                                                    onchange="setDirty();">
+                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
+                                                    AutoPostBack="true" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width10Percent">
@@ -613,11 +614,11 @@
                                                 Project Manager(s)
                                             </td>
                                             <td class="width60P">
-                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="ProjectSummaryScrollingDropDown Width20Percent"
+                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="ProjectDetailScrollingDropDown Width20Percent"
                                                     AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
                                                     DropDownListType="Manager" />
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
-                                                    Width="93%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
+                                                    Width="94%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
@@ -633,6 +634,31 @@
                                             </td>
                                         </tr>
                                     </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                Capabilities
+                                            </td>
+                                            <td class="width60P">
+                                                <cc2:ScrollingDropDown ID="cblPracticeCapabilities" runat="server" SetDirty="true"
+                                                    CssClass="ProjectDetailScrollingDropDown Width20Percent" AllSelectedReturnType="AllItems"
+                                                    onclick="scrollingDropdown_onclick('cblPracticeCapabilities','Capability','','Capabilities',28);"
+                                                    DropDownListType="Capability" DropDownListTypePluralForm="Capabilities" />
+                                                <ext:ScrollableDropdownExtender ID="sdePracticeCapabilities" runat="server" TargetControlID="cblPracticeCapabilities"
+                                                    BehaviorID="sdePracticeCapabilities" MaxNoOfCharacters="28" Width="94%" UseAdvanceFeature="true"
+                                                    EditImageUrl="Images/Dropdown_Arrow.png">
+                                                </ext:ScrollableDropdownExtender>
+                                            </td>
+                                            <td class="Width10Percent">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td colspan="4">
                                 </td>
                             </tr>
                         </table>
@@ -1078,7 +1104,7 @@
                     <tr>
                         <td class="FileUploadAttachment" colspan="2">
                             <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" CssClass="FileUpload"
-                                runat="server"  Size="68" />
+                                runat="server" Size="68" />
                             <asp:CustomValidator ID="cvAttachment" runat="server" ControlToValidate="fuProjectAttachment"
                                 EnableClientScript="true" ClientValidationFunction="cvAttachment_ClientValidationFunction"
                                 SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvAttachment_OnServerValidate"
@@ -1125,8 +1151,7 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
                 TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
                 OkControlID="btnOKErrorPanel" CancelControlID="btnOKErrorPanel" DropShadow="false" />
-            <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson"
-               >
+            <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
                 <table class="Width100Per">
                     <tr>
                         <th align="center" class="TextAlignCenter BackGroundColorGray vBottom" colspan="2">
