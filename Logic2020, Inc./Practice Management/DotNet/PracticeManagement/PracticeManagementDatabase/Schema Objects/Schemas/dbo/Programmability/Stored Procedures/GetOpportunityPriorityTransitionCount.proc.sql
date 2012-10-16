@@ -13,16 +13,11 @@ BEGIN
 			  ,[NoteText]
 			  ,[OpportunityTransitionTypeId]
 			  ,[TargetPersonId]
-			  ,SUBSTRING(REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''),0,
-			  CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))) Previous
-				  ,SUBSTRING( REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''),
-								CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))+1
-								,LEN(REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))-
-								CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))
-			  ) next
+			  ,PreviousChangedId
+			  ,NextChangedId
 		  FROM OpportunityTransition ot
 		  JOIN Opportunity O On O.OpportunityId = ot.OpportunityId
-		  WHERE [OpportunityTransitionStatusId] = 2 AND O.OpportunityStatusId = 1 
+		  WHERE [OpportunityTransitionStatusId] = 2 AND O.OpportunityStatusId = 1 AND NoteText LIKE 'Sales Stage changed.%'
 		  AND TransitionDate >= dbo.GettingPMTime(GETUTCDATE()) - @DaysPrevious --Get last @days days record.
 	),
 
@@ -30,17 +25,15 @@ BEGIN
 	(
 	SELECT opl.OpportunityId,
 			opl.TransitionDate,
-			opl.Previous,
-			opl.next,
+			opl.PreviousChangedId,
+			opl.NextChangedId,
 			MAX(opl.TransitionDate) OVER(partition by opl.OpportunityId) AS 'MaxDate',
 			MIN(opl.TransitionDate) OVER(partition by opl.OpportunityId) AS 'MinDate',
 			case WHEN opl.TransitionDate = MAX(opl.TransitionDate) OVER(partition by opl.OpportunityId) THEN np.sortOrder ELSE NULL END [NextSortOrder],
 			case WHEN opl.TransitionDate = MIN(opl.TransitionDate) OVER(partition by opl.OpportunityId) THEN pp.sortOrder ELSE NULL END [PreviousSortOrder]
 	FROM OpportunityTransitionPriorityList opl
-	INNER JOIN OpportunityPriorities np On np.DisplayName = opl.next
-	INNER JOIN OpportunityPriorities pp On pp.DisplayName = opl.Previous
-	WHERE NoteText LIKE '%Sales Stage changed.%'
-
+	INNER JOIN OpportunityPriorities np On np.Id = opl.NextChangedId
+	INNER JOIN OpportunityPriorities pp On pp.Id = opl.PreviousChangedId
 	)
 
 	SELECT (case WHEN priorityTrend.Status = 1 THEN 'Up'
@@ -58,3 +51,4 @@ BEGIN
 	ORDER BY priorityTrend.Status DESC
 
 END
+
