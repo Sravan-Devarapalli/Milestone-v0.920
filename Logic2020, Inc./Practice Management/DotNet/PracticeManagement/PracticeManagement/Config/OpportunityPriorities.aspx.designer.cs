@@ -85,6 +85,51 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.ImageButton btnCancel;
         
         /// <summary>
+        /// tdInsertDisplayName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tdInsertDisplayName;
+        
+        /// <summary>
+        /// waterMarkTxtDisplayName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtDisplayName;
+        
+        /// <summary>
+        /// reqDisplayName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqDisplayName;
+        
+        /// <summary>
+        /// valRegDisplayName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator valRegDisplayName;
+        
+        /// <summary>
+        /// cvInsertUniqueDisplayName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvInsertUniqueDisplayName;
+        
+        /// <summary>
         /// ddlInsertOpportunityPriority control.
         /// </summary>
         /// <remarks>
@@ -110,6 +155,24 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.TextBoxWatermarkExtender waterMarkTxtSearch;
+        
+        /// <summary>
+        /// valSummarySalesStageAdd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSummarySalesStageAdd;
+        
+        /// <summary>
+        /// valSummaryEditSalesStage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSummaryEditSalesStage;
         
         /// <summary>
         /// pnlOpportunityPriorities control.
