@@ -40,7 +40,8 @@ AS
 		   p.LastName as 'OwnerLastName',
 		   p.FirstName as 'OwnerFirstName',
 		   os.Name AS 'OwnerStatus',
-		   o.EstimatedRevenue
+		   o.EstimatedRevenue ,
+		   o.CloseDate
 		   --,o.OutSideResources
 		   
 	 FROM dbo.v_Opportunity AS o
