@@ -51,6 +51,8 @@ namespace PraticeManagement
         private const string StrawMansDateEncodeFormat = "MM/dd/yyyy";
         private List<NameValuePair> quantities;
 
+        private const string ValidationTextForPriority = "You must add a Team Make-Up to this opportunity before it can be saved with a {0} Sales Stage.";
+
         private const string ANIMATION_SHOW_SCRIPT =
                         @"<OnClick>
                         	<Sequence>
@@ -949,8 +951,7 @@ namespace PraticeManagement
         {
             var opportunity = new Opportunity();
             PopulateData(opportunity);
-            string poPriorityID = ((ListItem)ddlPriority.Items.FindByText("PO")).Value;
-            if (opportunity.Priority.Id.ToString() == poPriorityID && opportunity.Project == null)
+            if (opportunity.Priority.Id == Constants.OpportunityPriorityIds.PriorityIdOfPO && opportunity.Project == null)
             {
                 mpeAttachToProject.Show();
                 return false;
@@ -1235,6 +1236,29 @@ namespace PraticeManagement
 
             lvOpportunityPriorities.DataSource = opportunityPriorities;
             lvOpportunityPriorities.DataBind();
+
+
+            //cvPriority validation
+
+            List<OpportunityPriority> priorityList = opportunityPriorities.Where(p => p.Id == Constants.OpportunityPriorityIds.PriorityIdOfPO || p.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || p.Id == Constants.OpportunityPriorityIds.PriorityIdOfB).ToList();
+            
+
+            if (priorityList != null && priorityList.Count > 0)
+            {
+                string displayNames  = priorityList.First().DisplayName;
+                if (priorityList.Count > 1)
+                {
+                    for (int i = 1; i < priorityList.Count - 1; i++)
+                    {
+                        displayNames += " , " + priorityList[i].DisplayName;
+                    }
+                    displayNames = displayNames + " or " + priorityList[priorityList.Count - 1].DisplayName;
+                }
+
+                cvPriority.ErrorMessage = cvPriority.ToolTip =
+            string.Format(ValidationTextForPriority, displayNames);
+            }
+
         }
 
         private void PopulateSalesPersonDropDown()
@@ -1537,8 +1561,9 @@ namespace PraticeManagement
         protected void cvPriority_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            var selectedText = ddlPriority.SelectedItem.Text.ToUpperInvariant();
-            if (selectedText == "PO" || selectedText == "A" || selectedText == "B")
+
+            var selectedValue = ddlPriority.SelectedValue;
+            if (selectedValue == Constants.OpportunityPriorityIds.PriorityIdOfPO.ToString() || selectedValue == Constants.OpportunityPriorityIds.PriorityIdOfA.ToString() || selectedValue == Constants.OpportunityPriorityIds.PriorityIdOfB.ToString())
             {
                 if (ProposedPersons.Count() < 1 && StrawMans.Count() < 1)
                 {
