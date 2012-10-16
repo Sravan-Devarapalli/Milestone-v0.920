@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[OpportunityPriorityInsert]
 @PriorityId INT,
-@Description NVARCHAR(255)
+@Description NVARCHAR(255),
+@DisplayName NVARCHAR(15)
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -8,6 +9,7 @@ BEGIN
    SET 
        [Description] =@Description      
       ,[IsInserted] = 1
+	  ,[DisplayName] = @DisplayName
  WHERE id = @PriorityId
 END
 GO
