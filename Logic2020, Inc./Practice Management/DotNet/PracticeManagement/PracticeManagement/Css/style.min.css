@@ -678,6 +678,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .ExportAndExportAll ul.pmenu li:hover ul,.ExportAndExportAll ul.pmenu li.over ul{display:block}
 .ExportAndExportAll ul.pmenu li ul{left:100px}
 .ProjectSummaryScrollingDropDown{height:240px;width:240px;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
+.ProjectDetailScrollingDropDown{height:240px;width:17%;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
 .PersonPayTypeScrollingDropDown{height:100px;width:190px;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
 .PersonPayTypeScrollingDropDown Table{width:100%!important}
 .ProjectSummaryAdvancedFiltersHeader TH{border-bottom:1px solid black;width:190px;text-align:center}
@@ -1001,6 +1002,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .WeekSelectorDateSpan{color:Navy;font-size:large;font-weight:bold}
 .bgColorRed{background-color:Red}
 .bgColorWhite{background-color:white}
+.bgColorWhiteImp{background-color:white!important}
 .WeekSelectorHiddenTextBox{width:102px;margin-left:-40px;visibility:hidden}
 .TimeEntryAddPopUp{max-width:700px;min-height:60px;min-width:450px}
 .VisbleHidden{visibility:hidden}
