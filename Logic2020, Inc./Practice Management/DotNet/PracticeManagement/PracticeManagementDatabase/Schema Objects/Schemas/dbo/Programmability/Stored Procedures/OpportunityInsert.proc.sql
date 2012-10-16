@@ -7,6 +7,7 @@
 	@PriorityId            INT,
 	@ProjectedStartDate    DATETIME,
 	@ProjectedEndDate      DATETIME,
+	@CloseDate			   DATETIME,
 	@Description           NVARCHAR(MAX),
 	@PracticeId            INT,
 	@BuyerName             NVARCHAR(100),
@@ -58,10 +59,10 @@ BEGIN
 		INSERT INTO dbo.Opportunity
 					(Name, ClientId, SalespersonId, OpportunityStatusId, PriorityId,
 					 ProjectedStartDate, ProjectedEndDate, OpportunityNumber, Description, PracticeId, BuyerName,
-					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue)
+					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue,CloseDate)
 			 VALUES (@Name, @ClientId, @SalespersonId, @OpportunityStatusId, @PriorityId,
 					 @ProjectedStartDate, @ProjectedEndDate, @OpportunityNumber, @Description, @PracticeId, @BuyerName,
-					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue)
+					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue,@CloseDate)
 
 		IF(@ProjectId IS NOT NULL)
 		BEGIN
