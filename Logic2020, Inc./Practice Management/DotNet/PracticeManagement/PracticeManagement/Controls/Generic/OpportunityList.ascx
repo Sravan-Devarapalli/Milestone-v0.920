@@ -94,10 +94,10 @@
                     </td>
                     <td class="Width4Percent">
                         <div class="ie-bg no-wrap">
-                            <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Priority" CommandName="Sort"
+                            <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Sales Stage" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Priority" />
                             <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
-                            <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport" runat="server">
+                            <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport Width323PxImp" runat="server">
                                 <table>
                                     <tr>
                                         <th class="textRight">
@@ -117,17 +117,17 @@
                                                     </div>
                                                 </LayoutTemplate>
                                                 <ItemTemplate>
-                                                    <tr>
+                                                    <tr class="BorderBottomNone">
                                                         <td class="WholeWidth padLeft2">
                                                             <table class="WholeWidth">
                                                                 <tr>
-                                                                    <td class="OpportunityPriority">
-                                                                        <asp:Label ID="lblPriority" CssClass="Width15Px" runat="server" Text='<%# Eval("Priority") %>'></asp:Label>
+                                                                    <td class="LabelPriority">
+                                                                        <asp:Label ID="lblPriority" CssClass="Width100Px DisplayInline" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>'></asp:Label>
                                                                     </td>
-                                                                    <td class="OpportunityPriority padLeft2 padRight2">
+                                                                    <td class="LabelPriority">
                                                                         -
                                                                     </td>
-                                                                    <td class="Padding0">
+                                                                    <td class="LabelPriority">
                                                                         <asp:Label ID="lblDescription" runat="server" CssClass="OpportunityPriorityDescription"
                                                                             Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                     </td>
@@ -224,7 +224,7 @@
                 </td>
                 <td align="center">
                     <div class="cell-pad">
-                        <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
+                        <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.HtmlEncodedDisplayName %>' /></div>
                 </td>
                 <td>
                     <div class="cell-pad">
@@ -284,7 +284,7 @@
                 </td>
                 <td align="center">
                     <div class="cell-pad">
-                        <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.Priority %>' /></div>
+                        <asp:Label ID="lblPriority" runat="server" Text='<%# ((Opportunity) Container.DataItem).Priority.HtmlEncodedDisplayName %>' /></div>
                 </td>
                 <td>
                     <div class="cell-pad">
