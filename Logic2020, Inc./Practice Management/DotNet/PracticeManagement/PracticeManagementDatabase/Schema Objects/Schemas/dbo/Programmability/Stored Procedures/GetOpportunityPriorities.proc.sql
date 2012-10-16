@@ -6,6 +6,7 @@ BEGIN
 	SELECT  	OP.Id,
 			OP.Priority,
 			OP.Description,
+			OP.DisplayName,
 			CASE 
 			WHEN EXISTS(SELECT TOP 1 o.PriorityId FROM  v_Opportunity AS o WHERE o.PriorityId = op.Id)
 				THEN CAST(1 AS BIT)
