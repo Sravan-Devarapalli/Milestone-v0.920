@@ -794,7 +794,7 @@ namespace PraticeManagement
             //  ddlProjectGroup.Enabled = ddlDirector.Enabled = ddlSalesperson.Enabled = false;
         }
 
-        private void AddListItemIfNotExists(DropDownList ddl, string value,Person person)
+        private void AddListItemIfNotExists(DropDownList ddl, string value, Person person)
         {
             ListItem selectedItem = ddl.Items.FindByValue(value);
             if (selectedItem == null)
@@ -802,7 +802,7 @@ namespace PraticeManagement
                 selectedItem = new ListItem();
                 if (person == null)
                 {
-                    person = ServiceCallers.Custom.Person(p=>p.GetPersonDetailsShort(int.Parse(value)));
+                    person = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(int.Parse(value)));
                 }
                 selectedItem.Value = value;
                 selectedItem.Text = person.PersonLastFirstName;
@@ -1362,6 +1362,8 @@ namespace PraticeManagement
             string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
             DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
+            var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null));
+            DataHelper.FillListDefault(cblPracticeCapabilities, "All Capabilities", capabilities, false, "CapabilityId", "MergedName");
             DataHelper.FillListDefault(ddlProjectOwner, "-- Select Project Owner --", persons, false, "Id", "PersonLastFirstName");
 
             int? id = ProjectId;
@@ -1631,8 +1633,8 @@ namespace PraticeManagement
                 ddlPractice.Items.Add(selectedPractice);
                 ddlPractice.SortByText();
             }
-
             ddlPractice.SelectedValue = selectedPractice.Value;
+            cblPracticeCapabilities.SelectedItems = project.ProjectCapabilityIds;
         }
 
         private void PopulateClientDropDown(Project project)
@@ -1700,6 +1702,7 @@ namespace PraticeManagement
             project.BuyerName = txtBuyerName.Text;
             project.Client = new Client { Id = int.Parse(ddlClientName.SelectedValue) };
             project.Practice = new Practice { Id = int.Parse(ddlPractice.SelectedValue) };
+            project.ProjectCapabilityIds = cblPracticeCapabilities.SelectedItems;
             project.Status = new ProjectStatus { Id = int.Parse(ddlProjectStatus.SelectedValue) };
             project.ProjectManagerIdsList = cblProjectManagers.SelectedItems;
             //project.IsChargeable = chbIsChargeable.Checked;
