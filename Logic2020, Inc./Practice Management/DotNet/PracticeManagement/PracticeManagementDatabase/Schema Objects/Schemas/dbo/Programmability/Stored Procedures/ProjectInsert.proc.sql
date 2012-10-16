@@ -22,7 +22,8 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@IsInternal			BIT,
 	@IsNoteRequired     BIT = 1,
 	@ProjectOwner       INT = NULL,
-	@SowBudget			DECIMAL(18,2)
+	@SowBudget			DECIMAL(18,2),
+	@ProjectCapabilityIds NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -77,6 +78,10 @@ BEGIN
 	INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
 	SELECT  @ProjectId,ResultId
 	FROM    dbo.ConvertStringListIntoTable(@ProjectManagerIdsList)
+
+	INSERT INTO dbo.ProjectCapabilities(ProjectId,CapabilityId)
+	SELECT  @ProjectId,ResultId
+	FROM    dbo.ConvertStringListIntoTable(@ProjectCapabilityIds)
      
 	COMMIT TRAN T1;
 	END TRY
