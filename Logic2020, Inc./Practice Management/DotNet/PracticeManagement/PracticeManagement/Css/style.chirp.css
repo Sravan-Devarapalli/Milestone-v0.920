@@ -1720,6 +1720,10 @@ TABLE.Section td
 {
     padding-right: 5px !important;
 }
+.padRight7Imp
+{
+    padding-right: 7px !important;
+}
 .padRight8
 {
     padding-right: 8px;
@@ -2403,6 +2407,14 @@ TABLE.Section td
 .Width300Px
 {
     width: 300px;
+}
+.Width320PxImp
+{
+    width: 320px !important;
+}
+.Width323PxImp
+{
+    width: 323px !important;
 }
 .Width304Px
 {
@@ -4343,8 +4355,10 @@ BenchCosts.ascx*/
 {
     color: Black;
     font-size: 12px !important;
-    padding-bottom: 0px !important;
-    padding-top: 0px !important;
+    text-align: left !important;
+    vertical-align: middle;
+    padding: 0px;
+    white-space: normal;
 }
 .PaddingLeftRight0px
 {
@@ -7414,5 +7428,9 @@ table#ctl00_body_login tr td label
 .pnlTotal tr td
 {
     padding-bottom: 2px !important;
+}
+.CursorText
+{
+    cursor: text;
 }
 
