@@ -527,6 +527,7 @@
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
@@ -851,7 +852,6 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
-    <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
     <Content Include="Scripts\Master.min.js">
       <DependentUpon>Master.yui.js</DependentUpon>
@@ -864,6 +864,7 @@
       <DependentUpon>ScrollinDropDown.yui.js</DependentUpon>
     </Content>
     <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
+    <None Include="Service References\PracticeService\PracticeService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
