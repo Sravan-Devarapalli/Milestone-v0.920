@@ -62,6 +62,35 @@ namespace DataAccess
             return list;
         }
 
+        public static List<PracticeCapability> GetPracticeCapabilities(int? practiceId, int? capabilityId)
+        {
+            var list = new List<PracticeCapability>();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Practices.GetPracticeCapabilities, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    if (practiceId.HasValue)
+                    {
+                        command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam, practiceId.Value);
+                    }
+
+                    if (capabilityId.HasValue)
+                    {
+                        command.Parameters.AddWithValue(Constants.ParameterNames.CapabilityIdParam, capabilityId.Value);
+                    }
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        ReadPracticeCapabilities(reader, list);
+                    }
+                }
+            }
+            return list;
+        }
+
         /// <summary>
         /// Updates practice
         /// </summary>
@@ -184,6 +213,29 @@ namespace DataAccess
                 }
 
                 list.Add(practice);
+            }
+        }
+
+        private static void ReadPracticeCapabilities(SqlDataReader reader, List<PracticeCapability> list)
+        {
+            if (!reader.HasRows) return;
+
+            var capabilityIdIndex = reader.GetOrdinal(Constants.ColumnNames.CapabilityId);
+            var practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+            var nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+            var practiceAbbreviationIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeAbbreviation);
+ 
+            while (reader.Read())
+            {
+                var practiceCapability =
+                    new PracticeCapability
+                    {
+                        CapabilityId = reader.GetInt32(capabilityIdIndex),
+                        PracticeId = reader.GetInt32(practiceIdIndex),
+                        Name = reader.GetString(nameIndex),
+                        PracticeAbbreviation = reader.GetString(practiceAbbreviationIndex)
+                    };
+                list.Add(practiceCapability);
             }
         }
     }
