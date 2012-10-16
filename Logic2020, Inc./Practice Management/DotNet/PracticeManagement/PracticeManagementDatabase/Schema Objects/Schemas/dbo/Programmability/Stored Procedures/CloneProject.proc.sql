@@ -73,6 +73,11 @@ AS
 		SELECT  @ClonedProjectId,pm.ProjectManagerId
 		FROM    dbo.ProjectManagers AS pm
         WHERE   pm.ProjectId = @projectId
+
+		INSERT INTO dbo.ProjectCapabilities(ProjectId,CapabilityId)
+		SELECT  @ClonedProjectId,PC.CapabilityId
+		FROM    dbo.ProjectCapabilities PC
+	    WHERE   PC.ProjectId = @projectId
               
         IF @CloneMilestones = 1 
             BEGIN
