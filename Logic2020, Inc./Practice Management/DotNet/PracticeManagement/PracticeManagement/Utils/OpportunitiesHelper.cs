@@ -379,7 +379,7 @@ namespace PraticeManagement.Utils
             var calc = (from o in prioritySummary
                         where o.Status.Id == (int)OpportunityStatusType.Active
                         orderby o.Priority.SortOrder ascending
-                        group o by o.Priority.Priority into result
+                        group o by o.Priority.HtmlEncodedDisplayName into result
                         select new
                         {
                             priorityName = result.Key,
@@ -389,7 +389,7 @@ namespace PraticeManagement.Utils
                         );
 
             Table prioritySummaryTable = new Table();
-            AddHeaderRow("Summary by Priority", prioritySummaryTable, !(IsExporting.HasValue && IsExporting.Value));
+            AddHeaderRow("Summary by Sales Stage", prioritySummaryTable, !(IsExporting.HasValue && IsExporting.Value));
 
             foreach (var item in calc)
             {
@@ -420,7 +420,7 @@ namespace PraticeManagement.Utils
         private static Table AddPriorityTrendingCell()
         {
             Table priorityTrendingTable = new Table();
-            string headerText = string.Format("Priority Trending (last {0} days)", days);
+            string headerText = string.Format("Sales Stage Trending (last {0} days)", days);
             AddHeaderRow(headerText, priorityTrendingTable, !(IsExporting.HasValue && IsExporting.Value));
 
 
@@ -500,7 +500,7 @@ namespace PraticeManagement.Utils
             headerRow.Controls.Add(headerCell);
 
             var priorityList = OpportunityPriorityHelper.GetOpportunityPriorities(true).OrderBy(p => p.SortOrder);
-            var priorities = priorityList.Select(p => p.Priority).ToArray();
+            var priorities = priorityList.Select(p => p.HtmlEncodedDisplayName).ToArray();
             var priorityOrderList = opportunityList.OrderBy(opp => opp.Priority.SortOrder).ToArray();
 
             foreach (var priorityName in priorities)
@@ -540,7 +540,7 @@ namespace PraticeManagement.Utils
                                                                         ).ToArray();
             var ageLessThan31List = (from o in list
                                      orderby o.Priority.SortOrder ascending
-                                     group o by o.Priority.Priority into result
+                                     group o by o.Priority.HtmlEncodedDisplayName into result
                                      select new
                                      {
                                          priority = result.Key,
@@ -731,11 +731,11 @@ namespace PraticeManagement.Utils
         private static Table AddEstimateRevenueByPriorityCell(Opportunity[] opportunityList, decimal totalEstimateRevenue)
         {
             Table table = new Table();
-            AddHeaderRow("Est. Revenue by Priority", table);
+            AddHeaderRow("Est. Revenue by Sales Stage", table);
 
             var list = (from o in opportunityList
                         orderby o.Priority.SortOrder ascending
-                        group o by o.Priority.Priority into result
+                        group o by o.Priority.HtmlEncodedDisplayName into result
                         select new
                         {
                             priority = result.Key,
