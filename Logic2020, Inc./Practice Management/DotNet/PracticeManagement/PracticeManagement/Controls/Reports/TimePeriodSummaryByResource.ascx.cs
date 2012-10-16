@@ -55,6 +55,18 @@ namespace PraticeManagement.Controls.Reports
 
         private HtmlImage ImgDivisionFilter { get; set; }
 
+        private HtmlImage ImgTotalBillable { get; set; }
+
+        private HtmlImage ImgTotalNonBillable { get; set; }
+
+        private HtmlImage ImgTotalBD { get; set; }
+
+        private HtmlImage ImgTotalInternal { get; set; }
+
+        private HtmlImage ImgTotalTimeOff { get; set; }
+
+        private HtmlImage ImgTotalHours { get; set; }
+
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page); }
@@ -359,6 +371,12 @@ namespace PraticeManagement.Controls.Reports
                 ImgPersonStatusTypeFilter = e.Item.FindControl("imgPersonStatusTypeFilter") as HtmlImage;
                 ImgDivisionFilter = e.Item.FindControl("imgDivisionFilter") as HtmlImage;
 
+                ImgTotalBillable = e.Item.FindControl("imgTotalBillable") as HtmlImage;
+                ImgTotalNonBillable = e.Item.FindControl("imgTotalNonBillable") as HtmlImage;
+                ImgTotalBD = e.Item.FindControl("imgTotalBD") as HtmlImage;
+                ImgTotalInternal = e.Item.FindControl("imgTotalInternal") as HtmlImage;
+                ImgTotalTimeOff = e.Item.FindControl("imgTotalTimeOff") as HtmlImage;
+                ImgTotalHours = e.Item.FindControl("imgTotalHours") as HtmlImage;
                
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -432,7 +450,26 @@ namespace PraticeManagement.Controls.Reports
         }
 
         private void PopulateSumLabels(List<PersonLevelGroupedHours> reportData)
-        {            
+        {
+            ImgTotalBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, ImgTotalBillable.ClientID, pnlTotalBillableHours.ClientID);
+            ImgTotalBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableHours.ClientID);
+
+            ImgTotalNonBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, ImgTotalNonBillable.ClientID, pnlTotalNonBillableHours.ClientID);
+            ImgTotalNonBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalNonBillableHours.ClientID);
+
+            ImgTotalBD.Attributes[OnMouseOver] = string.Format(ShowPanel, ImgTotalBD.ClientID, pnlTotalBD.ClientID);
+            ImgTotalBD.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBD.ClientID);
+
+            ImgTotalInternal.Attributes[OnMouseOver] = string.Format(ShowPanel, ImgTotalInternal.ClientID, pnlTotalInternalHours.ClientID);
+            ImgTotalInternal.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalInternalHours.ClientID);
+
+            ImgTotalTimeOff.Attributes[OnMouseOver] = string.Format(ShowPanel, ImgTotalTimeOff.ClientID, pnlTotalTimeOffHours.ClientID);
+            ImgTotalTimeOff.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalTimeOffHours.ClientID);
+
+            ImgTotalHours.Attributes[OnMouseOver] = string.Format(ShowPanel, ImgTotalHours.ClientID, pnlTotalHours.ClientID);
+            ImgTotalHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalHours.ClientID);   
+
+
             lblBillable.Text =
             pthLblBillable.Text = reportData.Sum(p => p.BillableHours).ToString(Constants.Formatting.DoubleValue); 
           
