@@ -303,6 +303,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .padRight4{padding-right:4px}
 .padRight5,.wrap{padding-right:5px}
 .padRight5Imp{padding-right:5px!important}
+.padRight7Imp{padding-right:7px!important}
 .padRight8{padding-right:8px}
 .padRight10,.PaddingRight10Px{padding-right:10px}
 .padRight10Imp{padding-right:10px!important}
@@ -473,6 +474,8 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width295Px{width:295px}
 .Width295PxImp{width:295px!important}
 .Width300Px{width:300px}
+.Width320PxImp{width:320px!important}
+.Width323PxImp{width:323px!important}
 .Width304Px{width:304px}
 .Width320Px{width:320px}
 .Width325Px{width:325px}
@@ -831,7 +834,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .OverflowxAuto{overflow-x:auto}
 .ItemPlaceHolderContainer{max-height:150px;overflow-y:auto;overflow-x:hidden}
 .TdItemTemplate{width:100%;padding-left:2px!important}
-.LabelPriority{color:Black;font-size:12px!important;padding-bottom:0!important;padding-top:0!important}
+.LabelPriority{color:Black;font-size:12px!important;text-align:left!important;vertical-align:middle;padding:0;white-space:normal}
 .PaddingLeftRight0px{padding-left:0!important;padding-right:0!important}
 .PaddingLeftRight2px{padding-left:2px!important;padding-right:2px!important}
 .LabelRefreshMessage{display:none;font-style:italic}
@@ -1374,3 +1377,4 @@ table#ctl00_body_login tr td label{float:left}
 .pnlTotal{border:2px solid #375D89;z-index:2000;position:absolute;padding:6px!important;background-color:White!important}
 .zindex2001Imp{z-index:2001!important}
 .pnlTotal tr td{padding-bottom:2px!important}
+.CursorText{cursor:text}
