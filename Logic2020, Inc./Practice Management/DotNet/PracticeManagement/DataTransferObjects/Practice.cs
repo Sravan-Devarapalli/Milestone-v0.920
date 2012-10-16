@@ -60,7 +60,13 @@ namespace DataTransferObjects
         public string Name { get; set; }
 
         /// <summary>
-        /// Disaplay Encoded name of the practice
+        /// Abbreviation for the practice.
+        /// </summary>
+        [DataMember]
+        public string Abbreviation { get; set; }
+
+        /// <summary>
+        /// Display Encoded name of the practice
         /// </summary>
         public string HtmlEncodedName
         {
@@ -128,6 +134,14 @@ namespace DataTransferObjects
       
         [DataMember]
         public string PracticeOwnerName { get; set; }
+
+        [DataMember]
+        public List<PracticeCapability> PracticeCapabilities
+        {
+            get;
+            set;
+        }
+
 
         #endregion
 
