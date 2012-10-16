@@ -2080,7 +2080,7 @@ namespace PraticeManagement.Controls
         {
             OpportunityPriority[] priorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
 
-            FillListDefault(ddlPriority, firstItemText, priorities, false, "Id", "Priority");
+            FillListDefault(ddlPriority, firstItemText, priorities, false, "Id", "HtmlEncodedDisplayName");
 
         }
 
