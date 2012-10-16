@@ -258,53 +258,33 @@
                             </th>
                             <th>
                                 Billable
-                                <img alt="Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Billable"
-                                    id="imgTotalBillable" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalBillableHours" runat="server"
-                                    TargetControlID="imgTotalBillable" BehaviorID="pceTotalBillableHours" PopupControlID="pnlTotalBillableHours"
-                                    Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalBillable"
+                                    class="CursorText" />
                             </th>
-                            <th class="Width115PxImp">
+                            <th class="no-wrap">
                                 Non-Billable
-                                <img alt="Non-Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Non-Billable"
-                                    id="imgTotalNonBillable" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalNonBillableHours" runat="server"
-                                    TargetControlID="imgTotalNonBillable" BehaviorID="pceTotalNonBillableHours" PopupControlID="pnlTotalNonBillableHours"
-                                    Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="Non-Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalNonBillable"
+                                    class="CursorText" />
                             </th>
                             <th>
                                 BD
-                                <img alt="BD Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total BD" id="imgTotalBD" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalBDHours" runat="server" TargetControlID="imgTotalBD"
-                                    BehaviorID="pceTotalBDHours" PopupControlID="pnlTotalBD" Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="BD Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalBD"
+                                    class="CursorText" />
                             </th>
                             <th>
                                 Internal
-                                <img alt="Internal Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Internal"
-                                    id="imgTotalInternal" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalInternalHours" runat="server"
-                                    TargetControlID="imgTotalInternal" BehaviorID="pceTotalInternalHours" PopupControlID="pnlTotalInternalHours"
-                                    Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="Internal Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalInternal"
+                                    class="CursorText" />
                             </th>
                             <th>
                                 Time-Off
-                                <img alt="Time-Off Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Time-Off"
-                                    id="imgTotalTimeOff" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalTimeOffHours" runat="server"
-                                    TargetControlID="imgTotalTimeOff" BehaviorID="pceTotalTimeOffHours" PopupControlID="pnlTotalTimeOffHours"
-                                    Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="Time-Off Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalTimeOff"
+                                    class="CursorText" />
                             </th>
                             <th>
                                 Total
-                                <img alt="Total Sum" src="../../Images/Sigma-9x10.png" runat="server" title="Total Hours" id="imgTotalHours" />
-                                <AjaxControlToolkit:PopupControlExtender ID="pceTotalHours" runat="server" TargetControlID="imgTotalHours"
-                                    BehaviorID="pceTotalHours" PopupControlID="pnlTotalHours" Position="Bottom">
-                                </AjaxControlToolkit:PopupControlExtender>
+                                <img alt="Total Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalHours"
+                                    class="CursorText" />
                             </th>
                             <th class="Width295PxImp">
                                 Utilization Percent this Period
@@ -320,8 +300,7 @@
                         <tr>
                             <td>
                                 <asp:LinkButton ID="lnkPerson" PersonId='<%# Eval("Person.Id")%>' runat="server"
-                                    ToolTip='<%# Eval("Person.HtmlEncodedName")%>' OnClick="lnkPerson_OnClick"
-                                    Text='<%# Eval("Person.HtmlEncodedName")%>'></asp:LinkButton>
+                                    ToolTip='<%# Eval("Person.HtmlEncodedName")%>' OnClick="lnkPerson_OnClick" Text='<%# Eval("Person.HtmlEncodedName")%>'></asp:LinkButton>
                             </td>
                             <td>
                                 <asp:Image ID="imgIspersonTerminated" runat="server" ImageUrl="~/Images/Terminated.png"
@@ -499,7 +478,7 @@
         </tr>
         <tr>
             <td class="fontBold padRight15">
-                Total Non-Billable: 
+                Total Non-Billable:
             </td>
             <td>
                 <asp:Label ID="pthLblNonBillable" runat="server"></asp:Label>
