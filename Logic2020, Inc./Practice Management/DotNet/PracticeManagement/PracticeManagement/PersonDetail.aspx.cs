@@ -2659,6 +2659,7 @@ namespace PraticeManagement
                     catch (FaultException<ExceptionDetail> ex)
                     {
                         internalException = ex.Detail;
+                        string data = internalException.ToString();
                         serviceClient.Abort();
                         string exceptionMessage = internalException.InnerException != null ? internalException.InnerException.Message : string.Empty;
                         if (exceptionMessage == SalaryToContractException)
@@ -2668,7 +2669,7 @@ namespace PraticeManagement
                             if (cVSalaryToContractVoilation != null)
                                 cVSalaryToContractVoilation.IsValid = false;
                         }
-                        else
+                        else if (!(data.Contains("CK_Pay_DateRange") || exceptionMessage == StartDateIncorrect || exceptionMessage == EndDateIncorrect || exceptionMessage == PeriodIncorrect || exceptionMessage == HireDateInCorrect))
                         {
                             Logging.LogErrorMessage(
                                 ex.Message,
