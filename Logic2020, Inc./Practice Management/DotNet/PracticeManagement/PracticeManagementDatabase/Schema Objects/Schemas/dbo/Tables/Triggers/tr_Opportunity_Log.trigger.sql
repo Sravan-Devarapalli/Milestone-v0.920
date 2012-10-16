@@ -68,6 +68,7 @@ BEGIN
 			   ,OP.[Priority]
 			   ,i.[ProjectedStartDate]
 			   ,i.[ProjectedEndDate]
+			   ,i.[CloseDate]
 			   ,i.[OpportunityNumber]
 			   ,i.[Description]
 			   ,i.[PracticeId]
@@ -111,6 +112,7 @@ BEGIN
 			   ,OP.[Priority]
 			   ,d.[ProjectedStartDate]
 			   ,d.[ProjectedEndDate]
+			   ,d.[CloseDate]
 			   ,d.[OpportunityNumber]
 			   ,d.[Description]
 			   ,d.[PracticeId]
@@ -216,6 +218,7 @@ BEGIN
 				OR (ISNULL(i.SalespersonId,0) <> ISNULL(d.SalespersonId,0))
 				OR (ISNULL(i.ProjectedStartDate,'1900-01-01') <> ISNULL(d.ProjectedStartDate,'1900-01-01'))
 				OR (ISNULL(i.ProjectedEndDate,'1900-01-01') <> ISNULL(d.ProjectedEndDate,'1900-01-01'))
+				OR (ISNULL(i.CloseDate,'1900-01-01') <> ISNULL(d.CloseDate,'1900-01-01'))
 				OR (ISNULL(i.[Description],'') <> ISNULL(d.[Description],''))
 				OR (ISNULL(i.BuyerName,'') <> ISNULL(d.BuyerName,''))
 				OR (ISNULL(i.ProjectId,0) <> ISNULL(d.ProjectId,0))
