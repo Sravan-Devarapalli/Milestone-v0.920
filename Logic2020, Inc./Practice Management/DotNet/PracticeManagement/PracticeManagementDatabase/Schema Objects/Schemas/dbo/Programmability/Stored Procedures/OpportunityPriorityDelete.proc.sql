@@ -22,6 +22,7 @@ BEGIN
 	UPDATE [dbo].[OpportunityPriorities]
 	SET [Description] =NULL  
 	   ,[IsInserted] = 0    
+	   ,[DisplayName] = NULL
 	WHERE id = @DeletedPriorityId
 
 	-- End logging session
