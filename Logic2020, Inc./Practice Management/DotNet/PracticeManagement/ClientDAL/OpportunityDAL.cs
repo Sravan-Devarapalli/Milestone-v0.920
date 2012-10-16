@@ -89,6 +89,7 @@ namespace DataAccess
             {
                 var priorityIndex = reader.GetOrdinal(Constants.ColumnNames.PriorityColumn);
                 var descriptionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+                var displayNameIdIndex = reader.GetOrdinal(Constants.ColumnNames.DisplayNameColumn);
                 var priorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
                 int inUseIndex = -1;
 
@@ -109,7 +110,8 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(priorityIdIndex),
                             Priority = reader.GetString(priorityIndex),
-                            Description = reader.IsDBNull(descriptionIdIndex) ? null : reader.GetString(descriptionIdIndex)
+                            Description = reader.IsDBNull(descriptionIdIndex) ? null : reader.GetString(descriptionIdIndex),
+                            DisplayName = reader.IsDBNull(displayNameIdIndex) ? null : reader.GetString(displayNameIdIndex)
                         };
 
                     if (inUseIndex >= 0)
@@ -457,10 +459,21 @@ namespace DataAccess
                 var groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                 var practManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn);
                 var closeDateIndex = -1;
+                var priorityDisplaynameIndex = -1;
+
                 int priorityIdIndex = -1;
                 var prioritySortOrderIndex = -1;
                 int EstimatedRevenueiIndex = -1;
                 int OutSideResourcesIndex = -1;
+                try
+                {
+                    priorityDisplaynameIndex = reader.GetOrdinal(Constants.ColumnNames.DisplayNameColumn);
+
+                }
+                catch
+                {
+                    priorityDisplaynameIndex = -1;
+                }
                 try
                 {
                     closeDateIndex = reader.GetOrdinal(Constants.ColumnNames.CloseDateColumn);
@@ -620,6 +633,14 @@ namespace DataAccess
                         if (!reader.IsDBNull(priorityIdIndex))
                         {
                             opportunity.Priority.Id = reader.GetInt32(priorityIdIndex);
+                        }
+                    }
+
+                    if (priorityDisplaynameIndex > -1)
+                    {
+                        if (!reader.IsDBNull(priorityDisplaynameIndex))
+                        {
+                            opportunity.Priority.DisplayName = reader.GetString(priorityDisplaynameIndex);
                         }
                     }
 
@@ -944,6 +965,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam,
                     opportunityPriority.Description != null ? (object)opportunityPriority.Description : DBNull.Value);
 
+                command.Parameters.AddWithValue(Constants.ParameterNames.DisplayNameParam,
+                    opportunityPriority.DisplayName != null ? (object)opportunityPriority.DisplayName : DBNull.Value);
+
                 connection.Open();
                 command.ExecuteNonQuery();
             }
@@ -961,6 +985,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PriorityIdParam, opportunityPriority.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DescriptionParam,
                     opportunityPriority.Description != null ? (object)opportunityPriority.Description : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DisplayNameParam,
+                    opportunityPriority.Description != null ? (object)opportunityPriority.DisplayName : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam,
                                             !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
