@@ -45,8 +45,8 @@ BEGIN
 				SET @NoteText = 'Sales Stage changed.  Was: ' + @PrevPriority + ' now: ' + @CurrentPriority
 
 				INSERT INTO dbo.OpportunityTransition
-	            (OpportunityId, OpportunityTransitionStatusId, PersonId, NoteText, TargetPersonId)
-				SELECT OpportunityId, 2 /* Notes */, @PersonId, @NoteText, NULL
+	            (OpportunityId, OpportunityTransitionStatusId, PersonId, NoteText, TargetPersonId,PreviousChangedId,NextChangedId)
+				SELECT OpportunityId, 2 /* Notes */, @PersonId, @NoteText, NULL,@PrevPriorityId,@PriorityId
 				FROM inserted 
 
 			END
