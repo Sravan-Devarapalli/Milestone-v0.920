@@ -316,6 +316,7 @@
             public const string Phase = "Phase";
             public const string TimescaleName = "TimescaleName";
             public const string IsSalaryType = "IsSalaryType";
+            public const string IsHourlyType = "IsHourlyType";
             public const string ProjectOwnerId = "ProjectOwnerId";
             public const string ProjectOwnerLastName = "ProjectOwnerLastName";
             public const string ProjectOwnerFirstName = "ProjectOwnerFirstName";
@@ -362,6 +363,12 @@
             public const string TerminationsCumulativeEmployeeCountInTheRange = "TerminationsCumulativeEmployeeCountInTheRange";
             public const string FirstHireDate = "FirstHireDate";
             public const string LastTerminationDate = "LastTerminationDate";
+            public const string IsW2HourlyAllowed = "IsW2HourlyAllowed";
+            public const string IsW2SalaryAllowed = "IsW2SalaryAllowed";
+            public const string IsSickLeaveColumn = "IsSickLeave";
+            public const string CapabilityId = "CapabilityId";
+            public const string ProjectCapabilityIds = "ProjectCapabilityIds";
+            public const string PracticeAbbreviation = "PracticeAbbreviation";
         }
 
         #endregion
@@ -641,6 +648,7 @@
             public const string BusinessUnitIdsParam = "@BusinessUnitIds";
             public const string ProjectBillingTypesParam = "@ProjectBillingTypes";
             public const string IncludeUnpaidParam = "@IncludeUnpaid";
+            public const string IncludeSickLeaveParam = "@IncludeSickLeave";
             public const string SowBudgetParam = "@SowBudget";
             public const string CategoryIdParam = "@CategoryId";
             public const string LinkParam = "@Link";
@@ -653,6 +661,8 @@
             public const string TerminationReasonIdsParam = "@TerminationReasonIds";
             public const string TerminationDatesParam = "@TerminationDates";
             public const string RoleNameParam = "@RoleName";
+            public static string ProjectCapabilityIds = "@ProjectCapabilityIds";
+            public static string CapabilityIdParam = "@CapabilityId";
         }
 
         #endregion
@@ -797,6 +807,7 @@
                 public const string GetPersonHireAndTerminationDateById = "dbo.GetPersonHireAndTerminationDateById";
                 public const string GetPersonListWithRole = "dbo.GetPersonListWithRole";
                 public const string GetPersonEmploymentHistoryById = "dbo.GetPersonEmploymentHistoryById";
+                public const string GetPersonAdministrativeTimeTypesInRange = "dbo.GetPersonAdministrativeTimeTypesInRange";
             }
 
             #endregion
@@ -822,6 +833,7 @@
                 public const string GetTotals = "dbo.TimeEntriesGetTotals";
                 public const string PersonTimeEntriesByPeriod = "dbo.PersonTimeEntriesByPeriod";
                 public const string GetWorkTypeNameByIdProcedure = "dbo.GetWorkTypeNameById";
+                public const string GetWorkTypeByIdProcedure = "dbo.GetWorkTypeById";
                 public const string ToggleIsReviewed = "dbo.TimeEntryToggleIsReviewed";
                 public const string ToggleIsCorrect = "dbo.TimeEntryToggleIsCorrect";
                 public const string ToggleIsChargeable = "dbo.TimeEntryToggleIsChargeable";
@@ -896,6 +908,7 @@
                 public const string Update = "dbo.PracticeUpdate";
                 public const string Insert = "dbo.PracticeInsert";
                 public const string Delete = "dbo.PracticeDelete";
+                public const string GetPracticeCapabilities = "dbo.GetPracticeCapabilities";
             }
             #endregion
 
@@ -1020,6 +1033,8 @@
                 public const string GetTimeTypesByProjectIdProcedure = "dbo.GetProjectTimeTypes";
                 public const string SetProjectTimeTypesProcedure = "dbo.SetProjectTimeTypes";
                 public const string GetUnpaidTimeTypeProcedure = "dbo.GetUnpaidTimeType";
+                public const string GetSickLeaveTimeTypeProcedure = "dbo.GetSickLeaveTimeType";
+                public const string GetPTOTimeTypeProcedure = "dbo.GetPTOTimeType";
                 public const string IsUserIsProjectOwner = "dbo.IsUserIsProjectOwner";
                 public const string AttachOpportunityToProject = "dbo.AttachOpportunityToProject";
 
