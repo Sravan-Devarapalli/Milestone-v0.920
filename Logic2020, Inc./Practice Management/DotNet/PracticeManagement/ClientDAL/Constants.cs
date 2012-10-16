@@ -193,6 +193,7 @@
             public const string MilestoneIdColumn = "MilestoneId";
             public const string ProjectNameColumn = "ProjectName";
             public const string DescriptionColumn = "Description";
+            public const string DisplayNameColumn = "DisplayName";
             public const string ProjectStartDateColumn = "ProjectStartDate";
             public const string ProjectEndDateColumn = "ProjectEndDate";
             public const string BuyerNameColumn = "BuyerName";
@@ -222,6 +223,7 @@
             public const string PriorityIdColumn = "PriorityId";
             public const string ProjectedStartDateColumn = "ProjectedStartDate";
             public const string ProjectedEndDateColumn = "ProjectedEndDate";
+            public const string CloseDateColumn = "CloseDate";
             public const string OpportunityNumberColumn = "OpportunityNumber";
             public const string OpportunityName = "OpportunityName";
             public const string SalespersonFirstNameColumn = "SalespersonFirstName";
@@ -308,6 +310,7 @@
             public const string BereavementHours = "BereavementHours";
             public const string ORTHours = "ORTHours";
             public const string UnpaidHours = "UnpaidHours";
+            public const string SickOrSafeLeaveHours = "SickOrSafeLeaveHours";
             public const string PaychexID = "PaychexID";
             public const string IsOffshore = "IsOffshore";
             public const string IsNoteRequired = "IsNoteRequired";
@@ -577,7 +580,9 @@
             public const string DeletedPriorityIdParam = "@DeletedPriorityId";
             public const string ProjectedStartDateParam = "@ProjectedStartDate";
             public const string ProjectedEndDateParam = "@ProjectedEndDate";
+            public const string CloseDateParam = "@CloseDate";
             public const string DescriptionParam = "@Description";
+            public const string DisplayNameParam = "@DisplayName";
             public const string PipelineParam = "@Pipeline";
             public const string ProposedParam = "@Proposed";
             public const string SendOutParam = "@SendOut";
