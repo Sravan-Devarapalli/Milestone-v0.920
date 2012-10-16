@@ -141,8 +141,8 @@ namespace PraticeManagement.Utils
             //  Iterate through all colors and put them on legend
             legendItems.Add(Color.FromArgb(255, 0, 0), "Project with Active Status");//Red
             legendItems.Add(Color.FromArgb(255, 255, 0), "Project with Projected Status");//Yellow
-            legendItems.Add(Color.FromArgb(82, 178, 0), "Opportunity with \"A\" Priority");//Green
-            legendItems.Add(Color.FromArgb(51, 204, 255), "Opportunity with \"B\" Priority");//Sky Blue.
+            legendItems.Add(Color.FromArgb(82, 178, 0), "Opportunity with \"Negotiating\" Sales Stage");//Green
+            legendItems.Add(Color.FromArgb(51, 204, 255), "Opportunity with \"Proposed\" Sales Stage");//Sky Blue.
         }
 
         /// <summary>
