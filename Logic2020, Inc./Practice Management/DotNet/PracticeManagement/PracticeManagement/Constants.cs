@@ -63,8 +63,8 @@ namespace PraticeManagement
             public const string UnlockUserMinituesKey = "UnlockUserMinitues";
             public const string FormsAuthenticationTimeOutKey = "FormsAuthenticationTimeOutMin";
             public const string NotesRequiredForTimeEntryKey = "NotesRequiredForTimeEntry";
-            
-            
+
+
             #endregion
 
         }
@@ -222,7 +222,7 @@ namespace PraticeManagement
             public const string DoubleValue = "0.00";
             public const string CurrencyFormat = "$###,###,###,###,###,###,###";
             public const string ReportDateFormat = "MM/dd/yyyy (dddd)";
-            
+
         }
 
         public static class HttpHeaders
@@ -307,7 +307,14 @@ namespace PraticeManagement
             public const string IsStrawMan = "IsStrawMan";
             public const string OptionGroup = "OptionGroup";
             public const string HasPermissionToEditCalender = "HasPermissionToEditCalender";
-            
+
+        }
+
+        public static class OpportunityPriorityIds
+        {
+            public const int PriorityIdOfPO = 5;
+            public const int PriorityIdOfA = 1;
+            public const int PriorityIdOfB = 2;
         }
     }
 }
