@@ -1,5 +1,4 @@
-﻿
-CREATE VIEW [dbo].[v_Opportunity]
+﻿CREATE VIEW [dbo].[v_Opportunity]
 AS
 	SELECT o.OpportunityId,
 	       o.Name,	       
@@ -24,6 +23,7 @@ AS
 		   o.EstimatedRevenue,
 		   o.LastUpdated as 'LastUpdate',
 		   o.GroupId,
+		   o.CloseDate,
 		   g.[Name] as 'GroupName',
 	       c.Name AS ClientName,
 	       c.DefaultDiscount AS Discount,
@@ -46,3 +46,4 @@ AS
 	       INNER JOIN dbo.Practice AS r ON o.PracticeId = r.PracticeId	
 		   Left Join dbo.ProjectGroup as g on o.GroupId = g.GroupId
 		   Left join dbo.Person as prowner on prowner.PersonId = r.PracticeManagerId
+
