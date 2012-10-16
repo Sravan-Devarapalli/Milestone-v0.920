@@ -287,6 +287,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string ProjectCapabilityIds
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets a bayer name.
         /// </summary>
@@ -367,6 +374,9 @@ namespace DataTransferObjects
 
         [DataMember]
         public bool IsPTOProject { get; set; }
+
+        [DataMember]
+        public bool IsSickLeaveProject { get; set; }
 
         [DataMember]
         public bool IsHolidayProject { get; set; }
