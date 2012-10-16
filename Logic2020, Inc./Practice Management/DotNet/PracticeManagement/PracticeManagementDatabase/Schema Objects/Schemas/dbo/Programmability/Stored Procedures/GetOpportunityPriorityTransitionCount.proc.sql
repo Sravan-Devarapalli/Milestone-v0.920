@@ -13,12 +13,12 @@ BEGIN
 			  ,[NoteText]
 			  ,[OpportunityTransitionTypeId]
 			  ,[TargetPersonId]
-			  ,SUBSTRING(REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''),0,
-			  CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''))) Previous
-				  ,SUBSTRING( REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''),
-								CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''))+1
-								,LEN(REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''))-
-								CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Priority changed.  Was: ',''),'now',''),' ',''))
+			  ,SUBSTRING(REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''),0,
+			  CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))) Previous
+				  ,SUBSTRING( REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''),
+								CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))+1
+								,LEN(REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))-
+								CHARINDEX(':',REPLACE(REPLACE(REPLACE([NoteText],'Sales Stage changed.  Was: ',''),'now',''),' ',''))
 			  ) next
 		  FROM OpportunityTransition ot
 		  JOIN Opportunity O On O.OpportunityId = ot.OpportunityId
@@ -37,9 +37,9 @@ BEGIN
 			case WHEN opl.TransitionDate = MAX(opl.TransitionDate) OVER(partition by opl.OpportunityId) THEN np.sortOrder ELSE NULL END [NextSortOrder],
 			case WHEN opl.TransitionDate = MIN(opl.TransitionDate) OVER(partition by opl.OpportunityId) THEN pp.sortOrder ELSE NULL END [PreviousSortOrder]
 	FROM OpportunityTransitionPriorityList opl
-	INNER JOIN OpportunityPriorities np On np.Priority = opl.next
-	INNER JOIN OpportunityPriorities pp On pp.Priority = opl.Previous
-	WHERE NoteText LIKE '%Priority changed.%'
+	INNER JOIN OpportunityPriorities np On np.DisplayName = opl.next
+	INNER JOIN OpportunityPriorities pp On pp.DisplayName = opl.Previous
+	WHERE NoteText LIKE '%Sales Stage changed.%'
 
 	)
 
