@@ -15,6 +15,7 @@ using PraticeManagement.TimeTypeService;
 using PraticeManagement.ReportService;
 using PraticeManagement.PersonStatusService;
 using PraticeManagement.PersonSkillService;
+using PraticeManagement.PracticeService;
 
 namespace PraticeManagement
 {
@@ -184,12 +185,23 @@ namespace PraticeManagement
             {
                 Invoke(action);
             }
+
             public static TResult PersonSkill<TResult>(Func<PersonSkillServiceClient, TResult> func)
             {
                 return Invoke(func);
             }
 
             public static void PersonSkill(Action<PersonSkillServiceClient> action)
+            {
+                Invoke(action);
+            }
+
+            public static TResult Practice<TResult>(Func<PracticeServiceClient, TResult> func)
+            {
+                return Invoke(func);
+            }
+
+            public static void Practice(Action<PracticeServiceClient> action)
             {
                 Invoke(action);
             }
