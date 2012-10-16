@@ -21,7 +21,7 @@ namespace PraticeManagement
 {
     public partial class OpportunityDetail : PracticeManagementPageBase, IPostBackEventHandler
     {
-        
+
         #region Fields
 
         private bool _userIsAdministrator;
@@ -221,9 +221,6 @@ namespace PraticeManagement
             }
         }
 
-
-
-
         //private bool HasProposedPersonsOfTypeNormal
         //{
         //    get
@@ -287,6 +284,8 @@ namespace PraticeManagement
                 }
 
                 tpHistory.Visible = OpportunityId.HasValue;
+
+
             }
 
 
@@ -875,6 +874,7 @@ namespace PraticeManagement
             ddlStatus.SelectedIndex = 0;
             dpStartDate.TextValue = string.Empty;
             dpEndDate.TextValue = string.Empty;
+            dpCloseDate.TextValue = string.Empty;
             ddlPriority.Attributes["selectedPriorityText"] = ddlPriority.SelectedItem.Text;
             //ucProposedResources.ResetProposedResources();
             //ucProposedResources.FillPotentialResources();
@@ -938,6 +938,7 @@ namespace PraticeManagement
             {
                 dpEndDate.ErrorMessage = string.Empty;
                 dpStartDate.ErrorMessage = string.Empty;
+                dpCloseDate.ErrorMessage = string.Empty;
                 IsErrorPanelDisplay = true;
             }
 
@@ -1176,6 +1177,7 @@ namespace PraticeManagement
 
             dpStartDate.DateValue = opportunity.ProjectedStartDate.HasValue ? opportunity.ProjectedStartDate.Value : DateTime.MinValue;
             dpEndDate.DateValue = opportunity.ProjectedEndDate.HasValue ? opportunity.ProjectedEndDate.Value : DateTime.MinValue;
+            dpCloseDate.DateValue = opportunity.CloseDate.HasValue ? opportunity.CloseDate.Value : DateTime.MinValue;
 
             txtDescription.Text = opportunity.Description;
             txtBuyerName.Text = opportunity.BuyerName;
@@ -1320,6 +1322,10 @@ namespace PraticeManagement
             opportunity.ProjectedEndDate =
                 dpEndDate.DateValue != DateTime.MinValue
                         ? (DateTime?)dpEndDate.DateValue
+                        : null;
+
+            opportunity.CloseDate = dpCloseDate.DateValue != DateTime.MinValue
+                        ? (DateTime?)dpCloseDate.DateValue
                         : null;
 
             int priorityId;
