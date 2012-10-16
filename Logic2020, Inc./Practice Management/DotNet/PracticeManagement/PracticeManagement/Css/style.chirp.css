@@ -3467,6 +3467,19 @@ div.scrollextLabel
     z-index: 20000;
 }
 
+.ProjectDetailScrollingDropDown
+{
+    height: 240px;
+    width: 17%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 3;
+    display: inline-block;
+    z-index: 20000;
+}
+
 .PersonPayTypeScrollingDropDown
 {
     height: 100px;
@@ -5315,6 +5328,10 @@ BenchCosts.ascx*/
 .bgColorWhite
 {
     background-color: white;
+}
+.bgColorWhiteImp
+{
+    background-color: white !important;
 }
 .WeekSelectorHiddenTextBox
 {
