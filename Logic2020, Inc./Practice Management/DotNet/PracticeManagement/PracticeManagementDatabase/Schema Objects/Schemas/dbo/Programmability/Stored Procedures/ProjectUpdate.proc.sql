@@ -20,7 +20,8 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@IsInternal			BIT,
 	@IsNoteRequired     BIT = 1  ,
 	@ProjectOwner       INT,
-	@SowBudget			DECIMAL(18,2)
+	@SowBudget			DECIMAL(18,2),
+	@ProjectCapabilityIds NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -140,7 +141,19 @@ BEGIN
 		LEFT JOIN dbo.ProjectManagers pm
 		ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
 		WHERE pm.ProjectManagerId IS NULL
-				
+
+	    DELETE PC
+		FROM dbo.ProjectCapabilities PC
+		LEFT JOIN [dbo].ConvertStringListIntoTable(@ProjectCapabilityIds) AS p 
+		ON PC.ProjectId = @ProjectId AND PC.CapabilityId = p.ResultId 
+		WHERE p.ResultId IS NULL and PC.ProjectId = @ProjectId
+
+		INSERT INTO dbo.ProjectCapabilities(ProjectId,CapabilityId)
+		SELECT @ProjectId ,p.ResultId
+		FROM [dbo].ConvertStringListIntoTable(@ProjectCapabilityIds) AS p 
+		LEFT JOIN dbo.ProjectCapabilities PC
+		ON p.ResultId = PC.CapabilityId AND PC.ProjectId=@ProjectId
+		WHERE PC.CapabilityId IS NULL
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
