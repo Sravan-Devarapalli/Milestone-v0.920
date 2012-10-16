@@ -54,7 +54,8 @@ AS
 			ELSE CAST(1 AS BIT) END AS [HasTimeEntries],
 			p.IsNoteRequired,
 			p.SowBudget,
-			p.ClientIsNoteRequired
+			p.ClientIsNoteRequired,
+			p.ProjectCapabilityIds
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
