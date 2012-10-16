@@ -1,8 +1,11 @@
-﻿function scrollingDropdown_onclick(control, type,pluralform,pluralformType) {
+﻿function scrollingDropdown_onclick(control, type, pluralform, pluralformType, maxNoOfCharacters) {
     var temp = 0;
     var text = "";
     if (pluralform == undefined || pluralform == null || pluralform == '') {
         pluralform = "s";
+    }
+    if (maxNoOfCharacters == undefined || maxNoOfCharacters == null || maxNoOfCharacters == '' || isNaN(maxNoOfCharacters)) {
+        maxNoOfCharacters = 33;
     }
     var scrollingDropdownList = document.getElementById(control.toString());
     var arrayOfCheckBoxes = scrollingDropdownList.getElementsByTagName("input");
@@ -30,10 +33,9 @@
             }
         }
         text = DecodeString(text);
-        if (text.length > 33) {
-            text = text.substr(0, 31) + "..";
-        }
-        scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = text;
+        var isLengthExceded = (text.length > maxNoOfCharacters);
+        scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = isLengthExceded ? text.substr(0, maxNoOfCharacters-2) + ".." : text;
+        scrollingDropdownList.parentNode.children[1].children[0].firstChild.parentNode.attributes['title'].nodeValue = isLengthExceded ? fulltext : '';
     }
 }
 
