@@ -18,7 +18,7 @@ namespace PraticeManagement.Config
         private const int DDL_OPPORTUNITY_PRIORITY_INDEX = 1;
         private const string OPPORTUNITY_PRIORITY_LIST_KEY = "OPPORTUNITY_PRIORITY_LIST_KEY";
         private const string popupMessage = "This Priority Order is assigned to a Sales Stage, Which is linked to existing opportunities already.  Changing this value will also change the status for all existing opportunities that are using the old value.";
-       
+
         #endregion constants
 
         #region properties
@@ -228,8 +228,8 @@ namespace PraticeManagement.Config
                 var ddl = row.FindControl("ddlOpportunityPriority") as DropDownList;
                 var tbox = row.FindControl("tbEditPriorityDescription") as TextBox;
                 var tboxDisplayName = row.FindControl("tbEditDisplayName") as TextBox;
-                var oldDisplayName = tboxDisplayName.Attributes["OldName"].ToLower().Trim();
-                var newDisplayName = tboxDisplayName.Text.ToLower().Trim();
+                var oldDisplayName = tboxDisplayName.Attributes["OldName"].ToLower().Replace(" ", "");
+                var newDisplayName = tboxDisplayName.Text.ToLower().Replace(" ", "");
 
                 if (oldDisplayName != newDisplayName && IsSalesStageAlreadyExisting(tboxDisplayName.Text))
                 {
@@ -293,7 +293,7 @@ namespace PraticeManagement.Config
 
         private bool IsSalesStageAlreadyExisting(string salesStage)
         {
-            return OpportunityPriorityList.Any(p => p.DisplayName.ToLower().Trim() == salesStage.ToLower().Trim());
+            return OpportunityPriorityList.Any(p => p.DisplayName.ToLower().Replace(" ", "") == salesStage.ToLower().Replace(" ", ""));
         }
 
         #endregion Methods
