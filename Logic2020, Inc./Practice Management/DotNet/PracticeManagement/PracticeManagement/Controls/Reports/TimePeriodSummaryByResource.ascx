@@ -257,34 +257,22 @@
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th>
-                                Billable
-                                <img alt="Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalBillable"
-                                    class="CursorText" />
+                                <asp:Label ID="lblTotalBillable" runat="server" Text="Billable"></asp:Label>
                             </th>
                             <th class="no-wrap">
-                                Non-Billable
-                                <img alt="Non-Billable Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalNonBillable"
-                                    class="CursorText" />
+                                <asp:Label ID="lblTotalNonBillable" runat="server" Text="Non-Billable"></asp:Label>
                             </th>
                             <th>
-                                BD
-                                <img alt="BD Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalBD"
-                                    class="CursorText" />
+                                <asp:Label ID="lblTotalBD" runat="server" Text="BD"></asp:Label>
                             </th>
                             <th>
-                                Internal
-                                <img alt="Internal Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalInternal"
-                                    class="CursorText" />
+                                <asp:Label ID="lblTotalInternal" runat="server" Text="Internal"></asp:Label>
                             </th>
                             <th>
-                                Time-Off
-                                <img alt="Time-Off Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalTimeOff"
-                                    class="CursorText" />
+                                <asp:Label ID="lblTotalTimeOff" runat="server" Text="Time-Off"></asp:Label>
                             </th>
                             <th>
-                                Total
-                                <img alt="Total Sum" src="../../Images/Sigma-9x10.png" runat="server" id="imgTotalHours"
-                                    class="CursorText" />
+                                <asp:Label ID="lblTotalHours" runat="server" Text="Total"></asp:Label>
                             </th>
                             <th class="Width295PxImp">
                                 Utilization Percent this Period
