@@ -39,6 +39,8 @@ namespace DataTransferObjects
         Owner = 13,
         [EnumMember]
         EstimatedRevenue = 14,
+        [EnumMember]
+        CloseDate = 15,
     }
 
     /// <summary>
@@ -168,6 +170,12 @@ namespace DataTransferObjects
                     break;
                 case OpportunitySortOrder.EstimatedRevenue:
                     result = Nullable.Compare(x.EstimatedRevenue, y.EstimatedRevenue);
+                    break;
+                case OpportunitySortOrder.CloseDate:
+                    result =
+                        DateTime.Compare(
+                        x.CloseDate.HasValue ? x.CloseDate.Value : DateTime.MinValue,
+                        y.CloseDate.HasValue ? y.CloseDate.Value : DateTime.MinValue);
                     break;
 
                 default:
