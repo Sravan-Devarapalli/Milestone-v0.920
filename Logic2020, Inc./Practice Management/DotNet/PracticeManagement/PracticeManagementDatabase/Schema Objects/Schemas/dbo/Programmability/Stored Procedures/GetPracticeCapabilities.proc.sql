@@ -13,4 +13,6 @@ BEGIN
 	INNER JOIN dbo.Practice  P ON P.PracticeId = PC.PracticeId 
 	WHERE	( @PracticeId IS NULL OR P.PracticeId = @PracticeId ) 
 			AND ( @CapabilityId IS NULL OR PC.CapabilityId = @CapabilityId ) 
+	ORDER BY ISNULL(P.Abbreviation,P.Name),PC.[CapabilityName]
 END
+
