@@ -86,7 +86,7 @@
                             <asp:RegularExpressionValidator ControlToValidate="tbEditDisplayName" ValidationGroup="EditSalesStage"
                                 ID="valRegDisplayName" runat="server" ErrorMessage="Display Name should be limited to 15 characters in length."
                                 ToolTip="Display Name should be limited to 15 characters in length." EnableClientScript="false"
-                                Display="Dynamic" Text="*" ValidationExpression="^[a-zA-Z]{0,15}$" SetFocusOnError="true" />
+                                Display="Dynamic" Text="*" ValidationExpression="^[a-zA-Z0-9 ]{0,15}$" SetFocusOnError="true" />
                             <asp:CustomValidator ID="cvUniquesDisplayName" runat="server" ControlToValidate="tbEditDisplayName"
                                 ErrorMessage="This Sales Stage already exists.Please enter different Sales Stage."
                                 ToolTip="This Sales Stage already exists.Please enter different Sales Stage."
@@ -175,7 +175,7 @@
                             <asp:RegularExpressionValidator ControlToValidate="tdInsertDisplayName" ValidationGroup="AddSalesStage"
                                 ID="valRegDisplayName" runat="server" ErrorMessage="Display Name should be limited to 15 characters in length."
                                 ToolTip="Display Name should be limited to 15 characters in length." EnableClientScript="false"
-                                Text="*" ValidationExpression="^[a-zA-Z]{0,15}$" Display="Dynamic" />
+                                Text="*" ValidationExpression="^[a-zA-Z0-9 ]{0,15}$" Display="Dynamic" />
                             <asp:CustomValidator ID="cvInsertUniqueDisplayName" runat="server" ControlToValidate="tdInsertDisplayName"
                                 ErrorMessage="This Sales Stage already exists.Please enter different Sales Stage."
                                 ToolTip="This Sales Stage already exists.Please enter different Sales Stage."
