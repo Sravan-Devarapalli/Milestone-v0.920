@@ -32,7 +32,7 @@ BEGIN
 		
 	SELECT ROW_NUMBER() OVER(PARTITION BY O.ClientName + ISNULL(O.BuyerName, '') 
 							ORDER BY CASE OP.sortOrder WHEN 0 THEN 1000 ELSE OP.sortOrder END,
-									YEAR(ISNULL(O.ProjectedStartDate,@FutureDate)),MONTH(ISNULL(O.ProjectedStartDate,@FutureDate)),
+									YEAR(ISNULL(O.CloseDate,@FutureDate)),MONTH(ISNULL(O.CloseDate,@FutureDate)),
 									O.SalespersonLastName) RowNumber,
 							/* here sortOrder = 0 means 'PO' priority */
 			o.OpportunityId,
@@ -46,6 +46,7 @@ BEGIN
 			op.sortOrder AS [PrioritySortOrder],
 			o.ProjectedStartDate,
 			o.ProjectedEndDate,
+			o.CloseDate,
 			o.OpportunityNumber,
 			o.Description,
 			o.PracticeId,
@@ -96,8 +97,8 @@ BEGIN
 							AND A.RowNumber=1 AND A.PrioritySortOrder!=0 AND B.PrioritySortOrder != 0 ) 
 					   OR (A.OpportunityId = B.OpportunityId AND A.PrioritySortOrder=0)
 		ORDER BY A.PrioritySortOrder,
-				YEAR(ISNULL(A.ProjectedStartDate,@FutureDate)),
-				MONTH(ISNULL(A.ProjectedStartDate,@FutureDate)),
+				YEAR(ISNULL(A.CloseDate,@FutureDate)),
+				MONTH(ISNULL(A.CloseDate,@FutureDate)),
 				A.SalespersonLastName,
 				B.ClientName,
 				ISNULL(B.BuyerName, ''),
