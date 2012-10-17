@@ -646,14 +646,18 @@
                                             <td class="width60P">
                                                 <cc2:ScrollingDropDown ID="cblPracticeCapabilities" runat="server" SetDirty="true"
                                                     CssClass="ProjectDetailScrollingDropDown Width20Percent" AllSelectedReturnType="AllItems"
-                                                    onclick="scrollingDropdown_onclick('cblPracticeCapabilities','Capability','','Capabilities',28);"
-                                                    DropDownListType="Capability" DropDownListTypePluralForm="Capabilities" />
+                                                    onclick="scrollingDropdown_onclick('cblPracticeCapabilities','Capability','ies','Capabilities',28);"
+                                                    DropDownListType="Capability" DropDownListTypePluralForm="Capabilities" PluralForm="ies" />
                                                 <ext:ScrollableDropdownExtender ID="sdePracticeCapabilities" runat="server" TargetControlID="cblPracticeCapabilities"
                                                     BehaviorID="sdePracticeCapabilities" MaxNoOfCharacters="28" Width="94%" UseAdvanceFeature="true"
                                                     EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                             </td>
                                             <td class="Width10Percent">
+                                                <asp:CustomValidator ID="cvCapabilities" runat="server" EnableClientScript="false"
+                                                    ValidationGroup="Project" ErrorMessage="The Capability(ies) is required." ValidateEmptyText="true"
+                                                    OnServerValidate="cvCapabilities_OnServerValidate" SetFocusOnError="true" Text="*"
+                                                    ToolTip="The Capability(ies) is required."></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -1154,17 +1158,19 @@
             <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
                 <table class="Width100Per">
                     <tr>
-                        <th align="center" class="TextAlignCenter BackGroundColorGray vBottom" colspan="2">
+                        <th align="center" class="TextAlignCenter BackGroundColorGray vBottom">
                             <b class="BtnClose">Attention!</b>
                         </th>
                     </tr>
                     <tr>
                         <td class="Padding10Px">
                             <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
-                            <asp:ValidationSummary ID="vsumProject" runat="server" EnableClientScript="false"
+                            <asp:ValidationSummary ID="vsumProject" runat="server" DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists"
+                                ShowMessageBox="false" ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a project."
                                 ValidationGroup="Project" />
                             <asp:ValidationSummary ID="vsumProjectAttachment" runat="server" EnableClientScript="false"
-                                ValidationGroup="ProjectAttachment" />
+                                DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false"
+                                ShowSummary="true" ValidationGroup="ProjectAttachment" />
                         </td>
                     </tr>
                     <tr>
