@@ -640,7 +640,7 @@
                                 <td class="TdProjectDetailFeild">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td class="width30P">
+                                            <td class="width30P vTopImp PaddingTop4">
                                                 Capabilities
                                             </td>
                                             <td class="width60P">
