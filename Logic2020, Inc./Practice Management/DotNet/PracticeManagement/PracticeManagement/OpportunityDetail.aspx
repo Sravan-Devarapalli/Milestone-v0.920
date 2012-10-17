@@ -779,12 +779,12 @@
                                             </td>
                                             <td>
                                                 <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                    ErrorMessage="The Projected Start date is required" ToolTip="The Projected Start date is required."
+                                                    ErrorMessage="The Project Start Date is required" ToolTip="The Project Start Date is required."
                                                     ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
                                                 <asp:CompareValidator ID="cmpStartDateDataTypeCheck" runat="server" ControlToValidate="dpStartDate"
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
-                                                    ErrorMessage="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                    ToolTip="The Projected Start Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
+                                                    ErrorMessage="The Project Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                    ToolTip="The Project Start Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                             </td>
                                             <td class="LblEndDate">
                                                 <asp:Label ID="lbEndDate" CssClass="fontBold" runat="server" Text="Project End Date"></asp:Label>
@@ -795,15 +795,15 @@
                                             </td>
                                             <td class="padRight7Imp">
                                                 <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
-                                                    ErrorMessage="The Projected End date is required" ToolTip="The Projected End date is required."
+                                                    ErrorMessage="The Project End Date is required" ToolTip="The Project End Date is required."
                                                     ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
                                                 <asp:CompareValidator ID="cmpEndDateDataTypeCheck" runat="server" ControlToValidate="dpEndDate"
                                                     ValidationGroup="Opportunity" Type="Date" Operator="DataTypeCheck" Text="*" Display="Dynamic"
-                                                    ErrorMessage="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                    ToolTip="The Projected End Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
+                                                    ErrorMessage="The Project End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                    ToolTip="The Project End Date has an incorrect format. It must be 'MM/dd/yyyy'."></asp:CompareValidator>
                                                 <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
-                                                    ControlToCompare="dpStartDate" ErrorMessage="Project End Date must greater or Equal to Project Start Date."
-                                                    ToolTip="Project End Date must greater or Equal to Project Start Date." Text="*"
+                                                    ControlToCompare="dpStartDate" ErrorMessage="Project End Date must be greater or equal to Project Start Date."
+                                                    ToolTip="Project End Date must be greater or equal to Project Start Date." Text="*"
                                                     EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="GreaterThanEqual"
                                                     Type="Date" ValidationGroup="Opportunity"></asp:CompareValidator>
                                                 <asp:CustomValidator ID="cvOpportunityStrawmanEndDateCheck" runat="server" OnServerValidate="cvOpportunityStrawmanEndDateCheck_ServerValidate"
