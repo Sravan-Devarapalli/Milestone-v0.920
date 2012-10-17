@@ -1122,8 +1122,8 @@
                             </td>
                             <td class="Width4Percent">
                                 <div class="ie-bg no-wrap TextAlignCenter">
-                                    <asp:LinkButton ID="btnStartDateSort" runat="server" Text="Start" CommandName="Sort"
-                                        CssClass="arrow LeftPadding10px" CommandArgument="StartDate" />
+                                    <asp:LinkButton ID="btnCloseDateSort" runat="server" Text="Close Date" CommandName="Sort"
+                                        CssClass="arrow LeftPadding10px" CommandArgument="CloseDate" />
                                 </div>
                             </td>
                             <td class="Width13Percent">
@@ -1185,7 +1185,7 @@
                         </td>
                         <td class="TextAlignLeft">
                             <div class="cell-pad">
-                                <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
+                                <%# Eval("CloseDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("CloseDate")))%>
                             </div>
                         </td>
                         <td class="WordWrap">
@@ -1278,7 +1278,7 @@
                         </td>
                         <td class="TextAlignLeft">
                             <div class="cell-pad">
-                                <%# Eval("ProjectedStartDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("ProjectedStartDate")))%>
+                                <%# Eval("CloseDate") == null ? string.Empty : string.Format("{0:MMM} '{0:yy}", ((DateTime)Eval("CloseDate")))%>
                             </div>
                         </td>
                         <td class="WordWrap">
