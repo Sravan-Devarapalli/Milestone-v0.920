@@ -244,6 +244,11 @@ namespace PraticeManagement
             args.IsValid = cblProjectManagers.SelectedValues != null ? cblProjectManagers.SelectedValues.Count > 0 : false;
         }
 
+        protected void cvCapabilities_OnServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = cblPracticeCapabilities.SelectedValues != null ? cblPracticeCapabilities.SelectedValues.Count > 0 : false;
+        }
+
         protected void cvProjectOwner_OnServerValidate(object sender, ServerValidateEventArgs args)
         {
             args.IsValid = true;
