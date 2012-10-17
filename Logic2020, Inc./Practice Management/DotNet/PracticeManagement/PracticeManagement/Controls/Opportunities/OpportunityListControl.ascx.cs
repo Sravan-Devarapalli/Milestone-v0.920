@@ -206,8 +206,6 @@ namespace PraticeManagement.Controls.Opportunities
 
             SetHeaderIconsAccordingToSordOrder();
             FireFilterOptionsChanged();
-
-            var x = EditedOpportunityList;
         }
 
         protected override void ResetControls()
