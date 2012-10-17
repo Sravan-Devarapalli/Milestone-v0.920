@@ -418,13 +418,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvProjectManagerStatus;
         
         /// <summary>
-        /// cblPracticeCapabilities  control.
+        /// cblPracticeCapabilities control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ScrollingDropDown cblPracticeCapabilities ;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblPracticeCapabilities;
         
         /// <summary>
         /// sdePracticeCapabilities control.
@@ -434,6 +434,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePracticeCapabilities;
+        
+        /// <summary>
+        /// cvCapabilities control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvCapabilities;
         
         /// <summary>
         /// custProjectDesciption control.
