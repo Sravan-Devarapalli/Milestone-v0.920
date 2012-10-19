@@ -88,8 +88,8 @@
                                 ToolTip="Display Name should be limited to 15 characters in length." EnableClientScript="false"
                                 Display="Dynamic" Text="*" ValidationExpression="^[a-zA-Z0-9 ]{0,15}$" SetFocusOnError="true" />
                             <asp:CustomValidator ID="cvUniquesDisplayName" runat="server" ControlToValidate="tbEditDisplayName"
-                                ErrorMessage="This Sales Stage already exists.Please enter different Sales Stage."
-                                ToolTip="This Sales Stage already exists.Please enter different Sales Stage."
+                                ErrorMessage="Sales Stage with this name already exists. Please enter different Sales Stage name."
+                                ToolTip="Sales Stage with this name already exists. Please enter different Sales Stage name."
                                 EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="EditSalesStage" />
                         </EditItemTemplate>
                     </asp:TemplateField>
@@ -177,8 +177,8 @@
                                 ToolTip="Display Name should be limited to 15 characters in length." EnableClientScript="false"
                                 Text="*" ValidationExpression="^[a-zA-Z0-9 ]{0,15}$" Display="Dynamic" />
                             <asp:CustomValidator ID="cvInsertUniqueDisplayName" runat="server" ControlToValidate="tdInsertDisplayName"
-                                ErrorMessage="This Sales Stage already exists.Please enter different Sales Stage."
-                                ToolTip="This Sales Stage already exists.Please enter different Sales Stage."
+                                ErrorMessage="Sales Stage with this name already exists. Please enter different Sales Stage name."
+                                ToolTip="Sales Stage with this name already exists. Please enter different Sales Stage name."
                                 EnableClientScript="false" Display="Dynamic" Text="*" ValidationGroup="AddSalesStage" />
                         </td>
                         <td class="Width20Percent">
