@@ -53,7 +53,7 @@ namespace PraticeManagement.Controls.Opportunities
                 try
                 {
                     serviceClient.InsertOpportunityPriority(opportunityPriority);
-
+                    Utils.SettingsHelper.DemandOpportunitySalesStages = null;
                 }
                 catch (CommunicationException ex)
                 {
@@ -70,6 +70,7 @@ namespace PraticeManagement.Controls.Opportunities
                 try
                 {
                     serviceClient.UpdateOpportunityPriority(oldPriorityId, opportunityPriority, userName);
+                    Utils.SettingsHelper.DemandOpportunitySalesStages = null;
 
                 }
                 catch (CommunicationException ex)
@@ -87,6 +88,7 @@ namespace PraticeManagement.Controls.Opportunities
                 try
                 {
                     serviceClient.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId, userName);
+                    Utils.SettingsHelper.DemandOpportunitySalesStages = null;
 
                 }
                 catch (CommunicationException ex)
