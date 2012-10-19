@@ -158,7 +158,7 @@ AS
 				AND (@PracticeIdsLocal IS NULL 
 					OR p.DefaultPractice IN (SELECT PracticeId FROM @PracticeIdsTable)
 					) 
-				AND (P.TerminationReasonId IS NULL OR t.IsContingentRule != 1)
+				AND (P.TerminationReasonId IS NULL OR (P.TerminationReasonId != 8 AND t.IsContingentRule != 1))
 		 GROUP BY P.PersonId,
 					cal.Date, 
 					pay.Timescale,
