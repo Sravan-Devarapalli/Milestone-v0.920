@@ -13,6 +13,7 @@ namespace PraticeManagement.Utils
         #region Constants
 
         private static Color DEFAULT_COLOR = Color.Black;
+        private static string OpportuityDemandLegendFormat = "Opportunity with \"{0}\"  Sales Stage";
 
         #endregion
 
@@ -141,8 +142,16 @@ namespace PraticeManagement.Utils
             //  Iterate through all colors and put them on legend
             legendItems.Add(Color.FromArgb(255, 0, 0), "Project with Active Status");//Red
             legendItems.Add(Color.FromArgb(255, 255, 0), "Project with Projected Status");//Yellow
-            legendItems.Add(Color.FromArgb(82, 178, 0), "Opportunity with \"Negotiating\" Sales Stage");//Green
-            legendItems.Add(Color.FromArgb(51, 204, 255), "Opportunity with \"Proposed\" Sales Stage");//Sky Blue.
+
+            var salesStages = SettingsHelper.DemandOpportunitySalesStages;
+            if (salesStages != null &&  salesStages.ContainsKey(Constants.OpportunityPriorityIds.PriorityIdOfA))
+            {
+                legendItems.Add(Color.FromArgb(82, 178, 0), string.Format(OpportuityDemandLegendFormat,  salesStages[Constants.OpportunityPriorityIds.PriorityIdOfA]));//Green
+            }
+            if (salesStages != null && salesStages.ContainsKey(Constants.OpportunityPriorityIds.PriorityIdOfB))
+            {
+                legendItems.Add(Color.FromArgb(51, 204, 255), string.Format(OpportuityDemandLegendFormat, salesStages[Constants.OpportunityPriorityIds.PriorityIdOfB]));//Sky Blue.
+            }
         }
 
         /// <summary>
