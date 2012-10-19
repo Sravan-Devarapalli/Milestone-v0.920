@@ -25,6 +25,31 @@ namespace PraticeManagement.Utils
         const string SkillType = "SkillType";
         const string SkillsIndustry = "SkillIndustry";
         const string Person_TerminationReasons_List_Key = "Person_TerminationReasons_List_Key";
+        const string OpportunitySalesStages = "OpportunitySalesStages";
+        
+        public static Dictionary<int, string> DemandOpportunitySalesStages
+        {
+            get
+            {
+                if (HttpContext.Current.Cache[OpportunitySalesStages] == null)
+                {
+                    using (var serviceClient = new OpportunityService.OpportunityServiceClient())
+                    {
+                        var list = serviceClient.GetOpportunityPriorities(true).ToList();
+                        if (list.Count() > 0 && list.Any(op => op.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || op.Id == Constants.OpportunityPriorityIds.PriorityIdOfB))
+                        {
+                            HttpContext.Current.Cache[OpportunitySalesStages] = list.Where(op => op.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || op.Id == Constants.OpportunityPriorityIds.PriorityIdOfB).ToDictionary(o => o.Id, o => o.DisplayName);// .Select(o => new { key = o.Id, value = o.Priority }).ToDictionary(o =>  o.key);
+                        }
+                    }
+                }
+                return HttpContext.Current.Cache[OpportunitySalesStages] as Dictionary<int, string>;
+            }
+            set
+            {
+                if (value == null)
+                    HttpContext.Current.Cache.Remove(OpportunitySalesStages);
+            }
+        }
 
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
