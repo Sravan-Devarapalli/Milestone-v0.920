@@ -66,8 +66,8 @@
                                 ValidChars=" ">
                             </AjaxControlToolkit:FilteredTextBoxExtender>
                             <asp:CustomValidator ID="cvUpdatedTimeTypeName" runat="server" ControlToValidate="tbName"
-                                Display="Dynamic" ValidationGroup="UpdateTimeType" ErrorMessage="This work type already exists. Please enter a different work type."
-                                ToolTip="This work type already exists. Please enter a different work type.">*</asp:CustomValidator>
+                                Display="Dynamic" ValidationGroup="UpdateTimeType" ErrorMessage="Work Type with this name already exists. Please enter a different Work Type name."
+                                ToolTip="Work Type with this name already exists. Please enter a different Work Type name.">*</asp:CustomValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -101,7 +101,7 @@
                             <asp:RadioButton ID="rbIsInternal" runat="server" Checked='<%# Bind("IsInternal") %>'
                                 Enabled="false" />
                             <asp:CustomValidator ID="cvIsDefaultOrInternalEdit" runat="server" Display="Dynamic"
-                                ToolTip="WorkType should be Isdefalult Or IsInternal Or IsAdministrative." ErrorMessage="WorkType should be Isdefalult Or IsInternal Or IsAdministrative."
+                                ToolTip="Work Type should be defalult Or Internal Or Administrative." ErrorMessage="Work Type should be defalult Or Internal Or Administrative."
                                 ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternalEdit_Servervalidate"
                                 Text="*" />
                         </EditItemTemplate>
@@ -184,7 +184,7 @@
                     <td  class="TextAlignCenterImp Width10PerImp">
                         <asp:RadioButton ID="rbIsInternal" runat="server" Visible="false" GroupName="rbNewTimeType" />
                         <asp:CustomValidator ID="cvIsDefaultOrInternal" runat="server" Display="Dynamic"
-                            ToolTip="WorkType should be Isdefalult Or IsInternal Or IsAdministrative." ErrorMessage="WorkType should be Isdefalult Or IsInternal Or IsAdministrative."
+                            ToolTip="Work Type should be Defalult Or Internal Or Administrative." ErrorMessage="Work Type should be Defalult Or Internal Or Administrative."
                             ValidationGroup="NewTimeType" OnServerValidate="cvIsDefaultOrInternal_Servervalidate"
                             Text="*" />
                     </td>
