@@ -143,7 +143,10 @@ namespace PraticeManagement.Config
 
                 if (tt != null)
                 {
-                    e.Row.Cells[gvTimeTypes.Columns.Count - 1].Visible = !tt.InUse;
+                    var lastCell = (TableCell)e.Row.Cells[gvTimeTypes.Columns.Count - 1];
+                    var imgDelete = lastCell.FindControl("imgDelete") as ImageButton;
+                    if(imgDelete != null)
+                        imgDelete.Visible = !tt.InUse;
                 }
 
                 var rbIsDefault = e.Row.FindControl("rbIsDefault") as RadioButton;
