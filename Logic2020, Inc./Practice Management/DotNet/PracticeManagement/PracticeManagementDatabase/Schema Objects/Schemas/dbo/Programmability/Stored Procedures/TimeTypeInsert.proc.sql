@@ -24,7 +24,7 @@ BEGIN
 			IF EXISTS(SELECT 1 FROM dbo.TimeType WHERE [Name] = @Name)
 			BEGIN
 				
-				SET @Error = 'This work type already exists. Please add a different work type.'
+				SET @Error = 'Work Type with this name already exists. Please enter a different Work Type name.'
 				RAISERROR(@Error,16,1)
 				RETURN
 			END
