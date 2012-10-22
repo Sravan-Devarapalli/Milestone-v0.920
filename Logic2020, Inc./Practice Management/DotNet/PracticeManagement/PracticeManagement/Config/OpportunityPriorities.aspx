@@ -74,7 +74,7 @@
                             <asp:Label ID="lblDisplayName" CssClass="WS-Normal padLeft5" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="tbEditDisplayName" MaxLength="100" runat="server" Text='<%# Eval("DisplayName") %>'
+                            <asp:TextBox ID="tbEditDisplayName" runat="server" Text='<%# Eval("DisplayName") %>'
                                 CssClass="Width95Percent" OldName='<%# Eval("DisplayName") %>' />
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtDisplayName" runat="server"
                                 TargetControlID="tbEditDisplayName" WatermarkCssClass="watermarkedtext Width95Percent"
@@ -84,9 +84,9 @@
                                 ErrorMessage="Sales Stage is required." ToolTip="Sales Stage is required." EnableClientScript="false"
                                 SetFocusOnError="true" Text="*" ValidationGroup="EditSalesStage"></asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ControlToValidate="tbEditDisplayName" ValidationGroup="EditSalesStage"
-                                ID="valRegDisplayName" runat="server" ErrorMessage="Display Name should be limited to 15 characters in length."
-                                ToolTip="Display Name should be limited to 15 characters in length." EnableClientScript="false"
-                                Display="Dynamic" Text="*" ValidationExpression="^[a-zA-Z0-9 ]{0,15}$" SetFocusOnError="true" />
+                                ID="valRegDisplayName" runat="server" ErrorMessage="Sales Stage Name should be limited to 15 characters in length."
+                                ToolTip="Sales Stage Name should be limited to 15 characters in length." EnableClientScript="false"
+                                Display="Dynamic" Text="*" ValidationExpression="^[\s\S]{0,15}$" SetFocusOnError="true" />
                             <asp:CustomValidator ID="cvUniquesDisplayName" runat="server" ControlToValidate="tbEditDisplayName"
                                 ErrorMessage="Sales Stage with this name already exists. Please enter different Sales Stage name."
                                 ToolTip="Sales Stage with this name already exists. Please enter different Sales Stage name."
@@ -122,12 +122,17 @@
                             <asp:Label ID="lblPriorityDescription" CssClass="WS-Normal" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="tbEditPriorityDescription" MaxLength="100" runat="server" Text='<%# Eval("Description") %>'
+                            <asp:TextBox ID="tbEditPriorityDescription" runat="server" Text='<%# Eval("Description") %>'
                                 CssClass="Width95Percent" />
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server"
                                 TargetControlID="tbEditPriorityDescription" WatermarkCssClass="watermarkedtext Width95Percent"
                                 WatermarkText="Enter text here to define the opportunity priority">
                             </AjaxControlToolkit:TextBoxWatermarkExtender>
+                            <asp:RegularExpressionValidator ControlToValidate="tbEditPriorityDescription" ValidationGroup="EditSalesStage"
+                                ID="valRegDescription" runat="server" ErrorMessage="Sales Stage Description should be limited to 255 characters in length."
+                                ToolTip="Sales Stage Description should be limited to 255 characters in length."
+                                EnableClientScript="false" Display="Dynamic" Text="*" ValidationExpression="^[\s\S]{0,255}$"
+                                SetFocusOnError="true" />
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -163,8 +168,7 @@
                                 ToolTip="Cancel" Visible="false" />
                         </td>
                         <td class="Width20Percent">
-                            <asp:TextBox ID="tdInsertDisplayName" MaxLength="100" runat="server" Enabled="false"
-                                class="Width95Percent" />
+                            <asp:TextBox ID="tdInsertDisplayName" runat="server" Enabled="false" class="Width95Percent" />
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtDisplayName" runat="server"
                                 TargetControlID="tdInsertDisplayName" WatermarkCssClass="watermarkedtext Width95Percent"
                                 WatermarkText="Please enter Sales Stage name">
@@ -173,9 +177,9 @@
                                 ErrorMessage="Sales Stage is required." ToolTip="Sales Stage is required." EnableClientScript="false"
                                 SetFocusOnError="true" Text="*" ValidationGroup="AddSalesStage"></asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ControlToValidate="tdInsertDisplayName" ValidationGroup="AddSalesStage"
-                                ID="valRegDisplayName" runat="server" ErrorMessage="Display Name should be limited to 15 characters in length."
-                                ToolTip="Display Name should be limited to 15 characters in length." EnableClientScript="false"
-                                Text="*" ValidationExpression="^[a-zA-Z0-9 ]{0,15}$" Display="Dynamic" />
+                                ID="valRegDisplayName" runat="server" ErrorMessage="Sales Stage Name should be limited to 15 characters in length."
+                                ToolTip="Sales Stage Name should be limited to 15 characters in length." EnableClientScript="false"
+                                Text="*" ValidationExpression="^[\s\S]{0,15}$" Display="Dynamic" />
                             <asp:CustomValidator ID="cvInsertUniqueDisplayName" runat="server" ControlToValidate="tdInsertDisplayName"
                                 ErrorMessage="Sales Stage with this name already exists. Please enter different Sales Stage name."
                                 ToolTip="Sales Stage with this name already exists. Please enter different Sales Stage name."
@@ -187,12 +191,16 @@
                             </asp:DropDownList>
                         </td>
                         <td class="Width50Percent Left">
-                            <asp:TextBox ID="tbInsertPriorityDescription" MaxLength="100" runat="server" Enabled="false"
-                                class="Width95Percent" />
+                            <asp:TextBox ID="tbInsertPriorityDescription" runat="server" Enabled="false" class="Width95Percent" />
                             <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtSearch" runat="server"
                                 TargetControlID="tbInsertPriorityDescription" WatermarkCssClass="watermarkedtext Width95Percent"
                                 WatermarkText="Enter text here to define the opportunity sales stage">
                             </AjaxControlToolkit:TextBoxWatermarkExtender>
+                            <asp:RegularExpressionValidator ControlToValidate="tbInsertPriorityDescription" ValidationGroup="AddSalesStage"
+                                ID="valRegDescription" runat="server" ErrorMessage="Sales Stage Description should be limited to 255 characters in length."
+                                ToolTip="Sales Stage Description should be limited to 255 characters in length."
+                                EnableClientScript="false" Display="Dynamic" Text="*" ValidationExpression="^[\s\S]{0,255}$"
+                                SetFocusOnError="true" />
                         </td>
                         <td class="Width4Percent">
                             &nbsp;
