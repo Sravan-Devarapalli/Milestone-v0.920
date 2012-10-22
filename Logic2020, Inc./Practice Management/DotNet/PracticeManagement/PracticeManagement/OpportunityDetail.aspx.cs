@@ -60,7 +60,7 @@ namespace PraticeManagement
                         			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['thin solid navy']""/>
                         		</Parallel>
                         		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
-                        			<Resize  Width=""260"" Height=""{1}"" Unit=""px"" />
+                        			<Resize  Width=""350"" Height=""{1}"" Unit=""px"" />
                         		</Parallel>
                         	</Sequence>
                         </OnClick>";
@@ -392,16 +392,7 @@ namespace PraticeManagement
 
         public string GetAnimationsScriptForAnimShow()
         {
-            int lvCount = lvOpportunityPriorities.Items.Count;
-
-            int height = ((lvCount + 1) * (35)) - 10;
-
-            if (height > 150)
-            {
-                height = 180;
-            }
-
-            return string.Format(ANIMATION_SHOW_SCRIPT, pnlPriority.ID, 180);
+            return string.Format(ANIMATION_SHOW_SCRIPT, pnlPriority.ID, 205);
         }
 
         public string GetAnimationsScriptForAnimHide()
