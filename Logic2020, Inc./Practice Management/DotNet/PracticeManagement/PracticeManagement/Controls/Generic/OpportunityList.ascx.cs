@@ -36,7 +36,7 @@ namespace PraticeManagement.Controls.Generic
                         			<Discrete Property=""style"" propertyKey=""border"" ValuesScript=""['thin solid navy']""/>
                         		</Parallel>
                         		<Parallel Duration="".4"" Fps=""20"" AnimationTarget=""{0}"">
-                        			<Resize  Width=""257"" Height=""{1}"" Unit=""px"" />
+                        			<Resize  Width=""350"" Height=""{1}"" Unit=""px"" />
                         		</Parallel>
                         	</Sequence>
                         </OnClick>";
@@ -167,21 +167,13 @@ namespace PraticeManagement.Controls.Generic
             if (row != null)
             {
                 var img = row.FindControl("imgPriorityHint") as Image;
-                var lvOp = row.FindControl("lvOpportunityPriorities") as ListView;
-                var pnlPriority = row.FindControl("pnlPriority") as Panel;
-                var btnClosePriority = row.FindControl("btnClosePriority") as Button;
+                var pnlPriority = lvOpportunities.FindControl("pnlPriority") as Panel;
+                var btnClosePriority = lvOpportunities.FindControl("btnClosePriority") as Button;
 
                 var animHide = row.FindControl("animHide") as AnimationExtender;
                 var animShow = row.FindControl("animShow") as AnimationExtender;
 
-                int lvCount = lvOp.Items.Count;
-
-                int height = ((lvCount + 1) * (35)) - 10;
-
-                if (height > 150)
-                {
-                    height = 177;
-                }
+                int height = 205;
 
                 animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlPriority.ID, height);
                 animHide.Animations = string.Format(ANIMATION_HIDE_SCRIPT, pnlPriority.ID);
