@@ -493,6 +493,18 @@ TR.CompPerfData TD, TR.CompPerfData TH
     border: solid 1px gray;
     padding: 2px;
 }
+.SummaryMiniReport SPAN
+{
+    font-weight: bold;
+    font-variant: normal;
+    font-style: normal;
+    font-family: Arial;
+    line-height: normal;
+}
+.SummaryMiniReport
+{
+    z-index: 2000;
+}
 DIV.MiniReport
 {
     width: 0;
@@ -507,7 +519,7 @@ DIV.MiniReport
 }
 DIV.MiniReport TABLE
 {
-    width: 250px;
+    width: 100%;
 }
 DIV.MiniReport TD
 {
@@ -572,7 +584,7 @@ DIV.MiniReport table td table td
 {
     height: auto;
     background: #FFF;
-    padding: 2px 5px;
+    padding: 4px 6px;
 }
 .Revenue
 {
@@ -3920,12 +3932,6 @@ div.scrollextLabel
 {
     background-color: White;
 }
-.lvOpportunityPriorities
-{
-    max-height: 150px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
 .OpportunityPriority
 {
     text-align: center;
@@ -3937,11 +3943,8 @@ div.scrollextLabel
 }
 .OpportunityPriorityDescription
 {
-    color: Black;
     display: inline-block;
-    font-size: 12px;
     white-space: normal;
-    width: 180px;
 }
 .PersonDetailPermissionsScrollingDropDown
 {
@@ -4340,11 +4343,15 @@ BenchCosts.ascx*/
     overflow-x: auto;
 }
 
-.ItemPlaceHolderContainer
+.lvOpportunityPriorities
 {
-    max-height: 150px;
+    max-height: 180px;
     overflow-y: auto;
     overflow-x: hidden;
+}
+.CompPerfHeader lvOpportunityPriorities td
+{
+    border-bottom: 0px none !important;
 }
 .TdItemTemplate
 {
@@ -4359,6 +4366,7 @@ BenchCosts.ascx*/
     vertical-align: middle;
     padding: 0px;
     white-space: normal;
+    border: 0px !important;
 }
 .PaddingLeftRight0px
 {
@@ -6203,12 +6211,6 @@ table.ProjectDetail-ProjectInfo-Table td
 .Width38PerImp
 {
     width: 38% !important;
-}
-.DivPriorityContainer
-{
-    max-height: 150px;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 .TdLblPriority
 {
