@@ -80,6 +80,52 @@
 <div id="opportunity-list">
     <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" OnSorting="lvOpportunities_Sorting">
         <LayoutTemplate>
+            <asp:Panel ID="pnlPriority" CssClass="MiniReport displayNone SummaryMiniReport"
+                runat="server">
+                <table>
+                    <tr>
+                        <th class="textRight">
+                            <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
+                                Text="x" />
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:ListView ID="lvOpportunityPriorities" runat="server">
+                                <LayoutTemplate>
+                                    <div class="lvOpportunityPriorities">
+                                        <table id="itemPlaceHolderContainer" runat="server" class="WholeWidth bgColorWhite">
+                                            <tr runat="server" id="itemPlaceHolder">
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </LayoutTemplate>
+                                <ItemTemplate>
+                                    <tr class="BorderBottomNone">
+                                        <td class="LabelPriority">
+                                            <asp:Label ID="lblPriority" CssClass="Width100Px DisplayInline" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>'></asp:Label>
+                                        </td>
+                                        <td class="LabelPriority">
+                                            -
+                                        </td>
+                                        <td class="LabelPriority">
+                                            <asp:Label ID="lblDescription" runat="server" CssClass="OpportunityPriorityDescription"
+                                                Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
+                                        </td>
+                                    </tr>
+                                </ItemTemplate>
+                                <EmptyDataTemplate>
+                                    <tr>
+                                        <td class="padLeft2 vMiddle">
+                                            <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
+                                        </td>
+                                    </tr>
+                                </EmptyDataTemplate>
+                            </asp:ListView>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
                 <tr runat="server" id="lvHeader" class="CompPerfHeader">
                     <td class="Width1Percent">
@@ -97,57 +143,6 @@
                             <asp:LinkButton ID="btnPrioritySort" runat="server" Text="Sales Stage" CommandName="Sort"
                                 CssClass="arrow" CommandArgument="Priority" />
                             <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
-                            <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport Width323PxImp" runat="server">
-                                <table>
-                                    <tr>
-                                        <th class="textRight">
-                                            <asp:Button ID="btnClosePriority" OnClientClick="return false;" runat="server" CssClass="mini-report-close"
-                                                Text="x" />
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <asp:ListView ID="lvOpportunityPriorities" runat="server">
-                                                <LayoutTemplate>
-                                                    <div class="lvOpportunityPriorities">
-                                                        <table id="itemPlaceHolderContainer" runat="server" class="WholeWidth bgColorWhite">
-                                                            <tr runat="server" id="itemPlaceHolder">
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                </LayoutTemplate>
-                                                <ItemTemplate>
-                                                    <tr class="BorderBottomNone">
-                                                        <td class="WholeWidth padLeft2">
-                                                            <table class="WholeWidth">
-                                                                <tr>
-                                                                    <td class="LabelPriority">
-                                                                        <asp:Label ID="lblPriority" CssClass="Width100Px DisplayInline" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>'></asp:Label>
-                                                                    </td>
-                                                                    <td class="LabelPriority">
-                                                                        -
-                                                                    </td>
-                                                                    <td class="LabelPriority">
-                                                                        <asp:Label ID="lblDescription" runat="server" CssClass="OpportunityPriorityDescription"
-                                                                            Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </ItemTemplate>
-                                                <EmptyDataTemplate>
-                                                    <tr>
-                                                        <td class="padLeft2 vMiddle">
-                                                            <asp:Label ID="lblNoPriorities" runat="server" Text="No Priorities."></asp:Label>
-                                                        </td>
-                                                    </tr>
-                                                </EmptyDataTemplate>
-                                            </asp:ListView>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </asp:Panel>
                             <AjaxControlToolkit:AnimationExtender ID="animHide" TargetControlID="btnClosePriority"
                                 runat="server">
                             </AjaxControlToolkit:AnimationExtender>
@@ -211,7 +206,7 @@
         <ItemTemplate>
             <tr>
                 <td>
-                    <div class="cell-pad">                       
+                    <div class="cell-pad">
                         <asp:HyperLink ID="hlStatus" runat="server" CssClass='<%# PraticeManagement.Utils.OpportunitiesHelper.GetIndicatorClass((Opportunity) Container.DataItem)%>'
                             Description='<%# PraticeManagement.Utils.OpportunitiesHelper.GetToolTip((Opportunity) Container.DataItem)%>'
                             onmouseout="HidePanel();" onmouseover="SetTooltipText(this.attributes['Description'].value,this);">                           
