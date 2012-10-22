@@ -882,7 +882,7 @@
                                 <td class="fontBold Width12Per">
                                     Sales Stage
                                     <asp:Image ID="imgPriorityHint" runat="server" ImageUrl="~/Images/hint.png" />
-                                    <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport Width323PxImp"
+                                    <asp:Panel ID="pnlPriority" Style="display: none;" CssClass="MiniReport SummaryMiniReport"
                                         runat="server">
                                         <table>
                                             <tr>
@@ -895,7 +895,7 @@
                                                 <td>
                                                     <asp:ListView ID="lvOpportunityPriorities" runat="server">
                                                         <LayoutTemplate>
-                                                            <div class="DivPriorityContainer">
+                                                            <div class="lvOpportunityPriorities">
                                                                 <table id="itemPlaceHolderContainer" runat="server" class="WholeWidth BackGroundColorWhite">
                                                                     <tr runat="server" id="itemPlaceHolder">
                                                                     </tr>
@@ -904,21 +904,15 @@
                                                         </LayoutTemplate>
                                                         <ItemTemplate>
                                                             <tr>
-                                                                <td class="TdItemTemplate">
-                                                                    <table class="WholeWidth">
-                                                                        <tr>
-                                                                            <td class="LabelPriority">
-                                                                                <asp:Label ID="lblPriority" CssClass="Width100Px DisplayInline" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>'></asp:Label>
-                                                                            </td>
-                                                                            <td class="LabelPriority">
-                                                                                -
-                                                                            </td>
-                                                                            <td class="LabelPriority">
-                                                                                <asp:Label ID="lblDescription" runat="server" CssClass="WhiteSpaceNormal Width180Px DisplayInline"
-                                                                                    Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
+                                                                <td class="LabelPriority">
+                                                                    <asp:Label ID="lblPriority" CssClass="Width100Px DisplayInline" runat="server" Text='<%# Eval("HtmlEncodedDisplayName") %>'></asp:Label>
+                                                                </td>
+                                                                <td class="LabelPriority">
+                                                                    -
+                                                                </td>
+                                                                <td class="LabelPriority">
+                                                                    <asp:Label ID="lblDescription" runat="server" CssClass="WhiteSpaceNormal DisplayInline"
+                                                                        Text='<%# HttpUtility.HtmlEncode((string)Eval("Description")) %>'></asp:Label>
                                                                 </td>
                                                             </tr>
                                                         </ItemTemplate>
