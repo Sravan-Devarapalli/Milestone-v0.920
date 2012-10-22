@@ -86,8 +86,10 @@ TD.CompPerfTotalSummary{min-width:120px;text-align:center}
 .summary TD.CompPerfTotalSummary .cell-pad{text-align:right;padding-right:2px}
 TD.CompPerfData{min-width:90px;padding:2px}
 TR.CompPerfData TD,TR.CompPerfData TH{min-width:90px;border:solid 1px gray;padding:2px}
+.SummaryMiniReport SPAN{font-weight:bold;font-variant:normal;font-style:normal;font-family:Arial;line-height:normal}
+.SummaryMiniReport{z-index:2000}
 DIV.MiniReport{width:0;height:0;position:absolute;background-color:#fff;overflow:hidden;vertical-align:top;border:0;border-color:#FF9F00!important;padding:0}
-DIV.MiniReport TABLE{width:250px}
+DIV.MiniReport TABLE{width:100%}
 DIV.MiniReport TD{vertical-align:top;text-align:left;height:auto;border-bottom:0}
 .Loading{height:24px;background-image:url(../Images/loading.gif);background-repeat:no-repeat}
 DIV.MiniReport table th{background:url(../images/top-menu-bg.png) repeat-x scroll 0 0}
@@ -96,7 +98,7 @@ DIV.MiniReport table th{background:url(../images/top-menu-bg.png) repeat-x scrol
 .mini-report-closeNew{width:13px;height:13px;background:url(../images/mini-close.png) no-repeat 50% 50%;border:0;font-size:0;line-height:0;color:#444;cursor:pointer;margin-right:2px;float:right}
 .mini-report-closeNew :hover{background-color:#FCD18E}
 DIV.MiniReport table td table th{background:url(../images/cp-header-bg.png) repeat-x 0 100%;height:18px;padding:4px 0}
-DIV.MiniReport table td table td{height:auto;background:#FFF;padding:2px 5px}
+DIV.MiniReport table td table td{height:auto;background:#FFF;padding:4px 6px}
 .Revenue{color:#1a9e00}
 .Cogs{color:Maroon}
 .Margin{color:#8000c2}
@@ -756,9 +758,8 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .OpportunitySearchBar{background:#E2EBFF;margin-bottom:10px;padding:5px}
 .OpportunityToolTip{position:absolute;z-index:2000}
 .bgColorWhite,.BackGroundColorWhite{background-color:White}
-.lvOpportunityPriorities{max-height:150px;overflow-y:auto;overflow-x:hidden}
 .OpportunityPriority{text-align:center;color:Black;font-size:12px;padding:0;vertical-align:middle;font-weight:bold}
-.OpportunityPriorityDescription{color:Black;display:inline-block;font-size:12px;white-space:normal;width:180px}
+.OpportunityPriorityDescription{display:inline-block;white-space:normal}
 .PersonDetailPermissionsScrollingDropDown{height:150px;width:180px;overflow-y:auto;overflow-x:hidden;border:1px solid #eee;background-color:#fff;padding:0;display:inline-block;z-index:20000}
 .border-collapse{border-collapse:collapse}
 .MarginTestLabel{padding-left:20px;padding-right:20px;text-align:right;font-weight:bold}
@@ -832,9 +833,10 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .PanelOppNameToolTipHolder{display:none;position:absolute;z-index:2000}
 .TableOpportunitiesCount{width:100%;margin-bottom:10px}
 .OverflowxAuto{overflow-x:auto}
-.ItemPlaceHolderContainer{max-height:150px;overflow-y:auto;overflow-x:hidden}
+.lvOpportunityPriorities{max-height:180px;overflow-y:auto;overflow-x:hidden}
+.CompPerfHeader lvOpportunityPriorities td{border-bottom:0 none!important}
 .TdItemTemplate{width:100%;padding-left:2px!important}
-.LabelPriority{color:Black;font-size:12px!important;text-align:left!important;vertical-align:middle;padding:0;white-space:normal}
+.LabelPriority{color:Black;font-size:12px!important;text-align:left!important;vertical-align:middle;padding:0;white-space:normal;border:0!important}
 .PaddingLeftRight0px{padding-left:0!important;padding-right:0!important}
 .PaddingLeftRight2px{padding-left:2px!important;padding-right:2px!important}
 .LabelRefreshMessage{display:none;font-style:italic}
@@ -1163,7 +1165,6 @@ table.ProjectDetail-ProjectInfo-Table td{padding-left:4px}
 .LblEndDate{padding-left:4px!important;padding-right:8px!important}
 .Width38Per{width:38%}
 .Width38PerImp{width:38%!important}
-.DivPriorityContainer{max-height:150px;overflow-y:auto;overflow-x:hidden}
 .TdLblPriority{text-align:center!important;padding:0!important;color:Black;font-size:12px;vertical-align:middle}
 .LblDescription{white-space:normal;color:Black;font-size:12px;width:180px}
 .PaddingLeft1Px{padding-left:1px}
