@@ -401,14 +401,16 @@
             <br />
             <div class="WholeWidth">
                 <div class="Width50Percent displayInline">
-                    <asp:Button ID="btnPictureLink" runat="server" Text="Add/Update Consultant Picture URL" CssClass="Width220Px" />
-                    <asp:Button ID="btnProfileLink" runat="server" Text="Add/Update Consultant Profiles" CssClass="Width220Px" />
+                    <asp:Button ID="btnPictureLink" runat="server" Text="Add/Update Consultant Picture URL"
+                        CssClass="Width220Px" />
+                    <asp:Button ID="btnProfileLink" runat="server" Text="Add/Update Consultant Profiles"
+                        CssClass="Width220Px" />
                 </div>
                 <div class="Width50Percent textRight floatright">
-                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click" CssClass="width55Px"
-                        EnableViewState="false" Enabled="false" />
-                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" EnableViewState="false" CssClass="width55Px"
-                        OnClick="btnCancel_Click" Enabled="false" />
+                    <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save Changes" OnClick="btnSave_Click"
+                        CssClass="width55Px" EnableViewState="false" Enabled="false" />
+                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Cancel" EnableViewState="false"
+                        CssClass="width55Px" OnClick="btnCancel_Click" Enabled="false" />
                 </div>
             </div>
             <asp:ValidationSummary ID="valSummaryBusiness" runat="server" ShowMessageBox="false"
@@ -463,7 +465,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" class="TdRedirectToOppDetail">
+                        <td align="center" class="Padding6">
                             <table>
                                 <tr>
                                     <td class="padRight3">
@@ -476,6 +478,11 @@
                                     </td>
                                 </tr>
                             </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Padding6">
+                            Note: Use 120(height) x100(wide) picture dimensions for the Consultant Picture.
                         </td>
                     </tr>
                 </table>
