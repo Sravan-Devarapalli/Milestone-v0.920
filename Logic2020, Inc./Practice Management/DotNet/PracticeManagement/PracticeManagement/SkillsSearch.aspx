@@ -68,6 +68,16 @@
             clearButton.disabled = disable;
         }
 
+        function EnableDisableOkButton(ddl) {
+            var btnEmployeeOK = document.getElementById('<%= btnEmployeeOK.ClientID %>');
+            if (ddl.value == '' || ddl.value == undefined || ddl.value == null) {
+                btnEmployeeOK.disabled = true;
+            }
+            else {
+                btnEmployeeOK.disabled = false;
+            }
+        }
+
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="updSkillSearch" runat="server">
@@ -285,7 +295,7 @@
                             <tr>
                                 <td class="SkillSerachTd" align="right">
                                     <b>Employees</b>&nbsp;&nbsp;&nbsp;
-                                    <asp:DropDownList ID="ddlEmployees" runat="server">
+                                    <asp:DropDownList ID="ddlEmployees" runat="server" onchange="EnableDisableOkButton(this);">
                                     </asp:DropDownList>
                                     &nbsp;&nbsp;&nbsp;
                                     <asp:Button ID="btnEmployeeOK" runat="server" Text="  OK  " OnClick="btnEmployeeOK_OnClick" />
