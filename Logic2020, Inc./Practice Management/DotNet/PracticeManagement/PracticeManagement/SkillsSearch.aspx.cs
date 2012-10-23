@@ -38,9 +38,11 @@ namespace PraticeManagement
         private const string RowIdXmlAttribute = "RowId";
         private const string SkillXmlElement = "Skill";
         private const string IndustryXmlElement = "Industry";
-
-
+        private const string SearchResultCountMessage = "There were {0} matches found based on the criteria entered. ";
+        private const string HighlightMessage = "Highlighted names reflect profiles updated in the last 4 months.";
         #endregion
+
+        private bool IsHighlightedMessage = false;
 
         #region Properties
 
@@ -181,14 +183,21 @@ namespace PraticeManagement
                 var companyTitle = HttpUtility.HtmlDecode(BrandingConfigurationManager.GetCompanyTitle());
                 lblSearchTitle.Text = string.Format("{0} Employee Skills Search", companyTitle);
                 string statusIds = (int)PersonStatusType.Active + " , " + (int)PersonStatusType.TerminationPending;
-                DataHelper.FillPersonList(ddlEmployees, null, statusIds);
+                DataHelper.FillPersonList(ddlEmployees, "Select an Employee", statusIds);
                 BindSkills(tcSkillsEntry.ActiveTabIndex);
             }
+
+
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
             EnableSearchAndClearButtons();
+            btnEmployeeOK.Enabled = ddlEmployees.SelectedIndex != 0;
+            if (IsHighlightedMessage)
+            {
+                lblSearchcriteria.Text = lblSearchcriteria.Text + HighlightMessage;
+            }
         }
 
         protected override void Display()
@@ -220,17 +229,8 @@ namespace PraticeManagement
 
             dlPerson.DataSource = persons;
             dlPerson.DataBind();
-
-            if (persons.Any())
-            {
-                lblSearchcriteria.Text = "Following employee(s) has all the category/skill/level from all tabs.";
-                dlPerson.Visible = true;
-            }
-            else
-            {
-                lblSearchcriteria.Text = "There are no Employees with the above selected search criteria.";
-                dlPerson.Visible = false;
-            }
+            lblSearchcriteria.Text = string.Format(SearchResultCountMessage, persons.Count());
+            dlPerson.Visible = persons.Any();
             UpdateClearButtons(gvIndustrySkills);
         }
 
@@ -271,6 +271,7 @@ namespace PraticeManagement
                 }
                 if (person.IsHighlighted)
                 {
+                    IsHighlightedMessage = true;
                     hlPersonSkillProfile.BackColor = Color.Yellow;
                 }
             }
@@ -595,13 +596,13 @@ namespace PraticeManagement
             {
                 if (row.RowType == DataControlRowType.DataRow)
                 {
-                    var ddl= row.FindControl(ddlCategoryId) as DropDownList;
+                    var ddl = row.FindControl(ddlCategoryId) as DropDownList;
                     if (ddl == null)
                     {
                         ddl = row.FindControl(ddlIndustryId) as DropDownList;
                     }
                     var clearLink = row.FindControl(lnkbtnClearId) as LinkButton;
-                    if (ddl.SelectedIndex != 0) 
+                    if (ddl.SelectedIndex != 0)
                     {
                         clearLink.Enabled = true;
                         clearLink.Attributes["disable"] = false.ToString();
@@ -634,7 +635,7 @@ namespace PraticeManagement
             XDocument xdoc = XDocument.Parse(SkillsXml);
             var skillElements = xdoc.Descendants(XName.Get(SkillXmlElement)).ToList();
             var industryElements = xdoc.Descendants(XName.Get(IndustryXmlElement)).ToList();
-            btnClearAll.Enabled = 
+            btnClearAll.Enabled =
             btnSearch.Enabled = skillElements.Any(p => p.Attribute(CatagoryIdXmlAttribute).Value != 0.ToString()) || industryElements.Any(p => p.Attribute(SkillIdXmlAttribute).Value != 0.ToString());
         }
 
