@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using DataAccess.Other;
 using DataTransferObjects;
 using System;
+using System.Linq;
 
 namespace DataAccess
 {
@@ -34,6 +35,26 @@ namespace DataAccess
                     using (var reader = command.ExecuteReader())
                     {
                         ReadPractices(reader, list);
+                    }
+                }
+            }
+            return list;
+        }
+
+        public static List<Practice> PracticeListAllWithCapabilities()
+        {
+            var list = new List<Practice>();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Practices.PracticeListAllWithCapabilities, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        ReadPracticesWithCapabilities(reader, list);
                     }
                 }
             }
@@ -91,6 +112,47 @@ namespace DataAccess
             return list;
         }
 
+        public static void CapabilityDelete(int capabilityId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Practices.CapabilityDelete, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.CapabilityIdParam, capabilityId);
+                connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void CapabilityUpdate(PracticeCapability capability)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Practices.CapabilityUpdate, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.CapabilityIdParam, capability.CapabilityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Name, capability.Name);
+                connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void CapabilityInsert(PracticeCapability capability)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Practices.CapabilityInsert, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.Name, capability.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam, capability.PracticeId);
+                connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
         /// <summary>
         /// Updates practice
         /// </summary>
@@ -103,6 +165,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam, practice.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, practice.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Abbreviation, practice.Abbreviation);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, practice.IsActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsCompanyInternal, practice.IsCompanyInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
@@ -125,6 +188,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, practice.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Abbreviation, practice.Abbreviation);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, practice.IsActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsCompanyInternal, practice.IsCompanyInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
@@ -181,7 +245,15 @@ namespace DataAccess
                 isNotesRequiredIndex = -1;
             }
 
-
+            int abbreviationIndex = -1;
+            try
+            {
+                abbreviationIndex = reader.GetOrdinal(Constants.ColumnNames.Abbreviation);
+            }
+            catch
+            {
+                abbreviationIndex = -1;
+            }
 
             while (reader.Read())
             {
@@ -211,8 +283,61 @@ namespace DataAccess
                 {
                     practice.IsNotesRequiredForTimeEnry = reader.GetBoolean(isNotesRequiredIndex);
                 }
+                if (abbreviationIndex > -1)
+                {
+                    practice.Abbreviation = !reader.IsDBNull(abbreviationIndex) ? reader.GetString(abbreviationIndex) :string.Empty;
+                }
 
                 list.Add(practice);
+            }
+        }
+
+        private static void ReadPracticesWithCapabilities(DbDataReader reader, List<Practice> list)
+        {
+            if (!reader.HasRows) return;
+
+            var practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+            var nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+            var isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
+            int abbreviationIndex = reader.GetOrdinal(Constants.ColumnNames.Abbreviation);
+            var capabilityIdIndex = reader.GetOrdinal(Constants.ColumnNames.CapabilityId);
+            var capabilityNameIndex = reader.GetOrdinal(Constants.ColumnNames.CapabilityName);
+            var inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+
+            while (reader.Read())
+            {
+                int practiceId = reader.GetInt32(practiceIdIndex);
+                Practice practice;
+                if (list.Any(p => p.Id == practiceId))
+                {
+                    practice = list.FirstOrDefault(p => p.Id == practiceId);
+                }
+                else
+                {
+                    practice =
+                        new Practice
+                        {
+                            Id = practiceId,
+                            Name = reader.GetString(nameIndex),
+                            IsActive = reader.GetBoolean(isActiveIndex),
+                            Abbreviation = !reader.IsDBNull(abbreviationIndex) ? reader.GetString(abbreviationIndex) : string.Empty
+                        };
+                    practice.PracticeCapabilities = new List<PracticeCapability>();
+                    list.Add(practice);
+                }
+
+                if (!reader.IsDBNull(capabilityIdIndex))
+                {
+                    var practiceCapability =
+                        new PracticeCapability
+                        {
+                            CapabilityId = reader.GetInt32(capabilityIdIndex),
+                            PracticeId = practiceId,
+                            InUse = reader.GetBoolean(inUseIndex),
+                            Name = reader.GetString(capabilityNameIndex)
+                        };
+                    practice.PracticeCapabilities.Add(practiceCapability);
+                }
             }
         }
 
