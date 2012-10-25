@@ -47,27 +47,27 @@ namespace PracticeManagementService
         /// Updates practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public void UpdatePractice(Practice practice)
+        public void UpdatePractice(Practice practice, string userLogin)
         {
-            PracticeDAL.UpdatePractice(practice);
+            PracticeDAL.UpdatePractice(practice, userLogin);
         }
 
         /// <summary>
         /// Inserts practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public int InsertPractice(Practice practice)
+        public int InsertPractice(Practice practice, string userLogin)
         {
-            return PracticeDAL.InsertPractice(practice);
+            return PracticeDAL.InsertPractice(practice, userLogin);
         }
 
         /// <summary>
         /// Removes practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public void RemovePractice(Practice practice)
+        public void RemovePractice(Practice practice, string userLogin)
         {
-            PracticeDAL.RemovePractice(practice);
+            PracticeDAL.RemovePractice(practice, userLogin);
         }
 
         /// <summary>
@@ -96,27 +96,27 @@ namespace PracticeManagementService
         /// Deletes the given capability
         /// </summary>
         /// <param name="capabilityId"></param>
-        public void CapabilityDelete(int capabilityId)
+        public void CapabilityDelete(int capabilityId, string userLogin)
         {
-            PracticeDAL.CapabilityDelete(capabilityId);
+            PracticeDAL.CapabilityDelete(capabilityId, userLogin);
         }
 
         /// <summary>
         /// Updated the given capability
         /// </summary>
         /// <param name="capability"></param>
-        public void CapabilityUpdate(PracticeCapability capability)
+        public void CapabilityUpdate(PracticeCapability capability, string userLogin)
         {
-            PracticeDAL.CapabilityUpdate(capability);
+            PracticeDAL.CapabilityUpdate(capability, userLogin);
         }
 
         /// <summary>
         /// Insert New capability
         /// </summary>
         /// <param name="capability"></param>
-        public void CapabilityInsert(PracticeCapability capability)
+        public void CapabilityInsert(PracticeCapability capability, string userLogin)
         {
-            PracticeDAL.CapabilityInsert(capability);
+            PracticeDAL.CapabilityInsert(capability, userLogin);
         }
 
         #endregion
