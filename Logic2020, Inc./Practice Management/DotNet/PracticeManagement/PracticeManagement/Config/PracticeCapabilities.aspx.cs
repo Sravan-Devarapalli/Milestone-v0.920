@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
+using PraticeManagement.Controls;
 
 namespace PraticeManagement.Config
 {
@@ -150,9 +151,9 @@ namespace PraticeManagement.Config
                     var row = imgUpdate.NamingContainer as RepeaterItem;
                     PracticeCapability capability = PopulateCapability(row, isInsert);
                     if (!isInsert)
-                        ServiceCallers.Custom.Practice(p => p.CapabilityUpdate(capability));
+                        ServiceCallers.Custom.Practice(p => p.CapabilityUpdate(capability, DataHelper.CurrentPerson.Alias));
                     else
-                        ServiceCallers.Custom.Practice(p => p.CapabilityInsert(capability));
+                        ServiceCallers.Custom.Practice(p => p.CapabilityInsert(capability, DataHelper.CurrentPerson.Alias));
                     PopulateData();
                     mlInsertStatus.ShowInfoMessage(isInsert ? InsertSucess : UpdateSucess);
                 }
@@ -187,7 +188,7 @@ namespace PraticeManagement.Config
                 var row = imgDelete.NamingContainer as RepeaterItem;
                 var hdCapabilityId = row.FindControl(HdCapabilityId) as HiddenField;
                 int capabilityId = int.Parse(hdCapabilityId.Value);
-                ServiceCallers.Custom.Practice(p => p.CapabilityDelete(capabilityId));
+                ServiceCallers.Custom.Practice(p => p.CapabilityDelete(capabilityId, DataHelper.CurrentPerson.Alias));
                 PopulateData();
                 mlInsertStatus.ShowInfoMessage(DeleteSucess);
                 EditCapabilityId = InsertPracticeId = -1;
