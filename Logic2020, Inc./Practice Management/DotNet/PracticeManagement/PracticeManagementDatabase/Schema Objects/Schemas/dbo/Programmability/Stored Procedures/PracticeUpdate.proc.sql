@@ -9,10 +9,13 @@ CREATE PROCEDURE dbo.PracticeUpdate
 	@Abbreviation NVARCHAR(100) = NULL,
 	@PracticeManagerId INT,
 	@IsActive BIT,
-	@IsCompanyInternal BIT = 0	
+	@IsCompanyInternal BIT = 0,
+	@UserLogin NVARCHAR(MAX)
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	EXEC SessionLogPrepare @UserLogin = @UserLogin
 
 	DECLARE @PreviousPracticeManager INT,
 			@Today					 DATETIME
@@ -30,6 +33,13 @@ BEGIN
 		   IsActive = @IsActive,
 		   IsCompanyInternal = @IsCompanyInternal
 	 WHERE PracticeId = @PracticeId
+			AND (
+					[Name] != @Name
+					OR [Abbreviation] != @Abbreviation
+					OR PracticeManagerId != @PracticeManagerId
+					OR IsActive != @IsActive
+					OR IsCompanyInternal != @IsCompanyInternal
+				)
  
 	EXEC dbo.PracticeStatusHistoryUpdate
 			@PracticeId	= @PracticeId,
@@ -55,5 +65,6 @@ BEGIN
 				NULL)
 	END
 
+	EXEC dbo.SessionLogUnprepare
  END
 
