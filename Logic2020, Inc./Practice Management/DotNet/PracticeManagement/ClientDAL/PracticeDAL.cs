@@ -49,7 +49,7 @@ namespace DataAccess
                 using (var command = new SqlCommand(Constants.ProcedureNames.Practices.PracticeListAllWithCapabilities, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    
+
                     connection.Open();
 
                     using (var reader = command.ExecuteReader())
@@ -112,20 +112,21 @@ namespace DataAccess
             return list;
         }
 
-        public static void CapabilityDelete(int capabilityId)
+        public static void CapabilityDelete(int capabilityId, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Practices.CapabilityDelete, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.CapabilityIdParam, capabilityId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 connection.Open();
 
                 command.ExecuteNonQuery();
             }
         }
 
-        public static void CapabilityUpdate(PracticeCapability capability)
+        public static void CapabilityUpdate(PracticeCapability capability, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Practices.CapabilityUpdate, connection))
@@ -133,13 +134,14 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.CapabilityIdParam, capability.CapabilityId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, capability.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 connection.Open();
 
                 command.ExecuteNonQuery();
             }
         }
 
-        public static void CapabilityInsert(PracticeCapability capability)
+        public static void CapabilityInsert(PracticeCapability capability, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Practices.CapabilityInsert, connection))
@@ -147,6 +149,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, capability.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam, capability.PracticeId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 connection.Open();
 
                 command.ExecuteNonQuery();
@@ -157,7 +160,7 @@ namespace DataAccess
         /// Updates practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public static void UpdatePractice(Practice practice)
+        public static void UpdatePractice(Practice practice, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Practices.Update, connection))
@@ -165,12 +168,12 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam, practice.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, practice.Name);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Abbreviation, practice.Abbreviation);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Abbreviation, string.IsNullOrEmpty(practice.Abbreviation) ? (object)DBNull.Value : practice.Abbreviation);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, practice.IsActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsCompanyInternal, practice.IsCompanyInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
                     practice.PracticeOwner.Id.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 connection.Open();
 
                 command.ExecuteNonQuery();
@@ -181,18 +184,19 @@ namespace DataAccess
         /// Inserts practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public static int InsertPractice(Practice practice)
+        public static int InsertPractice(Practice practice, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Practices.Insert, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, practice.Name);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Abbreviation, practice.Abbreviation);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Abbreviation, string.IsNullOrEmpty(practice.Abbreviation) ? (object)DBNull.Value : practice.Abbreviation);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, practice.IsActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsCompanyInternal, practice.IsCompanyInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
                     practice.PracticeOwner.Id.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
                 connection.Open();
 
@@ -204,13 +208,14 @@ namespace DataAccess
         /// Removes practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public static void RemovePractice(Practice practice)
+        public static void RemovePractice(Practice practice, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Practices.Delete, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam, practice.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
                 connection.Open();
 
@@ -285,7 +290,7 @@ namespace DataAccess
                 }
                 if (abbreviationIndex > -1)
                 {
-                    practice.Abbreviation = !reader.IsDBNull(abbreviationIndex) ? reader.GetString(abbreviationIndex) :string.Empty;
+                    practice.Abbreviation = !reader.IsDBNull(abbreviationIndex) ? reader.GetString(abbreviationIndex) : string.Empty;
                 }
 
                 list.Add(practice);
@@ -349,7 +354,7 @@ namespace DataAccess
             var practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
             var nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
             var practiceAbbreviationIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeAbbreviation);
- 
+
             while (reader.Read())
             {
                 var practiceCapability =
