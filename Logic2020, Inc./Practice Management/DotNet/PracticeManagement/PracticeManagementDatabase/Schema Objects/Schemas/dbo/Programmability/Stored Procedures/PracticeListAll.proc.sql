@@ -64,7 +64,8 @@ AS
 			pers.LastName,
 			pers.PersonId,
 			pers.PersonStatusId,
-			stat.[Name] AS 'PersonStatusName'
+			stat.[Name] AS 'PersonStatusName',
+			P.Abbreviation
 		FROM Practice P
 		JOIN PracticeList PL ON PL.PracticeId = P.PracticeId
 		LEFT JOIN Person Pers ON Pers.PersonId = P.PracticeManagerId
@@ -130,7 +131,8 @@ AS
 			pers.LastName,
 			pers.PersonId,
 			pers.PersonStatusId,
-			stat.[Name] AS 'PersonStatusName'		
+			stat.[Name] AS 'PersonStatusName',
+			P.Abbreviation		
 		  FROM dbo.Practice AS p
 		  LEFT JOIN dbo.Person AS pers ON p.PracticeManagerId = pers.PersonId
 		  INNER JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
