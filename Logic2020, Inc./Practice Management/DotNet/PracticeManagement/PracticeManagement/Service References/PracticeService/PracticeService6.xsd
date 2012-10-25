@@ -27,6 +27,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="PracticeListAllWithCapabilities">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PracticeListAllWithCapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PracticeListAllWithCapabilitiesResult" nillable="true" type="q4:ArrayOfPractice" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="PracticeGetById">
     <xs:complexType>
       <xs:sequence>
@@ -37,14 +49,14 @@
   <xs:element name="PracticeGetByIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PracticeGetByIdResult" nillable="true" type="q4:ArrayOfPractice" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="PracticeGetByIdResult" nillable="true" type="q5:ArrayOfPractice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdatePractice">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="practice" nillable="true" type="q5:Practice" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="practice" nillable="true" type="q6:Practice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -56,7 +68,7 @@
   <xs:element name="InsertPractice">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="practice" nillable="true" type="q6:Practice" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="practice" nillable="true" type="q7:Practice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -70,7 +82,7 @@
   <xs:element name="RemovePractice">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="practice" nillable="true" type="q7:Practice" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="practice" nillable="true" type="q8:Practice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -90,8 +102,44 @@
   <xs:element name="GetPracticeCapabilitiesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPracticeCapabilitiesResult" nillable="true" type="q8:ArrayOfPracticeCapability" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPracticeCapabilitiesResult" nillable="true" type="q9:ArrayOfPracticeCapability" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CapabilityDelete">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="capabilityId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CapabilityDeleteResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CapabilityUpdate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="capability" nillable="true" type="q10:PracticeCapability" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CapabilityUpdateResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CapabilityInsert">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="capability" nillable="true" type="q11:PracticeCapability" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CapabilityInsertResponse">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
 </xs:schema>
