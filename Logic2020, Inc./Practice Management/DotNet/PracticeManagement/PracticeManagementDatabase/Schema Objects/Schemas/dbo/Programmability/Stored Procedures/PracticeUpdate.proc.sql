@@ -6,6 +6,7 @@
 CREATE PROCEDURE dbo.PracticeUpdate 
 	@PracticeId INT,
 	@Name VARCHAR(100),
+	@Abbreviation NVARCHAR(100) = NULL,
 	@PracticeManagerId INT,
 	@IsActive BIT,
 	@IsCompanyInternal BIT = 0	
@@ -24,6 +25,7 @@ BEGIN
 
 	UPDATE [dbo].[Practice]
 	   SET [Name] = @Name,
+		   [Abbreviation] = @Abbreviation,
 		   PracticeManagerId = @PracticeManagerId,
 		   IsActive = @IsActive,
 		   IsCompanyInternal = @IsCompanyInternal
