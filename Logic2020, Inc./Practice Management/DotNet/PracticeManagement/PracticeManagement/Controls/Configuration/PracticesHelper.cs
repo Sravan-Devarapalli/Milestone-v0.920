@@ -18,6 +18,7 @@ namespace PraticeManagement.Controls.Configuration
             IsActive = practice.IsActive;
             IsCompanyInternal = practice.IsCompanyInternal;
             InUse = practice.InUse;
+            Abbreviation = practice.Abbreviation;
         }
 
         public int PracticeManagerId
@@ -40,6 +41,7 @@ namespace PraticeManagement.Controls.Configuration
                 {
                     Id = Id,
                     Name = Name,
+                    Abbreviation = Abbreviation,
                     PracticeOwner = PracticeOwner,
                     IsActive = IsActive,
                     IsCompanyInternal = IsCompanyInternal
@@ -87,13 +89,14 @@ namespace PraticeManagement.Controls.Configuration
         /// Inserts practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public static int InsertPractice(string name, string practiceManagerId, bool isActive, bool isInternal)
+        public static int InsertPractice(string name, string practiceManagerId, bool isActive, bool isInternal, string abbreviation)
         {
             return InsertPractice(
                 new Practice
                 {
                     IsActive = isActive,
                     Name = name,
+                    Abbreviation = abbreviation,
                     IsCompanyInternal = isInternal,
                     PracticeOwner =
                       new Person
