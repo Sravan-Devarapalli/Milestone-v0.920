@@ -21,6 +21,9 @@ namespace PraticeManagement.PracticeService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/PracticeListAll", ReplyAction="http://tempuri.org/IPracticeService/PracticeListAllResponse")]
         DataTransferObjects.Practice[] PracticeListAll(DataTransferObjects.Person person);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/PracticeListAllWithCapabilities", ReplyAction="http://tempuri.org/IPracticeService/PracticeListAllWithCapabilitiesResponse")]
+        DataTransferObjects.Practice[] PracticeListAllWithCapabilities();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/PracticeGetById", ReplyAction="http://tempuri.org/IPracticeService/PracticeGetByIdResponse")]
         DataTransferObjects.Practice[] PracticeGetById(System.Nullable<int> id);
         
@@ -35,6 +38,15 @@ namespace PraticeManagement.PracticeService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/GetPracticeCapabilities", ReplyAction="http://tempuri.org/IPracticeService/GetPracticeCapabilitiesResponse")]
         DataTransferObjects.PracticeCapability[] GetPracticeCapabilities(System.Nullable<int> practiceId, System.Nullable<int> capabilityId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/CapabilityDelete", ReplyAction="http://tempuri.org/IPracticeService/CapabilityDeleteResponse")]
+        void CapabilityDelete(int capabilityId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/CapabilityUpdate", ReplyAction="http://tempuri.org/IPracticeService/CapabilityUpdateResponse")]
+        void CapabilityUpdate(DataTransferObjects.PracticeCapability capability);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPracticeService/CapabilityInsert", ReplyAction="http://tempuri.org/IPracticeService/CapabilityInsertResponse")]
+        void CapabilityInsert(DataTransferObjects.PracticeCapability capability);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -45,7 +57,7 @@ namespace PraticeManagement.PracticeService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PracticeServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PracticeService.IPracticeService>, PraticeManagement.PracticeService.IPracticeService {
         
-       
+      
         
         public PracticeServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -71,6 +83,10 @@ namespace PraticeManagement.PracticeService {
             return base.Channel.PracticeListAll(person);
         }
         
+        public DataTransferObjects.Practice[] PracticeListAllWithCapabilities() {
+            return base.Channel.PracticeListAllWithCapabilities();
+        }
+        
         public DataTransferObjects.Practice[] PracticeGetById(System.Nullable<int> id) {
             return base.Channel.PracticeGetById(id);
         }
@@ -89,6 +105,18 @@ namespace PraticeManagement.PracticeService {
         
         public DataTransferObjects.PracticeCapability[] GetPracticeCapabilities(System.Nullable<int> practiceId, System.Nullable<int> capabilityId) {
             return base.Channel.GetPracticeCapabilities(practiceId, capabilityId);
+        }
+        
+        public void CapabilityDelete(int capabilityId) {
+            base.Channel.CapabilityDelete(capabilityId);
+        }
+        
+        public void CapabilityUpdate(DataTransferObjects.PracticeCapability capability) {
+            base.Channel.CapabilityUpdate(capability);
+        }
+        
+        public void CapabilityInsert(DataTransferObjects.PracticeCapability capability) {
+            base.Channel.CapabilityInsert(capability);
         }
     }
 }
