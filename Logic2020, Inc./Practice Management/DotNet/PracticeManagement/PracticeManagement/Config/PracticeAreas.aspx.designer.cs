@@ -13,6 +13,24 @@ namespace PraticeManagement.Config {
     public partial class PracticeAreas {
         
         /// <summary>
+        /// LoadingProgress1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
+        
+        /// <summary>
+        /// updTimeEntries control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updTimeEntries;
+        
+        /// <summary>
         /// gvPractices control.
         /// </summary>
         /// <remarks>
@@ -29,6 +47,15 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlInsertPractice;
+        
+        /// <summary>
+        /// trInsertPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trInsertPractice;
         
         /// <summary>
         /// btnPlus control.
@@ -94,6 +121,33 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.CustomValidator cvPracticeName;
         
         /// <summary>
+        /// tbAbbreviation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tbAbbreviation;
+        
+        /// <summary>
+        /// regValAbbreviation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator regValAbbreviation;
+        
+        /// <summary>
+        /// custValEditPracticeAbbreviation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custValEditPracticeAbbreviation;
+        
+        /// <summary>
         /// chbPracticeActive control.
         /// </summary>
         /// <remarks>
@@ -121,6 +175,42 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.DropDownList ddlPracticeManagers;
         
         /// <summary>
+        /// hdnTargetErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnTargetErrorPanel;
+        
+        /// <summary>
+        /// mpeErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeErrorPanel;
+        
+        /// <summary>
+        /// pnlErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlErrorPanel;
+        
+        /// <summary>
+        /// btnCancelErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelErrorPanel;
+        
+        /// <summary>
         /// valSummaryInsert control.
         /// </summary>
         /// <remarks>
@@ -146,6 +236,15 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.MessageLabel mlInsertStatus;
+        
+        /// <summary>
+        /// btnOKErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOKErrorPanel;
         
         /// <summary>
         /// odsPractices control.
