@@ -2016,6 +2016,10 @@ TABLE.Section td
 {
     width: 27%;
 }
+.Width28Percent
+{
+    width: 28%;
+}
 .Width29Percent
 {
     width: 29%;
@@ -7106,25 +7110,25 @@ table#ctl00_body_login tr td label
 }
 .SkillsSearchDataBody .ajax__tab_container
 {
-    padding-bottom : 1%;
+    padding-bottom: 1%;
     width: 90%;
 }
 .SkillsSearchDataBody .ajax__tab_header
 {
-    text-align : left !important;
+    text-align: left !important;
 }
 .SkillsSearchDataBody .ajax__tab_tab
 {
-    min-width:100Px;
+    min-width: 100Px;
 }
 .SkillsSearchDataBody .ajax__tab_panel
 {
-    max-height : 165px;
-    overflow-y:auto;
+    max-height: 165px;
+    overflow-y: auto;
 }
 .SkillsSearchDataBody select
 {
-    height : 20px;
+    height: 20px;
 }
 
 .searchResult
@@ -7434,5 +7438,52 @@ table#ctl00_body_login tr td label
 .CursorText
 {
     cursor: text;
+}
+.repCapabilities div
+{
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.repCapabilities .PracticeHeaderTd
+{
+    border: 1px solid black;
+    font-size: 14px;
+    font-weight: bold;
+    height: 25px;
+    width: 70%;
+    line-height: 25px;
+    vertical-align: middle;
+}
+.repCapabilities .PracticeHeaderTd span
+{
+    padding-left: 10px;
+}
+
+.repCapabilities .capabilityTd
+{
+    padding-left: 25px;
+    width: 30%;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    vertical-align: middle;
+}
+.repCapabilities .capabilityTd input
+{
+    vertical-align: middle;
+}
+.repCapabilities .PlusTd
+{
+    padding-left: 25px;
+    width: 30%;
+    padding-top: 5px !important;
+    padding-bottom: 20px !important;
+}
+
+.repCapabilities .capabilityTd span
+{
+    vertical-align: middle;
+    line-height: 18px;
+    padding-left: 5px;
 }
 
