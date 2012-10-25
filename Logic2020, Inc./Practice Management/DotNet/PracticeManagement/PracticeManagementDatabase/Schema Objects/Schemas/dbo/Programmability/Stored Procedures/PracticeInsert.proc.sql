@@ -8,7 +8,8 @@ CREATE PROCEDURE dbo.PracticeInsert
 	@Abbreviation NVARCHAR(100) = NULL,
 	@PracticeManagerId INT,
 	@IsActive BIT = 1,
-	@IsCompanyInternal BIT = 0 	
+	@IsCompanyInternal BIT = 0 ,
+	@UserLogin NVARCHAR(MAX)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -38,6 +39,8 @@ BEGIN
 		END
 
 		DECLARE @PracticeId INT
+
+		EXEC SessionLogPrepare @UserLogin = @UserLogin
 
 		INSERT INTO dbo.Practice (
 			[Name],
@@ -85,5 +88,6 @@ BEGIN
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
+	EXEC dbo.SessionLogUnprepare
 END
 
