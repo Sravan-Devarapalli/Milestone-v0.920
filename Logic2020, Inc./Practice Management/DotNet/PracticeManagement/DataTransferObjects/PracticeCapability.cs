@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -18,6 +19,17 @@ namespace DataTransferObjects
 
         [DataMember]
         public string Name { get; set; }
+
+        [DataMember]
+        public bool InUse { get; set; }
+
+        public string HtmlEncodedName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Name);
+            }
+        }
 
         [DataMember]
         public string PracticeAbbreviation { get; set; }
