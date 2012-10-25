@@ -4,10 +4,13 @@
 -- Description:	Practices routines
 -- =============================================
 CREATE PROCEDURE dbo.PracticeDelete 
-	@PracticeId INT	
+	@PracticeId INT	,
+	@UserLogin NVARCHAR(MAX)
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	EXEC SessionLogPrepare @UserLogin = @UserLogin
 
 	DELETE FROM dbo.PracticeStatusHistory
 	WHERE PracticeId = @PracticeId
@@ -17,6 +20,8 @@ BEGIN
 
 	DELETE FROM Practice 
 	 WHERE PracticeId = @PracticeId
+
+	EXEC dbo.SessionLogUnprepare
  
  END
 
