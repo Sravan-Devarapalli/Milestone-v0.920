@@ -2,18 +2,18 @@
 
 namespace DataTransferObjects
 {
-	/// <summary>
-	/// Determines event sources for the user activity log.
-	/// </summary>
-	[DataContract]
-	public enum ActivityEventSource
-	{
+    /// <summary>
+    /// Determines event sources for the user activity log.
+    /// </summary>
+    [DataContract]
+    public enum ActivityEventSource
+    {
         //Note:- If value changes then change in ActivityLogControl.ascx also.
-		[EnumMember]
+        [EnumMember]
         All = 1,
         [EnumMember]
         Error = 2,
-		[EnumMember]
+        [EnumMember]
         Person = 3,
         [EnumMember]
         AddedPersons = 4,
@@ -41,7 +41,7 @@ namespace DataTransferObjects
         ChangedMilestones = 15,
         [EnumMember]
         DeletedMilestones = 16,
-        [EnumMember]        
+        [EnumMember]
         Opportunity = 17,
         [EnumMember]
         AddedOpportunities = 18,
@@ -100,7 +100,24 @@ namespace DataTransferObjects
         [EnumMember]
         ChangedStrawmen = 45,
         [EnumMember]
-        DeletedStrawmen = 46
+        DeletedStrawmen = 46,
+        [EnumMember]
+        Practice = 47,
+        [EnumMember]
+        AddedPractice = 48,
+        [EnumMember]
+        ChangedPractice = 49,
+        [EnumMember]
+        DeletedPractice = 50,
+        [EnumMember]
+        PracticeCapability = 51,
+        [EnumMember]
+        AddedPracticeCapability = 52,
+        [EnumMember]
+        ChangedPracticeCapability = 53,
+        [EnumMember]
+        DeletedPracticeCapability = 54
+
     }
 }
 
