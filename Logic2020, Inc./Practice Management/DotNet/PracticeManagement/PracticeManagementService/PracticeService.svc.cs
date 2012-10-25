@@ -7,22 +7,22 @@ using DataTransferObjects;
 
 namespace PracticeManagementService
 {
-	/// <summary>
-	/// Practice information supplied
-	/// </summary>
-	[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-	public class PracticeService : IPracticeService
-	{
-		#region IPracticeService Members
+    /// <summary>
+    /// Practice information supplied
+    /// </summary>
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    public class PracticeService : IPracticeService
+    {
+        #region IPracticeService Members
 
-		/// <summary>
-		/// Get all practices
-		/// </summary>
-		/// <returns>A list of <see cref="Practice"/>s in the system</returns>
-		public List<Practice> GetPracticeList()
-		{
-			return this.PracticeListAll(null);
-		}
+        /// <summary>
+        /// Get all practices
+        /// </summary>
+        /// <returns>A list of <see cref="Practice"/>s in the system</returns>
+        public List<Practice> GetPracticeList()
+        {
+            return this.PracticeListAll(null);
+        }
 
         /// <summary>
         /// Get all practices
@@ -34,32 +34,41 @@ namespace PracticeManagementService
             return PracticeDAL.PracticeListAll(person);
         }
 
-	    /// <summary>
-	    /// Updates practice
-	    /// </summary>
-	    /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-	    public void UpdatePractice(Practice practice)
-	    {
+        /// <summary>
+        /// Get all practices With there capabilities
+        /// </summary>
+        /// <returns>A list of <see cref="Practice"/>s in the system</returns>
+        public List<Practice> PracticeListAllWithCapabilities()
+        {
+            return PracticeDAL.PracticeListAllWithCapabilities();
+        }
+
+        /// <summary>
+        /// Updates practice
+        /// </summary>
+        /// <returns>A list of <see cref="Practice"/>s in the system</returns>
+        public void UpdatePractice(Practice practice)
+        {
             PracticeDAL.UpdatePractice(practice);
-	    }
+        }
 
-	    /// <summary>
-	    /// Inserts practice
-	    /// </summary>
-	    /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-	    public int InsertPractice(Practice practice)
-	    {
-	        return PracticeDAL.InsertPractice(practice);
-	    }
+        /// <summary>
+        /// Inserts practice
+        /// </summary>
+        /// <returns>A list of <see cref="Practice"/>s in the system</returns>
+        public int InsertPractice(Practice practice)
+        {
+            return PracticeDAL.InsertPractice(practice);
+        }
 
-	    /// <summary>
-	    /// Removes practice
-	    /// </summary>
-	    /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-	    public void RemovePractice(Practice practice)
-	    {
-	        PracticeDAL.RemovePractice(practice);
-	    }
+        /// <summary>
+        /// Removes practice
+        /// </summary>
+        /// <returns>A list of <see cref="Practice"/>s in the system</returns>
+        public void RemovePractice(Practice practice)
+        {
+            PracticeDAL.RemovePractice(practice);
+        }
 
         /// <summary>
         /// Get practice by id
@@ -83,6 +92,33 @@ namespace PracticeManagementService
             return PracticeDAL.GetPracticeCapabilities(practiceId, capabilityId);
         }
 
-	    #endregion               
+        /// <summary>
+        /// Deletes the given capability
+        /// </summary>
+        /// <param name="capabilityId"></param>
+        public void CapabilityDelete(int capabilityId)
+        {
+            PracticeDAL.CapabilityDelete(capabilityId);
+        }
+
+        /// <summary>
+        /// Updated the given capability
+        /// </summary>
+        /// <param name="capability"></param>
+        public void CapabilityUpdate(PracticeCapability capability)
+        {
+            PracticeDAL.CapabilityUpdate(capability);
+        }
+
+        /// <summary>
+        /// Insert New capability
+        /// </summary>
+        /// <param name="capability"></param>
+        public void CapabilityInsert(PracticeCapability capability)
+        {
+            PracticeDAL.CapabilityInsert(capability);
+        }
+
+        #endregion
     }
 }
