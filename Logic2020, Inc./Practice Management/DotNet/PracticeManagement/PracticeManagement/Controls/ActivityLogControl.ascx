@@ -182,6 +182,14 @@
                                         <asp:ListItem Text="&nbsp; Added Skills" Value="40"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed Skills" Value="41"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Deleted Skills" Value="42"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Practice Events" Value="47"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Practice" Value="48"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Practice" Value="49"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Practice" Value="50"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Practice Capability Events" Value="51"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Practice Capability" Value="52"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Practice Capability" Value="53"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Practice Capability" Value="54"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                                 <td id="tdYear" runat="server" class="padLeft2">
