@@ -4,15 +4,15 @@ using DataTransferObjects;
 
 namespace PracticeManagementService
 {
-	[ServiceContract]
-	public interface IPracticeService
-	{
-		/// <summary>
-		/// Get all practices
-		/// </summary>
-		/// <returns>A list of <see cref="Practice"/>s in the system</returns>
-		[OperationContract]
-		List<Practice> GetPracticeList();
+    [ServiceContract]
+    public interface IPracticeService
+    {
+        /// <summary>
+        /// Get all practices
+        /// </summary>
+        /// <returns>A list of <see cref="Practice"/>s in the system</returns>
+        [OperationContract]
+        List<Practice> GetPracticeList();
 
         /// <summary>
         /// Get all practices
@@ -20,6 +20,13 @@ namespace PracticeManagementService
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
         [OperationContract]
         List<Practice> PracticeListAll(Person person);
+
+        /// <summary>
+        /// Get all practices With their capabilities
+        /// </summary>
+        /// <returns>A list of <see cref="Practice"/>s in the system</returns>
+        [OperationContract]
+        List<Practice> PracticeListAllWithCapabilities();
 
         /// <summary>
         /// Get practices by id
@@ -50,14 +57,36 @@ namespace PracticeManagementService
         void RemovePractice(Practice practice);
 
         /// <summary>
-        /// Gets the list of practicecapabilities for the given practiceid and capabilityid
+        /// Gets the list of practice capabilities for the given practiceid and capabilityid
         /// If the practiceid and capabilityid are nulls then returns all practicecapabilities.
         /// </summary>
         /// <param name="practiceId"></param>
         /// <param name="capabilityId"></param>
-        /// <returns>list of practicecapabilities</returns>
+        /// <returns>list of practice capabilities</returns>
         [OperationContract]
         List<PracticeCapability> GetPracticeCapabilities(int? practiceId, int? capabilityId);
+
+         /// <summary>
+        /// Deletes the given capability
+        /// </summary>
+        /// <param name="capabilityId"></param>
+        [OperationContract]
+        void CapabilityDelete(int capabilityId);
+
+        /// <summary>
+        /// Updated the given capability
+        /// </summary>
+        /// <param name="capability"></param>
+        [OperationContract]
+        void CapabilityUpdate(PracticeCapability capability);
+
+        /// <summary>
+        /// Insert New capability
+        /// </summary>
+        /// <param name="capability"></param>
+        [OperationContract]
+        void CapabilityInsert(PracticeCapability capability);
+
     }
 }
 
