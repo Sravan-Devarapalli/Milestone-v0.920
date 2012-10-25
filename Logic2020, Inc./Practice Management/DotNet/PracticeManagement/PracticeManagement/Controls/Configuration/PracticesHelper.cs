@@ -70,7 +70,7 @@ namespace PraticeManagement.Controls.Configuration
             {
                 try
                 {
-                    serviceClient.UpdatePractice(practice);
+                    serviceClient.UpdatePractice(practice, DataHelper.CurrentPerson.Alias);
                 }
                 catch (CommunicationException)
                 {
@@ -116,7 +116,7 @@ namespace PraticeManagement.Controls.Configuration
             {
                 try
                 {
-                    return serviceClient.InsertPractice(practice);
+                    return serviceClient.InsertPractice(practice,DataHelper.CurrentPerson.Alias);
                 }
                 catch (CommunicationException)
                 {
@@ -145,7 +145,7 @@ namespace PraticeManagement.Controls.Configuration
             {
                 try
                 {
-                    serviceClient.RemovePractice(practice);
+                    serviceClient.RemovePractice(practice, DataHelper.CurrentPerson.Alias);
                 }
                 catch (CommunicationException)
                 {
