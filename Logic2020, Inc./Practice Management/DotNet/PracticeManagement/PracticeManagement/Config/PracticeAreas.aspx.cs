@@ -10,12 +10,38 @@ namespace PraticeManagement.Config
 {
     public partial class PracticeAreas : PracticeManagementPageBase
     {
-        private const int DELETE_BUTTON_INDEX = 6;
-        private const int PRACTICE_OWNER_INDEX = 5;
+        private const int DELETE_BUTTON_INDEX = 7;
+        private const int PRACTICE_OWNER_INDEX = 6;
+        private string PracticeUpdatedSuccessfully = "Practice updated successfully.";
+        private string PracticeDeletedSuccessfully = "Practice deleted successfully.";
 
         protected void Page_Load(object sender, EventArgs e)
         {
             mlInsertStatus.ClearMessage();
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            bool IsPageValid = true;
+            try
+            {
+                IsPageValid = Page.IsValid;
+            }
+            catch
+            { }
+
+            if (!IsPageValid || mlInsertStatus.IsMessageExists)
+            {
+                PopulateErrorPanel();
+                UpdateDeleteButton();
+            }
+        }
+
+        protected override void OnPreRenderComplete(EventArgs e)
+        {
+            base.OnPreRenderComplete(e);
+            trInsertPractice.Attributes["class"] = (gvPractices.Rows.Count % 2 == 0) ? "" : "alterrow";
         }
 
         protected override void Display()
@@ -25,6 +51,8 @@ namespace PraticeManagement.Config
         protected void btnPlus_Click(object sender, EventArgs e)
         {
             plusMakeVisible(false);
+            gvPractices.EditIndex = -1;
+            gvPractices.DataBind();
         }
 
         private void plusMakeVisible(bool isplusVisible)
@@ -32,24 +60,27 @@ namespace PraticeManagement.Config
             if (isplusVisible)
             {
                 btnPlus.Visible = true;
-                btnInsert.Visible = false;
-                btnCancel.Visible = false;
-                tbPracticeName.Visible = false;
-                chbPracticeActive.Visible = false;
-                chbIsInternalPractice.Visible = false;
+                btnInsert.Visible =
+                btnCancel.Visible =
+                tbPracticeName.Visible =
+                tbAbbreviation.Visible =
+                chbPracticeActive.Visible =
+                chbIsInternalPractice.Visible =
                 ddlPracticeManagers.Visible = false;
             }
             else
             {
+                chbIsInternalPractice.Checked =
                 btnPlus.Visible = false;
-                btnInsert.Visible = true;
-                btnCancel.Visible = true;
+                tbAbbreviation.Text =
                 tbPracticeName.Text = string.Empty;
-                tbPracticeName.Visible = true;
-                chbPracticeActive.Checked = true;
-                chbPracticeActive.Visible = true;
-                chbIsInternalPractice.Checked = false;
-                chbIsInternalPractice.Visible = true;
+                btnInsert.Visible =
+                btnCancel.Visible =
+                tbAbbreviation.Visible =
+                tbPracticeName.Visible =
+                chbPracticeActive.Checked =
+                chbPracticeActive.Visible =
+                chbIsInternalPractice.Visible =
                 ddlPracticeManagers.Visible = true;
             }
 
@@ -69,7 +100,7 @@ namespace PraticeManagement.Config
                 {
 
                     PracticesHelper.InsertPractice(tbPracticeName.Text, ddlPracticeManagers.SelectedValue,
-                                                   chbPracticeActive.Checked, chbIsInternalPractice.Checked);
+                                                   chbPracticeActive.Checked, chbIsInternalPractice.Checked, tbAbbreviation.Text);
                     mlInsertStatus.ShowInfoMessage(Resources.Controls.PracticeAddedSuccessfully);
                     gvPractices.DataBind();
 
@@ -82,7 +113,6 @@ namespace PraticeManagement.Config
             {
                 mlInsertStatus.ShowErrorMessage(exc.Message);
             }
-
         }
 
         protected void cvPracticeName_OnServerValidate(object source, ServerValidateEventArgs args)
@@ -95,6 +125,30 @@ namespace PraticeManagement.Config
 
         }
 
+        private void UpdateDeleteButton()
+        {
+            foreach (GridViewRow row in gvPractices.Rows)
+            {
+
+                if (row.RowType == DataControlRowType.DataRow)
+                {
+                    var item = row.DataItem as PracticeExtended;
+                    if (item != null && item.InUse)
+                    {
+                        var cell = row.Cells[DELETE_BUTTON_INDEX];
+                        cell.Enabled = false;
+                        if (cell.Controls.Count > 0)
+                        {
+                            var deleteButton = cell.Controls[0] as ImageButton;
+                            bool isVisible = true;
+                            Boolean.TryParse(deleteButton.Attributes["InUse"], out isVisible);
+                            deleteButton.Visible = isVisible;
+                        }
+                    }
+                }
+            }
+        }
+
         protected void gvPractices_RowDataBound(object sender, GridViewRowEventArgs e)
         {
 
@@ -105,7 +159,12 @@ namespace PraticeManagement.Config
             {
                 var cell = e.Row.Cells[DELETE_BUTTON_INDEX];
                 cell.Enabled = false;
-                cell.Visible = false;
+                if (cell.Controls.Count > 0)
+                {
+                    var deleteButton = cell.Controls[0] as ImageButton;
+                    deleteButton.Visible = false;
+                    deleteButton.Attributes["InUse"] = false.ToString();
+                }
             }
             if (item != null)
             {
@@ -185,6 +244,19 @@ namespace PraticeManagement.Config
                 }
             }
 
+            string newPracticeAbbrivation = e.NewValues["Abbreviation"] != null ? e.NewValues["Abbreviation"].ToString().Trim() : string.Empty;
+            string oldPracticeAbbrivation = e.OldValues["Abbreviation"] != null ? e.OldValues["Abbreviation"].ToString().Trim() : string.Empty;
+
+            if (newPracticeAbbrivation != oldPracticeAbbrivation)
+            {
+                if (IsPracticeAbbrivationAlreadyExisting(newPracticeAbbrivation))
+                {
+                    CustomValidator custValEditPracticeAbbreviation = gvPractices.Rows[e.RowIndex].FindControl("custValEditPracticeAbbreviation") as CustomValidator;
+                    custValEditPracticeAbbreviation.IsValid = false;
+                    e.Cancel = true;
+                }
+            }
+
             DropDownList ddl = gvPractices.Rows[e.RowIndex].Cells[PRACTICE_OWNER_INDEX].FindControl("ddlActivePersons") as DropDownList;
             if (ddl != null)
             {
@@ -195,10 +267,36 @@ namespace PraticeManagement.Config
             }
         }
 
+        protected void gvPractices_RowDeleted(object sender, GridViewDeletedEventArgs e)
+        {
+            mlInsertStatus.ShowInfoMessage(PracticeDeletedSuccessfully);
+        }
+
+        protected void gvPractices_RowUpdated(object sender, GridViewUpdatedEventArgs e)
+        {
+            mlInsertStatus.ShowInfoMessage(PracticeUpdatedSuccessfully);
+        }
+
+        protected void gvPractices_OnRowEditing(object sender, GridViewEditEventArgs e)
+        {
+            plusMakeVisible(true);
+        }
+
         private bool IsPracticeAlreadyExisting(string newPractice)
         {
             IEnumerable<PracticeExtended> practiceList = PracticesHelper.GetAllPractices();
             return practiceList.Any(practice => practice.Name.ToLowerInvariant() == newPractice.ToLowerInvariant());
+        }
+
+        private bool IsPracticeAbbrivationAlreadyExisting(string newPracticeAbbrivation)
+        {
+            IEnumerable<PracticeExtended> practiceList = PracticesHelper.GetAllPractices();
+            return practiceList.Any(practice => practice.Abbreviation.ToLowerInvariant() == newPracticeAbbrivation.ToLowerInvariant());
+        }
+
+        private void PopulateErrorPanel()
+        {
+            mpeErrorPanel.Show();
         }
     }
 }
