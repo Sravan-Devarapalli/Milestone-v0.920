@@ -372,6 +372,8 @@
             public const string CapabilityId = "CapabilityId";
             public const string ProjectCapabilityIds = "ProjectCapabilityIds";
             public const string PracticeAbbreviation = "PracticeAbbreviation";
+            public const string Abbreviation = "Abbreviation";
+            public const string CapabilityName = "CapabilityName";
         }
 
         #endregion
@@ -668,6 +670,7 @@
             public const string RoleNameParam = "@RoleName";
             public static string ProjectCapabilityIds = "@ProjectCapabilityIds";
             public static string CapabilityIdParam = "@CapabilityId";
+            public static string Abbreviation = "@Abbreviation";
         }
 
         #endregion
@@ -914,6 +917,10 @@
                 public const string Insert = "dbo.PracticeInsert";
                 public const string Delete = "dbo.PracticeDelete";
                 public const string GetPracticeCapabilities = "dbo.GetPracticeCapabilities";
+                public const string PracticeListAllWithCapabilities = "dbo.PracticeListAllWithCapabilities";
+                public const string CapabilityDelete = "dbo.CapabilityDelete";
+                public const string CapabilityUpdate = "dbo.CapabilityUpdate";
+                public const string CapabilityInsert = "dbo.CapabilityInsert";
             }
             #endregion
 
