@@ -36,7 +36,7 @@ namespace PraticeManagement.Controls
         public Color InfoColor { get; set; }
         public Color WarningColor { get; set; }
         public string CssClass { set { lblMessage.CssClass = value; } }
-
+        public bool IsMessageExists { get { return !string.IsNullOrEmpty(lblMessage.Text); } }
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
