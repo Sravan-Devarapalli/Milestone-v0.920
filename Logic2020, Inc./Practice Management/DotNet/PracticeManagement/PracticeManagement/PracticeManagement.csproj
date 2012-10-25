@@ -357,6 +357,7 @@
     <Content Include="ckeditor\skins\v2\skin.js" />
     <Content Include="ckeditor\skins\v2\templates.css" />
     <Content Include="ckeditor\themes\default\theme.js" />
+    <Content Include="Config\PracticeCapabilities.aspx" />
     <Content Include="Config\Strawmen.aspx" />
     <Content Include="Controls\Calendar.ascx" />
     <EmbeddedResource Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.js" />
@@ -1321,6 +1322,13 @@
     </Compile>
     <Compile Include="AttachProjectToOpportunityHandler.ashx.cs">
       <DependentUpon>AttachProjectToOpportunityHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\PracticeCapabilities.aspx.cs">
+      <DependentUpon>PracticeCapabilities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\PracticeCapabilities.aspx.designer.cs">
+      <DependentUpon>PracticeCapabilities.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\Strawmen.aspx.cs">
       <DependentUpon>Strawmen.aspx</DependentUpon>
@@ -3594,3 +3602,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
