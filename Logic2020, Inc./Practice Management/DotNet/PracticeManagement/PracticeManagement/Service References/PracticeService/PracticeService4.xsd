@@ -113,6 +113,7 @@
   <xs:complexType name="PracticeCapability">
     <xs:sequence>
       <xs:element minOccurs="0" name="CapabilityId" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PracticeAbbreviation" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PracticeId" type="xs:int" />
