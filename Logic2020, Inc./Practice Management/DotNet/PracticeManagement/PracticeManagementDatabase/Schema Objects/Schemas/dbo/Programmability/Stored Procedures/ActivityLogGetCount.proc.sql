@@ -168,6 +168,22 @@ AS
 					 )
 				  OR ( (@EventSource = 'DeletedStrawmen' OR @EventSource = 'All') AND a.LogData.exist('/Strawman') = 1 AND t.ActivityName = 'Deleted'
 					 )
+				  OR ( (@EventSource = 'Practice' OR @EventSource = 'All') AND a.LogData.exist('/Practice') = 1
+					 )
+				  OR ( (@EventSource = 'AddedPractice' OR @EventSource = 'All') AND a.LogData.exist('/Practice') = 1 AND t.ActivityName = 'Added'
+					 )
+				  OR ( (@EventSource = 'ChangedPractice' OR @EventSource = 'All') AND a.LogData.exist('/Practice') = 1 AND t.ActivityName = 'Changed'
+					 )
+				  OR ( (@EventSource = 'DeletedPractice' OR @EventSource = 'All') AND a.LogData.exist('/Practice') = 1 AND t.ActivityName = 'Deleted'
+					 )
+				  OR ( (@EventSource = 'PracticeCapability' OR @EventSource = 'All') AND a.LogData.exist('/PracticeCapability') = 1
+					 )
+				  OR ( (@EventSource = 'AddedPracticeCapability' OR @EventSource = 'All') AND a.LogData.exist('/PracticeCapability') = 1 AND t.ActivityName = 'Added'
+					 )
+				  OR ( (@EventSource = 'ChangedPracticeCapability' OR @EventSource = 'All') AND a.LogData.exist('/PracticeCapability') = 1 AND t.ActivityName = 'Changed'
+					 )
+				  OR ( (@EventSource = 'DeletedPracticeCapability' OR @EventSource = 'All') AND a.LogData.exist('/PracticeCapability') = 1 AND t.ActivityName = 'Deleted'
+					 )
 					)
 	
 					AND (@ProjectId IS NULL 
