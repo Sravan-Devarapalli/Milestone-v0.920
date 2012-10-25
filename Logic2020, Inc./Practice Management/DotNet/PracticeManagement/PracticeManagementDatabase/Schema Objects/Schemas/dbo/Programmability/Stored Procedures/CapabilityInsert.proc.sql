@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[CapabilityInsert]
 (
 	@Name NVARCHAR(100),
-	@PracticeId INT
+	@PracticeId INT,
+	@UserLogin NVARCHAR(MAX)
 )
 AS
 BEGIN
@@ -14,6 +15,8 @@ BEGIN
 			SET @Error = 'This Capability already exists. Please add a different Capability.'
 			RAISERROR(@Error,16,1)
 		END
+
+		EXEC SessionLogPrepare @UserLogin = @UserLogin
 
 		Insert [dbo].[PracticeCapabilities](CapabilityName,PracticeId)
 		VALUES (@Name,@PracticeId)
@@ -32,5 +35,5 @@ BEGIN
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
-
+	EXEC dbo.SessionLogUnprepare
 END
