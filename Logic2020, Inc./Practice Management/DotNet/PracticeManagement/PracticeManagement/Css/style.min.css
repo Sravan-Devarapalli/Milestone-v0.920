@@ -376,6 +376,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width25Percent{width:25%}
 .Width26Percent,.Width26Per{width:26%}
 .Width27Percent{width:27%}
+.Width28Percent{width:28%}
 .Width29Percent{width:29%}
 .width30P{width:30%}
 .Width31Percent{width:31%}
@@ -1379,3 +1380,10 @@ table#ctl00_body_login tr td label{float:left}
 .zindex2001Imp{z-index:2001!important}
 .pnlTotal tr td{padding-bottom:2px!important}
 .CursorText{cursor:text}
+.repCapabilities div{padding-top:3px;padding-bottom:3px}
+.repCapabilities .PracticeHeaderTd{border:1px solid black;font-size:14px;font-weight:bold;height:25px;width:70%;line-height:25px;vertical-align:middle}
+.repCapabilities .PracticeHeaderTd span{padding-left:10px}
+.repCapabilities .capabilityTd{padding-left:25px;width:30%;padding-top:6px!important;padding-bottom:6px!important;vertical-align:middle}
+.repCapabilities .capabilityTd input{vertical-align:middle}
+.repCapabilities .PlusTd{padding-left:25px;width:30%;padding-top:5px!important;padding-bottom:20px!important}
+.repCapabilities .capabilityTd span{vertical-align:middle;line-height:18px;padding-left:5px}
