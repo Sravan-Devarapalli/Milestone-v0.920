@@ -54,6 +54,7 @@
         <siteMapNode url="~/Config/Persons.aspx" title="Persons"  VirtualPath="~/Config/Persons.aspx" QuickLinkTitle="Persons" description="Person List"  />
         <siteMapNode url="~/Config/Strawmen.aspx" title="Strawmen"  VirtualPath="~/Config/Strawmen.aspx" QuickLinkTitle="Strawmen" description="Strawmen List"  />
         <siteMapNode url="~/Config/PracticeAreas.aspx" title="Practice Areas"  VirtualPath="~/Config/PracticeAreas.aspx" QuickLinkTitle="Practice Areas" description="Practice Areas"  />
+        <siteMapNode url="~/Config/PracticeCapabilities.aspx" title="Capabilities"  VirtualPath="~/Config/PracticeCapabilities.aspx" QuickLinkTitle="Capabilities" description="Capabilities"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Email" title="E-Mail" description="E-Mail Templates page"  >
         <siteMapNode url="~/Config/SMTPSetup.aspx" title="SMTP Setup"  VirtualPath="~/Config/SMTPSetup.aspx" QuickLinkTitle="SMTP Setup" description="SMTP Setup Settings"  />
