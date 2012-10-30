@@ -37,7 +37,7 @@ BEGIN
 				,i.DirectorId
 				,CASE WHEN i.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
 				      ELSE '' 
-				      END AS 'ProjectDirector'
+				      END AS 'ClientDirector'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
 				i.ProjectOwnerId,
@@ -74,7 +74,7 @@ BEGIN
 				,d.DirectorId
 				,CASE WHEN d.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
 				      ELSE '' 
-				      END AS 'ProjectDirector'
+				      END AS 'ClientDirector'
 				,CASE WHEN d.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
 						d.ProjectOwnerId,
@@ -166,4 +166,3 @@ BEGIN
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
-
