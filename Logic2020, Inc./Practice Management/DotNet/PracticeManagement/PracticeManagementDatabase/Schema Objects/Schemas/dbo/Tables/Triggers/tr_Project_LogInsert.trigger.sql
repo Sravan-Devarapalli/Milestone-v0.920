@@ -22,11 +22,11 @@ BEGIN
 				,i.ProjectNumber AS 'ProjectNumber'
 				,i.Name AS 'Name'
 				,i.ClientId
-				,C.Name AS 'Client'
+				,C.Name AS 'ClientName'
 				,i.PracticeId
 				,prac.Name AS 'PracticeArea'
 				,i.ProjectStatusId
-				,ps.Name AS 'ProjectStatus'
+				,ps.Name AS 'ProjectStatusName'
 				,i.Discount
 				,i.BuyerName AS 'BuyerName'
 				,i.GroupId
@@ -35,7 +35,7 @@ BEGIN
 				,i.DirectorId
 				,CASE WHEN i.DirectorId IS NOT NULL THEN D.LastName + ', ' + D.FirstName 
 				      ELSE '' 
-				      END AS 'ProjectDirector'
+				      END AS 'ClientDirector'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
 				i.ProjectOwnerId,
