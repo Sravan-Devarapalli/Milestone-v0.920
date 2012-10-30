@@ -16,6 +16,9 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN PracticeInsert_Tran;
 
+		SELECT @Name = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Name)),' ','<>'),'><',''),'<>',' '),
+			   @Abbreviation = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Abbreviation)),' ','<>'),'><',''),'<>',' ')
+
 		DECLARE @IsNotesRequired BIT = 1
 
 		SELECT @IsNotesRequired =(SELECT  s.Value 
@@ -29,12 +32,12 @@ BEGIN
 		DECLARE @Error NVARCHAR(200)
 		IF EXISTS(SELECT 1 FROM dbo.Practice WHERE [Name] = @Name)
 		BEGIN
-			SET @Error = 'This Practice already exists. Please add a different Practice.'
+			SET @Error = 'Practice area name already exists. Please enter a different practice area name.'
 			RAISERROR(@Error,16,1)
 		END
 		IF EXISTS(SELECT 1 FROM dbo.Practice WHERE ISNULL(Abbreviation,0) = @Abbreviation)
 		BEGIN
-			SET @Error = 'This practice area abbreviation already exists. Please add a different practice area abbreviation.'
+			SET @Error = 'Abbreviation with this name already exists for a practice area. Please enter different abbreviation name.'
 			RAISERROR(@Error,16,1)
 		END
 
@@ -90,4 +93,3 @@ BEGIN
 	END CATCH
 	EXEC dbo.SessionLogUnprepare
 END
-
