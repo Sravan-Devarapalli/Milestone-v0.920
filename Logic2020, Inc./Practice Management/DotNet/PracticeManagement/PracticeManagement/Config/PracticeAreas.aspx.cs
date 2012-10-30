@@ -233,7 +233,6 @@ namespace PraticeManagement.Config
         {
             string newPractice = e.NewValues["Name"].ToString().Trim();
             string oldPractice = e.OldValues["Name"].ToString().Trim();
-
             if (newPractice != oldPractice)
             {
                 if (IsPracticeAlreadyExisting(newPractice))
@@ -247,7 +246,7 @@ namespace PraticeManagement.Config
             string newPracticeAbbrivation = e.NewValues["Abbreviation"] != null ? e.NewValues["Abbreviation"].ToString().Trim() : string.Empty;
             string oldPracticeAbbrivation = e.OldValues["Abbreviation"] != null ? e.OldValues["Abbreviation"].ToString().Trim() : string.Empty;
 
-            if (newPracticeAbbrivation != oldPracticeAbbrivation)
+            if (!string.IsNullOrEmpty(newPracticeAbbrivation) && newPracticeAbbrivation != oldPracticeAbbrivation)
             {
                 if (IsPracticeAbbrivationAlreadyExisting(newPracticeAbbrivation))
                 {
@@ -284,12 +283,14 @@ namespace PraticeManagement.Config
 
         private bool IsPracticeAlreadyExisting(string newPractice)
         {
+            newPractice = newPractice.Trim().Replace(" ", "<>").Replace("><", "").Replace("<>", " ");
             IEnumerable<PracticeExtended> practiceList = PracticesHelper.GetAllPractices();
             return practiceList.Any(practice => practice.Name.ToLowerInvariant() == newPractice.ToLowerInvariant());
         }
 
         private bool IsPracticeAbbrivationAlreadyExisting(string newPracticeAbbrivation)
         {
+            newPracticeAbbrivation = newPracticeAbbrivation.Trim().Replace(" ", "<>").Replace("><", "").Replace("<>", " ");
             IEnumerable<PracticeExtended> practiceList = PracticesHelper.GetAllPractices();
             return practiceList.Any(practice => practice.Abbreviation.ToLowerInvariant() == newPracticeAbbrivation.ToLowerInvariant());
         }
