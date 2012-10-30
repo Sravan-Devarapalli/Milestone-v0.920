@@ -320,7 +320,7 @@
                                 </tr>
                                 <tr>
                                     <td class="t-left padLeft20Imp">
-                                        <div id="dlPersonDiv" class="searchResult" runat="server">
+                                        <div id="dlPersonDiv" class="PaddingBottom10Imp" runat="server">
                                             <asp:DataList ID="dlPerson" runat="server" OnItemDataBound="dlPerson_OnItemDataBound"
                                                 CssClass="dlPerson">
                                                 <AlternatingItemStyle CssClass="alterrow" />
