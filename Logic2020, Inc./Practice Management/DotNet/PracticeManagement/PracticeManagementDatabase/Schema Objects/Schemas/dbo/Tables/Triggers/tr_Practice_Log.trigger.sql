@@ -11,7 +11,7 @@ BEGIN
 	;WITH NEW_VALUES AS
 	(
 		SELECT i.PracticeId,
-				i.Name AS [Practice],
+				i.Name AS [PracticeArea],
 				i.Abbreviation,
 				CASE WHEN i.IsActive = 1 THEN 'YES' ELSE 'NO' END [IsActive],
 				CASE WHEN i.IsCompanyInternal = 1 THEN 'YES' ELSE 'NO' END [IsCompanyInternal],
@@ -25,7 +25,7 @@ BEGIN
 	OLD_VALUES AS
 	(
 			SELECT d.PracticeId,
-				d.Name AS [Practice],
+				d.Name AS [PracticeArea],
 				d.Abbreviation,
 				CASE WHEN d.IsActive = 1 THEN 'YES' ELSE 'NO' END [IsActive],
 				CASE WHEN d.IsCompanyInternal = 1 THEN 'YES' ELSE 'NO' END [IsCompanyInternal],
@@ -70,7 +70,7 @@ BEGIN
 					  FOR XML AUTO, ROOT('Practice'))),
 		LogData = (SELECT 
 						NEW_VALUES.PracticeId 
-						,NEW_VALUES.Practice
+						,NEW_VALUES.[PracticeArea]
 						,NEW_VALUES.Abbreviation
 						,NEW_VALUES.IsActive
 						,NEW_VALUES.IsCompanyInternal
@@ -78,7 +78,7 @@ BEGIN
 						,NEW_VALUES.PracticeManagerId
 						,NEW_VALUES.[PracticeManager]
 						,OLD_VALUES.PracticeId 
-						,OLD_VALUES.Practice
+						,OLD_VALUES.[PracticeArea]
 						,OLD_VALUES.Abbreviation
 						,OLD_VALUES.IsActive
 						,OLD_VALUES.IsCompanyInternal
