@@ -55,8 +55,8 @@
                                 Text="*" runat="server" ValidationGroup="EditPractice" ValidationExpression="^[\s\S]{0,100}$"
                                 ErrorMessage="Practice Area name should not be more than 100 characters." />
                             <asp:CustomValidator ID="custValEditPractice" runat="server" ValidationGroup="EditPractice"
-                                Display="Dynamic" Text="*" ErrorMessage="This practice area already exists. Please enter a different practice."
-                                ToolTip="This practice area already exists. Please enter a different practice." />
+                                Display="Dynamic" Text="*" ErrorMessage="Practice area name already exists. Please enter a different practice area name."
+                                ToolTip="Practice area name already exists. Please enter a different practice area name." />
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Abbreviation">
@@ -70,11 +70,11 @@
                                 CssClass="Width95Percent" ValidationGroup="EditPractice" />
                             <asp:RegularExpressionValidator ID="regValAbbreviation" ControlToValidate="tbEditAbbreviation"
                                 Display="Dynamic" Text="*" runat="server" ValidationGroup="EditPractice" ValidationExpression="^[\s\S]{0,100}$"
-                                ToolTip="Practice area Abbreviation should not be more than 100 characters."
-                                ErrorMessage="Practice area Abbreviation should not be more than 100 characters." />
+                                ToolTip="Abbreviation should not be more than 100 characters."
+                                ErrorMessage="Abbreviation should not be more than 100 characters." />
                             <asp:CustomValidator ID="custValEditPracticeAbbreviation" runat="server" ValidationGroup="EditPractice"
-                                Display="Dynamic" Text="*" ErrorMessage="This practice area abbreviation already exists. Please enter a different practice area abbreviation."
-                                ToolTip="This practice area abbreviation already exists. Please enter a different practice area abbreviation." />
+                                Display="Dynamic" Text="*" ErrorMessage="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name."
+                                ToolTip="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name." />
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Active">
@@ -148,19 +148,19 @@
                                 ToolTip="Practice Area name should not be more than 100 characters." ErrorMessage="Practice Area name should not be more than 100 characters." />
                             <asp:CustomValidator ID="cvPracticeName" runat="server" ControlToValidate="tbPracticeName"
                                 Display="Dynamic" Text="*" OnServerValidate="cvPracticeName_OnServerValidate"
-                                ToolTip="This practice area already exists. Please enter a different practice."
-                                ValidationGroup="InsertPractice" ErrorMessage="This practice area already exists. Please enter a different practice." />
+                                ToolTip="Practice area name already exists. Please enter a different practice area name."
+                                ValidationGroup="InsertPractice" ErrorMessage="Practice area name already exists. Please enter a different practice area name." />
                         </td>
                         <td class="Width7Percent Left padLeft20">
                             <asp:TextBox ID="tbAbbreviation" ValidationGroup="InsertPractice" runat="server"
                                 CssClass="Width95Percent" Visible="false" />
                             <asp:RegularExpressionValidator ID="regValAbbreviation" ControlToValidate="tbAbbreviation"
                                 Display="Dynamic" Text="*" runat="server" ValidationGroup="EditPractice" ValidationExpression="^[\s\S]{0,100}$"
-                                ToolTip="Practice area Abbreviation should not be more than 100 characters."
-                                ErrorMessage="Practice area Abbreviation should not be more than 100 characters." />
+                                ToolTip="Abbreviation should not be more than 100 characters."
+                                ErrorMessage="Abbreviation should not be more than 100 characters." />
                             <asp:CustomValidator ID="custValEditPracticeAbbreviation" runat="server" ValidationGroup="EditPractice"
-                                Display="Dynamic" Text="*" ErrorMessage="This practice area abbreviation already exists. Please enter a different practice area abbreviation."
-                                ToolTip="This practice area abbreviation already exists. Please enter a different practice area abbreviation." />
+                                Display="Dynamic" Text="*" ErrorMessage="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name."
+                                ToolTip="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name." />
                         </td>
                         <td class="Width7Percent">
                             <asp:CheckBox ID="chbPracticeActive" runat="server" Checked="true" Visible="false" />
