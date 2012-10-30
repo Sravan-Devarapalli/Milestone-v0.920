@@ -13,6 +13,9 @@ BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
 
+	DECLARE @UserLogin NVARCHAR(MAX) 
+	SELECT @UserLogin  = UserLogin FROM dbo.SessionLogData AS l WHERE l.SessionID = @@SPID
+
 	IF EXISTS(SELECT 1 FROM deleted)
 	BEGIN
 	
@@ -51,7 +54,8 @@ BEGIN
 
 			END
 	END
-	
+
+	EXEC SessionLogPrepare @UserLogin = @UserLogin
 	DECLARE @CurrentPMTime DATETIME 
 	SET @CurrentPMTime = dbo.InsertingTime()
 
@@ -65,10 +69,11 @@ BEGIN
 			   ,S.LastName + ', ' + S.FirstName as 'Salesperson'
 			   ,i.[OpportunityStatusId]
 			   ,OS.Name AS 'OpportunityStatus'
-			   ,OP.[Priority]
-			   ,i.[ProjectedStartDate]
-			   ,i.[ProjectedEndDate]
-			   ,i.[CloseDate]
+			   ,OP.Id AS PriorityId
+			   ,OP.DisplayName AS 'SalesStage'
+		       ,CONVERT(NVARCHAR(10), i.[ProjectedStartDate], 101) AS 'ProjectStartDate'
+			   ,CONVERT(NVARCHAR(10), i.[ProjectedEndDate], 101) AS 'ProjectEndDate'
+			   ,CONVERT(NVARCHAR(10), i.[CloseDate], 101) AS 'CloseDate'
 			   ,i.[OpportunityNumber]
 			   ,i.[Description]
 			   ,i.[PracticeId]
@@ -109,10 +114,11 @@ BEGIN
 			   ,S.LastName + ', ' + S.FirstName as 'Salesperson'
 			   ,d.[OpportunityStatusId]
 			   ,os.Name AS 'OpportunityStatus'
-			   ,OP.[Priority]
-			   ,d.[ProjectedStartDate]
-			   ,d.[ProjectedEndDate]
-			   ,d.[CloseDate]
+			   ,OP.Id AS PriorityId
+			   ,OP.DisplayName AS 'SalesStage'
+			   ,CONVERT(NVARCHAR(10), d.[ProjectedStartDate], 101) AS 'ProjectStartDate'
+			   ,CONVERT(NVARCHAR(10), d.[ProjectedEndDate], 101) AS 'ProjectEndDate'
+			   ,CONVERT(NVARCHAR(10), d.[CloseDate], 101) AS 'CloseDate'
 			   ,d.[OpportunityNumber]
 			   ,d.[Description]
 			   ,d.[PracticeId]
