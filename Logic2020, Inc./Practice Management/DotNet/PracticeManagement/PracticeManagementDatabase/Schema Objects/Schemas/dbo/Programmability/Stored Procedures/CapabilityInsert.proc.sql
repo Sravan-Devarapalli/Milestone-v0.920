@@ -12,11 +12,13 @@ BEGIN
 		DECLARE @Error NVARCHAR(MAX)
 		IF EXISTS(SELECT 1 FROM dbo.[PracticeCapabilities] WHERE CapabilityName = @Name)
 		BEGIN
-			SET @Error = 'This Capability already exists. Please add a different Capability.'
+			SET @Error = 'Capability name already exists. Please enter a different capability name.'
 			RAISERROR(@Error,16,1)
 		END
 
 		EXEC SessionLogPrepare @UserLogin = @UserLogin
+
+		SELECT @Name = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Name)),' ','<>'),'><',''),'<>',' ')
 
 		Insert [dbo].[PracticeCapabilities](CapabilityName,PracticeId)
 		VALUES (@Name,@PracticeId)
