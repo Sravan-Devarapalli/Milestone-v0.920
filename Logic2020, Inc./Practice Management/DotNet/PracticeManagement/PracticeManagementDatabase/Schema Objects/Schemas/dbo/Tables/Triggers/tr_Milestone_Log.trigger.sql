@@ -22,12 +22,12 @@ BEGIN
 		       i.Description AS Name,
 		       i.ProjectId AS MilestoneProjectId,
 		       p.Name AS ProjectName,
-		       i.ProjectedDeliveryDate,
-		       i.StartDate,
+			   CONVERT(NVARCHAR(10), i.ProjectedDeliveryDate, 101) AS 'ProjectedDeliveryDate',
+   			   CONVERT(NVARCHAR(10), i.StartDate, 101) AS 'StartDate',
 		       i.Amount,
-		       i.ConsultantsCanAdjust,
-		       i.IsChargeable,
-		       i.IsHourlyAmount	       
+			   CASE WHEN i.ConsultantsCanAdjust = 1 THEN 'Yes' ELSE 'No' END AS 'ConsultantsCanAdjust',
+   			   CASE WHEN i.IsChargeable = 1 THEN 'Yes' ELSE 'No' END AS 'IsChargeable',
+   			   CASE WHEN i.IsHourlyAmount = 1 THEN 'Yes' ELSE 'No' END AS 'IsHourlyAmount'
 		  FROM inserted AS i
 		       INNER JOIN dbo.Project AS p ON i.ProjectId = p.ProjectId
 	),
@@ -38,12 +38,12 @@ BEGIN
 		       d.Description AS Name,
 		       d.ProjectId AS MilestoneProjectId,
 		       p.Name AS ProjectName,
-		       d.ProjectedDeliveryDate,
-		       d.StartDate,
+		       CONVERT(NVARCHAR(10), d.ProjectedDeliveryDate, 101) AS 'ProjectedDeliveryDate',
+   			   CONVERT(NVARCHAR(10), d.StartDate, 101) AS 'StartDate',
 		       d.Amount,
-		       d.ConsultantsCanAdjust,
-		       d.IsChargeable,
-		       d.IsHourlyAmount	
+			   CASE WHEN d.ConsultantsCanAdjust = 1 THEN 'Yes' ELSE 'No' END AS 'ConsultantsCanAdjust',
+   			   CASE WHEN d.IsChargeable = 1 THEN 'Yes' ELSE 'No' END AS 'IsChargeable',
+   			   CASE WHEN d.IsHourlyAmount = 1 THEN 'Yes' ELSE 'No' END AS 'IsHourlyAmount'
 		  FROM deleted AS d
 		       INNER JOIN dbo.Project AS p ON d.ProjectId = p.ProjectId
 	)
