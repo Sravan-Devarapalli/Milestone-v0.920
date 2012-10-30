@@ -11,9 +11,9 @@ BEGIN
 	;WITH NEW_VALUES AS
 	(
 		SELECT i.CapabilityId AS [PracticeCapabilityId],
+				P.Name AS [PracticeArea],
 				i.CapabilityName AS [PracticeCapability],
-				i.PracticeId,
-				P.Name AS [Practice]
+				i.PracticeId
 		  FROM inserted AS i
 		  INNER JOIN dbo.Practice P ON P.PracticeId = i.PracticeId
 	),
@@ -21,9 +21,9 @@ BEGIN
 	OLD_VALUES AS
 	(
 		SELECT d.CapabilityId AS [PracticeCapabilityId],
+				P.Name AS [PracticeArea],
 				d.CapabilityName AS [PracticeCapability],
-				d.PracticeId,
-				P.Name AS [Practice]
+				d.PracticeId
 		  FROM deleted AS d
 		  INNER JOIN dbo.Practice P ON P.PracticeId = d.PracticeId
 	)
@@ -62,13 +62,13 @@ BEGIN
 					  FOR XML AUTO, ROOT('PracticeCapability'))),
 		LogData = (SELECT 
 						NEW_VALUES.PracticeCapabilityId 
+						,NEW_VALUES.[PracticeArea]
 						,NEW_VALUES.PracticeCapability
 						,NEW_VALUES.PracticeId
-						,NEW_VALUES.Practice
 						,OLD_VALUES.PracticeCapabilityId 
+						,OLD_VALUES.[PracticeArea]
 						,OLD_VALUES.PracticeCapability
 						,OLD_VALUES.PracticeId
-						,OLD_VALUES.Practice
 					  FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.[PracticeCapabilityId] = OLD_VALUES.[PracticeCapabilityId]
 			           WHERE NEW_VALUES.[PracticeCapabilityId] = ISNULL(i.CapabilityId, d.CapabilityId) OR OLD_VALUES.[PracticeCapabilityId] = ISNULL(i.CapabilityId, d.CapabilityId)
