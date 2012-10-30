@@ -17,6 +17,9 @@ BEGIN
 
 	EXEC SessionLogPrepare @UserLogin = @UserLogin
 
+	SELECT @Name = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Name)),' ','<>'),'><',''),'<>',' '),
+			   @Abbreviation = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Abbreviation)),' ','<>'),'><',''),'<>',' ')
+
 	DECLARE @PreviousPracticeManager INT,
 			@Today					 DATETIME
 
@@ -35,7 +38,7 @@ BEGIN
 	 WHERE PracticeId = @PracticeId
 			AND (
 					[Name] != @Name
-					OR [Abbreviation] != @Abbreviation
+					OR ISNULL([Abbreviation],'') != ISNULL(@Abbreviation,'')
 					OR PracticeManagerId != @PracticeManagerId
 					OR IsActive != @IsActive
 					OR IsCompanyInternal != @IsCompanyInternal
@@ -67,4 +70,3 @@ BEGIN
 
 	EXEC dbo.SessionLogUnprepare
  END
-
