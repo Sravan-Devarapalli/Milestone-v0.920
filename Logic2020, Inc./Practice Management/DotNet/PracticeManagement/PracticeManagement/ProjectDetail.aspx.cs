@@ -1489,6 +1489,12 @@ namespace PraticeManagement
 
                     ddlProjectOwner.SelectedValue = project.ProjectOwner.Id.ToString();
                 }
+                int viewIndex = mvProjectDetailTab.ActiveViewIndex;
+                if (viewIndex == 6) //History
+                {
+                    activityLog.Update();
+                }
+
             }
 
             PopulateAttachmentControl(project);
