@@ -21,13 +21,7 @@ namespace PraticeManagement
         #region Constants
 
         private const string StartDateArgument = "StartDate";
-        private const string StartDateIncorrect = "The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
-        private const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
-        private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
-        private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
         private const string IsStawman = "Isstrawman";
-        private const string SalaryToContractException = "Salary Type to Contract Type Violation";
-        private const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\"";
 
         #endregion
 
@@ -257,6 +251,18 @@ namespace PraticeManagement
                 internalException.Message != ErrorCode.PeriodIncorrect.ToString();
         }
 
+        protected void cvEmployeePayTypeChangeViolation_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var validator = ((CustomValidator)sender);
+            DateTime enddate = personnelCompensation.EndDate.HasValue ? personnelCompensation.EndDate.Value : new DateTime(2029, 12, 31);
+            e.IsValid = !ServiceCallers.Custom.Person(p => p.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(SelectedId.Value, personnelCompensation.StartDate.Value, enddate, (int)personnelCompensation.Timescale));
+            if (!e.IsValid)
+            {
+                validator.Text = validator.ToolTip = validator.ErrorMessage = PersonDetail.EmployeePayTypeChangeVoilationMessage;
+                mpeEmployeePayTypeChange.Show();
+            }
+        }
+
         #endregion
 
         protected void personnelCompensation_CompensationMethodChanged(object sender, EventArgs e)
@@ -281,8 +287,8 @@ namespace PraticeManagement
 
                         //var returnUrl = Request.Url.AbsoluteUri.Substring(Request.Url.AbsoluteUri.LastIndexOf("&returnTo="));
                         var returnUrl = Request.UrlReferrer.ToString();
-                        if(returnUrl.LastIndexOf("&returnTo=") != -1)
-                        returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("&returnTo="));
+                        if (returnUrl.LastIndexOf("&returnTo=") != -1)
+                            returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("&returnTo="));
                         string redirectUrl = "PersonDetail.aspx?id=" + PersonDetailData.Id + "&ShowConfirmMessage=1";
                         redirectUrl = redirectUrl + (returnUrl.Contains("persons.aspx") ? returnUrl : string.Empty);
 
@@ -293,65 +299,80 @@ namespace PraticeManagement
                 }
                 else
                 {
+                    if (SelectedStartDate.HasValue)
+                    {
+                        Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
+                        Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
+
+                        btnSave.Visible = (pay.StartDate >= person.HireDate && person.Status.Id != (int)PersonStatusType.Terminated);
+
+                        PopulateControls(pay);
+                    }
                     ClearDirty();
                     mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
                 }
             }
             else
             {
-                Page.Validate();
-                if (Page.IsValid)
+                if (cvEmployeePayTypeChangeViolation.IsValid)
                 {
-                    // Error occured while saving.
-                    CustomValidator cvc = new CustomValidator();
-                    cvc.IsValid = false;
-                    cvc.Text = "*";
-                    cvc.Display = ValidatorDisplay.None;
-                    cvc.ErrorMessage = @"Error occured while saving the Compensation.";
-                    pnlBody.ContentTemplateContainer.Controls.Add(cvc);
-
-                    if (internalException != null)
+                    bool isPayTypeChangeViolationEnable = cvEmployeePayTypeChangeViolation.Enabled;
+                    cvEmployeePayTypeChangeViolation.Enabled = false;
+                    Page.Validate();
+                    cvEmployeePayTypeChangeViolation.Enabled = isPayTypeChangeViolationEnable;
+                    if (Page.IsValid)
                     {
-                        string data = internalException.ToString();
-                        string innerexceptionMessage = internalException.InnerException.Message;
                         // Error occured while saving.
-                        CustomValidator cvc2 = new CustomValidator();
-                        cvc2.IsValid = false;
-                        cvc2.Text = "*";
-                        cvc2.Display = ValidatorDisplay.None;
-                        if (data.Contains("CK_Pay_DateRange"))
+                        CustomValidator cvc = new CustomValidator();
+                        cvc.IsValid = false;
+                        cvc.Text = "*";
+                        cvc.Display = ValidatorDisplay.None;
+                        cvc.ErrorMessage = @"Error occured while saving the Compensation.";
+                        pnlBody.ContentTemplateContainer.Controls.Add(cvc);
+
+                        if (internalException != null)
                         {
-                            cvc2.ErrorMessage = @"Compensation for the same period already exists.";
-                            pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                        }
-                        else if (innerexceptionMessage == StartDateIncorrect)
-                        {
-                            cvc2.ErrorMessage = StartDateIncorrect;
-                            pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                        }
-                        else if (innerexceptionMessage == EndDateIncorrect)
-                        {
-                            cvc2.ErrorMessage = EndDateIncorrect;
-                            pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                        }
-                        else if (innerexceptionMessage == PeriodIncorrect)
-                        {
-                            cvc2.ErrorMessage = PeriodIncorrect;
-                            pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                        }
-                        else if (innerexceptionMessage == HireDateInCorrect)
-                        {
-                            cvc2.ErrorMessage = HireDateInCorrect;
-                            pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                        }
-                        else if (innerexceptionMessage == SalaryToContractException)
-                        {
-                            cvc2.ErrorMessage = SalaryToContractMessage;
-                            pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                        }
-                        else
-                        {
-                            cvc2 = null;
+                            string data = internalException.ToString();
+                            string innerexceptionMessage = internalException.InnerException.Message;
+                            // Error occured while saving.
+                            CustomValidator cvc2 = new CustomValidator();
+                            cvc2.IsValid = false;
+                            cvc2.Text = "*";
+                            cvc2.Display = ValidatorDisplay.None;
+                            if (data.Contains("CK_Pay_DateRange"))
+                            {
+                                cvc2.ErrorMessage = @"Compensation for the same period already exists.";
+                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
+                            }
+                            else if (innerexceptionMessage == PersonDetail.StartDateIncorrect)
+                            {
+                                cvc2.ErrorMessage = PersonDetail.StartDateIncorrect;
+                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
+                            }
+                            else if (innerexceptionMessage == PersonDetail.EndDateIncorrect)
+                            {
+                                cvc2.ErrorMessage = PersonDetail.EndDateIncorrect;
+                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
+                            }
+                            else if (innerexceptionMessage == PersonDetail.PeriodIncorrect)
+                            {
+                                cvc2.ErrorMessage = PersonDetail.PeriodIncorrect;
+                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
+                            }
+                            else if (innerexceptionMessage == PersonDetail.HireDateInCorrect)
+                            {
+                                cvc2.ErrorMessage = PersonDetail.HireDateInCorrect;
+                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
+                            }
+                            else if (innerexceptionMessage == PersonDetail.SalaryToContractException)
+                            {
+                                cvc2.ErrorMessage = PersonDetail.SalaryToContractMessage;
+                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
+                            }
+                            else
+                            {
+                                cvc2 = null;
+                            }
                         }
                     }
                 }
@@ -361,7 +382,14 @@ namespace PraticeManagement
         protected override bool ValidateAndSave()
         {
             bool result = false;
+            bool isPayTypeChangeViolationEnable = cvEmployeePayTypeChangeViolation.Enabled;
+            cvEmployeePayTypeChangeViolation.Enabled = false;
             Page.Validate();
+            cvEmployeePayTypeChangeViolation.Enabled = isPayTypeChangeViolationEnable;
+            if (Page.IsValid && cvEmployeePayTypeChangeViolation.Enabled && SelectedId.HasValue)
+            {
+                cvEmployeePayTypeChangeViolation.Validate();
+            }
             if (Page.IsValid)
             {
                 result = SaveData();
@@ -420,7 +448,7 @@ namespace PraticeManagement
 
                             SavePersonsPermissions(person, serviceClient);
 
-                            if(!PersonDetailData.Id.HasValue)
+                            if (!PersonDetailData.Id.HasValue)
                                 PersonDetailData.Id = personId.Value;
                             IsDirty = false;
                         }
@@ -447,7 +475,7 @@ namespace PraticeManagement
                 }
             }
         }
-        
+
         private static void SaveRoles(Person person)
         {
             if (string.IsNullOrEmpty(person.Alias)) return;
@@ -525,6 +553,29 @@ namespace PraticeManagement
                     return;
             }
             custUserName.ErrorMessage = custUserName.ToolTip = message;
+        }
+
+        protected void btnEmployeePayTypeChangeViolationOk_Click(object sender, EventArgs e)
+        {
+            cvEmployeePayTypeChangeViolation.Enabled = false;
+            btnSave_Click(btnSave, new EventArgs());
+            mpeEmployeePayTypeChange.Hide();
+            cvEmployeePayTypeChangeViolation.Enabled = true;
+        }
+
+        protected void btnEmployeePayTypeChangeViolationCancel_Click(object source, EventArgs args)
+        {
+            if (SelectedStartDate.HasValue)
+            {
+                Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
+                Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
+
+                btnSave.Visible = (pay.StartDate >= person.HireDate && person.Status.Id != (int)PersonStatusType.Terminated);
+
+                PopulateControls(pay);
+            }
+            cvEmployeePayTypeChangeViolation.Enabled = true;
+            mpeEmployeePayTypeChange.Hide();
         }
 
         #endregion
