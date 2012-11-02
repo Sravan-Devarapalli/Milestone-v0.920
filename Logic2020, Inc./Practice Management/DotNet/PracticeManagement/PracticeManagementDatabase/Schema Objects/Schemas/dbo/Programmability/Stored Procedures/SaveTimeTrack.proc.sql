@@ -40,16 +40,21 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-	DECLARE @CurrentPMTime	DATETIME,
-			@ModifiedBy		INT,
-			@HolidayTimeTypeId INT,
-			@ORTTimeTypeId	INT,
-			@UnpaidTimeTypeId	INT
+	DECLARE @CurrentPMTime		DATETIME,
+			@ModifiedBy			INT,
+			@HolidayTimeTypeId	INT,
+			@ORTTimeTypeId		INT,
+			@UnpaidTimeTypeId	INT,
+			@W2SalaryId			INT,
+			@W2HourlyId			INT
 
 	SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
-		   @CurrentPMTime = dbo.InsertingTime(), 
-		   @ORTTimeTypeId = dbo.GetORTTimeTypeId(), 
-		   @UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
+		   @CurrentPMTime	  = dbo.InsertingTime(), 
+		   @ORTTimeTypeId	  = dbo.GetORTTimeTypeId(), 
+		   @UnpaidTimeTypeId  = dbo.GetUnpaidTimeTypeId()
+
+	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
+	SELECT @W2HourlyId = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
 
 	SELECT @ModifiedBy = P.PersonId
 	FROM Person P
@@ -219,7 +224,7 @@ BEGIN
 
 		/*
 			Delete PersonCalendar Entry Only,
-			1. if Time Off entered from Calendar page and w2salaried person on that date and there is no entry in XML.
+			1. if Time Off entered from Calendar page and (w2salaried/w2Hourly) person on that date and there is no entry in XML(note:Excluding holiday and unpaid time types).
 			2. if Time Off entered from any where / updated time Off from time Entry page and now there is no entry in XML.
 		*/
 		--Delete PTO entry from PersonCalendar only if the Person has PTO not Floating Holiday.
@@ -231,11 +236,11 @@ BEGIN
 					AND TWTE.ChargeCodeDate = PC.Date
 					AND TWTE.TimeTypeId <> @HolidayTimeTypeId
 					AND TWTE.TimeTypeId <> @UnpaidTimeTypeId
-		INNER JOIN dbo.Pay AS pay ON pay.Person = PC.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale = 2 --Here 2 is W2Salaried person.
+		INNER JOIN dbo.Pay AS pay ON pay.Person = PC.PersonId AND PC.Date BETWEEN pay.StartDate AND (pay.EndDate - 1) AND pay.Timescale IN (@W2SalaryId,@W2HourlyId)
 								  AND PC.TimeTypeId <> @HolidayTimeTypeId AND PC.TimeTypeId <> @UnpaidTimeTypeId AND C.DayOff <> 1 
 		WHERE ISNULL(TWTE.ActualHours, 0) = 0 --can delete only if it is entered for the time entry page and not floating holiday
 
-		--Update PTO actual hours.
+		--Update administrative time type ACTUAL HOURS in person calendar table(note:Excluding HOLIDAY and UNPAID time types) and APPROVED BY for the ORT.
 		UPDATE PC
 		SET	PC.ActualHours = TWTE.ActualHours,
 			PC.IsSeries = 0,
@@ -259,7 +264,7 @@ BEGIN
 				OR (PC.TimeTypeId = @ORTTimeTypeId AND PC.ApprovedBy <> TWTE.ApprovedById))
 				
 		
-		--Insert PTO.
+		--Insert administrative TIME TYPE time entries in person calendar table(note:Excluding HOLIDAY and UNPAID time types).
 		INSERT INTO PersonCalendar(Date,
 									PersonId,
 									DayOff,
@@ -305,4 +310,5 @@ BEGIN
 		RAISERROR(@ErrorMessage, 16, 1)
 	END CATCH
 END
+
 
