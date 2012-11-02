@@ -65,6 +65,23 @@ namespace DataTransferObjects.TimeEntry
         [DataMember]
         public bool IsUnpaidTimeType { get; set; }
 
+        public bool IsPTOTimeType { get; set; }
+
+        public bool IsHolidayTimeType { get; set; }
+
+        public bool IsJuryDutyTimeType { get; set; }
+
+        public bool IsSickLeaveTimeType { get; set; }
+
+        [DataMember]
+        public bool IsBereavementTimeType { get; set; }
+
+        [DataMember]
+        public bool IsW2HourlyAllowed { get; set; }
+
+        [DataMember]
+        public bool IsW2SalaryAllowed { get; set; }
+
         [DataMember]
         public string Category
         {
