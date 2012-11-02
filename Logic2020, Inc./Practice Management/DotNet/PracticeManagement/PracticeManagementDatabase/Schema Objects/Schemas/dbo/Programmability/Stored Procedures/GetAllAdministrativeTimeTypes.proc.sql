@@ -9,7 +9,8 @@ CREATE PROCEDURE dbo.GetAllAdministrativeTimeTypes
 (
   @IncludePTO BIT = 0,
   @IncludeHoliday BIT = 0,
-  @IncludeUnpaid BIT = 0
+  @IncludeUnpaid BIT = 0,
+  @IncludeSickLeave BIT = 0
 )
 AS
 BEGIN
@@ -17,12 +18,14 @@ BEGIN
 DECLARE @HolidayTimeTypeId	INT,
 		@PTOTimeTypeId		INT,
 		@UnpaidTimeTypeId	INT,
-		@ORTTimeTypeId		INT
+		@ORTTimeTypeId		INT,
+		@SickLeaveTimeTypeId		INT
 
 SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
 	   @PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
 	   @UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId(),
-	   @ORTTimeTypeId = dbo.GetORTTimeTypeId()
+	   @ORTTimeTypeId = dbo.GetORTTimeTypeId(),
+	   @SickLeaveTimeTypeId = dbo.[GetSickLeaveTimeTypeId]()
 
 	   DECLARE @NotIncludedWorkTypes TABLE (ID INT)
 	   INSERT INTO @NotIncludedWorkTypes 
@@ -31,12 +34,16 @@ SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
 	   SELECT CASE WHEN @IncludeHoliday = 0 THEN  @HolidayTimeTypeId ELSE -1 END 
 	   UNION 
 	   SELECT CASE WHEN @IncludeUnpaid = 0 THEN  @UnpaidTimeTypeId ELSE -1 END 
+	   UNION 
+	   SELECT CASE WHEN @IncludeSickLeave = 0 THEN  @SickLeaveTimeTypeId ELSE -1 END 
 
 
 	SELECT TT.TimeTypeId, 
 		   TT.[Name],
 		   CASE WHEN TT.TimeTypeId = @ORTTimeTypeId THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END [IsORTTimeType],
-		   CASE WHEN TT.TimeTypeId = @UnpaidTimeTypeId THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END [IsUnpaidTimeType]
+		   CASE WHEN TT.TimeTypeId = @UnpaidTimeTypeId THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END [IsUnpaidTimeType],
+		   TT.IsW2HourlyAllowed,
+		   TT.IsW2SalaryAllowed
 	FROM dbo.TimeType AS TT
 	--Joined ProjectTimeType because when new Administrative time type is added and not attached to any project
 		--It should not be visible in the time entry and calendar page.
