@@ -36,7 +36,9 @@ BEGIN
                    WHEN PCAL.DayOff = 1 THEN pcal.Description
                    ELSE ''
               END ) AS HolidayDescription ,
-            PCAL.ActualHours ,
+            CASE WHEN CAL.DayOff = 1 THEN NULL
+				 WHEN PCAL.DayOff = 1 THEN PCAL.ActualHours
+			END AS ActualHours,
             ISNULL(PCAL.IsFloatingHoliday,0) AS [IsFloatingHoliday] ,
             PCAL.TimeTypeId,
 			CASE WHEN @UnpaidTimeTypeId = PCAL.TimeTypeId THEN 1 ELSE 0 END AS [IsUnpaidTimeType]
@@ -62,7 +64,9 @@ BEGIN
                    WHEN PCAL.DayOff = 1 THEN PCAL.Description
                    ELSE ''
               END ) AS HolidayDescription ,
-            PCAL.ActualHours ,
+			CASE WHEN CAL.DayOff = 1 THEN NULL
+				 WHEN PCAL.DayOff = 1 THEN PCAL.ActualHours
+			END AS ActualHours,
             ISNULL(PCAL.IsFloatingHoliday,0) AS [IsFloatingHoliday] ,
             PCAL.TimeTypeId,
 			CASE WHEN @UnpaidTimeTypeId = PCAL.TimeTypeId THEN 1 ELSE 0 END AS [IsUnpaidTimeType]
@@ -80,3 +84,4 @@ BEGIN
             AND @PracticeManagerId IS NOT NULL
     ORDER BY CAL.Date
 END
+
