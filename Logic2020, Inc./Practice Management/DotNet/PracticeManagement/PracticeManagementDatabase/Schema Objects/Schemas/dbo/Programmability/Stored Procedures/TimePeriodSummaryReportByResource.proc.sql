@@ -146,6 +146,7 @@ AS
 					ISNULL(Data.BereavementHours, 0) AS BereavementHours ,
 					ISNULL(Data.ORTHours, 0) AS ORTHours ,
 					ISNULL(Data.UnpaidHours, 0) AS UnpaidHours ,
+					ISNULL(Data.SickOrSafeLeaveHours, 0) AS SickOrSafeLeaveHours ,
 					ISNULL(ROUND(CASE WHEN ISNULL(PDH.DefaultHours, 0) = 0
 									  THEN 0
 									  ELSE ( Data.ActualHours * 100 )
@@ -205,7 +206,12 @@ AS
 													AND TT.Code = 'W9350'
 									THEN TEH.ActualHours
 									ELSE 0
-									     END), 2) AS UnpaidHours ,
+									     END), 2) AS UnpaidHours ,	
+								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 4 
+										AND TT.Code = 'W9311'
+									THEN TEH.ActualHours
+									ELSE 0
+									     END), 2) AS SickOrSafeLeaveHours ,							
 								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 1
 													AND @NOW > TE.ChargeCodeDate
 													AND Pro.ProjectNumber != 'P031000'
