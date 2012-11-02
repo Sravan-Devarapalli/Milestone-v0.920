@@ -39,23 +39,27 @@ AS
 		}
 		
 		Delete TimeEtnries if there is no entry with DayOff = 1 in PersonCalendar and exists in TimeEntry table.
-		Update TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and exists with different actualhours in TimeEntry table.
-		Insert TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and not exists in TimeEntry table.
+		Update TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and exists with different ACTUAL HOURS in TimeEntry table.
+		Insert TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and not exists in TimeEntry table ONLY for w2salaried/w2hourly persons.
 	*/
-        DECLARE @Today DATETIME ,
-            @CurrentPMTime DATETIME ,
-            @ModifiedBy INT ,
-            @HolidayTimeTypeId INT ,
-            @Description NVARCHAR(500) ,
-            @IsSeries BIT ,
-            @ORTTimeTypeId INT,
-			@UnpaidTimeTypeId	INT
+        DECLARE @Today			DATETIME ,
+            @CurrentPMTime		DATETIME ,
+            @ModifiedBy			INT ,
+            @HolidayTimeTypeId	INT ,
+            @Description		NVARCHAR(500) ,
+            @IsSeries			BIT ,
+            @ORTTimeTypeId		INT,
+			@UnpaidTimeTypeId	INT,
+			@W2SalaryId			INT,
+			@W2HourlyId			INT
 			
         SELECT  @Today = dbo.GettingPMTime(GETUTCDATE()) ,
                 @CurrentPMTime = dbo.InsertingTime() ,
                 @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId() ,
                 @ORTTimeTypeId = dbo.GetORTTimeTypeId(),
 				@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
+		SELECT	@W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
+		SELECT	@W2HourlyId = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
 
         SELECT  @ModifiedBy = PersonId
         FROM    Person
@@ -426,7 +430,7 @@ AS
                     INNER JOIN dbo.TimeEntryHours TEH ON TE.TimeEntryId = TEH.TimeEntryId
                                                          AND PC.ActualHours <> TEH.ActualHours
 
-	--Insert TimeEntries only for w2salaried persons, if there is entry in PersonCalendar.
+	--Insert TimeEntries only for w2salaried/w2hourly persons, if there is entry in PersonCalendar.
             INSERT  INTO [dbo].[TimeEntry]
                     ( [PersonId] ,
                       [ChargeCodeId] ,
@@ -453,7 +457,7 @@ AS
                             INNER JOIN dbo.Person P ON P.PersonId = PC.PersonId
                                                        AND P.IsStrawman = 0
                             INNER JOIN dbo.Pay pay ON p.PersonId = pay.Person
-                                                      AND pay.Timescale = 2
+                                                      AND pay.Timescale IN (@W2SalaryId,@W2HourlyId)
                                                       AND PC.Date BETWEEN pay.StartDate
                                                               AND
                                                               ( CASE
@@ -501,7 +505,7 @@ AS
                             INNER JOIN dbo.Person P ON P.PersonId = PC.PersonId
                                                        AND P.IsStrawman = 0
                             INNER JOIN dbo.Pay pay ON p.PersonId = pay.Person
-                                                      AND pay.Timescale = 2
+                                                      AND pay.Timescale IN (@W2SalaryId,@W2HourlyId)
                                                       AND PC.Date BETWEEN pay.StartDate
                                                               AND
                                                               ( CASE
