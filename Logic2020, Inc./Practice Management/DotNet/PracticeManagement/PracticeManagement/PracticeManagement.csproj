@@ -640,6 +640,9 @@
     <None Include="Service References\OpportunityService\OpportunityService21.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\PersonService\DataTransferObjects.TimeEntry5.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\PersonSkillService\PersonSkillService1.wsdl" />
     <None Include="Service References\PersonSkillService\PersonSkillService3.xsd">
       <SubType>Designer</SubType>
@@ -3602,4 +3605,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
