@@ -1009,7 +1009,7 @@
                                                 OnClick="btnAddCompensation_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;" />
                                             &nbsp;<asp:CustomValidator ID="custCompensationCoversMilestone" runat="server" ValidationGroup="Person"
                                                 ErrorMessage="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
-                                                ToolTip = "This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
+                                                ToolTip="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
                                                 OnServerValidate="custCompensationCoversMilestone_ServerValidate" Text="*"> </asp:CustomValidator>
                                             <div class="clear0">
                                             </div>
@@ -1793,6 +1793,31 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:HiddenField ID="hndEmployeePayTypeChange" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeEmployeePayTypeChange" runat="server"
+                TargetControlID="hndEmployeePayTypeChange" PopupControlID="pnlEmployeePayTypeChange"
+                BackgroundCssClass="modalBackground" DropShadow="false">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnlEmployeePayTypeChange" runat="server" Style="display: none;" CssClass="popUpAttrition">
+                <table>
+                    <tr>
+                        <td>
+                            <asp:CustomValidator ID="cvEmployeePayTypeChangeViolation" runat="server" Text="*"
+                                ForeColor="Black" ToolTip="" OnServerValidate="cvEmployeePayTypeChangeViolation_ServerValidate"
+                                ValidationGroup="EmployeePayTypeChangeViolation" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="btnEmployeePayTypeChangeViolationOk" runat="server" Text="Ok" OnClick="btnEmployeePayTypeChangeViolationOk_Click"
+                                UseSubmitBehavior="false" />
+                            &nbsp;
+                            <asp:Button ID="btnEmployeePayTypeChangeViolationCancel" runat="server" Text="Cancel"
+                                OnClick="btnEmployeePayTypeChangeViolationCancel_Click" UseSubmitBehavior="false" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <asp:HiddenField ID="hdnChangeStatusEndCompensation" runat="server" Value="change" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeChangeStatusEndCompensation" runat="server"
                 TargetControlID="hdnChangeStatusEndCompensation" PopupControlID="pnlEndCompensation"
@@ -1811,7 +1836,7 @@
                         <td style="text-align: center; padding: 4px;">
                             <asp:Button ID="bntEndCompensationOk" runat="server" Text="Ok" OnClick="btnEndCompensationOk_Click"
                                 UseSubmitBehavior="false" />
-                                &nbsp;
+                            &nbsp;
                             <asp:Button ID="btnEndCompensationCancel" runat="server" Text="Cancel" OnClick="btnEndCompensationCancel_Click"
                                 UseSubmitBehavior="false" />
                         </td>
@@ -1835,7 +1860,7 @@
                         <td style="text-align: center; padding: 4px;">
                             <asp:Button ID="btnHireDateChangeOk" runat="server" Text="Ok" OnClick="btnHireDateChangeOk_Click"
                                 UseSubmitBehavior="false" />
-                                &nbsp;
+                            &nbsp;
                             <asp:Button ID="btnHireDateChangeCancel" runat="server" Text="Cancel" OnClick="btnHireDateChangeCancel_Click"
                                 UseSubmitBehavior="false" />
                         </td>
@@ -1860,7 +1885,7 @@
                         <td style="text-align: center; padding: 4px;">
                             <asp:Button ID="btnRehireConfirmationOk" runat="server" Text="Ok" OnClick="btnRehireConfirmationOk_Click"
                                 UseSubmitBehavior="false" />
-                                &nbsp;
+                            &nbsp;
                             <asp:Button ID="btnRehireConfirmationCancel" runat="server" Text="Cancel" OnClick="btnRehireConfirmationCancel_Click"
                                 UseSubmitBehavior="false" />
                         </td>
