@@ -30,11 +30,11 @@ namespace PracticeManagementService
             }
         }
 
-        public List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid)
+        public List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave)
         {
             try
             {
-                return TimeTypeDAL.GetAllAdministrativeTimeTypes(includePTO, includeHoliday, includeUnpaid);
+                return TimeTypeDAL.GetAllAdministrativeTimeTypes(includePTO, includeHoliday, includeUnpaid, includeSickLeave);
             }
             catch (Exception e)
             {
@@ -117,9 +117,31 @@ namespace PracticeManagementService
             }
         }
 
+        public TimeTypeRecord GetWorkTypeById(int worktypeId)
+        {
+            try
+            {
+                return TimeTypeDAL.GetWorkTypeById(worktypeId);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public TimeTypeRecord GetUnpaidTimeType()
         {
             return TimeTypeDAL.GetUnpaidTimeType();
+        }
+
+        public TimeTypeRecord GetPTOTimeType()
+        {
+            return TimeTypeDAL.GetPTOTimeType();
+        }
+
+        public TimeTypeRecord GetSickLeaveTimeType()
+        {
+            return TimeTypeDAL.GetSickLeaveTimeType();
         }
 
     }
