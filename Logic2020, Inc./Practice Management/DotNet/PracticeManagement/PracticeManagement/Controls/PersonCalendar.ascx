@@ -134,7 +134,7 @@
                     <uc3:LoadingProgress ID="ldProgress" runat="server" />
                     <table class="CalendarTable Width98Percent TextAlignCenter" align="center">
                         <tr>
-                            <td class="textRightImp vMiddle width30P">
+                            <td class="textRightImp ValignMiddleImp width30P">
                                 Select a Person:
                             </td>
                             <td class="textLeft no-wrap">
@@ -407,10 +407,10 @@
                                                             ToolTip="Selected day(s) are not working day(s). Please select any working day(s)."
                                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                             ValidationGroup="TimeOff" OnServerValidate="cvStartDateEndDateTimeOff_ServerValidate"></asp:CustomValidator>
-                                                        <asp:CustomValidator ID="cvNotW2Salary" runat="server" ErrorMessage="Person is not having W2-Salary pay during the selected day(s)."
-                                                            ToolTip="Person is not having W2-Salary pay during the selected day(s)." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff"
-                                                            OnServerValidate="cvNotW2Salary_ServerValidate"></asp:CustomValidator>
+                                                        <asp:CustomValidator ID="cvNotW2Salary" runat="server" Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff" OnServerValidate="cvNotW2Salary_ServerValidate"></asp:CustomValidator>
+                                                        <asp:CustomValidator ID="cvNotW2Hourly" runat="server" Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff" OnServerValidate="cvNotW2Hourly_ServerValidate"></asp:CustomValidator>
                                                         <asp:CustomValidator ID="cvPersonNotHired" runat="server" ErrorMessage="Person is not hired in the selected day(s)."
                                                             ToolTip="Person is not hired in the selected day(s)." Text="*" EnableClientScript="false"
                                                             SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff" OnServerValidate="cvPersonNotHired_ServerValidate"></asp:CustomValidator>
@@ -511,10 +511,8 @@
                                             Date:&nbsp;&nbsp;&nbsp;
                                             <asp:Label ID="lbdateSingleDay" runat="server"></asp:Label>
                                             <asp:HiddenField ID="hdnDateSingleDay" runat="server"></asp:HiddenField>
-                                            <asp:CustomValidator ID="cvSingleDay" runat="server" ErrorMessage="Person is not having W2-Salary pay during the selected day(s)."
-                                                ToolTip="Person is not having W2-Salary pay during the selected day(s)." Text="*"
-                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="SingleDay"
-                                                OnServerValidate="cvSingleDay_ServerValidate"></asp:CustomValidator>
+                                            <asp:CustomValidator ID="cvSingleDay" runat="server" Text="*" EnableClientScript="false"
+                                                SetFocusOnError="true" Display="Dynamic" ValidationGroup="SingleDay" OnServerValidate="cvSingleDay_ServerValidate"></asp:CustomValidator>
                                         </td>
                                     </tr>
                                     <tr>
@@ -645,6 +643,10 @@
                                                 Text="*" ValidateEmptyText="true" ToolTip="The selected date is not a working day."
                                                 ErrorMessage="The selected date is not a working day." ValidationGroup="Substituteday"
                                                 runat="server" OnServerValidate="cvSubstituteDay_ServerValidate"></asp:CustomValidator>
+                                            <asp:CustomValidator ID="cvSubstituteDayNotHavingW2Salary" runat="server" ErrorMessage="Invalid Pay Type: Employee is not a W2-Salary employee for the selected Substitute day."
+                                                ToolTip="Invalid Pay Type: Employee is not a W2-Salary employee for the selected Substitute day."
+                                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                ValidationGroup="Substituteday" OnServerValidate="cvSubstituteDayNotHavingW2Salary_ServerValidate"></asp:CustomValidator>
                                             <asp:CustomValidator ID="cvValidateSubDateWithHireDate" runat="server" ErrorMessage="Person is not hired in the selected  Substitute day."
                                                 ToolTip="Person is not hired in the selected Substitute day." Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Dynamic" ValidationGroup="Substituteday" OnServerValidate="cvValidateSubDateWithHireDate_ServerValidate"></asp:CustomValidator>
@@ -710,6 +712,11 @@
                                                 ToolTip="Person terminated in the selected Substitute day." Text="*" EnableClientScript="false"
                                                 SetFocusOnError="true" Display="Dynamic" ValidationGroup="ModifySubstituteDay"
                                                 OnServerValidate="cvValidateModifiedSubDateWithTermDate_ServerValidate"></asp:CustomValidator>
+                                            <asp:CustomValidator ID="cvModifiedSubstituteDayNotHavingW2Salary" runat="server"
+                                                ErrorMessage="Invalid Pay Type: Employee is not a W2-Salary employee for the selected Substitute day."
+                                                ToolTip="Invalid Pay Type: Employee is not a W2-Salary employee for the selected Substitute day."
+                                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                ValidationGroup="ModifySubstituteDay" OnServerValidate="cvModifiedSubstituteDayNotHavingW2Salary_ServerValidate"></asp:CustomValidator>
                                         </td>
                                     </tr>
                                     <tr>
