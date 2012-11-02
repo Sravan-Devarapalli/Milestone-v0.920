@@ -12,15 +12,37 @@ CREATE PROCEDURE [dbo].[SetRecurringHoliday]
 )
 AS
 BEGIN
+/*
+1.Update the CompanyRecurringHoliday table with the IsSet value for the given @Id.if(@Id is null) update all holidays IsSet to true.
+2.Populate the Recurring HolidaysDates in the temp1 table(i.e. @RecurringHolidaysDates table) according to the constraints specified in CompanyRecurringHoliday table.
+3.Update Calendar table with the Recurring holidays.
+4.update the ISSERIES column in the person calendar table.
+5.Delete all administrative WORKTYPE timeEntries on the Recurring HolidaysDates.
+6.check weather the Recurring holiday is set or deleted:
+	a.If Recurring holiday is set 
+		1.Populate PERSONCALENDAR table records which are parent holidays records for the substitute holidays of the recurring holidays with the person is W2SALARY people to the temp2 table(i.e.@SubDatesForPersons table).
+		2.Delete all the person calendar table records which are in the temp2 table and similarly substitute day records for the dates in the temp2 table.
+		3.Similary delete the time entry records for the substitute dates of the date records in the temp2 table.
+		4.Insert company holiday time entry for the W2SALARY people in the TIMEENTRY tables for the records in the temp2 table.
+		5.Insert company holiday time entry for the W2SALARY people in the TIMEENTRY tables for the records in the temp1 table.
+	b.If Recurring holiday is deleted ( note : we need to delete the substitute dates for that holiday and time entries related to that dates)
+		1.Populate PERSONCALENDAR table records which are substitutes dates for the recurring holiday removed dates to the temp3 table (i.e. @SubDates).
+		2.Update substitute date to PTO TIMETYPE for the records populated in the temp3 table.
+		3.Similarly update the time entry for those records updated in the above step.
+		4.Delete all recurring holidays in the PERSONCALENDAR table which has DayOff = 0 i.e. parent holidays for the substitute days .
+		5.Insert time entries for the removed recurring holidays dates if any records exists in the person calendar table for the w2salary and w2hourly persons.
+*/
 
 	DECLARE @Today DATETIME,
-		@ModifiedBy INT,
-		@HolidayTimeTypeId INT,
-		@CurrentPMTime DATETIME,
-		@PTOTimeTypeId INT,
-		@HolidayChargeCodeId INT,
-		@PTOChargeCodeId INT,
-		@FutureDate DATETIME
+			@ModifiedBy INT,
+			@HolidayTimeTypeId INT,
+			@CurrentPMTime DATETIME,
+			@PTOTimeTypeId INT,
+			@HolidayChargeCodeId INT,
+			@PTOChargeCodeId INT,
+			@FutureDate DATETIME,
+			@W2SalaryId			INT,
+			@W2HourlyId			INT
 
 
 	DECLARE @RecurringHolidaysDates TABLE( [Date] DATETIME, [Description] NVARCHAR(255), [Id] INT)
@@ -31,11 +53,12 @@ BEGIN
 		, @PTOTimeTypeId = dbo.GetPTOTimeTypeId()
 		, @FutureDate = dbo.GetFutureDate()
 
-	SELECT @ModifiedBy = PersonId
-	FROM Person
-	WHERE Alias = @UserLogin
-	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
-	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
+	SELECT @ModifiedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
+	SELECT @PTOChargeCodeId = Id FROM dbo.ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
+	SELECT @HolidayChargeCodeId = Id FROM dbo.ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
+	SELECT	@W2SalaryId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
+	SELECT	@W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
+
 	BEGIN TRY
 	
 	BEGIN TRANSACTION Tran_SetRecurringHoliday	
@@ -128,7 +151,7 @@ BEGIN
 	FROM dbo.PersonCalendar PC
 	INNER JOIN NeedToModifyDates NTMF ON NTMF.PersonId = PC.PersonId AND NTMF.Date = PC.Date
 		
-	--Delete all administrative worktype timeEntries.
+	--Delete all administrative WORKTYPE timeEntries.
 	DELETE TEH
 	FROM dbo.TimeEntryHours TEH
 	INNER JOIN dbo.TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId
@@ -153,7 +176,7 @@ BEGIN
 					ELSE 1 END) AS IsW2Salaried
 		FROM dbo.PersonCalendar AS PC 
 		INNER JOIN @RecurringHolidaysDates dates ON PC.SubstituteDate IS NOT NULL AND dates.date = PC.SubstituteDate  
-		LEFT JOIN  dbo.Pay pay  ON pay.Timescale = 2 /* 'W2-Salary' */ AND pay.Person = Pc.PersonId AND  
+		LEFT JOIN  dbo.Pay pay  ON pay.Timescale = @W2SalaryId AND pay.Person = Pc.PersonId AND  
 									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
 			
 		DELETE pc
@@ -221,7 +244,7 @@ BEGIN
 				,1
 				,1 --Here it is Auto generated.
 		FROM dbo.Person P
-		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = 2 AND p.PersonId = pay.Person AND P.IsStrawman = 0
+		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = @W2SalaryId AND p.PersonId = pay.Person AND P.IsStrawman = 0
 		INNER JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
@@ -245,7 +268,7 @@ BEGIN
 				,0--Non Billable
 				,1--Pending ReviewStatusId
 		FROM dbo.Person P
-		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = 2 AND p.PersonId = pay.Person AND P.IsStrawman = 0
+		INNER JOIN dbo.Pay pay ON pay.Person = P.PersonId  AND pay.Timescale = @W2SalaryId AND p.PersonId = pay.Person AND P.IsStrawman = 0
 		INNER JOIN @RecurringHolidaysDates AS rhd ON rhd.Date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
@@ -285,11 +308,11 @@ BEGIN
 
 		DELETE PC
 		FROM dbo.PersonCalendar AS PC 
-		INNER JOIN @RecurringHolidaysDates rhd ON rhd.Date = Pc.Date
+		INNER JOIN @RecurringHolidaysDates rhd ON rhd.Date = Pc.Date AND PC.DayOff = 0
 
 
 		INSERT  INTO [dbo].[TimeEntry]
-		        ( [PersonId],
+		        (	[PersonId],
 					[ChargeCodeId],
 					[ChargeCodeDate],
 					[Note],
@@ -307,7 +330,7 @@ BEGIN
 		FROM dbo.PersonCalendar PC
 		INNER JOIN @RecurringHolidaysDates d ON d.date = PC.Date AND PC.DayOff = 1
 		INNER JOIN dbo.Person p ON p.PersonId = PC.PersonId AND P.IsStrawman = 0
-		INNER JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+		INNER JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale IN (@W2HourlyId,@W2SalaryId) AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
 		INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
@@ -333,7 +356,7 @@ BEGIN
 		FROM dbo.PersonCalendar PC
 		INNER JOIN @RecurringHolidaysDates d ON d.date = PC.Date AND PC.DayOff = 1
 		INNER JOIN dbo.Person p ON p.PersonId = PC.PersonId AND P.IsStrawman = 0
-		INNER JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale = 2 AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
+		INNER JOIN dbo.Pay pay ON pay.Person = PC.PersonId AND pay.Timescale IN (@W2HourlyId,@W2SalaryId) AND d.date BETWEEN pay.StartDate AND (CASE WHEN p.TerminationDate IS NOT NULL AND pay.EndDate - 1 > p.TerminationDate THEN p.TerminationDate
 																															ELSE pay.EndDate - 1
 																															END)
 		INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = PC.TimeTypeId
