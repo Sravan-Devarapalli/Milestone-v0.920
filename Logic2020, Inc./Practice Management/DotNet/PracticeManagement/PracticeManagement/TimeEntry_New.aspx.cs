@@ -42,6 +42,7 @@ namespace PraticeManagement
         public const string WorkTypeXname = "WorkType";
         public const string BusinessUnitIdXname = "BusinessUnitId";
         public const string IsPTOXname = "IsPTO";
+        public const string IsSickLeaveXname = "IsSickLeave";
         public const string IsHolidayXname = "IsHoliday";
         public const string IsORTXname = "IsORT";
         public const string IsUnpaidXname = "IsUnpaid";
@@ -64,6 +65,8 @@ namespace PraticeManagement
         public const string workTypeOldId = "workTypeOldId";
         public const string CalendarItemXname = "CalendarItem";
         public const string AccountAndProjectSelectionXname = "AccountAndProjectSelection";
+        public const string IsW2HourlyTimeTypeAttribute = "isW2HourlyTimeType";
+        public const string IsW2SalaryTimeTypeAttribute = "isW2SalaryTimeType";
         private const string SectionXname = "Section";
         private const string sectionsXmlOpen = "<Sections>";
         private const string sectionsXmlClose = "</Sections>";
@@ -75,7 +78,7 @@ namespace PraticeManagement
         private const string internalSectionXmlClose = "</Section>";
         private const string administrativeSectionXmlOpen = "<Section Id=\"4\">";
         private const string administrativeSectionXmlClose = "</Section>";
-        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsORT=\"{10}\" IsNoteRequired=\"{11}\" IsUnpaid=\"{12}\" >";
+        private const string accountAndProjectSelectionXmlOpen = "<AccountAndProjectSelection AccountId=\"{0}\" AccountName=\"{1}\" ProjectId=\"{2}\" ProjectName=\"{3}\" ProjectNumber=\"{4}\" BusinessUnitId=\"{5}\" BusinessUnitName=\"{6}\" IsRecursive=\"{7}\"  IsPTO=\"{8}\"  IsHoliday=\"{9}\" IsORT=\"{10}\" IsNoteRequired=\"{11}\" IsUnpaid=\"{12}\" IsSickLeave=\"{13}\" >";
         private const string accountAndProjectSelectionXmlClose = "</AccountAndProjectSelection>";
         private const string workTypeXmlOpen = "<WorkType Id=\"{0}\" >";
         private const string workTypeXmlOpenWithOldId = "<WorkType Id=\"{0}\"  OldId=\"{1}\" >";
@@ -118,8 +121,6 @@ namespace PraticeManagement
         public const string lblDayTotalId = "lblDayTotal";
         public const string hdnDayTotalId = "hdnDayTotal";
         public const string mpeTimetypeAlertMessageBehaviourId = "mpeTimetypeAlertMessage";
-        public const string imgPlusBusinessDevelopmentSectionId = "imgPlusBusinessDevelopmentSection";
-        public const string imgPlusInternalSectionId = "imgPlusInternalSection";
         public const string extMaxValueAllowedForTextBoxExtenderId = "extMaxValueAllowedForTextBoxExtender";
         public const string extEnableDisableExtenderForAdminstratorSectionId = "extEnableDisableExtenderForAdminstratorSection";
         public const string hdTargetNotesId = "hdTargetNotesClientId";
@@ -144,6 +145,9 @@ namespace PraticeManagement
         private const string btnAddAttribute = "btnAdd";
         public const string selectedInActiveWorktypeName = "selectedInActiveWorktypeName";
         public const string selectedInActiveWorktypeid = "selectedInActiveWorktypeid";
+        public const string selectedInActiveWorktypeIsORT = "InActiveWTIsORT";
+        public const string selectedInActiveWorktypeIsW2Hourly = "InActiveWTIsW2Hourly";
+        public const string selectedInActiveWorktypeIsW2Salary = "InActiveWTIsW2Salary";
         public const string personIdAttribute = "personId";
         public const string startDateAttribute = "startDate";
         public const string endDateAttribute = "endDate";
@@ -214,20 +218,35 @@ namespace PraticeManagement
 
         public Dictionary<DateTime, bool> IsNoteRequiredList { get; set; }
 
-        private Dictionary<DateTime, bool> _isPersonSalaryTypeList;
+        private List<Triple<DateTime, bool, bool>> _isPersonSalaryHourlyTypeList;
 
-        public Dictionary<DateTime, bool> IsPersonSalaryTypeList
+        public List<Triple<DateTime, bool, bool>> IsPersonSalaryHourlyTypeList
         {
             get
             {
-                if (_isPersonSalaryTypeList == null)
+                if (_isPersonSalaryHourlyTypeList == null)
                 {
-                    _isPersonSalaryTypeList = ServiceCallers.Custom.Person(p => p.IsPersonSalaryTypeListByPeriod(SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]));
+                    _isPersonSalaryHourlyTypeList = ServiceCallers.Custom.Person(p => p.IsPersonSalaryTypeListByPeriod(SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1])).ToList();
 
                 }
-                return _isPersonSalaryTypeList;
+                return _isPersonSalaryHourlyTypeList;
             }
         }
+
+        private List<TimeTypeRecord> _allAdministrativeTimeTypes;
+
+        public List<TimeTypeRecord> AllAdministrativeTimeTypes
+        {
+            get
+            {
+                if (_allAdministrativeTimeTypes == null)
+                {
+                    _allAdministrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, true, true, true)).ToList();
+                }
+                return _allAdministrativeTimeTypes;
+            }
+        }
+
 
         public Dictionary<DateTime, bool> IsHourlyRevenueList { get; set; }
 
@@ -709,7 +728,7 @@ namespace PraticeManagement
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
                 extOptionRemove.ControlsToCheck = DdlWorkTypeIdsList;
-                var imgPlusBusinessDevelopmentSection = FindControlInFooter(repBusinessDevelopmentTes, imgPlusBusinessDevelopmentSectionId);
+                var imgPlusBusinessDevelopmentSection = FindControlInFooter(repBusinessDevelopmentTes, imgPlusBusinessDevelopmentSectionImage);
                 extOptionRemove.PlusButtonClientID = imgPlusBusinessDevelopmentSection != null ? imgPlusBusinessDevelopmentSection.ClientID : String.Empty;
 
                 var imgBtnRecurrenceBusinessDevelopmentSection = e.Item.FindControl(imgBtnRecurrenceBusinessDevelopmentSectionImage) as ImageButton;
@@ -758,7 +777,7 @@ namespace PraticeManagement
                 var extOptionRemove = e.Item.FindControl(extDupilcateOptionsRemoveExtender) as DupilcateOptionsRemoveExtender;
 
                 extOptionRemove.ControlsToCheck = DdlWorkTypeIdsList;
-                var imgPlusInternalSection = FindControlInFooter(repInternalTes, imgPlusInternalSectionId);
+                var imgPlusInternalSection = FindControlInFooter(repInternalTes, imgPlusInternalSectionImage);
                 extOptionRemove.PlusButtonClientID = imgPlusInternalSection != null ? imgPlusInternalSection.ClientID : String.Empty;
 
                 var imgBtnRecurrenceInternalSection = e.Item.FindControl(imgBtnRecurrenceInternalSectionImage) as ImageButton;
@@ -935,17 +954,26 @@ namespace PraticeManagement
                 bar.ProjectId = projectId.ToString();
 
                 bar.IsPTO = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsPTOXname)).Value);
+                bar.IsSickLeave = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsSickLeaveXname)).Value);
                 bar.IsHoliday = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsHolidayXname)).Value);
                 bar.IsORT = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsORTXname)).Value);
                 bar.IsUnpaid = Convert.ToBoolean(teSectionDataItem.Attribute(XName.Get(IsUnpaidXname)).Value);
 
                 var workTypeElement = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList()[0];
 
-                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false, false));
+                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.Person(p => p.GetPersonAdministrativeTimeTypesInRange(SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1], false, false, false, false));
 
-                if (bar.IsPTO || bar.IsHoliday)
+                if (bar.IsHoliday)
                 {
                     bar.SelectedTimeType = ServiceCallers.Custom.Project(p => p.GetTimeTypesByProjectId(Convert.ToInt32(projectId), true, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]))[0];
+                }
+                else if (bar.IsPTO)
+                {
+                    bar.SelectedTimeType = ServiceCallers.Custom.TimeType(p => p.GetPTOTimeType());
+                }
+                else if (bar.IsSickLeave)
+                {
+                    bar.SelectedTimeType = ServiceCallers.Custom.TimeType(p => p.GetSickLeaveTimeType());
                 }
                 else if (bar.IsUnpaid)
                 {
@@ -977,14 +1005,9 @@ namespace PraticeManagement
             else if (e.Item.ItemType == ListItemType.Footer)
             {
                 var imgPlus = e.Item.FindControl(imgPlusAdministrativeSectionImage) as ImageButton;
-                if (!IsPostBack)
-                {
-                    AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(false, false, false));
-
-                    if (AdministrativeTimeTypes.Count() < 1)
-                        imgPlus.Style["display"] = "none";
-                }
-
+                AdministrativeTimeTypes = AdministrativeTimeTypes ?? ServiceCallers.Custom.Person(p => p.GetPersonAdministrativeTimeTypesInRange(SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1], false, false, false, false));
+                if (AdministrativeTimeTypes.Count() < 1)
+                    imgPlus.Style["display"] = "none";
                 extDupilcateOptionsRemoveExtenderAdministrative.ControlsToCheck = DdlWorkTypeIdsList;
                 extDupilcateOptionsRemoveExtenderAdministrative.PlusButtonClientID = imgPlus.ClientID;
 
@@ -1882,7 +1905,7 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
 
-            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString(), teSection.Project.IsUnpaidProject.ToString()));
+            xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString(), teSection.Project.IsUnpaidProject.ToString(), teSection.Project.IsSickLeaveProject.ToString()));
 
 
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
@@ -2095,7 +2118,7 @@ namespace PraticeManagement
 
             var teSctions = ServiceCallers.Custom.TimeEntry(te => te.PersonTimeEntriesByPeriod(pcPersons.SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]));
 
-            AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).OrderByDescending(tes => tes.Project.IsHolidayProject).ThenByDescending(tes => tes.Project.IsPTOProject).ThenByDescending(tes => tes.Project.IsUnpaidProject).ToList();
+            AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).OrderByDescending(tes => tes.Project.IsHolidayProject).ThenByDescending(tes => tes.Project.IsPTOProject).ThenByDescending(tes => tes.Project.IsUnpaidProject).ThenByDescending(tes => tes.Project.IsSickLeaveProject).ToList();
             InternalSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Internal).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Project.ProjectNumber).ToList();
             BusinessDevelopmentSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.BusinessDevelopment).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Account.Name).ThenBy(tes => tes.BusinessUnit.Name).ToList();
             ProjectSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Project).OrderByDescending(tes => tes.IsRecursive).ThenBy(tes => tes.Project.ProjectNumber).ToList();
