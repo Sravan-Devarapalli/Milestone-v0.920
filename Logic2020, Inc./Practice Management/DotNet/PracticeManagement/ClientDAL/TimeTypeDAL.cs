@@ -34,7 +34,7 @@ namespace DataAccess
             }
         }
 
-        public static List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid)
+        public static List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.TimeType.GetAllAdministrativeTimeTypes, connection))
@@ -43,6 +43,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludePTOParam, includePTO);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludeHolidayParam, includeHoliday);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludeUnpaidParam, includeUnpaid);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeSickLeaveParam, includeSickLeave);
 
                 connection.Open();
 
@@ -199,6 +200,9 @@ namespace DataAccess
             {
                 int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
                 int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int isW2HourlyAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2HourlyAllowed);
+                int isW2SalaryAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2SalaryAllowed);
+
                 int isORTIndex = -1;
                 try
                 {
@@ -225,7 +229,8 @@ namespace DataAccess
                     {
                         Id = reader.GetInt32(timeTypeIdIndex),
                         Name = reader.GetString(nameIndex),
-
+                        IsW2HourlyAllowed = reader.GetBoolean(isW2HourlyAllowed),
+                        IsW2SalaryAllowed = reader.GetBoolean(isW2SalaryAllowed)
                     };
 
                     if (isORTIndex > -1)
@@ -236,12 +241,9 @@ namespace DataAccess
                     {
                         tt.IsUnpaidTimeType = reader.GetBoolean(isUnpaidIndex);
                     }
-
                     result.Add(tt);
-
                 }
             }
-
         }
 
         public static string GetWorkTypeNameById(int worktypeId)
@@ -271,6 +273,24 @@ namespace DataAccess
 
         }
 
+        public static TimeTypeRecord GetWorkTypeById(int worktypeId)
+        {
+            TimeTypeRecord result = new TimeTypeRecord();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.TimeEntry.GetWorkTypeByIdProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimeTypeId, worktypeId);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    result = ReadTimeTypeShort(reader);
+                }
+            }
+            return result;
+        }
+
         public static TimeTypeRecord GetUnpaidTimeType()
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -282,22 +302,114 @@ namespace DataAccess
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
-                    TimeTypeRecord result = new TimeTypeRecord();
-
-                    if (reader.HasRows)
-                    {
-                        int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                        int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
-
-                        while (reader.Read())
-                        {
-                            result.Id = reader.GetInt32(timeTypeIdIndex);
-                            result.Name = reader.GetString(nameIndex);
-                        }
-                    }
-                    return result;
+                    return ReadTimeTypeShort(reader);
                 }
             }
+        }
+
+        public static TimeTypeRecord GetPTOTimeType()
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetPTOTimeTypeProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    return ReadTimeTypeShort(reader);
+                }
+            }
+        }
+
+        public static TimeTypeRecord GetSickLeaveTimeType()
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetSickLeaveTimeTypeProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    return ReadTimeTypeShort(reader);
+                }
+            }
+        }
+
+        private static TimeTypeRecord ReadTimeTypeShort(SqlDataReader reader)
+        {
+            TimeTypeRecord result = new TimeTypeRecord();
+
+            if (reader.HasRows)
+            {
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int isORTIndex = -1;
+                try
+                {
+                    isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTTimeTypeColumn);
+                }
+                catch
+                {
+                    isORTIndex = -1;
+                }
+
+                int isUnpaidIndex = -1;
+                try
+                {
+                    isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidTimeType);
+                }
+                catch
+                {
+                    isUnpaidIndex = -1;
+                }
+
+                int isW2HourlyAllowed = -1;
+                try
+                {
+                    isW2HourlyAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2HourlyAllowed);
+                }
+                catch
+                {
+                    isW2HourlyAllowed = -1;
+                }
+
+                int isW2SalaryAllowed = -1;
+                try
+                {
+                    isW2SalaryAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2SalaryAllowed);
+                }
+                catch
+                {
+                    isW2SalaryAllowed = -1;
+                }
+
+                while (reader.Read())
+                {
+                    result.Id = reader.GetInt32(timeTypeIdIndex);
+                    result.Name = reader.GetString(nameIndex);
+                    if (isORTIndex > -1)
+                    {
+                        result.IsORTTimeType = reader.GetBoolean(isORTIndex);
+                    }
+                    if (isW2HourlyAllowed > -1)
+                    {
+                        result.IsW2HourlyAllowed = reader.GetBoolean(isW2HourlyAllowed);
+                    }
+                    if (isW2SalaryAllowed > -1)
+                    {
+                        result.IsW2SalaryAllowed = reader.GetBoolean(isW2SalaryAllowed);
+                    }
+                    if (isUnpaidIndex > -1)
+                    {
+                        result.IsUnpaidTimeType = reader.GetBoolean(isUnpaidIndex);
+                    }
+                }
+            }
+            return result;
         }
 
     }
