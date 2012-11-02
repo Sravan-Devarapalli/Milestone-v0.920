@@ -4101,6 +4101,18 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CapabilityDelete.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonAdministrativeTimeTypesInRange.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPTOTimeType.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetSickLeaveTimeType.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetWorkTypeById.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Tables\Triggers\tr_PersonProfile_Log.trigger.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4132,6 +4144,9 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_PracticeCapabilities_Log.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale.proc.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
@@ -4183,3 +4198,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
