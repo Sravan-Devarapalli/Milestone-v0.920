@@ -472,6 +472,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvNotW2Salary;
         
         /// <summary>
+        /// cvNotW2Hourly control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvNotW2Hourly;
+        
+        /// <summary>
         /// cvPersonNotHired control.
         /// </summary>
         /// <remarks>
@@ -877,6 +886,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvSubstituteDay;
         
         /// <summary>
+        /// cvSubstituteDayNotHavingW2Salary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvSubstituteDayNotHavingW2Salary;
+        
+        /// <summary>
         /// cvValidateSubDateWithHireDate control.
         /// </summary>
         /// <remarks>
@@ -1019,6 +1037,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator cvValidateModifiedSubDateWithTermDate;
+        
+        /// <summary>
+        /// cvModifiedSubstituteDayNotHavingW2Salary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvModifiedSubstituteDayNotHavingW2Salary;
         
         /// <summary>
         /// valSumModifySubstituteDay control.
