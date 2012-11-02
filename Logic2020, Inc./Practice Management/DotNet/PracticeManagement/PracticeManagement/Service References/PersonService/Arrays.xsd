@@ -43,6 +43,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfdateTimeboolean" nillable="true" type="tns:ArrayOfKeyValueOfdateTimeboolean" />
+  <xs:complexType name="ArrayOfint">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
   <xs:complexType name="ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz">
     <xs:annotation>
       <xs:appinfo>
@@ -61,10 +67,4 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" nillable="true" type="tns:ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" />
-  <xs:complexType name="ArrayOfint">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
 </xs:schema>
