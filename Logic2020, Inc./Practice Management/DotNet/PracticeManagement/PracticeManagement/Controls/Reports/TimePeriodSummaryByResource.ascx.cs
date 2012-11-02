@@ -22,7 +22,7 @@ namespace PraticeManagement.Controls.Reports
         private string ShowPanel = "ShowPanel('{0}', '{1}');";
         private string HidePanel = "HidePanel('{0}');";
         private string OnMouseOver = "onmouseover";
-        private string OnMouseOut = "onmouseout";      
+        private string OnMouseOut = "onmouseout";
 
         public ModalPopupExtender PersonDetailPopup
         {
@@ -102,7 +102,7 @@ namespace PraticeManagement.Controls.Reports
                     HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.SelectedItemsXmlFormat,
                     cblSeniorities.SelectedItems,
                     cblPayTypes.SelectedItemsXmlFormat, cblPersonStatusType.SelectedItems, cblDivision.SelectedItemsXmlFormat)).ToList();
-                
+
                 string filterApplied = "Filters applied to columns: ";
                 List<string> filteredColoums = new List<string>();
                 if (!cblOffShore.AllItemsSelected || !cblPersonStatusType.AllItemsSelected || !cblDivision.AllItemsSelected)
@@ -132,7 +132,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.AppendLine();
                     for (int i = 0; i < filteredColoums.Count; i++)
                     {
-                        if (i == filteredColoums.Count-1)
+                        if (i == filteredColoums.Count - 1)
                             filterApplied = filterApplied + filteredColoums[i] + ".";
                         else
                             filterApplied = filterApplied + filteredColoums[i] + ",";
@@ -345,13 +345,13 @@ namespace PraticeManagement.Controls.Reports
             PopulateByResourceData(false);
         }
 
-        protected void lnkPerson_OnClick(object sender, EventArgs e) 
+        protected void lnkPerson_OnClick(object sender, EventArgs e)
         {
             var lnkPerson = sender as LinkButton;
             var personId = Convert.ToInt32(lnkPerson.Attributes["PersonId"]);
             SelectedPersonForDetails = personId;
             var list = ServiceCallers.Custom.Report(r => r.PersonTimeEntriesDetails(personId, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
-            ucPersonDetailReport.DatabindRepepeaterPersonDetails(list,lnkPerson.Text);
+            ucPersonDetailReport.DatabindRepepeaterPersonDetails(list, lnkPerson.Text);
 
             mpePersonDetailReport.Show();
         }
@@ -380,7 +380,7 @@ namespace PraticeManagement.Controls.Reports
 
 
 
-                
+
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -471,22 +471,22 @@ namespace PraticeManagement.Controls.Reports
             LblTotalTimeOff.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalTimeOffHours.ClientID);
 
             LblTotalHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalHours.ClientID, pnlTotalHours.ClientID);
-            LblTotalHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalHours.ClientID);   
+            LblTotalHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalHours.ClientID);
 
 
             lblBillable.Text =
-            pthLblBillable.Text = reportData.Sum(p => p.BillableHours).ToString(Constants.Formatting.DoubleValue); 
-          
+            pthLblBillable.Text = reportData.Sum(p => p.BillableHours).ToString(Constants.Formatting.DoubleValue);
+
             lblNonBillable.Text =
             pthLblNonBillable.Text = reportData.Sum(p => p.ProjectNonBillableHours).ToString(Constants.Formatting.DoubleValue);
 
-            lblBD.Text = 
+            lblBD.Text =
             pthLblBD.Text = reportData.Sum(p => p.BusinessDevelopmentHours).ToString(Constants.Formatting.DoubleValue);
 
-            lblInternal.Text = 
+            lblInternal.Text =
             pthLblInternal.Text = reportData.Sum(p => p.InternalHours).ToString(Constants.Formatting.DoubleValue);
 
-            lblTimeOff.Text = 
+            lblTimeOff.Text =
             pthLblTimeOff.Text = reportData.Sum(p => p.AdminstrativeHours).ToString(Constants.Formatting.DoubleValue);
 
             pthLblGrandTotal.Text = reportData.Sum(p => p.TotalHours).ToString(Constants.Formatting.DoubleValue);
@@ -548,6 +548,7 @@ namespace PraticeManagement.Controls.Reports
             double oRTHours = reportData.Sum(p => p.ORTHours);
             double unpaidHours = reportData.Sum(p => p.UnpaidHours);
             double holidayHours = reportData.Sum(p => p.HolidayHours);
+            double sickOrSafeLeaveHours = reportData.Sum(p => p.SickOrSafeLeaveHours);
 
             int noOfEmployees = reportData.Count;
             double totalUtlization = reportData.Sum(p => p.Person.UtlizationPercent);
@@ -597,6 +598,7 @@ namespace PraticeManagement.Controls.Reports
             lblOrtHours.Text = oRTHours.ToString(Constants.Formatting.DoubleValue);
             lblUnpaidHours.Text = unpaidHours.ToString(Constants.Formatting.DoubleValue);
             lblHolidayHours.Text = holidayHours.ToString(Constants.Formatting.DoubleValue);
+            lblSickOrSafeLeaveHours.Text = sickOrSafeLeaveHours.ToString(Constants.Formatting.DoubleValue);
 
             ltrlTotalTimeoffHours.Attributes[OnMouseOver] = string.Format(ShowPanel, ltrlTotalTimeoffHours.ClientID, pnlTotalTimeOff.ClientID);
             ltrlTotalTimeoffHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalTimeOff.ClientID);
