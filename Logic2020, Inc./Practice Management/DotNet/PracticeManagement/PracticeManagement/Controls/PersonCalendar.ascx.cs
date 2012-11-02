@@ -977,6 +977,7 @@ namespace PraticeManagement.Controls
         {
             SelectedPersonId = Convert.ToInt32(ddlPerson.SelectedValue);
             SelectedYear++;
+            PopulateTimeTypesDropDown();
             UpdateCalendar();
         }
 
