@@ -76,6 +76,60 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custdateRangePeriod;
         
         /// <summary>
+        /// hndEmployeePayTypeChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hndEmployeePayTypeChange;
+        
+        /// <summary>
+        /// mpeEmployeePayTypeChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeEmployeePayTypeChange;
+        
+        /// <summary>
+        /// pnlEmployeePayTypeChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlEmployeePayTypeChange;
+        
+        /// <summary>
+        /// cvEmployeePayTypeChangeViolation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvEmployeePayTypeChangeViolation;
+        
+        /// <summary>
+        /// btnEmployeePayTypeChangeViolationOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnEmployeePayTypeChangeViolationOk;
+        
+        /// <summary>
+        /// btnEmployeePayTypeChangeViolationCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnEmployeePayTypeChangeViolationCancel;
+        
+        /// <summary>
         /// mlConfirmation control.
         /// </summary>
         /// <remarks>
