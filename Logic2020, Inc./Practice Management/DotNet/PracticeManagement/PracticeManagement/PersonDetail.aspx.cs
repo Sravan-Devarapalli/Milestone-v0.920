@@ -40,10 +40,10 @@ namespace PraticeManagement
         private const string lblTerminationDateErrorFormat = "Unable to set Termination Date for {0} due to the following:";
         private const string lblOwnerProjectsExistFormat = "{0} is designated as the Owner for the following project(s):";
         private const string lblOwnerOpportunitiesFormat = "{0} is designated as the Owner for the following Opportunities:";
-        private const string StartDateIncorrect = "The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
-        private const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
-        private const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
-        private const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
+        public const string StartDateIncorrect = "The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
+        public const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
+        public const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
+        public const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
         private const string TerminationReasonFirstItem = "- - Select Termination Reason - -";
         private const string CloseAnActiveCompensation = "This person still has an active compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
         private const string CloseAnOpenEndedCompensation = "This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
@@ -51,9 +51,10 @@ namespace PraticeManagement
         private const string ReHireMessage = "On switching contractor status from 1099 Hourly or 1099 POR to W2-Hourly or W2-Salary he/she will be terminated on the end date of the latest compensation record and will be considered as Re-Hired from the start date of new compensation record. Click ok to continue or click cancel to exit without saving changes.";
         private const string CancelTerminationMessage = "Following are the list of projects in which {0} resource's end date(s)  were set to his/her previous termination date automatically. Please reset the end dates for {0} in the below listed 'Projects-Milestones' if applicable.";
         private const string displayNone = "displayNone";
-        private const string SalaryToContractException = "Salary Type to Contract Type Violation";
-        private const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\"";
-
+        public const string SalaryToContractException = "Salary Type to Contract Type Violation";
+        public const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\"";
+        public const string EmployeePayTypeChangeVoilationMessage = "On changing employee pay type, Time-Off(s) related to previous pay type existing in the new pay type date range will be deleted. Click ok to continue or click cancel to exit without saving the changes.";
+        
         #endregion
 
         #region Fields
@@ -526,6 +527,40 @@ namespace PraticeManagement
         {
             ResetToPreviousData();
             mpeChangeStatusEndCompensation.Hide();
+        }
+
+        protected void btnEmployeePayTypeChangeViolationOk_Click(object sender, EventArgs e)
+        {
+            cvEmployeePayTypeChangeViolation.Enabled = false;
+            GridViewRow gvRow = null;
+            if (gvCompensationHistory.EditIndex != -1)
+            {
+                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+            }
+            else
+            {
+                if (gvCompensationHistory.ShowFooter)
+                {
+                    gvRow = gvCompensationHistory.FooterRow;
+                }
+            }
+            if (gvRow != null)
+            {
+                var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                imgUpdateCompensation_OnClick((Object)imgUpdate, new EventArgs());
+            }
+            mpeEmployeePayTypeChange.Hide();
+        }
+
+        protected void btnEmployeePayTypeChangeViolationCancel_Click(object source, EventArgs args)
+        {
+            ResetToPreviousData();
+            cvEmployeePayTypeChangeViolation.Enabled = true;
+            gvCompensationHistory.EditIndex = -1;
+            gvCompensationHistory.ShowFooter = false;
+            gvCompensationHistory.DataSource = PayHistory;
+            gvCompensationHistory.DataBind();
+            mpeEmployeePayTypeChange.Hide();
         }
 
         protected void btnHireDateChangeOk_Click(object sender, EventArgs e)
@@ -1459,7 +1494,7 @@ namespace PraticeManagement
             }
 
             PopulatePracticeDropDown(person);
-            
+
             txtEmployeeNumber.Text = person.EmployeeNumber;
 
             //Set Locked-Out CheckBox value
@@ -2049,6 +2084,15 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvEmployeePayTypeChangeViolation_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var validator = ((CustomValidator)sender);
+            e.IsValid = false;
+            validator.Text = validator.ToolTip = validator.ErrorMessage = EmployeePayTypeChangeVoilationMessage;
+            mpeEmployeePayTypeChange.Show();
+            IsOtherPanelDisplay = true;
+        }
+
         protected void cvHireDateChange_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             DateTime? terminationDate = IsStatusChangeClicked ? PreviousTerminationDate : TerminationDateBeforeCurrentHireDate;
@@ -2581,7 +2625,7 @@ namespace PraticeManagement
                 custTerminateDateTE.Enabled = true;
                 custTerminateDateTE.Validate();
             }
-
+            Pay pay = new Pay();
             if (Page.IsValid)
             {
                 var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
@@ -2593,7 +2637,6 @@ namespace PraticeManagement
                 var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
                 var txtSalesCommission = gvRow.FindControl("txtSalesCommission") as TextBox;
 
-                Pay pay = new Pay();
                 var index = 0;
                 Pay oldPay;
                 if (operation == "Update")
@@ -2650,6 +2693,19 @@ namespace PraticeManagement
 
                 pay.PersonId = PersonId.Value;
 
+                if (cvEmployeePayTypeChangeViolation.Enabled)
+                {
+                    DateTime enddate = pay.EndDate.HasValue ?pay.EndDate.Value: new DateTime(2029,12,31);
+                    bool isTimeOffExists = ServiceCallers.Custom.Person(p => p.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(pay.PersonId, pay.StartDate, enddate, (int)pay.Timescale));
+                    if (isTimeOffExists)
+                    {
+                        cvEmployeePayTypeChangeViolation.Validate();
+                    }
+                }
+            }
+
+            if (Page.IsValid)
+            {
                 using (PersonServiceClient serviceClient = new PersonServiceClient())
                 {
                     try
@@ -2683,7 +2739,7 @@ namespace PraticeManagement
                         resultreturn = false;
                     }
                 }
-
+                cvEmployeePayTypeChangeViolation.Enabled = true;
             }
             else
             {
