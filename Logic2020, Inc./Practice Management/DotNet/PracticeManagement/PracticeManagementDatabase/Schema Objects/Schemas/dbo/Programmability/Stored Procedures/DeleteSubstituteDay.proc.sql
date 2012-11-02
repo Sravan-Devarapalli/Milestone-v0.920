@@ -11,47 +11,45 @@ CREATE PROCEDURE [dbo].[DeleteSubstituteDay]
 )
 AS
 BEGIN
+/*
+1.Get the @ParentHolidayDate,@ParentHolidayDescription for the given @SubstituteDayDate.
+2.Get weather the person is w2salary person for the @ParentHolidayDate.
+3.Delete 2 records in to person calendar table:
+	1.@ParentHolidayDate record.
+	2.@SubstituteDayDate record
+4.Delete time entry records for the given @SubstituteDayDate.
+5.Insert holiday time type Entry to TimeEntry tables for the @ParentHolidayDate.
+
+*/
 	SET NOCOUNT ON;
 	
-	DECLARE @ParentHolidayDate DATETIME = NULL,
+	DECLARE @ParentHolidayDate		  DATETIME = NULL,
 	        @ParentHolidayDescription NVARCHAR(255),
-			@PTOTimeTypeId INT,
-			@CurrentPMTime DATETIME,
-			@HolidayTimeTypeId INT,
-			@PTOChargeCodeId INT,
-			@HolidayChargeCodeId INT,
-			@IsW2SalaryPerson	BIT = 0,
-			@ModifiedBy INT,
-			@FutureDate DATETIME
+			@CurrentPMTime			  DATETIME,
+			@HolidayTimeTypeId		  INT,
+			@HolidayChargeCodeId	  INT,
+			@IsW2SalaryPerson		  BIT = 0,
+			@ModifiedBy				  INT
 
 	SELECT  @CurrentPMTime = dbo.InsertingTime(),
-			@PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
-			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId(),
-			@FutureDate = dbo.GetFutureDate()
+			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 
 	SELECT @ParentHolidayDate = pc.Date, 
 		   @ParentHolidayDescription = c.HolidayDescription
-	 FROM dbo.PersonCalendar pc 
-	 INNER JOIN dbo.Calendar c ON c.Date = pc.Date
-	 WHERE pc.SubstituteDate = @SubstituteDayDate AND pc.PersonId = @PersonId
-
-
+	FROM dbo.PersonCalendar pc 
+	INNER JOIN dbo.Calendar c ON c.Date = pc.Date
+	WHERE pc.SubstituteDate = @SubstituteDayDate AND pc.PersonId = @PersonId
+	
 	SELECT @IsW2SalaryPerson = 1
 	FROM dbo.Pay pay 
 	INNER JOIN dbo.Timescale ts ON pay.Timescale = ts.TimescaleId  
-	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @ParentHolidayDate IS NOT NULL AND @ParentHolidayDate BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
+	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @ParentHolidayDate IS NOT NULL AND @ParentHolidayDate BETWEEN pay.StartDate AND pay.EndDate-1
 
-	
-				
-	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
 	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
 	SELECT @ModifiedBy = PersonId FROM Person WHERE Alias = @UserLogin
    
-
 	BEGIN TRY
 	BEGIN TRAN tran_DeleteSubstituteDay
-
-
 
 	DELETE pc
 	FROM dbo.PersonCalendar pc 
@@ -118,3 +116,4 @@ BEGIN
 	END CATCH
 
 END
+
