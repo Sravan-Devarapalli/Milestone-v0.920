@@ -70,6 +70,18 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public bool IsSickLeave
+        {
+            get
+            {
+                return ViewState["IsSickLeave_KEY"] != null ? (bool)ViewState["IsSickLeave_KEY"] : false;
+            }
+            set
+            {
+                ViewState["IsSickLeave_KEY"] = value;
+            }
+        }
+
         public bool IsHoliday
         {
             get
@@ -153,7 +165,7 @@ namespace PraticeManagement.Controls.TimeEntry
             extEnableDisable.PopUpBehaviourId = TimeEntry_New.mpeTimetypeAlertMessageBehaviourId;
 
             AddAttributesToTimeTypesDropdown(ddlTimeTypes, TimeTypes);
-            if (!(IsPTO || IsHoliday || IsUnpaid))
+            if (!(IsPTO || IsHoliday || IsUnpaid || IsSickLeave))
             {
                 if (!string.IsNullOrEmpty(imgDropTes.Attributes[TimeEntry_New.workTypeOldId]))
                 {
@@ -175,6 +187,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 var calendarItem = (XElement)e.Item.DataItem;
 
+                ste.IsHolidayDate = calendarItem.Attribute(XName.Get(TimeEntry_New.CssClassXname)).Value == "DayOff";
+
                 var textBoxId = ste.Controls[1].ClientID;
 
                 ste.DataBindApprovedManagers();
@@ -189,9 +203,16 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.IsNoteRequired = calendarItem.Attribute(XName.Get(TimeEntry_New.IsNoteRequiredXname)).Value;
                 ste.IsChargeCodeTurnOff = calendarItem.Attribute(XName.Get(TimeEntry_New.IsChargeCodeOffXname)).Value;
 
-                if (IsHoliday || IsUnpaid)
+                if (IsHoliday || IsUnpaid || ste.IsHolidayDate)
                 {
-                    ste.Disabled = true;
+                    if (!IsHoliday && !IsUnpaid && ste.IsHolidayDate)
+                    {
+                        ste.DisabledReadonly = true;
+                    }
+                    else
+                    {
+                        ste.Disabled = true;
+                    }
                 }
                 else
                 {
@@ -202,6 +223,9 @@ namespace PraticeManagement.Controls.TimeEntry
                 ste.IsHoliday = IsHoliday;
                 ste.IsORT = IsORT;
                 ste.IsUnpaid = IsUnpaid;
+                ste.IsSickLeave = IsSickLeave;
+                ste.TimeTypeRecord = HostingPage.AllAdministrativeTimeTypes.FirstOrDefault(t => t.Id == SelectedTimeType.Id);
+
 
                 DateTime date = Convert.ToDateTime(calendarItem.Attribute(XName.Get(TimeEntry_New.DateXname)).Value);
                 if (!HostingPage.AdminExtenderHoursControls.ContainsKey(date))
@@ -317,7 +341,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public void UpdateTimeEntries()
         {
-            if (IsPTO || IsHoliday || IsUnpaid)
+
+            if (IsPTO || IsHoliday || IsUnpaid || IsSickLeave)
             {
                 ddlTimeTypes.Visible = false;
                 lblTimeType.Visible = true;
@@ -338,11 +363,18 @@ namespace PraticeManagement.Controls.TimeEntry
 
                     if (selectedTimeType == null)
                     {
-                        var timetypename = ServiceCallers.Custom.TimeType(te => te.GetWorkTypeNameById(SelectedTimeType.Id)); ;
-                        selectedTimeType = new ListItem(timetypename, SelectedTimeType.Id.ToString());
+                        var timetype = ServiceCallers.Custom.TimeType(te => te.GetWorkTypeById(SelectedTimeType.Id));
+                        selectedTimeType = new ListItem(timetype.Name, SelectedTimeType.Id.ToString());
+                        selectedTimeType.Attributes.Add(TimeEntry_New.IsORTXname, timetype.IsORTTimeType.ToString());
+                        selectedTimeType.Attributes.Add(TimeEntry_New.IsW2HourlyTimeTypeAttribute, (timetype.IsW2HourlyAllowed ? 1 : 0).ToString());
+                        selectedTimeType.Attributes.Add(TimeEntry_New.IsW2SalaryTimeTypeAttribute, (timetype.IsW2SalaryAllowed ? 1 : 0).ToString());
                         ddlTimeTypes.Items.Add(selectedTimeType);
                         ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeid] = SelectedTimeType.Id.ToString();
-                        ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeName] = timetypename;
+                        ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeName] = timetype.Name;
+                        ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeIsORT] = timetype.IsORTTimeType.ToString();
+                        ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeIsW2Salary] = (timetype.IsW2SalaryAllowed ? 1 : 0).ToString();
+                        ddlTimeTypes.Attributes[TimeEntry_New.selectedInActiveWorktypeIsW2Hourly] = (timetype.IsW2HourlyAllowed ? 1 : 0).ToString();
+
                     }
 
                     ddlTimeTypes.SelectedValue = selectedTimeType.Value;
@@ -462,7 +494,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 nonbillableASte.ValidateNoteAndHours(ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname] == true.ToString());
             }
 
-            if (isThereAtleastOneTimeEntryrecord && !IsPTO && !IsHoliday && !IsUnpaid && !ValideWorkTypeDropDown())
+            if (isThereAtleastOneTimeEntryrecord && !IsPTO && !IsHoliday && !IsUnpaid && !ValideWorkTypeDropDown() && !IsSickLeave)
             {
                 HostingPage.IsValidWorkType = false;
             }
@@ -470,11 +502,11 @@ namespace PraticeManagement.Controls.TimeEntry
 
         internal void UpdateAccountAndProjectWorkType(XElement accountAndProjectSelectionElement, XElement workTypeElement)
         {
-            var workTypeId = (IsPTO || IsHoliday || IsUnpaid) ? Convert.ToInt32(hdnworkTypeId.Value) : Convert.ToInt32(ddlTimeTypes.SelectedValue); ;
+            var workTypeId = (IsPTO || IsHoliday || IsUnpaid || IsSickLeave) ? Convert.ToInt32(hdnworkTypeId.Value) : Convert.ToInt32(ddlTimeTypes.SelectedValue); ;
             workTypeElement.Attribute(XName.Get(TimeEntry_New.IdXname)).Value = workTypeId.ToString();
             accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.IsORTXname)).Value = ddlTimeTypes.SelectedItem.Attributes[TimeEntry_New.IsORTXname];
 
-            if (workTypeId > 0 && !(IsPTO || IsHoliday || IsUnpaid))
+            if (workTypeId > 0 && !(IsPTO || IsHoliday || IsUnpaid || IsSickLeave))
             {
                 Triple<int, int, int> result = ServiceCallers.Custom.TimeType(tt => tt.GetAdministrativeChargeCodeValues(workTypeId));
                 accountAndProjectSelectionElement.Attribute(XName.Get(TimeEntry_New.AccountIdXname)).Value = result.First.ToString();
@@ -499,12 +531,16 @@ namespace PraticeManagement.Controls.TimeEntry
                             if (obj != null)
                             {
                                 item.Attributes.Add(TimeEntry_New.IsORTXname, obj.IsORTTimeType.ToString());
+                                item.Attributes.Add(TimeEntry_New.IsW2HourlyTimeTypeAttribute, (obj.IsW2HourlyAllowed ? 1 : 0).ToString());
+                                item.Attributes.Add(TimeEntry_New.IsW2SalaryTimeTypeAttribute, (obj.IsW2SalaryAllowed ? 1 : 0).ToString());
                             }
                         }
                     }
                     else
                     {
                         item.Attributes.Add(TimeEntry_New.IsORTXname, false.ToString());
+                        item.Attributes.Add(TimeEntry_New.IsW2HourlyTimeTypeAttribute, 0.ToString());
+                        item.Attributes.Add(TimeEntry_New.IsW2SalaryTimeTypeAttribute, 0.ToString());
                     }
                 }
             }
