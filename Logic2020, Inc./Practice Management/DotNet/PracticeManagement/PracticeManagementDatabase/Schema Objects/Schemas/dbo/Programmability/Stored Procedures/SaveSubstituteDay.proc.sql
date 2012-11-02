@@ -14,23 +14,35 @@ CREATE PROCEDURE [dbo].[SaveSubstituteDay]
 )
 AS
 BEGIN
+/*
+1.Check weather given @SubstituteDayDate is company holiday or a day -off for the given person.if yes throw exception(Error "The selected date is not a working day.").
+2.only w2-salary person can enter substitute day.check weather the person is w2salary on the @SubstituteDayDate.
+3.Get the holiday description and format the substitute day description.
+4.Check weather the person already entered SubstituteDay for the given @Date.if yes need to update the date or else insert the substitute date.
+5.update the substitute date
+	a.get the previous substitute date.
+	b.update the previous substitute date for the given @Date record for the SUBSTITUTEDATE column.
+	c.update the  previous substitute date record with the given @SubstituteDayDate,with the latest description.
+	d.update the previous substitute date time entry record  with the given @SubstituteDayDate,with the latest description.
+6.Insert the substitute date.
+	a.delete the @Date record in the person calendar table.
+	b.insert 2 records in to person calendar table 
+		(i) Updated @Date record.
+		(ii)New @SubstituteDayDate record
+	c.Delete holiday time type Entry from TimeEntry tables for given @Date.
+	d.Insert holiday time type Entry to TimeEntry tables for the given @SubstituteDayDate
+*/
+
 	SET NOCOUNT ON;
 	
-	DECLARE @Today DATETIME,
-			@PTOTimeTypeId INT,
-			@CurrentPMTime DATETIME,
+	DECLARE @CurrentPMTime DATETIME,
 			@ModifiedBy INT,
 			@HolidayTimeTypeId INT,
-			@PTOChargeCodeId INT,
 			@HolidayChargeCodeId INT,
 			@IsW2SalaryPerson	BIT = 0
 	
-
 	BEGIN TRY
 	BEGIN TRAN tran_SaveSubstituteDay
-
-	DECLARE @FutureDate DATETIME
-	SET @FutureDate = dbo.GetFutureDate()
 
 	IF (EXISTS(SELECT 1 
 			  FROM Calendar AS C 
@@ -45,19 +57,15 @@ BEGIN
 		RAISERROR(@Error,16,1)
 	END
 
-
 	SELECT @IsW2SalaryPerson = 1
 	FROM dbo.Pay pay 
 	INNER JOIN dbo.Timescale ts ON pay.Timescale = ts.TimescaleId  
-	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @SubstituteDayDate BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
+	WHERE	pay.Person = @PersonId AND  ts.Name = 'W2-Salary' AND @SubstituteDayDate BETWEEN pay.StartDate AND pay.EndDate-1
 
-	SELECT @Today = dbo.GettingPMTime(GETUTCDATE()),
-			@CurrentPMTime = dbo.InsertingTime(),
-			@PTOTimeTypeId = dbo.GetPTOTimeTypeId(),
+	SELECT  @CurrentPMTime = dbo.InsertingTime(),
 			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 				
 	SELECT @ModifiedBy = PersonId FROM Person WHERE Alias = @UserLogin
-	SELECT @PTOChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @PTOTimeTypeId
 	SELECT @HolidayChargeCodeId = Id FROM ChargeCode WHERE TimeTypeId = @HolidayTimeTypeId
 
 
@@ -181,3 +189,4 @@ BEGIN
 	END CATCH
 
 END
+
