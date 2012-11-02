@@ -11,9 +11,10 @@ BEGIN
 	SELECT @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
 
+	--1.if updated termination date is less than the previous termination date OR termination date is set to some date. 
 	IF @TerminationDate IS NOT NULL AND (@TerminationDate < @PreviousTerminationDate OR @PreviousTerminationDate IS NULL)
 	BEGIN
-		--Delete all PTO/Holiday timeEntries greater than @TerminationDate.
+		--Delete all Administrative timeEntries greater than @TerminationDate.
 		DELETE TEH
 		FROM TimeEntry TE
 		JOIN ChargeCode CC ON TE.PersonId = @PersonId  AND CC.Id = TE.ChargeCodeId AND TE.ChargeCodeDate > @TerminationDate
@@ -26,13 +27,14 @@ BEGIN
 		JOIN TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 
 	END
+	--2.if updated termination date is greater than the previous termination date OR termination date is removed. 
 	ELSE IF @PreviousTerminationDate IS NOT NULL AND (@TerminationDate > @PreviousTerminationDate OR @TerminationDate IS NULL)
 	BEGIN
 		DECLARE @CurrentPMTime DATETIME,
 				@PersonUserId INT
 		SET @CurrentPMTime = dbo.InsertingTime()
 		SELECT @PersonUserId = PersonId FROM Person WHERE Alias = @UserLogin
-			
+		--Insert all Holyday timeEntries for w2salaried persons between  @PreviousTerminationDate and @TerminationDate.	
 		INSERT  INTO [dbo].[TimeEntry]
 						( [PersonId],
 							[ChargeCodeId],
@@ -96,3 +98,4 @@ BEGIN
 	END
 
 END
+
