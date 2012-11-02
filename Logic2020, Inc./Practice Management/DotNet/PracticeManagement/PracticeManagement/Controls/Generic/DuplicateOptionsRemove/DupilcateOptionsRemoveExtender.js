@@ -80,6 +80,14 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                         opt.setAttribute('IsORT', items[i].getAttribute('IsORT'))
                     }
 
+                    if (items[i].getAttribute('isW2HourlyTimeType') != null) {
+                        opt.setAttribute('isW2HourlyTimeType', items[i].getAttribute('isW2HourlyTimeType'))
+                    }
+
+                    if (items[i].getAttribute('isW2SalaryTimeType') != null) {
+                        opt.setAttribute('isW2SalaryTimeType', items[i].getAttribute('isW2SalaryTimeType'))
+                    }
+
                     if (isNaN(inActiveOptionValue) || inActiveOptionValue == null) {
                         Array.add(ddlOptionList, opt);
                     } else {
@@ -109,6 +117,7 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
             if (control) {
                 var inActiveOptionText = control.getAttribute('selectedInActiveWorktypeName');
                 var inActiveOptionValue = control.getAttribute('selectedInActiveWorktypeid');
+
                 var selectedVal = control.value;
                 control.options.length = 0;
 
@@ -124,13 +133,29 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
                     if (addOption) {
                         var opt = new Option(optionList[j].text, optionList[j].value);
                         if (optionList[j].getAttribute('IsORT') != null) {
-                            opt.setAttribute('IsORT', optionList[j].getAttribute('IsORT'))
+                            opt.setAttribute('IsORT', optionList[j].getAttribute('IsORT'));
+                        }
+                        if (optionList[j].getAttribute('isW2HourlyTimeType') != null) {
+                            opt.setAttribute('isW2HourlyTimeType', optionList[j].getAttribute('isW2HourlyTimeType'));
+                        }
+                        if (optionList[j].getAttribute('isW2SalaryTimeType') != null) {
+                            opt.setAttribute('isW2SalaryTimeType', optionList[j].getAttribute('isW2SalaryTimeType'));
                         }
                         control.add(opt);
                     }
                 }
                 if (!isNaN(inActiveOptionValue) && inActiveOptionValue != '' && inActiveOptionValue != null) {
-                    control.add(new Option(inActiveOptionText, inActiveOptionValue));
+                    var opt = new Option(inActiveOptionText, inActiveOptionValue);
+                    if (control.getAttribute('InActiveWTIsORT') != null) {
+                        opt.setAttribute('IsORT', control.getAttribute('InActiveWTIsORT'));
+                    }
+                    if (control.getAttribute('InActiveWTIsW2Hourly') != null) {
+                        opt.setAttribute('isW2HourlyTimeType', control.getAttribute('InActiveWTIsW2Hourly'));
+                    }
+                    if (control.getAttribute('InActiveWTIsW2Salary') != null) {
+                        opt.setAttribute('isW2SalaryTimeType', control.getAttribute('InActiveWTIsW2Salary'));
+                    }
+                    control.add(opt);
                 }
                 control.value = selectedVal;
             }
@@ -147,7 +172,7 @@ PraticeManagement.Controls.Generic.DuplicateOptionsRemove.DuplicateOptionsRemove
             var plusButtonClientID = document.getElementById(this.plusButtonClientID);
             if (plusButtonClientID != null) {
                 var controlItems = control.getElementsByTagName("option");
-                if (controlItems.length == count + 1) {
+                if (controlItems.length == 1 || controlItems.length == count + 1) {
                     plusButtonClientID.style.display = 'none';
                 } else {
                     plusButtonClientID.style.display = 'block';
