@@ -391,7 +391,7 @@
             </td>
         </tr>
         <tr>
-            <td class="fontBold padRight15">
+            <td class="fontBold">
                 Bereavement:
             </td>
             <td>
@@ -420,6 +420,14 @@
             </td>
             <td>
                 <asp:Label ID="lblUnpaidHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold padRight15">
+                Sick/Safe Leave:
+            </td>
+            <td>
+                <asp:Label ID="lblSickOrSafeLeaveHours" runat="server"></asp:Label>
             </td>
         </tr>
     </table>
