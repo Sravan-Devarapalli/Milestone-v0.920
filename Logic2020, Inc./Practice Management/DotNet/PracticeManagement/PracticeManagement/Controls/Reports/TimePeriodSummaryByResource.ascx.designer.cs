@@ -373,6 +373,15 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Label lblUnpaidHours;
         
         /// <summary>
+        /// lblSickOrSafeLeaveHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSickOrSafeLeaveHours;
+        
+        /// <summary>
         /// pnlTotalBillableHours control.
         /// </summary>
         /// <remarks>
