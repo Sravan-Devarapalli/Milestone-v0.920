@@ -29,11 +29,29 @@ CREATE PROCEDURE [dbo].[PaySave]
 AS
 	SET NOCOUNT ON
 	SET XACT_ABORT ON
+	/*
+		1.Basic Validations
+			a."Person cannot have the compensation for the days before his hire date."
+			b."The record overlaps from beginning"
+			c."The records overlaps from ending"
+			d."The record overlaps within the period"
+		2.Check weather to do Update Operation OR Insert Operation (i.e. weather the pay exists Pay Granularity(PERSONID,PAYSTARTDATE))
+			a.Update Operation
+			   1.DefaultCommission Update
+				(i)  Delete the DefaultCommission table record(s) for the type 1 (i.e. sales commission) between NEWSTARTDATE and NEWENDDATE. 
+				(ii) if previous record exists in the DefaultCommission table for the 
+
+			   2.Pay Update
+			   	(i) Get the Previous Pay record (IFF the updating record STARTDATE is equal to PREVIOUSENDDATE record)
+				(ii)If previous record exists update the previous record ENDDATE with the NEWSTARTDATE.
+				(iii) 
+			b.Insert Operation	
+	*/
 
 	DECLARE @ErrorMessage NVARCHAR(2048) 
-	, @RowsEffected INT
 	, @PersonHireDate DATETIME 
 	, @W2SalaryId INT
+	, @W2HourlyId INT
 	, @Today DATETIME
 	, @CurrentPMTime DATETIME
 	, @UserId INT
@@ -47,26 +65,25 @@ AS
 
  
 	
-	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
-		, @CurrentPMTime = dbo.InsertingTime()
-		, @FutureDate = dbo.GetFutureDate()
-		, @HoursPerYear = dbo.GetHoursPerYear()
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE()))),
+		   @CurrentPMTime = dbo.InsertingTime(),
+		   @FutureDate = dbo.GetFutureDate(),
+		   @HoursPerYear = dbo.GetHoursPerYear()
 	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
+	SELECT @W2HourlyId  = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
 	SELECT @UserId = PersonId FROM Person WHERE Alias = @UserLogin
 	SELECT @TerminationDate = TerminationDate FROM Person WHERE PersonId = @PersonId
-	
-	SELECT @PersonHireDate = Hiredate
-	FROM dbo.Person
-	WHERE PersonId = @PersonId
-	
+	SELECT @EndDate = ISNULL(@EndDate, @FutureDate)
+	SELECT @OLD_EndDate = ISNULL(@OLD_EndDate, @FutureDate)
+	SELECT @PersonHireDate = Hiredate FROM dbo.Person WHERE PersonId = @PersonId
+
+	--1.Basic Validations
 	IF (@PersonHireDate > @StartDate)
 	BEGIN
 		SELECT  @ErrorMessage = 'Person cannot have the compensation for the days before his hire date.'
 		RAISERROR (@ErrorMessage, 16, 1)
 		RETURN
 	END
-	SELECT @EndDate = ISNULL(@EndDate, @FutureDate)
-	SELECT @OLD_EndDate = ISNULL(@OLD_EndDate, @FutureDate)
 
 	IF EXISTS(SELECT 1
 	            FROM dbo.Pay
@@ -75,7 +92,7 @@ AS
 	             AND StartDate <> @OLD_StartDate
 	             AND ISNULL(EndDate, @FutureDate) <= @OLD_StartDate)
 	BEGIN
-		-- The record overlaps from begining
+		-- The record overlaps from beginning
 		SELECT  @ErrorMessage = [dbo].[GetErrorMessage](70005)
 		RAISERROR (@ErrorMessage, 16, 1)
 		RETURN
@@ -118,22 +135,28 @@ AS
 		LEFT JOIN dbo.Pay P ON DF.StartDate = P.StartDate AND DF.PersonId = P.Person  
 		WHERE DF.StartDate >= @StartDate AND  Type =1 AND DF.PersonId = @PersonId AND P.Person IS NULL
 				AND DF.StartDate < @EndDate
+
+		UPDATE dbo.[DefaultCommission]
+		SET EndDate = @StartDate
+		WHERE PersonId = @PersonId
+				AND [Type] = 1 -- Sales Commission
+				AND EndDate = @OLD_StartDate
+
+		UPDATE dbo.[DefaultCommission]
+		SET StartDate = @EndDate
+		WHERE PersonId = @PersonId
+				AND [Type] = 1 -- Sales Commission
+				AND StartDate = @OLD_EndDate
 		
 		-- Auto-adjust a previous record
 		DECLARE @PrevRecordEndtDate DATETIME
 
 		SELECT @PrevRecordEndtDate = MAX(EndDate) from  dbo.Pay where Person = @PersonId AND EndDate <=  @OLD_StartDate 
 
-			UPDATE dbo.Pay
+		UPDATE dbo.Pay
 			SET EndDate = @StartDate
 			WHERE Person = @PersonId AND EndDate = @PrevRecordEndtDate AND  @PrevRecordEndtDate >= @StartDate
 		 
-		UPDATE dbo.[DefaultCommission]
-		SET EndDate = @StartDate
-		WHERE PersonId = @PersonId
-			   AND [Type] = 1 -- Sales Commission
-			   AND EndDate = @OLD_StartDate
-
 		-- Auto-adjust a next record
 		DECLARE @NextRecordStartDate DATETIME
 
@@ -143,13 +166,6 @@ AS
 		SET StartDate = @EndDate
 		WHERE Person = @PersonId AND StartDate = @NextRecordStartDate AND @NextRecordStartDate <= @EndDate
 
-
-		UPDATE dbo.[DefaultCommission]
-		SET StartDate = @EndDate
-		WHERE PersonId = @PersonId
-			   AND [Type] = 1 -- Sales Commission
-			   AND StartDate = @OLD_EndDate
-		
 		UPDATE dbo.Pay
 		   SET Amount = @Amount,
 		       Timescale = @Timescale,
@@ -166,7 +182,7 @@ AS
 		 WHERE Person = @PersonId AND StartDate = @OLD_StartDate AND EndDate = @OLD_EndDate
 
 
-		 IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
+		IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
 					WHERE PersonId = @PersonId AND [Type] = 1 
 					AND StartDate = @OLD_StartDate
 					)
@@ -292,7 +308,7 @@ AS
 								   THEN 1 ELSE 0 END
 			WHERE Person = @PersonId
 	END
-	--NO compensation is active we need to consider next future compersation as active and update the default practiceid and serniorityid in person table.
+	--NO compensation is active we need to consider next future compensation as active and update the default PRACTICEID and SERNIORITYID in person table.
 	IF((SELECT COUNT(*) FROM dbo.Pay where @Today BETWEEN StartDate AND EndDate-1 and Person = @PersonId) = 0)
 	BEGIN
 		UPDATE P
@@ -316,7 +332,27 @@ AS
 	DECLARE @HolidayTimeTypeId INT
 
 	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
+
 	
+	DELETE PC
+	FROM dbo.PersonCalendar PC
+	JOIN dbo.Calendar C ON (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,CASE WHEN @StartDate > @OLD_StartDate  THEN @OLD_StartDate ELSE @StartDate END) AND 
+							ISNULL(@NextRecordEndDate,CASE WHEN @EndDate < @OLD_EndDate THEN @OLD_EndDate ELSE @EndDate END)-1)
+		AND PC.PersonId = @PersonId AND PC.Date = C.Date
+	JOIN dbo.TimeType TT ON TT.TimeTypeId = PC.TimeTypeId
+	LEFT JOIN Pay P ON P.Person = PC.PersonId AND C.Date BETWEEN p.StartDate AND P.EndDate - 1
+	WHERE (
+			P.Person IS NULL --If pay is deleted we need to delete the administrative time entries
+			OR  
+			--If pay is Updated we need to delete the administrative time entries according to the salary type and hourly type
+			NOT 
+			(
+				(p.Timescale = @W2SalaryId and TT.IsW2SalaryAllowed = 1)
+				OR 
+				(p.Timescale = @W2HourlyId and TT.IsW2HourlyAllowed = 1)
+			)
+		 )
+
 	--Delete Holiday timeEntries if person is not w2salaried.
 	DELETE TEH
 	FROM dbo.TimeEntryHours TEH
@@ -327,7 +363,17 @@ AS
 	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
 	JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 	LEFT JOIN Pay P ON P.Person = TE.PersonId AND C.Date BETWEEN p.StartDate AND P.EndDate - 1
-	WHERE (P.Person IS NULL OR  p.Timescale <> @W2SalaryId)
+	WHERE (
+			P.Person IS NULL --If pay is deleted we need to delete the administrative time entries
+			OR  
+			--If pay is Updated we need to delete the administrative time entries according to the salary type and hourly type
+			NOT 
+			(
+				(p.Timescale = @W2SalaryId and TT.IsW2SalaryAllowed = 1)
+				OR 
+				(p.Timescale = @W2HourlyId and TT.IsW2HourlyAllowed = 1)
+			)
+		 )
 
 	DELETE TE
 	FROM dbo.TimeEntry TE 
@@ -337,169 +383,197 @@ AS
 	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
 	JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId AND TT.IsAdministrative = 1
 	LEFT JOIN Pay P ON P.Person = TE.PersonId AND C.Date BETWEEN p.StartDate AND P.EndDate - 1
-	WHERE (P.Person IS NULL OR  p.Timescale <> @W2SalaryId)
+	WHERE (
+			P.Person IS NULL --If pay is deleted we need to delete the administrative time entries
+			OR  
+			--If pay is Updated we need to delete the administrative time entries according to the salary type and hourly type
+			NOT 
+			(
+				(p.Timescale = @W2SalaryId and TT.IsW2SalaryAllowed = 1)
+				OR 
+				(p.Timescale = @W2HourlyId and TT.IsW2HourlyAllowed = 1)
+			)
+		 )
 	
-		--Insert PTO/Holiday timeEntries
-		INSERT INTO dbo.TimeEntry(PersonId,
-								ChargeCodeId,
-								ChargeCodeDate,
-								ForecastedHours,
-								Note,
-								IsCorrect,
-								IsAutoGenerated)
-		SELECT DISTINCT @PersonId
-			,CC.Id
-			,C.Date
-			,0
-			, ISNULL(C.HolidayDescription, ISNULL(PC.Description, ''))
-			,1
-			,1 --Here it is Auto generated.
-		FROM dbo.Calendar C
-		JOIN dbo.Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale = @W2SalaryId AND p.Person = @PersonId
-		JOIN dbo.Person per ON per.PersonId = p.Person AND per.IsStrawman = 0
-		LEFT JOIN dbo.PersonCalendar PC ON PC.Date = C.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
-		INNER JOIN dbo.TimeType TT ON  (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
-									AND (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
-									AND ((C.DayOff = 1  AND DATEPART(DW,C.DATE) NOT IN (1,7) AND TT.TimeTypeId = @HolidayTimeTypeId )
-										OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND TT.TimeTypeId = PC.TimeTypeId)
-										)
-		INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = TT.TimeTypeId
-		LEFT JOIN dbo.TimeEntry TE ON TE.PersonId = p.Person AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = C.Date
-		WHERE TE.TimeEntryId IS NULL
+	--Insert PTO/Holiday timeEntries
+	INSERT INTO dbo.TimeEntry(PersonId,
+							ChargeCodeId,
+							ChargeCodeDate,
+							ForecastedHours,
+							Note,
+							IsCorrect,
+							IsAutoGenerated)
+	SELECT DISTINCT @PersonId
+		,CC.Id
+		,C.Date
+		,0
+		, ISNULL(C.HolidayDescription, ISNULL(PC.Description, ''))
+		,1
+		,1 --Here it is Auto generated.
+	FROM dbo.Calendar C
+	JOIN dbo.Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale IN (@W2SalaryId,@W2HourlyId) AND p.Person = @PersonId
+	JOIN dbo.Person per ON per.PersonId = p.Person AND per.IsStrawman = 0
+	LEFT JOIN dbo.PersonCalendar PC ON PC.Date = C.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
+	INNER JOIN dbo.TimeType TT ON  (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
+								AND (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
+								AND ((C.DayOff = 1  AND DATEPART(DW,C.DATE) NOT IN (1,7) AND TT.TimeTypeId = @HolidayTimeTypeId )
+									OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND TT.TimeTypeId = PC.TimeTypeId)
+									)
+	INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = TT.TimeTypeId
+	LEFT JOIN dbo.TimeEntry TE ON TE.PersonId = p.Person AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = C.Date
+	WHERE	(
+				TE.TimeEntryId IS NULL
+				AND  
+				--If pay is Updated we need to delete the administrative time entries according to the salary type and hourly type
+				(
+					(p.Timescale = @W2SalaryId and TT.IsW2SalaryAllowed = 1)
+					OR 
+					(p.Timescale = @W2HourlyId and TT.IsW2HourlyAllowed = 1)
+				)
+			)
 		
-		INSERT INTO dbo.TimeEntryHours(TimeEntryId,
-									   ActualHours,
-									   IsChargeable,
-										CreateDate,
-										ModifiedDate,
-										ModifiedBy,
-										ReviewStatusId)
-		SELECT TE.TimeEntryId
-				,CASE WHEN TT.TimeTypeId = @HolidayTimeTypeId THEN 8
-						ELSE ISNULL(PC.ActualHours,8) END
-				,0 --Non Billable
-				,@CurrentPMTime
-				,@CurrentPMTime
-				,@UserId
-				,CASE WHEN C.DayOff = 1 OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND PC.TimeTypeId <> @HolidayTimeTypeId AND PC.IsFromTimeEntry <> 1) THEN 2 
-						ELSE 1 END -- Holiday:Approved, PTO: from CalendarPage Approved, Floating-Holiday: pending
-		FROM dbo.Calendar C
-		JOIN dbo.Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale = @W2SalaryId AND p.Person = @PersonId
-		JOIN dbo.Person per ON per.PersonId = p.Person AND per.IsStrawman = 0
-		LEFT JOIN dbo.PersonCalendar PC ON PC.Date = C.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
-		INNER JOIN dbo.TimeType TT ON (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
-									AND (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
-									AND ((C.DayOff = 1  AND DATEPART(DW,C.DATE) NOT IN (1,7) AND TT.TimeTypeId = @HolidayTimeTypeId )
-										OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND TT.TimeTypeId = PC.TimeTypeId)
-										)
-		INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = TT.TimeTypeId
-		INNER JOIN dbo.TimeEntry TE ON TE.PersonId = p.Person AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = C.Date
-		LEFT JOIN dbo.TimeEntryHours TEH ON  TEH.TimeEntryId = TE.TimeEntryId						   
-		WHERE TEH.TimeEntryId IS NULL
+	INSERT INTO dbo.TimeEntryHours(TimeEntryId,
+									ActualHours,
+									IsChargeable,
+									CreateDate,
+									ModifiedDate,
+									ModifiedBy,
+									ReviewStatusId)
+	SELECT TE.TimeEntryId
+			,CASE WHEN TT.TimeTypeId = @HolidayTimeTypeId THEN 8
+					ELSE ISNULL(PC.ActualHours,8) END
+			,0 --Non Billable
+			,@CurrentPMTime
+			,@CurrentPMTime
+			,@UserId
+			,CASE WHEN C.DayOff = 1 OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND PC.TimeTypeId <> @HolidayTimeTypeId AND PC.IsFromTimeEntry <> 1) THEN 2 
+					ELSE 1 END -- Holiday:Approved, PTO: from CalendarPage Approved, Floating-Holiday: pending
+	FROM dbo.Calendar C
+	JOIN dbo.Pay p ON C.Date BETWEEN p.StartDate AND P.EndDate-1 AND p.Timescale IN (@W2SalaryId,@W2HourlyId) AND p.Person = @PersonId
+	JOIN dbo.Person per ON per.PersonId = p.Person AND per.IsStrawman = 0
+	LEFT JOIN dbo.PersonCalendar PC ON PC.Date = C.Date AND PC.PersonId = p.Person AND PC.DayOff = 1
+	INNER JOIN dbo.TimeType TT ON (C.Date <= @TerminationDate OR @TerminationDate IS NULL)
+								AND (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,@StartDate) AND ISNULL(@NextRecordEndDate,@EndDate)-1)
+								AND ((C.DayOff = 1  AND DATEPART(DW,C.DATE) NOT IN (1,7) AND TT.TimeTypeId = @HolidayTimeTypeId )
+									OR (PC.PersonId IS NOT NULL AND PC.DayOff = 1 AND TT.TimeTypeId = PC.TimeTypeId)
+									)
+	INNER JOIN dbo.ChargeCode CC ON CC.TimeTypeId = TT.TimeTypeId
+	INNER JOIN dbo.TimeEntry TE ON TE.PersonId = p.Person AND TE.ChargeCodeId = CC.Id AND TE.ChargeCodeDate = C.Date
+	LEFT JOIN dbo.TimeEntryHours TEH ON  TEH.TimeEntryId = TE.TimeEntryId						   
+	WHERE	(
+			TEH.TimeEntryId IS NULL
+			AND  
+			--If pay is Updated we need to delete the administrative time entries according to the salary type and hourly type
+			(
+				(p.Timescale = @W2SalaryId and TT.IsW2SalaryAllowed = 1)
+				OR 
+				(p.Timescale = @W2HourlyId and TT.IsW2HourlyAllowed = 1)
+			)
+			)
 
 
-		/*
-		Rehire Logic
-		1.Need to check weather  the first compensation is contract or not
-		2.If Yes Check weather the person has any compensation start date as salary type after the contract type before today(i.e. not the future compensation)
-		3.If Yes Terminate the person with latest compensation start date with contract type. And
-		4.Re-hire the person with hire date as salary type compensation start date.
-		*/
+	/*
+	Rehire Logic
+	1.Need to check weather  the first compensation is contract or not
+	2.If Yes Check weather the person has any compensation start date as salary type after the contract type before today(i.e. not the future compensation)
+	3.If Yes Terminate the person with latest compensation start date with contract type. And
+	4.Re-hire the person with hire date as salary type compensation start date.
+	*/
 
-		DECLARE @TerminationReasonId INT,@HireDate DATETIME,@PreviousTerminationDate DATETIME,@FirstSalaryCompensationStartDate DATETIME
-		SELECT @TerminationReasonId = TR.TerminationReasonId FROM dbo.TerminationReasons TR WHERE TR.TerminationReason = 'Voluntary - 1099 Contract Ended'
-		SELECT @PreviousTerminationDate = TerminationDate FROM dbo.Person AS P WHERE P.PersonId = @PersonId
+	DECLARE @TerminationReasonId INT,@HireDate DATETIME,@PreviousTerminationDate DATETIME,@FirstSalaryCompensationStartDate DATETIME
+	SELECT @TerminationReasonId = TR.TerminationReasonId FROM dbo.TerminationReasons TR WHERE TR.TerminationReason = 'Voluntary - 1099 Contract Ended'
+	SELECT @PreviousTerminationDate = TerminationDate FROM dbo.Person AS P WHERE P.PersonId = @PersonId
 
-		SELECT @FirstCompensationStartDate = MIN(pay.StartDate)
-		FROM dbo.Pay pay WITH(NOLOCK)
-		INNER JOIN dbo.Person P ON pay.person = P.personid AND pay.Person = @PersonId
-		WHERE pay.StartDate >= P.HireDate
+	SELECT @FirstCompensationStartDate = MIN(pay.StartDate)
+	FROM dbo.Pay pay WITH(NOLOCK)
+	INNER JOIN dbo.Person P ON pay.person = P.personid AND pay.Person = @PersonId
+	WHERE pay.StartDate >= P.HireDate
 
-		--Constraint Violation "Salary Type to Contract Type Violation" 
-		SELECT @FirstSalaryCompensationStartDate = MIN(pay.StartDate)
-		FROM dbo.Pay pay WITH(NOLOCK)
-		INNER JOIN dbo.Person P ON pay.person = P.personid AND pay.Person = @PersonId 
-		INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale AND T.IsContractType = 0
-		WHERE pay.StartDate >= P.HireDate
+	--Constraint Violation "Salary Type to Contract Type Violation" 
+	SELECT @FirstSalaryCompensationStartDate = MIN(pay.StartDate)
+	FROM dbo.Pay pay WITH(NOLOCK)
+	INNER JOIN dbo.Person P ON pay.person = P.personid AND pay.Person = @PersonId 
+	INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale AND T.IsContractType = 0
+	WHERE pay.StartDate >= P.HireDate
 
-		--Check weather the person has any compensation start date as contract type after the First salary type
-		IF EXISTS (SELECT 1
-					FROM dbo.Pay pay 
-					INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
-					WHERE pay.Person = @PersonId AND pay.StartDate > @FirstSalaryCompensationStartDate AND T.IsContractType = 1
-					)
-		BEGIN
-			SELECT  @ErrorMessage = 'Salary Type to Contract Type Violation'
-			RAISERROR (@ErrorMessage, 16, 1)
-			RETURN
-		END
+	--Check weather the person has any compensation start date as contract type after the First salary type
+	IF EXISTS (SELECT 1
+				FROM dbo.Pay pay 
+				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+				WHERE pay.Person = @PersonId AND pay.StartDate > @FirstSalaryCompensationStartDate AND T.IsContractType = 1
+				)
+	BEGIN
+		SELECT  @ErrorMessage = 'Salary Type to Contract Type Violation'
+		RAISERROR (@ErrorMessage, 16, 1)
+		RETURN
+	END
 		
-		--1.Need to check weather  the first compensation is contract or not
+	--1.Need to check weather  the first compensation is contract or not
+	IF EXISTS (SELECT 1
+				FROM dbo.Pay pay WITH(NOLOCK)
+				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+				WHERE pay.Person = @PersonId AND @FirstCompensationStartDate = pay.StartDate AND T.IsContractType = 1
+				)
+	BEGIN
+	--2.If Yes Check weather the person has any compensation start date as salary type after the contract type before today(i.e. not the future compensation)
 		IF EXISTS (SELECT 1
 					FROM dbo.Pay pay WITH(NOLOCK)
 					INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
-					WHERE pay.Person = @PersonId AND @FirstCompensationStartDate = pay.StartDate AND T.IsContractType = 1
-				  )
+					WHERE pay.Person = @PersonId AND pay.StartDate > @FirstCompensationStartDate AND T.IsContractType = 0 AND pay.StartDate <= @Today
+					)
 		BEGIN
-		--2.If Yes Check weather the person has any compensation start date as salary type after the contract type before today(i.e. not the future compensation)
-			IF EXISTS (SELECT 1
-						FROM dbo.Pay pay WITH(NOLOCK)
-						INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
-						WHERE pay.Person = @PersonId AND pay.StartDate > @FirstCompensationStartDate AND T.IsContractType = 0 AND pay.StartDate <= @Today
-					  )
-			BEGIN
 				
-		--3.If Yes Terminate the person with latest compensation end date  with contract type.
-				SELECT @TerminationDate = MAX(pay.EndDate) -1 
-				FROM dbo.Pay pay WITH(NOLOCK)
-				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
-				WHERE pay.Person = @PersonId AND pay.StartDate >= @FirstCompensationStartDate AND T.IsContractType = 1 AND pay.StartDate < @Today
+	--3.If Yes Terminate the person with latest compensation end date  with contract type.
+			SELECT @TerminationDate = MAX(pay.EndDate) -1 
+			FROM dbo.Pay pay WITH(NOLOCK)
+			INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+			WHERE pay.Person = @PersonId AND pay.StartDate >= @FirstCompensationStartDate AND T.IsContractType = 1 AND pay.StartDate < @Today
 				
-				EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1 -- terminating the person
+			EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1 -- terminating the person
 
 				
-				-- Ensure the temporary table exists
-				EXEC SessionLogPrepare @UserLogin = @UserLogin
+			-- Ensure the temporary table exists
+			EXEC SessionLogPrepare @UserLogin = @UserLogin
 
-				UPDATE dbo.Person
-					SET TerminationDate = @TerminationDate,
-						PersonStatusId = 2,
-						SeniorityId = @SeniorityId,
-						PracticeOwnedId = @PracticeId,
-						TerminationReasonId = @TerminationReasonId
-					WHERE PersonId = @PersonId
+			UPDATE dbo.Person
+				SET TerminationDate = @TerminationDate,
+					PersonStatusId = 2,
+					SeniorityId = @SeniorityId,
+					PracticeOwnedId = @PracticeId,
+					TerminationReasonId = @TerminationReasonId
+				WHERE PersonId = @PersonId
 
-				EXEC dbo.PersonStatusHistoryUpdate
-					@PersonId = @PersonId,
-					@PersonStatusId = 2
+			EXEC dbo.PersonStatusHistoryUpdate
+				@PersonId = @PersonId,
+				@PersonStatusId = 2
 
-				EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @PreviousTerminationDate,@UserLogin = @UserLogin	
+			EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @PreviousTerminationDate,@UserLogin = @UserLogin	
 
-		--4.Re-hire the person with hire date as salary type compensation start date.
-				SELECT @HireDate = MIN(pay.StartDate)
-				FROM dbo.Pay pay WITH(NOLOCK)
-				INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
-				WHERE pay.Person = @PersonId AND @FirstCompensationStartDate <= pay.StartDate AND T.IsContractType = 0 AND pay.StartDate < @Today
+	--4.Re-hire the person with hire date as salary type compensation start date.
+			SELECT @HireDate = MIN(pay.StartDate)
+			FROM dbo.Pay pay WITH(NOLOCK)
+			INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
+			WHERE pay.Person = @PersonId AND @FirstCompensationStartDate <= pay.StartDate AND T.IsContractType = 0 AND pay.StartDate < @Today
 
 				
-				-- Ensure the temporary table exists
-				EXEC SessionLogPrepare @UserLogin = @UserLogin
+			-- Ensure the temporary table exists
+			EXEC SessionLogPrepare @UserLogin = @UserLogin
 
-				UPDATE dbo.Person
-					SET HireDate = ISNULL(@HireDate,@StartDate),
-						TerminationDate = NULL,
-						PersonStatusId = 1,
-						TerminationReasonId = NULL
-					WHERE PersonId = @PersonId
+			UPDATE dbo.Person
+				SET HireDate = ISNULL(@HireDate,@StartDate),
+					TerminationDate = NULL,
+					PersonStatusId = 1,
+					TerminationReasonId = NULL
+				WHERE PersonId = @PersonId
 
-				EXEC dbo.PersonStatusHistoryUpdate
-					@PersonId = @PersonId,
-					@PersonStatusId = 1
+			EXEC dbo.PersonStatusHistoryUpdate
+				@PersonId = @PersonId,
+				@PersonStatusId = 1
 
-				EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @TerminationDate,@UserLogin = @UserLogin	
+			EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @TerminationDate,@UserLogin = @UserLogin	
 
-			END			
-		END
+		END			
+	END
 
 	COMMIT TRAN Tran_PaySave
 	END TRY
@@ -517,6 +591,4 @@ AS
 
 	END CATCH
 
-
 GO
-
