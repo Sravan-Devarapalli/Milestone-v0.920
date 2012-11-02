@@ -63,7 +63,7 @@
                                 ValidationGroup="UpdateTimeType">*</asp:RequiredFieldValidator>
                             <AjaxControlToolkit:FilteredTextBoxExtender ID="fteTimeType" runat="server" TargetControlID="tbName"
                                 FilterMode="ValidChars" FilterType="UppercaseLetters,LowercaseLetters,Numbers,Custom"
-                                ValidChars=" ">
+                                ValidChars=" /">
                             </AjaxControlToolkit:FilteredTextBoxExtender>
                             <asp:CustomValidator ID="cvUpdatedTimeTypeName" runat="server" ControlToValidate="tbName"
                                 Display="Dynamic" ValidationGroup="UpdateTimeType" ErrorMessage="Work Type with this name already exists. Please enter a different Work Type name."
@@ -175,7 +175,7 @@
                             ValidationGroup="NewTimeType">*</asp:RequiredFieldValidator>
                         <AjaxControlToolkit:FilteredTextBoxExtender ID="fteNewTimeType" runat="server" TargetControlID="tbNewTimeType"
                             FilterMode="ValidChars" FilterType="UppercaseLetters,LowercaseLetters,Numbers,Custom"
-                            ValidChars=" ">
+                            ValidChars=" /">
                         </AjaxControlToolkit:FilteredTextBoxExtender>
                     </td>
                     <td class="TextAlignCenterImp Width10PerImp">
