@@ -1215,6 +1215,7 @@ namespace DataAccess
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
                 int timeTypeIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeId);
                 int isPTOIndex = reader.GetOrdinal(Constants.ColumnNames.IsPTOColumn);
+                int isSickLeaveIndex = reader.GetOrdinal(Constants.ColumnNames.IsSickLeaveColumn);
                 int isHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsHolidayColumn);
                 int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTColumn);
                 int isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidColoumn);
@@ -1226,7 +1227,18 @@ namespace DataAccess
                     {
                         var tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
 
-                        tesection.Project.IsPTOProject = (reader.GetInt32(isPTOIndex) == 1);
+                        if ((reader.GetInt32(isPTOIndex) == 1))
+                        {
+                            tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && !tes.Project.IsSickLeaveProject &&tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
+                            tesection.Project.IsPTOProject = true;
+                        }
+
+                        if ((reader.GetInt32(isSickLeaveIndex) == 1))
+                        {
+                            tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && !tes.Project.IsPTOProject && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
+                            tesection.Project.IsSickLeaveProject = true;
+                        }
+
                         tesection.Project.IsHolidayProject = (reader.GetInt32(isHolidayIndex) == 1);
                         tesection.Project.IsORTProject = (reader.GetInt32(isORTIndex) == 1);
                         tesection.Project.IsUnpaidProject = (reader.GetInt32(isUnpaidIndex) == 1);
