@@ -4,6 +4,7 @@ using System.Data;
 using System.ServiceModel;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using DataTransferObjects.TimeEntry;
 
 namespace PracticeManagementService
 {
@@ -461,7 +462,7 @@ namespace PracticeManagementService
         Person GetPayHistoryShortByPerson(int personId);
 
         [OperationContract]
-        Dictionary<DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate);
+        List<Triple<DateTime, bool, bool>> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
         Person GetPersonDetailsShort(int personId);
@@ -489,6 +490,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Employment> GetPersonEmploymentHistoryById(int personId);
+
+        [OperationContract]
+        List<TimeTypeRecord> GetPersonAdministrativeTimeTypesInRange(int personId, DateTime startDate, DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave);
+
+        [OperationContract]
+        bool IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(int personId, DateTime startDate, DateTime endDate, int timeScaleId);
     }
 }
 
