@@ -18,13 +18,19 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string DefaultNameFieldName = "Name";
         private const string IsEmpDisableAttribute = "IsEmpDisable";
         private const string IsPersonSalaryTypeDisableAttribute = "IsPersonSalaryTypeDisable";
+        private const string IsPersonHourlyTypeDisableAttribute = "IsPersonHourlyTypeDisable";
         private const string IsChargeCodeTurnOffDisableAttribute = "isChargeCodeTurnOffDisable";
         private const string ImgNoteClientIdAttribute = "imgNoteClientId";
-        
-        
+
         #endregion
 
         #region Properties
+
+        public TimeTypeRecord TimeTypeRecord
+        {
+            get;
+            set;
+        }
 
         public bool IsThereAtleastOneTimeEntryrecord
         {
@@ -46,6 +52,7 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        //IsHoliday gives information that is this a holiday project or not
         public bool IsHoliday
         {
             get
@@ -57,6 +64,20 @@ namespace PraticeManagement.Controls.TimeEntry
                 ViewState["IsHoliday"] = value;
             }
         }
+
+        //IsHolidayDate gives information that is the selected day is company holiday or not.
+        public bool IsHolidayDate
+        {
+            get
+            {
+                return ViewState["IsHolidayDate"] != null ? (bool)ViewState["IsHolidayDate"] : false;
+            }
+            set
+            {
+                ViewState["IsHolidayDate"] = value;
+            }
+        }
+
 
         public bool IsORT
         {
@@ -79,6 +100,18 @@ namespace PraticeManagement.Controls.TimeEntry
             set
             {
                 ViewState["IsUnpaidWorktype"] = value;
+            }
+        }
+
+        public bool IsSickLeave
+        {
+            get
+            {
+                return ViewState["IsSickLeaveWorktype"] != null ? (bool)ViewState["IsSickLeaveWorktype"] : false;
+            }
+            set
+            {
+                ViewState["IsSickLeaveWorktype"] = value;
             }
         }
 
@@ -210,14 +243,14 @@ namespace PraticeManagement.Controls.TimeEntry
             }
 
             tbActualHours.Attributes[IsEmpDisableAttribute] = HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date] ? "0" : "1";
-            tbActualHours.Attributes[IsPersonSalaryTypeDisableAttribute] = HostingPage.IsPersonSalaryTypeList[DateBehind] ? "0" : "1";
+            tbActualHours.Attributes[IsPersonSalaryTypeDisableAttribute] = HostingPage.IsPersonSalaryHourlyTypeList.Where(t => t.First == DateBehind).First().Second ? "0" : "1";
+            tbActualHours.Attributes[IsPersonHourlyTypeDisableAttribute] = HostingPage.IsPersonSalaryHourlyTypeList.Where(t => t.First == DateBehind).First().Third ? "0" : "1";
         }
 
         public void CanelControlStyle()
         {
             tbActualHours.BackColor = Color.White;
         }
-
 
         protected override void OnPreRender(EventArgs e)
         {
@@ -231,18 +264,26 @@ namespace PraticeManagement.Controls.TimeEntry
                 HostingPage.AdminstratorSectionTargetNotes[DateBehind].Value = tbNotes.ClientID;
 
             }
-
-            if (IsPTO)
-            {
-                tbActualHours.Enabled = HostingPage.IsPersonSalaryTypeList[DateBehind]
-                                        && HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date];
-
-
-            }
-
-            if (IsHoliday || IsUnpaid)
+            if (IsHoliday || IsUnpaid || IsHolidayDate)
             {
                 imgClear.Style["display"] = "none";
+            }
+            else if (TimeTypeRecord != null)
+            {
+                if (TimeTypeRecord.IsW2SalaryAllowed && TimeTypeRecord.IsW2HourlyAllowed)
+                {
+                    tbActualHours.Enabled = true;
+                }
+                else if (TimeTypeRecord.IsW2SalaryAllowed)
+                {
+                    tbActualHours.Enabled = HostingPage.IsPersonSalaryHourlyTypeList.Where(t => t.First == DateBehind).First().Second
+                                        && HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date];
+                }
+                else if (TimeTypeRecord.IsW2HourlyAllowed)
+                {
+                    tbActualHours.Enabled = HostingPage.IsPersonSalaryHourlyTypeList.Where(t => t.First == DateBehind).First().Third
+                                        && HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date];
+                }
             }
 
             tblApprovedby.Style["display"] = IsORT ? "" : "none";
@@ -357,6 +398,31 @@ namespace PraticeManagement.Controls.TimeEntry
                 tbNotes.Enabled =
                 ddlApprovedManagers.Enabled =
                 tbActualHours.Enabled = enabled;
+            }
+        }
+
+        public bool DisabledReadonly
+        {
+            set
+            {
+                var enabled = !value;
+
+                btnSaveNotes.Enabled =
+                tbNotes.Enabled =
+                ddlApprovedManagers.Enabled =
+                tbActualHours.Enabled = enabled;
+
+                if (!enabled)
+                {
+                    tbActualHours.Attributes["readonly"] = "readonly";
+                    tbActualHours.Attributes["class"] = "bgColorWhiteImp";
+                    
+                }
+                else
+                {
+                    tbActualHours.Attributes.Remove("class");
+                    tbActualHours.Attributes.Remove("readonly");
+                }
             }
         }
 
