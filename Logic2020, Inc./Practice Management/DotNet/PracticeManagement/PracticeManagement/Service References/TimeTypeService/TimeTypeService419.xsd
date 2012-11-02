@@ -10,11 +10,14 @@
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsAdministrative" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsAllowedToEdit" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsBereavementTimeType" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsORTTimeType" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsSystemTimeType" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsUnpaidTimeType" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsW2HourlyAllowed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsW2SalaryAllowed" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
