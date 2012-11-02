@@ -44,12 +44,13 @@ BEGIN
 		END
 		ELSE IF EXISTS(SELECT 1 FROM dbo.Person WHERE PersonId = @PersonId AND IsStrawman =0 )
 		BEGIN
-			DECLARE @EndDate DATETIME , @Timescale INT ,@W2SalaryId INT
+			DECLARE @EndDate DATETIME , @Timescale INT ,@W2SalaryId INT,@W2HourlyId INT
 			SELECT @EndDate = enddate,@Timescale = Timescale FROM dbo.Pay WHERE Person = @PersonId AND StartDate = @StartDate
 			SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
+			SELECT @W2HourlyId = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
 
-			--Delete Holiday timeEntries if person is not w2salaried.
-			IF (@Timescale = @W2SalaryId)
+			--Delete Administrative timeEntries if person is w2salaried/w2Hourly person for the deleted pay.
+			IF (@Timescale = @W2SalaryId OR @Timescale = @W2HourlyId)
 			BEGIN
 
 				DELETE TEH
