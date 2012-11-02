@@ -34,7 +34,19 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
 
     _initializeEnableDisableTextBoxes: function () {
         var target = this.get_element();
+        var selectedOption = target.options[target.options.selectedIndex];
+        var isW2HourlyTimeType = 0;
+        var isW2SalaryTimeType = 0;
         if (target != null) {
+            if (selectedOption != null) {
+                if (selectedOption.getAttribute('isW2HourlyTimeType') != undefined && selectedOption.getAttribute('isW2HourlyTimeType') != null) {
+                    isW2HourlyTimeType = selectedOption.getAttribute('isW2HourlyTimeType');
+                }
+                if (selectedOption.getAttribute('isW2SalaryTimeType') != undefined && selectedOption.getAttribute('isW2SalaryTimeType') != null) {
+                    isW2SalaryTimeType = selectedOption.getAttribute('isW2SalaryTimeType');
+                }
+            }
+
             if (target.value == -1) {
                 this._disableTextBoxes();
             }
@@ -46,6 +58,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                         var isHourlyRevenueDisable = 0;
                         var isChargeCodeTurnOffDisable = 0;
                         var isPersonSalaryTypeDisable = 0;
+                        var isPersonHourlyTypeDisable = 0;
                         var isEmpDisable = 0;
                         if (control != null) {
                             if (control.getAttribute('isHourlyRevenueDisable') != undefined && control.getAttribute('isHourlyRevenueDisable') != null) {
@@ -60,8 +73,23 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                             if (control.getAttribute('IsPersonSalaryTypeDisable') != undefined && control.getAttribute('IsPersonSalaryTypeDisable') != null) {
                                 isPersonSalaryTypeDisable = control.getAttribute('IsPersonSalaryTypeDisable');
                             }
+                            if (control.getAttribute('IsPersonHourlyTypeDisable') != undefined && control.getAttribute('IsPersonHourlyTypeDisable') != null) {
+                                isPersonHourlyTypeDisable = control.getAttribute('IsPersonHourlyTypeDisable');
+                            }
                         }
-                        if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isEmpDisable == 0 && isPersonSalaryTypeDisable == 0) {
+                        var enable = 0;
+                        if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isEmpDisable == 0) {
+                            if (isW2HourlyTimeType == 0 && isW2SalaryTimeType == 0) {
+                                enable = 1;
+                            }
+                            else if (isW2HourlyTimeType == 1 && isPersonHourlyTypeDisable == 0) {
+                                enable = 1;
+                            }
+                            else if (isW2SalaryTimeType == 1 && isPersonSalaryTypeDisable == 0) {
+                                enable = 1;
+                            }
+                        }
+                        if (enable == 1) {
                             if (control.getAttribute('disabled') == 'disabled') {
                                 control.removeAttribute('disabled');
                                 control.style.backgroundColor = 'white';
@@ -90,10 +118,12 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
             var isNewchargeCodeTurnOff = isChargeCodeTurnOffJsonObject.IschargeCodeTurnOff == "true";
             if (isNonBillable) {
                 var nonBillableControl = document.getElementById(controlIds[i]);
-                var nonBillableControlHasValue = nonBillableControl.value != '';
-                var nonBillableControlIsDirty = nonBillableControl.style.backgroundColor != 'white' && nonBillableControl.style.backgroundColor != 'gray';
-                if (isNewchargeCodeTurnOff && (nonBillableControlIsDirty || nonBillableControlHasValue)) {
-                    showPopup = true;
+                if (nonBillableControl != null) {
+                    var nonBillableControlHasValue = nonBillableControl.value != '';
+                    var nonBillableControlIsDirty = nonBillableControl.style.backgroundColor != 'white' && nonBillableControl.style.backgroundColor != 'gray';
+                    if (isNewchargeCodeTurnOff && (nonBillableControlIsDirty || nonBillableControlHasValue)) {
+                        showPopup = true;
+                    }
                 }
             }
             else {
@@ -119,6 +149,18 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
         }
     },
     _enableTextBoxes: function (isChargeCodeTurnOffJson) {
+        var target = obj.get_element();
+        var selectedOption = target.options[target.options.selectedIndex];
+        var isW2HourlyTimeType = 0;
+        var isW2SalaryTimeType = 0;
+        if (selectedOption != null) {
+            if (selectedOption.getAttribute('isW2HourlyTimeType') != undefined && selectedOption.getAttribute('isW2HourlyTimeType') != null) {
+                isW2HourlyTimeType = selectedOption.getAttribute('isW2HourlyTimeType');
+            }
+            if (selectedOption.getAttribute('isW2SalaryTimeType') != undefined && selectedOption.getAttribute('isW2SalaryTimeType') != null) {
+                isW2SalaryTimeType = selectedOption.getAttribute('isW2SalaryTimeType');
+            }
+        }
         var controlIds = this.getControlIdList();
         var isNonBillable = true;
         if (controlIds.length >= 14) {
@@ -130,11 +172,13 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
             var ischargeCodeTurnOff = isChargeCodeTurnOffJsonObject.IschargeCodeTurnOff == "true";
             if (isNonBillable) {
                 var nonBillableControl = document.getElementById(controlIds[i]);
-                if (ischargeCodeTurnOff) {
-                    nonBillableControl.setAttribute('isChargeCodeTurnOffDisable', 1);
-                }
-                else {
-                    nonBillableControl.setAttribute('isChargeCodeTurnOffDisable', 0);
+                if (nonBillableControl != null) {
+                    if (ischargeCodeTurnOff) {
+                        nonBillableControl.setAttribute('isChargeCodeTurnOffDisable', 1);
+                    }
+                    else {
+                        nonBillableControl.setAttribute('isChargeCodeTurnOffDisable', 0);
+                    }
                 }
             }
             else {
@@ -160,6 +204,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                 var isHourlyRevenueDisable = 0;
                 var isChargeCodeTurnOffDisable = 0;
                 var isPersonSalaryTypeDisable = 0;
+                var isPersonHourlyTypeDisable = 0;
                 var isEmpDisable = 0;
                 if (control != null) {
                     if (control.getAttribute('isHourlyRevenueDisable') != undefined && control.getAttribute('isHourlyRevenueDisable') != null) {
@@ -174,8 +219,23 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                     if (control.getAttribute('IsPersonSalaryTypeDisable') != undefined && control.getAttribute('IsPersonSalaryTypeDisable') != null) {
                         isPersonSalaryTypeDisable = control.getAttribute('IsPersonSalaryTypeDisable');
                     }
+                    if (control.getAttribute('IsPersonHourlyTypeDisable') != undefined && control.getAttribute('IsPersonHourlyTypeDisable') != null) {
+                        isPersonHourlyTypeDisable = control.getAttribute('IsPersonHourlyTypeDisable');
+                    }
                 }
-                if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isEmpDisable == 0 && isPersonSalaryTypeDisable == 0) {
+                var enable = 0;
+                if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isEmpDisable == 0) {
+                    if (isW2HourlyTimeType == 0 && isW2SalaryTimeType == 0) {
+                        enable = 1;
+                    }
+                    else if (isW2HourlyTimeType == 1 && isPersonHourlyTypeDisable == 0) {
+                        enable = 1;
+                    }
+                    else if (isW2SalaryTimeType == 1 && isPersonSalaryTypeDisable == 0) {
+                        enable = 1;
+                    }
+                }
+                if (enable == 1) {
                     if (control.getAttribute('disabled') == 'disabled') {
                         control.removeAttribute('disabled');
                         var controlIsDirty = control.style.backgroundColor != 'white' && control.style.backgroundColor != 'gray';
@@ -190,7 +250,6 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                 }
             }
         }
-        var target = obj.get_element();
         target.setAttribute('previousId', target.value);
     },
     _disableTextBoxes: function () {
