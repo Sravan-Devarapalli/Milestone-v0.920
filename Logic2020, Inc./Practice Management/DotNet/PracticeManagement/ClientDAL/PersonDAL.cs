@@ -10,6 +10,7 @@ using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using System.Security.Cryptography;
 using System.Text;
+using DataTransferObjects.TimeEntry;
 
 
 namespace DataAccess
@@ -3645,6 +3646,84 @@ namespace DataAccess
                 }
             }
 
+        }
+
+        public static List<TimeTypeRecord> GetPersonAdministrativeTimeTypesInRange(int personId, DateTime startDate, DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonAdministrativeTimeTypesInRange, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludePTOParam, includePTO);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeHolidayParam, includeHoliday);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeUnpaidParam, includeUnpaid);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeSickLeaveParam, includeSickLeave);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<TimeTypeRecord>();
+                    ReadTimeTypesShort(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadTimeTypesShort(DbDataReader reader, List<TimeTypeRecord> result)
+        {
+            if (reader.HasRows)
+            {
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTTimeTypeColumn);
+                int isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidTimeType);
+                int isW2HourlyAllowedIndex = reader.GetOrdinal(Constants.ColumnNames.IsW2HourlyAllowed);
+                int isW2SalaryAllowedIndex = reader.GetOrdinal(Constants.ColumnNames.IsW2SalaryAllowed);
+
+                while (reader.Read())
+                {
+                    var tt = new TimeTypeRecord
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        Name = reader.GetString(nameIndex),
+                        IsORTTimeType = reader.GetBoolean(isORTIndex),
+                        IsUnpaidTimeType = reader.GetBoolean(isUnpaidIndex),
+                        IsW2HourlyAllowed = reader.GetBoolean(isW2HourlyAllowedIndex),
+                        IsW2SalaryAllowed = reader.GetBoolean(isW2SalaryAllowedIndex)
+                    };
+                    result.Add(tt);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// gets weather the given person in given date range has timeoff's.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="includeEmployeeTimeType"></param>
+        /// <returns></returns>
+        public static bool IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(int personId, DateTime startDate, DateTime endDate, int timescaleId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleId, timescaleId);
+
+                connection.Open();
+
+                bool result = (bool)command.ExecuteScalar();
+                return result;
+            }
         }
     }
 }
