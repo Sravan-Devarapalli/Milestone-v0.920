@@ -365,6 +365,7 @@ namespace DataAccess
                 int bereavementHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BereavementHours);
                 int oRTHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ORTHours);
                 int unpaidHoursIndex = reader.GetOrdinal(Constants.ColumnNames.UnpaidHours);
+                int sickOrSafeLeaveHoursIndex = reader.GetOrdinal(Constants.ColumnNames.SickOrSafeLeaveHours);
 
                 int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
                 int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
@@ -416,6 +417,8 @@ namespace DataAccess
                     PLGH.JuryDutyHours = reader.GetDouble(juryDutyHoursIndex);
                     PLGH.ORTHours = reader.GetDouble(oRTHoursIndex);
                     PLGH.UnpaidHours = reader.GetDouble(unpaidHoursIndex);
+                    PLGH.SickOrSafeLeaveHours = reader.GetDouble(sickOrSafeLeaveHoursIndex);
+
                     PLGH.Person = person;
                     result.Add(PLGH);
                 }
@@ -1328,13 +1331,49 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<PersonLevelPayCheck>();
-                    ReadTimePeriodSummaryByResourcePayCheck(reader, result);
+                    List<TimeTypeRecord> timeTypesList = new List<TimeTypeRecord>();
+                    ReadTimeTypeRecords(reader, timeTypesList);
+                    reader.NextResult();
+                    ReadTimePeriodSummaryByResourcePayCheck(reader, result, timeTypesList);
                     return result;
                 }
             }
         }
 
-        private static void ReadTimePeriodSummaryByResourcePayCheck(SqlDataReader reader, List<PersonLevelPayCheck> result)
+        private static void ReadTimeTypeRecords(SqlDataReader reader, List<TimeTypeRecord> result)
+        {
+            if (reader.HasRows)
+            {
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int isPTOIndex = reader.GetOrdinal(Constants.ColumnNames.IsPTOColumn);
+                int isHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsHolidayColumn);
+                int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTColumn);
+                int isSickLeaveIndex = reader.GetOrdinal(Constants.ColumnNames.IsSickLeaveColumn);
+                int isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidColoumn);
+                int isJuryDutyIndex = reader.GetOrdinal(Constants.ColumnNames.IsJuryDuty);
+                int isBereavementIndex = reader.GetOrdinal(Constants.ColumnNames.IsBereavement);
+
+                while (reader.Read())
+                {
+                    TimeTypeRecord tt = new TimeTypeRecord()
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        Name = reader.GetString(nameIndex),
+                        IsPTOTimeType = reader.GetInt32(isPTOIndex) == 1,
+                        IsHolidayTimeType = reader.GetInt32(isHolidayIndex) == 1,
+                        IsORTTimeType = reader.GetInt32(isORTIndex) == 1,
+                        IsSickLeaveTimeType = reader.GetInt32(isSickLeaveIndex) == 1,
+                        IsUnpaidTimeType = reader.GetInt32(isUnpaidIndex) == 1,
+                        IsJuryDutyTimeType = reader.GetInt32(isJuryDutyIndex) == 1,
+                        IsBereavementTimeType = reader.GetInt32(isBereavementIndex) == 1
+                    };
+                    result.Add(tt);
+                }
+            }
+        }
+
+        private static void ReadTimePeriodSummaryByResourcePayCheck(SqlDataReader reader, List<PersonLevelPayCheck> result, List<TimeTypeRecord> timeTypesList)
         {
             if (reader.HasRows)
             {
@@ -1353,6 +1392,7 @@ namespace DataAccess
                 int bereavementHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BereavementHours);
                 int oRTHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ORTHours);
                 int unpaidHoursIndex = reader.GetOrdinal(Constants.ColumnNames.UnpaidHours);
+                int sickOrSafeLeaveHoursIndex = reader.GetOrdinal(Constants.ColumnNames.SickOrSafeLeaveHours);
                 int paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
                 int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
 
@@ -1377,12 +1417,13 @@ namespace DataAccess
                     PLPC.DeptID = reader.GetInt32(deptIDIndex);
                     PLPC.TotalHoursExcludingTimeOff = reader.GetDouble(totalHoursIndex);
                     Dictionary<string, double> workTypeLevelTimeOffHours = new Dictionary<string, double>();
-                    workTypeLevelTimeOffHours.Add("PTO", reader.GetDouble(pTOHoursIndex));
-                    workTypeLevelTimeOffHours.Add("Holiday", reader.GetDouble(holidayHoursIndex));
-                    workTypeLevelTimeOffHours.Add("JuryDuty", reader.GetDouble(juryDutyHoursIndex));
-                    workTypeLevelTimeOffHours.Add("Bereavement", reader.GetDouble(bereavementHoursIndex));
-                    workTypeLevelTimeOffHours.Add("ORT", reader.GetDouble(oRTHoursIndex));
-                    workTypeLevelTimeOffHours.Add("Unpaid", reader.GetDouble(unpaidHoursIndex));
+                    workTypeLevelTimeOffHours.Add(timeTypesList.First(t => t.IsPTOTimeType).Name, reader.GetDouble(pTOHoursIndex));
+                    workTypeLevelTimeOffHours.Add(timeTypesList.First(t => t.IsHolidayTimeType).Name, reader.GetDouble(holidayHoursIndex));
+                    workTypeLevelTimeOffHours.Add(timeTypesList.First(t => t.IsJuryDutyTimeType).Name, reader.GetDouble(juryDutyHoursIndex));
+                    workTypeLevelTimeOffHours.Add(timeTypesList.First(t => t.IsBereavementTimeType).Name, reader.GetDouble(bereavementHoursIndex));
+                    workTypeLevelTimeOffHours.Add(timeTypesList.First(t => t.IsORTTimeType).Name, reader.GetDouble(oRTHoursIndex));
+                    workTypeLevelTimeOffHours.Add(timeTypesList.First(t => t.IsUnpaidTimeType).Name, reader.GetDouble(unpaidHoursIndex));
+                    workTypeLevelTimeOffHours.Add(timeTypesList.First(t => t.IsSickLeaveTimeType).Name, reader.GetDouble(sickOrSafeLeaveHoursIndex));
                     PLPC.WorkTypeLevelTimeOffHours = workTypeLevelTimeOffHours;
                     result.Add(PLPC);
                 }
