@@ -307,7 +307,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate)
+        public static List<Triple<DateTime, bool, bool>> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Pay.IsPersonSalaryTypeListByPeriodProcedure, connection))
@@ -323,15 +323,20 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    Dictionary<DateTime, bool> result = new Dictionary<DateTime, bool>();
+                    List<Triple<DateTime, bool, bool>> result = new List<Triple<DateTime, bool, bool>>();
                     if (reader.HasRows)
                     {
                         int dateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
                         int isSalaryTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsSalaryType);
+                        int isHourlyTypeIndex = reader.GetOrdinal(Constants.ColumnNames.IsHourlyType);
 
                         while (reader.Read())
                         {
-                            result.Add(reader.GetDateTime(dateIndex), reader.GetBoolean(isSalaryTypeIndex));
+                            Triple<DateTime, bool, bool> resultLocal = new Triple<DateTime, bool, bool>(DateTime.Now,true,true);
+                            resultLocal.First = reader.GetDateTime(dateIndex);
+                            resultLocal.Second = reader.GetBoolean(isSalaryTypeIndex);
+                            resultLocal.Third = reader.GetBoolean(isHourlyTypeIndex);
+                            result.Add(resultLocal);
                         }
                     }
                     return result;
