@@ -69,6 +69,14 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
+        public double SickOrSafeLeaveHours
+        {
+            get;
+            set;
+        }
+
+
+        [DataMember]
         public int TimeEntrySectionId { get; set; }
 
         public double NonBillableHours
@@ -126,7 +134,7 @@ namespace DataTransferObjects.Reports
         public double AdminstrativeHours
         {
             get {
-                return PTOHours + HolidayHours + BereavementHours + JuryDutyHours + ORTHours + UnpaidHours;
+                return PTOHours + HolidayHours + BereavementHours + JuryDutyHours + ORTHours + UnpaidHours + SickOrSafeLeaveHours;
             }
 
         }
