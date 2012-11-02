@@ -50,11 +50,29 @@
   <wsdl:message name="ITimeTypeService_GetWorkTypeNameById_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetWorkTypeNameByIdResponse" />
   </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetWorkTypeById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWorkTypeById" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetWorkTypeById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWorkTypeByIdResponse" />
+  </wsdl:message>
   <wsdl:message name="ITimeTypeService_GetUnpaidTimeType_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUnpaidTimeType" />
   </wsdl:message>
   <wsdl:message name="ITimeTypeService_GetUnpaidTimeType_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetUnpaidTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetPTOTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPTOTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetPTOTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPTOTimeTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetSickLeaveTimeType_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSickLeaveTimeType" />
+  </wsdl:message>
+  <wsdl:message name="ITimeTypeService_GetSickLeaveTimeType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSickLeaveTimeTypeResponse" />
   </wsdl:message>
   <wsdl:portType name="ITimeTypeService">
     <wsdl:operation name="GetAllTimeTypes">
@@ -85,9 +103,21 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetWorkTypeNameById" message="tns:ITimeTypeService_GetWorkTypeNameById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetWorkTypeNameByIdResponse" message="tns:ITimeTypeService_GetWorkTypeNameById_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetWorkTypeById">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetWorkTypeById" message="tns:ITimeTypeService_GetWorkTypeById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetWorkTypeByIdResponse" message="tns:ITimeTypeService_GetWorkTypeById_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetUnpaidTimeType">
       <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetUnpaidTimeType" message="tns:ITimeTypeService_GetUnpaidTimeType_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetUnpaidTimeTypeResponse" message="tns:ITimeTypeService_GetUnpaidTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPTOTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetPTOTimeType" message="tns:ITimeTypeService_GetPTOTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetPTOTimeTypeResponse" message="tns:ITimeTypeService_GetPTOTimeType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSickLeaveTimeType">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITimeTypeService/GetSickLeaveTimeType" message="tns:ITimeTypeService_GetSickLeaveTimeType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITimeTypeService/GetSickLeaveTimeTypeResponse" message="tns:ITimeTypeService_GetSickLeaveTimeType_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ITimeTypeService" type="tns:ITimeTypeService">
@@ -155,8 +185,35 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetWorkTypeById">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetWorkTypeById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetUnpaidTimeType">
       <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetUnpaidTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPTOTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetPTOTimeType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSickLeaveTimeType">
+      <soap:operation soapAction="http://tempuri.org/ITimeTypeService/GetSickLeaveTimeType" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
