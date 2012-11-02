@@ -43,6 +43,31 @@ AS
 		INSERT INTO @DivisionIds
 				SELECT ResultString
 				FROM	[dbo].[ConvertXmlStringInToStringTable](@PersonDivisionIds)
+
+	DECLARE @HolidayTimeTypeId INT ,
+			@PTOTimeTypeId INT ,
+			@SickLeaveTimeTypeId INT ,
+			@ORTTimeTypeId INT,
+			@UnpaidTimeTypeId	INT
+ 		    
+			 
+	SELECT  @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId() ,
+			@PTOTimeTypeId = dbo.GetPTOTimeTypeId() ,
+			@ORTTimeTypeId = dbo.GetORTTimeTypeId() ,
+			@SickLeaveTimeTypeId = dbo.[GetSickLeaveTimeTypeId](),
+			@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
+
+	SELECT 	TT.TimeTypeId,
+			TT.name,
+			CASE WHEN TT.TimeTypeId = @PTOTimeTypeId THEN 1 ELSE 0  END IsPTO,
+			CASE WHEN TT.TimeTypeId = @HolidayTimeTypeId THEN 1 ELSE 0  END IsHoliday,
+			CASE WHEN TT.TimeTypeId = @ORTTimeTypeId THEN 1 ELSE 0  END IsORT,
+			CASE WHEN TT.TimeTypeId = @SickLeaveTimeTypeId THEN 1 ELSE 0  END IsSickLeave,
+			CASE WHEN TT.TimeTypeId = @UnpaidTimeTypeId THEN 1 ELSE 0  END IsUnpaid,
+			CASE WHEN TT.Code = 'W9330' THEN 1 ELSE 0  END IsJuryDuty,
+			CASE WHEN TT.Code = 'W9340' THEN 1 ELSE 0  END IsBereavement
+	FROM dbo.TimeType TT
+	WHERE TT.IsAdministrative = 1
 		
 		;WITH PersonPayDuringSelectedRange
 				AS ( 
@@ -108,6 +133,7 @@ AS
 					ISNULL(Data.BereavementHours, 0) AS BereavementHours ,
 					ISNULL(Data.ORTHours, 0) AS ORTHours ,
 					ISNULL(Data.UnpaidHours, 0) AS UnpaidHours ,
+					ISNULL(Data.SickOrSafeLeaveHours, 0) AS SickOrSafeLeaveHours ,
 					PCP.Timescale,
 					P.DivisionId
 			FROM    ( SELECT    TE.PersonId ,
@@ -138,7 +164,11 @@ AS
 								ROUND(SUM(CASE WHEN TT.Code = 'W9350'
 											   THEN TEH.ActualHours
 											   ELSE 0
-										  END), 2) AS UnpaidHours
+										  END), 2) AS UnpaidHours,
+								ROUND(SUM(CASE WHEN TT.Code = 'W9311'
+											   THEN TEH.ActualHours
+											   ELSE 0
+										  END), 2) AS SickOrSafeLeaveHours
 					  FROM      dbo.TimeEntry TE
 								INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = te.TimeEntryId
 															  AND TE.ChargeCodeDate BETWEEN @StartDateLocal
@@ -203,5 +233,5 @@ AS
 						)
 			ORDER BY P.LastName ,
 					P.FirstName
-	END
+END
 
