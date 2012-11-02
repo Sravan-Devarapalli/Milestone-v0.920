@@ -106,6 +106,24 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="Industry" nillable="true" type="tns:Industry" />
+  <xs:complexType name="ArrayOfProfile">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Profile" nillable="true" type="tns:Profile" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProfile" nillable="true" type="tns:ArrayOfProfile" />
+  <xs:complexType name="Profile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ModifiedBy" type="xs:int" />
+      <xs:element minOccurs="0" name="ModifiedByName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ProfileId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ProfileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProfileUrl" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Profile" nillable="true" type="tns:Profile" />
   <xs:complexType name="ArrayOfPersonQualification">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonQualification" nillable="true" type="tns:PersonQualification" />
