@@ -374,6 +374,9 @@
             public const string PracticeAbbreviation = "PracticeAbbreviation";
             public const string Abbreviation = "Abbreviation";
             public const string CapabilityName = "CapabilityName";
+            public const string IsJuryDuty = "IsJuryDuty";
+            public const string IsBereavement = "IsBereavement";
+            public const string IsTimeOffExists = "IsTimeOffExists";
         }
 
         #endregion
@@ -668,9 +671,10 @@
             public const string TerminationReasonIdsParam = "@TerminationReasonIds";
             public const string TerminationDatesParam = "@TerminationDates";
             public const string RoleNameParam = "@RoleName";
-            public static string ProjectCapabilityIds = "@ProjectCapabilityIds";
-            public static string CapabilityIdParam = "@CapabilityId";
-            public static string Abbreviation = "@Abbreviation";
+            public const string ProjectCapabilityIds = "@ProjectCapabilityIds";
+            public const string CapabilityIdParam = "@CapabilityId";
+            public const string Abbreviation = "@Abbreviation";
+            public const string TimescaleId = "@TimescaleId";
         }
 
         #endregion
@@ -816,6 +820,7 @@
                 public const string GetPersonListWithRole = "dbo.GetPersonListWithRole";
                 public const string GetPersonEmploymentHistoryById = "dbo.GetPersonEmploymentHistoryById";
                 public const string GetPersonAdministrativeTimeTypesInRange = "dbo.GetPersonAdministrativeTimeTypesInRange";
+                public const string IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale = "dbo.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale";
             }
 
             #endregion
