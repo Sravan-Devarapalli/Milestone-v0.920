@@ -18,6 +18,7 @@ using System.Security.Cryptography;
 using System.Web.Configuration;
 using PraticeManagement;
 using System.Collections.Specialized;
+using DataTransferObjects.TimeEntry;
 
 namespace PracticeManagementService
 {
@@ -652,7 +653,7 @@ namespace PracticeManagementService
 
         private static PersonRateCalculator GetCalculatorForProposedFinancials(Person person, decimal proposedRate, decimal proposedHoursPerWeek, bool isMarginTestPage, DateTime? effectiveDate)
         {
-            PersonRateCalculator calculator = new PersonRateCalculator(person, false, isMarginTestPage, effectiveDate);           
+            PersonRateCalculator calculator = new PersonRateCalculator(person, false, isMarginTestPage, effectiveDate);
 
             if (person.CurrentPay != null)
             {
@@ -945,7 +946,7 @@ namespace PracticeManagementService
             return PersonDAL.GetAllPayTypes();
         }
 
-        public Dictionary<DateTime, bool> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate)
+        public List<Triple<DateTime, bool, bool>> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate)
         {
             return PayDAL.IsPersonSalaryTypeListByPeriod(personId, startDate, endDate);
         }
@@ -984,6 +985,16 @@ namespace PracticeManagementService
         public List<Person> GetPersonListWithRole(string rolename)
         {
             return PersonDAL.GetPersonListWithRole(rolename);
+        }
+
+        public List<TimeTypeRecord> GetPersonAdministrativeTimeTypesInRange(int personId, DateTime startDate, DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool inludeSickLeave)
+        {
+            return PersonDAL.GetPersonAdministrativeTimeTypesInRange(personId, startDate, endDate, includePTO, includeHoliday, includeUnpaid, inludeSickLeave);
+        }
+
+        public bool IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(int personId, DateTime startDate, DateTime endDate, int timeScaleId)
+        {
+            return PersonDAL.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(personId, startDate, endDate, timeScaleId);
         }
 
         #endregion
