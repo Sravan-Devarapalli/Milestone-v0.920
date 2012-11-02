@@ -20,6 +20,7 @@
         <xs:element minOccurs="0" name="includePTO" type="xs:boolean" />
         <xs:element minOccurs="0" name="includeHoliday" type="xs:boolean" />
         <xs:element minOccurs="0" name="includeUnpaid" type="xs:boolean" />
+        <xs:element minOccurs="0" name="includeSickLeave" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -96,6 +97,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetWorkTypeById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="worktypeId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetWorkTypeByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetWorkTypeByIdResult" nillable="true" type="q6:TimeTypeRecord" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetUnpaidTimeType">
     <xs:complexType>
       <xs:sequence />
@@ -104,7 +119,31 @@
   <xs:element name="GetUnpaidTimeTypeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetUnpaidTimeTypeResult" nillable="true" type="q6:TimeTypeRecord" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetUnpaidTimeTypeResult" nillable="true" type="q7:TimeTypeRecord" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPTOTimeType">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPTOTimeTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetPTOTimeTypeResult" nillable="true" type="q8:TimeTypeRecord" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSickLeaveTimeType">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSickLeaveTimeTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="GetSickLeaveTimeTypeResult" nillable="true" type="q9:TimeTypeRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
