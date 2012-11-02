@@ -28,12 +28,20 @@ namespace PraticeManagement.Controls
         public const string HolidayDetails_Format = "{0} - {1}";
         public const string AttributeDisplay = "display";
         public const string AttributeValueNone = "none";
-
+        public const string IsW2HourlyAllowedAttribute = "IsW2HourlyAllowed";
+        public const string IsW2SalaryAllowedAttribute = "IsW2SalaryAllowed";
+        public const string IsUnpaidAttribute = "IsUnpaid";
+        public const string IsORTAttribute = "IsORT";
+        public const string DefaultHours = "8.00";
+        public const string EmptyHours = "0.00";
         private bool userIsPracticeManager;
         private bool userIsBusinessUnitManager;
         private bool userIsAdministrator;
         private bool userIsHR;
         private bool userIsDirector;
+        public const string SalaryVoliationForMessage = "Invalid Pay Type: Employee is not a W2-Salary employee for the selected day(s).";
+        public const string HourlyVoliationForMessage = "Invalid Pay Type: Employee is not a W2-Hourly employee for the selected day(s).";
+        public const string EmployeeVoliationForMessage = "Invalid Pay Type: Employee is not a W2-Salary/W2-Hourly employee for the selected day(s).";
 
 
         #endregion
@@ -161,7 +169,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         private Person selectedPerson;
 
         private Person SelectedPerson
@@ -174,15 +181,27 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         #endregion
 
         public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedById, string approvedByName)
         {
             lbdateSingleDay.Text = date.ToString(Constants.Formatting.EntryDateFormat);
             hdnDateSingleDay.Value = date.ToString();
-            ddlTimeTypesSingleDay.SelectedValue = timeTypeId;
-            txtHoursSingleDay.Text = string.IsNullOrEmpty(hours) ? "0.00" : Convert.ToDouble(hours).ToString(HoursFormat);
+            //ddlTimeTypesSingleDay.SelectedValue = timeTypeId;
+            ListItem selectedTimeType = null;
+            selectedTimeType = ddlTimeTypesSingleDay.Items.FindByValue(timeTypeId.ToString());
+            if (selectedTimeType == null)
+            {
+                var timetype = ServiceCallers.Custom.TimeType(te => te.GetWorkTypeById(int.Parse(timeTypeId)));
+                selectedTimeType = new ListItem(timetype.Name, timeTypeId.ToString());
+                selectedTimeType.Attributes.Add(IsORTAttribute, timetype.IsORTTimeType.ToString());
+                selectedTimeType.Attributes.Add(IsUnpaidAttribute, timetype.IsUnpaidTimeType.ToString());
+                selectedTimeType.Attributes.Add(IsW2HourlyAllowedAttribute, timetype.IsW2HourlyAllowed.ToString());
+                selectedTimeType.Attributes.Add(IsW2SalaryAllowedAttribute, timetype.IsW2SalaryAllowed.ToString());
+                ddlTimeTypesSingleDay.Items.Add(selectedTimeType);
+            }
+            ddlTimeTypesSingleDay.SelectedValue = selectedTimeType.Value;
+            txtHoursSingleDay.Text = string.IsNullOrEmpty(hours) ? EmptyHours : Convert.ToDouble(hours).ToString(HoursFormat);
             hdIsSingleDayPopDirty.Value = false.ToString();
             btnDeleteSingleDay.Enabled = true;
         }
@@ -191,8 +210,21 @@ namespace PraticeManagement.Controls
         {
             dtpStartDateTimeOff.DateValue = startDate;
             dtpEndDateTimeOff.DateValue = endDate;
-            ddlTimeTypesTimeOff.SelectedValue = timeTypeId;
-            txthoursTimeOff.Text = string.IsNullOrEmpty(hours) ? "0.00" : Convert.ToDouble(hours).ToString(HoursFormat);
+            //ddlTimeTypesTimeOff.SelectedValue = timeTypeId;
+            ListItem selectedTimeType = null;
+            selectedTimeType = ddlTimeTypesTimeOff.Items.FindByValue(timeTypeId.ToString());
+            if (selectedTimeType == null)
+            {
+                var timetype = ServiceCallers.Custom.TimeType(te => te.GetWorkTypeById(int.Parse(timeTypeId)));
+                selectedTimeType = new ListItem(timetype.Name, timeTypeId.ToString());
+                selectedTimeType.Attributes.Add(IsORTAttribute, timetype.IsORTTimeType.ToString());
+                selectedTimeType.Attributes.Add(IsUnpaidAttribute, timetype.IsUnpaidTimeType.ToString());
+                selectedTimeType.Attributes.Add(IsW2HourlyAllowedAttribute, timetype.IsW2HourlyAllowed.ToString());
+                selectedTimeType.Attributes.Add(IsW2SalaryAllowedAttribute, timetype.IsW2SalaryAllowed.ToString());
+                ddlTimeTypesTimeOff.Items.Add(selectedTimeType);
+            }
+            ddlTimeTypesTimeOff.SelectedValue = selectedTimeType.Value;
+            txthoursTimeOff.Text = string.IsNullOrEmpty(hours) ? EmptyHours : Convert.ToDouble(hours).ToString(HoursFormat);
             btnDeleteTimeOff.Visible = btnDeleteTimeOff.Enabled = true;
             hdIsTimeOffPopUpDirty.Value = false.ToString();
         }
@@ -251,10 +283,12 @@ namespace PraticeManagement.Controls
 
                     foreach (CalendarItem item in days)
                     {
-                        if (personPayHistory.Any(p => (p.Timescale == TimescaleType.Salary && item.Date >= p.StartDate && (p.EndDate == null || item.Date <= p.EndDate))))
+                        if (item.Date >= SelectedPerson.HireDate
+                            && (!SelectedPerson.TerminationDate.HasValue || (SelectedPerson.TerminationDate.HasValue && item.Date <= SelectedPerson.TerminationDate))
+                            && personPayHistory.Any(p => ((p.Timescale == TimescaleType.Salary || (p.Timescale == TimescaleType.Hourly && !item.CompanyDayOff && !item.IsFloatingHoliday)) && item.Date >= p.StartDate && (p.EndDate == null || item.Date <= p.EndDate)))
+                            )
                         {
                             item.ReadOnly = false;
-
                             isVisible = true;
                         }
                         else
@@ -316,33 +350,37 @@ namespace PraticeManagement.Controls
 
             if (!IsPostBack)
             {
-                string statusIds = (int)PersonStatusType.Active +","+ (int)PersonStatusType.TerminationPending;
+                string statusIds = (int)PersonStatusType.Active + "," + (int)PersonStatusType.TerminationPending;
                 //#2961: allowing all persons to be in the dropdown list irrespective of role.
                 DataHelper.FillPersonList(ddlPerson, null, statusIds);
                 Person current = DataHelper.CurrentPerson;
 
                 ddlPerson.SelectedValue = current.Id.Value.ToString();
-
-                bool isUserHr = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
-                bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-                bool isUnpaidWorktypeInclude = false;
-                if (isUserHr || isUserAdminstrator)
-                {
-                    isUnpaidWorktypeInclude = true;
-                }
-                var administrativeTimeTypes = ServiceCallers.Custom.TimeType(p => p.GetAllAdministrativeTimeTypes(true, false, isUnpaidWorktypeInclude));
-                DataHelper.FillListDefault(ddlTimeTypesSingleDay, "- - Make Selection - -", administrativeTimeTypes, false);
-                DataHelper.FillListDefault(ddlTimeTypesTimeOff, "- - Make Selection - -", administrativeTimeTypes, false);
-                AddAttributesToTimeTypesDropdown(ddlTimeTypesSingleDay, administrativeTimeTypes);
-                AddAttributesToTimeTypesDropdown(ddlTimeTypesTimeOff, administrativeTimeTypes);
-
                 SelectedYear = DateTime.Today.Year;
-
                 SelectedPersonId = current.Id;
-
+                PopulateTimeTypesDropDown();
                 UpdateCalendar();
             }
 
+        }
+
+        private void PopulateTimeTypesDropDown()
+        {
+            bool isUserHr = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
+            bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            bool isUnpaidWorktypeInclude = false;
+            if (isUserHr || isUserAdminstrator)
+            {
+                isUnpaidWorktypeInclude = true;
+            }
+            DateTime yearStartdate = new DateTime(SelectedYear, 1, 1);
+            DateTime yearEnddate = new DateTime(SelectedYear, 12, 31);
+            DateTime startdate = SelectedPerson.HireDate > yearStartdate ? SelectedPerson.HireDate : yearStartdate;
+            var administrativeTimeTypes = ServiceCallers.Custom.Person(p => p.GetPersonAdministrativeTimeTypesInRange(SelectedPersonId.Value, startdate, yearEnddate, true, false, isUnpaidWorktypeInclude, true));
+            DataHelper.FillListDefault(ddlTimeTypesSingleDay, "- - Make Selection - -", administrativeTimeTypes, false);
+            DataHelper.FillListDefault(ddlTimeTypesTimeOff, "- - Make Selection - -", administrativeTimeTypes, false);
+            AddAttributesToTimeTypesDropdown(ddlTimeTypesSingleDay, administrativeTimeTypes);
+            AddAttributesToTimeTypesDropdown(ddlTimeTypesTimeOff, administrativeTimeTypes);
         }
 
         private void AddAttributesToTimeTypesDropdown(CustomDropDown ddlTimeTypes, DataTransferObjects.TimeEntry.TimeTypeRecord[] data)
@@ -355,14 +393,18 @@ namespace PraticeManagement.Controls
                     var obj = data.Where(tt => tt.Id == id).FirstOrDefault();
                     if (obj != null)
                     {
-                        item.Attributes.Add("IsORT", obj.IsORTTimeType.ToString());
-                        item.Attributes.Add("IsUnpaid", obj.IsUnpaidTimeType.ToString());
+                        item.Attributes.Add(IsORTAttribute, obj.IsORTTimeType.ToString());
+                        item.Attributes.Add(IsUnpaidAttribute, obj.IsUnpaidTimeType.ToString());
+                        item.Attributes.Add(IsW2HourlyAllowedAttribute, obj.IsW2HourlyAllowed.ToString());
+                        item.Attributes.Add(IsW2SalaryAllowedAttribute, obj.IsW2SalaryAllowed.ToString());
                     }
                 }
                 else
                 {
-                    item.Attributes.Add("IsORT", false.ToString());
-                    item.Attributes.Add("IsUnpaid", false.ToString());
+                    item.Attributes.Add(IsORTAttribute, false.ToString());
+                    item.Attributes.Add(IsUnpaidAttribute, false.ToString());
+                    item.Attributes.Add(IsW2HourlyAllowedAttribute, false.ToString());
+                    item.Attributes.Add(IsW2SalaryAllowedAttribute, false.ToString());
                 }
             }
         }
@@ -417,7 +459,7 @@ namespace PraticeManagement.Controls
                 }
                 int? approvedBy = null;
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
-                if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" || timeTypeSelectedItem.Attributes["IsUnpaid"].ToLower() == "true")
+                if (timeTypeSelectedItem.Attributes[IsORTAttribute].ToLower() == "true" || timeTypeSelectedItem.Attributes[IsUnpaidAttribute].ToLower() == "true")
                 {
                     approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
                 }
@@ -463,8 +505,7 @@ namespace PraticeManagement.Controls
             dtpStartDateTimeOff.DateValue = DateTime.Today;
             dtpEndDateTimeOff.DateValue = DateTime.Today;
             ddlTimeTypesTimeOff.SelectedIndex = 0;
-            txthoursTimeOff.Text = "8.00";
-
+            txthoursTimeOff.Text = DefaultHours;
             mpeAddTimeOff.Show();
             upnlTimeOff.Update();
         }
@@ -488,7 +529,7 @@ namespace PraticeManagement.Controls
                     int? approvedBy = null;
                     var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
 
-                    if (timeTypeSelectedItem.Attributes["IsORT"].ToLower() == "true" || timeTypeSelectedItem.Attributes["IsUnpaid"].ToLower() == "true")
+                    if (timeTypeSelectedItem.Attributes[IsORTAttribute].ToLower() == "true" || timeTypeSelectedItem.Attributes[IsUnpaidAttribute].ToLower() == "true")
                     {
                         approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
                     }
@@ -578,10 +619,10 @@ namespace PraticeManagement.Controls
         {
             //if (rfvSubstituteDay.IsValid)
             //{
-                if (string.IsNullOrEmpty(dpSubstituteDay.TextValue) || !string.IsNullOrEmpty(ExceptionMessage))
-                {
-                    args.IsValid = false;
-                }
+            if (string.IsNullOrEmpty(dpSubstituteDay.TextValue) || !string.IsNullOrEmpty(ExceptionMessage))
+            {
+                args.IsValid = false;
+            }
             //}
         }
 
@@ -595,33 +636,119 @@ namespace PraticeManagement.Controls
 
         protected void cvSingleDay_ServerValidate(object source, ServerValidateEventArgs args)
         {
+            var validator = source as CustomValidator;
             var date = Convert.ToDateTime(hdnDateSingleDay.Value);
-
+            validator.ErrorMessage = validator.ToolTip = EmployeeVoliationForMessage;
             var personPayHistory = SelectedPersonWithPayHistory.PaymentHistory;
+            var selectTimeType = ddlTimeTypesSingleDay.SelectedItem;
+            bool isW2SalaryAllowed = selectTimeType.Attributes[IsW2SalaryAllowedAttribute] == true.ToString();
+            bool isUnpaidTimeType = selectTimeType.Attributes[IsUnpaidAttribute] == true.ToString();
+            bool isW2HourlyAllowed = selectTimeType.Attributes[IsW2HourlyAllowedAttribute] == true.ToString();
 
             CalendarItem ci = CalendarItems.ToList().First(c => c.Date == date);
             if (ci.ReadOnly)
+            {
+                args.IsValid = false;
+            }
+            else
+            {
+                if (isUnpaidTimeType && !personPayHistory.Any(p => date >= p.StartDate && date <= p.EndDate && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly)))
+                {
+                    args.IsValid = false;
+                    return;
+                }
+
+                if (!isUnpaidTimeType && isW2HourlyAllowed && !personPayHistory.Any(p => date >= p.StartDate && date <= p.EndDate && p.Timescale == TimescaleType.Hourly))
+                {
+                    args.IsValid = false;
+                    validator.ErrorMessage = validator.ToolTip = HourlyVoliationForMessage;
+                    return;
+                }
+
+                if (!isUnpaidTimeType && isW2SalaryAllowed && !personPayHistory.Any(p => date >= p.StartDate && date <= p.EndDate && p.Timescale == TimescaleType.Salary))
+                {
+                    args.IsValid = false;
+                    validator.ErrorMessage = validator.ToolTip = SalaryVoliationForMessage;
+
+                    return;
+                }
+            }
+
+        }
+
+        protected void cvNotW2Salary_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var validator = source as CustomValidator;
+            validator.ErrorMessage = validator.ToolTip = SalaryVoliationForMessage;
+            var startDate = dtpStartDateTimeOff.DateValue.Date;
+            var endDate = dtpEndDateTimeOff.DateValue.Date;
+            var personPayHistory = SelectedPersonWithPayHistory.PaymentHistory;
+            var selectTimeType = ddlTimeTypesTimeOff.SelectedItem;
+            bool isW2SalaryAllowed = selectTimeType.Attributes[IsW2SalaryAllowedAttribute] == true.ToString();
+            bool isUnpaidTimeType = selectTimeType.Attributes[IsUnpaidAttribute] == true.ToString();
+            while (startDate <= endDate)
+            {
+                if (isW2SalaryAllowed && !personPayHistory.Any(p => startDate >= p.StartDate && startDate <= p.EndDate && p.Timescale == TimescaleType.Salary))
+                {
+                    if (!isUnpaidTimeType || (isUnpaidTimeType && !personPayHistory.Any(p => startDate >= p.StartDate && startDate <= p.EndDate && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly))))
+                    {
+                        args.IsValid = false;
+                        break;
+                    }
+                }
+
+                startDate = startDate.AddDays(1);
+            }
+
+        }
+
+        protected void cvNotW2Hourly_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var validator = source as CustomValidator;
+            validator.ErrorMessage = validator.ToolTip = HourlyVoliationForMessage;
+            var startDate = dtpStartDateTimeOff.DateValue.Date;
+            var endDate = dtpEndDateTimeOff.DateValue.Date;
+            var personPayHistory = SelectedPersonWithPayHistory.PaymentHistory;
+            var selectTimeType = ddlTimeTypesTimeOff.SelectedItem;
+            bool isW2HourlyAllowed = selectTimeType.Attributes[IsW2HourlyAllowedAttribute] == true.ToString();
+            bool isUnpaidTimeType = selectTimeType.Attributes[IsUnpaidAttribute] == true.ToString();
+            while (startDate <= endDate)
+            {
+                if (isW2HourlyAllowed && !personPayHistory.Any(p => startDate >= p.StartDate && startDate <= p.EndDate && p.Timescale == TimescaleType.Hourly))
+                {
+                    if (!isUnpaidTimeType || (isUnpaidTimeType && !personPayHistory.Any(p => startDate >= p.StartDate && startDate <= p.EndDate && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly))))
+                    {
+                        args.IsValid = false;
+                        break;
+                    }
+                }
+
+                startDate = startDate.AddDays(1);
+            }
+
+        }
+
+        protected void cvSubstituteDayNotHavingW2Salary_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var substituteDate = dpSubstituteDay.DateValue.Date;
+            var personPayHistory = SelectedPersonWithPayHistory.PaymentHistory;
+
+            if (!IsPersonNotHired(substituteDate) && !personPayHistory.Any(p => substituteDate >= p.StartDate && substituteDate <= p.EndDate && p.Timescale == TimescaleType.Salary))
             {
                 args.IsValid = false;
 
             }
         }
 
-        protected void cvNotW2Salary_ServerValidate(object source, ServerValidateEventArgs args)
+        protected void cvModifiedSubstituteDayNotHavingW2Salary_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            var startDate = dtpStartDateTimeOff.DateValue.Date;
-            var endDate = dtpEndDateTimeOff.DateValue.Date;
+            var modifiedSubDate = dpModifySubstituteday.DateValue.Date;
             var personPayHistory = SelectedPersonWithPayHistory.PaymentHistory;
 
-            while (startDate <= endDate)
+            if (!IsPersonNotHired(modifiedSubDate) && !personPayHistory.Any(p => modifiedSubDate >= p.StartDate && modifiedSubDate <= p.EndDate && p.Timescale == TimescaleType.Salary))
             {
-                if (!personPayHistory.Any(p => startDate >= p.StartDate && startDate <= p.EndDate && p.Timescale == TimescaleType.Salary))
-                {
-                    args.IsValid = false;
-                    break;
-                }
+                args.IsValid = false;
 
-                startDate = startDate.AddDays(1);
             }
 
         }
@@ -647,32 +774,30 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         protected void cvValidateSubDateWithHireDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
             //if (rfvSubstituteDay.IsValid)
             //{
-                var substituteDate = dpSubstituteDay.DateValue.Date;
-                if (IsPersonNotHired(substituteDate))
-                {
-                    args.IsValid = false;
-                }
+            var substituteDate = dpSubstituteDay.DateValue.Date;
+            if (IsPersonNotHired(substituteDate))
+            {
+                args.IsValid = false;
+            }
             //}
 
         }
 
         protected void cvValidateSubDateWithTermDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
-        //    if (rfvSubstituteDay.IsValid)
-        //    {
-                var substituteDate = dpSubstituteDay.DateValue.Date;
-                if (IsPersonTerminated(substituteDate))
-                {
-                    args.IsValid = false;
-                }
+            //    if (rfvSubstituteDay.IsValid)
+            //    {
+            var substituteDate = dpSubstituteDay.DateValue.Date;
+            if (IsPersonTerminated(substituteDate))
+            {
+                args.IsValid = false;
+            }
             //}
         }
-
 
         protected void cvValidateModifiedSubDateWithHireDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -684,7 +809,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         protected void cvValidateModifiedSubDateWithTermDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
             var modifiedSubDate = dpModifySubstituteday.DateValue.Date;
@@ -694,7 +818,6 @@ namespace PraticeManagement.Controls
                 args.IsValid = false;
             }
         }
-
 
         public Boolean IsPersonNotHired(DateTime date)
         {
@@ -714,7 +837,6 @@ namespace PraticeManagement.Controls
             }
             return false;
         }
-
 
         protected void btnDeleteSubstituteDay_Click(object sender, EventArgs e)
         {
@@ -839,6 +961,7 @@ namespace PraticeManagement.Controls
         protected void btnRetrieveCalendar_Click(object sender, EventArgs e)
         {
             SelectedPersonId = Convert.ToInt32(ddlPerson.SelectedValue);
+            PopulateTimeTypesDropDown();
             UpdateCalendar();
         }
 
@@ -846,6 +969,7 @@ namespace PraticeManagement.Controls
         {
             SelectedPersonId = Convert.ToInt32(ddlPerson.SelectedValue);
             SelectedYear--;
+            PopulateTimeTypesDropDown();
             UpdateCalendar();
         }
 
