@@ -56,18 +56,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected void repPersonsList_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Header)
-            {
-                CollapsiblePanelExtenderClientIds = new List<string>();
-
-            }
-            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                var cpePerson = e.Item.FindControl("cpePerson") as CollapsiblePanelExtender;
-                CollapsiblePanelExtenderClientIds.Add(cpePerson.BehaviorID);
-
-            }
-            else if (e.Item.ItemType == ListItemType.Footer)
+            if (e.Item.ItemType == ListItemType.Footer)
             {
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 var output = jss.Serialize(CollapsiblePanelExtenderClientIds);
@@ -88,9 +77,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
+                CollapsiblePanelExtenderClientIds = new List<string>();
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                var cpeBusinessUnit = e.Item.FindControl("cpeBusinessUnit") as CollapsiblePanelExtender;
+                CollapsiblePanelExtenderClientIds.Add(cpeBusinessUnit.BehaviorID);
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -163,3 +155,4 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
     }
 }
+
