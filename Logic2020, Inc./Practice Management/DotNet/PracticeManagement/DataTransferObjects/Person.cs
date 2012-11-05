@@ -447,7 +447,13 @@ namespace DataTransferObjects
         public bool IsHighlighted { get; set; }
 
         [DataMember]
-        public string PictureUrl { get; set; }
+        public byte[] PersonPicture { get; set; }
+
+        /// <summary>
+        /// Person has picture or not.
+        /// </summary>
+        [DataMember]
+        public bool HasPicture { get; set; }
 
         #endregion
 
