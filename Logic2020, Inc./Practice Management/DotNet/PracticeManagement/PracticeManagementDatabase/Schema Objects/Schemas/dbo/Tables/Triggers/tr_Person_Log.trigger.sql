@@ -25,7 +25,7 @@ BEGIN
 
 		IF EXISTS (SELECT 1 FROM inserted AS i	
 					INNER JOIN deleted AS d ON i.PersonID = d.PersonID 
-					WHERE ISNULL(i.PictureUrl,'') <> ISNULL(d.PictureUrl,'')
+					WHERE ISNULL(i.PictureFileName,'') <> ISNULL(d.PictureFileName,'')
 				) 
 		BEGIN 
 			-- Log an activity for person picture change
@@ -43,8 +43,8 @@ BEGIN
 					LogData,
 					LogDate)
 				SELECT CASE
-					WHEN d.PictureUrl IS NULL THEN 3
-					WHEN i.PictureUrl IS NULL THEN 5
+					WHEN d.PictureFileName IS NULL THEN 3
+					WHEN i.PictureFileName IS NULL THEN 5
 					ELSE 4
 				END AS ActivityTypeID,
 				l.SessionID,
@@ -57,19 +57,19 @@ BEGIN
 				l.FirstName,
 				Data =  CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.PersonId,
 									NEW_VALUES.LastName + ','+ NEW_VALUES.FirstName AS Person,
-									NEW_VALUES.PictureUrl ,
+									NEW_VALUES.PictureFileName ,
 									OLD_VALUES.PersonId,
 									OLD_VALUES.LastName + ','+ OLD_VALUES.FirstName AS Person,
-									OLD_VALUES.PictureUrl
+									OLD_VALUES.PictureFileName
 							FROM inserted AS NEW_VALUES
 									INNER JOIN deleted AS OLD_VALUES ON NEW_VALUES.PersonID = OLD_VALUES.PersonID 
 							FOR XML AUTO, ROOT('PersonSkill'))),
 				LogData = (SELECT NEW_VALUES.PersonId,
 									NEW_VALUES.LastName + ','+ NEW_VALUES.FirstName AS Person,
-									NEW_VALUES.PictureUrl,
+									NEW_VALUES.PictureFileName,
 									OLD_VALUES.PersonId,
 									OLD_VALUES.LastName + ','+ OLD_VALUES.FirstName AS Person,
-									OLD_VALUES.PictureUrl
+									OLD_VALUES.PictureFileName
 							FROM inserted AS NEW_VALUES
 									INNER JOIN deleted AS OLD_VALUES ON NEW_VALUES.PersonID = OLD_VALUES.PersonID 
 							FOR XML AUTO, ROOT('PersonSkill'), TYPE),
@@ -78,7 +78,7 @@ BEGIN
 				INNER JOIN deleted AS d ON i.PersonID = d.PersonID 
 				INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 				WHERE ISNULL(i.IsStrawman, d.IsStrawman) = 0 
-				AND ISNULL(i.PictureUrl,'') <> ISNULL(d.PictureUrl,'')
+				AND ISNULL(i.PictureFileName,'') <> ISNULL(d.PictureFileName,'')
 
 		END
 		ELSE
