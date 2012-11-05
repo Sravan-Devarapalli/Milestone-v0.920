@@ -52,10 +52,7 @@ namespace PracticeManagementService
         List<Person> PersonsSearchBySkills(string skillsSearchXML);
 
         [OperationContract]
-        void SavePersonProfiles(int personId, string profilesXml, string userLogin);
-
-        [OperationContract]
-        void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin);
+        void SavePersonProfiles(int personId, string profilesXml, string userLogin);       
 
     }
 }
