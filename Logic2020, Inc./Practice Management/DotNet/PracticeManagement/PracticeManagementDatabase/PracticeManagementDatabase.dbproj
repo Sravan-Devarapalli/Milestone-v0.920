@@ -4075,16 +4075,10 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\SavePersonPictureUrl.proc.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\PersonsSearchBySkills.proc.sql">
       <SubType>Code</SubType>
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonWithPictureUrl.proc.sql">
-      <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetUpdatedProfilesList.proc.sql">
       <SubType>Code</SubType>
@@ -4150,6 +4144,15 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetSickLeaveTimeTypeId.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\SavePersonPicture.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonPicture.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonWithHasPictureField.proc.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
