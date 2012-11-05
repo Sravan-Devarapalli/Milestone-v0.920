@@ -252,7 +252,12 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
                 lblPersonName.Text = Person.LastName + " " + Person.FirstName;
-                imgPersonPicture.ImageUrl = Person.PictureUrl;
+
+                if (Person.HasPicture)
+                {
+                    imgPersonPicture.ImageUrl = "~/Controls/PersonPicture.ashx?PersonId=" + DataHelper.CurrentPerson.Id.ToString();
+                }
+                
                 imgPersonPicture.AlternateText = lblPersonName.Text;
                 repProfiles.DataSource = Person.Profiles;
                 repProfiles.DataBind();
