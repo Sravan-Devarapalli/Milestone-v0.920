@@ -34,9 +34,10 @@ namespace DataAccess.Skills
             public const string ModifiedBy = "ModifiedBy";
             public const string ModifiedDate = "ModifiedDate";
             public const string IsHighlighted = "IsHighlighted";
-            public const string PictureUrl = "PictureUrl";
+            public const string PersonPicture = "PersonPicture";
             public const string ModifiedByName = "ModifiedByName";
             public const string IsDefault = "IsDefault";
+            public const string HasPicture = "HasPicture";
         }
 
         public class FunctionNames
@@ -52,7 +53,8 @@ namespace DataAccess.Skills
             public const string SkillsSearchXML = "@SkillsSearchXML";
             public const string ProfileUrl = "@ProfileUrl";
             public const string ProfilesXml = "@ProfilesXml";
-            public const string PictureUrl = "@PictureUrl";
+            public const string PictureData = "@PictureData";
+            public const string PictureFileName = "@PictureFileName";
         }
 
         public class ProcedureNames
@@ -69,8 +71,10 @@ namespace DataAccess.Skills
             public const string PersonsSearchBySkills = "Skills.PersonsSearchBySkills";
             public const string SavePersonProfiles = "Skills.SavePersonProfiles";
             public const string GetPersonProfiles = "Skills.GetPersonProfiles";
-            public const string SavePersonPictureUrl = "Skills.SavePersonPictureUrl";
-            public const string GetPersonWithPictureUrl = "Skills.GetPersonWithPictureUrl";
+            public const string SavePersonPicture = "Skills.SavePersonPicture";
+            public const string GetPersonWithHasPictureField = "Skills.GetPersonWithHasPictureField";
+            public const string GetPersonPicture = "Skills.GetPersonPicture";
+            public const string DeletePersonPicture = "Skills.DeletePersonPicture";
         }
 
         #endregion
