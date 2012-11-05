@@ -6,13 +6,7 @@
     <ItemTemplate>
         <table class="WholeWidthWithHeight">
             <tr class="textLeft">
-                <td colspan="4" class="ProjectAccountName Width95Percent no-wrap">
-                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeBusinessUnit" runat="Server"
-                        CollapsedText="Expand Business Unit Details" ExpandedText="Collapse Business Unit Details"
-                        EnableViewState="false" Collapsed="true" TargetControlID="pnlBusinessUnitDetails"
-                        ImageControlID="imgProject" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
-                        CollapseControlID="imgProject" ExpandControlID="imgProject" TextLabelID="lbProject" />
-                    <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
+                <td colspan="4" class="ProjectAccountName Width95Percent no-wrap">                  
                     <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
                     <%# Eval("BusinessUnit.HtmlEncodedName")%>
                     <b class="fontStyleNormal">
@@ -215,8 +209,7 @@
                                 <asp:Label ID="lbPerson" Style="display: none;" runat="server"></asp:Label>
                                 <%# Eval("Person.HtmlEncodedName")%>
                             </td>
-                            <td class="PersonDetailTotal padRight60Imp">
-                                <%# GetDoubleFormat((double)Eval("TotalHours"))%>
+                            <td class="PersonDetailTotal padRight60Imp"> <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                             </td>
                         </tr>
                     </table>
