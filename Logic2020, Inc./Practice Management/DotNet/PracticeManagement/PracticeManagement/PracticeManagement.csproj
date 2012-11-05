@@ -526,6 +526,7 @@
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\DefaultMilestoneSettingControl.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
+    <Content Include="Controls\PersonPicture.ashx" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
@@ -867,8 +868,8 @@
     <Content Include="Scripts\ScrollinDropDown.min.js">
       <DependentUpon>ScrollinDropDown.yui.js</DependentUpon>
     </Content>
-    <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <None Include="Service References\PracticeService\PracticeService1.disco" />
+    <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1385,6 +1386,9 @@
     </Compile>
     <Compile Include="Controls\PersonMonthCalendar.ascx.designer.cs">
       <DependentUpon>PersonMonthCalendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonPicture.ashx.cs">
+      <DependentUpon>PersonPicture.ashx</DependentUpon>
     </Compile>
     <Compile Include="Controls\PracticeManagementExtendedPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
