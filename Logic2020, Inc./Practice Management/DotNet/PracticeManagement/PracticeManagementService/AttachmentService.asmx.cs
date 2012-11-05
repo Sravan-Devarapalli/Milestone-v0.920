@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using DataAccess;
 using DataTransferObjects;
+using DataAccess.Skills;
 
 namespace PracticeManagementService
 {
@@ -39,6 +40,28 @@ namespace PracticeManagementService
             ProjectDAL.DeleteProjectAttachmentByProjectId(attachmentId, projectId, userName);
         }
 
+        [WebMethod]
+        public void SavePersonPicture(int personId, byte[] pictureData, string userLogin, string pictureFileName)
+        {
+            PersonSkillDAL.SavePersonPicture(personId, pictureData, userLogin, pictureFileName);
+        }
+
+        [WebMethod]
+        public byte[] GetPersonPicture(int personId)
+        {
+            try
+            {
+                return PersonSkillDAL.GetPersonPicture(personId);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(DataTransferObjects.Constants.Formatting.ErrorLogMessage, "GetPersonrPicture", "AttachmentService.asmx", string.Empty,
+                   HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+       
     }
 }
 
