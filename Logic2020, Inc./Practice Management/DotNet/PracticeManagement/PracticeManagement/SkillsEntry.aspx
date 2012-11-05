@@ -107,18 +107,58 @@
 
         function setPosition(item, ytop, xleft) {
             item.offset({ top: ytop, left: xleft });
-        }
+        }       
 
         function btnCancelPictureLink_OnClientClick() {
+
+//            var element = document.getElementById('<%= pnlPictureLinkPopup.ClientID %>');
+//            element.innerHTML = element.innerHTML;
             var popup = $find('mpePictureLinkPopup');
-            var hdPictureLink = document.getElementById('<%= hdPictureLink.ClientID %>');
-            var txtPictureLink = document.getElementById('<%= txtPictureLink.ClientID %>');
-            txtPictureLink.value = hdPictureLink.value;
             popup.hide();
         }
         function pageLoad() {
             document.onkeypress = enterPressed;
         }
+        function cvPersonPictureType_ClientValidationFunction(obj, args) {
+            args.IsValid = IsValidProfilePicture();
+        }
+
+        function IsValidProfilePicture() {
+
+            var fuPersonPicture = document.getElementById('<%= fuPersonPicture.ClientID %>');
+            var FileUploadPath = fuPersonPicture.value;
+            var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+            if (Extension == "png" || Extension == "gif" || Extension == "jpg" || Extension == "jpeg" || Extension == "bmp") {
+                return true; // Valid file type
+            }
+            else {
+                return false; // Not valid file type
+            }
+        }
+
+        function EnableAddButton() {
+            var addButton = document.getElementById('<%= btnUpdatePictureLink.ClientID %>');
+            if (IsHaveAttachement() && IsValidProfilePicture()) {
+                addButton.disabled = "";
+            }
+            else {
+                addButton.disabled = "disabled";
+            }
+        }
+
+        function IsHaveAttachement() {
+            var fuControl = document.getElementById('<%= fuPersonPicture.ClientID %>');
+            var fileUploadPath = fuControl.value;
+            if (fileUploadPath != null && fileUploadPath != undefined) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        
+
     </script>
     <div class="TextAlignCenterImp fontSizeLarge">
         Skills Entry for
@@ -401,7 +441,7 @@
             <br />
             <div class="WholeWidth">
                 <div class="Width50Percent displayInline">
-                    <asp:Button ID="btnPictureLink" runat="server" Text="Add/Update Consultant Picture URL"
+                    <asp:Button ID="btnPictureLink" runat="server" Text="Add/Update Consultant Picture"
                         CssClass="Width220Px" />
                     <asp:Button ID="btnProfileLink" runat="server" Text="Add/Update Consultant Profiles"
                         CssClass="Width220Px" />
@@ -450,18 +490,18 @@
                         <th>
                             Add/Update
                             <asp:Literal ID="ltrlPersonname1" runat="server"></asp:Literal>'s Profile Picture
-                            Url
                             <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel"
                                 OnClientClick="btnCancelPictureLink_OnClientClick();" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
                         <td class="PicturePanelTd">
-                            <asp:HiddenField ID="hdPictureLink" runat="server"></asp:HiddenField>
-                            <asp:TextBox ID="txtPictureLink" runat="server" Width="400"></asp:TextBox>
-                            <AjaxControlToolkit:TextBoxWatermarkExtender ID="txwPictureLink" runat="server" BehaviorID="txwPictureLink"
-                                WatermarkText="Add your PM Profile Picture here..." WatermarkCssClass="watermarkedtext"
-                                TargetControlID="txtPictureLink" />
+                            <asp:FileUpload ID="fuPersonPicture" CssClass="FileUpload" runat="server" Size="68"
+                                onchange="EnableAddButton();" />
+                            <asp:CustomValidator ID="cvPersonPictureType" runat="server" ControlToValidate="fuPersonPicture"
+                                EnableClientScript="true" ClientValidationFunction="cvPersonPictureType_ClientValidationFunction"
+                                SetFocusOnError="true" Display="Dynamic" Text="*" ToolTip="Picture File Format must be PNG/GIF/JPG/JPEG/BMP."
+                                ErrorMessage="Picture File Format must be PNG/GIF/JPG/JPEG/BMP."></asp:CustomValidator>
                         </td>
                     </tr>
                     <tr>
@@ -470,11 +510,15 @@
                                 <tr>
                                     <td class="padRight3">
                                         <asp:Button ID="btnUpdatePictureLink" OnClick="btnUpdatePictureLink_OnClick" runat="server"
-                                            CssClass="Width100Px" TabIndex="0" Text="Add/Update" ToolTip="Add/Update" />
+                                            CssClass="Width100Px" TabIndex="0" Text="" ToolTip="Add/Update" Enabled="false" />
+                                    </td>
+                                    <td class="padLeft3">
+                                        <asp:Button ID="btnPictureDelete" runat="server" Text="Delete" ToolTip="Delete Profile Picture"
+                                            Enabled="false" CssClass="Width100Px" OnClick="btnPictureDelete_OnClick" />
                                     </td>
                                     <td class="padLeft3">
                                         <asp:Button ID="btnCancelPictureLink" runat="server" Text="Cancel" ToolTip="Cancel"
-                                            CssClass="Width100Px" OnClientClick="btnCancelPictureLink_OnClientClick();" />
+                                            CssClass="Width100Px"  OnClientClick="btnCancelPictureLink_OnClientClick();" />
                                     </td>
                                 </tr>
                             </table>
@@ -482,7 +526,11 @@
                     </tr>
                     <tr>
                         <td class="Padding6">
-                            Note: Use 120(height) x100(wide) picture dimensions for the Consultant Picture.
+                            <bold>Note</bold>
+                            : Recommended to select 120(height)x100(wide) dimensional picture for the best display.
+                            <br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; File type should be of JPG,
+                            JPEG, Png, Bmp and Gif only.
                         </td>
                     </tr>
                 </table>
@@ -624,7 +672,7 @@
             <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
                 TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
-                CancelControlID="btnCancelErrorPanel" DropShadow="false" />
+                CancelControlID="btnCancelErrorPanel" DropShadow="false" OkControlID="btnOKErrorPanel" />
             <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
                 <table class="Width100Per">
                     <tr>
@@ -641,7 +689,7 @@
                     </tr>
                     <tr>
                         <td class="Padding10Px TextAlignCenterImp">
-                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
+                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" />
                         </td>
                     </tr>
                 </table>
