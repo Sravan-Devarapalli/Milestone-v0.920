@@ -7,12 +7,6 @@
         <table class="WholeWidthWithHeight">
             <tr class="textLeft">
                 <td colspan="4" class="ProjectAccountName Width95Percent no-wrap">
-                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpePerson" runat="Server" CollapsedText="Expand Person Details"
-                        ExpandedText="Collapse Person Details" EnableViewState="false" Collapsed="true"
-                        TargetControlID="pnlPersonDetails" ImageControlID="imgProject" CollapsedImage="~/Images/expand.jpg"
-                        ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgProject" ExpandControlID="imgProject"
-                        TextLabelID="lbProject" />
-                    <asp:Image ID="imgProject" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
                     <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
                     <%# Eval("Person.HtmlEncodedName")%>
                 </td>
