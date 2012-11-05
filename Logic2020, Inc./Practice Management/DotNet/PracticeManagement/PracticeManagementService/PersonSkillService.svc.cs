@@ -55,7 +55,7 @@ namespace PracticeManagementService
 
         public Person GetPersonWithSkills(int personId)
         {
-            Person person = PersonSkillDAL.GetPersonWithPictureUrl(personId);
+            Person person = PersonSkillDAL.GetPersonWithHasPictureField(personId);
             person.Skills = PersonSkillDAL.GetPersonSkillsByPersonId(personId);
             person.Industries = PersonSkillDAL.GetPersonIndustriesByPersonId(personId);
             return person;
@@ -79,12 +79,7 @@ namespace PracticeManagementService
         public void SavePersonProfiles(int personId, string profilesXml, string userLogin)
         {
             PersonSkillDAL.SavePersonProfiles(personId, profilesXml, userLogin);
-        }
-
-        public void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin)
-        {
-            PersonSkillDAL.SavePersonPictureUrl(personId, pictureUrl, userLogin);
-        }
+        }       
     }
 }
 
