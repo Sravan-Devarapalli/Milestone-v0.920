@@ -35,6 +35,10 @@ namespace PraticeManagement.AttachmentService {
         
         private System.Threading.SendOrPostCallback DeleteProjectAttachmentByProjectIdOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SavePersonPictureOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetPersonPictureOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -81,6 +85,12 @@ namespace PraticeManagement.AttachmentService {
         
         /// <remarks/>
         public event DeleteProjectAttachmentByProjectIdCompletedEventHandler DeleteProjectAttachmentByProjectIdCompleted;
+        
+        /// <remarks/>
+        public event SavePersonPictureCompletedEventHandler SavePersonPictureCompleted;
+        
+        /// <remarks/>
+        public event GetPersonPictureCompletedEventHandler GetPersonPictureCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SaveProjectAttachment", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -179,6 +189,70 @@ namespace PraticeManagement.AttachmentService {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SavePersonPicture", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void SavePersonPicture(int personId, [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")] byte[] pictureData, string userLogin, string pictureFileName) {
+            this.Invoke("SavePersonPicture", new object[] {
+                        personId,
+                        pictureData,
+                        userLogin,
+                        pictureFileName});
+        }
+        
+        /// <remarks/>
+        public void SavePersonPictureAsync(int personId, byte[] pictureData, string userLogin, string pictureFileName) {
+            this.SavePersonPictureAsync(personId, pictureData, userLogin, pictureFileName, null);
+        }
+        
+        /// <remarks/>
+        public void SavePersonPictureAsync(int personId, byte[] pictureData, string userLogin, string pictureFileName, object userState) {
+            if ((this.SavePersonPictureOperationCompleted == null)) {
+                this.SavePersonPictureOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSavePersonPictureOperationCompleted);
+            }
+            this.InvokeAsync("SavePersonPicture", new object[] {
+                        personId,
+                        pictureData,
+                        userLogin,
+                        pictureFileName}, this.SavePersonPictureOperationCompleted, userState);
+        }
+        
+        private void OnSavePersonPictureOperationCompleted(object arg) {
+            if ((this.SavePersonPictureCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SavePersonPictureCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPersonPicture", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
+        public byte[] GetPersonPicture(int personId) {
+            object[] results = this.Invoke("GetPersonPicture", new object[] {
+                        personId});
+            return ((byte[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetPersonPictureAsync(int personId) {
+            this.GetPersonPictureAsync(personId, null);
+        }
+        
+        /// <remarks/>
+        public void GetPersonPictureAsync(int personId, object userState) {
+            if ((this.GetPersonPictureOperationCompleted == null)) {
+                this.GetPersonPictureOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPersonPictureOperationCompleted);
+            }
+            this.InvokeAsync("GetPersonPicture", new object[] {
+                        personId}, this.GetPersonPictureOperationCompleted, userState);
+        }
+        
+        private void OnGetPersonPictureOperationCompleted(object arg) {
+            if ((this.GetPersonPictureCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetPersonPictureCompleted(this, new GetPersonPictureCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -207,6 +281,8 @@ namespace PraticeManagement.AttachmentService {
         
         private int attachmentIdField;
         
+        private string attachmentContentTypeField;
+        
         private string attachmentFileNameField;
         
         private ProjectAttachmentCategory categoryField;
@@ -226,6 +302,16 @@ namespace PraticeManagement.AttachmentService {
             }
             set {
                 this.attachmentIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string AttachmentContentType {
+            get {
+                return this.attachmentContentTypeField;
+            }
+            set {
+                this.attachmentContentTypeField = value;
             }
         }
         
@@ -344,6 +430,36 @@ namespace PraticeManagement.AttachmentService {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void DeleteProjectAttachmentByProjectIdCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void SavePersonPictureCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void GetPersonPictureCompletedEventHandler(object sender, GetPersonPictureCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetPersonPictureCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetPersonPictureCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public byte[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((byte[])(this.results[0]));
+            }
+        }
+    }
 }
 
 #pragma warning restore 1591
