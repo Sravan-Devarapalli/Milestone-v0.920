@@ -24,7 +24,8 @@
 	PaychexID		   NVARCHAR (MAX) NULL,
 	DivisionId			INT NULL,
 	TerminationReasonId	INT NULL,
-	PictureUrl         NVARCHAR(MAX) NULL,
+	PersonPicture          VARBINARY(MAX) NULL,
+	PictureFileName        NVARCHAR(MAX) NULL,
 	PictureModifiedDate DATETIME	 NULL
 );
 
