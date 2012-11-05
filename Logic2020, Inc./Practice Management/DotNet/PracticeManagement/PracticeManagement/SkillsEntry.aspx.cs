@@ -16,6 +16,7 @@ using System.Net;
 using System.Xml.Linq;
 using System.Text;
 using System.Web.UI.HtmlControls;
+using PraticeManagement.ConfigurationService;
 
 namespace PraticeManagement
 {
@@ -29,6 +30,11 @@ namespace PraticeManagement
         private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, and ‘Last Used’ for the below skill(s):";
         private const string SuccessMessage = "Skills Saved Successfully.";
         private const string ProfileXml = @"<Profile Id=""{0}"" ProfileName=""{1}"" ProfileURL=""{2}"" IsDefault=""{3}"" > </Profile>";
+        private const string SuccessMessageForAddedPicture = "Consultant Profile picture added/updated successfully.";      
+        private const string SuccessMessageForDeletedPicture = "Consultant Profile picture deleted successfully.";
+        private const string Update = "Update";
+        private const string Add = "Add";
+
 
 
         //scripts
@@ -213,7 +219,6 @@ namespace PraticeManagement
                 }
 
                 ltrlPersonname1.Text = ltrlPersonname.Text = lblUserName.Text = Person.LastName + " " + Person.FirstName;
-                hdPictureLink.Value = txtPictureLink.Text = Person.PictureUrl;
                 repProfiles.DataSource = PersonProfiles;
                 repProfiles.DataBind();
                 RenderSkills(tcSkillsEntry.ActiveTabIndex);
@@ -228,6 +233,9 @@ namespace PraticeManagement
             lblValidationMessage.Text = "";
             hdnIsValid.Value = false.ToString();
             lblMessage.Text = "";
+            //enable delete button if person has a picture.
+            btnPictureDelete.Enabled = Person.HasPicture;
+            btnUpdatePictureLink.Text = (Person.HasPicture) ? Update : Add;
         }
 
         protected override void Display()
@@ -413,9 +421,37 @@ namespace PraticeManagement
         }
 
         protected void btnUpdatePictureLink_OnClick(object sender, EventArgs e)
+        {  
+            PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
+            byte[] fileData = fuPersonPicture.FileBytes;
+            string fileName = fuPersonPicture.FileName;
+            svc.SavePersonPicture(Person.Id.Value, fileData, User.Identity.Name, fileName);
+
+            btnPictureDelete.Enabled = true;
+            btnUpdatePictureLink.Text = Update;
+            lblMessage.Text = SuccessMessageForAddedPicture;
+            mpeErrorPanel.Show();
+            lblMessage.Focus();
+        }
+
+        protected void btnPictureDelete_OnClick(object sender, EventArgs e)
         {
-            ServiceCallers.Custom.PersonSkill(s => s.SavePersonPictureUrl(Person.Id.Value, txtPictureLink.Text, User.Identity.Name));
-            Person.PictureUrl = hdPictureLink.Value = txtPictureLink.Text;
+            PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
+            svc.SavePersonPicture(Person.Id.Value, null, User.Identity.Name, null);
+
+            btnPictureDelete.Enabled = false;
+            btnUpdatePictureLink.Text = Add;
+            lblMessage.Text = SuccessMessageForDeletedPicture;
+            mpeErrorPanel.Show();
+            lblMessage.Focus();
+        }
+
+
+        protected void btnCancelPictureLink_OnClick(object sender, EventArgs e)
+        {
+            fuPersonPicture.Attributes["Value"] = "";
+            mpePictureLinkPopup.Hide();
+            
         }
 
         protected void btnProfilePopupUpdate_OnClick(object sender, EventArgs e)
@@ -866,7 +902,7 @@ namespace PraticeManagement
                 if (!string.IsNullOrEmpty(profile.ProfileName) && !string.IsNullOrEmpty(profile.ProfileUrl))
                 {
                     int profileId = profile.ProfileId.HasValue && profile.ProfileId.Value > 0 ? profile.ProfileId.Value : -1;
-                    string profileXml = string.Format(ProfileXml, profileId, profile.ProfileName, HttpUtility.HtmlEncode(profile.ProfileUrl).Trim(), profile.IsDefault);
+                    string profileXml = string.Format(ProfileXml, profileId, HttpUtility.HtmlEncode(profile.ProfileName), HttpUtility.HtmlEncode(profile.ProfileUrl).Trim(), profile.IsDefault);
                     profilesXml.Append(profileXml);
                 }
             }
