@@ -50,9 +50,6 @@ namespace PraticeManagement.PersonSkillService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SavePersonProfiles", ReplyAction="http://tempuri.org/IPersonSkillService/SavePersonProfilesResponse")]
         void SavePersonProfiles(int personId, string profilesXml, string userLogin);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonSkillService/SavePersonPictureUrl", ReplyAction="http://tempuri.org/IPersonSkillService/SavePersonPictureUrlResponse")]
-        void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -62,8 +59,6 @@ namespace PraticeManagement.PersonSkillService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonSkillServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonSkillService.IPersonSkillService>, PraticeManagement.PersonSkillService.IPersonSkillService {
-        
-     
         
         public PersonSkillServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -127,10 +122,6 @@ namespace PraticeManagement.PersonSkillService {
         
         public void SavePersonProfiles(int personId, string profilesXml, string userLogin) {
             base.Channel.SavePersonProfiles(personId, profilesXml, userLogin);
-        }
-        
-        public void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin) {
-            base.Channel.SavePersonPictureUrl(personId, pictureUrl, userLogin);
         }
     }
 }
