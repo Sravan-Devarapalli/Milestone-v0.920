@@ -478,18 +478,20 @@ namespace DataAccess.Skills
             }
         }
 
-        public static void SavePersonPictureUrl(int personId, string pictureUrl, string userLogin)
+        public static void SavePersonPicture(int personId, byte[] pictureData, string userLogin, string pictureFileName)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonPictureUrl, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.SavePersonPicture, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureUrl, string.IsNullOrEmpty(pictureUrl.Trim()) ? DBNull.Value : (object)pictureUrl.Trim());
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureFileName, (pictureFileName != null) ? (object)pictureFileName : DBNull.Value);
+                    command.Parameters.Add(Constants.ParameterNames.PictureData, SqlDbType.VarBinary, -1);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureData, pictureData != null ? (object)pictureData : DBNull.Value);
 
                     connection.Open();
 
@@ -498,12 +500,12 @@ namespace DataAccess.Skills
             }
         }
 
-        public static Person GetPersonWithPictureUrl(int personId)
+        public static Person GetPersonWithHasPictureField(int personId)
         {
             Person person = null;
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var command = new SqlCommand(Constants.ProcedureNames.GetPersonWithPictureUrl, connection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.GetPersonWithHasPictureField, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
@@ -515,7 +517,7 @@ namespace DataAccess.Skills
                     var personIdColoum = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                     var firstNameColoum = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                     var lastNameColoum = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                    var pictureUrlColoum = reader.GetOrdinal(Constants.ColumnNames.PictureUrl);
+                    var HasPictureColoum = reader.GetOrdinal(Constants.ColumnNames.HasPicture);
 
                     if (reader.HasRows)
                     {
@@ -526,7 +528,7 @@ namespace DataAccess.Skills
                                 Id = reader.GetInt32(personIdColoum),
                                 LastName = reader.GetString(lastNameColoum),
                                 FirstName = reader.GetString(firstNameColoum),
-                                PictureUrl = !reader.IsDBNull(pictureUrlColoum) ? reader.GetString(pictureUrlColoum) : string.Empty
+                                HasPicture = reader.GetInt32(HasPictureColoum) == 1 ? true : false
                             };
                         }
                     }
@@ -535,6 +537,47 @@ namespace DataAccess.Skills
             return person;
         }
 
+
+        public static byte[] GetPersonPicture(int personId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.GetPersonPicture, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    try
+                    {
+                        Byte[] pictureData = null;
+
+                        if (reader.HasRows)
+                        {
+                            int PersonPictureIndex = reader.GetOrdinal(Constants.ColumnNames.PersonPicture);
+
+
+                            while (reader.Read())
+                            {
+                                pictureData = (byte[])reader[PersonPictureIndex];
+                            }
+                        }
+
+                        return pictureData;
+                    }
+                    catch (Exception e)
+                    {                       
+                        throw e;
+                    }
+                }
+            }
+
+        }
     }
 }
 
