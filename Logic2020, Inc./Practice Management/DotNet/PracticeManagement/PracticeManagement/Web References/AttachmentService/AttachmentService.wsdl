@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
       <s:element name="SaveProjectAttachment">
@@ -14,6 +14,7 @@
       <s:complexType name="ProjectAttachment">
         <s:sequence>
           <s:element minOccurs="1" maxOccurs="1" name="AttachmentId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="AttachmentContentType" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="AttachmentFileName" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="Category" type="tns:ProjectAttachmentCategory" />
           <s:element minOccurs="0" maxOccurs="1" name="AttachmentData" type="s:base64Binary" />
@@ -60,6 +61,33 @@
       <s:element name="DeleteProjectAttachmentByProjectIdResponse">
         <s:complexType />
       </s:element>
+      <s:element name="SavePersonPicture">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="personId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="pictureData" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="userLogin" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pictureFileName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SavePersonPictureResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetPersonPicture">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="personId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPersonPictureResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPersonPictureResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="SaveProjectAttachmentSoapIn">
@@ -80,6 +108,18 @@
   <wsdl:message name="DeleteProjectAttachmentByProjectIdSoapOut">
     <wsdl:part name="parameters" element="tns:DeleteProjectAttachmentByProjectIdResponse" />
   </wsdl:message>
+  <wsdl:message name="SavePersonPictureSoapIn">
+    <wsdl:part name="parameters" element="tns:SavePersonPicture" />
+  </wsdl:message>
+  <wsdl:message name="SavePersonPictureSoapOut">
+    <wsdl:part name="parameters" element="tns:SavePersonPictureResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonPictureSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPersonPicture" />
+  </wsdl:message>
+  <wsdl:message name="GetPersonPictureSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPersonPictureResponse" />
+  </wsdl:message>
   <wsdl:portType name="AttachmentServiceSoap">
     <wsdl:operation name="SaveProjectAttachment">
       <wsdl:input message="tns:SaveProjectAttachmentSoapIn" />
@@ -92,6 +132,14 @@
     <wsdl:operation name="DeleteProjectAttachmentByProjectId">
       <wsdl:input message="tns:DeleteProjectAttachmentByProjectIdSoapIn" />
       <wsdl:output message="tns:DeleteProjectAttachmentByProjectIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonPicture">
+      <wsdl:input message="tns:SavePersonPictureSoapIn" />
+      <wsdl:output message="tns:SavePersonPictureSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonPicture">
+      <wsdl:input message="tns:GetPersonPictureSoapIn" />
+      <wsdl:output message="tns:GetPersonPictureSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="AttachmentServiceSoap" type="tns:AttachmentServiceSoap">
@@ -123,6 +171,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SavePersonPicture">
+      <soap:operation soapAction="http://tempuri.org/SavePersonPicture" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonPicture">
+      <soap:operation soapAction="http://tempuri.org/GetPersonPicture" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="AttachmentServiceSoap12" type="tns:AttachmentServiceSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -146,6 +212,24 @@
     </wsdl:operation>
     <wsdl:operation name="DeleteProjectAttachmentByProjectId">
       <soap12:operation soapAction="http://tempuri.org/DeleteProjectAttachmentByProjectId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonPicture">
+      <soap12:operation soapAction="http://tempuri.org/SavePersonPicture" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonPicture">
+      <soap12:operation soapAction="http://tempuri.org/GetPersonPicture" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
