@@ -15,7 +15,7 @@ namespace PraticeManagement
     {
         #region Constants
 
-        private const string SessionPersonWithSkills = "PersonWithSkills";
+        private const string ViewStatePersonWithSkills = "PersonWithSkills";
 
         #endregion
 
@@ -112,18 +112,18 @@ namespace PraticeManagement
                 {
                     return null;
                 }
-                if (ViewState[SessionPersonWithSkills] == null)
+                if (ViewState[ViewStatePersonWithSkills] == null)
                 {
                     using (var serviceClient = new PersonSkillService.PersonSkillServiceClient())
                     {
-                        ViewState[SessionPersonWithSkills] = serviceClient.GetPersonProfilesWithSkills(personId);
+                        ViewState[ViewStatePersonWithSkills] = serviceClient.GetPersonProfilesWithSkills(personId);
                     }
                 }
-                return (Person)ViewState[SessionPersonWithSkills];
+                return (Person)ViewState[ViewStatePersonWithSkills];
             }
             set
             {
-                ViewState[SessionPersonWithSkills] = value;
+                ViewState[ViewStatePersonWithSkills] = value;
             }
         }
 
@@ -255,7 +255,7 @@ namespace PraticeManagement
 
                 if (Person.HasPicture)
                 {
-                    imgPersonPicture.ImageUrl = "~/Controls/PersonPicture.ashx?PersonId=" + DataHelper.CurrentPerson.Id.ToString();
+                    imgPersonPicture.ImageUrl = string.Format(Constants.ApplicationPages.PersonPictureHandlerFormat, Person.Id.Value);
                 }
                 
                 imgPersonPicture.AlternateText = lblPersonName.Text;
@@ -271,7 +271,7 @@ namespace PraticeManagement
                 }
                 else
                 {
-                    btnUpdate.PostBackUrl = "~/SkillsEntry.aspx?Id=" + PersonId;
+                    btnUpdate.PostBackUrl = PersonId.HasValue ? string.Format(Constants.ApplicationPages.SkillsEntryPageFormat, PersonId) : Constants.ApplicationPages.SkillsEntryPage;
                 }
             }
         }
