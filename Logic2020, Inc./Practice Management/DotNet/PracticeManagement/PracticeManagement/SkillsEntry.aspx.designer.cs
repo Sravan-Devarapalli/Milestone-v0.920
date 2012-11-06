@@ -184,13 +184,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary valSummaryBusiness;
         
         /// <summary>
-        /// valSummaryTechnical1 control.
+        /// valSummaryTechnical control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary valSummaryTechnical1;
+        protected global::System.Web.UI.WebControls.ValidationSummary valSummaryTechnical;
         
         /// <summary>
         /// hdnIsValid control.
@@ -247,6 +247,60 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.ModalPopupExtender mpeValidations;
         
         /// <summary>
+        /// hdnTargetErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnTargetErrorPanel;
+        
+        /// <summary>
+        /// mpeErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeErrorPanel;
+        
+        /// <summary>
+        /// pnlErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlErrorPanel;
+        
+        /// <summary>
+        /// btnCancelErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelErrorPanel;
+        
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
+        
+        /// <summary>
+        /// btnOKErrorPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOKErrorPanel;
+        
+        /// <summary>
         /// mpePictureLinkPopup control.
         /// </summary>
         /// <remarks>
@@ -265,13 +319,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlPictureLinkPopup;
         
         /// <summary>
-        /// ltrlPersonname1 control.
+        /// ltrlPicturePopupPersonname control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlPersonname1;
+        protected global::System.Web.UI.WebControls.Literal ltrlPicturePopupPersonname;
         
         /// <summary>
         /// btnClose control.
@@ -319,13 +373,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnPictureDelete;
         
         /// <summary>
-        /// btnCancelPictureLink control.
+        /// btnCancelPicture control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelPictureLink;
+        protected global::System.Web.UI.WebControls.Button btnCancelPicture;
         
         /// <summary>
         /// mpeProfilePopUp control.
@@ -398,60 +452,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelProfile;
-        
-        /// <summary>
-        /// hdnTargetErrorPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnTargetErrorPanel;
-        
-        /// <summary>
-        /// mpeErrorPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpeErrorPanel;
-        
-        /// <summary>
-        /// pnlErrorPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlErrorPanel;
-        
-        /// <summary>
-        /// btnCancelErrorPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelErrorPanel;
-        
-        /// <summary>
-        /// lblMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
-        
-        /// <summary>
-        /// btnOKErrorPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnOKErrorPanel;
         
         /// <summary>
         /// odsSkillLevel control.
