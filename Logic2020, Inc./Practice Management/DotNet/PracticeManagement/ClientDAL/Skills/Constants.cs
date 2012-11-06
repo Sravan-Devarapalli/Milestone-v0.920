@@ -34,7 +34,7 @@ namespace DataAccess.Skills
             public const string ModifiedBy = "ModifiedBy";
             public const string ModifiedDate = "ModifiedDate";
             public const string IsHighlighted = "IsHighlighted";
-            public const string PersonPicture = "PersonPicture";
+            public const string PictureData = "PictureData";
             public const string ModifiedByName = "ModifiedByName";
             public const string IsDefault = "IsDefault";
             public const string HasPicture = "HasPicture";
