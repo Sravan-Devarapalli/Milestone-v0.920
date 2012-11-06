@@ -447,7 +447,7 @@ namespace DataTransferObjects
         public bool IsHighlighted { get; set; }
 
         [DataMember]
-        public byte[] PersonPicture { get; set; }
+        public byte[] PictureData { get; set; }
 
         /// <summary>
         /// Person has picture or not.
