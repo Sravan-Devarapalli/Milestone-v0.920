@@ -26,6 +26,7 @@ BEGIN
 		IF EXISTS (SELECT 1 FROM inserted AS i	
 					INNER JOIN deleted AS d ON i.PersonID = d.PersonID 
 					WHERE ISNULL(i.PictureFileName,'') <> ISNULL(d.PictureFileName,'')
+					OR ISNULL(i.PictureData, CONVERT(VARBINARY, '')) <> ISNULL(d.PictureData, CONVERT(VARBINARY, ''))
 				) 
 		BEGIN 
 			-- Log an activity for person picture change
@@ -78,8 +79,9 @@ BEGIN
 				INNER JOIN deleted AS d ON i.PersonID = d.PersonID 
 				INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 				WHERE ISNULL(i.IsStrawman, d.IsStrawman) = 0 
-				AND ISNULL(i.PictureFileName,'') <> ISNULL(d.PictureFileName,'')
-
+				AND ( ISNULL(i.PictureFileName,'') <> ISNULL(d.PictureFileName,'')
+					OR ISNULL(i.PictureData, CONVERT(VARBINARY, '')) <> ISNULL(d.PictureData, CONVERT(VARBINARY, ''))
+					)
 		END
 		ELSE
 		BEGIN	
