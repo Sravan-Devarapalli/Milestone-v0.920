@@ -49,6 +49,9 @@ AS
 	INSERT INTO @RecruiterIdsTable
 	SELECT ResultId 
 	FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList)
+		
+	DECLARE @NOW DATETIME
+	SET @NOW = GETDATE()
 
 	SELECT COUNT(*) AS num
 	  FROM dbo.v_Person AS p
@@ -64,9 +67,14 @@ AS
 	                     FROM dbo.RecruiterCommission AS c
 	                    WHERE c.RecruitId = p.PersonId AND c.RecruiterId IN (SELECT RecruiterId FROM @RecruiterIdsTable)))
 		AND (@TimescaleIdsList IS NULL
-			OR EXISTS (SELECT 1
-						FROM dbo.v_Pay AS pay
-						WHERE pay.PersonId = p.PersonId AND pay.Timescale IN (SELECT TimeScaleId FROM @TimeScaleIdsTable)))
+			OR EXISTS (SELECT 1 
+						FROM (SELECT TOP 1 pay.Timescale
+								FROM dbo.v_Pay AS pay
+								WHERE pay.PersonId = p.PersonId 
+								AND((@Now >= pay.StartDate AND @Now < pay.EndDateOrig) OR @Now < pay.StartDate)
+								ORDER BY pay.StartDate
+								) d
+						WHERE d.Timescale IN (SELECT TimeScaleId FROM @TimeScaleIdsTable)))
 		AND ( p.LastName LIKE @Alphabet )
 		AND p.IsStrawman = 0  
 
