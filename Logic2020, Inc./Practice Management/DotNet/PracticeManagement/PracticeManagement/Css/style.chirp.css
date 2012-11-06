@@ -7486,4 +7486,13 @@ table#ctl00_body_login tr td label
     line-height: 18px;
     padding-left: 5px;
 }
-
+.linkDisableStyle, .linkDisableStyle hover
+{
+    color: #8F8F8F !important;
+    cursor: text;
+}
+.linkEnableStyle
+{
+    color: #0898E6;
+    cursor: pointer;
+}
