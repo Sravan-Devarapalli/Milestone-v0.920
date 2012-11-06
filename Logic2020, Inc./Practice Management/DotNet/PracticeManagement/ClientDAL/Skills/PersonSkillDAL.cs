@@ -490,8 +490,10 @@ namespace DataAccess.Skills
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
                     command.Parameters.AddWithValue(Constants.ParameterNames.PictureFileName, (pictureFileName != null) ? (object)pictureFileName : DBNull.Value);
-                    command.Parameters.Add(Constants.ParameterNames.PictureData, SqlDbType.VarBinary, -1);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureData, pictureData != null ? (object)pictureData : DBNull.Value);
+                    if (pictureData != null)
+                    {
+                        command.Parameters.AddWithValue(Constants.ParameterNames.PictureData, pictureData != null ? (object)pictureData : DBNull.Value);
+                    }
 
                     connection.Open();
 
@@ -559,12 +561,11 @@ namespace DataAccess.Skills
 
                         if (reader.HasRows)
                         {
-                            int PersonPictureIndex = reader.GetOrdinal(Constants.ColumnNames.PersonPicture);
-
+                            int pictureDataIndex = reader.GetOrdinal(Constants.ColumnNames.PictureData);
 
                             while (reader.Read())
                             {
-                                pictureData = (byte[])reader[PersonPictureIndex];
+                                pictureData = reader.IsDBNull(pictureDataIndex) ? null : (byte[])reader[pictureDataIndex];
                             }
                         }
 
