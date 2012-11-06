@@ -156,6 +156,9 @@ namespace PraticeManagement
             public static string AccountSummaryReport = "~/Reports/AccountSummaryReport.aspx";
             public const string NewHireReport = "~/Reports/NewHireReport.aspx";
             public const string TerminationReport = "~/Reports/TerminationReport.aspx";
+            public const string SkillsEntryPageFormat = "~/SkillsEntry.aspx?Id={0}";
+            public const string SkillsEntryPage = "~/SkillsEntry.aspx";
+            public const string PersonPictureHandlerFormat = "~/Controls/PersonPicture.ashx?PersonId={0}";
 
         }
 
