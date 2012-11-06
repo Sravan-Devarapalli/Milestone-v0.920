@@ -30,7 +30,8 @@ namespace PraticeManagement
         private const string ValidationPopUpMessage = "Please select a value for ‘Level’, ‘Experience’, and ‘Last Used’ for the below skill(s):";
         private const string SuccessMessage = "Skills Saved Successfully.";
         private const string ProfileXml = @"<Profile Id=""{0}"" ProfileName=""{1}"" ProfileURL=""{2}"" IsDefault=""{3}"" > </Profile>";
-        private const string SuccessMessageForAddedPicture = "Consultant Profile picture added/updated successfully.";      
+        private const string SuccessMessageForAddedPicture = "Consultant Profile picture added successfully.";
+        private const string SuccessMessageForUpdatedPicture = "Consultant Profile picture updated successfully.";
         private const string SuccessMessageForDeletedPicture = "Consultant Profile picture deleted successfully.";
         private const string Update = "Update";
         private const string Add = "Add";
@@ -218,7 +219,7 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
-                ltrlPersonname1.Text = ltrlPersonname.Text = lblUserName.Text = Person.LastName + " " + Person.FirstName;
+                ltrlPicturePopupPersonname.Text = ltrlPersonname.Text = lblUserName.Text = Person.LastName + " " + Person.FirstName;
                 repProfiles.DataSource = PersonProfiles;
                 repProfiles.DataBind();
                 RenderSkills(tcSkillsEntry.ActiveTabIndex);
@@ -233,9 +234,6 @@ namespace PraticeManagement
             lblValidationMessage.Text = "";
             hdnIsValid.Value = false.ToString();
             lblMessage.Text = "";
-            //enable delete button if person has a picture.
-            btnPictureDelete.Enabled = Person.HasPicture;
-            btnUpdatePictureLink.Text = (Person.HasPicture) ? Update : Add;
         }
 
         protected override void Display()
@@ -293,9 +291,7 @@ namespace PraticeManagement
                 var ddlLastUsed = e.Row.FindControl(ddlLastUsedId) as DropDownList;
                 var hdnId = e.Row.FindControl(hdnIdId) as HiddenField;
                 var clearLink = e.Row.FindControl(lnkbtnClearId) as LinkButton;
-                clearLink.Enabled = false;
-                System.Drawing.Color gray = System.Drawing.ColorTranslator.FromHtml("#8F8F8F");
-                clearLink.ForeColor = gray;
+                ApplyClearLinkStyle(clearLink, false);
                 if (Person.Skills.Count > 0)
                 {
                     if (Person.Skills.Where(s => s.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
@@ -307,10 +303,7 @@ namespace PraticeManagement
                             ddlLevel.SelectedValue = skill.SkillLevel.Id.ToString();
                             ddlExperience.SelectedValue = skill.YearsExperience.Value.ToString();
                             ddlLastUsed.SelectedValue = skill.LastUsed.ToString();
-                            clearLink.Enabled = true;
-                            clearLink.Attributes["disable"] = false.ToString();
-                            System.Drawing.Color blue = System.Drawing.ColorTranslator.FromHtml("#0898E6");
-                            clearLink.ForeColor = blue;
+                            ApplyClearLinkStyle(clearLink, true);
                         }
                     }
                 }
@@ -343,7 +336,9 @@ namespace PraticeManagement
                 dtlSkillLevels.DataSource = SettingsHelper.GetSkillLevels();
                 dtlSkillLevels.DataBind();
             }
-
+            //enable delete button if person has a picture.
+            btnPictureDelete.Enabled = Person.HasPicture;
+            btnUpdatePictureLink.Text = btnUpdatePictureLink.ToolTip = (Person.HasPicture) ? Update : Add;
         }
 
         protected void gvIndustrySkills_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -421,17 +416,17 @@ namespace PraticeManagement
         }
 
         protected void btnUpdatePictureLink_OnClick(object sender, EventArgs e)
-        {  
-            PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
-            byte[] fileData = fuPersonPicture.FileBytes;
-            string fileName = fuPersonPicture.FileName;
-            svc.SavePersonPicture(Person.Id.Value, fileData, User.Identity.Name, fileName);
+        {
+            if (fuPersonPicture.HasFile)
+            {
+                PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
+                svc.SavePersonPicture(Person.Id.Value, fuPersonPicture.FileBytes, User.Identity.Name, fuPersonPicture.FileName);
 
-            btnPictureDelete.Enabled = true;
-            btnUpdatePictureLink.Text = Update;
-            lblMessage.Text = SuccessMessageForAddedPicture;
-            mpeErrorPanel.Show();
-            lblMessage.Focus();
+                lblMessage.Text = !Person.HasPicture ? SuccessMessageForAddedPicture : SuccessMessageForUpdatedPicture;
+                Person.HasPicture = true;
+                hdnTargetErrorPanel.Value = false.ToString().ToLower();
+                lblMessage.Focus();
+            }
         }
 
         protected void btnPictureDelete_OnClick(object sender, EventArgs e)
@@ -439,19 +434,10 @@ namespace PraticeManagement
             PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
             svc.SavePersonPicture(Person.Id.Value, null, User.Identity.Name, null);
 
-            btnPictureDelete.Enabled = false;
-            btnUpdatePictureLink.Text = Add;
+            Person.HasPicture = false;
             lblMessage.Text = SuccessMessageForDeletedPicture;
             mpeErrorPanel.Show();
             lblMessage.Focus();
-        }
-
-
-        protected void btnCancelPictureLink_OnClick(object sender, EventArgs e)
-        {
-            fuPersonPicture.Attributes["Value"] = "";
-            mpePictureLinkPopup.Hide();
-            
         }
 
         protected void btnProfilePopupUpdate_OnClick(object sender, EventArgs e)
@@ -479,7 +465,6 @@ namespace PraticeManagement
 
         protected void btnCancelProfile_OnClick(object sender, EventArgs e)
         {
-            //mlConfirmation.ClearMessage();
             PersonProfiles = null;
             repProfiles.DataSource = PersonProfiles;
             repProfiles.DataBind();
@@ -487,7 +472,6 @@ namespace PraticeManagement
 
         protected void ibtnAddProfile_Click(object sender, EventArgs e)
         {
-            //mlConfirmation.ClearMessage();
             UpdatePersonProfilesFromRep(true);
             repProfiles.DataSource = PersonProfiles;
             repProfiles.DataBind();
@@ -619,7 +603,7 @@ namespace PraticeManagement
                     }
                     break;
                 case 1:
-                    Page.Validate(valSummaryTechnical1.ValidationGroup);
+                    Page.Validate(valSummaryTechnical.ValidationGroup);
                     if (Page.IsValid)
                     {
                         result = Page.IsValid;
@@ -649,20 +633,8 @@ namespace PraticeManagement
                     var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
                     var ddlLastUsed = row.FindControl(ddlLastUsedId) as DropDownList;
                     var clearLink = row.FindControl(lnkbtnClearId) as LinkButton;
-                    if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
-                    {
-                        clearLink.Enabled = true;
-                        clearLink.Attributes["disable"] = false.ToString();
-                        System.Drawing.Color blue = System.Drawing.ColorTranslator.FromHtml("#0898E6");
-                        clearLink.ForeColor = blue;
-                    }
-                    else
-                    {
-                        clearLink.Enabled = false;
-                        clearLink.Attributes["disable"] = true.ToString();
-                        System.Drawing.Color gray = System.Drawing.ColorTranslator.FromHtml("#8F8F8F");
-                        clearLink.ForeColor = gray;
-                    }
+
+                    ApplyClearLinkStyle(clearLink, !(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0));
                 }
             }
         }
@@ -738,6 +710,22 @@ namespace PraticeManagement
             SaveBusinessORTechnicalSkills(rows);
         }
 
+        private void ApplyClearLinkStyle(LinkButton clearLink, bool enable)
+        {
+            if (enable)
+            {
+                clearLink.Enabled = true;
+                clearLink.Attributes["disable"] = false.ToString();
+                clearLink.CssClass = "fontUnderline linkEnableStyle";
+            }
+            else
+            {
+                clearLink.Enabled = false;
+                clearLink.Attributes["disable"] = true.ToString();
+                clearLink.CssClass = "fontUnderline linkDisableStyle";
+            }
+        }
+
         private void SaveBusinessORTechnicalSkills(GridViewRowCollection rows)
         {
             XmlDocument doc = new XmlDocument();
@@ -755,20 +743,8 @@ namespace PraticeManagement
                     var hdnId = row.FindControl(hdnIdId) as HiddenField;
                     int skillId = Convert.ToInt32(hdnId.Value);
                     bool isModified = true;
-                    if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
-                    {
-                        clearLink.Enabled = true;
-                        clearLink.Attributes["disable"] = false.ToString();
-                        System.Drawing.Color blue = System.Drawing.ColorTranslator.FromHtml("#0898E6");
-                        clearLink.ForeColor = blue;
-                    }
-                    else
-                    {
-                        clearLink.Enabled = false;
-                        clearLink.Attributes["disable"] = true.ToString();
-                        System.Drawing.Color gray = System.Drawing.ColorTranslator.FromHtml("#8F8F8F");
-                        clearLink.ForeColor = gray;
-                    }
+                    ApplyClearLinkStyle(clearLink, !(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0));
+
                     if (Person.Skills.Count > 0 && Person.Skills.Where(skill => skill.Skill != null && skill.Skill.Id == Convert.ToInt32(hdnId.Value)).Count() > 0)
                     {
                         if (!(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0))
