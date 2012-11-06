@@ -36,11 +36,19 @@
             var hdnIsValid = document.getElementById('<%= hdnIsValid.ClientID %>');
             var hdnValidationMessage = document.getElementById('<%= hdnValidationMessage.ClientID %>');
             var popup2 = $find('mpeValidationsBehaviourId');
-            if (hdnIsValid != null && hdnValidationMessage != null) {
-                if (hdnIsValid.value == "false") {
-                    popup2.show();
+            if (hdnIsValid != null && hdnValidationMessage != null && hdnIsValid.value == "false") {
+                popup2.show();
+            }
+            else {
+
+                var hdnErrorPanel = document.getElementById('<%= hdnTargetErrorPanel.ClientID %>');
+                var errorPanelPop = $find('mpeErrorPanelBehaviourId');
+                if (hdnErrorPanel != null && errorPanelPop != null && hdnErrorPanel.value == "false") {
+                    errorPanelPop.show();
+                    hdnErrorPanel.value = "";
                 }
             }
+
         }
 
         function ddlChanged(changedObject) {
@@ -53,14 +61,12 @@
             if (row.find("select[id$='ddlLevel']")[0].value != 0 || row.find("select[id$='ddlExperience']")[0].value != 0 || row.find("select[id$='ddlLastUsed']")[0].value != 0) {
                 clearLink.disabled = false;
                 clearLink.attributes['disable'].value = 'False';
-                clearLink.style.color = "#0898E6";
-                clearLink.style.cursor = "pointer";
+                clearLink.className = "fontUnderline linkEnableStyle";
             }
             else {
                 clearLink.disabled = true;
                 clearLink.attributes['disable'].value = 'True';
-                clearLink.style.color = "#8F8F8F";
-                clearLink.style.cursor = "text";
+                clearLink.className = "fontUnderline linkDisableStyle";
             }
         }
         function ddlChangedIndustry(changedObject) {
@@ -83,11 +89,9 @@
                 row.find("select[id$='ddlLevel']")[0].value = 0;
                 row.find("select[id$='ddlExperience']")[0].value = 0;
                 row.find("select[id$='ddlLastUsed']")[0].value = 0;
-                var ddlLevel = clearLink;
                 clearLink.disabled = true;
                 clearLink.attributes['disable'].value = 'True';
-                clearLink.style.color = "#8F8F8F";
-                clearLink.style.cursor = "text";
+                clearLink.className = "fontUnderline linkDisableStyle";
                 ddlChanged(clearLink);
             }
         }
@@ -107,14 +111,13 @@
 
         function setPosition(item, ytop, xleft) {
             item.offset({ top: ytop, left: xleft });
-        }       
+        }
 
         function btnCancelPictureLink_OnClientClick() {
-
-//            var element = document.getElementById('<%= pnlPictureLinkPopup.ClientID %>');
-//            element.innerHTML = element.innerHTML;
-            var popup = $find('mpePictureLinkPopup');
-            popup.hide();
+            var element = $('.ClearPersonPictureFileUpload');
+            element.html(element.html());
+            var addPicturePopUp = $find('mpePictureLinkPopup');
+            addPicturePopUp.hide();
         }
         function pageLoad() {
             document.onkeypress = enterPressed;
@@ -138,7 +141,7 @@
 
         function EnableAddButton() {
             var addButton = document.getElementById('<%= btnUpdatePictureLink.ClientID %>');
-            if (IsHaveAttachement() && IsValidProfilePicture()) {
+            if (HaveAttachement() && IsValidProfilePicture()) {
                 addButton.disabled = "";
             }
             else {
@@ -146,7 +149,7 @@
             }
         }
 
-        function IsHaveAttachement() {
+        function HaveAttachement() {
             var fuControl = document.getElementById('<%= fuPersonPicture.ClientID %>');
             var fileUploadPath = fuControl.value;
             if (fileUploadPath != null && fileUploadPath != undefined) {
@@ -175,11 +178,11 @@
                             <div class="Padding10">
                                 <asp:Label runat="server" ID="lblCategory" Text="Category"></asp:Label>
                                 <asp:DropDownList runat="server" ID="ddlBusinessCategory" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
-                                    DataTextField="Description" DataValueField="Id" AutoPostBack="true">
+                                    DataTextField="Description" DataValueField="Id" AutoPostBack="True">
                                 </asp:DropDownList>
                             </div>
                             <div class="SkillsEntryDataBody">
-                                <asp:GridView ID="gvBusinessSkills" runat="server" AutoGenerateColumns="false" OnRowDataBound="gvSkills_RowDataBound"
+                                <asp:GridView ID="gvBusinessSkills" runat="server" AutoGenerateColumns="False" OnRowDataBound="gvSkills_RowDataBound"
                                     CssClass="WholeWidth TabPadding">
                                     <AlternatingRowStyle CssClass="alterrow" />
                                     <HeaderStyle CssClass="alterrow" />
@@ -273,7 +276,7 @@
                                             <ItemStyle CssClass="Width8Per" />
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
-                                                    OnClientClick="ClearAllFields(this);  return false;" CssClass="fontUnderline"
+                                                    OnClientClick="ClearAllFields(this);  return false;" CssClass="fontUnderline linkEnableStyle"
                                                     disable="">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
@@ -388,8 +391,8 @@
                                             <ItemStyle CssClass="Width8Per" />
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server" ID="lnkbtnClear" Text="clear" ToolTip="Clear Level, Experience, Last Used in this row."
-                                                    OnClientClick="ClearAllFields(this); return false;" Enabled="false" Font-Underline="true"
-                                                    disable="">
+                                                    OnClientClick="ClearAllFields(this); return false;" Enabled="false" disable=""
+                                                    CssClass="fontUnderline linkDisableStyle">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
@@ -455,7 +458,7 @@
             </div>
             <asp:ValidationSummary ID="valSummaryBusiness" runat="server" ShowMessageBox="false"
                 ValidationGroup="BusinessGroup" />
-            <asp:ValidationSummary ID="valSummaryTechnical1" runat="server" ShowMessageBox="false"
+            <asp:ValidationSummary ID="valSummaryTechnical" runat="server" ShowMessageBox="false"
                 ValidationGroup="TechnicalGroup" />
             <asp:HiddenField ID="hdnIsValid" runat="server" Value="true" />
             <asp:HiddenField ID="hdnValidationMessage" runat="server" Value="" />
@@ -481,21 +484,47 @@
                 BackgroundCssClass="modalBackground" BehaviorID="mpeValidationsBehaviourId" DropShadow="false"
                 PopupControlID="pnlValidations" OkControlID="btnOk">
             </AjaxControlToolkit:ModalPopupExtender>
+            <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
+                TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
+                CancelControlID="btnCancelErrorPanel" DropShadow="false" OkControlID="btnOKErrorPanel" />
+            <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
+                <table class="Width100Per">
+                    <tr>
+                        <th class="bgcolorGray TextAlignCenterImp vBottom">
+                            <b class="BtnClose">Attention!</b>
+                            <asp:Button ID="btnCancelErrorPanel" runat="server" CssClass="mini-report-close floatright"
+                                ToolTip="Cancel" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="Padding10Px">
+                            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Text="" CssClass="padLeft20"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Padding10Px TextAlignCenterImp">
+                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <AjaxControlToolkit:ModalPopupExtender ID="mpePictureLinkPopup" runat="server" TargetControlID="btnPictureLink"
-                CancelControlID="btnCancelPictureLink" BehaviorID="mpePictureLinkPopup" BackgroundCssClass="modalBackground"
-                PopupControlID="pnlPictureLinkPopup" DropShadow="false" />
+                BehaviorID="mpePictureLinkPopup" BackgroundCssClass="modalBackground" PopupControlID="pnlPictureLinkPopup"
+                DropShadow="false" />
             <asp:Panel ID="pnlPictureLinkPopup" runat="server" CssClass="popUp" Style="display: none">
                 <table class="WholeWidth">
                     <tr class="PopUpHeader">
                         <th>
                             Add/Update
-                            <asp:Literal ID="ltrlPersonname1" runat="server"></asp:Literal>'s Profile Picture
+                            <asp:Literal ID="ltrlPicturePopupPersonname" runat="server"></asp:Literal>'s Profile
+                            Picture
                             <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel"
                                 OnClientClick="btnCancelPictureLink_OnClientClick();" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
-                        <td class="PicturePanelTd">
+                        <td class="PicturePanelTd ClearPersonPictureFileUpload">
                             <asp:FileUpload ID="fuPersonPicture" CssClass="FileUpload" runat="server" Size="68"
                                 onchange="EnableAddButton();" />
                             <asp:CustomValidator ID="cvPersonPictureType" runat="server" ControlToValidate="fuPersonPicture"
@@ -517,8 +546,8 @@
                                             Enabled="false" CssClass="Width100Px" OnClick="btnPictureDelete_OnClick" />
                                     </td>
                                     <td class="padLeft3">
-                                        <asp:Button ID="btnCancelPictureLink" runat="server" Text="Cancel" ToolTip="Cancel"
-                                            CssClass="Width100Px"  OnClientClick="btnCancelPictureLink_OnClientClick();" />
+                                        <asp:Button ID="btnCancelPicture" runat="server" Text="Cancel" ToolTip="Cancel" CssClass="Width100Px"
+                                            OnClientClick="btnCancelPictureLink_OnClientClick();" />
                                     </td>
                                 </tr>
                             </table>
@@ -526,10 +555,10 @@
                     </tr>
                     <tr>
                         <td class="Padding6">
-                            <bold>Note</bold>
-                            : Recommended to select 120(height)x100(wide) dimensional picture for the best display.
+                            <b>Note</b>: Recommended to select 120 (height) x 100 (wide) dimensional picture
+                            for the best display.
                             <br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; File type should be of JPG,
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; File type should be JPG,
                             JPEG, Png, Bmp and Gif only.
                         </td>
                     </tr>
@@ -645,12 +674,6 @@
                                 ImageUrl="~/Images/add_16.png" ToolTip="Add New Profile" />
                         </td>
                     </tr>
-                    <%--  <tr>
-                        <td class="padLeft8">
-                            <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
-                                WarningColor="Orange" />
-                        </td>
-                    </tr>--%>
                     <tr>
                         <td align="center" class="TdRedirectToOppDetail">
                             <table>
@@ -669,32 +692,10 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
-            <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
-                TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
-                CancelControlID="btnCancelErrorPanel" DropShadow="false" OkControlID="btnOKErrorPanel" />
-            <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
-                <table class="Width100Per">
-                    <tr>
-                        <th class="bgcolorGray TextAlignCenterImp vBottom">
-                            <b class="BtnClose">Attention!</b>
-                            <asp:Button ID="btnCancelErrorPanel" runat="server" CssClass="mini-report-close floatright"
-                                ToolTip="Cancel" Text="X"></asp:Button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td class="Padding10Px">
-                            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Text="" CssClass="padLeft20"></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="Padding10Px TextAlignCenterImp">
-                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" />
-                        </td>
-                    </tr>
-                </table>
-            </asp:Panel>
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnUpdatePictureLink" />
+        </Triggers>
     </asp:UpdatePanel>
     <asp:ObjectDataSource ID="odsSkillLevel" runat="server" TypeName="PraticeManagement.SkillsEntry"
         SelectMethod="GetSkillLevels"></asp:ObjectDataSource>
