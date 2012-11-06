@@ -2,7 +2,7 @@
 (
 	@PersonId         INT,		
 	@PictureFileName  NVARCHAR(MAX),
-	@PictureData	  VARBINARY(MAX),
+	@PictureData	  VARBINARY(MAX) = NULL,
 	@UserLogin		  NVARCHAR (100)      
 )
 AS
@@ -13,11 +13,11 @@ BEGIN
 	SET @Now = dbo.InsertingTime()	
 
 	UPDATE dbo.Person
-	SET PersonPicture = @PictureData,
+	SET PictureData = @PictureData,
 	    PictureFileName = @PictureFileName,
 		PictureModifiedDate = @Now
 	WHERE PersonId = @PersonId 
-		AND ISNULL(PersonPicture,0) <> ISNULL(@PictureData,0)
+		AND ISNULL(PictureData,  CONVERT(VARBINARY(2), '')) <> ISNULL(@PictureData,  CONVERT(VARBINARY(2), ''))
 
 	EXEC dbo.SessionLogUnprepare
 END
