@@ -398,6 +398,7 @@
         {
             public const string GroupIdColumn = "GroupId";
             public const string AttachmentFileName = "@FileName";
+            public const string AttachmentContentType = "@ContentType";
             public const string AttachmentData = "@AttachmentData";
             public const string OpportunityTransitionId = ColumnNames.OpportunityTransitionId;
             public const string TargetPerson = "@TargetPersonId";
