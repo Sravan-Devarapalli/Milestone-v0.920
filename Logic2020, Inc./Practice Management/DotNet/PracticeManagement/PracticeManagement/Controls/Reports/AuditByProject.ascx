@@ -35,9 +35,9 @@
                     <td colspan="4" class="AuditReportByProjectHeaderTd1">
                         <%# Eval("Project.ProjectNumber")%>
                         -
-                        <%# Eval("Project.Name")%><b class="fontStyleNormal"> (<%# Eval("Project.Client.Name")%>
+                        <%# Eval("Project.HtmlEncodedName")%><b class="fontStyleNormal"> (<%# Eval("Project.Client.HtmlEncodedName")%>
                             >
-                            <%# Eval("Project.Group.Name")%>)</b>
+                            <%# Eval("Project.Group.HtmlEncodedName")%>)</b>
                     </td>
                     <td class="AuditReportByProjectHeaderTd2">
                         <%# GetDoubleFormat((double)Eval("NetChange"))%>
