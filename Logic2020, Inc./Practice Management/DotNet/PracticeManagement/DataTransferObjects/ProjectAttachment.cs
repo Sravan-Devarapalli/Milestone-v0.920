@@ -18,6 +18,13 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public String AttachmentContentType
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public String AttachmentFileName
         {
             get;
