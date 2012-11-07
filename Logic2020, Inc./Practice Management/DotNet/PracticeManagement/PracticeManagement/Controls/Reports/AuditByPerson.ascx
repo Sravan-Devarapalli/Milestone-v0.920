@@ -90,7 +90,7 @@
                         <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' class="AuditReportByPersonTd1">
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
                             -
-                            <%# Eval("ChargeCode.Project.Name")%>
+                            <%# Eval("ChargeCode.Project.HtmlEncodedName")%>
                         </td>
                         <td>
                         </td>
@@ -152,7 +152,7 @@
                         <td title='<%# Eval("ChargeCode.ChargeCodeName")%>' class="AuditReportByPersonTd1">
                             <%# Eval("ChargeCode.Project.ProjectNumber")%>
                             -
-                            <%# Eval("ChargeCode.Project.Name")%>
+                            <%# Eval("ChargeCode.Project.HtmlEncodedName")%>
                         </td>
                         <td>
                         </td>
