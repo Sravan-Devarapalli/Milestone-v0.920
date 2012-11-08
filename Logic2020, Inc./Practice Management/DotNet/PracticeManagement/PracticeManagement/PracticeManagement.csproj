@@ -527,6 +527,7 @@
     <Content Include="Controls\DefaultMilestoneSettingControl.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\PersonPicture.ashx" />
+    <Content Include="Controls\Projects\AttachmentUpload.ashx" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
@@ -546,6 +547,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Skills.Profile.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TerminationReason.datasource" />
+    <None Include="Scripts\uploader.fla" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
       <SubType>Designer</SubType>
@@ -858,6 +860,10 @@
     <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
+    <Content Include="Scripts\jquery.uploadify.min.js">
+      <DependentUpon>jquery.uploadify.yui.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.uploadify.yui.js" />
     <Content Include="Scripts\Master.min.js">
       <DependentUpon>Master.yui.js</DependentUpon>
     </Content>
@@ -870,6 +876,7 @@
     </Content>
     <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
+    <Content Include="Scripts\uploader.swf" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1395,6 +1402,9 @@
     </Compile>
     <Compile Include="Controls\PracticeManagementPersonDetailPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\AttachmentUpload.ashx.cs">
+      <DependentUpon>AttachmentUpload.ashx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Projects\ProjectTimeTypes.ascx.cs">
       <DependentUpon>ProjectTimeTypes.ascx</DependentUpon>
