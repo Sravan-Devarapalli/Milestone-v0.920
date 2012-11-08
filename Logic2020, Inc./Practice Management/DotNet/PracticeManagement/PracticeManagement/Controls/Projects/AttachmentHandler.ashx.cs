@@ -22,16 +22,8 @@ namespace PraticeManagement.Controls.Projects
             AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
 
             attachmentData = svc.GetProjectAttachmentData(projectId, attachmentId);
-            
-            String extension = System.IO.Path.GetExtension(FileName).ToLowerInvariant();
-            if (extension == ".pdf")
-            {
-                context.Response.ContentType = "Application/pdf";
-            }
-            else if (extension == ".doc" || extension == ".docx")
-            {
-                context.Response.ContentType = "Application/msword";
-            }
+                     
+            context.Response.ContentType = "application/octet-stream";            
 
             context.Response.AddHeader(
                 "content-disposition", string.Format("attachment; filename={0}", FileName));
