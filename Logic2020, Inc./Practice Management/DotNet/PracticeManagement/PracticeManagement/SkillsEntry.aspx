@@ -116,8 +116,9 @@
         function btnCancelPictureLink_OnClientClick() {
             var element = $('.ClearPersonPictureFileUpload');
             element.html(element.html());
-            var addPicturePopUp = $find('mpePictureLinkPopup');
-            addPicturePopUp.hide();
+
+            var addButton = document.getElementById('<%= btnUpdatePictureLink.ClientID %>');
+            addButton.disabled = "disabled";
         }
         function pageLoad() {
             document.onkeypress = enterPressed;
@@ -141,6 +142,7 @@
 
         function EnableAddButton() {
             var addButton = document.getElementById('<%= btnUpdatePictureLink.ClientID %>');
+            
             if (HaveAttachement() && IsValidProfilePicture()) {
                 addButton.disabled = "";
             }
@@ -183,7 +185,7 @@
                             </div>
                             <div class="SkillsEntryDataBody">
                                 <asp:GridView ID="gvBusinessSkills" runat="server" AutoGenerateColumns="False" OnRowDataBound="gvSkills_RowDataBound"
-                                    CssClass="WholeWidth TabPadding">
+                                    CssClass="WholeWidth TabPadding" EnableModelValidation="True">
                                     <AlternatingRowStyle CssClass="alterrow" />
                                     <HeaderStyle CssClass="alterrow" />
                                     <Columns>
@@ -520,7 +522,7 @@
                             <asp:Literal ID="ltrlPicturePopupPersonname" runat="server"></asp:Literal>'s Profile
                             Picture
                             <asp:Button ID="btnClose" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel"
-                                OnClientClick="btnCancelPictureLink_OnClientClick();" Text="X"></asp:Button>
+                                OnClientClick="btnCancelPictureLink_OnClientClick();" OnClick="btnCancelPicture_Click" Text="X"></asp:Button>
                         </th>
                     </tr>
                     <tr>
@@ -547,7 +549,7 @@
                                     </td>
                                     <td class="padLeft3">
                                         <asp:Button ID="btnCancelPicture" runat="server" Text="Cancel" ToolTip="Cancel" CssClass="Width100Px"
-                                            OnClientClick="btnCancelPictureLink_OnClientClick();" />
+                                            OnClientClick="btnCancelPictureLink_OnClientClick();" OnClick="btnCancelPicture_Click" />
                                     </td>
                                 </tr>
                             </table>
