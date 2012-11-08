@@ -33,7 +33,7 @@
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
-    <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>   
+    <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
     <script src="Scripts/jquery.uploadify.min.js" type="text/javascript"></script>
     <script type="text/javascript">
    
@@ -44,8 +44,8 @@
             document.onkeypress = enterPressed;
             $("#<%=FileUpload1.ClientID%>").fileUpload({
                 'uploader': 'Scripts/uploader.swf',
-                'cancelImg': 'Images/cancel.png',
-                'buttonText': 'Browse Files',
+                'cancelImg': 'Images/close_16.png',
+                'buttonText': 'Browse File(s)',               
                 'script': 'Controls/Projects/AttachmentUpload.ashx',
                 'fileExt': '*.xls;*.xlsx;*.xlw;*.doc;*.docx;*.pdf;*.ppt;*.pptx;*.mpp;*.vsd;*.msg;*.ZIP;*.RAR;*.sig;*.one*',
                 'fileDesc': 'Excel;Word doc;PDF;PowerPoint;MS Project;Visio;Exchange;ZIP;RAR;OneNote',
@@ -1171,14 +1171,11 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:Panel ID="pnlAttachSOW" runat="server" Style="display: none" CssClass="PanelPerson Width465Px"
-                Width="465px">
+            <asp:Panel ID="pnlAttachSOW" runat="server" Style="display: none" CssClass="PanelPerson Width465Px">
                 <table class="WholeWidth Padding5">
                     <tr class="BackGroundColorGray Height27Px">
-                        <td align="center" class="TdAddAttachmentText">
+                        <td align="center" class="TdAddAttachmentText WS-Normal" colspan="2">
                             Add Attachment
-                        </td>
-                        <td>
                             <asp:Button ID="btnCancel" runat="server" CssClass="mini-report-close floatright"
                                 ToolTip="Close" Text="X" OnClick="btnCancel_OnClick"></asp:Button>
                         </td>
@@ -1189,10 +1186,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="FileUploadAttachment" colspan="2">
-                            <div style="padding: 40px">
-                                <asp:FileUpload ID="FileUpload1" runat="server" />
-                            </div>
+                        <td class="FileUploadAttachment PaddingBottom10" colspan="2">
+                            <asp:FileUpload ID="FileUpload1" runat="server" />
                         </td>
                     </tr>
                     <tr>
@@ -1207,7 +1202,7 @@
                             <asp:CustomValidator ID="cvAttachmentCategory" runat="server" ControlToValidate="ddlAttachmentCategory"
                                 EnableClientScript="true" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvAttachmentCategory_OnServerValidate"
                                 ValidationGroup="ProjectAttachment" Text="*" ToolTip="Category is required."
-                                ClientValidationFunction="cvAttachmentCategory_ClientValidationFunction" ErrorMessage="Category is required."></asp:CustomValidator>
+                                ErrorMessage="Category is required."></asp:CustomValidator>
                         </td>
                         <td align="right" class="FileUploadAttachment PaddingTop10Px">
                             <asp:Button ID="btnUpload" ValidationGroup="ProjectAttachment" runat="server" Text="Upload"
