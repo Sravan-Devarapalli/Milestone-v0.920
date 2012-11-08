@@ -20,6 +20,9 @@ using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
 using ProjectAttachment = DataTransferObjects.ProjectAttachment;
 using System.Linq;
+using PraticeManagement.Controls.Projects;
+using System.Web.Script.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace PraticeManagement
 {
@@ -31,7 +34,7 @@ namespace PraticeManagement
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
-        private const string AttachSOWMessage = "File must be in PDF or Word format, and be no larger than {0} KB";
+        private const string AttachSOWMessage = "File must be in PDF, Word format, Excel, PowerPoint, MS Project, Visio, Exchange, OneNote, ZIP or RAR and be no larger than {0} KB";
         private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         public const string AllTimeTypesKey = "AllTimeTypesKey";
@@ -39,7 +42,12 @@ namespace PraticeManagement
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
         public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
 
-
+        public string id = "";
+        public string Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
 
         #endregion
 
@@ -355,7 +363,7 @@ namespace PraticeManagement
             }
             mlConfirmation.ClearMessage();
 
-            btnUpload.Attributes["onclick"] = "return CanShowPrompt();";
+            btnUpload.Attributes["onclick"] = "startUpload();return false;";
 
         }
 
@@ -378,6 +386,14 @@ namespace PraticeManagement
             imgMailToProjectOwner.Visible =
             imgMailToClientDirector.Visible =
             imgMailToSalesperson.Visible = !txtProjectNameFirstTime.Visible;
+            if (ProjectId.HasValue)
+            {
+                Id = ProjectId.Value.ToString();
+            }
+            else
+            {
+                Id = "0";
+            }
         }
 
         /// <summary>
@@ -650,65 +666,6 @@ namespace PraticeManagement
                     mlConfirmation.ClearMessage();
                 }
             }
-        }
-
-        protected void btnUpload_Click(object sender, EventArgs e)
-        {
-            Page.Validate(vsumProjectAttachment.ValidationGroup);
-            if (Page.IsValid)
-            {
-                AttachmentService.ProjectAttachment attachment = PopulateProjectAttachment();
-                if (attachment != null)
-                {
-                    if (ProjectId.HasValue)
-                    {
-                        AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
-                        svc.SaveProjectAttachment(attachment, ProjectId.Value, User.Identity.Name);
-                    }
-                    else
-                    {
-                        attachment.UploadedDate = DateTime.Now;
-
-                        if (AttachmentsForNewProject == null)
-                        {
-                            AttachmentsForNewProject = new List<AttachmentService.ProjectAttachment>();
-                        }
-
-                        attachment.AttachmentId = AttachmentsForNewProject.Count + 1;
-                        AttachmentsForNewProject.Add(attachment);
-
-                        if (AttachmentsForNewProject.Count > 0)
-                        {
-                            divEmptyMessage.Style["display"] = "none";
-                            repProjectAttachments.Visible = true;
-                            repProjectAttachments.DataSource = AttachmentsForNewProject;
-                            repProjectAttachments.DataBind();
-                        }
-                        else
-                        {
-                            divEmptyMessage.Style["display"] = "";
-                            repProjectAttachments.Visible = false;
-                        }
-
-                    }
-                    if (ProjectId.HasValue)
-                    {
-                        Project = GetCurrentProject(ProjectId);
-                        PopulateAttachmentControl(Project);
-                    }
-                    ddlAttachmentCategory.SelectedValue = "0";
-                    btnUpload.Enabled = false;
-                }
-                else
-                {
-                    mpeAttachSOW.Show();
-                }
-            }
-            else
-            {
-                mpeAttachSOW.Show();
-            }
-
         }
 
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -1125,49 +1082,6 @@ namespace PraticeManagement
                 // Status was not changed
                 currentStatus == (Project != null && Project.Status != null ? Project.Status.Id : 0);
 
-        }
-
-        protected void cvProjectAttachment_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = true;
-            if (fuProjectAttachment.HasFile)
-            {
-                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName).ToLowerInvariant();
-                if (!(extension == ".pdf" || extension == ".doc" || extension == ".docx"))
-                {
-                    args.IsValid = false;
-                }
-            }
-        }
-
-        protected void cvAttachment_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = true;
-            if (!fuProjectAttachment.HasFile)
-            {
-                args.IsValid = false;
-            }
-        }
-
-        protected void cvalidatorProjectAttachment_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = true;
-            if (fuProjectAttachment.HasFile)
-            {
-                string extension = System.IO.Path.GetExtension(fuProjectAttachment.FileName).ToLowerInvariant();
-                if (!(extension == ".pdf" || extension == ".doc" || extension == ".docx"))
-                {
-                    int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, AttachmentFileSize));
-
-                    if (fuProjectAttachment.PostedFile.ContentLength > size)
-                    {
-                        int kbSize = (int)size / 1024;
-                        cvalidatorProjectAttachment.ErrorMessage = "File Must be less than " + kbSize + " Kb.";
-                        cvalidatorProjectAttachment.ToolTip = "File Must be less than " + kbSize + " Kb.";
-                        args.IsValid = false;
-                    }
-                }
-            }
         }
 
         protected void cvAttachmentCategory_OnServerValidate(object source, ServerValidateEventArgs args)
@@ -1742,20 +1656,6 @@ namespace PraticeManagement
 
         }
 
-        private AttachmentService.ProjectAttachment PopulateProjectAttachment()
-        {
-            if (fuProjectAttachment.HasFile)
-            {
-                AttachmentService.ProjectAttachment attachment = new AttachmentService.ProjectAttachment();
-                attachment.AttachmentFileName = fuProjectAttachment.FileName;
-                attachment.AttachmentData = fuProjectAttachment.FileBytes;
-                attachment.AttachmentSize = fuProjectAttachment.FileBytes.Length;
-                attachment.Category = (PraticeManagement.AttachmentService.ProjectAttachmentCategory)Convert.ToInt32(ddlAttachmentCategory.SelectedValue);
-                return attachment;
-            }
-            return null;
-        }
-
         private void PopulatePracticeManagementCommission(Project project)
         {
             // Practice Management Commissions
@@ -1871,10 +1771,65 @@ namespace PraticeManagement
             HttpContext.Current.Response.End();
         }
 
+
         protected void btnCancel_OnClick(object sender, EventArgs e)
         {
-            ddlAttachmentCategory.SelectedValue = "0";
-            btnUpload.Enabled = false;
+            if (!ProjectId.HasValue)
+            {
+                var attachmentsJsonData = this.hdnAttachment.Value;
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = int.MaxValue;
+                Dictionary<string, object> attachmentsData = (Dictionary<string, object>)serializer.DeserializeObject(attachmentsJsonData);
+                if (attachmentsData != null)
+                {
+                    var attachmentData = attachmentsData["attachemnt"];
+                    var attachments = (object[])attachmentData;
+                    if (AttachmentsForNewProject == null)
+                    {
+                        AttachmentsForNewProject = new List<AttachmentService.ProjectAttachment>();
+                    }
+                    foreach (var attachment in attachments)
+                    {
+                        var attachmentFileData = (Dictionary<string, object>)(attachment);
+                        AttachmentService.ProjectAttachment projectAttachment = new AttachmentService.ProjectAttachment();
+                        projectAttachment.AttachmentId = AttachmentsForNewProject.Count + 1;
+                        projectAttachment.AttachmentFileName = (string)attachmentFileData["AttachmentFileName"];
+                        projectAttachment.AttachmentSize = (int)attachmentFileData["AttachmentSize"];
+                        projectAttachment.Category =  (PraticeManagement.AttachmentService.ProjectAttachmentCategory)Convert.ToInt32(attachmentFileData["Category"]);
+                        projectAttachment.UploadedDate = (DateTime)attachmentFileData["UploadedDate"];
+                        projectAttachment.AttachmentData = Array.ConvertAll<object, byte>((object[])attachmentFileData["AttachmentData"], new Converter<object, byte>(ObjToByte));                      
+                        AttachmentsForNewProject.Add(projectAttachment);
+                    }
+                }
+
+                if (AttachmentsForNewProject != null && AttachmentsForNewProject.Count > 0)
+                {
+                    divEmptyMessage.Style["display"] = "none";
+                    repProjectAttachments.Visible = true;
+                    repProjectAttachments.DataSource = AttachmentsForNewProject;
+                    repProjectAttachments.DataBind();
+                }
+                else
+                {
+                    divEmptyMessage.Style["display"] = "";
+                    repProjectAttachments.Visible = false;
+                }
+
+                ddlAttachmentCategory.SelectedValue = "0";
+                this.hdnAttachment.Value = "";
+            }
+            else
+            {
+                Project = GetCurrentProject(ProjectId);
+                PopulateAttachmentControl(Project);
+            }         
+            
+        }
+       
+
+        public static byte ObjToByte(object o)
+        {
+            return Convert.ToByte(o);
         }
 
         protected void lnkClone_OnClick(object sender, EventArgs e)
