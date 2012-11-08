@@ -281,8 +281,6 @@ namespace PraticeManagement.AttachmentService {
         
         private int attachmentIdField;
         
-        private string attachmentContentTypeField;
-        
         private string attachmentFileNameField;
         
         private ProjectAttachmentCategory categoryField;
@@ -302,16 +300,6 @@ namespace PraticeManagement.AttachmentService {
             }
             set {
                 this.attachmentIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string AttachmentContentType {
-            get {
-                return this.attachmentContentTypeField;
-            }
-            set {
-                this.attachmentContentTypeField = value;
             }
         }
         
@@ -395,6 +383,12 @@ namespace PraticeManagement.AttachmentService {
         
         /// <remarks/>
         ChangeRequest,
+        
+        /// <remarks/>
+        Proposal,
+        
+        /// <remarks/>
+        ProjectEstimate,
     }
     
     /// <remarks/>
