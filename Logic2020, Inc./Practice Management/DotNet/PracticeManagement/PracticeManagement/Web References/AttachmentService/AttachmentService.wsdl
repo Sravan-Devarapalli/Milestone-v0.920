@@ -14,7 +14,6 @@
       <s:complexType name="ProjectAttachment">
         <s:sequence>
           <s:element minOccurs="1" maxOccurs="1" name="AttachmentId" type="s:int" />
-          <s:element minOccurs="0" maxOccurs="1" name="AttachmentContentType" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="AttachmentFileName" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="Category" type="tns:ProjectAttachmentCategory" />
           <s:element minOccurs="0" maxOccurs="1" name="AttachmentData" type="s:base64Binary" />
@@ -29,6 +28,8 @@
           <s:enumeration value="SOW" />
           <s:enumeration value="MSA" />
           <s:enumeration value="ChangeRequest" />
+          <s:enumeration value="Proposal" />
+          <s:enumeration value="ProjectEstimate" />
         </s:restriction>
       </s:simpleType>
       <s:element name="SaveProjectAttachmentResponse">
