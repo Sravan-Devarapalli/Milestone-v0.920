@@ -153,7 +153,13 @@ namespace DataTransferObjects
         MSA = 2,
         [EnumMember]
         [Description("Change Request")]
-        ChangeRequest = 3
+        ChangeRequest = 3,
+        [EnumMember]
+        [Description("Proposal")]
+        Proposal = 4,
+        [EnumMember]
+        [Description("Project Estimate")]
+        ProjectEstimate = 5 
     }
 }
 
