@@ -59,7 +59,7 @@ namespace PraticeManagement.PersonSkillService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonSkillServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonSkillService.IPersonSkillService>, PraticeManagement.PersonSkillService.IPersonSkillService {
-        
+              
         public PersonSkillServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
