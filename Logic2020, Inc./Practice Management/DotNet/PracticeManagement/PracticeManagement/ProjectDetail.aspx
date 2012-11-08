@@ -32,13 +32,81 @@
         type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
     <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>   
+    <script src="Scripts/jquery.uploadify.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-
-        function pageLoad() {
+   
+      var jsonobj = []; 
+      var fileError = "";   
+        function pageLoad() {    
+               
             document.onkeypress = enterPressed;
+            $("#<%=FileUpload1.ClientID%>").fileUpload({
+                'uploader': 'Scripts/uploader.swf',
+                'cancelImg': 'Images/cancel.png',
+                'buttonText': 'Browse Files',
+                'script': 'Controls/Projects/AttachmentUpload.ashx',
+                'fileExt': '*.xls;*.xlsx;*.xlw;*.doc;*.docx;*.pdf;*.ppt;*.pptx;*.mpp;*.vsd;*.msg;*.ZIP;*.RAR;*.sig;*.one*',
+                'fileDesc': 'Excel;Word doc;PDF;PowerPoint;MS Project;Visio;Exchange;ZIP;RAR;OneNote',
+                'multi': true,
+                'auto': false,
+                'sizeLimit':4294656,//4194kb - 4294656bytes
+                onComplete: function(event, queueID, fileObj, reponse, data) 
+                {
+                    var div = document.getElementById('<%= uploadedFiles.ClientID%>');  
+                    var lblUplodedFilesMsg = document.getElementById('<%= lblUplodedFilesMsg.ClientID%>');
+                    if(lblUplodedFilesMsg.getAttribute("class") == "displayNone")
+                    {
+                        lblUplodedFilesMsg.setAttribute("class","fontBold");
+                        div.appendChild(document.createElement("br"));
+                    }
+                    div.appendChild(document.createTextNode(fileObj.name));
+                    div.appendChild(document.createElement("br"));
+
+                    if(reponse != "Uploaded")
+                    {
+                        jsonobj.push(reponse);
+                    }
+                },
+                onAllComplete: function (event, queueID, fileObj, response, data) {
+                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');                  
+                    hdnAttachment.value = "{'attachemnt':["+jsonobj+"]}"; 
+
+                    var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
+                    ddlAttachmentCategory.value = "0";
+                    var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
+                    uploadButton.disabled = "disabled";
+                    if(fileError == "")
+                    {
+                        var btnCancel = document.getElementById('<%= btnCancel.ClientID %>');
+                        btnCancel.click();
+                    }
+                },
+                onError: function(event, ID, fileObj, errorObj)
+                { 
+                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');                  
+                    hdnAttachment.value = "{'attachemnt':["+jsonobj+"]}";
+                    fileError = "Error";
+                },
+                onCancel: function()
+                { 
+                    EnableUploadButton("onCancel"); 
+                },                  
+                onSelectOnce: function()
+                {
+                   EnableUploadButton("onSelect");
+                }
+            });
         }
+        
+        function startUpload(){           
+            var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
+            var selectedValue = ddlAttachmentCategory.value;          
+            $("#<%=FileUpload1.ClientID%>").fileUploadSettings('scriptData','&ProjectId='+<%=Id %>+'&categoryId='+selectedValue);	
+            $("#<%=FileUpload1.ClientID%>").fileUploadStart();
+        }
+
 
         function enterPressed(evn) {
             if (window.event && window.event.keyCode == 13) {
@@ -81,34 +149,34 @@
             args.IsValid = IsValidProjectAttachMent();
         }
 
-        function IsValidProjectAttachMent() {
+//        function IsValidProjectAttachMent() {
 
-            var fuControl = document.getElementById('<%= fuProjectAttachment.ClientID %>');
-            var FileUploadPath = fuControl.value;
-            var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
-            if (Extension == "pdf" || Extension == "doc" || Extension == "docx") {
-                return true; // Valid file type
-            }
-            else {
-                return false; // Not valid file type
-            }
-        }
+//            var fuControl = document.getElementById('fuProjectAttachment.ClientID %>');
+//            var FileUploadPath = fuControl.value;
+//            var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+//            if (Extension == "pdf" || Extension == "doc" || Extension == "docx" || Extension == "xls" || Extension == "xlsx" || Extension == "xlw" || Extension == "ppt" || Extension == "pptx" || Extension == "mpp" || Extension == "vsd" || Extension == "msg" || Extension == "ZIP" || Extension == "RAR") {
+//                return true; // Valid file type
+//            }
+//            else {
+//                return false; // Not valid file type
+//            }
+//        }
 
 
-        function cvAttachment_ClientValidationFunction(obj, args) {
-            args.IsValid = IsHaveAttachement();
-        }
+//        function cvAttachment_ClientValidationFunction(obj, args) {
+//            args.IsValid = IsHaveAttachement();
+//        }
 
-        function IsHaveAttachement() {
-            var fuControl = document.getElementById('<%= fuProjectAttachment.ClientID %>');
-            var fileUploadPath = fuControl.value;
-            if (fileUploadPath != null && fileUploadPath != undefined) {
-                return true; // Valid file type
-            }
-            else {
-                return false; // Not valid file type
-            }
-        }
+//        function IsHaveAttachement() {
+//            var fuControl = document.getElementById('fuProjectAttachment.ClientID %>');
+//            var fileUploadPath = fuControl.value;
+//            if (fileUploadPath != null && fileUploadPath != undefined) {
+//                return true; // Valid file type
+//            }
+//            else {
+//                return false; // Not valid file type
+//            }
+//        }
 
         function cvAttachmentCategory_ClientValidationFunction(obj, args) {
             args.IsValid = IsAttachmentCategorySelected();
@@ -125,9 +193,18 @@
             }
         }
 
-        function EnableUploadButton() {
-            var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
-            if (IsHaveAttachement() && IsValidProjectAttachMent() && IsAttachmentCategorySelected()) {
+        function EnableUploadButton(cancel) {             
+            var fileUploadQueue = document.getElementsByClassName('fileUploadQueueItem');
+            var count = 0;
+            for(var i=0 ;i<fileUploadQueue.length;i++)
+            {
+              if(fileUploadQueue[i].style.display == "")
+              {
+                count++;
+              }
+            }
+            var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');//IsHaveAttachement() && IsValidProjectAttachMent() && 
+            if (((cancel == "onCancel" && count > 1) || (cancel == undefined && count > 0) || (cancel == "onSelect" && count >= 0)) && IsAttachmentCategorySelected()) {
                 uploadButton.disabled = "";
             }
             else {
@@ -307,11 +384,13 @@
 
         $(document).ready(function () {
             SetTooltipsForallDropDowns();
+            $('script #tableSorterScript').load(function () { 
             $("#tblProjectAttachments").tablesorter(
                 {
                     sortList: [[0, 0]]
                 }
                 );
+                 });
         });
 
         function mailTo(url) {
@@ -817,9 +896,9 @@
                                     <div class="PaddingBottom35Px">
                                         <asp:ShadowedTextButton ID="stbAttachSOW" runat="server" CausesValidation="false"
                                             CssClass="add-btn" OnClientClick="return false;" Text="Add Attachment" />
+                                        <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="stbAttachSOW"
+                                            BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     </div>
-                                    <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="stbAttachSOW"
-                                        BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     <asp:Repeater ID="repProjectAttachments" runat="server">
                                         <HeaderTemplate>
                                             <table class="CompPerfTable tablesorter" width="100%" align="center" id="tblProjectAttachments">
@@ -1096,8 +1175,12 @@
                 Width="465px">
                 <table class="WholeWidth Padding5">
                     <tr class="BackGroundColorGray Height27Px">
-                        <td align="center" class="TdAddAttachmentText" colspan="2">
+                        <td align="center" class="TdAddAttachmentText">
                             Add Attachment
+                        </td>
+                        <td>
+                            <asp:Button ID="btnCancel" runat="server" CssClass="mini-report-close floatright"
+                                ToolTip="Close" Text="X" OnClick="btnCancel_OnClick"></asp:Button>
                         </td>
                     </tr>
                     <tr>
@@ -1107,25 +1190,14 @@
                     </tr>
                     <tr>
                         <td class="FileUploadAttachment" colspan="2">
-                            <asp:FileUpload ID="fuProjectAttachment" onchange="EnableUploadButton();" CssClass="FileUpload"
-                                runat="server" Size="68" />
-                            <asp:CustomValidator ID="cvAttachment" runat="server" ControlToValidate="fuProjectAttachment"
-                                EnableClientScript="true" ClientValidationFunction="cvAttachment_ClientValidationFunction"
-                                SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvAttachment_OnServerValidate"
-                                ValidationGroup="ProjectAttachment" Text="*" ToolTip="File is Required." ErrorMessage="File is Required."></asp:CustomValidator>
-                            <asp:CustomValidator ID="cvProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
-                                EnableClientScript="true" ClientValidationFunction="cvProjectAttachment_ClientValidationFunction"
-                                SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvProjectAttachment_OnServerValidate"
-                                ValidationGroup="ProjectAttachment" Text="*" ToolTip="File Format must be PDF/DOC/DOCX."
-                                ErrorMessage="File Format must be PDF/DOC/DOCX."></asp:CustomValidator>
-                            <asp:CustomValidator ID="cvalidatorProjectAttachment" runat="server" ControlToValidate="fuProjectAttachment"
-                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="cvalidatorProjectAttachment_OnServerValidate"
-                                ValidationGroup="ProjectAttachment" Text="*"></asp:CustomValidator>
+                            <div style="padding: 40px">
+                                <asp:FileUpload ID="FileUpload1" runat="server" />
+                            </div>
                         </td>
                     </tr>
                     <tr>
                         <td class="FileUploadAttachment" colspan="2">
-                            <asp:Label ID="lblAttachmentMessage" ForeColor="Gray" runat="server"></asp:Label>
+                            <asp:Label ID="lblAttachmentMessage" ForeColor="Gray" runat="server" CssClass="WordWrap"></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -1138,16 +1210,22 @@
                                 ClientValidationFunction="cvAttachmentCategory_ClientValidationFunction" ErrorMessage="Category is required."></asp:CustomValidator>
                         </td>
                         <td align="right" class="FileUploadAttachment PaddingTop10Px">
-                            <asp:Button ID="btnUpload" Enabled="false" ValidationGroup="ProjectAttachment" runat="server"
-                                Text="Upload" ToolTip="Upload" OnClick="btnUpload_Click" />
-                            &nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="btnCancel" OnClick="btnCancel_OnClick" runat="server" Text="Cancel"
-                                ToolTip="Cancel" />
+                            <asp:Button ID="btnUpload" ValidationGroup="ProjectAttachment" runat="server" Text="Upload"
+                                ToolTip="Upload" Enabled="false"></asp:Button>
+                            <asp:HiddenField ID="hdnAttachment" runat="server" />
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
                             &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="FileUploadAttachment paddingBottom10px">
+                            <div id="uploadedFiles" runat="server">
+                                <label id="lblUplodedFilesMsg" runat="server" class="displayNone">
+                                    Following files are uploaded successfully:</label>
+                            </div>
                         </td>
                     </tr>
                 </table>
