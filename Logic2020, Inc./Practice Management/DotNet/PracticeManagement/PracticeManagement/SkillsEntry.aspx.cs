@@ -93,6 +93,7 @@ namespace PraticeManagement
 
         public bool IsFirst = true;
         private bool IsPreviousTabValid = true;
+        private bool UnsavedSkillsEntriesExists = false;
 
         #endregion
 
@@ -310,17 +311,32 @@ namespace PraticeManagement
             }
         }
 
+        private GridView ActiveGridView(bool includeIndustries)
+        {
+            int activeIndex = tcSkillsEntry.ActiveTabIndex;
+            switch (activeIndex)
+            {
+                case 0:
+                    return gvBusinessSkills;
+                case 1:
+                    return gvTechnicalSkills;
+                case 3:
+                    if (includeIndustries)
+                    {
+                        return gvIndustrySkills;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                default:
+                    return null;
+            }
+        }
+
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            GridView gvSkills = null;
-            if (tcSkillsEntry.ActiveTabIndex == 0)
-            {
-                gvSkills = gvBusinessSkills;
-            }
-            else if (tcSkillsEntry.ActiveTabIndex == 1)
-            {
-                gvSkills = gvTechnicalSkills;
-            }
+            GridView gvSkills = ActiveGridView(false);
             if (gvSkills != null)
             {
                 var animHide = gvSkills.HeaderRow.FindControl("animHide") as AnimationExtender;
@@ -415,8 +431,16 @@ namespace PraticeManagement
             ClearDirty();
         }
 
+        protected void btnCancelPicture_Click(object sender, EventArgs e)
+        {
+            EnableClickLinkButton();
+            EnableSaveAndCancelButtons(UnsavedSkillsEntriesExists);
+        }
+
         protected void btnUpdatePictureLink_OnClick(object sender, EventArgs e)
         {
+            EnableClickLinkButton();
+            EnableSaveAndCancelButtons(UnsavedSkillsEntriesExists);
             if (fuPersonPicture.HasFile)
             {
                 PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
@@ -431,6 +455,8 @@ namespace PraticeManagement
 
         protected void btnPictureDelete_OnClick(object sender, EventArgs e)
         {
+            EnableClickLinkButton();
+            EnableSaveAndCancelButtons(UnsavedSkillsEntriesExists);
             PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
             svc.SavePersonPicture(Person.Id.Value, null, User.Identity.Name, null);
 
@@ -442,20 +468,17 @@ namespace PraticeManagement
 
         protected void btnProfilePopupUpdate_OnClick(object sender, EventArgs e)
         {
-            //mlConfirmation.ClearMessage();
+            EnableClickLinkButton();
+            EnableSaveAndCancelButtons(UnsavedSkillsEntriesExists);
             UpdatePersonProfilesFromRep(false);
             Page.Validate("ProfileValidationGroup");
             if (Page.IsValid)
             {
-
                 string profilesXml = GetProfilesLinksXml();
                 ServiceCallers.Custom.PersonSkill(p => p.SavePersonProfiles(Person.Id.Value, profilesXml, DataHelper.CurrentPerson.Alias));
                 var personProfiles = ServiceCallers.Custom.PersonSkill(p => p.GetPersonProfiles(Person.Id.Value)).ToList();
                 Person.Profiles = personProfiles;
-                PersonProfiles = null;
-                repProfiles.DataSource = PersonProfiles;
-                repProfiles.DataBind();
-                //mlConfirmation.ShowInfoMessage("Profiles updated successfully.");
+                BindProfilesRepeater(null);
             }
             else
             {
@@ -465,16 +488,24 @@ namespace PraticeManagement
 
         protected void btnCancelProfile_OnClick(object sender, EventArgs e)
         {
-            PersonProfiles = null;
+            EnableClickLinkButton();
+            EnableSaveAndCancelButtons(UnsavedSkillsEntriesExists);
+            BindProfilesRepeater(null);
+        }
+
+        private void BindProfilesRepeater(List<Profile> personProfiles)
+        {
+            PersonProfiles = personProfiles;
             repProfiles.DataSource = PersonProfiles;
             repProfiles.DataBind();
         }
 
         protected void ibtnAddProfile_Click(object sender, EventArgs e)
         {
+            EnableClickLinkButton();
+            EnableSaveAndCancelButtons(UnsavedSkillsEntriesExists);
             UpdatePersonProfilesFromRep(true);
-            repProfiles.DataSource = PersonProfiles;
-            repProfiles.DataBind();
+            BindProfilesRepeater(PersonProfiles);
             mpeProfilePopUp.Show();
         }
 
@@ -623,18 +654,23 @@ namespace PraticeManagement
 
         private void EnableClickLinkButton()
         {
-            var rows = gvBusinessSkills.Rows;
-            foreach (GridViewRow row in rows)
+            var grid = ActiveGridView(false);
+            if (grid != null)
             {
-                var hdnChanged = row.FindControl(hdnChangedId) as HiddenField;
-                if (hdnChanged != null && hdnChanged.Value == "1")
+                var rows = grid.Rows;
+                foreach (GridViewRow row in rows)
                 {
-                    var ddlLevel = row.FindControl(ddlLevelId) as DropDownList;
-                    var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
-                    var ddlLastUsed = row.FindControl(ddlLastUsedId) as DropDownList;
-                    var clearLink = row.FindControl(lnkbtnClearId) as LinkButton;
+                    var hdnChanged = row.FindControl(hdnChangedId) as HiddenField;
+                    if (hdnChanged != null && hdnChanged.Value == "1")
+                    {
+                        UnsavedSkillsEntriesExists = true;
+                        var ddlLevel = row.FindControl(ddlLevelId) as DropDownList;
+                        var ddlExperience = row.FindControl(ddlExperienceId) as DropDownList;
+                        var ddlLastUsed = row.FindControl(ddlLastUsedId) as DropDownList;
+                        var clearLink = row.FindControl(lnkbtnClearId) as LinkButton;
 
-                    ApplyClearLinkStyle(clearLink, !(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0));
+                        ApplyClearLinkStyle(clearLink, !(ddlLevel.SelectedIndex == 0 && ddlExperience.SelectedIndex == 0 && ddlLastUsed.SelectedIndex == 0));
+                    }
                 }
             }
         }
