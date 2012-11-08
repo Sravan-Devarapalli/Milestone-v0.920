@@ -68,6 +68,18 @@ namespace PraticeManagement
             }
         }
 
+        public Person LoggedInPerson
+        {
+            get 
+            {
+                return ServiceCallers.Custom.Person(p => p.GetPersonByAlias(User.Identity.Name));
+            }
+            set
+            {
+                LoggedInPerson = value; 
+            }
+        }
+
         public Client InternalClient
         {
             get
@@ -1797,6 +1809,7 @@ namespace PraticeManagement
                         projectAttachment.AttachmentSize = (int)attachmentFileData["AttachmentSize"];
                         projectAttachment.Category =  (PraticeManagement.AttachmentService.ProjectAttachmentCategory)Convert.ToInt32(attachmentFileData["Category"]);
                         projectAttachment.UploadedDate = (DateTime)attachmentFileData["UploadedDate"];
+                        projectAttachment.Uploader = LoggedInPerson.PersonFirstLastName;
                         projectAttachment.AttachmentData = Array.ConvertAll<object, byte>((object[])attachmentFileData["AttachmentData"], new Converter<object, byte>(ObjToByte));                      
                         AttachmentsForNewProject.Add(projectAttachment);
                     }
