@@ -1210,40 +1210,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlAttachSOW;
         
         /// <summary>
-        /// fuProjectAttachment control.
+        /// btnCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fuProjectAttachment;
+        protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
-        /// cvAttachment control.
+        /// FileUpload1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvAttachment;
-        
-        /// <summary>
-        /// cvProjectAttachment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvProjectAttachment;
-        
-        /// <summary>
-        /// cvalidatorProjectAttachment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvalidatorProjectAttachment;
+        protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
         
         /// <summary>
         /// lblAttachmentMessage control.
@@ -1282,13 +1264,31 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnUpload;
         
         /// <summary>
-        /// btnCancel control.
+        /// hdnAttachment control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancel;
+        protected global::System.Web.UI.WebControls.HiddenField hdnAttachment;
+        
+        /// <summary>
+        /// uploadedFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl uploadedFiles;
+        
+        /// <summary>
+        /// lblUplodedFilesMsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblUplodedFilesMsg;
         
         /// <summary>
         /// mpeErrorPanel control.
