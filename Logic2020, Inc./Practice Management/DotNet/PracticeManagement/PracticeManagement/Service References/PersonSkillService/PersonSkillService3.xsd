@@ -40,7 +40,7 @@
       <xs:element minOccurs="0" name="OverheadList" nillable="true" type="tns:ArrayOfPersonOverhead" />
       <xs:element minOccurs="0" name="PaychexID" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PaymentHistory" nillable="true" type="tns:ArrayOfPay" />
-      <xs:element minOccurs="0" name="PersonPicture" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="PictureData" nillable="true" type="xs:base64Binary" />
       <xs:element minOccurs="0" name="PracticesOwned" nillable="true" type="tns:ArrayOfPractice" />
       <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Profiles" nillable="true" type="q5:ArrayOfProfile" />
       <xs:element minOccurs="0" name="ProjectRoleName" nillable="true" type="xs:string" />
@@ -204,7 +204,6 @@
   <xs:element name="ArrayOfProjectAttachment" nillable="true" type="tns:ArrayOfProjectAttachment" />
   <xs:complexType name="ProjectAttachment">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AttachmentContentType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="AttachmentData" nillable="true" type="xs:base64Binary" />
       <xs:element minOccurs="0" name="AttachmentFileName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="AttachmentId" type="xs:int" />
@@ -221,6 +220,8 @@
       <xs:enumeration value="SOW" />
       <xs:enumeration value="MSA" />
       <xs:enumeration value="ChangeRequest" />
+      <xs:enumeration value="Proposal" />
+      <xs:enumeration value="ProjectEstimate" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ProjectAttachmentCategory" nillable="true" type="tns:ProjectAttachmentCategory" />
