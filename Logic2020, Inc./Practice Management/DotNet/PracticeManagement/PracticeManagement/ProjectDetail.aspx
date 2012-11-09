@@ -34,15 +34,15 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.uploadify.min.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.uploadify.min.js?id=15" type="text/javascript"></script>
     <script type="text/javascript">
    
-      var jsonobj = []; 
-      var fileError = "";   
-        function pageLoad() {    
+      var unsavedFiles = [];
+      var fileError = 0;
+        function pageLoad() {
                
             document.onkeypress = enterPressed;
-            $("#<%=FileUpload1.ClientID%>").fileUpload({
+            $("#<%=fuAttachmentsUpload.ClientID%>").fileUpload({
                 'uploader': 'Scripts/uploader.swf',
                 'cancelImg': 'Images/close_16.png',
                 'buttonText': 'Browse File(s)',               
@@ -66,47 +66,67 @@
 
                     if(reponse != "Uploaded")
                     {
-                        jsonobj.push(reponse);
+                        unsavedFiles.push(reponse);
                     }
                 },
                 onAllComplete: function (event, queueID, fileObj, response, data) {
-                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');                  
-                    hdnAttachment.value = "{'attachemnt':["+jsonobj+"]}"; 
+                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');
+                    hdnAttachment.value = "{'attachemnt':["+ unsavedFiles +"]}";
 
-                    var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
-                    ddlAttachmentCategory.value = "0";
                     var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
                     uploadButton.disabled = "disabled";
-                    if(fileError == "")
+
+                    if(fileError == 0)
                     {
+                        unsavedFiles = [];
                         var btnCancel = document.getElementById('<%= btnCancel.ClientID %>');
                         btnCancel.click();
                     }
                 },
                 onError: function(event, ID, fileObj, errorObj)
-                { 
-                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');                  
-                    hdnAttachment.value = "{'attachemnt':["+jsonobj+"]}";
-                    fileError = "Error";
+                {
+                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');
+                    hdnAttachment.value = "{'attachemnt':["+ unsavedFiles +"]}";
+                    fileError = 1;
                 },
-                onCancel: function()
-                { 
-                    EnableUploadButton("onCancel"); 
-                },                  
                 onSelectOnce: function()
                 {
-                   EnableUploadButton("onSelect");
+                   EnableUploadButton(true);
+                },
+                onCancelComplete: function() {
+                    EnableUploadButton();
                 }
             });
         }
+
+        function ClearVariables() {
+            unsavedFiles = [];
+            fileError = 0;
+        }
         
-        function startUpload(){           
+        function startUpload(){
             var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
-            var selectedValue = ddlAttachmentCategory.value;          
-            $("#<%=FileUpload1.ClientID%>").fileUploadSettings('scriptData','&ProjectId='+<%=Id %>+'&categoryId='+selectedValue);	
-            $("#<%=FileUpload1.ClientID%>").fileUploadStart();
+            var selectedValue = ddlAttachmentCategory.value;
+            $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadSettings('scriptData','&ProjectId='+<%=Id %>+'&categoryId='+selectedValue);	
+            $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadStart();
         }
 
+        function EnableUploadButton(selected) {
+            var categorySelected = IsAttachmentCategorySelected();
+            var fileSelected = (selected == true ? true : false);
+            if(categorySelected && !fileSelected)
+            {
+                var fileUploadQueue = $('.fileUploadQueueItem');
+                for(var i=0; i < fileUploadQueue.length;i++){
+                  if(fileUploadQueue[i].style.display == ""){
+                    fileSelected = true;
+                    break;
+                  }
+                }
+            }
+            var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
+            uploadButton.disabled = categorySelected && fileSelected ? "" : "disabled";
+        }
 
         function enterPressed(evn) {
             if (window.event && window.event.keyCode == 13) {
@@ -149,35 +169,6 @@
             args.IsValid = IsValidProjectAttachMent();
         }
 
-//        function IsValidProjectAttachMent() {
-
-//            var fuControl = document.getElementById('fuProjectAttachment.ClientID %>');
-//            var FileUploadPath = fuControl.value;
-//            var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
-//            if (Extension == "pdf" || Extension == "doc" || Extension == "docx" || Extension == "xls" || Extension == "xlsx" || Extension == "xlw" || Extension == "ppt" || Extension == "pptx" || Extension == "mpp" || Extension == "vsd" || Extension == "msg" || Extension == "ZIP" || Extension == "RAR") {
-//                return true; // Valid file type
-//            }
-//            else {
-//                return false; // Not valid file type
-//            }
-//        }
-
-
-//        function cvAttachment_ClientValidationFunction(obj, args) {
-//            args.IsValid = IsHaveAttachement();
-//        }
-
-//        function IsHaveAttachement() {
-//            var fuControl = document.getElementById('fuProjectAttachment.ClientID %>');
-//            var fileUploadPath = fuControl.value;
-//            if (fileUploadPath != null && fileUploadPath != undefined) {
-//                return true; // Valid file type
-//            }
-//            else {
-//                return false; // Not valid file type
-//            }
-//        }
-
         function cvAttachmentCategory_ClientValidationFunction(obj, args) {
             args.IsValid = IsAttachmentCategorySelected();
         }
@@ -190,25 +181,6 @@
             }
             else {
                 return false; // Not valid 
-            }
-        }
-
-        function EnableUploadButton(cancel) {             
-            var fileUploadQueue = document.getElementsByClassName('fileUploadQueueItem');
-            var count = 0;
-            for(var i=0 ;i<fileUploadQueue.length;i++)
-            {
-              if(fileUploadQueue[i].style.display == "")
-              {
-                count++;
-              }
-            }
-            var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');//IsHaveAttachement() && IsValidProjectAttachMent() && 
-            if (((cancel == "onCancel" && count > 1) || (cancel == undefined && count > 0) || (cancel == "onSelect" && count >= 0)) && IsAttachmentCategorySelected()) {
-                uploadButton.disabled = "";
-            }
-            else {
-                uploadButton.disabled = "disabled";
             }
         }
 
@@ -1176,8 +1148,9 @@
                     <tr class="BackGroundColorGray Height27Px">
                         <td align="center" class="TdAddAttachmentText WS-Normal" colspan="2">
                             Add Attachment
-                            <asp:Button ID="btnCancel" runat="server" CssClass="mini-report-close floatright"
-                                ToolTip="Close" Text="X" OnClick="btnCancel_OnClick"></asp:Button>
+                            <asp:Button ID="btnAttachmentPopupClose" runat="server" CssClass="mini-report-close floatright"
+                                ToolTip="Close" Text="X" OnClientClick="ClearVariables();" OnClick="btnCancel_OnClick">
+                            </asp:Button>
                         </td>
                     </tr>
                     <tr>
@@ -1187,7 +1160,7 @@
                     </tr>
                     <tr>
                         <td class="FileUploadAttachment PaddingBottom10" colspan="2">
-                            <asp:FileUpload ID="FileUpload1" runat="server" />
+                            <asp:FileUpload ID="fuAttachmentsUpload" runat="server" />
                         </td>
                     </tr>
                     <tr>
@@ -1208,6 +1181,8 @@
                             <asp:Button ID="btnUpload" ValidationGroup="ProjectAttachment" runat="server" Text="Upload"
                                 ToolTip="Upload" Enabled="false"></asp:Button>
                             <asp:HiddenField ID="hdnAttachment" runat="server" />
+                            <asp:Button ID="btnCancel" runat="server" ToolTip="Cancel" Text="Cancel" OnClientClick="ClearVariables();"
+                                OnClick="btnCancel_OnClick"></asp:Button>
                         </td>
                     </tr>
                     <tr>
@@ -1339,8 +1314,6 @@
             </asp:Panel>
         </ContentTemplate>
         <Triggers>
-            <asp:PostBackTrigger ControlID="btnUpload" />
-            <asp:PostBackTrigger ControlID="btnCancel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
