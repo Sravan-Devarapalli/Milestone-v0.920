@@ -34,19 +34,21 @@ namespace PraticeManagement
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
-        private const string AttachSOWMessage = "File must be in PDF, Word format, Excel, PowerPoint, MS Project, Visio, Exchange, OneNote, ZIP or RAR and be no larger than {0} KB";
+        private const string AttachSOWMessage = "File should be in PDF, Word format, Excel, PowerPoint, MS Project, Visio, Exchange, OneNote, ZIP or RAR and be no larger than {0} KB";
         private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         public const string AllTimeTypesKey = "AllTimeTypesKey";
         public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
         public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
+        public const string ViewStateLoggedInPerson = "ViewStateLoggedInPerson";
 
-        public string id = "";
         public string Id
         {
-            get { return id; }
-            set { id = value; }
+            get {
+                if (ProjectId.HasValue)
+                    return ProjectId.Value.ToString();
+                return "0"; }
         }
 
         #endregion
@@ -70,13 +72,13 @@ namespace PraticeManagement
 
         public Person LoggedInPerson
         {
-            get 
+            get
             {
-                return ServiceCallers.Custom.Person(p => p.GetPersonByAlias(User.Identity.Name));
-            }
-            set
-            {
-                LoggedInPerson = value; 
+                if (ViewState[ViewStateLoggedInPerson] == null)
+                {
+                    ViewState[ViewStateLoggedInPerson] = ServiceCallers.Custom.Person(p => p.GetPersonByAlias(User.Identity.Name));
+                }
+                return (Person)ViewState[ViewStateLoggedInPerson];
             }
         }
 
@@ -398,14 +400,6 @@ namespace PraticeManagement
             imgMailToProjectOwner.Visible =
             imgMailToClientDirector.Visible =
             imgMailToSalesperson.Visible = !txtProjectNameFirstTime.Visible;
-            if (ProjectId.HasValue)
-            {
-                Id = ProjectId.Value.ToString();
-            }
-            else
-            {
-                Id = "0";
-            }
         }
 
         /// <summary>
@@ -1828,15 +1822,14 @@ namespace PraticeManagement
                     repProjectAttachments.Visible = false;
                 }
 
-                ddlAttachmentCategory.SelectedValue = "0";
                 this.hdnAttachment.Value = "";
             }
             else
             {
                 Project = GetCurrentProject(ProjectId);
                 PopulateAttachmentControl(Project);
-            }         
-            
+            }
+            ddlAttachmentCategory.SelectedValue = "0";
         }
        
 
