@@ -1210,22 +1210,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlAttachSOW;
         
         /// <summary>
-        /// btnCancel control.
+        /// btnAttachmentPopupClose control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancel;
+        protected global::System.Web.UI.WebControls.Button btnAttachmentPopupClose;
         
         /// <summary>
-        /// FileUpload1 control.
+        /// fuAttachmentsUpload control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
+        protected global::System.Web.UI.WebControls.FileUpload fuAttachmentsUpload;
         
         /// <summary>
         /// lblAttachmentMessage control.
@@ -1271,6 +1271,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnAttachment;
+        
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
         /// uploadedFiles control.
