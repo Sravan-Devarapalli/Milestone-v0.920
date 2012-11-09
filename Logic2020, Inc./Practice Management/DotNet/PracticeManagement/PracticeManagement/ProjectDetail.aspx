@@ -87,7 +87,10 @@
                 {
                     var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');
                     hdnAttachment.value = "{'attachemnt':["+ unsavedFiles +"]}";
-                    fileError = 1;
+                    fileError++;                                     
+                    var queueItem = document.getElementById('ctl00_body_fuAttachmentsUpload'+ID);
+                    var imgElement = queueItem.firstChild.firstChild;
+                    imgElement.setAttribute("onclick","javascript:(document.getElementById('ctl00_body_fuAttachmentsUpload"+ID+"')).outerHTML= '';fileError--;");                                                  
                 },
                 onSelectOnce: function()
                 {
@@ -99,12 +102,31 @@
             });
         }
 
+        function ChangeCancelDivInnerHTML()
+        {
+            var cancelDiv = $('.fileUploadQueueItem .cancel');
+                       
+            for(i = 0; i< cancelDiv.length; i++)
+            {
+                var anchorTags = cancelDiv[i].firstChild;
+                var queueItemId = cancelDiv[i].parentElement.id;
+               
+                var imgElement = document.createElement('Img');
+                imgElement.setAttribute("src","Images/close_16.png");
+                imgElement.setAttribute("class","CursorPointer");
+                cancelDiv[i].innerHTML = "";
+                cancelDiv[i].appendChild(imgElement);
+               
+            }
+        }
+
         function ClearVariables() {
             unsavedFiles = [];
             fileError = 0;
         }
         
         function startUpload(){
+            ChangeCancelDivInnerHTML();
             var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
             var selectedValue = ddlAttachmentCategory.value;
             $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadSettings('scriptData','&ProjectId='+<%=Id %>+'&categoryId='+selectedValue);	
@@ -1177,7 +1199,7 @@
                                 ValidationGroup="ProjectAttachment" Text="*" ToolTip="Category is required."
                                 ErrorMessage="Category is required."></asp:CustomValidator>
                         </td>
-                        <td align="right" class="FileUploadAttachment PaddingTop10Px">
+                        <td align="right" class="FileUploadAttachment PaddingTop10Px no-wrap">
                             <asp:Button ID="btnUpload" ValidationGroup="ProjectAttachment" runat="server" Text="Upload"
                                 ToolTip="Upload" Enabled="false"></asp:Button>
                             <asp:HiddenField ID="hdnAttachment" runat="server" />
@@ -1191,7 +1213,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="FileUploadAttachment paddingBottom10px">
+                        <td class="FileUploadAttachment paddingBottom10px" colspan="2">
                             <div id="uploadedFiles" runat="server">
                                 <label id="lblUplodedFilesMsg" runat="server" class="displayNone">
                                     Following files are uploaded successfully:</label>
