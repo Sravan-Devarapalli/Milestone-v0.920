@@ -81,7 +81,8 @@ if (jQuery) {
                             onCancel: function () { },
                             onError: function () { },
                             onProgress: function () { },
-                            onComplete: function () { }
+                            onComplete: function () { },
+                            onCancelComplete: function () { }
                         }, b);
                         var d = location.pathname;
                         d = d.split("/");
@@ -207,7 +208,8 @@ if (jQuery) {
       if (j.data.action(j, h, i, k) !== false) {
           a("#" + a(this).attr("id") + h).fadeOut(250,
           function () {
-              a("#" + a(this).attr("id") + h).remove()
+              a("#" + a(this).attr("id") + h).remove();
+              settings.onCancelComplete();
           })
       }
   });
@@ -222,7 +224,7 @@ if (jQuery) {
   });
                         a(this).bind("rfuError", { action: settings.onError },
   function (k, h, j, i) {
-      if (k.data.action(k, h, j, i) !== false) {     
+      if (k.data.action(k, h, j, i) !== false) {
           a("#" + a(this).attr("id") + h + " .fileName").text(i.type + " Error - " + j.name);
           a("#" + a(this).attr("id") + h).css({ border: "3px solid #FBCBBC", "white-space": "normal" });
           a("#" + a(this).attr("id") + h + "ProgressBar").css("background-color", "#FDE5DD");
@@ -267,7 +269,8 @@ if (jQuery) {
             },
             fileUploadCancel: function (b) {
                 a(this).each(function () {
-                    document.getElementById(a(this).attr("id") + "Uploader").cancelFileUpload(b)                })
+                    document.getElementById(a(this).attr("id") + "Uploader").cancelFileUpload(b)
+                })
 
             },
             fileUploadClearQueue: function () { a(this).each(function () { document.getElementById(a(this).attr("id") + "Uploader").clearFileUploadQueue() }) }
