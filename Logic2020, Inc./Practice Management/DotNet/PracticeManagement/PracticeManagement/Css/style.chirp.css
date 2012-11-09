@@ -5851,7 +5851,6 @@ BenchCosts.ascx*/
 }
 .FileUploadAttachment
 {
-    white-space: nowrap;
     padding-left: 10px;
     padding-right: 20px;
 }
@@ -7503,7 +7502,6 @@ table#ctl00_body_login tr td label
 	border: 3px solid #E5E5E5;
 	margin-top: 5px;
 	padding: 10px;
-	width: 300px;
 }
 .fileUploadQueueItem .cancel {
 	float: right;
