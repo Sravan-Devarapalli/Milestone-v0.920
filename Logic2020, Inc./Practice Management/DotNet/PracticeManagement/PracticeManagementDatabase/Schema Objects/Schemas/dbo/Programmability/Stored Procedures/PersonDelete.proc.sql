@@ -30,3 +30,6 @@ AS
 	DELETE dbo.Person
 	 WHERE PersonId = @PersonId
 
+	DELETE dbo.PersonHistory
+	 WHERE PersonId = @PersonId
+
