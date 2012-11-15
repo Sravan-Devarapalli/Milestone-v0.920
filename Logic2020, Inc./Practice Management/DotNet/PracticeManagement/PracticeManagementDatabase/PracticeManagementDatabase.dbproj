@@ -4025,9 +4025,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\PersonHistory.table.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\RecruiterCommissionHistory.table.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_RecruiterCommission_InsertUpdateDelete.trigger.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4155,6 +4152,27 @@
     <Build Include="Schema Objects\Schemas\Skills\Programmability\Stored Procedures\GetPersonWithHasPictureField.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetAvgUtilizationTable.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetCurrentPayTypeTable.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetNumberAvaliableHoursTable.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetPersonVacationDaysTable.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetNumberProjectedHoursTable.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetWeeklyUtilizationTable.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetWeeklyUtilizationForConsultant.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4204,4 +4222,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
