@@ -310,7 +310,62 @@ namespace DataAccess
         public static List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationWeeklyProcedure, connection))
+            {
+                List<Quadruple<Person, int[], int, int>> result = null;
+
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationWeeklyProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ActivePersons, context.ActivePersons);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ActiveProjects, context.ActiveProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedPersons, context.ProjectedPersons);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Granularity, context.Granularity);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Period, context.Period);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, context.PracticeIdList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, context.TimescaleIdList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SortId, context.SortId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SortDirection, context.SortDirection);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, context.ExcludeInternalPractices);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsSampleReport, context.IsSampleReport);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        result = GetPersonLoadWithVactionDays(reader);
+                        reader.NextResult();
+                        //ReadPersonsWeeklyUtlization(reader, result);
+                        //reader.NextResult();
+                        ReadPersonsEmploymentHistory(reader, result);
+                    }
+                }
+                Dictionary<int, List<int>> PersonWeeklyUtlization = GetWeeklyUtilizationForConsultant(context);
+
+                if (result != null && PersonWeeklyUtlization != null)
+                {
+                    foreach (var record in result)
+                    {
+                        if (record.First.Id.HasValue && PersonWeeklyUtlization.Any(p => p.Key == record.First.Id.Value))
+                        {
+                            record.Second = PersonWeeklyUtlization[record.First.Id.Value].ToArray();
+                        }
+                    }
+                }
+
+                return result;
+            }
+        }
+
+
+        public static Dictionary<int, List<int>> GetWeeklyUtilizationForConsultant(ConsultantTimelineReportContext context)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetWeeklyUtilizationForConsultant, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -326,14 +381,15 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.Period, context.Period);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, context.PracticeIdList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, context.TimescaleIdList);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SortId, context.SortId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SortDirection, context.SortDirection);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, context.ExcludeInternalPractices);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSampleReport, context.IsSampleReport);
 
                 connection.Open();
 
-                return GetPersonLoadWithVactionDays(command);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    return ReadPersonsWeeklyUtlization(reader);
+                }
             }
         }
 
@@ -416,78 +472,136 @@ namespace DataAccess
         /// <summary>
         /// reads a dataset of persons into a collection
         /// </summary>
-        private static List<Quadruple<Person, int[], int, int>> GetPersonLoadWithVactionDays(SqlCommand command)
+        private static List<Quadruple<Person, int[], int, int>> GetPersonLoadWithVactionDays(SqlDataReader reader)
         {
-            using (SqlDataReader reader = command.ExecuteReader())
+            if (reader.HasRows)
+            {
+                int personStatusIdIndex = reader.GetOrdinal(PersonStatusId);
+                int personStatusNameIndex = reader.GetOrdinal(NameColumn);
+                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                int employeeNumberIndex = reader.GetOrdinal(EmployeeNumberColumn);
+                //int weeklyLoadIndex = reader.GetOrdinal(WeeklyUtilColumn);
+                int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
+                int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+                int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+                int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
+                int personVacationDaysIndex = reader.GetOrdinal(PersonVactionDaysColumn);
+                int seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
+                int SeniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
+
+                var res = new List<Quadruple<Person, int[], int, int>>();
+                while (reader.Read())
+                {
+                    var person =
+                        new Person
+                        {
+                            Id = (int)reader[PersonIdColumn],
+                            FirstName = (string)reader[firstNameIndex],
+                            LastName = (string)reader[lastNameIndex],
+                            EmployeeNumber = (string)reader[employeeNumberIndex],
+                            Status = new PersonStatus
+                            {
+                                Id = (int)reader[personStatusIdIndex],
+                                Name = (string)reader[personStatusNameIndex]
+                            },
+                            CurrentPay = new Pay
+                            {
+                                TimescaleName = reader.GetString(timescaleNameIndex),
+                                Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
+                            },
+                            HireDate = (DateTime)reader[hireDateIndex],
+                            Seniority = new Seniority
+                            {
+                                Id = reader.GetInt32(seniorityIdColumnIndex),
+                                Name = reader.GetString(SeniorityNameColumnIndex)
+                            }
+                        };
+
+                    if (Convert.IsDBNull(reader[TerminationDateColumn]))
+                    {
+                        person.TerminationDate = null;
+                    }
+                    else
+                    {
+                        person.TerminationDate = (DateTime)reader[TerminationDateColumn];
+                    }
+
+                    int[] load = { 0 };//Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
+
+                    int avgUtil = reader.GetInt32(avgUtilIndex);
+
+                    int PersonVactionDays = reader.GetInt32(personVacationDaysIndex);
+
+
+                    res.Add(new Quadruple<Person, int[], int, int>(person, load, avgUtil, PersonVactionDays));
+                }
+
+                return res;
+            }
+            return null;
+        }
+
+        private static Dictionary<int, List<int>> ReadPersonsWeeklyUtlization(SqlDataReader reader)
+        {
+            Dictionary<int, List<int>> PersonWeeklyUtlization = new Dictionary<int, List<int>>();
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int weeklyUtlizationIndex = reader.GetOrdinal(Constants.ColumnNames.WeeklyUtlization);
+                while (reader.Read())
+                {
+                    int personid = reader.GetInt32(personIdIndex);
+                    List<int> weeklyUtlization = null;
+                    if (PersonWeeklyUtlization.Any(p => p.Key == personid))
+                    {
+                        weeklyUtlization = PersonWeeklyUtlization.First(p => p.Key == personid).Value;
+                    }
+                    else
+                    {
+                        weeklyUtlization = new List<int>();
+                        PersonWeeklyUtlization.Add(personid, weeklyUtlization);
+                    }
+                    weeklyUtlization.Add(reader.GetInt32(weeklyUtlizationIndex));
+                }
+            }
+            return PersonWeeklyUtlization;
+        }
+
+
+        private static void ReadPersonsEmploymentHistory(SqlDataReader reader, List<Quadruple<Person, int[], int, int>> result)
+        {
+            if (result != null)
             {
                 if (reader.HasRows)
                 {
-                    int personStatusIdIndex = reader.GetOrdinal(PersonStatusId);
-                    int personStatusNameIndex = reader.GetOrdinal(NameColumn);
-                    int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                    int lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                    int employeeNumberIndex = reader.GetOrdinal(EmployeeNumberColumn);
-                    int weeklyLoadIndex = reader.GetOrdinal(WeeklyUtilColumn);
-                    int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
-                    int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
-                    int hireDateIndex = reader.GetOrdinal(HireDateColumn);
-                    int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
-                    int personVacationDaysIndex = reader.GetOrdinal(PersonVactionDaysColumn);
-                    int seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
-                    int SeniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
+                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                    int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                    int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
 
-                    var res = new List<Quadruple<Person, int[], int, int>>();
                     while (reader.Read())
                     {
-                        var person =
-                            new Person
+                        var employment = new Employment();
+                        employment.PersonId = reader.GetInt32(personIdIndex);
+                        employment.HireDate = reader.GetDateTime(hireDateIndex);
+                        employment.TerminationDate = reader.IsDBNull(terminationDateIndex) ? null : (DateTime?)reader.GetDateTime(terminationDateIndex);
+
+                        Person person = null;
+                        if (result.Any(p => p.First.Id == employment.PersonId))
+                        {
+                            person = result.First(p => p.First.Id == employment.PersonId).First;
+                            if (person.EmploymentHistory == null)
                             {
-                                Id = (int)reader[PersonIdColumn],
-                                FirstName = (string)reader[firstNameIndex],
-                                LastName = (string)reader[lastNameIndex],
-                                EmployeeNumber = (string)reader[employeeNumberIndex],
-                                Status = new PersonStatus
-                                {
-                                    Id = (int)reader[personStatusIdIndex],
-                                    Name = (string)reader[personStatusNameIndex]
-                                },
-                                CurrentPay = new Pay
-                                {
-                                    TimescaleName = reader.GetString(timescaleNameIndex),
-                                    Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
-                                },
-                                HireDate = (DateTime)reader[hireDateIndex],
-                                Seniority = new Seniority
-                                {
-                                    Id = reader.GetInt32(seniorityIdColumnIndex),
-                                    Name = reader.GetString(SeniorityNameColumnIndex)
-                                }
-                            };
-
-                        if (Convert.IsDBNull(reader[TerminationDateColumn]))
-                        {
-                            person.TerminationDate = null;
+                                person.EmploymentHistory = new List<Employment>();
+                            }
                         }
-                        else
+                        if (person != null)
                         {
-                            person.TerminationDate = (DateTime)reader[TerminationDateColumn];
+                            person.EmploymentHistory.Add(employment);
                         }
-
-                        int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
-
-                        int avgUtil = reader.GetInt32(avgUtilIndex);
-
-                        int PersonVactionDays = reader.GetInt32(personVacationDaysIndex);
-
-
-                        res.Add(new Quadruple<Person, int[], int, int>(person, load, avgUtil, PersonVactionDays));
                     }
-
-                    return res;
                 }
             }
-
-            return null;
         }
 
         /// <summary>
