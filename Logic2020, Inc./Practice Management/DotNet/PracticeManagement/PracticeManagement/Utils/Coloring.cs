@@ -23,13 +23,13 @@ namespace PraticeManagement.Utils
         /// <param name="utilization">Utilization value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByUtilization(int utilization, bool isVac, bool isHired = true, bool isTerminated = false)
+        public static Color GetColorByUtilization(int utilization, bool isVac, bool isHiredIntheEmployeementRange = true)
         {
             //  Get settings from web.config
             ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
 
-            if (!isHired || isTerminated)
+            if (!isHiredIntheEmployeementRange)
                 return coloring.HiredColor;
 
             //  If that's vacation, return vacation color
@@ -48,19 +48,20 @@ namespace PraticeManagement.Utils
             return DEFAULT_COLOR;
         }
 
+
         /// <summary>
         /// Returns color based on capacity value
         /// </summary>
         /// <param name="utilization">Capacity value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByCapacity(int capacity, bool isVac, bool isHired, bool isTerminated, bool isWeekEnd)
+        public static Color GetColorByCapacity(int capacity, bool isVac, bool isHiredIntheEmployeementRange, bool isWeekEnd)
         {
             //  Get settings from web.config
             ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
-            
-            if (!isHired || isTerminated)
+
+            if (!isHiredIntheEmployeementRange)
                 return coloring.HiredColor;
 
             //  If that's vacation, return vacation color
