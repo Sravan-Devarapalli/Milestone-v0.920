@@ -377,6 +377,7 @@
             public const string IsJuryDuty = "IsJuryDuty";
             public const string IsBereavement = "IsBereavement";
             public const string IsTimeOffExists = "IsTimeOffExists";
+            public static string WeeklyUtlization = "WeeklyUtlization";
         }
 
         #endregion
@@ -821,6 +822,7 @@
                 public const string GetPersonEmploymentHistoryById = "dbo.GetPersonEmploymentHistoryById";
                 public const string GetPersonAdministrativeTimeTypesInRange = "dbo.GetPersonAdministrativeTimeTypesInRange";
                 public const string IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale = "dbo.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale";
+                public static string GetWeeklyUtilizationForConsultant = "dbo.GetWeeklyUtilizationForConsultant";
             }
 
             #endregion
