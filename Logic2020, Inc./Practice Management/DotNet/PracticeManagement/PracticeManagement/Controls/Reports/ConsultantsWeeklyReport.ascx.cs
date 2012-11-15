@@ -742,31 +742,28 @@ namespace PraticeManagement.Controls.Reports
             }
 
             var range = AddRange(pointStartDate, pointEndDate, _personsCount);
-            bool isHired = p.HireDate < pointEndDate;
-
-            bool isTerminated = false;
-
-            if (p.TerminationDate.HasValue && p.TerminationDate.Value < pointStartDate)
+            bool isHiredIntheEmployeementRange = p.EmploymentHistory.Any(ph => ph.HireDate < pointEndDate && (!ph.TerminationDate.HasValue || ph.TerminationDate.Value >= pointStartDate));
+            range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, load > 100, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, load < 0, isHiredIntheEmployeementRange);
+            if (!isHiredIntheEmployeementRange)
             {
-                isTerminated = true;
-            }
+                DateTime? oldTerminationdate = p.EmploymentHistory.Any(ph => ph.TerminationDate.HasValue && ph.TerminationDate.Value < pointStartDate) ? p.EmploymentHistory.Last(ph => ph.TerminationDate.HasValue && ph.TerminationDate.Value < pointStartDate).TerminationDate : (DateTime?)null;
+                DateTime? newHireDate = p.EmploymentHistory.Any(ph => ph.HireDate >= pointEndDate) ? p.EmploymentHistory.First(ph => ph.HireDate >= pointEndDate).HireDate : (DateTime?)null;
 
+                string tooltip = "";
 
-            range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, load > 100, isHired, isTerminated, isWeekEnd) : Coloring.GetColorByUtilization(load, load < 0, isHired, isTerminated);
-
-            if (isTerminated)
-            {
-                range.ToolTip = p.TerminationDate.Value.ToString("MM/dd/yyyy");
-
-                if (!isHired)
+                if (oldTerminationdate.HasValue && newHireDate.HasValue)
                 {
-                    range.ToolTip = string.Format("Hired:{0}{1} Terminated:{2}", p.HireDate.ToString("MM/dd/yyyy"), Environment.NewLine, p.TerminationDate.Value.ToString("MM/dd/yyyy"));
+                    tooltip = string.Format("Terminated: {0}{1} ReHired: {2}", oldTerminationdate.Value.ToString("MM/dd/yyyy"), Environment.NewLine, newHireDate.Value.ToString("MM/dd/yyyy"));
                 }
-
-            }
-            else if (!isHired)
-            {
-                range.ToolTip = p.HireDate.ToString("MM/dd/yyyy");
+                else if (newHireDate.HasValue)
+                {
+                    tooltip = string.Format("Hired: {0}", newHireDate.Value.ToString("MM/dd/yyyy"));
+                }
+                else if (oldTerminationdate.HasValue)
+                {
+                    tooltip = string.Format("Terminated: {0}", oldTerminationdate.Value.ToString("MM/dd/yyyy"));
+                }
+                range.ToolTip = tooltip;
             }
             else
             {
