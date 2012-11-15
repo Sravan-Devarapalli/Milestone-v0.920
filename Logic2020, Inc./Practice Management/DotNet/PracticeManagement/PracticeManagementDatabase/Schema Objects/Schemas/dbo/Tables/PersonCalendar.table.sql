@@ -8,5 +8,7 @@
 	[SubstituteDate]	DATETIME NULL,
 	[Description]		NVARCHAR(500) NULL,
 	[IsFromTimeEntry]	BIT NULL,
-	[ApprovedBy]		INT NULL
+	[ApprovedBy]		INT NULL,
+	[SeriesId]          BIGINT NOT NULL CONSTRAINT DF_PersonCalendar_SeriesId DEFAULT 0
 );
+
