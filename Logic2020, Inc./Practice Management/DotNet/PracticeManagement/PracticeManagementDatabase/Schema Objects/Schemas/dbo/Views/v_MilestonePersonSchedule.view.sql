@@ -12,8 +12,10 @@ AS
 	       m.IsHourlyAmount,
 	       m.StartDate,
 	       m.ProjectedDeliveryDate,
-	       m.IsDefault IsDefaultMileStone
-	  FROM dbo.[Milestone] AS m
+	       m.IsDefault IsDefaultMileStone,
+		   P.ProjectStatusId
+	  FROM dbo.Project P 
+		   INNER JOIN dbo.[Milestone] AS m ON P.ProjectId=m.ProjectId
 		   INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
 	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
 	       INNER JOIN dbo.PersonCalendarAuto AS cal
