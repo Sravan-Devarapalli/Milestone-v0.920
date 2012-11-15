@@ -36,17 +36,17 @@ AS
         ELSE IF(@SortId = 2) --Alphabetical  Pay Type
         BEGIN
 			SET @OrderBy = @OrderBy + ' paytp.[Name] DESC' +
-							', (dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects)) ASC'
+							', wutilAvg  ASC'
         END
         ELSE IF(@SortId = 3) --Alphabetical  Practice
         BEGIN
 			SET @OrderBy = @OrderBy + ' pr.[Name] DESC'  +
-						   ', (dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects)) ASC'
+						   ', wutilAvg  ASC'
         END
         ELSE
         BEGIN  --Average Utilization for Period
         
-			SET @OrderBy = @OrderBy + '(dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects))'
+			SET @OrderBy = @OrderBy + 'wutilAvg '
 			SET @OrderBy = @OrderBy + @SortDirection + ' ,  p.LastName DESC'
         END
         
@@ -68,7 +68,8 @@ AS
         INSERT  INTO @CurrentConsultants ( ConsId, TimeScaleId, TimeScaleName )
                 SELECT  p.PersonId, T.TimescaleId, T.Name
                 FROM    dbo.Person AS p
-				INNER JOIN dbo.Timescale T ON T.TimescaleId = dbo.GetCurrentPayType(p.PersonId) AND T.TimescaleId IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))
+				INNER JOIN dbo.Timescale T ON T.TimescaleId IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))
+				INNER JOIN dbo.GetCurrentPayTypeTable() AS PCPT ON PCPT.PersonId = p.PersonId AND T.TimescaleId = PCPT.Timescale  
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 WHERE   (p.IsStrawman = 0) 
                         AND ( (@ActivePersons = 1 AND p.PersonStatusId IN (1,5)) 
@@ -84,7 +85,7 @@ AS
 	-- @CurrentConsultants now contains ids of consultants
     ---------------------------------------------------------
     
-    SET @Query = @Query + ' 
+    SET @Query = @Query + '
         SELECT  p.PersonId,
                 p.EmployeeNumber,
                 p.FirstName,
@@ -97,16 +98,29 @@ AS
                 st.[Name],
 				S.[Name] Seniorityname,
 				S.SeniorityId,
-                dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil,
-                dbo.GetAvgUtilization(c.ConsId, @StartDate,@DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutilAvg,
-                dbo.GetPersonVacationDays(c.ConsId,@StartDate,@DaysForward) PersonVactionDays
+                --dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil,
+                AvgUT.AvgUtilization AS wutilAvg,
+                ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays
         FROM    dbo.Person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
 				INNER JOIN dbo.Seniority S ON P.SeniorityId = S.SeniorityId
+				INNER JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId AND AvaHrs.AvaliableHours > 0
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
-        WHERE dbo.GetNumberAvaliableHours(c.ConsId, @StartDate, @EndDate, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) > 0 '
+                LEFT JOIN dbo.GetPersonVacationDaysTable(@StartDate,@Enddate) VactionDaysTable ON VactionDaysTable.PersonId = c.ConsId
+				LEFT JOIN dbo.GetAvgUtilizationTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvgUT ON AvgUT.PersonId =  p.PersonId'
+
      SET @Query = @Query+@OrderBy
+	SET @Query = @Query+	
+		'  
+		SELECT	PH.PersonId,
+				PH.HireDate,
+				PH.TerminationDate
+		FROM v_PersonHistory PH
+		INNER JOIN @CurrentConsultants AS c ON c.ConsId = PH.PersonId
+		ORDER BY PH.PersonId,PH.HireDate
+				 
+		'
      
      --PRINT @Query
      EXEC SP_EXECUTESQL @Query,N'@StartDate				DATETIME,
