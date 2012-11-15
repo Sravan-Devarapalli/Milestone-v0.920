@@ -243,7 +243,6 @@ BEGIN
 		--Update administrative time type ACTUAL HOURS in person calendar table(note:Excluding HOLIDAY and UNPAID time types) and APPROVED BY for the ORT.
 		UPDATE PC
 		SET	PC.ActualHours = TWTE.ActualHours,
-			PC.IsSeries = 0,
 			PC.IsFromTimeEntry = 1,
 			PC.TimeTypeId = TWTE.TimeTypeId,
 			PC.Description = CASE WHEN TT.IsAdministrative = 1 AND ( TWTE.Note = '' OR ISNULL(OldTT.Name,'') + '.' = TWTE.Note ) THEN TT.Name + '.' ELSE TWTE.Note END,
@@ -269,7 +268,6 @@ BEGIN
 									PersonId,
 									DayOff,
 									ActualHours,
-									IsSeries,
 									TimeTypeId,
 									Description,
 									IsFromTimeEntry,
@@ -279,7 +277,6 @@ BEGIN
 				@PersonId,
 				1,
 				TWTE.ActualHours,
-				0,
 				TWTE.TimeTypeId,
 				CASE WHEN TT.IsAdministrative = 1 AND ( TWTE.Note = '' OR ISNULL(OldTT.Name,'') + '.' = TWTE.Note ) THEN TT.Name + '.' ELSE TWTE.Note END,
 				1,
