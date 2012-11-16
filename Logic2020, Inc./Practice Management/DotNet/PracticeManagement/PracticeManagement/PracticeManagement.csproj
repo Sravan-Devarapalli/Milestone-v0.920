@@ -548,6 +548,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Skills.Profile.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TerminationReason.datasource" />
     <None Include="Scripts\uploader.fla" />
+    <None Include="Scripts\uploaderRemovedFolder.fla" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
       <SubType>Designer</SubType>
@@ -877,6 +878,7 @@
     <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <Content Include="Scripts\uploader.swf" />
+    <Content Include="Scripts\uploaderRemovedFolder.swf" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
