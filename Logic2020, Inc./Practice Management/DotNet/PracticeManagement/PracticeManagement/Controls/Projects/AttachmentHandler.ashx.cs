@@ -26,7 +26,7 @@ namespace PraticeManagement.Controls.Projects
             context.Response.ContentType = "application/octet-stream";            
 
             context.Response.AddHeader(
-                "content-disposition", string.Format("attachment; filename={0}", FileName));
+                "content-disposition", string.Format("attachment; filename={0}", FileName.Replace(' ', '_')));
 
             int len = attachmentData.Length;
             int bytes;
