@@ -742,6 +742,15 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedTextButton stbAttachSOW;
         
         /// <summary>
+        /// hdnOpenAttachmentPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnOpenAttachmentPopUp;
+        
+        /// <summary>
         /// mpeAttachSOW control.
         /// </summary>
         /// <remarks>
@@ -1282,15 +1291,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
-        /// uploadedFiles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl uploadedFiles;
-        
-        /// <summary>
         /// lblUplodedFilesMsg control.
         /// </summary>
         /// <remarks>
@@ -1298,6 +1298,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblUplodedFilesMsg;
+        
+        /// <summary>
+        /// uploadedFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl uploadedFiles;
         
         /// <summary>
         /// mpeErrorPanel control.
@@ -1460,6 +1469,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnOk;
+        
+        /// <summary>
+        /// btnDownloadButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDownloadButton;
+        
+        /// <summary>
+        /// hdnDownloadAttachmentId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnDownloadAttachmentId;
     }
 }
 
