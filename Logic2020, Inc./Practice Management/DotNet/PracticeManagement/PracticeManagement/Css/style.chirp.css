@@ -7518,4 +7518,12 @@ table#ctl00_body_login tr td label
 .fileUploadProgressBar {
 	background-color: lightgreen;
 }
-
+.fileUploadQueue
+{
+    max-height: 600px;
+    overflow-y: auto;
+}
+.LineHeight25Px
+{
+    line-height: 25px;
+}
