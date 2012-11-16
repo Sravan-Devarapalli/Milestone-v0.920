@@ -34,120 +34,117 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.uploadify.min.js?id=15" type="text/javascript"></script>
+    <script src="Scripts/jquery.uploadify.min.js?Id=16" type="text/javascript"></script>
     <script type="text/javascript">
-   
-      var unsavedFiles = [];
-      var fileError = 0;
+
+        var fileError = 0;
         function pageLoad() {
-               
+
             document.onkeypress = enterPressed;
             $("#<%=fuAttachmentsUpload.ClientID%>").fileUpload({
-                'uploader': 'Scripts/uploader.swf',
+                'uploader': 'Scripts/uploaderRemovedFolder.swf',
                 'cancelImg': 'Images/close_16.png',
-                'buttonText': 'Browse File(s)',               
+                'buttonText': 'Browse File(s)',
                 'script': 'Controls/Projects/AttachmentUpload.ashx',
                 'fileExt': '*.xls;*.xlsx;*.xlw;*.doc;*.docx;*.pdf;*.ppt;*.pptx;*.mpp;*.vsd;*.msg;*.ZIP;*.RAR;*.sig;*.one*',
                 'fileDesc': 'Excel;Word doc;PDF;PowerPoint;MS Project;Visio;Exchange;ZIP;RAR;OneNote',
                 'multi': true,
                 'auto': false,
-                'sizeLimit':4294656,//4194kb - 4294656bytes
-                onComplete: function(event, queueID, fileObj, reponse, data) 
-                {
-                    var div = document.getElementById('<%= uploadedFiles.ClientID%>');  
+                'sizeLimit': 4294656, //4194kb - 4294656bytes
+                onComplete: function (event, queueID, fileObj, reponse, data) {
+                    var div = document.getElementById('<%= uploadedFiles.ClientID%>');
                     var lblUplodedFilesMsg = document.getElementById('<%= lblUplodedFilesMsg.ClientID%>');
-                    if(lblUplodedFilesMsg.getAttribute("class") == "displayNone")
-                    {
-                        lblUplodedFilesMsg.setAttribute("class","fontBold");
+                    if (lblUplodedFilesMsg.getAttribute("class") == "displayNone") {
+                        lblUplodedFilesMsg.setAttribute("class", "fontBold");
                         div.appendChild(document.createElement("br"));
                     }
-                    div.appendChild(document.createTextNode(fileObj.name));
+                    div.appendChild(document.createTextNode("- " + fileObj.name));
                     div.appendChild(document.createElement("br"));
-
-                    if(reponse != "Uploaded")
-                    {
-                        unsavedFiles.push(reponse);
-                    }
                 },
                 onAllComplete: function (event, queueID, fileObj, response, data) {
-                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');
-                    hdnAttachment.value = "{'attachemnt':["+ unsavedFiles +"]}";
-
                     var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
                     uploadButton.disabled = "disabled";
-
-                    if(fileError == 0)
-                    {
-                        unsavedFiles = [];
+                    var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
+                    progressBar.setAttribute('style', 'display:none;');
+                    if (fileError == 0) {
                         var btnCancel = document.getElementById('<%= btnCancel.ClientID %>');
                         btnCancel.click();
                     }
                 },
-                onError: function(event, ID, fileObj, errorObj)
-                {
-                    var hdnAttachment = document.getElementById('<%= hdnAttachment.ClientID%>');
-                    hdnAttachment.value = "{'attachemnt':["+ unsavedFiles +"]}";
-                    fileError++;                                     
-                    var queueItem = document.getElementById('ctl00_body_fuAttachmentsUpload'+ID);
+                onError: function (event, queueID, fileObj, errorObj) {
+                    fileError++;
+                    var elementId = '<%= fuAttachmentsUpload.ClientID %>' + queueID;
+                    var queueItem = document.getElementById(elementId);
                     var imgElement = queueItem.firstChild.firstChild;
-                    imgElement.setAttribute("onclick","javascript:(document.getElementById('ctl00_body_fuAttachmentsUpload"+ID+"')).outerHTML= '';fileError--;");                                                  
+                    imgElement.setAttribute("onclick", "javascript:(document.getElementById('" + elementId + "')).outerHTML= ''; fileError--; EnableUploadButton();");
+                    var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
+                    progressBar.setAttribute('style', 'display:none;');
                 },
-                onSelectOnce: function()
-                {
-                   EnableUploadButton(true);
+                onSelectOnce: function () {
+                    EnableUploadButton(true);
                 },
-                onCancelComplete: function() {
+                onCancelComplete: function () {
                     EnableUploadButton();
                 }
             });
         }
 
-        function ChangeCancelDivInnerHTML()
-        {
+        function ChangeCancelDivInnerHTML() {
             var cancelDiv = $('.fileUploadQueueItem .cancel');
-                       
-            for(i = 0; i< cancelDiv.length; i++)
-            {
+            for (i = 0; i < cancelDiv.length; i++) {
                 var anchorTags = cancelDiv[i].firstChild;
                 var queueItemId = cancelDiv[i].parentElement.id;
-               
+
                 var imgElement = document.createElement('Img');
-                imgElement.setAttribute("src","Images/close_16.png");
-                imgElement.setAttribute("class","CursorPointer");
+                imgElement.setAttribute("src", "Images/close_16.png");
+                imgElement.setAttribute("class", "CursorPointer");
                 cancelDiv[i].innerHTML = "";
                 cancelDiv[i].appendChild(imgElement);
-               
+
             }
         }
 
         function ClearVariables() {
-            unsavedFiles = [];
             fileError = 0;
         }
-        
-        function startUpload(){
+
+        function startUpload() {
+            var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
+            progressBar.setAttribute('style', '');
             ChangeCancelDivInnerHTML();
             var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
             var selectedValue = ddlAttachmentCategory.value;
-            $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadSettings('scriptData','&ProjectId='+<%=Id %>+'&categoryId='+selectedValue);	
+            var hdnProjectId = document.getElementById('<%= hdnProjectId.ClientID %>');
+
+            $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadSettings('scriptData', 'ProjectId=' + hdnProjectId.value + '&categoryId=' + selectedValue + '&LoggedInUser=<%= User.Identity.Name %>');
             $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadStart();
         }
 
         function EnableUploadButton(selected) {
             var categorySelected = IsAttachmentCategorySelected();
             var fileSelected = (selected == true ? true : false);
-            if(categorySelected && !fileSelected)
-            {
+            if (categorySelected && !fileSelected) {
                 var fileUploadQueue = $('.fileUploadQueueItem');
-                for(var i=0; i < fileUploadQueue.length;i++){
-                  if(fileUploadQueue[i].style.display == ""){
-                    fileSelected = true;
-                    break;
-                  }
+                for (var i = 0; i < fileUploadQueue.length; i++) {
+                    if (fileUploadQueue[i].style.display == "") {
+                        fileSelected = true;
+                        break;
+                    }
                 }
             }
             var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
             uploadButton.disabled = categorySelected && fileSelected ? "" : "disabled";
+        }
+
+        function DownloadUnsavedFile(linkButton) {
+            if (linkButton != null) {
+                var lnkbutton = $('#' + linkButton.id)[0];
+                var attachmentId = lnkbutton.getAttribute('attachmentid');
+                var btn = document.getElementById('<%= btnDownloadButton.ClientID %>');
+                var hdn = document.getElementById('<%= hdnDownloadAttachmentId.ClientID %>');
+                hdn.value = attachmentId;
+                btn.click();
+            }
         }
 
         function enterPressed(evn) {
@@ -178,6 +175,14 @@
             }
 
             return false;
+        }
+
+        function ConfirmSaveOrExit() {
+            var hdnProjectId = document.getElementById('<%= hdnProjectId.ClientID %>');
+            if (getDirty() || hdnProjectId.value == "") {
+                return confirm("Some data isn't saved. Click Ok to Save the data or Cancel to exit.");
+            }
+            return true;
         }
 
         function RedirectToOpportunity() {
@@ -378,13 +383,13 @@
 
         $(document).ready(function () {
             SetTooltipsForallDropDowns();
-            $('script #tableSorterScript').load(function () { 
-            $("#tblProjectAttachments").tablesorter(
+            $('script #tableSorterScript').load(function () {
+                $("#tblProjectAttachments").tablesorter(
                 {
                     sortList: [[0, 0]]
                 }
                 );
-                 });
+            });
         });
 
         function mailTo(url) {
@@ -889,8 +894,9 @@
                                 <asp:Panel ID="pnlAttachments" runat="server" CssClass="tab-pane">
                                     <div class="PaddingBottom35Px">
                                         <asp:ShadowedTextButton ID="stbAttachSOW" runat="server" CausesValidation="false"
-                                            CssClass="add-btn" OnClientClick="return false;" Text="Add Attachment" />
-                                        <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="stbAttachSOW"
+                                            OnClick="stbAttachSOW_Click" OnClientClick="if(!ConfirmSaveOrExit()) return false;" CssClass="add-btn" Text="Add Attachment" />
+                                        <asp:HiddenField ID="hdnOpenAttachmentPopUp" runat="server" />
+                                        <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="hdnOpenAttachmentPopUp"
                                             BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
                                     </div>
                                     <asp:Repeater ID="repProjectAttachments" runat="server">
@@ -943,8 +949,9 @@
                                                        else
                                                        { %>
                                                     <asp:LinkButton ID="lnkProjectAttachment1" runat="server" CssClass="ProjectAttachmentNameWrap"
-                                                        Visible="<%# IsProjectCreated() %>" CommandName='<%# Eval("AttachmentId") %>'
-                                                        Text='<%# GetWrappedText((string)Eval("AttachmentFileName")) %>' OnClick="lnkProjectAttachment_OnClick" />
+                                                        Visible="<%# IsProjectCreated() %>" attachmentid='<%# Eval("AttachmentId") %>'
+                                                        Text='<%# GetWrappedText((string)Eval("AttachmentFileName")) %>' OnClientClick="DownloadUnsavedFile(this); return false;"
+                                                        OnClick="lnkProjectAttachment_OnClick" />
                                                     <% } %>
                                                 </td>
                                                 <td class="textCenter">
@@ -1168,7 +1175,7 @@
             <asp:Panel ID="pnlAttachSOW" runat="server" Style="display: none" CssClass="PanelPerson Width465Px">
                 <table class="WholeWidth Padding5">
                     <tr class="BackGroundColorGray Height27Px">
-                        <td align="center" class="TdAddAttachmentText WS-Normal" colspan="2">
+                        <td align="center" class="font14Px LineHeight25Px WS-Normal" colspan="2">
                             Add Attachment
                             <asp:Button ID="btnAttachmentPopupClose" runat="server" CssClass="mini-report-close floatright"
                                 ToolTip="Close" Text="X" OnClientClick="ClearVariables();" OnClick="btnCancel_OnClick">
@@ -1202,7 +1209,6 @@
                         <td align="right" class="FileUploadAttachment PaddingTop10Px no-wrap">
                             <asp:Button ID="btnUpload" ValidationGroup="ProjectAttachment" runat="server" Text="Upload"
                                 ToolTip="Upload" Enabled="false"></asp:Button>
-                            <asp:HiddenField ID="hdnAttachment" runat="server" />
                             <asp:Button ID="btnCancel" runat="server" ToolTip="Cancel" Text="Cancel" OnClientClick="ClearVariables();"
                                 OnClick="btnCancel_OnClick"></asp:Button>
                         </td>
@@ -1214,9 +1220,9 @@
                     </tr>
                     <tr>
                         <td class="FileUploadAttachment paddingBottom10px" colspan="2">
-                            <div id="uploadedFiles" runat="server">
-                                <label id="lblUplodedFilesMsg" runat="server" class="displayNone">
-                                    Following files are uploaded successfully:</label>
+                            <label id="lblUplodedFilesMsg" runat="server" class="displayNone">
+                                Following files uploaded successfully:</label>
+                            <div id="uploadedFiles" runat="server" class="padLeft2">
                             </div>
                         </td>
                     </tr>
@@ -1334,8 +1340,12 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:Button ID="btnDownloadButton" runat="server" OnClick="lnkProjectAttachment_OnClick"
+                Style="display: none;" />
+            <asp:HiddenField ID="hdnDownloadAttachmentId" runat="server" Value="" />
         </ContentTemplate>
         <Triggers>
+            <asp:PostBackTrigger ControlID="btnDownloadButton" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
