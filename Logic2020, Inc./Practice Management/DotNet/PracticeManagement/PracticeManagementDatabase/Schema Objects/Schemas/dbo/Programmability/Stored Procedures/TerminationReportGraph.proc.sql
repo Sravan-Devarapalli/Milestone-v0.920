@@ -33,15 +33,16 @@ BEGIN
 		FilteredPersonTerminationHistory
 		AS
 		(
-			SELECT FPH.*
+			SELECT FPH.*,TR.IsContingentRule
 			FROM v_PersonHistory FPH 
+			INNER JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = FPH.TerminationReasonId
 			WHERE FPH.TerminationDate BETWEEN @StartDate AND @EndDate AND ISNULL(FPH.TerminationReasonId,0) != @FormalyInactive
 		),
 		PersonTerminationInRange
 		AS 
 		(
 			SELECT TT.StartDate,
-					SUM(CASE WHEN pay.Timescale IN (@W2SalaryId, @W2HourlyId) THEN 1 ELSE 0 END) AS TerminationsCumulativeEmployeeCountInTheRange,
+					SUM(CASE WHEN pay.Timescale IN (@W2SalaryId, @W2HourlyId) AND FPT.IsContingentRule = 0 THEN 1 ELSE 0 END) AS TerminationsCumulativeEmployeeCountInTheRange,
 					COUNT(FPT.PersonId) AS TerminationsCountInTheRange,
 					SUM(CASE WHEN FPT.TerminationDate >= TT.StartDate AND pay.Timescale = @W2SalaryId THEN 1 ELSE 0 END) AS TerminationsW2SalaryCountInTheRange,
 					SUM(CASE WHEN FPT.TerminationDate >= TT.StartDate AND pay.Timescale = @W2HourlyId THEN 1 ELSE 0 END) AS TerminationsW2HourlyCountInTheRange,
@@ -50,6 +51,7 @@ BEGIN
 			FROM RangeValue TT
 			LEFT JOIN  FilteredPersonTerminationHistory FPT  ON FPT.TerminationDate BETWEEN @StartDate AND TT.EndDate
 			OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPT.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPT.HireDate AND pa.StartDate <= CASE WHEN FPT.TerminationDate < TT.EndDate THEN FPT.TerminationDate ELSE TT.EndDate END ORDER BY pa.StartDate DESC ) pay
+
 			GROUP BY TT.StartDate
 		),
 		FilteredPersonHireHistory
@@ -63,16 +65,10 @@ BEGIN
 					CPH.DivisionId,
 					CPH.TerminationReasonId
 			FROM v_PersonHistory CPH 
+			LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = CPH.TerminationReasonId
 			WHERE CPH.HireDAte BETWEEN @StartDate AND @EndDate 
 			AND CPH.PersonStatusId != 3 --Projected status
-		),
-		FilteredPersonHireHistory1
-		AS
-		(
-			SELECT FPH.*
-			FROM FilteredPersonHireHistory FPH
-			
-			
+			AND ISNULL(TR.IsContingentRule,0) = 0
 		),
 		PersonHiriesInRange
 		AS 
@@ -80,7 +76,7 @@ BEGIN
 			SELECT TT.StartDate , COUNT(FPT.PersonId) AS NewHiredCumulativeInTheRange
 				, SUM(CASE WHEN FPT.HireDate >= TT.StartDate THEN 1 ELSE 0 END ) AS NewHiredInTheRange
 			FROM RangeValue TT
-			LEFT JOIN  FilteredPersonHireHistory1 FPT  ON FPT.HireDate BETWEEN @StartDate AND TT.EndDate
+			LEFT JOIN  FilteredPersonHireHistory FPT  ON FPT.HireDate BETWEEN @StartDate AND TT.EndDate
 			OUTER APPLY (SELECT TOP 1 pa.* FROM dbo.Pay pa WHERE pa.Person = FPT.PersonId AND ISNULL(pa.EndDate,@FutureDate)-1 >= FPT.HireDate AND pa.StartDate <= (CASE WHEN FPT.TerminationDate < TT.EndDate THEN FPT.TerminationDate ELSE TT.EndDate END)  ORDER BY pa.StartDate DESC ) pay
 			WHERE pay.Timescale IN (@W2SalaryId,@W2HourlyId)
 			GROUP BY TT.StartDate
