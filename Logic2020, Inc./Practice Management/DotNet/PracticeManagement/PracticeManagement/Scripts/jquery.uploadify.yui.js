@@ -47,13 +47,13 @@ if (navigator.plugins != null && navigator.plugins.length > 0) {
 else {
     if ($.browser.msie) {
         var version;
-        var axo; var e;
+        var axo;
+        var e;
         try {
             axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
             version = axo.GetVariable("$version")
         }
-        catch (e) {
-        }
+        catch (e) { }
         flashVer = version.replace("WIN ", "").replace(",", ".")
     }
 }
@@ -101,11 +101,7 @@ if (jQuery) {
                         f += "&script=" + settings.script;
                         f += "&folder=" + escape(settings.folder);
                         if (settings.scriptData) {
-                            var g = "";
-                            for (var c in settings.scriptData) {
-                                g += "&" + c + "=" + settings.scriptData[c]
-                            }
-                            f += "&scriptData=" + escape(g)
+                            var g = ""; for (var c in settings.scriptData) { g += "&" + c + "=" + settings.scriptData[c] } f += "&scriptData=" + escape(g)
                         }
                         f += "&btnWidth=" + settings.width;
                         f += "&btnHeight=" + settings.height;
@@ -141,118 +137,86 @@ if (jQuery) {
                             flashElement = '<embed src="' + settings.uploader + "?fileUploadID=" + a(this).attr("id") + f + '" quality="high" width="' + settings.width + '" height="' + settings.height + '" id="' + a(this).attr("id") + 'Uploader" class="fileUploaderBtn" name="' + a(this).attr("id") + 'Uploader" allowScriptAccess="' + settings.scriptAccess + '" wmode="' + settings.wmode + '" type="application/x-shockwave-flash" />'
                         }
                         if (settings.onInit() !== false) {
-                            a(this).css("display", "none");
-                            if (a.browser.msie) {
-                                a(this).after('<div id="' + a(this).attr("id") + 'Uploader"></div>');
-                                document.getElementById(a(this).attr("id") + "Uploader").outerHTML = flashElement
-                            }
-                            else {
-                                a(this).after(flashElement)
-                            }
-                            a("#" + a(this).attr("id") + "Uploader").after('<div id="' + a(this).attr("id") + 'Queue" class="fileUploadQueue"></div>')
+                            a(this).css("display", "none"); if (a.browser.msie) { a(this).after('<div id="' + a(this).attr("id") + 'Uploader"></div>'); document.getElementById(a(this).attr("id") + "Uploader").outerHTML = flashElement } else { a(this).after(flashElement) } a("#" + a(this).attr("id") + "Uploader").after('<div id="' + a(this).attr("id") + 'Queue" class="fileUploadQueue"></div>')
                         }
                         a(this).bind("rfuSelect", {
                             action: settings.onSelect
                         },
- function (j, h, i) {
-     if (j.data.action(j, h, i) !== false) {
-         var k = Math.round(i.size / 1024 * 100) * 0.01; var l = "KB"; if (k > 1000) { k = Math.round(k * 0.001 * 100) * 0.01; l = "MB" }
-         var m = k.toString().split(".");
-         if (m.length > 1) {
-             k = m[0] + "." + m[1].substr(0, 2)
-         }
-         else {
-             k = m[0]
-         }
-         if (i.name.length > 20) {
-             fileName = i.name.substr(0, 20) + "..."
-         }
-         else {
-             fileName = i.name
-         }
-         a("#" + a(this).attr("id") + "Queue").append('<div id="' + a(this).attr("id") + h + '" class="fileUploadQueueItem"><div class="cancel"><a href="javascript:$(\'#' + a(this).attr("id") + "').fileUploadCancel('" + h + '\')"><img src="' + settings.cancelImg + '" border="0" /></a></div><span class="fileName">' + fileName + " (" + k + l + ')</span><span class="percentage">&nbsp;</span><div class="fileUploadProgress" style="width: 100%;"><div id="' + a(this).attr("id") + h + 'ProgressBar" class="fileUploadProgressBar" style="width: 1px; height: 3px;"></div></div></div>')
-     }
- });
+                        function (j, h, i) {
+                            if (j.data.action(j, h, i) !== false) {
+                                var k = Math.round(i.size / 1024 * 100) * 0.01;
+                                var l = "KB";
+                                if (k > 1000) {
+                                    k = Math.round(k * 0.001 * 100) * 0.01; l = "MB"
+                                }
+                                var m = k.toString().split(".");
+                                if (m.length > 1) {
+                                    k = m[0] + "." + m[1].substr(0, 2)
+                                }
+                                else {
+                                    k = m[0]
+                                }
+                                if (i.name.length > 40) {
+                                    fileName = i.name.substr(0, 40) + "..."
+                                }
+                                else {
+                                    fileName = i.name
+                                }
+                                a("#" + a(this).attr("id") + "Queue").append('<div id="' + a(this).attr("id") + h + '" class="fileUploadQueueItem"><div class="cancel"><a href="javascript:$(\'#' + a(this).attr("id") + "').fileUploadCancel('" + h + '\')"><img src="' + settings.cancelImg + '" border="0" /></a></div><span class="fileName" title="' + i.name + '">' + fileName + " (" + k + l + ')</span><span class="percentage">&nbsp;</span><div class="fileUploadProgress" style="width: 100%;"><div id="' + a(this).attr("id") + h + 'ProgressBar" class="fileUploadProgressBar" style="width: 1px; height: 3px;"></div></div></div>')
+                            }
+                        });
                         if (typeof (settings.onSelectOnce) == "function") {
                             a(this).bind("rfuSelectOnce", settings.onSelectOnce)
                         }
-                        a(this).bind("rfuCheckExist", { action: settings.onCheck },
-  function (m, l, j, k, o) {
-      var i = new Object();
-      i.folder = d + k;
-      for (var h in j) {
-          i[h] = j[h];
-          if (o) {
-              var n = h
-          }
-      }
-      a.post(l, i, function (r) {
-          for (var p in r) {
-              if (m.data.action(m, l, j, k, o) !== false) {
-                  var q = confirm("Do you want to replace the file '" + r[p] + "'?");
-                  if (!q) {
-                      document.getElementById(a(m.target).attr("id") + "Uploader").cancelFileUpload(p)
-                  }
-              }
-          }
-          if (o) {
-              document.getElementById(a(m.target).attr("id") + "Uploader").startFileUpload(n, true)
-          }
-          else {
-              document.getElementById(a(m.target).attr("id") + "Uploader").startFileUpload(null, true)
-          }
-      }, "json")
-  });
-                        a(this).bind("rfuCancel", { action: settings.onCancel },
-  function (j, h, i, k) {
-      if (j.data.action(j, h, i, k) !== false) {
-          a("#" + a(this).attr("id") + h).fadeOut(250,
-          function () {
-              a("#" + a(this).attr("id") + h).remove();
-              settings.onCancelComplete();
-          })
-      }
-  });
-                        a(this).bind("rfuClearQueue", { action: settings.onClearQueue },
-  function () {
-      if (event.data.action() !== false) {
-          a("#" + a(this).attr("id") + "Queue").contents().fadeOut(250,
-  function () {
-      a("#" + a(this).attr("id") + "Queue").empty()
-  })
-      }
-  });
-                        a(this).bind("rfuError", { action: settings.onError },
-  function (k, h, j, i) {
-      if (k.data.action(k, h, j, i) !== false) {
-          a("#" + a(this).attr("id") + h + " .fileName").text(i.type + " Error - " + j.name);
-          a("#" + a(this).attr("id") + h).css({ border: "3px solid #FBCBBC", "white-space": "normal" });
-          a("#" + a(this).attr("id") + h + "ProgressBar").css("background-color", "#FDE5DD");
-      }
-  });
-                        a(this).bind("rfuProgress", { action: settings.onProgress, toDisplay: settings.displayData },
-  function (j, h, i, k) {
-      if (j.data.action(j, h, i, k) !== false) {
-          a("#" + a(this).attr("id") + h + "ProgressBar").css("width", k.percentage + "%");
-          if (j.data.toDisplay == "percentage") {
-              displayData = " - " + k.percentage + "%"
-          }
-          if (j.data.toDisplay == "speed") {
-              displayData = " - " + k.speed + "KB/s"
-          }
-          if (j.data.toDisplay == null) {
-              displayData = " "
-          }
-          a("#" + a(this).attr("id") + h + " .percentage").text(displayData)
-      }
-  });
-                        a(this).bind("rfuComplete", { action: settings.onComplete },
-  function (k, h, j, i, l) {
-      if (k.data.action(k, h, j, unescape(i), l) !== false) {
-          a("#" + a(this).attr("id") + h).fadeOut(250, function () { a("#" + a(this).attr("id") + h).remove() });
-          a("#" + a(this).attr("id") + h + " .percentage").text(" - Completed")
-      }
-  });
+                        a(this).bind("rfuCheckExist", {
+                            action: settings.onCheck
+                        },
+                        function (m, l, j, k, o) {
+                            var i = new Object(); i.folder = d + k; for (var h in j) { i[h] = j[h]; if (o) { var n = h } } a.post(l, i, function (r) { for (var p in r) { if (m.data.action(m, l, j, k, o) !== false) { var q = confirm("Do you want to replace the file '" + r[p] + "'?"); if (!q) { document.getElementById(a(m.target).attr("id") + "Uploader").cancelFileUpload(p) } } } if (o) { document.getElementById(a(m.target).attr("id") + "Uploader").startFileUpload(n, true) } else { document.getElementById(a(m.target).attr("id") + "Uploader").startFileUpload(null, true) } }, "json")
+                        });
+                        a(this).bind("rfuCancel", {
+                            action: settings.onCancel
+                        },
+                        function (j, h, i, k) {
+                            if (j.data.action(j, h, i, k) !== false) {
+                                a("#" + a(this).attr("id") + h).remove();
+                                settings.onCancelComplete();
+                            }
+                        });
+                        a(this).bind("rfuClearQueue", {
+                            action: settings.onClearQueue
+                        },
+                        function () {
+                            if (event.data.action() !== false) { a("#" + a(this).attr("id") + "Queue").contents().fadeOut(250, function () { a("#" + a(this).attr("id") + "Queue").empty() }) }
+                        });
+                        a(this).bind("rfuError", {
+                            action: settings.onError
+                        },
+                        function (k, h, j, i) {
+                            if (k.data.action(k, h, j, i) !== false) {
+                                var fileNameError = j.name;
+                                if (fileNameError.length > 40) {
+                                    fileNameError = j.name.substr(0, 40) + "..."
+                                }
+                                a("#" + a(this).attr("id") + h + " .fileName").text(i.type + " Error - " + fileNameError);
+                                a("#" + a(this).attr("id") + h).css({ border: "3px solid #FBCBBC", "background-color": "#FDE5DD" });
+                                a("#" + a(this).attr("id") + h + "ProgressBar").css({ "background-color": "#FDE5DD" });
+                            }
+                        });
+                        a(this).bind("rfuProgress", {
+                            action: settings.onProgress, toDisplay: settings.displayData
+                        },
+                        function (j, h, i, k) {
+                            if (j.data.action(j, h, i, k) !== false) { a("#" + a(this).attr("id") + h + "ProgressBar").css("width", k.percentage + "%"); if (j.data.toDisplay == "percentage") { displayData = " - " + k.percentage + "%" } if (j.data.toDisplay == "speed") { displayData = " - " + k.speed + "KB/s" } if (j.data.toDisplay == null) { displayData = " " } a("#" + a(this).attr("id") + h + " .percentage").text(displayData) }
+                        });
+                        a(this).bind("rfuComplete", {
+                            action: settings.onComplete
+                        },
+                        function (k, h, j, i, l) {
+                            if (k.data.action(k, h, j, unescape(i), l) !== false) {
+                                a("#" + a(this).attr("id") + h).fadeOut(250, function () { a("#" + a(this).attr("id") + h).remove() }); a("#" + a(this).attr("id") + h + " .percentage").text(" - Completed")
+                            }
+                        });
                         if (typeof (settings.onAllComplete) == "function") {
                             a(this).bind("rfuAllComplete", settings.onAllComplete)
                         }
@@ -260,20 +224,17 @@ if (jQuery) {
                 }
             },
             fileUploadSettings: function (b, c) {
-                a(this).each(function () {
-                    document.getElementById(a(this).attr("id") + "Uploader").updateSettings(b, c)
-                })
+                a(this).each(function () { document.getElementById(a(this).attr("id") + "Uploader").updateSettings(b, c) })
             },
             fileUploadStart: function (b) {
                 a(this).each(function () { document.getElementById(a(this).attr("id") + "Uploader").startFileUpload(b, false) })
             },
             fileUploadCancel: function (b) {
-                a(this).each(function () {
-                    document.getElementById(a(this).attr("id") + "Uploader").cancelFileUpload(b)
-                })
-
+                a(this).each(function () { document.getElementById(a(this).attr("id") + "Uploader").cancelFileUpload(b) })
             },
-            fileUploadClearQueue: function () { a(this).each(function () { document.getElementById(a(this).attr("id") + "Uploader").clearFileUploadQueue() }) }
+            fileUploadClearQueue: function () {
+                a(this).each(function () { document.getElementById(a(this).attr("id") + "Uploader").clearFileUploadQueue() })
+            }
         })
     })(jQuery)
 };
