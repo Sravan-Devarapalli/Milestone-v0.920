@@ -16,9 +16,12 @@ namespace PraticeManagement.Controls.Projects
         {
             try
             {
+                context.Response.ContentType = "text/plain";
                 HttpPostedFile postedFile = context.Request.Files["Filedata"];
-                int projectId = Convert.ToInt32(context.Request.QueryString["ProjectId"]);
-                int category = Convert.ToInt32(context.Request.QueryString["categoryId"]);
+                int projectId = 0;
+                int.TryParse(context.Request.QueryString["ProjectId"], out projectId);
+                int category = 0;
+                int.TryParse(context.Request.QueryString["categoryId"], out category);
 
                 byte[] fileData = new byte[postedFile.InputStream.Length];
                 postedFile.InputStream.Read(fileData, 0, fileData.Length);
@@ -26,37 +29,27 @@ namespace PraticeManagement.Controls.Projects
                 PraticeManagement.AttachmentService.ProjectAttachment attachment = new PraticeManagement.AttachmentService.ProjectAttachment();
                 attachment.AttachmentFileName = postedFile.FileName;
                 attachment.AttachmentData = fileData;
-                attachment.AttachmentSize = fileData.Length;                
+                attachment.AttachmentSize = fileData.Length;
 
                 attachment.Category = (PraticeManagement.AttachmentService.ProjectAttachmentCategory)category;
                 if (projectId != 0)
                 {
+                    string loggedInUserAlias = string.IsNullOrEmpty(context.User.Identity.Name) ? context.Request.QueryString["LoggedInUser"] : context.User.Identity.Name;
                     PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
-                    svc.SaveProjectAttachment(attachment, projectId, context.User.Identity.Name);
+                    svc.SaveProjectAttachment(attachment, projectId, loggedInUserAlias);
                     context.Response.Write("Uploaded");
                 }
                 else
                 {
-                    attachment.UploadedDate = DateTime.Now;
-                    string file = AttachmentUpload.ToJSON(attachment);
 
-                    context.Response.Write(file);
+                    context.Response.Write(" ");
                 }
-
-
             }
             catch (Exception ex)
             {
+                context.Response.Write(" ");
                 throw ex;
             }
-        }
-
-        private static string ToJSON(Object obj)
-        {
-            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            serializer.MaxJsonLength = int.MaxValue;
-            return serializer.Serialize(obj);
-
         }
 
         public bool IsReusable
@@ -68,3 +61,4 @@ namespace PraticeManagement.Controls.Projects
         }
     }
 }
+
