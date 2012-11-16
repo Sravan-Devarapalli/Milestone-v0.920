@@ -34,7 +34,7 @@ namespace PraticeManagement
         private const string ProjectIdFormat = "projectId={0}";
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
-        private const string AttachSOWMessage = "File should be in PDF, Word format, Excel, PowerPoint, MS Project, Visio, Exchange, OneNote, ZIP or RAR and be no larger than {0} KB";
+        private const string AttachSOWMessage = "File should be in PDF, Word format, Excel, PowerPoint, MS Project, Visio, Exchange, OneNote, ZIP or RAR and should be no larger than {0} KB";
         private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         public const string AllTimeTypesKey = "AllTimeTypesKey";
@@ -42,14 +42,6 @@ namespace PraticeManagement
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
         public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
         public const string ViewStateLoggedInPerson = "ViewStateLoggedInPerson";
-
-        public string Id
-        {
-            get {
-                if (ProjectId.HasValue)
-                    return ProjectId.Value.ToString();
-                return "0"; }
-        }
 
         #endregion
 
@@ -70,15 +62,15 @@ namespace PraticeManagement
             }
         }
 
-        public Person LoggedInPerson
+        public string LoggedInPersonFirstLastName
         {
             get
             {
                 if (ViewState[ViewStateLoggedInPerson] == null)
                 {
-                    ViewState[ViewStateLoggedInPerson] = ServiceCallers.Custom.Person(p => p.GetPersonByAlias(User.Identity.Name));
+                    ViewState[ViewStateLoggedInPerson] = ServiceCallers.Custom.Person(p => p.GetPersonByAlias(User.Identity.Name)).PersonFirstLastName;
                 }
-                return (Person)ViewState[ViewStateLoggedInPerson];
+                return (string)ViewState[ViewStateLoggedInPerson];
             }
         }
 
@@ -104,6 +96,7 @@ namespace PraticeManagement
             {
                 if (SelectedId.HasValue)
                 {
+                    this.hdnProjectId.Value = SelectedId.Value.ToString();
                     return SelectedId;
                 }
                 else
@@ -377,7 +370,7 @@ namespace PraticeManagement
             }
             mlConfirmation.ClearMessage();
 
-            btnUpload.Attributes["onclick"] = "startUpload();return false;";
+            btnUpload.Attributes["onclick"] = "startUpload(); return false;";
 
         }
 
@@ -576,22 +569,24 @@ namespace PraticeManagement
                 list.Remove(list.Find(pa => pa.AttachmentId == id));
 
                 AttachmentsForNewProject = list;
-                if (list.Count > 0)
-                {
-                    divEmptyMessage.Style["display"] = "none";
-                    repProjectAttachments.Visible = true;
-                    repProjectAttachments.DataSource = list;
-                    repProjectAttachments.DataBind();
-                }
-                else
-                {
-                    divEmptyMessage.Style["display"] = "";
-                    repProjectAttachments.Visible = false;
-                }
+                BindProjectAttachments(AttachmentsForNewProject);
             }
+        }
 
-
-
+        private void BindProjectAttachments(List<AttachmentService.ProjectAttachment> list)
+        {
+            if (list != null && list.Count > 0)
+            {
+                divEmptyMessage.Style["display"] = "none";
+                repProjectAttachments.Visible = true;
+                repProjectAttachments.DataSource = list;
+                repProjectAttachments.DataBind();
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+                repProjectAttachments.Visible = false;
+            }
         }
 
         protected void btnUpdateProjectName_OnClick(object sender, EventArgs e)
@@ -632,19 +627,35 @@ namespace PraticeManagement
             }
         }
 
+        protected void stbAttachSOW_Click(object sender, EventArgs e)
+        {
+            if (IsDirty || !ProjectId.HasValue)
+            {
+                FromSaveButtonClick = false;
+                ValidateSaveAndPopulate(false);
+            }
+            if (!IsDirty && ProjectId.HasValue)
+            {
+                mpeAttachSOW.Show();
+            }
+        }
+
         protected void btnSave_Click(object sender, EventArgs e)
         {
             FromSaveButtonClick = true;
-            ValidateSaveAndPopulate();
+            ValidateSaveAndPopulate(true);
         }
 
-        private void ValidateSaveAndPopulate()
+        private void ValidateSaveAndPopulate(bool showSuccessPopup)
         {
             if (ValidateAndSave())
             {
                 ClearDirty();
-                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Project"));
-                IsErrorPanelDisplay = true;
+                if (showSuccessPopup)
+                {
+                    mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Project"));
+                    IsErrorPanelDisplay = true;
+                }
             }
 
             if (Page.IsValid && ProjectId.HasValue)
@@ -940,7 +951,7 @@ namespace PraticeManagement
         {
             if (IsDirty || !ProjectId.HasValue)
             {
-                ValidateSaveAndPopulate();
+                ValidateSaveAndPopulate(false);
                 if (Page.IsValid)
                 {
                     mpeLinkOpportunityPopup.Show();
@@ -1425,21 +1436,12 @@ namespace PraticeManagement
 
         private void PopulateAttachmentControl(Project project)
         {
-            if (project != null)
+            if (project != null && project.Attachments != null && project.Attachments.Count > 0)
             {
-                if (project.Attachments != null && project.Attachments.Count > 0)
-                {
-                    divEmptyMessage.Style["display"] = "none";
-                    repProjectAttachments.Visible = true;
-                    repProjectAttachments.DataSource = project.Attachments;
-                    repProjectAttachments.DataBind();
-
-                }
-                else
-                {
-                    divEmptyMessage.Style["display"] = "";
-                    repProjectAttachments.Visible = false;
-                }
+                divEmptyMessage.Style["display"] = "none";
+                repProjectAttachments.Visible = true;
+                repProjectAttachments.DataSource = project.Attachments;
+                repProjectAttachments.DataBind();
             }
             else
             {
@@ -1748,90 +1750,51 @@ namespace PraticeManagement
 
         protected void lnkProjectAttachment_OnClick(object sender, EventArgs e)
         {
-            var id = Convert.ToInt32(((LinkButton)sender).CommandName);
-            var list = AttachmentsForNewProject;
-            var attachment = list[list.FindIndex(pa => pa.AttachmentId == id)];
-
-            string FileName = attachment.AttachmentFileName;
-            byte[] attachmentData = attachment.AttachmentData;
-
-            HttpContext.Current.Response.Clear();
-            HttpContext.Current.Response.ContentType = "Application/pdf";
-            HttpContext.Current.Response.AddHeader(
-                "content-disposition", string.Format("attachment; filename={0}", FileName));
-
-            int len = attachmentData.Length;
-            int bytes;
-            byte[] buffer = new byte[1024];
-
-            Stream outStream = HttpContext.Current.Response.OutputStream;
-            using (MemoryStream stream = new MemoryStream(attachmentData))
+            if (!string.IsNullOrEmpty(hdnDownloadAttachmentId.Value))
             {
-                while (len > 0 && (bytes = stream.Read(buffer, 0, buffer.Length)) > 0)
+                var id = Convert.ToInt32(hdnDownloadAttachmentId.Value);
+                var list = AttachmentsForNewProject;
+                if (list.Any(pa => pa.AttachmentId == id))
                 {
-                    outStream.Write(buffer, 0, bytes);
-                    HttpContext.Current.Response.Flush();
-                    len -= bytes;
+                    var attachment = list[list.FindIndex(pa => pa.AttachmentId == id)];
+
+                    string FileName = attachment.AttachmentFileName;
+                    byte[] attachmentData = attachment.AttachmentData;
+
+                    HttpContext.Current.Response.Clear();
+                    HttpContext.Current.Response.ContentType = "application/octet-stream";
+                    HttpContext.Current.Response.AddHeader(
+                        "content-disposition", string.Format("attachment; filename='{0}'", HttpUtility.HtmlEncode(FileName)));
+
+                    int len = attachmentData.Length;
+                    int bytes;
+                    byte[] buffer = new byte[1024];
+
+                    Stream outStream = HttpContext.Current.Response.OutputStream;
+                    using (MemoryStream stream = new MemoryStream(attachmentData))
+                    {
+                        while (len > 0 && (bytes = stream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            outStream.Write(buffer, 0, bytes);
+                            HttpContext.Current.Response.Flush();
+                            len -= bytes;
+                        }
+                    }
+                    HttpContext.Current.Response.End();
                 }
             }
-            HttpContext.Current.Response.End();
         }
 
 
         protected void btnCancel_OnClick(object sender, EventArgs e)
         {
-            if (!ProjectId.HasValue)
-            {
-                var attachmentsJsonData = this.hdnAttachment.Value;
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                serializer.MaxJsonLength = int.MaxValue;
-                Dictionary<string, object> attachmentsData = (Dictionary<string, object>)serializer.DeserializeObject(attachmentsJsonData);
-                if (attachmentsData != null)
-                {
-                    var attachmentData = attachmentsData["attachemnt"];
-                    var attachments = (object[])attachmentData;
-                    if (AttachmentsForNewProject == null)
-                    {
-                        AttachmentsForNewProject = new List<AttachmentService.ProjectAttachment>();
-                    }
-                    foreach (var attachment in attachments)
-                    {
-                        var attachmentFileData = (Dictionary<string, object>)(attachment);
-                        AttachmentService.ProjectAttachment projectAttachment = new AttachmentService.ProjectAttachment();
-                        projectAttachment.AttachmentId = AttachmentsForNewProject.Count + 1;
-                        projectAttachment.AttachmentFileName = (string)attachmentFileData["AttachmentFileName"];
-                        projectAttachment.AttachmentSize = (int)attachmentFileData["AttachmentSize"];
-                        projectAttachment.Category =  (PraticeManagement.AttachmentService.ProjectAttachmentCategory)Convert.ToInt32(attachmentFileData["Category"]);
-                        projectAttachment.UploadedDate = (DateTime)attachmentFileData["UploadedDate"];
-                        projectAttachment.Uploader = LoggedInPerson.PersonFirstLastName;
-                        projectAttachment.AttachmentData = Array.ConvertAll<object, byte>((object[])attachmentFileData["AttachmentData"], new Converter<object, byte>(ObjToByte));                      
-                        AttachmentsForNewProject.Add(projectAttachment);
-                    }
-                }
-
-                if (AttachmentsForNewProject != null && AttachmentsForNewProject.Count > 0)
-                {
-                    divEmptyMessage.Style["display"] = "none";
-                    repProjectAttachments.Visible = true;
-                    repProjectAttachments.DataSource = AttachmentsForNewProject;
-                    repProjectAttachments.DataBind();
-                }
-                else
-                {
-                    divEmptyMessage.Style["display"] = "";
-                    repProjectAttachments.Visible = false;
-                }
-
-                this.hdnAttachment.Value = "";
-            }
-            else
+            if (ProjectId.HasValue)
             {
                 Project = GetCurrentProject(ProjectId);
                 PopulateAttachmentControl(Project);
             }
             ddlAttachmentCategory.SelectedValue = "0";
         }
-       
 
         public static byte ObjToByte(object o)
         {
