@@ -48,18 +48,18 @@ BEGIN
 
 			--Delete Project time Types if exists.
 			DELETE PTT
-			FROM ProjectTimeType PTT
+			FROM dbo.ProjectTimeType PTT
 			WHERE PTT.ProjectId = @ProjectID
 
 			-- Delete Milestones of this project.
-			IF EXISTS (SELECT 1 FROM Milestone WHERE ProjectId = @ProjectID)
+			IF EXISTS (SELECT 1 FROM dbo.Milestone WHERE ProjectId = @ProjectID)
 			BEGIN
 				DECLARE @milestones TABLE (RowId INT IDENTITY(1,1), milestoneID INT)
 				DECLARE @index INT
 				DECLARE @milestoneCount INT
 				
 				INSERT INTO @milestones(milestoneID)
-				(SELECT MilestoneId FROM Milestone WHERE ProjectId = @ProjectID)
+				(SELECT MilestoneId FROM dbo.Milestone WHERE ProjectId = @ProjectID)
 				
 				SET @index = 1
 				SET @milestoneCount = (SELECT COUNT(*) FROM @milestones)
@@ -69,55 +69,62 @@ BEGIN
 					DECLARE @milestone INT
 					SET @milestone = (SELECT milestoneId FROM @milestones WHERE RowId = @index)
 					EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
-					EXEC MilestoneDelete @milestone, @UserLogin 
+					EXEC dbo.MilestoneDelete @milestone, @UserLogin 
 					
 					SET @index = @index + 1
 				END
 			END
 		
-			IF EXISTS (SELECT 1 FROM Opportunity WHERE ProjectId = @ProjectID)
+			IF EXISTS (SELECT 1 FROM dbo.Opportunity WHERE ProjectId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
-				UPDATE Opportunity
+				UPDATE dbo.Opportunity
 				SET ProjectId = NULL,
 					LastUpdated = GETDATE()
 				WHERE ProjectId = @ProjectID
 			END
 			
-			IF EXISTS (SELECT ProjectId FROM Commission WHERE ProjectId = @ProjectID)
+			IF EXISTS (SELECT ProjectId FROM dbo.Commission WHERE ProjectId = @ProjectID)
 			BEGIN
-				DELETE Commission
+				DELETE dbo.Commission
 				WHERE ProjectId = @ProjectID
 			END
 			
-			IF EXISTS (SELECT ProjectId FROM ProjectAttachment WHERE ProjectId = @ProjectID)
+			IF EXISTS (SELECT ProjectId FROM dbo.ProjectAttachment WHERE ProjectId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 				DELETE 
-				FROM	ProjectAttachment
+				FROM	dbo.ProjectAttachment
 				WHERE ProjectId = @ProjectID
 			END
 
-			IF EXISTS (SELECT 1 FROM Note WHERE NoteTargetId = 2 AND TargetId = @ProjectID)
+			IF EXISTS (SELECT 1 FROM dbo.Note WHERE NoteTargetId = 2 AND TargetId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 				DELETE 
-				FROM Note
+				FROM dbo.Note
 				WHERE NoteTargetId = 2 AND TargetId = @ProjectID-- Here 2 is Project in NoteTarget table.
 				EXEC dbo.SessionLogUnprepare
 			END
 			
-			IF EXISTS (SELECT ProjectId FROM ProjectManagers WHERE ProjectId = @ProjectID)
+			IF EXISTS (SELECT ProjectId FROM dbo.ProjectManagers WHERE ProjectId = @ProjectID)
 			BEGIN
 				DELETE 
-				FROM	ProjectManagers
+				FROM	dbo.ProjectManagers
+				WHERE ProjectId = @ProjectID
+			END
+			
+			IF EXISTS (SELECT ProjectId FROM dbo.ProjectCapabilities WHERE ProjectId = @ProjectID)
+			BEGIN
+				DELETE 
+				FROM	dbo.ProjectCapabilities
 				WHERE ProjectId = @ProjectID
 			END
 
-			IF EXISTS (SELECT ProjectId FROM Project WHERE ProjectId = @ProjectID)
+			IF EXISTS (SELECT ProjectId FROM dbo.Project WHERE ProjectId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
-				DELETE Project
+				DELETE dbo.Project
 				WHERE ProjectId = @ProjectID
 			END
 			
