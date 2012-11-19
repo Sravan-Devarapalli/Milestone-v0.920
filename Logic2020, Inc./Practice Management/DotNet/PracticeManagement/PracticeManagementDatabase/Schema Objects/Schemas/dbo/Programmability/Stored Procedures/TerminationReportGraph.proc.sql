@@ -43,7 +43,7 @@ BEGIN
 		(
 			SELECT TT.StartDate,
 					SUM(CASE WHEN pay.Timescale IN (@W2SalaryId, @W2HourlyId) AND FPT.IsContingentRule = 0 THEN 1 ELSE 0 END) AS TerminationsCumulativeEmployeeCountInTheRange,
-					COUNT(FPT.PersonId) AS TerminationsCountInTheRange,
+					SUM(CASE WHEN FPT.TerminationDate >= TT.StartDate THEN 1 ELSE 0 END) AS TerminationsCountInTheRange,
 					SUM(CASE WHEN FPT.TerminationDate >= TT.StartDate AND pay.Timescale = @W2SalaryId THEN 1 ELSE 0 END) AS TerminationsW2SalaryCountInTheRange,
 					SUM(CASE WHEN FPT.TerminationDate >= TT.StartDate AND pay.Timescale = @W2HourlyId THEN 1 ELSE 0 END) AS TerminationsW2HourlyCountInTheRange,
 					SUM(CASE WHEN FPT.TerminationDate >= TT.StartDate AND pay.Timescale = @1099HourlyId THEN 1 ELSE 0 END) AS Terminations1099HourlyCountInTheRange,
