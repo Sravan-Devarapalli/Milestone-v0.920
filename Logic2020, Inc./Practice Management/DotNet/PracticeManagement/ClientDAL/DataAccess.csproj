@@ -142,6 +142,7 @@
     <Compile Include="Skills\PersonSkillDAL.cs" />
     <Compile Include="TimeEntryDAL.cs" />
     <Compile Include="TimescaleDAL.cs" />
+    <Compile Include="TitleDal.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WeekPaidOptionDAL.cs" />
   </ItemGroup>
