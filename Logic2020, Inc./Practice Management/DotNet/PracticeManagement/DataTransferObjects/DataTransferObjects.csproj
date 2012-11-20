@@ -257,6 +257,8 @@
     <Compile Include="RecruiterCommission.cs" />
     <Compile Include="RateType.cs" />
     <Compile Include="Timezone.cs" />
+    <Compile Include="Title.cs" />
+    <Compile Include="TitleType.cs" />
     <Compile Include="Triple.cs" />
     <Compile Include="UserCredentials.cs" />
     <Compile Include="UserPasswordsHistory.cs" />
