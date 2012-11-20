@@ -33,7 +33,7 @@ BEGIN
 				d.MinimumSalary,
 				d.MaximumSalary
 		  FROM deleted AS d
-		  INNER JOIN dbo.TitleType TT ON TT.TitleTypeId = i.TitleTypeId
+		  INNER JOIN dbo.TitleType TT ON TT.TitleTypeId = d.TitleTypeId
 	)
 
 	-- Log an activity
