@@ -341,6 +341,15 @@ namespace DataTransferObjects
         }
 
         /// <summary>
+        /// Gets or sets a person's Title.
+        /// </summary>
+        public Title title
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
         /// List of practices owned by this person
         /// </summary>
         [DataMember]
