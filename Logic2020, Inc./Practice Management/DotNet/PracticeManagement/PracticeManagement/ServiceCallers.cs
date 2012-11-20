@@ -16,6 +16,7 @@ using PraticeManagement.ReportService;
 using PraticeManagement.PersonStatusService;
 using PraticeManagement.PersonSkillService;
 using PraticeManagement.PracticeService;
+using PraticeManagement.TitleService;
 
 namespace PraticeManagement
 {
@@ -202,6 +203,16 @@ namespace PraticeManagement
             }
 
             public static void Practice(Action<PracticeServiceClient> action)
+            {
+                Invoke(action);
+            }
+
+            public static TResult Title<TResult>(Func<TitleServiceClient, TResult> func)
+            {
+                return Invoke(func);
+            }
+
+            public static void Title(Action<TitleServiceClient> action)
             {
                 Invoke(action);
             }
