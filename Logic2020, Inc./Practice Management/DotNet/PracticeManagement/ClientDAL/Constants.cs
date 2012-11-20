@@ -377,7 +377,15 @@
             public const string IsJuryDuty = "IsJuryDuty";
             public const string IsBereavement = "IsBereavement";
             public const string IsTimeOffExists = "IsTimeOffExists";
-            public static string WeeklyUtlization = "WeeklyUtlization";
+            public const string WeeklyUtlization = "WeeklyUtlization";
+            public const string TitleId = "TitleId";
+            public const string Title = "Title";
+            public const string TitleTypeId = "TitleTypeId";
+            public const string TitleType = "TitleType";
+            public const string SortOrder = "SortOrder";
+            public const string PTOAccrual = "PTOAccrual";
+            public const string MinimumSalary = "MinimumSalary";
+            public const string MaximumSalary = "MaximumSalary";
         }
 
         #endregion
@@ -676,6 +684,13 @@
             public const string CapabilityIdParam = "@CapabilityId";
             public const string Abbreviation = "@Abbreviation";
             public const string TimescaleId = "@TimescaleId";
+            public const string TitleId = "@TitleId";
+            public const string Title = "@Title";
+            public const string TitleTypeId = "@TitleTypeId";
+            public const string SortOrder = "@SortOrder";
+            public const string PTOAccrual = "@PTOAccrual";
+            public const string MinimumSalary = "@MinimumSalary";
+            public const string MaximumSalary = "@MaximumSalary";
         }
 
         #endregion
@@ -822,7 +837,7 @@
                 public const string GetPersonEmploymentHistoryById = "dbo.GetPersonEmploymentHistoryById";
                 public const string GetPersonAdministrativeTimeTypesInRange = "dbo.GetPersonAdministrativeTimeTypesInRange";
                 public const string IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale = "dbo.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale";
-                public static string GetWeeklyUtilizationForConsultant = "dbo.GetWeeklyUtilizationForConsultant";
+                public const string GetWeeklyUtilizationForConsultant = "dbo.GetWeeklyUtilizationForConsultant";
             }
 
             #endregion
@@ -910,6 +925,19 @@
             {
                 public const string SeniorityListAllProcedure = "dbo.SeniorityListAll";
                 public const string ListAllSeniorityCategories = "dbo.ListAllSeniorityCategories";
+            }
+
+            #endregion
+
+            #region Nested type: Title
+
+            public class Title
+            {
+                public const string GetAllTitles = "dbo.GetAllTitles";
+                public const string GetTitleById = "dbo.GetTitleById";
+                public const string TitleInset= "dbo.TitleInset";
+                public const string TitleUpdate= "dbo.TitleUpdate";
+                public const string TitleDelete= "dbo.TitleDelete";
             }
 
             #endregion
