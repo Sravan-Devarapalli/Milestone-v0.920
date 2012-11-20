@@ -32,6 +32,7 @@
       <Setting name="PersonSkillServiceClient" value="http://65.52.17.100:8080/PersonSkillService.svc" />
       <Setting name="TimeTypeServiceClient" value="http://65.52.17.100:8080/TimeTypeService.svc" />
       <Setting name="ReportServiceClient" value="http://65.52.17.100:8080/ReportService.svc" />
+      <Setting name="TitleServiceClient" value="http://65.52.17.100:8080/TitleService.svc" />
       <Setting name="HasHttpsEndPoint" value="false" />
       <Setting name="EnableSSL" value="true" />
       <Setting name="senioritySeparationRangeValue" value="19" />
