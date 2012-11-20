@@ -298,6 +298,20 @@ namespace PraticeManagement.ReportService
     }
 }
 
+namespace PraticeManagement.TitleService
+{
+    public partial class TitleServiceClient
+    {
+        public TitleServiceClient()
+        {
+            if (WCFClientUtility.IsWebAzureRole())
+            {
+                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("TitleServiceClient");
+            }
+        }
+    }
+}
+
 namespace PraticeManagement.TimescaleService
 {
     public partial class TimescaleServiceClient
@@ -727,3 +741,4 @@ namespace PraticeManagement.Utils
         }
     }
 }
+
