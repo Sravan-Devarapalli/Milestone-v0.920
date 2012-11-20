@@ -359,6 +359,7 @@
     <Content Include="ckeditor\themes\default\theme.js" />
     <Content Include="Config\PracticeCapabilities.aspx" />
     <Content Include="Config\Strawmen.aspx" />
+    <Content Include="Config\Titles.aspx" />
     <Content Include="Controls\Calendar.ascx" />
     <EmbeddedResource Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.js" />
     <EmbeddedResource Include="Controls\Generic\DuplicateOptionsRemove\DupilcateOptionsRemoveExtender.js" />
@@ -547,6 +548,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Skills.Profile.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TerminationReason.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Title.datasource" />
     <None Include="Scripts\uploader.fla" />
     <None Include="Scripts\uploaderRemovedFolder.fla" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
@@ -879,6 +881,13 @@
     <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <Content Include="Scripts\uploader.swf" />
     <Content Include="Scripts\uploaderRemovedFolder.swf" />
+    <None Include="Service References\TitleService\TitleService.disco" />
+    <None Include="Service References\TitleService\configuration91.svcinfo" />
+    <None Include="Service References\TitleService\configuration.svcinfo" />
+    <None Include="Service References\TitleService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1285,6 +1294,16 @@
     <None Include="Service References\TimeTypeService\TimeTypeService419.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\TitleService\TitleService.wsdl" />
+    <None Include="Service References\TitleService\TitleService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TitleService\TitleService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TitleService\TitleService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web References\AttachmentService\AttachmentService.disco" />
     <Content Include="TimeEntry_New.aspx" />
     <Content Include="Web.config">
@@ -1349,6 +1368,13 @@
     </Compile>
     <Compile Include="Config\Strawmen.aspx.designer.cs">
       <DependentUpon>Strawmen.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Titles.aspx.cs">
+      <DependentUpon>Titles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Titles.aspx.designer.cs">
+      <DependentUpon>Titles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Calendar.ascx.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
@@ -2321,6 +2347,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Service References\TimeTypeService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TitleService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -3568,6 +3599,7 @@
     <WCFMetadataStorage Include="Service References\TimeEntryService\" />
     <WCFMetadataStorage Include="Service References\TimescaleService\" />
     <WCFMetadataStorage Include="Service References\TimeTypeService\" />
+    <WCFMetadataStorage Include="Service References\TitleService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3621,3 +3653,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
