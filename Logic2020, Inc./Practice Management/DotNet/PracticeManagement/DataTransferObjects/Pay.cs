@@ -224,6 +224,15 @@ namespace DataTransferObjects
         }
 
         /// <summary>
+        /// Title of the person which will be active from the start date.
+        /// </summary>
+        public Title title
+        {
+            set;
+            get;
+        }
+
+        /// <summary>
         /// Practice Id of the person which will be active from the start date.
         /// </summary>
         [DataMember]
