@@ -54,6 +54,8 @@
       <Setting name="AttachmentServiceURL" />
       <Setting name="PopupTimebeforeFormsAuthTimeOutSec" />
       <Setting name="ReportServiceClient"/>
+      <Setting name="TitleServiceClient"/>
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
+
