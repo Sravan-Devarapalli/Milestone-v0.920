@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:3262/TitleService.svc?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:element name="GetAllTitles">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllTitlesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllTitlesResult" nillable="true" type="q1:ArrayOfTitle" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTitleById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="titleId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTitleByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetTitleByIdResult" nillable="true" type="q2:Title" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TitleInset">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="title" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleTypeId" type="xs:int" />
+        <xs:element minOccurs="0" name="sortOrder" type="xs:int" />
+        <xs:element minOccurs="0" name="pTOAccural" type="xs:int" />
+        <xs:element minOccurs="0" name="minimumSalary" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="maximumSalary" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TitleInsetResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TitleUpdate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="titleId" type="xs:int" />
+        <xs:element minOccurs="0" name="title" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleTypeId" type="xs:int" />
+        <xs:element minOccurs="0" name="sortOrder" type="xs:int" />
+        <xs:element minOccurs="0" name="pTOAccural" type="xs:int" />
+        <xs:element minOccurs="0" name="minimumSalary" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="maximumSalary" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TitleUpdateResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TitleDelete">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="titleId" type="xs:int" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TitleDeleteResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
