@@ -118,6 +118,7 @@
     <Content Include="ProjectStatusService.svc" />
     <Content Include="ReportService.svc" />
     <Content Include="TimeTypeService.svc" />
+    <Content Include="TitleService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -151,6 +152,7 @@
     <Compile Include="ITimeTypeService.cs" />
     <Compile Include="CustomMembershipProvider.cs" />
     <Compile Include="IPersonSkillService.cs" />
+    <Compile Include="ITitleService.cs" />
     <Compile Include="Mail\FileDeliveryProvider.cs" />
     <Compile Include="IConfigurationService.cs" />
     <Compile Include="IEMailDeliveryProvider.cs" />
@@ -250,6 +252,9 @@
     </Compile>
     <Compile Include="TimeTypeService.svc.cs">
       <DependentUpon>TimeTypeService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="TitleService.svc.cs">
+      <DependentUpon>TitleService.svc</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
