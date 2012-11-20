@@ -82,7 +82,8 @@ if (jQuery) {
                             onError: function () { },
                             onProgress: function () { },
                             onComplete: function () { },
-                            onCancelComplete: function () { }
+                            onCancelComplete: function () { },
+                            onErrorComplete: function () { }
                         }, b);
                         var d = location.pathname;
                         d = d.split("/");
@@ -199,8 +200,9 @@ if (jQuery) {
                                     fileNameError = j.name.substr(0, 40) + "..."
                                 }
                                 a("#" + a(this).attr("id") + h + " .fileName").text(i.type + " Error - " + fileNameError);
-                                a("#" + a(this).attr("id") + h).css({ border: "3px solid #FBCBBC", "background-color": "#FDE5DD" });
+                                a("#" + a(this).attr("id") + h).removeClass().addClass("errorFile");
                                 a("#" + a(this).attr("id") + h + "ProgressBar").css({ "background-color": "#FDE5DD" });
+                                settings.onErrorComplete();
                             }
                         });
                         a(this).bind("rfuProgress", {
@@ -238,3 +240,4 @@ if (jQuery) {
         })
     })(jQuery)
 };
+
