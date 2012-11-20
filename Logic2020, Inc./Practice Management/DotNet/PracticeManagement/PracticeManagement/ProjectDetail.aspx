@@ -34,7 +34,7 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.uploadify.min.js?Id=16" type="text/javascript"></script>
+    <script src="Scripts/jquery.uploadify.min.js?Id=20" type="text/javascript"></script>
     <script type="text/javascript">
 
         var fileError = 0;
@@ -60,6 +60,9 @@
                     }
                     div.appendChild(document.createTextNode("- " + fileObj.name));
                     div.appendChild(document.createElement("br"));
+
+                    var queueItem = document.getElementById('<%= fuAttachmentsUpload.ClientID %>' + queueID);
+                    queueItem.outerHTML = '';
                 },
                 onAllComplete: function (event, queueID, fileObj, response, data) {
                     var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
@@ -77,13 +80,19 @@
                     var queueItem = document.getElementById(elementId);
                     var imgElement = queueItem.firstChild.firstChild;
                     imgElement.setAttribute("onclick", "javascript:(document.getElementById('" + elementId + "')).outerHTML= ''; fileError--; EnableUploadButton();");
-                    var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
-                    progressBar.setAttribute('style', 'display:none;');
                 },
                 onSelectOnce: function () {
                     EnableUploadButton(true);
                 },
                 onCancelComplete: function () {
+                    EnableUploadButton();
+                },
+                onErrorComplete: function () {
+                    if (!IsQueueContainValidFiles()) {
+                        var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
+                        progressBar.setAttribute('style', 'display:none;');
+                    }
+
                     EnableUploadButton();
                 }
             });
@@ -124,16 +133,19 @@
             var categorySelected = IsAttachmentCategorySelected();
             var fileSelected = (selected == true ? true : false);
             if (categorySelected && !fileSelected) {
-                var fileUploadQueue = $('.fileUploadQueueItem');
-                for (var i = 0; i < fileUploadQueue.length; i++) {
-                    if (fileUploadQueue[i].style.display == "") {
-                        fileSelected = true;
-                        break;
-                    }
-                }
+                fileSelected = IsQueueContainValidFiles();
             }
+
             var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
             uploadButton.disabled = categorySelected && fileSelected ? "" : "disabled";
+        }
+
+        function IsQueueContainValidFiles() {
+            var fileUploadQueue = $('.fileUploadQueueItem');
+            if (fileUploadQueue.length > 0) {
+                return true;
+            }
+            return false;
         }
 
         function DownloadUnsavedFile(linkButton) {
@@ -1222,7 +1234,7 @@
                         <td class="FileUploadAttachment paddingBottom10px" colspan="2">
                             <label id="lblUplodedFilesMsg" runat="server" class="displayNone">
                                 Following files uploaded successfully:</label>
-                            <div id="uploadedFiles" runat="server" class="padLeft2">
+                            <div id="uploadedFiles" runat="server" class="padLeft2 uploadedFilesDiv">
                             </div>
                         </td>
                     </tr>
