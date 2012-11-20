@@ -1390,8 +1390,10 @@ table#ctl00_body_login tr td label{float:left}
 .linkDisableStyle,.linkDisableStyle hover{color:#8F8F8F!important;cursor:text}
 .linkEnableStyle{color:#0898E6;cursor:pointer}
 .fileUploadQueueItem{font:11px Verdana,Geneva,sans-serif;background-color:#e2ebff;border:3px solid #E5E5E5;margin-top:5px;padding:10px}
-.fileUploadQueueItem .cancel{float:right}
+.fileUploadQueueItem .cancel,.errorFile .cancel{float:right}
 .fileUploadProgress{background-color:#FFF;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #C5C5C5;border-bottom:1px solid #C5C5C5;margin-top:10px;width:100%}
 .fileUploadProgressBar{background-color:lightgreen}
-.fileUploadQueue{max-height:600px;overflow-y:auto}
+.fileUploadQueue{max-height:480px;overflow-y:auto}
 .LineHeight25Px{line-height:25px}
+.errorFile{font:11px Verdana,Geneva,sans-serif;background-color:#FDE5DD;border:3px solid #FBCBBC;margin-top:5px;padding:10px}
+.uploadedFilesDiv{max-height:220px;overflow-y:auto}
