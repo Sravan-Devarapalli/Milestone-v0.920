@@ -1558,8 +1558,8 @@
                                 <asp:Panel ID="pnlLog" runat="server" CssClass="tab-pane WholeWidth">
                                     <uc:Notes ID="nPerson" runat="server" Target="Person" OnNoteAdded="nPerson_OnNoteAdded" />
                                     <uc:ActivityLog runat="server" ID="activityLog" DisplayDropDownValue="TargetPerson"
-                                        DateFilterValue="Year" ShowDisplayDropDown="false" ShowProjectDropDown="false"
-                                        ShowPersonDropDown="false" />
+                                        ValidationSummaryEnabled="false" DateFilterValue="Year" ShowDisplayDropDown="false"
+                                        ShowProjectDropDown="false" ShowPersonDropDown="false" />
                                 </asp:Panel>
                             </asp:View>
                         </asp:MultiView>
@@ -1942,7 +1942,7 @@
             <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
                 TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
-                CancelControlID="btnCancelErrorPanel" DropShadow="false" />
+                CancelControlID="btnCancelErrorPanel" DropShadow="false" OkControlID="btnOKErrorPanel" />
             <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
                 <table class="Width100Per">
                     <tr>
@@ -1972,7 +1972,7 @@
                     </tr>
                     <tr>
                         <td class="Padding10Px TextAlignCenterImp">
-                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
+                            <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" />
                         </td>
                     </tr>
                 </table>
