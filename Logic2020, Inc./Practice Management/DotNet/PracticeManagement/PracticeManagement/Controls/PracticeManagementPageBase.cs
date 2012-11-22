@@ -14,7 +14,7 @@ namespace PraticeManagement.Controls
 		private const string ReturnUrlKey = "returnTo";
 	    private const string IdArgument = "Id";
 		private const string IdArgumentFormat1 = "?id={0}";
-		private const string IdArgumentFormat2 = "&id={0}";
+		private const string IdArgumentFormat2 = "?id={0}&";
 		private const string ValidatedKey = "PageValidated";
 
 		#endregion
@@ -29,7 +29,7 @@ namespace PraticeManagement.Controls
 			get
 			{
                 var queryString = Request.QueryString[ReturnUrlKey];
-                queryString = string.IsNullOrEmpty(queryString) ? queryString : queryString.Replace(",", "&" + ReturnUrlKey + "=");
+                //queryString = string.IsNullOrEmpty(queryString) ? queryString : queryString.Replace(",", "&" + ReturnUrlKey + "=");
                 return queryString;
 			}
 		}
@@ -246,6 +246,31 @@ namespace PraticeManagement.Controls
 			RedirectWithBack(redirectUrl, Request.Url.AbsoluteUri);
 		}
 
+            /// <summary>
+            /// Redirects to the specified URL.
+            /// </summary>
+            /// <param name="redirectUrl">The URL to redirect to.</param>
+            public void RedirectWithOutReturnTo(string redirectUrl)
+            {
+                Utils.Generic.RedirectWithoutReturnTo(redirectUrl, Response);
+            }
+
+	 public string GetBackUrlWithId(string backUrl, string newId)
+            {
+                if (!SelectedId.HasValue)
+                {
+                    if (backUrl.IndexOf(Constants.QueryStringParameterNames.QueryStringSeparator) < 0)
+                    {
+                        backUrl += string.Format(IdArgumentFormat1, newId);
+                    }
+                    else
+                    {
+                        backUrl = backUrl.Replace("?", string.Format(IdArgumentFormat2, newId));
+                    }
+                }
+                return backUrl;
+            }
+
 		/// <summary>
 		/// Redirects to the specified URL and provides the back redirect for new records.
 		/// </summary>
@@ -254,13 +279,7 @@ namespace PraticeManagement.Controls
 		public void Redirect(string redirectUrl, string newId)
 		{
 			string backUrl = Request.Url.AbsoluteUri;
-			if (!SelectedId.HasValue)
-			{
-				backUrl +=
-					string.Format(
-					backUrl.IndexOf(Constants.QueryStringParameterNames.QueryStringSeparator) < 0 ? IdArgumentFormat1 : IdArgumentFormat2,
-					newId);
-			}
+			backUrl = GetBackUrlWithId(backUrl, newId);
 			RedirectWithBack(redirectUrl, backUrl);
 		}
 
