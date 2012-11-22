@@ -191,6 +191,18 @@ namespace PraticeManagement.Controls
 
         public bool IsActivityLogPage { get; set; }
 
+        public bool ValidationSummaryEnabled
+        {
+            get
+            {
+                return valSum.Enabled;
+            }
+            set
+            {
+                valSum.Enabled = value;
+            }
+        }
+
         #endregion
 
         public DateTime? FromDateFilterValue
