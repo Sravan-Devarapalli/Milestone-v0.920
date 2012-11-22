@@ -652,6 +652,14 @@ namespace PraticeManagement
             return null;
         }
 
+        private Person PersonById(int personId)
+        {
+            using (var serviceClient = new PersonService.PersonServiceClient())
+            {
+                return serviceClient.GetPersonDetailsShort(personId);
+            }
+        }
+
         /// <summary>
         /// Fill the controls with the specified data.
         /// </summary>
@@ -671,7 +679,7 @@ namespace PraticeManagement
                 ListItem selectedDefaultDirector = ddlDefaultDirector.Items.FindByValue(client.DefaultDirectorId.Value.ToString());
                 if (selectedDefaultDirector == null)
                 {
-                    Person selectedPerson = DataHelper.GetPerson(client.DefaultDirectorId.Value);
+                    Person selectedPerson = PersonById(client.DefaultDirectorId.Value);
                     selectedDefaultDirector = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
                     ddlDefaultDirector.Items.Add(selectedDefaultDirector);
                     ddlDefaultDirector.SortByText();
@@ -770,24 +778,10 @@ namespace PraticeManagement
                 if (clientId.HasValue)
                 {
                     var query = Request.QueryString.ToString();
+                    string backUrl = string.Format( Constants.ApplicationPages.ClientDetailsWithoutClientIdFormat,
+                                                    Constants.ApplicationPages.ClientDetails,query);
+                    backUrl = GetBackUrlWithId(backUrl, clientId.Value.ToString());
 
-                    string backUrl;
-
-                    if (Request.QueryString[Constants.QueryStringParameterNames.Id] == null)
-                    {
-                        backUrl = string.Format(
-                            Constants.ApplicationPages.ClientDetailsWithReturnFormat,
-                            Constants.ApplicationPages.ClientDetails,
-                            query,
-                            clientId.Value);
-                    }
-                    else
-                    {
-                        backUrl = string.Format(
-                            Constants.ApplicationPages.ClientDetailsWithoutClientIdFormat,
-                            Constants.ApplicationPages.ClientDetails,
-                            query);
-                    }
                     var id = -1;
                     if (string.IsNullOrEmpty(eventArgument) || int.TryParse(eventArgument, out id))
                     {
