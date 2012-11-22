@@ -1590,12 +1590,12 @@ namespace PraticeManagement
             {
                 if (ValidateAndSave())
                 {
-                    Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
+                    RedirectWithOutReturnTo(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
                 }
             }
             else
             {
-                Redirect(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
+                RedirectWithOutReturnTo(eventArgument == string.Empty ? Constants.ApplicationPages.OpportunityList : eventArgument);
             }
         }
         #endregion
