@@ -381,6 +381,11 @@ namespace PraticeManagement
             personOpportunities.TargetPersonId = PersonId;
             mlError.ClearMessage();
             this.dvTerminationDateErrors.Visible = false;
+
+            if (mvPerson.Views[mvPerson.ActiveViewIndex] == vwActivityLog)
+            {
+                activityLog.Update();
+            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -957,7 +962,8 @@ namespace PraticeManagement
             if (!DisableValidatecustTerminateDateTE && Page.IsValid)
             {
                 custTerminateDateTE.Enabled = true;
-                Page.Validate(valsPerson.ValidationGroup);
+                //Page.Validate(valsPerson.ValidationGroup);
+                custTerminateDateTE.Validate();
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
             if (!Page.IsValid)
@@ -999,12 +1005,12 @@ namespace PraticeManagement
 
             SelectView((Control)sender, viewIndex, false);
 
-            if (viewIndex == 9) //History
+            if (viewIndex == 10) //History
             {
                 activityLog.Update();
             }
 
-            if (viewIndex == 6) //Opportunities
+            if (viewIndex == 9) //Opportunities
             {
                 personOpportunities.DatabindOpportunities();
             }
