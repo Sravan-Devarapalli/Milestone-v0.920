@@ -95,6 +95,11 @@ namespace PraticeManagement.Utils
             httpResponse.Redirect(GetTargetUrlWithReturn(targetUrl, currentUrl));
         }
 
+        public static void RedirectWithoutReturnTo(string targetUrl, HttpResponse httpResponse)
+        {
+            httpResponse.Redirect(Urls.GetUrlWithoutReturnTo(targetUrl));
+        }
+
         public static string GetTargetUrlWithReturn(string targetUrl, string currentUrl)
         {
             if (String.IsNullOrEmpty(targetUrl))
