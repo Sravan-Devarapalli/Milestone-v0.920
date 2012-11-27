@@ -939,7 +939,7 @@
     function SetTooltipText(descriptionText, hlinkObj) {
         var hlinkObjct = $('#' + hlinkObj.id);
         var displayPanel = $('#<%= oppNameToolTipHolder.ClientID %>');
-        iptop = hlinkObjct.offset().top - hlinkObjct[0].offsetHeight;
+        iptop = hlinkObjct.offset().top - 20;// - hlinkObjct[0].offsetHeight;
         ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 10;
         iptop = iptop;
         ipleft = ipleft;
@@ -997,10 +997,8 @@
                 <tr class="middle">
                     <td class="lbor">
                     </td>
-                    <td class="content">
-                        <pre>
+                    <td class="content WordWrap">
                             <asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap Width100Per" runat="server"></asp:Label>
-                        </pre>
                     </td>
                     <td class="rbor">
                     </td>
