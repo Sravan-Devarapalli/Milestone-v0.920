@@ -148,7 +148,7 @@
             </LayoutTemplate>
             <ItemTemplate>
                 <tr runat="server" id="boundingRow" class="MinHeight25Px vTop">
-                    <td class="PaddingTop4Px">                       
+                    <td class="PaddingTop4Px">
                     </td>
                     <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
@@ -197,7 +197,7 @@
             </ItemTemplate>
             <AlternatingItemTemplate>
                 <tr runat="server" id="boundingRow" class="rowEven MinHeight20Px vTop">
-                    <td class="PaddingTop4Px">                       
+                    <td class="PaddingTop4Px">
                     </td>
                     <td class="CompPerfProjectState AddLeftPadding">
                         <asp:LinkButton ID="btnProjectNumber" runat="server" Text='<%# HighlightFound(Eval("ProjectNumber")) %>'
@@ -217,7 +217,7 @@
                             ToolTip="Project Milestones" />
                         <asp:LinkButton ID="btnProjectName" runat="server" Text='<%# HighlightFound(Eval("HtmlEncodedName")) %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
-                        <asp:Panel ID="pnlMilestones" runat="server"  CssClass="padLeft30">
+                        <asp:Panel ID="pnlMilestones" runat="server" CssClass="padLeft30">
                             <asp:DataList ID="dtlProposedPersons" runat="server">
                                 <ItemTemplate>
                                     <div class="DivMileStoneNames">
@@ -264,9 +264,7 @@
                 <td class="lbor">
                 </td>
                 <td class="content WordWrap">
-                    <pre>
-<asp:Label ID="lblProjectTooltip" CssClass="WordWrap" runat="server"></asp:Label>
-</pre>
+                    <asp:Label ID="lblProjectTooltip" CssClass="WordWrap" runat="server"></asp:Label>
                 </td>
                 <td class="rbor">
                 </td>
