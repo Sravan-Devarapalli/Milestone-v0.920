@@ -4337,6 +4337,10 @@ BenchCosts.ascx*/
     position: absolute;
     z-index: 2000;
 }
+.PanelOppNameToolTipHolder SPAN, .ProjectsToolTip SPAN
+{
+    line-height: 20px;
+}
 .TableOpportunitiesCount
 {
     width: 100%;
