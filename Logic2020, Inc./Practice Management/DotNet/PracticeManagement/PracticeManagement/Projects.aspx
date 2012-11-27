@@ -708,7 +708,8 @@
                     </tr>
                 </table>
             </div>
-            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" style="display:none;">
+            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp"
+                Style="display: none;">
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
@@ -749,9 +750,7 @@
                         <td class="lbor">
                         </td>
                         <td class="content WordWrap">
-                            <pre>
-<asp:Label ID="lblProjectTooltip" CssClass="WordWrap" runat="server"></asp:Label>
-</pre>
+                            <asp:Label ID="lblProjectTooltip" CssClass="WordWrap" runat="server"></asp:Label>
                         </td>
                         <td class="rbor">
                         </td>
