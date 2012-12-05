@@ -335,7 +335,7 @@ namespace PraticeManagement.Controls.Reporting
                                            0, // Index
                                             LabelMarkStyle.None); // Mark style: none
             objectNumberLabel.ForeColor = Color.FromArgb(8, 152, 230); //Color.FromArgb(0, 102, 153); //a onhover
-            objectNumberLabel.ToolTip = item.ProjectDescription;
+            objectNumberLabel.ToolTip = string.IsNullOrEmpty(item.ProjectDescription) ? item.OpportunintyDescription : item.ProjectDescription;
             objectNumberLabel.Url = item.ObjectType == 1 ?
                 Urls.OpportunityDetailsLink(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString)
                 : Urls.GetProjectDetailsUrl(item.ObjectId, Constants.ApplicationPages.ConsultingDemandWithFilterQueryString);
