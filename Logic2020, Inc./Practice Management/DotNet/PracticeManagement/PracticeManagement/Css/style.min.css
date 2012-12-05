@@ -145,8 +145,8 @@ table.sortable thead{background-color:#eee;color:#666;font-weight:700;cursor:def
 .tem-persons{float:left;width:350px}
 .tem-persons select{width:342px}
 .tem-week-of{float:right;width:auto}
-.please-wait-holder{height:0;text-align:center}
-.please-wait-holder table{width:300px;position:absolute;margin-left:-150px;z-index:1000001}
+.please-wait-holder{height:0;text-align:center;z-index:10000001!important}
+.please-wait-holder table{width:300px;position:absolute;margin-left:-150px;z-index:10000001!important}
 .error-milestone-row{background-color:#FFE6E0}
 .time-entry-grid{vertical-align:top;width:97%}
 .time-entry-new-grid{vertical-align:top;width:100%}
