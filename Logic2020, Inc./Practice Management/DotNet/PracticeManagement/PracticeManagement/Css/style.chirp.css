@@ -886,13 +886,14 @@ table.sortable thead
 {
     height: 0;
     text-align: center;
+    z-index: 10000001 !important;
 }
 .please-wait-holder table
 {
     width: 300px;
     position: absolute;
     margin-left: -150px;
-    z-index: 1000001;
+    z-index: 10000001 !important;
 }
 .error-milestone-row
 {
