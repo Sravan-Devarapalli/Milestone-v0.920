@@ -3780,38 +3780,10 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<TimeTypeRecord>();
-                    ReadTimeTypesShort(reader, result);
+                    TimeTypeDAL.ReadTimeTypesShort(reader, result);
                     return result;
                 }
             }
-        }
-
-        private static void ReadTimeTypesShort(DbDataReader reader, List<TimeTypeRecord> result)
-        {
-            if (reader.HasRows)
-            {
-                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
-                int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTTimeTypeColumn);
-                int isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidTimeType);
-                int isW2HourlyAllowedIndex = reader.GetOrdinal(Constants.ColumnNames.IsW2HourlyAllowed);
-                int isW2SalaryAllowedIndex = reader.GetOrdinal(Constants.ColumnNames.IsW2SalaryAllowed);
-
-                while (reader.Read())
-                {
-                    var tt = new TimeTypeRecord
-                    {
-                        Id = reader.GetInt32(timeTypeIdIndex),
-                        Name = reader.GetString(nameIndex),
-                        IsORTTimeType = reader.GetBoolean(isORTIndex),
-                        IsUnpaidTimeType = reader.GetBoolean(isUnpaidIndex),
-                        IsW2HourlyAllowed = reader.GetBoolean(isW2HourlyAllowedIndex),
-                        IsW2SalaryAllowed = reader.GetBoolean(isW2SalaryAllowedIndex)
-                    };
-                    result.Add(tt);
-                }
-            }
-
         }
 
         /// <summary>
