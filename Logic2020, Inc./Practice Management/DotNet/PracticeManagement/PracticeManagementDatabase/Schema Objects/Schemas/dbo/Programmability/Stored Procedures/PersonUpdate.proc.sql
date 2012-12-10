@@ -250,7 +250,13 @@
 			--Hire Date Changed.
 			IF(@PreviousHireDate <> @HireDate)
 			BEGIN
-				EXEC dbo.OnPersonHireDateChange	@PersonId = @PersonId , @NewHireDate = @HireDate
+				
+				DECLARE @ModifiedBy INT
+				SELECT @ModifiedBy = PersonId
+				FROM dbo.Person p
+				WHERE P.Alias = @UserLogin
+
+				EXEC dbo.OnPersonHireDateChange	@PersonId = @PersonId , @NewHireDate = @HireDate, @ModifiedBy = @ModifiedBy
 			END
 
 
