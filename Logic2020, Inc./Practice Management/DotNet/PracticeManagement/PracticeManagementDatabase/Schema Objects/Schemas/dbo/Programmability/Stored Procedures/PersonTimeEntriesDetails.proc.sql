@@ -7,7 +7,7 @@
 -- =============================================
 CREATE PROCEDURE [dbo].[PersonTimeEntriesDetails]
 	(
-	  @PersonId INT ,
+	  @PersonId INT = NULL,
 	  @StartDate DATETIME ,
 	  @EndDate DATETIME
 	)
@@ -28,22 +28,29 @@ AS
 
 		;WITH    PersonDayWiseByProjectsBillableTypes
 				  AS ( SELECT   M.ProjectId ,
+								MP.PersonId,
 								C.Date ,
 								MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue ,
 								MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
+								,CASE WHEN MAX(CAST(m.IsHOurlyAmount AS INT)) = 1 AND MIN(CAST(m.IsHourlyAmount AS INT)) = 1 THEN SUM(MPE.Amount * MPE.HoursPerDay)/ SUM(MPE.HoursPerDay)
+								ELSE NULL END HourlyRate
 					   FROM     dbo.MilestonePersonEntry AS MPE
 								INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 								INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 								INNER JOIN dbo.Calendar AS C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate
 															  AND C.Date BETWEEN @StartDateLocal AND @EndDateLocal
-					   WHERE    MP.PersonId = @PersonIdLocal
+					   WHERE    (@PersonIdLocal IS NULL OR MP.PersonId = @PersonIdLocal)
 								AND M.StartDate < @EndDateLocal
 								AND @StartDateLocal < M.ProjectedDeliveryDate
 					   GROUP BY M.ProjectId ,
+								MP.PersonId,
 								C.Date
 					 )
 
-			SELECT  CC.TimeEntrySectionId ,
+			SELECT  TE.PersonId,
+					P.FirstName,
+					P.LastName,
+					CC.TimeEntrySectionId ,
 					C.ClientId ,
 					C.Name AS ClientName ,
 					C.Code AS ClientCode ,
@@ -70,6 +77,8 @@ AS
 								) THEN 'Hourly'
 						   ELSE 'Both'
 					  END ) AS BillingType ,
+					 CASE WHEN CC.TimeEntrySectionId = 3 THEN NULL
+							ELSE PDBR.HourlyRate END HourlyRate,
 					( CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
 								  OR TT.TimeTypeId = @HolidayTimeType
 								  OR TT.TimeTypeId = @UnpaidTimeTypeId
@@ -98,9 +107,10 @@ AS
 					INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
 					INNER JOIN dbo.PersonStatusHistory PTSH ON TE.ChargeCodeDate BETWEEN PTSH.StartDate
 															  AND ISNULL(PTSH.EndDate,@FutureDate) AND PTSH.PersonId = TE.PersonId
-					LEFT JOIN PersonDayWiseByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId
+					INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
+					LEFT JOIN PersonDayWiseByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId AND TE.PersonId = PDBR.PersonId
 															  AND PDBR.Date = TE.ChargeCodeDate
-			WHERE   TE.PersonId = @PersonIdLocal
+			WHERE   (@PersonIdLocal IS NULL OR TE.PersonId = @PersonIdLocal)
 					AND TE.ChargeCodeDate BETWEEN @StartDateLocal
 										  AND     @EndDateLocal
 					AND ( CC.timeTypeId != @HolidayTimeType
@@ -108,7 +118,10 @@ AS
 							   AND PTSH.PersonStatusId IN (1,5)
 							 )
 						)
-			GROUP BY CC.TimeEntrySectionId ,
+			GROUP BY TE.PersonId ,
+					P.FirstName,
+					P.LastName,
+					CC.TimeEntrySectionId ,
 					C.ClientId ,
 					C.Name ,
 					C.Code ,
@@ -124,8 +137,11 @@ AS
 					TE.ChargeCodeDate ,
 					TE.Note ,
 					PDBR.MinimumValue ,
-					PDBR.MaximumValue
-			ORDER BY CC.TimeEntrySectionId ,
+					PDBR.MaximumValue,
+					PDBR.HourlyRate
+			ORDER BY P.FirstName,
+					P.LastName,
+					CC.TimeEntrySectionId ,
 					PRO.ProjectNumber ,
 					TE.ChargeCodeDate ,
 					TT.Name
