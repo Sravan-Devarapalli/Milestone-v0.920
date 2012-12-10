@@ -26,6 +26,13 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
+        public Person Person
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public double BillableHours { get; set; }
 
         [DataMember]
