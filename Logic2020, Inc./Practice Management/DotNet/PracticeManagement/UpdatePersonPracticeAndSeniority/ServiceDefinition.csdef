@@ -5,12 +5,15 @@
       <Import moduleName="Diagnostics" />
     </Imports>
     <ConfigurationSettings>
+      <Setting name="Environment" />
       <Setting name="DBConnection" />
       <Setting name="LogEnabled" />
       <Setting name="RunSchedularDailyAtTime" />
       <Setting name="SkillsProfilePagePath"/>
       <Setting name="UpdatedProfilesListEmailReciever" />
       <Setting name="EmailSubjectForProfilesUpdatedList"/>
+      <Setting name="PayrollDistributionScheduleTime"/>
+      <Setting name="PayrollDistributionReportReciever"/>
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
