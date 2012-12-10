@@ -69,6 +69,10 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClientDAL\DataAccess.csproj">
+      <Project>{EDB5F24C-B46B-46B3-B7F7-644BC9DA8648}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataTransferObjects\DataTransferObjects.csproj">
       <Project>{848EAE46-9397-439B-86BC-5799B366EF61}</Project>
       <Name>DataTransferObjects</Name>
