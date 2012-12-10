@@ -194,7 +194,7 @@ namespace DataAccess
             }
         }
 
-        private static void ReadTimeTypesShort(DbDataReader reader, List<TimeTypeRecord> result)
+        internal static void ReadTimeTypesShort(DbDataReader reader, List<TimeTypeRecord> result)
         {
             if (reader.HasRows)
             {
