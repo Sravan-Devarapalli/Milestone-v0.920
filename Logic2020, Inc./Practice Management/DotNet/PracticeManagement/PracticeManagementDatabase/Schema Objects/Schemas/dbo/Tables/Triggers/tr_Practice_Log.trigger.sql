@@ -93,6 +93,12 @@ BEGIN
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.PracticeId = d.PracticeId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+	  WHERE ISNULL(i.Abbreviation, '') <> ISNULL(d.Abbreviation, '')
+	  OR ISNULL(i.IsActive, '') <> ISNULL(d.IsActive, '')
+	  OR ISNULL(i.IsCompanyInternal, '') <> ISNULL(d.IsCompanyInternal, '')
+	  OR ISNULL(i.IsNotesRequired, '') <> ISNULL(d.IsNotesRequired, '')
+	  OR ISNULL(i.Name, '') <> ISNULL(d.Name, '')
+	  OR ISNULL(i.PracticeManagerId, '') <> ISNULL(d.PracticeManagerId, '')
 	
 	 -- End logging session
 	EXEC dbo.SessionLogUnprepare
