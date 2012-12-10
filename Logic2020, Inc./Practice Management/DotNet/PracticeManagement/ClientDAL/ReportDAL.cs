@@ -68,12 +68,24 @@ namespace DataAccess
         public static List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesDetails(int personId, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                return PersonTimeEntriesDetailsWithData(personId, startDate, endDate, connection);
+            }
+        }
+
+        public static List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesDetailsSchedular(int? personId, DateTime startDate, DateTime endDate, SqlConnection connection)
+        {
+            return PersonTimeEntriesDetailsWithData(personId, startDate, endDate, connection);
+        }
+
+        private static List<TimeEntriesGroupByClientAndProject> PersonTimeEntriesDetailsWithData(int? personId, DateTime startDate, DateTime endDate, SqlConnection connection)
+        {
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.PersonTimeEntriesDetails, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId.HasValue ? (object)personId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
 
@@ -109,6 +121,23 @@ namespace DataAccess
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
                 int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int personFirstNameIndex = -1;
+                int personLastNameIndex = -1;
+                int hourlyRateIndex = -1;
+                try
+                {
+                    hourlyRateIndex = reader.GetOrdinal(Constants.ColumnNames.HourlyRate);
+                }
+                catch
+                { }
+                try
+                {
+                    personFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                    personLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                }
+                catch
+                { }
 
                 while (reader.Read())
                 {
@@ -123,6 +152,11 @@ namespace DataAccess
                             Code = reader.GetString(timeTypeCodeIndex)
                         }
                     };
+
+                    if (hourlyRateIndex > -1 && !reader.IsDBNull(hourlyRateIndex))
+                    {
+                        dayTotalHoursbyWorkType.HourlyRate = reader.GetDecimal(hourlyRateIndex);
+                    }
 
                     var dt = new TimeEntriesGroupByDate()
                     {
@@ -167,10 +201,24 @@ namespace DataAccess
 
                     };
 
-
-                    if (result.Any(r => r.Project.Id == ptd.Project.Id && r.Client.Id == ptd.Client.Id))
+                    if (personIdIndex > -1)
                     {
-                        ptd = result.First(r => r.Project.Id == ptd.Project.Id && r.Client.Id == ptd.Client.Id);
+                        ptd.Person = new Person
+                        {
+                            Id = reader.GetInt32(personIdIndex)
+                        };
+                    }
+
+                    if (personFirstNameIndex > -1 && personLastNameIndex > -1)
+                    {
+                        ptd.Person.FirstName = reader.GetString(personFirstNameIndex);
+                        ptd.Person.LastName = reader.GetString(personLastNameIndex);
+                    }
+
+
+                    if (result.Any(r => r.Person.Id == ptd.Person.Id && r.Project.Id == ptd.Project.Id && r.Client.Id == ptd.Client.Id))
+                    {
+                        ptd = result.First(r => r.Person.Id == ptd.Person.Id && r.Project.Id == ptd.Project.Id && r.Client.Id == ptd.Client.Id);
 
                         ptd.AddDayTotalHours(dt);
                     }
