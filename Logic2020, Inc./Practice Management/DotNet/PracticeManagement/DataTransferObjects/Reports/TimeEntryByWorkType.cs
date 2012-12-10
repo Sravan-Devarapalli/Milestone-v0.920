@@ -26,6 +26,9 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double NonBillableHours { get; set; }
 
+        [DataMember]
+        public decimal? HourlyRate { get; set; }
+
 
         public double TotalHours
         {
