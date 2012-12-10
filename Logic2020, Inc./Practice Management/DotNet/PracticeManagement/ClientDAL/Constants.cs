@@ -386,6 +386,7 @@
             public const string PTOAccrual = "PTOAccrual";
             public const string MinimumSalary = "MinimumSalary";
             public const string MaximumSalary = "MaximumSalary";
+            public const string HourlyRate = "HourlyRate";
         }
 
         #endregion
