@@ -122,22 +122,13 @@ namespace DataAccess
                 int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
                 int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
                 int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                int personFirstNameIndex = -1;
-                int personLastNameIndex = -1;
-                int hourlyRateIndex = -1;
-                try
-                {
-                    hourlyRateIndex = reader.GetOrdinal(Constants.ColumnNames.HourlyRate);
-                }
-                catch
-                { }
-                try
-                {
-                    personFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
-                    personLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                }
-                catch
-                { }
+                int personFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int personLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int hourlyRateIndex = reader.GetOrdinal(Constants.ColumnNames.HourlyRate); ;
+                int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+                int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+                int payRateIndex = reader.GetOrdinal(Constants.ColumnNames.HourlyPayRate);
+                int timeScaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
 
                 while (reader.Read())
                 {
@@ -153,9 +144,19 @@ namespace DataAccess
                         }
                     };
 
-                    if (hourlyRateIndex > -1 && !reader.IsDBNull(hourlyRateIndex))
+                    if (!reader.IsDBNull(hourlyRateIndex))
                     {
                         dayTotalHoursbyWorkType.HourlyRate = reader.GetDecimal(hourlyRateIndex);
+                    }
+
+                    if (!reader.IsDBNull(payRateIndex))
+                    {
+                        dayTotalHoursbyWorkType.PayRate = reader.GetDecimal(payRateIndex);
+                    }
+
+                    if (!reader.IsDBNull(timeScaleNameIndex))
+                    {
+                        dayTotalHoursbyWorkType.PayType = reader.GetString(timeScaleNameIndex);
                     }
 
                     var dt = new TimeEntriesGroupByDate()
@@ -200,20 +201,14 @@ namespace DataAccess
                         BillableType = reader.GetString(billingTypeIndex)
 
                     };
-
-                    if (personIdIndex > -1)
+                    ptd.Person = new Person
                     {
-                        ptd.Person = new Person
-                        {
-                            Id = reader.GetInt32(personIdIndex)
-                        };
-                    }
-
-                    if (personFirstNameIndex > -1 && personLastNameIndex > -1)
-                    {
-                        ptd.Person.FirstName = reader.GetString(personFirstNameIndex);
-                        ptd.Person.LastName = reader.GetString(personLastNameIndex);
-                    }
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(personFirstNameIndex),
+                        LastName = reader.GetString(personLastNameIndex),
+                        EmployeeNumber = reader.GetString(employeeNumberIndex),
+                        IsOffshore = reader.GetBoolean(isOffshoreIndex)
+                    };
 
 
                     if (result.Any(r => r.Person.Id == ptd.Person.Id && r.Project.Id == ptd.Project.Id && r.Client.Id == ptd.Client.Id))
