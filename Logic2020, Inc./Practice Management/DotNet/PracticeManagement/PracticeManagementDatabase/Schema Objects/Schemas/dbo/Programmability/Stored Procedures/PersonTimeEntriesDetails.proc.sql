@@ -48,8 +48,10 @@ AS
 					 )
 
 			SELECT  TE.PersonId,
+					P.EmployeeNumber,
 					P.FirstName,
 					P.LastName,
+					P.IsOffshore,
 					CC.TimeEntrySectionId ,
 					C.ClientId ,
 					C.Name AS ClientName ,
@@ -96,7 +98,9 @@ AS
 					ROUND(SUM(CASE WHEN TEH.IsChargeable = 0
 								   THEN TEH.ActualHours
 								   ELSE 0
-							  END), 2) AS NonBillableHours
+							  END), 2) AS NonBillableHours,
+					Pa.AmountHourly AS 'HourlyPayRate',
+					Pa.TimescaleName
 			FROM    dbo.TimeEntry AS TE
 					INNER JOIN dbo.TimeEntryHours AS TEH ON TEH.TimeEntryId = TE.TimeEntryId
 					INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
@@ -110,6 +114,7 @@ AS
 					INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId
 					LEFT JOIN PersonDayWiseByProjectsBillableTypes PDBR ON PDBR.ProjectId = CC.ProjectId AND TE.PersonId = PDBR.PersonId
 															  AND PDBR.Date = TE.ChargeCodeDate
+					LEFT JOIN dbo.v_Pay Pa ON Pa.PersonId = P.PersonId AND TE.ChargeCodeDate BETWEEN Pa.StartDate AND (ISNULL(Pa.EndDate, @FutureDate) -1)
 			WHERE   (@PersonIdLocal IS NULL OR TE.PersonId = @PersonIdLocal)
 					AND TE.ChargeCodeDate BETWEEN @StartDateLocal
 										  AND     @EndDateLocal
@@ -119,8 +124,10 @@ AS
 							 )
 						)
 			GROUP BY TE.PersonId ,
+					P.EmployeeNumber,
 					P.FirstName,
 					P.LastName,
+					P.IsOffshore,
 					CC.TimeEntrySectionId ,
 					C.ClientId ,
 					C.Name ,
@@ -138,7 +145,9 @@ AS
 					TE.Note ,
 					PDBR.MinimumValue ,
 					PDBR.MaximumValue,
-					PDBR.HourlyRate
+					PDBR.HourlyRate,
+					Pa.AmountHourly,
+					Pa.TimescaleName
 			ORDER BY P.FirstName,
 					P.LastName,
 					CC.TimeEntrySectionId ,
