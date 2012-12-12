@@ -387,6 +387,7 @@
             public const string MinimumSalary = "MinimumSalary";
             public const string MaximumSalary = "MaximumSalary";
             public const string HourlyRate = "HourlyRate";
+            public const string HourlyPayRate = "HourlyPayRate";
         }
 
         #endregion
