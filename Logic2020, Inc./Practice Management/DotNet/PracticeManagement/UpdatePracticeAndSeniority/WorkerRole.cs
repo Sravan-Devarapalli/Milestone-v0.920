@@ -45,6 +45,7 @@ namespace UpdatePracticeAndSeniority
         public const string PayrollDistributionReportFailedFormat = "Failed to send an email of Payroll Distribution Report due to: {0}";
         public const string DateFormat = "MM/dd/yyyy";
         public const string DateDotFormat = "MM.dd.yyyy";
+        public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
 
         //Log Status
         public const string Success = "Success";
@@ -385,6 +386,8 @@ namespace UpdatePracticeAndSeniority
         public static string PreparePayrollDistributionReportExcelData(List<DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject> reportdata, string range)
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("Payroll Distribution Report");
+            sb.Append("\t");
             sb.Append(range);
             sb.Append("\t");
             sb.AppendLine();
@@ -394,7 +397,13 @@ namespace UpdatePracticeAndSeniority
                 //Header
                 /* Account	Account Name	Business Unit	Business Unit Name	Project	Project Name	Phase
                 Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
+                sb.Append("Employee Id");
+                sb.Append("\t");
                 sb.Append("Employee");
+                sb.Append("\t");
+                sb.Append("Pay Type");
+                sb.Append("\t");
+                sb.Append("Is Offshore?");
                 sb.Append("\t");
                 sb.Append("Account");
                 sb.Append("\t");
@@ -426,7 +435,9 @@ namespace UpdatePracticeAndSeniority
                 sb.Append("\t");
                 sb.Append("Total Hours");
                 sb.Append("\t");
-                sb.Append("Hourly Rate");
+                sb.Append("Bill Rate");
+                sb.Append("\t");
+                sb.Append("Pay Rate");
                 sb.Append("\t");
                 sb.Append("Note");
                 sb.Append("\t");
@@ -441,8 +452,17 @@ namespace UpdatePracticeAndSeniority
 
                         foreach (var byWorkType in byDateList.DayTotalHoursList)
                         {
+                            sb.Append(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
+                            sb.Append("\t");
                             sb.Append(timeEntriesGroupByClientAndProject.Person.PersonFirstLastName);
                             sb.Append("\t");
+
+                            sb.Append(string.IsNullOrEmpty(byWorkType.PayType) ? string.Empty : byWorkType.PayType);
+                            sb.Append("\t");
+
+                            sb.Append(timeEntriesGroupByClientAndProject.Person.IsOffshore ? "Yes" : "No");
+                            sb.Append("\t");
+
                             sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
                             sb.Append("\t");
                             sb.Append(timeEntriesGroupByClientAndProject.Client.HtmlEncodedName);
@@ -474,9 +494,11 @@ namespace UpdatePracticeAndSeniority
                             sb.Append("\t");
                             sb.Append(byWorkType.TotalHours);
                             sb.Append("\t");
-                            sb.Append(byWorkType.HourlyRate.HasValue ? byWorkType.HourlyRate.Value.ToString() : string.Empty);
+                            sb.Append(byWorkType.HourlyRate.HasValue ? byWorkType.HourlyRate.Value.ToString(CurrencyExcelReportFormat) : string.Empty);
                             sb.Append("\t");
-                            sb.Append(byWorkType.HtmlEncodedNoteForExport);
+                            sb.Append(byWorkType.PayRate.HasValue ? byWorkType.PayRate.Value.ToString(CurrencyExcelReportFormat) : string.Empty);
+                            sb.Append("\t");
+                            sb.Append( " " + byWorkType.HtmlEncodedNoteForExport);
                             sb.Append("\t");
                             sb.AppendLine();
                         }
