@@ -26,9 +26,23 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double NonBillableHours { get; set; }
 
+        /// <summary>
+        /// Hourly Bill Rate from MilestonePerson
+        /// </summary>
         [DataMember]
         public decimal? HourlyRate { get; set; }
 
+        /// <summary>
+        /// Hourly Pay Rate from Pay(Compensation) Table.
+        /// </summary>
+        [DataMember]
+        public decimal? PayRate { get; set; }
+
+        /// <summary>
+        /// Returns the Timescale type Name.
+        /// </summary>
+        [DataMember]
+        public string PayType { get; set; }
 
         public double TotalHours
         {
