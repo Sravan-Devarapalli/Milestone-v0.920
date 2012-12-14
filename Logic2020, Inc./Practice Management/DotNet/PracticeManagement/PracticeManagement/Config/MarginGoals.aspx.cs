@@ -133,7 +133,7 @@ namespace PraticeManagement.Config
                 SaveData();
                 SettingsHelper.RemoveMarginColorInfoDefaults();
                 ClearDirty();
-                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Margin Goals"));
+                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Contribution Margin Goals"));
                 ViewState.Remove(ClientGoalDefault_THRESHOLDS_LIST_KEY);
                 ViewState.Remove(PersonMarginColorInfo_THRESHOLDS_LIST_KEY);
 
