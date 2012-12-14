@@ -66,7 +66,7 @@
         <siteMapNode url="~/Config/ExpenseCategories.aspx" title="Expense Categories"  VirtualPath="~/Config/ExpenseCategories.aspx" QuickLinkTitle="Expense Categories"  description="Expense Categories"  />
         <siteMapNode url="~/Config/Overheads.aspx" title="Overheads"  VirtualPath="~/Config/Overheads.aspx" QuickLinkTitle="Overheads"  description="Overhead List"  />
         <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals"  VirtualPath="~/Config/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals"  description="Revenue Goals"  />
-        <siteMapNode url="~/Config/MarginGoals.aspx" title="Margin Goals"  VirtualPath="~/Config/MarginGoals.aspx" QuickLinkTitle="Margin Goals"  description="Margin Goals"  />
+        <siteMapNode url="~/Config/MarginGoals.aspx" title="Contribution Margin Goals"  VirtualPath="~/Config/MarginGoals.aspx" QuickLinkTitle="Contribution Margin Goals"  description="Contribution Margin Goals"  />
         <siteMapNode url="~/Config/Titles.aspx" title="Salary Bands and PTO Accrual"  VirtualPath="~/Config/Titles.aspx" QuickLinkTitle="Salary Bands and PTO Accrual"  description="Salary Bands and PTO Accrual"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=ConfigurationReports" title="Reports" description="Reports" >
