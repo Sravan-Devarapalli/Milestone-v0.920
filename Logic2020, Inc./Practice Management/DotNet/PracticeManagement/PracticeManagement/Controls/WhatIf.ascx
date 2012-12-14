@@ -248,7 +248,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="PaddingBottom3">
-                            Monthly Gross Margin
+                            Monthly Contribution Margin
                         </td>
                         <td colspan="4" class="WhatIfControlStyle">
                             <asp:Label ID="lblMonthlyGrossMarginWithoutRecruiting" runat="server"></asp:Label>
