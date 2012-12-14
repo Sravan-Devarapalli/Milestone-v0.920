@@ -74,10 +74,10 @@
                     CssClass="Revenue"></asp:Label>
             </ItemTemplate>
         </asp:TemplateField>
-        <asp:TemplateField HeaderText="Gross Margin">
+        <asp:TemplateField HeaderText="Contribution Margin">
             <HeaderTemplate>
                 <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbGrossMargin" runat="server" Text="Gross Margin" CommandName="Sort"
+                    <asp:LinkButton ID="lbGrossMargin" runat="server" Text="Contribution Margin" CommandName="Sort"
                         CommandArgument="GrossMargin" />
                 </div>
             </HeaderTemplate>
