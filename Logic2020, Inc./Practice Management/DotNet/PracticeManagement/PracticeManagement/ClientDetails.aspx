@@ -210,7 +210,7 @@
             </ajaxToolkit:TabPanel>
             <ajaxToolkit:TabPanel runat="server" ID="tpMarginGoals">
                 <HeaderTemplate>
-                    <span class="bg"><a href="#"><span>Margin Goals</span></a> </span>
+                    <span class="bg"><a href="#"><span>Contribution Margin Goals</span></a> </span>
                 </HeaderTemplate>
                 <ContentTemplate>
                     <asp:UpdatePanel ID="upnlClientThrsholds" runat="server">
@@ -223,7 +223,7 @@
                                                 <td colspan="3" class="PaddingBottomTop15Px">
                                                     <asp:CheckBox ID="chbMarginThresholds" AutoPostBack="true" OnCheckedChanged="cbMarginThresholds_OnCheckedChanged"
                                                         runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
-                                                    Margin thresholds
+                                                    Contribution Margin thresholds
                                                 </td>
                                                 <td class="PaddingBottomTop15Px TextAlignRight">
                                                     <asp:Button ID="btnAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
@@ -298,13 +298,13 @@
                                         <div class="MarginGoalsDescription">
                                             <p>
                                                 Enabling this feature and configuring color-coded ranges will allow persons without
-                                                unrestricted access to Project and Milestone margin calculations a visual indication
-                                                of how Projects and Milestones are tracking with regard to the margin goals defined
+                                                unrestricted access to Project and Milestone contribution margin calculations a visual indication
+                                                of how Projects and Milestones are tracking with regard to the contribution margin goals defined
                                                 by the company.<br />
                                                 <br />
                                             </p>
                                             <p>
-                                                Margin goals must add up to at least 100%.<br />
+                                                Contribution Margin goals must add up to at least 100%.<br />
                                                 <br />
                                             </p>
                                         </div>
