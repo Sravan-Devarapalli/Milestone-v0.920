@@ -3,10 +3,10 @@
 
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
-    <title>Margin Goals | Practice Management</title>
+    <title>Contribution Margin Goals | Practice Management</title>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
-    Margin Goals
+    Contribution Margin Goals
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">
@@ -44,7 +44,7 @@
                                     <td colspan="3">
                                         <asp:CheckBox ID="chbClientGoalDefaultThreshold" AutoPostBack="true" OnCheckedChanged="chbClientGoalDefaultThreshold_OnCheckedChanged"
                                             runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
-                                        Margin thresholds
+                                        Contribution Margin thresholds
                                     </td>
                                     <td align="right">
                                         <asp:Button ID="btnClientGoalDefaultAddThreshold" Enabled="false" runat="server"
@@ -119,18 +119,18 @@
                             <div>
                                 <p>
                                     Enabling this feature and configuring color-coded ranges will allow persons without
-                                    unrestricted access to Project and Milestone margin calculations a visual indication
-                                    of how Projects and Milestones are tracking with regard to the margin goals defined
+                                    unrestricted access to Project and Milestone contribution margin calculations a visual indication
+                                    of how Projects and Milestones are tracking with regard to the contribution margin goals defined
                                     by the company.<br />
                                     <br />
                                 </p>
                                 <p>
-                                    Margin goals must add up to at least 100%.<br />
+                                    Contribution Margin goals must add up to at least 100%.<br />
                                     <br />
                                 </p>
                                 <p>
-                                    NOTE: It is also possible to specify individual Account margin goals from each Account's
-                                    profile page, either in lieu of these default margin goals, or by overriding them.<br />
+                                    NOTE: It is also possible to specify individual Account contribution margin goals from each Account's
+                                    profile page, either in lieu of these default contribution margin goals, or by overriding them.<br />
                                     <br />
                                 </p>
                             </div>
@@ -166,7 +166,7 @@
                                     <td colspan="3">
                                         <asp:CheckBox ID="chbPersonMarginThresholds" AutoPostBack="true" OnCheckedChanged="chbPersonMarginThresholds_OnCheckedChanged"
                                             runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
-                                        Margin thresholds
+                                        Contribution Margin thresholds
                                     </td>
                                     <td align="right">
                                         <asp:Button ID="btnPersonAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
@@ -243,13 +243,13 @@
                                 <p>
                                     Enabling this feature and configuring color-coded ranges will allow persons without
                                     unrestricted access to the Margin Test page and its calculations a visual indication
-                                    of how acceptable a calculated margin is, based on the selected Bill Rate and Hours
+                                    of how acceptable a calculated contribution margin is, based on the selected Bill Rate and Hours
                                     per Week.
                                     <br />
                                     <br />
                                 </p>
                                 <p>
-                                    Margin goals must add up to at least 100%.<br />
+                                    Contribution Margin goals must add up to at least 100%.<br />
                                     <br />
                                 </p>
                             </div>
