@@ -91,13 +91,13 @@
         </tr>
         <tr>
             <td>
-                MGM
+                MCM
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
             <td>
-                Monthly Gross Margin
+                Monthly Contribution Margin
             </td>
         </tr>
         <tr>
@@ -217,7 +217,7 @@
         </tr>
         <tr>
             <td>
-                MGM
+                MCM
             </td>
             <td>
                 &nbsp;=&nbsp;
