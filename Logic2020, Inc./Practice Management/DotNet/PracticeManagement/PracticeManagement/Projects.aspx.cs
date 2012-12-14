@@ -60,7 +60,7 @@ namespace PraticeManagement
 
         private const string FS_RevenueRowName = "Revenue";
         private const string FS_COGSRowName = "COGS";
-        private const string FS_GrossMarginRowName = "Gross margin";
+        private const string FS_GrossMarginRowName = "Contribution margin";
         private const string FS_TargetMarginRowName = "Margin %";
         private const string FS_ExpensesRowName = "Expenses";
         private const string FS_SalesCommissionsRowName = "Sales Commissions";
@@ -97,7 +97,7 @@ namespace PraticeManagement
         private const string AlternatingRowCssClass = "rowEven";
         private const string OneGreaterSeniorityExistsKey = "ProjectsListOneGreaterSeniorityExists";
         private const string Revenue = "Revenue";
-        private const string Margin = "Margin";
+        private const string Margin = "Cont. Margin";
 
         private const string CompanyPerformanceFilterKey = "CompanyPerformanceFilterKey";
 
