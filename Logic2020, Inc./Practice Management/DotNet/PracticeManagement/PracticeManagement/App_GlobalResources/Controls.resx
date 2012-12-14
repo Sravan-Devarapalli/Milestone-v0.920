@@ -226,7 +226,7 @@
     <value>Select Project...</value>
   </data>
   <data name="TotalProjectName" xml:space="preserve">
-    <value>Revenue and Gross Margin&lt;br/&gt;Monthly Totals</value>
+    <value>Revenue and Contribution Margin&lt;br/&gt;Monthly Totals</value>
   </data>
   <data name="UnavailableLabel" xml:space="preserve">
     <value>Unavailable</value>
