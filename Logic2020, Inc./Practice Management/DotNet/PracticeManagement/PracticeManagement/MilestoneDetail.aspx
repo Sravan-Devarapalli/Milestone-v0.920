@@ -509,7 +509,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Gross Margin
+                                    Contribution Margin
                                 </td>
                                 <td class="textRight no-wrap">
                                     <table>
@@ -669,7 +669,7 @@
                                 <asp:TemplateField>
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
-                                            &#931 Gross Margin</div>
+                                            &#931 Contribution Margin</div>
                                         </th>
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="textRight fontBold" />
