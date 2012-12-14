@@ -137,7 +137,7 @@ namespace PraticeManagement.Controls.Reports
                                 {
                                     //GrossMargin
                                     case CR_GrossMarginEligibleForCommissions:
-                                        e.Row.Cells[TabNameColumnIndex].Text = "Gross Margin eligible for commissions";
+                                        e.Row.Cells[TabNameColumnIndex].Text = "Contribution Margin eligible for commissions";
                                         e.Row.Cells[i].Text = interestValue.Value.GrossMargin.ToString();
                                         break;
                                     //Sales Commision
@@ -179,3 +179,4 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
+
