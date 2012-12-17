@@ -16,6 +16,8 @@ using DataTransferObjects;
 using DataAccess;
 using System.Text;
 using System.IO;
+using System.Web.UI.WebControls;
+using System.Web.UI;
 
 namespace UpdatePracticeAndSeniority
 {
@@ -46,22 +48,27 @@ namespace UpdatePracticeAndSeniority
         public const string DateFormat = "MM/dd/yyyy";
         public const string DateDotFormat = "MM.dd.yyyy";
         public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
+        public const string FailedRunningProcedureFormat = "Failed running the procedure {0} due to: {1}";
+        public const string SuccessRunningProcedureFormat = "Successfully completed running the procedure {0}";
+        public const string ExportExcelCellFormat = "&nbsp; {0}";
 
         //Log Status
-        public const string Success = "Success";
-        public const string Failed = "Failed";
+        public const string SuccessStatus = "Success";
+        public const string FailedStatus = "Failed";
 
         //Log Messages
-        public const string SchedularStarted = "Started Schedular.";
-        public const string AutoUpdateObjectsRunSuccessfully = "Successfully completed running the procedure dbo.AutoUpdateObjects";
-        public const string PayrollDistributionReportStartedProcess = "Started Process of emailing Payroll Distribution Report.";
-        public const string PayrollDistributionReportStartedReadingData = "Started reading data Payroll Distribution Report.";
-        public const string PayrollDistributionReportReadDataSuccess = "Read the Payroll Distribution Report data.";
-        public const string PayrollDistributionReportStartedEmailing = "Started emailing the Payroll Distribution Report data.";
-        public const string PayrollDistributionReportEmailed = "Emailed the Payroll Distribution Report.";
+        public const string M_SchedularStarted = "Started Schedular.";
+        public const string M_AutoUpdateObjectsRunSuccessfully = "Successfully completed running the procedure dbo.AutoUpdateObjects.";
+        public const string M_PayrollDistributionReportStartedProcess = "Started Process of emailing Payroll Distribution Report.";
+        public const string M_PayrollDistributionReportStartedReadingData = "Started reading data Payroll Distribution Report.";
+        public const string M_PayrollDistributionReportReadDataSuccess = "Read the Payroll Distribution Report data.";
+        public const string M_PayrollDistributionReportStartedEmailing = "Started emailing the Payroll Distribution Report data.";
+        public const string M_PayrollDistributionReportEmailed = "Emailed the Payroll Distribution Report.";
 
         //Stored Procedures
-        public const string AutoUpdateObjects = "dbo.AutoUpdateObjects";
+        public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
+        public const string SP_PersonPasswordInsert = "dbo.PersonPasswordInsert";
+        public const string SP_GetPersonsByTodayHireDate = "dbo.GetPersonsByTodayHireDate";
 
         //Parameters
         public const string NextRun = "@NextRun";
@@ -169,8 +176,7 @@ namespace UpdatePracticeAndSeniority
 
                 Thread.Sleep(5 * 60 * 1000);
                 currentDateTimeWithTimeZone = CurrentPMTime;
-                WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, Success, SchedularStarted, currentDateTimeWithTimeZone);
-                
+                WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, SuccessStatus, M_SchedularStarted, currentDateTimeWithTimeZone);
                 currentDateTimeWithTimeZone = CurrentPMTime;
                 //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report.
                 if (currentDateTimeWithTimeZone.TimeOfDay > FirstSchedularTime)
@@ -199,7 +205,7 @@ namespace UpdatePracticeAndSeniority
             }
             catch(Exception ex)
             {
-                WorkerRole.SaveSchedularLog(DateTime.UtcNow, Failed, "Schedular error: " + ex.Message, DateTime.UtcNow);
+                WorkerRole.SaveSchedularLog(DateTime.UtcNow, FailedStatus, "Schedular error: " + ex.Message, DateTime.UtcNow);
                 throw ex;
             }
         }
@@ -297,7 +303,7 @@ namespace UpdatePracticeAndSeniority
                     return;
 
                 connection = new SqlConnection(connectionString);
-                SqlCommand cmd = new SqlCommand(AutoUpdateObjects, connection);
+                SqlCommand cmd = new SqlCommand(SP_AutoUpdateObjects, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlParameter lastRunParam = new SqlParameter(LastRun, currentWithTimeZone);
@@ -307,11 +313,11 @@ namespace UpdatePracticeAndSeniority
                 int rowsAffected = cmd.ExecuteNonQuery();
                 connection.Close();
                 
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, Success, AutoUpdateObjectsRunSuccessfully, nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_AutoUpdateObjects), nextRun);
             }
             catch (Exception ex)
             {
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, Failed, string.Format(AutoUpdateObjectsFailedFormat, ex.Message), nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FailedRunningProcedureFormat, SP_AutoUpdateObjects, ex.Message), nextRun);
             }
             finally
             {
@@ -328,7 +334,7 @@ namespace UpdatePracticeAndSeniority
         public static void SendPayrollDistributionReport(DateTime currentDate)
         {
             var nextRunTime = currentDate.Day == 3 ? currentDate.AddDays(18 - 3) : currentDate.AddMonths(1).AddDays(3);
-            WorkerRole.SaveSchedularLog(currentDate, Success, PayrollDistributionReportStartedProcess, nextRunTime);
+            WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_PayrollDistributionReportStartedProcess, nextRunTime);
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
@@ -337,18 +343,18 @@ namespace UpdatePracticeAndSeniority
                     DateTime endDate = currentDate.Day == 3 ? currentDate.Date.AddDays(-currentDate.Day) : new DateTime(currentDate.Year, currentDate.Month, 15);
 
                     //Read the data.
-                    WorkerRole.SaveSchedularLog(currentDate, Success, PayrollDistributionReportStartedReadingData, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_PayrollDistributionReportStartedReadingData, nextRunTime);
                     var data = ReportDAL.PersonTimeEntriesDetailsSchedular(null, startDate, endDate, connection);
 
                     //Mail the data.
-                    WorkerRole.SaveSchedularLog(currentDate, Success, PayrollDistributionReportReadDataSuccess, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_PayrollDistributionReportReadDataSuccess, nextRunTime);
                     EmailPayrollDistributionReport(data, startDate, endDate, currentDate, nextRunTime);
-                    WorkerRole.SaveSchedularLog(currentDate, Success, PayrollDistributionReportEmailed, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_PayrollDistributionReportEmailed, nextRunTime);
                 }
             }
             catch (Exception ex)
             {
-                WorkerRole.SaveSchedularLog(currentDate, Failed, string.Format(PayrollDistributionReportFailedFormat, ex.Message), nextRunTime);
+                WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(PayrollDistributionReportFailedFormat, ex.Message), nextRunTime);
             }
         }
 
@@ -364,6 +370,7 @@ namespace UpdatePracticeAndSeniority
 
             //Read the data.
             var attachmentData = PreparePayrollDistributionReportExcelData(reportdata, range);
+
             var fileName = string.Format("{0}_{1}_{2}.xls", "PayrollDistributionReport", startDate.Date.ToString(DateDotFormat), endDate.Date.ToString(DateDotFormat));
             var attachment = PrepareAttachment(attachmentData, fileName, "application/octat-stream");
 
@@ -371,10 +378,63 @@ namespace UpdatePracticeAndSeniority
             attachments.Add(attachment);
 
             //Email the data.
-            WorkerRole.SaveSchedularLog(currentTime, Success, PayrollDistributionReportStartedEmailing, nextRunTime);
+            WorkerRole.SaveSchedularLog(currentTime, SuccessStatus, M_PayrollDistributionReportStartedEmailing, nextRunTime);
             var subject = string.Format(PayRollDistributionReportEmailSubjectFormat, range);
             var body = string.Format(PayRollDistributionReportEmailBodyFormat, range);
             Email(subject, body, true, PayrollDistributionReportReciever, string.Empty, attachments);
+        }
+
+        protected static void gvExp_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            var row = e.Row;
+            if (row.RowType == DataControlRowType.Header)
+            {
+                row.Cells[0].Text = "Employee Id";
+                row.Cells[1].Text = "Employee";
+                row.Cells[2].Text = "Pay Type";
+                row.Cells[3].Text = "Is Offshore?";
+                row.Cells[4].Text = "Account";
+                row.Cells[5].Text = "Account Name";
+                row.Cells[6].Text = "Business Unit";
+                row.Cells[7].Text = "Business Unit Name";
+                row.Cells[8].Text = "Project";
+                row.Cells[9].Text = "Project Name";
+                row.Cells[10].Text = "Status";
+                row.Cells[11].Text = "Billing";
+                row.Cells[12].Text = "Phase";
+                row.Cells[13].Text = "Work Type";
+                row.Cells[14].Text = "Work Type Name";
+                row.Cells[15].Text = "Date";
+                row.Cells[16].Text = "Billable Hours";
+                row.Cells[17].Text = "Non-Billable Hours";
+                row.Cells[18].Text = "Total Hours";
+                row.Cells[19].Text = "Bill Rate";
+                row.Cells[20].Text = "Pay Rate";
+                row.Cells[21].Text = "Note";
+            }
+            else if (row.RowType == DataControlRowType.DataRow)
+            {
+                //ExcelEncodeText(row.Cells[5]);//AccountName
+                //ExcelEncodeText(row.Cells[7]);//BussinessUnitName
+                //ExcelEncodeText(row.Cells[9]);//ProjectName
+                //ExcelEncodeText(row.Cells[14]);//WorktypeName
+                ExcelEncodeText(row.Cells[21]);//Note
+                row.Style.Add(HtmlTextWriterStyle.Height, "20px");
+            }
+        }
+
+        private static void ExcelEncodeText(TableCell cell)
+        {
+            Label lbl = new Label();
+            lbl.Text = string.Format(ExportExcelCellFormat, cell.Text);
+
+            var sw = new StringWriter();
+            using (var htw = new HtmlTextWriter(sw))
+            {
+                lbl.RenderControl(htw);
+            }
+
+            cell.Text = sw.ToString();
         }
 
         /// <summary>
@@ -385,132 +445,64 @@ namespace UpdatePracticeAndSeniority
         /// <returns></returns>
         public static string PreparePayrollDistributionReportExcelData(List<DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject> reportdata, string range)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Payroll Distribution Report");
-            sb.Append("\t");
-            sb.Append(range);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.AppendLine();
+            StringBuilder attachmentData = new StringBuilder();
+            attachmentData.Append("Payroll Distribution Report");
+            attachmentData.Append("<br/>");
+            attachmentData.AppendLine();
+            attachmentData.Append(range);
+            attachmentData.Append("<br/>");
+            attachmentData.Append("<br/>");
+
             if (reportdata.Count > 0)
             {
-                //Header
-                /* Account	Account Name	Business Unit	Business Unit Name	Project	Project Name	Phase
-                Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
-                sb.Append("Employee Id");
-                sb.Append("\t");
-                sb.Append("Employee");
-                sb.Append("\t");
-                sb.Append("Pay Type");
-                sb.Append("\t");
-                sb.Append("Is Offshore?");
-                sb.Append("\t");
-                sb.Append("Account");
-                sb.Append("\t");
-                sb.Append("Account Name");
-                sb.Append("\t");
-                sb.Append("Business Unit");
-                sb.Append("\t");
-                sb.Append("Business Unit Name");
-                sb.Append("\t");
-                sb.Append("Project");
-                sb.Append("\t");
-                sb.Append("Project Name");
-                sb.Append("\t");
-                sb.Append("Status");
-                sb.Append("\t");
-                sb.Append("Billing");
-                sb.Append("\t");
-                sb.Append("Phase");
-                sb.Append("\t");
-                sb.Append("Work Type");
-                sb.Append("\t");
-                sb.Append("Work Type Name");
-                sb.Append("\t");
-                sb.Append("Date");
-                sb.Append("\t");
-                sb.Append("Billable Hours");
-                sb.Append("\t");
-                sb.Append("Non-Billable Hours");
-                sb.Append("\t");
-                sb.Append("Total Hours");
-                sb.Append("\t");
-                sb.Append("Bill Rate");
-                sb.Append("\t");
-                sb.Append("Pay Rate");
-                sb.Append("\t");
-                sb.Append("Note");
-                sb.Append("\t");
-                sb.AppendLine();
+                var data = (from r in reportdata
+                            from dth in r.DayTotalHours
+                            from dthl in dth.DayTotalHoursList
+                            select new
+                            {
+                                empId = r.Person.EmployeeNumber,
+                                empFirstLastName = r.Person.PersonFirstLastName,
+                                payType = string.IsNullOrEmpty(dthl.PayType) ? string.Empty : dthl.PayType,
+                                isOffshore = r.Person.IsOffshore ? "Yes" : "No",
+                                clientCode = r.Client.Code,
+                                clientName = r.Client.Name,
+                                groupCode = r.Project.Group.Code,
+                                groupName = r.Project.Group.Name,
+                                projectNumber = r.Project.ProjectNumber,
+                                projectName = r.Project.Name,
+                                Status = r.Project.Status.Name,
+                                Billing = r.BillableType,
+                                Phase = "01",
+                                WorkType = dthl.TimeType.Code,
+                                WorkTypeName = dthl.TimeType.Name,
+                                Date = dth.Date.ToString(DateFormat),
+                                BillableHours = dthl.BillableHours,
+                                NonBillableHours = dthl.NonBillableHours,
+                                TotalHours = dthl.TotalHours,
+                                BillRate = dthl.HourlyRate.HasValue ? dthl.HourlyRate.Value.ToString(CurrencyExcelReportFormat) : string.Empty,
+                                PayRate = dthl.PayRate.HasValue ? dthl.PayRate.Value.ToString(CurrencyExcelReportFormat) : string.Empty,
+                                Note = dthl.Note
+                            }
+                            );
 
-                //Data
-                foreach (var timeEntriesGroupByClientAndProject in reportdata)
-                {
+                var gvExp = new GridView();
+                gvExp.DataSource = data;
+                gvExp.RowDataBound += new GridViewRowEventHandler(gvExp_RowDataBound);
+                gvExp.DataBind();
 
-                    foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
-                    {
+                var str = new StringWriter();
+                var htw = new HtmlTextWriter(str);
 
-                        foreach (var byWorkType in byDateList.DayTotalHoursList)
-                        {
-                            sb.Append(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Person.PersonFirstLastName);
-                            sb.Append("\t");
+                gvExp.RenderControl(htw);
 
-                            sb.Append(string.IsNullOrEmpty(byWorkType.PayType) ? string.Empty : byWorkType.PayType);
-                            sb.Append("\t");
-
-                            sb.Append(timeEntriesGroupByClientAndProject.Person.IsOffshore ? "Yes" : "No");
-                            sb.Append("\t");
-
-                            sb.Append(timeEntriesGroupByClientAndProject.Client.Code);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Client.HtmlEncodedName);
-                            sb.Append("\t");
-
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.Group.Code);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.Group.HtmlEncodedName);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.ProjectNumber);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.HtmlEncodedName);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.Project.Status.Name);
-                            sb.Append("\t");
-                            sb.Append(timeEntriesGroupByClientAndProject.BillableType);
-                            sb.Append("\t");
-                            sb.Append("01");//phase
-                            sb.Append("\t");
-                            sb.Append(byWorkType.TimeType.Code);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.TimeType.Name);
-                            sb.Append("\t");
-                            sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
-                            sb.Append("\t");
-                            sb.Append(byWorkType.BillableHours);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.NonBillableHours);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.TotalHours);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.HourlyRate.HasValue ? byWorkType.HourlyRate.Value.ToString(CurrencyExcelReportFormat) : string.Empty);
-                            sb.Append("\t");
-                            sb.Append(byWorkType.PayRate.HasValue ? byWorkType.PayRate.Value.ToString(CurrencyExcelReportFormat) : string.Empty);
-                            sb.Append("\t");
-                            sb.Append( " " + byWorkType.HtmlEncodedNoteForExport);
-                            sb.Append("\t");
-                            sb.AppendLine();
-                        }
-                    }
-                }
+                attachmentData.Append(str.ToString());
             }
             else
             {
-                sb.Append("This person has not entered Time Entries for the selected period.");
+                attachmentData.Append("There are no Time Entries entered for the selected period.");
             }
 
-            return sb.ToString();
+            return attachmentData.ToString();
         }
 
         /// <summary>
@@ -522,9 +514,9 @@ namespace UpdatePracticeAndSeniority
         /// <returns></returns>
         public static Attachment PrepareAttachment(string data, string fileName, string mediaType)
         {
-            System.Text.Encoding Enc = System.Text.Encoding.ASCII;
+            //System.Text.Encoding Enc = System.Text.Encoding.ASCII;
 
-            byte[] mBArray = Enc.GetBytes(data);
+            byte[] mBArray = Encoding.Default.GetBytes(data);
 
             return new Attachment(new MemoryStream(mBArray, false), fileName, "application/octat-stream");
         }
@@ -711,7 +703,7 @@ namespace UpdatePracticeAndSeniority
         /// <param name="nextRun"></param>
         public static void EmailUpdatedProfilesList(DateTime currentWithTimeZone, DateTime nextRun)
         {
-            WorkerRole.SaveSchedularLog(currentWithTimeZone, Success, "Started emailing updated profiles list.", nextRun);
+            WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Started emailing updated profiles list.", nextRun);
 
             try
             {
@@ -722,11 +714,11 @@ namespace UpdatePracticeAndSeniority
                     Email(EmailSubjectForProfilesUpdatedList, body, true, UpdatedProfilesListEmailReciever, string.Empty, null);
                     WorkerRole.SaveSchedularLog(currentWithTimeZone, "Emailed", "Emailed the updated profiles list.", nextRun);
                 }
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, Success, "Finished emailing updated profiles list.", nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Finished emailing updated profiles list.", nextRun);
             }
             catch(Exception ex)
             {
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, Failed, "Failed to send an email of updated profiles list due to: " + ex.Message , nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, "Failed to send an email of updated profiles list due to: " + ex.Message , nextRun);
             }
         }
 
