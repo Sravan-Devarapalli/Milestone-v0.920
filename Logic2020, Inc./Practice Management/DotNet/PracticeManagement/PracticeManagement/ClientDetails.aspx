@@ -298,8 +298,8 @@
                                         <div class="MarginGoalsDescription">
                                             <p>
                                                 Enabling this feature and configuring color-coded ranges will allow persons without
-                                                unrestricted access to Project and Milestone contribution margin calculations a visual indication
-                                                of how Projects and Milestones are tracking with regard to the contribution margin goals defined
+                                                unrestricted access to Project and Milestone Contribution Margin  calculations a visual indication
+                                                of how Projects and Milestones are tracking with regard to the Contribution Margin  goals defined
                                                 by the company.<br />
                                                 <br />
                                             </p>
