@@ -119,8 +119,8 @@
                             <div>
                                 <p>
                                     Enabling this feature and configuring color-coded ranges will allow persons without
-                                    unrestricted access to Project and Milestone contribution margin calculations a visual indication
-                                    of how Projects and Milestones are tracking with regard to the contribution margin goals defined
+                                    unrestricted access to Project and Milestone Contribution Margin calculations a visual indication
+                                    of how Projects and Milestones are tracking with regard to the Contribution Margin  goals defined
                                     by the company.<br />
                                     <br />
                                 </p>
@@ -129,8 +129,8 @@
                                     <br />
                                 </p>
                                 <p>
-                                    NOTE: It is also possible to specify individual Account contribution margin goals from each Account's
-                                    profile page, either in lieu of these default contribution margin goals, or by overriding them.<br />
+                                    NOTE: It is also possible to specify individual Account Contribution Margin  goals from each Account's
+                                    profile page, either in lieu of these default Contribution Margin  goals, or by overriding them.<br />
                                     <br />
                                 </p>
                             </div>
@@ -243,7 +243,7 @@
                                 <p>
                                     Enabling this feature and configuring color-coded ranges will allow persons without
                                     unrestricted access to the Margin Test page and its calculations a visual indication
-                                    of how acceptable a calculated contribution margin is, based on the selected Bill Rate and Hours
+                                    of how acceptable a calculated Contribution Margin  is, based on the selected Bill Rate and Hours
                                     per Week.
                                     <br />
                                     <br />
