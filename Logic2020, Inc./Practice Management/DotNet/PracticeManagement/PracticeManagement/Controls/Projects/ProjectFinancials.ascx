@@ -70,7 +70,7 @@
         </tr>
         <tr>
             <td>
-                Contribution margin
+                Contribution Margin 
             </td>
             <td class="textRightImp">
                 <asp:Label ID="lblGrossMargin" CssClass="Margin" runat="server">Unavailable</asp:Label>
