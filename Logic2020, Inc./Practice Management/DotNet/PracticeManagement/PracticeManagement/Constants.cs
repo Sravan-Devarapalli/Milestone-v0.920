@@ -225,6 +225,7 @@ namespace PraticeManagement
             public const string DoubleValue = "0.00";
             public const string CurrencyFormat = "$###,###,###,###,###,###,###";
             public const string ReportDateFormat = "MM/dd/yyyy (dddd)";
+            public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
 
         }
 
