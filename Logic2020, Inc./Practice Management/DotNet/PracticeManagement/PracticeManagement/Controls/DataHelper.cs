@@ -197,19 +197,6 @@ namespace PraticeManagement.Controls
                 return client.GetPersonHireAndTerminationDate(personId);
         }
 
-        public static PersonStatus GetPersonStatus(Person person)
-        {
-            using (var client = new PersonServiceClient())
-            {
-                person = client.GetPersonDetail(person.Id.Value);
-
-                if (person != null && person.Status != null)
-                    return person.Status;
-            }
-
-            return null;
-        }
-
         public static void SetNewDefaultManager(Person person)
         {
             using (var client = new PersonServiceClient())
