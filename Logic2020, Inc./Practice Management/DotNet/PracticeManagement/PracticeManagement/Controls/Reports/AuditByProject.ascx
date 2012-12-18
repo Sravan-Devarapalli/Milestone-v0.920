@@ -127,7 +127,7 @@
                             </table>
                         </td>
                         <td>
-                            <img src="../Images/notes.png" alt="Note" title='<%# Eval("Value.Note")%>' id="imgNote" />
+                            <img src="../Images/notes.png" alt="Note" title='<%# HttpUtility.HtmlEncode(Eval("Value.Note").ToString())%>' id="imgNote" />
                         </td>
                     </tr>
                 </ItemTemplate>
@@ -183,7 +183,7 @@
                             </table>
                         </td>
                         <td>
-                            <img src="../Images/notes.png" alt="Note" title='<%# Eval("Value.Note")%>' id="imgNote" />
+                            <img src="../Images/notes.png" alt="Note" title='<%# HttpUtility.HtmlEncode( Eval("Value.Note").ToString() )%>' id="imgNote" />
                         </td>
                     </tr>
                 </AlternatingItemTemplate>
