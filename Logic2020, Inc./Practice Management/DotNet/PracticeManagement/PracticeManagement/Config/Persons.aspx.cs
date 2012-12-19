@@ -1,19 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.ServiceModel;
 using System.Threading;
 using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Controls;
-using PraticeManagement.PersonService;
-using PraticeManagement.Utils;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Drawing;
 using PraticeManagement.FilterObjects;
-using System.Reflection;
+using PraticeManagement.PersonService;
 namespace PraticeManagement.Config
 {
     public partial class Persons : PracticeManagementPageBase
@@ -182,11 +180,7 @@ namespace PraticeManagement.Config
                 // Recruiters should see a complete list their recruits
                 //practiceFilter.ActiveOnly = userIsAdministrator || userIsHR; //#2817: userIsHR is added as per  requirement.
 
-                DataHelper.FillRecruiterList(
-                    cblRecruiters,
-                     AllRecruiters,
-                    null,
-                    null);//#2817: userIsHR is added as per  requirement.
+                DataHelper.FillRecruiterList(cblRecruiters,AllRecruiters);//#2817: userIsHR is added as per  requirement.
 
                 if (!userIsAdministrator && !userIsHR)//#2817: userIsHR is added as per  requirement.
                 {
