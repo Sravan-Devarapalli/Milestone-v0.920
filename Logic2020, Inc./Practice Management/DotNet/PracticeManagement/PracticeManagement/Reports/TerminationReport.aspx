@@ -62,7 +62,8 @@
             displayPanel.hide();
         }
     </script>
-    <uc:HumanCapitalReportsHeader ID="humanCapitalReportsHeader" runat="server"></uc:HumanCapitalReportsHeader>
+    <uc:HumanCapitalReportsHeader ID="humanCapitalReportsHeader" runat="server">
+    </uc:HumanCapitalReportsHeader>
     <br />
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
@@ -157,15 +158,15 @@
                         <table class="ReportParametersTable">
                             <tr>
                                 <td class="FirstTd70">
-                                    Seniority:&nbsp;
+                                    Title:&nbsp;
                                 </td>
                                 <td class="SecondTdNewHire">
-                                    <pmc:ScrollingDropDown ID="cblSeniorities" runat="server" AllSelectedReturnType="Null"
-                                        OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblSeniorities','Seniority','','Seniorities')"
-                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Seniority" DropDownListTypePluralForm="Seniorities"
+                                    <pmc:ScrollingDropDown ID="cblTitles" runat="server" AllSelectedReturnType="Null"
+                                        OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblTitles','Title','','Titles')"
+                                        CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Title" DropDownListTypePluralForm="Titles"
                                         CssClass="NewHireReportCblTimeScales Height160PxIMP" />
-                                    <ext:ScrollableDropdownExtender ID="sdeSeniorities" runat="server" TargetControlID="cblSeniorities"
-                                        BehaviorID="sdeSeniorities" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
+                                    <ext:ScrollableDropdownExtender ID="sdeTitles" runat="server" TargetControlID="cblTitles"
+                                        BehaviorID="sdeTitles" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
                                         Width="250px">
                                     </ext:ScrollableDropdownExtender>
                                 </td>
@@ -303,7 +304,7 @@
                                         <tr>
                                             <td class="FirstTd fontBold">
                                                 Attrition*
-                                                <asp:Image alt="Attrition Hint" ImageUrl="~/Images/hint1.png" runat="server" ID="imgAttritionHint" />                                               
+                                                <asp:Image alt="Attrition Hint" ImageUrl="~/Images/hint1.png" runat="server" ID="imgAttritionHint" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -513,12 +514,14 @@
                 <asp:MultiView ID="mvTerminationReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwSummary" runat="server">
                         <asp:Panel ID="pnlSummary" runat="server" CssClass="WholeWidth">
-                            <uc:SummaryView ID="tpSummary" runat="server"></uc:SummaryView>
+                            <uc:SummaryView ID="tpSummary" runat="server">
+                            </uc:SummaryView>
                         </asp:Panel>
                     </asp:View>
                     <asp:View ID="vwGraph" runat="server">
                         <asp:Panel ID="pnlGraph" runat="server" CssClass="WholeWidth">
-                            <uc:GraphView ID="tpGraph" runat="server"></uc:GraphView>
+                            <uc:GraphView ID="tpGraph" runat="server">
+                            </uc:GraphView>
                         </asp:Panel>
                     </asp:View>
                 </asp:MultiView>
