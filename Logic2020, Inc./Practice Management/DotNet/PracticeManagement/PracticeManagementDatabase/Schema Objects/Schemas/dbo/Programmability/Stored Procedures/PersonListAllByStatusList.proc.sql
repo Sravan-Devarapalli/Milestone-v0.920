@@ -8,18 +8,21 @@ BEGIN
 	SET NOCOUNT ON
 
 	DECLARE @Query NVARCHAR(4000),
-			@Where NVARCHAR(4000)
-			
-	DECLARE @PersonSeniorityValue INT
-		
-	SET @Where = ''
+			@Where NVARCHAR(4000),
+			@OrderBy NVARCHAR(100),
+			@PersonSeniorityValue INT
 
-	SET @Query='SELECT PersonId,
+	SELECT	@Where = '' , 
+			@OrderBy = ' ORDER BY LastName,FirstName',
+			@Query='SELECT PersonId,
 					   FirstName,
 					   LastName,
 					   IsDefaultManager,
 					   HireDate,
-					   TerminationDate
+					   TerminationDate,
+					   Alias,
+					   P.SeniorityId,
+					   S.Name AS SeniorityName
 				FROM dbo.Person P
 				JOIN dbo.Seniority S
 				ON P.SeniorityId = S.SeniorityId'
@@ -28,6 +31,7 @@ BEGIN
 	  BEGIN
 		SET @Where = @Where + ' WHERE PersonStatusId IN (' + @PersonStatusIdsList + ')'
 	  END
+	  
 	  IF (ISNULL(@PersonId,'') <> '')
 	  BEGIN
 		SELECT @PersonSeniorityValue = S.SeniorityValue 
@@ -42,7 +46,8 @@ BEGIN
 								ELSE '' END
 							)
 	  END
-	 SET @Query = @Query + @Where
+
+	 SET @Query = @Query + @Where + @OrderBy
 	 EXEC(@Query)
 
 END
