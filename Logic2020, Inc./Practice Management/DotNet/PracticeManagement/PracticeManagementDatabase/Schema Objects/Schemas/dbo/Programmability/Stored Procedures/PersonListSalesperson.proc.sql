@@ -37,7 +37,6 @@ BEGIN
 		SELECT DISTINCT SP.PersonId ,
 				SP.FirstName ,
 				SP.LastName ,
-				SP.PTODaysPerAnnum ,
 				SP.HireDate ,
 				SP.TerminationDate ,
 				SP.Alias ,
@@ -62,6 +61,7 @@ BEGIN
 		WHERE (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId OR P.projectOwnerId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
 			AND (SP.PersonStatusId IN (1,5) /* Active person only */
 					OR @IncludeInactive = 1)
+			AND sp.IsStrawman = 0
 
 	END
 	ELSE
@@ -113,50 +113,6 @@ BEGIN
 					  AS ( SELECT   p.PersonId ,
 									p.FirstName ,
 									p.LastName ,
-									p.PTODaysPerAnnum ,
-									p.HireDate ,
-									p.TerminationDate ,
-									p.Alias ,
-									p.DefaultPractice ,
-									p.PracticeName ,
-									p.PersonStatusId ,
-									p.PersonStatusName ,
-									p.EmployeeNumber ,
-									p.SeniorityId ,
-									p.SeniorityName ,
-									p.ManagerId ,
-									p.ManagerAlias ,
-									p.ManagerFirstName ,
-									p.ManagerLastName ,
-									p.PracticeOwnedId ,
-									p.PracticeOwnedName,
-									p.TelephoneNumber
-						   FROM     dbo.v_Person AS p
-						   WHERE    ( p.PersonStatusId IN (1,5) /* Active person only */
-									  OR @IncludeInactive = 1
-									)
-									AND ( @PersonId IS NULL
-										  OR p.PersonId IN (
-										  SELECT sp.PersonId
-										  FROM   @SalespersonPermissions AS sp)
-										  OR p.PersonId IN (
-										  SELECT    opsp.PersonId
-										  FROM      @OwnerProjectSalesPersonList AS opsp )
-										)
-									AND EXISTS ( SELECT 1
-												 FROM   dbo.DefaultCommission AS c
-												 WHERE  p.PersonId = c.PersonId
-														AND [type] = 1
-														AND ( @IncludeInactive = 1
-															  OR ( @Now >= c.StartDate
-																  AND @Now < c.EndDate
-																 )
-															) )
-						   UNION ALL
-						   SELECT   p.PersonId ,
-									p.FirstName ,
-									p.LastName ,
-									p.PTODaysPerAnnum ,
 									p.HireDate ,
 									p.TerminationDate ,
 									p.Alias ,
