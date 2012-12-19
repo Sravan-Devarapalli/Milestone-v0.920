@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
-using DataTransferObjects;
-using DataAccess;
 using System.ServiceModel.Activation;
+using DataAccess;
+using DataTransferObjects;
 
 namespace PracticeManagementService
 {
@@ -14,74 +10,73 @@ namespace PracticeManagementService
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TitleService : ITitleService
     {
-
+        /// <summary>
+        /// Gets all titles.
+        /// </summary>
+        /// <returns></returns>
         public List<Title> GetAllTitles()
         {
-            try
-            {
-                return TitleDal.GetAllTitles();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            return TitleDAL.GetAllTitles();
         }
 
+        /// <summary>
+        /// Gets all Title Types
+        /// </summary>
+        /// <returns></returns>
+        public List<TitleType> GetTitleTypes()
+        {
+            return TitleDAL.GetTitleTypes();
+        }
 
+        /// <summary>
+        /// Gets a Title for given titleid.
+        /// </summary>
+        /// <param name="titleId"></param>
+        /// <returns></returns>
         public Title GetTitleById(int titleId)
         {
-            try
-            {
-                return TitleDal.GetTitleById(titleId);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            return TitleDAL.GetTitleById(titleId);
         }
 
-
+        /// <summary>
+        /// Inserts new Title.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="titleTypeId"></param>
+        /// <param name="sortOrder"></param>
+        /// <param name="pTOAccural"></param>
+        /// <param name="minimumSalary"></param>
+        /// <param name="maximumSalary"></param>
+        /// <param name="userLogin"></param>
         public void TitleInset(string title, int titleTypeId, int sortOrder, int pTOAccural, int? minimumSalary, int? maximumSalary, string userLogin)
         {
-            try
-            {
-                TitleDal.TitleInset(title, titleTypeId, sortOrder, pTOAccural, minimumSalary, maximumSalary, userLogin);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            TitleDAL.TitleInset(title, titleTypeId, sortOrder, pTOAccural, minimumSalary, maximumSalary, userLogin);
         }
 
-
+        /// <summary>
+        /// Updates the Given Title With the Given details.
+        /// </summary>
+        /// <param name="titleId"></param>
+        /// <param name="title"></param>
+        /// <param name="titleTypeId"></param>
+        /// <param name="sortOrder"></param>
+        /// <param name="pTOAccural"></param>
+        /// <param name="minimumSalary"></param>
+        /// <param name="maximumSalary"></param>
+        /// <param name="userLogin"></param>
         public void TitleUpdate(int titleId, string title, int titleTypeId, int sortOrder, int pTOAccural, int? minimumSalary, int? maximumSalary, string userLogin)
         {
-            try
-            {
-                TitleDal.TitleUpdate(titleId, title, titleTypeId, sortOrder, pTOAccural, minimumSalary, maximumSalary, userLogin);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            TitleDAL.TitleUpdate(titleId, title, titleTypeId, sortOrder, pTOAccural, minimumSalary, maximumSalary, userLogin);
         }
 
-
+        /// <summary>
+        /// Deletes title for the given titleid.
+        /// </summary>
+        /// <param name="titleId"></param>
+        /// <param name="userLogin"></param>
         public void TitleDelete(int titleId, string userLogin)
         {
-            try
-            {
-                TitleDal.TitleDelete(titleId, userLogin);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            TitleDAL.TitleDelete(titleId, userLogin);
         }
     }
 }
