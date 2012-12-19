@@ -142,8 +142,8 @@
                                         <asp:ListItem Text="&nbsp; Added Projects" Value="8"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed Projects" Value="9"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Deleted Projects" Value="10"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Added SOW" Value="11"></asp:ListItem>
-                                        <asp:ListItem Text="&nbsp; Deleted SOW" Value="12"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Project Attachment" Value="11"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Project Attachment" Value="12"></asp:ListItem>
                                         <asp:ListItem Text="ALL Milestone Events" Value="13"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Added Milestones" Value="14"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed Milestones" Value="15"></asp:ListItem>
@@ -190,6 +190,10 @@
                                         <asp:ListItem Text="&nbsp; Added Practice Capability" Value="52"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed Practice Capability" Value="53"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Deleted Practice Capability" Value="54"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Title Events" Value="55"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Title" Value="56"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Title" Value="57"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Title" Value="58"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                                 <td id="tdYear" runat="server" class="padLeft2">
