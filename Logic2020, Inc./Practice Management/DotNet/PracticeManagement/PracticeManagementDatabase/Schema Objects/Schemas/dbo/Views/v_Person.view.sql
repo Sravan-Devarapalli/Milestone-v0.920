@@ -13,7 +13,6 @@ AS
 	       p.LastName,
 		   P.IsOffshore,
 		   p.PaychexID,
-	       p.PTODaysPerAnnum,
 	       p.HireDate,
 	       p.TerminationDate,
 	       p.TelephoneNumber,
@@ -41,11 +40,15 @@ AS
 			WHERE practice.PracticeManagerId = p.PersonId
 			FOR XML PATH('Practice'), ROOT('Practices')) AS 'PracticesOwned',
 			p.DivisionId,
-			p.TerminationReasonId
+			p.TerminationReasonId,
+			p.RecruiterId,
+			p.TitleId,
+			T.Title
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
 	       LEFT JOIN dbo.Seniority AS e ON p.SeniorityId = e.SeniorityId
 	       LEFT JOIN dbo.Person AS manager ON p.ManagerId = manager.PersonId
+		   LEFT JOIN dbo.Title AS T ON p.TitleId = T.TitleId
 
 
