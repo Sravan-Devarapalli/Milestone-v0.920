@@ -11,19 +11,17 @@ CREATE PROCEDURE [dbo].[PaySave]
 	@PersonId            INT,
 	@Amount              DECIMAL(18,2),
 	@Timescale           INT,
-	@TimesPaidPerMonth   INT,
-	@Terms               INT,
 	@VacationDays        INT,
 	@BonusAmount         DECIMAL(18,2),
 	@BonusHoursToCollect INT,
-	@DefaultHoursPerDay  DECIMAL(18,2),
 	@StartDate           DATETIME,
 	@EndDate             DATETIME,
 	@OLD_StartDate       DATETIME,
 	@OLD_EndDate         DATETIME,
-	@SeniorityId		 INT,
 	@PracticeId			 INT,
-	@SalesCommissionFractionOfMargin DECIMAL(18,2),
+	@TitleId			 INT,
+	@SLTApproval		 BIT,
+	@SLTPTOApproval		 BIT,
 	@UserLogin			 NVARCHAR(255)
 )
 AS
@@ -37,15 +35,23 @@ AS
 			d."The record overlaps within the period"
 		2.Check weather to do Update Operation OR Insert Operation (i.e. weather the pay exists Pay Granularity(PERSONID,PAYSTARTDATE))
 			a.Update Operation
-			   1.DefaultCommission Update
-				(i)  Delete the DefaultCommission table record(s) for the type 1 (i.e. sales commission) between NEWSTARTDATE and NEWENDDATE. 
-				(ii) if previous record exists in the DefaultCommission table for the 
-
-			   2.Pay Update
-			   	(i) Get the Previous Pay record (IFF the updating record STARTDATE is equal to PREVIOUSENDDATE record)
-				(ii)If previous record exists update the previous record ENDDATE with the NEWSTARTDATE.
-				(iii) 
+			   	(i)  Get the Previous Pay record (IFF the updating record STARTDATE is equal to PREVIOUSENDDATE record)
+				(ii) If previous record exists update the previous record ENDDATE with the NEWSTARTDATE.
+				(iii)Get the Next Pay record (IFF the updating record EndDate is equal to NextStartDATE record)
+				(iv) If Next record exists update the Next record StartDate with the NEWEndDATE.
+				(v) Update the Pay which has oldStartdate And oldEnddate With all the other parameters.
 			b.Insert Operation	
+				(i)  Get the Previous Pay record (IFF the updating record STARTDATE is equal to PREVIOUSENDDATE record)
+				(ii) If previous record exists update the previous record ENDDATE with the NEWSTARTDATE.
+				(iii) Insert New the Pay With all given parameters.
+		3.If Today is in between given Pay STARTDATE and ENDDATE 
+			a.Update the person default practice and title with the given practiceId and titleId parameters.
+			b.Update the IsActivePay in the pay table.
+		4.Else If Today is in between given Pay Old_STARTDATE and Old_ENDDATE 
+			a.Update the person default practice and title with the practiceId and titleId of the Old_STARTDATE and Old_ENDDATE Pay.
+			b.Update the IsActivePay in the pay table.
+		5.NO compensation is active we need to consider next future compensation as active and update the Default practiceId and titleId in person table.
+
 	*/
 
 	DECLARE @ErrorMessage NVARCHAR(2048) 
@@ -62,19 +68,23 @@ AS
 	, @FutureDate	DATETIME
 	, @HoursPerYear	DECIMAL
 	, @FirstCompensationStartDate DATETIME
-
+	, @HolidayTimeTypeId INT 
+	, @IsPersonRehireDueToPay BIT = CONVERT (BIT,0)
+	, @HolidayChargeCodeId INT
  
 	
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE()))),
 		   @CurrentPMTime = dbo.InsertingTime(),
 		   @FutureDate = dbo.GetFutureDate(),
-		   @HoursPerYear = dbo.GetHoursPerYear()
+		   @HoursPerYear = dbo.GetHoursPerYear(),
+		   @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
+	SELECT @HolidayChargeCodeId = CC.Id FROM dbo.ChargeCode CC WHERE CC.Id = @HolidayTimeTypeId
 	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
 	SELECT @W2HourlyId  = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
 	SELECT @UserId = PersonId FROM Person WHERE Alias = @UserLogin
 	SELECT @TerminationDate = TerminationDate FROM Person WHERE PersonId = @PersonId
-	SELECT @EndDate = ISNULL(@EndDate, @FutureDate)
-	SELECT @OLD_EndDate = ISNULL(@OLD_EndDate, @FutureDate)
+	SELECT @EndDate = ISNULL(@EndDate, @FutureDate),
+		   @OLD_EndDate = ISNULL(@OLD_EndDate, @FutureDate)
 	SELECT @PersonHireDate = Hiredate FROM dbo.Person WHERE PersonId = @PersonId
 
 	--1.Basic Validations
@@ -129,25 +139,6 @@ AS
 	           WHERE Person = @PersonId AND StartDate = @OLD_StartDate AND EndDate = @OLD_EndDate)
 	BEGIN
 	
-
-		DELETE DF
-		FROM  dbo.[DefaultCommission] DF
-		LEFT JOIN dbo.Pay P ON DF.StartDate = P.StartDate AND DF.PersonId = P.Person  
-		WHERE DF.StartDate >= @StartDate AND  Type =1 AND DF.PersonId = @PersonId AND P.Person IS NULL
-				AND DF.StartDate < @EndDate
-
-		UPDATE dbo.[DefaultCommission]
-		SET EndDate = @StartDate
-		WHERE PersonId = @PersonId
-				AND [Type] = 1 -- Sales Commission
-				AND EndDate = @OLD_StartDate
-
-		UPDATE dbo.[DefaultCommission]
-		SET StartDate = @EndDate
-		WHERE PersonId = @PersonId
-				AND [Type] = 1 -- Sales Commission
-				AND StartDate = @OLD_EndDate
-		
 		-- Auto-adjust a previous record
 		DECLARE @PrevRecordEndtDate DATETIME
 
@@ -169,64 +160,16 @@ AS
 		UPDATE dbo.Pay
 		   SET Amount = @Amount,
 		       Timescale = @Timescale,
-		       TimesPaidPerMonth = @TimesPaidPerMonth,
-		       Terms = @Terms,
 			   VacationDays = @VacationDays,
 			   BonusAmount = @BonusAmount,
 			   BonusHoursToCollect = ISNULL(@BonusHoursToCollect, @HoursPerYear),
-		       DefaultHoursPerDay = @DefaultHoursPerDay,
-			   SeniorityId = @SeniorityId,
+			   TitleId = @TitleId,
 			   PracticeId = @PracticeId,
 		       StartDate = @StartDate,
-		       EndDate = @EndDate
+		       EndDate = @EndDate,
+			   SLTApproval = @SLTApproval,
+			   SLTPTOApproval = @SLTPTOApproval
 		 WHERE Person = @PersonId AND StartDate = @OLD_StartDate AND EndDate = @OLD_EndDate
-
-
-		IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
-					WHERE PersonId = @PersonId AND [Type] = 1 
-					AND StartDate = @OLD_StartDate
-					)
-		BEGIN
-			IF(@SalesCommissionFractionOfMargin IS NULL)
-				DELETE FROM dbo.[DefaultCommission]
-				WHERE PersonId = @PersonId AND [Type] = 1 
-							AND StartDate = @OLD_StartDate
-			ELSE
-			BEGIN
-				 
-				  IF NOT EXISTS (SELECT 1 FROM dbo.[DefaultCommission]
-								 WHERE [TYPE]=1 AND PersonId = @PersonId 
-								 AND StartDate >  @StartDate)
-					AND NOT EXISTS (SELECT 1 FROM dbo.Pay
-									WHERE Person= @PersonId AND StartDate > @StartDate
-					)
-					 SELECT @TempEndDate = @FutureDate
-				  ELSE
-					SELECT @TempEndDate = @EndDate
-				 UPDATE  dbo.[DefaultCommission]
-				 SET FractionOfMargin = @SalesCommissionFractionOfMargin,
-					 StartDate = @StartDate,
-					 EndDate = @TempEndDate
-				 WHERE PersonId = @PersonId AND [Type] = 1 
-								AND StartDate = @OLD_StartDate
-			END
-		END
-		ELSE IF @SalesCommissionFractionOfMargin IS NOT NULL
-		BEGIN
-			  IF NOT EXISTS (SELECT 1 FROM dbo.[DefaultCommission]
-							 WHERE [TYPE]=1 AND PersonId = @PersonId 
-							 AND StartDate >  @StartDate)
-				AND NOT EXISTS (SELECT 1 FROM dbo.Pay
-								WHERE Person= @PersonId AND StartDate > @StartDate
-				)
-			  SELECT @TempEndDate = @FutureDate
-			  ELSE
-				SELECT @TempEndDate = @EndDate
-
-			INSERT INTO dbo.[DefaultCommission]
-							(PersonId, StartDate, EndDate, FractionOfMargin, [type], MarginTypeId)
-			VALUES (@PersonId, @StartDate, @TempEndDate, @SalesCommissionFractionOfMargin, 1, NULL)
-		END
 
 	END
 	ELSE
@@ -235,55 +178,24 @@ AS
 		UPDATE dbo.Pay
 		   SET EndDate = @StartDate
 		 WHERE Person = @PersonId AND EndDate > @StartDate
-
-		DELETE DF
-		FROM  dbo.[DefaultCommission] DF
-		LEFT JOIN dbo.Pay P ON DF.StartDate = P.StartDate AND DF.PersonId = P.Person  
-		WHERE DF.StartDate >= @StartDate AND  Type =1 AND DF.PersonId = @PersonId AND P.Person IS NULL
-				AND DF.StartDate < @EndDate
 	
 		INSERT INTO dbo.Pay
-					(Person, StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms,
-					 VacationDays, BonusAmount, BonusHoursToCollect,
-					 DefaultHoursPerDay,SeniorityId,PracticeId)
-			 VALUES (@PersonId, @StartDate, @EndDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms,
-					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, @HoursPerYear),
-					 @DefaultHoursPerDay,@SeniorityId,@PracticeId)
-		
-		
-
-		UPDATE dbo.[DefaultCommission]
-			SET EndDate = @StartDate
-			WHERE PersonId = @PersonId
-				   AND [Type] = 1 -- Sales Commission
-				   AND EndDate > @StartDate
-				   AND StartDate < @StartDate
-
-		DECLARE @DefaultCommissionEndDate DATETIME
-		 
-
-		SELECT @DefaultCommissionEndDate = @FutureDate
-
-
-		IF EXISTS (SELECT 1 FROM dbo.[DefaultCommission] 
-					WHERE PersonId = @PersonId AND TYPE = 1 
-						AND StartDate > @StartDate)
-		SELECT @DefaultCommissionEndDate = @EndDate
-		
-		IF @SalesCommissionFractionOfMargin IS NOT NULL
-		INSERT INTO dbo.[DefaultCommission]
-						(PersonId, StartDate, EndDate, FractionOfMargin, [type], MarginTypeId)
-			VALUES (@PersonId, @StartDate, @DefaultCommissionEndDate, @SalesCommissionFractionOfMargin, 1, NULL)
+					(Person, StartDate, EndDate, Amount, Timescale,
+					 VacationDays, BonusAmount, BonusHoursToCollect,PracticeId,TitleId,SLTApproval,SLTPTOApproval)
+			 VALUES (@PersonId, @StartDate, @EndDate, @Amount, @Timescale, 
+					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, @HoursPerYear),@PracticeId,@TitleId,@SLTApproval,@SLTPTOApproval)
 
 	END
+
+
 	--DECLARE @Today DATETIME
 	--SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,GETDATE()))
 	IF (@Today >= @StartDate AND @Today < @EndDate)
 	BEGIN
 		
 		UPDATE Person
-		SET SeniorityId = @SeniorityId,
-			DefaultPractice = @PracticeId
+		SET TitleId = @TitleId,
+		DefaultPractice = @PracticeId
 		WHERE PersonId = @PersonId
 
 		UPDATE Pay
@@ -295,7 +207,7 @@ AS
 	ELSE IF(@Today >= @OLD_StartDate AND @Today < @OLD_EndDate)
 	BEGIN
 		UPDATE P
-			SET P.SeniorityId = Pa.SeniorityId,
+			SET P.TitleId = Pa.TitleId,
 			P.DefaultPractice = Pa.PracticeId
 			FROM dbo.Person P
 			JOIN dbo.Pay Pa
@@ -308,11 +220,11 @@ AS
 								   THEN 1 ELSE 0 END
 			WHERE Person = @PersonId
 	END
-	--NO compensation is active we need to consider next future compensation as active and update the default PRACTICEID and SERNIORITYID in person table.
+	--5.NO compensation is active we need to consider next future compensation as active and update the Default practiceId and titleId in person table.
 	IF((SELECT COUNT(*) FROM dbo.Pay where @Today BETWEEN StartDate AND EndDate-1 and Person = @PersonId) = 0)
 	BEGIN
 		UPDATE P
-			SET P.SeniorityId = Pa.SeniorityId,
+			SET P.TitleId = Pa.TitleId,
 			P.DefaultPractice = Pa.PracticeId
 			FROM dbo.Person P
 			JOIN dbo.Pay Pa
@@ -320,6 +232,7 @@ AS
 			pa.StartDate = (SELECT MIN(StartDate) FROM dbo.Pay where Person = @PersonId and StartDate > @Today)
 			WHERE P.PersonId = @PersonId
 	END
+
 	SELECT @PreviousRecordStartDate = StartDate
 	FROM dbo.Pay
 	WHERE EndDate = @StartDate
@@ -329,11 +242,6 @@ AS
 	WHERE StartDate = @EndDate
 			AND Person = @PersonId
 
-	DECLARE @HolidayTimeTypeId INT
-
-	SET @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
-
-	
 	DELETE PC
 	FROM dbo.PersonCalendar PC
 	JOIN dbo.Calendar C ON (C.Date BETWEEN ISNULL(@PreviousRecordStartDate,CASE WHEN @StartDate > @OLD_StartDate  THEN @OLD_StartDate ELSE @StartDate END) AND 
@@ -472,6 +380,37 @@ AS
 			)
 
 
+	DECLARE @NeedToDeleteDates TABLE (Date DATETIME,SubstituteDate DATETIME)
+
+	INSERT INTO @NeedToDeleteDates (Date,SubstituteDate)
+	SELECT PC.Date,PC.SubstituteDate
+	FROM PersonCalendar PC
+	INNER JOIN Pay P ON P.Person = PC.PersonId 
+						AND P.Person = @PersonId
+						AND (PC.Date BETWEEN p.StartDate AND P.EndDate - 1 OR PC.SubstituteDate BETWEEN p.StartDate AND P.EndDate - 1)
+						AND PC.SubstituteDate IS NOT NULL
+						AND PC.TimeTypeId IS NULL
+						AND p.Timescale != @W2SalaryId --W2-Salary 
+						AND PC.DayOff = 0
+
+	DELETE PC
+	--SELECT  *
+	FROM dbo.PersonCalendar PC
+	INNER JOIN @NeedToDeleteDates P ON  PC.PersonId = @PersonId AND ( PC.Date = P.Date OR PC.Date = P.SubstituteDate)
+
+	DELETE TEH
+	--SELECT  *
+	FROM dbo.TimeEntryHours TEH
+	JOIN dbo.TimeEntry TE ON TE.TimeEntryId = TEH.TimeEntryId AND TE.PersonId = @PersonId
+	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND CC.TimeTypeId = @HolidayTimeTypeId
+	JOIN @NeedToDeleteDates ND ON  TE.PersonId = @PersonId AND TE.ChargeCodeDate = ND.SubstituteDate
+
+	DELETE TE
+	--SELECT  *
+	FROM dbo.TimeEntry TE 
+	JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId AND CC.TimeTypeId = @HolidayTimeTypeId AND  TE.PersonId = @PersonId
+	JOIN @NeedToDeleteDates ND ON  TE.PersonId = @PersonId AND TE.ChargeCodeDate = ND.SubstituteDate
+
 	/*
 	Rehire Logic
 	1.Need to check weather  the first compensation is contract or not
@@ -538,7 +477,7 @@ AS
 			UPDATE dbo.Person
 				SET TerminationDate = @TerminationDate,
 					PersonStatusId = 2,
-					SeniorityId = @SeniorityId,
+					TitleId = @TitleId,
 					PracticeOwnedId = @PracticeId,
 					TerminationReasonId = @TerminationReasonId
 				WHERE PersonId = @PersonId
@@ -550,7 +489,8 @@ AS
 			EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @PreviousTerminationDate,@UserLogin = @UserLogin	
 
 	--4.Re-hire the person with hire date as salary type compensation start date.
-			SELECT @HireDate = MIN(pay.StartDate)
+			SELECT @HireDate = MIN(pay.StartDate),
+			       @IsPersonRehireDueToPay = 1
 			FROM dbo.Pay pay WITH(NOLOCK)
 			INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
 			WHERE pay.Person = @PersonId AND @FirstCompensationStartDate <= pay.StartDate AND T.IsContractType = 0 AND pay.StartDate < @Today
@@ -576,6 +516,9 @@ AS
 	END
 
 	COMMIT TRAN Tran_PaySave
+
+	SELECT @IsPersonRehireDueToPay AS IsPersonRehireDueToPay
+
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN Tran_PaySave
@@ -592,3 +535,4 @@ AS
 	END CATCH
 
 GO
+
