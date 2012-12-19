@@ -16,7 +16,6 @@ BEGIN
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
-	       p.PTODaysPerAnnum,
 	       p.HireDate,
 	       p.TerminationDate,
 	       p.Alias,
@@ -41,7 +40,11 @@ BEGIN
 		   p.IsOffshore,
 		   p.PaychexID,
 		   p.DivisionId,
-		   p.TerminationReasonId
+		   p.TerminationReasonId,
+		   p.RecruiterId AS RecruiterId,
+		   p.TitleId,
+           p.Title
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 END
+
