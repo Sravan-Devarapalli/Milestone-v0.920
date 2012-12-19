@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net.Mail;
+using System.Security.Cryptography;
 using System.ServiceModel.Activation;
-using System.Transactions;
+using System.Text;
 using System.Web.Security;
 using DataAccess;
 using DataAccess.Other;
 using DataTransferObjects;
-using System.IO;
 using DataTransferObjects.ContextObjects;
-using System.Text;
-using System.Security.Cryptography;
-using System.Web.Configuration;
-using PraticeManagement;
-using System.Collections.Specialized;
 using DataTransferObjects.TimeEntry;
 
 namespace PracticeManagementService
@@ -84,7 +77,6 @@ namespace PracticeManagementService
             return PersonDAL.ConsultantUtilizationDailyByPerson(personId, context);
         }
 
-
         /// <summary>
         /// Gets all permissions for the given person
         /// </summary>
@@ -94,26 +86,6 @@ namespace PracticeManagementService
         {
             PersonPermission permission = PersonDAL.GetPermissions(person);
             return permission;
-        }
-
-        public List<Person> GetPersonListWithCurrentPay(
-            int? practice,
-            bool active,
-            int pageSize,
-            int pageNo,
-            string looked,
-            int? recruiterId,
-            string userName,
-            string sortBy,
-            int? timeScaleId,
-            bool projected,
-            bool terminated,
-            bool inactive,
-            char? alphabet)
-        {
-            PersonRateCalculator.VerifyPrivileges(userName, ref recruiterId);
-            return
-                PersonDAL.PersonListFilteredWithCurrentPay(practice, !active, pageSize, pageNo, looked, DateTime.MinValue, DateTime.MinValue, recruiterId, null, sortBy, timeScaleId, projected, terminated, inactive, alphabet);
         }
 
         public List<Person> GetPersonListWithCurrentPayByCommaSeparatedIdsList(
@@ -163,7 +135,6 @@ namespace PracticeManagementService
                 .OrderBy(p => p.LastName + p.FirstName)
                 .ToList();
         }
-
 
         public List<Person> OwnerListAllShort(string statusIds)
         {
@@ -257,9 +228,9 @@ namespace PracticeManagementService
         /// Lists all active persons who receive some recruiter commissions.
         /// </summary>
         /// <returns>The list of <see cref="Person"/> objects.</returns>
-        public List<Person> GetRecruiterList(int? personId, DateTime? hireDate)
+        public List<Person> GetRecruiterList()
         {
-            return PersonDAL.PersonListRecruiter(personId, hireDate);
+            return PersonDAL.PersonListRecruiter();
         }
 
         /// <summary>
@@ -269,7 +240,7 @@ namespace PracticeManagementService
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
         public List<Person> GetSalespersonList(bool includeInactive)
         {
-            return PersonDAL.PersonListSalesperson(includeInactive);
+            return PersonDAL.PersonListSalesperson(null, includeInactive);
         }
 
         /// <summary>
@@ -317,7 +288,6 @@ namespace PracticeManagementService
             return PersonDAL.GetById(personId);
         }
 
-        // TODO: do we need this if we already have a list of all persons?
         /// <summary>
         /// Get a person
         /// </summary>
@@ -376,26 +346,12 @@ namespace PracticeManagementService
         /// is placed in the <paramref name="person"/>
         /// </remarks>
         /// <returns>An ID of the saved record.</returns>
-        public int SavePersonDetail(Person person, string currentUser, string loginPageUrl)
+        public int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay)
         {
             Person oldPerson = person.Id.HasValue ? PersonDAL.GetById(person.Id.Value) : null;
-
-            bool isPreviouslyActive = person.Id.HasValue ? PersonDAL.IsPersonAlreadyHavingStatus((int)PersonStatusType.Active, person.Id) : true;
-
             try
             {
-                ProcessPersonData(person, currentUser, oldPerson, loginPageUrl);
-
-                if (oldPerson != null
-                    && !oldPerson.IsWelcomeEmailSent
-                    && oldPerson.Status.Id != (int)PersonStatusType.Active
-                    && person.Status.Id == (int)PersonStatusType.Active
-                    && !isPreviouslyActive)
-                {
-                    var companyName = ConfigurationDAL.GetCompanyName();
-                    SendWelcomeEmail(person, companyName, loginPageUrl);
-                }
-
+                ProcessPersonData(person, currentUser, oldPerson, loginPageUrl, saveCurrentPay);
                 return person.Id.Value;
             }
             catch (Exception ex)
@@ -406,20 +362,30 @@ namespace PracticeManagementService
 
         public static void SendWelcomeEmail(Person person, string companyName, string loginPageUrl)
         {
-            MembershipUser user = Membership.GetUser(person.Alias);
-            if (user != null)
+            try
             {
-                if (user.IsLockedOut)
+                MembershipUser user = Membership.GetUser(person.Alias);
+                if (user != null)
                 {
-                    user.UnlockUser();
+                    if (user.IsLockedOut)
+                    {
+                        user.UnlockUser();
+                    }
+                    string password = user.ResetPassword();
+                    MailUtil.SendWelcomeEmail(person.FirstName, person.Alias, password, companyName, loginPageUrl);
+                    PersonDAL.UpdateIsWelcomeEmailSentForPerson(person.Id);
                 }
-                string password = user.ResetPassword();
-                MailUtil.SendWelcomeEmail(person.FirstName, person.Alias, password, companyName, loginPageUrl);
-                PersonDAL.UpdateIsWelcomeEmailSentForPerson(person.Id);
+                else
+                {
+                    throw new MembershipPasswordException("User Not Exists.");
+                }
             }
-            else
+            catch (Exception e)
             {
-                throw new MembershipPasswordException();
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SendWelcomeEmail", "ProjectService.svc", string.Empty,
+                    System.Web.HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : System.Web.HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
             }
         }
 
@@ -435,11 +401,13 @@ namespace PracticeManagementService
             // MembershipPasswordFormat.Hashed
             HashAlgorithm s = HashAlgorithm.Create(Membership.HashAlgorithmType);
             bRet = s.ComputeHash(bAll);
-
-
             return Convert.ToBase64String(bRet);
         }
 
+        /// <summary>
+        /// generates salt to encode password.
+        /// </summary>
+        /// <returns></returns>
         public static string GenerateSalt()
         {
             byte[] buf = new byte[16];
@@ -448,24 +416,126 @@ namespace PracticeManagementService
         }
 
         /// <summary>
+        /// Sends mails after processing person data.
+        /// </summary>
+        /// <param name="oldPerson">Old person data.</param>
+        /// <param name="person">Present person data.</param>
+        /// <param name="isRehireDueToPay">Is person rehire due to compensation change of contract to employee.</param>
+        /// <param name="loginPageUrl">Login page url of site.</param>
+        public static void SendMailsAfterProcessPersonData(Person oldPerson, Person person, bool isRehireDueToPay, string loginPageUrl)
+        {
+            int personStatusId = person.Status.Id;
+            bool isPersonActive = (personStatusId == (int)PersonStatusType.Active || personStatusId == (int)PersonStatusType.TerminationPending);
+
+            if (oldPerson != null)//updating person data.
+            {
+                bool isOldPersonActive = (oldPerson.Status.Id == (int)PersonStatusType.Active || oldPerson.Status.Id == (int)PersonStatusType.TerminationPending);
+
+                if (personStatusId == (int)PersonStatusType.Terminated && isOldPersonActive)
+                {
+                    MailUtil.SendDeactivateAccountEmail(person.FirstName, person.LastName, person.TerminationDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                }
+                if (isOldPersonActive && isPersonActive && oldPerson.HireDate.Date != person.HireDate)
+                {
+                    SendHireDateChangedEmail(oldPerson, person, loginPageUrl);
+                }
+            }
+            if (isRehireDueToPay)
+            {
+                //deactivate account and Activate account.               
+                MailUtil.SendDeactivateAccountEmail(person.FirstName, person.LastName, person.EmploymentHistory.Last(p => p.HireDate.Date < person.HireDate.Date).TerminationDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+
+            }
+            if (isPersonActive)//rehiring due to pay or adding person or rehiring normally
+            {
+                SendActivateAccountEmail(person, oldPerson, loginPageUrl);
+            }
+        }
+        /// <summary>
+        /// Sends administrator added email.
+        /// </summary>
+        /// <param name="person">person's current data.</param>
+        /// <param name="oldPerson">person's old data.</param>
+        public void SendAdministratorAddedEmail(Person person, Person oldPerson)
+        {
+            if (person.RoleNames.Contains(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)) // && !isRehireDueToPay
+            {
+                bool isOldPersonAdministrator = (oldPerson != null) ? oldPerson.RoleNames.Contains(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) : false;
+                if (!isOldPersonAdministrator || (isOldPersonAdministrator && oldPerson.Status.Id == (int)PersonStatusType.Terminated && person.Status.Id != (int)PersonStatusType.Terminated))
+                {
+                    MailUtil.SendAdministratorAddedEmail(person.FirstName, person.LastName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends activate account email.
+        /// </summary>
+        /// <param name="person">Person,to whom we need to send email.</param>
+        /// <param name="loginPageUrl">Login page url of site.</param>
+        private static void SendActivateAccountEmail(Person person, Person oldPerson, string loginPageUrl)
+        {
+            bool isOldPersonContingentOrTerminated = (oldPerson != null) ? (oldPerson.Status.Id == (int)PersonStatusType.Contingent || oldPerson.Status.Id == (int)PersonStatusType.Terminated) : true;
+            if (isOldPersonContingentOrTerminated)
+            {
+                MailUtil.SendActivateAccountEmail(person.FirstName, person.LastName, person.HireDate.ToString(Constants.Formatting.EntryDateFormat),
+                         person.Alias, (person.Title != null) ? person.Title.TitleName : null, (person.CurrentPay != null) ? person.CurrentPay.Timescale.ToString() : null, person.TelephoneNumber);
+
+                if (person.HireDate.Date < DateTime.Now.Date)
+                {
+                    //send welcome mail if person have past hire date
+                    var companyName = ConfigurationDAL.GetCompanyName();
+                    SendWelcomeEmail(person, companyName, loginPageUrl);
+                }
+            }
+
+        }
+
+
+        /// <summary>
+        /// Sends hire date changed email.
+        /// </summary>
+        /// <param name="oldPerson">Old person data,to whom we need to send email.</param>
+        /// <param name="person">Person,to whom we need to send email</param>
+        /// <param name="loginPageUrl">Login page url of site.</param>
+        private static void SendHireDateChangedEmail(Person oldPerson, Person person, string loginPageUrl)
+        {
+            MailUtil.SendHireDateChangedEmail(person.FirstName, person.LastName, oldPerson.HireDate.ToString(Constants.Formatting.EntryDateFormat),
+                        person.HireDate.ToString(Constants.Formatting.EntryDateFormat), person.Alias, (person.Title != null) ? person.Title.TitleName : null,
+                        (person.CurrentPay != null) ? person.CurrentPay.Timescale.ToString() : null, person.TelephoneNumber);
+
+            if (person.HireDate.Date >= DateTime.Now.Date)
+            {
+                //lockout the user
+                AspMembershipDAL.UserSetLockedOut(person.Alias, Membership.ApplicationName, null, null);
+            }
+            else if (oldPerson.HireDate.Date >= DateTime.Now.Date)
+            {
+                //send welcome mail if person have past hire date
+                var companyName = ConfigurationDAL.GetCompanyName();
+                SendWelcomeEmail(person, companyName, loginPageUrl);
+            }
+        }
+
+
+        /// <summary>
         /// Stores all data into the database and process the notification.
         /// </summary>
         /// <param name="person">The data to be stored.</param>
         /// <param name="currentUser">A currently logged user.</param>
         /// <param name="oldPerson">Old person data.</param>
-        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson, string loginPageUrl)
+        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson, string loginPageUrl, bool saveCurrentPay)
         {
             string password = string.Empty;
+            bool isReHireDueToPay = false;
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
                 connection.Open();
 
-                SqlTransaction transaction = connection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+                SqlTransaction transaction = connection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted, "TR_ProcessPersonData");
 
                 if (!person.Id.HasValue)
                 {
-
-
                     if (!string.IsNullOrEmpty(person.Alias))
                     {
                         // Create a login
@@ -498,10 +568,11 @@ namespace PracticeManagementService
 
                 bool isLockedOutUpdated = false;
 
-                // Locking the terminated users
+                // Locking the users:the rule is the person should be in lock out state from termination date to midnight of next hiredate.
+		//If person is rehired also we will lock the person and unlock him after sending the welcome mail i.e. on the new hiredate.
                 if (oldPerson != null && oldPerson.Status != null && person.Status != null &&
                     oldPerson.Status.Id != person.Status.Id &&
-                    person.Status.Id == (int)PersonStatusType.Terminated)
+                    (person.Status.Id == (int)PersonStatusType.Terminated || oldPerson.Status.Id == (int)PersonStatusType.Terminated))
                 {
                     AspMembershipDAL.UserSetLockedOut(person.Alias, Membership.ApplicationName, connection, transaction);
                     person.LockedOut = isLockedOutUpdated = true;
@@ -521,63 +592,35 @@ namespace PracticeManagementService
                     }
                 }
 
-                // Saving the recruiter commissions for the given person
-                if (person.RecruiterCommission != null && person.Id.HasValue)
-                {
-                    List<RecruiterCommission> currentRecruiterCommission =
-                        RecruiterCommissionDAL.DefaultRecruiterCommissionListByRecruitId(person.Id.Value);
-                    foreach (RecruiterCommission commission in currentRecruiterCommission)
-                    {
-                        if (!person.RecruiterCommission.Exists(comm => comm.RecruiterId == commission.RecruiterId)
-                            || person.RecruiterCommission.Count < 2 && currentRecruiterCommission.Count == 2)
-                        {
-                            RecruiterCommissionDAL.DeleteRecruiterCommissionDetail(commission, connection, transaction);
-                        }
-                    }
-                    foreach (RecruiterCommission commission in person.RecruiterCommission)
-                    {
-                        commission.Recruit = person;
-                        RecruiterCommissionDAL.SaveRecruiterCommissionDetail(commission, connection, transaction);
-                    }
-
-                }
+                transaction.Commit();
 
                 // Saving the person's payment info
-                if (person.CurrentPay != null && person.Id.HasValue)
+
+                if (saveCurrentPay && person.CurrentPay != null && person.Id.HasValue)
                 {
                     person.CurrentPay.PersonId = person.Id.Value;
-                    PayDAL.SavePayDatail(person.CurrentPay, connection, transaction);
+                    isReHireDueToPay = PayDAL.SavePayDatail(person.CurrentPay, connection, null, currentUser);
                 }
-
-                // Saving the person's default commission info.
-                if (person.DefaultPersonCommissions != null && person.Id.HasValue)
+                if (isReHireDueToPay)
                 {
-                    foreach (DefaultCommission commission in person.DefaultPersonCommissions)
-                    {
-                        commission.PersonId = person.Id.Value;
-                        if (commission.FractionOfMargin >= 0)
-                        {
-                            DefaultCommissionDAL.SaveDefaultCommissionDetail(commission, connection, transaction);
-                        }
-                        else
-                        {
-                            DefaultCommissionDAL.DeleteDefaultCommission(commission, connection, transaction);
-                        }
-                    }
+                    person.EmploymentHistory = PersonDAL.GetPersonEmploymentHistoryById(person.Id.Value);
                 }
-
-                //PersonDAL.PersonEnsureIntegrity(person.Id.Value, connection, transaction);
-
-                transaction.Commit();
+                person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
+                if (oldPerson != null)
+                {
+                    oldPerson.RoleNames = Roles.GetRolesForUser(person.Alias);
+                }
             }
+            SendMailsAfterProcessPersonData(oldPerson, person, isReHireDueToPay, loginPageUrl);
+        }
 
-            if (oldPerson == null && !string.IsNullOrEmpty(person.Alias) && person.Status.Id == (int)PersonStatusType.Active)
-            {
-                var companyName = ConfigurationDAL.GetCompanyName();
-                MailUtil.SendWelcomeEmail(person.FirstName, person.Alias, password, companyName, loginPageUrl);
-                PersonDAL.UpdateIsWelcomeEmailSentForPerson(person.Id);
-            }
-
+        /// <summary>
+        /// Person Insert/Update DB validations are done by this Method.
+        /// </summary>
+        /// <param name="person"></param>
+        public void PersonValidations(Person person)
+        {
+            PersonDAL.PersonValidations(person);
         }
 
         /// <summary>
@@ -613,19 +656,6 @@ namespace PracticeManagementService
         /// <summary>
         /// Calculates the person's rate.
         /// </summary>
-        /// <param name="personId">An ID of the <see cref="Person"/> to calculate the data for.</param>
-        /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
-        /// <param name="proposedRate">A proposed person's hourly rate.</param>
-        /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount)
-        {
-            PersonRateCalculator calculator = new PersonRateCalculator(personId, true);
-            return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
-        }
-
-        /// <summary>
-        /// Calculates the person's rate.
-        /// </summary>
         /// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
         /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
         /// <param name="proposedRate">A proposed person's hourly rate.</param>
@@ -635,20 +665,6 @@ namespace PracticeManagementService
             PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, proposedRate, proposedHoursPerWeek, isMarginTestPage, effectiveDate);
 
             return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
-        }
-
-        /// <summary>
-        /// Calculates the person's rate.
-        /// </summary>
-        /// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
-        /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
-        /// <param name="proposedRate">A proposed person's hourly rate.</param>
-        /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        /// Not Using.
-        public ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage)
-        {
-            PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, 0M, proposedHoursPerWeek, isMarginTestPage, null);
-            return calculator.CalculateProposedFinancialsTargetMargin(targetMargin, proposedHoursPerWeek, clientDiscount);
         }
 
         private static PersonRateCalculator GetCalculatorForProposedFinancials(Person person, decimal proposedRate, decimal proposedHoursPerWeek, bool isMarginTestPage, DateTime? effectiveDate)
@@ -709,7 +725,6 @@ namespace PracticeManagementService
                 person.OverheadList = new List<PersonOverhead>();
             }
 
-            person.OverheadList.Add(calculator.CalculateRecruitingOverhead());
             person.OverheadList.Add(calculator.CalculateBonusOverhead(proposedHoursPerWeek));
             return calculator;
         }
@@ -718,16 +733,31 @@ namespace PracticeManagementService
         /// Saves a payment data.
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
-        public void SavePay(Pay pay, string user = null)
+        /// <param name="loginPageUrl">Login page url of site.</param>
+        /// <param name="user">Current login user.</param>
+        public void SavePay(Pay pay, string loginPageUrl, string user = null)
         {
-            PayDAL.SavePayDatail(pay, null, null, user);
+            bool isRehireDueToPay = PayDAL.SavePayDatail(pay, null, null, user);
+            if (isRehireDueToPay)
+            {
+                var person = GetPersonById(pay.PersonId);
+                person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
+                person.EmploymentHistory = PersonDAL.GetPersonEmploymentHistoryById(person.Id.Value);
+                person.RoleNames = Roles.GetRolesForUser(person.Alias);
+                SendMailsAfterProcessPersonData(null, person, true, loginPageUrl);
+            }
+
         }
 
+        /// <summary>
+        /// Deletes the pay with given person and start date.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="startDate"></param>
         public void DeletePay(int personId, DateTime startDate)
         {
             PayDAL.DeletePay(personId, startDate);
         }
-
 
         /// <summary>
         /// Selects a list of the seniorities.
@@ -769,6 +799,13 @@ namespace PracticeManagementService
             return PersonDAL.CurrentPayExists(personId);
         }
 
+        /// <summary>
+        /// Saves USer Temporary Credentials
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="PMLoginPageUrl"></param>
+        /// <param name="PMChangePasswordPageUrl"></param>
+        /// <returns></returns>
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl)
         {
             string password = Membership.GeneratePassword(Math.Max(Membership.MinRequiredPasswordLength, 1),
@@ -792,6 +829,12 @@ namespace PracticeManagementService
             }
         }
 
+        /// <summary>
+        /// Check weather temporary credentials are valid or not.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public bool CheckIfTemporaryCredentialsValid(string userName, string password)
         {
             var userCredentials = PersonDAL.GetTemporaryCredentialsByUserName(userName);
@@ -803,6 +846,12 @@ namespace PracticeManagementService
             }
             return false;
         }
+
+        /// <summary>
+        /// Sets New password for the given user with given new password.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="newPassword"></param>
         public void SetNewPasswordForUser(string userName, string newPassword)
         {
             string salt = GenerateSalt();
@@ -815,10 +864,12 @@ namespace PracticeManagementService
         {
             return PersonDAL.PersonListByCategoryTypeAndPeriod(categoryType, startDate, endDate);
         }
+
         public bool CheckPersonTimeEntriesAfterTerminationDate(int personId, DateTime terminationDate)
         {
             return TimeEntryDAL.CheckPersonTimeEntriesAfterTerminationDate(personId, terminationDate);
         }
+
         public List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate)
         {
             return MilestoneDAL.GetPersonMilestonesAfterTerminationDate(personId, terminationDate);
@@ -859,18 +910,36 @@ namespace PracticeManagementService
             return PersonDAL.GetIsNoteRequiredDetailsForSelectedDateRange(start, end, personId);
         }
 
+        /// <summary>
+        /// Saves the given straw man and with the given pay.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <param name="currentPay"></param>
+        /// <param name="userLogin"></param>
+        /// <returns></returns>
         public int? SaveStrawman(Person person, Pay currentPay, string userLogin)
         {
             PersonDAL.SaveStrawMan(person, currentPay, userLogin);
             return person.Id;
         }
 
+        /// <summary>
+        /// deletes the given straw man.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="userLogin"></param>
         public void DeleteStrawman(int personId, string userLogin)
         {
             PersonDAL.DeleteStrawman(personId, userLogin);
         }
 
-
+        /// <summary>
+        /// saves straw man from the given existing straw man.
+        /// </summary>
+        /// <param name="existingPersonId"></param>
+        /// <param name="person"></param>
+        /// <param name="userLogin"></param>
+        /// <returns></returns>
         public int SaveStrawManFromExisting(int existingPersonId, Person person, string userLogin)
         {
             int newPersonId = 0;
@@ -878,7 +947,11 @@ namespace PracticeManagementService
             return newPersonId;
         }
 
-
+        /// <summary>
+        /// gets straw man details by given Id.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns></returns>
         public Person GetStrawmanDetailsById(int personId)
         {
             var person = PersonDAL.GetPersonFirstLastNameById(personId);
@@ -886,11 +959,15 @@ namespace PracticeManagementService
             return person;
         }
 
+        /// <summary>
+        /// gets the person details In short.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns></returns>
         public Person GetPersonDetailsShort(int personId)
         {
             return PersonDAL.GetPersonFirstLastNameById(personId);
         }
-
 
         public Person GetPayHistoryShortByPerson(int personId)
         {
@@ -940,10 +1017,6 @@ namespace PracticeManagementService
         public List<Person> GetPersonListBySearchKeyword(String looked)
         {
             return PersonDAL.GetPersonListBySearchKeyword(looked);
-        }
-        public List<Timescale> GetAllPayTypes()
-        {
-            return PersonDAL.GetAllPayTypes();
         }
 
         public List<Triple<DateTime, bool, bool>> IsPersonSalaryTypeListByPeriod(int personId, DateTime startDate, DateTime endDate)
@@ -997,6 +1070,57 @@ namespace PracticeManagementService
             return PersonDAL.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(personId, startDate, endDate, timeScaleId);
         }
 
+        public PersonPassword GetPersonEncodedPassword(int personId)
+        {
+            return PersonDAL.GetPersonEncodedPassword(personId);
+        }
+
+        public void DeletePersonEncodedPassword(int personId)
+        {
+            PersonDAL.DeletePersonEncodedPassword(personId);
+        }
+
+        private static string DecodePasswordWithoutHash(string encryptpwd)
+        {
+            string decodedPassword = string.Empty;
+            UTF8Encoding encodepwd = new UTF8Encoding();
+            Decoder Decode = encodepwd.GetDecoder();
+            byte[] decodedBytes = Convert.FromBase64String(encryptpwd);
+            int charCount = Decode.GetCharCount(decodedBytes, 0, decodedBytes.Length);
+            char[] decodedCharacters = new char[charCount];
+            Decode.GetChars(decodedBytes, 0, decodedBytes.Length, decodedCharacters, 0);
+            decodedPassword = new String(decodedCharacters);
+            return decodedPassword;
+        }
+
+        public bool CheckIfPersonPasswordValid(string alias, string password)
+        {
+            int? personId = PersonDAL.PersonGetByAlias(alias).Id;
+            if (personId != null)
+            {
+                var personCredentials = PersonDAL.GetPersonEncodedPassword(personId.Value);
+                if (personCredentials != null)
+                {
+                    bool result = (password == DecodePasswordWithoutHash(personCredentials.Password));
+                    return result;
+                }
+            }
+            return false;
+
+        }
+
+        public void UpdateUserPassword(int personId, string userName, string newPassword)
+        {
+            string salt = GenerateSalt();
+            string hashedPassword = EncodePassword(newPassword, salt);
+            PersonDAL.SetNewPasswordForUser(userName, hashedPassword, salt, 1, DateTime.UtcNow, "PracticeManagement");
+            PersonDAL.DeletePersonEncodedPassword(personId);
+        }
+
+        public Pay GetCurrentByPerson(int personId)
+        {
+            return PayDAL.GetCurrentByPerson(personId);
+        }
         #endregion
     }
 }
