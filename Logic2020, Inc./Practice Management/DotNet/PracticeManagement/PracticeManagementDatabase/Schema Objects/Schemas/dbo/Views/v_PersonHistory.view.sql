@@ -12,7 +12,8 @@
 			PH.Id,
 			PH.DivisionId,
 			PH.RecruiterId,
-			PH.CreatedDate
+			PH.CreatedDate,
+			PH.TitleId
 	FROM dbo.PersonHistory PH
 	WHERE PH.IsStrawman = 0 
 	)
@@ -25,7 +26,8 @@
 			PH1.id,
 			PH1.DivisionId,
 			PH1.RecruiterId,
-			PH1.CreatedDate
+			PH1.CreatedDate,
+			PH1.TitleId
 	FROM PersonHistoryWithRowNo  PH1
 	LEFT JOIN PersonHistoryWithRowNo PH2 ON PH1.PersonId = PH2.PersonId AND PH1.RowNumber + 1 = PH2.RowNumber
 	WHERE PH2.PersonId IS NULL OR (PH1.PersonStatusId = 2 AND  PH1.TerminationDate < PH2.HireDate)
