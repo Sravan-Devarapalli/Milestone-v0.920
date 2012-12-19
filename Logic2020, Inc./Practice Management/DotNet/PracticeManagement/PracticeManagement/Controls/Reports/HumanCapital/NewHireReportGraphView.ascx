@@ -21,8 +21,8 @@
                 </asp:ChartArea>
             </ChartAreas>
         </asp:Chart>
-        <asp:Chart ID="chrtNewHireReportBySeniority" runat="server" OnClick="chrtNewHireReport_Click"
-            EnableViewState="true" >
+        <asp:Chart ID="chrtNewHireReportByTitle" runat="server" OnClick="chrtNewHireReport_Click"
+            EnableViewState="true">
             <Series>
                 <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
                     YValueType="Int32" PostBackValue="#VALX:#VALY:True" ToolTip="#VALY New Hires"
@@ -31,6 +31,9 @@
             </Series>
             <ChartAreas>
                 <asp:ChartArea Name="MainArea">
+                    <AxisX>
+                        <LabelStyle Format="###" />
+                    </AxisX>
                 </asp:ChartArea>
             </ChartAreas>
         </asp:Chart>
