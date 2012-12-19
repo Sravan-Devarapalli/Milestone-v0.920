@@ -105,8 +105,6 @@
     <Compile Include="ReportDAL.cs" />
     <Compile Include="TimeTypeDAL.cs" />
     <Compile Include="DataAccessException.cs" />
-    <Compile Include="DefaultCommissionDAL.cs" />
-    <Compile Include="DefaultRecruiterCommissionDAL.cs" />
     <Compile Include="EmailTemplateDAL.cs" />
     <Compile Include="ExpenseBasisDAL.cs" />
     <Compile Include="ExpenseCategoryDAL.cs" />
@@ -136,13 +134,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Readers\EntityReaderBase.cs" />
     <Compile Include="Readers\ProjectExpenseReader.cs" />
-    <Compile Include="RecruiterCommissionDAL.cs" />
     <Compile Include="SeniorityDAL.cs" />
     <Compile Include="Skills\Constants.cs" />
     <Compile Include="Skills\PersonSkillDAL.cs" />
     <Compile Include="TimeEntryDAL.cs" />
     <Compile Include="TimescaleDAL.cs" />
-    <Compile Include="TitleDal.cs" />
+    <Compile Include="TitleDAL.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WeekPaidOptionDAL.cs" />
   </ItemGroup>
