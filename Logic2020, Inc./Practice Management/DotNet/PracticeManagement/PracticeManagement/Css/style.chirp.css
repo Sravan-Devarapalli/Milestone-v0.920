@@ -1165,7 +1165,7 @@ DIV.DayOff
     width: 24px;
     background-color: #FAF;
 }
-DIV.CompanyDayOn
+DIV.CompanyDayOn, DIV.CompanyDayOnFloatingDay
 {
     height: 24px;
     width: 24px;
@@ -1175,7 +1175,7 @@ TD.DayOff, TH.DayOff
 {
     background-color: #FAF;
 }
-TD.CompanyDayOn, TH.CompanyDayOn
+TD.CompanyDayOn, TH.CompanyDayOn, TD.CompanyDayOnFloatingDay, TH.CompanyDayOnFloatingDay
 {
     background-color: #F60;
 }
@@ -2408,6 +2408,10 @@ TABLE.Section td
 .Width250Px, .btnsTable
 {
     width: 250px;
+}
+.Width256Px
+{
+    width: 256px;
 }
 .Width260Px
 {
@@ -7353,6 +7357,7 @@ table#ctl00_body_login tr td label
 .PersonInfo tr td
 {
     padding-bottom: 4px;
+    padding-right: 4px;
 }
 .PersonInfo td.PersonDefaultUser
 {
@@ -7548,5 +7553,22 @@ table#ctl00_body_login tr td label
 {
     max-height: 220px;
     overflow-y: auto;
+}
+.DatePickerOuterTd .DatePickerTable input
+{
+    width: 227px;
+}
+
+.gvTitles
+{
+    background-color: White;
+    border-collapse: collapse;
+    width: 70%;
+}
+.gvTitles td
+{
+    height: 25px;
+    white-space: nowrap;
+    text-align: center;
 }
 
