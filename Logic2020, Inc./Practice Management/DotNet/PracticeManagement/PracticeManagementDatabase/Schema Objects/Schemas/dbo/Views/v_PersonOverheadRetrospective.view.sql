@@ -88,24 +88,6 @@ AS
 	   AND r.[Inactive] = 0
 	   AND r.IsCogs = 1
 	UNION ALL
-	-- Recruiting overhead
-	SELECT ps.[PersonId],
-	       'Recruiting' AS [Description],
-	       ROUND(SUM(r.[Amount] / r.[HoursToCollect]), 2) AS Rate,
-	       1 AS HoursToCollect,
-	       0 AS IsPercentage,
-	       NULL AS OverheadFixedRateId,
-	       cal.Date,
-	       ROUND(SUM(r.[Amount] / r.[HoursToCollect]), 2) AS HourlyRate,
-	       NULL AS OverheadRateTypeId,
-	       NULL AS OverheadRateTypeName,
-	       CAST(0 AS DECIMAL) AS BillRateMultiplier
-	  FROM dbo.[RecruiterCommission] AS r
-	       INNER JOIN dbo.Person AS ps ON r.[RecruitId] = ps.[PersonId]
-	       INNER JOIN dbo.Calendar AS cal
-	           ON cal.Date >= ps.[HireDate] AND cal.Date < DATEADD(dd, HoursToCollect / 8, ps.[HireDate])
-	GROUP BY ps.[PersonId], cal.Date
-	UNION ALL
 	SELECT ps.[PersonId],
 	       'Bonus' AS [Description],
 	       p.BonusAmount AS Rate,
