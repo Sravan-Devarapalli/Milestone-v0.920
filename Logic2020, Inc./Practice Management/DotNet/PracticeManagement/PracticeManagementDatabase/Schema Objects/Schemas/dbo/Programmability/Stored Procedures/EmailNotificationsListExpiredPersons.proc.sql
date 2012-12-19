@@ -17,8 +17,7 @@ AS
 		inner join Person as mngr on pers.ManagerId = mngr.PersonId
 		left join Practice as pr on pers.DefaultPractice = pr.PracticeId
 		left join Person as pown on pr.PracticeManagerId = pown.PersonId
-		left join RecruiterCommission as rcom on pers.PersonId = rcom.RecruitId
-		left join Person as recr on recr.PersonId = rcom.RecruiterId
+		left join Person as recr on pers.RecruiterId = recr.PersonId
 		where pers.PersonStatusId = 3		
     
 		SELECT EmailTemplateSubject, EmailTemplateBody FROM EmailTemplate  et WHERE et.EmailTemplateId = @EmailTemplateId  
