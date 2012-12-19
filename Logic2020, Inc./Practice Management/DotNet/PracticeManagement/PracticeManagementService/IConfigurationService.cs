@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
-using System;
 
 namespace PracticeManagementService
 {
@@ -25,13 +25,7 @@ namespace PracticeManagementService
         bool DeleteEmailTemplate(int templateId);
 
         [OperationContract]
-        void CheckProjectedProjects(int templateId, string companyName);
-
-        [OperationContract]
         EmailData GetEmailData(EmailContext emailContext);
-
-        [OperationContract]
-        void CheckProjectedProjectsByHireDate(int templateId, string companyName);
 
         [OperationContract]
         CompanyLogo GetCompanyLogoData();
@@ -41,7 +35,6 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SaveResourceKeyValuePairs(SettingsType settingType, Dictionary<string, string> dictionary);
-
 
         [OperationContract]
         bool SaveResourceKeyValuePairItem(SettingsType settingType, string key, string value);
@@ -75,6 +68,9 @@ namespace PracticeManagementService
             
         [OperationContract]
         string GetLatestAnnouncement();
+
+        [OperationContract]
+        List<string> GetAllDomains();
     }
 }
 
