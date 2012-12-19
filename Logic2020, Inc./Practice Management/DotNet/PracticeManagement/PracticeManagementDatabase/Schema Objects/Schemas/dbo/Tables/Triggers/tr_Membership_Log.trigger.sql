@@ -23,7 +23,9 @@ BEGIN
 			u.userid,
 			p.FirstName + ', ' + p.LastName as 'Name',
 			p.Alias as 'Email',
-			i.password as 'HashedPassword'
+			i.password as 'HashedPassword',
+			CASE WHEN i.IsLockedOut = 1 THEN 'true'
+			     ELSE 'false' END AS 'IsLockedOut'
 		  FROM inserted AS i
 			left join dbo.aspnet_Users as u on i.userid = u.userid
 			left join dbo.person as p on p.alias = u.username
@@ -36,7 +38,9 @@ BEGIN
 			u.userid,
 			p.FirstName + ', ' + p.LastName as 'Name',
 			p.Alias as 'Email',
-			d.password as 'HashedPassword'
+			d.password as 'HashedPassword',
+			CASE WHEN d.IsLockedOut = 1 THEN 'true'
+			     ELSE 'false' END AS 'IsLockedOut'
 		  FROM deleted AS d
 			left join dbo.aspnet_Users as u on d.userid = u.userid
 			left join dbo.person as p on p.alias = u.username
