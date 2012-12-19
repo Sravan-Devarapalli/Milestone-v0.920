@@ -7,6 +7,7 @@
       <xs:element minOccurs="0" name="PTOAccrual" type="xs:int" />
       <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
       <xs:element minOccurs="0" name="TitleId" type="xs:int" />
+      <xs:element minOccurs="0" name="TitleInUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TitleType" nillable="true" type="tns:TitleType" />
     </xs:sequence>
@@ -25,4 +26,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfTitle" nillable="true" type="tns:ArrayOfTitle" />
+  <xs:complexType name="ArrayOfTitleType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TitleType" nillable="true" type="tns:TitleType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTitleType" nillable="true" type="tns:ArrayOfTitleType" />
 </xs:schema>
