@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using PraticeManagement.Controls;
-using DataTransferObjects;
-using System.Web.UI.HtmlControls;
 using System.Text;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using DataTransferObjects;
+using PraticeManagement.Controls;
 using PraticeManagement.Controls.Reports.HumanCapital;
 
 namespace PraticeManagement.Reporting
@@ -346,7 +345,7 @@ namespace PraticeManagement.Reporting
         {
             int w2SalaryCount = reportData.Count(p => p.CurrentPay != null && p.CurrentPay.Timescale == TimescaleType.Salary);
             int w2HourlyCount = reportData.Count(p => p.CurrentPay != null && p.CurrentPay.Timescale == TimescaleType.Hourly);
-            int contractorCount = reportData.Count(p => p.CurrentPay != null && ( p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue));
+            int contractorCount = reportData.Count(p => p.CurrentPay != null && (p.CurrentPay.Timescale == TimescaleType._1099Ctc || p.CurrentPay.Timescale == TimescaleType.PercRevenue));
             List<int> ratioList = (new int[] { w2SalaryCount, w2HourlyCount, contractorCount }).ToList();
             int height = 80;
             List<int> percentageList = DataTransferObjects.Utils.Generic.GetProportionateRatio(ratioList, height);
@@ -428,7 +427,7 @@ namespace PraticeManagement.Reporting
                 //Header
                 sb.Append("Resource");
                 sb.Append("\t");
-                sb.Append("Seniority");
+                sb.Append("Title");
                 sb.Append("\t");
                 sb.Append("Pay Types");
                 sb.Append("\t");
@@ -445,15 +444,15 @@ namespace PraticeManagement.Reporting
                 {
                     sb.Append(person.HtmlEncodedName);
                     sb.Append("\t");
-                    sb.Append(person.Seniority != null ? person.Seniority.Name : string .Empty);
+                    sb.Append(person.Title != null ? person.Title.TitleName : string.Empty);
                     sb.Append("\t");
-                    sb.Append(person.CurrentPay != null ? person.CurrentPay.TimescaleName :string.Empty );
+                    sb.Append(person.CurrentPay != null ? person.CurrentPay.TimescaleName : string.Empty);
                     sb.Append("\t");
                     sb.Append(GetDateFormat(person.HireDate));
                     sb.Append("\t");
                     sb.Append(person.Status.Name);
                     sb.Append("\t");
-                    sb.Append(person.RecruiterCommission.Count > 0 ? person.RecruiterCommission.First().Recruiter.PersonLastFirstName : string.Empty);
+                    sb.Append(person.RecruiterId.HasValue ? person.RecruiterLastFirstName : string.Empty);
                     sb.Append("\t");
                     sb.AppendLine();
                 }
@@ -520,3 +519,4 @@ namespace PraticeManagement.Reporting
         #endregion
     }
 }
+
