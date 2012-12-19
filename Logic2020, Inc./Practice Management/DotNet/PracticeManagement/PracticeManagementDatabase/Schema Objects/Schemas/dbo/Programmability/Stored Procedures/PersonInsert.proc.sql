@@ -8,13 +8,14 @@ CREATE PROCEDURE [dbo].[PersonInsert]
 (
 	@FirstName       NVARCHAR(40),
 	@LastName        NVARCHAR(40), 
-	@PTODaysPerAnnum INT,
 	@HireDate        DATETIME,
 	@TerminationDate DATETIME,
 	@Alias           NVARCHAR(100),
 	@DefaultPractice INT,
 	@PersonStatusId	 INT,
 	@SeniorityId     INT,
+	@RecruiterId	 INT,
+	@TitleId		 INT,
 	@UserLogin       NVARCHAR(255),
 	@ManagerId		 INT = NULL,
 	@PracticeOwnedId INT = NULL,
@@ -27,29 +28,13 @@ CREATE PROCEDURE [dbo].[PersonInsert]
 )
 AS
 	SET NOCOUNT ON
-	DECLARE @ErrorMessage NVARCHAR(2048),
-			@Today			DATETIME
+	BEGIN TRY
+		DECLARE @ErrorMessage NVARCHAR(2048),
+				@Today			DATETIME
 
-	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+		EXEC [dbo].[PersonValidations] @FirstName = @FirstName, @LastName = @LastName, @Alias = @Alias
 
-	IF EXISTS(SELECT 1
-	            FROM dbo.[Person] AS p
-	           WHERE p.[LastName] = @LastName AND p.[FirstName] = @FirstName)
-	BEGIN
-		-- Person First and Last Name uniqueness violation
-		SELECT @ErrorMessage = [dbo].[GetErrorMessage](70001)
-		RAISERROR (@ErrorMessage, 16, 1)
-	END
-	ELSE IF EXISTS(SELECT 1
-	                 FROM dbo.[Person] AS p
-	                WHERE p.[Alias] = @Alias)
-	BEGIN
-		-- Person Email uniqueness violation
-		SELECT @ErrorMessage = [dbo].[GetErrorMessage](70002)
-		RAISERROR (@ErrorMessage, 16, 1)
-	END
-	ELSE
-	BEGIN
 		-- Start logging session
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
@@ -90,11 +75,11 @@ AS
 		SELECT @PersonStatusId = CASE WHEN @TerminationDate < @Today THEN 2 ELSE @PersonStatusId END
 		-- Inserting Person
 		INSERT dbo.Person
-			(FirstName, LastName, PTODaysPerAnnum,  HireDate,  Alias, DefaultPractice, 
-		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId, TerminationReasonId)
+			(FirstName, LastName, HireDate,  Alias, DefaultPractice, 
+		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId, TerminationReasonId,TitleId,RecruiterId)
 		VALUES
-			(@FirstName, @LastName, @PTODaysPerAnnum, @HireDate, @Alias, @DefaultPractice, 
-		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId, @TerminationReasonId)
+			(@FirstName, @LastName, @HireDate, @Alias, @DefaultPractice, 
+		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId, @TerminationReasonId,@TitleId,@RecruiterId)
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
@@ -124,5 +109,9 @@ AS
 			   )
 
 		SELECT @PersonId
-	END
+		END TRY
+	BEGIN CATCH 
+		SELECT @ErrorMessage = ERROR_MESSAGE()
+		RAISERROR (@ErrorMessage, 16, 1)
+	END CATCH
 
