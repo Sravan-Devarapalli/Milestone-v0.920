@@ -332,7 +332,7 @@
         <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
         <xs:element minOccurs="0" name="personDivisionIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="seniorityIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="hireDates" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="recruiterIds" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -352,7 +352,7 @@
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="payTypeIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="seniorityIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="terminationReasonIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
