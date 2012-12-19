@@ -16,8 +16,8 @@ BEGIN
 	SELECT @IsPersonHasActiveStatus = 1
 	FROM dbo.v_PersonHistory AS p
 	INNER JOIN dbo.PersonStatusHistory PSH ON  PSH.PersonId = p.PersonId  AND P.PersonId = @PersonId AND PSH.PersonStatusId IN (1,5) -- ACTIVE And TerminationPending Status
-	WHERE  P.HireDate <= @EndDate AND ISNULL(P.TerminationDate,@FutureDate)  >= @StartDate AND 
-		PSH.StartDate <= @EndDate AND ISNULL(PSH.EndDate,@FutureDate)  >= @StartDate
+	WHERE  P.HireDate <= ISNULL(@EndDate,@FutureDate) AND ISNULL(P.TerminationDate,@FutureDate)  >= @StartDate AND 
+		PSH.StartDate <= ISNULL(@EndDate,@FutureDate) AND ISNULL(PSH.EndDate,@FutureDate)  >= @StartDate
 
     SELECT @IsPersonHasActiveStatus 
 END
