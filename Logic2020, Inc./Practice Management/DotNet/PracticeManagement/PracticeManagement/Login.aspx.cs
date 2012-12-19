@@ -1,16 +1,14 @@
 ﻿using System;
 using System.ServiceModel;
+using System.Text.RegularExpressions;
 using System.Web.Security;
+using System.Web.UI.WebControls;
 using DataTransferObjects;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using PraticeManagement.ActivityLogService;
 using PraticeManagement.Configuration;
 using PraticeManagement.PersonService;
-using System.Web.UI.WebControls;
-using System.Text.RegularExpressions;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using System.Configuration;
 using PraticeManagement.Utils;
-using System.Web;
 namespace PraticeManagement
 {
     public partial class Login : System.Web.UI.Page
@@ -255,16 +253,38 @@ namespace PraticeManagement
             }
             else
             {
+                string changePasswordPageUrl =
+                        Request.Url.Scheme + "://" + Request.Url.Host
+                        + (IsAzureWebRole() ? string.Empty : ":" + Request.Url.Port.ToString())
+                        + Request.ApplicationPath + "/ChangePassword.aspx{0}";
+
                 //Check with TemporaryCredentials
                 if (ServiceCallers.Custom.Person(p => p.CheckIfTemporaryCredentialsValid(login.UserName, login.Password)))
                 {
+                    string queryString = string.Format("?UserName={0}&Pwd={1}", login.UserName, login.Password);
+                    changePasswordPageUrl = string.Format(changePasswordPageUrl, queryString);
                     // Redirect to change password page as TemporaryCredentials are satisfied.
-                    string changePasswordPageUrl =
-                            Request.Url.Scheme + "://" + Request.Url.Host
-                            + (IsAzureWebRole() ? string.Empty : ":" + Request.Url.Port.ToString())
-                            + Request.ApplicationPath + "/ChangePassword.aspx?UserName={0}&Pwd={1}";
-
-                    changePasswordPageUrl = string.Format(changePasswordPageUrl, login.UserName, login.Password);
+                    Response.Redirect(changePasswordPageUrl);
+                }
+                else if (ServiceCallers.Custom.Person(p => p.CheckIfPersonPasswordValid(login.UserName, login.Password)))
+                {
+                    changePasswordPageUrl = string.Format(changePasswordPageUrl, "");
+                    //Insert hashed password into asp_membership,delete encoded password from personpassword
+                    using (PersonServiceClient serviceClient = new PersonServiceClient())
+                    {
+                        try
+                        {
+                            Person person = serviceClient.GetPersonByAlias(login.UserName);
+                            serviceClient.UpdateUserPassword(person.Id.Value, person.Alias, login.Password);
+                            Generic.SetCustomFormsAuthenticationTicket(login.UserName, login.RememberMeSet, this.Page);
+                            Session["IsLoggedInthroughLoginPage"] = true;
+                        }
+                        catch (Exception)
+                        {
+                            serviceClient.Abort();
+                            throw;
+                        }
+                    }
                     Response.Redirect(changePasswordPageUrl);
                 }
                 else
