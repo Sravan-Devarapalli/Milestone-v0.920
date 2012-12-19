@@ -109,7 +109,6 @@ namespace PraticeManagement
             public const string Calendar = "~/Calendar.aspx";
             public const string Projects = "~/Projects.aspx";
             public const string CompensationDetail = "~/CompensationDetail.aspx";
-            public const string DefaultRecruitingCommissionDetail = "~/DefaultRecruitingCommissionDetail.aspx";
             public const string ExpenseDetail = "~/ExpenseDetail.aspx";
             public const string ExpenseCategoryList = "~/ExpenseCategoryList.aspx";
             public const string OpportunityDetail = "~/OpportunityDetail.aspx";
@@ -153,12 +152,13 @@ namespace PraticeManagement
             public const string PersonDetailReport = "~/Reports/PersonDetailTimeReport.aspx";
             public const string TimePeriodSummaryReport = "~/Reports/TimePeriodSummaryReport.aspx";
             public const string ProjectSummaryReport = "~/Reports/ProjectSummaryReport.aspx";
-            public static string AccountSummaryReport = "~/Reports/AccountSummaryReport.aspx";
+            public const string AccountSummaryReport = "~/Reports/AccountSummaryReport.aspx";
             public const string NewHireReport = "~/Reports/NewHireReport.aspx";
             public const string TerminationReport = "~/Reports/TerminationReport.aspx";
             public const string SkillsEntryPageFormat = "~/SkillsEntry.aspx?Id={0}";
             public const string SkillsEntryPage = "~/SkillsEntry.aspx";
             public const string PersonPictureHandlerFormat = "~/Controls/PersonPicture.ashx?PersonId={0}";
+            public const string PersonsPage = "~/Config/Persons.aspx";
 
         }
 
@@ -290,7 +290,7 @@ namespace PraticeManagement
 
         public static class CssClassNames
         {
-            public static string DIMMED_ROW = "declined-row";
+            public const string DIMMED_ROW = "declined-row";
         }
 
         public static class EntityNames
