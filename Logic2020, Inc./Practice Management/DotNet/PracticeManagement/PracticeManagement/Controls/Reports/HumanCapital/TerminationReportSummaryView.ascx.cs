@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using DataTransferObjects;
-using System.Text;
 using DataTransferObjects.Reports.HumanCapital;
 
 namespace PraticeManagement.Controls.Reports.HumanCapital
@@ -16,7 +13,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         #region Properties
 
-        private HtmlImage ImgSeniorityFilter { get; set; }
+        private HtmlImage ImgTitleFilter { get; set; }
 
         private HtmlImage ImgPayTypeFilter { get; set; }
 
@@ -51,11 +48,11 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             }
         }
 
-        private string Seniorities
+        private string Titles
         {
             get
             {
-                return cblSeniorities.SelectedItemsXmlFormat != null ? cblSeniorities.SelectedItemsXmlFormat : HostingPage.Seniorities;
+                return cblTitles.SelectedItemsXmlFormat != null ? cblTitles.SelectedItemsXmlFormat : HostingPage.Titles;
             }
         }
 
@@ -73,7 +70,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            cblRecruiter.OKButtonId = cblHireDate.OKButtonId = cblSeniorities.OKButtonId = cblPayTypes.OKButtonId = cblPersonStatusType.OKButtonId = cblDivision.OKButtonId = cblTerminationReason.OKButtonId = cblTerminationDate.OKButtonId = btnFilterOK.ClientID;
+            cblRecruiter.OKButtonId = cblHireDate.OKButtonId = cblTitles.OKButtonId = cblPayTypes.OKButtonId = cblPersonStatusType.OKButtonId = cblDivision.OKButtonId = cblTerminationReason.OKButtonId = cblTerminationDate.OKButtonId = btnFilterOK.ClientID;
         }
 
         #endregion
@@ -104,9 +101,9 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                 }
                 else
                 {
-                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).PersonList;
+                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(startDate, endDate, HostingPage.PayTypes, null, HostingPage.Titles, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).PersonList;
                 }
-                HostingPage.ExportToExcel(data, isGraphViewPopUp, startDate.ToString("MMM yyyy"),startDate,endDate);
+                HostingPage.ExportToExcel(data, isGraphViewPopUp, startDate.ToString("MMM yyyy"), startDate, endDate);
             }
 
         }
@@ -116,7 +113,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             if (e.Item.ItemType == ListItemType.Header)
             {
                 ImgDivisionFilter = e.Item.FindControl("imgDivisionFilter") as HtmlImage;
-                ImgSeniorityFilter = e.Item.FindControl("imgSeniorityFilter") as HtmlImage;
+                ImgTitleFilter = e.Item.FindControl("imgTitleFilter") as HtmlImage;
                 ImgPayTypeFilter = e.Item.FindControl("imgPayTypeFilter") as HtmlImage;
                 ImgHiredateFilter = e.Item.FindControl("imgHiredateFilter") as HtmlImage;
                 ImgPersonStatusTypeFilter = e.Item.FindControl("imgPersonStatusTypeFilter") as HtmlImage;
@@ -148,12 +145,12 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             {
                 if (HostingPage.SetSelectedFilters)
                 {
-                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
+                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Titles, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
                     PopulateFilterPanels(data.PersonList);
                 }
                 else
                 {
-                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, PayTypes, cblPersonStatusType.SelectedItemsXmlFormat, Seniorities, TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblTerminationDate.SelectedItemsXmlFormat));
+                    data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, PayTypes, cblPersonStatusType.SelectedItemsXmlFormat, Titles, TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, cblDivision.SelectedItemsXmlFormat, cblRecruiter.SelectedItemsXmlFormat, cblHireDate.SelectedItemsXmlFormat, cblTerminationDate.SelectedItemsXmlFormat));
                 }
             }
             else
@@ -165,7 +162,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void RemoveFilters()
         {
-            ImgSeniorityFilter.Visible =
+            ImgTitleFilter.Visible =
             ImgPayTypeFilter.Visible =
             ImgHiredateFilter.Visible =
             ImgDivisionFilter.Visible =
@@ -179,7 +176,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         public void DataBindResource(TerminationPersonsInRange reportData, bool isPopUp)
         {
             var reportDataList = reportData.PersonList.ToList();
-            if (reportDataList.Count > 0 || cblSeniorities.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1 || cblTerminationDate.Items.Count > 1 || cblTerminationReason.Items.Count > 1)
+            if (reportDataList.Count > 0 || cblTitles.Items.Count > 1 || cblPayTypes.Items.Count > 1 || cblHireDate.Items.Count > 1 || cblDivision.Items.Count > 1 || cblPersonStatusType.Items.Count > 1 || cblRecruiter.Items.Count > 1 || cblTerminationDate.Items.Count > 1 || cblTerminationReason.Items.Count > 1)
             {
                 divEmptyMessage.Attributes["class"] = "displayNone";
                 btnExportToExcel.Enabled =
@@ -209,7 +206,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void SetAttribitesForFiltersImages()
         {
-            cblSeniorities.SaveSelectedIndexesInViewState();
+            cblTitles.SaveSelectedIndexesInViewState();
             cblPayTypes.SaveSelectedIndexesInViewState();
             cblRecruiter.SaveSelectedIndexesInViewState();
             cblDivision.SaveSelectedIndexesInViewState();
@@ -218,8 +215,8 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             cblTerminationDate.SaveSelectedIndexesInViewState();
             cblTerminationReason.SaveSelectedIndexesInViewState();
 
-            ImgSeniorityFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblSeniorities.FilterPopupClientID,
-              cblSeniorities.SelectedIndexes, cblSeniorities.CheckBoxListObject.ClientID, cblSeniorities.WaterMarkTextBoxBehaviorID);
+            ImgTitleFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTitles.FilterPopupClientID,
+              cblTitles.SelectedIndexes, cblTitles.CheckBoxListObject.ClientID, cblTitles.WaterMarkTextBoxBehaviorID);
 
             ImgPayTypeFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblPayTypes.FilterPopupClientID,
                cblPayTypes.SelectedIndexes, cblPayTypes.CheckBoxListObject.ClientID, cblPayTypes.WaterMarkTextBoxBehaviorID);
@@ -246,7 +243,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         private void PopulateFilterPanels(List<Person> reportData)
         {
             PopulateDivisionFilter(reportData);
-            PopulateSeniorityFilter(reportData);
+            PopulateTitleFilter(reportData);
             PopulateHireDateFilter(reportData);
             PopulatePayTypeFilter(reportData);
             PopulatPersonStatusTypeFilter(reportData);
@@ -290,11 +287,11 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             cblPersonStatusType.SelectAllItems(true);
         }
 
-        private void PopulateSeniorityFilter(List<Person> reportData)
+        private void PopulateTitleFilter(List<Person> reportData)
         {
-            var seniorities = reportData.Select(r => new { Id = r.Seniority != null ? r.Seniority.Id : 0, Name = r.Seniority != null ? r.Seniority.Name : Constants.FilterKeys.Unassigned }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblSeniorities.CheckBoxListObject, "All Seniorities", seniorities.ToArray(), false, "Id", "Name");
-            cblSeniorities.SelectAllItems(true);
+            var titles = reportData.Select(r => new { TitleId = r.Title != null ? r.Title.TitleId : 0, TitleName = r.Title != null ? r.Title.TitleName : Constants.FilterKeys.Unassigned }).Distinct().ToList().OrderBy(s => s.TitleName);
+            DataHelper.FillListDefault(cblTitles.CheckBoxListObject, "All Titles", titles.ToArray(), false, "TitleId", "TitleName");
+            cblTitles.SelectAllItems(true);
         }
 
         private void PopulatePayTypeFilter(List<Person> reportData)
@@ -306,14 +303,9 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateRecruiterFilter(List<Person> reportData)
         {
-            var payTypes = reportData.Select(r => new { Text = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.PersonLastFirstName : Constants.FilterKeys.Unassigned, Value = r.RecruiterCommission.Count > 0 ? r.RecruiterCommission.First().Recruiter.Id : 0 }).Distinct().ToList().OrderBy(t => t.Text);
-            DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter(s)", payTypes.ToArray(), false, "Value", "Text");
+            var recruiters = reportData.Select(r => new { Text = r.RecruiterId.HasValue ? r.RecruiterLastFirstName : Constants.FilterKeys.Unassigned, Value = r.RecruiterId.HasValue ? r.RecruiterId.Value : 0 }).Distinct().ToList().OrderBy(t => t.Text);
+            DataHelper.FillListDefault(cblRecruiter.CheckBoxListObject, "All Recruiter(s)", recruiters.ToArray(), false, "Value", "Text");
             cblRecruiter.SelectAllItems(true);
-        }
-
-        protected string GetRecruiter(List<RecruiterCommission> recruiterCommission)
-        {
-            return recruiterCommission.Count > 0 ? recruiterCommission.First().Recruiter.PersonLastFirstName : string.Empty;
         }
 
         #endregion
