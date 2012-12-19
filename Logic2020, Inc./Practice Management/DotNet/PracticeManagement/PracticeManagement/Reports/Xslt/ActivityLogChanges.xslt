@@ -68,7 +68,8 @@
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
                   or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'
                   or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'
-                  or $attrName = 'ProfileId'  or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' or $attrName = 'ManagerId'"></xsl:when>
+                  or $attrName = 'ProfileId'  or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' 
+                  or $attrName = 'ManagerId' or $attrName = 'SeniorityId' or $attrName = 'RecruiterId' or $attrName = 'TitleId' or $attrName = 'TitleTypeId'"></xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
             <xsl:if test="name() = $attrName and . != $value">
@@ -103,7 +104,8 @@
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
                   or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'
                   or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'
-                  or $attrName = 'ProfileId' or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' or $attrName = 'ManagerId'"></xsl:when>
+                  or $attrName = 'ProfileId' or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' 
+                  or $attrName = 'ManagerId' or $attrName = 'SeniorityId' or $attrName = 'RecruiterId' or $attrName = 'TitleId' or $attrName = 'TitleTypeId'"></xsl:when>
         <xsl:otherwise>
           <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
             <xsl:call-template name="DisplayChange">
@@ -173,7 +175,8 @@
                   or $attrName = 'LastUpdated' or $attrName = 'Tag' or $attrName = 'OpportunityTransitionStatusId' or $attrName='ProjectStatusId' or $attrName = 'ProjectManagerId'
                   or $attrName = 'DirectorId' or $attrName = 'User' or $attrName = 'PracticeManagerId' or $attrName = 'ProjectGroupId' or $attrName = 'IsAllowedToShow'
                   or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'
-                  or $attrName = 'ProfileId' or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' or $attrName = 'ManagerId'"></xsl:when>
+                  or $attrName = 'ProfileId' or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' 
+                  or $attrName = 'ManagerId' or $attrName = 'SeniorityId' or $attrName = 'RecruiterId' or $attrName = 'TitleId' or $attrName = 'TitleTypeId'"></xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="FriendlyName">
             <xsl:with-param name="attrName" select="name()" />
@@ -398,7 +401,7 @@
       <xsl:when test="$attrName = 'LastName'">Last Name</xsl:when>
       <xsl:when test="$attrName = 'HireDate'">Hire Date</xsl:when>
       <xsl:when test="$attrName = 'PersonStatusName'">Status</xsl:when>
-      <xsl:when test="$attrName = 'DefaultPractice'">Default Practice Area</xsl:when>
+      <xsl:when test="$attrName = 'DefaultPractice'">Practice Area</xsl:when>
       <xsl:when test="$attrName = 'PTODaysPerAnnum'">PTO Days</xsl:when>
       <xsl:when test="$attrName = 'EmployeeNumber'">Employee Number</xsl:when>
       <xsl:when test="$attrName = 'PersonId'">Person ID</xsl:when>
@@ -480,6 +483,13 @@
       <xsl:when test="$attrName = 'OpportunityNumber'">Opportunity Number</xsl:when>
       <xsl:when test="$attrName = 'FileName'">File Name</xsl:when>
       <xsl:when test="$attrName = 'UploadedDate'">Uploaded Date</xsl:when>
+      <xsl:when test="$attrName = 'RecruiterName'">Recruiter Name</xsl:when>
+      <xsl:when test="$attrName = 'TelephoneNumber'">Telephone Number</xsl:when>
+      <xsl:when test="$attrName = 'TitleType'">Title Type</xsl:when>
+      <xsl:when test="$attrName = 'PTOAccrual'">PTO Accrual</xsl:when>
+      <xsl:when test="$attrName = 'MinimumSalary'">Salary Minimum</xsl:when>
+      <xsl:when test="$attrName = 'MaximumSalary'">Salary Maximum</xsl:when>
+      <xsl:when test="$attrName = 'SortOrder'">Sort Order</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$attrName"/>
       </xsl:otherwise>
