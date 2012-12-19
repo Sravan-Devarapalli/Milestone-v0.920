@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using DataTransferObjects.Skills;
 using System.Web;
+using DataTransferObjects.Skills;
 
 namespace DataTransferObjects
 {
@@ -23,13 +23,12 @@ namespace DataTransferObjects
 
         #region Fields
 
-        private int _ptoDays;
         private DateTime? _terminationDate;
         private string _alias;
         private Practice _defaultPractice;
         private List<Commission> _commissionList = new List<Commission>();
         private Pay _currentPay;
-
+       
 
         #endregion
 
@@ -56,6 +55,16 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public bool SLTApproval
+        {
+            set;
+            get;
+        }
+
+        [DataMember]
+        public bool SLTPTOApproval { get; set; }
 
         public string Name
         {
@@ -91,13 +100,6 @@ namespace DataTransferObjects
             set;
         }
 
-        [DataMember]
-        public string MiddleName
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// Person status 
         /// </summary>
@@ -119,13 +121,13 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Number of PTO days per year this person has
+        /// Person admin or not
         /// </summary>
         [DataMember]
-        public int PtoDays
+        public bool IsAdmin
         {
-            get { return _ptoDays; }
-            set { _ptoDays = value; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -228,6 +230,32 @@ namespace DataTransferObjects
             get { return _alias; }
             set { _alias = value; }
         }
+
+        public string AliasWithoutDomain
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Alias))
+                {
+                    return Alias.Split('@')[0];
+                }
+                return string.Empty;
+            }
+        }
+
+        public string Domain
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Alias))
+                {
+                    return Alias.Split('@')[1].ToLower();
+                }
+                return string.Empty;
+            }
+        }
+
+
         [DataMember]
         public bool IsDefaultManager
         {
@@ -244,43 +272,35 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Gets or sets a default commission's value if the <see cref="Person"/> receives any.
+        /// Gets or sets the recruiterId of the <see cref="Person"/>.
         /// </summary>
         [DataMember]
-        public List<DefaultRecruiterCommission> DefaultPersonRecruiterCommission
+        public int? RecruiterId
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets or sets the commissions for the recruiter of the <see cref="Person"/>.
-        /// </summary>
         [DataMember]
-        public List<RecruiterCommission> RecruiterCommission
+        public string RecruiterFirstName
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets or sets default <see cref="Person"/>'s commissions if applicable.
-        /// </summary>
         [DataMember]
-        public List<DefaultCommission> DefaultPersonCommissions
+        public string RecruiterLastName
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Person"/>'s commissions.
-        /// </summary>
-        [DataMember]
-        public List<Commission> CommissionList
+        public string RecruiterLastFirstName
         {
-            get { return _commissionList; }
-            set { _commissionList = value; }
+            get
+            {
+                return RecruiterId.HasValue ? string.Format(PersonNameFormat, RecruiterLastName, RecruiterFirstName):string.Empty;
+            }
         }
 
         [DataMember]
@@ -343,7 +363,8 @@ namespace DataTransferObjects
         /// <summary>
         /// Gets or sets a person's Title.
         /// </summary>
-        public Title title
+        [DataMember]
+        public Title Title
         {
             set;
             get;
@@ -463,6 +484,12 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public bool HasPicture { get; set; }
+
+        /// <summary>
+        /// Person is terminated due to pay or not.Using in worker role
+        /// </summary>
+        [DataMember]
+        public bool IsTerminatedDueToPay { get; set; }
 
         #endregion
 
