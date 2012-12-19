@@ -130,22 +130,22 @@ namespace PraticeManagement.Reporting {
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeTimeScales;
         
         /// <summary>
-        /// cblSeniorities control.
+        /// cblTitles control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ScrollingDropDown cblSeniorities;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblTitles;
         
         /// <summary>
-        /// sdeSeniorities control.
+        /// sdeTitles control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeSeniorities;
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeTitles;
         
         /// <summary>
         /// cblTerminationReasons control.
