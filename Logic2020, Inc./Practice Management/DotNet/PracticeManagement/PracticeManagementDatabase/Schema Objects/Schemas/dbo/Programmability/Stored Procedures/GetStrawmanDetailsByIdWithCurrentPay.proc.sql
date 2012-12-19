@@ -19,12 +19,9 @@ BEGIN
 			ts.Name AS TimescaleName,
 			pay.StartDate,
 			pay.EndDate,
-			pay.Terms ,
 			pay.VacationDays,
-			pay.TimesPaidPerMonth,
 			pay.BonusAmount,
 			pay.BonusHoursToCollect,
-			pay.DefaultHoursPerDay,
 			CAST(CASE pay.BonusHoursToCollect WHEN @HoursPerYear THEN 1 ELSE 0 END AS BIT) AS IsYearBonus,
 			CASE WHEN	(
 							SELECT COUNT(*) FROM dbo.MilestonePerson mp 
