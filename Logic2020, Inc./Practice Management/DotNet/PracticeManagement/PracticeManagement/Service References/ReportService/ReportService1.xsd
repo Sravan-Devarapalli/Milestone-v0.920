@@ -57,7 +57,7 @@
   <xs:element name="ArrayOfPersonLevelGroupedHours" nillable="true" type="tns:ArrayOfPersonLevelGroupedHours" />
   <xs:complexType name="PersonLevelGroupedHours">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AdminstrativeHours" type="xs:double" />
+      <xs:element minOccurs="0" name="BereavementHours" type="xs:double" />
       <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
       <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
@@ -65,10 +65,16 @@
       <xs:element minOccurs="0" name="DayTotalHours" nillable="true" type="tns:ArrayOfTimeEntriesGroupByDate" />
       <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
       <xs:element minOccurs="0" name="ForecastedHoursUntilToday" type="xs:double" />
+      <xs:element minOccurs="0" name="HolidayHours" type="xs:double" />
       <xs:element minOccurs="0" name="InternalHours" type="xs:double" />
+      <xs:element minOccurs="0" name="JuryDutyHours" type="xs:double" />
+      <xs:element minOccurs="0" name="ORTHours" type="xs:double" />
+      <xs:element minOccurs="0" name="PTOHours" type="xs:double" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q4:Person" />
       <xs:element minOccurs="0" name="ProjectNonBillableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="SickOrSafeLeaveHours" type="xs:double" />
       <xs:element minOccurs="0" name="TimeEntrySectionId" type="xs:int" />
+      <xs:element minOccurs="0" name="UnpaidHours" type="xs:double" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonLevelGroupedHours" nillable="true" type="tns:PersonLevelGroupedHours" />
