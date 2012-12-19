@@ -20,11 +20,11 @@ BEGIN
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
-		   p.SeniorityId,
-		   s.Name AS SeniorityName
+		   p.TitleId,
+		   T.Title
 	  FROM dbo.Person AS p
       LEFT  JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId	 
-	  LEFT JOIN dbo.Seniority AS s ON s.SeniorityId = p.SeniorityId
+	  LEFT JOIN dbo.Title AS T ON t.TitleId = P.TitleId
 	  WHERE p.PersonStatusId in (1,3,5) AND ISNULL(pr.IsCompanyInternal, 0) = 0
 		   AND EXISTS (SELECT 1 FROM dbo.Pay y
 						WHERE p.PersonId = y.Person 
@@ -33,7 +33,7 @@ BEGIN
 						 )
 					  )
 		  AND p.IsStrawman = 0
-     ORDER BY p.LastName
+     ORDER BY p.LastName, p.FirstName
 
 END
 
