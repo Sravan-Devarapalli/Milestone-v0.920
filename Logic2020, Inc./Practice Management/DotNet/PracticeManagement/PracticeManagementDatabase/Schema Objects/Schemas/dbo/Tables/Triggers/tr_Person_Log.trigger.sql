@@ -107,14 +107,20 @@ BEGIN
 				i.PayChexID,
 				CASE WHEN i.IsOffshore = 1 THEN 'YES' ELSE 'NO' END AS [IsOffshore],
 				TR.TerminationReasonId,
-				TR.TerminationReason
+				TR.TerminationReason,
+				i.RecruiterId,
+				recr.LastName + ', ' + recr.FirstName as RecruiterName,
+				i.TitleId,
+				T.Title
 			FROM inserted AS i
 				LEFT JOIN dbo.Practice AS p ON i.DefaultPractice = p.PracticeId
 				INNER JOIN dbo.PersonStatus AS s ON i.PersonStatusId = s.PersonStatusId
 				LEFT JOIN dbo.Seniority AS r ON i.SeniorityId = r.SeniorityId
 				LEFT JOIN dbo.Person as mngr ON mngr.PersonId = i.ManagerId
+				LEFT JOIN dbo.Person as recr ON recr.PersonId = i.RecruiterId
 				LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = i.DivisionId
 				LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = i.TerminationReasonId
+				LEFT JOIN dbo.Title AS T ON i.TitleId = T.TitleId
 			WHERE i.IsStrawman = 0 
 			),
 
@@ -140,14 +146,20 @@ BEGIN
 				d.PayChexID,
 				CASE WHEN d.IsOffshore = 1 THEN 'YES' ELSE 'NO' END AS [IsOffshore],
 				TR.TerminationReasonId,
-				TR.TerminationReason
+				TR.TerminationReason,
+				d.RecruiterId,
+				recr.LastName + ', ' + recr.FirstName as RecruiterName,
+				d.TitleId,
+				T.Title
 			FROM deleted AS d
 				LEFT JOIN dbo.Practice AS p ON d.DefaultPractice = p.PracticeId
 				INNER JOIN dbo.PersonStatus AS s ON d.PersonStatusId = s.PersonStatusId
 				LEFT JOIN dbo.Seniority AS r ON d.SeniorityId = r.SeniorityId
 				LEFT JOIN dbo.Person as mngr ON mngr.PersonId = d.ManagerId
+				LEFT JOIN dbo.Person as recr ON recr.PersonId = d.RecruiterId
 				LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = d.DivisionId
 				LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = d.TerminationReasonId
+				LEFT JOIN dbo.Title AS T ON d.TitleId = T.TitleId
 			WHERE d.IsStrawman = 0
 			)
 
@@ -221,6 +233,8 @@ BEGIN
 				OR ISNULL(i.PayChexID,'') <> ISNULL(d.PayChexID,'')
 				OR ISNULL(i.IsOffshore,'') <> ISNULL(d.IsOffshore,'')
 				OR ISNULL(i.TerminationReasonId, -1) <> ISNULL(d.TerminationReasonId, -1)
+				OR ISNULL(i.[RecruiterId], -1) <> ISNULL(d.[RecruiterId], -1)
+				OR ISNULL(i.[TitleId], -1) <> ISNULL(d.[TitleId], -1)
 			)
 		END
 	END
@@ -341,14 +355,13 @@ BEGIN
 								  ,[IsDefaultManager]
 								  ,[TelephoneNumber]
 								  ,[IsWelcomeEmailSent]
-								  ,[MiddleName]
-								  ,[ImageUrl]
 								  ,[IsStrawman]
 								  ,[IsOffshore]
 								  ,[PaychexID]
 								  ,[DivisionId]
 								  ,[TerminationReasonId]
 								  ,[RecruiterId]
+								  ,[TitleId]
 								  ,[CreatedDate]
 								  ,[CreatedBy])
 		SELECT i.[PersonId]
@@ -367,19 +380,17 @@ BEGIN
 			  ,i.[IsDefaultManager]
 			  ,i.[TelephoneNumber]
 			  ,i.[IsWelcomeEmailSent]
-			  ,i.[MiddleName]
-			  ,i.[ImageUrl]
 			  ,i.[IsStrawman]
 			  ,i.[IsOffshore]
 			  ,i.[PaychexID]
 			  ,i.[DivisionId]
 			  ,i.[TerminationReasonId]
-			  ,RC.[RecruiterId]
+			  ,i.[RecruiterId]
+			  ,i.TitleId
 			  ,@insertTime
 			  ,l.PersonID
 		FROM inserted i
 		INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
-		OUTER APPLY(SELECT TOP 1 * FROM dbo.RecruiterCommission RC WHERE RC.RecruitId = i.PersonId) RC
 		LEFT JOIN deleted d ON d.PersonId = i.PersonId
 		WHERE ISNULL(i.HireDate,'') <> ISNULL(d.HireDate,'')
 					OR ISNULL(i.TerminationDate,'') <> ISNULL(d.TerminationDate,'')
@@ -396,15 +407,14 @@ BEGIN
 					OR ISNULL(i.IsDefaultManager,'') <> ISNULL(d.IsDefaultManager,'')
 					OR ISNULL(i.TelephoneNumber,'') <> ISNULL(d.TelephoneNumber,'')
 					OR ISNULL(i.IsWelcomeEmailSent, '') <> ISNULL(d.IsWelcomeEmailSent, '')
-					OR ISNULL(i.MiddleName, '') <> ISNULL(d.MiddleName, '')
-					OR ISNULL(i.ImageUrl, '') <> ISNULL(d.ImageUrl, '')
 					OR ISNULL(i.IsStrawman, '') <> ISNULL(d.IsStrawman, '')
 					OR ISNULL(i.IsOffshore, '') <> ISNULL(d.IsOffshore, '')
 					OR ISNULL(i.PayChexID,'') <> ISNULL(d.PayChexID,'')
 					OR ISNULL(i.DivisionId,0) <> ISNULL(d.DivisionId,0)
 					OR ISNULL(i.IsOffshore,'') <> ISNULL(d.IsOffshore,'')
 					OR ISNULL(i.TerminationReasonId, -1) <> ISNULL(d.TerminationReasonId, -1)
-									
+					OR ISNULL(i.[RecruiterId], -1) <> ISNULL(d.[RecruiterId], -1)
+					OR ISNULL(i.[TitleId], -1) <> ISNULL(d.[TitleId], -1)			
 	END
 
 		-- End logging session
