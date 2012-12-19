@@ -40,13 +40,13 @@ namespace PraticeManagement.Controls.Reports.HumanCapital {
         protected global::System.Web.UI.DataVisualization.Charting.Chart chrtNewHireReportByRecruiter;
         
         /// <summary>
-        /// chrtNewHireReportBySeniority control.
+        /// chrtNewHireReportByTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.DataVisualization.Charting.Chart chrtNewHireReportBySeniority;
+        protected global::System.Web.UI.DataVisualization.Charting.Chart chrtNewHireReportByTitle;
         
         /// <summary>
         /// divEmptyMessage control.
