@@ -1,35 +1,8 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 8-04-2008
--- Updated by:	Anatoliy Lokshin
--- Update date: 12-01-2008
--- Description:	Retrives the list of Persons who receives the Recruiting commissions.
--- =============================================
-CREATE PROCEDURE dbo.PersonListRecruiter
-    (
-      @PersonId INT ,
-      @HireDate DATETIME
-    )
+﻿CREATE PROCEDURE dbo.PersonListRecruiter
 AS 
-    SET NOCOUNT ON
-
-    IF @HireDate IS NULL
-        AND @PersonId IS NOT NULL 
-        BEGIN
-            SELECT  @HireDate = p.HireDate
-            FROM    dbo.Person AS p
-            WHERE   PersonId = @PersonId
-        END
-    ELSE 
-        IF @HireDate IS NULL 
-            BEGIN
-                SET @HireDate = GETDATE()
-            END
-
     SELECT  p.PersonId ,
             p.FirstName ,
             p.LastName ,
-            p.PTODaysPerAnnum ,
             p.HireDate ,
             p.TerminationDate ,
             p.Alias ,
@@ -48,20 +21,9 @@ AS
             p.PracticeOwnedName,
             p.TelephoneNumber
     FROM    dbo.v_Person AS p
-    WHERE   p.PersonStatusId IN (1,5)	-- Active person only
-	   AND (   EXISTS (SELECT 1
-	                     FROM dbo.DefaultRecruiterCommissionHeader AS c
-	                    WHERE p.PersonId = c.PersonId
-	                      AND @HireDate >= c.StartDate
-	                      AND @HireDate < c.EndDate)
-	        OR EXISTS (SELECT 1
-	                     FROM dbo.RecruiterCommission AS rc
-	                    WHERE rc.RecruitId = @PersonId AND rc.RecruiterId = p.PersonId)
-			OR EXISTS ( SELECT   *
-                           FROM     v_UsersInRoles AS ur
-                           WHERE    ur.UserName = p.Alias
-                                    AND ur.RoleName = 'Recruiter' )
-	       )
+    INNER JOIN  v_UsersInRoles AS ur ON ur.UserName = p.Alias
+                                    AND ur.RoleName = 'Recruiter' 
+	WHERE   p.PersonStatusId IN (1,5)	-- Active person only
     ORDER BY p.LastName ,
             p.FirstName
 
