@@ -125,6 +125,8 @@
             public const string PersonRoleName = "RoleName";
             public const string PersonSeniorityId = "SeniorityId";
             public const string PersonSeniorityName = "SeniorityName";
+            public const string PersonTitleId = "TitleId";
+            public const string PersonTitle = "Title";
             public const string PersonVacationsOnMilestone = "VacationDays";
             public const string ProjectEndDate = "ProjectEndDate";
             public const string PracticesOwned = "PracticesOwned";
@@ -388,6 +390,7 @@
             public const string MaximumSalary = "MaximumSalary";
             public const string HourlyRate = "HourlyRate";
             public const string HourlyPayRate = "HourlyPayRate";
+            public const string TitleInUse = "TitleInUse";
         }
 
         #endregion
@@ -658,6 +661,7 @@
             public const string PersonStatusIdsParam = "@PersonStatusIds";
             public const string OrderByCerteriaParam = "@OrderByCerteria";
             public const string SeniorityIdsParam = "@SeniorityIds";
+            public const string TitleIdsParam = "@TitleIds";
             public const string CategoryNamesParam = "@CategoryNames";
             public const string PersonRoleNamesParam = "@PersonRoleNames";
             public const string IsNoteRequiredParam = "@IsNoteRequired";
@@ -693,6 +697,9 @@
             public const string PTOAccrual = "@PTOAccrual";
             public const string MinimumSalary = "@MinimumSalary";
             public const string MaximumSalary = "@MaximumSalary";
+            public const string ApplicationName = "@ApplicationName";
+            public const string UserName = "@UserName";
+            public const string LastLockoutDate = "@LastLockoutDate";
         }
 
         #endregion
@@ -752,6 +759,7 @@
                 public const string DeleteQuickLinkByIdProcedure = "dbo.DeleteQuickLinkById";
                 public const string SaveAnnouncement = "dbo.SaveAnnouncement";
                 public const string GetLatestAnnouncement = "dbo.GetLatestAnnouncement";
+                public const string GetAllDomainsProcedure = "dbo.GetAllDomains";
 
             }
 
@@ -775,7 +783,6 @@
                 public const string PersonsListHavingActiveStatusDuringThisPeriodProcedure = "dbo.PersonsListHavingActiveStatusDuringThisPeriod";
                 public const string GetApprovedByManagerListProcedure = "dbo.GetApprovedByManagerList";
                 public const string GetPersonListBySearchKeywordProcedure = "dbo.GetPersonListBySearchKeyword";
-                public const string GetAllPayTypesProcedure = "dbo.GetAllPayTypes";
                 public const string GetStrawManListAllProcedure = "dbo.GetStrawManListAll";
                 public const string GetStrawManListAllShortProcedure = "dbo.GetStrawManListAllShort";
                 public const string SaveStrawManProcedure = "dbo.SaveStrawMan";
@@ -815,7 +822,6 @@
                 public const string aspnetMembershipCreateUserProcedure = "dbo.aspnet_Membership_CreateUser";
                 public const string MembershipAliasUpdateProcedure = "dbo.MembershipAliasUpdate";
                 public const string PersonOneOffListProcedure = "dbo.PersonOneOffList";
-                public const string PersonEnsureIntegrityProcedure = "dbo.PersonEnsureIntegrity";
                 public const string PersonGetExcelSetProcedure = "dbo.PersonExcelSet";
                 public const string PermissionsGetAllowedClientsProcedure = "dbo.PermissionsGetAllowedClients";
                 public const string PermissionsGetAllowedGroupsProcedure = "dbo.PermissionsGetAllowedGroups";
@@ -829,7 +835,6 @@
                 public const string PermissionsGetAllProcedure = "dbo.PermissionsGetAll";
                 public const string PermissionsSetAllProcedure = "dbo.PermissionsSetAll";
                 public const string PersonMilestoneWithFinancials = "dbo.PersonMilestoneWithFinancials";
-                public const string PersonListAllSeniorityFilterWithPayProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPay";
                 public const string PersonListAllSeniorityFilterWithPayByCommaSeparatedIdsListProcedure = "dbo.PersonListAllSeniorityFilterWithCurrentPayByCommaSeparatedIdsList";
                 public const string GetPasswordHistoryByUserNameProcedure = "dbo.GetPasswordHistoryByUserName";
                 public const string GetStrawmanListShortFilterWithTodayPay = "dbo.GetStrawmanListShortFilterWithTodayPay";
@@ -840,6 +845,9 @@
                 public const string GetPersonAdministrativeTimeTypesInRange = "dbo.GetPersonAdministrativeTimeTypesInRange";
                 public const string IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale = "dbo.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale";
                 public const string GetWeeklyUtilizationForConsultant = "dbo.GetWeeklyUtilizationForConsultant";
+                public const string GetPersonEncodedPasswordProcedure = "dbo.GetPersonEncodedPassword";
+                public const string DeletePersonEncodedPasswordProcedure = "dbo.DeletePersonEncodedPassword";
+                public const string PersonValidationsProcedure = "dbo.PersonValidations";
             }
 
             #endregion
@@ -940,6 +948,7 @@
                 public const string TitleInset= "dbo.TitleInset";
                 public const string TitleUpdate= "dbo.TitleUpdate";
                 public const string TitleDelete= "dbo.TitleDelete";
+                public const string GetTitleTypes = "dbo.GetTitleTypes";
             }
 
             #endregion
@@ -1205,6 +1214,16 @@
                 public const string CommissionSetProcedure = "dbo.CommissionSet";
             }
             #endregion
+
+            #region Nested type: AspMembership
+
+            public class AspMembership
+            {
+                public const string UserSetLockedOutProcedure = "dbo.aspnet_Membership_LockUser";
+                public const string UserUnLockedOutProcedure = "dbo.aspnet_Membership_UnlockUser";
+            }
+            #endregion
+
 
         }
 
