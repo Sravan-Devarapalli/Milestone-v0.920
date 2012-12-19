@@ -5,12 +5,9 @@
 	@PersonId				INT OUTPUT,
 	@Amount					DECIMAL(18,2),
 	@Timescale				INT,
-	@TimesPaidPerMonth		INT,
-	@Terms					INT,
 	@VacationDays			INT,
 	@BonusAmount			DECIMAL(18,2),
 	@BonusHoursToCollect	INT,
-	@DefaultHoursPerDay		DECIMAL(18,2),
 	@StartDate				DATETIME,
 	@PersonStatusId         INT 
 AS
@@ -68,14 +65,12 @@ BEGIN
 			INSERT INTO Person(FirstName,
 							   LastName,
 							   EmployeeNumber,
-							   PTODaysPerAnnum,
 							   IsStrawman,
 							   HireDate,
 							   PersonStatusId)
 			VALUES (@FirstName,
 					@LastName,
 					@EmployeeNumber,
-					0,
 					1,
 					'1900-01-01',  --For strawman we will use HireDate field as created date field and it will be the pm minimum start date
 					1)
@@ -102,8 +97,8 @@ BEGIN
 			
 			IF NOT EXISTS (SELECT 1 FROM Pay P WHERE Person = @PersonId)
 			BEGIN
-				INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay, IsActivePay)
-				SELECT @PersonId, @StartDate , @FutureDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay, 1
+				INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, VacationDays, BonusAmount, BonusHoursToCollect, IsActivePay)
+				SELECT @PersonId, @StartDate , @FutureDate, @Amount, @Timescale, @VacationDays, @BonusAmount, @BonusHoursToCollect, 1
 			END
 			ELSE IF EXISTS (SELECT 1 FROM Pay pa 
 						    WHERE pa.Person = @PersonId AND  pa.StartDate = @StartDate
@@ -114,12 +109,9 @@ BEGIN
 				UPDATE pa
 				Set pa.Amount = @Amount,
 					pa.Timescale = @Timescale,
-					Pa.TimesPaidPerMonth = @TimesPaidPerMonth,
-					Pa.Terms = @Terms,
 					pa.VacationDays = @VacationDays,
 					pa.BonusAmount = @BonusAmount,
-					Pa.BonusHoursToCollect = @BonusHoursToCollect,
-					Pa.DefaultHoursPerDay = @DefaultHoursPerDay
+					Pa.BonusHoursToCollect = @BonusHoursToCollect
 				FROM  Pay Pa
 				WHERE Pa.Person = @PersonId AND pa.StartDate = @StartDate
 			END
@@ -133,12 +125,9 @@ BEGIN
 							AND
 							(pa.Amount <> @Amount OR
 							pa.Timescale <> @Timescale OR
-							Pa.TimesPaidPerMonth <> @TimesPaidPerMonth OR
-							Pa.Terms <> @Terms OR
 							pa.VacationDays <> @VacationDays OR
 							pa.BonusAmount <> @BonusAmount OR
-							Pa.BonusHoursToCollect <> @BonusHoursToCollect OR
-							Pa.DefaultHoursPerDay <> @DefaultHoursPerDay)					 
+							Pa.BonusHoursToCollect <> @BonusHoursToCollect) 
 						 )
 				BEGIN
 
@@ -148,8 +137,8 @@ BEGIN
 						WHERE Person = @PersonId AND EndDate = @FutureDate
 
 						--Insert new compensation with start date i.e. today and end with future date. 
-						INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay)
-						SELECT @PersonId, @StartDate, @FutureDate, @Amount, @Timescale, @TimesPaidPerMonth, @Terms, @VacationDays, @BonusAmount, @BonusHoursToCollect, @DefaultHoursPerDay
+						INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, VacationDays, BonusAmount, BonusHoursToCollect)
+						SELECT @PersonId, @StartDate, @FutureDate, @Amount, @Timescale, @VacationDays, @BonusAmount, @BonusHoursToCollect
 
 						UPDATE Pay	SET IsActivePay = CASE WHEN EndDate = @FutureDate   THEN 1 ELSE 0 END	WHERE Person = @PersonId
 				END
