@@ -41,8 +41,6 @@
       <Setting name="TimeTypeServiceClient"/>
       <Setting name="TimescaleServiceClient" />
       <Setting name="ConfigurationServiceClient" />
-      <Setting name="DefaultRecruiterCommissionServiceClient" />
-      <Setting name="DefaultCommissionServiceClient" />
       <Setting name="MembershipServiceClient" />
       <Setting name="PersonSkillServiceClient" />
       <Setting name="RoleServiceClient" />
