@@ -40,22 +40,22 @@ namespace PraticeManagement.Controls.Reports.HumanCapital {
         protected global::PraticeManagement.Controls.FilteredCheckBoxList cblDivision;
         
         /// <summary>
-        /// pnlFilterSeniority control.
+        /// pnlFilterTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlFilterSeniority;
+        protected global::System.Web.UI.WebControls.Panel pnlFilterTitle;
         
         /// <summary>
-        /// cblSeniorities control.
+        /// cblTitles control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblSeniorities;
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblTitles;
         
         /// <summary>
         /// pnlFilterPayType control.
