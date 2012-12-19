@@ -21,7 +21,6 @@ namespace DataAccess
 
 		private const string TimescaleIdColumn = "TimescaleId";
 		private const string NameColumn = "Name";
-		private const string DefaultTermsColumn = "DefaultTerms";
 
 		#endregion
 
@@ -80,7 +79,6 @@ namespace DataAccess
 			{
 				int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
 				int nameIndex = reader.GetOrdinal(NameColumn);
-				int defaultTermsIndex = reader.GetOrdinal(DefaultTermsColumn);
 
 				while (reader.Read())
 				{
@@ -88,8 +86,6 @@ namespace DataAccess
 
 					timescale.Id = reader.GetInt32(timescaleIdIndex);
 					timescale.Name = reader.GetString(nameIndex);
-					timescale.DefaultTerms =
-						!reader.IsDBNull(defaultTermsIndex) ? (int?)reader.GetInt32(defaultTermsIndex) : null;
 
 					result.Add(timescale);
 				}
