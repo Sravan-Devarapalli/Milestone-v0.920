@@ -844,7 +844,7 @@ namespace PraticeManagement.Controls.Reports
                 NAME_FORMAT,
                 p.LastName,
                 p.FirstName,
-                p.Seniority.Name
+                p.Title.TitleName
                 );
         }
 
