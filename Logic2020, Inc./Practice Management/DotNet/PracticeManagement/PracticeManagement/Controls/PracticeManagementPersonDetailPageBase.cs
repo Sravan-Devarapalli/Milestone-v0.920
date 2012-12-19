@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using DataTransferObjects;
+﻿using DataTransferObjects;
 
 namespace PraticeManagement.Controls
 {
@@ -22,8 +18,7 @@ namespace PraticeManagement.Controls
             set;
         }
 
-        public abstract string LoginPageUrl { get; set; }
-
         public abstract PersonPermission Permissions { get; set; }
     }
 }
+
