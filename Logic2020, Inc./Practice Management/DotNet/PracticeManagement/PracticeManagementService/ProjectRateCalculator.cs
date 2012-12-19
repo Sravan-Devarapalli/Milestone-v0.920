@@ -59,53 +59,6 @@ namespace PracticeManagementService
         /// <summary>
         /// Enlists the requested projects.
         /// </summary>
-        /// <param name="clientId">An ID of the client the projects belong to.</param>
-        /// <param name="showActive">If true - the active (statusName=Active) projects will be included in the results.</param>
-        /// <param name="showProjected">If true - the projected projects will be included in the results.</param>
-        /// <param name="showCompleted">If true - the completed projects will are included in the results.</param>
-        /// <param name="showExperimental">If true - the experimantal projects will are included in the results.</param>
-        /// <param name="periodStart">The start of the period to enlist the projects within.</param>
-        /// <param name="periodEnd">The end of the period to enlist the projects within.</param>
-        /// <param name="salespersonId">Determines an ID of the salesperson to filter the list for.</param>
-        /// <param name="practiceManagerId">Determines an ID of the practice manager to filter the list for.</param>
-        /// <param name="includeCurentYearFinancials">
-        /// If true - the current year financials will are included into the result
-        /// otherwise the financials will are calculated for the specified period.
-        /// </param>
-        /// <returns>The list of the projects are match with the specified conditions.</returns>
-        public static List<Project> GetProjectList(
-            int? clientId,
-            bool showProjected,
-            bool showCompleted,
-            bool showActive,
-            bool showExperimental,
-            DateTime periodStart,
-            DateTime periodEnd,
-            int? salespersonId,
-            int? practiceManagerId,
-            int? practiceId,
-            int? projectGroupId,
-            ProjectCalculateRangeType includeCurentYearFinancials)
-        {
-            List<Project> result =
-                ProjectDAL.ProjectListAll(clientId,
-                showProjected,
-                showCompleted,
-                showActive,
-                showExperimental,
-                periodStart,
-                periodEnd,
-                salespersonId,
-                practiceManagerId,
-                practiceId,
-                projectGroupId);
-
-            return CalculateRates(result, periodStart, periodEnd, includeCurentYearFinancials);
-        }
-
-        /// <summary>
-        /// Enlists the requested projects.
-        /// </summary>
         /// <param name="clientIds">Comma separated list of client ids. Null value means all clients.</param>
         /// <param name="showActive">If true - the active (statusName=Active) projects will be included in the results.</param>
         /// <param name="showProjected">If true - the projected projects will be included in the results.</param>
@@ -407,7 +360,7 @@ namespace PracticeManagementService
                     foreach (var calc in calcs)
                     {
                         var personHours = calc.GetPersonWorkDays(currentStart, currentEnd);
-                        var companyHours = companyWorkDays * calc.DefaultHours;
+                        var companyHours = companyWorkDays * PersonRateCalculator.DefaultHoursPerDay;
                         var cogs = calc.CalculateCogsForHours(personHours, companyHours, 0M);
                         financials.Cogs += cogs;
                     }
