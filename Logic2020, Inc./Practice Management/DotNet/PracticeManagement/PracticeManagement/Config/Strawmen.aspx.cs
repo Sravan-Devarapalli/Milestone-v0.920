@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
-using PraticeManagement.Controls;
-using System.ServiceModel;
-using PraticeManagement.PersonService;
-using PraticeManagement.ProjectGroupService;
-using PraticeManagement.TimescaleService;
 using PraticeManagement.Utils;
 
 namespace PraticeManagement.Config
@@ -107,7 +103,7 @@ namespace PraticeManagement.Config
             pay.Amount = amt;
             int vacationHours = 0;
             int.TryParse(txtVacationDays.Text, out vacationHours);
-            pay.VacationDays = (pay.Timescale != TimescaleType._1099Ctc && pay.Timescale != TimescaleType.PercRevenue) ? (int?)(vacationHours / 8) : null;
+            pay.VacationDays = pay.Timescale == TimescaleType.Salary ? (int?)(vacationHours / 8) : null;
         }
 
         private void PopulateCompersationData(Pay pay)
@@ -162,7 +158,7 @@ namespace PraticeManagement.Config
 
         protected string GetVacationDays(Pay pay)
         {
-            if (pay != null && pay.Timescale != TimescaleType._1099Ctc && pay.Timescale != TimescaleType.PercRevenue && pay.VacationDays.HasValue)
+            if (pay != null && pay.Timescale == TimescaleType.Salary && pay.VacationDays.HasValue)
             {
                 return (pay.VacationDays.Value * 8).ToString();
             }
@@ -184,7 +180,7 @@ namespace PraticeManagement.Config
             e.IsValid = false;
             var txtVacationDays = gvStrawmen.Rows[gvStrawmen.EditIndex].FindControl("txtVacationDays") as TextBox;
             var ddlBasic = gvStrawmen.Rows[gvStrawmen.EditIndex].FindControl("ddlBasic") as DropDownList;
-            if (ddlBasic.SelectedIndex == 2 || ddlBasic.SelectedIndex == 3)
+            if (ddlBasic.SelectedIndex != 0)
             {
                 e.IsValid = true;
                 return;
@@ -204,7 +200,7 @@ namespace PraticeManagement.Config
             e.IsValid = false;
             var txtVacationDays = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex].FindControl("txtVacationDays") as TextBox;
             var ddlBasic = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex].FindControl("ddlBasic") as DropDownList;
-            if (ddlBasic.SelectedIndex == 2 || ddlBasic.SelectedIndex == 3)
+            if (ddlBasic.SelectedIndex != 0)
             {
                 e.IsValid = true;
                 return;
@@ -300,7 +296,7 @@ namespace PraticeManagement.Config
                 else if (pay.Timescale == TimescaleType.Hourly)
                 {
                     ddlBasic.SelectedIndex = 1;
-                    txtVacationDays.Enabled = true;
+                    txtVacationDays.Enabled = false;
                 }
                 else if (pay.Timescale == TimescaleType._1099Ctc)
                 {
@@ -404,7 +400,7 @@ namespace PraticeManagement.Config
             IsValidationPanelDisplay = true;
             var ddlBasic = row.FindControl("ddlBasic") as DropDownList;
             var txtVacationDays = row.FindControl("txtVacationDays") as TextBox;
-            txtVacationDays.Enabled = !(ddlBasic.SelectedIndex == 2 || ddlBasic.SelectedIndex == 3);
+            txtVacationDays.Enabled = ddlBasic.SelectedIndex == 0;
         }
 
         protected void imgCancel_OnClick(object sender, EventArgs e)
@@ -555,7 +551,7 @@ namespace PraticeManagement.Config
             var ddlBasic = sender as DropDownList;
             var row = ddlBasic.NamingContainer as GridViewRow;
             var txtVacationDays = row.FindControl("txtVacationDays") as TextBox;
-            txtVacationDays.Enabled = !(ddlBasic.SelectedIndex == 2 || ddlBasic.SelectedIndex == 3);
+            txtVacationDays.Enabled = ddlBasic.SelectedIndex == 0;
         }
 
         #endregion
