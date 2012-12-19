@@ -146,24 +146,24 @@
         </tr>
         <tr>
             <td>
-                VD
+                PTO
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
             <td>
-                Vacation Days (per Year)
+                PTO Accrual (per Year)
             </td>
         </tr>
         <tr>
             <td>
-                VHE
+                PTOHE
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
             <td>
-                Vacation Hourly Expense
+                PTO Accrual Hourly Expense
             </td>
         </tr>
         <tr>
@@ -294,13 +294,13 @@
         </tr>
         <tr>
             <td>
-                VHE
+                PTOHE
             </td>
             <td>
                 &nbsp;=&nbsp;
             </td>
             <td>
-                RHR * (VD * (HPW / 5)) / HPY
+                RHR * (PTO * (HPW / 5)) / HPY
             </td>
         </tr>
     </table>
