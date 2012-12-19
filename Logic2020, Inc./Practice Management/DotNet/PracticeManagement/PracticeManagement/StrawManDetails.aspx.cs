@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using PraticeManagement.Controls;
 using DataTransferObjects;
+using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
-using System.ServiceModel;
 using PraticeManagement.Utils;
-using PraticeManagement.TimescaleService;
 
 namespace PraticeManagement
 {
@@ -56,11 +55,7 @@ namespace PraticeManagement
                 pay.BonusAmount = personnelCompensation.BonusAmount;
                 pay.IsYearBonus = personnelCompensation.IsYearBonus;
                 pay.BonusHoursToCollect = personnelCompensation.BonusHoursToCollect;
-                pay.DefaultHoursPerDay = personnelCompensation.DefaultHoursPerDay;
                 pay.VacationDays = personnelCompensation.VacationDays;
-                pay.TimesPaidPerMonth = personnelCompensation.TimesPaidPerMonth;
-                pay.Terms = personnelCompensation.Terms;
-
 
                 return pay;
             }
@@ -72,11 +67,7 @@ namespace PraticeManagement
                 personnelCompensation.IsYearBonus = pay.IsYearBonus;
                 personnelCompensation.BonusAmount = pay.BonusAmount;
                 personnelCompensation.BonusHoursToCollect = pay.BonusHoursToCollect;
-                personnelCompensation.DefaultHoursPerDay = pay.DefaultHoursPerDay;
                 personnelCompensation.VacationDays = pay.VacationDays;
-                personnelCompensation.TimesPaidPerMonth = pay.TimesPaidPerMonth;
-                personnelCompensation.Terms = pay.Terms;
-
             }
         }
 
@@ -140,27 +131,6 @@ namespace PraticeManagement
                     //}
 
                     PopulateControls(person);
-                }
-                else
-                {
-                    SetDefaultTerms();
-                }
-            }
-        }
-
-        private void SetDefaultTerms()
-        {
-            using (TimescaleServiceClient serviceClient = new TimescaleServiceClient())
-            {
-                try
-                {
-                    Timescale timescale = serviceClient.GetById(personnelCompensation.Timescale);
-                    personnelCompensation.Terms = timescale != null ? timescale.DefaultTerms : null;
-                }
-                catch (FaultException<ExceptionDetail>)
-                {
-                    serviceClient.Abort();
-                    throw;
                 }
             }
         }
