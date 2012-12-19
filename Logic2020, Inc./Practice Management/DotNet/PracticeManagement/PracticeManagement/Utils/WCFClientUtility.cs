@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
 using System.ServiceModel;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using PraticeManagement.MilestonePersonService;
 using PraticeManagement.ActivityLogService;
+using PraticeManagement.AuthService;
 using PraticeManagement.CalendarService;
 using PraticeManagement.ClientService;
+using PraticeManagement.ConfigurationService;
 using PraticeManagement.ExpenseCategoryService;
 using PraticeManagement.ExpenseService;
+using PraticeManagement.MembershipService;
+using PraticeManagement.MilestonePersonService;
 using PraticeManagement.MilestoneService;
 using PraticeManagement.OpportunityService;
 using PraticeManagement.OverheadService;
@@ -20,17 +20,10 @@ using PraticeManagement.PracticeService;
 using PraticeManagement.ProjectGroupService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.ProjectStatusService;
-using PraticeManagement.TimeEntryService;
-using PraticeManagement.TimeTypeService;
-using PraticeManagement.TimescaleService;
-using PraticeManagement.ConfigurationService;
-using PraticeManagement.DefaultRecruiterCommissionService;
-using PraticeManagement.DefaultCommissionService;
-using PraticeManagement.MembershipService;
-using PraticeManagement.AuthService;
 using PraticeManagement.RoleService;
+using PraticeManagement.TimeEntryService;
+using PraticeManagement.TimescaleService;
 using PraticeManagement.Utils;
-using System.Configuration;
 
 namespace PraticeManagement.MilestonePersonService
 {
@@ -354,34 +347,6 @@ namespace PraticeManagement.PersonSkillService
     }
 }
 
-namespace PraticeManagement.DefaultRecruiterCommissionService
-{
-    public partial class DefaultRecruiterCommissionServiceClient
-    {
-        public DefaultRecruiterCommissionServiceClient()
-        {
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("DefaultRecruiterCommissionServiceClient");
-            }
-        }
-    }
-}
-
-namespace PraticeManagement.DefaultCommissionService
-{
-    public partial class DefaultCommissionServiceClient
-    {
-        public DefaultCommissionServiceClient()
-        {
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("DefaultCommissionServiceClient");
-            }
-        }
-    }
-}
-
 namespace PraticeManagement.MembershipService
 {
     public partial class MembershipServiceClient
@@ -633,28 +598,6 @@ namespace PraticeManagement.Utils
             if (WCFClientUtility.IsWebAzureRole())
             {
                 client.Endpoint.Address = GetEndpointAddress("OpportunityServiceClient");
-            }
-
-            return client;
-        }
-
-        private static DefaultRecruiterCommissionServiceClient GetDefaultRecruiterCommissionServiceClient()
-        {
-            var client = new DefaultRecruiterCommissionServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("DefaultRecruiterCommissionServiceClient");
-            }
-
-            return client;
-        }
-
-        private static DefaultCommissionServiceClient GetDefaultCommissionServiceClient()
-        {
-            var client = new DefaultCommissionServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("DefaultCommissionServiceClient");
             }
 
             return client;
