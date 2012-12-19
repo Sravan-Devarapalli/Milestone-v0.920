@@ -63,7 +63,7 @@
                             </tr>
                             <tr>
                                 <td colspan="3" class="PaddingTop5 padLeft15">
-                                    <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" AutoPostBack="true"
+                                    <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" AutoPostBack="true" IsMarginTestPage="true"
                                         OnCompensationChanged="compensation_Changed" OnCompensationMethodChanged="compensation_Changed"
                                         OnPeriodChanged="compensation_Changed" />
                                 </td>
