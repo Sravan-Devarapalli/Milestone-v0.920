@@ -153,7 +153,7 @@ namespace PraticeManagement
                     if (SelectedStartDate.HasValue)
                     {
                         Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-                        var now = Utils.Generic.GetNowWithTimeZone(); 
+                        var now = Utils.Generic.GetNowWithTimeZone();
                         btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
                         PopulateControls(pay);
                     }
@@ -397,10 +397,16 @@ namespace PraticeManagement
                             if (person.Id.HasValue)
                             {
                                 oldPerson = serviceClient.GetPersonDetailsShort(person.Id.Value);
-                                oldPerson.RoleNames = Roles.GetRolesForUser(oldPerson.Alias);
+                            }
+                            string[] currentRoles = Roles.GetRolesForUser(person.Alias);
+                            if (currentRoles.Length == 0 && oldPerson != null)
+                            {
+                                currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
+                                oldPerson.RoleNames = currentRoles;
                             }
                             int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, true);
-                            PersonDetail.SaveRoles(person);
+
+                            PersonDetail.SaveRoles(person, currentRoles);
                             serviceClient.SendAdministratorAddedEmail(person, oldPerson);
                             if (personId.Value < 0)
                             {
