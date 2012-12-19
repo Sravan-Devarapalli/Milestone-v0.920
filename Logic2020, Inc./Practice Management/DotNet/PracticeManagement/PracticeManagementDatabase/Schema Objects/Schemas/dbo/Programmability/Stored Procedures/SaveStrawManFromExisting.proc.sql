@@ -53,14 +53,12 @@ BEGIN
 		INSERT INTO Person(FirstName,
 							LastName,
 							EmployeeNumber,
-							PTODaysPerAnnum,
 							IsStrawman,
 							HireDate,
 							PersonStatusId)
 		VALUES (@FirstName,
 				@LastName,
 				@EmployeeNumber,
-				0,
 				1,
 				'1900-01-01',  --For strawman we will use HireDate field as created date field and it will be the pm minimum start date
 				@PersonStatusId)
@@ -86,13 +84,9 @@ BEGIN
 							EndDate,
 							Amount,
 							Timescale,
-							TimesPaidPerMonth,
-							Terms,
 							VacationDays,
 							BonusAmount,
 							BonusHoursToCollect,
-							DefaultHoursPerDay,
-							SeniorityId,
 							PracticeId,
 							IsActivePay)
 			SELECT @PersonId,
@@ -100,13 +94,9 @@ BEGIN
 					EndDate,
 					Amount,
 					Timescale,
-					TimesPaidPerMonth,
-					Terms,
 					VacationDays,
 					BonusAmount,
 					BonusHoursToCollect,
-					DefaultHoursPerDay,
-					SeniorityId,
 					PracticeId,
 					IsActivePay 
 			FROM dbo.Pay
@@ -139,8 +129,8 @@ BEGIN
 					WHERE Person = @PersonId AND EndDate = @FutureDate
 
 					--b.Insert new compensation with startdate today.
-					INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, TimesPaidPerMonth, Terms, VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay)
-					SELECT @PersonId, @Today, @FutureDate, @Amount, @Timescale, TimesPaidPerMonth, Terms, @VacationDays, BonusAmount, BonusHoursToCollect, DefaultHoursPerDay
+					INSERT INTO Pay(Person,StartDate, EndDate, Amount, Timescale, VacationDays, BonusAmount, BonusHoursToCollect)
+					SELECT @PersonId, @Today, @FutureDate, @Amount, @Timescale, @VacationDays, BonusAmount, BonusHoursToCollect
 					FROM  Pay Pa
 					WHERE Pa.Person = @PersonId AND pa.EndDate = @Today
 			END
