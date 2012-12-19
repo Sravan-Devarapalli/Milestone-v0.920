@@ -130,6 +130,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtSalaryAnnual;
         
         /// <summary>
+        /// ftetxtAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtAmount;
+        
+        /// <summary>
         /// reqSalaryAnnual control.
         /// </summary>
         /// <remarks>
@@ -146,6 +155,24 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compSalaryAnnual;
+        
+        /// <summary>
+        /// compSalaryWageGreaterThanZero control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compSalaryWageGreaterThanZero;
+        
+        /// <summary>
+        /// cvSLTApprovalValidation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvSLTApprovalValidation;
         
         /// <summary>
         /// rbtnSalaryHourly control.
@@ -166,6 +193,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtSalaryHourly;
         
         /// <summary>
+        /// FilteredTextBoxExtender1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender1;
+        
+        /// <summary>
         /// reqSalaryHourly control.
         /// </summary>
         /// <remarks>
@@ -182,6 +218,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compSalaryHourly;
+        
+        /// <summary>
+        /// compHourlyWageGreaterThanZero control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compHourlyWageGreaterThanZero;
         
         /// <summary>
         /// rbtn1099Ctc control.
@@ -202,6 +247,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txt1099Ctc;
         
         /// <summary>
+        /// FilteredTextBoxExtender2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender2;
+        
+        /// <summary>
         /// req1099Ctc control.
         /// </summary>
         /// <remarks>
@@ -218,6 +272,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator comp1099Ctc;
+        
+        /// <summary>
+        /// compHourlyGreaterThanZero control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compHourlyGreaterThanZero;
         
         /// <summary>
         /// rbtnPercentRevenue control.
@@ -238,6 +301,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtPercRevenue;
         
         /// <summary>
+        /// FilteredTextBoxExtender3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender3;
+        
+        /// <summary>
         /// reqPercRevenue control.
         /// </summary>
         /// <remarks>
@@ -254,6 +326,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compPercRevenue;
+        
+        /// <summary>
+        /// compPercRevenueGreaterThanZero control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compPercRevenueGreaterThanZero;
         
         /// <summary>
         /// rbtnBonusHourly control.
@@ -274,6 +355,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtBonusHourly;
         
         /// <summary>
+        /// FilteredTextBoxExtender4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender4;
+        
+        /// <summary>
         /// compBonusHourly control.
         /// </summary>
         /// <remarks>
@@ -290,6 +380,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBonusDuration;
+        
+        /// <summary>
+        /// FilteredTextBoxExtender5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender5;
         
         /// <summary>
         /// reqBonusDuration control.
@@ -328,6 +427,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtBonusAnnual;
         
         /// <summary>
+        /// FilteredTextBoxExtender6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender6;
+        
+        /// <summary>
         /// compBonusAnnual control.
         /// </summary>
         /// <remarks>
@@ -335,42 +443,6 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compBonusAnnual;
-        
-        /// <summary>
-        /// trDefaultHoursPerDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trDefaultHoursPerDay;
-        
-        /// <summary>
-        /// txtDefaultHoursPerDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDefaultHoursPerDay;
-        
-        /// <summary>
-        /// reqDefaultHoursPerDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqDefaultHoursPerDay;
-        
-        /// <summary>
-        /// compDefaultHoursPerDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator compDefaultHoursPerDay;
         
         /// <summary>
         /// lblVacationDays control.
@@ -400,13 +472,13 @@ namespace PraticeManagement.Controls {
         protected global::AjaxControlToolkit.FilteredTextBoxExtender ftetxtVacationDays;
         
         /// <summary>
-        /// RequiredFieldValidator1 control.
+        /// rfvVacationDays control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvVacationDays;
         
         /// <summary>
         /// cvVacationDays control.
@@ -418,67 +490,40 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvVacationDays;
         
         /// <summary>
-        /// trPayments control.
+        /// cvSLTPTOApprovalValidation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trPayments;
+        protected global::System.Web.UI.WebControls.CustomValidator cvSLTPTOApprovalValidation;
         
         /// <summary>
-        /// ddlPaidPerMonth control.
+        /// trTitleAndPractice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPaidPerMonth;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trTitleAndPractice;
         
         /// <summary>
-        /// ddlPaymentTerms control.
+        /// ddlTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPaymentTerms;
+        protected global::PraticeManagement.Controls.CustomDropDown ddlTitle;
         
         /// <summary>
-        /// reqPaymentTerms control.
+        /// rfvTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPaymentTerms;
-        
-        /// <summary>
-        /// trSeniorityAndPractice control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trSeniorityAndPractice;
-        
-        /// <summary>
-        /// ddlSeniority control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSeniority;
-        
-        /// <summary>
-        /// custValSeniority control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custValSeniority;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTitle;
         
         /// <summary>
         /// ddlPractice control.
@@ -490,40 +535,121 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.DropDownList ddlPractice;
         
         /// <summary>
-        /// custValPractice control.
+        /// rfvPractice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custValPractice;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPractice;
         
         /// <summary>
-        /// trSalesCommisiion control.
+        /// hdSLTApproval control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trSalesCommisiion;
+        protected global::System.Web.UI.WebControls.HiddenField hdSLTApproval;
         
         /// <summary>
-        /// txtSalesCommission control.
+        /// hdSLTPTOApproval control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSalesCommission;
+        protected global::System.Web.UI.WebControls.HiddenField hdSLTPTOApproval;
         
         /// <summary>
-        /// custValSalesCommission control.
+        /// hdSLTApprovalPopUp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custValSalesCommission;
+        protected global::System.Web.UI.WebControls.HiddenField hdSLTApprovalPopUp;
+        
+        /// <summary>
+        /// mpeSLTApprovalPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeSLTApprovalPopUp;
+        
+        /// <summary>
+        /// pnlSLTApprovalPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSLTApprovalPopUp;
+        
+        /// <summary>
+        /// btnSLTApproval control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSLTApproval;
+        
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancel;
+        
+        /// <summary>
+        /// hdSLTPTOApprovalPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdSLTPTOApprovalPopUp;
+        
+        /// <summary>
+        /// mpeSLTPTOApprovalPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeSLTPTOApprovalPopUp;
+        
+        /// <summary>
+        /// pnlSLTPTOApprovalPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSLTPTOApprovalPopUp;
+        
+        /// <summary>
+        /// btnSLTPTOApproval control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSLTPTOApproval;
+        
+        /// <summary>
+        /// btnCancelSLTPTOApproval control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelSLTPTOApproval;
     }
 }
 
