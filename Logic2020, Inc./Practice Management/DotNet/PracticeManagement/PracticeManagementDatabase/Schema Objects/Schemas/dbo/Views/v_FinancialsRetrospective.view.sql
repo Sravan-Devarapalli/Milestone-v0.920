@@ -93,18 +93,7 @@ AS
 			THEN p.HourlyRate * 0.01 * m.Amount
 			ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0)*m.HoursPerDay/HY.HoursInYear VacationRate,
 		   0 AS PracticeManagementCommissionOwn,
-	       0 AS PracticeManagementCommissionSub,
-	       (SELECT SUM(CASE
-	                       WHEN DATEDIFF(DD, Person.HireDate, Calendar.Date)*8 <= rc.HoursToCollect
-								AND rc.HoursToCollect > 0 
-	                       THEN rc.Amount / (rc.HoursToCollect)
-	                       ELSE NULL
-	                   END)
-	          FROM dbo.RecruiterCommission AS rc
-	               INNER JOIN dbo.Person ON Person.PersonId = rc.RecruitId
-	               INNER JOIN dbo.Calendar ON Calendar.Date = r.Date
-	         WHERE rc.RecruitId = m.PersonId
-	       ) AS RecruitingCommissionRate
+	       0 AS PracticeManagementCommissionSub
 	  FROM dbo.v_MilestoneRevenueRetrospective AS r
 		   -- Linking to persons
 	       INNER JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
