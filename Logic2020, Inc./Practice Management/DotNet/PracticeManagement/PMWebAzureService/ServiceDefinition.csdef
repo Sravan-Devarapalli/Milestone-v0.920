@@ -46,8 +46,6 @@
       <Setting name="TimeEntryServiceClient" />
       <Setting name="TimescaleServiceClient" />
       <Setting name="ConfigurationServiceClient" />
-      <Setting name="DefaultRecruiterCommissionServiceClient" />
-      <Setting name="DefaultCommissionServiceClient" />
       <Setting name="MembershipServiceClient" />
       <Setting name="PersonSkillServiceClient" />
       <Setting name="TimeTypeServiceClient" />
@@ -63,3 +61,4 @@
     </ConfigurationSettings>
   </WebRole>
 </ServiceDefinition>
+
