@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
-using System.Text;
 using DataTransferObjects;
 
 namespace PracticeManagementService
@@ -15,6 +11,9 @@ namespace PracticeManagementService
     {
         [OperationContract]
         List<Title> GetAllTitles();
+
+        [OperationContract]
+        List<TitleType> GetTitleTypes();
 
         [OperationContract]
         Title GetTitleById(int titleId);
