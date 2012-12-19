@@ -549,6 +549,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Skills.Profile.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.TerminationReason.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Title.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.TitleType1.datasource" />
     <None Include="Scripts\uploader.fla" />
     <None Include="Scripts\uploaderRemovedFolder.fla" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
@@ -584,6 +585,25 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\CalendarService\CalendarService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
+    <None Include="Service References\ConfigurationService\ConfigurationService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService9.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.wsdl" />
@@ -859,7 +879,6 @@
     <None Include="Service References\TimeTypeService\TimeTypeService14.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
@@ -888,6 +907,8 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="TimEntry_New.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1007,45 +1028,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ClientService\ClientService7.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
-    <None Include="Service References\ConfigurationService\ConfigurationService10.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService6.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService7.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService8.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService9.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService1.wsdl" />
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService1.wsdl" />
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService5.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService1.wsdl" />
@@ -1243,8 +1225,6 @@
     <None Include="Service References\TimeEntryService\TimeEntryService9.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService1.disco" />
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService1.disco" />
     <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService1.disco" />
     <None Include="Service References\ExpenseService\ExpenseService1.disco" />
     <None Include="Service References\MembershipService\MembershipService1.disco" />
@@ -1253,7 +1233,6 @@
     <None Include="Service References\ProjectStatusService\ProjectStatusService1.disco" />
     <None Include="Service References\RoleService\RoleService1.disco" />
     <Content Include="Service References\ClientService\ClientService.disco" />
-    <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ClientService\ClientService1.disco" />
     <Content Include="Service References\MembershipService\MembershipService.disco" />
     <None Include="Service References\TimeEntryService\configuration91.svcinfo" />
@@ -2536,13 +2515,6 @@
     </Compile>
     <Compile Include="Controls\SerializationHelper.cs" />
     <Compile Include="Controls\TimeEntry\WeekChangedEventArguments.cs" />
-    <Compile Include="DefaultRecruitingCommissionDetail.aspx.cs">
-      <DependentUpon>DefaultRecruitingCommissionDetail.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DefaultRecruitingCommissionDetail.aspx.designer.cs">
-      <DependentUpon>DefaultRecruitingCommissionDetail.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Events\ErrorEventArgs.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2653,13 +2625,6 @@
     </Compile>
     <Compile Include="Controls\ProjectNameCell.ascx.designer.cs">
       <DependentUpon>ProjectNameCell.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\RecruiterInfo.ascx.cs">
-      <DependentUpon>RecruiterInfo.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\RecruiterInfo.ascx.designer.cs">
-      <DependentUpon>RecruiterInfo.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\VisibilitySwitch.cs" />
     <Compile Include="Controls\WhatIf.ascx.cs">
@@ -2870,16 +2835,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Service References\DefaultCommissionService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Service References\DefaultRecruiterCommissionService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Service References\ExpenseCategoryService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3070,7 +3025,6 @@
     <Content Include="Css\PracticeManagementIE.css" />
     <Content Include="Css\style-ie7.css" />
     <Content Include="Css\TreeView.css" />
-    <Content Include="DefaultRecruitingCommissionDetail.aspx" />
     <Content Include="Global.asax" />
     <Content Include="GuestPages\AccessDenied.aspx" />
     <Content Include="App_GlobalResources\Controls.resx">
@@ -3092,7 +3046,6 @@
     <Content Include="Controls\MonthCalendar.ascx" />
     <Content Include="Controls\ProjectInfo.ascx" />
     <Content Include="Controls\ProjectNameCell.ascx" />
-    <Content Include="Controls\RecruiterInfo.ascx" />
     <Content Include="Controls\WhatIf.ascx" />
     <Content Include="ExpenseCategoryList.aspx" />
     <Content Include="ExpenseDetail.aspx" />
@@ -3275,26 +3228,6 @@
     <None Include="Service References\ClientService\configuration91.svcinfo" />
     <None Include="Service References\ClientService\configuration.svcinfo" />
     <None Include="Service References\ClientService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\DefaultCommissionService\configuration91.svcinfo" />
-    <None Include="Service References\DefaultCommissionService\configuration.svcinfo" />
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService11.wsdl" />
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService33.xsd" />
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService34.xsd" />
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService35.xsd" />
-    <None Include="Service References\DefaultCommissionService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\DefaultRecruiterCommissionService\configuration91.svcinfo" />
-    <None Include="Service References\DefaultRecruiterCommissionService\configuration.svcinfo" />
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService11.wsdl" />
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService33.xsd" />
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService34.xsd" />
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService35.xsd" />
-    <None Include="Service References\DefaultRecruiterCommissionService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -3515,10 +3448,6 @@
     <None Include="Service References\CalendarService\configuration912.svcinfo" />
     <None Include="Service References\ClientService\ClientService11.disco" />
     <None Include="Service References\ClientService\configuration912.svcinfo" />
-    <None Include="Service References\DefaultCommissionService\DefaultCommissionService11.disco" />
-    <None Include="Service References\DefaultCommissionService\configuration912.svcinfo" />
-    <None Include="Service References\DefaultRecruiterCommissionService\DefaultRecruiterCommissionService11.disco" />
-    <None Include="Service References\DefaultRecruiterCommissionService\configuration912.svcinfo" />
     <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService11.disco" />
     <None Include="Service References\ExpenseCategoryService\configuration912.svcinfo" />
     <None Include="Service References\ExpenseService\ExpenseService11.disco" />
@@ -3543,8 +3472,6 @@
     <None Include="Service References\AuthService\configuration913.svcinfo" />
     <None Include="Service References\CalendarService\configuration913.svcinfo" />
     <None Include="Service References\ClientService\configuration913.svcinfo" />
-    <None Include="Service References\DefaultCommissionService\configuration913.svcinfo" />
-    <None Include="Service References\DefaultRecruiterCommissionService\configuration913.svcinfo" />
     <None Include="Service References\ExpenseCategoryService\configuration913.svcinfo" />
     <None Include="Service References\ExpenseService\configuration913.svcinfo" />
     <None Include="Service References\MembershipService\configuration913.svcinfo" />
@@ -3577,8 +3504,6 @@
     <WCFMetadataStorage Include="Service References\CalendarService\" />
     <WCFMetadataStorage Include="Service References\ClientService\" />
     <WCFMetadataStorage Include="Service References\ConfigurationService\" />
-    <WCFMetadataStorage Include="Service References\DefaultCommissionService\" />
-    <WCFMetadataStorage Include="Service References\DefaultRecruiterCommissionService\" />
     <WCFMetadataStorage Include="Service References\ExpenseCategoryService\" />
     <WCFMetadataStorage Include="Service References\ExpenseService\" />
     <WCFMetadataStorage Include="Service References\MembershipService\" />
@@ -3653,4 +3578,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
