@@ -1,159 +1,182 @@
 ﻿using System;
-using System.Web;
 using System.Web.UI;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace PraticeManagement.Controls
 {
-	/// <summary>
-	/// Provides a base WEB page class for the application.
-	/// </summary>
-	public abstract class PracticeManagementPageBase : Page
-	{
-		#region Constants
+    /// <summary>
+    /// Provides a base WEB page class for the application.
+    /// </summary>
+    public abstract class PracticeManagementPageBase : Page
+    {
+        #region Constants
 
-		private const string ReturnUrlKey = "returnTo";
-	    private const string IdArgument = "Id";
-		private const string IdArgumentFormat1 = "?id={0}";
-		private const string IdArgumentFormat2 = "?id={0}&";
-		private const string ValidatedKey = "PageValidated";
+        private const string ReturnUrlKey = "returnTo";
+        private const string IdArgument = "Id";
+        private const string IdArgumentFormat1 = "?id={0}";
+        private const string IdArgumentFormat2 = "?id={0}&";
+        private const string ValidatedKey = "PageValidated";
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Gets a value of the query string argument which must specify a return URL.
-		/// </summary>
-		protected string ReturnUrl
-		{
-			get
-			{
+        private static bool IsAzureWebRole()
+        {
+            try
+            {
+                return RoleEnvironment.IsAvailable;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a login url.
+        /// </summary>
+        protected string LoginPageUrl
+        {
+            get
+            {
+                return base.Request.Url.Scheme + "://" + base.Request.Url.Host + (IsAzureWebRole() ? string.Empty : (":" + base.Request.Url.Port.ToString())) + base.Request.ApplicationPath + "/Login.aspx";
+            }
+        }
+
+        /// <summary>
+        /// Gets a value of the query string argument which must specify a return URL.
+        /// </summary>
+        protected string ReturnUrl
+        {
+            get
+            {
                 var queryString = Request.QueryString[ReturnUrlKey];
                 //queryString = string.IsNullOrEmpty(queryString) ? queryString : queryString.Replace(",", "&" + ReturnUrlKey + "=");
                 return queryString;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Gets a value if the "ID" query string argument
-		/// </summary>
-		public int? SelectedId
-		{
-			get
-			{
-				return GetArgumentInt32(IdArgument);
-			}
-		}
+        /// <summary>
+        /// Gets a value if the "ID" query string argument
+        /// </summary>
+        public int? SelectedId
+        {
+            get
+            {
+                return GetArgumentInt32(IdArgument);
+            }
+        }
 
-		/// <summary>
-		/// Gets a specified value from the query string and tries to convert it into the int value.
-		/// </summary>
-		/// <param name="argumentName">The name of the argument to be converted.</param>
-		/// <returns>The conversion result whenever it's possible and null otherwise.</returns>
-		protected int? GetArgumentInt32(string argumentName)
-		{
-			string tmpId = Request.QueryString[argumentName];
-			int result;
-			if (!int.TryParse(tmpId, out result))
-			{
-				return null;
-			}
+        /// <summary>
+        /// Gets a specified value from the query string and tries to convert it into the int value.
+        /// </summary>
+        /// <param name="argumentName">The name of the argument to be converted.</param>
+        /// <returns>The conversion result whenever it's possible and null otherwise.</returns>
+        protected int? GetArgumentInt32(string argumentName)
+        {
+            string tmpId = Request.QueryString[argumentName];
+            int result;
+            if (!int.TryParse(tmpId, out result))
+            {
+                return null;
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Gets a specified value from the query string and tries to convert it into the DateTime value.
-		/// </summary>
-		/// <param name="argumentName">The name of the argument to be converted.</param>
-		/// <returns>The conversion result whenever it's possible and null otherwise.</returns>
-		protected DateTime? GetArgumentDateTime(string argumentName)
-		{
-			string tmpValue = Request.QueryString[argumentName];
-			DateTime result;
-			if (!DateTime.TryParse(tmpValue, out result))
-			{
-				return null;
-			}
+        /// <summary>
+        /// Gets a specified value from the query string and tries to convert it into the DateTime value.
+        /// </summary>
+        /// <param name="argumentName">The name of the argument to be converted.</param>
+        /// <returns>The conversion result whenever it's possible and null otherwise.</returns>
+        protected DateTime? GetArgumentDateTime(string argumentName)
+        {
+            string tmpValue = Request.QueryString[argumentName];
+            DateTime result;
+            if (!DateTime.TryParse(tmpValue, out result))
+            {
+                return null;
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		protected bool IsValidated
-		{
-			get
-			{
-				return Convert.ToBoolean(ViewState[ValidatedKey]);
-			}
-			private set
-			{
-				ViewState[ValidatedKey] = value;
-			}
-		}
+        protected bool IsValidated
+        {
+            get
+            {
+                return Convert.ToBoolean(ViewState[ValidatedKey]);
+            }
+            private set
+            {
+                ViewState[ValidatedKey] = value;
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets if the page's data is dirty (not saved)
-		/// </summary>
-		public bool IsDirty
-		{
-			get
-			{
-                return Master is PracticeManagementMain ? ((PracticeManagementMain) Master).IsDirty : false;
-			}
-			set
-			{
+        /// <summary>
+        /// Gets or sets if the page's data is dirty (not saved)
+        /// </summary>
+        public bool IsDirty
+        {
+            get
+            {
+                return Master is PracticeManagementMain ? ((PracticeManagementMain)Master).IsDirty : false;
+            }
+            set
+            {
                 if (Master is PracticeManagementMain)
-				{
-                    ((PracticeManagementMain) Master).IsDirty = value;
-				}
-			}
-		}
+                {
+                    ((PracticeManagementMain)Master).IsDirty = value;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets whether the user selected save dirty data.
-		/// </summary>
-		protected bool SaveDirty
-		{
-			get
-			{
-                return Master is PracticeManagementMain ? ((PracticeManagementMain) Master).SaveDirty : false;
-			}
-			set
-			{
+        /// <summary>
+        /// Gets whether the user selected save dirty data.
+        /// </summary>
+        protected bool SaveDirty
+        {
+            get
+            {
+                return Master is PracticeManagementMain ? ((PracticeManagementMain)Master).SaveDirty : false;
+            }
+            set
+            {
                 if (Master is PracticeManagementMain)
-				{
-                    ((PracticeManagementMain) Master).SaveDirty = value;
-				}
-			}
-		}
+                {
+                    ((PracticeManagementMain)Master).SaveDirty = value;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets if continue without saving is allowed.
-		/// </summary>
-		protected bool AllowContinueWithoutSave
-		{
-			get
-			{
-                return Master is PracticeManagementMain ? ((PracticeManagementMain) Master).AllowContinueWithoutSave : true;
-			}
-			set
-			{
+        /// <summary>
+        /// Gets or sets if continue without saving is allowed.
+        /// </summary>
+        protected bool AllowContinueWithoutSave
+        {
+            get
+            {
+                return Master is PracticeManagementMain ? ((PracticeManagementMain)Master).AllowContinueWithoutSave : true;
+            }
+            set
+            {
                 if (Master is PracticeManagementMain)
-				{
-                    ((PracticeManagementMain) Master).AllowContinueWithoutSave = value;
-				}
-			}
-		}
+                {
+                    ((PracticeManagementMain)Master).AllowContinueWithoutSave = value;
+                }
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		protected override void OnInit(EventArgs e)
-		{
-			base.OnInit(e);
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
 
-			//ScriptManager scriptManager = ScriptManager.GetCurrent(Page);
+            //ScriptManager scriptManager = ScriptManager.GetCurrent(Page);
             //  Commented out to fix Chrome issues.
             //if (scriptManager != null)
             //{
@@ -161,154 +184,154 @@ namespace PraticeManagement.Controls
             //}
 
             if (Master is PracticeManagementMain)
-			{
-                ((PracticeManagementMain) Master).Navigating += Master_Navigating;
-			}
-		}
+            {
+                ((PracticeManagementMain)Master).Navigating += Master_Navigating;
+            }
+        }
 
-		/// <summary>
-		/// Displayes the data.
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
+        /// <summary>
+        /// Displayes the data.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
 
-			if (!IsPostBack)
-			{
-				Display();
-			}
+            if (!IsPostBack)
+            {
+                Display();
+            }
 
             //Response.CacheControl = Constants.HttpHeaders.CacheControlNoCache;
             //Response.Cache.SetNoStore();
-		}
+        }
 
-		protected override void OnPreRender(EventArgs e)
-		{
-			base.OnPreRender(e);
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
 
             //if (IsPostBack && IsDirty)
             //{
             //    ScriptManager.RegisterStartupScript(this, GetType(), "SetDirty", "setDirty();", true);
             //}
-		}
+        }
 
-		// Just for debugging purposes
-		protected override void OnError(EventArgs e)
-		{
-			base.OnError(e);
-		}
+        // Just for debugging purposes
+        protected override void OnError(EventArgs e)
+        {
+            base.OnError(e);
+        }
 
-		protected void ClearDirty()
-		{
-			IsDirty = false;
-			SaveDirty = false;
-			ScriptManager.RegisterStartupScript(this, GetType(), "SetDirty", "clearDirty();", true);
-		}
+        protected void ClearDirty()
+        {
+            IsDirty = false;
+            SaveDirty = false;
+            ScriptManager.RegisterStartupScript(this, GetType(), "SetDirty", "clearDirty();", true);
+        }
 
-		/// <summary>
-		/// Displayes the data.
-		/// </summary>
-		protected abstract void Display();
+        /// <summary>
+        /// Displayes the data.
+        /// </summary>
+        protected abstract void Display();
 
-		protected virtual bool ValidateAndSave()
-		{
-			return true;
-		}
+        protected virtual bool ValidateAndSave()
+        {
+            return true;
+        }
 
-		/// <summary>
-		/// Remembers if the page was already validated.
-		/// </summary>
-		public override void Validate()
-		{
-			base.Validate();
+        /// <summary>
+        /// Remembers if the page was already validated.
+        /// </summary>
+        public override void Validate()
+        {
+            base.Validate();
 
-			IsValidated = true;
-		}
+            IsValidated = true;
+        }
 
-		/// <summary>
-		/// Performs a redirect to the page which is specified with the value of <see cref="ReturnUrl"/> property.
-		/// </summary>
-		public void ReturnToPreviousPage()
-		{
-			if (!string.IsNullOrEmpty(ReturnUrl))
-			{
-				Response.Redirect(ReturnUrl);
-			}
-		}
-
-		/// <summary>
-		/// Redirects to the specified URL.
-		/// </summary>
-		/// <param name="redirectUrl">The URL to redirect to.</param>
-		public void Redirect(string redirectUrl)
-		{
-			RedirectWithBack(redirectUrl, Request.Url.AbsoluteUri);
-		}
-
-            /// <summary>
-            /// Redirects to the specified URL.
-            /// </summary>
-            /// <param name="redirectUrl">The URL to redirect to.</param>
-            public void RedirectWithOutReturnTo(string redirectUrl)
+        /// <summary>
+        /// Performs a redirect to the page which is specified with the value of <see cref="ReturnUrl"/> property.
+        /// </summary>
+        public void ReturnToPreviousPage()
+        {
+            if (!string.IsNullOrEmpty(ReturnUrl))
             {
-                Utils.Generic.RedirectWithoutReturnTo(redirectUrl, Response);
+                Response.Redirect(ReturnUrl);
             }
+        }
 
-	 public string GetBackUrlWithId(string backUrl, string newId)
+        /// <summary>
+        /// Redirects to the specified URL.
+        /// </summary>
+        /// <param name="redirectUrl">The URL to redirect to.</param>
+        public void Redirect(string redirectUrl)
+        {
+            RedirectWithBack(redirectUrl, Request.Url.AbsoluteUri);
+        }
+
+        /// <summary>
+        /// Redirects to the specified URL.
+        /// </summary>
+        /// <param name="redirectUrl">The URL to redirect to.</param>
+        public void RedirectWithOutReturnTo(string redirectUrl)
+        {
+            Utils.Generic.RedirectWithoutReturnTo(redirectUrl, Response);
+        }
+
+        public string GetBackUrlWithId(string backUrl, string newId)
+        {
+            if (!SelectedId.HasValue)
             {
-                if (!SelectedId.HasValue)
+                if (backUrl.IndexOf(Constants.QueryStringParameterNames.QueryStringSeparator) < 0)
                 {
-                    if (backUrl.IndexOf(Constants.QueryStringParameterNames.QueryStringSeparator) < 0)
-                    {
-                        backUrl += string.Format(IdArgumentFormat1, newId);
-                    }
-                    else
-                    {
-                        backUrl = backUrl.Replace("?", string.Format(IdArgumentFormat2, newId));
-                    }
+                    backUrl += string.Format(IdArgumentFormat1, newId);
                 }
-                return backUrl;
+                else
+                {
+                    backUrl = backUrl.Replace("?", string.Format(IdArgumentFormat2, newId));
+                }
             }
+            return backUrl;
+        }
 
-		/// <summary>
-		/// Redirects to the specified URL and provides the back redirect for new records.
-		/// </summary>
-		/// <param name="redirectUrl">The URL to redirect to.</param>
-		/// <param name="newId">An ID of the new record.</param>
-		public void Redirect(string redirectUrl, string newId)
-		{
-			string backUrl = Request.Url.AbsoluteUri;
-			backUrl = GetBackUrlWithId(backUrl, newId);
-			RedirectWithBack(redirectUrl, backUrl);
-		}
+        /// <summary>
+        /// Redirects to the specified URL and provides the back redirect for new records.
+        /// </summary>
+        /// <param name="redirectUrl">The URL to redirect to.</param>
+        /// <param name="newId">An ID of the new record.</param>
+        public void Redirect(string redirectUrl, string newId)
+        {
+            string backUrl = Request.Url.AbsoluteUri;
+            backUrl = GetBackUrlWithId(backUrl, newId);
+            RedirectWithBack(redirectUrl, backUrl);
+        }
 
-		/// <summary>
-		/// Redirects to the specified page and supply a query string argument for bacjward redirect.
-		/// </summary>
-		/// <param name="redirectUrl">An URL to redirect to.</param>
-		/// <param name="backUrl">A back URL.</param>
-		protected virtual void RedirectWithBack(string redirectUrl, string backUrl)
-		{
-		    Utils.Generic.RedirectWithReturnTo(redirectUrl, backUrl, Response);
-		}
+        /// <summary>
+        /// Redirects to the specified page and supply a query string argument for bacjward redirect.
+        /// </summary>
+        /// <param name="redirectUrl">An URL to redirect to.</param>
+        /// <param name="backUrl">A back URL.</param>
+        protected virtual void RedirectWithBack(string redirectUrl, string backUrl)
+        {
+            Utils.Generic.RedirectWithReturnTo(redirectUrl, backUrl, Response);
+        }
 
-	    /// <summary>
-		/// Redirects the user to the previous page.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		protected void btnCancel_Click(object sender, EventArgs e)
-		{
-			ReturnToPreviousPage();
-		}
+        /// <summary>
+        /// Redirects the user to the previous page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            ReturnToPreviousPage();
+        }
 
-		private void Master_Navigating(object sender, NavigatingEventArgs e)
-		{
-			e.Cancel = SaveDirty && !ValidateAndSave() && !Page.IsValid;
-		}
+        private void Master_Navigating(object sender, NavigatingEventArgs e)
+        {
+            e.Cancel = SaveDirty && !ValidateAndSave() && !Page.IsValid;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }
 
