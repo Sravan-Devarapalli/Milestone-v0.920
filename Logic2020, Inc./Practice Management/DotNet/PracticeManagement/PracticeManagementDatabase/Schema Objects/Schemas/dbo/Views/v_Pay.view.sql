@@ -22,20 +22,16 @@ AS
 	                WHEN 2 THEN p.Amount / HPY.HoursPerYear
 	                ELSE p.Amount
 	            END AS DECIMAL(18,2)) AS AmountHourly,
-	       p.TimesPaidPerMonth,
-	       p.Terms,
 	       p.VacationDays,
 	       p.BonusAmount,
 	       p.BonusHoursToCollect,
 	       CAST(CASE p.BonusHoursToCollect WHEN HPY.HoursPerYear THEN 1 ELSE 0 END AS BIT) AS IsYearBonus,
-	       p.DefaultHoursPerDay,
 	       t.Name AS TimescaleName,
-		   p.SeniorityId,
 		   p.PracticeId,
-		   DC.FractionOfMargin SalesCommissionFractionOfMargin
+		   p.TitleId,
+		   p.SLTApproval,
+		   p.SLTPTOApproval
 	  FROM dbo.Pay AS p
 		   INNER JOIN dbo.GetFutureDateTable() FT ON 1 = 1
 		   INNER JOIN dbo.GetHoursPerYearTable() HPY ON 1 = 1
 	       INNER JOIN dbo.Timescale AS t ON p.Timescale = t.TimescaleId
-		   LEFT JOIN dbo.DefaultCommission DC
-		   ON DC.[type] = 1 AND DC.PersonId = p.Person AND DC.StartDate = p.StartDate
