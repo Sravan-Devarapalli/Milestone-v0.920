@@ -329,7 +329,7 @@
     <value>Grand Total: {0}</value>
   </data>
   <data name="CancelAndReturn" xml:space="preserve">
-    <value>Cancel and return</value>
+    <value>Cancel and Return</value>
     <comment>CancelAndReturn description</comment>
   </data>
   <data name="TimeTypeAddedSuccessfully" xml:space="preserve">
@@ -383,5 +383,7 @@
   <data name="EventSourceSecurity" xml:space="preserve">
     <value>Security Events</value>
   </data>
+  <data name="CssCompanyDayOnFloatingDay" xml:space="preserve">
+    <value>CompanyDayOnFloatingDay</value>
+  </data>
 </root>
-
