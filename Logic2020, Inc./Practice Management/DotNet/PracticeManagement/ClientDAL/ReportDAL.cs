@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DataTransferObjects.Reports;
-using System.Data.SqlClient;
-using DataAccess.Other;
 using System.Data;
-using DataTransferObjects;
-using DataTransferObjects.TimeEntry;
 using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using DataAccess.Other;
+using DataTransferObjects;
+using DataTransferObjects.Reports;
 using DataTransferObjects.Reports.ByAccount;
 using DataTransferObjects.Reports.HumanCapital;
+using DataTransferObjects.TimeEntry;
 
 namespace DataAccess
 {
@@ -1772,7 +1771,7 @@ namespace DataAccess
             return person;
         }
 
-        public static List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string seniorityIds, string hireDates, string recruiterIds)
+        public static List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string titleIds, string hireDates, string recruiterIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.NewHireReport, connection))
@@ -1787,7 +1786,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonDivisionIdsParam, personDivisionIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TitleIdsParam, titleIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.HireDatesParam, hireDates);
                 command.Parameters.AddWithValue(Constants.ParameterNames.RecruiterIdsParam, recruiterIds);
 
@@ -1815,10 +1814,10 @@ namespace DataAccess
                 int recruiterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterIdColumn);
                 int recruiterFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterFirstNameColumn);
                 int recruiterLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterLastNameColumn);
-                int personSeniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityId);
-                int personSeniorityNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonSeniorityName);
-                int seniorityCategoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategoryId);
-                int seniorityCategoryIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategory);
+                int personTitleIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonTitleId);
+                int personTitleIndex = reader.GetOrdinal(Constants.ColumnNames.PersonTitle);
+                int titleTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleTypeId);
+                int titleTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TitleType);
                 int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
                 int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
 
@@ -1855,23 +1854,22 @@ namespace DataAccess
                 {
                     var person = ReadBasicPersonDetails(reader, personIdIndex, firstNameIndex, lastNameIndex, personStatusIdIndex, personStatusNameIndex, timeScaleIndex, timescaleNameIndex);
 
-                    var recruiterList = new List<RecruiterCommission>();
                     if (!reader.IsDBNull(recruiterIdIndex))
                     {
-                        var recruiterCommission = new RecruiterCommission { Recruiter = new Person { Id = reader.GetInt32(recruiterIdIndex), FirstName = reader.GetString(recruiterFirstNameIndex), LastName = reader.GetString(recruiterLastNameIndex) } };
-                        recruiterList.Add(recruiterCommission);
+                        person.RecruiterId = reader.GetInt32(recruiterIdIndex);
+                        person.RecruiterFirstName = reader.GetString(recruiterFirstNameIndex);
+                        person.RecruiterLastName = reader.GetString(recruiterLastNameIndex);
                     }
-                    person.RecruiterCommission = recruiterList;
-                    if (!reader.IsDBNull(timeScaleIndex))
+                    if (!reader.IsDBNull(personTitleIdIndex))
                     {
-                        person.Seniority = new Seniority
+                        person.Title = new Title
                         {
-                            Id = reader.GetInt32(personSeniorityIdIndex),
-                            Name = reader.GetString(personSeniorityNameIndex),
-                            SeniorityCategory = new SeniorityCategory()
+                            TitleId = reader.GetInt32(personTitleIdIndex),
+                            TitleName = reader.GetString(personTitleIndex),
+                            TitleType = new TitleType()
                             {
-                                Id = reader.GetInt32(seniorityCategoryIdIndex),
-                                Name = reader.GetString(seniorityCategoryIndex)
+                                TitleTypeId = reader.GetInt32(titleTypeIdIndex),
+                                TitleTypeName = reader.GetString(titleTypeIndex)
                             }
                         };
                     }
@@ -1897,7 +1895,7 @@ namespace DataAccess
             }
         }
 
-        public static TerminationPersonsInRange TerminationReport(DateTime startDate, DateTime endDate, string payTypeIds, string personStatusIds, string seniorityIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates)
+        public static TerminationPersonsInRange TerminationReport(DateTime startDate, DateTime endDate, string payTypeIds, string personStatusIds, string titleIds, string terminationReasonIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string recruiterIds, string hireDates, string terminationDates)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TerminationReport, connection))
@@ -1909,7 +1907,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimeScaleIdsParam, payTypeIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatusIds);
-                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TitleIdsParam, titleIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TerminationReasonIdsParam, terminationReasonIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
