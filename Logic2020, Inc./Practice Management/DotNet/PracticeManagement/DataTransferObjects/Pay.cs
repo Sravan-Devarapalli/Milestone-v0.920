@@ -6,7 +6,7 @@ namespace DataTransferObjects
 {
     [DataContract]
 	[Serializable]
-	public class Pay
+	public class Pay : ICloneable
 	{
 		#region Constants
 
@@ -134,26 +134,6 @@ namespace DataTransferObjects
         }
 
 		/// <summary>
-		/// Gets or sets a number of times paid per month.
-		/// </summary>
-		[DataMember]
-		public int? TimesPaidPerMonth
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the payment terms.
-		/// </summary>
-		[DataMember]
-		public int? Terms
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// Gets or sets a number of the vacation days per year.
 		/// </summary>
 		[DataMember]
@@ -193,40 +173,21 @@ namespace DataTransferObjects
 			set;
 		}
 
-		/// <summary>
-		/// Gets or sets a number of the hours per day expected to be billable.
-		/// </summary>
-		[DataMember]
-		public decimal DefaultHoursPerDay
-		{
-			get;
-			set;
-		}
-
         /// <summary>
-        ///Seniority Id of the person which will be active from the start date.
+        /// TitleId of the person which will be active from the start date.
         /// </summary>
         [DataMember]
-        public int? SeniorityId
+        public int? TitleId
         {
             set;
             get;
         }
 
         /// <summary>
-        ///Seniority Name of the person which will be active from the start date.
+        /// TitleName of the person which will be active from the start date.
         /// </summary>
         [DataMember]
-        public string SeniorityName
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
-        /// Title of the person which will be active from the start date.
-        /// </summary>
-        public Title title
+        public string TitleName
         {
             set;
             get;
@@ -261,10 +222,43 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public decimal? SalesCommissionFractionOfMargin
+        public bool SLTApproval
         {
             set;
             get;
+        }
+
+        [DataMember]
+        public bool SLTPTOApproval
+        {
+            set;
+            get;
+        }
+
+        public object Clone()
+        {
+            return (object) new Pay()
+            {
+                PersonId = this.PersonId,
+                StartDate = this.StartDate,
+                EndDate = this.EndDate,
+                OldStartDate = this.OldStartDate,
+                OldEndDate = this.OldEndDate,
+                Amount = this.Amount,
+                Timescale = this.Timescale,
+                TimescaleName = this.TimescaleName,
+                AmountHourly = this.AmountHourly,
+                VacationDays = this.VacationDays,
+                BonusAmount = this.BonusAmount,
+                BonusHoursToCollect = this.BonusHoursToCollect,
+                IsYearBonus = this.IsYearBonus,
+                TitleId = this.TitleId,
+                TitleName = this.TitleName,
+                PracticeId = this.PracticeId,
+                PracticeName = this.PracticeName,
+                SLTApproval = this.SLTApproval,
+                SLTPTOApproval = this.SLTPTOApproval
+            };
         }
 
 		#endregion
