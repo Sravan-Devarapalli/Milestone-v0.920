@@ -1,28 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.ServiceModel;
+using System.Threading;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
-using DataTransferObjects.Utils;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using PraticeManagement.Configuration;
 using PraticeManagement.Controls;
-using PraticeManagement.Events;
 using PraticeManagement.PersonService;
-using Resources;
 using PraticeManagement.Security;
-using PraticeManagement.OpportunityService;
-using DataTransferObjects.ContextObjects;
 using PraticeManagement.Utils;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using System.IO;
-using System.Threading;
+using Resources;
 
 namespace PraticeManagement
 {
@@ -40,10 +36,6 @@ namespace PraticeManagement
         private const string lblTerminationDateErrorFormat = "Unable to set Termination Date for {0} due to the following:";
         private const string lblOwnerProjectsExistFormat = "{0} is designated as the Owner for the following project(s):";
         private const string lblOwnerOpportunitiesFormat = "{0} is designated as the Owner for the following Opportunities:";
-        public const string StartDateIncorrect = "The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
-        public const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
-        public const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
-        public const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
         private const string TerminationReasonFirstItem = "- - Select Termination Reason - -";
         private const string CloseAnActiveCompensation = "This person still has an active compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
         private const string CloseAnOpenEndedCompensation = "This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
@@ -52,9 +44,15 @@ namespace PraticeManagement
         private const string CancelTerminationMessage = "Following are the list of projects in which {0} resource's end date(s)  were set to his/her previous termination date automatically. Please reset the end dates for {0} in the below listed 'Projects-Milestones' if applicable.";
         private const string displayNone = "displayNone";
         public const string SalaryToContractException = "Salary Type to Contract Type Violation";
-        public const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\"";
+        public const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\".";
         public const string EmployeePayTypeChangeVoilationMessage = "On changing employee pay type, Time-Off(s) related to previous pay type existing in the new pay type date range will be deleted. Click ok to continue or click cancel to exit without saving the changes.";
-        
+        public const string StartDateIncorrect = "The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
+        public const string EndDateIncorrect = "The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first.";
+        public const string PeriodIncorrect = "The period is incorrect. There records falls into the period specified in an existing record.";
+        public const string HireDateInCorrect = "Person cannot have the compensation for the days before his hire date.";
+        public const string SLTApprovalPopUpMessage = "The inputted value is outside of the approved salary band for this level. A salary figure outside of the band requires approval from a member of the Senior Leadership Team. Please ensure that you have received that approval before continuing.";
+        public const string SLTPTOApprovalPopUpMessage = "Any change to a person's allotted PTO accrual requires approval from a member of the Senior Leadership Team. Please ensure that you have received that approval before continuing.";
+
         #endregion
 
         #region Fields
@@ -65,6 +63,11 @@ namespace PraticeManagement
         private bool? _userIsHRValue;
         private bool IsErrorPanelDisplay;
         private bool IsOtherPanelDisplay;
+        private Pay payForcvEmployeePayTypeChangeViolation;
+        private ExceptionDetail internalException;
+        private bool DisableValidatecustTerminateDateTE;
+        private int FinalWizardView = 2;
+        private int StartingWizardView = 0;
 
         #endregion Fields
 
@@ -139,10 +142,10 @@ namespace PraticeManagement
                 {
                     if (!string.IsNullOrEmpty(this.hdnPersonId.Value))
                     {
-                        int projectid;
-                        if (Int32.TryParse(this.hdnPersonId.Value, out projectid))
+                        int _personid;
+                        if (Int32.TryParse(this.hdnPersonId.Value, out _personid))
                         {
-                            return projectid;
+                            return _personid;
                         }
                     }
                     return null;
@@ -183,12 +186,6 @@ namespace PraticeManagement
 
                 return _userIsHRValue.Value;
             }
-        }
-
-        public bool UserIsRecruiter
-        {
-            get { return (bool)ViewState["UserIsRecruiter"]; }
-            set { ViewState["UserIsRecruiter"] = value; }
         }
 
         private Pay PayFooter
@@ -281,8 +278,6 @@ namespace PraticeManagement
 
         public override Person PersonUnsavedData { get; set; }
 
-        public override string LoginPageUrl { get; set; }
-
         public override PersonPermission Permissions { get; set; }
 
         public bool IsStatusChangeClicked
@@ -361,22 +356,69 @@ namespace PraticeManagement
             }
         }
 
+        private bool IsWizards
+        {
+            get
+            {
+                if (ViewState["IsWizards"] == null)
+                {
+                    ViewState["IsWizards"] = false;
+                }
+                return (bool)ViewState["IsWizards"];
+            }
+            set
+            {
+                ViewState["IsWizards"] = value;
+            }
+        }
+
+        private int ActiveWizard
+        {
+            get
+            {
+                if (ViewState["ActiveWizard"] == null)
+                {
+                    ViewState["ActiveWizard"] = StartingWizardView;
+                }
+                return (int)ViewState["ActiveWizard"];
+            }
+            set
+            {
+                ViewState["ActiveWizard"] = value;
+            }
+        }
+
+        private Dictionary<int, int[]> ActiveWizardsArray
+        {
+            get
+            {
+                Dictionary<int, int[]> _ActiveWizardsArray = new Dictionary<int, int[]>();
+                _ActiveWizardsArray.Add(0, new int[] { 0 });
+                _ActiveWizardsArray.Add(1, new int[] { 0, 1 });
+                _ActiveWizardsArray.Add(2, new int[] { 0, 1, 2 });
+                return _ActiveWizardsArray;
+            }
+        }
+
+        private string Email
+        {
+            get
+            {
+                string email = string.Empty;
+                email = !string.IsNullOrEmpty(txtEmailAddress.Text) ? txtEmailAddress.Text + '@' + ddlDomain.SelectedValue : string.Empty;
+                return email;
+            }
+        }
+
         #endregion
+
+        #region Events
 
         #region Page Events
 
         protected void Page_Load(object sender, EventArgs e)
         {
             mlConfirmation.ClearMessage();
-            if (!IsPostBack)
-            {
-                DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, string.Empty);
-                DataHelper.FillPersonDivisionList(ddlDivision);
-                txtFirstName.Focus();
-                UserIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
-                AddTriggersToUpdatePanel(false);
-            }
-
             AllowContinueWithoutSave = cellActivityLog.Visible = PersonId.HasValue;
             personOpportunities.TargetPersonId = PersonId;
             mlError.ClearMessage();
@@ -392,133 +434,45 @@ namespace PraticeManagement
         {
             // Security
             chblRoles.Visible =
-                btnResetPassword.Visible = locRolesLabel.Visible = chbLockedOut.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
+            btnResetPassword.Visible =
+            locRolesLabel.Visible =
+            ddlRecruiter.Enabled =
+            cellPermissions.Visible =
+            chbLockedOut.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
             txtEmployeeNumber.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
+            lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
 
             if (!UserIsAdministrator && !UserIsHR && !PersonId.HasValue)//#2817 UserisHR is added as per requirement.
             {
                 // Recruiter should not be able to set the person active.
                 PersonStatusId = PersonStatusType.Contingent;
             }
-            recruiterInfo.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
-            lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
-            btnAddDefaultRecruitingCommission.Enabled = UserIsAdministrator || UserIsRecruiter || UserIsHR;//#2817 UserisHR is added as per requirement.
-            cellPermissions.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
 
             //Disable TerminationDate, TerminationReason
             DisableTerminationDateAndReason();
 
             ddlPersonStatus.Visible = !(lblPersonStatus.Visible = btnChangeEmployeeStatus.Visible = PersonId.HasValue);
             btnAddCompensation.Enabled = !(PersonStatusId == PersonStatusType.Terminated);
+
+            DisableInactiveViews();
+            DisplayWizardButtons();
         }
 
         protected override void OnPreRender(EventArgs e)
         {
             base.OnPreRender(e);
+
             if (IsErrorPanelDisplay && !IsOtherPanelDisplay)
             {
                 PopulateErrorPanel();
             }
         }
 
-        private void DisableTerminationDateAndReason()
-        {
-            if (PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Terminated || (PrevPersonStatusId == (int)PersonStatusType.Contingent && dtpTerminationDate.DateValue == DateTime.MinValue))
-            {
-                if (PrevPersonStatusId != (int)PersonStatusType.Terminated && IsStatusChangeClicked && PersonStatusId == PersonStatusType.Terminated)
-                {
-                    ddlTerminationReason.Visible = true;
-                    txtTerminationReason.Visible = false;
-                    ddlTerminationReason.Enabled = false;
-                }
-                else if (PrevPersonStatusId != (int)PersonStatusType.Terminated)
-                {
-                    //FillTerminationReasonsByTerminationDate(null, ddlTerminationReason);
-                    ddlTerminationReason.Visible = false;
-                    txtTerminationReason.Visible = true;
-                }
-                else
-                {
-                    ddlTerminationReason.Enabled = false;
-                    ddlTerminationReason.Visible = true;
-                    txtTerminationReason.Visible = false;
-                }
-                dtpTerminationDate.EnabledTextBox = false;
-                dtpTerminationDate.ReadOnly = true;
-            }
-            else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && dtpTerminationDate.DateValue != DateTime.MinValue))
-            {
-                dtpTerminationDate.EnabledTextBox = true;
-                dtpTerminationDate.ReadOnly = false;
-
-                ddlTerminationReason.Visible = true;
-                txtTerminationReason.Visible = false;
-            }
-
-            if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
-            {
-                dtpHireDate.ReadOnly = true;
-                dtpHireDate.EnabledTextBox = false;
-            }
-        }
-
-        private void LoadChangeEmployeeStatusPopUpData()
-        {
-            if (PrevPersonStatusId == (int)PersonStatusType.Active)
-            {
-                rbnCancleTermination.CssClass =
-                rbnActive.CssClass =
-                divActive.Attributes["class"] =
-                rbnContingent.CssClass =
-                divContingent.Attributes["class"] = displayNone;
-
-                dtpPopUpTerminateDate.DateValue = DateTime.Now.Date;
-                rbnTerminate.CssClass = "";
-                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = !(rbnTerminate.Checked = true);
-                divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
-            }
-            else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && PreviousTerminationDate.HasValue))
-            {
-                rbnCancleTermination.CssClass = "";
-                rbnActive.Checked = rbnTerminate.Checked = rbnContingent.Checked = rbnCancleTermination.Checked = false;
-
-                rbnActive.CssClass =
-                rbnTerminate.CssClass =
-                rbnContingent.CssClass =
-                divActive.Attributes["class"] =
-                divTerminate.Attributes["class"] =
-                divContingent.Attributes["class"] = displayNone;
-            }
-            else if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
-            {
-                dtpActiveHireDate.DateValue = dtpHireDate.DateValue;
-                dtpPopUpTerminateDate.DateValue = DateTime.Now.Date;
-
-                rbnActive.CssClass = rbnTerminate.CssClass = "";
-                rbnCancleTermination.CssClass =
-                rbnContingent.CssClass =
-                divActive.Attributes["class"] =
-                divContingent.Attributes["class"] =
-                divTerminate.Attributes["class"] = displayNone;
-                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
-            }
-            else if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
-            {
-                dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PreviousTerminationDate.Value.AddDays(1);
-
-                rbnActive.CssClass = rbnContingent.CssClass = "";
-                rbnCancleTermination.CssClass =
-                divActive.Attributes["class"] =
-                rbnTerminate.CssClass =
-                divTerminate.Attributes["class"] =
-                divContingent.Attributes["class"] = displayNone;
-                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
-            }
-
-            FillTerminationReasonsByTerminationDate(dtpPopUpTerminateDate, ddlPopUpTerminationReason);
-        }
-
         #endregion
+
+        #region Control Events
+
+        #region mpeChangeStatusEndCompensation Events
 
         protected void btnEndCompensationOk_Click(object sender, EventArgs e)
         {
@@ -533,6 +487,10 @@ namespace PraticeManagement
             ResetToPreviousData();
             mpeChangeStatusEndCompensation.Hide();
         }
+
+        #endregion
+
+        #region mpeEmployeePayTypeChange Events
 
         protected void btnEmployeePayTypeChangeViolationOk_Click(object sender, EventArgs e)
         {
@@ -568,6 +526,10 @@ namespace PraticeManagement
             mpeEmployeePayTypeChange.Hide();
         }
 
+        #endregion
+
+        #region mpeHireDateChange Events
+
         protected void btnHireDateChangeOk_Click(object sender, EventArgs e)
         {
             cvHireDateChange.Enabled = false;
@@ -580,6 +542,10 @@ namespace PraticeManagement
             ResetToPreviousData();
             mpeHireDateChange.Hide();
         }
+
+        #endregion
+
+        #region mpeRehireConfirmation Events
 
         protected void btnRehireConfirmationOk_Click(object sender, EventArgs e)
         {
@@ -617,44 +583,9 @@ namespace PraticeManagement
             mpeRehireConfirmation.Hide();
         }
 
-        protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
-        {
-            FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlTerminationReason);
-        }
+        #endregion
 
-        private void FillTerminationReasonsByTerminationDate(DatePicker terminationDate, ListControl ddlTerminationReasons)
-        {
-            var reasons = new List<TerminationReason>();
-            if (terminationDate != null)
-            {
-                ddlTerminationReasons.SelectedValue = string.Empty;
-                if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
-                {
-                    reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsContigent == true).ToList();
-                }
-                else if (GetDate(terminationDate.DateValue).HasValue && PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date)))
-                {
-                    var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date));
-                    switch (pay.Timescale)
-                    {
-                        case TimescaleType.Hourly:
-                            reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2HourlyRule == true).ToList();
-                            break;
-                        case TimescaleType.Salary:
-                            reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2SalaryRule == true).ToList();
-                            break;
-                        case TimescaleType._1099Ctc:
-                        case TimescaleType.PercRevenue:
-                            reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.Is1099Rule == true).ToList();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            DataHelper.FillTerminationReasonsList(ddlTerminationReasons, TerminationReasonFirstItem, reasons.ToArray());
-        }
+        #region mpeViewPersonChangeStatus Events
 
         protected void dtpPopUpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
@@ -663,23 +594,11 @@ namespace PraticeManagement
             mpeViewPersonChangeStatus.Show();
         }
 
-        protected void btnChangeEmployeeStatus_Click(object sender, EventArgs e)
-        {
-            LoadChangeEmployeeStatusPopUpData();
-            mpeViewPersonChangeStatus.Show();
-        }
-
         protected void btnCancelChangePersonStatus_Click(object source, EventArgs args)
         {
             IsStatusChangeClicked = false;
             ResetToPreviousData();
             mpeViewPersonChangeStatus.Hide();
-        }
-
-        private void ResetToPreviousData()
-        {
-            var person = GetPerson(PersonId);
-            PopulateControls(person);
         }
 
         protected void btnOkChangePersonStatus_Click(object source, EventArgs args)
@@ -765,7 +684,6 @@ namespace PraticeManagement
                         txtTerminationReason.Visible = false;
                         ddlTerminationReason.SelectedValue = TerminationReasonId;
                     }
-                    AddTriggersToUpdatePanel(IsStatusChangeClicked);
                     Save_Click(source, args);
                 }
             }
@@ -775,9 +693,63 @@ namespace PraticeManagement
             }
         }
 
-        protected void recruiterInfo_InfoChanged(object sender, EventArgs e)
+        #endregion
+
+        #region mpeCancelTermination Events
+
+        protected void btnCancleTerminationOKButton_OnClick(object source, EventArgs args)
         {
-            IsDirty = true;
+            custCancelTermination.Enabled = false;
+            Save_Click(source, args);
+            mpeCancelTermination.Hide();
+        }
+
+        protected void btnCancelTerminationCancelButton_OnClick(object sender, EventArgs e)
+        {
+            ResetToPreviousData();
+            mpeCancelTermination.Hide();
+        }
+
+        #endregion
+
+        #region mpeViewTerminationDateErrors Events
+
+        protected void btnTerminationProcessCancel_OnClick(object source, EventArgs args)
+        {
+            ResetToPreviousData();
+            cvRehireConfirmation.Enabled = true;
+            mpeViewTerminationDateErrors.Hide();
+        }
+
+        protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
+        {
+            DisableValidatecustTerminateDateTE = true;
+            cvEndCompensation.Enabled = false;
+            if (!IsRehire)
+            {
+                Save_Click(source, args);
+            }
+            else
+            {
+                GridViewRow gvRow = null;
+                if (gvCompensationHistory.EditIndex != -1)
+                {
+                    gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+                }
+                else
+                {
+                    if (gvCompensationHistory.ShowFooter)
+                    {
+                        gvRow = gvCompensationHistory.FooterRow;
+                    }
+                }
+                if (gvRow != null)
+                {
+                    var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                    imgUpdateCompensation_OnClick((Object)imgUpdate, new EventArgs());
+                }
+            }
+            mpeViewTerminationDateErrors.Hide();
         }
 
         protected void lnkSaveReport_OnClick(object sender, EventArgs e)
@@ -792,56 +764,19 @@ namespace PraticeManagement
             HTMLToPdf(html, "Information");
         }
 
-        public void HTMLToPdf(String HTML, string filename)
-        {
-            var document = new iTextSharp.text.Document();
-            iTextSharp.text.pdf.PdfWriter.GetInstance(document, new FileStream(Request.PhysicalApplicationPath + @"\" + filename + ".pdf", FileMode.Create));
+        #endregion
 
-            document.Open();
-            var styles = new iTextSharp.text.html.simpleparser.StyleSheet();
-            var hw = new iTextSharp.text.html.simpleparser.HTMLWorker(document);
-            hw.Parse(new StringReader(HTML));
-            document.Close();
-            HttpContext.Current.Response.Clear();
-            HttpContext.Current.Response.ContentType = "Application/pdf";
-            HttpContext.Current.Response.AddHeader(
-                "content-disposition", string.Format("attachment; filename={0}", filename + ".pdf"));
-            HttpContext.Current.Response.WriteFile(Request.PhysicalApplicationPath + @"\" + filename + ".pdf");
+        protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
+        {
+            FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlTerminationReason);
         }
 
-        private void AddTriggersToUpdatePanel(bool addPostBackTrigger)
+        protected void btnChangeEmployeeStatus_Click(object sender, EventArgs e)
         {
-            //if (upnlBody.Triggers.Count > 3)
-            //{
-            //    upnlBody.Triggers.RemoveAt(3);
-            //    upnlBody.Triggers.RemoveAt(3);
-            //    upnlBody.Triggers.RemoveAt(3);
-            //}
-            //if (addPostBackTrigger)
-            //{
-            //    var trBtnsave = new PostBackTrigger { ControlID = "btnSave" };
-            //    var trBntEndCompensationOk = new PostBackTrigger { ControlID = "bntEndCompensationOk" };
-            //    var trBtnTerminationProcessOk = new PostBackTrigger { ControlID = "btnTerminationProcessOK" };
-            //    upnlBody.Triggers.Add(trBtnsave);
-            //    upnlBody.Triggers.Add(trBntEndCompensationOk);
-            //    upnlBody.Triggers.Add(trBtnTerminationProcessOk);
-            //}
-            //else
-            //{
-            //    var trBtnsave = new AsyncPostBackTrigger { ControlID = "btnSave", EventName = "click" };
-            //    var trBntEndCompensationOk = new AsyncPostBackTrigger { ControlID = "bntEndCompensationOk", EventName = "click" };
-            //    var trBtnTerminationProcessOk = new AsyncPostBackTrigger { ControlID = "btnTerminationProcessOK", EventName = "click" };
-            //    upnlBody.Triggers.Add(trBtnsave);
-            //    upnlBody.Triggers.Add(trBntEndCompensationOk);
-            //    upnlBody.Triggers.Add(trBtnTerminationProcessOk);
-            //}
+            LoadChangeEmployeeStatusPopUpData();
+            mpeViewPersonChangeStatus.Show();
         }
 
-        /// <summary>
-        /// Saves the user's input.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected void btnSave_Click(object sender, EventArgs e)
         {
             var updatePersonStatusDropdown = true;
@@ -860,167 +795,28 @@ namespace PraticeManagement
             }
         }
 
-        private void FillAllPersonStatuses(PersonStatusType PersonStatusId)
-        {
-            DataHelper.FillPersonStatusList(ddlPersonStatus);
-            ddlPersonStatus.SelectedValue = ((int)PersonStatusId).ToString();
-        }
-
-        protected void btnCancleTerminationOKButton_OnClick(object source, EventArgs args)
-        {
-            custCancelTermination.Enabled = false;
-            Save_Click(source, args);
-            mpeCancelTermination.Hide();
-        }
-
-        protected void btnCancelTerminationCancelButton_OnClick(object sender, EventArgs e)
-        {
-            ResetToPreviousData();
-            mpeCancelTermination.Hide();
-        }
-
-        private void Save_Click(object sender, EventArgs e)
-        {
-            int viewindex = mvPerson.ActiveViewIndex;
-            TableCell CssSelectCell = null;
-            foreach (TableCell item in tblPersonViewSwitch.Rows[0].Cells)
-            {
-                if (!string.IsNullOrEmpty(item.CssClass))
-                {
-                    CssSelectCell = item;
-                }
-            }
-
-            if (ValidateAndSave() && Page.IsValid)
-            {
-                ClearDirty();
-                mlError.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
-                IsErrorPanelDisplay = true;
-            }
-            if (!string.IsNullOrEmpty(ExMessage) || Page.IsValid)
-            {
-                mvPerson.ActiveViewIndex = viewindex;
-                SetCssClassEmpty();
-                CssSelectCell.CssClass = "SelectedSwitch";
-            }
-            if (Page.IsValid && PersonId.HasValue)
-            {
-                var person = GetPerson(PersonId);
-                if (person != null)
-                {
-                    gvCompensationHistory.EditIndex = -1;
-                    lblEmployeeNumber.Visible = true;
-                    txtEmployeeNumber.Visible = true;
-                    PayHistory = person.PaymentHistory;
-                    PopulateControls(person);
-                }
-            }
-        }
-
-        protected override bool ValidateAndSave()
-        {
-            return ValidateAndSavePersonDetails();
-        }
-
-        private void ValidatePage()
-        {
-            custTerminateDateTE.Enabled = false;
-            int activeindex = mvPerson.ActiveViewIndex;
-            for (int i = 0, j = mvPerson.ActiveViewIndex; i < mvPerson.Views.Count; i++, j++)
-            {
-                if (j == mvPerson.Views.Count)
-                {
-                    j = 0;
-                }
-                SelectView(rowSwitcher.Cells[j].Controls[0], j, true);
-                Page.Validate(valsPerson.ValidationGroup);
-                if (!Page.IsValid)
-                {
-                    break;
-                }
-            }
-
-            if (cvEndCompensation.Enabled && Page.IsValid)
-            {
-                //Page.Validate("EndCompensation");
-                cvEndCompensation.Validate();
-                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
-            }
-
-            if (cvHireDateChange.Enabled && Page.IsValid)
-            {
-                cvHireDateChange.Validate();
-                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
-            }
-
-            if (custCancelTermination.Enabled && Page.IsValid)
-            {
-                custCancelTermination.Validate();
-                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
-            }
-
-            if (!DisableValidatecustTerminateDateTE && Page.IsValid)
-            {
-                custTerminateDateTE.Enabled = true;
-                //Page.Validate(valsPerson.ValidationGroup);
-                custTerminateDateTE.Validate();
-                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
-            }
-            if (!Page.IsValid)
-            {
-                IsErrorPanelDisplay = true;
-            }
-        }
-
-        public bool ValidateAndSavePersonDetails()
-        {
-            ValidatePage();
-            if (Page.IsValid)
-            {
-                int? personId = SaveData();
-                if (personId.HasValue)
-                {
-                    PersonId = personId;
-                    ClearDirty();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Switches the MultiView with the <see cref="Person"/> details.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             int viewIndex = int.Parse((string)e.CommandArgument);
 
-            if (SaveDirty && (mvPerson.Views[viewIndex] == vwRates || mvPerson.Views[viewIndex] == vwWhatIf) &&
-                !ValidateAndSave())
+            if (SaveDirty && !ValidateAndSave())
             {
                 return;
             }
 
             SelectView((Control)sender, viewIndex, false);
 
-            if (viewIndex == 10) //History
+            if (mvPerson.Views[viewIndex] == vwActivityLog) //History
             {
                 activityLog.Update();
             }
 
-            if (viewIndex == 9) //Opportunities
+            if (mvPerson.Views[viewIndex] == vwOpportunities) //Opportunities
             {
                 personOpportunities.DatabindOpportunities();
             }
         }
 
-        /// <summary>
-        /// Redirects to Compensation Details page
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected void btnStartDate_Command(object sender, CommandEventArgs e)
         {
             if (!SaveDirty || (ValidateAndSave() && Page.IsValid))
@@ -1060,52 +856,11 @@ namespace PraticeManagement
             }
         }
 
-        protected void btnRecruitingCommissionStartDate_Command(object sender, CommandEventArgs e)
-        {
-            if (!SaveDirty || (ValidateAndSave() && Page.IsValid))
-            {
-                Redirect(
-                    string.Format(Constants.ApplicationPages.RedirectPersonIdFormat,
-                                  Constants.ApplicationPages.DefaultRecruitingCommissionDetail,
-                                  e.CommandArgument,
-                                  PersonId), PersonId.Value.ToString());
-            }
-        }
-
-        protected void btnAddDefaultRecruitingCommission_Click(object sender, EventArgs e)
-        {
-            if (!PersonId.HasValue)
-            {
-                // Save a New Record
-                ValidatePage();
-                if (Page.IsValid)
-                {
-                    int? personId = SaveData();
-                    if (Page.IsValid)
-                    {
-                        Redirect(string.Format(Constants.ApplicationPages.RedirectPersonIdFormat,
-                                               Constants.ApplicationPages.DefaultRecruitingCommissionDetail,
-                                               string.Empty,
-                                               personId),
-                                 personId.ToString());
-                    }
-                }
-            }
-            else if (!SaveDirty || (ValidateAndSave() && Page.IsValid))
-            {
-                Redirect(
-                    string.Format(Constants.ApplicationPages.RedirectPersonIdFormat,
-                                  Constants.ApplicationPages.DefaultRecruitingCommissionDetail,
-                                  string.Empty,
-                                  PersonId), PersonId.Value.ToString());
-            }
-        }
-
         protected void btnUnlock_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtEmailAddress.Text) && !IsDirty)
+            if (!string.IsNullOrEmpty(Email) && !IsDirty)
             {
-                MembershipUser user = Membership.GetUser(txtEmailAddress.Text);
+                MembershipUser user = Membership.GetUser(Email);
 
                 if (user != null)
                 {
@@ -1116,9 +871,9 @@ namespace PraticeManagement
 
         protected void btnResetPassword_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtEmailAddress.Text) && !IsDirty)
+            if (!string.IsNullOrEmpty(Email) && !IsDirty)
             {
-                MembershipUser user = Membership.GetUser(txtEmailAddress.Text);
+                MembershipUser user = Membership.GetUser(Email);
 
                 if (user != null)
                 {
@@ -1126,205 +881,71 @@ namespace PraticeManagement
                     btnResetPassword.Visible = false;
                     lblPaswordResetted.Visible = true;
                     chbLockedOut.Checked = user.IsLockedOut;
-                }
-            }
-        }
 
-        private void SetCssClassEmpty()
-        {
-            foreach (TableCell cell in tblPersonViewSwitch.Rows[0].Cells)
-            {
-                cell.CssClass = string.Empty;
-            }
-        }
-
-        private void SelectView(Control sender, int viewIndex, bool selectOnly)
-        {
-            mvPerson.ActiveViewIndex = viewIndex;
-
-            SetCssClassEmpty();
-
-            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
-
-            if (mvPerson.GetActiveView() == vwWhatIf && !selectOnly)
-            {
-                // Recalculation the rates
-                DisplayCalculatedRate();
-            }
-        }
-
-        private void DisplayCalculatedRate()
-        {
-            if (!SaveDirty || (ValidateAndSave() && Page.IsValid))
-            {
-                /*
-                 *  There's no need to call GetPerson, because it
-                 *      calls PersonRateCalculator constructor,
-                 *      which will later be called in WhatIf.DisplayCalculatorRate
-                 *      
-                 *      Also, WhatIf doesn't use any Person properties
-                 *      except of PersonId
-                 */
-                //Person person = GetPerson(SelectedId);
-
-                var fakePerson = new Person { Id = PersonId };
-                fakePerson.PaymentHistory = PayHistory;
-                fakePerson.TerminationDate = TerminationDate;
-                whatIf.Person = fakePerson; // person;
-            }
-        }
-
-        private void DisplayPersonPermissions()
-        {
-            ShowPermissionsPerPage();
-            ShowPermissionsPerEntities();
-        }
-
-        private void ShowPermissionsPerEntities()
-        {
-            //  If we're editing existing user and having administrators rights
-            if (PersonId.HasValue && (UserIsAdministrator || UserIsHR))//#2817 UserisHR is added as per requirement.
-            {
-                rpPermissions.Visible = true;
-                var permissions = DataHelper.GetPermissions(new Person { Id = PersonId.Value });
-                rpPermissions.ApplyPermissions(permissions);
-            }
-        }
-
-        private void ShowPermissionsPerPage()
-        {
-            var permDiff = new List<PermissionDiffeneceItem>();
-
-            IPrincipal userNew =
-                new GenericPrincipal(new GenericIdentity(txtEmailAddress.Text), GetSelectedRoles().ToArray());
-            IPrincipal userCurrent =
-                new GenericPrincipal(new GenericIdentity(txtEmailAddress.Text),
-                                     Roles.GetRolesForUser(txtEmailAddress.Text));
-
-            // Retrieve and sort locations
-            System.Configuration.Configuration config =
-                WebConfigurationManager.OpenWebConfiguration(Request.ApplicationPath);
-            var locationsSorted = new List<ConfigurationLocation>(config.Locations.Count);
-            locationsSorted.AddRange(config.Locations.Cast<ConfigurationLocation>());
-
-            // Evaluate and display permissions for secure pages
-            foreach (var location in locationsSorted.OrderBy(location => location.Path))
-            {
-                var description =
-                    location.OpenConfiguration().GetSection("locationDescription") as
-                    LocationDescriptionConfigurationSection;
-                if (description != null && !string.IsNullOrEmpty(description.Title))
-                {
-                    permDiff.Add(new PermissionDiffeneceItem
-                    {
-                        Title = description.Title,
-                        Old = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userNew, "GET"),
-                        New = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userCurrent, "GET")
-                    });
-                }
-            }
-
-            gvPermissionDiffenrece.DataSource = permDiff;
-            gvPermissionDiffenrece.DataBind();
-        }
-
-        /// <summary>
-        /// Retrives the data and display them.
-        /// </summary>
-        protected override void Display()
-        {
-            rpPermissions.Visible = IsStatusChangeClicked = false;
-            if (Request.QueryString["ShowConfirmMessage"] != null && Request.QueryString["ShowConfirmMessage"] == "1")
-            {
-                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
-                IsErrorPanelDisplay = true;
-            }
-
-            if (!PersonId.HasValue)
-            {
-                var status = new List<PersonStatus>();
-                status.Add(new PersonStatus { Id = (int)PersonStatusType.Active, Name = PersonStatusType.Active.ToString() });
-                status.Add(new PersonStatus { Id = (int)PersonStatusType.Contingent, Name = PersonStatusType.Contingent.ToString() });
-                DataHelper.FillListDefault(ddlPersonStatus, string.Empty, status.ToArray(), true);
-                PersonStatusId = PersonStatusType.Active;
-                FillTerminationReasonsByTerminationDate(dtpTerminationDate, ddlTerminationReason);
-
-                ddlPersonStatus.Visible = true;
-                lblPersonStatus.Visible = false;
-                btnChangeEmployeeStatus.Visible = false;
-            }
-            else
-            {
-                DataHelper.FillPersonStatusList(ddlPersonStatus);
-            }
-            DataHelper.FillSenioritiesList(ddlSeniority);
-
-            chblRoles.DataSource = Roles.GetAllRoles();
-            chblRoles.DataBind();
-
-            int? id = PersonId;
-
-            personProjects.PersonId = id;
-            personProjects.UserIsAdministrator = UserIsAdministrator || UserIsHR; //#2817 UserIsHR is added as per requirement.
-
-            Person person = null;
-
-            if (id.HasValue) // Edit existing person mode
-            {
-                person = GetPerson(id);
-
-                if (person != null)
-                {
-                    PayHistory = person.PaymentHistory;
-                    PopulateControls(person);
-                }
-                else
-                {
-                    UpdateRecruiterList();
-                }
-            }
-            else // Add new person mode
-            {
-                // Hide Employee Number related controls
-                lblEmployeeNumber.Visible = false;
-                txtEmployeeNumber.Visible = false;
-                reqEmployeeNumber.Enabled = false;
-
-                cellRates.Visible = cellWhatIf.Visible = false;
-                btnResetPassword.Visible = false;
-
-                UpdateRecruiterList();
-            }
-
-            UpdateSalesCommissionState();
-            UpdateManagementCommissionState();
-
-            personOpportunities.DataBind();
-        }
-
-        private static Person GetPerson(int? id)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    var person = serviceClient.GetPersonDetail(id.Value);
-                    person.EmploymentHistory = serviceClient.GetPersonEmploymentHistoryById(person.Id.Value).ToList();
-                    return person;
-                }
-                catch (FaultException<ExceptionDetail>)
-                {
-                    serviceClient.Abort();
-                    throw;
                 }
             }
         }
 
         protected void dtpHireDate_SelectionChanged(object sender, EventArgs e)
         {
-            UpdateRecruiterList();
             IsDirty = true;
             dtpHireDate.Focus();
+            if (IsWizards)
+            {
+                personnelCompensation.StartDate = dtpHireDate.DateValue;
+            }
+        }
+
+        protected void ddlPersonTitle_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (IsWizards)
+            {
+                int titleId = 0;
+                int.TryParse(ddlPersonTitle.SelectedValue, out titleId);
+                personnelCompensation.TitleId = titleId == 0 ? (int?)null : titleId;
+                personnelCompensation.UpdatePTOHours();
+            }
+            else
+            {
+                hdTitleChanged.Value = 1.ToString();
+            }
+        }
+
+        protected void personnelCompensation_OnTitleChanged(object sender, EventArgs e)
+        {
+            if (IsWizards)
+            {
+                if (personnelCompensation.TitleId.HasValue)
+                    ddlPersonTitle.SelectedValue = personnelCompensation.TitleId.Value.ToString();
+                else
+                    ddlPersonTitle.SelectedIndex = 0;
+            }
+        }
+
+        protected void personnelCompensation_SaveDetails(object sender, EventArgs e)
+        {
+            btnNext_Click(btnNext, null);
+        }
+
+        protected void personnelCompensation_OnPracticeChanged(object sender, EventArgs e)
+        {
+            if (IsWizards)
+            {
+                if (personnelCompensation.PracticeId.HasValue)
+                    ddlDefaultPractice.SelectedValue = personnelCompensation.PracticeId.Value.ToString();
+                else
+                    ddlDefaultPractice.SelectedIndex = 0;
+            }
+        }
+
+        protected void ddlDefaultPractice_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (IsWizards)
+            {
+                int practiceId = 0;
+                int.TryParse(ddlDefaultPractice.SelectedValue, out practiceId);
+                personnelCompensation.PracticeId = practiceId == 0 ? (int?)null : practiceId;
+            }
         }
 
         protected void chblRoles_SelectedIndexChanged(object sender, EventArgs e)
@@ -1333,462 +954,12 @@ namespace PraticeManagement
             chblRoles.Focus();
         }
 
-        #region Populate controls
-
-        private void PopulateControls(Person person)
-        {
-            //  Names, email, dates etc.
-            PopulateBasicData(person);
-
-            // Default recruiter commissions
-            PopulateRecruiterCommissions(person);
-
-            // Payment history
-            PopulatePayment(person);
-
-            // Default commissions info
-            PopulatePersonCommissions(person);
-
-            // Role/Seniority
-            PopulateRolesAndSeniority(person);
-
-            // EmploymentHistory
-            PopulateEmploymentHistory(person);
-        }
-
-        /// <summary>
-        /// Updates a recruiter list
-        /// </summary>
-        private void UpdateRecruiterList()
-        {
-            if (!PersonId.HasValue)
-            {
-                var person = new Person { HireDate = dtpHireDate.DateValue };
-
-                recruiterInfo.Person = person;
-
-                if (!UserIsAdministrator && !UserIsHR && UserIsRecruiter)//#2817 UserisHR is added as per requirement.
-                {
-                    // Recruiter cannot set another resruiter for the person
-                    var current = DataHelper.CurrentPerson;
-                    if (current != null && current.Id.HasValue)
-                    {
-                        try
-                        {
-                            recruiterInfo.SetRecruiter(current.Id.Value);
-                            btnSave.Enabled = true;
-                        }
-                        catch (Exception e)
-                        {
-                            btnSave.Enabled = false;
-                            mlError.ShowErrorMessage(e.Message);
-                            IsErrorPanelDisplay = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void PopulateRolesAndSeniority(Person person)
-        {
-            if (person.Seniority != null)
-            {
-                ddlSeniority.SelectedIndex =
-                    ddlSeniority.Items.IndexOf(ddlSeniority.Items.FindByValue(person.Seniority.Id.ToString()));
-            }
-
-            // Roles
-            foreach (ListItem item in chblRoles.Items)
-            {
-                item.Selected = Array.IndexOf(person.RoleNames, item.Text) >= 0;
-            }
-        }
-
-        private void PopulatePersonCommissions(Person person)
-        {
-            if (person.DefaultPersonCommissions != null)
-            {
-                // Sales commission
-                foreach (DefaultCommission commission in person.DefaultPersonCommissions)
-                {
-                    if (commission.TypeOfCommission == CommissionType.Sales)
-                    {
-                        chbSalesCommissions.Checked = true;
-                        txtSalesCommissionsGross.Text = commission.FractionOfMargin.ToString();
-
-                        break;
-                    }
-                }
-
-                // Practice management commission
-                foreach (DefaultCommission commission in person.DefaultPersonCommissions)
-                {
-                    if (commission.TypeOfCommission == CommissionType.PracticeManagement)
-                    {
-                        chbManagementCommissions.Checked = true;
-                        txtManagementCommission.Text = commission.FractionOfMargin.ToString();
-                        rlstManagementCommission.SelectedIndex =
-                            rlstManagementCommission.Items.IndexOf(rlstManagementCommission.Items.FindByValue(
-                                commission.MarginTypeId.HasValue
-                                    ?
-                                        commission.MarginTypeId.Value.ToString()
-                                    : string.Empty));
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        private void PopulatePayment(Person person)
-        {
-            PopulatePayment(person.PaymentHistory);
-        }
-
-        private void PopulatePayment(List<Pay> paymentHistory)
-        {
-            gvCompensationHistory.DataSource = paymentHistory;
-            gvCompensationHistory.DataBind();
-        }
-
-        private void PopulateEmploymentHistory(Person person)
-        {
-            gvEmploymentHistory.DataSource = person.EmploymentHistory;
-            gvEmploymentHistory.DataBind();
-        }
-
-        private void PopulateRecruiterCommissions(Person person)
-        {
-            if (person.DefaultPersonRecruiterCommission != null)
-            {
-                gvRecruitingCommissions.DataSource = person.DefaultPersonRecruiterCommission;
-                gvRecruitingCommissions.DataBind();
-            }
-
-            // Recruiter commissions for the given person
-            recruiterInfo.Person = person;
-        }
-
-        private void PopulateBasicData(Person person)
-        {
-            txtFirstName.Text = person.FirstName;
-            txtLastName.Text = person.LastName;
-            dtpHireDate.DateValue = person.HireDate;
-            PreviousHireDate = person.HireDate;
-            PreviousTerminationDate = (person.EmploymentHistory != null && person.EmploymentHistory.Count > 0) ? person.EmploymentHistory.Last().TerminationDate : null;
-
-            //Last but one Termination date for Hire Date validation.
-            TerminationDateBeforeCurrentHireDate = person.EmploymentHistory.Any(p => p.HireDate.Date < person.HireDate.Date) ? person.EmploymentHistory.Last(p => p.HireDate.Date < person.HireDate.Date).TerminationDate : null;
-
-            //Populate PersonStatus.
-            PersonStatusId = person.Status != null ? (PersonStatusType?)person.Status.Id : null;
-            PrevPersonStatusId = (person.Status != null) ? person.Status.Id : -1;
-            lblPersonStatus.Text = PersonStatusId.HasValue ? DataHelper.GetDescription((PersonStatusType)PrevPersonStatusId) : string.Empty;
-
-            //Populate Termination date and termination reason.
-            PopulateTerminationDate(person.TerminationDate);
-            FillTerminationReasonsByTerminationDate(dtpTerminationDate, ddlTerminationReason);
-            PopulateTerminationReason(person.TerminationReasonid);
-
-            txtEmailAddress.Text = person.Alias;
-            txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
-            ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
-            txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
-            if ((int)person.DivisionType != 0)
-            {
-                ddlDivision.SelectedValue = ((int)person.DivisionType).ToString();
-            }
-
-            PopulatePracticeDropDown(person);
-
-            txtEmployeeNumber.Text = person.EmployeeNumber;
-
-            //Set Locked-Out CheckBox value
-            chbLockedOut.Checked = person.LockedOut;
-            defaultManager.EnsureDatabound();
-            // Select manager and exclude self from the list
-            defaultManager.SelectedManager = person.Manager;
-            //defaultManager.ExcludePerson(new Person { Id = SelectedId });
-            //newManager.ExcludePerson(new Person { Id = SelectedId });
-
-            repPracticesOwned.DataSource = person.PracticesOwned;
-            repPracticesOwned.DataBind();
-            if (person.IsDefaultManager)
-            {
-                this.hdnIsDefaultManager.Value = person.IsDefaultManager.ToString();
-            }
-        }
-
-        private void PopulatePracticeDropDown(Person person)
-        {
-            if (person != null && person.DefaultPractice != null)
-            {
-                ListItem selectedPractice = ddlDefaultPractice.Items.FindByValue(person.DefaultPractice.Id.ToString());
-
-                if (selectedPractice == null)
-                {
-                    selectedPractice = new ListItem(person.DefaultPractice.Name, person.DefaultPractice.Id.ToString());
-                    ddlDefaultPractice.Items.Add(selectedPractice);
-                    ddlDefaultPractice.SortByText();
-                }
-
-                ddlDefaultPractice.SelectedValue = selectedPractice.Value;
-            }
-        }
-
-        private void PopulateTerminationReason(int? terminationReasonId)
-        {
-            string selectedValue = string.Empty;
-
-            if (terminationReasonId.HasValue)
-            {
-                selectedValue = terminationReasonId.Value.ToString();
-                var item = ddlTerminationReason.Items.FindByValue(terminationReasonId.Value.ToString());
-                if (item == null)
-                {
-                    var newItem = SettingsHelper.GetTerminationReasonsList().First(tr => tr.Id == terminationReasonId.Value);
-                    ddlTerminationReason.Items.Add(new ListItem { Value = newItem.Id.ToString(), Text = newItem.Name });
-                }
-            }
-
-            ddlTerminationReason.SelectedValue = selectedValue;
-            PreviousTerminationReasonId = terminationReasonId.HasValue ? terminationReasonId.Value.ToString() : null;
-        }
-
-        private void PopulateTerminationDate(DateTime? terminationDate)
-        {
-            dtpTerminationDate.DateValue =
-                   terminationDate.HasValue ? terminationDate.Value : DateTime.MinValue;
-            PreviousTerminationDate = terminationDate;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Collects the user input to the DTO.
-        /// </summary>
-        /// <param name="person">The DTO to the data be collected to.</param>
-        private void PopulateData(Person person)
-        {
-            person.Id = PersonId;
-            person.FirstName = txtFirstName.Text;
-            person.LastName = txtLastName.Text;
-            person.HireDate = HireDate.Value;
-
-            person.IsOffshore = ddlPersonType.SelectedValue == "1";
-            person.PaychexID = txtPayCheckId.Text;
-            person.TerminationDate = TerminationDate;// dtpTerminationDate.DateValue != DateTime.MinValue ? (DateTime?)dtpTerminationDate.DateValue : null;
-            person.TerminationReasonid = string.IsNullOrEmpty(TerminationReasonId) ? null : (int?)Convert.ToInt32(TerminationReasonId);// ddlTerminationReason.SelectedValue != string.Empty ? (int?)Convert.ToInt32(ddlTerminationReason.SelectedValue) : null;
-
-            person.Alias = txtEmailAddress.Text;
-            person.TelephoneNumber = txtTelephoneNumber.Text;
-
-            person.EmployeeNumber = txtEmployeeNumber.Text;
-
-            person.Status = new PersonStatus { Id = (int)PersonStatusId };
-
-            //Set Locked-Out value
-            person.LockedOut = IsLockOut;
-
-            person.DefaultPractice =
-                !string.IsNullOrEmpty(ddlDefaultPractice.SelectedValue) ?
-                new Practice { Id = int.Parse(ddlDefaultPractice.SelectedValue) } : null;
-
-            // Filling the recruiter commissions for the given person
-            person.RecruiterCommission = recruiterInfo.RecruiterCommission;
-
-            // Filling the default commissions info
-            var salesCommission = new DefaultCommission
-            {
-                TypeOfCommission = CommissionType.Sales,
-                FractionOfMargin =
-                    chbSalesCommissions.Checked
-                        ? decimal.Parse(txtSalesCommissionsGross.Text)
-                        : -1
-            };
-
-            var managementCommission = new DefaultCommission
-            {
-                TypeOfCommission = CommissionType.PracticeManagement,
-                FractionOfMargin =
-                    chbManagementCommissions.Checked
-                        ? decimal.Parse(txtManagementCommission.Text)
-                        : 0,
-                MarginTypeId = int.Parse(rlstManagementCommission.SelectedValue)
-            };
-
-            person.DefaultPersonCommissions = new List<DefaultCommission> { salesCommission, managementCommission };
-
-            // Role/Seniority
-            if (!string.IsNullOrEmpty(ddlSeniority.SelectedValue))
-            {
-                person.Seniority = new Seniority { Id = int.Parse(ddlSeniority.SelectedValue) };
-            }
-
-            // Roles
-            var roleNames = GetSelectedRoles();
-            person.RoleNames = roleNames.ToArray();
-
-            person.Manager = defaultManager.SelectedManager;
-
-            if (ddlDivision.SelectedIndex != 0)
-            {
-                person.DivisionType = (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), ddlDivision.SelectedValue);
-            }
-        }
-
-        private List<string> GetSelectedRoles()
-        {
-            return (from ListItem item in chblRoles.Items where item.Selected select item.Text).ToList();
-        }
-
-        /// <summary>
-        /// Saves the user's input.
-        /// </summary>
-        private int? SaveData()
-        {
-            string loginPageUrl = base.Request.Url.Scheme + "://" + base.Request.Url.Host + (IsAzureWebRole() ? string.Empty : (":" + base.Request.Url.Port.ToString())) + base.Request.ApplicationPath + "/Login.aspx";
-
-            var person = new Person();
-            PopulateData(person);
-
-            if (PersonId.HasValue && PrevPersonStatusId == (int)PersonStatusType.Terminated && (PersonStatusId.Value == PersonStatusType.Active || PersonStatusId.Value == PersonStatusType.Contingent))
-            {
-                TransferToCompesationDetailPage(person, loginPageUrl);
-            }
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, loginPageUrl);
-                    SaveRoles(person);
-
-                    if (personId.Value < 0)
-                    {
-                        // Creating User error
-                        _saveCode = personId.Value;
-                        Page.Validate();
-                        if (!Page.IsValid)
-                        {
-                            IsErrorPanelDisplay = true;
-                        }
-                        return null;
-                    }
-
-                    SavePersonsPermissions(person, serviceClient);
-
-                    IsDirty = IsStatusChangeClicked = false;
-                    AddTriggersToUpdatePanel(IsStatusChangeClicked);
-
-                    return personId;
-                }
-                catch (Exception ex)
-                {
-                    serviceClient.Abort();
-                    ExMessage = ex.Message;
-                    Page.Validate();
-
-                    if (!Page.IsValid)
-                    {
-                        IsErrorPanelDisplay = true;
-                    }
-                }
-            }
-            return null;
-        }
-
-        private void TransferToCompesationDetailPage(Person person, string loginPageUrl)
-        {
-            //To transfer the unsave person data to Compensation detail page.
-            person.PaymentHistory = PayHistory;
-            PersonUnsavedData = person;
-            LoginPageUrl = loginPageUrl;
-
-            if (bool.Parse(hfReloadPerms.Value))
-            {
-                Permissions = rpPermissions.GetPermissions();
-            }
-            Server.Transfer("~/CompensationDetail.aspx?Id=" + PersonUnsavedData.Id + "&returnTo=" + Request.Url, true);
-        }
-
-        private static bool IsAzureWebRole()
-        {
-            try
-            {
-                return RoleEnvironment.IsAvailable;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private void SavePersonsPermissions(Person person, PersonServiceClient serviceClient)
-        {
-            if (bool.Parse(hfReloadPerms.Value))
-            {
-                PersonPermission permissions = rpPermissions.GetPermissions();
-
-                serviceClient.SetPermissionsForPerson(person, permissions);
-            }
-        }
-
-        private static void SaveRoles(Person person)
-        {
-            if (string.IsNullOrEmpty(person.Alias)) return;
-
-            // Saving roles
-            string[] currentRoles = Roles.GetRolesForUser(person.Alias);
-
-            if (person.RoleNames.Length > 0)
-            {
-                // New roles
-                string[] newRoles =
-                    Array.FindAll(person.RoleNames, value => Array.IndexOf(currentRoles, value) < 0);
-
-                if (newRoles.Length > 0)
-                    Roles.AddUserToRoles(person.Alias, newRoles);
-            }
-
-            if (currentRoles.Length > 0)
-            {
-                // Redundant roles
-                string[] redundantRoles =
-                    Array.FindAll(currentRoles, value => Array.IndexOf(person.RoleNames, value) < 0);
-
-                if (redundantRoles.Length > 0)
-                    Roles.RemoveUserFromRoles(person.Alias, redundantRoles);
-            }
-        }
-
         protected void vwPermissions_PreRender(object sender, EventArgs e)
         {
             if (UserIsAdministrator || UserIsHR)//#2817 UserisHR is added as per requirement.
             {
                 DisplayPersonPermissions();
                 hfReloadPerms.Value = bool.TrueString;
-            }
-        }
-
-        protected void cvPracticeArea_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (PersonStatusId.HasValue && PersonStatusId == PersonStatusType.Active)
-            {
-                if (string.IsNullOrEmpty(ddlDefaultPractice.SelectedValue))
-                {
-                    args.IsValid = false;
-                    return;
-                }
-            }
-            args.IsValid = true;
-        }
-
-        protected void custCompensationCoversMilestone_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            // Checks if the person is active
-            if (PersonStatusId.Value == PersonStatusType.Active || PersonStatusId == PersonStatusType.TerminationPending)
-            {
-                args.IsValid = !PersonId.HasValue || (PersonId.HasValue && DataHelper.CurrentPayExists(PersonId.Value));
             }
         }
 
@@ -1801,20 +972,40 @@ namespace PraticeManagement
             }
         }
 
+        protected void nPerson_OnNoteAdded(object source, EventArgs args)
+        {
+            activityLog.Update();
+        }
+
+        protected string GetTerminationReasonById(int? terminationReasonId)
+        {
+            if (terminationReasonId.HasValue && Utils.SettingsHelper.GetTerminationReasonsList().Any(t => t.Id == terminationReasonId))
+            {
+                return Utils.SettingsHelper.GetTerminationReasonsList().First(t => t.Id == terminationReasonId).Name;
+            }
+            return string.Empty;
+        }
+
+        #endregion
+
         #region Validation
 
-        private ExceptionDetail internalException;
-        private bool DisableValidatecustTerminateDateTE;
-
-        protected void custValPractice_OnServerValidate(object sender, ServerValidateEventArgs e)
+        protected void custCompensationCoversMilestone_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            var custValPractice = sender as CustomValidator;
+            // Checks if the person is active
+            if (PersonStatusId.Value == PersonStatusType.Active || PersonStatusId == PersonStatusType.TerminationPending)
+            {
+                args.IsValid = !PersonId.HasValue || (PersonId.HasValue && DataHelper.CurrentPayExists(PersonId.Value));
+            }
+        }
 
-            var gvRow = custValPractice.NamingContainer as GridViewRow;
-
-            var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
-
-            e.IsValid = ddlPractice.SelectedIndex > 0;
+        protected void custActiveCompensation_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            // Checks if the person is active
+            if (PersonStatusId.Value == PersonStatusType.Active)
+            {
+                args.IsValid = !personnelCompensation.EndDate.HasValue || (personnelCompensation.EndDate.HasValue && personnelCompensation.EndDate.Value.AddDays(-1) >= Utils.Generic.GetNowWithTimeZone().Date);
+            }
         }
 
         protected void custCancelTermination_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1842,47 +1033,6 @@ namespace PraticeManagement
                     IsOtherPanelDisplay = true;
                 }
             }
-        }
-
-        protected void custValSeniority_OnServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            var custValPractice = sender as CustomValidator;
-
-            var gvRow = custValPractice.NamingContainer as GridViewRow;
-
-            var ddlSeniorityName = gvRow.FindControl("ddlSeniorityName") as DropDownList;
-
-            e.IsValid = ddlSeniorityName.SelectedIndex > 0;
-        }
-
-        protected void custValSalesCommission_OnServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            var custValSalesCommission = sender as CustomValidator;
-
-            var gvRow = custValSalesCommission.NamingContainer as GridViewRow;
-
-            var txtSalesCommission = gvRow.FindControl("txtSalesCommission") as TextBox;
-
-            var salesComm = txtSalesCommission.Text;
-            decimal salecCommValue;
-            if (!string.IsNullOrEmpty(salesComm))
-            {
-                if (!decimal.TryParse(salesComm, out salecCommValue))
-                {
-                    e.IsValid = false;
-                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
-                        "A number with 2 decimal digits is allowed for the sales commission %.";
-                    return;
-                }
-                else if (salecCommValue < 0.00M)
-                {
-                    e.IsValid = false;
-                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
-                        "Sales Commission % must be greater than or equal 0.";
-                    return;
-                }
-            }
-            e.IsValid = true;
         }
 
         protected void custPersonName_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1922,32 +1072,9 @@ namespace PraticeManagement
             }
         }
 
-        // Any person who is projected should not have any roles checked.  
-        // User should  uncheck their roles to save the record.
-        protected void custRoles_ServerValidate(object source, ServerValidateEventArgs args)
+        protected void cvRoles_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Contingent)
-            {
-                // Roles
-                args.IsValid = !chblRoles.Items.Cast<ListItem>().Any(item => item.Selected);
-            }
-        }
-
-        protected void cvRolesActiveStatus_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (PersonStatusId.HasValue && PersonStatusId == PersonStatusType.Active)
-            {
-                // Roles
-                args.IsValid = chblRoles.Items.Cast<ListItem>().Any(item => item.Selected);
-            }
-        }
-
-        protected void custSeniority_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            // Active persons must have the Seniority set.
-            e.IsValid =
-                PersonStatusId.Value != PersonStatusType.Active ||
-                !string.IsNullOrEmpty(ddlSeniority.SelectedValue);
+            args.IsValid = chblRoles.Items.Cast<ListItem>().Any(item => item.Selected);
         }
 
         protected void custTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1984,11 +1111,6 @@ namespace PraticeManagement
             args.IsValid = (TerminationDateBeforeCurrentHireDate.HasValue) ? HireDate > TerminationDateBeforeCurrentHireDate : true;
         }
 
-        /// <summary>
-        /// Validates a user ctreate status code.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="args"></param>
         protected void custUserName_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = _saveCode == default(int);
@@ -2032,14 +1154,6 @@ namespace PraticeManagement
             custUserName.ErrorMessage = custUserName.ToolTip = message;
         }
 
-        protected void custReqEmailAddress_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Active)
-            {
-                args.IsValid = !string.IsNullOrEmpty(txtEmailAddress.Text);
-            }
-        }
-
         protected void custPersonStatus_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid =
@@ -2050,13 +1164,11 @@ namespace PraticeManagement
 
         protected void custHireDate_ServerValidate(object sender, ServerValidateEventArgs e)
         {
-            List<RecruiterCommission> commissions = recruiterInfo.RecruiterCommission;
+            //need to refill the ddlRecruiter as per the new hire date
             Person current = DataHelper.CurrentPerson;
             e.IsValid =
                 UserIsAdministrator || UserIsHR ||
-                (current != null && current.Id.HasValue && commissions != null &&
-                 commissions.Count > 0 &&
-                 commissions.Count(commission => commission.RecruiterId != current.Id.Value) == 0);//#2817 UserisHR This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.is added as per requirement.
+                (current != null && current.Id.HasValue && int.Parse(ddlRecruiter.SelectedValue) != current.Id.Value);//#2817 UserisHR This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.is added as per requirement.
         }
 
         protected void cvEndCompensation_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -2092,11 +1204,20 @@ namespace PraticeManagement
 
         protected void cvEmployeePayTypeChangeViolation_ServerValidate(object sender, ServerValidateEventArgs e)
         {
-            var validator = ((CustomValidator)sender);
-            e.IsValid = false;
-            validator.Text = validator.ToolTip = validator.ErrorMessage = EmployeePayTypeChangeVoilationMessage;
-            mpeEmployeePayTypeChange.Show();
-            IsOtherPanelDisplay = true;
+            e.IsValid = true;
+            if (payForcvEmployeePayTypeChangeViolation != null)
+            {
+                payForcvEmployeePayTypeChangeViolation.EndDate = payForcvEmployeePayTypeChangeViolation.EndDate.HasValue ? payForcvEmployeePayTypeChangeViolation.EndDate.Value : new DateTime(2029, 12, 31);
+                bool isTimeOffExists = ServiceCallers.Custom.Person(p => p.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(payForcvEmployeePayTypeChangeViolation.PersonId, payForcvEmployeePayTypeChangeViolation.StartDate, payForcvEmployeePayTypeChangeViolation.EndDate.Value, (int)payForcvEmployeePayTypeChangeViolation.Timescale));
+                if (isTimeOffExists)
+                {
+                    var validator = ((CustomValidator)sender);
+                    e.IsValid = false;
+                    validator.Text = validator.ToolTip = validator.ErrorMessage = EmployeePayTypeChangeVoilationMessage;
+                    mpeEmployeePayTypeChange.Show();
+                    IsOtherPanelDisplay = true;
+                }
+            }
         }
 
         protected void cvHireDateChange_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -2163,114 +1284,6 @@ namespace PraticeManagement
             }
 
             validator.Text = validator.ToolTip = validator.ErrorMessage;
-        }
-
-        private void PopulateUnCommitedPay(List<Pay> payHistory)
-        {
-            Pay pay = null;
-            GridViewRow gvRow = null;
-            if (gvCompensationHistory.EditIndex != -1)
-            {
-                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
-            }
-            else
-            {
-                if (gvCompensationHistory.ShowFooter)
-                {
-                    gvRow = gvCompensationHistory.FooterRow;
-                }
-            }
-            if (gvRow != null)
-            {
-                pay = new Pay();
-
-                DateTime startDate;
-                var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
-                var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
-                var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
-                var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
-                var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
-
-                pay.StartDate = dpStartDate.DateValue;
-                pay.EndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue.AddDays(1) : null;
-
-                if (ddlBasis.SelectedIndex == 0)
-                {
-                    pay.Timescale = TimescaleType.Salary;
-                }
-                else if (ddlBasis.SelectedIndex == 1)
-                {
-                    pay.Timescale = TimescaleType.Hourly;
-                }
-                else if (ddlBasis.SelectedIndex == 2)
-                {
-                    pay.Timescale = TimescaleType._1099Ctc;
-                }
-                else
-                {
-                    pay.Timescale = TimescaleType.PercRevenue;
-                }
-                var index = 0;
-                if (operation == "Update")
-                {
-                    startDate = Convert.ToDateTime(imgUpdate.Attributes["StartDate"]);
-                    index = PayHistory.FindIndex(p => p.StartDate.Date == startDate);
-                    payHistory[index] = pay;
-                }
-                else
-                {
-                    payHistory.Add(pay);
-                }
-            }
-        }
-
-        private void PopulateErrorPanel()
-        {
-            mpeErrorPanel.Show();
-        }
-
-        #endregion
-
-        #region Commissions
-
-        protected void chbSalesCommissions_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateSalesCommissionState();
-            IsDirty = true;
-        }
-
-        protected void chbManagementCommissions_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateManagementCommissionState();
-            IsDirty = true;
-        }
-
-        private void UpdateSalesCommissionState()
-        {
-            txtSalesCommissionsGross.Enabled =
-                reqSalesCommissionsGross.Enabled = compSalesCommissionsGross.Enabled =
-                                                   chbSalesCommissions.Checked;
-        }
-
-        private void UpdateManagementCommissionState()
-        {
-            txtManagementCommission.Enabled =
-                reqManagementCommission.Enabled = compManagementCommission.Enabled =
-                                                  rlstManagementCommission.Enabled =
-                                                  chbManagementCommissions.Checked;
-        }
-
-        #endregion
-
-        protected void valRecruterRole_OnServerValidate(object source, ServerValidateEventArgs args)
-        {
-            // This is a stub for the issue #1858
-            args.IsValid = true;
-        }
-
-        protected void nPerson_OnNoteAdded(object source, EventArgs args)
-        {
-            activityLog.Update();
         }
 
         protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
@@ -2378,45 +1391,318 @@ namespace PraticeManagement
             }
         }
 
-        protected void btnTerminationProcessCancel_OnClick(object source, EventArgs args)
+        protected void cvSLTApproval_OnServerValidate(object source, ServerValidateEventArgs args)
         {
-            ResetToPreviousData();
-            cvRehireConfirmation.Enabled = true;
-            mpeViewTerminationDateErrors.Hide();
+            args.IsValid = true;
+            if (!IsWizards && hdTitleChanged.Value == 1.ToString() && PersonId.HasValue)
+            {
+                Pay pay = ServiceCallers.Custom.Person(p => p.GetCurrentByPerson(PersonId.Value));
+                int titleId = int.Parse(ddlPersonTitle.SelectedValue);
+                Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(titleId));
+
+                if (pay != null && pay.Timescale == TimescaleType.Salary)
+                {
+                    if ((title.MinimumSalary.HasValue && title.MinimumSalary.Value > pay.Amount) || (title.MaximumSalary.HasValue && pay.Amount > title.MaximumSalary.Value))
+                    {
+                        args.IsValid = false;
+                        hdcvSLTApproval.Value = true.ToString();
+                        ltrlSLTApprovalPopUp.Text = SLTApprovalPopUpMessage;
+                        mpeSLTApprovalPopUp.Show();
+                        IsOtherPanelDisplay = true;
+                    }
+                    if (title.MinimumSalary.HasValue && title.MinimumSalary.Value <= pay.Amount && title.MaximumSalary.HasValue && pay.Amount <= title.MaximumSalary.Value)
+                    {
+                        hdcvSLTApproval.Value = false.ToString();
+                    }
+                }
+            }
         }
 
-        protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
+        protected void cvSLTPTOApproval_OnServerValidate(object source, ServerValidateEventArgs args)
         {
-            DisableValidatecustTerminateDateTE = true;
-            cvEndCompensation.Enabled = false;
-            if (!IsRehire)
+            cvSLTApproval.Validate();
+            args.IsValid = true;
+            if (!IsWizards && hdTitleChanged.Value == 1.ToString() && PersonId.HasValue && cvSLTApproval.IsValid)
             {
-                Save_Click(source, args);
-            }
-            else
-            {
-                GridViewRow gvRow = null;
-                if (gvCompensationHistory.EditIndex != -1)
+                Pay pay = ServiceCallers.Custom.Person(p => p.GetCurrentByPerson(PersonId.Value));
+                int titleId = int.Parse(ddlPersonTitle.SelectedValue);
+                Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(titleId));
+
+                if (pay != null && pay.Timescale == TimescaleType.Salary)
                 {
-                    gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+                    if (pay.VacationDays.HasValue && title.PTOAccrual != pay.VacationDays.Value)
+                    {
+                        args.IsValid = false;
+                        hdcvSLTPTOApproval.Value = true.ToString();
+                        ltrlSLTPTOApprovalPopUp.Text = SLTPTOApprovalPopUpMessage;
+                        mpeSLTPTOApprovalPopUp.Show();
+                        IsOtherPanelDisplay = true;
+                    }
+                    else
+                    {
+                        hdcvSLTPTOApproval.Value = false.ToString();
+                    }
+                }
+                hdTitleChanged.Value = 0.ToString();
+            }
+        }
+
+        #endregion
+
+        #region gvCompensationHistory Events
+
+        #region mpeSLTApprovalPopUp Events
+
+        protected void btnCancel_OnClick(object sender, EventArgs e)
+        {
+            mpeSLTApprovalPopUp.Hide();
+            if (!IsWizards)
+            {
+                if (hdcvSLTApproval.Value == true.ToString())
+                {
+                    ResetToPreviousData();
                 }
                 else
                 {
-                    if (gvCompensationHistory.ShowFooter)
+                    GridViewRow gvRow = null;
+                    if (gvCompensationHistory.EditIndex != -1)
                     {
-                        gvRow = gvCompensationHistory.FooterRow;
+                        gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+                    }
+                    else
+                    {
+                        if (gvCompensationHistory.ShowFooter)
+                        {
+                            gvRow = gvCompensationHistory.FooterRow;
+                        }
+                    }
+                    if (gvRow != null)
+                    {
+                        var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
+                        txtAmount.Text = "";
+                        txtAmount.Focus();
                     }
                 }
-                if (gvRow != null)
-                {
-                    var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
-                    imgUpdateCompensation_OnClick((Object)imgUpdate, new EventArgs());
-                }
             }
-            mpeViewTerminationDateErrors.Hide();
         }
 
-        #region gvCompensationHistory Events
+        protected void btnSLTApproval_OnClick(object sender, EventArgs e)
+        {
+            mpeSLTApprovalPopUp.Hide();
+            if (!IsWizards)
+            {
+                if (hdcvSLTApproval.Value == true.ToString())
+                {
+                    cvSLTApproval.Enabled = false;
+                    Save_Click(sender, e);
+                    cvSLTApproval.Enabled = true;
+                }
+                else
+                {
+                    GridViewRow gvRow = null;
+                    if (gvCompensationHistory.EditIndex != -1)
+                    {
+                        gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+                    }
+                    else
+                    {
+                        if (gvCompensationHistory.ShowFooter)
+                        {
+                            gvRow = gvCompensationHistory.FooterRow;
+                        }
+                    }
+                    if (gvRow != null)
+                    {
+                        var hdSLTApproval = gvRow.FindControl("hdSLTApproval") as HiddenField;
+                        var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
+                        var hdAmount = gvRow.FindControl("hdAmount") as HiddenField;
+                        var cvSLTPTOApprovalValidation = gvRow.FindControl("cvSLTPTOApprovalValidation") as CustomValidator;
+                        var imgUpdateCompensation = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                        hdAmount.Value = txtAmount.Text;
+                        hdSLTApproval.Value = true.ToString();
+                        cvSLTPTOApprovalValidation.Validate();
+                        if (cvSLTPTOApprovalValidation.IsValid)
+                        {
+                            imgUpdateCompensation_OnClick(imgUpdateCompensation, null);
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void cvSLTApprovalValidation_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var cvSLTApprovalValidation = source as CustomValidator;
+            var gvRow = cvSLTApprovalValidation.NamingContainer as GridViewRow;
+            var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+            var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
+            var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
+            var hdAmount = gvRow.FindControl("hdAmount") as HiddenField;
+            var custValTitle = gvRow.FindControl("custValTitle") as CustomValidator;
+            var custValPractice = gvRow.FindControl("custValPractice") as CustomValidator;
+            var reqAmount = gvRow.FindControl("reqAmount") as RequiredFieldValidator;
+            var rfvVacationDays = gvRow.FindControl("rfvVacationDays") as RequiredFieldValidator;
+            var hdSLTApproval = gvRow.FindControl("hdSLTApproval") as HiddenField;
+            var cmpAmount = gvRow.FindControl("cmpAmount") as CompareValidator;
+            var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+            var hdVacationDay = gvRow.FindControl("hdVacationDay") as HiddenField;
+
+
+            bool IsSLTApproval = !(hdSLTApproval.Value == false.ToString() || hdAmount.Value != txtAmount.Text);
+
+            custValTitle.Validate();
+            custValPractice.Validate();
+            reqAmount.Validate();
+            rfvVacationDays.Validate();
+            cmpAmount.Validate();
+
+            decimal salary;
+            if (decimal.TryParse(txtAmount.Text, out salary) && custValTitle.IsValid)
+            {
+                int titleId = int.Parse(ddlTitle.SelectedValue);
+                Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(titleId));
+
+                if (!IsSLTApproval && ddlBasis.SelectedIndex == 0 && custValPractice.IsValid && reqAmount.IsValid && rfvVacationDays.IsValid && cmpAmount.IsValid)
+                {
+                    if ((title.MinimumSalary.HasValue && title.MinimumSalary.Value > salary) || (title.MaximumSalary.HasValue && salary > title.MaximumSalary.Value))
+                    {
+                        args.IsValid = false;
+                        ltrlSLTApprovalPopUp.Text = SLTApprovalPopUpMessage;
+                        mpeSLTApprovalPopUp.Show();
+                        IsOtherPanelDisplay = true;
+                    }
+                }
+                if (title.MinimumSalary.HasValue && title.MinimumSalary.Value <= salary && title.MaximumSalary.HasValue && salary <= title.MaximumSalary.Value)
+                {
+                    hdSLTApproval.Value = false.ToString();
+                }
+            }
+        }
+
+        #endregion
+
+        #region mpeSLTPTOApprovalPopUp Events
+
+        protected void btnCancelSLTPTOApproval_OnClick(object sender, EventArgs e)
+        {
+            mpeSLTPTOApprovalPopUp.Hide();
+            if (!IsWizards)
+            {
+                if (hdcvSLTPTOApproval.Value == true.ToString())
+                {
+                    ResetToPreviousData();
+                }
+                else
+                {
+                    GridViewRow gvRow = null;
+                    if (gvCompensationHistory.EditIndex != -1)
+                    {
+                        gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+                    }
+                    else
+                    {
+                        if (gvCompensationHistory.ShowFooter)
+                        {
+                            gvRow = gvCompensationHistory.FooterRow;
+                        }
+                    }
+                    if (gvRow != null)
+                    {
+                        var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+                        txtVacationDays.Text = "";
+                        txtVacationDays.Focus();
+                    }
+                }
+            }
+        }
+
+        protected void btnSLTPTOApproval_OnClick(object sender, EventArgs e)
+        {
+            mpeSLTPTOApprovalPopUp.Hide();
+            if (!IsWizards)
+            {
+                if (hdcvSLTPTOApproval.Value == true.ToString())
+                {
+                    cvSLTPTOApproval.Enabled = false;
+                    Save_Click(sender, e);
+                    cvSLTPTOApproval.Enabled = true;
+                }
+                else
+                {
+                    GridViewRow gvRow = null;
+                    if (gvCompensationHistory.EditIndex != -1)
+                    {
+                        gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+                    }
+                    else
+                    {
+                        if (gvCompensationHistory.ShowFooter)
+                        {
+                            gvRow = gvCompensationHistory.FooterRow;
+                        }
+                    }
+                    if (gvRow != null)
+                    {
+                        var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
+                        var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+                        var hdVacationDay = gvRow.FindControl("hdVacationDay") as HiddenField;
+                        var imgUpdateCompensation = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                        hdVacationDay.Value = txtVacationDays.Text;
+                        hdSLTPTOApproval.Value = true.ToString();
+                        imgUpdateCompensation_OnClick(imgUpdateCompensation, null);
+                    }
+                }
+            }
+        }
+
+        protected void cvSLTPTOApprovalValidation_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var cvSLTPTOApprovalValidation = source as CustomValidator;
+            var gvRow = cvSLTPTOApprovalValidation.NamingContainer as GridViewRow;
+            var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+            var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
+            var custValTitle = gvRow.FindControl("custValTitle") as CustomValidator;
+            var custValPractice = gvRow.FindControl("custValPractice") as CustomValidator;
+            var reqAmount = gvRow.FindControl("reqAmount") as RequiredFieldValidator;
+            var rfvVacationDays = gvRow.FindControl("rfvVacationDays") as RequiredFieldValidator;
+            var cmpAmount = gvRow.FindControl("cmpAmount") as CompareValidator;
+            var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+            var hdVacationDay = gvRow.FindControl("hdVacationDay") as HiddenField;
+            var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
+            var cvSLTApprovalValidation = gvRow.FindControl("cvSLTApprovalValidation") as CustomValidator;
+
+            bool IsSLTPTOApproval = !(hdSLTPTOApproval.Value == false.ToString() || hdVacationDay.Value != txtVacationDays.Text);
+
+            custValTitle.Validate();
+            custValPractice.Validate();
+            reqAmount.Validate();
+            rfvVacationDays.Validate();
+            cmpAmount.Validate();
+            cvSLTApprovalValidation.Validate();
+            int ptoAccrual = 0;
+            if (int.TryParse(txtVacationDays.Text, out ptoAccrual) && custValTitle.IsValid && cvSLTApprovalValidation.IsValid)
+            {
+                int titleId = int.Parse(ddlTitle.SelectedValue);
+                Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(titleId));
+
+                if (!IsSLTPTOApproval && ddlBasis.SelectedIndex == 0 && custValPractice.IsValid && reqAmount.IsValid && rfvVacationDays.IsValid && cmpAmount.IsValid)
+                {
+                    if (title.PTOAccrual != ptoAccrual)
+                    {
+                        args.IsValid = false;
+                        ltrlSLTPTOApprovalPopUp.Text = SLTPTOApprovalPopUpMessage;
+                        mpeSLTPTOApprovalPopUp.Show();
+                        IsOtherPanelDisplay = true;
+                    }
+                }
+                if (title.PTOAccrual == ptoAccrual)
+                {
+                    hdSLTPTOApproval.Value = false.ToString();
+                }
+            }
+        }
+
+        #endregion
 
         private void _gvCompensationHistory_OnRowDataBound(GridViewRow gvRow, Pay pay)
         {
@@ -2425,17 +1711,21 @@ namespace PraticeManagement
             var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
             var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
             var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
-            var ddlSeniorityName = gvRow.FindControl("ddlSeniorityName") as DropDownList;
+            var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
             var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
+            var hdAmount = gvRow.FindControl("hdAmount") as HiddenField;
+            var hdSLTApproval = gvRow.FindControl("hdSLTApproval") as HiddenField;
             var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
-            var txtSalesCommission = gvRow.FindControl("txtSalesCommission") as TextBox;
+            var hdVacationDay = gvRow.FindControl("hdVacationDay") as HiddenField;
+            var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
 
-            DataHelper.FillSenioritiesList(ddlSeniorityName, "-- Select Seniority --");
+
+
+            DataHelper.FillTitleList(ddlTitle, "-- Select Title --");
             DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
 
             dpStartDate.DateValue = pay.StartDate;
             dpEndDate.DateValue = pay.EndDate.HasValue ? pay.EndDate.Value.AddDays(-1) : DateTime.MinValue;
-            ddlBasis.Attributes["vacationdaysId"] = txtVacationDays.ClientID;
 
             if (pay.Timescale == TimescaleType.Salary)
             {
@@ -2445,7 +1735,7 @@ namespace PraticeManagement
             else if (pay.Timescale == TimescaleType.Hourly)
             {
                 ddlBasis.SelectedIndex = 1;
-                txtVacationDays.Enabled = true;
+                txtVacationDays.Enabled = false;
             }
             else if (pay.Timescale == TimescaleType._1099Ctc)
             {
@@ -2458,8 +1748,9 @@ namespace PraticeManagement
                 txtVacationDays.Enabled = false;
             }
 
-            txtAmount.Text = pay.Amount.Value.ToString();
-
+            hdAmount.Value = txtAmount.Text = pay.Amount.Value.ToString();
+            hdSLTApproval.Value = pay.SLTApproval.ToString();
+            hdSLTPTOApproval.Value = pay.SLTPTOApproval.ToString();
             if (pay.PracticeId.HasValue)
             {
                 ListItem selectedPractice = ddlPractice.Items.FindByValue(pay.PracticeId.Value.ToString());
@@ -2481,17 +1772,16 @@ namespace PraticeManagement
             }
 
 
-            if (pay.SeniorityId.HasValue)
+            if (pay.TitleId.HasValue)
             {
-                ListItem selectedSeniority = ddlSeniorityName.Items.FindByValue(pay.SeniorityId.Value.ToString());
-                if (selectedSeniority != null)
+                ListItem selectedTitle = ddlTitle.Items.FindByValue(pay.TitleId.Value.ToString());
+                if (selectedTitle != null)
                 {
-                    ddlSeniorityName.SelectedValue = selectedSeniority.Value;
+                    ddlTitle.SelectedValue = selectedTitle.Value;
                 }
             }
 
-            txtVacationDays.Text = pay.VacationDays.HasValue ? pay.VacationDays.Value.ToString() : "0";
-            txtSalesCommission.Text = pay.SalesCommissionFractionOfMargin.HasValue ? pay.SalesCommissionFractionOfMargin.Value.ToString() : "0.00";
+            hdVacationDay.Value = txtVacationDays.Text = pay.VacationDays.HasValue ? pay.VacationDays.Value.ToString() : "0";
         }
 
         protected void gvCompensationHistory_OnRowDataBound(object sender, GridViewRowEventArgs e)
@@ -2500,11 +1790,11 @@ namespace PraticeManagement
             {
                 var gvRow = e.Row;
                 var pay = gvRow.DataItem as Pay;
-
+                var now = Utils.Generic.GetNowWithTimeZone();
                 var imgCopy = e.Row.FindControl("imgCopy") as Image;
                 var imgEditCompensation = e.Row.FindControl("imgEditCompensation") as Image;
                 var imgCompensationDelete = e.Row.FindControl("imgCompensationDelete") as Image;
-                var isVisible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < dtpHireDate.DateValue) || (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Terminated)) : true;
+                var isVisible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Terminated)) : true;
 
                 imgCopy.Visible = isVisible;
 
@@ -2522,6 +1812,8 @@ namespace PraticeManagement
             if (e.Row.RowType == DataControlRowType.Footer && e.Row.Visible && PayFooter != null)
             {
                 var gvRow = e.Row;
+                PayFooter.SLTApproval = false;
+                PayFooter.SLTPTOApproval = false;
                 _gvCompensationHistory_OnRowDataBound(gvRow, PayFooter);
             }
 
@@ -2564,6 +1856,7 @@ namespace PraticeManagement
                 if (result)
                 {
                     cvDeleteCompensation.IsValid = false;
+                    IsErrorPanelDisplay = true;
                 }
                 else
                 {
@@ -2574,10 +1867,10 @@ namespace PraticeManagement
                         PayHistory.Remove(PayHistory.First(p => p.StartDate.Date == startDate));
                         PayHistory = PayHistory;
                         PopulatePayment(PayHistory);
+
                     }
                 }
             }
-
         }
 
         protected void imgCancel_OnClick(object sender, EventArgs e)
@@ -2606,7 +1899,7 @@ namespace PraticeManagement
             var compVacationDays = gvRow.FindControl("compVacationDays") as CompareValidator;
             var rfvVacationDays = gvRow.FindControl("rfvVacationDays") as RequiredFieldValidator;
             var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
-            if (ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3)
+            if (ddlBasis.SelectedIndex != 0)
             {
                 compVacationDays.Enabled = false;
                 rfvVacationDays.Enabled = false;
@@ -2639,9 +1932,11 @@ namespace PraticeManagement
                 var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
                 var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
                 var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
-                var ddlSeniorityName = gvRow.FindControl("ddlSeniorityName") as DropDownList;
+                var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
                 var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
-                var txtSalesCommission = gvRow.FindControl("txtSalesCommission") as TextBox;
+                var hdSLTApproval = gvRow.FindControl("hdSLTApproval") as HiddenField;
+                var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
+
 
                 var index = 0;
                 Pay oldPay;
@@ -2657,9 +1952,6 @@ namespace PraticeManagement
                 {
                     oldPay = PayFooter;
                 }
-                pay.TimesPaidPerMonth = oldPay.TimesPaidPerMonth;
-                pay.DefaultHoursPerDay = oldPay.DefaultHoursPerDay;
-                pay.Terms = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? 5 : 14;
                 pay.IsYearBonus = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? oldPay.IsYearBonus : false;
                 pay.BonusAmount = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? oldPay.BonusAmount : 0;
                 pay.BonusHoursToCollect = !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ? oldPay.BonusHoursToCollect : null;
@@ -2690,23 +1982,18 @@ namespace PraticeManagement
                     pay.Amount = result;
                 }
 
-                pay.VacationDays = !string.IsNullOrEmpty(txtVacationDays.Text) && !(ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3) ?
+                pay.VacationDays = !string.IsNullOrEmpty(txtVacationDays.Text) && ddlBasis.SelectedIndex == 0 ?
                    (int?)int.Parse(txtVacationDays.Text) : null;
-
-                pay.SeniorityId = int.Parse(ddlSeniorityName.SelectedValue);
+                pay.TitleId = int.Parse(ddlTitle.SelectedValue);
+                pay.SLTApproval = ddlBasis.SelectedIndex == 0 && bool.Parse(hdSLTApproval.Value);
+                pay.SLTPTOApproval = ddlBasis.SelectedIndex == 0 && bool.Parse(hdSLTPTOApproval.Value);
                 pay.PracticeId = int.Parse(ddlPractice.SelectedValue);
-                pay.SalesCommissionFractionOfMargin = Convert.ToDecimal(String.IsNullOrEmpty(txtSalesCommission.Text) ? "0.00" : txtSalesCommission.Text);
-
                 pay.PersonId = PersonId.Value;
 
                 if (cvEmployeePayTypeChangeViolation.Enabled)
                 {
-                    DateTime enddate = pay.EndDate.HasValue ?pay.EndDate.Value: new DateTime(2029,12,31);
-                    bool isTimeOffExists = ServiceCallers.Custom.Person(p => p.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(pay.PersonId, pay.StartDate, enddate, (int)pay.Timescale));
-                    if (isTimeOffExists)
-                    {
-                        cvEmployeePayTypeChangeViolation.Validate();
-                    }
+                    payForcvEmployeePayTypeChangeViolation = pay;
+                    cvEmployeePayTypeChangeViolation.Validate();
                 }
             }
 
@@ -2716,7 +2003,7 @@ namespace PraticeManagement
                 {
                     try
                     {
-                        serviceClient.SavePay(pay, HttpContext.Current.User.Identity.Name);
+                        serviceClient.SavePay(pay, LoginPageUrl, HttpContext.Current.User.Identity.Name);
                     }
                     catch (FaultException<ExceptionDetail> ex)
                     {
@@ -2761,6 +2048,7 @@ namespace PraticeManagement
         protected void imgUpdateCompensation_OnClick(object sender, EventArgs e)
         {
             mlConfirmation.ClearMessage();
+            cvEmployeePayTypeChangeViolation.Enabled = true;
             if (validateAndSave(sender, e))
             {
                 IsRehire = false;
@@ -2829,18 +2117,101 @@ namespace PraticeManagement
             var pay = (Pay)PayHistory[row.DataItemIndex];
             var gvRow = _gvCompensationHistory.FooterRow;
             _gvCompensationHistory.ShowFooter = true;
-            PayFooter = pay;
-            _gvCompensationHistory.DataSource = PayHistory;
-            _gvCompensationHistory.DataBind();
+            PayFooter = (Pay)pay.Clone();
+            pay.SLTApproval = false;
+            pay.SLTPTOApproval = false;
+            PopulatePayment(PayHistory);
+            //_gvCompensationHistory.DataSource = PayHistory;
+            //_gvCompensationHistory.DataBind();
         }
 
-        protected string GetTerminationReasonById(int? terminationReasonId)
+        protected void ddlBasis_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (terminationReasonId.HasValue && Utils.SettingsHelper.GetTerminationReasonsList().Any(t => t.Id == terminationReasonId))
+            EnableDisableVacationDays();
+            UpdatePTOHours();
+        }
+
+        protected void ddlTitle_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            var ddlTitle = sender as DropDownList;
+            var gvRow = ddlTitle.NamingContainer as GridViewRow;
+            var hdSLTApproval = gvRow.FindControl("hdSLTApproval") as HiddenField;
+            var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
+            hdSLTPTOApproval.Value = hdSLTApproval.Value = false.ToString();
+            UpdatePTOHours();
+        }
+
+        private void UpdatePTOHours()
+        {
+            GridViewRow gvRow = null;
+            if (gvCompensationHistory.EditIndex != -1)
             {
-                return Utils.SettingsHelper.GetTerminationReasonsList().First(t => t.Id == terminationReasonId).Name;
+                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
             }
-            return string.Empty;
+            else
+            {
+                if (gvCompensationHistory.ShowFooter)
+                {
+                    gvRow = gvCompensationHistory.FooterRow;
+                }
+            }
+            if (gvRow != null)
+            {
+                var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+                var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
+                var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+                int titleId = 0;
+                if (ddlBasis.SelectedIndex == 0 && ddlTitle.SelectedIndex > 0 && int.TryParse(ddlTitle.SelectedValue, out titleId))
+                {
+                    Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(titleId));
+                    txtVacationDays.Text = title.PTOAccrual.ToString();
+                }
+            }
+        }
+
+        private void EnableDisableVacationDays()
+        {
+            GridViewRow gvRow = null;
+            if (gvCompensationHistory.EditIndex != -1)
+            {
+                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+            }
+            else
+            {
+                if (gvCompensationHistory.ShowFooter)
+                {
+                    gvRow = gvCompensationHistory.FooterRow;
+                }
+            }
+            if (gvRow != null)
+            {
+                var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+                var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+                txtVacationDays.Enabled = ddlBasis.SelectedIndex == 0;//0 : W2-salary
+                txtVacationDays.Text = txtVacationDays.Enabled ? txtVacationDays.Text : 0.ToString();
+            }
+        }
+
+        protected void custValTitle_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var custValTitle = sender as CustomValidator;
+
+            var gvRow = custValTitle.NamingContainer as GridViewRow;
+
+            var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
+
+            e.IsValid = ddlTitle.SelectedIndex > 0;
+        }
+
+        protected void custValPractice_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var custValPractice = sender as CustomValidator;
+
+            var gvRow = custValPractice.NamingContainer as GridViewRow;
+
+            var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
+
+            e.IsValid = ddlPractice.SelectedIndex > 0;
         }
 
         #endregion
@@ -2862,6 +2233,1001 @@ namespace PraticeManagement
                 RedirectWithBack(eventArgument, backUrl);
             }
 
+        }
+
+        #endregion
+
+        #region Wizards Events
+
+        protected void btnWizardsCancel_Click(object sender, EventArgs e)
+        {
+            mpeWizardsCancelPopup.Show();
+        }
+
+        protected void btnWizardsCancelPopupOKButton_OnClick(object sender, EventArgs e)
+        {
+            mpeWizardsCancelPopup.Hide();
+            Response.Redirect("~/Config/Persons.aspx?ApplyFilterFromCookie=true");
+        }
+
+        protected void btnWizardsCancelPopupCancelButton_OnClick(object sender, EventArgs e)
+        {
+            mpeWizardsCancelPopup.Hide();
+        }
+
+        protected void btnNext_Click(object sender, EventArgs e)
+        {
+            if (ValidateActiveWizards())
+            {
+                if (ActiveWizard == FinalWizardView)
+                {
+
+                    Save_Click(null, new EventArgs());
+                    if (Page.IsValid)
+                    {
+                        Response.Redirect(Constants.ApplicationPages.PersonsPage);
+                    }
+
+                }
+                if (ActiveWizard != FinalWizardView)
+                {
+                    ActiveWizard++;
+                    SelectView(rowSwitcher.Cells[ActiveWizard].Controls[0], ActiveWizard, true);
+                }
+            }
+            IsOtherPanelDisplay = personnelCompensation.SLTApprovalPopupDisplayed ? true : IsOtherPanelDisplay;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Methods
+
+        public static void SaveRoles(Person person)
+        {
+            if (string.IsNullOrEmpty(person.Alias)) return;
+
+            // Saving roles
+            string[] currentRoles = Roles.GetRolesForUser(person.Alias);
+
+            if (person.RoleNames.Length > 0)
+            {
+                // New roles
+                string[] newRoles =
+                    Array.FindAll(person.RoleNames, value => Array.IndexOf(currentRoles, value) < 0);
+
+                if (newRoles.Length > 0)
+                    Roles.AddUserToRoles(person.Alias, newRoles);
+            }
+
+            if (currentRoles.Length > 0)
+            {
+                // Redundant roles
+                string[] redundantRoles =
+                    Array.FindAll(currentRoles, value => Array.IndexOf(person.RoleNames, value) < 0);
+
+                if (redundantRoles.Length > 0)
+                    Roles.RemoveUserFromRoles(person.Alias, redundantRoles);
+            }
+        }
+
+        private bool ValidateActiveWizards()
+        {
+            int activeindex = mvPerson.ActiveViewIndex;
+            int[] activeWizardsArray = ActiveWizardsArray[ActiveWizard];
+            Page.Validate(valsPerson.ValidationGroup);
+            if (Page.IsValid)
+            {
+                foreach (int i in activeWizardsArray)
+                {
+                    SelectView(rowSwitcher.Cells[i].Controls[0], i, true);
+                    Page.Validate(valsPerson.ValidationGroup);
+                    if (!Page.IsValid)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (!Page.IsValid)
+            {
+                IsErrorPanelDisplay = true;
+            }
+            else
+            {
+                PersonValidation();
+                if (Page.IsValid)
+                {
+                    SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+                }
+            }
+            return Page.IsValid;
+        }
+
+        private void DisableInactiveViews()
+        {
+            if (IsWizards)
+            {
+                int[] activeWizardsArray = ActiveWizardsArray[ActiveWizard];
+                for (int i = 0; i < tblPersonViewSwitch.Rows[0].Cells.Count; i++)
+                {
+                    TableCell item = tblPersonViewSwitch.Rows[0].Cells[i];
+                    item.Enabled = activeWizardsArray.Any(a => a == i);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < tblPersonViewSwitch.Rows[0].Cells.Count; i++)
+                {
+                    TableCell item = tblPersonViewSwitch.Rows[0].Cells[i];
+                    item.Enabled = true;
+                }
+            }
+
+            divCompensationHistory.Visible = !IsWizards;
+            divCompensation.Visible = IsWizards;
+        }
+
+        private void DisplayWizardButtons()
+        {
+            btnCancelAndReturn.Visible = btnSave.Visible = !IsWizards;
+            btnNext.Visible = btnWizardsCancel.Visible = IsWizards;
+            btnNext.Text = ActiveWizard == FinalWizardView ? "Finish" : "Next";
+        }
+
+        private void DisableTerminationDateAndReason()
+        {
+            if (PrevPersonStatusId == (int)PersonStatusType.Active || PrevPersonStatusId == (int)PersonStatusType.Terminated || (PrevPersonStatusId == (int)PersonStatusType.Contingent && dtpTerminationDate.DateValue == DateTime.MinValue))
+            {
+                if (PrevPersonStatusId != (int)PersonStatusType.Terminated && IsStatusChangeClicked && PersonStatusId == PersonStatusType.Terminated)
+                {
+                    ddlTerminationReason.Visible = true;
+                    txtTerminationReason.Visible = false;
+                    ddlTerminationReason.Enabled = false;
+                }
+                else if (PrevPersonStatusId != (int)PersonStatusType.Terminated)
+                {
+                    //FillTerminationReasonsByTerminationDate(null, ddlTerminationReason);
+                    ddlTerminationReason.Visible = false;
+                    txtTerminationReason.Visible = true;
+                }
+                else
+                {
+                    ddlTerminationReason.Enabled = false;
+                    ddlTerminationReason.Visible = true;
+                    txtTerminationReason.Visible = false;
+                }
+                dtpTerminationDate.EnabledTextBox = false;
+                dtpTerminationDate.ReadOnly = true;
+            }
+            else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && dtpTerminationDate.DateValue != DateTime.MinValue))
+            {
+                dtpTerminationDate.EnabledTextBox = true;
+                dtpTerminationDate.ReadOnly = false;
+
+                ddlTerminationReason.Visible = true;
+                txtTerminationReason.Visible = false;
+            }
+
+            if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
+            {
+                dtpHireDate.ReadOnly = true;
+                dtpHireDate.EnabledTextBox = false;
+            }
+        }
+
+        private void LoadChangeEmployeeStatusPopUpData()
+        {
+            if (PrevPersonStatusId == (int)PersonStatusType.Active)
+            {
+                rbnCancleTermination.CssClass =
+                rbnActive.CssClass =
+                divActive.Attributes["class"] =
+                rbnContingent.CssClass =
+                divContingent.Attributes["class"] = displayNone;
+
+                dtpPopUpTerminateDate.DateValue = DateTime.Now.Date;
+                rbnTerminate.CssClass = "";
+                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = !(rbnTerminate.Checked = true);
+                divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
+            }
+            else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && PreviousTerminationDate.HasValue))
+            {
+                rbnCancleTermination.CssClass = "";
+                rbnActive.Checked = rbnTerminate.Checked = rbnContingent.Checked = rbnCancleTermination.Checked = false;
+
+                rbnActive.CssClass =
+                rbnTerminate.CssClass =
+                rbnContingent.CssClass =
+                divActive.Attributes["class"] =
+                divTerminate.Attributes["class"] =
+                divContingent.Attributes["class"] = displayNone;
+            }
+            else if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
+            {
+                dtpActiveHireDate.DateValue = dtpHireDate.DateValue;
+                dtpPopUpTerminateDate.DateValue = DateTime.Now.Date;
+
+                rbnActive.CssClass = rbnTerminate.CssClass = "";
+                rbnCancleTermination.CssClass =
+                rbnContingent.CssClass =
+                divActive.Attributes["class"] =
+                divContingent.Attributes["class"] =
+                divTerminate.Attributes["class"] = displayNone;
+                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
+            }
+            else if (PrevPersonStatusId == (int)PersonStatusType.Terminated)
+            {
+                dtpActiveHireDate.DateValue = dtpContingentHireDate.DateValue = PreviousTerminationDate.Value.AddDays(1);
+
+                rbnActive.CssClass = rbnContingent.CssClass = "";
+                rbnCancleTermination.CssClass =
+                divActive.Attributes["class"] =
+                rbnTerminate.CssClass =
+                divTerminate.Attributes["class"] =
+                divContingent.Attributes["class"] = displayNone;
+                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
+            }
+
+            FillTerminationReasonsByTerminationDate(dtpPopUpTerminateDate, ddlPopUpTerminationReason);
+        }
+
+        private void HTMLToPdf(String HTML, string filename)
+        {
+            var document = new iTextSharp.text.Document();
+            iTextSharp.text.pdf.PdfWriter.GetInstance(document, new FileStream(Request.PhysicalApplicationPath + @"\" + filename + ".pdf", FileMode.Create));
+
+            document.Open();
+            var styles = new iTextSharp.text.html.simpleparser.StyleSheet();
+            var hw = new iTextSharp.text.html.simpleparser.HTMLWorker(document);
+            hw.Parse(new StringReader(HTML));
+            document.Close();
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.ContentType = "Application/pdf";
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", filename + ".pdf"));
+            HttpContext.Current.Response.WriteFile(Request.PhysicalApplicationPath + @"\" + filename + ".pdf");
+        }
+
+        private void ResetToPreviousData()
+        {
+            var person = GetPerson(PersonId);
+            PopulateControls(person);
+        }
+
+        private void FillTerminationReasonsByTerminationDate(DatePicker terminationDate, ListControl ddlTerminationReasons)
+        {
+            var reasons = new List<TerminationReason>();
+            if (terminationDate != null)
+            {
+                ddlTerminationReasons.SelectedValue = string.Empty;
+                if (PrevPersonStatusId == (int)PersonStatusType.Contingent)
+                {
+                    reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsContigent == true).ToList();
+                }
+                else if (GetDate(terminationDate.DateValue).HasValue && PayHistory.Any(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date)))
+                {
+                    var pay = PayHistory.First(p => p.StartDate.Date <= terminationDate.DateValue.Date && (!p.EndDate.HasValue || p.EndDate.Value > terminationDate.DateValue.Date));
+                    switch (pay.Timescale)
+                    {
+                        case TimescaleType.Hourly:
+                            reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2HourlyRule == true).ToList();
+                            break;
+                        case TimescaleType.Salary:
+                            reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2SalaryRule == true).ToList();
+                            break;
+                        case TimescaleType._1099Ctc:
+                        case TimescaleType.PercRevenue:
+                            reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.Is1099Rule == true).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            DataHelper.FillTerminationReasonsList(ddlTerminationReasons, TerminationReasonFirstItem, reasons.ToArray());
+        }
+
+        private void FillAllPersonStatuses(PersonStatusType PersonStatusId)
+        {
+            DataHelper.FillPersonStatusList(ddlPersonStatus);
+            ddlPersonStatus.SelectedValue = ((int)PersonStatusId).ToString();
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            int viewindex = mvPerson.ActiveViewIndex;
+            TableCell CssSelectCell = null;
+            foreach (TableCell item in tblPersonViewSwitch.Rows[0].Cells)
+            {
+                if (!string.IsNullOrEmpty(item.CssClass))
+                {
+                    CssSelectCell = item;
+                }
+            }
+
+            if (ValidateAndSave() && Page.IsValid)
+            {
+                ClearDirty();
+                mlError.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
+                IsErrorPanelDisplay = true;
+
+            }
+            if (!string.IsNullOrEmpty(ExMessage) || Page.IsValid)
+            {
+                mvPerson.ActiveViewIndex = viewindex;
+                SetCssClassEmpty();
+                CssSelectCell.CssClass = "SelectedSwitch";
+            }
+            if (Page.IsValid && PersonId.HasValue)
+            {
+                var person = GetPerson(PersonId);
+                if (person != null)
+                {
+                    gvCompensationHistory.EditIndex = -1;
+                    lblEmployeeNumber.Visible = true;
+                    txtEmployeeNumber.Visible = true;
+                    PayHistory = person.PaymentHistory;
+                    PopulateControls(person);
+                }
+            }
+        }
+
+        protected override bool ValidateAndSave()
+        {
+            return ValidateAndSavePersonDetails();
+        }
+
+        private void ValidatePage()
+        {
+            custTerminateDateTE.Enabled = false;
+            int activeindex = mvPerson.ActiveViewIndex;
+            for (int i = 0, j = mvPerson.ActiveViewIndex; i < mvPerson.Views.Count; i++, j++)
+            {
+                if (j == mvPerson.Views.Count)
+                {
+                    j = 0;
+                }
+                SelectView(rowSwitcher.Cells[j].Controls[0], j, true);
+                Page.Validate(valsPerson.ValidationGroup);
+                if (!Page.IsValid)
+                {
+                    break;
+                }
+            }
+
+            if (cvEndCompensation.Enabled && Page.IsValid)
+            {
+                //Page.Validate("EndCompensation");
+                cvEndCompensation.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
+
+            if (cvHireDateChange.Enabled && Page.IsValid)
+            {
+                cvHireDateChange.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
+
+            if (custCancelTermination.Enabled && Page.IsValid)
+            {
+                custCancelTermination.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
+
+            if (!DisableValidatecustTerminateDateTE && Page.IsValid)
+            {
+                custTerminateDateTE.Enabled = true;
+                custTerminateDateTE.Validate();
+                //Page.Validate(valsPerson.ValidationGroup);
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
+            if (cvSLTApproval.Enabled && Page.IsValid)
+            {
+                cvSLTApproval.Validate();
+            }
+            if (cvSLTPTOApproval.Enabled && Page.IsValid)
+            {
+                cvSLTPTOApproval.Validate();
+            }
+            if (!Page.IsValid)
+            {
+                IsErrorPanelDisplay = true;
+            }
+        }
+
+        public bool ValidateAndSavePersonDetails()
+        {
+            ValidatePage();
+            if (Page.IsValid)
+            {
+                int? personId = SaveData();
+                if (personId.HasValue)
+                {
+                    PersonId = personId;
+                    ClearDirty();
+                    hdTitleChanged.Value = 0.ToString();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void SetCssClassEmpty()
+        {
+            foreach (TableCell cell in tblPersonViewSwitch.Rows[0].Cells)
+            {
+                cell.CssClass = string.Empty;
+            }
+        }
+
+        private void SelectView(Control sender, int viewIndex, bool selectOnly)
+        {
+            mvPerson.ActiveViewIndex = viewIndex;
+
+            SetCssClassEmpty();
+
+            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
+        }
+
+        private void DisplayPersonPermissions()
+        {
+            ShowPermissionsPerPage();
+            ShowPermissionsPerEntities();
+        }
+
+        private void ShowPermissionsPerEntities()
+        {
+            //  If we're editing existing user and having administrators rights
+            if (PersonId.HasValue && (UserIsAdministrator || UserIsHR))//#2817 UserisHR is added as per requirement.
+            {
+                var permissions = DataHelper.GetPermissions(new Person { Id = PersonId.Value });
+                rpPermissions.ApplyPermissions(permissions);
+            }
+        }
+
+        private void ShowPermissionsPerPage()
+        {
+            var permDiff = new List<PermissionDiffeneceItem>();
+
+            IPrincipal userNew =
+                new GenericPrincipal(new GenericIdentity(Email), GetSelectedRoles().ToArray());
+            IPrincipal userCurrent =
+                new GenericPrincipal(new GenericIdentity(Email),
+                                     Roles.GetRolesForUser(Email));
+
+            // Retrieve and sort locations
+            System.Configuration.Configuration config =
+                WebConfigurationManager.OpenWebConfiguration(Request.ApplicationPath);
+            var locationsSorted = new List<ConfigurationLocation>(config.Locations.Count);
+            locationsSorted.AddRange(config.Locations.Cast<ConfigurationLocation>());
+
+            // Evaluate and display permissions for secure pages
+            foreach (var location in locationsSorted.OrderBy(location => location.Path))
+            {
+                var description =
+                    location.OpenConfiguration().GetSection("locationDescription") as
+                    LocationDescriptionConfigurationSection;
+                if (description != null && !string.IsNullOrEmpty(description.Title))
+                {
+                    permDiff.Add(new PermissionDiffeneceItem
+                    {
+                        Title = description.Title,
+                        Old = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userNew, "GET"),
+                        New = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userCurrent, "GET")
+                    });
+                }
+            }
+
+            gvPermissionDiffenrece.DataSource = permDiff;
+            gvPermissionDiffenrece.DataBind();
+        }
+
+        protected override void Display()
+        {
+            IsStatusChangeClicked = false;
+            if (Request.QueryString["ShowConfirmMessage"] != null && Request.QueryString["ShowConfirmMessage"] == "1")
+            {
+                mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
+                IsErrorPanelDisplay = true;
+            }
+
+            if (!PersonId.HasValue)
+            {
+                var status = new List<PersonStatus>();
+                status.Add(new PersonStatus { Id = (int)PersonStatusType.Active, Name = PersonStatusType.Active.ToString() });
+                status.Add(new PersonStatus { Id = (int)PersonStatusType.Contingent, Name = PersonStatusType.Contingent.ToString() });
+                DataHelper.FillListDefault(ddlPersonStatus, string.Empty, status.ToArray(), true);
+                PersonStatusId = PersonStatusType.Active;
+                FillTerminationReasonsByTerminationDate(dtpTerminationDate, ddlTerminationReason);
+
+                ddlPersonStatus.Visible = true;
+                lblPersonStatus.Visible = false;
+                btnChangeEmployeeStatus.Visible = false;
+                IsWizards = true;
+            }
+            else
+            {
+                DataHelper.FillPersonStatusList(ddlPersonStatus);
+            }
+            DataHelper.FillSenioritiesList(ddlSeniority, "-- Select Seniority --");
+            DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, "-- Select Practice Area --");
+            DataHelper.FillRecruiterList(ddlRecruiter, "--Select Recruiter--");
+            DataHelper.FillPersonDivisionList(ddlDivision);
+            ddlDivision.SelectedValue = "2";//Division default value is 'Consulting'
+            DataHelper.FillTitleList(ddlPersonTitle, "-- Select Title --");
+            DataHelper.FillDomainsList(ddlDomain);
+            txtFirstName.Focus();
+
+            chblRoles.DataSource = Roles.GetAllRoles();
+            chblRoles.DataBind();
+
+            int? id = PersonId;
+
+            personProjects.PersonId = id;
+            personProjects.UserIsAdministrator = UserIsAdministrator || UserIsHR; //#2817 UserIsHR is added as per requirement.
+
+            Person person = null;
+
+            if (id.HasValue) // Edit existing person mode
+            {
+                person = GetPerson(id);
+
+                if (person != null)
+                {
+                    PayHistory = person.PaymentHistory;
+                    PopulateControls(person);
+                }
+            }
+            else // Add new person mode
+            {
+                // Hide Employee Number related controls
+                lblEmployeeNumber.Visible =
+                txtEmployeeNumber.Visible =
+                reqEmployeeNumber.Enabled =
+                btnResetPassword.Visible = false;
+            }
+            personOpportunities.DataBind();
+        }
+
+        private static Person GetPerson(int? id)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var person = serviceClient.GetPersonDetail(id.Value);
+                    person.EmploymentHistory = serviceClient.GetPersonEmploymentHistoryById(person.Id.Value).ToList();
+                    return person;
+                }
+                catch (FaultException<ExceptionDetail>)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        #region Populate controls
+
+        private void PopulateControls(Person person)
+        {
+            //  Names, email, dates etc.
+            PopulateBasicData(person);
+
+            // Payment history
+            PopulatePayment(person);
+
+            // Role/Seniority
+            PopulateRolesAndSeniority(person);
+
+            // EmploymentHistory
+            PopulateEmploymentHistory(person);
+        }
+
+        private void PopulateRolesAndSeniority(Person person)
+        {
+            if (person.Seniority != null)
+            {
+                ddlSeniority.SelectedIndex =
+                    ddlSeniority.Items.IndexOf(ddlSeniority.Items.FindByValue(person.Seniority.Id.ToString()));
+            }
+
+            // Roles
+            foreach (ListItem item in chblRoles.Items)
+            {
+                item.Selected = Array.IndexOf(person.RoleNames, item.Text) >= 0;
+            }
+        }
+
+        private void PopulatePayment(Person person)
+        {
+            PopulatePayment(person.PaymentHistory);
+        }
+
+        private void PopulatePayment(List<Pay> paymentHistory)
+        {
+            gvCompensationHistory.DataSource = paymentHistory;
+            gvCompensationHistory.DataBind();
+        }
+
+        private void PopulateEmploymentHistory(Person person)
+        {
+            gvEmploymentHistory.DataSource = person.EmploymentHistory;
+            gvEmploymentHistory.DataBind();
+        }
+
+        private void PopulateRecruiterDropDown(Person person)
+        {
+            if (person.RecruiterId.HasValue)
+            {
+                ListItem selectedRecruiter = ddlRecruiter.Items.FindByValue(person.RecruiterId.Value.ToString());
+                if (selectedRecruiter == null)
+                {
+                    var recruiter = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(person.RecruiterId.Value));
+                    selectedRecruiter = new ListItem(recruiter.PersonLastFirstName, person.RecruiterId.Value.ToString());
+                    ddlRecruiter.Items.Add(selectedRecruiter);
+                    ddlRecruiter.SortByText();
+                }
+                ddlRecruiter.SelectedValue = selectedRecruiter.Value;
+            }
+        }
+
+        private void PopulateBasicData(Person person)
+        {
+            txtFirstName.Text = person.FirstName;
+            txtLastName.Text = person.LastName;
+            dtpHireDate.DateValue = person.HireDate;
+            PreviousHireDate = person.HireDate;
+            PreviousTerminationDate = (person.EmploymentHistory != null && person.EmploymentHistory.Count > 0) ? person.EmploymentHistory.Last().TerminationDate : null;
+
+            //Last but one Termination date for Hire Date validation.
+            TerminationDateBeforeCurrentHireDate = person.EmploymentHistory.Any(p => p.HireDate.Date < person.HireDate.Date) ? person.EmploymentHistory.Last(p => p.HireDate.Date < person.HireDate.Date).TerminationDate : null;
+
+            //Populate PersonStatus.
+            PersonStatusId = person.Status != null ? (PersonStatusType?)person.Status.Id : null;
+            PrevPersonStatusId = (person.Status != null) ? person.Status.Id : -1;
+            lblPersonStatus.Text = PersonStatusId.HasValue ? DataHelper.GetDescription((PersonStatusType)PrevPersonStatusId) : string.Empty;
+
+            //Populate Termination date and termination reason.
+            PopulateTerminationDate(person.TerminationDate);
+            FillTerminationReasonsByTerminationDate(dtpTerminationDate, ddlTerminationReason);
+            PopulateTerminationReason(person.TerminationReasonid);
+
+            txtEmailAddress.Text = person.AliasWithoutDomain;
+            if (ddlDomain.Items.FindByValue(person.Domain) != null)
+                ddlDomain.SelectedValue = person.Domain;
+            else if (!string.IsNullOrEmpty(person.Domain))
+            {
+                ddlDomain.Items.Add(new ListItem() { Text = person.Domain, Value = person.Domain });
+                ddlDomain.SelectedValue = person.Domain;
+            }
+            txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
+            ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
+            txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
+            if ((int)person.DivisionType != 0)
+            {
+                ddlDivision.SelectedValue = ((int)person.DivisionType).ToString();
+            }
+
+            PopulatePracticeDropDown(person);
+            PopulateRecruiterDropDown(person);
+
+            txtEmployeeNumber.Text = person.EmployeeNumber;
+
+            //Set Locked-Out CheckBox value
+            chbLockedOut.Checked = person.LockedOut;
+            defaultManager.EnsureDatabound();
+            // Select manager and exclude self from the list
+            defaultManager.SelectedManager = person.Manager;
+
+            if (person.IsDefaultManager)
+            {
+                this.hdnIsDefaultManager.Value = person.IsDefaultManager.ToString();
+            }
+
+            if (person.Title != null)
+            {
+                ddlPersonTitle.SelectedValue = person.Title.TitleId.ToString();
+            }
+            hdTitleChanged.Value = 0.ToString();
+            hdcvSLTApproval.Value = person.SLTApproval.ToString();
+            hdcvSLTPTOApproval.Value = person.SLTPTOApproval.ToString();
+        }
+
+        private void PopulatePracticeDropDown(Person person)
+        {
+            if (person != null && person.DefaultPractice != null)
+            {
+                ListItem selectedPractice = ddlDefaultPractice.Items.FindByValue(person.DefaultPractice.Id.ToString());
+
+                if (selectedPractice == null)
+                {
+                    selectedPractice = new ListItem(person.DefaultPractice.Name, person.DefaultPractice.Id.ToString());
+                    ddlDefaultPractice.Items.Add(selectedPractice);
+                }
+
+                ddlDefaultPractice.SelectedValue = selectedPractice.Value;
+            }
+        }
+
+        private void PopulateTerminationReason(int? terminationReasonId)
+        {
+            string selectedValue = string.Empty;
+
+            if (terminationReasonId.HasValue)
+            {
+                selectedValue = terminationReasonId.Value.ToString();
+                var item = ddlTerminationReason.Items.FindByValue(terminationReasonId.Value.ToString());
+                if (item == null)
+                {
+                    var newItem = SettingsHelper.GetTerminationReasonsList().First(tr => tr.Id == terminationReasonId.Value);
+                    ddlTerminationReason.Items.Add(new ListItem { Value = newItem.Id.ToString(), Text = newItem.Name });
+                }
+            }
+
+            ddlTerminationReason.SelectedValue = selectedValue;
+            PreviousTerminationReasonId = terminationReasonId.HasValue ? terminationReasonId.Value.ToString() : null;
+        }
+
+        private void PopulateTerminationDate(DateTime? terminationDate)
+        {
+            dtpTerminationDate.DateValue =
+                   terminationDate.HasValue ? terminationDate.Value : DateTime.MinValue;
+            PreviousTerminationDate = terminationDate;
+        }
+
+        #endregion
+
+        private void PopulateData(Person person)
+        {
+            person.Id = PersonId;
+            person.FirstName = txtFirstName.Text;
+            person.LastName = txtLastName.Text;
+            person.HireDate = HireDate.Value;
+
+            person.IsOffshore = ddlPersonType.SelectedValue == "1";
+            person.PaychexID = txtPayCheckId.Text;
+            person.TerminationDate = TerminationDate;// dtpTerminationDate.DateValue != DateTime.MinValue ? (DateTime?)dtpTerminationDate.DateValue : null;
+            person.TerminationReasonid = string.IsNullOrEmpty(TerminationReasonId) ? null : (int?)Convert.ToInt32(TerminationReasonId);// ddlTerminationReason.SelectedValue != string.Empty ? (int?)Convert.ToInt32(ddlTerminationReason.SelectedValue) : null;
+
+            person.Alias = Email;
+            person.TelephoneNumber = txtTelephoneNumber.Text;
+
+            person.EmployeeNumber = txtEmployeeNumber.Text;
+
+            person.Status = new PersonStatus { Id = (int)PersonStatusId };
+
+            //Set Locked-Out value
+            person.LockedOut = IsLockOut;
+
+            person.DefaultPractice =
+                !string.IsNullOrEmpty(ddlDefaultPractice.SelectedValue) ?
+                new Practice { Id = int.Parse(ddlDefaultPractice.SelectedValue) } : null;
+
+            int recruiterID;
+            person.RecruiterId = int.TryParse(ddlRecruiter.SelectedValue, out recruiterID) ? (int?)recruiterID : null;
+            if (ddlPersonTitle.SelectedIndex != 0)
+            {
+                person.Title = new Title() { TitleId = int.Parse(ddlPersonTitle.SelectedValue), TitleName = ddlPersonTitle.SelectedItem.Text };
+            }
+            // Role/Seniority
+            if (!string.IsNullOrEmpty(ddlSeniority.SelectedValue))
+            {
+                person.Seniority = new Seniority { Id = int.Parse(ddlSeniority.SelectedValue) };
+            }
+
+            // Roles
+            var roleNames = GetSelectedRoles();
+            person.RoleNames = roleNames.ToArray();
+
+            person.Manager = defaultManager.SelectedManager;
+
+            if (ddlDivision.SelectedIndex != 0)
+            {
+                person.DivisionType = (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), ddlDivision.SelectedValue);
+            }
+
+            if (IsWizards)
+            {
+                int[] activeWizardsArray = ActiveWizardsArray[ActiveWizard];
+                if (activeWizardsArray.Any(a => mvPerson.Views[a] == vwCompensation))
+                {
+                    person.CurrentPay = personnelCompensation.Pay;
+                }
+            }
+            else
+            {
+                var today = (SettingsHelper.GetCurrentPMTime()).Date;
+                person.CurrentPay = PayHistory.FirstOrDefault(c => today >= c.StartDate && (!c.EndDate.HasValue || today < c.EndDate)) ?? PayHistory.FirstOrDefault(c => today < c.StartDate);
+                person.SLTApproval = person.CurrentPay != null && person.CurrentPay.Timescale == TimescaleType.Salary && bool.Parse(hdcvSLTApproval.Value);
+                person.SLTPTOApproval = person.CurrentPay != null && person.CurrentPay.Timescale == TimescaleType.Salary && bool.Parse(hdcvSLTPTOApproval.Value);
+            }
+        }
+
+        private List<string> GetSelectedRoles()
+        {
+            return (from ListItem item in chblRoles.Items where item.Selected select item.Text).ToList();
+        }
+
+        private int? SaveData()
+        {
+            var person = new Person();
+            PopulateData(person);
+
+            if (PersonId.HasValue && PrevPersonStatusId == (int)PersonStatusType.Terminated && (PersonStatusId.Value == PersonStatusType.Active || PersonStatusId.Value == PersonStatusType.Contingent))
+            {
+                TransferToCompesationDetailPage(person);
+            }
+            cvEmployeePayTypeChangeViolation.Enabled = false;
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    Person oldPerson = null;
+                    if (person.Id.HasValue)
+                    {
+                        oldPerson = serviceClient.GetPersonDetailsShort(person.Id.Value);
+                        oldPerson.RoleNames = Roles.GetRolesForUser(oldPerson.Alias);
+                    }
+                    int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, IsWizards);
+                    SaveRoles(person);
+
+                    serviceClient.SendAdministratorAddedEmail(person, oldPerson);
+                    if (personId.Value < 0)
+                    {
+                        // Creating User error
+                        _saveCode = personId.Value;
+                        Page.Validate();
+                        if (!Page.IsValid)
+                        {
+                            IsErrorPanelDisplay = true;
+                        }
+                        return null;
+                    }
+
+                    SavePersonsPermissions(person, serviceClient);
+
+                    IsDirty = IsStatusChangeClicked = false;
+                    return personId;
+                }
+                catch (Exception ex)
+                {
+                    serviceClient.Abort();
+                    ExMessage = ex.Message;
+                    Page.Validate();
+
+                    if (!Page.IsValid)
+                    {
+                        IsErrorPanelDisplay = true;
+                    }
+                    else
+                    {
+                        Logging.LogErrorMessage(
+                            ex.Message,
+                            ex.Source,
+                            ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                            string.Empty,
+                            HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                            string.Empty,
+                            Thread.CurrentPrincipal.Identity.Name);
+                    }
+                }
+            }
+            return null;
+        }
+
+        private void PersonValidation()
+        {
+            var person = new Person();
+            PopulateData(person);
+
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    serviceClient.PersonValidations(person);
+                }
+                catch (Exception ex)
+                {
+                    serviceClient.Abort();
+                    ExMessage = ex.Message;
+                    Page.Validate();
+
+                    if (!Page.IsValid)
+                    {
+                        IsErrorPanelDisplay = true;
+                    }
+                }
+            }
+        }
+
+        private void TransferToCompesationDetailPage(Person person)
+        {
+            //To transfer the unsave person data to Compensation detail page.
+            person.PaymentHistory = PayHistory;
+            PersonUnsavedData = person;
+            if (bool.Parse(hfReloadPerms.Value))
+            {
+                Permissions = rpPermissions.GetPermissions();
+            }
+            Server.Transfer("~/CompensationDetail.aspx?Id=" + PersonUnsavedData.Id + "&returnTo=" + Request.Url, true);
+        }
+
+        private void SavePersonsPermissions(Person person, PersonServiceClient serviceClient)
+        {
+            if (bool.Parse(hfReloadPerms.Value))
+            {
+                PersonPermission permissions = rpPermissions.GetPermissions();
+
+                serviceClient.SetPermissionsForPerson(person, permissions);
+            }
+        }
+
+        private void PopulateUnCommitedPay(List<Pay> payHistory)
+        {
+            Pay pay = null;
+            GridViewRow gvRow = null;
+            if (gvCompensationHistory.EditIndex != -1)
+            {
+                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+            }
+            else
+            {
+                if (gvCompensationHistory.ShowFooter)
+                {
+                    gvRow = gvCompensationHistory.FooterRow;
+                }
+            }
+            if (gvRow != null)
+            {
+                pay = new Pay();
+
+                DateTime startDate;
+                var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
+                var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
+                var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
+                var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
+
+                pay.StartDate = dpStartDate.DateValue;
+                pay.EndDate = dpEndDate.DateValue != DateTime.MinValue ? (DateTime?)dpEndDate.DateValue.AddDays(1) : null;
+
+                if (ddlBasis.SelectedIndex == 0)
+                {
+                    pay.Timescale = TimescaleType.Salary;
+                }
+                else if (ddlBasis.SelectedIndex == 1)
+                {
+                    pay.Timescale = TimescaleType.Hourly;
+                }
+                else if (ddlBasis.SelectedIndex == 2)
+                {
+                    pay.Timescale = TimescaleType._1099Ctc;
+                }
+                else
+                {
+                    pay.Timescale = TimescaleType.PercRevenue;
+                }
+                var index = 0;
+                if (operation == "Update")
+                {
+                    startDate = Convert.ToDateTime(imgUpdate.Attributes["StartDate"]);
+                    index = PayHistory.FindIndex(p => p.StartDate.Date == startDate);
+                    payHistory[index] = pay;
+                }
+                else
+                {
+                    payHistory.Add(pay);
+                }
+            }
+        }
+
+        private void PopulateErrorPanel()
+        {
+            mpeErrorPanel.Show();
         }
 
         #endregion
