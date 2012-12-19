@@ -14,20 +14,30 @@ BEGIN
 	DECLARE @TerminatedPersons TABLE
 	(
 	PersonID INT,
+	FirstName NVARCHAR(40),
+	LastName NVARCHAR(40),
 	TerminationDate DATETIME,
 	Alias NVARCHAR(100),
 	DefaultPractice INT,
 	IsTerminatedDueToPay BIT,
-	ReHiredate DATETIME
+	ReHiredate DATETIME,
+	TimeScaleName NVARCHAR(50),
+	TitleName NVARCHAR(100),
+	TelephoneNumber NCHAR(100)
 	)
 	
 	INSERT INTO @TerminatedPersons
 	SELECT	PersonId,
+			FirstName,
+			LastName,
 			TerminationDate,
 			Alias,
 			DefaultPractice,
 			0 AS IsTerminatedDueToPay,
-			NULL AS ReHiredate 
+			NULL AS ReHiredate,
+			NULL AS TimeScaleName,
+			NULL AS TitleName,
+			NULL AS TelephoneNumber
 	FROM dbo.Person AS P
 	WHERE   P.PersonStatusId <> 2
 			AND P.TerminationDate = (@Today-1)
@@ -35,19 +45,30 @@ BEGIN
 
 	INSERT INTO @TerminatedPersons
 	SELECT	p.PersonId,
-			@Today,
+			p.FirstName,
+			p.LastName,
+			(@Today - 1),
 			P.Alias,
 			P.DefaultPractice,
 			1 AS IsTerminatedDueToPay,
-			MIN(Apay.StartDate) AS ReHiredate 
+			MIN(Apay.StartDate) AS ReHiredate,
+			AT.Name AS TimeScaleName,
+			TT.Title AS TitleName,
+			P.TelephoneNumber			
 	FROM dbo.Person P  
 	INNER JOIN dbo.Pay Bpay  ON Bpay.Person = P.PersonId AND (P.TerminationDate IS NULL OR P.TerminationDate > (@Today-1))  AND Bpay.EndDate = @Today
 	INNER JOIN dbo.Timescale BT ON BT.TimescaleId = Bpay.Timescale AND BT.IsContractType = 1 
 	INNER JOIN dbo.Pay Apay  ON Apay.Person = P.PersonId AND Apay.StartDate >= @Today 
 	INNER JOIN dbo.Timescale AT ON AT.TimescaleId = Apay.Timescale AND AT.IsContractType = 0
+	INNER JOIN dbo.Title TT ON TT.TitleId = P.TitleId
 	GROUP BY p.PersonId,
+			p.FirstName,
+			p.LastName,
 			P.Alias,
-			P.DefaultPractice
+			P.DefaultPractice,
+			AT.Name,
+			P.TelephoneNumber,
+			TT.Title
 
 	UPDATE pay
 	   SET pay.EndDate = P.TerminationDate + 1
@@ -94,18 +115,19 @@ BEGIN
 	--Lock out Terminated persons
 	UPDATE m
 	SET m.IsLockedOut = 1,
-		m.LastLockoutDate = @Today
+		m.LastLockoutDate = (@Today - 1)	
 	FROM    dbo.aspnet_Users AS u
 	INNER JOIN dbo.aspnet_Applications AS a ON u.ApplicationId = a.ApplicationId
 	INNER JOIN  dbo.aspnet_Membership AS m ON u.UserId = m.UserId
-	INNER JOIN @TerminatedPersons as P ON u.LoweredUserName = LOWER(P.Alias) 
-	WHERE a.LoweredApplicationName =LOWER('PracticeManagement') AND P.IsTerminatedDueToPay = 0
+	INNER JOIN @TerminatedPersons as P ON u.LoweredUserName = LOWER(P.Alias)
+	WHERE a.LoweredApplicationName =LOWER('PracticeManagement') --AND P.IsTerminatedDueToPay = 0
 
 
 	-- set Terminated status to persons
 	UPDATE P
 	SET P.PersonStatusId = 2, --Terminated status
 		P.TerminationDate = (@Today-1),
+		P.IsWelcomeEmailSent = 0,
 		P.TerminationReasonId = CASE WHEN TP.IsTerminatedDueToPay = 0 THEN P.TerminationReasonId ELSE @TerminationReasonId END
 	FROM dbo.Person AS P 
 	INNER JOIN @TerminatedPersons TP ON P.PersonId = TP.PersonID
@@ -143,6 +165,23 @@ BEGIN
 	 FROM dbo.PersonStatusHistory PH
 	 INNER JOIN @TerminatedPersons P ON P.PersonId = PH.PersonID AND P.IsTerminatedDueToPay = 1
 	 WHERE EndDate IS NULL AND StartDate = @Today
+
+	SELECT 
+		FirstName,
+		LastName,
+		TerminationDate,
+		IsTerminatedDueToPay,
+		ReHiredate,
+		Alias,
+		TelephoneNumber,
+		TimeScaleName,
+		TitleName,		
+		CASE WHEN EXISTS(SELECT 1 FROM  @TerminatedPersons AS P 
+									 INNER JOIN aspnet_Users AS a ON LOWER(p.Alias) = a.LoweredUserName
+									 INNER JOIN aspnet_UsersInRoles AS ur ON a.UserId = ur.UserId
+									 INNER JOIN aspnet_Roles AS r ON ur.RoleId = r.RoleId WHERE r.RoleName = 'Administrator') THEN 1
+            ELSE 0 END As isAdministrator
+	FROM @TerminatedPersons 
 	 
 END
 
