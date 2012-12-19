@@ -157,9 +157,27 @@
     <value>The Person is not specified properly.</value>
   </data>
   <data name="VacationOverheadName" xml:space="preserve">
-    <value>Vacation Hourly Expense  (VHE)</value>
+    <value>PTO Hourly Expense  (PTOHE)</value>
   </data>
   <data name="WelcomeEmailTemplateName" xml:space="preserve">
     <value>WelcomeEmailTemplate</value>
+  </data>
+  <data name="AdministratorAddedTemplateName" xml:space="preserve">
+    <value>AdministratorAddedTemplate</value>
+  </data>
+  <data name="ActivateAccountTemplateName" xml:space="preserve">
+    <value>ActivateAccountTemplate</value>
+  </data>
+  <data name="HireDateChangedTemplateName" xml:space="preserve">
+    <value>HireDateChangedTemplate</value>
+  </data>
+  <data name="DeActivateAccountTemplateName" xml:space="preserve">
+    <value>DeActivateAccountTemplate</value>
+  </data>
+  <data name="ResetPasswordEmailTemplateName" xml:space="preserve">
+    <value>ResetPasswordEmailTemplate</value>
+  </data>
+  <data name="TestSettingsEmailTemplateName" xml:space="preserve">
+    <value>TestSettingsEmailTemplate</value>
   </data>
 </root>
