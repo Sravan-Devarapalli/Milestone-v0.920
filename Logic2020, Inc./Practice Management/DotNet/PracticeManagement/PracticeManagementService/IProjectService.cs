@@ -86,40 +86,6 @@ namespace PracticeManagementService
         /// <summary>
         /// Enlists the requested projects.
         /// </summary>
-        /// <param name="clientId">An ID of the client the projects belong to.</param>
-        /// <param name="showProjected">If true - the projected projects will be included in the results.</param>
-        /// <param name="showCompleted">If true - the completed projects will be included in the results.</param>
-        /// <param name="showActive">If true - the active (statusName=Active) projects will be included in the results.</param>
-        /// <param name="showExperimental">If true - the experimantal projects will are included in the results.</param>
-        /// <param name="periodStart">The start of the period to enlist the projects within.</param>
-        /// <param name="periodEnd">The end of the period to enlist the projects within.</param>
-        /// <param name="userName">The user (by email) to retrive the result for.</param>
-        /// <param name="salespersonId">Determines an ID of the salesperson to filter the list for.</param>
-        /// <param name="practiceManagerId">Determines an ID of the practice manager to filter the list for.</param>
-        /// <param name="projectGroupId"></param>
-        /// <param name="includeCurentYearFinancials">
-        /// Determines the financial indexes for the current year need to be included into the result.
-        /// </param>
-        /// <param name="practiceId"></param>
-        /// <returns>The list of the projects are match with the specified conditions.</returns>
-        [OperationContract]
-        List<Project> GetProjectList(int? clientId,
-            bool showProjected,
-            bool showCompleted,
-            bool showActive,
-            bool showExperimental,
-            DateTime periodStart,
-            DateTime periodEnd,
-            string userName,
-            int? salespersonId,
-            int? practiceManagerId,
-            int? practiceId,
-            int? projectGroupId,
-            ProjectCalculateRangeType includeCurentYearFinancials);
-
-        /// <summary>
-        /// Enlists the requested projects.
-        /// </summary>
         /// <param name="clientIds">Comma separated list of client ids. Null value means all clients.</param>
         /// <param name="showProjected">If true - the projected projects will be included in the results.</param>
         /// <param name="showCompleted">If true - the completed projects will be included in the results.</param>
@@ -213,15 +179,6 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref="Project"/> objects.</returns>
         [OperationContract]
         List<Project> ProjectSearchText(string looked, int personId);
-
-        /// <summary>
-        /// Reatrives a project with a specified ID.
-        /// </summary>
-        /// <param name="projectId">The ID of the requested project.</param>
-        /// <param name="userName">The user (by email) to retrive the result for.</param>
-        /// <returns>The <see cref="Project"/> record if found and null otherwise.</returns>
-        [OperationContract]
-        Project GetProjectDetail(int projectId, string userName);
 
         /// <summary>
         /// Reatrives a project with a specified ID.
