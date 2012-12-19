@@ -24,21 +24,21 @@
             <table>
                 <tr>
                     <td>
-                        <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" OnCompensationMethodChanged="personnelCompensation_CompensationMethodChanged"
+                        <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" OnCompensationMethodChanged="personnelCompensation_CompensationMethodChanged" ValidationGroup="CompensationDetail" OnSaveDetails="personnelCompensation_SaveDetails"
                             OnPeriodChanged="personnelCompensation_PeriodChanged" />
                     </td>
                 </tr>
                 <tr>
                     <asp:TextBox ID="txtDummy" runat="server" Style="display: none"></asp:TextBox>
-                    <asp:CustomValidator ID="custdateRangeBegining" runat="server" EnableClientScript="false"
+                    <asp:CustomValidator ID="custdateRangeBegining" runat="server" EnableClientScript="false" ValidationGroup="CompensationDetail"
                         ErrorMessage="The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first."
                         ToolTip="The Start Date is incorrect. There are several other compensation records for the specified period. Please edit them first."
                         ControlToValidate="txtDummy" ValidateEmptyText="True" Text="*" OnServerValidate="custdateRangeBegining_ServerValidate"></asp:CustomValidator>
-                    <asp:CustomValidator ID="custdateRangeEnding" runat="server" EnableClientScript="false"
+                    <asp:CustomValidator ID="custdateRangeEnding" runat="server" EnableClientScript="false" ValidationGroup="CompensationDetail"
                         ErrorMessage="The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first."
                         ToolTip="The End Date is incorrect. There are several other compensation records for the specified period. Please edit them first."
                         ControlToValidate="txtDummy" ValidateEmptyText="True" Text="*" OnServerValidate="custdateRangeEnding_ServerValidate"></asp:CustomValidator>
-                    <asp:CustomValidator ID="custdateRangePeriod" runat="server" EnableClientScript="false"
+                    <asp:CustomValidator ID="custdateRangePeriod" runat="server" EnableClientScript="false" ValidationGroup="CompensationDetail"
                         ErrorMessage="The period is incorrect. There records falls into the period specified in an existing record."
                         ToolTip="The period is incorrect. There records falls into the period specified in an existing record."
                         ControlToValidate="txtDummy" ValidateEmptyText="True" Text="*" OnServerValidate="custdateRangePeriod_ServerValidate"></asp:CustomValidator>
@@ -73,10 +73,10 @@
     </asp:Panel>
     <div class="buttons-block">
         <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
-        <asp:CustomValidator ID="custUserName" runat="server" ValidationGroup="PersonDetailsSave"></asp:CustomValidator>
-        <asp:ValidationSummary ID="vsumCompensation" runat="server" EnableClientScript="false" />
-        <cc:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />&nbsp;
-        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" />
+        <asp:CustomValidator ID="custUserName" runat="server" ValidationGroup="PersonDetailsSave" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>
+        <asp:ValidationSummary ID="vsumCompensation" runat="server" EnableClientScript="false" ValidationGroup="CompensationDetail" />
+        <cc:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" CssClass="Width150pxImp"/>&nbsp;
+        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CssClass="Width150pxImp" />
         <div class="clear0">
         </div>
     </div>
