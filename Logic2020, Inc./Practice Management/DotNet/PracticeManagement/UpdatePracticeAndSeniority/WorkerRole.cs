@@ -38,6 +38,7 @@ namespace UpdatePracticeAndSeniority
         public const string Skills_Profile_PagePath_ConfigKey = "SkillsProfilePagePath";
         public const string PAYROLLDISTRIBUTIONREPORT_SCHEDULETIME_ConfigKey = "PayrollDistributionScheduleTime";
         public const string PayRollDistibutionReportReciever_ConfigKey = "PayrollDistributionReportReciever";
+        public const string LoginPagePath_ConfigKey = "LoginPagePath";
 
         //Formats
         public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
@@ -51,6 +52,8 @@ namespace UpdatePracticeAndSeniority
         public const string FailedRunningProcedureFormat = "Failed running the procedure {0} due to: {1}";
         public const string SuccessRunningProcedureFormat = "Successfully completed running the procedure {0}";
         public const string ExportExcelCellFormat = "&nbsp; {0}";
+        public const string WelcomeEmailFailedFormat = "Failed to send the WelCome Emails due to: {0}";
+        public const string ActivateDeactivateEmailsFailedFormat = "Failed to send Activate and DeActivate Account Emails due to: {0}";
 
         //Log Status
         public const string SuccessStatus = "Success";
@@ -64,6 +67,10 @@ namespace UpdatePracticeAndSeniority
         public const string M_PayrollDistributionReportReadDataSuccess = "Read the Payroll Distribution Report data.";
         public const string M_PayrollDistributionReportStartedEmailing = "Started emailing the Payroll Distribution Report data.";
         public const string M_PayrollDistributionReportEmailed = "Emailed the Payroll Distribution Report.";
+        public const string M_StartedWelcomeEmails = "Started to send Welcome emails.";
+        public const string M_FinishedWelcomeEmails = "Finished to send the Welcome Emails.";
+        public const string M_StartedActivateDeactivateEmails = "Started to send the Activate and DeActivate Account Emails.";
+        public const string M_FinishedActivateDeactivateEmails = "Finished to send the Activate and DeActivate Account Emails.";
 
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
@@ -73,6 +80,12 @@ namespace UpdatePracticeAndSeniority
         //Parameters
         public const string NextRun = "@NextRun";
         public const string LastRun = "@LastRun";
+
+        //Email Templates
+        public const string DeActivateAccountTemplate = "DeActivateAccountTemplate";
+        public const string ActivateAccountTemplate = "ActivateAccountTemplate";
+        public const string WelcomeEmailTemplate = "WelcomeEmailTemplate";
+        public const string AdministratorAddedTemplate = "AdministratorAddedTemplate";
 
         #endregion
 
@@ -149,6 +162,14 @@ namespace UpdatePracticeAndSeniority
             get
             {
                 return TimeSpan.Parse(GetConfigValue(RunSchedularDailyAtTime_ConfigKey));
+            }
+        }
+
+        public static string LoginPagePath
+        {
+            get
+            {
+                return WorkerRole.GetConfigValue(LoginPagePath_ConfigKey) ?? "https://practice.logic2020.com/Login.aspx";
             }
         }
 
@@ -270,6 +291,7 @@ namespace UpdatePracticeAndSeniority
         {
             var nextRun = GetNextRunDate(currentWithTimeZone);
             WorkerRole.StartAutomaticUpdation(currentWithTimeZone, nextRun);
+            WorkerRole.GetTodaysHireDatePersonsAndSenEmails(currentWithTimeZone, nextRun);
             WorkerRole.EmailUpdatedProfilesList(currentWithTimeZone, nextRun);
         }
 
@@ -310,10 +332,21 @@ namespace UpdatePracticeAndSeniority
                 cmd.Parameters.Add(lastRunParam);
                 SqlParameter nextRunParam = new SqlParameter(NextRun, nextRun);
                 cmd.Parameters.Add(nextRunParam);
-                int rowsAffected = cmd.ExecuteNonQuery();
+
+                List<Person> terminatedPersons = new List<Person>();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    ReadPersons(reader, terminatedPersons);
+                }
+
                 connection.Close();
-                
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_AutoUpdateObjects), nextRun);
+
+                //sending activate and deactivate account emails.
+                if (terminatedPersons.Count > 0)
+                {
+                    SendActivateAndDeactivateAccountEmails(terminatedPersons, currentWithTimeZone, nextRun);
+                }
             }
             catch (Exception ex)
             {
@@ -731,11 +764,12 @@ namespace UpdatePracticeAndSeniority
         /// <param name="commaSeperatedToAddresses"></param>
         /// <param name="commaSeperatedBccAddresses"></param>
         /// <param name="attachments"></param>
-        public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, List<Attachment> attachments)
+        public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, List<Attachment> attachments,bool isHighPriority = false)
         {
             var smtpSettings = GetSMTPSettings();
 
             MailMessage message = new MailMessage();
+            message.Priority = isHighPriority ? MailPriority.High : MailPriority.Normal;
             var addresses = commaSeperatedToAddresses.Split(',');
             foreach (var address in addresses)
             {
@@ -885,6 +919,475 @@ namespace UpdatePracticeAndSeniority
                 GetResourceValueByKeyAndType(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
 
             return sMTPSettings;
+        }
+
+        /// <summary>
+        /// Retrieves today's hire date persons.
+        /// </summary>
+        public static void GetTodaysHireDatePersonsAndSenEmails(DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+
+                if (string.IsNullOrEmpty(connectionString))
+                    return;
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand(SP_GetPersonsByTodayHireDate, connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+
+                List<Person> persons = new List<Person>();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    ReadPersons(reader, persons);
+                }
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_GetPersonsByTodayHireDate), nextRun);
+                //sending login credentials through email.
+                if (persons.Count > 0)
+                {
+                    SendWelComeEmails(persons, currentWithTimeZone, nextRun);
+                }
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FailedRunningProcedureFormat, SP_GetPersonsByTodayHireDate) + ex.Message, nextRun);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Sends login credentials to the persons.
+        /// </summary>
+        /// <param name="persons">Persons,Who have (today - 1) as hire date.</param>
+        private static void SendWelComeEmails(List<Person> persons, DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            try
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedWelcomeEmails, nextRun);
+                var welcomeEmailTemplate = GetEmailTemplate(WelcomeEmailTemplate);
+                var companyName = GetCompanyName();
+                var smtpSettings = GetSMTPSettings();
+
+                foreach (Person person in persons)
+                {
+                    var password = GenerateRandomPassword();
+                    var encodedPassword = EncodePasswordWithoutHash(password);
+
+                    PersonEncodedPasswordInsert(person.Id.Value, encodedPassword);
+
+                    var emailBody = String.Format(welcomeEmailTemplate.Body, person.FirstName, companyName, person.Alias, password, LoginPagePath, smtpSettings.PMSupportEmail);
+                    Email(welcomeEmailTemplate.Subject, emailBody, true, person.Alias, string.Empty, null);
+                    UpdateIsWelcomeEmailSentForPerson(person.Id.Value);
+                }
+
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FinishedWelcomeEmails, nextRun);
+
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(WelcomeEmailFailedFormat, ex.Message), nextRun);
+            }
+
+        }
+
+        /// <summary>
+        /// Sends activated and deactivated account emails.
+        /// </summary>
+        /// <param name="terminatedPersons">Persons,who have terminated due to pay or due to termination date.</param>      
+        private static void SendActivateAndDeactivateAccountEmails(List<Person> terminatedPersons, DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            try
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedActivateDeactivateEmails, nextRun);
+                var deactivateAccountEmailTemplates = GetEmailTemplate(DeActivateAccountTemplate);
+                var activeAccountEmailTemplate = GetEmailTemplate(ActivateAccountTemplate);
+                var administratorAddedEmailTemplate = GetEmailTemplate(AdministratorAddedTemplate);
+
+                foreach (Person person in terminatedPersons)
+                {
+                    var emailBody = string.Format(deactivateAccountEmailTemplates.Body, person.FirstName, person.LastName, person.TerminationDate.Value.ToString(DateFormat));
+                    Email(deactivateAccountEmailTemplates.Subject, emailBody, true, deactivateAccountEmailTemplates.EmailTemplateTo, string.Empty, null);
+
+                    if (person.IsTerminatedDueToPay)//rehire due to compensation change from contract to employee
+                    {
+                        var activeAccountEmailBody = string.Format(activeAccountEmailTemplate.Body, person.FirstName, person.LastName, person.HireDate.ToString(DateFormat), person.Alias, person.Title.TitleName, person.CurrentPay.TimescaleName, person.TelephoneNumber);
+                        Email(activeAccountEmailTemplate.Subject, activeAccountEmailBody, true, activeAccountEmailTemplate.EmailTemplateTo, string.Empty, null);
+                        if (person.IsAdmin)
+                        {
+                            var administartorAddedEmail = string.Format(administratorAddedEmailTemplate.Body, person.FirstName, person.LastName);
+                            Email(administratorAddedEmailTemplate.Subject, administartorAddedEmail, true, administratorAddedEmailTemplate.EmailTemplateTo, string.Empty, null,true);
+                        }
+
+                    }
+
+                }
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FinishedActivateDeactivateEmails, nextRun);
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(ActivateDeactivateEmailsFailedFormat, ex.Message), nextRun);
+            }
+
+        }
+
+        /// <summary>
+        /// Updates person's IsWelcomeEmailSent to 1.
+        /// </summary>
+        /// <param name="personId">person id.</param>
+        public static void UpdateIsWelcomeEmailSentForPerson(int personId)
+        {
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand("dbo.UpdateIsWelcomeEmailSentForPerson", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlParameter personIdParam = new SqlParameter("@PersonId", personId);
+                cmd.Parameters.Add(personIdParam);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                throw ex;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets company name,Which is used in welcome email body.
+        /// </summary>
+        /// <returns>Company name.</returns>
+        public static string GetCompanyName()
+        {
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand("dbo.GetCompanyName", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                return (string)cmd.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                throw ex;
+            }
+
+        }
+
+        /// <summary>
+        /// Reads a list of persons.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="persons"></param>
+        private static void ReadPersons(SqlDataReader reader, List<Person> persons)
+        {
+
+            if (reader.HasRows)
+            {
+                int personFirstNameIndex = reader.GetOrdinal("FirstName");
+                int personLastNameIndex;
+                int personTerminationDateIndex;
+                int personAliasIndex;
+                int personIdIndex;
+                int personTerminatedDueToPayIndex;
+                int personReHireDateIndex;
+                int personTelephoneNumberIndex;
+                int personTimeScaleNameIndex;
+                int personTitleNameIndex;
+                int isAdministratorIndex;
+
+                try
+                {
+                    personIdIndex = reader.GetOrdinal("PersonId");
+
+                }
+                catch
+                {
+                    personIdIndex = -1;
+                }
+                try
+                {
+                    personLastNameIndex = reader.GetOrdinal("LastName");
+
+                }
+                catch
+                {
+                    personLastNameIndex = -1;
+                }
+                try
+                {
+                    personTerminationDateIndex = reader.GetOrdinal("TerminationDate");
+                }
+                catch
+                {
+                    personTerminationDateIndex = -1;
+                }
+                try
+                {
+                    personAliasIndex = reader.GetOrdinal("Alias");
+                }
+                catch
+                {
+                    personAliasIndex = -1;
+                }
+                try
+                {
+                    personTerminatedDueToPayIndex = reader.GetOrdinal("IsTerminatedDueToPay");
+
+                }
+                catch
+                {
+                    personTerminatedDueToPayIndex = -1;
+                }
+
+                try
+                {
+                    personReHireDateIndex = reader.GetOrdinal("ReHiredate");
+
+                }
+                catch
+                {
+                    personReHireDateIndex = -1;
+                }
+                try
+                {
+                    personTelephoneNumberIndex = reader.GetOrdinal("TelephoneNumber");
+
+                }
+                catch
+                {
+                    personTelephoneNumberIndex = -1;
+                }
+                try
+                {
+                    personTimeScaleNameIndex = reader.GetOrdinal("TimeScaleName");
+
+                }
+                catch
+                {
+                    personTimeScaleNameIndex = -1;
+                }
+                try
+                {
+                    personTitleNameIndex = reader.GetOrdinal("TitleName");
+
+                }
+                catch
+                {
+                    personTitleNameIndex = -1;
+                }
+                try
+                {
+                    isAdministratorIndex = reader.GetOrdinal("isAdministrator");
+                }
+                catch
+                {
+                    isAdministratorIndex = -1;
+                }
+
+                while (reader.Read())
+                {
+                    var person = new Person
+                    {
+                        FirstName = reader.GetString(personFirstNameIndex)
+                    };
+                    if (personLastNameIndex != -1)
+                    {
+                        person.LastName = reader.GetString(personLastNameIndex);
+                    }
+                    if (personTerminationDateIndex != -1)
+                    {
+                        person.TerminationDate = reader.GetDateTime(personTerminationDateIndex);
+                    }
+
+                    if (personAliasIndex != -1)
+                    {
+                        person.Alias = reader.GetString(personAliasIndex);
+                    }
+
+                    if (personIdIndex != -1)
+                    {
+                        person.Id = reader.GetInt32(personIdIndex);
+                    }
+                    if (personTerminatedDueToPayIndex != -1)
+                    {
+                        person.IsTerminatedDueToPay = reader.GetBoolean(personTerminatedDueToPayIndex);
+                    }
+                    if (personReHireDateIndex != -1)
+                    {
+                        person.HireDate = reader.IsDBNull(personReHireDateIndex) ? DateTime.Now : reader.GetDateTime(personReHireDateIndex);
+                    }
+                    if (personTelephoneNumberIndex != -1)
+                    {
+                        person.TelephoneNumber = reader.IsDBNull(personTelephoneNumberIndex) ? null : reader.GetString(personTelephoneNumberIndex);//update
+                    }
+
+                    if (personTimeScaleNameIndex != -1)
+                    {
+                        person.CurrentPay = new Pay
+                        {
+                            TimescaleName = reader.IsDBNull(personTimeScaleNameIndex) ? null : reader.GetString(personTimeScaleNameIndex)
+                        };
+
+                    }
+                    if (personTitleNameIndex != -1)
+                    {
+                        person.Title = new Title
+                        {
+                            TitleName = reader.IsDBNull(personTitleNameIndex) ? null : reader.GetString(personTitleNameIndex)
+                        };
+                    }
+                    if (isAdministratorIndex != -1)
+                    {
+                        person.IsAdmin = reader.GetInt32(isAdministratorIndex) == 1;
+                    }
+
+
+                    persons.Add(person);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets email template from database by emailtemplatename.
+        /// </summary>
+        /// <param name="emailTemplateName">Email template name.</param>
+        /// <returns>EmailTemplate object</returns>
+        private static EmailTemplate GetEmailTemplate(string emailTemplateName)
+        {
+            SqlConnection connection = null;
+            EmailTemplate emailTemplate = new EmailTemplate();
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmnd = new SqlCommand("dbo.EmailTemplateGetByName", connection);
+                cmnd.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlParameter emailTemplateNameParam = new SqlParameter("@EmailTemplateName", emailTemplateName);
+                cmnd.Parameters.Add(emailTemplateNameParam);
+                using (var reader = cmnd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        int emailTemplateBodyIndex = reader.GetOrdinal("EmailTemplateBody");
+                        int emailTemplateSubjectIndex = reader.GetOrdinal("EmailTemplateSubject");
+                        int emailTemplateToIndex = reader.GetOrdinal("EmailTemplateTo");
+                        while (reader.Read())
+                        {
+                            emailTemplate = new EmailTemplate
+                            {
+                                EmailTemplateTo = reader.IsDBNull(emailTemplateToIndex) ? string.Empty : reader.GetString(emailTemplateToIndex),
+                                Subject = reader.GetString(emailTemplateSubjectIndex),
+                                Body = reader.GetString(emailTemplateBodyIndex)
+                            };
+                        }
+
+                    }
+
+                }
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                throw ex;
+            }
+            return emailTemplate;
+
+        }
+
+        /// <summary>
+        /// Inserts a encoded password into database.
+        /// </summary>
+        /// <param name="personId">Person id.</param>
+        /// <param name="encodedPassword">Encoded password without hash.</param>
+        public static void PersonEncodedPasswordInsert(int personId, string encodedPassword)
+        {
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmnd = new SqlCommand("dbo.PersonPasswordInsert", connection);
+                cmnd.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlParameter personIdParam = new SqlParameter("@PersonId", personId);
+                cmnd.Parameters.Add(personIdParam);
+                SqlParameter encodedPasswordParam = new SqlParameter("@encodedPassword", encodedPassword);
+                cmnd.Parameters.Add(encodedPasswordParam);
+                cmnd.ExecuteNonQuery();
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                throw ex;
+            }
+
+        }
+
+        /// <summary>
+        /// Encodes password.
+        /// </summary>
+        /// <param name="password">Password to be encoded.</param>
+        /// <returns>Encoded password.</returns>
+        private static string EncodePasswordWithoutHash(string password)
+        {
+            string encodedPassword = string.Empty;
+            byte[] encode = new byte[password.Length];
+            encode = Encoding.UTF8.GetBytes(password);
+            encodedPassword = Convert.ToBase64String(encode);
+            return encodedPassword;
+        }
+
+        /// <summary>
+        /// Generates random password,Which is of 7 in length and contains atleast one special character.
+        /// </summary>
+        /// <returns></returns>
+        private static string GenerateRandomPassword()
+        {
+            int PasswordLength = 7;
+            string randomPassword = "";
+            string specialChars = "~,!,@,^,*,(,)";
+            string allowedChars = "";
+            allowedChars = "1,2,3,4,5,6,7,8,9,0";
+            allowedChars += "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,";
+            allowedChars += "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,";
+            allowedChars += "~,!,@,^,*,(,)";
+            allowedChars += specialChars;
+
+            char[] seperator = { ',' };
+            string[] allowedCharacters = allowedChars.Split(seperator);
+            string[] specialCharacters = specialChars.Split(seperator);
+            Random rand = new Random();
+            for (int i = 0; i < Convert.ToInt32(PasswordLength); i++)
+            {
+                randomPassword += allowedCharacters[rand.Next(0, allowedCharacters.Length)];
+                if (i == PasswordLength / 2)
+                {
+                    randomPassword += specialCharacters[rand.Next(0, specialCharacters.Length)];
+                    i++;
+                }
+            }
+            return randomPassword;
         }
 
         #endregion
