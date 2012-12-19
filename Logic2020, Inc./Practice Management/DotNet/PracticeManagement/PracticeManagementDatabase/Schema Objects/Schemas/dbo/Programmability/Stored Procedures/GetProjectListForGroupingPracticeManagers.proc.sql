@@ -231,19 +231,7 @@ BEGIN
 				   (CASE 
 				   WHEN p.Timescale = 4
 				   THEN p.HourlyRate * 0.01 * m.Amount
-				   ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0)*m.HoursPerDay/HY.HoursInYear VacationRate,
-				   (SELECT SUM(CASE
-								   WHEN DATEDIFF(DD, Person.HireDate, Calendar.Date)*8 <= rc.HoursToCollect
-										AND rc.HoursToCollect > 0 
-								   THEN rc.Amount / (rc.HoursToCollect)
-								   ELSE NULL
-								END)
-					  FROM dbo.RecruiterCommission AS rc
-						   INNER JOIN dbo.Person ON Person.PersonId = rc.RecruitId
-						   INNER JOIN dbo.Calendar ON Calendar.Date = r.Date
-					 WHERE rc.RecruitId = m.PersonId
-				   ) AS RecruitingCommissionRate
-
+				   ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0)*m.HoursPerDay/HY.HoursInYear VacationRate
 			  FROM  (			  
 						  SELECT -- Milestones with a fixed amount
 							   m.MilestoneId,
@@ -393,8 +381,7 @@ BEGIN
 					   f.Date, 
 					   f.PersonMilestoneDailyAmount,
 					   f.PersonDiscountDailyAmount,
-					   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)
-						+ISNULL(f.RecruitingCommissionRate,0)) SLHR,
+					   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)) SLHR,
 					   ISNULL(f.PayRate,0) PayRate,
 					   f.MLFOverheadRate,
 					   f.PersonHoursPerDay,
