@@ -569,7 +569,7 @@ namespace PracticeManagementService
                 bool isLockedOutUpdated = false;
 
                 // Locking the users:the rule is the person should be in lock out state from termination date to midnight of next hiredate.
-		//If person is rehired also we will lock the person and unlock him after sending the welcome mail i.e. on the new hiredate.
+                //If person is rehired also we will lock the person and unlock him after sending the welcome mail i.e. on the new hiredate.
                 if (oldPerson != null && oldPerson.Status != null && person.Status != null &&
                     oldPerson.Status.Id != person.Status.Id &&
                     (person.Status.Id == (int)PersonStatusType.Terminated || oldPerson.Status.Id == (int)PersonStatusType.Terminated))
@@ -606,10 +606,6 @@ namespace PracticeManagementService
                     person.EmploymentHistory = PersonDAL.GetPersonEmploymentHistoryById(person.Id.Value);
                 }
                 person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
-                if (oldPerson != null)
-                {
-                    oldPerson.RoleNames = Roles.GetRolesForUser(person.Alias);
-                }
             }
             SendMailsAfterProcessPersonData(oldPerson, person, isReHireDueToPay, loginPageUrl);
         }
