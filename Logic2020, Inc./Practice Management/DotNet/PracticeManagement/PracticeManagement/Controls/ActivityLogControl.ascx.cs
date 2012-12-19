@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Globalization;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Xml;
 using System.Xml.Xsl;
 using DataTransferObjects;
-using DataTransferObjects.ContextObjects;
-using System.Xml;
 using PraticeManagement.Configuration;
-using PraticeManagement.Utils;
 using PraticeManagement.FilterObjects;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls
 {
