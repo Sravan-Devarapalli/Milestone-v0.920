@@ -4,9 +4,9 @@ using System.Threading;
 using System.Web;
 using System.Web.SessionState;
 using DataTransferObjects;
+using PraticeManagement.Controls.Reports;
 using PraticeManagement.ExpenseService;
 using PraticeManagement.ProjectService;
-using PraticeManagement.Controls.Reports;
 
 namespace PraticeManagement.Controls
 {
@@ -352,69 +352,6 @@ namespace PraticeManagement.Controls
 				}
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets the data for the person stats report.
-		/// </summary>
-		public static PersonStats[] PersonStats
-		{
-			get
-			{
-				CompanyPerformanceState singleton = State;
-				CompanyPerformanceFilterSettings filterSet = Filter;
-				PersonStats[] result;
-
-				if (singleton != null && filterSet != null)
-				{
-					result = singleton.PersonStatsState;
-
-					if (result == null)
-					{
-						using (var serviceClient = new ProjectServiceClient())
-						{
-							try
-							{
-                                result = GetPersonStats(filterSet.PeriodStart,
-                                                            filterSet.PeriodEnd,
-                                                            Thread.CurrentPrincipal.Identity.Name,
-                                                            filterSet.SalespersonId,
-                                                            filterSet.ProjectOwnerId,
-                                                            false,
-                                                            true,
-                                                            true,
-                                                            true,
-                                                            true,
-                                                            true);
-							}
-							catch (CommunicationException)
-							{
-								serviceClient.Abort();
-								throw;
-							}
-						}
-
-						singleton.PersonStatsState = result;
-						State = singleton;
-					}
-				}
-				else
-				{
-					result = null;
-				}
-
-				return result;
-			}
-			set
-			{
-				CompanyPerformanceState singleton = State;
-				if (State != null)
-				{
-					State.PersonStatsState = value;
-					State = singleton;
-				}
-			}
-		}
-
 
         public static PersonStats[] GetPersonStats(DateTime periodStart, DateTime periodEnd, string identityName, int? salesPersonId,
                                                           int? projectOwnerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental,bool showInternal, bool showInactive)
