@@ -14,8 +14,10 @@
       <Setting name="EmailSubjectForProfilesUpdatedList"/>
       <Setting name="PayrollDistributionScheduleTime"/>
       <Setting name="PayrollDistributionReportReciever"/>
+      <Setting name="LoginPagePath"/>
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
   </WorkerRole>
 </ServiceDefinition>
+
