@@ -96,15 +96,15 @@ AS
                 c.[TimeScaleName] AS Timescale,
 				st.PersonStatusId,
                 st.[Name],
-				S.[Name] Seniorityname,
-				S.SeniorityId,
+				P.TitleId,
+				T.Title,
                 --dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil,
                 AvgUT.AvgUtilization AS wutilAvg,
                 ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays
         FROM    dbo.Person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
-				INNER JOIN dbo.Seniority S ON P.SeniorityId = S.SeniorityId
+				INNER JOIN dbo.Title AS T ON T.TitleId = P.TitleId
 				INNER JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId AND AvaHrs.AvaliableHours > 0
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 LEFT JOIN dbo.GetPersonVacationDaysTable(@StartDate,@Enddate) VactionDaysTable ON VactionDaysTable.PersonId = c.ConsId
