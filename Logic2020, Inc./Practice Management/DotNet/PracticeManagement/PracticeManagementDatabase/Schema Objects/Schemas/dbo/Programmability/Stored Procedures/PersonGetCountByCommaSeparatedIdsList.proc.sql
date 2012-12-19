@@ -23,33 +23,6 @@ AS
 	ELSE
 		SET @Alphabet = '%'
 
-	DECLARE @PracticeIdsTable TABLE
-	(
-		PracticeId INT
-	)
-
-	INSERT INTO @PracticeIdsTable
-	SELECT ResultId 
-	FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsList)
-	
-	DECLARE @TimeScaleIdsTable TABLE
-	(
-		TimeScaleId INT
-	)
-
-	INSERT INTO @TimeScaleIdsTable
-	SELECT ResultId 
-	FROM [dbo].[ConvertStringListIntoTable] (@TimescaleIdsList)
-
-	DECLARE @RecruiterIdsTable TABLE
-	(
-		RecruiterId INT
-	)
-
-	INSERT INTO @RecruiterIdsTable
-	SELECT ResultId 
-	FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList)
-		
 	DECLARE @NOW DATETIME
 	SET @NOW = GETDATE()
 
@@ -60,12 +33,9 @@ AS
 				OR (p.PersonStatusId = 3 AND @Projected = 1)
 				OR (p.PersonStatusId = 5 AND @TerminationPending  = 1) 
 			) 
-		AND ( p.DefaultPractice  IN (SELECT PracticeId FROM @PracticeIdsTable)  OR @PracticeIdsList IS NULL )
+		AND (@PracticeIdsList IS NULL OR p.DefaultPractice  IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsList)))
 		AND (p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
-		AND ( @RecruiterIdsList IS NULL
-	        OR EXISTS (SELECT 1
-	                     FROM dbo.RecruiterCommission AS c
-	                    WHERE c.RecruitId = p.PersonId AND c.RecruiterId IN (SELECT RecruiterId FROM @RecruiterIdsTable)))
+		AND ( @RecruiterIdsList IS NULL OR p.RecruiterId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList)))
 		AND (@TimescaleIdsList IS NULL
 			OR EXISTS (SELECT 1 
 						FROM (SELECT TOP 1 pay.Timescale
@@ -74,7 +44,7 @@ AS
 								AND((@Now >= pay.StartDate AND @Now < pay.EndDateOrig) OR @Now < pay.StartDate)
 								ORDER BY pay.StartDate
 								) d
-						WHERE d.Timescale IN (SELECT TimeScaleId FROM @TimeScaleIdsTable)))
+						WHERE d.Timescale IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@TimescaleIdsList))))
 		AND ( p.LastName LIKE @Alphabet )
 		AND p.IsStrawman = 0  
 
