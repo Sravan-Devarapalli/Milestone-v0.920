@@ -2,28 +2,16 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProjectService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd6" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd6" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_InputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProject" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_OutputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProjectResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
-  </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupId" />
   </wsdl:message>
@@ -150,12 +138,6 @@
   <wsdl:message name="IProjectService_GetProjectListCustom_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectListCustomResponse" />
   </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectList_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectList" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectList_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectListResponse" />
-  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectListAllMultiParameters_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectListAllMultiParameters" />
   </wsdl:message>
@@ -197,12 +179,6 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectSearchText_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectSearchTextResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectDetail_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectDetail" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectDetail_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectDetailResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectDetailWithoutMilestones_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectDetailWithoutMilestones" />
@@ -294,15 +270,19 @@
   <wsdl:message name="IProjectService_IsUserHasPermissionOnProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsUserHasPermissionOnProjectResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProject" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
+  </wsdl:message>
   <wsdl:portType name="IProjectService">
-    <wsdl:operation name="IsUserIsOwnerOfProject">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" message="tns:IProjectService_IsUserIsOwnerOfProject_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse" message="tns:IProjectService_IsUserIsOwnerOfProject_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetProjectsListByProjectGroupId">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" message="tns:IProjectService_GetProjectsListByProjectGroupId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse" message="tns:IProjectService_GetProjectsListByProjectGroupId_OutputMessage" />
@@ -387,10 +367,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListCustom" message="tns:IProjectService_GetProjectListCustom_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListCustomResponse" message="tns:IProjectService_GetProjectListCustom_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetProjectList">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectList" message="tns:IProjectService_GetProjectList_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListResponse" message="tns:IProjectService_GetProjectList_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="ProjectListAllMultiParameters">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectListAllMultiParameters" message="tns:IProjectService_ProjectListAllMultiParameters_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectListAllMultiParametersResponse" message="tns:IProjectService_ProjectListAllMultiParameters_OutputMessage" />
@@ -418,10 +394,6 @@
     <wsdl:operation name="ProjectSearchText">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectSearchText" message="tns:IProjectService_ProjectSearchText_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectSearchTextResponse" message="tns:IProjectService_ProjectSearchText_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectDetail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectDetail" message="tns:IProjectService_GetProjectDetail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectDetailResponse" message="tns:IProjectService_GetProjectDetail_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetProjectDetailWithoutMilestones">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectDetailWithoutMilestones" message="tns:IProjectService_GetProjectDetailWithoutMilestones_InputMessage" />
@@ -483,27 +455,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProject" message="tns:IProjectService_IsUserHasPermissionOnProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserHasPermissionOnProjectResponse" message="tns:IProjectService_IsUserHasPermissionOnProject_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="IsUserIsOwnerOfProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" message="tns:IProjectService_IsUserIsOwnerOfProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse" message="tns:IProjectService_IsUserIsOwnerOfProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="IsUserIsOwnerOfProject">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetProjectsListByProjectGroupId">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" style="document" />
       <wsdl:input>
@@ -693,15 +655,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetProjectList">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectList" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="ProjectListAllMultiParameters">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectListAllMultiParameters" style="document" />
       <wsdl:input>
@@ -758,15 +711,6 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectSearchText">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectSearchText" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectDetail">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectDetail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -909,10 +853,28 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="IsUserIsOwnerOfProject">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="ProjectService">
     <wsdl:port name="BasicHttpBinding_IProjectService" binding="tns:BasicHttpBinding_IProjectService">
-      <soap:address location="http://system68.ggk.com/PracticeManagementService/ProjectService.svc" />
+      <soap:address location="http://system64.ggk.com/PracticeManagementService/ProjectService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
