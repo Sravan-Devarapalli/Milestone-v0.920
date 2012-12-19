@@ -1,20 +1,19 @@
 ﻿using System;
+using System.Linq;
 using System.ServiceModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
-using PraticeManagement.TimescaleService;
-using System.Linq;
 
 namespace PraticeManagement
 {
     using System.Threading;
     using System.Web;
-    using Utils;
     using System.Web.Security;
     using Resources;
+    using Utils;
 
     public partial class CompensationDetail : PracticeManagementPageBase
     {
@@ -64,18 +63,6 @@ namespace PraticeManagement
             set
             {
                 ViewState["PersonDetailPageData"] = value;
-            }
-        }
-
-        protected string LoginPageUrl
-        {
-            get
-            {
-                return (string)ViewState["LoginPageUrl_ViewState"];
-            }
-            set
-            {
-                ViewState["LoginPageUrl_ViewState"] = value;
             }
         }
 
@@ -153,10 +140,9 @@ namespace PraticeManagement
                 try
                 {
                     Person person;
-                    if (PreviousPage != null && PreviousPage.PersonUnsavedData != null && PreviousPage.LoginPageUrl != null)
+                    if (PreviousPage != null && PreviousPage.PersonUnsavedData != null)
                     {
                         person = PersonDetailData = PreviousPage.PersonUnsavedData;
-                        LoginPageUrl = PreviousPage.LoginPageUrl;
                         Permissions = PreviousPage.Permissions;
                     }
                     else
@@ -167,9 +153,8 @@ namespace PraticeManagement
                     if (SelectedStartDate.HasValue)
                     {
                         Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-
-                        btnSave.Visible = (pay.StartDate >= person.HireDate && person.Status.Id != (int)PersonStatusType.Terminated);
-
+                        var now = Utils.Generic.GetNowWithTimeZone(); 
+                        btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
                         PopulateControls(pay);
                     }
                     else
@@ -177,18 +162,13 @@ namespace PraticeManagement
                         if (person.PaymentHistory.Count == 0 || (PreviousPage != null && PersonDetailData != null))
                         {
                             personnelCompensation.StartDate = person.HireDate;
-                            if (person.Seniority != null)
+                            if (person.Title != null)
                             {
-                                personnelCompensation.SeniorityId = person.Seniority.Id;
+                                personnelCompensation.TitleId = person.Title.TitleId;
                             }
                             if (person.DefaultPractice != null)
                             {
                                 personnelCompensation.PracticeId = person.DefaultPractice.Id;
-                            }
-                            if (person.DefaultPersonCommissions != null && person.DefaultPersonCommissions.Any(cl => cl.TypeOfCommission == CommissionType.Sales) && PreviousPage == null && PersonDetailData == null)
-                            {
-                                var salesComm = person.DefaultPersonCommissions.First(cl => cl.TypeOfCommission == CommissionType.Sales);
-                                personnelCompensation.SalesCommissionFractionOfMargin = salesComm.FractionOfMargin;
                             }
                             personnelCompensation.StartDateReadOnly = true;
                         }
@@ -196,8 +176,6 @@ namespace PraticeManagement
                         {
                             personnelCompensation.StartDate = DateTime.Today;
                         }
-
-                        SetDefaultTerms();
                     }
 
                     personInfo.Person = person;
@@ -217,15 +195,13 @@ namespace PraticeManagement
             personnelCompensation.Timescale = pay.Timescale;
             personnelCompensation.Amount = pay.Amount;
             personnelCompensation.VacationDays = pay.VacationDays;
-            personnelCompensation.TimesPaidPerMonth = pay.TimesPaidPerMonth;
-            personnelCompensation.Terms = pay.Terms;
             personnelCompensation.IsYearBonus = pay.IsYearBonus;
             personnelCompensation.BonusAmount = pay.BonusAmount;
             personnelCompensation.BonusHoursToCollect = pay.BonusHoursToCollect;
-            personnelCompensation.DefaultHoursPerDay = pay.DefaultHoursPerDay;
-            personnelCompensation.SeniorityId = pay.SeniorityId;
             personnelCompensation.PracticeId = pay.PracticeId;
-            personnelCompensation.SalesCommissionFractionOfMargin = pay.SalesCommissionFractionOfMargin;
+            personnelCompensation.TitleId = pay.TitleId;
+            personnelCompensation.SLTApproval = pay.SLTApproval;
+            personnelCompensation.SLTPTOApproval = pay.SLTPTOApproval;
         }
 
         #region Validation
@@ -267,7 +243,12 @@ namespace PraticeManagement
 
         protected void personnelCompensation_CompensationMethodChanged(object sender, EventArgs e)
         {
-            SetDefaultTerms();
+
+        }
+
+        protected void personnelCompensation_SaveDetails(object sender, EventArgs e)
+        {
+            btnSave_Click(btnSave, null);
         }
 
         protected void personnelCompensation_PeriodChanged(object sender, EventArgs e)
@@ -299,17 +280,11 @@ namespace PraticeManagement
                 }
                 else
                 {
-                    if (SelectedStartDate.HasValue)
-                    {
-                        Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
-                        Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-
-                        btnSave.Visible = (pay.StartDate >= person.HireDate && person.Status.Id != (int)PersonStatusType.Terminated);
-
-                        PopulateControls(pay);
-                    }
                     ClearDirty();
-                    mlConfirmation.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Compensation"));
+                    if (SelectedId.HasValue)
+                    {
+                        ReturnToPreviousPage();
+                    }
                 }
             }
             else
@@ -384,7 +359,7 @@ namespace PraticeManagement
             bool result = false;
             bool isPayTypeChangeViolationEnable = cvEmployeePayTypeChangeViolation.Enabled;
             cvEmployeePayTypeChangeViolation.Enabled = false;
-            Page.Validate();
+            Page.Validate(vsumCompensation.ValidationGroup);
             cvEmployeePayTypeChangeViolation.Enabled = isPayTypeChangeViolationEnable;
             if (Page.IsValid && cvEmployeePayTypeChangeViolation.Enabled && SelectedId.HasValue)
             {
@@ -396,23 +371,6 @@ namespace PraticeManagement
             }
 
             return result;
-        }
-
-        private void SetDefaultTerms()
-        {
-            using (TimescaleServiceClient serviceClient = new TimescaleServiceClient())
-            {
-                try
-                {
-                    Timescale timescale = serviceClient.GetById(personnelCompensation.Timescale);
-                    personnelCompensation.Terms = timescale != null ? timescale.DefaultTerms : null;
-                }
-                catch (FaultException<ExceptionDetail>)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
         }
 
         private bool SaveData()
@@ -434,9 +392,16 @@ namespace PraticeManagement
                         if (PersonDetailData != null)
                         {
                             var person = PersonDetailData;
-                            int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl);
-                            SaveRoles(person);
-
+                            person.CurrentPay = pay;
+                            Person oldPerson = null;
+                            if (person.Id.HasValue)
+                            {
+                                oldPerson = serviceClient.GetPersonDetailsShort(person.Id.Value);
+                                oldPerson.RoleNames = Roles.GetRolesForUser(oldPerson.Alias);
+                            }
+                            int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, true);
+                            PersonDetail.SaveRoles(person);
+                            serviceClient.SendAdministratorAddedEmail(person, oldPerson);
                             if (personId.Value < 0)
                             {
                                 // Creating User error
@@ -452,8 +417,10 @@ namespace PraticeManagement
                                 PersonDetailData.Id = personId.Value;
                             IsDirty = false;
                         }
-
-                        serviceClient.SavePay(pay, HttpContext.Current.User.Identity.Name);
+                        else
+                        {
+                            serviceClient.SavePay(pay, LoginPageUrl, HttpContext.Current.User.Identity.Name);
+                        }
                         personnelCompensation.StartDate = personnelCompensation.StartDate;
                         personnelCompensation.EndDate = personnelCompensation.EndDate;
                     }
@@ -473,34 +440,6 @@ namespace PraticeManagement
                         Thread.CurrentPrincipal.Identity.Name);
                     return false;
                 }
-            }
-        }
-
-        private static void SaveRoles(Person person)
-        {
-            if (string.IsNullOrEmpty(person.Alias)) return;
-
-            // Saving roles
-            string[] currentRoles = Roles.GetRolesForUser(person.Alias);
-
-            if (person.RoleNames.Length > 0)
-            {
-                // New roles
-                string[] newRoles =
-                    Array.FindAll(person.RoleNames, value => Array.IndexOf(currentRoles, value) < 0);
-
-                if (newRoles.Length > 0)
-                    Roles.AddUserToRoles(person.Alias, newRoles);
-            }
-
-            if (currentRoles.Length > 0)
-            {
-                // Redundant roles
-                string[] redundantRoles =
-                    Array.FindAll(currentRoles, value => Array.IndexOf(person.RoleNames, value) < 0);
-
-                if (redundantRoles.Length > 0)
-                    Roles.RemoveUserFromRoles(person.Alias, redundantRoles);
             }
         }
 
@@ -570,7 +509,8 @@ namespace PraticeManagement
                 Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
                 Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
 
-                btnSave.Visible = (pay.StartDate >= person.HireDate && person.Status.Id != (int)PersonStatusType.Terminated);
+                var now = Utils.Generic.GetNowWithTimeZone();
+                btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
 
                 PopulateControls(pay);
             }
