@@ -20,8 +20,7 @@ BEGIN
 		   f.Date, 
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
-		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0) 
-			+ ISNULL(f.RecruitingCommissionRate,0)) SLHR,
+		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)) SLHR,
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay,
