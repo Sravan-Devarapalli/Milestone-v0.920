@@ -58,6 +58,8 @@ AS
 					THEN CAST(1 AS BIT) 
 				WHEN EXISTS(SELECT TOP 1 pay.PracticeId FROM dbo.Pay pay WHERE pay.PracticeId = p.PracticeId)
 					THEN CAST(1 AS BIT)
+				WHEN EXISTS(SELECT TOP 1 PC.PracticeId FROM dbo.PracticeCapabilities PC WHERE PC.PracticeId = p.PracticeId)
+					THEN CAST(1 AS BIT)
 				ELSE CAST(0 AS BIT)
 			END AS 'InUse',
 			pers.FirstName,
@@ -124,6 +126,8 @@ AS
 				WHEN EXISTS(SELECT TOP 1 op.PracticeId FROM dbo.Opportunity op WHERE op.PracticeId = p.PracticeId)
 					THEN CAST(1 AS BIT) 
 				WHEN EXISTS(SELECT TOP 1 pay.PracticeId FROM dbo.Pay pay WHERE pay.PracticeId = p.PracticeId)
+					THEN CAST(1 AS BIT)
+				WHEN EXISTS(SELECT TOP 1 PC.PracticeId FROM dbo.PracticeCapabilities PC WHERE PC.PracticeId = p.PracticeId)
 					THEN CAST(1 AS BIT)
 				ELSE CAST(0 AS BIT)
 			END AS 'InUse',
