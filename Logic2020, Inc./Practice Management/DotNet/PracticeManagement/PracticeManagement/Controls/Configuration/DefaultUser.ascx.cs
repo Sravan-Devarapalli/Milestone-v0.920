@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Events;
-using Resources;
-using System.Linq;
 using PraticeManagement.Utils;
+using Resources;
 namespace PraticeManagement.Controls.Configuration
 {
     public partial class DefaultUser : PracticeManagementUserControl
@@ -96,9 +95,9 @@ namespace PraticeManagement.Controls.Configuration
                     ListItem selectedPersonListItem = ddlActivePersons.Items.FindByValue(_personToSelect.Id.Value.ToString());
                     if (selectedPersonListItem == null)
                     {
-                        Person selectedPerson = DataHelper.GetPersonWithoutFinancials(_personToSelect.Id.Value);
+                        Person selectedPerson = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(_personToSelect.Id.Value));
 
-                        selectedPersonListItem = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
+                        selectedPersonListItem = new ListItem(selectedPerson.PersonLastFirstName, _personToSelect.Id.Value.ToString());
                         ddlActivePersons.Items.Add(selectedPersonListItem);
                         ddlActivePersons.SortByText();
                     }
