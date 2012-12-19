@@ -36,7 +36,6 @@ AS
 		
 		SELECT  DISTINCT 
 				pers.PersonId ,
-				pers.PTODaysPerAnnum ,
 				pers.HireDate ,
 				pers.TerminationDate,
 				pers.TelephoneNumber,
@@ -87,7 +86,6 @@ AS
 
 		SELECT  DISTINCT 
 				pers.PersonId ,
-				pers.PTODaysPerAnnum ,
 				pers.HireDate ,
 				pers.TerminationDate,
 				pers.TelephoneNumber,
