@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using PraticeManagement.Controls;
-using DataTransferObjects;
-using System.Web.UI.HtmlControls;
 using System.Text;
-using AjaxControlToolkit;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using DataTransferObjects;
 using DataTransferObjects.Reports.HumanCapital;
+using PraticeManagement.Controls;
 using PraticeManagement.Controls.Reports.HumanCapital;
 
 namespace PraticeManagement.Reporting
@@ -174,11 +172,11 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public string Seniorities
+        public string Titles
         {
             get
             {
-                return cblSeniorities.SelectedItemsXmlFormat;
+                return cblTitles.SelectedItemsXmlFormat;
             }
         }
 
@@ -221,9 +219,9 @@ namespace PraticeManagement.Reporting
                     DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
 
                 }
-                if (this.cblSeniorities != null && this.cblSeniorities.Items.Count == 0)
+                if (this.cblTitles != null && this.cblTitles.Items.Count == 0)
                 {
-                    DataHelper.FillSenioritiesList(this.cblSeniorities, "All Seniorities");
+                    DataHelper.FillTitleList(this.cblTitles, "All Titles");
                 }
                 if (this.cblTerminationReasons != null && this.cblTerminationReasons.Items.Count == 0)
                 {
@@ -276,7 +274,7 @@ namespace PraticeManagement.Reporting
             ddlPeriod.SelectedValue = "6";
             this.chbInternalProjects.Checked = false;
             SelectAllItems(this.cblPractices);
-            SelectAllItems(this.cblSeniorities);
+            SelectAllItems(this.cblTitles);
             SelectAllItems(this.cblTerminationReasons);
             SelectDefaultTimeScaleItems(this.cblTimeScales);
         }
@@ -463,7 +461,7 @@ namespace PraticeManagement.Reporting
                 //Header
                 sb.Append("Resource");
                 sb.Append("\t");
-                sb.Append("Seniority");
+                sb.Append("Title");
                 sb.Append("\t");
                 sb.Append("Pay Types");
                 sb.Append("\t");
@@ -484,13 +482,13 @@ namespace PraticeManagement.Reporting
                 {
                     sb.Append(person.HtmlEncodedName);
                     sb.Append("\t");
-                    sb.Append(person.Seniority != null ? person.Seniority.Name : string.Empty);
+                    sb.Append(person.Title != null ? person.Title.TitleName : string.Empty);
                     sb.Append("\t");
                     sb.Append(person.CurrentPay != null ? person.CurrentPay.TimescaleName : string.Empty);
                     sb.Append("\t");
                     sb.Append(person.Status.Name);
                     sb.Append("\t");
-                    sb.Append(person.RecruiterCommission.Count > 0 ? person.RecruiterCommission.First().Recruiter.PersonLastFirstName : string.Empty);
+                    sb.Append(person.RecruiterId.HasValue ? person.RecruiterLastFirstName : string.Empty);
                     sb.Append("\t");
                     sb.Append(GetDateFormat(person.HireDate));
                     sb.Append("\t");
