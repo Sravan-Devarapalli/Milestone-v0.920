@@ -1,6 +1,5 @@
-﻿using DataTransferObjects;
-using PraticeManagement.CalendarService;
-using System;
+﻿using System;
+using DataTransferObjects;
 
 namespace PraticeManagement.Utils
 {
@@ -14,12 +13,12 @@ namespace PraticeManagement.Utils
                 return string.Empty;
 
             return calendarItem.DayOff
-                        ? (calendarItem.CompanyDayOff 
-                            ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : Resources.Controls.CssDayOff) 
-                            : (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : Resources.Controls.CssCompanyDayOn)
+                        ? (calendarItem.CompanyDayOff
+                        ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : Resources.Controls.CssDayOff)
+                            : (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOff : calendarItem.IsFloatingHoliday ? Resources.Controls.CssCompanyDayOnFloatingDay : Resources.Controls.CssCompanyDayOn)
                           )
-                        : (calendarItem.CompanyDayOff 
-                            ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOn : Resources.Controls.CssCompanyDayOff )
+                        : (calendarItem.CompanyDayOff
+                            ? (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOn : Resources.Controls.CssCompanyDayOff)
                             : (calendarItem.Date.DayOfWeek == DayOfWeek.Sunday || calendarItem.Date.DayOfWeek == DayOfWeek.Saturday ? Resources.Controls.CssWeekEndDayOn : Resources.Controls.CssDayOn)
                           );
         }
@@ -110,7 +109,7 @@ namespace PraticeManagement.Utils
 
         public static DateTime YearEndDate(DateTime now)
         {
-            return  now.AddYears(1).AddDays(-now.AddYears(1).DayOfYear);
+            return now.AddYears(1).AddDays(-now.AddYears(1).DayOfYear);
         }
 
         public static DateTime LastWeekStartDate(DateTime now)
@@ -131,23 +130,23 @@ namespace PraticeManagement.Utils
         public static DateTime Last3MonthStartDate(DateTime now)
         {
             return MonthStartDate(now.AddMonths(-3));
-        }        
+        }
 
         public static DateTime Last6MonthStartDate(DateTime now)
         {
             return MonthStartDate(now.AddMonths(-6));
         }
-       
+
         public static DateTime Last9MonthStartDate(DateTime now)
         {
             return MonthStartDate(now.AddMonths(-9));
-        }       
+        }
 
         public static DateTime Last12MonthStartDate(DateTime now)
         {
             return MonthStartDate(now.AddMonths(-12));
         }
-       
+
         //return 16th of the last month
         public static DateTime LastMonthSecondHalfStartDate(DateTime now)
         {
@@ -179,7 +178,7 @@ namespace PraticeManagement.Utils
             return now.AddDays(-now.DayOfYear);
         }
 
-        public static DateTime QuarterStartDate(DateTime now,int quater)
+        public static DateTime QuarterStartDate(DateTime now, int quater)
         {
             if (quater == 1)
             {
