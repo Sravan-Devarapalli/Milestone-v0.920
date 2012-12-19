@@ -18,6 +18,9 @@ namespace PraticeManagement.TitleService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITitleService/GetAllTitles", ReplyAction="http://tempuri.org/ITitleService/GetAllTitlesResponse")]
         DataTransferObjects.Title[] GetAllTitles();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITitleService/GetTitleTypes", ReplyAction="http://tempuri.org/ITitleService/GetTitleTypesResponse")]
+        DataTransferObjects.TitleType[] GetTitleTypes();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITitleService/GetTitleById", ReplyAction="http://tempuri.org/ITitleService/GetTitleByIdResponse")]
         DataTransferObjects.Title GetTitleById(int titleId);
         
@@ -39,7 +42,8 @@ namespace PraticeManagement.TitleService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TitleServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TitleService.ITitleService>, PraticeManagement.TitleService.ITitleService {
         
-       
+        
+        
         public TitleServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -58,6 +62,10 @@ namespace PraticeManagement.TitleService {
         
         public DataTransferObjects.Title[] GetAllTitles() {
             return base.Channel.GetAllTitles();
+        }
+        
+        public DataTransferObjects.TitleType[] GetTitleTypes() {
+            return base.Channel.GetTitleTypes();
         }
         
         public DataTransferObjects.Title GetTitleById(int titleId) {
