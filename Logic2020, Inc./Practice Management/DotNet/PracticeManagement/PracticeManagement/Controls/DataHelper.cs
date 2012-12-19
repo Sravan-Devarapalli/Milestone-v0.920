@@ -717,20 +717,14 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    Person[] persons = serviceClient.GetPersonListWithCurrentPay(null, true, Int16.MaxValue, 0,
-                                                                   String.Empty, null,
-                                                                   Thread.CurrentPrincipal.Identity.Name, null, null, false, false, false, null);
+                    Person[] persons = serviceClient.GetPersonListByStatusList("1,5", null);
                     control.Items.Clear();
                     if (persons.Length == 0)
                         control.Items.Add(new ListItem(Resources.Controls.NotAvailableText, null));
                     else
                         foreach (Person person in persons)
                         {
-                            if (person.Status != null && (person.Status.Id == (int)PersonStatusType.Active || person.Status.Id == (int)PersonStatusType.TerminationPending) &&
-                                !person.LockedOut)
-                                control.Items.Add(new ListItem(
-                                                      person.PersonLastFirstName,
-                                                      person.Alias));
+                            control.Items.Add(new ListItem(person.PersonLastFirstName, person.Alias));
                         }
                 }
                 catch (CommunicationException)
@@ -789,7 +783,7 @@ namespace PraticeManagement.Controls
                     var persons = serviceClient.GetOneOffList(today);
 
                     Array.Sort(persons);
-                    FillPersonListWithSeniority(control, firstItemText, persons, "-1");                   
+                    FillPersonListWithTitle(control, firstItemText, persons, "-1");
 
                 }
                 catch (CommunicationException)
@@ -827,15 +821,13 @@ namespace PraticeManagement.Controls
         /// <param name="personId">An ID of the <see cref="Person"/> to fill the list for.</param>
         /// <param name="hireDate">A Hire Date of the person.</param>
         public static void FillRecruiterList(ListControl control,
-                                             string firstItemText,
-                                             int? personId,
-                                             DateTime? hireDate)
+                                             string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    Person[] persons = serviceClient.GetRecruiterList(personId, hireDate);
+                    Person[] persons = serviceClient.GetRecruiterList();
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -914,13 +906,13 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillSalespersonListOnlyActiveForLoginPerson(ListControl control,Person person, string firstItemText)
+        public static void FillSalespersonListOnlyActiveForLoginPerson(ListControl control, Person person, string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    Person[] persons = GetActivePersons(serviceClient.PersonListSalesperson(person,false));
+                    Person[] persons = GetActivePersons(serviceClient.PersonListSalesperson(person, false));
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -1153,7 +1145,7 @@ namespace PraticeManagement.Controls
 
         }
 
-        public static void FillPersonListWithSeniority(ListControl control, string firstItemText, Person[] persons, string firstItemValue)
+        public static void FillPersonListWithTitle(ListControl control, string firstItemText, Person[] persons, string firstItemValue)
         {
             control.Items.Clear();
             if (!string.IsNullOrEmpty(firstItemText))
@@ -1170,10 +1162,10 @@ namespace PraticeManagement.Controls
                 {
                     var personitem = new ListItem();
                     personitem.Value = person.Id.Value.ToString();
-                    var personSeniority = person.Seniority.Name;
+                    var personTitle = person.Title.TitleName;
                     personitem.Attributes[Constants.Variables.IsStrawMan] = person.IsStrawMan.ToString().ToLowerInvariant();
                     personitem.Attributes[Constants.Variables.OptionGroup] = person.IsStrawMan ? "Strawmen" : "Persons";
-                    personitem.Text = person.PersonLastFirstName + " (" + personSeniority + ") ";
+                    personitem.Text = person.PersonLastFirstName + " (" + personTitle + ") ";
                     control.Items.Add(personitem);
                 }
             }
@@ -1478,6 +1470,45 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
+        }
+
+        /// <summary>
+        /// Fills the list control with the list of person's titles.
+        /// </summary>
+        /// <param name="control">The control to be filled.</param>
+        public static void FillTitleList(ListControl control, string firstItemText = null)
+        {
+            var titles = ServiceCallers.Custom.Title(t => t.GetAllTitles());
+            control.Items.Clear();
+
+            if (!string.IsNullOrEmpty(firstItemText))
+            {
+                var listitem = new ListItem() { Text = firstItemText, Value = "" };
+                control.Items.Add(listitem);
+            }
+
+            if (titles.Length > 0)
+            {
+                foreach (Title title in titles)
+                {
+                    var titleitem = new ListItem();
+                    titleitem.Value = title.TitleId.ToString();
+                    titleitem.Text = title.TitleName;
+                    titleitem.Attributes[Constants.Variables.OptionGroup] = title.TitleType.TitleTypeName;
+                    control.Items.Add(titleitem);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fills the list control with the list of Domains.
+        /// </summary>
+        /// <param name="control">The control to be filled.</param>
+        public static void FillDomainsList(ListControl control)
+        {
+            var domains = ServiceCallers.Invoke<ConfigurationServiceClient, string[]>(c => c.GetAllDomains()).Select(p => new { Name = p, Id = p }).ToArray();
+            FillListDefault(control, null, domains, true, "Id", "Name");
+            control.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -1994,7 +2025,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         public static void SaveResourceKeyValuePairs(SettingsType settingType, Dictionary<string, string> dictionary)
         {
             using (var serviceClient = new ConfigurationServiceClient())
@@ -2360,14 +2390,13 @@ namespace PraticeManagement.Controls
                     control.DataTextField = "Key";
                     control.DataValueField = "Value";
 
-                    Dictionary<string, int> list = new Dictionary<string, int>();
+                    Dictionary<string, string> list = new Dictionary<string, string>();
 
                     foreach (PersonDivisionType item in divisions)
                     {
                         string key = GetDescription(item);
-
-                        int value = (int)item;
-
+                        string value = ((int)item).ToString();
+                        if (value == "0") value = "";
                         list.Add(key, value);
                     }
 
