@@ -24,8 +24,8 @@
 <asp:Panel ID="pnlDivision" Style="display: none;" runat="server">
     <uc:FilteredCheckBoxList ID="cblDivision" runat="server" />
 </asp:Panel>
-<asp:Panel ID="pnlFilterSeniority" Style="display: none;" runat="server">
-    <uc:FilteredCheckBoxList ID="cblSeniorities" runat="server" />
+<asp:Panel ID="pnlFilterTitle" Style="display: none;" runat="server">
+    <uc:FilteredCheckBoxList ID="cblTitles" runat="server" />
 </asp:Panel>
 <asp:Panel ID="pnlFilterPayType" Style="display: none;" runat="server">
     <uc:FilteredCheckBoxList ID="cblPayTypes" runat="server" />
@@ -61,11 +61,11 @@
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th>
-                            Seniority
-                            <img alt="Filter" title="Seniority" src="../../../Images/search_filter.png" class="FilterImg"
-                                runat="server" id="imgSeniorityFilter" />
-                            <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
-                                BehaviorID="pceSeniorityFilter" PopupControlID="pnlFilterSeniority" Position="Bottom">
+                            Title
+                            <img alt="Filter" title="Title" src="../../../Images/search_filter.png" class="FilterImg"
+                                runat="server" id="imgTitleFilter" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pceTitleFilter" runat="server" TargetControlID="imgTitleFilter"
+                                BehaviorID="pceTitleFilter" PopupControlID="pnlFilterTitle" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <th class="Width110PxImp">
@@ -131,7 +131,7 @@
                 <%# Eval("HtmlEncodedName")%>
             </td>
             <td>
-                <%# Eval("Seniority.Name")%>
+                <%# Eval("Title.TitleName")%>
             </td>
             <td>
                 <%# Eval("CurrentPay.TimescaleName")%>
@@ -140,7 +140,7 @@
                 <%# Eval("Status.Name")%>
             </td>
             <td>
-                <%# GetRecruiter((System.Collections.Generic.List<DataTransferObjects.RecruiterCommission>)Eval("RecruiterCommission"))%>
+                <%# Eval("RecruiterLastFirstName")%>
             </td>
             <td>
                 <%# GetDateFormat((DateTime)Eval("HireDate"))%>
@@ -158,6 +158,7 @@
     </FooterTemplate>
 </asp:Repeater>
 <div id="divEmptyMessage" runat="server">
-    No people were terminated in the time range selected and/or that match the selected filters.
+    No people were terminated in the time range selected and/or that match the selected
+    filters.
 </div>
 
