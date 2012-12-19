@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonService;
-using System.Web.Security;
 using PraticeManagement.Security;
-using System.Linq;
 using PraticeManagement.Utils;
 
 namespace PraticeManagement
@@ -65,10 +64,8 @@ namespace PraticeManagement
             DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a Strawman --");
 
             //recruiterInfo.Person = new Person();
-            personnelCompensation.PaymentsVisible =
                 personnelCompensation.CompensationDateVisible =
-                    personnelCompensation.DefaultHoursPerDayVisible =
-                        personnelCompensation.SeniorityAndPracticeVisible = false;
+                personnelCompensation.TitleAndPracticeVisible = false;
 
             // Security //Removed as per #2917.     
             //bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
@@ -141,8 +138,7 @@ namespace PraticeManagement
                     person.CurrentPay.AmountHourly = person.CurrentPay.Amount;
                 else
                     person.CurrentPay.AmountHourly = person.CurrentPay.Amount / Utils.Calendar.GetWorkingHoursInCurrentYear(whatIf.SelectedHorsPerWeek);
-                // Commisions
-                //person.RecruiterCommission = recruiterInfo.RecruiterCommission;
+               
 
                 using (PersonServiceClient serviceClient = new PersonServiceClient())
                 {
@@ -221,12 +217,11 @@ namespace PraticeManagement
             personnelCompensation.Timescale = pay.Timescale;
             personnelCompensation.Amount = pay.Amount;
             personnelCompensation.VacationDays = pay.VacationDays;
-            personnelCompensation.TimesPaidPerMonth = pay.TimesPaidPerMonth;
-            personnelCompensation.Terms = pay.Terms;
             personnelCompensation.IsYearBonus = pay.IsYearBonus;
             personnelCompensation.BonusAmount = pay.BonusAmount;
             personnelCompensation.BonusHoursToCollect = pay.BonusHoursToCollect;
-            personnelCompensation.DefaultHoursPerDay = pay.DefaultHoursPerDay;
+            personnelCompensation.TitleId = pay.TitleId;
+            personnelCompensation.SLTApproval = pay.SLTApproval;
         }
 
         private void ClearControls()
@@ -237,12 +232,11 @@ namespace PraticeManagement
             personnelCompensation.Timescale = pay.Timescale;
             personnelCompensation.Amount = pay.Amount;
             personnelCompensation.VacationDays = pay.VacationDays;
-            personnelCompensation.TimesPaidPerMonth = pay.TimesPaidPerMonth;
-            personnelCompensation.Terms = pay.Terms;
             personnelCompensation.IsYearBonus = pay.IsYearBonus;
             personnelCompensation.BonusAmount = pay.BonusAmount;
             personnelCompensation.BonusHoursToCollect = pay.BonusHoursToCollect;
-            personnelCompensation.DefaultHoursPerDay = pay.DefaultHoursPerDay;
+            personnelCompensation.TitleId = pay.TitleId;
+            personnelCompensation.SLTApproval = pay.SLTApproval;
 
             whatIf.SetSliderDefaultValue();
         }
