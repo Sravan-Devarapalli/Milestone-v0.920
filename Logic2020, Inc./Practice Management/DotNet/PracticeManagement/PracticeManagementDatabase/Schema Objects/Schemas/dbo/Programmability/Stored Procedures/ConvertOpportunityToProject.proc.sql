@@ -69,14 +69,6 @@ BEGIN
 		@IsInternal = 0,
 		@SowBudget = NULL
 
-	-- Add a sales commission
-	INSERT INTO dbo.Commission
-	            (ProjectId, PersonId, FractionOfMargin, CommissionType, MarginTypeId)
-	SELECT TOP 1 @ProjectId, c.PersonId, c.FractionOfMargin, 1 /* sales commission*/, 2 /* Sub-ordinate person margin */
-	FROM dbo.DefaultCommission AS c
-	WHERE c.PersonId = @SalespersonId
-	AND dbo.GettingPMTime(GETDATE()) BETWEEN c.StartDate AND c.EndDate
-
 	IF(@HasPersons = 1)
 	BEGIN
 	
