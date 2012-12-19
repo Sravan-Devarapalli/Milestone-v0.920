@@ -16,20 +16,19 @@ namespace DataAccess
         #region Constants
 
         #region Parameters
-        
+
         private const string AmountParam = "@Amount";
         private const string TimescaleParam = "@Timescale";
-        private const string TimesPaidPerMonthParam = "@TimesPaidPerMonth";
-        private const string TermsParam = "@Terms";
         private const string VacationDaysParam = "@VacationDays";
         private const string BonusAmountParam = "@BonusAmount";
         private const string BonusHoursToCollectParam = "@BonusHoursToCollect";
-        private const string DefaultHoursPerDayParam = "@DefaultHoursPerDay";
         private const string OldStartDateParam = "@OLD_StartDate";
         private const string OldEndDateParam = "@OLD_EndDate";
-        private const string SeniorityIdParam = "@SeniorityId";
         private const string PracticeIdParam = "@PracticeId";
-        private const string SalesCommFractionOfMarginParam = "@SalesCommissionFractionOfMargin";
+        private const string TitleIdParam = "@TitleId";
+        private const string SLTApprovalParam = "@SLTApproval";
+        private const string SLTPTOApprovalParam = "@SLTPTOApproval";
+        
 
         #endregion
 
@@ -41,18 +40,16 @@ namespace DataAccess
         private const string AmountColumn = "Amount";
         private const string TimescaleNameColumn = "TimescaleName";
         private const string AmountHourlyColumn = "AmountHourly";
-        private const string TimesPaidPerMonthColumn = "TimesPaidPerMonth";
-        private const string TermsColumn = "Terms";
         private const string VacationDaysColumn = "VacationDays";
         private const string BonusAmountColumn = "BonusAmount";
         private const string BonusHoursToCollectColumn = "BonusHoursToCollect";
         private const string IsYearBonusColumn = "IsYearBonus";
-        private const string DefaultHoursPerDayColumn = "DefaultHoursPerDay";
-        private const string SeniorityIdColumn = "SeniorityId";
-        private const string SeniorityNameColumn = "SeniorityName";
         private const string PracticeIdColumn = "PracticeId";
         private const string PracticeNameColumn = "PracticeName";
-        private const string SalesCommFractionOfMarginColumn = "SalesCommissionFractionOfMargin";
+        private const string TitleColumn = "Title";
+        private const string TitleIdColumn = "TitleId";
+        private static string SLTApprovalColumn = "SLTApproval";
+        private static string SLTPTOApprovalColumn = "SLTPTOApproval";
 
         #endregion
 
@@ -140,7 +137,7 @@ namespace DataAccess
         /// Saves a <see cref="Pay"/> object to the database.
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
-        public static void SavePayDatail(Pay pay, SqlConnection connection = null, SqlTransaction activeTransaction = null, string user = null)
+        public static bool SavePayDatail(Pay pay, SqlConnection connection = null, SqlTransaction activeTransaction = null, string user = null)
         {
             if (connection == null)
             {
@@ -155,16 +152,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, pay.PersonId);
                 command.Parameters.AddWithValue(AmountParam, pay.Amount.Value);
                 command.Parameters.AddWithValue(TimescaleParam, pay.Timescale);
-                command.Parameters.AddWithValue(TimesPaidPerMonthParam,
-                    pay.TimesPaidPerMonth.HasValue ? (object)pay.TimesPaidPerMonth.Value : DBNull.Value);
-                command.Parameters.AddWithValue(TermsParam,
-                    pay.Terms.HasValue ? (object)pay.Terms.Value : DBNull.Value);
-                command.Parameters.AddWithValue(VacationDaysParam,
-                    pay.VacationDays.HasValue ? (object)pay.VacationDays.Value : DBNull.Value);
+                command.Parameters.AddWithValue(VacationDaysParam, pay.VacationDays.HasValue ? (object)pay.VacationDays.Value : DBNull.Value);
                 command.Parameters.AddWithValue(BonusAmountParam, pay.BonusAmount.Value);
                 command.Parameters.AddWithValue(BonusHoursToCollectParam,
                     pay.BonusHoursToCollect.HasValue ? (object)pay.BonusHoursToCollect.Value : DBNull.Value);
-                command.Parameters.AddWithValue(DefaultHoursPerDayParam, pay.DefaultHoursPerDay);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, pay.StartDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam,
                     pay.EndDate.HasValue ? (object)pay.EndDate.Value : DBNull.Value);
@@ -172,12 +163,11 @@ namespace DataAccess
                     pay.OldStartDate.HasValue ? (object)pay.OldStartDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(OldEndDateParam,
                     pay.OldEndDate.HasValue ? (object)pay.OldEndDate.Value : DBNull.Value);
-                command.Parameters.AddWithValue(SeniorityIdParam,
-                    pay.SeniorityId.HasValue ? (object)pay.SeniorityId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(PracticeIdParam,
                     pay.PracticeId.HasValue ? (object)pay.PracticeId.Value : DBNull.Value);
-                command.Parameters.AddWithValue(SalesCommFractionOfMarginParam,
-                    pay.SalesCommissionFractionOfMargin.HasValue ? (object)pay.SalesCommissionFractionOfMargin.Value : DBNull.Value);
+                command.Parameters.AddWithValue(TitleIdParam, pay.TitleId.HasValue ? (object)pay.TitleId : DBNull.Value);
+                command.Parameters.AddWithValue(SLTApprovalParam, pay.SLTApproval);
+                command.Parameters.AddWithValue(SLTPTOApprovalParam, pay.SLTPTOApproval);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, string.IsNullOrEmpty(user) ? DBNull.Value : (object)user);
                 try
                 {
@@ -189,7 +179,8 @@ namespace DataAccess
                     {
                         command.Transaction = activeTransaction;
                     }
-                    command.ExecuteNonQuery();
+
+                    return ((bool)command.ExecuteScalar());                  
                 }
                 catch (SqlException ex)
                 {
@@ -260,19 +251,17 @@ namespace DataAccess
                 int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
                 int timescaleNameIndex = reader.GetOrdinal(TimescaleNameColumn);
                 int amountHourlyIndex = reader.GetOrdinal(AmountHourlyColumn);
-                int timesPaidPerMonthIndex = reader.GetOrdinal(TimesPaidPerMonthColumn);
-                int termsIndex = reader.GetOrdinal(TermsColumn);
                 int vacationDaysIndex = reader.GetOrdinal(VacationDaysColumn);
                 int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
                 int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
                 int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
-                int defaultHoursPerDayIndex = reader.GetOrdinal(DefaultHoursPerDayColumn);
-                int SeniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
-                int SeniorityNameIndex = reader.GetOrdinal(SeniorityNameColumn);
-                int PracticeIdIndex = reader.GetOrdinal(PracticeIdColumn);
-                int PracticeNameIndex = reader.GetOrdinal(PracticeNameColumn);
-                int SalesCommFractionOfMarginIndex = reader.GetOrdinal(SalesCommFractionOfMarginColumn);
-
+                int practiceIdIndex = reader.GetOrdinal(PracticeIdColumn);
+                int practiceNameIndex = reader.GetOrdinal(PracticeNameColumn);
+                int titleColumnIndex = reader.GetOrdinal(TitleColumn);
+                int titleIdColumnIndex = reader.GetOrdinal(TitleIdColumn);
+                int sLTApprovalColumnIndex = reader.GetOrdinal(SLTApprovalColumn);
+                int sLTPTOApprovalColumnIndex = reader.GetOrdinal(SLTPTOApprovalColumn);
+                
                 while (reader.Read())
                 {
                     Pay pay = new Pay();
@@ -285,10 +274,6 @@ namespace DataAccess
                     pay.EndDate =
                         !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
                     pay.AmountHourly = reader.GetDecimal(amountHourlyIndex);
-                    pay.TimesPaidPerMonth =
-                        !reader.IsDBNull(timesPaidPerMonthIndex) ?
-                        (int?)reader.GetInt32(timesPaidPerMonthIndex) : null;
-                    pay.Terms = !reader.IsDBNull(termsIndex) ? (int?)reader.GetInt32(termsIndex) : null;
                     pay.VacationDays =
                         !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null;
                     pay.BonusAmount = reader.GetDecimal(bonusAmountIndex);
@@ -296,12 +281,15 @@ namespace DataAccess
                         !reader.IsDBNull(bonusHoursToCollectIndex) ?
                         (int?)reader.GetInt32(bonusHoursToCollectIndex) : null;
                     pay.IsYearBonus = reader.GetBoolean(isYearBonusIndex);
-                    pay.DefaultHoursPerDay = reader.GetDecimal(defaultHoursPerDayIndex);
-                    pay.SeniorityId = !reader.IsDBNull(SeniorityIdIndex) ? (int?)reader.GetInt32(SeniorityIdIndex) : null;
-                    pay.SeniorityName = !reader.IsDBNull(SeniorityNameIndex) ? reader.GetString(SeniorityNameIndex) : string.Empty;
-                    pay.PracticeId = !reader.IsDBNull(PracticeIdIndex) ? (int?)reader.GetInt32(PracticeIdIndex) : null;
-                    pay.PracticeName = !reader.IsDBNull(PracticeNameIndex) ? reader.GetString(PracticeNameIndex) : string.Empty;
-                    pay.SalesCommissionFractionOfMargin = !reader.IsDBNull(SalesCommFractionOfMarginIndex) ? (decimal?)reader.GetDecimal(SalesCommFractionOfMarginIndex) : null;
+                    pay.PracticeId = !reader.IsDBNull(practiceIdIndex) ? (int?)reader.GetInt32(practiceIdIndex) : null;
+                    pay.PracticeName = !reader.IsDBNull(practiceNameIndex) ? reader.GetString(practiceNameIndex) : string.Empty;
+                    if (!reader.IsDBNull(titleIdColumnIndex))
+                    {
+                        pay.TitleId = reader.GetInt32(titleIdColumnIndex);
+                        pay.TitleName = reader.GetString(titleColumnIndex);
+                    }
+                    pay.SLTApproval = reader.GetBoolean(sLTApprovalColumnIndex);
+                    pay.SLTPTOApproval = reader.GetBoolean(sLTPTOApprovalColumnIndex);
                     result.Add(pay);
                 }
             }
@@ -332,7 +320,7 @@ namespace DataAccess
 
                         while (reader.Read())
                         {
-                            Triple<DateTime, bool, bool> resultLocal = new Triple<DateTime, bool, bool>(DateTime.Now,true,true);
+                            Triple<DateTime, bool, bool> resultLocal = new Triple<DateTime, bool, bool>(DateTime.Now, true, true);
                             resultLocal.First = reader.GetDateTime(dateIndex);
                             resultLocal.Second = reader.GetBoolean(isSalaryTypeIndex);
                             resultLocal.Third = reader.GetBoolean(isHourlyTypeIndex);
