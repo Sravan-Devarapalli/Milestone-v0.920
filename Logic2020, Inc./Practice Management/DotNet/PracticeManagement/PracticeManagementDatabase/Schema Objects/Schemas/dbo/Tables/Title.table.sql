@@ -8,6 +8,6 @@
 	MinimumSalary	INT NULL,
 	MaximumSalary	INT NULL,
 	CONSTRAINT PK_Title_TitleId     PRIMARY KEY CLUSTERED(TitleId),
-	CONSTRAINT [UQ_Title_Title] UNIQUE NONCLUSTERED(Title) ON [PRIMARY]
+	CONSTRAINT [UQ_Title_Title] UNIQUE NONCLUSTERED(Title)
 )
 
