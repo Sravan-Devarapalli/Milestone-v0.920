@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -59,6 +57,20 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public bool TitleInUse
+        {
+            get;
+            set;
+        }
+
+        public string HtmlEncodedTitleName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(TitleName);
+            }
+        }
     }
 }
 
