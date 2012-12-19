@@ -1,18 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
+using System.Web.Security;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.ClientService;
 using PraticeManagement.Configuration;
 using PraticeManagement.Controls;
-using System.Web.UI;
-using System.Web.Security;
 using PraticeManagement.Utils;
 using DTO = DataTransferObjects;
-using System.Linq;
-using System.Collections.Generic;
-using System.Drawing;
-using System.ComponentModel;
 
 
 namespace PraticeManagement
@@ -680,7 +678,7 @@ namespace PraticeManagement
                 if (selectedDefaultDirector == null)
                 {
                     Person selectedPerson = PersonById(client.DefaultDirectorId.Value);
-                    selectedDefaultDirector = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
+                    selectedDefaultDirector = new ListItem(selectedPerson.PersonLastFirstName, client.DefaultDirectorId.Value.ToString());
                     ddlDefaultDirector.Items.Add(selectedDefaultDirector);
                     ddlDefaultDirector.SortByText();
                 }
