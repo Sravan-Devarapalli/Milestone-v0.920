@@ -49,13 +49,13 @@ BEGIN
 
 		 BEGIN TRANSACTION SetPersonSeniorityPractice_Tran
 
-			EXEC dbo.UpdatePersonSeniorityPracticeFromCurrentPay
+			EXEC dbo.UpdatePersonTitleAndPracticeFromCurrentPay
  
 
 			EXECUTE dbo.[SaveSchedularLog]
 			   @LastRun = @LastRun
 			  ,@Status = 'Success'
-			  ,@Comments ='Successfully comepleted running the procedure "dbo.UpdatePersonSeniorityPracticeFromCurrentPay"'
+			  ,@Comments ='Successfully comepleted running the procedure "dbo.UpdatePersonTitleAndPracticeFromCurrentPay"'
 			  ,@NextRun = @NextRun
 
 			COMMIT TRANSACTION SetPersonSeniorityPractice_Tran
@@ -66,7 +66,7 @@ BEGIN
 		SET	 @ERROR_MESSAGE		= ERROR_MESSAGE()
 		ROLLBACK TRANSACTION  SetPersonSeniorityPractice_Tran
 
-		  SELECT @Error = 'Failed running the procedure "dbo.UpdatePersonSeniorityPracticeFromCurrentPay". The Error message is :'+@Error
+		  SELECT @Error = 'Failed running the procedure "dbo.UpdatePersonTitleAndPracticeFromCurrentPay". The Error message is :'+@Error
 		  EXECUTE [dbo].[SaveSchedularLog] 
 			   @LastRun = @LastRun
 			  ,@Status = 'Failed'
