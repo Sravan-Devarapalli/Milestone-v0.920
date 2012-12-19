@@ -29,16 +29,6 @@ namespace DataTransferObjects
 			get;
 			set;
 		}
-
-		/// <summary>
-		/// Gets or sets a default Terms for the <see cref="Timescale"/>.
-		/// </summary>
-		[DataMember]
-		public int? DefaultTerms
-		{
-			get;
-			set;
-		}
 	}
 }
 
