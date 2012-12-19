@@ -96,26 +96,6 @@ AS
 	   AND ISNULL(r.[EndDate], FD.FutureDate) > GETDATE()
 	   AND r.IsCogs = 1
 	UNION ALL
-	-- Recruiting overhead
-	SELECT ps.[PersonId],
-	       'Recruiting' AS [Description],
-	       ROUND(SUM(r.[Amount] / r.[HoursToCollect]), 2) AS Rate,
-	       1 AS HoursToCollect,
-	       ps.[HireDate] AS [StartDate],
-	       MAX(ps.[TerminationDate]) AS [EndDate],
-	       CAST(0 AS BIT) AS IsPercentage,
-	       NULL AS OverheadFixedRateId,
-	       NULL AS OverheadRateTypeId,
-	       NULL AS OverheadRateTypeName,
-	       CAST(0 AS DECIMAL) AS BillRateMultiplier
-	  FROM dbo.[RecruiterCommission] AS r
-	       INNER JOIN dbo.Person AS ps ON r.[RecruitId] = ps.[PersonId]
-	 WHERE (SELECT COUNT(*) * 8
-			  FROM dbo.Calendar AS cal
-			 WHERE cal.Date BETWEEN ps.[HireDate] AND GETDATE()
-			   AND cal.DayOff = 0) < r.[HoursToCollect]
-	GROUP BY ps.[PersonId], ps.[HireDate]
-	UNION ALL
 	SELECT ps.[PersonId],
 	       'Bonus' AS [Description],
 	       p.BonusAmount AS Rate,
