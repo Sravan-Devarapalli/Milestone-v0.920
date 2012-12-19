@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DataTransferObjects;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using DataAccess.Other;
-using DataTransferObjects.ContextObjects;
+using DataTransferObjects;
 
 namespace DataAccess
 {
@@ -43,7 +40,6 @@ namespace DataAccess
         #endregion Columns
 
         #endregion Constants
-
 
         public static void SaveCompanyLogoData(string title, string imagename, string imagePath, Byte[] data)
         {
@@ -139,7 +135,6 @@ namespace DataAccess
             }
         }
 
-
         public static bool SaveResourceKeyValuePairItem(SettingsType settingType, string key, string value, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
             int rowsAffected = 0;
@@ -172,7 +167,6 @@ namespace DataAccess
 
             return rowsAffected > 0;
         }
-
 
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
@@ -284,8 +278,6 @@ namespace DataAccess
             }
         }
 
-
-
         public static List<ClientMarginColorInfo> GetMarginColorInfoDefaults(DefaultGoalType goalType)
         {
             var clientMarginColorInfo = new List<ClientMarginColorInfo>();
@@ -338,7 +330,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         public static void SavePracticesIsNotesRequiredDetails(string isNotesRequiredPracticeIdsList, string isNotesExemptedPracticeIdsList)
         {
@@ -470,6 +461,31 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<string> GetAllDomains()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetAllDomainsProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<string>();
+                    if (reader.HasRows)
+                    {
+                        int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                        while (reader.Read())
+                        {
+                            result.Add(reader.GetString(nameIndex));
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
+
     }
 }
 
