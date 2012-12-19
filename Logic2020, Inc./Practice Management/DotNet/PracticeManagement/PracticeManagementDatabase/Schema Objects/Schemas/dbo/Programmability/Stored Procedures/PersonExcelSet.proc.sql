@@ -34,7 +34,7 @@ BEGIN
 			pers.Alias,
 			pers.HireDate,
 			pers.TerminationDate,
-			prct.[Name] AS 'Default Practice Area',
+			prct.[Name] AS 'Practice Area',
 			paytype.[Name] AS 'Pay type',
 			-- if pay type is hourly (here actually, not salary)
 			CASE pay.Timescale
@@ -56,17 +56,17 @@ BEGIN
 				WHEN NULL THEN 0
 				ELSE pay.BonusHoursToCollect
 			END AS 'Hourly Bonus, hours',
-			sen.[Name] AS 'Seniority',
-			pay.VacationDays AS 'Vacation Days',
+			T.Title,
+			pay.VacationDays AS 'PTO Accrual',
 			manager.FirstName + ' ' + manager.LastName AS 'Career Counselor Name',
-			rcd.RecruiterName
+			rcd.LastName + ' ' + rcd.FirstName AS 'RecruiterName'
 	FROM    dbo.Person AS pers
 			LEFT OUTER JOIN dbo.v_Pay AS pay ON pers.PersonId = pay.PersonId
 			INNER JOIN CurrentElseLastPay AS lp ON lp.PersonId = pay.PersonId AND (lp.EndDate = ISNULL(pay.EndDate, @FutureDate))
 			LEFT OUTER JOIN dbo.Timescale AS paytype ON paytype.TimescaleId = pay.Timescale
-			LEFT OUTER JOIN dbo.Seniority AS sen ON pers.SeniorityId = sen.SeniorityId
+			LEFT OUTER JOIN dbo.Title AS T ON pers.TitleId = T.TitleId
 			LEFT OUTER JOIN dbo.PersonStatus AS stat ON stat.PersonStatusId = pers.PersonStatusId
-			LEFT OUTER JOIN dbo.v_RecruiterComissionWithDays AS rcd ON rcd.RecruitId = pers.PersonId
+			LEFT OUTER JOIN dbo.Person AS rcd ON rcd.PersonId = pers.RecruiterId
 			LEFT OUTER JOIN dbo.Practice AS prct ON pers.DefaultPractice = prct.PracticeId
 			LEFT JOIN dbo.Person AS manager ON manager.PersonId = pers.ManagerId
 	ORDER BY pers.PersonId
