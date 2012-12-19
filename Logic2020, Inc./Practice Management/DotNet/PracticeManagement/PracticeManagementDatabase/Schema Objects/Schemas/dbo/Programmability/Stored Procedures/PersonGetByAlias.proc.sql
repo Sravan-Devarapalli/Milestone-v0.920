@@ -15,7 +15,6 @@ AS
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
-	       p.PTODaysPerAnnum,
 	       p.HireDate,
 	       p.TerminationDate,
 	       p.Alias,
