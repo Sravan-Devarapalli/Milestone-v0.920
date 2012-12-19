@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using DataTransferObjects;
-using System.Web.UI.DataVisualization.Charting;
-using iTextSharp.text;
 using System.Drawing;
+using System.Linq;
+using System.Web.UI.DataVisualization.Charting;
+using System.Web.UI.WebControls;
 using DataTransferObjects.Reports.HumanCapital;
+using iTextSharp.text;
 
 namespace PraticeManagement.Controls.Reports.HumanCapital
 {
@@ -102,7 +99,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             {
                 tpir.PayTypesList = HostingPage.PayTypesList;
             }
-            TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Seniorities, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
+            TerminationPersonsInRange data = ServiceCallers.Custom.Report(r => r.TerminationReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PayTypes, null, HostingPage.Titles, HostingPage.TerminationReasons, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null));
             HostingPage.PopulateHeaderSection(data);
             LoadChartData(terminationPersonInRange);
         }
