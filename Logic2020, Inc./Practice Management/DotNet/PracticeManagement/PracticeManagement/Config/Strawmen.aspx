@@ -75,7 +75,7 @@
         function EnableDisableVacationDays(ddlBasic) {
             var vacationdaysId = ddlBasic.getAttribute("vacationdaysId");
             var vacationdays = document.getElementById(vacationdaysId);
-            if (!(ddlBasic.value == 'W2-Salary' || ddlBasic.value == 'W2-Hourly')) {
+            if (!(ddlBasic.value == 'W2-Salary')) {
                 vacationdays.setAttribute("disabled", "disabled");
             }
             else {
@@ -175,7 +175,7 @@
                                     CssClass="padRight25"></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:TextBox ID="txtAmount" runat="server" Text='<%# ((Pay)Eval("CurrentPay")) != null ? ((Pay)Eval("CurrentPay")).Amount : 0%>'
+                                <asp:TextBox ID="txtAmount" runat="server" Text='<%# ((Pay)Eval("CurrentPay")) != null ? ((Pay)Eval("CurrentPay")).Amount : 0%>' MaxLength="16"
                                     CssClass="Width100Px textRight"></asp:TextBox>
                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmount"
                                     FilterMode="ValidChars" FilterType="Numbers,Custom" ValidChars=".">
@@ -190,20 +190,20 @@
                             <ItemStyle CssClass="Right" />
                             <HeaderTemplate>
                                 <div class="ie-bg">
-                                    Vacation (In Hours)<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                                    PTO Accrual (In Hours)<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
                             </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="lblVacationDays" runat="server" Text='<%# GetVacationDays((Pay)Eval("CurrentPay")) %>'
                                     CssClass="padRight25"></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:TextBox ID="txtVacationDays" runat="server" Text='<%# GetVacationDays((Pay)Eval("CurrentPay")) %>'
+                                <asp:TextBox ID="txtVacationDays" runat="server" Text='<%# GetVacationDays((Pay)Eval("CurrentPay")) %>' MaxLength="3"
                                     CssClass="textRight Width100Px"></asp:TextBox>
                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtVacationDays" runat="server"
                                     TargetControlID="txtVacationDays" FilterMode="ValidChars" FilterType="Numbers">
                                 </AjaxControlToolkit:FilteredTextBoxExtender>
-                                <asp:CustomValidator ID="cvVacationDays" runat="server" Text="*" ErrorMessage="VacationDays(In Hours) must be in multiple of 8."
-                                    ToolTip="VacationDays(In Hours) must be in multiple of 8." ValidationGroup="StrawmanGroup"
+                                <asp:CustomValidator ID="cvVacationDays" runat="server" Text="*" ErrorMessage="PTO Accrual(In Hours) must be in multiple of 8."
+                                    ToolTip="PTO Accrual(In Hours) must be in multiple of 8." ValidationGroup="StrawmanGroup"
                                     SetFocusOnError="true" OnServerValidate="cvVacationDays_ServerValidate"></asp:CustomValidator>
                             </EditItemTemplate>
                         </asp:TemplateField>
@@ -425,7 +425,7 @@
                                     <asp:TemplateField>
                                         <HeaderTemplate>
                                             <div class="ie-bg">
-                                                Vacation (In Hours)</div>
+                                                PTO Accrual (In Hours)</div>
                                         </HeaderTemplate>
                                         <ItemTemplate>
                                             <%# ((int?)Eval("VacationDays")).HasValue ? (((int?)Eval("VacationDays")).Value * 8).ToString() : string.Empty %>
