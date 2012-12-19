@@ -99,19 +99,6 @@ AS
 				   WHEN 0 THEN 0
 				   ELSE pay.BonusAmount / (CASE WHEN pay.BonusHoursToCollect = 2080 THEN HY.HoursInYear ELSE pay.BonusHoursToCollect END)
 			   END AS BonusRate,
-			
-				ISNULL((SELECT SUM(CASE
-							   WHEN DATEDIFF(DD, Person.HireDate, Calendar.Date)*8 <= rc.HoursToCollect
-									AND rc.HoursToCollect > 0 
-							   THEN rc.Amount / (rc.HoursToCollect)
-							   ELSE NULL
-						   END)
-				  FROM dbo.RecruiterCommission AS rc
-					   INNER JOIN dbo.Person ON Person.PersonId = rc.RecruitId
-					   INNER JOIN dbo.Calendar ON Calendar.Date = cal.Date
-				 WHERE rc.RecruitId = P.PersonId
-			   ),0) AS RecruitingCommissionRate,
-	       
 				ISNULL(CASE
 				   WHEN pay.Timescale IN (1, 3)
 				   THEN pay.Amount
@@ -172,8 +159,8 @@ AS
 	AS
 	(
 		SELECT 
-			CASE WHEN (HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate) >HourlyRate+MLFOverheadRate
-				 THEN (HourlyRate+OverHeadAmount+BonusRate+RecruitingCommissionRate+VacationRate)
+			CASE WHEN (HourlyRate+OverHeadAmount+BonusRate+VacationRate) >HourlyRate+MLFOverheadRate
+				 THEN (HourlyRate+OverHeadAmount+BonusRate+VacationRate)
 				 ELSE HourlyRate+MLFOverheadRate
 				 END FLHR,
 			HourlyRate,
