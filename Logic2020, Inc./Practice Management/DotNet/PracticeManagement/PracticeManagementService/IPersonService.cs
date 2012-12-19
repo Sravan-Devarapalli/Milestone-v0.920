@@ -82,35 +82,6 @@ namespace PracticeManagementService
         /// <returns>Object with the list of permissions</returns>
         [OperationContract]
         PersonPermission GetPermissions(Person person);
-        
-        /// <summary>
-        /// This method is used by only in PersonList.aspx, Set_user.aspx and DataHelper.cs. This will return 
-        /// all person list along with his currentPay details.
-        /// </summary>
-        /// <param name="practice">identifies a practice to limit results</param>
-        /// <param name="active"><value>true</value> limits to active persons only</param>
-        /// <param name="looked">A text to be looked for.</param>
-        /// <param name="pageNo">Determines a page index to be retrieved.</param>
-        /// <param name="pageSize">Determines a page size to be retrieved.</param>
-        /// <param name="recruiterId">Determines an ID of the recruiter to retrieve the recruits for.</param>
-        /// <param name="userName">A current user.</param>
-        /// <param name="sortBy">The sort column by which the result set should be sorted.</param>
-        /// <returns></returns>
-        [OperationContract]
-        List<Person> GetPersonListWithCurrentPay(
-            int? practice,
-            bool active,
-            int pageSize,
-            int pageNo,
-            string looked,
-            int? recruiterId,
-            string userName,
-            string sortBy,
-            int? timeScaleId,
-            bool projected,
-            bool terminated,
-            bool inactive,
-            char? alphabet);
 
         [OperationContract]
         List<Person> GetPersonListWithCurrentPayByCommaSeparatedIdsList(
@@ -127,7 +98,7 @@ namespace PracticeManagementService
             bool terminated,
             bool terminatedPending,
             char? alphabet);
-        
+
         /// <summary>
         /// Retrieves a short info on persons.
         /// </summary>
@@ -188,11 +159,11 @@ namespace PracticeManagementService
         int GetPersonWorkDaysNumber(int personId, DateTime startDate, DateTime endDate);
 
         /// <summary>
-        /// Lists all active persons who receive some recruiter commissions.
+        /// Lists all active persons who have recruiter role.
         /// </summary>
         /// <returns>The list of <see cref="Person"/> objects.</returns>
         [OperationContract]
-        List<Person> GetRecruiterList(int? personId, DateTime? hireDate);
+        List<Person> GetRecruiterList();
 
         /// <summary>
         /// List the persons who recieve the sales commissions
@@ -266,7 +237,10 @@ namespace PracticeManagementService
         /// <param name="currentUser">current logged in user name</param>       
         [OperationContract]
         [FaultContract(typeof(DataAccessFault))]
-        int SavePersonDetail(Person person, string currentUser, string loginPageUrl);
+        int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay);
+
+        [OperationContract]
+        void PersonValidations(Person person);
 
         /// <summary>
         /// Retrieves the list of the overheads for the specified person.
@@ -293,16 +267,6 @@ namespace PracticeManagementService
         MilestonePerson GetPersonRate(MilestonePerson milestonePerson);
 
         /// <summary>
-        /// Calculates the person's financials.
-        /// </summary>
-        /// <param name="personId">An ID of the <see cref="Person"/> to colculate the data for.</param>
-        /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
-        /// <param name="proposedRate">A proposed person's hourly rate.</param>
-        /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        [OperationContract]
-        ComputedFinancialsEx CalculateProposedFinancials(int personId, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount);
-
-        /// <summary>
         /// Calculates the person's rate.
         /// </summary>
         /// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
@@ -313,21 +277,11 @@ namespace PracticeManagementService
         ComputedFinancialsEx CalculateProposedFinancialsPerson(Person person, decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage, DateTime? effectiveDate);
 
         /// <summary>
-        /// Calculates the person's rate.
-        /// </summary>
-        /// <param name="person">A <see cref="Person"/> object to calculate the data for.</param>
-        /// <param name="targetMargin">A Target Magin.</param>
-        /// <param name="proposedHoursPerWeek">A proposed work week duration.</param>
-        /// <returns>The <see cref="ComputedRate"/> object with the calculation results.</returns>
-        [OperationContract]
-        ComputedFinancialsEx CalculateProposedFinancialsPersonTargetMargin(Person person, decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount, bool isMarginTestPage);
-        
-        /// <summary>
         /// Saves a payment data.
         /// </summary>
         /// <param name="pay">The <see cref="Pay"/> object to be saved.</param>
         [OperationContract]
-        void SavePay(Pay pay, string user);
+        void SavePay(Pay pay, string loginPageUrl, string user);
 
         [OperationContract]
         void DeletePay(int personId, DateTime startDate);
@@ -421,7 +375,6 @@ namespace PracticeManagementService
         [OperationContract]
         List<Opportunity> GetActiveOpportunitiesByOwnerId(int personId);
 
-
         [OperationContract]
         int? SaveStrawman(Person person, Pay currentPay, string userLogin);
 
@@ -456,9 +409,6 @@ namespace PracticeManagementService
         List<Person> GetPersonListBySearchKeyword(String looked);
 
         [OperationContract]
-        List<Timescale> GetAllPayTypes();
-
-        [OperationContract]
         Person GetPayHistoryShortByPerson(int personId);
 
         [OperationContract]
@@ -466,7 +416,7 @@ namespace PracticeManagementService
 
         [OperationContract]
         Person GetPersonDetailsShort(int personId);
-        
+
         [OperationContract]
         Person GetStrawmanDetailsByIdWithCurrentPay(int id);
 
@@ -496,6 +446,21 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(int personId, DateTime startDate, DateTime endDate, int timeScaleId);
+
+        [OperationContract]
+        void DeletePersonEncodedPassword(int personId);
+
+        [OperationContract]
+        bool CheckIfPersonPasswordValid(string alias, string password);
+
+        [OperationContract]
+        void UpdateUserPassword(int personId, string userName, string newPassword);
+
+        [OperationContract]
+        Pay GetCurrentByPerson(int personId);
+
+        [OperationContract]
+        void SendAdministratorAddedEmail(Person person, Person oldPerson);
     }
 }
 
