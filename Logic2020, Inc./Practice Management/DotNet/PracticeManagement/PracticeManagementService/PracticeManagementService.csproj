@@ -106,8 +106,6 @@
     <Content Include="AttachmentService.asmx" />
     <Content Include="CalendarService.svc" />
     <Content Include="ClientService.svc" />
-    <Content Include="DefaultCommissionService.svc" />
-    <Content Include="DefaultRecruiterCommissionService.svc" />
     <Content Include="MilestonePersonService.svc" />
     <Content Include="MilestoneService.svc" />
     <Content Include="OverheadService.svc" />
@@ -170,12 +168,6 @@
       <DependentUpon>ReportService.svc</DependentUpon>
     </Compile>
     <Compile Include="ServiceConstants.cs" />
-    <Compile Include="DefaultCommissionService.svc.cs">
-      <DependentUpon>DefaultCommissionService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="DefaultRecruiterCommissionService.svc.cs">
-      <DependentUpon>DefaultRecruiterCommissionService.svc</DependentUpon>
-    </Compile>
     <Compile Include="ExpenseCategoryService.svc.cs">
       <DependentUpon>ExpenseCategoryService.svc</DependentUpon>
     </Compile>
@@ -186,8 +178,6 @@
     <Compile Include="IAuthService.cs" />
     <Compile Include="ICalendarService.cs" />
     <Compile Include="IClientService.cs" />
-    <Compile Include="IDefaultCommissionService.cs" />
-    <Compile Include="IDefaultRecruiterCommissionService.cs" />
     <Compile Include="IExpenseCategoryService.cs" />
     <Compile Include="IExpenseService.cs" />
     <Compile Include="IMembershipService.cs" />
