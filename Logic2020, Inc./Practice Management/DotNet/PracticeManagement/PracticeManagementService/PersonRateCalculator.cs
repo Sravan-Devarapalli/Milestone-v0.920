@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Web.Security;
 using DataAccess;
 using DataAccess.Other;
 using DataTransferObjects;
-using System.Data;
-using System.Linq;
 
 
 namespace PracticeManagementService
@@ -25,10 +24,6 @@ namespace PracticeManagementService
         public const int DefaultHoursPerDay = 8;
         public const decimal MonthPerYear = 12.00M;
         public const decimal WeeksPerMonth = 4.20M;
-
-        private const int MaxIterationNumber = 10000;
-        private const decimal RateCalculationSteps = 10M;
-        private const decimal RateCalculationThreshold = 0.01M;
 
         #endregion
 
@@ -97,18 +92,11 @@ namespace PracticeManagementService
         {
             if (person != null && person.Id.HasValue && !isMarginTest)
             {
-                person.DefaultPersonRecruiterCommission =
-                    DefaultRecruiterCommissionDAL.DefaultRecruiterCommissionListByPerson(person.Id.Value);
-
+               
                 if (effectiveDate == null)
                 {
                     person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
                 }
-
-                person.RecruiterCommission =
-                        RecruiterCommissionDAL.DefaultRecruiterCommissionListByRecruitId(person.Id.Value);
-
-                person.DefaultPersonCommissions = DefaultCommissionDAL.DefaultCommissionListByPerson(person.Id.Value);
 
                 person.OverheadList =
                     recalculateOverhead && person.CurrentPay != null ?
@@ -142,7 +130,6 @@ namespace PracticeManagementService
 
             if (recalculateOverhead)
             {
-                person.OverheadList.Add(CalculateRecruitingOverhead());
                 person.OverheadList.Add(CalculateBonusOverhead());
             }
         }
@@ -201,33 +188,6 @@ namespace PracticeManagementService
             return result;
         }
 
-        /// <summary>
-        /// Checks whether the specified user is an Administrator and leaves or replaces the value to filter data.
-        /// </summary>
-        /// <param name="userName">The user to be verified.</param>
-        /// <param name="recruiterId">An ID of the recruiter for filter.</param>
-        public static void VerifyPrivileges(string userName, ref int? recruiterId)
-        {
-            // Administrators can see anything.
-            if (
-                !Roles.IsUserInRole(userName, Constants.RoleNames.AdministratorRoleName) &&
-                !Roles.IsUserInRole(userName, Constants.RoleNames.HRRoleName)                           //#2817:HRRoleName is added as per requirement.
-               )
-            {
-                if (Roles.IsUserInRole(userName, Constants.RoleNames.RecruiterRoleName))
-                {
-                    // A rectuiter can see only hes/her recruits
-                    Person recruiter = PersonDAL.PersonGetByAlias(userName);
-                    recruiterId =
-                        recruiter != null && recruiter.Id.HasValue ? recruiter.Id.Value : 0;
-                }
-                else
-                {
-                    // Cannot apply the filter
-                    recruiterId = 0;
-                }
-            }
-        }
 
         #endregion
 
@@ -244,36 +204,6 @@ namespace PracticeManagementService
         public static decimal CalculateMonthlyRevenue(decimal hourlyRate, decimal hoursPerWeek)
         {
             return Math.Round(hourlyRate * hoursPerWeek * WeeksPerMonth);
-        }
-
-        /// <summary>
-        /// Calculates a projected margin.
-        /// </summary>
-        /// <param name="hourlyRate">The projected horly rate.</param>
-        /// <param name="hoursPerWeek">The projected numder of hours per week.</param>
-        /// <returns>The projected margin for the company.</returns>
-        public decimal CalculateProjectedMargin(decimal hourlyRate, decimal hoursPerWeek, decimal salesCommission)
-        {
-            return CalculateMonthlyRevenue(hourlyRate, hoursPerWeek) - CalculateCogs(hoursPerWeek, salesCommission);
-        }
-
-        /// <summary>
-        /// Calculates a default sales commission for the proposed rate.
-        /// </summary>
-        /// <param name="hourlyRate">The projected horly rate.</param>
-        /// <param name="hoursPerWeek">The projected numder of hours per week.</param>
-        /// <returns>The projected sales commission.</returns>
-        public decimal CalculateSalesCommission(decimal hourlyRate, decimal hoursPerWeek, decimal defaultSalesCommission)
-        {
-            // Task: #756
-            // The calculation should be exactly:
-            //SalesCommission = Round((BillRate – RawHourlyRate) *.05)
-            decimal tmpResult =
-                hourlyRate - (Person.CurrentPay != null ? Person.CurrentPay.AmountHourly.Value : 0M);
-
-            //return tmpResult * Constants.Finacials.DefaultSalesCommission;
-            return tmpResult * defaultSalesCommission;
-
         }
 
         /// <summary>
@@ -304,7 +234,7 @@ namespace PracticeManagementService
 
             // Add the Vacation Overhead
             PersonOverhead vacationOverhead = CalculateVacationOverhead(proposedHoursPerWeek);
-            financials.OverheadList.Insert(2, vacationOverhead);
+            financials.OverheadList.Add(vacationOverhead);
 
             financials.LoadedHourlyRate = Person.LoadedHourlyRate;
 
@@ -364,76 +294,7 @@ namespace PracticeManagementService
             financials.GrossMargin = financials.RevenueNet - financials.Cogs;
             financials.MarginWithoutRecruiting = financials.RevenueNet - financials.CogsWithoutRecruiting;
 
-            //if (MLFOverhead != null && MLFOverhead.HourlyValue > 0)
-            //{
-            //    financials.SalesCommission = financials.GrossMargin * defaultSalesCommission;
-            //    financials.SaleCommissionPerHour = financials.SalesCommission / (proposedHoursPerWeek * WeeksPerMonth);
-            //}
-
-            // Add a sales commission overhead
-            //PersonOverhead salesCommission = new PersonOverhead();
-            //salesCommission.Name = Resources.Messages.SalesCommissionTitle;
-            //salesCommission.HoursToCollect = 1;
-            //salesCommission.Rate = salesCommission.HourlyValue = financials.SaleCommissionPerHour;
-            //Person.OverheadList.Add(salesCommission);
-
             financials.OverheadList.Insert(0, rawHourlyRate);
-
-            return financials;
-        }
-
-        /// <summary>
-        /// Calculates the financials for the <see cref="Person"/> with the proposed values.
-        /// </summary>
-        /// <param name="targetMargin">The Target Margin in percentage.</param>
-        /// <param name="proposedHoursPerWeek">A number of the billed hours per week.</param>
-        /// <returns>A <see cref="ComputedFinancialsEx"/> object.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancialsTargetMargin(decimal targetMargin, decimal proposedHoursPerWeek, decimal clientDiscount)
-        {
-            // Determine the first approximation
-            decimal proposedRate = CalculateCogs(proposedHoursPerWeek, 0M);
-            proposedRate =
-                proposedRate / (WeeksPerMonth * proposedHoursPerWeek) +
-                (proposedRate * targetMargin) / (100M * WeeksPerMonth * proposedHoursPerWeek);
-            proposedRate =
-                //CalculateCogs(proposedHoursPerWeek, proposedRate * Constants.Finacials.DefaultSalesCommission);
-                CalculateCogs(proposedHoursPerWeek, 0M);
-            proposedRate =
-                proposedRate / (WeeksPerMonth * proposedHoursPerWeek) +
-                (proposedRate * targetMargin) / (100M * WeeksPerMonth * proposedHoursPerWeek);
-
-            ComputedFinancialsEx financials = CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
-
-            int iterationNumber = MaxIterationNumber;
-            while (iterationNumber > 0 && (Math.Abs(targetMargin - financials.TargetMargin) > RateCalculationThreshold))
-            {
-                // Removing recalculated overheads.
-                var vacationOverhead = Person.OverheadList.Find(oh => oh.Name == Resources.Messages.VacationOverheadName);
-                var rawHourlyRate = Person.OverheadList.Find(oh => oh.Name == Resources.Messages.RawHourlyRateTitle);
-                //var salesCommission = Person.OverheadList.Find(oh => oh.Name == Resources.Messages.SalesCommissionTitle);
-                if (vacationOverhead != null)
-                {
-                    Person.OverheadList.Remove(vacationOverhead);  // remove the Vacation Overhead
-                }
-
-                if (rawHourlyRate != null)
-                {
-                    Person.OverheadList.Remove(rawHourlyRate); // remove the Raw Hourly Rate
-                }
-                //if (salesCommission != null)
-                //{
-                //    Person.OverheadList.Remove(salesCommission); // remove a sales commission overhead
-                //}
-
-                proposedRate +=
-                    financials.Cogs * (targetMargin - financials.TargetMargin) /
-                    (100M * WeeksPerMonth * proposedHoursPerWeek * RateCalculationSteps);
-                financials = CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
-
-                iterationNumber--;
-            }
-
-            financials.HoursBilled = WeeksPerMonth * proposedHoursPerWeek;
 
             return financials;
         }
@@ -503,18 +364,6 @@ namespace PracticeManagementService
         /// Computes the COGS for the person.
         /// </summary>
         /// <returns></returns>
-        public PracticeManagementCurrency CalculateCogs(decimal hoursPerWeek, decimal salesCommissionOverhead)
-        {
-            return CalculateCogsForHours(
-                hoursPerWeek * WeeksPerMonth,
-                DefaultHoursPerWeek * WeeksPerMonth,
-                salesCommissionOverhead);
-        }
-
-        /// <summary>
-        /// Computes the COGS for the person.
-        /// </summary>
-        /// <returns></returns>
         public PracticeManagementCurrency CalculateCogsForHours(
             decimal hours,
             decimal companyHours,
@@ -557,28 +406,9 @@ namespace PracticeManagementService
             return monthAmount + monthOverhead;
         }
 
-        /// <summary>
-        /// Computes the COGS for the person for an especial period.
-        /// </summary>
-        /// <param name="startDate">The period start.</param>
-        /// <param name="endDate">The period end.</param>
-        /// <returns></returns>
-        public PracticeManagementCurrency CalculateCogs(DateTime startDate, DateTime endDate)
-        {
-            decimal personHours = GetPersonWorkDays(startDate, endDate);
-            decimal companyHours = CompanyWorkDaysNumber(startDate, endDate) * DefaultHours;
-
-            return CalculateCogsForHours(personHours, companyHours, 0M);
-        }
-
         public static int CompanyWorkDaysNumber(DateTime startDate, DateTime endDate)
         {
             return CalendarDAL.WorkDaysCompanyNumber(startDate, endDate);
-        }
-
-        public decimal DefaultHours
-        {
-            get { return (Person.CurrentPay != null ? Person.CurrentPay.DefaultHoursPerDay : 0M); }
         }
 
         public decimal GetPersonWorkDays(DateTime startDate, DateTime endDate)
@@ -589,7 +419,7 @@ namespace PracticeManagementService
         private decimal GetPersonWorkDays(int personId, DateTime startDate, DateTime endDate)
         {
             return CalendarDAL.WorkDaysPersonNumber(personId, startDate, endDate) *
-                   DefaultHours;
+                   DefaultHoursPerDay;
         }
 
         /// <summary>
@@ -612,56 +442,6 @@ namespace PracticeManagementService
                     2);
                 result.StartDate = Person.HireDate;
                 result.HoursToCollect = 1;
-                result.HourlyValue = result.Rate;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Calculates a recruiting overhead.
-        /// </summary>
-        /// <returns>The <see cref="PersonOverhead"/> object with a calculated value.</returns>
-        public PersonOverhead CalculateRecruitingOverhead()
-        {
-            PersonOverhead result = new PersonOverhead();
-            result.Name = Resources.Messages.RecruitingOverheadName;
-            result.HoursToCollect = 1;
-
-            if (Person.RecruiterCommission != null && Person.CurrentPay != null)
-            {
-                int hoursWorked;
-
-                if (Person.Id.HasValue && Person.HireDate == DateTime.MinValue)
-                {
-                    var tempPerson = PersonDAL.GetById(Person.Id.Value);
-                    if (tempPerson != null)
-                    {
-                        Person.HireDate = tempPerson.HireDate;
-                    }
-                }
-                if (Person.HireDate == DateTime.MinValue)
-                {
-
-                    // Calculation for a new person
-                    hoursWorked = 0;
-                }
-                else
-                {
-                    hoursWorked =
-                        (int)Math.Floor(
-                        Math.Max((DateTime.Today - Person.HireDate).TotalDays, 0.0) *
-                        (double)DefaultHoursPerDay);
-                }
-
-                foreach (RecruiterCommission commision in Person.RecruiterCommission)
-                {
-                    if (commision.HoursToCollect >= hoursWorked && commision.HoursToCollect != 0 && commision.Amount.HasValue)
-                    {
-                        result.Rate += commision.Amount.Value / commision.HoursToCollect;
-                    }
-                }
-
                 result.HourlyValue = result.Rate;
             }
 
