@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DataTransferObjects;
-using DataAccess.Other;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
+using DataAccess.Other;
+using DataTransferObjects;
 
 namespace DataAccess
 {
-    public static class TitleDal
+    public static class TitleDAL
     {
         public static List<Title> GetAllTitles()
         {
@@ -29,6 +27,43 @@ namespace DataAccess
             }
         }
 
+        public static List<TitleType> GetTitleTypes()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Title.GetTitleTypes, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var result = new List<TitleType>();
+                    ReadTitleTypes(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadTitleTypes(SqlDataReader reader, List<TitleType> result)
+        {
+            if (reader.HasRows)
+            {
+                int titleTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleTypeId);
+                int titleTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TitleType);
+                while (reader.Read())
+                {
+                    result.Add(
+                        new TitleType()
+                        {
+                            TitleTypeId = reader.GetInt32(titleTypeIdIndex),
+                            TitleTypeName = reader.GetString(titleTypeIndex)
+                        });
+                }
+            }
+        }
+
+
         private static void ReadTitles(SqlDataReader reader, List<Title> result)
         {
             if (reader.HasRows)
@@ -42,6 +77,7 @@ namespace DataAccess
                 int pTOAccrualIndex = reader.GetOrdinal(Constants.ColumnNames.PTOAccrual);
                 int minimumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MinimumSalary);
                 int maximumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MaximumSalary);
+                int titleInUseIndex = reader.GetOrdinal(Constants.ColumnNames.TitleInUse);
 
 
                 while (reader.Read())
@@ -59,7 +95,9 @@ namespace DataAccess
                             SortOrder = reader.GetInt32(sortOrderIndex),
                             PTOAccrual = reader.GetInt32(pTOAccrualIndex),
                             MinimumSalary = !reader.IsDBNull(minimumSalaryIndex) ? reader.GetInt32(minimumSalaryIndex) : (int?)null,
-                            MaximumSalary = !reader.IsDBNull(maximumSalaryIndex) ? reader.GetInt32(maximumSalaryIndex) : (int?)null
+                            MaximumSalary = !reader.IsDBNull(maximumSalaryIndex) ? reader.GetInt32(maximumSalaryIndex) : (int?)null,
+                            TitleInUse = reader.GetBoolean(titleInUseIndex)
+
                         });
                 }
             }
@@ -137,13 +175,13 @@ namespace DataAccess
             }
         }
 
-        public static void TitleUpdate(int titleId,string title, int titleTypeId, int sortOrder, int pTOAccural, int? minimumSalary, int? maximumSalary, string userLogin)
+        public static void TitleUpdate(int titleId, string title, int titleTypeId, int sortOrder, int pTOAccural, int? minimumSalary, int? maximumSalary, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Title.TitleUpdate, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                 command.Parameters.AddWithValue(Constants.ParameterNames.TitleId, titleId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TitleId, titleId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Title, title);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TitleTypeId, titleTypeId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SortOrder, sortOrder);
