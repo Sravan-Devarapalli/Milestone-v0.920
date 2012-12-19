@@ -187,7 +187,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel and return.
+        ///   Looks up a localized string similar to Cancel and Return.
         /// </summary>
         internal static string CancelAndReturn {
             get {
