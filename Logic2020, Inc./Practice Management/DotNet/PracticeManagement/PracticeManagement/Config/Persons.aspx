@@ -283,13 +283,13 @@
                         <asp:TemplateField>
                             <HeaderTemplate>
                                 <div class="ie-bg">
-                                    <asp:LinkButton ID="lnkSeniority" CommandName="Sort" CommandArgument="SeniorityName"
-                                        runat="server">Seniority</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkTitle" CommandName="Sort" CommandArgument="Title"
+                                        runat="server">Title</asp:LinkButton>
                                 </div>
                             </HeaderTemplate>
                             <ItemStyle CssClass="Width12Percent" />
                             <ItemTemplate>
-                                <asp:Label ID="lblSeniority" runat="server" Text='<%# Eval("Seniority.Name") %>'></asp:Label>
+                                <asp:Label ID="lblTitle" runat="server" Text='<%# Eval("Title.TitleName") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
