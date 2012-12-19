@@ -1,28 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
-using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
-using PraticeManagement.AttachmentService;
 using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
-using PraticeManagement.DefaultCommissionService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
-using ProjectAttachment = DataTransferObjects.ProjectAttachment;
-using System.Linq;
-using PraticeManagement.Controls.Projects;
-using System.Web.Script.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace PraticeManagement
 {
@@ -817,7 +808,6 @@ namespace PraticeManagement
                             AddListItemIfNotExists(ddlSalesperson, client.DefaultSalespersonId.ToString(), null);
                             ddlSalesperson.SelectedIndex =
                                 ddlSalesperson.Items.IndexOf(ddlSalesperson.Items.FindByValue(client.DefaultSalespersonId.ToString()));
-                            ddlSalesperson_SelectedIndexChanged(ddlSalesperson, EventArgs.Empty);
                         }
                     }
 
@@ -1001,39 +991,7 @@ namespace PraticeManagement
             }
         }
 
-        /// <summary>
-        /// Sets the salesperson commission
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void ddlSalesperson_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(ddlSalesperson.SelectedValue))
-            {
-                int personId = int.Parse(ddlSalesperson.SelectedValue);
-                using (DefaultCommissionServiceClient serviceClient = new DefaultCommissionServiceClient())
-                {
-                    try
-                    {
-                        DefaultCommission commission = serviceClient.DefaultSalesCommissionByPerson(personId);
-                        if (commission != null)
-                        {
-                            txtSalesCommission.Text = commission.FractionOfMargin.ToString();
-                            chbReceivesSalesCommission.Checked = true;
-                            txtSalesCommission.Enabled = true;
-                        }
-                    }
-                    catch (FaultException<ExceptionDetail>)
-                    {
-                        serviceClient.Abort();
-                        throw;
-                    }
-                }
-            }
-
-            ddlSalesperson.Focus();
-        }
-
+       
         protected void chbReceivesSalesCommission_CheckedChanged(object sender, EventArgs e)
         {
             UpdateSalesCommissionState();
