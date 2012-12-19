@@ -360,15 +360,7 @@ namespace PraticeManagement
         {
             get
             {
-                if (ViewState["IsWizards"] == null)
-                {
-                    ViewState["IsWizards"] = false;
-                }
-                return (bool)ViewState["IsWizards"];
-            }
-            set
-            {
-                ViewState["IsWizards"] = value;
+                return !PersonId.HasValue;
             }
         }
 
@@ -2284,12 +2276,12 @@ namespace PraticeManagement
 
         #region Methods
 
-        public static void SaveRoles(Person person)
+        public static void SaveRoles(Person person, string[] currentRoles)
         {
             if (string.IsNullOrEmpty(person.Alias)) return;
 
             // Saving roles
-            string[] currentRoles = Roles.GetRolesForUser(person.Alias);
+           
 
             if (person.RoleNames.Length > 0)
             {
@@ -2746,7 +2738,6 @@ namespace PraticeManagement
                 ddlPersonStatus.Visible = true;
                 lblPersonStatus.Visible = false;
                 btnChangeEmployeeStatus.Visible = false;
-                IsWizards = true;
             }
             else
             {
@@ -3070,10 +3061,15 @@ namespace PraticeManagement
                     if (person.Id.HasValue)
                     {
                         oldPerson = serviceClient.GetPersonDetailsShort(person.Id.Value);
-                        oldPerson.RoleNames = Roles.GetRolesForUser(oldPerson.Alias);
+                    }
+                    string[] currentRoles = Roles.GetRolesForUser(person.Alias);
+                    if (currentRoles.Length == 0 && oldPerson != null)
+                    {
+                        currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
+                        oldPerson.RoleNames = currentRoles;
                     }
                     int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, IsWizards);
-                    SaveRoles(person);
+                    SaveRoles(person, currentRoles);
 
                     serviceClient.SendAdministratorAddedEmail(person, oldPerson);
                     if (personId.Value < 0)
