@@ -3,13 +3,13 @@
 
 <%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
 <%@ Register Src="Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
-<%@ Register Src="Controls/RecruiterInfo.ascx" TagName="RecruiterInfo" TagPrefix="uc1" %>
-<%@ Register Src="Controls/WhatIf.ascx" TagName="WhatIf" TagPrefix="uc1" %>
 <%@ Register Src="~/Controls/RestrictionPanel.ascx" TagPrefix="uc" TagName="RestrictionPanel" %>
 <%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLog" %>
 <%@ Register Src="~/Controls/Persons/PersonProjects.ascx" TagPrefix="uc" TagName="PersonProjects" %>
 <%@ Register Src="~/Controls/Configuration/DefaultUser.ascx" TagPrefix="uc" TagName="DefaultManager" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="MessageLabel" TagPrefix="uc" %>
+<%@ Register Src="Controls/PersonnelCompensation.ascx" TagName="PersonnelCompensation"
+    TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/OpportunityList.ascx" TagName="OpportunityList"
     TagPrefix="uc" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
@@ -127,6 +127,7 @@
                     lblCustomDateRange.style.display = "none";
                 }
             }
+            SetTooltipsForallDropDowns();
         }
 
         function CheckIfDatesValid() {
@@ -264,68 +265,6 @@
 
         function setPosition(item, ytop, xleft) {
             item.offset({ top: ytop, left: xleft });
-        }
-
-        function ChangeHourlyBillRate(IsIncrement) {
-            var txtBillRate = document.getElementById('<%= (whatIf.FindControl("txtBillRateSlider_BoundControl") as TextBox).ClientID %>');
-
-            if (txtBillRate != null) {
-                BillRate = parseFloat(txtBillRate.value);
-                if (IsIncrement && BillRate < 350) {
-
-                    txtBillRate.value = BillRate + 1;
-                }
-                else if (!IsIncrement && BillRate > 20) {
-                    txtBillRate.value = BillRate - 1;
-                }
-                if (txtBillRate.fireEvent) {
-                    txtBillRate.fireEvent('onchange');
-                }
-                if (document.createEvent) {
-                    var event = document.createEvent('HTMLEvents');
-                    event.initEvent('change', true, true);
-                    txtBillRate.dispatchEvent(event);
-                }
-            }
-        }
-        function ChangeHoursPerWeek(IsIncrement) {
-            var txtHPW = document.getElementById('<%= (whatIf.FindControl("txtHorsPerWeekSlider_BoundControl") as TextBox).ClientID %>');
-
-            if (txtHPW != null) {
-                BillRate = parseInt(txtHPW.value);
-                if (IsIncrement && BillRate < 60) {
-
-                    if (BillRate < 55)
-                        txtHPW.value = BillRate + 5;
-                    else
-                        txtHPW.value = 60;
-                }
-                else if (!IsIncrement) {
-                    if (BillRate > 15)
-                        txtHPW.value = BillRate - 5;
-                    else
-                        txtHPW.value = 10;
-                }
-                if (txtHPW.fireEvent) {
-                    txtHPW.fireEvent('onchange');
-                }
-                if (document.createEvent) {
-                    var event = document.createEvent('HTMLEvents');
-                    event.initEvent('change', true, true);
-                    txtHPW.dispatchEvent(event);
-                }
-            }
-        }
-        function EnableDisableVacationDays(ddlBasic) {
-            var vacationdaysId = ddlBasic.getAttribute("vacationdaysId");
-            var vacationdays = document.getElementById(vacationdaysId);
-            if (!(ddlBasic.value == 'W2-Salary' || ddlBasic.value == 'W2-Hourly')) {
-                vacationdays.setAttribute("disabled", "disabled");
-            }
-            else {
-                vacationdays.removeAttribute("disabled");
-            }
-            return false;
         }
 
         function ValidateCompensationAndTerminationDate(btnTerminatePersonOk, popupTerminationDate, ddlPopupTerminationReason) {
@@ -480,314 +419,335 @@
 
         function pageLoad() {
             document.onkeypress = enterPressed;
+            SetTooltipsForallDropDowns();
+        }
+
+        
+        function SetTooltipsForallDropDowns() {
+            var optionList = document.getElementsByTagName('option');
+
+            for (var i = 0; i < optionList.length; ++i) {
+
+                optionList[i].title = optionList[i].innerHTML;
+            }
+
         }
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <asp:HiddenField ID="hidDirty" runat="server" />
             <table class="PersonForm">
                 <tr>
                     <td>
-                        <asp:Panel ID="pnlPersonalInfo" runat="server">
-                            <table class="PersonInfo">
-                                <tr>
-                                    <td>
-                                        First Name
-                                    </td>
-                                    <td>
-                                        <asp:TextBox ID="txtFirstName" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>
-                                    </td>
-                                    <td>
-                                        <asp:RequiredFieldValidator ID="reqFirstName" runat="server" ValidationGroup="Person"
-                                            ControlToValidate="txtFirstName" ErrorMessage="The First Name is required." EnableClientScript="False"
-                                            SetFocusOnError="True" ToolTip="The First Name is required.">*</asp:RequiredFieldValidator>
-                                        <asp:CustomValidator ID="custPersonName" runat="server" ControlToValidate="txtFirstName"
-                                            ErrorMessage="There is another Person with the same First Name and Last Name."
-                                            ToolTip="There is another Person with the same First Name and Last Name." ValidationGroup="Person"
-                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            OnServerValidate="custPersonName_ServerValidate"></asp:CustomValidator>
-                                        <asp:RegularExpressionValidator ControlToValidate="txtFirstName" ValidationGroup="Person"
-                                            ID="valRegFirstName" runat="server" ErrorMessage="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                            ToolTip="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                            EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
-                                    </td>
-                                    <td>
-                                        Status
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width158px" onchange="setDirty();"
-                                            AutoPostBack="true" Visible="false">
-                                        </asp:DropDownList>
-                                        <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
-                                    </td>
-                                    <td>
-                                        <asp:Button ID="btnChangeEmployeeStatus" runat="server" Text="Change Employee Status"
-                                            UseSubmitBehavior="false" OnClick="btnChangeEmployeeStatus_Click" />&nbsp;
-                                        <asp:RequiredFieldValidator ID="reqPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
-                                            ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Person"
-                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
-                                        <asp:CustomValidator ID="custPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
-                                            ErrorMessage="Only administrator can set a status to Active or Terminated." ToolTip="Only administrator can set a status to Active or Terminated."
-                                            ValidationGroup="Person" Text="*" ValidateEmptyText="false" EnableClientScript="false"
-                                            SetFocusOnError="true" Display="Dynamic" OnServerValidate="custPersonStatus_ServerValidate"></asp:CustomValidator>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Last Name
-                                    </td>
-                                    <td>
-                                        <asp:TextBox ID="txtLastName" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>
-                                    </td>
-                                    <td>
-                                        <asp:RequiredFieldValidator ID="reqLastName" runat="server" ValidationGroup="Person"
-                                            ControlToValidate="txtLastName" ErrorMessage="The Last Name is required." EnableClientScript="False"
-                                            SetFocusOnError="True" ToolTip="The Last Name is required.">*</asp:RequiredFieldValidator>
-                                        <asp:RegularExpressionValidator ControlToValidate="txtLastName" ID="valRegLastName"
-                                            runat="server" ValidationGroup="Person" ErrorMessage="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                            ToolTip="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                            EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        Career Counselor
-                                    </td>
-                                    <td class="padRight2">
-                                        <asp:UpdatePanel ID="pnlLineManager" runat="server">
-                                            <ContentTemplate>
-                                                <uc:DefaultManager ID="defaultManager" runat="server" InsertFirtItem="false" PersonsRole="Practice Area Manager"
-                                                    CssClass="Width158px" />
-                                            </ContentTemplate>
-                                            <Triggers>
-                                                <asp:AsyncPostBackTrigger ControlID="lbSetPracticeOwner" EventName="Click" />
-                                            </Triggers>
-                                        </asp:UpdatePanel>
-                                    </td>
-                                    <td>
-                                        <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set to Practice Area Owner</asp:LinkButton>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap="nowrap" class="padRight10Imp">
-                                        Default Practice Area
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList ID="ddlDefaultPractice" runat="server" CssClass="Width158px" onchange="setDirty();">
-                                            <asp:ListItem Text="Technology Solutions"></asp:ListItem>
-                                        </asp:DropDownList>
-                                    </td>
-                                    <td>
-                                        <asp:CustomValidator ID="cvPracticeArea" runat="server" ErrorMessage="The Default Practice Area is required for active person."
-                                            ToolTip="The Default Practice Area is required for active person." ValidationGroup="Person"
-                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            OnServerValidate="cvPracticeArea_ServerValidate"></asp:CustomValidator>&nbsp;
-                                    </td>
-                                    <td>
-                                        Hire&nbsp;Date
-                                    </td>
-                                    <td class="Width158px">
-                                        <uc2:DatePicker ID="dtpHireDate" runat="server" OnSelectionChanged="dtpHireDate_SelectionChanged"
-                                            AutoPostBack="true" />
-                                    </td>
-                                    <td>
-                                        <asp:CompareValidator ID="compHireDate" runat="server" ControlToValidate="dtpHireDate"
-                                            EnableClientScript="False" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
-                                            Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'"
-                                            Type="Date">*</asp:CompareValidator>
-                                        <asp:RequiredFieldValidator ID="reqHireDate" runat="server" ControlToValidate="dtpHireDate"
-                                            Display="Dynamic" EnableClientScript="False" ErrorMessage="The Hire Date is required."
-                                            SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date is required.">*</asp:RequiredFieldValidator>
-                                        <asp:CustomValidator ID="custHireDate" runat="server" ControlToValidate="dtpHireDate"
-                                            ErrorMessage="Cannot set a Hire Date outside recruiting commissions period."
-                                            ToolTip="Cannot set a Hire Date outside recruiting commissions period." ValidationGroup="Person"
-                                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                            OnServerValidate="custHireDate_ServerValidate"></asp:CustomValidator>&nbsp;
-                                        <asp:CustomValidator ID="custWithPreviousTermDate" runat="server" ControlToValidate="dtpHireDate"
-                                            ErrorMessage="Hire Date should be greater than previous Termination date." ToolTip="Hire Date should be greater than previous Termination date."
-                                            ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate"
-                                            ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Email&nbsp;Address
-                                    </td>
-                                    <td>
-                                        <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="Width152px" onchange="setDirty();"></asp:TextBox>&nbsp;
-                                    </td>
-                                    <td>
-                                        <asp:RegularExpressionValidator ID="regEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
-                                            Display="Dynamic" ErrorMessage="The Email Address is not valid." ValidationGroup="Person"
-                                            ToolTip="The Email Address is not valid." Text="*" EnableClientScript="False"
-                                            ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"></asp:RegularExpressionValidator>
-                                        <asp:CustomValidator ID="custEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
-                                            ErrorMessage="There is another Person with the same Email." ToolTip="There is another Person with the same Email."
-                                            ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                            Display="Dynamic" OnServerValidate="custEmailAddress_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator ID="custUserName" runat="server" ControlToValidate="txtEmailAddress"
-                                            ErrorMessage="Unknown error occures. Please contact your administrator." ToolTip="Unknown error occures. Please contact your administrator."
-                                            ValidateEmptyText="true" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                            Display="Dynamic" ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator ID="custReqEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
-                                            ErrorMessage="The Email Address is required for active person." ToolTip="The Email Address is required for active person."
-                                            ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                            Display="Dynamic" ValidateEmptyText="true" OnServerValidate="custReqEmailAddress_ServerValidate"></asp:CustomValidator>&nbsp;
-                                    </td>
-                                    <td nowrap="nowrap">
-                                        Termination Date&nbsp;
-                                    </td>
-                                    <td class="Width158px padRight10Imp">
-                                        <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged"
-                                            EnabledTextBox="false" ReadOnly="true" />
-                                    </td>
-                                    <td>
-                                        <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
-                                            Display="Dynamic" EnableClientScript="False" Enabled="False" EnableTheming="True"
-                                            ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'" Operator="DataTypeCheck"
-                                            SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'"
-                                            Type="Date">*</asp:CompareValidator>
-                                        <asp:CustomValidator ID="custTerminationDate" runat="server" ErrorMessage="To terminate the person the Termination Date should be specified."
-                                            ToolTip="To terminate the person the Termination Date should be specified." ValidationGroup="Person"
-                                            Text="*" Display="Dynamic" EnableClientScript="false" OnServerValidate="custTerminationDate_ServerValidate"></asp:CustomValidator>
-                                        <asp:CompareValidator ID="cmpTerminateDate" runat="server" ControlToValidate="dtpTerminationDate"
-                                            ControlToCompare="dtpHireDate" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Termination date should be greater than or equal to Hire date."
-                                            Display="Dynamic" Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than or equal to Hire date."
-                                            SetFocusOnError="true"></asp:CompareValidator>
-                                        <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
-                                            Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
-                                            OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
-                                            Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
-                                            OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
-                                        <asp:DropDownList ID="ddlTerminationReason" runat="server" Visible="false">
-                                        </asp:DropDownList>
-                                        <asp:TextBox ID="txtTerminationReason" runat="server" Visible="true" Enabled="false"></asp:TextBox>
-                                        <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtTerminationReason" runat="server"
-                                            TargetControlID="txtTerminationReason" BehaviorID="waterMarkTxtTerminationReason"
-                                            WatermarkCssClass="watermarkedtext Width158px" WatermarkText="No Reason Selected">
-                                        </AjaxControlToolkit:TextBoxWatermarkExtender>
-                                        <asp:CustomValidator ID="custTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
-                                            ToolTip="To terminate the person the Termination Reason should be specified."
-                                            ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
-                                            OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>&nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap="nowrap">
-                                        Offshore Resource
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList ID="ddlPersonType" runat="server" CssClass="Width158px" onchange="setDirty();">
-                                            <asp:ListItem Text="NO" Value="0" Selected="True"></asp:ListItem>
-                                            <asp:ListItem Text="YES" Value="1"></asp:ListItem>
-                                        </asp:DropDownList>
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        <asp:Label ID="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
-                                    </td>
-                                    <td>
-                                        <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="Width152px" onchange="setDirty();"
-                                            Visible="false"></asp:TextBox>
-                                        <AjaxControlToolkit:FilteredTextBoxExtender ID="ftePayCheckId" TargetControlID="txtPayCheckId"
-                                            FilterType="Numbers" FilterMode="ValidChars" runat="server" />
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Telephone number
-                                    </td>
-                                    <td>
-                                        <asp:TextBox ID="txtTelephoneNumber" runat="server" onchange="setDirty();" CssClass="Width152px"></asp:TextBox>
-                                    </td>
-                                    <td>
-                                        <asp:RegularExpressionValidator ID="reqTelphoneNumber" runat="server" ControlToValidate="txtTelephoneNumber"
-                                            Display="Dynamic" ErrorMessage="The Telephone number is not valid." ValidationGroup="Person"
-                                            ToolTip="The Telephone number is not valid." Text="*" EnableClientScript="False"
-                                            ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>&nbsp;
-                                    </td>
-                                    <td>
-                                        <asp:Label ID="lblDivision" runat="server" Text="Division"></asp:Label>
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width158px">
-                                        </asp:DropDownList>
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <asp:Label ID="lblEmployeeNumber" runat="server" Text="PersonID"></asp:Label>
-                                    </td>
-                                    <td>
-                                        <asp:TextBox ID="txtEmployeeNumber" runat="server" MaxLength="12" onchange="setDirty();"
-                                            onfocus="if (!this.readOnly &amp;&amp; !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) this.blur();"
-                                            CssClass="Width152px"></asp:TextBox>
-                                        <asp:HiddenField ID="hdnPersonId" runat="server" />
-                                        <asp:HiddenField ID="hdnIsDefaultManager" runat="server" />
-                                    </td>
-                                    <td>
-                                        <asp:RequiredFieldValidator ID="reqEmployeeNumber" runat="server" ValidationGroup="Person"
-                                            ControlToValidate="txtEmployeeNumber" EnableClientScript="False" ErrorMessage="The Employee Number is required."
-                                            SetFocusOnError="True" ToolTip="The Employee Number is required.">*</asp:RequiredFieldValidator>
-                                        <asp:CustomValidator ID="custEmployeeNumber" runat="server" ControlToValidate="txtEmployeeNumber"
-                                            Display="Dynamic" EnableClientScript="false" ValidationGroup="Person" ErrorMessage="There is another Person with the same Employee Number."
-                                            OnServerValidate="custEmployeeNumber_ServerValidate" SetFocusOnError="true" Text="*"
-                                            ToolTip="There is another Person with the same Employee Number."></asp:CustomValidator>&nbsp;
-                                    </td>
-                                    <td class="padRight10Imp">
-                                        Practice Areas Owned
-                                    </td>
-                                    <td class="Width152px">
-                                        <asp:Repeater ID="repPracticesOwned" runat="server">
-                                            <HeaderTemplate>
-                                                <ul class="practices">
-                                            </HeaderTemplate>
-                                            <ItemTemplate>
-                                                <li class="practices">
-                                                    <%# Eval("HtmlEncodedName") %></li>
-                                            </ItemTemplate>
-                                            <FooterTemplate>
-                                                </ul>
-                                            </FooterTemplate>
-                                        </asp:Repeater>
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
-                                            Text="Locked-Out" />
-                                    </td>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                            </table>
-                        </asp:Panel>
+                        <table class="PersonInfo">
+                            <tr>
+                                <td>
+                                    First Name
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtFirstName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="reqFirstName" runat="server" ValidationGroup="Person"
+                                        ControlToValidate="txtFirstName" ErrorMessage="The First Name is required." EnableClientScript="False"
+                                        SetFocusOnError="True" ToolTip="The First Name is required.">*</asp:RequiredFieldValidator>
+                                    <asp:CustomValidator ID="custPersonName" runat="server" ControlToValidate="txtFirstName"
+                                        ErrorMessage="There is another Person with the same First Name and Last Name."
+                                        ToolTip="There is another Person with the same First Name and Last Name." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                        OnServerValidate="custPersonName_ServerValidate"></asp:CustomValidator>
+                                    <asp:RegularExpressionValidator ControlToValidate="txtFirstName" ValidationGroup="Person"
+                                        ID="valRegFirstName" runat="server" ErrorMessage="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
+                                        ToolTip="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
+                                        EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
+                                </td>
+                                <td>
+                                    Status
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width250Px" onchange="setDirty();"
+                                        AutoPostBack="true" Visible="false">
+                                    </asp:DropDownList>
+                                    <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:Button ID="btnChangeEmployeeStatus" runat="server" Text="Change Employee Status"
+                                        UseSubmitBehavior="false" OnClick="btnChangeEmployeeStatus_Click" />&nbsp;
+                                    <asp:RequiredFieldValidator ID="reqPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
+                                        ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
+                                    <asp:CustomValidator ID="custPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
+                                        ErrorMessage="Only administrator can set a status to Active or Terminated." ToolTip="Only administrator can set a status to Active or Terminated."
+                                        ValidationGroup="Person" Text="*" ValidateEmptyText="false" EnableClientScript="false"
+                                        SetFocusOnError="true" Display="Dynamic" OnServerValidate="custPersonStatus_ServerValidate"></asp:CustomValidator>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Last Name
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtLastName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="reqLastName" runat="server" ValidationGroup="Person"
+                                        ControlToValidate="txtLastName" ErrorMessage="The Last Name is required." EnableClientScript="False"
+                                        SetFocusOnError="True" ToolTip="The Last Name is required.">*</asp:RequiredFieldValidator>
+                                    <asp:RegularExpressionValidator ControlToValidate="txtLastName" ID="valRegLastName"
+                                        runat="server" ValidationGroup="Person" ErrorMessage="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
+                                        ToolTip="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
+                                        EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    Career Counselor
+                                </td>
+                                <td class="padRight2">
+                                    <asp:UpdatePanel ID="pnlLineManager" runat="server">
+                                        <ContentTemplate>
+                                            <uc:DefaultManager ID="defaultManager" runat="server" InsertFirtItem="false" PersonsRole="Practice Area Manager"
+                                                CssClass="Width256Px" />
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="lbSetPracticeOwner" EventName="Click" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </td>
+                                <td>
+                                    <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set to Practice Area Owner</asp:LinkButton>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Title
+                                </td>
+                                <td>
+                                    <pmc:CustomDropDown ID="ddlPersonTitle" runat="server" onchange="setDirty();" CssClass="Width256Px"
+                                        OnSelectedIndexChanged="ddlPersonTitle_OnSelectedIndexChanged" AutoPostBack="true">
+                                    </pmc:CustomDropDown>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="rvPersonTitle" runat="server" ErrorMessage="The Title is required."
+                                        ToolTip="The Title is required." ValidationGroup="Person" ControlToValidate="ddlPersonTitle"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                    <asp:CustomValidator ID="cvSLTApproval" runat="server" OnServerValidate="cvSLTApproval_OnServerValidate"
+                                        ValidationGroup="SLTApprovalForTitleChange" Text="*" EnableClientScript="false"
+                                        SetFocusOnError="true" Display="Dynamic"></asp:CustomValidator>&nbsp;
+                                    <asp:CustomValidator ID="cvSLTPTOApproval" runat="server" OnServerValidate="cvSLTPTOApproval_OnServerValidate"
+                                        ValidationGroup="SLTApprovalForTitleChange" Text="*" EnableClientScript="false"
+                                        SetFocusOnError="true" Display="Dynamic"></asp:CustomValidator>&nbsp;
+                                    <asp:HiddenField ID="hdTitleChanged" runat="server" Value="0" />
+                                    <asp:HiddenField ID="hdcvSLTApproval" runat="server" Value="false" />
+                                    <asp:HiddenField ID="hdcvSLTPTOApproval" runat="server" Value="false" />
+                                </td>
+                                <td>
+                                    Hire&nbsp;Date
+                                </td>
+                                <td class="DatePickerOuterTd">
+                                    <uc2:DatePicker ID="dtpHireDate" runat="server" OnSelectionChanged="dtpHireDate_SelectionChanged"
+                                        AutoPostBack="true" />
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="reqHireDate" runat="server" ControlToValidate="dtpHireDate"
+                                        Display="Dynamic" EnableClientScript="False" ErrorMessage="The Hire Date is required."
+                                        SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date is required.">*</asp:RequiredFieldValidator>
+                                    <asp:CompareValidator ID="compHireDate" runat="server" ControlToValidate="dtpHireDate"
+                                        EnableClientScript="False" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
+                                        Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'"
+                                        Type="Date">*</asp:CompareValidator>
+                                    <asp:CustomValidator ID="custHireDate" runat="server" ControlToValidate="dtpHireDate"
+                                        ErrorMessage="Cannot set a Hire Date outside recruiting commissions period."
+                                        ToolTip="Cannot set a Hire Date outside recruiting commissions period." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                        OnServerValidate="custHireDate_ServerValidate"></asp:CustomValidator>&nbsp;
+                                    <asp:CustomValidator ID="custWithPreviousTermDate" runat="server" ControlToValidate="dtpHireDate"
+                                        ErrorMessage="Hire Date should be greater than previous Termination date." ToolTip="Hire Date should be greater than previous Termination date."
+                                        ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate"
+                                        ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap="nowrap" class="padRight10Imp">
+                                    Practice Area
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlDefaultPractice" runat="server" CssClass="Width256Px" onchange="setDirty();"
+                                        OnSelectedIndexChanged="ddlDefaultPractice_OnSelectedIndexChanged" AutoPostBack="true">
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="rfvPracticeArea" runat="server" ErrorMessage="The Practice Area is required."
+                                        ToolTip="The Practice Area is required." ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                        SetFocusOnError="true" Display="Dynamic" ControlToValidate="ddlDefaultPractice"></asp:RequiredFieldValidator>&nbsp;
+                                </td>
+                                <td nowrap="nowrap">
+                                    Termination Date&nbsp;
+                                </td>
+                                <td class="DatePickerOuterTd padRight10Imp">
+                                    <uc2:DatePicker ID="dtpTerminationDate" runat="server" AutoPostBack="true" OnSelectionChanged="dtpTerminationDate_OnSelectionChanged"
+                                        EnabledTextBox="false" ReadOnly="true" />
+                                </td>
+                                <td>
+                                    <asp:CompareValidator ID="compTerminationDate" runat="server" ControlToValidate="dtpTerminationDate"
+                                        Display="Dynamic" EnableClientScript="False" Enabled="False" EnableTheming="True"
+                                        ErrorMessage="The Termination Date must be in the format 'MM/dd/yyyy'" Operator="DataTypeCheck"
+                                        SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Termination Date must be in the format 'MM/dd/yyyy'"
+                                        Type="Date">*</asp:CompareValidator>
+                                    <asp:CustomValidator ID="custTerminationDate" runat="server" ErrorMessage="To terminate the person the Termination Date should be specified."
+                                        ToolTip="To terminate the person the Termination Date should be specified." ValidationGroup="Person"
+                                        Text="*" Display="Dynamic" EnableClientScript="false" OnServerValidate="custTerminationDate_ServerValidate"></asp:CustomValidator>
+                                    <asp:CompareValidator ID="cmpTerminateDate" runat="server" ControlToValidate="dtpTerminationDate"
+                                        ControlToCompare="dtpHireDate" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Termination date should be greater than or equal to Hire date."
+                                        Display="Dynamic" Text="*" ValidationGroup="Person" ToolTip="Termination date should be greater than or equal to Hire date."
+                                        SetFocusOnError="true"></asp:CompareValidator>
+                                    <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
+                                        Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                        OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
+                                    <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
+                                        Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                        OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
+                                    <asp:DropDownList ID="ddlTerminationReason" runat="server" Visible="false" CssClass="Width250Px">
+                                    </asp:DropDownList>
+                                    <asp:TextBox ID="txtTerminationReason" runat="server" Visible="true" Enabled="false"></asp:TextBox>
+                                    <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarkTxtTerminationReason" runat="server"
+                                        TargetControlID="txtTerminationReason" BehaviorID="waterMarkTxtTerminationReason"
+                                        WatermarkCssClass="watermarkedtext Width160px" WatermarkText="No Reason Selected">
+                                    </AjaxControlToolkit:TextBoxWatermarkExtender>
+                                    <asp:CustomValidator ID="custTerminationReason" runat="server" ErrorMessage="To terminate the person the Termination Reason should be specified."
+                                        ToolTip="To terminate the person the Termination Reason should be specified."
+                                        ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
+                                        OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Email&nbsp;Address
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="Width120Px" onchange="setDirty();"></asp:TextBox>&nbsp;@&nbsp;
+                                    <asp:DropDownList ID="ddlDomain" runat="server" onchange="setDirty();" CssClass="Width110Px">
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="rfvEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
+                                        ErrorMessage="The Email Address is required." ToolTip="The Email Address is required."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic" ValidateEmptyText="true"></asp:RequiredFieldValidator>
+                                    <asp:RegularExpressionValidator ID="regEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
+                                        Display="Dynamic" ErrorMessage="The Email Address is not valid." ValidationGroup="Person"
+                                        ToolTip="The Email Address is not valid." Text="*" EnableClientScript="False"
+                                        ValidationExpression="\w+([-+.']\w+)*"></asp:RegularExpressionValidator>
+                                    <asp:CustomValidator ID="custEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
+                                        ErrorMessage="A user with the same email address already exists in the system. Please enter another email address." ToolTip="A user with the same email address already exists in the system. Please enter another email address."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic" OnServerValidate="custEmailAddress_ServerValidate"></asp:CustomValidator>
+                                    <asp:CustomValidator ID="custUserName" runat="server" ControlToValidate="txtEmailAddress"
+                                        ErrorMessage="Unknown error occures. Please contact your administrator." ToolTip="Unknown error occures. Please contact your administrator."
+                                        ValidateEmptyText="true" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic" ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>&nbsp;
+                                </td>
+                                <td>
+                                    <asp:Label ID="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="Width250Px" onchange="setDirty();"
+                                        Visible="false"></asp:TextBox>
+                                    <AjaxControlToolkit:FilteredTextBoxExtender ID="ftePayCheckId" TargetControlID="txtPayCheckId"
+                                        FilterType="Numbers" FilterMode="ValidChars" runat="server" />
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap="nowrap">
+                                    Offshore Resource
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlPersonType" runat="server" CssClass="Width256Px" onchange="setDirty();">
+                                        <asp:ListItem Text="NO" Value="0" Selected="True"></asp:ListItem>
+                                        <asp:ListItem Text="YES" Value="1"></asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    Division
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width256Px">
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="rfvDivision" runat="server" ErrorMessage="The Division is required."
+                                        ControlToValidate="ddlDivision" ToolTip="The Division is required." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Telephone number
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtTelephoneNumber" runat="server" onchange="setDirty();" CssClass="Width250Px"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:RegularExpressionValidator ID="reqTelphoneNumber" runat="server" ControlToValidate="txtTelephoneNumber"
+                                        Display="Dynamic" ErrorMessage="The Telephone number is not valid. " ValidationGroup="Person"
+                                        ToolTip="The Telephone number is not valid." Text="*" EnableClientScript="False"
+                                        ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>&nbsp;
+                                    <asp:RequiredFieldValidator ID="rfvTelephoneNumber" runat="server" ErrorMessage="The Telephone number is required."
+                                        ControlToValidate="txtTelephoneNumber" ToolTip="The Telephone number is required."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                </td>
+                                <td class="padRight10Imp">
+                                    Recruiter
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlRecruiter" runat="server" onchange="setDirty();" CssClass="Width256Px">
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="rfvRecruiter" runat="server" ErrorMessage="The Recruiter is required."
+                                        ControlToValidate="ddlRecruiter" ToolTip="The Recruiter is required." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblEmployeeNumber" runat="server" Text="PersonID"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtEmployeeNumber" runat="server" MaxLength="12" onchange="setDirty();"
+                                        onfocus="if (!this.readOnly &amp;&amp; !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) this.blur();"
+                                        CssClass="Width250Px"></asp:TextBox>
+                                    <asp:HiddenField ID="hdnPersonId" runat="server" />
+                                    <asp:HiddenField ID="hdnIsDefaultManager" runat="server" />
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="reqEmployeeNumber" runat="server" ValidationGroup="Person"
+                                        ControlToValidate="txtEmployeeNumber" EnableClientScript="False" ErrorMessage="The Employee Number is required."
+                                        SetFocusOnError="True" ToolTip="The Employee Number is required.">*</asp:RequiredFieldValidator>
+                                    <asp:CustomValidator ID="custEmployeeNumber" runat="server" ControlToValidate="txtEmployeeNumber"
+                                        Display="Dynamic" EnableClientScript="false" ValidationGroup="Person" ErrorMessage="There is another Person with the same Employee Number."
+                                        OnServerValidate="custEmployeeNumber_ServerValidate" SetFocusOnError="true" Text="*"
+                                        ToolTip="There is another Person with the same Employee Number."></asp:CustomValidator>&nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
+                                        Text="Locked-Out" />
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
@@ -826,47 +786,22 @@
                                             CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
-                                <asp:TableCell ID="cellRecruiting" runat="server">
-                                    <span class="bg">
-                                        <asp:LinkButton ID="btnViewRecruiting" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recruiter"
-                                            CausesValidation="false" CssClass="width58Px" OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellCommissions" runat="server">
-                                    <span class="bg">
-                                        <asp:LinkButton ID="btnCommissions" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Commissions"
-                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellRates" runat="server" Visible="false">
-                                    <span class="bg">
-                                        <asp:LinkButton ID="btnRates" runat="server" Text="Overhead and Margin" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton>
-                                    </span>
-                                </asp:TableCell>
-                                <asp:TableCell ID="cellWhatIf" runat="server">
-                                    <span class="bg">
-                                        <asp:LinkButton ID="btnWhatIf" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; What-If?"
-                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="7"
-                                            OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
-                                    </span>
-                                </asp:TableCell>
                                 <asp:TableCell ID="cellProjects" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnProjects" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Projects"
-                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellOpportunities" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnOppportunities" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Opportunities"
-                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellActivityLog" runat="server" Visible="false">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnActivityLog" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History"
-                                            CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="10"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -879,18 +814,9 @@
                                             <td class="Width60Px">
                                                 <strong>
                                                     <asp:Localize ID="locRolesLabel" runat="server" Text="Roles"></asp:Localize></strong>
-                                                <asp:CustomValidator ID="custRoles" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Any person who is contingent should not have any roles checked."
-                                                    OnServerValidate="custRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Any person who is contingent should not have any roles checked."
-                                                    ValidateEmptyText="true"></asp:CustomValidator>
-                                                <asp:CustomValidator ID="valRecruterRole" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Person with Recruiter role should have recruiting commission."
-                                                    OnServerValidate="valRecruterRole_OnServerValidate" SetFocusOnError="true" Text="*"
-                                                    ToolTip="Person with Recruiter role should have recruiting commission." ValidateEmptyText="true" />
-                                                <asp:CustomValidator ID="cvRolesActiveStatus" runat="server" Display="Dynamic" EnableClientScript="false"
-                                                    ValidationGroup="Person" ErrorMessage="Any person who is active should have atleast one role checked."
-                                                    OnServerValidate="cvRolesActiveStatus_ServerValidate" SetFocusOnError="true"
-                                                    Text="*" ToolTip="Any person who is active should have atleast one role checked."></asp:CustomValidator>
+                                                <asp:CustomValidator ID="cvRoles" runat="server" Display="Dynamic" EnableClientScript="false"
+                                                    ValidationGroup="Person" ErrorMessage="Person should have at least one role checked."
+                                                    OnServerValidate="cvRoles_ServerValidate" SetFocusOnError="true" Text="*" ToolTip="Person should have at least one role checked."></asp:CustomValidator>
                                             </td>
                                             <td>
                                                 &nbsp;
@@ -914,10 +840,12 @@
                                             <td valign="top">
                                                 <asp:DropDownList ID="ddlSeniority" runat="server" onchange="setDirty();" />
                                             </td>
-                                            <td>
-                                                <asp:CustomValidator ID="custSeniority" runat="server" ValidationGroup="Person" Display="Dynamic"
-                                                    EnableClientScript="true" ErrorMessage="The Seniority is required since the person's status is Active."
-                                                    OnServerValidate="custSeniority_ServerValidate" Text="*" ToolTip="The Seniority is required since the person's status is Active."></asp:CustomValidator>
+                                            <td valign="top">
+                                                <asp:RequiredFieldValidator ID="rfvSeniority" runat="server" ValidationGroup="Person"
+                                                    ErrorMessage="The Seniority is required." ToolTip="The Seniority is required."
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    ControlToValidate="ddlSeniority"></asp:RequiredFieldValidator>
+                                                &nbsp;
                                             </td>
                                         </tr>
                                         <tr>
@@ -1001,355 +929,389 @@
                             </asp:View>
                             <asp:View ID="vwCompensation" runat="server">
                                 <asp:Panel ID="pnlCompensation" runat="server" CssClass="tab-pane">
-                                    <div class="filters Margin-Top5Px Margin-Bottom10Px">
-                                        <div class="buttons-block">
-                                            <span class="colorGray">Click on Start Date column in the grid to edit compensation
-                                                history item.</span>
-                                            <asp:ShadowedTextButton ID="btnAddCompensation" runat="server" Text="Add Compensation"
-                                                OnClick="btnAddCompensation_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;" />
-                                            &nbsp;<asp:CustomValidator ID="custCompensationCoversMilestone" runat="server" ValidationGroup="Person"
-                                                ErrorMessage="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
-                                                ToolTip="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
-                                                OnServerValidate="custCompensationCoversMilestone_ServerValidate" Text="*"> </asp:CustomValidator>
-                                            <div class="clear0">
+                                    <div id="divCompensationHistory" runat="server">
+                                        <div class="filters Margin-Top5Px Margin-Bottom10Px">
+                                            <div class="buttons-block">
+                                                <span class="colorGray">Click on Start Date column in the grid to edit compensation
+                                                    history item.</span>
+                                                <asp:ShadowedTextButton ID="btnAddCompensation" runat="server" Text="Add Compensation"
+                                                    OnClick="btnAddCompensation_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;" />
+                                                &nbsp;<asp:CustomValidator ID="custCompensationCoversMilestone" runat="server" ValidationGroup="Person"
+                                                    ErrorMessage="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
+                                                    ToolTip="This person has a status of Active/Termination Pending, but does not have an active compensation record. &nbsp;Go back to their record so you can create a compensation record for them, or set their status as Contingent or Terminated."
+                                                    OnServerValidate="custCompensationCoversMilestone_ServerValidate" Text="*"> </asp:CustomValidator>
+                                                <div class="clear0">
+                                                </div>
                                             </div>
                                         </div>
+                                        <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
+                                            OnRowDataBound="gvCompensationHistory_OnRowDataBound" EmptyDataText="No compensation history for this person."
+                                            CssClass="CompPerfTable CompensationHistory" ShowFooter="false">
+                                            <AlternatingRowStyle CssClass="alterrow" />
+                                            <Columns>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            &nbsp;
+                                                        </div>
+                                                    </HeaderTemplate>
+                                                    <HeaderStyle CssClass="Width3Percent" />
+                                                    <ItemTemplate>
+                                                        <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
+                                                            ImageUrl="~/Images/copy.png" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            &nbsp;
+                                                        </div>
+                                                    </HeaderTemplate>
+                                                    <HeaderStyle CssClass="Width3Percent" />
+                                                    <ItemTemplate>
+                                                        <asp:ImageButton ID="imgEditCompensation" ToolTip="Edit Compensation" runat="server"
+                                                            OnClick="imgEditCompensation_OnClick" ImageUrl="~/Images/icon-edit.png" />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:ImageButton ID="imgUpdateCompensation" StartDate='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
+                                                            ToolTip="Save" runat="server" ImageUrl="~/Images/icon-check.png" OnClick="imgUpdateCompensation_OnClick"
+                                                            operation="Update" />
+                                                        <asp:ImageButton ID="imgCancel" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
+                                                            OnClick="imgCancel_OnClick" />
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <asp:ImageButton ID="imgUpdateCompensation" operation="Insert" ToolTip="Save" runat="server"
+                                                            ImageUrl="~/Images/icon-check.png" OnClick="imgUpdateCompensation_OnClick" />
+                                                        <asp:ImageButton ID="imgCancel" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
+                                                            OnClick="imgCancelFooter_OnClick" />
+                                                    </FooterTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Start</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
+                                                            CommandArgument='<%# Eval("StartDate") %>' OnCommand="btnStartDate_Command" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                                TextBoxWidth="90%" AutoPostBack="false" />
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
+                                                                ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                Display="Static"></asp:RequiredFieldValidator>
+                                                            <asp:CompareValidator ID="compStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                                ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                                Type="Date"></asp:CompareValidator>
+                                                        </span>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                                TextBoxWidth="90%" AutoPostBack="false" />
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
+                                                                ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                Display="Static"></asp:RequiredFieldValidator>
+                                                            <asp:CompareValidator ID="compStartDate" runat="server" ControlToValidate="dpStartDate"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                                ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                                Type="Date"></asp:CompareValidator>
+                                                        </span>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width11Percent" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            End</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label></ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                                TextBoxWidth="90%" AutoPostBack="false" />
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
+                                                                ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
+                                                                ToolTip="The End Date must be greater than the or equal to Start Date." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual"
+                                                                Type="Date"></asp:CompareValidator>
+                                                            <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                                ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                                Type="Date"></asp:CompareValidator>
+                                                        </span>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
+                                                                TextBoxWidth="90%" AutoPostBack="false" />
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
+                                                                ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
+                                                                ToolTip="The End Date must be greater than the or equal to Start Date." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual"
+                                                                Type="Date"></asp:CompareValidator>
+                                                            <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                                                                ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
+                                                                Type="Date"></asp:CompareValidator>
+                                                        </span>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width11Percent" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Practice Area</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("HtmlEncodedPracticeName")%>'></asp:Label></ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
+                                                            CssClass="Width85Percent">
+                                                        </asp:DropDownList>
+                                                        <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
+                                                            OnServerValidate="custValPractice_OnServerValidate">
+                                                        </asp:CustomValidator>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
+                                                            CssClass="Width85Percent">
+                                                        </asp:DropDownList>
+                                                        <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
+                                                            OnServerValidate="custValPractice_OnServerValidate">
+                                                        </asp:CustomValidator>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width23Percent" HorizontalAlign="Center" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Title</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblTitle" runat="server" Text=' <%# Eval("TitleName") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server" AutoPostBack="true"
+                                                            OnSelectedIndexChanged="ddlTitle_OnSelectedIndexChanged" CssClass="Width80Percent">
+                                                        </pmc:CustomDropDown>
+                                                        <asp:CustomValidator ID="custValTitle" runat="server" ToolTip="Please select title"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select title"
+                                                            OnServerValidate="custValTitle_OnServerValidate">
+                                                        </asp:CustomValidator>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server" AutoPostBack="true"
+                                                            OnSelectedIndexChanged="ddlTitle_OnSelectedIndexChanged" CssClass="Width80Percent">
+                                                        </pmc:CustomDropDown>
+                                                        <asp:CustomValidator ID="custValTitle" runat="server" ToolTip="Please select title"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select title"
+                                                            OnServerValidate="custValTitle_OnServerValidate">
+                                                        </asp:CustomValidator>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width20Percent" HorizontalAlign="Center" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Basis</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblBasis" runat="server" Text='<%# Eval("TimescaleName") %>'></asp:Label></ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" OnSelectedIndexChanged="ddlBasis_OnSelectedIndexChanged"
+                                                            AutoPostBack="true">
+                                                            <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
+                                                            <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
+                                                            <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
+                                                            <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
+                                                            ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" OnSelectedIndexChanged="ddlBasis_OnSelectedIndexChanged"
+                                                            AutoPostBack="true">
+                                                            <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
+                                                            <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
+                                                            <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
+                                                            <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
+                                                            ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width10Percent" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Amount</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lbAmount" runat="server" Text='<%# Bind("Amount") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" CssClass="Width80Percent textRight"
+                                                                MaxLength="16"></asp:TextBox>
+                                                            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmount"
+                                                                FilterMode="ValidChars" FilterType="Numbers,Custom" ValidChars=".">
+                                                            </AjaxControlToolkit:FilteredTextBoxExtender>
+                                                            <asp:HiddenField ID="hdAmount" runat="server" />
+                                                            <asp:HiddenField ID="hdSLTApproval" runat="server" />
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+                                                                Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                            <asp:CompareValidator ID="compAmount" runat="server" ControlToValidate="txtAmount"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="A number with 2 decimal digits is allowed for the Amount."
+                                                                ToolTip="A number with 2 decimal digits is allowed for the Amount." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck" Type="Currency"
+                                                                Display="Dynamic"></asp:CompareValidator>
+                                                            <asp:CustomValidator ID="cvSLTApprovalValidation" runat="server" OnServerValidate="cvSLTApprovalValidation_OnServerValidate"
+                                                                ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                Display="Dynamic"></asp:CustomValidator>
+                                                            <asp:CompareValidator ID="cmpAmount" runat="server" ControlToValidate="txtAmount"
+                                                                Operator="GreaterThan" Display="Dynamic" Type="Double" SetFocusOnError="true"
+                                                                ValueToCompare="0" EnableClientScript="false" Text="*" ValidationGroup="CompensationUpdate"
+                                                                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
+                                                                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
+                                                            </asp:CompareValidator>
+                                                        </span>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" CssClass="Width80Percent textRight"
+                                                                MaxLength="16"></asp:TextBox>
+                                                            <asp:HiddenField ID="hdAmount" runat="server" />
+                                                            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtAmount" runat="server" TargetControlID="txtAmount"
+                                                                FilterMode="ValidChars" FilterType="Numbers,Custom" ValidChars=".">
+                                                            </AjaxControlToolkit:FilteredTextBoxExtender>
+                                                            <asp:HiddenField ID="hdSLTApproval" runat="server" />
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
+                                                                Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                            <asp:CompareValidator ID="compAmount" runat="server" ControlToValidate="txtAmount"
+                                                                ValidationGroup="CompensationUpdate" ErrorMessage="A number with 2 decimal digits is allowed for the Amount."
+                                                                ToolTip="A number with 2 decimal digits is allowed for the Amount." Text="*"
+                                                                EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck" Type="Currency"
+                                                                Display="Dynamic"></asp:CompareValidator>
+                                                            <asp:CustomValidator ID="cvSLTApprovalValidation" runat="server" OnServerValidate="cvSLTApprovalValidation_OnServerValidate"
+                                                                ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                Display="Dynamic"></asp:CustomValidator>
+                                                            <asp:CompareValidator ID="cmpAmount" runat="server" ControlToValidate="txtAmount"
+                                                                Operator="GreaterThan" Display="Dynamic" Type="Double" SetFocusOnError="true"
+                                                                ValueToCompare="0" EnableClientScript="false" Text="*" ValidationGroup="CompensationUpdate"
+                                                                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
+                                                                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
+                                                            </asp:CompareValidator>
+                                                        </span>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width8Percent" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            PTO Accrual</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lbVacationDays" runat="server" Text='<%# Bind("VacationDays") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <asp:HiddenField ID="hdVacationDay" runat="server" />
+                                                            <asp:HiddenField ID="hdSLTPTOApproval" runat="server" />
+                                                            <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
+                                                                MaxLength="2" CssClass="Width80Percent" Text="0"></asp:TextBox>
+                                                            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtVacationDays" runat="server"
+                                                                TargetControlID="txtVacationDays" FilterMode="ValidChars" FilterType="Numbers">
+                                                            </AjaxControlToolkit:FilteredTextBoxExtender>
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                                ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
+                                                                ErrorMessage="The PTO Accrual must be an integer number." Operator="DataTypeCheck"
+                                                                ToolTip="The PTO Accrual must be an integer number." Type="Integer">*</asp:CompareValidator>
+                                                            <asp:RequiredFieldValidator ID="rfvVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                                ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" Display="Dynamic"
+                                                                ErrorMessage="PTO Accrual is required" ToolTip="PTO Accrual is required"></asp:RequiredFieldValidator>
+                                                            <asp:CustomValidator ID="cvSLTPTOApprovalValidation" runat="server" OnServerValidate="cvSLTPTOApprovalValidation_OnServerValidate"
+                                                                ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                Display="Dynamic"></asp:CustomValidator>
+                                                        </span>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <span class="fl-left Width85Percent">
+                                                            <asp:HiddenField ID="hdVacationDay" runat="server" />
+                                                            <asp:HiddenField ID="hdSLTPTOApproval" runat="server" />
+                                                            <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
+                                                                MaxLength="2" CssClass="Width80Percent" Text="0"></asp:TextBox>
+                                                            <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtVacationDays" runat="server"
+                                                                TargetControlID="txtVacationDays" FilterMode="ValidChars" FilterType="Numbers">
+                                                            </AjaxControlToolkit:FilteredTextBoxExtender>
+                                                        </span><span class="Width15Percent vMiddle">
+                                                            <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                                ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
+                                                                ErrorMessage="The PTO Accrual must be an integer number." Operator="DataTypeCheck"
+                                                                ToolTip="The PTO Accrual must be an integer number." Type="Integer">*</asp:CompareValidator>
+                                                            <asp:RequiredFieldValidator ID="rfvVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                                                                ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" Display="Dynamic"
+                                                                ErrorMessage="PTO Accrual is required" ToolTip="PTO Accrual is required"></asp:RequiredFieldValidator>
+                                                            <asp:CustomValidator ID="cvSLTPTOApprovalValidation" runat="server" OnServerValidate="cvSLTPTOApprovalValidation_OnServerValidate"
+                                                                ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                Display="Dynamic"></asp:CustomValidator>
+                                                        </span>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width7Percent" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                        </div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:ImageButton ID="imgCompensationDelete" runat="server" AlternateText="Delete"
+                                                            EndDate='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'
+                                                            StartDate='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>' ImageUrl="~/Images/cross_icon.png"
+                                                            OnClick="imgCompensationDelete_OnClick" />
+                                                        <AjaxControlToolkit:ConfirmButtonExtender ID="ConfirmButtonExtender1" ConfirmText="Are you sure you want to delete this Compensation?"
+                                                            runat="server" TargetControlID="imgCompensationDelete">
+                                                        </AjaxControlToolkit:ConfirmButtonExtender>
+                                                        <asp:CustomValidator ID="cvDeleteCompensation" runat="server" Text="*" ErrorMessage="The Person is active during this compensation period."
+                                                            ToolTip="The Person is active during this compensation period." ValidationGroup="CompensationDelete"></asp:CustomValidator>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                    </EditItemTemplate>
+                                                    <HeaderStyle CssClass="Width4Percent" />
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
                                     </div>
-                                    <asp:GridView ID="gvCompensationHistory" runat="server" AutoGenerateColumns="False"
-                                        OnRowDataBound="gvCompensationHistory_OnRowDataBound" EmptyDataText="No compensation history for this person."
-                                        CssClass="CompPerfTable CompensationHistory" ShowFooter="false">
-                                        <AlternatingRowStyle CssClass="alterrow" />
-                                        <Columns>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        &nbsp;
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemStyle CssClass="Width2Percent" />
-                                                <ItemTemplate>
-                                                    <asp:ImageButton ID="imgCopy" ToolTip="Copy" runat="server" OnClick="imgCopy_OnClick"
-                                                        ImageUrl="~/Images/copy.png" />
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        &nbsp;
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemStyle CssClass="Width2Percent" />
-                                                <ItemTemplate>
-                                                    <asp:ImageButton ID="imgEditCompensation" ToolTip="Edit Compensation" runat="server"
-                                                        OnClick="imgEditCompensation_OnClick" ImageUrl="~/Images/icon-edit.png" />
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:ImageButton ID="imgUpdateCompensation" StartDate='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
-                                                        ToolTip="Save" runat="server" ImageUrl="~/Images/icon-check.png" OnClick="imgUpdateCompensation_OnClick"
-                                                        operation="Update" />
-                                                    <asp:ImageButton ID="imgCancel" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
-                                                        OnClick="imgCancel_OnClick" />
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:ImageButton ID="imgUpdateCompensation" operation="Insert" ToolTip="Save" runat="server"
-                                                        ImageUrl="~/Images/icon-check.png" OnClick="imgUpdateCompensation_OnClick" />
-                                                    <asp:ImageButton ID="imgCancel" ToolTip="Cancel" runat="server" ImageUrl="~/Images/no.png"
-                                                        OnClick="imgCancelFooter_OnClick" />
-                                                </FooterTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Start</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="btnStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
-                                                        CommandArgument='<%# Eval("StartDate") %>' OnCommand="btnStartDate_Command" OnClientClick="if (!confirmSaveDirty()) return false;"></asp:LinkButton>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
-                                                            TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
-                                                            ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                            Display="Static"></asp:RequiredFieldValidator>
-                                                        <asp:CompareValidator ID="compStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                            ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                                                            Type="Date"></asp:CompareValidator>
-                                                    </span>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <uc2:DatePicker ID="dpStartDate" ValidationGroup="CompensationUpdate" runat="server"
-                                                            TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date is required."
-                                                            ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                            Display="Static"></asp:RequiredFieldValidator>
-                                                        <asp:CompareValidator ID="compStartDate" runat="server" ControlToValidate="dpStartDate"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                            ToolTip="The Start Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                                                            Type="Date"></asp:CompareValidator>
-                                                    </span>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width11Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        End</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label></ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
-                                                            TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
-                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
-                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual"
-                                                            Type="Date"></asp:CompareValidator>
-                                                        <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                            ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                                                            Type="Date"></asp:CompareValidator>
-                                                    </span>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <uc2:DatePicker ID="dpEndDate" ValidationGroup="CompensationUpdate" runat="server"
-                                                            TextBoxWidth="90%" AutoPostBack="false" />
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:CompareValidator ID="compDateRange" runat="server" ControlToValidate="dpEndDate"
-                                                            ValidationGroup="CompensationUpdate" ControlToCompare="dpStartDate" ErrorMessage="The End Date must be greater than the or equal to Start Date."
-                                                            ToolTip="The End Date must be greater than the or equal to Start Date." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Display="Static" Operator="GreaterThanEqual"
-                                                            Type="Date"></asp:CompareValidator>
-                                                        <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpEndDate"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                                                            ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
-                                                            Type="Date"></asp:CompareValidator>
-                                                    </span>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width11Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Practice Area</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblpractice" runat="server" Text='<%# Eval("HtmlEncodedPracticeName")%>'></asp:Label></ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
-                                                        CssClass="Width85Percent">
-                                                    </asp:DropDownList>
-                                                    <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
-                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
-                                                        OnServerValidate="custValPractice_OnServerValidate">
-                                                    </asp:CustomValidator>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
-                                                        CssClass="Width85Percent">
-                                                    </asp:DropDownList>
-                                                    <asp:CustomValidator ID="custValPractice" runat="server" ToolTip="Please select Practice Area"
-                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
-                                                        OnServerValidate="custValPractice_OnServerValidate">
-                                                    </asp:CustomValidator>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width14Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderStyle-HorizontalAlign="Center">
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Seniority</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblseniority" runat="server" Text='<%# Eval("SeniorityName")%>'></asp:Label>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlSeniorityName" runat="server"
-                                                        CssClass="Width80Percent">
-                                                    </asp:DropDownList>
-                                                    <asp:CustomValidator ID="custValSeniority" runat="server" ToolTip="Please select Seniority"
-                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Seniority"
-                                                        OnServerValidate="custValSeniority_OnServerValidate">
-                                                    </asp:CustomValidator>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlSeniorityName" runat="server"
-                                                        CssClass="Width80Percent">
-                                                    </asp:DropDownList>
-                                                    <asp:CustomValidator ID="custValSeniority" runat="server" ToolTip="Please select Seniority"
-                                                        ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Seniority"
-                                                        OnServerValidate="custValSeniority_OnServerValidate">
-                                                    </asp:CustomValidator>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width14Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Basis</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblBasis" runat="server" Text='<%# Eval("TimescaleName") %>'></asp:Label></ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" onchange="return EnableDisableVacationDays(this);">
-                                                        <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
-                                                        <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
-                                                        <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
-                                                        <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
-                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" onchange="return EnableDisableVacationDays(this);">
-                                                        <asp:ListItem Text="W2-Salary" Value="W2-Salary"></asp:ListItem>
-                                                        <asp:ListItem Text="W2-Hourly" Value="W2-Hourly"></asp:ListItem>
-                                                        <asp:ListItem Text="1099/Hourly" Value="1099/Hourly"></asp:ListItem>
-                                                        <asp:ListItem Text="1099/POR" Value="1099/POR"></asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
-                                                        ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width8Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Amount</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lbAmount" runat="server" Text='<%# Bind("Amount") %>'></asp:Label>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" CssClass="Width80Percent textRight"></asp:TextBox>
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
-                                                            Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                                        <asp:CompareValidator ID="compAmount" runat="server" ControlToValidate="txtAmount"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="A number with 2 decimal digits is allowed for the Amount."
-                                                            ToolTip="A number with 2 decimal digits is allowed for the Amount." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck" Type="Currency"
-                                                            Display="Dynamic"></asp:CompareValidator>
-                                                    </span>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <asp:TextBox ID="txtAmount" ValidationGroup="CompensationUpdate" runat="server" CssClass="Width80Percent textRight"></asp:TextBox>
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:RequiredFieldValidator ID="reqAmount" runat="server" ControlToValidate="txtAmount"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="The Amount is required." ToolTip="The Amount is required."
-                                                            Text="*" EnableClientScript="false" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                                        <asp:CompareValidator ID="compAmount" runat="server" ControlToValidate="txtAmount"
-                                                            ValidationGroup="CompensationUpdate" ErrorMessage="A number with 2 decimal digits is allowed for the Amount."
-                                                            ToolTip="A number with 2 decimal digits is allowed for the Amount." Text="*"
-                                                            EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck" Type="Currency"
-                                                            Display="Dynamic"></asp:CompareValidator>
-                                                    </span>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width6Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Vacation</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lbVacationDays" runat="server" Text='<%# Bind("VacationDays") %>'></asp:Label>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
-                                                            CssClass="Width80Percent" Text="0"></asp:TextBox>
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
-                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
-                                                            ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
-                                                            ToolTip="The Vacation Days must be an integer number." Type="Integer">*</asp:CompareValidator>
-                                                        <asp:RequiredFieldValidator ID="rfvVacationDays" runat="server" ControlToValidate="txtVacationDays"
-                                                            ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" Display="Dynamic"
-                                                            ErrorMessage="Vacation days is required" ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
-                                                    </span>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <span class="fl-left Width85Percent">
-                                                        <asp:TextBox ID="txtVacationDays" ValidationGroup="CompensationUpdate" runat="server"
-                                                            CssClass="Width80Percent" Text="0"></asp:TextBox>
-                                                    </span><span class="Width15Percent vMiddle">
-                                                        <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
-                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" EnableClientScript="False"
-                                                            ErrorMessage="The Vacation Days must be an integer number." Operator="DataTypeCheck"
-                                                            ToolTip="The Vacation Days must be an integer number." Type="Integer">*</asp:CompareValidator>
-                                                        <asp:RequiredFieldValidator ID="rfvVacationDays" runat="server" ControlToValidate="txtVacationDays"
-                                                            ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" Display="Dynamic"
-                                                            ErrorMessage="Vacation days is required" ToolTip="Vacation days is required"></asp:RequiredFieldValidator>
-                                                    </span>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width6Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                        Sales Commission %</div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblSalesCommFraction" runat="server" Text='<%# ((decimal?)Eval("SalesCommissionFractionOfMargin")).HasValue ? 
-                                                    ((decimal?)Eval("SalesCommissionFractionOfMargin")).Value.ToString() : string.Empty %>'></asp:Label>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtSalesCommission" ValidationGroup="CompensationUpdate" runat="server"
-                                                        CssClass="Width80Percent"></asp:TextBox>
-                                                    <asp:CustomValidator ID="custValSalesCommission" runat="server" Display="Dynamic"
-                                                        ValidationGroup="CompensationUpdate" Text="*" OnServerValidate="custValSalesCommission_OnServerValidate">
-                                                    </asp:CustomValidator>
-                                                </EditItemTemplate>
-                                                <FooterTemplate>
-                                                    <asp:TextBox ID="txtSalesCommission" ValidationGroup="CompensationUpdate" runat="server"
-                                                        CssClass="Width80Percent"></asp:TextBox>
-                                                    <asp:CustomValidator ID="custValSalesCommission" runat="server" Display="Dynamic"
-                                                        ValidationGroup="CompensationUpdate" Text="*" OnServerValidate="custValSalesCommission_OnServerValidate">
-                                                    </asp:CustomValidator>
-                                                </FooterTemplate>
-                                                <ItemStyle CssClass="Width5Percent" />
-                                            </asp:TemplateField>
-                                            <asp:TemplateField>
-                                                <HeaderTemplate>
-                                                    <div class="ie-bg">
-                                                    </div>
-                                                </HeaderTemplate>
-                                                <ItemTemplate>
-                                                    <asp:ImageButton ID="imgCompensationDelete" runat="server" AlternateText="Delete"
-                                                        EndDate='<%# ((DateTime?)Eval("EndDate")).HasValue ? ((DateTime?)Eval("EndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'
-                                                        StartDate='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>' ImageUrl="~/Images/cross_icon.png"
-                                                        OnClick="imgCompensationDelete_OnClick" />
-                                                    <AjaxControlToolkit:ConfirmButtonExtender ID="ConfirmButtonExtender1" ConfirmText="Are you sure you want to delete this Compensation?"
-                                                        runat="server" TargetControlID="imgCompensationDelete">
-                                                    </AjaxControlToolkit:ConfirmButtonExtender>
-                                                    <asp:CustomValidator ID="cvDeleteCompensation" runat="server" Text="*" ErrorMessage="The Person is active during this compensation period."
-                                                        ToolTip="The Person is active during this compensation period." ValidationGroup="CompensationDelete"></asp:CustomValidator>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                </EditItemTemplate>
-                                                <ItemStyle CssClass="Width3Percent" />
-                                            </asp:TemplateField>
-                                        </Columns>
-                                    </asp:GridView>
+                                    <div id="divCompensation" runat="server">
+                                        <uc:PersonnelCompensation ID="personnelCompensation" runat="server" ValidationGroup="Person" OnSaveDetails="personnelCompensation_SaveDetails"
+                                            StartDateReadOnly="true" OnTitleChanged="personnelCompensation_OnTitleChanged"
+                                            OnPracticeChanged="personnelCompensation_OnPracticeChanged" rfvTitleValidationMessage="The Compensation Title is required."
+                                            rfvPracticeValidationMessage="The Compensation Practice Area is required." />
+                                        <asp:CustomValidator ID="custActiveCompensation" runat="server" ValidationGroup="Person"
+                                            Text="*" Display="None" ErrorMessage="This person has a status of Active, but does not have an active compensation record"
+                                            OnServerValidate="custActiveCompensation_ServerValidate"> </asp:CustomValidator>
+                                    </div>
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwEmploymentHistory" runat="server">
@@ -1392,157 +1354,6 @@
                                     </asp:GridView>
                                 </asp:Panel>
                             </asp:View>
-                            <asp:View ID="vwRecruiter" runat="server">
-                                <asp:Panel ID="pnlRecruiter" runat="server" CssClass="tab-pane WholeWidth">
-                                    <uc1:RecruiterInfo ID="recruiterInfo" NeedFirstItemForRecruiterDropDown="true" runat="server"
-                                        OnInfoChanged="recruiterInfo_InfoChanged" ShowCommissionDetails="false" />
-                                </asp:Panel>
-                            </asp:View>
-                            <asp:View ID="vwCommission" runat="server">
-                                <asp:Panel ID="pnlCommission" runat="server" CssClass="tab-pane WholeWidth">
-                                    <table>
-                                        <tr>
-                                            <td class="nowrap">
-                                                <asp:CheckBox ID="chbSalesCommissions" runat="server" Text="Person receives sales commission"
-                                                    AutoPostBack="True" OnCheckedChanged="chbSalesCommissions_CheckedChanged" />
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td>
-                                                <asp:TextBox ID="txtSalesCommissionsGross" runat="server" CssClass="Width60Px" Enabled="False"
-                                                    onchange="setDirty();"></asp:TextBox>
-                                            </td>
-                                            <td>
-                                                <asp:RequiredFieldValidator ID="reqSalesCommissionsGross" runat="server" ControlToValidate="txtSalesCommissionsGross"
-                                                    ErrorMessage="The Sales Commission % of Gross Margin is required." ToolTip="The Sales Commission % of Gross Margin is required."
-                                                    ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic"></asp:RequiredFieldValidator>
-                                                <asp:CompareValidator ID="compSalesCommissionsGross" runat="server" ControlToValidate="txtSalesCommissionsGross"
-                                                    ErrorMessage="A number with 2 decimal digits is allowed for Sales Commission % of Gross Margin."
-                                                    ToolTip="A number with 2 decimal digits is allowed for Sales Commission % of Gross Margin."
-                                                    ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
-                                            </td>
-                                            <td colspan="3">
-                                                &nbsp;%&nbsp;of&nbsp;gross&nbsp;margin
-                                            </td>
-                                            <td>
-                                                &nbsp;&nbsp;&nbsp;
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" align="left">
-                                                <h3>
-                                                    Recruiting Commissions</h3>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="8">
-                                                <asp:GridView ID="gvRecruitingCommissions" runat="server" EmptyDataText="No commissions."
-                                                    AutoGenerateColumns="False" CssClass="CompPerfTable WholeWidth" GridLines="None"
-                                                    BackColor="White">
-                                                    <AlternatingRowStyle BackColor="#F9FAFF" />
-                                                    <Columns>
-                                                        <asp:TemplateField HeaderText="Start  Date">
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton ID="btnRecruitingCommissionStartDate" runat="server" CausesValidation="false"
-                                                                    OnClientClick="if (!confirmSaveDirty()) return false;" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
-                                                                    CommandArgument='<%# Eval("CommissionHeaderId") %>' OnCommand="btnRecruitingCommissionStartDate_Command"
-                                                                    Visible='<%# UserIsAdministrator %>'></asp:LinkButton><asp:Label ID="lblRecruitingCommissionStartDate"
-                                                                        runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>'
-                                                                        Visible='<%# !UserIsAdministrator %>'></asp:Label>
-                                                            </ItemTemplate>
-                                                            <HeaderTemplate>
-                                                                <div class="ie-bg">
-                                                                    Start Date</div>
-                                                            </HeaderTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField>
-                                                            <HeaderTemplate>
-                                                                <div class="ie-bg">
-                                                                    End Date</div>
-                                                            </HeaderTemplate>
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblEndDate" runat="server" Text='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value.AddDays(-1).ToString("MM/dd/yyyy") : string.Empty %>' />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Commissions">
-                                                            <HeaderTemplate>
-                                                                <div class="ie-bg">
-                                                                    Commissions</div>
-                                                            </HeaderTemplate>
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="Label1" runat="server" Text='<%# Bind("TextLine") %>'></asp:Label>
-                                                            </ItemTemplate>
-                                                            <EditItemTemplate>
-                                                                <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("TextLine") %>'></asp:TextBox>
-                                                            </EditItemTemplate>
-                                                        </asp:TemplateField>
-                                                    </Columns>
-                                                </asp:GridView>
-                                            </td>
-                                            <td>
-                                                Click on Start Date column to edit an item<br />
-                                                <asp:ShadowedTextButton ID="btnAddDefaultRecruitingCommission" runat="server" Text="Add Recruiting Commission"
-                                                    OnClientClick="if (!confirmSaveDirty()) return false;" OnClick="btnAddDefaultRecruitingCommission_Click"
-                                                    CssClass="add-btn" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td nowrap="nowrap">
-                                                <asp:CheckBox ID="chbManagementCommissions" runat="server" Text="Person receives practice mgmt commission"
-                                                    AutoPostBack="True" OnCheckedChanged="chbManagementCommissions_CheckedChanged" />
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td>
-                                                <asp:TextBox ID="txtManagementCommission" runat="server" CssClass="Width60Px" Enabled="False"
-                                                    onchange="setDirty();"></asp:TextBox>
-                                            </td>
-                                            <td>
-                                                <asp:RequiredFieldValidator ID="reqManagementCommission" runat="server" ControlToValidate="txtManagementCommission"
-                                                    ErrorMessage="The Margin is required." ToolTip="The Margin is required." ValidationGroup="Person"
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                                <asp:CompareValidator ID="compManagementCommission" runat="server" ControlToValidate="txtManagementCommission"
-                                                    ErrorMessage="A number with 2 decimal digits is allowed for the Margin." ToolTip="A number with 2 decimal digits is allowed for the Margin."
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" ValidationGroup="Person"
-                                                    Operator="DataTypeCheck" Type="Currency"></asp:CompareValidator>
-                                            </td>
-                                            <td>
-                                                &nbsp;of&nbsp;
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td colspan="2">
-                                                <asp:RadioButtonList ID="rlstManagementCommission" runat="server" RepeatDirection="Vertical"
-                                                    RepeatLayout="Flow" Enabled="False">
-                                                    <asp:ListItem Text="Own margin" Value="1"></asp:ListItem>
-                                                    <asp:ListItem Text="Sub-ordinate person margin" Value="2" Selected="True"></asp:ListItem>
-                                                </asp:RadioButtonList>
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </asp:Panel>
-                            </asp:View>
-                            <asp:View ID="vwRates" runat="server">
-                            </asp:View>
-                            <asp:View ID="vwWhatIf" runat="server">
-                                <asp:Panel ID="pnlWhatIf" runat="server" CssClass="tab-pane WholeWidth">
-                                    <div class="bgColorNone">
-                                        <uc1:WhatIf ID="whatIf" runat="server" DisplayTargetMargin="True" TargetMarginReadOnly="True"
-                                            DisplayDefinedTermsAndCalcs="true" />
-                                    </div>
-                                </asp:Panel>
-                            </asp:View>
                             <asp:View ID="vwProjects" runat="server">
                                 <asp:Panel ID="pnlProjects" runat="server" CssClass="tab-pane WholeWidth">
                                     <uc:PersonProjects ID="personProjects" runat="server" />
@@ -1571,10 +1382,20 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
-                        <asp:HiddenField ID="hdnPersonStatus" runat="server" Value="" />
-                        <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" UseSubmitBehavior="false" />&nbsp;
-                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" UseSubmitBehavior="false" />
+                    <td>
+                        <table class="WholeWidth">
+                            <tr>
+                                <td class="Width55Percent" align="right">
+                                    <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" UseSubmitBehavior="false" />&nbsp;
+                                    <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" UseSubmitBehavior="false" />
+                                </td>
+                                <td align="right" class="padRight15">
+                                    <asp:Button ID="btnNext" runat="server" Text="Next" OnClick="btnNext_Click" UseSubmitBehavior="false" />&nbsp;
+                                    <asp:Button ID="btnWizardsCancel" runat="server" UseSubmitBehavior="false" Text="Cancel And Return"
+                                        OnClick="btnWizardsCancel_Click" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
@@ -1967,12 +1788,81 @@
                             <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
                                 WarningColor="Orange" />
                             <uc:MessageLabel ID="mlError" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
-                                WarningColor="Orange" EnableViewState="false" />
+                                WarningColor="Orange" />
                         </td>
                     </tr>
                     <tr>
                         <td class="Padding10Px TextAlignCenterImp">
                             <asp:Button ID="btnOKErrorPanel" runat="server" Text="OK" Width="100" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdWizardsCancelPopup" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeWizardsCancelPopup" runat="server"
+                TargetControlID="hdWizardsCancelPopup" BackgroundCssClass="modalBackground" PopupControlID="pnlWizardsCancelPopup"
+                DropShadow="false" />
+            <asp:Panel ID="pnlWizardsCancelPopup" runat="server" CssClass="popUp PopUpPersonDetailPage"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr>
+                        <td class="Padding6">
+                            You will lose all information that you have entered for adding this person to Practice
+                            Management. Are you sure you wish to continue?
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="Padding6">
+                            <asp:Button ID="btnWizardsCancelPopupOKButton" runat="server" Text="OK" OnClick="btnWizardsCancelPopupOKButton_OnClick"
+                                UseSubmitBehavior="false" CssClass="Width60Px" />
+                            &nbsp;
+                            <asp:Button ID="btnWizardsCancelPopupCancelButton" runat="server" Text="Cancel" OnClick="btnWizardsCancelPopupCancelButton_OnClick"
+                                UseSubmitBehavior="false" CssClass="Width60Px" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdSLTApprovalPopUp" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeSLTApprovalPopUp" runat="server" TargetControlID="hdSLTApprovalPopUp"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlSLTApprovalPopUp" DropShadow="false" />
+            <asp:Panel ID="pnlSLTApprovalPopUp" runat="server" CssClass="popUp PopUpPersonDetailPage"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr>
+                        <td class="Padding6">
+                            <asp:Literal ID="ltrlSLTApprovalPopUp" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="Padding6">
+                            <asp:Button ID="btnSLTApproval" runat="server" Text="SLT Approval Received" OnClick="btnSLTApproval_OnClick"
+                                UseSubmitBehavior="false" CssClass="Width160px" />
+                            &nbsp;
+                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_OnClick"
+                                UseSubmitBehavior="false" CssClass="Width60Px" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdSLTPTOApprovalPopUp" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeSLTPTOApprovalPopUp" runat="server"
+                TargetControlID="hdSLTPTOApprovalPopUp" BackgroundCssClass="modalBackground"
+                PopupControlID="pnlSLTPTOApprovalPopUp" DropShadow="false" />
+            <asp:Panel ID="pnlSLTPTOApprovalPopUp" runat="server" CssClass="popUp PopUpPersonDetailPage"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr>
+                        <td class="Padding6">
+                            <asp:Literal ID="ltrlSLTPTOApprovalPopUp" runat="server"></asp:Literal>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="Padding6">
+                            <asp:Button ID="btnSLTPTOApproval" runat="server" Text="SLT Approval Received" OnClick="btnSLTPTOApproval_OnClick"
+                                UseSubmitBehavior="false" CssClass="Width160px" />
+                            &nbsp;
+                            <asp:Button ID="btnCancelSLTPTOApproval" runat="server" Text="Cancel" OnClick="btnCancelSLTPTOApproval_OnClick"
+                                UseSubmitBehavior="false" CssClass="Width60Px" />
                         </td>
                     </tr>
                 </table>
