@@ -220,6 +220,14 @@ AS
 					 )
 				  OR ( (@EventSource = 'DeletedPracticeCapability' OR @EventSource = 'All') AND a.LogData.exist('/PracticeCapability') = 1 AND t.ActivityName = 'Deleted'
 					 )
+				  OR ( (@EventSource = 'Title' OR @EventSource = 'All') AND a.LogData.exist('/Title') = 1
+					 )
+				  OR ( (@EventSource = 'AddedTitle' OR @EventSource = 'All') AND a.LogData.exist('/Title') = 1 AND t.ActivityName = 'Added'
+					 )
+				  OR ( (@EventSource = 'ChangedTitle' OR @EventSource = 'All') AND a.LogData.exist('/Title') = 1 AND t.ActivityName = 'Changed'
+					 )
+				  OR ( (@EventSource = 'DeletedTitle' OR @EventSource = 'All') AND a.LogData.exist('/Title') = 1 AND t.ActivityName = 'Deleted'
+					 )
 					)
 					AND (@ProjectId IS NULL 
 						 OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
