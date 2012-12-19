@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Net.Mail;
 using System.ServiceModel.Activation;
 using System.Web.Security;
@@ -346,10 +345,7 @@ namespace PracticeManagementService
             {
                 try
                 {
-                    MailUtil.SendNotification(
-                        person,
-                        result,
-                        ConfigurationManager.AppSettings[MailUtil.ResetPasswordEmailTemplateKey]);
+                    MailUtil.SendResetPasswordNotification(person,result);
                 }
                 catch (SmtpException)
                 {
