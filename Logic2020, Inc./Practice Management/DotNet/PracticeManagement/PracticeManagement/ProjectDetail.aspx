@@ -532,8 +532,8 @@
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 &nbsp;&nbsp;
-                                                <asp:DropDownList ID="ddlSalesperson" runat="server" AutoPostBack="True" CssClass="Width95Per"
-                                                    onchange="setDirty();" OnSelectedIndexChanged="ddlSalesperson_SelectedIndexChanged">
+                                                <asp:DropDownList ID="ddlSalesperson" runat="server" CssClass="Width95Per"
+                                                    onchange="setDirty();">
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                             </td>
