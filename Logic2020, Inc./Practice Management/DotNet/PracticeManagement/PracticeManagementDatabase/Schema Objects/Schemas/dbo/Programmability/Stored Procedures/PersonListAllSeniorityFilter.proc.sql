@@ -36,7 +36,6 @@ BEGIN
 		SELECT p.PersonId,
 			   p.FirstName,
 			   p.LastName,
-			   p.PTODaysPerAnnum,
 			   p.HireDate,
 			   p.TerminationDate,
 			   p.Alias,
@@ -61,10 +60,7 @@ BEGIN
 		        OR ( @ShowAll = 1 AND @PracticeId = p.DefaultPractice ) )
 		   AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
            AND ( @Flags = 1 OR ( @StartDate <= ISNULL(p.TerminationDate,@FutureDate) AND p.HireDate <= @EndDate))
-		   AND (   @RecruiterId IS NULL
-		        OR EXISTS (SELECT 1
-		                     FROM dbo.RecruiterCommission AS c
-		                    WHERE c.RecruitId = p.PersonId AND c.RecruiterId = @RecruiterId))
+		   AND (   @RecruiterId IS NULL OR ISNULL(p.RecruiterId,0) = @RecruiterId)
 			AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityValue))
 		ORDER BY p.LastName, p.FirstName
 	END
@@ -77,7 +73,6 @@ BEGIN
 		SELECT tmp.PersonId,
 			   tmp.FirstName,
 			   tmp.LastName,
-			   tmp.PTODaysPerAnnum,
 			   tmp.HireDate,
 			   tmp.TerminationDate,
 			   tmp.Alias,
@@ -100,7 +95,6 @@ BEGIN
 					   p.PersonId,
 					   p.FirstName,
 					   p.LastName,
-					   p.PTODaysPerAnnum,
 					   p.HireDate,
 					   p.TerminationDate,
 					   p.Alias,
@@ -125,10 +119,7 @@ BEGIN
 		                OR ( @ShowAll = 1 AND @PracticeId IS NULL )
 		                OR ( @ShowAll = 1 AND @PracticeId = p.DefaultPractice ) ) 
 					AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
-		            AND (   @RecruiterId IS NULL
-		                 OR EXISTS (SELECT 1
-		                              FROM dbo.RecruiterCommission AS c
-		                             WHERE c.RecruitId = p.PersonId AND c.RecruiterId = @RecruiterId))
+		            AND (   @RecruiterId IS NULL OR ISNULL(p.RecruiterId,0) = @RecruiterId)
 					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityValue))
 				ORDER BY p.LastName, p.FirstName
 		       ) AS tmp
