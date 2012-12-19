@@ -191,9 +191,9 @@ TABLE.CalendarTable A{color:#000}
 TR.HeadRow TD{font-weight:700;font-size:larger;border-top:solid 1px gray}
 TABLE.CalendarTable TD{vertical-align:top;text-align:center;padding:3px}
 DIV.DayOff{height:24px;width:24px;background-color:#FAF}
-DIV.CompanyDayOn{height:24px;width:24px;background-color:#F60}
+DIV.CompanyDayOn,DIV.CompanyDayOnFloatingDay{height:24px;width:24px;background-color:#F60}
 TD.DayOff,TH.DayOff{background-color:#FAF}
-TD.CompanyDayOn,TH.CompanyDayOn{background-color:#F60}
+TD.CompanyDayOn,TH.CompanyDayOn,TD.CompanyDayOnFloatingDay,TH.CompanyDayOnFloatingDay{background-color:#F60}
 DIV.DayGrayed{height:24px;width:24px;background-color:ButtonFace;color:Gray}
 DIV.DayGrayed SPAN{color:Gray}
 tr.al-row{border-bottom:1px dotted #D3D3D3}
@@ -473,6 +473,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width250Px{width:250px}
 .Width220PxImp{width:220px!important}
 .Width250Px,.btnsTable{width:250px}
+.Width256Px{width:256px}
 .Width260Px{width:260px}
 .Width295Px{width:295px}
 .Width295PxImp{width:295px!important}
@@ -1361,7 +1362,7 @@ table#ctl00_body_login tr td label{float:left}
 .TerminationReportHeaderTotals{width:750px!important;height:100%}
 .NewHireReportTotals{height:100%}
 .pnlNewHireHelp{z-index:2000;position:absolute;padding:12px 0 12px 12px;height:30px;width:500px;background-color:White;border-color:#375D89;border-style:solid;border-width:4px}
-.PersonInfo tr td{padding-bottom:4px}
+.PersonInfo tr td{padding-bottom:4px;padding-right:4px}
 .PersonInfo td.PersonDefaultUser{padding-bottom:0!important}
 .dlPerson,.dlPerson table{width:100%!important}
 .dlPerson th div{white-space:nowrap}
@@ -1398,3 +1399,6 @@ table#ctl00_body_login tr td label{float:left}
 .LineHeight25Px{line-height:25px}
 .errorFile{font:11px Verdana,Geneva,sans-serif;background-color:#FDE5DD;border:3px solid #FBCBBC;margin-top:5px;padding:10px}
 .uploadedFilesDiv{max-height:220px;overflow-y:auto}
+.DatePickerOuterTd .DatePickerTable input{width:227px}
+.gvTitles{background-color:White;border-collapse:collapse;width:70%}
+.gvTitles td{height:25px;white-space:nowrap;text-align:center}
