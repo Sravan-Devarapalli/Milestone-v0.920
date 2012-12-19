@@ -263,7 +263,7 @@ namespace PraticeManagement.Controls
                 {
                     vacationDays = vacationDays / 8;
                 }
-                return  !string.IsNullOrEmpty(txtVacationDays.Text) && !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked) ?
+                return !string.IsNullOrEmpty(txtVacationDays.Text) && !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked) ?
                 (int?)vacationDays : null;
 
             }
@@ -275,43 +275,6 @@ namespace PraticeManagement.Controls
                     vacationDays = vacationDays * 8;
                 }
                 txtVacationDays.Text = vacationDays.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a number of the vacation days per year.
-        /// </summary>
-        public int? TimesPaidPerMonth
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(ddlPaidPerMonth.SelectedValue) ?
-                    (int?)int.Parse(ddlPaidPerMonth.SelectedValue) : null;
-            }
-            set
-            {
-                ddlPaidPerMonth.SelectedIndex =
-                    ddlPaidPerMonth.Items.IndexOf(ddlPaidPerMonth.Items.FindByValue(
-                    value.HasValue ? value.Value.ToString() : string.Empty));
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a paryent terms.
-        /// </summary>
-        public int? Terms
-        {
-            get
-            {
-                return
-                    !string.IsNullOrEmpty(ddlPaymentTerms.SelectedValue) ?
-                    (int?)int.Parse(ddlPaymentTerms.SelectedValue) : null;
-            }
-            set
-            {
-                ddlPaymentTerms.SelectedIndex =
-                    ddlPaymentTerms.Items.IndexOf(ddlPaymentTerms.Items.FindByValue(
-                    value.HasValue ? value.Value.ToString() : string.Empty));
             }
         }
 
@@ -392,43 +355,6 @@ namespace PraticeManagement.Controls
         }
 
         /// <summary>
-        /// Gets or sets a default number of the billable hours per day for the person.
-        /// </summary>
-        public decimal DefaultHoursPerDay
-        {
-            get
-            {
-                return decimal.Parse(txtDefaultHoursPerDay.Text);
-            }
-            set
-            {
-                txtDefaultHoursPerDay.Text = value.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Sets whether the table row with Payments data is Visible.
-        /// </summary>
-        public bool PaymentsVisible
-        {
-            set
-            {
-                trPayments.Visible = value;
-            }
-        }
-
-        /// <summary>
-        /// Sets whether the table row witn DefaultHoursPerDay data is Visible.
-        /// </summary>
-        public bool DefaultHoursPerDayVisible
-        {
-            set
-            {
-                trDefaultHoursPerDay.Visible = value;
-            }
-        }
-
-        /// <summary>
         /// Sets whether the table row with Compenasation data is Visible.
         /// </summary>
         public bool CompensationDateVisible
@@ -442,11 +368,68 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Sets whether the table row with Seniority And Practice fields is Visible.
         /// </summary>
-        public bool SeniorityAndPracticeVisible
+        public bool TitleAndPracticeVisible
         {
             set
             {
-                trSeniorityAndPractice.Visible = trSalesCommisiion.Visible = value;
+                trTitleAndPractice.Visible = value;
+            }
+        }
+
+        public bool SLTApproval
+        {
+            get
+            {
+                return bool.Parse(hdSLTApproval.Value);
+            }
+            set
+            {
+                hdSLTApproval.Value = value.ToString();
+            }
+        }
+
+        public bool SLTPTOApproval
+        {
+            get
+            {
+                return bool.Parse(hdSLTPTOApproval.Value);
+            }
+            set
+            {
+                hdSLTPTOApproval.Value = value.ToString();
+            }
+        }
+
+        public bool SLTApprovalPopupDisplayed
+        {
+            get;
+            set;
+        }
+
+        public int? TitleId
+        {
+            set
+            {
+                if (value.HasValue)
+                {
+                    ListItem selectedTitle = ddlTitle.Items.FindByValue(value.Value.ToString());
+                    if (selectedTitle != null)
+                    {
+                        ddlTitle.SelectedValue = selectedTitle.Value;
+                    }
+                }
+                else
+                {
+                    ddlTitle.SelectedIndex = 0;
+                }
+            }
+            get
+            {
+                if (ddlTitle.SelectedIndex > 0)
+                {
+                    return int.Parse(ddlTitle.SelectedValue);
+                }
+                return null;
             }
         }
 
@@ -474,6 +457,10 @@ namespace PraticeManagement.Controls
                         ddlPractice.SelectedValue = selectedPractice.Value;
                     }
                 }
+                else
+                {
+                    ddlPractice.SelectedIndex = 0;
+                }
             }
             get
             {
@@ -485,52 +472,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public int? SeniorityId
-        {
-            set
-            {
-                if (value.HasValue)
-                {
-                    ListItem selectedSeniority = ddlSeniority.Items.FindByValue(value.Value.ToString());
-                    if (selectedSeniority != null)
-                    {
-
-                        ddlSeniority.SelectedValue = selectedSeniority.Value;
-                    }
-                }
-            }
-            get
-            {
-                if (ddlSeniority.SelectedIndex > 0)
-                {
-                    return int.Parse(ddlSeniority.SelectedValue);
-                }
-                return null;
-            }
-        }
-
-        public decimal? SalesCommissionFractionOfMargin
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(txtSalesCommission.Text))
-                {
-                    return Convert.ToDecimal(txtSalesCommission.Text);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                if (value.HasValue)
-                {
-                    txtSalesCommission.Text = value.ToString();
-                }
-            }
-        }
-
         /// <summary>
         /// Gets a selected <see cref="Pay"/>.
         /// </summary>
@@ -539,25 +480,21 @@ namespace PraticeManagement.Controls
             get
             {
                 Pay result = new Pay();
-
                 if (StartDate.HasValue)
                     result.StartDate = StartDate.Value;
                 result.EndDate = EndDate;
                 result.Timescale = Timescale;
                 result.Amount = Amount.Value;
                 result.VacationDays = VacationDays;
-                result.TimesPaidPerMonth = TimesPaidPerMonth;
-                result.Terms = Terms;
                 result.IsYearBonus = IsYearBonus;
                 result.BonusAmount = BonusAmount;
                 result.BonusHoursToCollect = BonusHoursToCollect;
-                result.DefaultHoursPerDay = DefaultHoursPerDay;
                 result.OldStartDate = OldStartDate;
                 result.OldEndDate = OldEndDate;
-                result.SeniorityId = SeniorityId;
                 result.PracticeId = PracticeId;
-                result.SalesCommissionFractionOfMargin = SalesCommissionFractionOfMargin;
-
+                result.TitleId = TitleId;
+                result.SLTApproval = SLTApproval;
+                result.SLTPTOApproval = SLTPTOApproval;
                 return result;
             }
         }
@@ -575,11 +512,10 @@ namespace PraticeManagement.Controls
             {
                 dpStartDate.ReadOnly = dpEndDate.ReadOnly = txtSalaryAnnual.ReadOnly = txtSalaryHourly.ReadOnly =
                     txtBonusHourly.ReadOnly = txtBonusDuration.ReadOnly = txt1099Ctc.ReadOnly =
-                    txtBonusAnnual.ReadOnly = txtDefaultHoursPerDay.ReadOnly = txtVacationDays.ReadOnly = value;
+                    txtBonusAnnual.ReadOnly = txtVacationDays.ReadOnly = value;
 
                 rbtnSalaryAnnual.Enabled = rbtnSalaryHourly.Enabled = rbtnBonusHourly.Enabled =
                     rbtn1099Ctc.Enabled = rbtnBonusAnnual.Enabled =
-                    ddlPaidPerMonth.Enabled = ddlPaymentTerms.Enabled =
                     rbtnPercentRevenue.Enabled = !value;
 
                 UpdateCompensationState();
@@ -598,7 +534,7 @@ namespace PraticeManagement.Controls
             set
             {
                 txt1099Ctc.AutoPostBack = txtBonusAnnual.AutoPostBack = txtBonusDuration.AutoPostBack =
-                    txtBonusHourly.AutoPostBack = txtDefaultHoursPerDay.AutoPostBack =
+                    txtBonusHourly.AutoPostBack =
                     txtSalaryAnnual.AutoPostBack = txtSalaryHourly.AutoPostBack =
                     txtVacationDays.AutoPostBack = value;
             }
@@ -608,6 +544,10 @@ namespace PraticeManagement.Controls
 
         public string ValidationGroup
         {
+            get
+            {
+                return reqStartDate.ValidationGroup;
+            }
             set
             {
                 reqStartDate.ValidationGroup =
@@ -616,26 +556,45 @@ namespace PraticeManagement.Controls
                 compEndDate.ValidationGroup =
                 reqSalaryAnnual.ValidationGroup =
                 compSalaryAnnual.ValidationGroup =
+                compSalaryWageGreaterThanZero.ValidationGroup =
                 reqSalaryHourly.ValidationGroup =
                 compSalaryHourly.ValidationGroup =
+                compHourlyWageGreaterThanZero.ValidationGroup =
                 req1099Ctc.ValidationGroup =
                 comp1099Ctc.ValidationGroup =
+                compHourlyGreaterThanZero.ValidationGroup =
                 reqPercRevenue.ValidationGroup =
                 compPercRevenue.ValidationGroup =
+                compPercRevenueGreaterThanZero.ValidationGroup =
                 compBonusHourly.ValidationGroup =
                 reqBonusDuration.ValidationGroup =
                 compBonusDuration.ValidationGroup =
                 compBonusAnnual.ValidationGroup =
-                reqDefaultHoursPerDay.ValidationGroup =
-                compDefaultHoursPerDay.ValidationGroup =
-                RequiredFieldValidator1.ValidationGroup =
-                cvVacationDays.ValidationGroup =
-                reqPaymentTerms.ValidationGroup =
-                custValSeniority.ValidationGroup =
-                custValPractice.ValidationGroup =
-                custValSalesCommission.ValidationGroup = value;
+                rfvVacationDays.ValidationGroup =
+                rfvTitle.ValidationGroup =
+                cvSLTApprovalValidation.ValidationGroup =
+                cvSLTPTOApprovalValidation.ValidationGroup =
+                rfvPractice.ValidationGroup = value;
             }
         }
+
+        public string rfvTitleValidationMessage
+        {
+            set
+            {
+                rfvTitle.ErrorMessage = rfvTitle.ToolTip = value;
+            }
+        }
+
+        public string rfvPracticeValidationMessage
+        {
+            set
+            {
+                rfvPractice.ErrorMessage = rfvPractice.ToolTip = value;
+            }
+        }
+
+        public bool IsMarginTestPage { get; set; }
 
         #endregion
 
@@ -644,6 +603,9 @@ namespace PraticeManagement.Controls
         public event EventHandler CompensationMethodChanged;
         public event EventHandler PeriodChanged;
         public event EventHandler CompensationChanged;
+        public event EventHandler TitleChanged;
+        public event EventHandler PracticeChanged;
+        public event EventHandler SaveDetails;
 
         #endregion
 
@@ -651,13 +613,9 @@ namespace PraticeManagement.Controls
         {
             if (!IsPostBack)
             {
-                TermsConfigurationSection terms = TermsConfigurationSection.Current;
-                ddlPaymentTerms.DataSource = terms != null ? terms.Terms : null;
-                ddlPaymentTerms.DataBind();
-
                 if (!IsStrawmanMode)
                 {
-                    DataHelper.FillSenioritiesList(ddlSeniority, "-- Select Seniority --");
+                    DataHelper.FillTitleList(ddlTitle, "-- Select Title --");
                     DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
                 }
             }
@@ -667,11 +625,12 @@ namespace PraticeManagement.Controls
         {
             if (IsStrawmanMode)
             {
-                trCompensationDate.Visible = false;
-                trSeniorityAndPractice.Visible = false;
-                trSalesCommisiion.Visible = false;
+                CompensationDateVisible =
+                TitleAndPracticeVisible = false;
                 cvVacationDays.Enabled = true;
-                lblVacationDays.Text = "Vacation Days (In Hours)";
+                lblVacationDays.Text = "PTO Accrual (In Hours)";
+                rfvVacationDays.ErrorMessage = rfvVacationDays.ToolTip = "PTO Accrual (In Hours) is required.";
+
             }
             UpdateCompensationState();
         }
@@ -679,21 +638,13 @@ namespace PraticeManagement.Controls
         protected void Compensation_CheckedChanged(object sender, EventArgs e)
         {
             UpdateCompensationState();
+            UpdatePTOHours();
+            SLTApproval = false;
 
             if (CompensationMethodChanged != null)
             {
                 CompensationMethodChanged(this, e);
             }
-        }
-
-        protected void custValSeniority_OnServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = ddlSeniority.SelectedIndex > 0;
-        }
-
-        protected void custValPractice_OnServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = ddlPractice.SelectedIndex > 0;
         }
 
         protected void cvVacationDays_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -712,18 +663,51 @@ namespace PraticeManagement.Controls
             }
         }
 
+        protected void ddlPractice_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (PracticeChanged != null)
+            {
+                PracticeChanged(this, e);
+            }
+        }
+
+        protected void ddlTitle_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            SLTPTOApproval = SLTApproval = false;
+            UpdatePTOHours();
+            if (TitleChanged != null)
+            {
+                TitleChanged(this, e);
+            }
+        }
+
         private void UpdateCompensationState()
         {
-            txtSalaryAnnual.Enabled = reqSalaryAnnual.Enabled = compSalaryAnnual.Enabled =
+            txtSalaryAnnual.Enabled = reqSalaryAnnual.Enabled = compSalaryAnnual.Enabled = compSalaryWageGreaterThanZero.Enabled = txtVacationDays.Enabled = rfvVacationDays.Enabled =
                 rbtnSalaryAnnual.Checked;
-            txtSalaryHourly.Enabled = reqSalaryHourly.Enabled = compSalaryHourly.Enabled =
+            txtSalaryHourly.Enabled = reqSalaryHourly.Enabled = compSalaryHourly.Enabled = compHourlyWageGreaterThanZero.Enabled =
                 rbtnSalaryHourly.Checked;
-            txt1099Ctc.Enabled = req1099Ctc.Enabled = comp1099Ctc.Enabled = rbtn1099Ctc.Checked;
-            txtPercRevenue.Enabled = reqPercRevenue.Enabled = compPercRevenue.Enabled = rbtnPercentRevenue.Checked;
-
-            // Bonus and vacation are not available for the 1099 employees.
+            txt1099Ctc.Enabled = req1099Ctc.Enabled = comp1099Ctc.Enabled = compHourlyGreaterThanZero.Enabled = rbtn1099Ctc.Checked;
+            txtPercRevenue.Enabled = reqPercRevenue.Enabled = compPercRevenue.Enabled = compPercRevenueGreaterThanZero.Enabled = rbtnPercentRevenue.Checked;
+            //txtVacationDays.Enabled = !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked);
+            // Bonus and vacation are  available for the w2-salary employess.
             UpdateBonusState();
-            txtVacationDays.Enabled = !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked);
+
+
+        }
+
+        public void UpdatePTOHours()
+        {
+            int titleId = 0;
+            if (rbtnSalaryAnnual.Checked && ddlTitle.SelectedIndex > 0 && int.TryParse(ddlTitle.SelectedValue, out titleId))
+            {
+                Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(titleId));
+                txtVacationDays.Text = title.PTOAccrual.ToString();
+            }
+            else
+            {
+                txtVacationDays.Text = "";
+            }
         }
 
         protected void Bonus_CheckedChanged(object sender, EventArgs e)
@@ -768,34 +752,124 @@ namespace PraticeManagement.Controls
 
         protected void Compensation_TextChanged(object sender, EventArgs e)
         {
+            TextBox changeBox = sender as TextBox;
+            if (changeBox.ClientID == txtSalaryAnnual.ClientID)
+            {
+                SLTApproval = false;
+            }
+            else if (changeBox.ClientID == txtVacationDays.ClientID)
+            {
+                SLTPTOApproval = false;
+            }
+
             if (CompensationChanged != null)
             {
                 CompensationChanged(this, e);
             }
         }
-
-        protected void custValSalesCommission_OnServerValidate(object sender, ServerValidateEventArgs e)
+        
+        protected void btnCancel_OnClick(object sender, EventArgs e)
         {
-            var salesComm = txtSalesCommission.Text;
-            decimal salecCommValue;
-            if (!string.IsNullOrEmpty(salesComm))
+            mpeSLTApprovalPopUp.Hide();
+            txtSalaryAnnual.Text = "";
+            txtSalaryAnnual.Focus();
+        }
+
+        protected void btnSLTApproval_OnClick(object sender, EventArgs e)
+        {
+            mpeSLTApprovalPopUp.Hide();
+            SLTApproval = true;
+            cvSLTPTOApprovalValidation.Validate();
+            if (cvSLTPTOApprovalValidation.IsValid)
             {
-                if (!decimal.TryParse(salesComm, out salecCommValue))
+                if (SaveDetails != null)
                 {
-                    e.IsValid = false;
-                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
-                        "A number with 2 decimal digits is allowed for the sales commission %.";
-                    return;
-                }
-                else if (salecCommValue < 0.00M)
-                {
-                    e.IsValid = false;
-                    custValSalesCommission.ErrorMessage = custValSalesCommission.ToolTip =
-                        "Sales Commission % must be greater than or equal to 0.";
-                    return;
+                    SaveDetails(this, e);
                 }
             }
-            e.IsValid = true;
+        }
+
+        protected void cvSLTApprovalValidation_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (!IsMarginTestPage && !IsStrawmanMode)
+            {
+                rfvPractice.Validate();
+                rfvVacationDays.Validate();
+                compBonusAnnual.Validate();
+                reqSalaryAnnual.Validate();
+                compSalaryWageGreaterThanZero.Validate();
+                decimal salary;
+                int ptoAccrual = 0;
+                if (decimal.TryParse(txtSalaryAnnual.Text, out salary) && TitleId.HasValue)
+                {
+                    Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(TitleId.Value));
+                    int.TryParse(txtVacationDays.Text, out ptoAccrual);
+                    if (!SLTApproval && rbtnSalaryAnnual.Checked && reqSalaryAnnual.IsValid && compSalaryAnnual.IsValid && compSalaryWageGreaterThanZero.IsValid && rfvPractice.IsValid && rfvVacationDays.IsValid && compBonusAnnual.IsValid)
+                    {
+                        if ((title.MinimumSalary.HasValue && title.MinimumSalary.Value > salary) || (title.MaximumSalary.HasValue && salary > title.MaximumSalary.Value))
+                        {
+                            args.IsValid = false;
+                            mpeSLTApprovalPopUp.Show();
+                            SLTApprovalPopupDisplayed = true;
+                        }
+                    }
+                    if (title.MinimumSalary.HasValue && title.MinimumSalary.Value <= salary && title.MaximumSalary.HasValue && salary <= title.MaximumSalary.Value)
+                    {
+                        SLTApproval = false;
+                    }
+                }
+            }
+        }
+
+        protected void btnCancelSLTPTOApproval_OnClick(object sender, EventArgs e)
+        {
+            mpeSLTPTOApprovalPopUp.Hide();
+            txtVacationDays.Text = "";
+            txtVacationDays.Focus();
+
+        }
+
+        protected void btnSLTPTOApproval_OnClick(object sender, EventArgs e)
+        {
+            mpeSLTPTOApprovalPopUp.Hide();
+            SLTPTOApproval = true;
+            if (SaveDetails != null)
+            {
+                SaveDetails(this, e);
+            }
+        }
+
+        protected void cvSLTPTOApprovalValidation_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (!IsMarginTestPage && !IsStrawmanMode)
+            {
+                rfvPractice.Validate();
+                rfvVacationDays.Validate();
+                compBonusAnnual.Validate();
+                reqSalaryAnnual.Validate();
+                compSalaryWageGreaterThanZero.Validate();
+                cvSLTApprovalValidation.Validate();
+                int ptoAccrual = 0;
+                if (int.TryParse(txtVacationDays.Text, out ptoAccrual) && TitleId.HasValue && cvSLTApprovalValidation.IsValid)
+                {
+                    Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(TitleId.Value));
+                    if (!SLTPTOApproval && rbtnSalaryAnnual.Checked && reqSalaryAnnual.IsValid && compSalaryAnnual.IsValid && compSalaryWageGreaterThanZero.IsValid && rfvPractice.IsValid && rfvVacationDays.IsValid && compBonusAnnual.IsValid)
+                    {
+                        if (title.PTOAccrual != ptoAccrual)
+                        {
+                            args.IsValid = false;
+                            mpeSLTPTOApprovalPopUp.Show();
+                            SLTApprovalPopupDisplayed = true;
+                        }
+                    }
+                    if (title.PTOAccrual == ptoAccrual)
+                    {
+                        SLTPTOApproval = false;
+                    }
+                }
+            }
         }
 
         public void ShowDates()
