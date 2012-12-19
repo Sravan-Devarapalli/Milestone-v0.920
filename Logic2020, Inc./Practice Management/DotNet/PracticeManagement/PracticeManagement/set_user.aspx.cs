@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Text;
@@ -8,7 +9,6 @@ using System.Web.Security;
 using System.Web.UI.WebControls;
 using PraticeManagement.PersonService;
 using PraticeManagement.Utils;
-using System.Linq;
 
 namespace PraticeManagement
 {
@@ -22,9 +22,8 @@ namespace PraticeManagement
                 {
                     //var persons = serviceClient.PersonListAllShort(null, DateTime.MinValue, DateTime.MaxValue);
                     string userName = ConfigurationManager.AppSettings["AdminsEmail"];
-                    var persons = serviceClient.GetPersonListWithCurrentPay(null, true, Int16.MaxValue, 0,
-                        string.Empty, null, userName, null, null, false, false, false, null);
-                    foreach (var person in persons.ToList().FindAll(p => !p.IsStrawMan))
+                    var persons = serviceClient.GetPersonListByStatusList("1,5",null).ToList();
+                    foreach (var person in persons)
                     {
                         var userRoles = string.Empty;
 
