@@ -1,5 +1,8 @@
-﻿using System.ServiceModel.Activation;
+﻿using System;
+using System.ServiceModel.Activation;
 using System.Web.Security;
+using DataAccess;
+using DataTransferObjects;
 
 namespace PracticeManagementService
 {
@@ -18,7 +21,16 @@ namespace PracticeManagementService
         /// <param name="roleNames">A string array of the role names to add the specified user names to.</param>
         public void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
-            Roles.AddUsersToRoles(usernames, roleNames);
+            try
+            {
+                Roles.AddUsersToRoles(usernames, roleNames);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "AddUsersToRoles", "RoleService.svc", string.Empty,
+                      System.Web.HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : System.Web.HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+            }
         }
 
         /// <summary>
