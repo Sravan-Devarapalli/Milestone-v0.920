@@ -116,7 +116,7 @@
                                     <asp:TemplateField HeaderText="Vacation">
                                         <HeaderTemplate>
                                             <div class="ie-bg">
-                                                Vacation (In Hours)</div>
+                                                PTO Accrual (In Hours)</div>
                                         </HeaderTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                         <EditItemTemplate>
