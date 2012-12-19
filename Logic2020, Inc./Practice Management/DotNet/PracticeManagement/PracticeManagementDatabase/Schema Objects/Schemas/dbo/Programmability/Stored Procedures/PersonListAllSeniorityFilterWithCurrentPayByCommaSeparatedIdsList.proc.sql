@@ -60,7 +60,6 @@ BEGIN
 					   p.PersonId,
 					   p.FirstName,
 					   p.LastName,
-					   p.PTODaysPerAnnum,
 					   p.HireDate,
 					   p.TerminationDate,
 					   p.Alias,
@@ -71,8 +70,8 @@ BEGIN
 		               p.PersonStatusName,
 					   p.EmployeeNumber,
 					   ROW_NUMBER() OVER(' + @OrderBy + ') - 1 AS rownum,
-		               p.SeniorityId,
-		               p.SeniorityName,
+		               p.TitleId,
+		               p.Title,
 					   p.ManagerId,
 					   p.ManagerAlias,
 					   p.ManagerFirstName,
@@ -87,13 +86,10 @@ BEGIN
 					   TS.Amount,
 					   TS.Timescale,
 					   TS.AmountHourly,
-					   TS.TimesPaidPerMonth,
-					   TS.Terms,
 					   TS.VacationDays,
 					   TS.BonusAmount,
 					   TS.BonusHoursToCollect,
 					   TS.IsYearBonus,
-					   TS.DefaultHoursPerDay,
 					   TS.TimescaleName
 				  FROM dbo.v_Person AS p
 				  OUTER APPLY 
@@ -104,13 +100,10 @@ BEGIN
 							   pay.Amount,
 							   pay.Timescale,
 							   pay.AmountHourly,
-							   pay.TimesPaidPerMonth,
-							   pay.Terms,
 							   pay.VacationDays,
 							   pay.BonusAmount,
 							   pay.BonusHoursToCollect,
 							   pay.IsYearBonus,
-							   pay.DefaultHoursPerDay,
 							   pay.TimescaleName
 						  FROM dbo.v_Pay AS pay
 						 WHERE p.PersonId = pay.PersonId
@@ -128,10 +121,7 @@ BEGIN
 		            AND (@PracticeIdsList IS NULL OR p.DefaultPractice IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@PracticeIdsList)))
 					AND ( p.FirstName LIKE @Looked OR p.LastName LIKE @Looked OR p.EmployeeNumber LIKE @Looked )
 					AND p.IsStrawman = 0  
-		            AND (  @RecruiterIdsList IS NULL
-		                 OR EXISTS (SELECT 1
-		                              FROM dbo.RecruiterCommission AS c
-		                             WHERE c.RecruitId = p.PersonId AND c.RecruiterId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList))))
+		            AND (  @RecruiterIdsList IS NULL OR p.RecruiterId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@RecruiterIdsList)))
 		            AND (@TimescaleIdsList IS NULL OR	(TS.Timescale IN ((SELECT ResultId FROM [dbo].[ConvertStringListIntoTable] (@TimescaleIdsList)))) 	)
 		            AND ( p.LastName LIKE @Alphabet )
 					AND ((@MaxSeniorityLevel IS NULL) OR (@MaxSeniorityLevel >= p.SeniorityValue))' + @OrderBy + '
