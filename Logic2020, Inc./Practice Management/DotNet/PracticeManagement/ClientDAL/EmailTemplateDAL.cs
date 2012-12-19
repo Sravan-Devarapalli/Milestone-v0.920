@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DataTransferObjects;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 using DataAccess.Other;
+using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 
 namespace DataAccess
@@ -18,16 +16,17 @@ namespace DataAccess
         #region Constants
 
         #region Stored Procedures
+
         private const string EmailTemplateInsertProcedure = "dbo.EmailTemplateInsert";
         private const string EmailTemplateGetAllProcedure = "dbo.EmailTemplateGetAll";
         private const string EmailTemplateUpdateProcedure = "dbo.EmailTemplateUpdate";
         private const string EmailTemplateDeleteProcedure = "dbo.EmailTemplateDelete";
         private const string EmailTemplateGetByNameProcedure = "dbo.EmailTemplateGetByName";
-        private const string EmailTemplateGetTemplateForProjectedProjectWithRecipientsProcedure = "dbo.EmailTemplateGetTemplateForProjectedProjectWithRecipients";
-        private const string EmailTemplateGetTemplateForProjectedProjectByHireDateProcedure = "dbo.EmailTemplateGetTemplateForProjectedProjectByHireDate";
+        
         #endregion
 
         #region Parameters
+
         private const string EmailTemplateIdParam = "@EmailTemplateId";
         private const string EmailTemplateNameParam = "@EmailTemplateName";
         private const string EmailTemplateToParam = "@EmailTemplateTo";
@@ -46,22 +45,12 @@ namespace DataAccess
         private const string EmailTemplateSubjectColumn = "EmailTemplateSubject";
         private const string EmailTemplateBodyColumn = "EmailTemplateBody";
 
-        private const string ProjectIdColumn = "ProjectId";
-        private const string ProjectOwnerColumn = "ProjectOwner";
-        private const string SalespersonColumn = "Salesperson";
-        private const string PracticeOwnerColumn = "PracticeOwner";
-        private const string ClientNameColumn = "ClientName";
-        private const string ProjectNameColumn = "ProjectName";
-        private const string MileStoneStartDateColumn = "StartDate";
-        private const string LineManagerColumn = "LineManager";
-        private const string PersonRecruterColumn = "PersonRecruter";
-        private const string PersonHireDateColumn = "HireDate";
-        private const string PersonNameColumn = "PersonName";
         #endregion
 
         #endregion
 
         #region Methods
+
         public static List<EmailTemplate> GetAllEmailTemplates()
         {
             using (SqlConnection connection = new SqlConnection(DataAccess.Other.DataSourceHelper.DataConnection))
@@ -104,7 +93,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         public static bool UpdateEmailTemplate(EmailTemplate template)
         {
@@ -187,122 +175,6 @@ namespace DataAccess
             return true;
         }
 
-        public static void CheckProjectedProjectsByHireDate(int templateId, Dictionary<int, EmailRecepients> projects, out string body, out string subject)
-        {
-            subject = string.Empty;
-            body = string.Empty;
-
-            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(EmailTemplateGetTemplateForProjectedProjectByHireDateProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(EmailTemplateIdParam, templateId);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        int projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
-                        int lineManagerIndex = reader.GetOrdinal(LineManagerColumn);
-                        int personRecruiterIndex = reader.GetOrdinal(PersonRecruterColumn);
-                        int practiceOwnerIndex = reader.GetOrdinal(PracticeOwnerColumn);
-                        int personHireDateIndex = reader.GetOrdinal(PersonHireDateColumn);
-                        int personNameIndex = reader.GetOrdinal(PersonNameColumn);
-
-                        while (reader.Read())
-                        {
-                            int projectId = reader.GetInt32(projectIdIndex);
-                            if (!projects.ContainsKey(projectId))
-                            {
-                                projects.Add(projectId, new EmailRecepients());
-                            }
-
-                            projects[projectId].ToPersonAddresses.Add(reader.GetString(practiceOwnerIndex));
-                            projects[projectId].ToPersonAddresses.Add(reader.GetString(lineManagerIndex));
-                            projects[projectId].ToPersonAddresses.Add(reader.GetString(personRecruiterIndex));
-                            projects[projectId].Parameters.Add("HireDate", reader.GetDateTime(personHireDateIndex).ToShortDateString());
-                            projects[projectId].Parameters.Add("PersonName", reader.GetString(personNameIndex));
-                        }
-
-                        reader.NextResult(); // step to email template select
-                    }
-
-                    ReadEmailMembers(reader, out body, out subject);
-                }
-            }
-        }
-
-        private static void ReadEmailMembers(SqlDataReader reader, out string body, out string subject)
-        {
-            subject = string.Empty;
-            body = string.Empty;
-
-            if (reader.HasRows) // read template
-            {
-                int emailTemplateSubjectIndex = reader.GetOrdinal(EmailTemplateSubjectColumn);
-                int emailTemplateBodyIndex = reader.GetOrdinal(EmailTemplateBodyColumn);
-
-                while (reader.Read())
-                {
-                    subject = reader.GetString(emailTemplateSubjectIndex);
-                    body = reader.GetString(emailTemplateBodyIndex);
-                }
-            }
-        }
-        public static void CheckProjectedProjects(int templateId, Dictionary<int, EmailRecepients> projects, out string body, out string subject)
-        {
-            subject = string.Empty;
-            body = string.Empty;
-
-            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(EmailTemplateGetTemplateForProjectedProjectWithRecipientsProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(EmailTemplateIdParam, templateId);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        int projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
-                        int projectOwnerIndex = reader.GetOrdinal(ProjectOwnerColumn);
-                        int salesPersonIndex = reader.GetOrdinal(SalespersonColumn);
-                        int practiceOwnerIndex = reader.GetOrdinal(PracticeOwnerColumn);
-                        int clientNameIndex = reader.GetOrdinal(ClientNameColumn);
-                        int projectNameIndex = reader.GetOrdinal(ProjectNameColumn);
-                        int milestoneStartDateIndex = reader.GetOrdinal(MileStoneStartDateColumn);
-
-                        while (reader.Read())
-                        {
-                            int projectId = reader.GetInt32(projectIdIndex);
-                            if (!projects.ContainsKey(projectId))
-                            {
-                                projects.Add(projectId, new EmailRecepients());
-                            }
-
-                            projects[projectId].ToPersonAddresses.Add(reader.GetString(projectOwnerIndex));
-                            projects[projectId].ToPersonAddresses.Add(reader.GetString(salesPersonIndex));
-                            projects[projectId].ToPersonAddresses.Add(reader.GetString(practiceOwnerIndex));
-                            projects[projectId].Parameters.Add("ClientName", reader.GetString(clientNameIndex));
-                            projects[projectId].Parameters.Add("ProjectName", reader.GetString(projectNameIndex));
-                            projects[projectId].Parameters.Add("MilestoneStartDate", reader.GetDateTime(milestoneStartDateIndex).ToShortDateString());
-                        }
-
-                        reader.NextResult(); // step to email template select
-                    }
-
-                    ReadEmailMembers(reader, out body, out subject);
-                }
-            }
-        }
-
-
         public static EmailData GetEmailData(EmailContext emailContext)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -358,9 +230,6 @@ namespace DataAccess
             return null;
         }
 
-        #endregion
-
-
         private static void ReadEmailTemplates(SqlDataReader reader, List<EmailTemplate> templates)
         {
             if (reader.HasRows)
@@ -388,22 +257,7 @@ namespace DataAccess
             }
         }
 
-        
-    }
-
-    public class EmailRecepients
-    {
-        public List<string> ToPersonAddresses { get; set; }
-        public List<string> CcPersonAddresses { get; set; }
-
-        public Dictionary<string, string> Parameters { get; set; }
-
-        public EmailRecepients()
-        {
-            ToPersonAddresses = new List<string>();
-            CcPersonAddresses = new List<string>();
-            Parameters = new Dictionary<string, string>();
-        }
+        #endregion
     }
 }
 
