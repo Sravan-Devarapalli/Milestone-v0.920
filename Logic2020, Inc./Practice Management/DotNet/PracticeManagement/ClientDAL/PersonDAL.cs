@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Xml;
 using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
-using System.Security.Cryptography;
-using System.Text;
 using DataTransferObjects.TimeEntry;
 
 
@@ -27,7 +25,6 @@ namespace DataAccess
         private const string PersonIdParam = "@PersonId";
         private const string FirstNameParam = "@FirstName";
         private const string LastNameParam = "@LastName";
-        private const string PTODaysPerAnnumParam = "@PTODaysPerAnnum";
         private const string HireDateParam = "@HireDate";
         private const string TerminationDateParam = "@TerminationDate";
         private const string TerminationReasonIdParam = "@TerminationReasonId";
@@ -95,6 +92,12 @@ namespace DataAccess
         private const string PaychexIDParam = "@PaychexID";
         private const string PersonDivisionIdParam = "@PersonDivisionId";
         private const string EffectiveDateParam = "@EffectiveDate";
+        private const string TitleIdParam = "@TitleId";
+        private const string NumTablesDeletedFromParam = "@NumTablesDeletedFrom";
+        private const string SLTApprovalParam = "@SLTApproval";
+        private const string SLTPTOApprovalParam = "@SLTPTOApproval";
+        
+
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
         private const string TimescaleParam = "@Timescale";
@@ -139,7 +142,6 @@ namespace DataAccess
         private const string AliasColumn = "Alias";
         private const string SeniorityIdColumn = "SeniorityId";
         private const string SeniorityNameColumn = "SeniorityName";
-        private const string PTODaysPerAnnumColumn = "PTODaysPerAnnum";
         private const string TimescaleColumn = "Timescale";
         private const string TimescaleIdColumn = "TimescaleId";
         private const string WeeklyUtilColumn = "wutil";
@@ -167,6 +169,7 @@ namespace DataAccess
         private const string TerminationReasonIdColumn = "TerminationReasonId";
         private const string TerminationReasonColumn = "TerminationReason";
         private const string PersonStatusId = "PersonStatusId";
+
         #endregion
 
         #region Functions
@@ -361,7 +364,6 @@ namespace DataAccess
             }
         }
 
-
         public static Dictionary<int, List<int>> GetWeeklyUtilizationForConsultant(ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -468,7 +470,6 @@ namespace DataAccess
             return null;
         }
 
-
         /// <summary>
         /// reads a dataset of persons into a collection
         /// </summary>
@@ -487,8 +488,8 @@ namespace DataAccess
                 int hireDateIndex = reader.GetOrdinal(HireDateColumn);
                 int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
                 int personVacationDaysIndex = reader.GetOrdinal(PersonVactionDaysColumn);
-                int seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
-                int SeniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
 
                 var res = new List<Quadruple<Person, int[], int, int>>();
                 while (reader.Read())
@@ -511,10 +512,10 @@ namespace DataAccess
                                 Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
                             },
                             HireDate = (DateTime)reader[hireDateIndex],
-                            Seniority = new Seniority
+                            Title = new Title
                             {
-                                Id = reader.GetInt32(seniorityIdColumnIndex),
-                                Name = reader.GetString(SeniorityNameColumnIndex)
+                                TitleId = reader.GetInt32(titleIdIndex),
+                                TitleName = reader.GetString(titleIndex)
                             }
                         };
 
@@ -567,7 +568,6 @@ namespace DataAccess
             }
             return PersonWeeklyUtlization;
         }
-
 
         private static void ReadPersonsEmploymentHistory(SqlDataReader reader, List<Quadruple<Person, int[], int, int>> result)
         {
@@ -681,7 +681,6 @@ namespace DataAccess
                 return !Convert.IsDBNull(command.ExecuteScalar());
             }
         }
-
 
         /// <summary>
         /// Gets permissions for single target type
@@ -826,51 +825,25 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(FirstNameParam,
-                                                !string.IsNullOrEmpty(person.FirstName)
-                                                    ? (object)person.FirstName
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(LastNameParam,
-                                                !string.IsNullOrEmpty(person.LastName)
-                                                    ? (object)person.LastName
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(PTODaysPerAnnumParam, person.PtoDays);
+                command.Parameters.AddWithValue(FirstNameParam, !string.IsNullOrEmpty(person.FirstName) ? (object)person.FirstName : DBNull.Value);
+                command.Parameters.AddWithValue(LastNameParam, !string.IsNullOrEmpty(person.LastName) ? (object)person.LastName : DBNull.Value);
                 command.Parameters.AddWithValue(HireDateParam, person.HireDate);
-                command.Parameters.AddWithValue(AliasParam,
-                                                !string.IsNullOrEmpty(person.Alias)
-                                                    ? (object)person.Alias
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(DefaultPracticeParam,
-                                                person.DefaultPractice != null
-                                                    ? (object)person.DefaultPractice.Id
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(PersonStatusIdParam,
-                                                person.Status != null ? (object)person.Status.Id : DBNull.Value);
-                command.Parameters.AddWithValue(TerminationDateParam,
-                                                person.TerminationDate.HasValue
-                                                    ? (object)person.TerminationDate.Value
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(TeleponeNumberParam,
-                                                !string.IsNullOrEmpty(person.TelephoneNumber)
-                                                    ? (object)person.TelephoneNumber
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(SeniorityIdParam,
-                                                person.Seniority != null
-                                                    ? (object)person.Seniority.Id
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(UserLoginParam,
-                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+                command.Parameters.AddWithValue(AliasParam, !string.IsNullOrEmpty(person.Alias) ? (object)person.Alias : DBNull.Value);
+                command.Parameters.AddWithValue(DefaultPracticeParam, person.DefaultPractice != null ? (object)person.DefaultPractice.Id : DBNull.Value);
+                command.Parameters.AddWithValue(PersonStatusIdParam, person.Status != null ? (object)person.Status.Id : DBNull.Value);
+                command.Parameters.AddWithValue(TerminationDateParam, person.TerminationDate.HasValue ? (object)person.TerminationDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(TeleponeNumberParam, !string.IsNullOrEmpty(person.TelephoneNumber) ? (object)person.TelephoneNumber : DBNull.Value);
+                command.Parameters.AddWithValue(SeniorityIdParam, person.Seniority != null ? (object)person.Seniority.Id : DBNull.Value);
+                command.Parameters.AddWithValue(TitleIdParam, person.Title != null ? (object)person.Title.TitleId : DBNull.Value);
+                command.Parameters.AddWithValue(UserLoginParam, !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
                 command.Parameters.AddWithValue(IsOffshoreParam, person.IsOffshore);
                 command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
                 command.Parameters.AddWithValue(PersonDivisionIdParam, (int)person.DivisionType != 0 ? (object)((int)person.DivisionType) : DBNull.Value);
-                command.Parameters.AddWithValue(TerminationReasonIdParam,
-                                                person.TerminationReasonid.HasValue
-                                                    ? (object)person.TerminationReasonid.Value
-                                                    : DBNull.Value);
+                command.Parameters.AddWithValue(TerminationReasonIdParam, person.TerminationReasonid.HasValue ? (object)person.TerminationReasonid.Value : DBNull.Value);
+                command.Parameters.AddWithValue(RecruiterIdParam, person.RecruiterId.HasValue ? (object)person.RecruiterId.Value : DBNull.Value);
 
                 if (person.Manager != null)
-                    command.Parameters.AddWithValue(
-                        Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
 
                 var personIdParameter = new SqlParameter(PersonIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(personIdParameter);
@@ -893,6 +866,26 @@ namespace DataAccess
                     throw ex;
                 }
                 person.Id = (int)personIdParameter.Value;
+            }
+        }
+
+        public static void PersonValidations(Person person)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonValidationsProcedure, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(PersonIdParam, person.Id.HasValue ? (object)person.Id.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(FirstNameParam, !string.IsNullOrEmpty(person.FirstName) ? (object)person.FirstName : DBNull.Value);
+                    command.Parameters.AddWithValue(LastNameParam, !string.IsNullOrEmpty(person.LastName) ? (object)person.LastName : DBNull.Value);
+                    command.Parameters.AddWithValue(AliasParam, !string.IsNullOrEmpty(person.Alias) ? (object)person.Alias : DBNull.Value);
+                    command.Parameters.AddWithValue(EmployeeNumberParam, !string.IsNullOrEmpty(person.EmployeeNumber) ? (object)person.EmployeeNumber : DBNull.Value);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
             }
         }
 
@@ -935,58 +928,27 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam,
-                                                person.Id.HasValue ? (object)person.Id.Value : DBNull.Value);
-                command.Parameters.AddWithValue(FirstNameParam,
-                                                !string.IsNullOrEmpty(person.FirstName)
-                                                    ? (object)person.FirstName
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(LastNameParam,
-                                                !string.IsNullOrEmpty(person.LastName)
-                                                    ? (object)person.LastName
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(PTODaysPerAnnumParam, person.PtoDays);
+                command.Parameters.AddWithValue(PersonIdParam, person.Id.HasValue ? (object)person.Id.Value : DBNull.Value);
+                command.Parameters.AddWithValue(FirstNameParam, !string.IsNullOrEmpty(person.FirstName) ? (object)person.FirstName : DBNull.Value);
+                command.Parameters.AddWithValue(LastNameParam, !string.IsNullOrEmpty(person.LastName) ? (object)person.LastName : DBNull.Value);
                 command.Parameters.AddWithValue(HireDateParam, person.HireDate);
-                command.Parameters.AddWithValue(TerminationDateParam,
-                                                person.TerminationDate.HasValue
-                                                    ? (object)person.TerminationDate.Value
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(AliasParam,
-                                                !string.IsNullOrEmpty(person.Alias)
-                                                    ? (object)person.Alias
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(DefaultPracticeParam,
-                                                person.DefaultPractice != null
-                                                    ? (object)person.DefaultPractice.Id
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(TeleponeNumberParam,
-                                                !string.IsNullOrEmpty(person.TelephoneNumber)
-                                                    ? (object)person.TelephoneNumber
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(PersonStatusIdParam,
-                                                person.Status != null ? (object)person.Status.Id : DBNull.Value);
-                command.Parameters.AddWithValue(SeniorityIdParam,
-                                                person.Seniority != null
-                                                    ? (object)person.Seniority.Id
-                                                    : DBNull.Value);
-                command.Parameters.AddWithValue(UserLoginParam,
-                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
-
-                command.Parameters.AddWithValue(EmployeeNumberParam,
-                                                !string.IsNullOrEmpty(person.EmployeeNumber)
-                                                    ? (object)person.EmployeeNumber
-                                                    : DBNull.Value);
+                command.Parameters.AddWithValue(TerminationDateParam, person.TerminationDate.HasValue ? (object)person.TerminationDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(AliasParam, !string.IsNullOrEmpty(person.Alias) ? (object)person.Alias : DBNull.Value);
+                command.Parameters.AddWithValue(DefaultPracticeParam, person.DefaultPractice != null ? (object)person.DefaultPractice.Id : DBNull.Value);
+                command.Parameters.AddWithValue(TeleponeNumberParam, !string.IsNullOrEmpty(person.TelephoneNumber) ? (object)person.TelephoneNumber : DBNull.Value);
+                command.Parameters.AddWithValue(PersonStatusIdParam, person.Status != null ? (object)person.Status.Id : DBNull.Value);
+                command.Parameters.AddWithValue(SeniorityIdParam, person.Seniority != null ? (object)person.Seniority.Id : DBNull.Value);
+                command.Parameters.AddWithValue(UserLoginParam, !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+                command.Parameters.AddWithValue(EmployeeNumberParam, !string.IsNullOrEmpty(person.EmployeeNumber) ? (object)person.EmployeeNumber : DBNull.Value);
                 command.Parameters.AddWithValue(IsOffshoreParam, person.IsOffshore);
                 command.Parameters.AddWithValue(PaychexIDParam, !string.IsNullOrEmpty(person.PaychexID) ? (object)person.PaychexID : DBNull.Value);
                 command.Parameters.AddWithValue(PersonDivisionIdParam, (int)person.DivisionType != 0 ? (object)((int)person.DivisionType) : DBNull.Value);
-                command.Parameters.AddWithValue(TerminationReasonIdParam,
-                                                person.TerminationReasonid.HasValue
-                                                    ? (object)person.TerminationReasonid.Value
-                                                    : DBNull.Value);
-
-                if (person.Manager != null)
-                    command.Parameters.AddWithValue(
-                        Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
+                command.Parameters.AddWithValue(TerminationReasonIdParam, person.TerminationReasonid.HasValue ? (object)person.TerminationReasonid.Value : DBNull.Value);
+                command.Parameters.AddWithValue(TitleIdParam, person.Title != null ? (object)person.Title.TitleId : DBNull.Value);
+                command.Parameters.AddWithValue(RecruiterIdParam, person.RecruiterId.HasValue ? (object)person.RecruiterId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(SLTApprovalParam, person.SLTApproval);
+                command.Parameters.AddWithValue(SLTPTOApprovalParam, person.SLTPTOApproval);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager != null ? (object)person.Manager.Id.Value : DBNull.Value);
 
                 try
                 {
@@ -1011,7 +973,7 @@ namespace DataAccess
         /// Lists all active persons who receive some recruiter commissions.
         /// </summary>
         /// <returns>The list of <see cref="Person"/> objects.</returns>
-        public static List<Person> PersonListRecruiter(int? personId, DateTime? hireDate)
+        public static List<Person> PersonListRecruiter()
         {
             var result = new List<Person>();
 
@@ -1021,10 +983,6 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(PersonIdParam,
-                                                personId.HasValue ? (object)personId.Value : DBNull.Value);
-                command.Parameters.AddWithValue(HireDateParam,
-                                                hireDate.HasValue ? (object)hireDate.Value : DBNull.Value);
 
                 connection.Open();
 
@@ -1032,30 +990,6 @@ namespace DataAccess
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// List the persons who recieve the sales commissions
-        /// </summary>
-        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public static List<Person> PersonListSalesperson(bool includeInactive)
-        {
-            var result = new List<Person>();
-
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListSalespersonProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(IncludeInactiveParam, includeInactive);
-
-                connection.Open();
-                ReadPersons(command, result);
-
-                return result;
-            }
         }
 
         /// <summary>
@@ -1189,68 +1123,6 @@ namespace DataAccess
             return personList;
         }
 
-        public static List<Person> PersonListFilteredWithCurrentPay(
-            int? practice,
-            bool showAll,
-            int pageSize,
-            int pageNo,
-            string looked,
-            DateTime startDate,
-            DateTime endDate,
-            int? recruiterId,
-            int? maxSeniorityLevel,
-            string sortBy,
-            int? timeScaleId,
-            bool projected,
-            bool terminated,
-            bool inactive,
-            char? alphabet)
-        {
-            var personList = new List<Person>();
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListAllSeniorityFilterWithPayProcedure, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(ShowAllParam, showAll);
-                    command.Parameters.AddWithValue(PracticeIdParam,
-                                                    practice.HasValue ? (object)practice.Value : DBNull.Value);
-                    command.Parameters.AddWithValue(StartDateParam,
-                                                    startDate != DateTime.MinValue ? (object)startDate : DBNull.Value);
-                    command.Parameters.AddWithValue(EndDateParam,
-                                                    endDate != DateTime.MinValue ? (object)endDate : DBNull.Value);
-                    command.Parameters.AddWithValue(PageSizeParam,
-                                                    pageSize > 0 && pageNo >= 0 ? (object)pageSize : DBNull.Value);
-                    command.Parameters.AddWithValue(PageNoParam,
-                                                    pageSize > 0 && pageNo >= 0 ? (object)pageNo : DBNull.Value);
-                    command.Parameters.AddWithValue(LookedParam,
-                                                    !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
-                    command.Parameters.AddWithValue(RecruiterIdParam,
-                                                    recruiterId.HasValue ? (object)recruiterId.Value : DBNull.Value);
-                    command.Parameters.AddWithValue(MaxSeniorityLevelParam,
-                                                    maxSeniorityLevel.HasValue
-                                                        ? (object)maxSeniorityLevel.Value
-                                                        : DBNull.Value);
-                    if (!string.IsNullOrEmpty(sortBy))
-                    {
-                        command.Parameters.AddWithValue(SortByParam, sortBy);
-                    }
-                    command.Parameters.AddWithValue(TimescaleIdParam,
-                                                    timeScaleId.HasValue ? (object)timeScaleId.Value : DBNull.Value);
-                    command.Parameters.AddWithValue(ProjectedParam, projected);
-                    command.Parameters.AddWithValue(TerminatedParam, terminated);
-                    command.Parameters.AddWithValue(InactiveParam, inactive);
-                    command.Parameters.AddWithValue(AlphabetParam, alphabet.HasValue ? (object)alphabet.Value : DBNull.Value);
-
-                    connection.Open();
-                    ReadPersonsWithCurrentPay(command, personList);
-                }
-            }
-            return personList;
-        }
-
         public static List<Person> PersonListFilteredWithCurrentPayByCommaSeparatedIdsList(
            string practiceIdsSelected,
            bool showAll,
@@ -1277,30 +1149,19 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(ShowAllParam, showAll);
-                    command.Parameters.AddWithValue(PracticeIdsListParam,
-                                                    practiceIdsSelected != null ? (object)practiceIdsSelected : DBNull.Value);
-                    command.Parameters.AddWithValue(StartDateParam,
-                                                    startDate != DateTime.MinValue ? (object)startDate : DBNull.Value);
-                    command.Parameters.AddWithValue(EndDateParam,
-                                                    endDate != DateTime.MinValue ? (object)endDate : DBNull.Value);
-                    command.Parameters.AddWithValue(PageSizeParam,
-                                                    pageSize > 0 && pageNo >= 0 ? (object)pageSize : DBNull.Value);
-                    command.Parameters.AddWithValue(PageNoParam,
-                                                    pageSize > 0 && pageNo >= 0 ? (object)pageNo : DBNull.Value);
-                    command.Parameters.AddWithValue(LookedParam,
-                                                    !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
-                    command.Parameters.AddWithValue(RecruiterIdsListParam,
-                                                    recruiterIdsSelected != null ? (object)recruiterIdsSelected : DBNull.Value);
-                    command.Parameters.AddWithValue(MaxSeniorityLevelParam,
-                                                    maxSeniorityLevel.HasValue
-                                                        ? (object)maxSeniorityLevel.Value
-                                                        : DBNull.Value);
+                    command.Parameters.AddWithValue(PracticeIdsListParam,practiceIdsSelected != null ? (object)practiceIdsSelected : DBNull.Value);
+                    command.Parameters.AddWithValue(StartDateParam,startDate != DateTime.MinValue ? (object)startDate : DBNull.Value);
+                    command.Parameters.AddWithValue(EndDateParam,endDate != DateTime.MinValue ? (object)endDate : DBNull.Value);
+                    command.Parameters.AddWithValue(PageSizeParam,pageSize > 0 && pageNo >= 0 ? (object)pageSize : DBNull.Value);
+                    command.Parameters.AddWithValue(PageNoParam,pageSize > 0 && pageNo >= 0 ? (object)pageNo : DBNull.Value);
+                    command.Parameters.AddWithValue(LookedParam,!string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
+                    command.Parameters.AddWithValue(RecruiterIdsListParam,recruiterIdsSelected != null ? (object)recruiterIdsSelected : DBNull.Value);
+                    command.Parameters.AddWithValue(MaxSeniorityLevelParam,maxSeniorityLevel.HasValue? (object)maxSeniorityLevel.Value: DBNull.Value);
                     if (!string.IsNullOrEmpty(sortBy))
                     {
                         command.Parameters.AddWithValue(SortByParam, sortBy);
                     }
-                    command.Parameters.AddWithValue(TimescaleIdsListParam,
-                                                    timeScaleIdsSelected != null ? (object)timeScaleIdsSelected : DBNull.Value);
+                    command.Parameters.AddWithValue(TimescaleIdsListParam,timeScaleIdsSelected != null ? (object)timeScaleIdsSelected : DBNull.Value);
                     command.Parameters.AddWithValue(ProjectedParam, projected);
                     command.Parameters.AddWithValue(TerminatedParam, terminated);
                     command.Parameters.AddWithValue(TerminationPendingParam, terminatedPending);
@@ -1499,22 +1360,21 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<Person>();
-                    ReadPersonsIdFirstNameLastNameAndSeniority(reader, result);
+                    ReadPersonsIdFirstNameLastNameAndTitle(reader, result);
                     return result;
                 }
             }
         }
 
-
-        private static void ReadPersonsIdFirstNameLastNameAndSeniority(SqlDataReader reader, List<Person> result)
+        private static void ReadPersonsIdFirstNameLastNameAndTitle(SqlDataReader reader, List<Person> result)
         {
             if (reader.HasRows)
             {
                 int personIdIndex = reader.GetOrdinal(PersonIdColumn);
                 int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 int lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
-                int seniorityNameIndex = reader.GetOrdinal(SeniorityNameColumn);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
 
                 while (reader.Read())
                 {
@@ -1526,19 +1386,17 @@ namespace DataAccess
                         LastName = reader.GetString(lastNameIndex),
                     };
 
-                    person.Seniority =
-                                new Seniority
+                    person.Title =
+                                new Title
                                 {
-                                    Id = reader.GetInt32(seniorityIdIndex),
-                                    Name = reader.GetString(seniorityNameIndex)
+                                    TitleId = reader.GetInt32(titleIdIndex),
+                                    TitleName = reader.GetString(titleIndex)
                                 };
 
                     result.Add(person);
                 }
             }
         }
-
-
 
         /// <summary>
         /// Retrieves a number of the work days for the <see cref="Person"/> and the period specified.
@@ -1783,8 +1641,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(AppicationNameParam, "PracticeManagement");
                 command.Parameters.AddWithValue(UserNameParam, userName);
                 command.Parameters.AddWithValue(TablesToDeleteFromParam, 15);
-                var NumTablesDeletedFromParm = new SqlParameter(PersonIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
-                command.Parameters.Add(NumTablesDeletedFromParm);
+                var NumTablesDeletedFrom = new SqlParameter(NumTablesDeletedFromParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
+                command.Parameters.Add(NumTablesDeletedFrom);
 
                 if (connection.State != ConnectionState.Open)
                 {
@@ -1896,45 +1754,6 @@ namespace DataAccess
                     command.Transaction = activeTransaction;
                 }
                 command.ExecuteNonQuery();
-            }
-        }
-
-        /// <summary>
-        /// Verifies the person's data for an integrity.
-        /// </summary>
-        /// <param name="personId">An ID of the person to be verified.</param>
-        /// <exception cref="DataAccessException">When the person's data are incorrect.</exception>
-        public static void PersonEnsureIntegrity(int personId, SqlConnection connection = null, SqlTransaction activeTransaction = null)
-        {
-            if (connection == null)
-            {
-                connection = new SqlConnection(DataSourceHelper.DataConnection);
-            }
-
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonEnsureIntegrityProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-
-                try
-                {
-                    if (connection.State != ConnectionState.Open)
-                    {
-                        connection.Open();
-                    }
-                    if (activeTransaction != null)
-                    {
-                        command.Transaction = activeTransaction;
-                    }
-
-                    command.ExecuteNonQuery();
-                }
-                catch (SqlException ex)
-                {
-                    throw new DataAccessException(ex.Message, ex);
-                }
             }
         }
 
@@ -2071,7 +1890,6 @@ namespace DataAccess
                     int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
                     int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
                     int seniorityNameIndex = reader.GetOrdinal(SeniorityNameColumn);
-                    int ptoDaysPerAnnumIndex = reader.GetOrdinal(PTODaysPerAnnumColumn);
                     int managerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerId);
                     int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
                     int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
@@ -2084,6 +1902,23 @@ namespace DataAccess
                     int paychexIDIndex;
                     int divisionIdIndex;
                     int terminationReasonIdIndex = -1;
+                    int titleIdIndex = -1;
+                    int recruterIdIndex = -1;
+                    int titleIndex = -1;
+                    try
+                    {
+                        titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+			titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                    }
+                    catch
+                    { }
+
+                    try
+                    {
+                        recruterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterIdColumn);
+                    }
+                    catch
+                    { }
 
                     try
                     {
@@ -2179,7 +2014,6 @@ namespace DataAccess
                                 !reader.IsDBNull(aliasIndex)
                                     ? reader.GetString(aliasIndex)
                                     : string.Empty,
-                            PtoDays = reader.GetInt32(ptoDaysPerAnnumIndex),
                             HireDate = (DateTime)reader[HireDateColumn],
                             TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty
                         };
@@ -2219,6 +2053,16 @@ namespace DataAccess
                         if (!Convert.IsDBNull(reader[EmployeeNumberColumn]))
                         {
                             person.EmployeeNumber = (string)reader[EmployeeNumberColumn];
+                        }
+
+                        if (recruterIdIndex > -1 && !reader.IsDBNull(recruterIdIndex))
+                        {
+                            person.RecruiterId = reader.GetInt32(recruterIdIndex);
+                        }
+
+                        if (titleIdIndex > -1 && !reader.IsDBNull(titleIdIndex))
+                        {
+                            person.Title = new Title() { TitleId = reader.GetInt32(titleIdIndex), TitleName = reader.GetString(titleIndex) };
                         }
 
                         person.Status = new PersonStatus
@@ -2297,7 +2141,6 @@ namespace DataAccess
             }
         }
 
-
         private static void ReadPersonsWithCurrentPay(SqlCommand command, ICollection<Person> personList)
         {
             using (SqlDataReader reader = command.ExecuteReader())
@@ -2307,9 +2150,8 @@ namespace DataAccess
                     int aliasIndex = reader.GetOrdinal(AliasColumn);
                     int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
                     int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
-                    int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
-                    int seniorityNameIndex = reader.GetOrdinal(SeniorityNameColumn);
-                    int ptoDaysPerAnnumIndex = reader.GetOrdinal(PTODaysPerAnnumColumn);
+                    int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                    int titleNameIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
                     int managerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerId);
                     int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
                     int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
@@ -2325,13 +2167,10 @@ namespace DataAccess
                     int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
                     int timescaleNameIndex = reader.GetOrdinal(TimescaleNameColumn);
                     int amountHourlyIndex = reader.GetOrdinal(AmountHourlyColumn);
-                    int timesPaidPerMonthIndex = reader.GetOrdinal(TimesPaidPerMonthColumn);
-                    int termsIndex = reader.GetOrdinal(TermsColumn);
                     int vacationDaysIndex = reader.GetOrdinal(VacationDaysColumn);
                     int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
                     int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
                     int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
-                    int defaultHoursPerDayIndex = reader.GetOrdinal(DefaultHoursPerDayColumn);
                     int payPersonIdIndex = reader.GetOrdinal(PayPersonIdColumn);
 
                     //  PracticesOwned column is not defined for each set that
@@ -2354,7 +2193,6 @@ namespace DataAccess
                             FirstName = (string)reader[FirstNameColumn],
                             LastName = (string)reader[LastNameColumn],
                             Alias = !reader.IsDBNull(aliasIndex) ? reader.GetString(aliasIndex) : string.Empty,
-                            PtoDays = reader.GetInt32(ptoDaysPerAnnumIndex),
                             HireDate = (DateTime)reader[HireDateColumn],
                             IsStrawMan = !reader.IsDBNull(isStrawManIndex) ? (bool)reader.GetBoolean(isStrawManIndex) : false,
                             TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty,
@@ -2373,10 +2211,10 @@ namespace DataAccess
                                 Id = reader.GetInt32(personStatusIdIndex),
                                 Name = reader.GetString(personStatusNameIndex)
                             },
-                            Seniority = !reader.IsDBNull(seniorityIdIndex) ? new Seniority
+                            Title = !reader.IsDBNull(titleIdIndex) ? new Title
                             {
-                                Id = reader.GetInt32(seniorityIdIndex),
-                                Name = reader.GetString(seniorityNameIndex)
+                                TitleId = reader.GetInt32(titleIdIndex),
+                                TitleName = reader.GetString(titleNameIndex)
                             } : null,
                             Manager = !Convert.IsDBNull(reader[managerIdIndex]) ? new Person
                             {
@@ -2418,19 +2256,13 @@ namespace DataAccess
                                 EndDate =
                                     !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
                                 AmountHourly = reader.GetDecimal(amountHourlyIndex),
-                                TimesPaidPerMonth =
-                                    !reader.IsDBNull(timesPaidPerMonthIndex) ?
-                                    (int?)reader.GetInt32(timesPaidPerMonthIndex) : null,
-                                Terms = !reader.IsDBNull(termsIndex) ? (int?)reader.GetInt32(termsIndex) : null,
                                 VacationDays =
                                     !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
                                 BonusAmount = reader.GetDecimal(bonusAmountIndex),
                                 BonusHoursToCollect =
                                     !reader.IsDBNull(bonusHoursToCollectIndex) ?
                                     (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
-                                IsYearBonus = reader.GetBoolean(isYearBonusIndex),
-                                DefaultHoursPerDay = reader.GetDecimal(defaultHoursPerDayIndex)
-
+                                IsYearBonus = reader.GetBoolean(isYearBonusIndex)
                             };
                             person.CurrentPay = pay;
                         }
@@ -2453,6 +2285,9 @@ namespace DataAccess
                 int terminationDateIndex;
                 int isStrawManIndex;
                 int personStatusIdIndex;
+                int aliasIndex = -1;
+                int seniorityIdColumnIndex = -1;
+                int seniorityNameColumnIndex = -1;
                 try
                 {
                     isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
@@ -2496,6 +2331,20 @@ namespace DataAccess
                     terminationDateIndex = -1;
                 }
 
+                try
+                {
+                    aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
+                }
+                catch
+                {}
+                try
+                {
+                    seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
+                    seniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
+                }
+                catch
+                {}
+
                 while (reader.Read())
                 {
                     var personId = reader.GetInt32(personIdIndex);
@@ -2506,6 +2355,18 @@ namespace DataAccess
                         LastName = reader.GetString(lastNameIndex),
                         HireDate = (hireDateIndex > -1) ? reader.GetDateTime(hireDateIndex) : DateTime.MinValue
                     };
+                    if (aliasIndex > -1 && !reader.IsDBNull(aliasIndex))
+                    {
+                        person.Alias = reader.GetString(aliasIndex);
+                    }
+                    if (seniorityIdColumnIndex > -1 && !reader.IsDBNull(seniorityIdColumnIndex))
+                    {
+                        person.Seniority = new Seniority
+                        {
+                            Id = reader.GetInt32(seniorityIdColumnIndex),
+                            Name = reader.GetString(seniorityNameColumnIndex)
+                        };
+                    }
                     if (terminationDateIndex > -1)
                     {
                         person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
@@ -2703,8 +2564,7 @@ namespace DataAccess
             }
         }
 
-        public static void SetNewPasswordForUser(string userName,
-            string newPassword, string passwordSalt, int passwordFormat, DateTime currentTimeUtc, string applicationName = "PracticeManagement")
+        public static void SetNewPasswordForUser(string userName, string newPassword, string passwordSalt, int passwordFormat, DateTime currentTimeUtc, string applicationName = "PracticeManagement")
         {
 
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -3021,12 +2881,9 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(AmountParam, currentPay.Amount.Value);
                     command.Parameters.AddWithValue(TimescaleParam, currentPay.Timescale);
-                    command.Parameters.AddWithValue(TimesPaidPerMonthParam, currentPay.TimesPaidPerMonth.HasValue ? (object)currentPay.TimesPaidPerMonth.Value : DBNull.Value);
-                    command.Parameters.AddWithValue(TermsParam, currentPay.Terms.HasValue ? (object)currentPay.Terms.Value : DBNull.Value);
                     command.Parameters.AddWithValue(VacationDaysParam, currentPay.VacationDays.HasValue ? (object)currentPay.VacationDays.Value : DBNull.Value);
                     command.Parameters.AddWithValue(BonusAmountParam, currentPay.BonusAmount.Value);
                     command.Parameters.AddWithValue(BonusHoursToCollectParam, currentPay.BonusHoursToCollect.HasValue ? (object)currentPay.BonusHoursToCollect.Value : DBNull.Value);
-                    command.Parameters.AddWithValue(DefaultHoursPerDayParam, currentPay.DefaultHoursPerDay);
                     command.Parameters.AddWithValue(StartDateParam, currentPay.StartDate == DateTime.MinValue ? DBNull.Value : (object)currentPay.StartDate);
                     command.Parameters.AddWithValue(PersonStatusIdParam, person.Status != null && person.Id.HasValue ? (object)person.Status.Id : (int)PersonStatusType.Active);
 
@@ -3251,20 +3108,16 @@ namespace DataAccess
             int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
             int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
             int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
-
             int payPersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.PayPersonIdColumn);
             int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
             int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
             int amountIndex = reader.GetOrdinal(Constants.ColumnNames.Amount);
             int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
             int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
-            int timesPaidPerMonthIndex = reader.GetOrdinal(TimesPaidPerMonthColumn);
-            int termsIndex = reader.GetOrdinal(TermsColumn);
             int vacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.VacationDaysColumn);
             int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
             int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
             int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
-            int defaultHoursPerDayIndex = reader.GetOrdinal(DefaultHoursPerDayColumn);
 
             Person person = null;
             if (reader.HasRows)
@@ -3298,10 +3151,6 @@ namespace DataAccess
                             StartDate = reader.GetDateTime(startDateIndex),
                             EndDate =
                                 !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
-                            TimesPaidPerMonth =
-                                !reader.IsDBNull(timesPaidPerMonthIndex) ?
-                                (int?)reader.GetInt32(timesPaidPerMonthIndex) : null,
-                            Terms = !reader.IsDBNull(termsIndex) ? (int?)reader.GetInt32(termsIndex) : null,
                             VacationDays =
                                 !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
                             BonusAmount = reader.GetDecimal(bonusAmountIndex),
@@ -3309,8 +3158,6 @@ namespace DataAccess
                                 !reader.IsDBNull(bonusHoursToCollectIndex) ?
                                 (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
                             IsYearBonus = reader.GetBoolean(isYearBonusIndex),
-                            DefaultHoursPerDay = reader.GetDecimal(defaultHoursPerDayIndex)
-
                         };
                         person.CurrentPay = pay;
                     }
@@ -3410,6 +3257,7 @@ namespace DataAccess
                 {
                     var person = new Person();
                     ReadFirstLastName(reader, person);
+                    person.Id = personId;
                     return person;
                 }
             }
@@ -3572,37 +3420,6 @@ namespace DataAccess
             }
         }
 
-        public static List<Timescale> GetAllPayTypes()
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetAllPayTypesProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    var result = new List<Timescale>();
-
-                    if (reader.HasRows)
-                    {
-                        int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
-                        int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
-                        while (reader.Read())
-                        {
-                            var timescale = new Timescale
-                            {
-                                Id = reader.GetInt32(timescaleIdIndex),
-                                Name = reader.GetString(timescaleNameIndex)
-                            };
-                            result.Add(timescale);
-                        }
-                    }
-                    return result;
-                }
-            }
-        }
-
         public static List<TerminationReason> GetTerminationReasonsList()
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -3644,7 +3461,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         /// <summary>
         /// Reading hiredate and termination date for a person.
@@ -3810,6 +3626,55 @@ namespace DataAccess
                 bool result = (bool)command.ExecuteScalar();
                 return result;
             }
+        }
+
+
+        public static PersonPassword GetPersonEncodedPassword(int personId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataAccess.Other.DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonEncodedPasswordProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(PersonIdParam, personId);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    return ReadPersonEncodedPassword(reader);
+                }
+            }
+        }
+
+        private static PersonPassword ReadPersonEncodedPassword(SqlDataReader reader)
+        {
+            PersonPassword personPassword = null;
+            if (reader.HasRows)
+            {
+                int passwordIndex = reader.GetOrdinal(PasswordColumn);
+
+                while (reader.Read())
+                {
+                    personPassword = new PersonPassword
+                    {
+                        Password = reader.GetString(passwordIndex)
+                    };
+                }
+            }
+            return personPassword;
+        }
+
+        public static void DeletePersonEncodedPassword(int personId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataAccess.Other.DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.DeletePersonEncodedPasswordProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(PersonIdParam, personId);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+
         }
     }
 }
