@@ -5,7 +5,6 @@ AS
 	       p.Amount AS Rate,
 	       p.Timescale,
 	       t.Name AS TimescaleName,
-	       p.DefaultHoursPerDay,
 	       CASE
 	           WHEN p.Timescale IN (1, 3, 4)
 	           THEN p.Amount
