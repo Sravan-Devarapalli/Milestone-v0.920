@@ -4,7 +4,7 @@
 	@EndDate	DATETIME,
 	@TimeScaleIds	XML = null,
 	@PersonStatusIds	XML = null,
-	@SeniorityIds	XML = null,
+	@TitleIds	XML = null,
 	@TerminationReasonIds XML = NULL,
 	@PracticeIds	XML = null,
 	@ExcludeInternalPractices	BIT,
@@ -41,10 +41,10 @@ BEGIN
 			FPH.RecruiterId,
 			RCP.FirstName AS RecruiterFirstName ,
 			RCP.LastName RecruiterLastName,
-			S.SeniorityId,
-			S.Name AS SeniorityName,
-			SC.SeniorityCategoryId,
-			SC.Name AS SeniorityCategory,
+			T.TitleId,
+			T.Title,
+			TT.TitleTypeId,
+			TT.TitleType,
 			FPH.DivisionId,
 			FPH.HireDate,
 			FPH.TerminationDate,
@@ -60,8 +60,8 @@ BEGIN
 	LEFT JOIN dbo.Timescale TS ON TS.TimescaleId = Pay.Timescale
 	LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = Pay.PracticeId
 	LEFT JOIN dbo.Person RCP ON FPH.RecruiterId = RCP.PersonId
-	LEFT JOIN dbo.Seniority S ON S.[SeniorityId] = Pay.[SeniorityId]
-	LEFT JOIN dbo.SeniorityCategory SC ON SC.SeniorityCategoryId = S.SeniorityCategoryId
+	LEFT JOIN dbo.Title T ON T.TitleId = Pay.TitleId
+	LEFT JOIN dbo.TitleType TT ON TT.TitleTypeId = T.TitleTypeId
 	WHERE	(
 				@PersonStatusIds IS NULL
 				OR PS.PersonStatusId IN ( SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@PersonStatusIds))
@@ -83,8 +83,8 @@ BEGIN
 			)
 			AND
 			( 
-				@SeniorityIds IS NULL
-				OR ISNULL(S.SeniorityId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@SeniorityIds))
+				@TitleIds IS NULL
+				OR ISNULL(T.TitleId,0) IN (SELECT  ResultString FROM    dbo.[ConvertXmlStringInToStringTable](@TitleIds))
 			)
 			AND 
 			( 
