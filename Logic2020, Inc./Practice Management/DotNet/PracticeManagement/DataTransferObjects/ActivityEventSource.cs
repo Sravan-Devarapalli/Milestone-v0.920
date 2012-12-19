@@ -116,8 +116,15 @@ namespace DataTransferObjects
         [EnumMember]
         ChangedPracticeCapability = 53,
         [EnumMember]
-        DeletedPracticeCapability = 54
-
+        DeletedPracticeCapability = 54,
+        [EnumMember]
+        Title = 55,
+        [EnumMember]
+        AddedTitle = 56,
+        [EnumMember]
+        ChangedTitle = 57,
+        [EnumMember]
+        DeletedTitle = 58
     }
 }
 
