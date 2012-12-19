@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI.WebControls;
 using System.Collections;
+using System.Web.UI.WebControls;
 
 namespace PraticeManagement.Utils
 {
@@ -27,6 +24,9 @@ namespace PraticeManagement.Utils
             if (ddList.Items.Count <= 1)
                 return;
 
+            ListItem firstItem = ddList.Items[0];
+            ddList.Items.Remove(firstItem);
+
             ArrayList arrItems = new ArrayList();
             for (i = 0; i < ddList.Items.Count; i++)
             {
@@ -37,7 +37,7 @@ namespace PraticeManagement.Utils
             arrItems.Sort(comparer);
 
             ddList.Items.Clear();
-
+            ddList.Items.Add(firstItem);
             for (i = 0; i < arrItems.Count; i++)
             {
                 ddList.Items.Add((ListItem)arrItems[i]);
