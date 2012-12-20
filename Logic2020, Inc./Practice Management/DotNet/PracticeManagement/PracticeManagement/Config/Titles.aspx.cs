@@ -4,6 +4,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Controls;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Config
 {
@@ -41,7 +42,7 @@ namespace PraticeManagement.Config
             {
                 if (salaryBandsTitleTypes == null)
                 {
-                    salaryBandsTitleTypes = ServiceCallers.Custom.Title(t => t.GetTitleTypes());
+                    salaryBandsTitleTypes = SettingsHelper.GetTitleTypes();
                 }
                 return salaryBandsTitleTypes;
             }
