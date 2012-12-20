@@ -528,6 +528,7 @@ namespace PracticeManagementService
         {
             string password = string.Empty;
             bool isReHireDueToPay = false;
+            bool isAdministrator = Roles.IsUserInRole(currentUser, DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
                 connection.Open();
@@ -579,7 +580,7 @@ namespace PracticeManagementService
                 }
 
                 // Saving the Locked-Out value
-                if (Roles.IsUserInRole(currentUser, DataTransferObjects.Constants.RoleNames.AdministratorRoleName) // && userInfo != null && person.LockedOut != userInfo.IsLockedOut
+                if (isAdministrator  // && userInfo != null && person.LockedOut != userInfo.IsLockedOut
                      && !isLockedOutUpdated)
                 {
                     if (person.LockedOut)
