@@ -505,6 +505,7 @@ namespace PraticeManagement
                 imgUpdateCompensation_OnClick((Object)imgUpdate, new EventArgs());
             }
             mpeEmployeePayTypeChange.Hide();
+            cvEmployeePayTypeChangeViolation.Enabled = true;
         }
 
         protected void btnEmployeePayTypeChangeViolationCancel_Click(object source, EventArgs args)
@@ -2045,7 +2046,6 @@ namespace PraticeManagement
         protected void imgUpdateCompensation_OnClick(object sender, EventArgs e)
         {
             mlConfirmation.ClearMessage();
-            cvEmployeePayTypeChangeViolation.Enabled = true;
             if (validateAndSave(sender, e))
             {
                 IsRehire = false;
@@ -3057,7 +3057,6 @@ namespace PraticeManagement
             {
                 TransferToCompesationDetailPage(person);
             }
-            cvEmployeePayTypeChangeViolation.Enabled = false;
             using (var serviceClient = new PersonServiceClient())
             {
                 try
