@@ -37,6 +37,7 @@ using PraticeManagement.ConfigurationService;
 using PraticeManagement.Controls.Opportunities;
 using PraticeManagement.ReportService;
 using System.ComponentModel;
+using PraticeManagement.Utils;
 
 #endregion
 
@@ -685,8 +686,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
-        public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate,
-                                          DateTime endDate, string statusIds, bool fillWithPersonFirstLastName = false)
+        public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate,DateTime endDate, string statusIds, bool fillWithPersonFirstLastName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -742,12 +742,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
-        public static void FillPersonListForMilestone(
-            ListControl control,
-            string firstItemText,
-            int? milestonePersonId,
-            DateTime startDate,
-            DateTime endDate)
+        public static void FillPersonListForMilestone(ListControl control,string firstItemText,int? milestonePersonId,DateTime startDate,DateTime endDate)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -793,6 +788,7 @@ namespace PraticeManagement.Controls
                 }
             }
         }
+
         public static void FillStrawManList(ListControl control, string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
@@ -820,8 +816,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="personId">An ID of the <see cref="Person"/> to fill the list for.</param>
         /// <param name="hireDate">A Hire Date of the person.</param>
-        public static void FillRecruiterList(ListControl control,
-                                             string firstItemText)
+        public static void FillRecruiterList(ListControl control,string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -934,8 +929,7 @@ namespace PraticeManagement.Controls
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        public static void FillSalespersonList(Person person, ListControl control, string firstItemText,
-                                               bool includeInactive)
+        public static void FillSalespersonList(Person person, ListControl control, string firstItemText,bool includeInactive)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -960,11 +954,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        public static void FillProjectOwnerList(
-            ListControl control,
-            string firstItemText,
-            DateTime? endDate,
-            bool includeInactive)
+        public static void FillProjectOwnerList(ListControl control,string firstItemText,DateTime? endDate,bool includeInactive)
         {
             FillProjectOwnerList(control, firstItemText, includeInactive, null);
         }
@@ -977,11 +967,7 @@ namespace PraticeManagement.Controls
         /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <param name="person">Person who requests the info</param>
-        public static void FillProjectOwnerList(
-            ListControl control,
-            string firstItemText,
-            bool includeInactive,
-            Person person)
+        public static void FillProjectOwnerList(ListControl control,string firstItemText,bool includeInactive,Person person)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -1039,8 +1025,7 @@ namespace PraticeManagement.Controls
         }
 
 
-        public static void FillPersonList(ListControl control, string firstItemText, Person[] persons,
-                                           string firstItemValue, bool fillWithPersonFirstLastName = false)
+        public static void FillPersonList(ListControl control, string firstItemText, Person[] persons,string firstItemValue, bool fillWithPersonFirstLastName = false)
         {
             control.Items.Clear();
 
@@ -1287,8 +1272,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        private static void FillCheckBoxList<T>(
-            ListControl control, string firstItemText, int? selectedValue, T[] items, string firstItemValue) where T : IIdNameObject
+        private static void FillCheckBoxList<T>(ListControl control, string firstItemText, int? selectedValue, T[] items, string firstItemValue) where T : IIdNameObject
         {
             control.Items.Clear();
             control.Items.Add(new ListItem(firstItemText, firstItemValue));
@@ -1506,7 +1490,7 @@ namespace PraticeManagement.Controls
         /// <param name="control">The control to be filled.</param>
         public static void FillDomainsList(ListControl control)
         {
-            var domains = ServiceCallers.Invoke<ConfigurationServiceClient, string[]>(c => c.GetAllDomains()).Select(p => new { Name = p, Id = p }).ToArray();
+            var domains = SettingsHelper.GetDomainsList().Select(p => new { Name = p, Id = p }).ToArray();
             FillListDefault(control, null, domains, true, "Id", "Name");
             control.SelectedIndex = 0;
         }
@@ -1719,8 +1703,7 @@ namespace PraticeManagement.Controls
         /// <param name="clientList">Clients list control</param>
         /// <param name="groupList">Groups list control</param>
         /// <param name="clients">Collection of clients</param>
-        private static void PrepareGroupList(CascadingMsdd clientList, ListControl groupList,
-                                             IEnumerable<Client> clients)
+        private static void PrepareGroupList(CascadingMsdd clientList, ListControl groupList,IEnumerable<Client> clients)
         {
             groupList.Items.Clear();
 
@@ -1795,7 +1778,6 @@ namespace PraticeManagement.Controls
                 }
             }
         }
-
 
         public static IEnumerable<Client> GetAllClientsSecure(Person person, bool inactives, bool applyNewRule = false)
         {
@@ -1907,20 +1889,17 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillListDefault(ListControl control, string firstItemText, object[] statuses,
-                                            bool noFirstItem)
+        public static void FillListDefault(ListControl control, string firstItemText, object[] statuses,bool noFirstItem)
         {
             FillListDefault(control, firstItemText, statuses, noFirstItem, DefaultIdFieldName, DefaultNameFieldName);
         }
 
-        public static void FillListDefaultWithEncodedName(ListControl control, string firstItemText, object[] statuses,
-                                            bool noFirstItem)
+        public static void FillListDefaultWithEncodedName(ListControl control, string firstItemText, object[] statuses,bool noFirstItem)
         {
             FillListDefault(control, firstItemText, statuses, noFirstItem, DefaultIdFieldName, DefaultNameFieldEndodedName);
         }
 
-        public static void FillListDefault(ListControl control, string firstItemText, object[] statuses,
-                                            bool noFirstItem, string valueField, string NameField)
+        public static void FillListDefault(ListControl control, string firstItemText, object[] statuses,bool noFirstItem, string valueField, string NameField)
         {
             control.AppendDataBoundItems = true;
             control.Items.Clear();
@@ -2212,7 +2191,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         public static string GetEncodedPassword(string password, string passwordSalt)
         {
             using (var person = new PersonServiceClient())
@@ -2220,7 +2198,6 @@ namespace PraticeManagement.Controls
                 return person.GetEncodedPassword(password, passwordSalt);
             }
         }
-
 
         public static List<MilestonePerson> GetMilestonePersonListByProjectWithoutPay(int projectId)
         {
@@ -2230,7 +2207,6 @@ namespace PraticeManagement.Controls
                 return milestonePersonList.OrderBy(mp => mp.Person.PersonLastFirstName).ThenBy(mp => mp.StartDate).ToList();
             }
         }
-
 
         public static Dictionary<DateTime, bool> GetIsNoteRequiredDetailsForSelectedDateRange(DateTime start, DateTime end, int personId)
         {
