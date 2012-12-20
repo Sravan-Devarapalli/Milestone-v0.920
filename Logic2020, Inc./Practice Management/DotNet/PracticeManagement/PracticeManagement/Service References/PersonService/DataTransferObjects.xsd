@@ -320,12 +320,12 @@
   <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
   <xs:complexType name="Title">
     <xs:sequence>
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="MaximumSalary" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="MinimumSalary" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PTOAccrual" type="xs:int" />
       <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
       <xs:element minOccurs="0" name="TitleId" type="xs:int" />
-      <xs:element minOccurs="0" name="TitleInUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TitleType" nillable="true" type="tns:TitleType" />
     </xs:sequence>
