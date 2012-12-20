@@ -908,9 +908,14 @@ namespace PraticeManagement
             if (IsWizards)
             {
                 if (personnelCompensation.TitleId.HasValue)
+                {
                     ddlPersonTitle.SelectedValue = personnelCompensation.TitleId.Value.ToString();
+                }
                 else
-                    ddlPersonTitle.SelectedIndex = 0;
+                {
+                    if(ddlPersonTitle.Items.FindByValue("") != null)
+                        ddlPersonTitle.SelectedValue = ddlPersonTitle.Items.FindByValue("").Value;
+                }
             }
         }
 
