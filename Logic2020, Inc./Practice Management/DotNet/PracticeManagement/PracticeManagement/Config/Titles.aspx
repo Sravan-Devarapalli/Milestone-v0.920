@@ -187,7 +187,7 @@
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Salary Band And PTO Accrual" TitleId='<%# Eval("TitleId") %>'
-                                Visible='<%# IsDeleteButtonVisible((bool)Eval("TitleInUse")) %>' />
+                                Visible='<%# IsDeleteButtonVisible((bool)Eval("InUse")) %>' />
                             <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgDelete" runat="server" TargetControlID="imgDelete"
                                 ConfirmText="Are you sure. Do you want to delete the Salary Band And PTO Accrual?">
                             </AjaxControlToolkit:ConfirmButtonExtender>
