@@ -4104,6 +4104,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\PersonValidations.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_PersonPassword_PersonId.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
