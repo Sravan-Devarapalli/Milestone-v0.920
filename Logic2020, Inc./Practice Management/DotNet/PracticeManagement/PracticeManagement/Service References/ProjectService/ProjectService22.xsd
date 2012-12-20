@@ -260,6 +260,7 @@
       <xs:element minOccurs="0" name="ImageUrl" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q5:ArrayOfPersonIndustry" />
+      <xs:element minOccurs="0" name="IsAdmin" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHighlighted" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOffshore" type="xs:boolean" />
@@ -285,6 +286,8 @@
       <xs:element minOccurs="0" name="RecruiterId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="RecruiterLastName" nillable="true" type="xs:string" />
       <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RoleNames" nillable="true" type="q9:ArrayOfstring" />
+      <xs:element minOccurs="0" name="SLTApproval" type="xs:boolean" />
+      <xs:element minOccurs="0" name="SLTPTOApproval" type="xs:boolean" />
       <xs:element minOccurs="0" name="Seniority" nillable="true" type="tns:Seniority" />
       <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Skills" nillable="true" type="q10:ArrayOfPersonSkill" />
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
@@ -312,6 +315,7 @@
       <xs:element minOccurs="0" name="PracticeId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PracticeName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SLTApproval" type="xs:boolean" />
+      <xs:element minOccurs="0" name="SLTPTOApproval" type="xs:boolean" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Timescale" type="tns:TimescaleType" />
       <xs:element minOccurs="0" name="TimescaleName" nillable="true" type="xs:string" />
@@ -447,12 +451,12 @@
   <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
   <xs:complexType name="Title">
     <xs:sequence>
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="MaximumSalary" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="MinimumSalary" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PTOAccrual" type="xs:int" />
       <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
       <xs:element minOccurs="0" name="TitleId" type="xs:int" />
-      <xs:element minOccurs="0" name="TitleInUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TitleType" nillable="true" type="tns:TitleType" />
     </xs:sequence>
