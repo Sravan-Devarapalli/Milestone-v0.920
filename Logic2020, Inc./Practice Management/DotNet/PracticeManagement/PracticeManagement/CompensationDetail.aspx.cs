@@ -9,6 +9,7 @@ using PraticeManagement.PersonService;
 
 namespace PraticeManagement
 {
+    using System.Collections.Generic;
     using System.Threading;
     using System.Web;
     using System.Web.Security;
@@ -30,6 +31,8 @@ namespace PraticeManagement
         private int _saveCode;
         private bool? _userIsAdministratorValue;
         private bool? _userIsHRValue;
+        private bool IsErrorPanelDisplay;
+        private bool IsOtherPanelDisplay;
 
         #endregion
 
@@ -111,7 +114,9 @@ namespace PraticeManagement
 
         #endregion
 
-        #region Methods
+        #region Events
+
+        #region Page Events
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -132,6 +137,247 @@ namespace PraticeManagement
                 personnelCompensation.EndDateReadOnly = true;
             }
         }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            IsOtherPanelDisplay = personnelCompensation.SLTApprovalPopupDisplayed ? true : IsOtherPanelDisplay;
+            if (IsErrorPanelDisplay && !IsOtherPanelDisplay)
+            {
+                PopulateErrorPanel();
+            }
+        }
+
+        #endregion
+
+        #region Validation
+
+        protected void cvEmployeePayTypeChangeViolation_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var validator = ((CustomValidator)sender);
+            DateTime enddate = personnelCompensation.EndDate.HasValue ? personnelCompensation.EndDate.Value : new DateTime(2029, 12, 31);
+            e.IsValid = !ServiceCallers.Custom.Person(p => p.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(SelectedId.Value, personnelCompensation.StartDate.Value, enddate, (int)personnelCompensation.Timescale));
+            if (!e.IsValid)
+            {
+                validator.Text = validator.ToolTip = validator.ErrorMessage = PersonDetail.EmployeePayTypeChangeVoilationMessage;
+                mpeEmployeePayTypeChange.Show();
+                IsOtherPanelDisplay = true;
+            }
+        }
+
+        protected void custUserName_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = _saveCode == default(int);
+
+            string message;
+            switch (-_saveCode)
+            {
+                case (int)MembershipCreateStatus.DuplicateEmail:
+                    message = Messages.DuplicateEmail;
+                    break;
+                case (int)MembershipCreateStatus.DuplicateUserName:
+                    //  Because we're using email as username in the system,
+                    //      DuplicateUserName is equal to our PersonEmailUniquenesViolation
+                    message = Messages.DuplicateEmail;
+                    break;
+                case (int)MembershipCreateStatus.InvalidAnswer:
+                    message = Messages.InvalidAnswer;
+                    break;
+                case (int)MembershipCreateStatus.InvalidEmail:
+                    message = Messages.InvalidEmail;
+                    break;
+                case (int)MembershipCreateStatus.InvalidPassword:
+                    message = Messages.InvalidPassword;
+                    break;
+                case (int)MembershipCreateStatus.InvalidQuestion:
+                    message = Messages.InvalidQuestion;
+                    break;
+                case (int)MembershipCreateStatus.InvalidUserName:
+                    message = Messages.InvalidUserName;
+                    break;
+                case (int)MembershipCreateStatus.ProviderError:
+                    message = Messages.ProviderError;
+                    break;
+                case (int)MembershipCreateStatus.UserRejected:
+                    message = Messages.UserRejected;
+                    break;
+                default:
+                    message = custUserName.ErrorMessage;
+                    return;
+            }
+            custUserName.ErrorMessage = custUserName.ToolTip = message;
+        }
+
+        protected void cvRehireConfirmation_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            var validator = (CustomValidator)sender;
+            validator.ErrorMessage = PersonDetail.ReHireMessage;
+            var person = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(SelectedId.Value));
+            var payHistory = ServiceCallers.Custom.Person(p => p.GetHistoryByPerson(SelectedId.Value)).ToList();
+            if (payHistory != null && payHistory.Any(p => p.StartDate >= person.HireDate))
+            {
+                payHistory = payHistory.OrderBy(p => p.StartDate).ToList();
+                PopulateUnCommitedPay(payHistory);
+                Pay firstPay = payHistory.Where(p => p.StartDate >= person.HireDate).FirstOrDefault();
+                if (firstPay != null && (firstPay.Timescale == TimescaleType.PercRevenue || firstPay.Timescale == TimescaleType._1099Ctc))
+                {
+                    if (payHistory.Any(p => p.StartDate > firstPay.StartDate && p.StartDate <= DateTime.Now.Date && (p.Timescale == TimescaleType.Salary || p.Timescale == TimescaleType.Hourly)))
+                    {
+                        e.IsValid = false;
+                    }
+                }
+            }
+
+            if (!e.IsValid)
+            {
+                mpeRehireConfirmation.Show();
+                IsOtherPanelDisplay = true;
+            }
+
+            validator.Text = validator.ToolTip = validator.ErrorMessage;
+        }
+
+        #endregion
+
+        #region mpeRehireConfirmation Events
+
+        protected void btnRehireConfirmationOk_Click(object sender, EventArgs e)
+        {
+            cvRehireConfirmation.Enabled = false;
+            btnSave_Click(btnSave, new EventArgs());
+            mpeRehireConfirmation.Hide();
+            cvRehireConfirmation.Enabled = true;
+        }
+
+        protected void btnRehireConfirmationCancel_Click(object source, EventArgs args)
+        {
+            if (SelectedStartDate.HasValue)
+            {
+                Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
+                Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
+
+                var now = Utils.Generic.GetNowWithTimeZone();
+                btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
+                PopulateControls(pay);
+            }
+            cvRehireConfirmation.Enabled = true;
+            mpeRehireConfirmation.Hide();
+        }
+
+        #endregion
+
+        #region personnelCompensation Events
+
+        protected void personnelCompensation_CompensationMethodChanged(object sender, EventArgs e)
+        {
+            IsDirty = true;
+        }
+
+        protected void personnelCompensation_SaveDetails(object sender, EventArgs e)
+        {
+            btnSave_Click(btnSave, null);
+        }
+
+        protected void personnelCompensation_PeriodChanged(object sender, EventArgs e)
+        {
+            IsDirty = true;
+        }
+
+        #endregion
+
+        #region mpeEmployeePayTypeChange Events
+
+        protected void btnEmployeePayTypeChangeViolationOk_Click(object sender, EventArgs e)
+        {
+            cvEmployeePayTypeChangeViolation.Enabled = false;
+            btnSave_Click(btnSave, new EventArgs());
+            mpeEmployeePayTypeChange.Hide();
+            cvEmployeePayTypeChangeViolation.Enabled = true;
+        }
+
+        protected void btnEmployeePayTypeChangeViolationCancel_Click(object source, EventArgs args)
+        {
+            if (SelectedStartDate.HasValue)
+            {
+                Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
+                Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
+
+                var now = Utils.Generic.GetNowWithTimeZone();
+                btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
+
+                PopulateControls(pay);
+            }
+            cvEmployeePayTypeChangeViolation.Enabled = true;
+            mpeEmployeePayTypeChange.Hide();
+        }
+
+        #endregion
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            if (ValidateAndSave())
+            {
+                if (PersonDetailData != null)
+                {
+                    if (_saveCode == default(int))
+                    {
+                        ClearDirty();
+
+                        //var returnUrl = Request.Url.AbsoluteUri.Substring(Request.Url.AbsoluteUri.LastIndexOf("&returnTo="));
+                        var returnUrl = Request.UrlReferrer.ToString();
+                        if (returnUrl.LastIndexOf("&returnTo=") != -1)
+                            returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("&returnTo="));
+                        string redirectUrl = "PersonDetail.aspx?id=" + PersonDetailData.Id + "&ShowConfirmMessage=1";
+                        redirectUrl = redirectUrl + (returnUrl.Contains("persons.aspx") ? returnUrl : string.Empty);
+
+                        Response.Redirect(redirectUrl);
+
+                        //Server.Transfer("~" + ReturnUrl.Substring(ReturnUrl.IndexOf("/PersonDetail.aspx?id="), ReturnUrl.Length - ReturnUrl.IndexOf("/PersonDetail.aspx?id=")));
+                    }
+                }
+                else
+                {
+                    ClearDirty();
+                    if (SelectedId.HasValue)
+                    {
+                        ReturnToPreviousPage();
+                    }
+                }
+            }
+            else
+            {
+                if (cvEmployeePayTypeChangeViolation.IsValid)
+                {
+                    Page.Validate(vsumCompensation.ValidationGroup);
+                    if (Page.IsValid)
+                    {
+                        if (internalException != null)
+                        {
+                            string data = internalException.ToString();
+                            string innerexceptionMessage = internalException.InnerException.Message;
+                            if (data.Contains("CK_Pay_DateRange"))
+                            {
+                                mlConfirmation.ShowErrorMessage("Compensation for the same period already exists.");
+                                IsErrorPanelDisplay = true;
+                            }
+                            else if (innerexceptionMessage == PersonDetail.StartDateIncorrect || innerexceptionMessage == PersonDetail.EndDateIncorrect || innerexceptionMessage == PersonDetail.PeriodIncorrect || innerexceptionMessage == PersonDetail.HireDateInCorrect || innerexceptionMessage == PersonDetail.SalaryToContractException)
+                            {
+                                if (innerexceptionMessage == PersonDetail.SalaryToContractException)
+                                    mlConfirmation.ShowErrorMessage(PersonDetail.SalaryToContractMessage);
+                                else
+                                    mlConfirmation.ShowErrorMessage(innerexceptionMessage);
+                                IsErrorPanelDisplay = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Methods
 
         protected override void Display()
         {
@@ -188,6 +434,31 @@ namespace PraticeManagement
             }
         }
 
+        protected override bool ValidateAndSave()
+        {
+            bool result = false;
+            Page.Validate(vsumCompensation.ValidationGroup);
+            if (Page.IsValid && cvEmployeePayTypeChangeViolation.Enabled && SelectedId.HasValue && PersonDetailData == null)
+            {
+                cvEmployeePayTypeChangeViolation.Validate();
+            }
+            if (Page.IsValid && cvRehireConfirmation.Enabled && SelectedId.HasValue && PersonDetailData == null)
+            {
+                cvRehireConfirmation.Validate();
+            }
+            if (Page.IsValid)
+            {
+                result = SaveData();
+            }
+            IsErrorPanelDisplay = !Page.IsValid;
+            return result;
+        }
+
+        private void PopulateErrorPanel()
+        {
+            mpeErrorPanel.Show();
+        }
+
         private void PopulateControls(Pay pay)
         {
             personnelCompensation.StartDate = pay.StartDate;
@@ -202,175 +473,6 @@ namespace PraticeManagement
             personnelCompensation.TitleId = pay.TitleId;
             personnelCompensation.SLTApproval = pay.SLTApproval;
             personnelCompensation.SLTPTOApproval = pay.SLTPTOApproval;
-        }
-
-        #region Validation
-
-        protected void custdateRangeBegining_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid =
-                internalException == null ||
-                internalException.Message != ErrorCode.CompensationStartDateIncorrect.ToString();
-        }
-
-        protected void custdateRangeEnding_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid =
-                internalException == null ||
-                internalException.Message != ErrorCode.EndDateIncorrect.ToString();
-        }
-
-        protected void custdateRangePeriod_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid =
-                internalException == null ||
-                internalException.Message != ErrorCode.PeriodIncorrect.ToString();
-        }
-
-        protected void cvEmployeePayTypeChangeViolation_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            var validator = ((CustomValidator)sender);
-            DateTime enddate = personnelCompensation.EndDate.HasValue ? personnelCompensation.EndDate.Value : new DateTime(2029, 12, 31);
-            e.IsValid = !ServiceCallers.Custom.Person(p => p.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(SelectedId.Value, personnelCompensation.StartDate.Value, enddate, (int)personnelCompensation.Timescale));
-            if (!e.IsValid)
-            {
-                validator.Text = validator.ToolTip = validator.ErrorMessage = PersonDetail.EmployeePayTypeChangeVoilationMessage;
-                mpeEmployeePayTypeChange.Show();
-            }
-        }
-
-        #endregion
-
-        protected void personnelCompensation_CompensationMethodChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void personnelCompensation_SaveDetails(object sender, EventArgs e)
-        {
-            btnSave_Click(btnSave, null);
-        }
-
-        protected void personnelCompensation_PeriodChanged(object sender, EventArgs e)
-        {
-            IsDirty = true;
-        }
-
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            if (ValidateAndSave())
-            {
-                if (PersonDetailData != null)
-                {
-                    if (_saveCode == default(int))
-                    {
-                        ClearDirty();
-
-                        //var returnUrl = Request.Url.AbsoluteUri.Substring(Request.Url.AbsoluteUri.LastIndexOf("&returnTo="));
-                        var returnUrl = Request.UrlReferrer.ToString();
-                        if (returnUrl.LastIndexOf("&returnTo=") != -1)
-                            returnUrl = returnUrl.Substring(returnUrl.LastIndexOf("&returnTo="));
-                        string redirectUrl = "PersonDetail.aspx?id=" + PersonDetailData.Id + "&ShowConfirmMessage=1";
-                        redirectUrl = redirectUrl + (returnUrl.Contains("persons.aspx") ? returnUrl : string.Empty);
-
-                        Response.Redirect(redirectUrl);
-
-                        //Server.Transfer("~" + ReturnUrl.Substring(ReturnUrl.IndexOf("/PersonDetail.aspx?id="), ReturnUrl.Length - ReturnUrl.IndexOf("/PersonDetail.aspx?id=")));
-                    }
-                }
-                else
-                {
-                    ClearDirty();
-                    if (SelectedId.HasValue)
-                    {
-                        ReturnToPreviousPage();
-                    }
-                }
-            }
-            else
-            {
-                if (cvEmployeePayTypeChangeViolation.IsValid)
-                {
-                    bool isPayTypeChangeViolationEnable = cvEmployeePayTypeChangeViolation.Enabled;
-                    cvEmployeePayTypeChangeViolation.Enabled = false;
-                    Page.Validate();
-                    cvEmployeePayTypeChangeViolation.Enabled = isPayTypeChangeViolationEnable;
-                    if (Page.IsValid)
-                    {
-                        // Error occured while saving.
-                        CustomValidator cvc = new CustomValidator();
-                        cvc.IsValid = false;
-                        cvc.Text = "*";
-                        cvc.Display = ValidatorDisplay.None;
-                        cvc.ErrorMessage = @"Error occured while saving the Compensation.";
-                        pnlBody.ContentTemplateContainer.Controls.Add(cvc);
-
-                        if (internalException != null)
-                        {
-                            string data = internalException.ToString();
-                            string innerexceptionMessage = internalException.InnerException.Message;
-                            // Error occured while saving.
-                            CustomValidator cvc2 = new CustomValidator();
-                            cvc2.IsValid = false;
-                            cvc2.Text = "*";
-                            cvc2.Display = ValidatorDisplay.None;
-                            if (data.Contains("CK_Pay_DateRange"))
-                            {
-                                cvc2.ErrorMessage = @"Compensation for the same period already exists.";
-                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                            }
-                            else if (innerexceptionMessage == PersonDetail.StartDateIncorrect)
-                            {
-                                cvc2.ErrorMessage = PersonDetail.StartDateIncorrect;
-                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                            }
-                            else if (innerexceptionMessage == PersonDetail.EndDateIncorrect)
-                            {
-                                cvc2.ErrorMessage = PersonDetail.EndDateIncorrect;
-                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                            }
-                            else if (innerexceptionMessage == PersonDetail.PeriodIncorrect)
-                            {
-                                cvc2.ErrorMessage = PersonDetail.PeriodIncorrect;
-                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                            }
-                            else if (innerexceptionMessage == PersonDetail.HireDateInCorrect)
-                            {
-                                cvc2.ErrorMessage = PersonDetail.HireDateInCorrect;
-                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                            }
-                            else if (innerexceptionMessage == PersonDetail.SalaryToContractException)
-                            {
-                                cvc2.ErrorMessage = PersonDetail.SalaryToContractMessage;
-                                pnlBody.ContentTemplateContainer.Controls.Add(cvc2);
-                            }
-                            else
-                            {
-                                cvc2 = null;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        protected override bool ValidateAndSave()
-        {
-            bool result = false;
-            bool isPayTypeChangeViolationEnable = cvEmployeePayTypeChangeViolation.Enabled;
-            cvEmployeePayTypeChangeViolation.Enabled = false;
-            Page.Validate(vsumCompensation.ValidationGroup);
-            cvEmployeePayTypeChangeViolation.Enabled = isPayTypeChangeViolationEnable;
-            if (Page.IsValid && cvEmployeePayTypeChangeViolation.Enabled && SelectedId.HasValue)
-            {
-                cvEmployeePayTypeChangeViolation.Validate();
-            }
-            if (Page.IsValid)
-            {
-                result = SaveData();
-            }
-
-            return result;
         }
 
         private bool SaveData()
@@ -435,15 +537,20 @@ namespace PraticeManagement
                 catch (FaultException<ExceptionDetail> ex)
                 {
                     internalException = ex.Detail;
+                    string data = internalException.ToString();
                     serviceClient.Abort();
-                    Logging.LogErrorMessage(
-                        ex.Message,
-                        ex.Source,
-                        internalException.InnerException != null ? internalException.InnerException.Message : string.Empty,
-                        string.Empty,
-                        HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
-                        string.Empty,
-                        Thread.CurrentPrincipal.Identity.Name);
+                    string exceptionMessage = internalException.InnerException != null ? internalException.InnerException.Message : string.Empty;
+                    if (!(data.Contains("CK_Pay_DateRange") || exceptionMessage == PersonDetail.StartDateIncorrect || exceptionMessage == PersonDetail.EndDateIncorrect || exceptionMessage == PersonDetail.PeriodIncorrect || exceptionMessage == PersonDetail.HireDateInCorrect || exceptionMessage == PersonDetail.SalaryToContractException))
+                    {
+                        Logging.LogErrorMessage(
+                            ex.Message,
+                            ex.Source,
+                            internalException.InnerException != null ? internalException.InnerException.Message : string.Empty,
+                            string.Empty,
+                            HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                            string.Empty,
+                            Thread.CurrentPrincipal.Identity.Name);
+                    }
                     return false;
                 }
             }
@@ -457,71 +564,18 @@ namespace PraticeManagement
             }
         }
 
-        protected void custUserName_ServerValidate(object source, ServerValidateEventArgs args)
+        private void PopulateUnCommitedPay(List<Pay> payHistory)
         {
-            args.IsValid = _saveCode == default(int);
-
-            string message;
-            switch (-_saveCode)
-            {
-                case (int)MembershipCreateStatus.DuplicateEmail:
-                    message = Messages.DuplicateEmail;
-                    break;
-                case (int)MembershipCreateStatus.DuplicateUserName:
-                    //  Because we're using email as username in the system,
-                    //      DuplicateUserName is equal to our PersonEmailUniquenesViolation
-                    message = Messages.DuplicateEmail;
-                    break;
-                case (int)MembershipCreateStatus.InvalidAnswer:
-                    message = Messages.InvalidAnswer;
-                    break;
-                case (int)MembershipCreateStatus.InvalidEmail:
-                    message = Messages.InvalidEmail;
-                    break;
-                case (int)MembershipCreateStatus.InvalidPassword:
-                    message = Messages.InvalidPassword;
-                    break;
-                case (int)MembershipCreateStatus.InvalidQuestion:
-                    message = Messages.InvalidQuestion;
-                    break;
-                case (int)MembershipCreateStatus.InvalidUserName:
-                    message = Messages.InvalidUserName;
-                    break;
-                case (int)MembershipCreateStatus.ProviderError:
-                    message = Messages.ProviderError;
-                    break;
-                case (int)MembershipCreateStatus.UserRejected:
-                    message = Messages.UserRejected;
-                    break;
-                default:
-                    message = custUserName.ErrorMessage;
-                    return;
-            }
-            custUserName.ErrorMessage = custUserName.ToolTip = message;
-        }
-
-        protected void btnEmployeePayTypeChangeViolationOk_Click(object sender, EventArgs e)
-        {
-            cvEmployeePayTypeChangeViolation.Enabled = false;
-            btnSave_Click(btnSave, new EventArgs());
-            mpeEmployeePayTypeChange.Hide();
-            cvEmployeePayTypeChangeViolation.Enabled = true;
-        }
-
-        protected void btnEmployeePayTypeChangeViolationCancel_Click(object source, EventArgs args)
-        {
+            Pay pay = (Pay)personnelCompensation.Pay.Clone();
             if (SelectedStartDate.HasValue)
             {
-                Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
-                Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-
-                var now = Utils.Generic.GetNowWithTimeZone();
-                btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
-
-                PopulateControls(pay);
+                int index = payHistory.FindIndex(p => p.StartDate.Date == SelectedStartDate.Value.Date);
+                payHistory[index] = pay;
             }
-            cvEmployeePayTypeChangeViolation.Enabled = true;
-            mpeEmployeePayTypeChange.Hide();
+            else
+            {
+                payHistory.Add(pay);
+            }
         }
 
         #endregion
