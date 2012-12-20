@@ -58,7 +58,7 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public bool TitleInUse
+        public bool InUse
         {
             get;
             set;
