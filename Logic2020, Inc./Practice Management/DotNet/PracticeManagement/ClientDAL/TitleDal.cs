@@ -77,7 +77,7 @@ namespace DataAccess
                 int pTOAccrualIndex = reader.GetOrdinal(Constants.ColumnNames.PTOAccrual);
                 int minimumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MinimumSalary);
                 int maximumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MaximumSalary);
-                int titleInUseIndex = reader.GetOrdinal(Constants.ColumnNames.TitleInUse);
+                int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.TitleInUse);
 
 
                 while (reader.Read())
@@ -96,7 +96,7 @@ namespace DataAccess
                             PTOAccrual = reader.GetInt32(pTOAccrualIndex),
                             MinimumSalary = !reader.IsDBNull(minimumSalaryIndex) ? reader.GetInt32(minimumSalaryIndex) : (int?)null,
                             MaximumSalary = !reader.IsDBNull(maximumSalaryIndex) ? reader.GetInt32(maximumSalaryIndex) : (int?)null,
-                            TitleInUse = reader.GetBoolean(titleInUseIndex)
+                            InUse = reader.GetBoolean(inUseIndex)
 
                         });
                 }
