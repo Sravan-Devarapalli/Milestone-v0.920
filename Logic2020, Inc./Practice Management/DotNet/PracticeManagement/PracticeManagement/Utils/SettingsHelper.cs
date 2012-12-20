@@ -23,10 +23,12 @@ namespace PraticeManagement.Utils
         const string Skill = "Skill";
         const string SkillLevel = "SkillLevel";
         const string SkillType = "SkillType";
+        const string TitleTypes = "TitleTypes";
         const string SkillsIndustry = "SkillIndustry";
         const string Person_TerminationReasons_List_Key = "Person_TerminationReasons_List_Key";
+        const string Person_Domain_List_Key = "Person_Domain_List_Key";
         const string OpportunitySalesStages = "OpportunitySalesStages";
-        
+
         public static Dictionary<int, string> DemandOpportunitySalesStages
         {
             get
@@ -224,7 +226,6 @@ namespace PraticeManagement.Utils
             }
         }
 
-
         internal static void RemoveMarginColorInfoDefaults()
         {
             HttpContext.Current.Cache.Remove(CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY);
@@ -314,6 +315,7 @@ namespace PraticeManagement.Utils
             }
             return HttpContext.Current.Cache[SkillLevel] as List<SkillLevel>;
         }
+
         public static List<SkillType> GetSkillTypes()
         {
             if (HttpContext.Current.Cache[SkillType] == null)
@@ -337,6 +339,25 @@ namespace PraticeManagement.Utils
             }
             return HttpContext.Current.Cache[Person_TerminationReasons_List_Key] as List<TerminationReason>;
         }
+
+        public static string[] GetDomainsList()
+        {
+            if (HttpContext.Current.Cache[Person_Domain_List_Key] == null)
+            {
+                HttpContext.Current.Cache[Person_Domain_List_Key] = ServiceCallers.Invoke<ConfigurationServiceClient, string[]>(c => c.GetAllDomains()).ToArray();
+            }
+            return HttpContext.Current.Cache[Person_Domain_List_Key] as string[];
+        }
+
+        public static TitleType[] GetTitleTypes()
+        {
+            if (HttpContext.Current.Cache[TitleTypes] == null)
+            {
+                HttpContext.Current.Cache[TitleTypes] = ServiceCallers.Custom.Title(t => t.GetTitleTypes()).ToArray();
+            }
+            return HttpContext.Current.Cache[TitleTypes] as TitleType[];
+        }
+
     }
 }
 
