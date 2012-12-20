@@ -42,7 +42,7 @@ namespace PraticeManagement.TitleService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class TitleServiceClient : System.ServiceModel.ClientBase<PraticeManagement.TitleService.ITitleService>, PraticeManagement.TitleService.ITitleService {
         
-        
+     
         
         public TitleServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
