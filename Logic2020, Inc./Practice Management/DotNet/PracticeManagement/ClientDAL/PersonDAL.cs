@@ -3274,12 +3274,14 @@ namespace DataAccess
                 int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
                 int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
                 int aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
+                int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
 
                 while (reader.Read())
                 {
                     person.FirstName = reader.GetString(firstNameIndex);
                     person.LastName = reader.GetString(lastNameIndex);
                     person.Alias = reader.GetString(aliasIndex);
+                    person.HireDate = reader.GetDateTime(hireDateIndex);
                     person.IsStrawMan = reader.IsDBNull(isStrawManIndex) ? false : reader.GetBoolean(isStrawManIndex);
                     person.CurrentPay = new Pay
                     {
