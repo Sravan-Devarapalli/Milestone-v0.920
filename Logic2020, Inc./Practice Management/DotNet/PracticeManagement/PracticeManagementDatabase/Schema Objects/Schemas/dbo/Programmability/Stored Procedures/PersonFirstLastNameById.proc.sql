@@ -12,6 +12,7 @@ BEGIN
 	SELECT	P.FirstName,
 			P.LastName,
 			P.IsStrawman,
+			P.HireDate,
 			TS.Name AS Timescale,
 			P.IsOffshore,
 			P.PersonStatusId,
