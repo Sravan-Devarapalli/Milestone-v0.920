@@ -177,6 +177,7 @@ namespace PraticeManagement
             }
             else
             {
+                whatIf.Person = null;
                 Person person = SelectedPerson;
                 ClearControls();
                 if (person != null && person.PaymentHistory != null)
