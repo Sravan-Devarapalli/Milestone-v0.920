@@ -31,7 +31,7 @@ AS
 		   p.SLTApproval,
 		   p.SLTPTOApproval
 	  FROM dbo.v_Pay AS p
-	  INNER JOIN dbo.Title Tt ON Tt.TitleId = P.TitleId
+	  LEFT JOIN dbo.Title Tt ON Tt.TitleId = P.TitleId
 	  LEFT JOIN dbo.Practice pr on pr.PracticeId = p.PracticeId
 	 WHERE p.PersonId = @PersonId
 	ORDER BY p.StartDate
