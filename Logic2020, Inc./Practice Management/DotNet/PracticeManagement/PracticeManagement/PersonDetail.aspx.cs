@@ -3067,9 +3067,10 @@ namespace PraticeManagement
                         oldPerson = serviceClient.GetPersonDetailsShort(person.Id.Value);
                     }
                     string[] currentRoles = Roles.GetRolesForUser(person.Alias);
-                    if (currentRoles.Length == 0 && oldPerson != null)
+                    if (oldPerson != null)
                     {
-                        currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
+                        if(currentRoles.Length == 0)
+                            currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
                         oldPerson.RoleNames = currentRoles;
                     }
                     int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, IsWizards);
