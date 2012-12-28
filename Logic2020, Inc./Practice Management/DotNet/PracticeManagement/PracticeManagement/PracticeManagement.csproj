@@ -2385,6 +2385,7 @@
     </Compile>
     <Compile Include="Utils\ActivityLogHelper.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />
+    <Compile Include="Utils\NPOIExcel.cs" />
     <Compile Include="Utils\OpportunitiesHelper.cs" />
     <Compile Include="Controls\Opportunities\PrevNextOpportunity.ascx.cs">
       <DependentUpon>PrevNextOpportunity.ascx</DependentUpon>
