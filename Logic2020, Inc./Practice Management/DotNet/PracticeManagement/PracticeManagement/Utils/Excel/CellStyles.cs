@@ -62,14 +62,10 @@ namespace PraticeManagement.Utils.Excel
             }
         }
 
-        public void ApplyStyles(ICell cell)
+        public void ApplyStyles(ICell cell, List<ICellStyle> allCellStyles)
         {
             if (parentWorkbook != null)
             {
-
-                ICellStyle coloumnstyle = parentWorkbook.CreateCellStyle();
-                //coloumnstyle.Indention = 10;
-                coloumnstyle.BorderBottom = coloumnstyle.BorderLeft = coloumnstyle.BorderRight = coloumnstyle.BorderTop = BorderStyle;
                 if (cell.CellType == CellType.STRING && cell.StringCellValue.StartsWith(NPOIExcel.CustomColorStartTag))
                 {
                     string[] values = cell.StringCellValue.Split(new char[] { '~' });
@@ -78,31 +74,74 @@ namespace PraticeManagement.Utils.Excel
                     SetCellValue(cell, cellValue);
                     SetFontColorIndex(cellcolor);
                 }
-                IFont font = parentWorkbook.FindFont(IsBold ? (short)FontBoldWeight.BOLD : (short)FontBoldWeight.NORMAL, FontColorIndex, FontHeight, "Arial", false, false, FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
-                if (font == null)
+                ICellStyle coloumnstyle = FindCellStyle(allCellStyles);
+                if (coloumnstyle == null)
                 {
-                    font = parentWorkbook.CreateFont();
-                    font.Boldweight = IsBold ? (short)FontBoldWeight.BOLD : (short)FontBoldWeight.NORMAL;
-                    font.Color = FontColorIndex;
-                    font.FontHeight = FontHeight;
-                }
-                coloumnstyle.SetFont(font);
-                coloumnstyle.Alignment = HorizontalAlignment;
-                coloumnstyle.VerticalAlignment = VerticalAlignment;
-                coloumnstyle.ShrinkToFit = ShrinkToFit;
-                coloumnstyle.WrapText = WrapText;
-                coloumnstyle.FillBackgroundColor = BackGroundColorIndex;
+                    coloumnstyle = parentWorkbook.CreateCellStyle();
 
-                var formatId = HSSFDataFormat.GetBuiltinFormat(DataFormat);
-                if (formatId == -1)
+                    //coloumnstyle.Indention = 10;
+                    coloumnstyle.BorderBottom = coloumnstyle.BorderLeft = coloumnstyle.BorderRight = coloumnstyle.BorderTop = BorderStyle;
+
+                    coloumnstyle.Alignment = HorizontalAlignment;
+                    coloumnstyle.VerticalAlignment = VerticalAlignment;
+                    coloumnstyle.ShrinkToFit = ShrinkToFit;
+                    coloumnstyle.WrapText = WrapText;
+
+
+                    IFont font = parentWorkbook.FindFont(IsBold ? (short)FontBoldWeight.BOLD : (short)FontBoldWeight.NORMAL, FontColorIndex, FontHeight, "Arial", false, false, FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
+                    if (font == null)
+                    {
+                        font = parentWorkbook.CreateFont();
+                        font.Boldweight = IsBold ? (short)FontBoldWeight.BOLD : (short)FontBoldWeight.NORMAL;
+                        font.Color = FontColorIndex;
+                        font.FontHeight = FontHeight;
+                    }
+                    coloumnstyle.SetFont(font);
+                    allCellStyles.Add(coloumnstyle);
+                }
+                coloumnstyle.FillBackgroundColor = BackGroundColorIndex;
+                if (!string.IsNullOrEmpty(DataFormat))
                 {
-                    var newDataFormat = parentWorkbook.CreateDataFormat();
-                    coloumnstyle.DataFormat = newDataFormat.GetFormat(DataFormat);
+                    var formatId = HSSFDataFormat.GetBuiltinFormat(DataFormat);
+                    if (formatId == -1)
+                    {
+                        var newDataFormat = parentWorkbook.CreateDataFormat();
+                        coloumnstyle.DataFormat = newDataFormat.GetFormat(DataFormat);
+                    }
+                    else
+                        coloumnstyle.DataFormat = formatId;
                 }
                 else
-                    coloumnstyle.DataFormat = formatId;
+                {
+                    coloumnstyle.DataFormat = 0;
+                }
                 cell.CellStyle = coloumnstyle;
             }
+        }
+
+        public ICellStyle FindCellStyle(List<ICellStyle> allCellStyles)
+        {
+            if (allCellStyles.Any(c => c.BorderBottom == BorderStyle &&
+                                    c.Alignment == HorizontalAlignment &&
+                                    c.VerticalAlignment == VerticalAlignment &&
+                                    c.ShrinkToFit == ShrinkToFit &&
+                                    c.WrapText == WrapText &&
+                                    c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL) &&
+                                    c.GetFont(parentWorkbook).Color == FontColorIndex &&
+                                    c.GetFont(parentWorkbook).FontHeight == FontHeight
+                                    ))
+            {
+                return allCellStyles.First(c => c.BorderBottom == BorderStyle &&
+                                       c.Alignment == HorizontalAlignment &&
+                                       c.VerticalAlignment == VerticalAlignment &&
+                                       c.ShrinkToFit == ShrinkToFit &&
+                                       c.WrapText == WrapText &&
+                                       c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL) &&
+                                        c.GetFont(parentWorkbook).Color == FontColorIndex &&
+                                        c.GetFont(parentWorkbook).FontHeight == FontHeight
+                                       );
+            }
+            return null;
         }
     }
 }
