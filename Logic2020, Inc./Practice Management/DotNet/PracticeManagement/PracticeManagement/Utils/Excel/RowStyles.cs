@@ -17,7 +17,7 @@ namespace PraticeManagement.Utils.Excel
             this.cellStyles = cellStyles;
         }
 
-        public void ApplyRowStyles(IRow row)
+        public void ApplyRowStyles(IRow row, List<ICellStyle> allCellStyles)
         {
             if (parentWorkbook != null)
             {
@@ -30,7 +30,7 @@ namespace PraticeManagement.Utils.Excel
                     foreach (ICell cell in row.Cells)
                     {
                         cellStyles[i].parentWorkbook = parentWorkbook;
-                        cellStyles[i].ApplyStyles(cell);
+                        cellStyles[i].ApplyStyles(cell, allCellStyles);
                         if (i < cellStyles.Length - 1)
                         {
                             i++;
