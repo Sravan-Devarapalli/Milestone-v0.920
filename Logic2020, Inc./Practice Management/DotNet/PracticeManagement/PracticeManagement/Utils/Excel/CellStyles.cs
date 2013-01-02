@@ -109,7 +109,7 @@ namespace PraticeManagement.Utils.Excel
                         else
                             dataFormatShort = formatId;
                     }
-                    if (allDataFormats.Any(k => k.Key == DataFormat))
+                    if (!allDataFormats.Any(k => k.Key == DataFormat))
                     {
                         allDataFormats.Add(DataFormat, dataFormatShort);
                     }
@@ -124,7 +124,7 @@ namespace PraticeManagement.Utils.Excel
 
         public ICellStyle FindCellStyle(List<ICellStyle> allCellStyles, Dictionary<string, short> allDataFormats)
         {
-            if (allDataFormats.Any(k => k.Key == DataFormat) &&
+            if ((string.IsNullOrEmpty(DataFormat) || allDataFormats.Any(k => k.Key == DataFormat)) &&
                 allCellStyles.Any(c => c.BorderBottom == BorderStyle &&
                                     c.Alignment == HorizontalAlignment &&
                                     c.VerticalAlignment == VerticalAlignment &&
@@ -143,7 +143,7 @@ namespace PraticeManagement.Utils.Excel
                                        c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL) &&
                                         c.GetFont(parentWorkbook).Color == FontColorIndex &&
                                         c.GetFont(parentWorkbook).FontHeight == FontHeight &&
-                                         c.DataFormat == allDataFormats.First(k => k.Key == DataFormat).Value
+                                        (string.IsNullOrEmpty(DataFormat) || c.DataFormat == allDataFormats.First(k => k.Key == DataFormat).Value)
                                        );
             }
             return null;
