@@ -108,11 +108,13 @@ namespace PraticeManagement.Utils.Excel
                         }
                         else
                             dataFormatShort = formatId;
+
+                        if (!allDataFormats.Any(k => k.Key == DataFormat))
+                        {
+                            allDataFormats.Add(DataFormat, dataFormatShort);
+                        }
                     }
-                    if (!allDataFormats.Any(k => k.Key == DataFormat))
-                    {
-                        allDataFormats.Add(DataFormat, dataFormatShort);
-                    }
+
                     coloumnstyle.DataFormat = dataFormatShort;
                     allCellStyles.Add(coloumnstyle);
                 }
