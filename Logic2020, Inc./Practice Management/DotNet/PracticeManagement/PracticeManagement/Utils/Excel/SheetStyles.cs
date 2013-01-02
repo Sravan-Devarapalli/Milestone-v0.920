@@ -21,6 +21,7 @@ namespace PraticeManagement.Utils.Excel
         public int TopRowNo = 1;
         public List<int[]> MergeRegion = new List<int[]>();
         public List<ICellStyle> AllCellStyles = new List<ICellStyle>();
+        public Dictionary<string, short> AllDataFormats = new Dictionary<string, short>();
 
         public SheetStyles(RowStyles[] rowStyles)
         {
@@ -42,7 +43,7 @@ namespace PraticeManagement.Utils.Excel
                     {
                         IRow row = (IRow)rowEnumerator.Current;
                         rowStyles[j].parentWorkbook = parentWorkbook;
-                        rowStyles[j].ApplyRowStyles(row, AllCellStyles);
+                        rowStyles[j].ApplyRowStyles(row, AllCellStyles, AllDataFormats);
                         if (j < rowStyles.Length - 1)
                         {
                             j++;
