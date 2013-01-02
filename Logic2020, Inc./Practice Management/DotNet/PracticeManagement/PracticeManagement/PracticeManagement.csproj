@@ -2384,8 +2384,11 @@
       <DependentUpon>TimeEntry_New.aspx</DependentUpon>
     </Compile>
     <Compile Include="Utils\ActivityLogHelper.cs" />
+    <Compile Include="Utils\Excel\CellStyles.cs" />
+    <Compile Include="Utils\Excel\NPOIExcel.cs" />
+    <Compile Include="Utils\Excel\RowStyles.cs" />
+    <Compile Include="Utils\Excel\SheetStyles.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />
-    <Compile Include="Utils\NPOIExcel.cs" />
     <Compile Include="Utils\OpportunitiesHelper.cs" />
     <Compile Include="Controls\Opportunities\PrevNextOpportunity.ascx.cs">
       <DependentUpon>PrevNextOpportunity.ascx</DependentUpon>
