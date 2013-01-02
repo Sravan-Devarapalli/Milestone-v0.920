@@ -62,7 +62,7 @@ namespace PraticeManagement.Utils.Excel
             }
         }
 
-        public void ApplyStyles(ICell cell, List<ICellStyle> allCellStyles)
+        public void ApplyStyles(ICell cell, List<ICellStyle> allCellStyles, Dictionary<string, short> allDataFormats)
         {
             if (parentWorkbook != null)
             {
@@ -74,7 +74,7 @@ namespace PraticeManagement.Utils.Excel
                     SetCellValue(cell, cellValue);
                     SetFontColorIndex(cellcolor);
                 }
-                ICellStyle coloumnstyle = FindCellStyle(allCellStyles);
+                ICellStyle coloumnstyle = FindCellStyle(allCellStyles, allDataFormats);
                 if (coloumnstyle == null)
                 {
                     coloumnstyle = parentWorkbook.CreateCellStyle();
@@ -97,31 +97,35 @@ namespace PraticeManagement.Utils.Excel
                         font.FontHeight = FontHeight;
                     }
                     coloumnstyle.SetFont(font);
+                    short dataFormatShort = 0;
+                    if (!string.IsNullOrEmpty(DataFormat))
+                    {
+                        var formatId = HSSFDataFormat.GetBuiltinFormat(DataFormat);
+                        if (formatId == -1)
+                        {
+                            var newDataFormat = parentWorkbook.CreateDataFormat();
+                            dataFormatShort = newDataFormat.GetFormat(DataFormat);
+                        }
+                        else
+                            dataFormatShort = formatId;
+                    }
+                    if (allDataFormats.Any(k => k.Key == DataFormat))
+                    {
+                        allDataFormats.Add(DataFormat, dataFormatShort);
+                    }
+                    coloumnstyle.DataFormat = dataFormatShort;
                     allCellStyles.Add(coloumnstyle);
                 }
                 coloumnstyle.FillBackgroundColor = BackGroundColorIndex;
-                if (!string.IsNullOrEmpty(DataFormat))
-                {
-                    var formatId = HSSFDataFormat.GetBuiltinFormat(DataFormat);
-                    if (formatId == -1)
-                    {
-                        var newDataFormat = parentWorkbook.CreateDataFormat();
-                        coloumnstyle.DataFormat = newDataFormat.GetFormat(DataFormat);
-                    }
-                    else
-                        coloumnstyle.DataFormat = formatId;
-                }
-                else
-                {
-                    coloumnstyle.DataFormat = 0;
-                }
+
                 cell.CellStyle = coloumnstyle;
             }
         }
 
-        public ICellStyle FindCellStyle(List<ICellStyle> allCellStyles)
+        public ICellStyle FindCellStyle(List<ICellStyle> allCellStyles, Dictionary<string, short> allDataFormats)
         {
-            if (allCellStyles.Any(c => c.BorderBottom == BorderStyle &&
+            if (allDataFormats.Any(k => k.Key == DataFormat) &&
+                allCellStyles.Any(c => c.BorderBottom == BorderStyle &&
                                     c.Alignment == HorizontalAlignment &&
                                     c.VerticalAlignment == VerticalAlignment &&
                                     c.ShrinkToFit == ShrinkToFit &&
@@ -138,7 +142,8 @@ namespace PraticeManagement.Utils.Excel
                                        c.WrapText == WrapText &&
                                        c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL) &&
                                         c.GetFont(parentWorkbook).Color == FontColorIndex &&
-                                        c.GetFont(parentWorkbook).FontHeight == FontHeight
+                                        c.GetFont(parentWorkbook).FontHeight == FontHeight &&
+                                         c.DataFormat == allDataFormats.First(k => k.Key == DataFormat).Value
                                        );
             }
             return null;
