@@ -47,13 +47,13 @@ namespace PraticeManagement.Utils
             {
                 ICellStyle coloumnHeader = hssfworkbook.CreateCellStyle();
                 coloumnHeader.GetFont(hssfworkbook).Boldweight = 200;
-
+                
+                int k = 0;
                 foreach (DataSet dataset in dsInput)
                 {
                     if (dataset.Tables.Count > 0)
                     {
                         int i = 0;
-                        int k = 0;
                         int tableStartRow = i;
                         int tableNo = 1;
                         bool isHeaderTableExists = dataset.Tables.Count > 1;
