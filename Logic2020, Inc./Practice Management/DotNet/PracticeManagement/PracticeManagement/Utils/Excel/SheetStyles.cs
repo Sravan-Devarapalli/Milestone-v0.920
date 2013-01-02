@@ -20,6 +20,7 @@ namespace PraticeManagement.Utils.Excel
         public int FreezePanRowSplit = 1;
         public int TopRowNo = 1;
         public List<int[]> MergeRegion = new List<int[]>();
+        public List<ICellStyle> AllCellStyles = new List<ICellStyle>();
 
         public SheetStyles(RowStyles[] rowStyles)
         {
@@ -41,7 +42,7 @@ namespace PraticeManagement.Utils.Excel
                     {
                         IRow row = (IRow)rowEnumerator.Current;
                         rowStyles[j].parentWorkbook = parentWorkbook;
-                        rowStyles[j].ApplyRowStyles(row);
+                        rowStyles[j].ApplyRowStyles(row, AllCellStyles);
                         if (j < rowStyles.Length - 1)
                         {
                             j++;
