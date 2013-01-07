@@ -372,7 +372,7 @@ namespace UpdatePracticeAndSeniority
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    DateTime startDate = currentDate.Day == 3 ? new DateTime(currentDate.Year, currentDate.Month - 1, 16) : new DateTime(currentDate.Year, currentDate.Month, 1);
+                    DateTime startDate = currentDate.Day == 3 ? currentDate.AddMonths(-1).AddDays(16 - currentDate.AddMonths(-1).Day).Date : new DateTime(currentDate.Year, currentDate.Month, 1);
                     DateTime endDate = currentDate.Day == 3 ? currentDate.Date.AddDays(-currentDate.Day) : new DateTime(currentDate.Year, currentDate.Month, 15);
 
                     //Read the data.
