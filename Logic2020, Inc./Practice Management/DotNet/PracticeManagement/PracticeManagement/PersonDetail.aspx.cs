@@ -65,9 +65,10 @@ namespace PraticeManagement
         private bool IsOtherPanelDisplay;
         private Pay payForcvEmployeePayTypeChangeViolation;
         private ExceptionDetail internalException;
-        private bool DisableValidatecustTerminateDateTE;
-        private int FinalWizardView = 2;
-        private int StartingWizardView = 0;
+        private bool _disableValidatecustTerminateDateTE;
+        private int _finalWizardView = 2;
+        private int _startingWizardView = 0;
+        private DateTime? _editablePayStartDate;
 
         #endregion Fields
 
@@ -311,6 +312,18 @@ namespace PraticeManagement
             }
         }
 
+        public DateTime? PersonHireDate
+        {
+            get
+            {
+                return (DateTime?)ViewState["PersonHireDate_Key"];
+            }
+            set
+            {
+                ViewState["PersonHireDate_Key"] = value;
+            }
+        }
+
         public DateTime? TerminationDate
         {
             get
@@ -370,7 +383,7 @@ namespace PraticeManagement
             {
                 if (ViewState["ActiveWizard"] == null)
                 {
-                    ViewState["ActiveWizard"] = StartingWizardView;
+                    ViewState["ActiveWizard"] = _startingWizardView;
                 }
                 return (int)ViewState["ActiveWizard"];
             }
@@ -470,7 +483,7 @@ namespace PraticeManagement
         {
             cvEndCompensation.Enabled = false;
             mpeChangeStatusEndCompensation.Hide();
-            DisableValidatecustTerminateDateTE = false;
+            _disableValidatecustTerminateDateTE = false;
             Save_Click(sender, e);
         }
 
@@ -514,8 +527,7 @@ namespace PraticeManagement
             cvEmployeePayTypeChangeViolation.Enabled = true;
             gvCompensationHistory.EditIndex = -1;
             gvCompensationHistory.ShowFooter = false;
-            gvCompensationHistory.DataSource = PayHistory;
-            gvCompensationHistory.DataBind();
+            PopulatePayment(PayHistory);
             mpeEmployeePayTypeChange.Hide();
         }
 
@@ -545,7 +557,7 @@ namespace PraticeManagement
             cvRehireConfirmation.Enabled = false;
             mpeRehireConfirmation.Hide();
             IsRehire = true;
-            DisableValidatecustTerminateDateTE = false;
+            _disableValidatecustTerminateDateTE = false;
             GridViewRow gvRow = null;
             if (gvCompensationHistory.EditIndex != -1)
             {
@@ -571,8 +583,7 @@ namespace PraticeManagement
             cvRehireConfirmation.Enabled = true;
             gvCompensationHistory.EditIndex = -1;
             gvCompensationHistory.ShowFooter = false;
-            gvCompensationHistory.DataSource = PayHistory;
-            gvCompensationHistory.DataBind();
+            PopulatePayment(PayHistory);
             mpeRehireConfirmation.Hide();
         }
 
@@ -599,7 +610,7 @@ namespace PraticeManagement
             if (PopupStatus.HasValue)
             {
                 IsStatusChangeClicked = true;
-                DisableValidatecustTerminateDateTE = false;
+                _disableValidatecustTerminateDateTE = false;
                 custCompensationCoversMilestone.Enabled = false;
                 cvEndCompensation.Enabled = cvHireDateChange.Enabled = custCancelTermination.Enabled = true;
 
@@ -716,7 +727,7 @@ namespace PraticeManagement
 
         protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
         {
-            DisableValidatecustTerminateDateTE = true;
+            _disableValidatecustTerminateDateTE = true;
             cvEndCompensation.Enabled = false;
             if (!IsRehire)
             {
@@ -914,7 +925,7 @@ namespace PraticeManagement
                 }
                 else
                 {
-                    if(ddlPersonTitle.Items.FindByValue("") != null)
+                    if (ddlPersonTitle.Items.FindByValue("") != null)
                         ddlPersonTitle.SelectedValue = ddlPersonTitle.Items.FindByValue("").Value;
                 }
             }
@@ -1196,7 +1207,7 @@ namespace PraticeManagement
 
                 validator.Text = validator.ToolTip = validator.ErrorMessage;
 
-                DisableValidatecustTerminateDateTE = !e.IsValid;
+                _disableValidatecustTerminateDateTE = !e.IsValid;
             }
         }
 
@@ -1792,7 +1803,7 @@ namespace PraticeManagement
                 var imgCopy = e.Row.FindControl("imgCopy") as Image;
                 var imgEditCompensation = e.Row.FindControl("imgEditCompensation") as Image;
                 var imgCompensationDelete = e.Row.FindControl("imgCompensationDelete") as Image;
-                var isVisible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Terminated)) : true;
+                var isVisible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (PersonStatusId.HasValue && PersonStatusId.Value == PersonStatusType.Terminated)) || (_editablePayStartDate.HasValue && _editablePayStartDate.Value == pay.StartDate) : true;
 
                 imgCopy.Visible = isVisible;
 
@@ -1915,9 +1926,9 @@ namespace PraticeManagement
             if (Page.IsValid && cvRehireConfirmation.Enabled)
             {
                 cvRehireConfirmation.Validate();
-                DisableValidatecustTerminateDateTE = true;
+                _disableValidatecustTerminateDateTE = true;
             }
-            if (Page.IsValid && !DisableValidatecustTerminateDateTE)
+            if (Page.IsValid && !_disableValidatecustTerminateDateTE)
             {
                 custTerminateDateTE.Enabled = true;
                 custTerminateDateTE.Validate();
@@ -2256,7 +2267,7 @@ namespace PraticeManagement
         {
             if (ValidateActiveWizards())
             {
-                if (ActiveWizard == FinalWizardView)
+                if (ActiveWizard == _finalWizardView)
                 {
 
                     Save_Click(null, new EventArgs());
@@ -2266,7 +2277,7 @@ namespace PraticeManagement
                     }
 
                 }
-                if (ActiveWizard != FinalWizardView)
+                if (ActiveWizard != _finalWizardView)
                 {
                     ActiveWizard++;
                     SelectView(rowSwitcher.Cells[ActiveWizard].Controls[0], ActiveWizard, true);
@@ -2286,7 +2297,7 @@ namespace PraticeManagement
             if (string.IsNullOrEmpty(person.Alias)) return;
 
             // Saving roles
-           
+
 
             if (person.RoleNames.Length > 0)
             {
@@ -2370,7 +2381,7 @@ namespace PraticeManagement
         {
             btnCancelAndReturn.Visible = btnSave.Visible = !IsWizards;
             btnNext.Visible = btnWizardsCancel.Visible = IsWizards;
-            btnNext.Text = ActiveWizard == FinalWizardView ? "Finish" : "Next";
+            btnNext.Text = ActiveWizard == _finalWizardView ? "Finish" : "Next";
         }
 
         private void DisableTerminationDateAndReason()
@@ -2614,7 +2625,7 @@ namespace PraticeManagement
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
 
-            if (!DisableValidatecustTerminateDateTE && Page.IsValid)
+            if (!_disableValidatecustTerminateDateTE && Page.IsValid)
             {
                 custTerminateDateTE.Enabled = true;
                 custTerminateDateTE.Validate();
@@ -2845,6 +2856,14 @@ namespace PraticeManagement
 
         private void PopulatePayment(List<Pay> paymentHistory)
         {
+            var now = Utils.Generic.GetNowWithTimeZone();
+            //if person status is active or terminated pending or contigent and does not have current pay then we need to show last pay as editable.
+            if (PersonStatusId.HasValue && (PersonStatusId.Value != PersonStatusType.Terminated)
+                && !paymentHistory.Any(p => p.StartDate <= now.Date && (!p.EndDate.HasValue || (p.EndDate.HasValue && now.Date <= p.EndDate.Value.AddDays(-1)))))
+            {
+                Pay pay = paymentHistory.OrderByDescending(p => p.StartDate).FirstOrDefault(p => p.StartDate < now.Date);
+                _editablePayStartDate = pay != null && (!PersonHireDate.HasValue || (PersonHireDate.HasValue && pay.StartDate >= PersonHireDate.Value.Date)) ? pay.StartDate : (DateTime?)null;
+            }
             gvCompensationHistory.DataSource = paymentHistory;
             gvCompensationHistory.DataBind();
         }
@@ -2875,7 +2894,7 @@ namespace PraticeManagement
         {
             txtFirstName.Text = person.FirstName;
             txtLastName.Text = person.LastName;
-            dtpHireDate.DateValue = person.HireDate;
+            PersonHireDate = dtpHireDate.DateValue = person.HireDate;
             PreviousHireDate = person.HireDate;
             PreviousTerminationDate = (person.EmploymentHistory != null && person.EmploymentHistory.Count > 0) ? person.EmploymentHistory.Last().TerminationDate : null;
 
@@ -3069,7 +3088,7 @@ namespace PraticeManagement
                     string[] currentRoles = Roles.GetRolesForUser(person.Alias);
                     if (oldPerson != null)
                     {
-                        if(currentRoles.Length == 0)
+                        if (currentRoles.Length == 0)
                             currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
                         oldPerson.RoleNames = currentRoles;
                     }
