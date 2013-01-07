@@ -109,7 +109,7 @@
                             </HeaderTemplate>
                             <HeaderStyle CssClass="Width7Percent" />
                             <ItemTemplate>
-                                <asp:ImageButton ID="imgCompersationStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Click to open Compersation History"
+                                <asp:ImageButton ID="imgCompersationStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Click to open Compensation History"
                                     runat="server" OnClick="imgCompersationStrawman_OnClick" ImageUrl="~/Images/Zoom-In-icon.png" />
                                 &nbsp;&nbsp;&nbsp;
                                 <asp:ImageButton ID="imgCopyStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Copy Strawman"
