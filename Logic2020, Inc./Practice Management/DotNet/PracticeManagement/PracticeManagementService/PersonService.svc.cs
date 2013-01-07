@@ -12,6 +12,7 @@ using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
+using DataTransferObjects.Utils;
 
 namespace PracticeManagementService
 {
@@ -479,7 +480,7 @@ namespace PracticeManagementService
             if (isOldPersonContingentOrTerminated)
             {
                 MailUtil.SendActivateAccountEmail(person.FirstName, person.LastName, person.HireDate.ToString(Constants.Formatting.EntryDateFormat),
-                         person.Alias, (person.Title != null) ? person.Title.TitleName : null, (person.CurrentPay != null) ? person.CurrentPay.Timescale.ToString() : null, person.TelephoneNumber);
+                         person.Alias, (person.Title != null) ? person.Title.TitleName : null, (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber);
 
                 if (person.HireDate.Date < DateTime.Now.Date)
                 {
@@ -502,7 +503,7 @@ namespace PracticeManagementService
         {
             MailUtil.SendHireDateChangedEmail(person.FirstName, person.LastName, oldPerson.HireDate.ToString(Constants.Formatting.EntryDateFormat),
                         person.HireDate.ToString(Constants.Formatting.EntryDateFormat), person.Alias, (person.Title != null) ? person.Title.TitleName : null,
-                        (person.CurrentPay != null) ? person.CurrentPay.Timescale.ToString() : null, person.TelephoneNumber);
+                        (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber);
 
             if (person.HireDate.Date >= DateTime.Now.Date)
             {
