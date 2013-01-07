@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Reports;
+using System.ComponentModel;
 
 namespace DataTransferObjects.Utils
 {
@@ -239,6 +240,26 @@ namespace DataTransferObjects.Utils
                 }
             }
             return groupByDateByPersonList;
+        }
+
+        public static string GetDescription(Enum enumerator)
+        {
+            Type type = enumerator.GetType();
+
+            var memberInfo = type.GetMember(enumerator.ToString());
+
+            if (memberInfo != null && memberInfo.Length > 0)
+            {
+                //we default to the first member info, as it's for the specific enum value
+                object[] attributes = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+                //return the description if it's found
+                if (attributes != null && attributes.Length > 0)
+                    return ((DescriptionAttribute)attributes[0]).Description;
+            }
+
+            //if there's no description, return the string value of the enum
+            return enumerator.ToString();
         }
     }
 }
