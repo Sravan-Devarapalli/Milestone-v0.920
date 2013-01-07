@@ -256,9 +256,7 @@ namespace PraticeManagement
             {
                 Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
                 Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-
-                var now = Utils.Generic.GetNowWithTimeZone();
-                btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
+                SetSaveButtonVisibility(person, pay); 
                 PopulateControls(pay);
             }
             cvRehireConfirmation.Enabled = true;
@@ -300,12 +298,10 @@ namespace PraticeManagement
         {
             if (SelectedStartDate.HasValue)
             {
+               
                 Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
                 Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-
-                var now = Utils.Generic.GetNowWithTimeZone();
-                btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
-
+                SetSaveButtonVisibility(person, pay);
                 PopulateControls(pay);
             }
             cvEmployeePayTypeChangeViolation.Enabled = true;
@@ -379,6 +375,21 @@ namespace PraticeManagement
 
         #region Methods
 
+        private void SetSaveButtonVisibility(Person person,Pay pay)
+        {
+            var now = Utils.Generic.GetNowWithTimeZone();
+            DateTime? _editablePayStartDate = null;
+            //if person status is active or terminated pending or contigent and does not have current pay then we need to show last pay as editable.
+            if ((person.Status.Id != (int)PersonStatusType.Terminated)
+                && !person.PaymentHistory.Any(p => p.StartDate <= now.Date && (!p.EndDate.HasValue || (p.EndDate.HasValue && now.Date <= p.EndDate.Value.AddDays(-1)))))
+            {
+                Pay editPay = person.PaymentHistory.OrderByDescending(p => p.StartDate).FirstOrDefault(p => p.StartDate < now.Date);
+                _editablePayStartDate = editPay != null && editPay.StartDate >= person.HireDate.Date ? editPay.StartDate : (DateTime?)null;
+            }
+
+            btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) || (_editablePayStartDate.HasValue && _editablePayStartDate.Value == pay.StartDate) : true;
+
+        }
         protected override void Display()
         {
             using (PersonServiceClient serviceClient = new PersonServiceClient())
@@ -399,8 +410,7 @@ namespace PraticeManagement
                     if (SelectedStartDate.HasValue)
                     {
                         Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-                        var now = Utils.Generic.GetNowWithTimeZone();
-                        btnSave.Visible = (pay.EndDate.HasValue) ? !((pay.EndDate.Value.AddDays(-1) < now.Date) || (person.Status.Id == (int)PersonStatusType.Terminated)) : true;
+                        SetSaveButtonVisibility(person, pay); 
                         PopulateControls(pay);
                     }
                     else
