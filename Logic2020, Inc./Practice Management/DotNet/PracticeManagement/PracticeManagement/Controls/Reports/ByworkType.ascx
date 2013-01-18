@@ -52,7 +52,7 @@
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
-                                    Total Hours
+                                    Total Actual Hours
                                 </td>
                             </tr>
                             <tr>
@@ -159,7 +159,7 @@
             </td>
         </tr>
     </table>
-    <asp:Repeater ID="repWorkType" runat="server">
+    <asp:Repeater ID="repWorkType" runat="server" OnItemDataBound="repWorkType_ItemDataBound">
         <HeaderTemplate>
             <div class="minheight250Px">
                 <table id="tblProjectSummaryByWorkType" class="tablesorter PersonSummaryReport WholeWidth zebra">
@@ -169,18 +169,18 @@
                                 WorkType
                             </th>
                             <th class="Width150px">
-                                Billable
+                                <asp:Label ID="lblBillable" runat="server" Text="Billable"></asp:Label>
                             </th>
                             <th class="Width150px">
-                                Non-Billable
+                                <asp:Label ID="lblNonBillable" runat="server" Text="Non-Billable"></asp:Label>
                             </th>
                             <th class="Width140px">
-                                Total
+                                <asp:Label ID="lblActualHours" runat="server" Text="Actual Hours"></asp:Label>
                             </th>
                             <th class="Width160px">
                             </th>
                             <th class="Width325Px">
-                                Percent of Total Hours
+                                Percent of Total Actual Hours
                             </th>
                         </tr>
                     </thead>
@@ -235,4 +235,44 @@
         There are no Time Entries by any Employee for the selected range.
     </div>
 </div>
+<asp:Panel ID="pnlTotalBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Billable:
+    </label>
+    <asp:Label ID="lblTotalBillableHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalNonBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Non-Billable:
+    </label>
+    <asp:Label ID="lblTotalNonBillableHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalActualHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <table>
+        <tr>
+            <td class="fontBold">
+                Total Billable:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalBillablePanlActual" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Total Non-Billable:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalNonBillablePanlActual" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold padRight15">
+                Total Actual Hours:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalActualHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
 
