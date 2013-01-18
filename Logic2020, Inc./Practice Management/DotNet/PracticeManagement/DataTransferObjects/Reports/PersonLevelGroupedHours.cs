@@ -77,13 +77,13 @@ namespace DataTransferObjects.Reports
 
 
         [DataMember]
-        public int TimeEntrySectionId { get; set; }
+        public int TimeEntrySectionId { get; set; }       
 
         public double NonBillableHours
         {
             get
             {
-                return DayTotalHours != null ? DayTotalHours.Sum(d=>d.NonBillableHours) : ProjectNonBillableHours + BusinessDevelopmentHours + InternalHours + AdminstrativeHours;
+                return DayTotalHours != null ? DayTotalHours.Sum(d => d.NonBillableHours) : ProjectNonBillableHours + BusinessDevelopmentHours + InternalHours + AdminstrativeHours;
             }
         }
 
@@ -130,10 +130,11 @@ namespace DataTransferObjects.Reports
 
         }
 
-        
+
         public double AdminstrativeHours
         {
-            get {
+            get
+            {
                 return PTOHours + HolidayHours + BereavementHours + JuryDutyHours + ORTHours + UnpaidHours + SickOrSafeLeaveHours;
             }
 
@@ -154,6 +155,12 @@ namespace DataTransferObjects.Reports
 
         [DataMember]
         public double ForecastedHours { get; set; }
+
+        [DataMember]
+        public double AvailableHours { get; set; }
+
+        [DataMember]
+        public double AvailableHoursUntilToday { get; set; }
 
         public double TotalHours
         {
@@ -177,7 +184,16 @@ namespace DataTransferObjects.Reports
             {
                 return ForecastedHoursUntilToday == 0 ? "N/A" : (BillableHoursUntilToday - ForecastedHoursUntilToday) >= 0 ? "+" + (BillableHoursUntilToday - ForecastedHoursUntilToday).ToString("0.00") : (BillableHoursUntilToday - ForecastedHoursUntilToday).ToString("0.00");
             }
+        }       
+
+        public double BillableHoursVariance
+        {
+            get
+            {
+                return (BillableHoursUntilToday - ForecastedHoursUntilToday);
+            }
         }
+      
 
         private int BillableFirstHalfWidth
         {
