@@ -12,6 +12,7 @@
   <xs:complexType name="TimeEntriesGroupByClientAndProject">
     <xs:sequence>
       <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Client" nillable="true" type="q1:Client" />
       <xs:element minOccurs="0" name="DayTotalHours" nillable="true" type="tns:ArrayOfTimeEntriesGroupByDate" />
@@ -19,6 +20,8 @@
       <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q2:Person" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q3:Project" />
+      <xs:element minOccurs="0" name="ProjectedHours" type="xs:double" />
+      <xs:element minOccurs="0" name="ProjectedHoursUntilToday" type="xs:double" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TimeEntriesGroupByClientAndProject" nillable="true" type="tns:TimeEntriesGroupByClientAndProject" />
@@ -53,6 +56,15 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TimeEntryByWorkType" nillable="true" type="tns:TimeEntryByWorkType" />
+  <xs:complexType name="PersonTimeEntriesTotals">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AvailableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
+      <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonTimeEntriesTotals" nillable="true" type="tns:PersonTimeEntriesTotals" />
   <xs:complexType name="ArrayOfPersonLevelGroupedHours">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonLevelGroupedHours" nillable="true" type="tns:PersonLevelGroupedHours" />
@@ -61,6 +73,8 @@
   <xs:element name="ArrayOfPersonLevelGroupedHours" nillable="true" type="tns:ArrayOfPersonLevelGroupedHours" />
   <xs:complexType name="PersonLevelGroupedHours">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AvailableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="AvailableHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="BereavementHours" type="xs:double" />
       <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
       <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
@@ -93,6 +107,7 @@
       <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
       <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
       <xs:element minOccurs="0" name="ForecastedHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
       <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q6:Project" />
