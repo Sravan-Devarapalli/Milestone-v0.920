@@ -29,13 +29,7 @@
             $("#tblProjectSummaryByResource").tablesorter(
             {
                 headers: {
-                    6: {
-                        sorter: false
-                    },
                     1: {
-                        sorter: false
-                    },
-                    7: {
                         sorter: false
                     }
                 },
@@ -73,13 +67,7 @@
             $("#tblProjectSummaryByResource").tablesorter(
                 {
                     headers: {
-                        6: {
-                            sorter: false
-                        },
                         1: {
-                            sorter: false
-                        },
-                        7: {
                             sorter: false
                         }
                     },
@@ -130,6 +118,22 @@
             }
             return true;
         }
+
+        function ShowPanel(object, displaypnl, position) {
+            var obj = $("#" + object);
+            var displayPanel = $("#" + displaypnl);
+            iptop = obj.offset().top + obj[0].offsetHeight;
+            ipleft = obj.offset().left - position;
+            displayPanel.offset({ top: iptop, left: ipleft });
+            displayPanel.show();
+            displayPanel.offset({ top: iptop, left: ipleft });
+        }
+
+        function HidePanel(hiddenpnl) {
+
+            var displayPanel = $("#" + hiddenpnl);
+            displayPanel.hide();
+        }   
 
     </script>
     <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
