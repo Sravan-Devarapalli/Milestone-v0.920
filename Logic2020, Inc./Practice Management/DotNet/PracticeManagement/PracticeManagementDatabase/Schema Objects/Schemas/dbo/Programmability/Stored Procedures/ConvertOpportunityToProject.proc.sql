@@ -69,6 +69,11 @@ BEGIN
 		@IsInternal = 0,
 		@SowBudget = NULL
 
+	-- Add a sales commission
+	INSERT INTO dbo.Commission
+	            (ProjectId, PersonId, FractionOfMargin, CommissionType, MarginTypeId)
+	SELECT @ProjectId, @SalespersonId, 0 , 1 /* sales commission*/, 2 /* Sub-ordinate person margin */
+
 	IF(@HasPersons = 1)
 	BEGIN
 	
