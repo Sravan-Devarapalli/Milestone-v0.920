@@ -34,7 +34,11 @@ AS
 				FROM    [dbo].[ConvertStringListIntoTable](@ProjectStatusIds);
 			WITH    ProjectForeCastedHoursUntilToday
 					  AS ( SELECT   M.ProjectId ,
-									SUM(MPE.HoursPerDay) AS ForecastedHoursUntilToday ,
+					                SUM(CASE WHEN PC.Date < @Today
+												 THEN MPE.HoursPerDay
+												 ELSE 0
+											END)  AS ForecastedHoursUntilToday ,
+									SUM(MPE.HoursPerDay) AS ForecastedHours ,									
 									MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue ,
 									MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
 						   FROM     dbo.MilestonePersonEntry AS MPE
@@ -42,24 +46,9 @@ AS
 									INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 									INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
 									INNER JOIN dbo.v_PersonCalendar PC ON PC.PersonId = MP.PersonId
+															  AND PC.DayOff = 0
 															  AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
-															  AND PC.Date BETWEEN @StartDateLocal
-															  AND
-															  CASE
-															  WHEN @EndDateLocal > DATEADD(day,
-															  -1, @Today)
-															  THEN DATEADD(day,
-															  -1, @Today)
-															  ELSE @EndDateLocal
-															  END
-															  AND ( ( PC.CompanyDayOff = 0
-															  AND ISNULL(PC.TimeTypeId,
-															  0) != @HolidayTimeType
-															  )
-															  OR ( PC.CompanyDayOff = 1
-															  AND PC.SubstituteDate IS NOT NULL
-															  )
-															  )
+															  AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal															  
 						   GROUP BY M.ProjectId
 						 )
 			SELECT  C.ClientId ,
@@ -75,7 +64,8 @@ AS
 					PS.Name AS ProjectStatusName ,
 					BillableHours ,
 					NonBillableHours ,
-					ISNULL(pfh.ForecastedHoursUntilToday, 0) AS ForecastedHoursUntilToday ,
+					CAST(ISNULL(pfh.ForecastedHoursUntilToday, 0) AS INT) AS ForecastedHoursUntilToday ,
+					CAST(ISNULL(pfh.ForecastedHours, 0) AS INT) AS ForecastedHours ,
 					BillableHoursUntilToday ,
 					TimeEntrySectionId ,
 					( CASE WHEN ( pfh.MinimumValue IS NULL ) THEN ''
