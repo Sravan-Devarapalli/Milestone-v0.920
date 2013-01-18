@@ -14,8 +14,10 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src='<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.min.js", this) %>' type="text/javascript"></script>
-    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet" type="text/css" />
+    <script src='<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.min.js", this) %>'
+        type="text/javascript"></script>
+    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
+        type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -129,6 +131,23 @@
             return true;
         }
 
+        function ShowPanel(object, displaypnl, position) {
+
+            var obj = $("#" + object);
+            var displayPanel = $("#" + displaypnl);
+            iptop = obj.offset().top + obj[0].offsetHeight;
+            ipleft = obj.offset().left - position;
+            displayPanel.offset({ top: iptop, left: ipleft });
+            displayPanel.show();
+            displayPanel.offset({ top: iptop, left: ipleft });
+        }
+
+        function HidePanel(hiddenpnl) {
+
+            var displayPanel = $("#" + hiddenpnl);
+            displayPanel.hide();
+        }
+
     </script>
     <uc:TimeEntryReportsHeader ID="timeEntryReportHeader" runat="server"></uc:TimeEntryReportsHeader>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
@@ -238,7 +257,8 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                 BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
                 DropShadow="false" />
-            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" style="display:none;">
+            <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp"
+                Style="display: none;">
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
@@ -292,7 +312,7 @@
                                         <table class="ReportHeaderTotalsTable">
                                             <tr>
                                                 <td class="FirstTd">
-                                                    Total Hours
+                                                    Total Actual Hours
                                                 </td>
                                             </tr>
                                             <tr>
@@ -306,12 +326,14 @@
                                         <table class="ReportHeaderTotalsTable">
                                             <tr>
                                                 <td class="FirstTd">
-                                                    Utilization
+                                                    Billable Utilization
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="SecondTd">
-                                                    <asp:Literal ID="ltrlUtilization" runat="server"></asp:Literal>
+                                                    <asp:Label ID="lblBillableUtilization" runat="server"></asp:Label>
+                                                    <asp:Image alt="Billable Utilization Hint" ImageUrl="~/Images/hint1.png" runat="server"
+                                                        ID="imgBillableUtilizationHint" CssClass="PaddingBottom5 CursorPointer" ToolTip="Billable Utilization Calculation" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -421,7 +443,7 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpePersonSearch" runat="server" TargetControlID="imgSearch"
                 CancelControlID="btnclose" BackgroundCssClass="modalBackground" PopupControlID="pnlPersonSearch"
                 BehaviorID="mpePersonSearch" DropShadow="false" />
-            <asp:Panel ID="pnlPersonSearch" runat="server" CssClass="popUp PersonSearch" style="display:none;">
+            <asp:Panel ID="pnlPersonSearch" runat="server" CssClass="popUp PersonSearch" Style="display: none;">
                 <table class="WholeWidth">
                     <tr class="PopUpHeader">
                         <th colspan="2">
@@ -495,6 +517,123 @@
                                     No Results found.
                                 </div>
                             </div>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:Panel ID="pnlBillableUtilizationCalculation" CssClass="pnlBillableUtilizationCalculation"
+                runat="server" Style="display: none;">
+                <table>
+                    <tr class="vTop font15PxImp PaddingBottom5Imp">
+                        <th class="Width50Percent">
+                            Variables
+                        </th>
+                        <th class="Width10Percent">
+                        </th>
+                        <th class="Width20Percent">
+                            Calculation
+                        </th>
+                        <th class="Width5Percent">
+                        </th>
+                        <th class="Width15Percent">
+                            Billable Utilization&nbsp;%
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="Width50Percent TextAlignLeft">
+                            # of total hours billed to a client project(s) during the specified period
+                        </td> 
+                        <td class="Width10Percent vBottom textCenter">
+                            <asp:Label ID="lblTotalBillableHours" runat="server"></asp:Label>
+                        </td>
+                        <td class="Width20Percent vBottom textCenter">
+                            <asp:Label ID="lblTotalBillableHoursInBold" runat="server" CssClass="font15PxImp"></asp:Label>
+                        </td>
+                        <td class="Width5Percent">
+                        </td>
+                        <td class="Width15Percent">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Width50Percent">
+                        </td>
+                        <td class="Width10Percent">
+                        </td>
+                        <td class="Width20Percent">
+                            <hr class="hrArritionCalculation" />
+                        </td>
+                        <td class="Width5Percent textCenter">
+                            =
+                        </td>
+                        <td class="Width15Percent textCenter">
+                            <asp:Label ID="lblBillableUtilizationPercentage" runat="server" CssClass="font15PxImp"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Width50Percent TextAlignLeft PaddingBottom10Imp">
+                            # of total available hours in specified time period
+                        </td>
+                        <td class="Width10Percent textCenter">
+                            <asp:Label ID="lblTotalAvailableHours" runat="server"></asp:Label>
+                        </td>
+                        <td class="Width20Percent vTop textCenter">
+                            <asp:Label ID="lblTotalAvailableHoursInBold" runat="server" CssClass="font15PxImp"></asp:Label>
+                        </td>
+                        <td class="Width5Percent">
+                        </td>
+                        <td class="Width15Percent">
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeBillableUtilization" runat="server"
+                TargetControlID="imgBillableUtilizationHint" CancelControlID="btnCancel" BehaviorID="pnlBillableUtilization"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlBillableUtilization"
+                DropShadow="false" />
+            <asp:Panel ID="pnlBillableUtilization" runat="server" CssClass="popUpBillableUtilization"
+                Style="display: none;">
+                <table>
+                    <tr>
+                        <td colspan="3">
+                            <asp:Button ID="btnCancel" runat="server" CssClass="mini-report-close floatright"
+                                ToolTip="Close" Text="X"></asp:Button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Width20Percent">
+                        </td>
+                        <td class="Width2Percent">
+                        </td>
+                        <td class="Width78Percent textCenter vBottom">
+                            # of hours billed to a client project(s) during specified time period
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Width25Percent">
+                            <label class="LabelProject">
+                                Billable Utilization Calculation:
+                            </label>
+                        </td>
+                        <td class="Width2Percent">
+                        </td>
+                        <td class="Width73Percent textCenter">
+                            <hr class="WholeWidth hrArrition" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Width20Percent">
+                        </td>
+                        <td class="Width2Percent">
+                        </td>
+                        <td class="Width78Percent textCenter vTop">
+                            # of available hours in specified time period
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="FontSize10PX PaddingTop12">
+                            <span class="TextAlignLeft">Note: the number of available hours is based on 2,080 hours
+                                in a calendar year (40 hours a week with 52 weeks a year). The number is adjusted
+                                accordingly for individuals who join the company during the year. </span>
                         </td>
                     </tr>
                 </table>
