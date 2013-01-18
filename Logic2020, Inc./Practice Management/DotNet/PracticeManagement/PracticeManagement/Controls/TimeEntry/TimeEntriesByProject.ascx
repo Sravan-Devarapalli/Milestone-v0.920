@@ -32,11 +32,12 @@
         var divPersonListSummary = $("div[id$='divPersonListSummary']");
         var hdnSaveReportExcelText = document.getElementById('<%= hdnSaveReportExcelText.ClientID %>');
         var html = "";
-
         if (divPersonListSummary != null && divPersonListSummary.length > 0) {
             for (var i = 0; i < divPersonListSummary.length; i++) {
-
+                var employeeNumberLabel = (divPersonListSummary[i].getElementsByTagName('span'))[0];
+                employeeNumberLabel.style.display = '';
                 html += "<b style='font-size:18px;'>" + lblProjectName.innerHTML + "</b>" + "<br /><br />" + divPersonListSummary[i].innerHTML;
+                employeeNumberLabel.style.display = 'none';
             }
         }
 
@@ -226,6 +227,7 @@
             <ItemTemplate>
                 <div id="divPersonListSummary" runat="server">
                     <h3 class="fontBold">
+                        <asp:Label ID="lblEmployeeNumber" runat="server" Style="display: none;" Text='<%# GetEmployeeNumber(Eval("Key.Id").ToString()) %>'></asp:Label>
                         <asp:Label ID="lblPersonName" runat="server" Text='<%# Eval("Key.HtmlEncodedName") %>' /></h3>
                     <br class="NotVisible" />
                     <asp:GridView ID="gvPersonTimeEntries" runat="server" DataSource='<%# Eval("Value") %>'
