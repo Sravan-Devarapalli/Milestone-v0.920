@@ -36,10 +36,19 @@ namespace DataTransferObjects.Reports
         public double BillableHours { get; set; }
 
         [DataMember]
+        public double BillableHoursUntilToday { get; set; }
+
+        [DataMember]
         public double NonBillableHours { get; set; }
 
         [DataMember]
         public string BillableType { get; set; }
+
+        [DataMember]
+        public double ProjectedHours { get; set; }
+
+        [DataMember]
+        public double ProjectedHoursUntilToday { get; set; }
 
         [DataMember]
         public List<TimeEntriesGroupByDate> DayTotalHours
@@ -74,7 +83,16 @@ namespace DataTransferObjects.Reports
                 return Convert.ToInt32((NonBillableHours / GrandTotal) * 100);
             }
 
+        }         
+
+        public double BillableHoursVariance
+        {
+            get
+            {
+                return (BillableHoursUntilToday - ProjectedHoursUntilToday);
+            }
         }
+
 
         [DataMember]
         public double GrandTotal
