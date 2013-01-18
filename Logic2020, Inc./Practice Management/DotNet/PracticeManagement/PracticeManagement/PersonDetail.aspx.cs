@@ -31,6 +31,7 @@ namespace PraticeManagement
         private const string UserNameParameterName = "userName";
         private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
         private const string DuplicateEmail = "There is another Person with the same Email.";
+        private const string DuplicatePersonId = "There is another Person with the same Employee Number.";
         private const string lblTimeEntriesExistFormat = "There are time entries submitted by person after {0}.";
         private const string lblProjectMilestomesExistFormat = "{0} is assigned to below Project - Milesone(s) after {1}:";
         private const string lblTerminationDateErrorFormat = "Unable to set Termination Date for {0} due to the following:";
@@ -56,8 +57,7 @@ namespace PraticeManagement
         #endregion
 
         #region Fields
-
-        private ExceptionDetail _internalException;
+        
         private int _saveCode;
         private bool? _userIsAdministratorValue;
         private bool? _userIsHRValue;
@@ -1063,21 +1063,21 @@ namespace PraticeManagement
         protected void custEmployeeNumber_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid =
-                _internalException == null ||
-                _internalException.Message != ErrorCode.PersonEmployeeNumberUniquenesViolation.ToString();
+                ExMessage == null ||
+                ExMessage != DuplicatePersonId;
         }
 
         protected void custPersonData_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid =
-                _internalException == null ||
-                _internalException.Message == ErrorCode.PersonNameUniquenesViolation.ToString() ||
-                _internalException.Message == ErrorCode.PersonEmailUniquenesViolation.ToString() ||
-                _internalException.Message == ErrorCode.PersonEmployeeNumberUniquenesViolation.ToString();
+                ExMessage == null ||
+                ExMessage == DuplicatePersonName ||
+                ExMessage == DuplicateEmail ||
+                ExMessage == DuplicatePersonId;
 
-            if (_internalException != null)
+            if (ExMessage != null)
             {
-                ((CustomValidator)source).Text = _internalException.Message;
+                ((CustomValidator)source).Text = ExMessage;
             }
         }
 
