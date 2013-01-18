@@ -13,7 +13,18 @@ namespace PraticeManagement.Controls.Reports
 {
     public partial class ByworkType : System.Web.UI.UserControl
     {
+        private string ShowPanel = "ShowPanel('{0}', '{1}','{2}');";
+        private string HidePanel = "HidePanel('{0}');";
+        private string OnMouseOver = "onmouseover";
+        private string OnMouseOut = "onmouseout";
         private string ProjectSummaryReportExport = "ProjectSummary Report By WorkType";
+
+
+        private Label LblBillable { get; set; }
+
+        private Label LblNonBillable { get; set; }
+
+        private Label LblActualHours { get; set; }
 
         private PraticeManagement.Reporting.ProjectSummaryReport HostingPage
         {
@@ -37,6 +48,17 @@ namespace PraticeManagement.Controls.Reports
                 }
             }
         }
+
+        protected void repWorkType_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                LblBillable = e.Item.FindControl("lblBillable") as Label;
+                LblNonBillable = e.Item.FindControl("lblNonBillable") as Label;
+                LblActualHours = e.Item.FindControl("lblActualHours") as Label;
+            }
+        }
+
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(ProjectSummaryReportExport);
@@ -72,9 +94,9 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.Append("Non-Billable");
                 sb.Append("\t");
-                sb.Append("Total");
+                sb.Append("Actual Hours");
                 sb.Append("\t");
-                sb.Append("Percent of Total Hours");
+                sb.Append("Percent of Total Actual Hours");
                 sb.Append("\t");
                 sb.AppendLine();
 
@@ -118,6 +140,16 @@ namespace PraticeManagement.Controls.Reports
                 PopulateWorkTypeTotalHoursPercent(reportData);
                 repWorkType.DataSource = reportData;
                 repWorkType.DataBind();
+
+                //populate header hover
+                LblBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblBillable.ClientID, pnlTotalBillableHours.ClientID, 0);
+                LblBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableHours.ClientID);
+
+                LblNonBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblNonBillable.ClientID, pnlTotalNonBillableHours.ClientID, 0);
+                LblNonBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalNonBillableHours.ClientID);
+
+                LblActualHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblActualHours.ClientID, pnlTotalActualHours.ClientID, 0);
+                LblActualHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalActualHours.ClientID);
             }
             else
             {
@@ -140,6 +172,7 @@ namespace PraticeManagement.Controls.Reports
             double billableHours = reportData.Sum(p => p.BillableHours);
             double nonBillableHours = reportData.Sum(p => p.NonBillableHours);
             double projectedHours = reportData.Length > 0 ? reportData[0].ForecastedHours : 0d;
+            double actualHours = reportData.Sum(p => p.TotalHours);
 
             var billablePercent = 0;
             var nonBillablePercent = 0;
@@ -157,10 +190,11 @@ namespace PraticeManagement.Controls.Reports
             ltrlProjectStatusAndBillingType.Text = string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType;
             ltrlProjectRange.Text = HostingPage.ProjectRange;
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
-            ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlBillableHours.Text = lblTotalBillableHours.Text = lblTotalBillablePanlActual.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlNonBillableHours.Text = lblTotalNonBillableHours.Text = lblTotalNonBillablePanlActual.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+            lblTotalActualHours.Text = actualHours.ToString(Constants.Formatting.DoubleValue);
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
