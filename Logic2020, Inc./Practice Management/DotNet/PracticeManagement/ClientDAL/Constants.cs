@@ -285,9 +285,14 @@
             public const string IsORTColumn = "IsORT";
             public const string BillableHours = "BillableHours";
             public const string NonBillableHours = "NonBillableHours";
+            public const string ProjectedHours = "ProjectedHours";
+            public const string ProjectedHoursUntilToday = "ProjectedHoursUntilToday";
+            public const string AvailableHours = "AvailableHours";
+            public const string AvailableHoursUntilToday = "AvailableHoursUntilToday";
             public const string GroupByCerteria = "GroupByCerteria";
             public const string Category = "Category";
             public const string UtlizationPercent = "UtlizationPercent";
+            public const string BillableUtilizationPercent = "BillableUtilizationPercent";
             public const string ProjectRoleName = "ProjectRoleName";
             public const string ClientCodeColumn = "ClientCode";
             public const string GroupCodeColumn = "GroupCode";
