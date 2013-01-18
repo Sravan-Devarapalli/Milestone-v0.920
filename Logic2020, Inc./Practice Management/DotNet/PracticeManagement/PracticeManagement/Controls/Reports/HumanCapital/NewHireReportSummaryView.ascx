@@ -106,7 +106,7 @@
                 <%# Eval("HtmlEncodedName")%>
             </td>
             <td>
-                <%# Eval("Title.TitleName")%>
+                <%# Eval("Title.HtmlEncodedTitleName")%>
             </td>
             <td>
                 <%# Eval("CurrentPay.TimescaleName")%>
