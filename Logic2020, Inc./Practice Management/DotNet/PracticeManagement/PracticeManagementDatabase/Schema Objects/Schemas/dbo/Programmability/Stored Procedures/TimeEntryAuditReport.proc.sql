@@ -38,6 +38,7 @@ AS
                                                       AND     @EndDateLocal
                      )
             SELECT  P.PersonId ,
+			        P.EmployeeNumber,
                     P.LastName ,
                     P.FirstName ,
                     P.PersonStatusId ,
