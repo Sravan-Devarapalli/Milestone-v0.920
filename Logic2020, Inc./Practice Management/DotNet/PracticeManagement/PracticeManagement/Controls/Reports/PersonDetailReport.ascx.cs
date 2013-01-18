@@ -173,7 +173,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-                
+
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -284,7 +284,7 @@ namespace PraticeManagement.Controls.Reports
                                                                                  string.IsNullOrEmpty(payType) ? personType :
                                                                                  string.IsNullOrEmpty(personType) ? payType :
                                                                                                                      payType + ", " + personType;
-                sb.Append(person.FirstName + " " + person.LastName);
+                sb.Append(person.EmployeeNumber + " - " + person.FirstName + " " + person.LastName);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(personStatusAndType);
@@ -327,7 +327,7 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Non-Billable Hours");
                     sb.Append("\t");
-                    sb.Append("Total Hours");
+                    sb.Append("Actual Hours");
                     sb.Append("\t");
                     sb.Append("Note");
                     sb.Append("\t");
@@ -420,7 +420,7 @@ namespace PraticeManagement.Controls.Reports
 
             if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
             {
-                var hostingPage = (PraticeManagement.Reporting.TimePeriodSummaryReport)Page;                
+                var hostingPage = (PraticeManagement.Reporting.TimePeriodSummaryReport)Page;
                 hostingPage.ByResourceControl.PersonDetailPopup.Show();
             }
 
