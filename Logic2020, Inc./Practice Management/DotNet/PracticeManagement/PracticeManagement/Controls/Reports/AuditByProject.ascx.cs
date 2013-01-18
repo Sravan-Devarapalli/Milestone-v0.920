@@ -42,7 +42,7 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateByProjectData(ProjectLevelTimeEntriesHistory[] reportDataByPerson)
         {
-            var reportDataList = reportDataByPerson.OrderBy(p=>p.Project.ProjectNumber).ToList();
+            var reportDataList = reportDataByPerson.OrderBy(p => p.Project.ProjectNumber).ToList();
 
             if (reportDataList.Count > 0)
             {
@@ -79,6 +79,8 @@ namespace PraticeManagement.Controls.Reports
                 if (data.Count > 0)
                 {
                     //Header
+                    sb.Append("Employee Id");
+                    sb.Append("\t");
                     sb.Append("Person Name");
                     sb.Append("\t");
                     sb.Append("Status");
@@ -120,6 +122,8 @@ namespace PraticeManagement.Controls.Reports
                         {
                             foreach (TimeEntryRecord timeEntryRecord in personLevelTimeEntrie.TimeEntryRecords)
                             {
+                                sb.Append(personLevelTimeEntrie.Person.EmployeeNumber);
+                                sb.Append("\t");
                                 sb.Append(personLevelTimeEntrie.Person.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append(personLevelTimeEntrie.Person.Status.Name);
