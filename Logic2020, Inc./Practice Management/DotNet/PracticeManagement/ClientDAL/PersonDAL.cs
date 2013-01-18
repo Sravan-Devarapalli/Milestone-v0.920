@@ -96,7 +96,7 @@ namespace DataAccess
         private const string NumTablesDeletedFromParam = "@NumTablesDeletedFrom";
         private const string SLTApprovalParam = "@SLTApproval";
         private const string SLTPTOApprovalParam = "@SLTPTOApproval";
-        
+
 
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
@@ -1149,19 +1149,19 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(ShowAllParam, showAll);
-                    command.Parameters.AddWithValue(PracticeIdsListParam,practiceIdsSelected != null ? (object)practiceIdsSelected : DBNull.Value);
-                    command.Parameters.AddWithValue(StartDateParam,startDate != DateTime.MinValue ? (object)startDate : DBNull.Value);
-                    command.Parameters.AddWithValue(EndDateParam,endDate != DateTime.MinValue ? (object)endDate : DBNull.Value);
-                    command.Parameters.AddWithValue(PageSizeParam,pageSize > 0 && pageNo >= 0 ? (object)pageSize : DBNull.Value);
-                    command.Parameters.AddWithValue(PageNoParam,pageSize > 0 && pageNo >= 0 ? (object)pageNo : DBNull.Value);
-                    command.Parameters.AddWithValue(LookedParam,!string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
-                    command.Parameters.AddWithValue(RecruiterIdsListParam,recruiterIdsSelected != null ? (object)recruiterIdsSelected : DBNull.Value);
-                    command.Parameters.AddWithValue(MaxSeniorityLevelParam,maxSeniorityLevel.HasValue? (object)maxSeniorityLevel.Value: DBNull.Value);
+                    command.Parameters.AddWithValue(PracticeIdsListParam, practiceIdsSelected != null ? (object)practiceIdsSelected : DBNull.Value);
+                    command.Parameters.AddWithValue(StartDateParam, startDate != DateTime.MinValue ? (object)startDate : DBNull.Value);
+                    command.Parameters.AddWithValue(EndDateParam, endDate != DateTime.MinValue ? (object)endDate : DBNull.Value);
+                    command.Parameters.AddWithValue(PageSizeParam, pageSize > 0 && pageNo >= 0 ? (object)pageSize : DBNull.Value);
+                    command.Parameters.AddWithValue(PageNoParam, pageSize > 0 && pageNo >= 0 ? (object)pageNo : DBNull.Value);
+                    command.Parameters.AddWithValue(LookedParam, !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
+                    command.Parameters.AddWithValue(RecruiterIdsListParam, recruiterIdsSelected != null ? (object)recruiterIdsSelected : DBNull.Value);
+                    command.Parameters.AddWithValue(MaxSeniorityLevelParam, maxSeniorityLevel.HasValue ? (object)maxSeniorityLevel.Value : DBNull.Value);
                     if (!string.IsNullOrEmpty(sortBy))
                     {
                         command.Parameters.AddWithValue(SortByParam, sortBy);
                     }
-                    command.Parameters.AddWithValue(TimescaleIdsListParam,timeScaleIdsSelected != null ? (object)timeScaleIdsSelected : DBNull.Value);
+                    command.Parameters.AddWithValue(TimescaleIdsListParam, timeScaleIdsSelected != null ? (object)timeScaleIdsSelected : DBNull.Value);
                     command.Parameters.AddWithValue(ProjectedParam, projected);
                     command.Parameters.AddWithValue(TerminatedParam, terminated);
                     command.Parameters.AddWithValue(TerminationPendingParam, terminatedPending);
@@ -1908,7 +1908,7 @@ namespace DataAccess
                     try
                     {
                         titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
-			titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                        titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
                     }
                     catch
                     { }
@@ -2336,14 +2336,14 @@ namespace DataAccess
                     aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
                 }
                 catch
-                {}
+                { }
                 try
                 {
                     seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
                     seniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
                 }
                 catch
-                {}
+                { }
 
                 while (reader.Read())
                 {
@@ -3275,6 +3275,7 @@ namespace DataAccess
                 int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
                 int aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
                 int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
 
                 while (reader.Read())
                 {
@@ -3283,6 +3284,7 @@ namespace DataAccess
                     person.Alias = reader.GetString(aliasIndex);
                     person.HireDate = reader.GetDateTime(hireDateIndex);
                     person.IsStrawMan = reader.IsDBNull(isStrawManIndex) ? false : reader.GetBoolean(isStrawManIndex);
+                    person.EmployeeNumber = reader.GetString(employeeNumberIndex);
                     person.CurrentPay = new Pay
                     {
                         TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
