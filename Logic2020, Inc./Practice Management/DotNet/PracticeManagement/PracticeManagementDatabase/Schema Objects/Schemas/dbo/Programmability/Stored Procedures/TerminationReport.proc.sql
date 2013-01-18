@@ -32,6 +32,7 @@ BEGIN
 	)
 
 	SELECT DISTINCT P.PersonId,
+	        P.EmployeeNumber,
 			P.FirstName,
 			P.LastName,
 			Ps.PersonStatusId,
