@@ -223,10 +223,12 @@ namespace PraticeManagement
             public const string GreetingUserName = "{0} {1}";
             public const string DoubleValueWithZeroPadding = "00.00";
             public const string DoubleValue = "0.00";
+            public const string DoubleValueWithPercent = "0.0%";
             public const string CurrencyFormat = "$###,###,###,###,###,###,###";
             public const string ReportDateFormat = "MM/dd/yyyy (dddd)";
             public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
-
+            public const string NumberFormatWithCommas = "###,###,###,###,###,###,###0";
+            public const string DoubleValueWithSinglePrecision = "0.0";
         }
 
         public static class HttpHeaders
