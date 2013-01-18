@@ -49,6 +49,13 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        [DataMember]
+        public double ForecastedHours
+        {
+            get;
+            set;
+        }
+
         public double TotalHours
         {
             get
@@ -57,7 +64,7 @@ namespace DataTransferObjects.Reports
             }
         }
 
-        public int VariancePercent 
+        public int VariancePercent
         {
             get
             {
@@ -72,6 +79,15 @@ namespace DataTransferObjects.Reports
                 return ForecastedHoursUntilToday == 0 ? "N/A" : (BillableHoursUntilToday - ForecastedHoursUntilToday) >= 0 ? "+" + (BillableHoursUntilToday - ForecastedHoursUntilToday).ToString("0.00") : (BillableHoursUntilToday - ForecastedHoursUntilToday).ToString("0.00");
             }
         }
+
+
+        public double BillableHoursVariance
+        {
+            get
+            {
+                return (BillableHoursUntilToday - ForecastedHoursUntilToday);
+            }
+        }      
 
         private int BillableFirstHalfWidth
         {
