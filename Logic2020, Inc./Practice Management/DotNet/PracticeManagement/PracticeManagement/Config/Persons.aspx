@@ -289,7 +289,7 @@
                             </HeaderTemplate>
                             <ItemStyle CssClass="Width12Percent" />
                             <ItemTemplate>
-                                <asp:Label ID="lblTitle" runat="server" Text='<%# Eval("Title.TitleName") %>'></asp:Label>
+                                <asp:Label ID="lblTitle" runat="server" Text='<%# Eval("Title.HtmlEncodedTitleName") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
