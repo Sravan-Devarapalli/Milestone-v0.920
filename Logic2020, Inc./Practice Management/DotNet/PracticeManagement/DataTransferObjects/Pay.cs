@@ -235,6 +235,14 @@ namespace DataTransferObjects
             get;
         }
 
+        public string HtmlEncodedTitleName
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(TitleName);
+            }
+        }
+
         public object Clone()
         {
             return (object) new Pay()
