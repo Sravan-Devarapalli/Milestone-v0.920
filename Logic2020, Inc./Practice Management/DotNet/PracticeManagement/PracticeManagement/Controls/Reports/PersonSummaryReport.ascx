@@ -23,12 +23,12 @@
         </td>
     </tr>
 </table>
-<asp:Repeater ID="repSummary" runat="server">
+<asp:Repeater ID="repSummary" runat="server" OnItemDataBound="repSummary_ItemDataBound">
     <HeaderTemplate>
         <table id="tblPersonSummaryReport" class="tablesorter TimePeriodByproject WholeWidth">
             <thead>
                 <tr>
-                    <th class="textLeft Width550PxImp">
+                    <th class="textLeft Width460Px">
                         Project Name
                     </th>
                     <th class="Width110Px">
@@ -37,17 +37,23 @@
                     <th class="Width110Px">
                         Billing
                     </th>
-                    <th class="Width100Px">
-                        Billable
+                    <th class="Width110Px">
+                        <asp:Label ID="lblProjectedHours" runat="server" Text="Projected Hours"></asp:Label>
                     </th>
                     <th class="Width100Px">
-                        Non-Billable
+                        <asp:Label ID="lblBillable" runat="server" Text="Billable"></asp:Label>
                     </th>
                     <th class="Width100Px">
-                        Total
+                        <asp:Label ID="lblNonBillable" runat="server" Text="Non-Billable"></asp:Label>
                     </th>
-                    <th class="Width325Px">
-                        Percent of Total Hours this Period
+                    <th class="Width100Px">
+                        <asp:Label ID="lblActualHours" runat="server" Text="Actual Hours"></asp:Label>
+                    </th>
+                    <th class="Width200Px">
+                        <asp:Label ID="lblBillableHoursVariance" runat="server" Text="Billable Hours Variance"></asp:Label>
+                    </th>
+                    <th class="Width215Px">
+                        Percent of Actual Hours this Period
                     </th>
                 </tr>
             </thead>
@@ -80,6 +86,9 @@
                 <%# Eval("BillableType")%>
             </td>
             <td>
+                <%# GetDoubleFormat((double)Eval("ProjectedHours"))%>
+            </td>
+            <td>
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
@@ -88,31 +97,22 @@
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
-            <td sorttable_customkey='<%# Eval("ProjectTotalHoursPercent")%>'>
-                <table class="TdLevelNoBorder UtlizationGraph">
+            <td sorttable_customkey='<%# Eval("BillableHoursVariance") %>'>
+                <table class="WholeWidth TdLevelNoBorder">
                     <tr>
-                        <td class="Width10Percent">
+                        <td class="Width50Percent textRightImp">
+                            <%# ((double)Eval("BillableHoursVariance") > 0) ? "+" + GetDoubleFormat((double)Eval("BillableHoursVariance")) : GetDoubleFormat((double)Eval("BillableHoursVariance"))%>
                         </td>
-                        <td class="PersonSummaryGraphTd GraphTd">
-                            <table>
-                                <tr>
-                                    <td class="FirstTd" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
-                                    </td>
-                                    <td class="ThirdTd" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
-                                    </td>
-                                    <td class="SecondTd" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="PersonSummaryGraphValueTd">
-                            <%# Eval("ProjectTotalHoursPercent")%>%
-                        </td>
-                        <td class="Width10Percent">
+                        <td class="Width50Percent t-left">
+                            <asp:Label ID="lblExclamationMark" runat="server" Visible='<%# ((double)Eval("BillableHoursVariance") < 0)%>'
+                                Text="!" CssClass="error-message fontSizeLarge" ToolTip="Project Underrun"></asp:Label>
                         </td>
                     </tr>
                 </table>
             </td>
+            <td sorttable_customkey='<%# Eval("ProjectTotalHoursPercent") %>'>
+                <%# Eval("ProjectTotalHoursPercent")%>
+            %
         </tr>
     </ItemTemplate>
     <AlternatingItemTemplate>
@@ -143,6 +143,9 @@
                 <%# Eval("BillableType")%>
             </td>
             <td>
+                <%# GetDoubleFormat((double)Eval("ProjectedHours"))%>
+            </td>
+            <td>
                 <%# GetDoubleFormat((double)Eval("BillableHours"))%>
             </td>
             <td>
@@ -151,30 +154,21 @@
             <td>
                 <%# GetDoubleFormat((double)Eval("TotalHours"))%>
             </td>
-            <td sorttable_customkey='<%# Eval("ProjectTotalHoursPercent")%>'>
-                <table class="TdLevelNoBorder UtlizationGraph">
+            <td sorttable_customkey='<%# Eval("BillableHoursVariance") %>'>
+                <table class="WholeWidth TdLevelNoBorder">
                     <tr>
-                        <td class="Width10Percent">
+                        <td class="Width50Percent textRightImp">
+                            <%# ((double)Eval("BillableHoursVariance") > 0) ? "+" + GetDoubleFormat((double)Eval("BillableHoursVariance")) : GetDoubleFormat((double)Eval("BillableHoursVariance"))%>
                         </td>
-                        <td class="PersonSummaryGraphTd GraphTd">
-                            <table>
-                                <tr>
-                                    <td class="FirstTd" width="<%# Eval("ProjectTotalHoursPercentBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentBillable")%>%">
-                                    </td>
-                                    <td class="ThirdTd" width="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%" title="<%# Eval("ProjectTotalHoursPercentNonBillable")%>%">
-                                    </td>
-                                    <td class="SecondTd" width="<%# Eval("TotalHoursPercentExceptThisProject")%>%">
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="PersonSummaryGraphValueTd">
-                            <%# Eval("ProjectTotalHoursPercent")%>%
-                        </td>
-                        <td class="Width10Percent">
+                        <td class="Width50Percent t-left">
+                            <asp:Label ID="lblExclamationMark" runat="server" Visible='<%# ((double)Eval("BillableHoursVariance") < 0)%>'
+                                Text="!" CssClass="error-message fontSizeLarge" ToolTip="Project Underrun"></asp:Label>
                         </td>
                     </tr>
                 </table>
+            </td>
+            <td sorttable_customkey='<%# Eval("ProjectTotalHoursPercent") %>'>
+                <%# Eval("ProjectTotalHoursPercent")%>%
             </td>
         </tr>
     </AlternatingItemTemplate>
@@ -185,4 +179,59 @@
 <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
     This person has not entered Time Entries for the selected period.
 </div>
+<asp:Panel ID="pnlTotalProjectedHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Projected Hours:
+    </label>
+    <asp:Label ID="lblTotalProjectedHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Billable:
+    </label>
+    <asp:Label ID="lblTotalBillableHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalNonBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Non-Billable:
+    </label>
+    <asp:Label ID="lblTotalNonBillableHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalActualHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <table>
+        <tr>
+            <td class="fontBold">
+                Total Billable:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalBillablePanlActual" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Total Non-Billable:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalNonBillablePanlActual" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold padRight15">
+                Total Actual Hours:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalActualHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+<asp:Panel ID="pnlBillableHoursVariance" Style="display: none;" runat="server" CssClass="pnlTotal Width170PxImp">
+    <label class="fontBold">
+        Total Billable Hours Variance:
+    </label>
+    <br />
+    <asp:Label ID="lblTotalBillableHoursVariance" runat="server"></asp:Label>
+    <asp:Label ID="lblExclamationMarkPanl" runat="server" Visible="false" Text="!" CssClass="error-message fontSizeLarge t-left"
+        ToolTip="Project Underrun"></asp:Label>
+</asp:Panel>
 
