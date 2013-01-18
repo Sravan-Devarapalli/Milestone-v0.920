@@ -2776,7 +2776,7 @@ TABLE.PaddingTenPx td
 .PersonDetailReportHeader TD.PersonTotals
 {
     text-align: right;
-    width: 470px;
+    width: 600px;
 }
 .TimePeriodSummaryReportHeader
 {
@@ -2793,7 +2793,7 @@ TABLE.PaddingTenPx td
 }
 .TimePeriodSummaryReportHeader .ByProject
 {
-    width: 470px !important;
+    width: 530px !important;
 }
 .TimePeriodSummaryReportHeader .AuditReportTotals
 {
@@ -2821,7 +2821,7 @@ TABLE.PaddingTenPx td
 .ProjectSummaryReportTotals
 {
     text-align: right;
-    width: 470px;
+    width: 530px;
     padding-bottom: 10px !important;
 }
 
@@ -7570,5 +7570,58 @@ table#ctl00_body_login tr td label
     height: 25px;
     white-space: nowrap;
     text-align: center;
+}
+.buttons-blockCheckBox input
+{
+    text-align: left !important;
+    float: left !important;
+    width: 50px;
+}
+.Width225Px
+{
+    width: 225px;
+}
+.Width215Px
+{
+    width: 215px;
+}
+.pnlBillableUtilizationCalculation
+{
+    width: 410px;
+    border: 4px solid #375D89;
+    z-index: 1000001 !important;
+    position: absolute;
+    padding: 6px !important;
+    background-color: White !important;
+}
+.pnlBillableUtilizationCalculation table
+{
+    width: 410px;
+}
+.popUpBillableUtilization
+{
+    background-color: White;
+    border-color: #375D89;
+    border-style: solid;
+    border-width: 4px;
+    min-height: 60px;
+    min-width: 200px;
+    max-height: 400px;
+    max-width: 600px !important;
+    padding: 12px 12px 12px 12px !important;
+}
+
+.PaddingTop12
+{
+    padding-top: 12px;
+}
+.width850PxImp
+{
+    width: 850px !important;
+}
+
+.Width450PxImp
+{
+    width: 450px !important;
 }
 
