@@ -29,7 +29,7 @@
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
-                                    Total Hours
+                                    Total Actual Hours
                                 </td>
                             </tr>
                             <tr>
@@ -182,17 +182,20 @@
                             <th class="Width110Px">
                                 Billing
                             </th>
-                            <th class="Width100Px">
-                                Billable
+                            <th class="Width125Px">
+                                <asp:Label ID="lblProjectedHours" runat="server" Text="Projected Hours"></asp:Label>
                             </th>
                             <th class="Width100Px">
-                                Non-Billable
+                                <asp:Label ID="lblBillable" runat="server" Text="Billable"></asp:Label>
                             </th>
                             <th class="Width100Px">
-                                Total
+                                <asp:Label ID="lblNonBillable" runat="server" Text="Non-Billable"></asp:Label>
                             </th>
-                            <th class="Width325Px">
-                                Project Variance (in Hours)
+                            <th class="Width100Px">
+                                <asp:Label ID="lblActualHours" runat="server" Text="Actual Hours"></asp:Label>
+                            </th>
+                            <th class="Width200Px">
+                                <asp:Label ID="lblBillableHoursVariance" runat="server" Text="Billable Hours Variance"></asp:Label>
                             </th>
                         </tr>
                     </thead>
@@ -229,55 +232,27 @@
                     <%# Eval("BillingType")%>
                 </td>
                 <td>
+                    <%# GetDoubleFormat((double)Eval("ForecastedHours"))%>
+                </td>
+                <td>
                     <%# GetDoubleFormat((double)Eval("BillableHours"))%>
                 </td>
                 <td>
                     <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                 </td>
                 <td>
-                    <%# GetDoubleFormat((double)Eval("TotalHours"))%>
+                    <asp:LinkButton ID="lnkActualHours" runat="server" ToolTip='<%# GetDoubleFormat((double)Eval("TotalHours"))%>'
+                        OnClientClick="OpenUrlInNewWindow(this);return false;" Text='<%# GetDoubleFormat((double)Eval("TotalHours"))%>'></asp:LinkButton>
                 </td>
-                <td sorttable_customkey='<%# GetVarianceSortValue((string)Eval("Variance"))%>'>
+                <td sorttable_customkey='<%# Eval("BillableHoursVariance") %>'>
                     <table class="WholeWidth TdLevelNoBorder">
                         <tr>
-                            <td class="Width5Percent">
+                            <td class="Width50Percent textRightImp">
+                                <%# ((double)Eval("BillableHoursVariance") > 0) ? "+" + GetDoubleFormat((double)Eval("BillableHoursVariance")) : GetDoubleFormat((double)Eval("BillableHoursVariance")) %>
                             </td>
-                            <td class="Width70Per textRight">
-                                <table class="WholeWidth">
-                                    <tr class="border1Px">
-                                        <td class="Width50Percent borderRightImp">
-                                            <table class="WholeWidth">
-                                                <tr>
-                                                    <td style="<%# Eval("BillableFirstHalfHtmlStyle")%>">
-                                                    </td>
-                                                    <td style="<%# Eval("BillableSecondHalfHtmlStyle")%>">
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td class="Width50Percent borderLeft">
-                                            <table class="WholeWidth">
-                                                <tr>
-                                                    <td style="<%# Eval("ForecastedFirstHalfHtmlStyle")%>">
-                                                    </td>
-                                                    <td style="<%# Eval("ForecastedSecondHalfHtmlStyle")%>">
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="Width20Percent">
-                                <table class="WholeWidth">
-                                    <tr>
-                                        <td class="TimePeriodByProjectVariance">
-                                            <%# Eval("Variance")%>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="Width5Percent">
+                            <td class="Width50Percent t-left">
+                                <asp:Label ID="lblExclamationMark" runat="server" Visible='<%# ((double)Eval("BillableHoursVariance") < 0) %>'
+                                    Text="!" CssClass="error-message fontSizeLarge t-left" ToolTip="Project Underrun"></asp:Label>
                             </td>
                         </tr>
                     </table>
@@ -337,5 +312,60 @@
             </td>
         </tr>
     </table>
+</asp:Panel>
+<asp:Panel ID="pnlTotalProjectedHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Projected Hours:
+    </label>
+    <asp:Label ID="lblTotalProjectedHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Billable:
+    </label>
+    <asp:Label ID="lblTotalBillableHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalNonBillableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Non-Billable:
+    </label>
+    <asp:Label ID="lblTotalNonBillableHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalActualHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <table>
+        <tr>
+            <td class="fontBold">
+                Total Billable:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalBillablePanlActual" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold">
+                Total Non-Billable:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalNonBillablePanlActual" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="fontBold padRight15">
+                Total Actual Hours:
+            </td>
+            <td>
+                <asp:Label ID="lblTotalActualHours" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+<asp:Panel ID="pnlBillableHoursVariance" Style="display: none;" runat="server" CssClass="pnlTotal Width170PxImp">
+    <label class="fontBold">
+        Total Billable Hours Variance:
+    </label>
+    <br />
+    <asp:Label ID="lblTotalBillableHoursVariance" runat="server"></asp:Label>
+    <asp:Label ID="lblExclamationMarkPanl" runat="server" Visible="false" Text="!" CssClass="error-message fontSizeLarge t-left"
+        ToolTip="Project Underrun"></asp:Label>
 </asp:Panel>
 
