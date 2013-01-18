@@ -437,7 +437,7 @@ namespace DataTransferObjects
         public bool IsStrawMan { get; set; }
 
         [DataMember]
-        public double UtlizationPercent { get; set; }
+        public double BillableUtilizationPercent { get; set; }       
 
         [DataMember]
         public bool IsOffshore { get; set; }
