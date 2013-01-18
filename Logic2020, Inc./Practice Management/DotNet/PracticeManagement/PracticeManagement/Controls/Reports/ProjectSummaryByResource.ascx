@@ -54,7 +54,7 @@
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
-                                    Total Hours
+                                    Total Actual Hours
                                 </td>
                             </tr>
                             <tr>
