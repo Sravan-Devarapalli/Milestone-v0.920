@@ -27,6 +27,7 @@ BEGIN
 		 , TT.Name AS [TimeTypeName]
 		 , TT.Code AS [TimeTypeCode]
 		 , P.PersonId
+		 , P.EmployeeNumber
 		 , P.FirstName
 		 , P.LastName
 		 , TE.ChargeCodeDate
