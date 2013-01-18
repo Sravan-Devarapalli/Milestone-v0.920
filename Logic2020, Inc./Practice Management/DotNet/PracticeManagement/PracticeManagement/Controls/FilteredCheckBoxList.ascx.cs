@@ -20,7 +20,7 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                return CheckBoxListObject.Items.Count == SelectedIndexesList.Count || CheckBoxListObject.Items.Count-1 == SelectedIndexesList.Count;
+                return CheckBoxListObject.Items.Count == SelectedIndexesList.Count || CheckBoxListObject.Items.Count - 1 == SelectedIndexesList.Count;
             }
         }
 
@@ -58,7 +58,7 @@ namespace PraticeManagement.Controls
                     cbl.Items[i].Attributes["style"] = "font-style: italic;";
                 }
 
-                cbl.Items[i].Attributes["title"] = cbl.Items[i].Text;
+                cbl.Items[i].Attributes["title"] = HttpUtility.HtmlDecode(cbl.Items[i].Text);
             }
 
 
