@@ -64,6 +64,7 @@
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillableUtilizationPercent" type="xs:double" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="ContactInfoList" nillable="true" type="q1:ArrayOfPersonContactInfo" />
       <xs:element minOccurs="0" name="CurrentPay" nillable="true" type="tns:Pay" />
       <xs:element minOccurs="0" name="DefaultPractice" nillable="true" type="tns:Practice" />
@@ -117,7 +118,6 @@
       <xs:element minOccurs="0" name="TerminationReasonid" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Title" nillable="true" type="tns:Title" />
       <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q10:ArrayOfPersonTraining" />
-      <xs:element minOccurs="0" name="UtlizationPercent" type="xs:double" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Person" nillable="true" type="tns:Person" />
@@ -637,23 +637,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
-  <xs:complexType name="TripleOfdoubledoubledouble">
-    <xs:annotation>
-      <xs:appinfo>
-        <GenericType Name="TripleOf{0}{1}{2}{#}" Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="double" Namespace="http://www.w3.org/2001/XMLSchema" />
-          <GenericParameter Name="double" Namespace="http://www.w3.org/2001/XMLSchema" />
-          <GenericParameter Name="double" Namespace="http://www.w3.org/2001/XMLSchema" />
-        </GenericType>
-      </xs:appinfo>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element minOccurs="0" name="First" type="xs:double" />
-      <xs:element minOccurs="0" name="Second" type="xs:double" />
-      <xs:element minOccurs="0" name="Third" type="xs:double" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="TripleOfdoubledoubledouble" nillable="true" type="tns:TripleOfdoubledoubledouble" />
   <xs:complexType name="ArrayOfProject">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
