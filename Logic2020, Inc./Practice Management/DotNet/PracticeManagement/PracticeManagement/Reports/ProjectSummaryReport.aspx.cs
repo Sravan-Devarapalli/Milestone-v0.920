@@ -308,16 +308,15 @@ namespace PraticeManagement.Reporting
 
             if (!string.IsNullOrEmpty(PeriodSelectedFromQueryString) && !IsPostBack)
             {
-                PopulateControls(ProjectNumberFromQueryString);
+                txtProjectNumber.Text = ProjectNumberFromQueryString;
                 ddlPeriod.SelectedValue = PeriodSelectedFromQueryString;
-                if (ddlPeriod.SelectedValue == "Please Select")
+                if ((ddlPeriod.SelectedValue == "Please Select" || ddlPeriod.SelectedValue == "0") && !string.IsNullOrEmpty(StartDateFromQueryString))
                 {
                     diRange.FromDate = Convert.ToDateTime(StartDateFromQueryString);
                     diRange.ToDate = Convert.ToDateTime(EndDatFromQueryString);
                     ddlPeriod.SelectedValue = "0";
                 }
                 ddlView.SelectedValue = "0";
-                imgProjectSearch.Visible = false;
             }
 
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
