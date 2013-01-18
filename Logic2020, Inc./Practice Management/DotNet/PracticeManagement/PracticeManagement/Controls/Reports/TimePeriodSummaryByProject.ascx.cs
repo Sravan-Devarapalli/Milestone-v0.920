@@ -15,10 +15,25 @@ namespace PraticeManagement.Controls.Reports
     public partial class TimePeriodSummaryByProject : System.Web.UI.UserControl
     {
         private string TimePeriodSummaryReportExport = "TimePeriod Summary Report By Project";
+        private string ByProjectByResourceUrl = "ProjectSummaryReport.aspx?StartDate={0}&EndDate={1}&PeriodSelected={2}&ProjectNumber={3}";
+        private string ShowPanel = "ShowPanel('{0}', '{1}','{2}');";
+        private string HidePanel = "HidePanel('{0}');";
+        private string OnMouseOver = "onmouseover";
+        private string OnMouseOut = "onmouseout";
 
         private HtmlImage ImgClientFilter { get; set; }
 
         private HtmlImage ImgProjectStatusFilter { get; set; }
+
+        private Label LblProjectedHours { get; set; }
+
+        private Label LblBillable { get; set; }
+
+        private Label LblNonBillable { get; set; }
+
+        private Label LblActualHours { get; set; }
+
+        private Label LblBillableHoursVariance { get; set; }
 
         public string SelectedProjectNumber
         {
@@ -46,7 +61,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 return ucGroupByBusinessDevelopment;
             }
-        }            
+        }
 
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
@@ -141,13 +156,15 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Billing");
                     sb.Append("\t");
+                    sb.Append("Projected Hours");
+                    sb.Append("\t");
                     sb.Append("Billable");
                     sb.Append("\t");
                     sb.Append("Non-Billable");
                     sb.Append("\t");
-                    sb.Append("Total");
+                    sb.Append("Actual Hours");
                     sb.Append("\t");
-                    sb.Append("Project Variance (in Hours)");
+                    sb.Append("Billable Hours Variance");
                     sb.Append("\t");
                     sb.AppendLine();
 
@@ -170,13 +187,15 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.BillingType);
                         sb.Append("\t");
+                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.ForecastedHours));
+                        sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.BillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.NonBillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Variance);
+                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.BillableHoursVariance));
                         sb.Append("\t");
                         sb.AppendLine();
                     }
@@ -217,14 +236,24 @@ namespace PraticeManagement.Controls.Reports
             {
                 ImgClientFilter = e.Item.FindControl("imgClientFilter") as HtmlImage;
                 ImgProjectStatusFilter = e.Item.FindControl("imgProjectStatusFilter") as HtmlImage;
+
+                LblProjectedHours = e.Item.FindControl("lblProjectedHours") as Label;
+                LblBillable = e.Item.FindControl("lblBillable") as Label;
+                LblNonBillable = e.Item.FindControl("lblNonBillable") as Label;
+                LblActualHours = e.Item.FindControl("lblActualHours") as Label;
+                LblBillableHoursVariance = e.Item.FindControl("lblBillableHoursVariance") as Label;
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                var dataItem = (ProjectLevelGroupedHours)e.Item.DataItem;
                 var lnkProject = e.Item.FindControl("lnkProject") as LinkButton;
                 var imgZoomIn = e.Item.FindControl("imgZoomIn") as HtmlImage;
+                var LnkActualHours = e.Item.FindControl("lnkActualHours") as LinkButton;
 
                 lnkProject.Attributes["onmouseover"] = string.Format("document.getElementById(\'{0}\').style.display='';", imgZoomIn.ClientID);
                 lnkProject.Attributes["onmouseout"] = string.Format("document.getElementById(\'{0}\').style.display='none';", imgZoomIn.ClientID);
+                LnkActualHours.Attributes["NavigationUrl"] = string.Format(ByProjectByResourceUrl, HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    HostingPage.EndDate.Value.Date.ToString(Constants.Formatting.EntryDateFormat), HostingPage.RangeSelected, dataItem.Project.ProjectNumber);
             }
         }
 
@@ -288,6 +317,22 @@ namespace PraticeManagement.Controls.Reports
                   cblClients.SelectedIndexes, cblClients.CheckBoxListObject.ClientID, cblClients.WaterMarkTextBoxBehaviorID);
                 ImgProjectStatusFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblProjectStatus.FilterPopupClientID,
                   cblProjectStatus.SelectedIndexes, cblProjectStatus.CheckBoxListObject.ClientID, cblProjectStatus.WaterMarkTextBoxBehaviorID);
+
+                //Populate header hover               
+                LblProjectedHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblProjectedHours.ClientID, pnlTotalProjectedHours.ClientID, 0);
+                LblProjectedHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalProjectedHours.ClientID);
+
+                LblBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblBillable.ClientID, pnlTotalBillableHours.ClientID, 0);
+                LblBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableHours.ClientID);
+
+                LblNonBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblNonBillable.ClientID, pnlTotalNonBillableHours.ClientID, 0);
+                LblNonBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalNonBillableHours.ClientID);
+
+                LblActualHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblActualHours.ClientID, pnlTotalActualHours.ClientID, 0);
+                LblActualHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalActualHours.ClientID);
+
+                LblBillableHoursVariance.Attributes[OnMouseOver] = string.Format(ShowPanel, LblBillableHoursVariance.ClientID, pnlBillableHoursVariance.ClientID, 0);
+                LblBillableHoursVariance.Attributes[OnMouseOut] = string.Format(HidePanel, pnlBillableHoursVariance.ClientID);
             }
             else
             {
@@ -324,6 +369,10 @@ namespace PraticeManagement.Controls.Reports
         {
             double billableHours = reportData.Sum(p => p.BillableHours);
             double nonBillableHours = reportData.Sum(p => p.NonBillableHours);
+            double totalProjectedHours = reportData.Sum(p => p.ForecastedHours);
+            double totalActualHours = reportData.Sum(p => p.TotalHours);
+            double totalBillableHoursVariance = reportData.Sum(p => p.BillableHoursVariance);
+
             int noOfEmployees = reportData.Length;
             var billablePercent = 0;
             var nonBillablePercent = 0;
@@ -334,12 +383,18 @@ namespace PraticeManagement.Controls.Reports
             }
             ltProjectCount.Text = noOfEmployees + " Projects";
             lbRange.Text = HostingPage.Range;
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
+            ltrlTotalHours.Text = lblTotalActualHours.Text = totalActualHours.ToString(Constants.Formatting.DoubleValue);
             ltrlAvgHours.Text = noOfEmployees > 0 ? ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValue) : "0.00";
-            ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlBillableHours.Text = lblTotalBillableHours.Text = lblTotalBillablePanlActual.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlNonBillableHours.Text = lblTotalNonBillableHours.Text = lblTotalNonBillablePanlActual.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+            lblTotalProjectedHours.Text = totalProjectedHours.ToString(Constants.Formatting.DoubleValue);
+            lblTotalBillableHoursVariance.Text = totalBillableHoursVariance.ToString(Constants.Formatting.DoubleValue);
+            if (totalBillableHoursVariance < 0)
+            {
+                lblExclamationMarkPanl.Visible = true;
+            }
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
