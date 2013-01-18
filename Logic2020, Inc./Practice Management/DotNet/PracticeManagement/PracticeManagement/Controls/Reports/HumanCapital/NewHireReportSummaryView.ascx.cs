@@ -244,7 +244,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         private void PopulateTitleFilter(List<Person> reportData)
         {
-            var titles = reportData.Select(r => new { TitleId = r.Title != null ? r.Title.TitleId : 0, TitleName = r.Title != null ? r.Title.TitleName : Constants.FilterKeys.Unassigned }).Distinct().ToList().OrderBy(s => s.TitleName);
+            var titles = reportData.Select(r => new { TitleId = r.Title != null ? r.Title.TitleId : 0, TitleName = r.Title != null ? r.Title.HtmlEncodedTitleName : Constants.FilterKeys.Unassigned }).Distinct().ToList().OrderBy(s => s.TitleName);
             DataHelper.FillListDefault(cblTitles.CheckBoxListObject, "All Titles", titles.ToArray(), false, "TitleId", "TitleName");
             cblTitles.SelectAllItems(true);
         }
