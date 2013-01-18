@@ -33,6 +33,7 @@ BEGIN
 		WHERE CPH.HireDate BETWEEN @Startdate AND @Enddate
 	)
 	SELECT DISTINCT P.PersonId,
+			P.EmployeeNumber,
 			P.FirstName,
 			P.LastName,
 			Ps.PersonStatusId,
