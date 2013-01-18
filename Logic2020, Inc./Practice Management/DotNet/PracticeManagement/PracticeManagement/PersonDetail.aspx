@@ -426,9 +426,8 @@
         function SetTooltipsForallDropDowns() {
             var optionList = document.getElementsByTagName('option');
 
-            for (var i = 0; i < optionList.length; ++i) {
-
-                optionList[i].title = optionList[i].innerHTML;
+            for (var i = 0; i < optionList.length; ++i) {            
+                optionList[i].title = DecodeString(optionList[i].innerHTML);
             }
 
         }
@@ -1105,7 +1104,7 @@
                                                             Title</div>
                                                     </HeaderTemplate>
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblTitle" runat="server" Text=' <%# Eval("TitleName") %>'></asp:Label>
+                                                        <asp:Label ID="lblTitle" runat="server" Text=' <%# Eval("HtmlEncodedTitleName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                     <EditItemTemplate>
                                                         <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server" AutoPostBack="true"
