@@ -375,6 +375,8 @@ namespace PraticeManagement.Controls.Reports
                 //Header
                 /* Person Name 
                 Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
+                sb.Append("Employee Id");
+                sb.Append("\t");
                 sb.Append("Resource");
                 sb.Append("\t");
                 sb.Append("Project Role");
@@ -389,7 +391,7 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.Append("Non-Billable");
                 sb.Append("\t");
-                sb.Append("Total");
+                sb.Append("Actual Hours");
                 sb.Append("\t");
                 sb.Append("Note");
                 sb.AppendLine();
@@ -402,6 +404,8 @@ namespace PraticeManagement.Controls.Reports
                         {
                             foreach (var byWorkType in byDateList.DayTotalHoursList)
                             {
+                                sb.Append(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
+                                sb.Append("\t");
                                 sb.Append(timeEntriesGroupByClientAndProject.Person.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
@@ -426,6 +430,8 @@ namespace PraticeManagement.Controls.Reports
                     }
                     else
                     {
+                        sb.Append(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
+                        sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Person.PersonLastFirstName);
                         sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
