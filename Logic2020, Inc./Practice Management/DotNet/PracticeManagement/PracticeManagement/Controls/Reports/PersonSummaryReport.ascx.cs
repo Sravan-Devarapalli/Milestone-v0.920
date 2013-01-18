@@ -12,10 +12,37 @@ namespace PraticeManagement.Controls.Reports
     public partial class PersonSummaryReport : System.Web.UI.UserControl
     {
         private string PersonSummaryReportExport = "Person Summary Report";
+        private string ShowPanel = "ShowPanel('{0}', '{1}','{2}');";
+        private string HidePanel = "HidePanel('{0}');";
+        private string OnMouseOver = "onmouseover";
+        private string OnMouseOut = "onmouseout";
+
+        private Label LblProjectedHours { get; set; }
+
+        private Label LblBillable { get; set; }
+
+        private Label LblNonBillable { get; set; }
+
+        private Label LblActualHours { get; set; }
+
+        private Label LblBillableHoursVariance { get; set; }
+
 
         private PraticeManagement.Reporting.PersonDetailTimeReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.PersonDetailTimeReport)Page); }
+        }
+
+        protected void repSummary_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                LblProjectedHours = e.Item.FindControl("lblProjectedHours") as Label;
+                LblBillable = e.Item.FindControl("lblBillable") as Label;
+                LblNonBillable = e.Item.FindControl("lblNonBillable") as Label;
+                LblActualHours = e.Item.FindControl("lblActualHours") as Label;
+                LblBillableHoursVariance = e.Item.FindControl("lblBillableHoursVariance") as Label;
+            }
         }
 
         public void DatabindRepepeaterSummary(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
@@ -26,6 +53,7 @@ namespace PraticeManagement.Controls.Reports
                 repSummary.Visible = true;
                 repSummary.DataSource = timeEntriesGroupByClientAndProjectList;
                 repSummary.DataBind();
+                PopulateHeaderHoverLabels(timeEntriesGroupByClientAndProjectList.ToList());
             }
             else
             {
@@ -34,11 +62,40 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        private void PopulateHeaderHoverLabels(List<TimeEntriesGroupByClientAndProject> reportData)
+        {
+            LblProjectedHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblProjectedHours.ClientID, pnlTotalProjectedHours.ClientID, 0);
+            LblProjectedHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalProjectedHours.ClientID);
+
+            LblBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblBillable.ClientID, pnlTotalBillableHours.ClientID, 0);
+            LblBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableHours.ClientID);
+
+            LblNonBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblNonBillable.ClientID, pnlTotalNonBillableHours.ClientID, 0);
+            LblNonBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalNonBillableHours.ClientID);
+
+            LblActualHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblActualHours.ClientID, pnlTotalActualHours.ClientID, 0);
+            LblActualHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalActualHours.ClientID);
+
+            LblBillableHoursVariance.Attributes[OnMouseOver] = string.Format(ShowPanel, LblBillableHoursVariance.ClientID, pnlBillableHoursVariance.ClientID, 0);
+            LblBillableHoursVariance.Attributes[OnMouseOut] = string.Format(HidePanel, pnlBillableHoursVariance.ClientID);
+            double totalBillableHoursVariance = reportData.Sum(p => p.BillableHoursVariance);
+
+            lblTotalProjectedHours.Text = reportData.Sum(p => p.ProjectedHours).ToString(Constants.Formatting.DoubleValue);
+            lblTotalBillableHours.Text = lblTotalBillablePanlActual.Text = reportData.Sum(p => p.BillableHours).ToString(Constants.Formatting.DoubleValue);
+            lblTotalNonBillableHours.Text = lblTotalNonBillablePanlActual.Text = reportData.Sum(p => p.NonBillableHours).ToString(Constants.Formatting.DoubleValue);
+            lblTotalActualHours.Text = reportData.Sum(p => p.TotalHours).ToString(Constants.Formatting.DoubleValue);
+            lblTotalBillableHoursVariance.Text = totalBillableHoursVariance.ToString(Constants.Formatting.DoubleValue);
+            if (totalBillableHoursVariance < 0)
+            {
+                lblExclamationMarkPanl.Visible = true;
+            }
+        }
+
         protected string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
         }
-     
+
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(PersonSummaryReportExport);
@@ -57,7 +114,7 @@ namespace PraticeManagement.Controls.Reports
                                                                                  string.IsNullOrEmpty(personType) ? payType :
                                                                                                                      payType + ", " + personType;
                 StringBuilder sb = new StringBuilder();
-                sb.Append(person.FirstName + " " + person.LastName);
+                sb.Append(person.EmployeeNumber + " - " + person.FirstName + " " + person.LastName);
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(personStatusAndType);
@@ -86,14 +143,18 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Billing");
                     sb.Append("\t");
+                    sb.Append("Projected Hours");
+                    sb.Append("\t");
                     sb.Append("Billable");
                     sb.Append("\t");
                     sb.Append("Non-Billable");
                     sb.Append("\t");
-                    sb.Append("Total");
+                    sb.Append("Actual Hours");
+                    sb.Append("\t");
+                    sb.Append("Billable Hours Variance");
                     sb.Append("\t");
                     sb.Append("Percent of Total Hours this Period");
-                   
+
                     sb.Append("\t");
                     sb.AppendLine();
 
@@ -116,13 +177,17 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(timeEntriesGroupByClientAndProject.BillableType);
                         sb.Append("\t");
+                        sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.ProjectedHours));
+                        sb.Append("\t");
                         sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.NonBillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.TotalHours));
                         sb.Append("\t");
-                        sb.Append(timeEntriesGroupByClientAndProject.ProjectTotalHoursPercent+ "%");
+                        sb.Append(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHoursVariance));
+                        sb.Append("\t");
+                        sb.Append(timeEntriesGroupByClientAndProject.ProjectTotalHoursPercent + "%");
                         sb.Append("\t");
                         sb.AppendLine();
                     }
