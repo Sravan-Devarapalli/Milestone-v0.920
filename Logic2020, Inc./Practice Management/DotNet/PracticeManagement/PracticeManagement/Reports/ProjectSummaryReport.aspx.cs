@@ -18,7 +18,40 @@ namespace PraticeManagement.Reporting
 {
     public partial class ProjectSummaryReport : Page
     {
+        public const string ProjectNumberKey = "ProjectNumber";
+        public const string StartDateKey = "StartDate";
+        public const string EndDateKey = "EndDate";
+        public const string PeriodSelectedkey = "PeriodSelected";
         #region Properties
+
+        public string ProjectNumberFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[ProjectNumberKey];
+            }
+        }
+        public string StartDateFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[StartDateKey];
+            }
+        }
+        public string EndDatFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[EndDateKey];
+            }
+        }
+        public string PeriodSelectedFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[PeriodSelectedkey];
+            }
+        }
 
         public DateTime? StartDate
         {
@@ -272,6 +305,21 @@ namespace PraticeManagement.Reporting
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
+
+            if (!string.IsNullOrEmpty(PeriodSelectedFromQueryString) && !IsPostBack)
+            {
+                PopulateControls(ProjectNumberFromQueryString);
+                ddlPeriod.SelectedValue = PeriodSelectedFromQueryString;
+                if (ddlPeriod.SelectedValue == "Please Select")
+                {
+                    diRange.FromDate = Convert.ToDateTime(StartDateFromQueryString);
+                    diRange.ToDate = Convert.ToDateTime(EndDatFromQueryString);
+                    ddlPeriod.SelectedValue = "0";
+                }
+                ddlView.SelectedValue = "0";
+                imgProjectSearch.Visible = false;
+            }
+
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
@@ -498,7 +546,7 @@ namespace PraticeManagement.Reporting
                 listItem.Attributes.Add("milestone", listItem.Text);
             }
             ddlPeriod.Items.Add(listItem);
-            
+
             //adding additional time phrases as a part of #3074
             var payrollCurrent = new System.Web.UI.WebControls.ListItem("Payroll – Current", "15");
             var payrollPrevious = new System.Web.UI.WebControls.ListItem("Payroll – Previous", "-15");
@@ -624,7 +672,7 @@ namespace PraticeManagement.Reporting
 
             PdfPTable outerTable = new PdfPTable(4);
             outerTable.WidthPercentage = 100;
-            float[] outerWidths = { .6f, .2f, .1f, .1f };
+            float[] outerWidths = { .5f, .2f, .2f, .1f };
             outerTable.SetWidths(outerWidths);
 
             var boldBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
@@ -688,7 +736,7 @@ namespace PraticeManagement.Reporting
             //inner table3
             PdfPTable innerTable3 = new PdfPTable(1);
             innerTable3.WidthPercentage = 100;
-            PdfPCell headerText7 = new PdfPCell(new Phrase("Total Hours", normalFont12));
+            PdfPCell headerText7 = new PdfPCell(new Phrase("Total Actual Hours", normalFont12));
             PdfPCell headerText8 = new PdfPCell(new Phrase((billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue), boldFont));
             headerText7.VerticalAlignment = Element.ALIGN_BOTTOM;
             headerText8.VerticalAlignment = Element.ALIGN_TOP;
@@ -745,20 +793,21 @@ namespace PraticeManagement.Reporting
             if (data.Count > 0)
             {
                 //Header
-                _pdfProjectPersonsSummary = string.Format("Resource{0}ProjectRole{0}Billable{0}Non-Billable{0}Total{0}Project Variance(in Hours){1}", ColoumSpliter, RowSpliter);
+                _pdfProjectPersonsSummary = string.Format("Resource{0}ProjectRole{0}Projected Hours{0}Billable{0}Non-Billable{0}Actual Hours{0}Billable Hours Variance{1}", ColoumSpliter, RowSpliter);
 
                 var list = data.OrderBy(p => p.Person.PersonLastFirstName);
 
                 //Data
                 foreach (var byPerson in list)
                 {
-                    _pdfProjectPersonsSummary += String.Format("{0}{6}{1}{6}{2}{6}{3}{6}{4}{6}{5}{7}",
+                    _pdfProjectPersonsSummary += String.Format("{0}{7}{1}{7}{2}{7}{3}{7}{4}{7}{5}{7}{6}{8}",
                         byPerson.Person.PersonLastFirstName,
                         byPerson.Person.ProjectRoleName,
+                        GetDoubleFormat(byPerson.ForecastedHours),
                         GetDoubleFormat(byPerson.BillableHours),
                         GetDoubleFormat(byPerson.NonBillableHours),
                         GetDoubleFormat(byPerson.TotalHours),
-                        byPerson.Variance,
+                        (byPerson.BillableHoursVariance > 0) ? "+" + GetDoubleFormat(byPerson.BillableHoursVariance) : GetDoubleFormat(byPerson.BillableHoursVariance),
                         ColoumSpliter,
                         RowSpliter);
                 }
@@ -777,7 +826,7 @@ namespace PraticeManagement.Reporting
                 if (list[0].DayTotalHours != null)
                 {
                     //Header
-                    _pdfProjectPersonDetail = String.Format("Date{0}WorkType{0}WorkType Name{0}Billable{0}Non-Billable{0}Total{0}Note{1}", ColoumSpliter, RowSpliter);
+                    _pdfProjectPersonDetail = String.Format("Date{0}WorkType{0}WorkType Name{0}Billable{0}Non-Billable{0}Actual Hours{0}Note{1}", ColoumSpliter, RowSpliter);
 
                     //Data
                     foreach (var byPerson in list)
