@@ -177,6 +177,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 //Header
                 /* Person Name 
                 Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
+                sb.Append("Employee Id");
+                sb.Append("\t");
                 sb.Append("Resource");
                 sb.Append("\t");
                 sb.Append("Date");
@@ -206,6 +208,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
                             foreach (var dateLevel in groupByDate.DayTotalHoursList)
                             {
+                                sb.Append(personLevelGroupedHoursList.Person.EmployeeNumber);
+                                sb.Append("\t");
                                 sb.Append(personLevelGroupedHoursList.Person.HtmlEncodedName);
                                 sb.Append("\t");
 
