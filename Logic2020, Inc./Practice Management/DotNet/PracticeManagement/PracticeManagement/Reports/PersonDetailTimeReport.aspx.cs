@@ -8,13 +8,51 @@ using AjaxControlToolkit;
 using PraticeManagement.Controls;
 using DataTransferObjects;
 using System.Web.Security;
+using DataTransferObjects.Reports;
 
 
 namespace PraticeManagement.Reporting
 {
     public partial class PersonDetailTimeReport : Page
     {
+        public const string PersonIdKey = "PersonId";
+        public const string StartDateKey = "StartDate";
+        public const string EndDateKey = "EndDate";
+        public const string PeriodSelectedkey = "PeriodSelected";
+        public const string PersonNameKey = "Name";
+        private string ShowPanel = "ShowPanel('{0}', '{1}','{2}');";
+        private string HidePanel = "HidePanel('{0}');";
+        private string OnMouseOver = "onmouseover";
+        private string OnMouseOut = "onmouseout";
 
+        public string PersonIdFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[PersonIdKey];
+            }
+        }
+        public string StartDateFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[StartDateKey];
+            }
+        }
+        public string EndDatFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[EndDateKey];
+            }
+        }
+        public string PeriodSelectedFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[PeriodSelectedkey];
+            }
+        }   
         public DateTime? StartDate
         {
             get
@@ -268,9 +306,21 @@ namespace PraticeManagement.Reporting
                     ddlPerson.Items.Add(new ListItem(logInPerson.PersonLastFirstName, currentPerson.Id.Value.ToString()));
                     imgSearch.Visible = false;
                 }
-
                 ddlPerson.SelectedValue = currentPerson.Id.Value.ToString();
 
+                if (!String.IsNullOrEmpty(PersonIdFromQueryString))
+                {
+                    ddlPerson.SelectedValue = PersonIdFromQueryString;
+                    if (ddlPerson.SelectedValue != PersonIdFromQueryString)
+                    {
+                        var person = ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(int.Parse(PersonIdFromQueryString)));
+                        ddlPerson.Items.Add(new ListItem(person.Name, PersonIdFromQueryString));
+                        ddlPerson.SelectedValue = PersonIdFromQueryString;
+                    }
+                }
+
+                lblBillableUtilization.Attributes[OnMouseOver] = string.Format(ShowPanel, lblBillableUtilization.ClientID, pnlBillableUtilizationCalculation.ClientID, 50);
+                lblBillableUtilization.Attributes[OnMouseOut] = string.Format(HidePanel, pnlBillableUtilizationCalculation.ClientID);
             }
         }
 
@@ -298,10 +348,22 @@ namespace PraticeManagement.Reporting
                                                                              string.IsNullOrEmpty(personType) ? payType :
                                                                                                                  payType + ", " + personType;
             lblPersonStatus.ToolTip = lblPersonStatus.Text = personStatusAndType;
-            lbRange.ToolTip = lbRange.Text = Range;
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
+
+            //From other report's link
+            if (!string.IsNullOrEmpty(PeriodSelectedFromQueryString) && !IsPostBack)
+            {
+                ddlPeriod.SelectedValue = PeriodSelectedFromQueryString;
+                if ((ddlPeriod.SelectedValue == "Please Select" || ddlPeriod.SelectedValue == "0") && !string.IsNullOrEmpty(StartDateFromQueryString))
+                {
+                    diRange.FromDate = Convert.ToDateTime(StartDateFromQueryString);
+                    diRange.ToDate = Convert.ToDateTime(EndDatFromQueryString);
+                    ddlPeriod.SelectedValue = "0";
+                }
+            }
+            lbRange.ToolTip = lbRange.Text = Range;
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
@@ -408,8 +470,8 @@ namespace PraticeManagement.Reporting
             if (StartDate.HasValue && EndDate.HasValue)
             {
                 divWholePage.Style.Remove("display");
-                Triple<double, double, double> result = ServiceCallers.Custom.Report(r => r.GetPersonTimeEntriesTotalsByPeriod(SelectedPersonId, StartDate.Value, EndDate.Value));
-                PopulateTotalSection(result.First, result.Second, result.Third);
+                var result = ServiceCallers.Custom.Report(r => r.GetPersonTimeEntriesTotalsByPeriod(SelectedPersonId, StartDate.Value, EndDate.Value));
+                PopulateTotalSection(result);
                 if (mvPersonDetailReport.ActiveViewIndex == 0)
                 {
                     PopulateSummaryDetails();
@@ -437,22 +499,24 @@ namespace PraticeManagement.Reporting
             ucpersonSummaryReport.DatabindRepepeaterSummary(list);
         }
 
-        private void PopulateTotalSection(double billableHours, double nonBillableHours, double utlizationPercentage)
+        private void PopulateTotalSection(PersonTimeEntriesTotals personTimeEntriesTotals)
         {
             var billablePercent = 0;
             var nonBillablePercent = 0;
-            if (billableHours != 0 || nonBillableHours != 0)
+            if (personTimeEntriesTotals.BillableHours != 0 || personTimeEntriesTotals.NonBillableHours != 0)
             {
-                billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(billableHours, nonBillableHours);
+                billablePercent = DataTransferObjects.Utils.Generic.GetBillablePercentage(personTimeEntriesTotals.BillableHours, personTimeEntriesTotals.NonBillableHours);
                 nonBillablePercent = (100 - billablePercent);
             }
 
-            ltrlUtilization.Text = ((int)utlizationPercentage).ToString() + "%";
-            ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
+            lblBillableUtilization.Text = lblBillableUtilizationPercentage.Text = personTimeEntriesTotals.BillableUtilizationPercentage;
+            ltrlBillableHours.Text = personTimeEntriesTotals.BillableHours.ToString(Constants.Formatting.DoubleValue);
+            lblTotalBillableHours.Text = lblTotalBillableHoursInBold.Text = personTimeEntriesTotals.BillableHoursUntilToday.ToString(Constants.Formatting.NumberFormatWithCommas);
+            ltrlNonBillableHours.Text = personTimeEntriesTotals.NonBillableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlTotalHours.Text = (personTimeEntriesTotals.BillableHours + personTimeEntriesTotals.NonBillableHours).ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+            lblTotalAvailableHours.Text = lblTotalAvailableHoursInBold.Text = personTimeEntriesTotals.AvailableHours.ToString(Constants.Formatting.NumberFormatWithCommas);
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
