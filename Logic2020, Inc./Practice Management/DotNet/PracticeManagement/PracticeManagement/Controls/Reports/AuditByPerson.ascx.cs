@@ -38,7 +38,7 @@ namespace PraticeManagement.Controls.Reports
         public void PopulateByResourceData(PersonLevelTimeEntriesHistory[] reportDataByPerson)
         {
             var reportDataList = reportDataByPerson.OrderBy(p => p.Person.PersonLastFirstName).ToList();
-           
+
             if (reportDataList.Count > 0)
             {
                 divEmptyMessage.Style["display"] = "none";
@@ -59,7 +59,7 @@ namespace PraticeManagement.Controls.Reports
 
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                List<PersonLevelTimeEntriesHistory> data = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByPerson(HostingPage.StartDate.Value,HostingPage.EndDate.Value)).ToList();
+                List<PersonLevelTimeEntriesHistory> data = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByPerson(HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
                 data = data.OrderBy(p => p.Person.PersonLastFirstName).ToList();
                 StringBuilder sb = new StringBuilder();
                 sb.Append("Time Entry Audit");
@@ -75,6 +75,8 @@ namespace PraticeManagement.Controls.Reports
                 if (data.Count > 0)
                 {
                     //Header
+                    sb.Append("Employee Id");
+                    sb.Append("\t");
                     sb.Append("Person Name");
                     sb.Append("\t");
                     sb.Append("Status");
@@ -114,11 +116,13 @@ namespace PraticeManagement.Controls.Reports
                     {
                         foreach (TimeEntryRecord timeEntryRecord in personLevelTimeEntriesHistory.TimeEntryRecords)
                         {
+                            sb.Append(personLevelTimeEntriesHistory.Person.EmployeeNumber);
+                            sb.Append("\t");
                             sb.Append(personLevelTimeEntriesHistory.Person.HtmlEncodedName);
                             sb.Append("\t");
                             sb.Append(personLevelTimeEntriesHistory.Person.Status.Name);
                             sb.Append("\t");
-                            sb.Append(personLevelTimeEntriesHistory.Person.CurrentPay != null ? personLevelTimeEntriesHistory.Person.CurrentPay.TimescaleName:string.Empty);
+                            sb.Append(personLevelTimeEntriesHistory.Person.CurrentPay != null ? personLevelTimeEntriesHistory.Person.CurrentPay.TimescaleName : string.Empty);
                             sb.Append("\t");
                             sb.Append(timeEntryRecord.ChargeCodeDate.ToString("MM/dd/yyyy"));
                             sb.Append("\t");
@@ -136,7 +140,7 @@ namespace PraticeManagement.Controls.Reports
                             sb.Append("\t");
                             sb.Append(timeEntryRecord.ChargeCode.TimeType.Name);
                             sb.Append("\t");
-                            sb.Append(timeEntryRecord.IsChargeable?"B":"NB");
+                            sb.Append(timeEntryRecord.IsChargeable ? "B" : "NB");
                             sb.Append("\t");
                             sb.Append(timeEntryRecord.OldHours);
                             sb.Append("\t");
@@ -174,7 +178,7 @@ namespace PraticeManagement.Controls.Reports
         {
             return !isChargeable && timeEntrySection == (int)TimeEntrySectionType.Project;
         }
-       
+
     }
 }
 
