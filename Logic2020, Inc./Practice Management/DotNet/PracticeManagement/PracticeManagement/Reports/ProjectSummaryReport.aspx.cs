@@ -309,6 +309,7 @@ namespace PraticeManagement.Reporting
             if (!string.IsNullOrEmpty(PeriodSelectedFromQueryString) && !IsPostBack)
             {
                 txtProjectNumber.Text = ProjectNumberFromQueryString;
+                PopulateddlPeriod(ProjectNumber);
                 ddlPeriod.SelectedValue = PeriodSelectedFromQueryString;
                 if ((ddlPeriod.SelectedValue == "Please Select" || ddlPeriod.SelectedValue == "0") && !string.IsNullOrEmpty(StartDateFromQueryString))
                 {
