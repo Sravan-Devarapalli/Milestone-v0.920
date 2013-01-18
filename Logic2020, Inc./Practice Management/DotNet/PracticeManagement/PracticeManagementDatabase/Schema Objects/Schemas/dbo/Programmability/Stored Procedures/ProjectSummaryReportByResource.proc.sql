@@ -88,7 +88,7 @@ AS
 							 ),
 					   PersonForeCastedHours
 						  AS ( SELECT   MP.PersonId ,
-										SUM(CASE WHEN CAL.Date < @Today
+										SUM(CASE WHEN PC.Date < @Today
 												 THEN MPE.HoursPerDay
 												 ELSE 0
 											END) AS ForecastedHoursUntilToday ,
@@ -96,13 +96,10 @@ AS
 							   FROM     dbo.MilestonePersonEntry AS MPE
 										INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 										INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-										INNER JOIN dbo.v_PersonHistory AS P ON P.personId = MP.PersonId
-										INNER JOIN dbo.Calendar AS CAL ON CAL.Date BETWEEN MPE.StartDate AND MPE.EndDate 
-																		AND CAL.Date >= P.HireDate
-																		AND CAL.Date <= ISNULL(P.TerminationDate,
-																		@FutureDate)
-										LEFT JOIN dbo.PersonCalendar AS PCAL ON PCAL.Date = CAL.Date
-																		AND PCAL.PersonId = P.PersonId
+										INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
+									    INNER JOIN dbo.v_PersonCalendar PC ON PC.PersonId = MP.PersonId
+															  AND PC.DayOff = 0
+															  AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate																																																			
 							   WHERE    M.ProjectId = @ProjectId
 										AND ( @MilestoneIdLocal IS NULL
 											  OR M.MilestoneId = @MilestoneIdLocal
@@ -110,15 +107,8 @@ AS
 										AND ( ( @StartDateLocal IS NULL
 												AND @EndDateLocal IS NULL
 											  )
-											  OR ( CAL.Date BETWEEN @StartDateLocal AND @EndDateLocal )
-											)
-										AND ( ( CAL.DayOff = 0
-												AND ISNULL(PCAL.TimeTypeId, 0) != @HolidayTimeType
-											  )
-											  OR ( CAL.DayOff = 1
-												   AND PCAL.SubstituteDate IS NOT NULL
-												 )
-											)
+											  OR ( PC.Date BETWEEN @StartDateLocal AND @EndDateLocal )
+											)								  
 							   GROUP BY MP.PersonId
 							 )
 					,TimeEntryPersons AS
@@ -166,7 +156,8 @@ AS
 							  END ) AS BillingType ,
 							ROUND(MAX(ISNULL(PFH.ForecastedHoursUntilToday, 0)),
 								  2) AS ForecastedHoursUntilToday ,
-							ROUND(MAX(ISNULL(PFH.ForecastedHours, 0)), 2) AS ForecastedHours
+							ROUND(MAX(ISNULL(PFH.ForecastedHours, 0)), 2) AS ForecastedHours,							
+							P.EmployeeNumber
 					FROM    dbo.Person P
 					LEFT JOIN TimeEntryPersons TEP ON TEP.PersonId = P.PersonId
 					LEFT  JOIN PersonMaxRoleValues AS PMRV ON P.PersonId = PMRV.PersonId
@@ -195,7 +186,8 @@ AS
 							P.IsOffshore ,
 							PR.Name ,
 							PMRV.MinimumValue ,
-							PMRV.MaximumValue
+							PMRV.MaximumValue,
+							P.EmployeeNumber
 	
 			END
 		ELSE 
