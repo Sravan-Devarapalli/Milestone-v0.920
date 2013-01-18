@@ -61,6 +61,7 @@ BEGIN
 					ELSE
 						@EndDateLocal
 				END AND ((PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType) OR (PC.CompanyDayOff = 1 AND PC.SubstituteDate IS NOT NULL))
+				AND PC.DayOff = 0
 		GROUP BY
 			M.ProjectId
 	),
