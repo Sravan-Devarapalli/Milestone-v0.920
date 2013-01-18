@@ -29,6 +29,7 @@ BEGIN
 
 
 	SELECT  pers.PersonId AS 'Id',
+	        pers.EmployeeNumber AS 'Employee Id',
 			pers.FirstName + ' ' + pers.LastName AS 'Person name',
 			stat.[Name] AS 'Status',
 			pers.Alias,
