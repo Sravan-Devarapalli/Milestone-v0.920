@@ -44,14 +44,15 @@ BEGIN
 		SELECT DISTINCT P.PersonId
 						, P.FirstName
 						, P.LastName
+						, P.EmployeeNumber
 		FROM dbo.Person P
 		INNER JOIN @PersonList PL ON PL.Id = P.PersonId
 		LEFT JOIN Pay pa ON pa.Person = P.PersonId  AND pa.StartDate <= @EndDate AND (ISNULL(pa.EndDate, @FutureDate) -1) >= @StartDate
 		WHERE (@TimescaleIds IS NULL OR pa.Timescale IN (SELECT Id FROM @TimescaleIdList))
 		      AND (@PracticeIds IS NULL) OR ISNULL(pa.PracticeId,P.DefaultPractice) IN (SELECT Id FROM @PracticeIdsList)
 	)
-	SELECT 
-		   p.LastName +', ' +p.FirstName AS Name,
+	SELECT p.EmployeeNumber AS 'Employee Id',
+		   p.LastName +', ' +p.FirstName AS Name,		   
 		   C.Name AS Account,
 		   PG.Name AS [Business Unit],
 		   PROJ.ProjectNumber AS [P#],
@@ -101,7 +102,8 @@ BEGIN
 		     TE.Note,
 			 PG.Name,
 			 p.LastName,
-			 p.FirstName
+			 p.FirstName,
+			 p.EmployeeNumber
 	ORDER BY  p.LastName,p.FirstName,C.Name,PG.Name,PROJ.ProjectNumber,TT.Name,TE.ChargeCodeDate
 
 END
