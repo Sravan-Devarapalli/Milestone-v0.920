@@ -213,7 +213,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 int? personId = (isUserAdministrator || isUserSeniorLeadership) ? null : DataHelper.CurrentPerson.Id;
                 var projects = DataHelper.GetTimeEntryProjectsByClientId(clientId, personId, chbActiveInternalProject.Checked);
-                
+
                 ListItem[] items = projects.Select(
                                                      project => new ListItem(
                                                                              project.Name + " - " + project.ProjectNumber,
@@ -647,6 +647,11 @@ namespace PraticeManagement.Controls.TimeEntry
             sb.Append("<body>\n");
 
             return sb.ToString();
+        }
+
+        public string GetEmployeeNumber(string personId)
+        {
+            return ServiceCallers.Custom.Person(p => p.GetPersonDetailsShort(int.Parse(personId))).EmployeeNumber + " - ";
         }
 
 
