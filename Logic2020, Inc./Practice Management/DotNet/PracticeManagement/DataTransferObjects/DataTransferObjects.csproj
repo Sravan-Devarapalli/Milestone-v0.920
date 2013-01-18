@@ -153,6 +153,9 @@
     <Compile Include="Reports\HumanCapital\TerminationPersonsInRange.cs" />
     <Compile Include="Reports\PersonLevelGroupedHours.cs" />
     <Compile Include="Reports\PersonLevelPayCheck.cs" />
+    <Compile Include="Reports\PersonTimeEntriesTotals.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Reports\ProjectLevelGroupedHours.cs" />
     <Compile Include="Reports\GroupByClientAndProject.cs" />
     <Compile Include="Reports\ProjectLevelTimeEntriesHistory.cs" />
