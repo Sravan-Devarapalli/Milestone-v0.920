@@ -221,7 +221,7 @@ namespace PraticeManagement.Reporting
                 }
                 if (this.cblTitles != null && this.cblTitles.Items.Count == 0)
                 {
-                    DataHelper.FillTitleList(this.cblTitles, "All Titles");
+                    DataHelper.FillTitleList(this.cblTitles, "All Titles", true);
                 }
                 if (this.cblTerminationReasons != null && this.cblTerminationReasons.Items.Count == 0)
                 {
@@ -459,6 +459,8 @@ namespace PraticeManagement.Reporting
             if (data.Count > 0)
             {
                 //Header
+                sb.Append("Employee Id");
+                sb.Append("\t");
                 sb.Append("Resource");
                 sb.Append("\t");
                 sb.Append("Title");
@@ -480,9 +482,11 @@ namespace PraticeManagement.Reporting
                 //Data
                 foreach (var person in data)
                 {
+                    sb.Append(person.EmployeeNumber);
+                    sb.Append("\t");
                     sb.Append(person.HtmlEncodedName);
                     sb.Append("\t");
-                    sb.Append(person.Title != null ? person.Title.TitleName : string.Empty);
+                    sb.Append(person.Title != null ? person.Title.HtmlEncodedTitleName : string.Empty);
                     sb.Append("\t");
                     sb.Append(person.CurrentPay != null ? person.CurrentPay.TimescaleName : string.Empty);
                     sb.Append("\t");
