@@ -11,7 +11,7 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryReportByResource]
 	  @EndDate DATETIME ,
 	  @IncludePersonsWithNoTimeEntries BIT ,
 	  @PersonTypes NVARCHAR(MAX) = NULL ,
-	  @SeniorityIds NVARCHAR(MAX) = NULL ,
+	  @TitleIds NVARCHAR(MAX) = NULL ,
 	  @TimeScaleNamesList XML = NULL,
 	  @PersonStatusIds NVARCHAR(MAX) = NULL,
 	  @PersonDivisionIds NVARCHAR(MAX) = NULL
@@ -50,6 +50,8 @@ AS
 	;
 		WITH    PersonDefaultHoursWithInPeriod
 				  AS ( SELECT   Pc.Personid ,
+				                SUM(CASE WHEN PC.Date < @NOW THEN 1
+										 ELSE 0 END) * 8 AS  DefaultHoursUntilToday,
 								( COUNT(PC.Date) * 8 ) AS DefaultHours --Estimated working hours per day is 8.
 					   FROM     ( SELECT    CAL.Date ,
 											P.PersonId ,
@@ -64,12 +66,7 @@ AS
 															  AND PCAL.PersonId = P.PersonId
 								) AS PC
 					   WHERE    PC.Date BETWEEN @StartDateLocal
-										AND     CASE WHEN @EndDateLocal > DATEADD(day,
-															  -1, @NOW)
-													 THEN DATEADD(day, -1,
-															  @NOW)
-													 ELSE @EndDateLocal
-												END
+										AND  @EndDateLocal												
 								AND ( ( PC.CompanyDayOff = 0
 										AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType
 									  )
@@ -133,10 +130,12 @@ AS
 			SELECT  P.PersonId ,
 					P.LastName ,
 					P.FirstName ,
-					S.SeniorityId ,
-					S.Name SeniorityName ,
+					S.TitleId ,
+					S.Title,
 					P.IsOffshore ,
+					P.EmployeeNumber,
 					ISNULL(Data.BillableHours, 0) AS BillableHours ,
+					ISNULL(Data.BillableHoursUntilToday, 0) AS BillableHoursUntilToday ,
 					ISNULL(Data.ProjectNonBillableHours, 0) AS ProjectNonBillableHours ,
 					ISNULL(Data.BusinessDevelopmentHours, 0) AS BusinessDevelopmentHours ,
 					ISNULL(Data.InternalHours, 0) AS InternalHours ,
@@ -147,21 +146,28 @@ AS
 					ISNULL(Data.ORTHours, 0) AS ORTHours ,
 					ISNULL(Data.UnpaidHours, 0) AS UnpaidHours ,
 					ISNULL(Data.SickOrSafeLeaveHours, 0) AS SickOrSafeLeaveHours ,
-					ISNULL(ROUND(CASE WHEN ISNULL(PDH.DefaultHours, 0) = 0
+					ISNULL(CASE WHEN ISNULL(PDH.DefaultHoursUntilToday, 0) = 0
 									  THEN 0
-									  ELSE ( Data.ActualHours * 100 )
-										   / PDH.DefaultHours
-								 END, 0), 0) AS UtlizationPercent ,
+									  ELSE ( Data.BillableHoursUntilToday * 100 )
+										   / PDH.DefaultHoursUntilToday
+								 END, 0) AS BillableUtilizationPercent ,
 					PCP.Timescale,
 					PS.PersonStatusId AS 'PersonStatusId',
 					PS.Name AS 'PersonStatusName',
-					P.DivisionId AS 'DivisionId'
+					P.DivisionId AS 'DivisionId',
+					ISNULL(CAST(PDH.DefaultHours AS INT),0) AS AvailableHours,
+					ISNULL(CAST(PDH.DefaultHoursUntilToday AS INT),0) AS AvailableHoursUntilToday
 			FROM    ( SELECT    TE.PersonId ,
 								ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
 													AND Pro.ProjectNumber != 'P031000'
 											   THEN TEH.ActualHours
 											   ELSE 0
 										  END), 2) AS BillableHours ,
+								ROUND(SUM(CASE WHEN ( TEH.IsChargeable = 1 AND Pro.ProjectNumber != 'P031000'
+												  AND TE.ChargeCodeDate < @NOW
+												) THEN TEH.ActualHours
+										   ELSE 0
+									  END), 2) AS BillableHoursUntilToday ,
 								ROUND(SUM(CASE WHEN TEH.IsChargeable = 0
 													AND CC.TimeEntrySectionId = 1
 													AND Pro.ProjectNumber != 'P031000'
@@ -244,7 +250,7 @@ AS
 												 OR AP.PersonId = P.PersonId
 											   )
 											   AND p.IsStrawman = 0
-					INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
+					INNER JOIN dbo.Title S ON S.TitleId = P.TitleId
 					INNER JOIN PersonWithPay PCP ON P.PersonId = PCP.PersonId 
 					INNER JOIN [dbo].[PersonStatus] PS ON PS.PersonStatusId = P.PersonStatusId
 					LEFT JOIN PersonDefaultHoursWithInPeriod PDH ON PDH.PersonId = P.PersonId
@@ -260,10 +266,10 @@ AS
 							SELECT  ResultString
 							FROM    [dbo].[ConvertXmlStringInToStringTable](@PersonTypes) )
 						  )
-						  AND ( @SeniorityIds IS NULL
-								OR S.SeniorityId IN (
+						  AND ( @TitleIds IS NULL
+								OR S.TitleId IN (
 								SELECT  ResultId
-								FROM    dbo.ConvertStringListIntoTable(@SeniorityIds) )
+								FROM    dbo.ConvertStringListIntoTable(@TitleIds) )
 							  )
 						   AND ( @PersonStatusIds IS NULL
 								 OR PS.PersonStatusId IN (
