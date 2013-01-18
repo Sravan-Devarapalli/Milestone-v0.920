@@ -19,10 +19,11 @@ namespace PraticeManagement.Controls.Reports
 
         private string TimePeriodSummaryReportPayCheckExport = "TimePeriod Summary Report By Resource(Pay Chex)";
 
-        private string ShowPanel = "ShowPanel('{0}', '{1}');";
+        private string ShowPanel = "ShowPanel('{0}', '{1}','{2}');";
         private string HidePanel = "HidePanel('{0}');";
         private string OnMouseOver = "onmouseover";
         private string OnMouseOut = "onmouseout";
+        private string ByPersonByResourceUrl = "PersonDetailTimeReport.aspx?StartDate={0}&EndDate={1}&PeriodSelected={2}&PersonId={3}";
 
         public ModalPopupExtender PersonDetailPopup
         {
@@ -67,6 +68,10 @@ namespace PraticeManagement.Controls.Reports
 
         private Label LblTotalHours { get; set; }
 
+        private Label LblAvailableHours { get; set; }
+
+        private Label LblHeaderBillableUtilization { get; set; }
+
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
             get { return ((PraticeManagement.Reporting.TimePeriodSummaryReport)Page); }
@@ -75,6 +80,16 @@ namespace PraticeManagement.Controls.Reports
         protected string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
+        protected string GetNumberFormatWithCommas(double value)
+        {
+            return value.ToString(Constants.Formatting.NumberFormatWithCommas);
+        }
+
+        protected string GetPercentageFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValueWithSinglePrecision) + "%";
         }
 
         protected string GetPayTypeSortValue(string payType, string name)
@@ -111,7 +126,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 if (!cblSeniorities.AllItemsSelected)
                 {
-                    filteredColoums.Add("Seniority");
+                    filteredColoums.Add("Title");
                 }
                 if (!cblPayTypes.AllItemsSelected)
                 {
@@ -146,9 +161,11 @@ namespace PraticeManagement.Controls.Reports
                 if (data.Count > 0)
                 {
                     //Header
+                    sb.Append("Employee Id");
+                    sb.Append("\t");
                     sb.Append("Resource");
                     sb.Append("\t");
-                    sb.Append("Seniority");
+                    sb.Append("Title");
                     sb.Append("\t");
                     sb.Append("Pay Types");
                     sb.Append("\t");
@@ -164,18 +181,22 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append("\t");
                     sb.Append("Time-Off");
                     sb.Append("\t");
-                    sb.Append("Total");
+                    sb.Append("Actual Hours");
                     sb.Append("\t");
-                    sb.Append("Utilization Percent this Period");
+                    sb.Append("Available Hours");
+                    sb.Append("\t");
+                    sb.Append("Billable Utilization");
                     sb.Append("\t");
                     sb.AppendLine();
 
                     //Data
                     foreach (var personLevelGroupedHours in data)
                     {
+                        sb.Append(personLevelGroupedHours.Person.EmployeeNumber);
+                        sb.Append("\t");
                         sb.Append(personLevelGroupedHours.Person.HtmlEncodedName);
                         sb.Append("\t");
-                        sb.Append(personLevelGroupedHours.Person.Seniority.Name);
+                        sb.Append(personLevelGroupedHours.Person.Title.HtmlEncodedTitleName);
                         sb.Append("\t");
                         sb.Append(personLevelGroupedHours.Person.CurrentPay.TimescaleName);
                         sb.Append("\t");
@@ -193,7 +214,9 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(personLevelGroupedHours.TotalHours));
                         sb.Append("\t");
-                        sb.Append(personLevelGroupedHours.Person.UtlizationPercent + "%");
+                        sb.Append(GetDoubleFormat(personLevelGroupedHours.AvailableHours));
+                        sb.Append("\t");
+                        sb.Append(GetPercentageFormat(personLevelGroupedHours.Person.BillableUtilizationPercent));
                         sb.Append("\t");
                         sb.AppendLine();
                     }
@@ -206,6 +229,7 @@ namespace PraticeManagement.Controls.Reports
                 //“TimePeriod_ByResource_[StartOfRange]_[EndOfRange].xls”.  
                 var filename = string.Format("{0}_{1}-{2}.xls", "TimePeriod_ByResource", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
                 GridViewExportUtil.Export(filename, sb);
+
             }
         }
 
@@ -231,7 +255,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 if (!cblSeniorities.AllItemsSelected)
                 {
-                    filteredColoums.Add("Seniority");
+                    filteredColoums.Add("Title");
                 }
                 if (!cblPayTypes.AllItemsSelected)
                 {
@@ -377,18 +401,21 @@ namespace PraticeManagement.Controls.Reports
                 LblTotalInternal = e.Item.FindControl("lblTotalInternal") as Label;
                 LblTotalTimeOff = e.Item.FindControl("lblTotalTimeOff") as Label;
                 LblTotalHours = e.Item.FindControl("lblTotalHours") as Label;
-
-
-
-
+                LblAvailableHours = e.Item.FindControl("lblAvailableHours") as Label;
+                LblHeaderBillableUtilization = e.Item.FindControl("lblHeaderBillableUtilization") as Label;
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                var dataItem = (PersonLevelGroupedHours)e.Item.DataItem;
                 var lnkPerson = e.Item.FindControl("lnkPerson") as LinkButton;
                 var imgZoomIn = e.Item.FindControl("imgZoomIn") as HtmlImage;
+                var LnkBillableUtilizationPercentage = e.Item.FindControl("lnkBillableUtilizationPercentage") as LinkButton;
 
                 lnkPerson.Attributes["onmouseover"] = string.Format("document.getElementById(\'{0}\').style.visibility='visible';", imgZoomIn.ClientID);
                 lnkPerson.Attributes["onmouseout"] = string.Format("document.getElementById(\'{0}\').style.visibility='hidden';", imgZoomIn.ClientID);
+                //Respective Person's Id,Person's Name will be added from client side to below path when click on the link button.
+                LnkBillableUtilizationPercentage.Attributes["NavigationUrl"] = string.Format(ByPersonByResourceUrl, HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    HostingPage.EndDate.Value.Date.ToString(Constants.Formatting.EntryDateFormat), HostingPage.RangeSelected, dataItem.Person.Id);
             }
         }
 
@@ -455,23 +482,29 @@ namespace PraticeManagement.Controls.Reports
         private void PopulateSumLabels(List<PersonLevelGroupedHours> reportData)
         {
 
-            LblTotalBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalBillable.ClientID, pnlTotalBillableHours.ClientID);
+            LblTotalBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalBillable.ClientID, pnlTotalBillableHours.ClientID, 0);
             LblTotalBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableHours.ClientID);
 
-            LblTotalNonBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalNonBillable.ClientID, pnlTotalNonBillableHours.ClientID);
+            LblTotalNonBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalNonBillable.ClientID, pnlTotalNonBillableHours.ClientID, 0);
             LblTotalNonBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalNonBillableHours.ClientID);
 
-            LblTotalBD.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalBD.ClientID, pnlTotalBD.ClientID);
+            LblTotalBD.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalBD.ClientID, pnlTotalBD.ClientID, 0);
             LblTotalBD.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBD.ClientID);
 
-            LblTotalInternal.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalInternal.ClientID, pnlTotalInternalHours.ClientID);
+            LblTotalInternal.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalInternal.ClientID, pnlTotalInternalHours.ClientID, 0);
             LblTotalInternal.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalInternalHours.ClientID);
 
-            LblTotalTimeOff.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalTimeOff.ClientID, pnlTotalTimeOffHours.ClientID);
+            LblTotalTimeOff.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalTimeOff.ClientID, pnlTotalTimeOffHours.ClientID, 0);
             LblTotalTimeOff.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalTimeOffHours.ClientID);
 
-            LblTotalHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalHours.ClientID, pnlTotalHours.ClientID);
+            LblTotalHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalHours.ClientID, pnlTotalHours.ClientID, 0);
             LblTotalHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalHours.ClientID);
+
+            LblAvailableHours.Attributes[OnMouseOver] = string.Format(ShowPanel, LblAvailableHours.ClientID, pnlTotalAvailableHours.ClientID, 0);
+            LblAvailableHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalAvailableHours.ClientID);
+
+            LblHeaderBillableUtilization.Attributes[OnMouseOver] = string.Format(ShowPanel, LblHeaderBillableUtilization.ClientID, pnlTotalBillableUtilization.ClientID, 0);
+            LblHeaderBillableUtilization.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableUtilization.ClientID);
 
 
             lblBillable.Text =
@@ -490,6 +523,8 @@ namespace PraticeManagement.Controls.Reports
             pthLblTimeOff.Text = reportData.Sum(p => p.AdminstrativeHours).ToString(Constants.Formatting.DoubleValue);
 
             pthLblGrandTotal.Text = reportData.Sum(p => p.TotalHours).ToString(Constants.Formatting.DoubleValue);
+
+            lblPanelTotalAvailableHours.Text = reportData.Sum(p => p.AvailableHours).ToString(Constants.Formatting.NumberFormatWithCommas);
 
         }
 
@@ -525,8 +560,8 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulateSeniorityFilter(List<PersonLevelGroupedHours> reportData)
         {
-            var seniorities = reportData.Select(r => new { Id = r.Person.Seniority.Id, Name = r.Person.Seniority.Name }).Distinct().ToList().OrderBy(s => s.Name);
-            DataHelper.FillListDefault(cblSeniorities.CheckBoxListObject, "All Seniorities", seniorities.ToArray(), false, "Id", "Name");
+            var titles = reportData.Select(r => new { Id = r.Person.Title.TitleId, Name = r.Person.Title.HtmlEncodedTitleName }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblSeniorities.CheckBoxListObject, "All Titles", titles.ToArray(), false, "Id", "Name");
             cblSeniorities.SelectAllItems(true);
         }
 
@@ -549,9 +584,10 @@ namespace PraticeManagement.Controls.Reports
             double unpaidHours = reportData.Sum(p => p.UnpaidHours);
             double holidayHours = reportData.Sum(p => p.HolidayHours);
             double sickOrSafeLeaveHours = reportData.Sum(p => p.SickOrSafeLeaveHours);
+            double totalAvailableHours = reportData.Sum(p => p.AvailableHoursUntilToday);
+            double billableHoursUntilToday = reportData.Sum(p => p.BillableHoursUntilToday);
 
             int noOfEmployees = reportData.Count;
-            double totalUtlization = reportData.Sum(p => p.Person.UtlizationPercent);
             var billablePercent = 0;
             var nonBillablePercent = 0;
             if (billableHours != 0 || nonBillableHours != 0)
@@ -564,11 +600,13 @@ namespace PraticeManagement.Controls.Reports
             ltrlTotalHours.Text = (billableHours + nonBillableHours).ToString(Constants.Formatting.DoubleValue);
             ltrlTotalTimeoffHours.Text = totalTimeOffHours.ToString(Constants.Formatting.DoubleValue);
             ltrlAvgHours.Text = noOfEmployees > 0 ? ((billableHours + nonBillableHours) / noOfEmployees).ToString(Constants.Formatting.DoubleValue) : "0.00";
-            ltrlAvgUtilization.Text = noOfEmployees > 0 ? Math.Round((totalUtlization / noOfEmployees), 0).ToString() + "%" : "0%";
+            lblTotalBillableUtilization.Text = lblBillableUtilization.Text = lblBillableUtilizationPercentage.Text = (totalAvailableHours > 0) ? (billableHoursUntilToday / totalAvailableHours).ToString(Constants.Formatting.DoubleValueWithPercent) : "0%";//noOfEmployees > 0 ? Math.Round((totalUtlization / noOfEmployees), 1).ToString() + "%" : "0%";
             ltrlBillableHours.Text = billableHours.ToString(Constants.Formatting.DoubleValue);
+            lblTotalBillableHours.Text = lblTotalBillableHoursInBold.Text = billableHoursUntilToday.ToString(Constants.Formatting.NumberFormatWithCommas);
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+            lblTotalAvailableHours.Text = lblTotalAvailableHoursInBold.Text = totalAvailableHours.ToString(Constants.Formatting.NumberFormatWithCommas);
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
@@ -600,8 +638,10 @@ namespace PraticeManagement.Controls.Reports
             lblHolidayHours.Text = holidayHours.ToString(Constants.Formatting.DoubleValue);
             lblSickOrSafeLeaveHours.Text = sickOrSafeLeaveHours.ToString(Constants.Formatting.DoubleValue);
 
-            ltrlTotalTimeoffHours.Attributes[OnMouseOver] = string.Format(ShowPanel, ltrlTotalTimeoffHours.ClientID, pnlTotalTimeOff.ClientID);
+            ltrlTotalTimeoffHours.Attributes[OnMouseOver] = string.Format(ShowPanel, ltrlTotalTimeoffHours.ClientID, pnlTotalTimeOff.ClientID, 0);
             ltrlTotalTimeoffHours.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalTimeOff.ClientID);
+            lblBillableUtilization.Attributes[OnMouseOver] = string.Format(ShowPanel, lblBillableUtilization.ClientID, pnlBillableUtilizationCalculation.ClientID, 50);
+            lblBillableUtilization.Attributes[OnMouseOut] = string.Format(HidePanel, pnlBillableUtilizationCalculation.ClientID);
         }
 
     }
