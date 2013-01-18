@@ -4,25 +4,6 @@
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Reports/ByPerson/GroupByProject.ascx" TagName="GroupByProject"
     TagPrefix="uc" %>
-<script type="text/javascript">
-    function ShowPanel(object, displaypnl) {
-
-        var obj = $("#" + object);
-        var displayPanel = $("#" + displaypnl);
-        iptop = obj.offset().top + obj[0].offsetHeight;
-        ipleft = obj.offset().left;
-        displayPanel.offset({ top: iptop, left: ipleft });
-        displayPanel.show();
-        displayPanel.offset({ top: iptop, left: ipleft });
-    }
-
-    function HidePanel(hiddenpnl) {
-
-        var displayPanel = $("#" + hiddenpnl);
-        displayPanel.hide();
-    }
-   
-</script>
 <table class="PaddingTenPx TimePeriodSummaryReportHeader">
     <tr>
         <td class="font16Px fontBold">
@@ -39,14 +20,14 @@
                 </tr>
             </table>
         </td>
-        <td class="TimePeriodTotals Width740px">
+        <td class="TimePeriodTotals width850PxImp">
             <table class="tableFixed WholeWidth">
                 <tr>
                     <td class="Width17Percent">
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
-                                    Total Hours
+                                    Total Actual Hours
                                 </td>
                             </tr>
                             <tr>
@@ -88,12 +69,14 @@
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
-                                    Avg Utilization
+                                    Billable Utilization
                                 </td>
                             </tr>
                             <tr>
                                 <td class="SecondTd">
-                                    <asp:Literal ID="ltrlAvgUtilization" runat="server"></asp:Literal>
+                                    <asp:Label ID="lblBillableUtilization" runat="server"></asp:Label>
+                                    <asp:Image alt="Billable Utilization Hint" ImageUrl="~/Images/hint1.png" runat="server"
+                                        ID="imgBillableUtilizationHint" CssClass="PaddingBottom5 CursorPointer" ToolTip="Billable Utilization Calculation" />
                                 </td>
                             </tr>
                         </table>
@@ -241,7 +224,7 @@
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th class="Width130pxImp">
-                                Seniority
+                                Title
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="FilterImg"
                                     runat="server" id="imgSeniorityFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceSeniorityFilter" runat="server" TargetControlID="imgSeniorityFilter"
@@ -272,10 +255,13 @@
                                 <asp:Label ID="lblTotalTimeOff" runat="server" Text="Time-Off"></asp:Label>
                             </th>
                             <th>
-                                <asp:Label ID="lblTotalHours" runat="server" Text="Total"></asp:Label>
+                                <asp:Label ID="lblTotalHours" runat="server" Text="Actual Hours"></asp:Label>
                             </th>
-                            <th class="Width295PxImp">
-                                Utilization Percent this Period
+                            <th>
+                                <asp:Label ID="lblAvailableHours" runat="server" Text="Available Hours"></asp:Label>
+                            </th>
+                            <th>
+                                <asp:Label ID="lblHeaderBillableUtilization" runat="server" Text="Billable Utilization"></asp:Label>
                             </th>
                         </tr>
                     </thead>
@@ -300,8 +286,8 @@
                         </tr>
                     </table>
                 </td>
-                <td sorttable_customkey='<%# Eval("Person.Seniority.Name") %> <%#Eval("Person.HtmlEncodedName")%>'>
-                    <%# Eval("Person.Seniority.Name")%>
+                <td sorttable_customkey='<%# Eval("Person.Title.HtmlEncodedTitleName") %> <%#Eval("Person.HtmlEncodedName")%>'>
+                    <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                 </td>
                 <td sorttable_customkey='<%# GetPayTypeSortValue((string)Eval("Person.CurrentPay.TimescaleName"),(string)Eval("Person.HtmlEncodedName"))%>'>
                     <%# Eval("Person.CurrentPay.TimescaleName")%>
@@ -324,28 +310,12 @@
                 <td>
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>
                 </td>
-                <td sorttable_customkey='<%# Eval("Person.UtlizationPercent")%>'>
-                    <table class="TdLevelNoBorder UtlizationGraph">
-                        <tr>
-                            <td class="Width5Percent">
-                            </td>
-                            <td class="GraphTd">
-                                <table>
-                                    <tr>
-                                        <td class="FirstTd" width="<%# Eval("Person.UtlizationPercent")%>%">
-                                        </td>
-                                        <td class="SecondTd" width="<%# 100 - ((double)Eval("Person.UtlizationPercent") )%>%">
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="GraphValueTd">
-                                <%# Eval("Person.UtlizationPercent")%>%
-                            </td>
-                            <td class="Width5Percent">
-                            </td>
-                        </tr>
-                    </table>
+                <td sorttable_customkey='<%#Eval("AvailableHours")%>'>
+                    <%# GetNumberFormatWithCommas((double)Eval("AvailableHours"))%>
+                </td>
+                <td>
+                    <asp:LinkButton ID="lnkBillableUtilizationPercentage" runat="server" ToolTip='<%# GetPercentageFormat((double)Eval("Person.BillableUtilizationPercent"))%>'
+                        OnClientClick="OpenUrlInNewWindow(this);return false;" Text='<%# GetPercentageFormat((double)Eval("Person.BillableUtilizationPercent"))%>'></asp:LinkButton>
                 </td>
             </tr>
         </ItemTemplate>
@@ -510,6 +480,136 @@
             </td>
             <td>
                 <asp:Label ID="pthLblGrandTotal" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+<asp:Panel ID="pnlTotalAvailableHours" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Available Hours:
+    </label>
+    <asp:Label ID="lblPanelTotalAvailableHours" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlTotalBillableUtilization" Style="display: none;" runat="server"
+    CssClass="pnlTotal">
+    <label class="fontBold">
+        Total Billable Utilization:
+    </label>
+    <asp:Label ID="lblTotalBillableUtilization" runat="server"></asp:Label>
+</asp:Panel>
+<asp:Panel ID="pnlBillableUtilizationCalculation" CssClass="pnlBillableUtilizationCalculation"
+    runat="server" Style="display: none;">
+    <table>
+        <tr class="vTop font15PxImp PaddingBottom5Imp">
+            <th class="Width50Percent">
+                Variables
+            </th>
+            <th class="Width10Percent">
+            </th>
+            <th class="Width20Percent">
+                Calculation
+            </th>
+            <th class="Width5Percent">
+            </th>
+            <th class="Width15Percent">
+                Billable Utilization&nbsp;%
+            </th>
+        </tr>
+        <tr>
+            <td class="Width50Percent TextAlignLeft">
+                # of total hours billed to a client project(s) during the specified period
+            </td>
+            <td class="Width10Percent vBottom textCenter">
+                <asp:Label ID="lblTotalBillableHours" runat="server"></asp:Label>
+            </td>
+            <td class="Width20Percent vBottom textCenter">
+                <asp:Label ID="lblTotalBillableHoursInBold" runat="server" CssClass="font15PxImp"></asp:Label>
+            </td>
+            <td class="Width5Percent">
+            </td>
+            <td class="Width15Percent">
+            </td>
+        </tr>
+        <tr>
+            <td class="Width50Percent">
+            </td>
+            <td class="Width10Percent">
+            </td>
+            <td class="Width20Percent">
+                <hr class="hrArritionCalculation" />
+            </td>
+            <td class="Width5Percent textCenter">
+                =
+            </td>
+            <td class="Width15Percent textCenter">
+                <asp:Label ID="lblBillableUtilizationPercentage" runat="server" CssClass="font15PxImp"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td class="Width50Percent TextAlignLeft PaddingBottom10Imp">
+                # of total available hours in specified time period
+            </td>
+            <td class="Width10Percent textCenter">
+                <asp:Label ID="lblTotalAvailableHours" runat="server"></asp:Label>
+            </td>
+            <td class="Width20Percent vTop textCenter">
+                <asp:Label ID="lblTotalAvailableHoursInBold" runat="server" CssClass="font15PxImp"></asp:Label>
+            </td>
+            <td class="Width5Percent">
+            </td>
+            <td class="Width15Percent">
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+<AjaxControlToolkit:ModalPopupExtender ID="mpeBillableUtilization" runat="server"
+    TargetControlID="imgBillableUtilizationHint" CancelControlID="btnCancel" BehaviorID="pnlBillableUtilization"
+    BackgroundCssClass="modalBackground" PopupControlID="pnlBillableUtilization"
+    DropShadow="false" />
+<asp:Panel ID="pnlBillableUtilization" runat="server" CssClass="popUpBillableUtilization"
+    Style="display: none;">
+    <table>
+        <tr>
+            <td colspan="3">
+                <asp:Button ID="btnCancel" runat="server" CssClass="mini-report-close floatright"
+                    ToolTip="Close" Text="X"></asp:Button>
+            </td>
+        </tr>
+        <tr>
+            <td class="Width20Percent">
+            </td>
+            <td class="Width2Percent">
+            </td>
+            <td class="Width78Percent textCenter vBottom">
+                # of hours billed to a client project(s) during specified time period
+            </td>
+        </tr>
+        <tr>
+            <td class="Width25Percent">
+                <label class="LabelProject">
+                    Billable Utilization Calculation:
+                </label>
+            </td>
+            <td class="Width2Percent">
+            </td>
+            <td class="Width73Percent textCenter">
+                <hr class="WholeWidth hrArrition" />
+            </td>
+        </tr>
+        <tr>
+            <td class="Width20Percent">
+            </td>
+            <td class="Width2Percent">
+            </td>
+            <td class="Width78Percent textCenter vTop">
+                # of available hours in specified time period
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" class="FontSize10PX PaddingTop12">
+                <span class="TextAlignLeft">Note: the number of available hours is based on 2,080 hours
+                    in a calendar year (40 hours a week with 52 weeks a year). The number is adjusted
+                    accordingly for individuals who join the company during the year. </span>
             </td>
         </tr>
     </table>
