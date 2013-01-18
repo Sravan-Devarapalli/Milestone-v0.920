@@ -6,6 +6,7 @@ using System.Web.UI.DataVisualization.Charting;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using System.Web.UI;
+using System.Web;
 
 namespace PraticeManagement.Controls.Reports.HumanCapital
 {
@@ -94,7 +95,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
             Boolean.TryParse(postBackDetails[2], out isTitle);
             if (isTitle)
             {
-                lbName.Text = "Title: " + selectedValue;
+                lbName.Text = "Title: " + HttpUtility.HtmlEncode(selectedValue);
                 data = data.Where(p => p.Title != null ? p.Title.TitleName == selectedValue : selectedValue == Constants.FilterKeys.Unassigned).ToList();
             }
             else
