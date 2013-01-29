@@ -3,7 +3,6 @@ AS
 BEGIN
 	DECLARE @Today DATETIME
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
-
 	--unlock out
 	UPDATE m
 	SET m.IsLockedOut = 0,
@@ -13,6 +12,21 @@ BEGIN
 	INNER JOIN  dbo.aspnet_Membership AS m ON u.UserId = m.UserId
 	INNER JOIN Person as P ON u.LoweredUserName = LOWER(P.Alias) 
 	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today - 1) AND P.IsWelcomeEmailSent = 0 AND a.LoweredApplicationName =LOWER('PracticeManagement')
+	
+	DECLARE @Personids NVARCHAR(500)
+	
+	SELECT @Personids  = ISNULL(@Personids ,'From SPROC GetPersonsByTodayHireDate Return PersonIds :') + CONVERT(NVARCHAR,P.PersonId) + ',' 
+	FROM  Person as P 
+	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today - 1) AND P.IsWelcomeEmailSent = 0
+	
+	INSERT INTO [dbo].[SchedularLog]
+       ([LastRun]
+       ,[Status]
+       ,[Comments]
+       ,[NextRun]
+       )
+	SELECT @Today,'Success' as [Status],@Personids as [Comments],@Today+1 as [NextRun]
+
 
 	SELECT P.PersonId,
 	       p.FirstName,
