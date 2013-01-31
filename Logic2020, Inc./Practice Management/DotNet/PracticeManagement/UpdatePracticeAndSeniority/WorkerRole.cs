@@ -38,6 +38,7 @@ namespace UpdatePracticeAndSeniority
         public const string Skills_Profile_PagePath_ConfigKey = "SkillsProfilePagePath";
         public const string PAYROLLDISTRIBUTIONREPORT_SCHEDULETIME_ConfigKey = "PayrollDistributionScheduleTime";
         public const string PayRollDistibutionReportReciever_ConfigKey = "PayrollDistributionReportReciever";
+        public const string EmailBccRecieverList_ConfigKey = "EmailBccRecieverList";
         public const string LoginPagePath_ConfigKey = "LoginPagePath";
 
         //Formats
@@ -154,6 +155,14 @@ namespace UpdatePracticeAndSeniority
             get
             {
                 return GetConfigValue(PayRollDistibutionReportReciever_ConfigKey);
+            }
+        }
+
+        public static string EmailBccRecieverList
+        {
+            get
+            {
+                return GetConfigValue(EmailBccRecieverList_ConfigKey);
             }
         }
 
@@ -985,7 +994,7 @@ namespace UpdatePracticeAndSeniority
                     PersonEncodedPasswordInsert(person.Id.Value, encodedPassword);
 
                     var emailBody = String.Format(welcomeEmailTemplate.Body, person.FirstName, companyName, person.Alias, password, LoginPagePath, smtpSettings.PMSupportEmail);
-                    Email(welcomeEmailTemplate.Subject, emailBody, true, person.Alias, string.Empty, null);
+                    Email(welcomeEmailTemplate.Subject, emailBody, true, person.Alias, EmailBccRecieverList, null);
                     UpdateIsWelcomeEmailSentForPerson(person.Id.Value);
                 }
 
