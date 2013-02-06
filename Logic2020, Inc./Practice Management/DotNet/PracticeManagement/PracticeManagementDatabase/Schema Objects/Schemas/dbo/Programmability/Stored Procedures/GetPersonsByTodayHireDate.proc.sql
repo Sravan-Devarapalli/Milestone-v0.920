@@ -11,13 +11,13 @@ BEGIN
 	INNER JOIN dbo.aspnet_Applications AS a ON u.ApplicationId = a.ApplicationId
 	INNER JOIN  dbo.aspnet_Membership AS m ON u.UserId = m.UserId
 	INNER JOIN Person as P ON u.LoweredUserName = LOWER(P.Alias) 
-	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today - 1) AND P.IsWelcomeEmailSent = 0 AND a.LoweredApplicationName =LOWER('PracticeManagement')
+	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today) AND P.IsWelcomeEmailSent = 0 AND a.LoweredApplicationName =LOWER('PracticeManagement')
 	
-	DECLARE @Personids NVARCHAR(500)
+	DECLARE @Personids NVARCHAR(500) = 'From SPROC GetPersonsByTodayHireDate Return PersonIds :'
 	
 	SELECT @Personids  = ISNULL(@Personids ,'From SPROC GetPersonsByTodayHireDate Return PersonIds :') + CONVERT(NVARCHAR,P.PersonId) + ',' 
 	FROM  Person as P 
-	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today - 1) AND P.IsWelcomeEmailSent = 0
+	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today) AND P.IsWelcomeEmailSent = 0
 	
 	INSERT INTO [dbo].[SchedularLog]
        ([LastRun]
@@ -32,7 +32,7 @@ BEGIN
 	       p.FirstName,
 		   p.Alias
 	FROM  Person as P 
-	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today - 1) AND P.IsWelcomeEmailSent = 0
+	WHERE P.PersonStatusId IN (1,5) AND HireDate = (@Today) AND P.IsWelcomeEmailSent = 0
 
 END
 
