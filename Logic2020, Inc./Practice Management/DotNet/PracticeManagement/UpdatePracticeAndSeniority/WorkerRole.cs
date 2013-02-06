@@ -40,6 +40,7 @@ namespace UpdatePracticeAndSeniority
         public const string PayRollDistibutionReportReciever_ConfigKey = "PayrollDistributionReportReciever";
         public const string EmailBccRecieverList_ConfigKey = "EmailBccRecieverList";
         public const string LoginPagePath_ConfigKey = "LoginPagePath";
+        public const string WelcomeMailScheduleTime_ConfigKey = "WelcomeMailScheduleTime";
 
         //Formats
         public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
@@ -150,6 +151,14 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static TimeSpan WelcomeMailScheduleTime
+        {
+            get
+            {
+                return TimeSpan.Parse(GetConfigValue(WelcomeMailScheduleTime_ConfigKey));
+            }
+        }
+
         public static string PayrollDistributionReportReciever
         {
             get
@@ -208,10 +217,12 @@ namespace UpdatePracticeAndSeniority
                 currentDateTimeWithTimeZone = CurrentPMTime;
                 WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, SuccessStatus, M_SchedularStarted, currentDateTimeWithTimeZone);
                 currentDateTimeWithTimeZone = CurrentPMTime;
-                //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report.
+                //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                 if (currentDateTimeWithTimeZone.TimeOfDay > FirstSchedularTime)
                 {
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
+                    //Runs at 07:00:00 every day.
+                    RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
                 }
 
                 while (true)
@@ -219,7 +230,7 @@ namespace UpdatePracticeAndSeniority
                     Thread.Sleep(5 * 60 * 1000);
 
                     currentDateTimeWithTimeZone = CurrentPMTime;
-                    nextRun = GetNextRunDate(currentDateTimeWithTimeZone);
+                    nextRun = GetNextRunDate(currentDateTimeWithTimeZone, FirstSchedularTime);
                     var sleepTimeSpan = nextRun > currentDateTimeWithTimeZone ?
                         nextRun - currentDateTimeWithTimeZone :
                         currentDateTimeWithTimeZone - nextRun;
@@ -231,6 +242,8 @@ namespace UpdatePracticeAndSeniority
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 07:00:00 on 3rd and 18th of every month.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
+                    //Runs at 07:00:00 every day.
+                    RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
                 }
             }
             catch(Exception ex)
@@ -249,10 +262,9 @@ namespace UpdatePracticeAndSeniority
         /// </summary>
         /// <param name="currentDateTimeWithTimeZone"></param>
         /// <returns></returns>
-        public static DateTime GetNextRunDate(DateTime currentDateTimeWithTimeZone)
+        public static DateTime GetNextRunDate(DateTime currentDateTimeWithTimeZone, TimeSpan ScheduledTime)
         {
             DateTime nextRun;
-            TimeSpan ScheduledTime = TimeSpan.Parse(GetConfigValue(RunSchedularDailyAtTime_ConfigKey));
             if (ScheduledTime > currentDateTimeWithTimeZone.TimeOfDay)
             {
                 nextRun = new DateTime(currentDateTimeWithTimeZone.Year, currentDateTimeWithTimeZone.Month, currentDateTimeWithTimeZone.Day,
@@ -298,9 +310,8 @@ namespace UpdatePracticeAndSeniority
         /// <param name="currentWithTimeZone"></param>
         public static void RunTasks(DateTime currentWithTimeZone)
         {
-            var nextRun = GetNextRunDate(currentWithTimeZone);
+            var nextRun = GetNextRunDate(currentWithTimeZone, FirstSchedularTime);
             WorkerRole.StartAutomaticUpdation(currentWithTimeZone, nextRun);
-            WorkerRole.GetTodaysHireDatePersonsAndSenEmails(currentWithTimeZone, nextRun);
             WorkerRole.EmailUpdatedProfilesList(currentWithTimeZone, nextRun);
         }
 
@@ -312,9 +323,27 @@ namespace UpdatePracticeAndSeniority
         {
             if ((currentDateTimeWithTimeZone.Day == 3 || currentDateTimeWithTimeZone.Day == 18) && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime)
             {
-                    var sleeptime = PayrollDistributionReportScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
+                var sleeptime = PayrollDistributionReportScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
+                Thread.Sleep(sleeptime);
+                SendPayrollDistributionReport(CurrentPMTime);
+            }
+        }
+
+        /// <summary>
+        /// Runs WelcomeEmail Task For NewHires as per the time reaches( Every day at 07:00:00).
+        /// </summary>
+        public static void RunWelcomeEmailTaskForNewHires(DateTime currentDateTimeWithTimeZone)
+        {
+            if (currentDateTimeWithTimeZone.TimeOfDay < WelcomeMailScheduleTime)
+            {
+                currentDateTimeWithTimeZone = CurrentPMTime;
+                var nextRun = GetNextRunDate(currentDateTimeWithTimeZone, WelcomeMailScheduleTime);
+                if (currentDateTimeWithTimeZone.TimeOfDay < WelcomeMailScheduleTime)
+                {
+                    var sleeptime = WelcomeMailScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
                     Thread.Sleep(sleeptime);
-                    SendPayrollDistributionReport(CurrentPMTime);
+                }
+                WorkerRole.GetTodaysHireDatePersonsAndSenEmails(CurrentPMTime, nextRun);
             }
         }
 
