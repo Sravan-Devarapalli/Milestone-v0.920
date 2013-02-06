@@ -15,6 +15,7 @@
       <Setting name="PayrollDistributionReportReciever" value="Finance@logic2020.com"/> <!--Finance@logic2020.com-->
       <Setting name="EmailBccRecieverList" value="lisaj@logic2020.com,mattr@logic2020.com"/> <!--lisaj@logic2020.com,mattr@logic2020.com-->
       <Setting name="LoginPagePath" value="https://practice.logic2020.com/login.aspx"/> <!--https://65.52.17.100/login.aspx-->
+      <Setting name="WelcomeMailScheduleTime" value="07:00:00"/><!--HH:mm:ss and 24 hour time format-->
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
