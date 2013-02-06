@@ -16,6 +16,7 @@
       <Setting name="PayrollDistributionReportReciever"/>
       <Setting name="EmailBccRecieverList"/>
       <Setting name="LoginPagePath"/>
+      <Setting name="WelcomeMailScheduleTime"/>
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
