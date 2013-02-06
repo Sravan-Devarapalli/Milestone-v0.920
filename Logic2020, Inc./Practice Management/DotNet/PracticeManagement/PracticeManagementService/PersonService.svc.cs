@@ -482,7 +482,7 @@ namespace PracticeManagementService
                 MailUtil.SendActivateAccountEmail(person.FirstName, person.LastName, person.HireDate.ToString(Constants.Formatting.EntryDateFormat),
                          person.Alias, (person.Title != null) ? person.Title.TitleName : null, (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber);
 
-                if (person.HireDate.Date < DateTime.Now.Date)
+                if (person.HireDate.Date <= SettingsHelper.GetCurrentPMTime().Date)
                 {
                     //send welcome mail if person have past hire date
                     var companyName = ConfigurationDAL.GetCompanyName();
@@ -505,12 +505,12 @@ namespace PracticeManagementService
                         person.HireDate.ToString(Constants.Formatting.EntryDateFormat), person.Alias, (person.Title != null) ? person.Title.TitleName : null,
                         (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber);
 
-            if (person.HireDate.Date >= DateTime.Now.Date)
+            if (person.HireDate.Date >= SettingsHelper.GetCurrentPMTime().Date)
             {
                 //lockout the user
                 AspMembershipDAL.UserSetLockedOut(person.Alias, Membership.ApplicationName, null, null);
             }
-            else if (oldPerson.HireDate.Date >= DateTime.Now.Date)
+            else if (oldPerson.HireDate.Date > SettingsHelper.GetCurrentPMTime().Date)
             {
                 //send welcome mail if person have past hire date
                 var companyName = ConfigurationDAL.GetCompanyName();
