@@ -482,7 +482,9 @@ namespace PracticeManagementService
                 MailUtil.SendActivateAccountEmail(person.FirstName, person.LastName, person.HireDate.ToString(Constants.Formatting.EntryDateFormat),
                          person.Alias, (person.Title != null) ? person.Title.TitleName : null, (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber);
 
-                if (person.HireDate.Date <= SettingsHelper.GetCurrentPMTime().Date)
+                DateTime currentPmTime = SettingsHelper.GetCurrentPMTime();
+                TimeSpan welcomeEmailTimeStamp = new TimeSpan(7, 0, 0);
+                if (person.HireDate.Date <= currentPmTime.Date && currentPmTime.TimeOfDay > welcomeEmailTimeStamp)
                 {
                     //send welcome mail if person have past hire date
                     var companyName = ConfigurationDAL.GetCompanyName();
@@ -504,13 +506,14 @@ namespace PracticeManagementService
             MailUtil.SendHireDateChangedEmail(person.FirstName, person.LastName, oldPerson.HireDate.ToString(Constants.Formatting.EntryDateFormat),
                         person.HireDate.ToString(Constants.Formatting.EntryDateFormat), person.Alias, (person.Title != null) ? person.Title.TitleName : null,
                         (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber);
-
-            if (person.HireDate.Date >= SettingsHelper.GetCurrentPMTime().Date)
+            DateTime currentPmTime = SettingsHelper.GetCurrentPMTime();
+            TimeSpan welcomeEmailTimeStamp = new TimeSpan(7, 0, 0);
+            if (person.HireDate.Date > currentPmTime.Date || (person.HireDate.Date == currentPmTime.Date && currentPmTime.TimeOfDay < welcomeEmailTimeStamp))
             {
                 //lockout the user
                 AspMembershipDAL.UserSetLockedOut(person.Alias, Membership.ApplicationName, null, null);
             }
-            else if (oldPerson.HireDate.Date > SettingsHelper.GetCurrentPMTime().Date)
+            else if (oldPerson.HireDate.Date > currentPmTime.Date && currentPmTime.TimeOfDay > welcomeEmailTimeStamp)
             {
                 //send welcome mail if person have past hire date
                 var companyName = ConfigurationDAL.GetCompanyName();
