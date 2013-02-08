@@ -1658,7 +1658,7 @@ namespace PraticeManagement
             {
                 var monthColumn = new TableCell();
                 monthColumn.HorizontalAlign = HorizontalAlign.Center;
-                monthColumn.Text = periodStart.ToString(Constants.Formatting.CompPerfMonthYearFormat);
+                monthColumn.Text = periodStart.ToString();
                 monthColumn.Style.Add("mso-number-format", "mmm-yy");
                 monthColumn.Font.Bold = true;
                 row.Cells.AddAt(i, monthColumn);
