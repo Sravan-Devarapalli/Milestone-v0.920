@@ -8,7 +8,10 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN DeleteStrawman
 		EXEC dbo.SessionLogPrepare @userLogin = @UserLogin
-	
+		
+		DELETE MilestonePerson
+		WHERE personid = @PersonId
+
 		--Deleting the Strawman
 		DELETE P
 		FROM dbo.Person P
