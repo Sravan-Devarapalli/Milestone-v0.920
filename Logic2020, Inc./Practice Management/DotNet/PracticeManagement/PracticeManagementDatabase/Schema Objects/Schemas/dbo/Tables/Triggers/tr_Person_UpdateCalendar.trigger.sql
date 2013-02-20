@@ -16,7 +16,7 @@ BEGIN
 	IF EXISTS (SELECT 1
 				FROM inserted i
 				LEFT JOIN deleted d ON d.PersonId = i.PersonId
-				WHERE ISNULL(i.HireDate, '') <> ISNULL(d.HireDate, '') OR ISNULL(i.TerminationDate, '') <> ISNULL(d.TerminationDate, ''))
+				WHERE ISNULL(i.HireDate, '18000101') <> ISNULL(d.HireDate, '18000101') OR ISNULL(i.TerminationDate, '18000101') <> ISNULL(d.TerminationDate, '18000101'))
 	BEGIN
 
 		-- Deleting redundand records
@@ -46,3 +46,4 @@ EXEC sp_settriggerorder @triggername = N'[dbo].[tr_Person_UpdateCalendar]', @ord
 GO
 EXEC sp_settriggerorder @triggername = N'[dbo].[tr_Person_UpdateCalendar]', @order = N'LAST', @stmttype = N'UPDATE'
 GO
+
