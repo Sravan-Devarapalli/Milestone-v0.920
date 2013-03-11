@@ -269,7 +269,7 @@
                                     <ItemStyle Width="100px" HorizontalAlign="Center" />
                                     <FooterStyle Width="120px" />
                                     <ItemTemplate>
-                                        <asp:Label ID="lblBillableHours" runat="server" Text='<%# Eval("BillableHours") != null ? Eval("BillableHours") : 0 %>'></asp:Label>
+                                        <asp:Label ID="lblBillableHours" runat="server" Text='<%# Eval("ProjectedWorkload") != null ? Eval("ProjectedWorkload") : 0 %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderStyle-Width="100px">
