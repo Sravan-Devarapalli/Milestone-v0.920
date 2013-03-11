@@ -28,8 +28,8 @@ BEGIN
 
 		-- Inserting new records
 		INSERT INTO dbo.PersonCalendarAuto
-					(Date, PersonId, DayOff)
-		SELECT c.Date, c.PersonId, c.DayOff
+					(Date, PersonId, DayOff,CompanyDayOff,TimeOffHours)
+		SELECT c.Date, c.PersonId, c.DayOff,c.CompanyDayOff,c.ActualHours
 		FROM inserted i
 		INNER JOIN  dbo.v_PersonCalendar AS C ON i.PersonId = c.PersonId
 		LEFT JOIN dbo.PersonCalendarAuto AS PCA ON C.PersonId = PCA.PersonId AND C.Date = PCA.Date
