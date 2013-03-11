@@ -15,9 +15,6 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithRole", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse")]
-        DataTransferObjects.Person[] GetPersonListWithRole(string rolename);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById", ReplyAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse")]
         DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId);
         
@@ -45,9 +42,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SendAdministratorAddedEmail", ReplyAction="http://tempuri.org/IPersonService/SendAdministratorAddedEmailResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         void SendAdministratorAddedEmail(DataTransferObjects.Person person, DataTransferObjects.Person oldPerson);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListByStatusList", ReplyAction="http://tempuri.org/IPersonService/GetPersonListByStatusListResponse")]
-        DataTransferObjects.Person[] GetPersonListByStatusList(string statusList, System.Nullable<int> personId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListByPersonIdList", ReplyAction="http://tempuri.org/IPersonService/GetPersonListByPersonIdListResponse")]
         DataTransferObjects.Person[] GetPersonListByPersonIdList(string PersonIds);
@@ -166,6 +160,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ListAllSeniorityCategories", ReplyAction="http://tempuri.org/IPersonService/ListAllSeniorityCategoriesResponse")]
         DataTransferObjects.SeniorityCategory[] ListAllSeniorityCategories();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithRole", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse")]
+        DataTransferObjects.Person[] GetPersonListWithRole(string rolename);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
         
@@ -220,8 +217,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsList", ReplyAction="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsListResponse")]
         int GetPersonCountByCommaSeperatedIdsList(string practiceIds, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool terminationpending, System.Nullable<char> alphabet);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonWorkDaysNumber", ReplyAction="http://tempuri.org/IPersonService/GetPersonWorkDaysNumberResponse")]
-        int GetPersonWorkDaysNumber(int personId, System.DateTime startDate, System.DateTime endDate);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonWorkingHoursDetailsWithinThePeriod", ReplyAction="http://tempuri.org/IPersonService/GetPersonWorkingHoursDetailsWithinThePeriodResp" +
+            "onse")]
+        DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(int personId, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetRecruiterList", ReplyAction="http://tempuri.org/IPersonService/GetRecruiterListResponse")]
         DataTransferObjects.Person[] GetRecruiterList();
@@ -257,9 +255,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         void PersonValidations(DataTransferObjects.Person person);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonOverheadByPerson", ReplyAction="http://tempuri.org/IPersonService/GetPersonOverheadByPersonResponse")]
-        DataTransferObjects.PersonOverhead[] GetPersonOverheadByPerson(int personId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonOverheadByTimescale", ReplyAction="http://tempuri.org/IPersonService/GetPersonOverheadByTimescaleResponse")]
         DataTransferObjects.PersonOverhead[] GetPersonOverheadByTimescale(DataTransferObjects.TimescaleType timescale, System.Nullable<System.DateTime> effectiveDate);
         
@@ -291,6 +286,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ListManagersSubordinates", ReplyAction="http://tempuri.org/IPersonService/ListManagersSubordinatesResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person[] ListManagersSubordinates(DataTransferObjects.Person person);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListByStatusList", ReplyAction="http://tempuri.org/IPersonService/GetPersonListByStatusListResponse")]
+        DataTransferObjects.Person[] GetPersonListByStatusList(string statusList, System.Nullable<int> personId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -301,7 +299,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-      
+    
         
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -317,10 +315,6 @@ namespace PraticeManagement.PersonService {
         
         public PersonServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
-        }
-        
-        public DataTransferObjects.Person[] GetPersonListWithRole(string rolename) {
-            return base.Channel.GetPersonListWithRole(rolename);
         }
         
         public DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId) {
@@ -353,10 +347,6 @@ namespace PraticeManagement.PersonService {
         
         public void SendAdministratorAddedEmail(DataTransferObjects.Person person, DataTransferObjects.Person oldPerson) {
             base.Channel.SendAdministratorAddedEmail(person, oldPerson);
-        }
-        
-        public DataTransferObjects.Person[] GetPersonListByStatusList(string statusList, System.Nullable<int> personId) {
-            return base.Channel.GetPersonListByStatusList(statusList, personId);
         }
         
         public DataTransferObjects.Person[] GetPersonListByPersonIdList(string PersonIds) {
@@ -499,6 +489,10 @@ namespace PraticeManagement.PersonService {
             return base.Channel.ListAllSeniorityCategories();
         }
         
+        public DataTransferObjects.Person[] GetPersonListWithRole(string rolename) {
+            return base.Channel.GetPersonListWithRole(rolename);
+        }
+        
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
             return base.Channel.GetPersonMilestoneWithFinancials(personId);
         }
@@ -563,8 +557,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetPersonCountByCommaSeperatedIdsList(practiceIds, active, looked, recruiterIds, userName, timeScaleIds, projected, terminated, terminationpending, alphabet);
         }
         
-        public int GetPersonWorkDaysNumber(int personId, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.GetPersonWorkDaysNumber(personId, startDate, endDate);
+        public DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetPersonWorkingHoursDetailsWithinThePeriod(personId, startDate, endDate);
         }
         
         public DataTransferObjects.Person[] GetRecruiterList() {
@@ -603,10 +597,6 @@ namespace PraticeManagement.PersonService {
             base.Channel.PersonValidations(person);
         }
         
-        public DataTransferObjects.PersonOverhead[] GetPersonOverheadByPerson(int personId) {
-            return base.Channel.GetPersonOverheadByPerson(personId);
-        }
-        
         public DataTransferObjects.PersonOverhead[] GetPersonOverheadByTimescale(DataTransferObjects.TimescaleType timescale, System.Nullable<System.DateTime> effectiveDate) {
             return base.Channel.GetPersonOverheadByTimescale(timescale, effectiveDate);
         }
@@ -641,6 +631,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person[] ListManagersSubordinates(DataTransferObjects.Person person) {
             return base.Channel.ListManagersSubordinates(person);
+        }
+        
+        public DataTransferObjects.Person[] GetPersonListByStatusList(string statusList, System.Nullable<int> personId) {
+            return base.Channel.GetPersonListByStatusList(statusList, personId);
         }
     }
 }
