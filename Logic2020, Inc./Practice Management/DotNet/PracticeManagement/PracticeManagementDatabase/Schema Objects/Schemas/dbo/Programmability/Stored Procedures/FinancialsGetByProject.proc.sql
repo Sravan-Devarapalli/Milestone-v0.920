@@ -67,8 +67,8 @@ AS
 		P.ProjectId,
 		P.StartDate FinancialDate,
 		p.EndDate MonthEnd,
-		ISNULL(pf.Revenue,0)+ISNULL(PE.ReimbursedExpenseSum,0)-ISNULL(PE.ExpenseSum,0)  as 'Revenue',
-		ISNULL(pf.RevenueNet,0)+((ISNULL(PE.ReimbursedExpenseSum,0)-ISNULL(PE.ExpenseSum,0)) * (1 - P.Discount/100))  as 'RevenueNet',
+		ISNULL(pf.Revenue,0)  as 'Revenue',
+		ISNULL(pf.RevenueNet,0) as 'RevenueNet',
 		CASE WHEN (pr.IsCompanyInternal = 1) THEN 0
 		ELSE ISNULL(pf.Cogs,0) END AS 'Cogs',
 		ISNULL(pf.GrossMargin,0)+((ISNULL(PE.ReimbursedExpenseSum,0)-ISNULL(PE.ExpenseSum,0)) * (1 - P.Discount/100))  as 'GrossMargin',
@@ -90,3 +90,4 @@ AS
 	WHERE (pf.ProjectId IS NOT NULL OR PE.ProjectId IS NOT NULL) AND P.ProjectId =@ProjectIdLocal
 			AND P.StartDate IS NOT  NULL AND P.EndDate IS NOT NULL	
 	
+
