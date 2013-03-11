@@ -16,6 +16,8 @@ namespace DataTransferObjects
         private PracticeManagementCurrency _marginValue;
         private PracticeManagementCurrency _revenueNetValue;
         private PracticeManagementCurrency _revenueValue;
+        private PracticeManagementCurrency _actualMarginValue;
+        private PracticeManagementCurrency _actualRevenueValue;
 
         #endregion
 
@@ -29,6 +31,34 @@ namespace DataTransferObjects
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a computed Revenue.
+        /// </summary>
+        [DataMember]
+        public PracticeManagementCurrency ActualRevenue
+        {
+            get { return _actualRevenueValue; }
+            set
+            {
+                _actualRevenueValue = value;
+                _actualRevenueValue.FormatStyle = NumberFormatStyle.Revenue;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a computed margin.
+        /// </summary>
+        [DataMember]
+        public PracticeManagementCurrency ActualGrossMargin
+        {
+            get { return _actualMarginValue; }
+            set
+            {
+                _actualMarginValue = value;
+                _actualMarginValue.FormatStyle = NumberFormatStyle.Margin;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a computed Revenue.
@@ -204,3 +234,4 @@ namespace DataTransferObjects
 
     }
 }
+
