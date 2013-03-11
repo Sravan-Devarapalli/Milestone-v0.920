@@ -261,6 +261,16 @@ namespace DataTransferObjects.Utils
             //if there's no description, return the string value of the enum
             return enumerator.ToString();
         }
+
+        public static DateTime MonthStartDate(DateTime now)
+        {
+            return now.AddDays(1 - now.Day);
+        }
+
+        public static DateTime MonthEndDate(DateTime now)
+        {
+            return now.AddMonths(1).AddDays(-now.AddMonths(1).Day);
+        }
     }
 }
 
