@@ -8,13 +8,18 @@ AS
 			TE.ChargeCodeDate,
 			SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours ELSE 0 END) BillableHOursPerDay,
 			SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours ELSE 0 END) NonBillableHoursPerDay,
-			CAST(CASE WHEN SUM(CAST(m.IsHourlyAmount as INT)) > 0 THEN 1 ELSE 0 END AS BIT) AS IsHourlyAmount
+			P.IsHourlyAmount
 	FROM TimeEntry TE
 	JOIN TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
 	JOIN ChargeCode CC on CC.Id = TE.ChargeCodeId
-	JOIN Project P ON p.ProjectId = CC.ProjectId AND P.IsAllowedToShow = 1
-	LEFT JOIN Milestone m ON m.ProjectId = p.ProjectId 
-	GROUP BY CC.ProjectId, TE.PersonId, TE.ChargeCodeDate
+	JOIN (
+			SELECT Pro.ProjectId,CAST(CASE WHEN SUM(CAST(m.IsHourlyAmount as INT)) > 0 THEN 1 ELSE 0 END AS BIT) AS IsHourlyAmount
+			FROM Project Pro 
+				LEFT JOIN Milestone m ON m.ProjectId = Pro.ProjectId 
+			WHERE Pro.IsAllowedToShow = 1
+			GROUP BY Pro.ProjectId
+		 ) P ON p.ProjectId = CC.ProjectId
+	GROUP BY CC.ProjectId, TE.PersonId, TE.ChargeCodeDate,P.IsHourlyAmount
 ),
 MileStoneEntries
 AS
