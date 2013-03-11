@@ -67,7 +67,12 @@ AS
 			pers.PersonId,
 			pers.PersonStatusId,
 			stat.[Name] AS 'PersonStatusName',
-			P.Abbreviation
+			P.Abbreviation,
+			CASE 
+				WHEN EXISTS(SELECT TOP 1 PC.PracticeId FROM dbo.PracticeCapabilities PC WHERE PC.PracticeId = p.PracticeId AND PC.IsActive = 1)
+					THEN CAST(1 AS BIT)
+				ELSE CAST(0 AS BIT)
+			END AS 'IsActiveCapabilitiesExists'
 		FROM Practice P
 		JOIN PracticeList PL ON PL.PracticeId = P.PracticeId
 		LEFT JOIN Person Pers ON Pers.PersonId = P.PracticeManagerId
@@ -136,7 +141,12 @@ AS
 			pers.PersonId,
 			pers.PersonStatusId,
 			stat.[Name] AS 'PersonStatusName',
-			P.Abbreviation		
+			P.Abbreviation,
+			CASE 
+				WHEN EXISTS(SELECT TOP 1 PC.PracticeId FROM dbo.PracticeCapabilities PC WHERE PC.PracticeId = p.PracticeId AND PC.IsActive = 1)
+					THEN CAST(1 AS BIT)
+				ELSE CAST(0 AS BIT)
+			END AS 'IsActiveCapabilitiesExists'		
 		  FROM dbo.Practice AS p
 		  LEFT JOIN dbo.Person AS pers ON p.PracticeManagerId = pers.PersonId
 		  INNER JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
@@ -149,3 +159,4 @@ AS
 			)
 		ORDER BY p.Name
 	END
+
