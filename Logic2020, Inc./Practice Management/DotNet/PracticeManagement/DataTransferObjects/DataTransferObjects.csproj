@@ -142,6 +142,7 @@
     <Compile Include="Employment.cs" />
     <Compile Include="OpurtunityPerson.cs" />
     <Compile Include="PersonPassword.cs" />
+    <Compile Include="PersonWorkingHoursDetailsWithinThePeriod.cs" />
     <Compile Include="PracticeCapability.cs" />
     <Compile Include="Reports\ByPerson\GroupByDateByPerson.cs" />
     <Compile Include="Reports\ByPerson\GroupByPersonByWorktype.cs" />
