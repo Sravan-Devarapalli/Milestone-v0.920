@@ -4160,6 +4160,12 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonWorkingHoursDetailsWithinThePeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
+ <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetPersonTimeoffValuesByMilestoneId.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\PersonProjectedHoursPerDay.function.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
