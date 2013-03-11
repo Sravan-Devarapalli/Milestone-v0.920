@@ -18,7 +18,7 @@ BEGIN
 	FROM dbo.v_PersonCalendar
 	WHERE Date BETWEEN @startDate AND @endDate AND 
 		  @PersonId = PersonId AND 
-		  DayOff = 1
+		  DayOff = 1 AND CompanyDayOff = 1
 
 	RETURN @res
 END
