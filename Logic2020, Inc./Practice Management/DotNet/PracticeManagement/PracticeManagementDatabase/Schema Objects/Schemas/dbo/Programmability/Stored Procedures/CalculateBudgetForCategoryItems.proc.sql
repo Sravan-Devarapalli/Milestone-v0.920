@@ -92,15 +92,14 @@ BEGIN
 				m.ProjectId,
 				m.IsHourlyAmount,
 				mpe.MilestonePersonId,
-				mpe.HoursPerDay AS HoursPerDay,
+				dbo.PersonProjectedHoursPerDay(cal.DayOff,cal.companydayoff,cal.TimeoffHours,mpe.HoursPerDay) AS HoursPerDay,
 				cal.Date,
 				mpe.StartDate AS EntryStartDate,
 				mpe.Amount
 			FROM dbo.[Milestone] AS m
 			INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
-			INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId			   
+			INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId	
 			INNER JOIN dbo.PersonCalendarAuto AS cal ON (cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId)
-			WHERE cal.DayOff = 0 
 		),
 		CTEFinancialsRetroSpective
 		AS
@@ -291,15 +290,14 @@ BEGIN
 				m.ProjectId,
 				m.IsHourlyAmount,
 				mpe.MilestonePersonId,
-				mpe.HoursPerDay AS HoursPerDay,
+				dbo.PersonProjectedHoursPerDay(cal.DayOff,cal.companydayoff,cal.TimeoffHours,mpe.HoursPerDay) AS HoursPerDay,
 				cal.Date,
 				mpe.StartDate AS EntryStartDate,
 				mpe.Amount
 		   FROM dbo.[Milestone] AS m
 		   INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
-		   INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId			   
+		   INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId			
 		   INNER JOIN dbo.PersonCalendarAuto AS cal ON (cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId)
-		   WHERE cal.DayOff = 0 
 		),
 		CTEFinancialsRetroSpective
 		AS
@@ -479,15 +477,14 @@ BEGIN
 				  m.ProjectId,
 				  m.IsHourlyAmount,
 				  mpe.MilestonePersonId,
-				  mpe.HoursPerDay AS HoursPerDay,
+				  dbo.PersonProjectedHoursPerDay(cal.DayOff,cal.companydayoff,cal.TimeoffHours,mpe.HoursPerDay) AS HoursPerDay,
 				  cal.Date,
 				  mpe.StartDate AS EntryStartDate,
 				  mpe.Amount
 		   FROM dbo.[Milestone] AS m
 		   INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
-		   INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId			   
-		   INNER JOIN dbo.PersonCalendarAuto AS cal ON (cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId)
-		   WHERE cal.DayOff = 0 
+		   INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
+		  INNER JOIN dbo.PersonCalendarAuto AS cal ON (cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId)
 		),
 		CTEFinancialsRetroSpective
 		AS
