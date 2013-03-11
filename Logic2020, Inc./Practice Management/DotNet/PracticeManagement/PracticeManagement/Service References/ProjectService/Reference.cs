@@ -15,6 +15,9 @@ namespace PraticeManagement.ProjectService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProjectService.IProjectService")]
     public interface IProjectService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner", ReplyAction="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse")]
+        bool IsUserIsProjectOwner(string user, int id);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId", ReplyAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse")]
         DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate);
         
@@ -99,14 +102,18 @@ namespace PraticeManagement.ProjectService {
                     bool showInactive, 
                     System.DateTime periodStart, 
                     System.DateTime periodEnd, 
-                    string userName, 
                     string salespersonIdsList, 
                     string projectOwnerIdsList, 
                     string practiceIdsList, 
                     string projectGroupIdsList, 
                     DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
                     bool excludeInternalPractices, 
-                    string userLogin);
+                    string userLogin, 
+                    bool useActuals, 
+                    bool getFinancialsFromCache);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsProjectSummaryCachedToday", ReplyAction="http://tempuri.org/IProjectService/IsProjectSummaryCachedTodayResponse")]
+        bool IsProjectSummaryCachedToday();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListWithFinancials", ReplyAction="http://tempuri.org/IProjectService/GetProjectListWithFinancialsResponse")]
         DataTransferObjects.Project[] GetProjectListWithFinancials(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices);
@@ -138,10 +145,10 @@ namespace PraticeManagement.ProjectService {
         int SaveProjectDetail(DataTransferObjects.Project project, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/MonthMiniReport", ReplyAction="http://tempuri.org/IProjectService/MonthMiniReportResponse")]
-        string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive);
+        string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/PersonStartsReport", ReplyAction="http://tempuri.org/IProjectService/PersonStartsReportResponse")]
-        DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive);
+        DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectId", ReplyAction="http://tempuri.org/IProjectService/GetProjectIdResponse")]
         System.Nullable<int> GetProjectId(string projectNumber);
@@ -181,9 +188,6 @@ namespace PraticeManagement.ProjectService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject", ReplyAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse")]
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner", ReplyAction="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse")]
-        bool IsUserIsProjectOwner(string user, int id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -193,8 +197,7 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
-        
-      
+  
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -210,6 +213,10 @@ namespace PraticeManagement.ProjectService {
         
         public ProjectServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public bool IsUserIsProjectOwner(string user, int id) {
+            return base.Channel.IsUserIsProjectOwner(user, id);
         }
         
         public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate) {
@@ -306,15 +313,20 @@ namespace PraticeManagement.ProjectService {
                     bool showInactive, 
                     System.DateTime periodStart, 
                     System.DateTime periodEnd, 
-                    string userName, 
                     string salespersonIdsList, 
                     string projectOwnerIdsList, 
                     string practiceIdsList, 
                     string projectGroupIdsList, 
                     DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
                     bool excludeInternalPractices, 
-                    string userLogin) {
-            return base.Channel.ProjectListAllMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, userName, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin);
+                    string userLogin, 
+                    bool useActuals, 
+                    bool getFinancialsFromCache) {
+            return base.Channel.ProjectListAllMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, useActuals, getFinancialsFromCache);
+        }
+        
+        public bool IsProjectSummaryCachedToday() {
+            return base.Channel.IsProjectSummaryCachedToday();
         }
         
         public DataTransferObjects.Project[] GetProjectListWithFinancials(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices) {
@@ -349,12 +361,12 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.SaveProjectDetail(project, userName);
         }
         
-        public string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive) {
-            return base.Channel.MonthMiniReport(month, userName, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive);
+        public string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals) {
+            return base.Channel.MonthMiniReport(month, userName, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive, useActuals);
         }
         
-        public DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive) {
-            return base.Channel.PersonStartsReport(startDate, endDate, userName, salespersonId, practiceManagerId, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive);
+        public DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals) {
+            return base.Channel.PersonStartsReport(startDate, endDate, userName, salespersonId, practiceManagerId, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive, useActuals);
         }
         
         public System.Nullable<int> GetProjectId(string projectNumber) {
@@ -403,10 +415,6 @@ namespace PraticeManagement.ProjectService {
         
         public bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId) {
             return base.Channel.IsUserIsOwnerOfProject(user, id, isProjectId);
-        }
-        
-        public bool IsUserIsProjectOwner(string user, int id) {
-            return base.Channel.IsUserIsProjectOwner(user, id);
         }
     }
 }
