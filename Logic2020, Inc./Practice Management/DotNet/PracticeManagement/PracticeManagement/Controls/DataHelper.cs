@@ -151,23 +151,27 @@ namespace PraticeManagement.Controls
         {
             get
             {
-                if (HttpContext.Current.Items[CurrentPersonKey] == null)
+                if (HttpContext.Current != null)
                 {
-                    using (var serviceClient = new PersonServiceClient())
+                    if (HttpContext.Current.Items[CurrentPersonKey] == null)
                     {
-                        try
+                        using (var serviceClient = new PersonServiceClient())
                         {
-                            HttpContext.Current.Items[CurrentPersonKey] =
-                                serviceClient.GetPersonByAlias(HttpContext.Current.User.Identity.Name);
-                        }
-                        catch (CommunicationException)
-                        {
-                            serviceClient.Abort();
-                            throw;
+                            try
+                            {
+                                HttpContext.Current.Items[CurrentPersonKey] =
+                                    serviceClient.GetPersonByAlias(HttpContext.Current.User.Identity.Name);
+                            }
+                            catch (CommunicationException)
+                            {
+                                serviceClient.Abort();
+                                throw;
+                            }
                         }
                     }
+                    return HttpContext.Current.Items[CurrentPersonKey] as Person;
                 }
-                return HttpContext.Current.Items[CurrentPersonKey] as Person;
+                return null;
             }
         }
 
@@ -373,7 +377,7 @@ namespace PraticeManagement.Controls
                 try
                 {
                     Person cp = CurrentPerson;
-                    logClient.ActivityLogInsert(Constants.ActityLog.ExportMessageId,
+                    logClient.ActivityLogInsert(Constants.ActityLog.TaskPerformedMessageId,
                                                 String.Format(Constants.ActityLog.ExportLogMessage,
                                                               cp.LastName + ", " + cp.FirstName, source));
                 }
