@@ -539,6 +539,7 @@
     <Content Include="Controls\Projects\AttachmentUpload.ashx" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
@@ -3593,4 +3594,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
