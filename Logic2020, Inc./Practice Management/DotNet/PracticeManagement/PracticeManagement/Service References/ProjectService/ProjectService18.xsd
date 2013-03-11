@@ -4,6 +4,21 @@
   <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
   <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+  <xs:element name="IsUserIsProjectOwner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="user" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="id" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsUserIsProjectOwnerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsUserIsProjectOwnerResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetProjectsListByProjectGroupId">
     <xs:complexType>
       <xs:sequence>
@@ -355,7 +370,6 @@
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
         <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
-        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="salespersonIdsList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="projectOwnerIdsList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
@@ -363,6 +377,8 @@
         <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="includeCurentYearFinancials" type="q18:ProjectCalculateRangeType" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="useActuals" type="xs:boolean" />
+        <xs:element minOccurs="0" name="getFinancialsFromCache" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -370,6 +386,18 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectListAllMultiParametersResult" nillable="true" type="q19:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsProjectSummaryCachedToday">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsProjectSummaryCachedTodayResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsProjectSummaryCachedTodayResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -526,6 +554,7 @@
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="useActuals" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -550,6 +579,7 @@
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="useActuals" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -747,21 +777,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="IsUserIsOwnerOfProjectResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="IsUserIsProjectOwner">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="user" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="id" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="IsUserIsProjectOwnerResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IsUserIsProjectOwnerResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
