@@ -18,9 +18,10 @@ BEGIN
 
 		EXEC dbo.SessionLogPrepare @userLogin = @UserLogin
 		
-		DECLARE @FutureDate  DATETIME
+		DECLARE @FutureDate  DATETIME, @HoursPerYear	DECIMAL
+		SELECT @HoursPerYear = GHY.HoursPerYear FROM dbo.[BonusHoursPerYearTable]() GHY
 		SELECT	@StartDate = ISNULL(CONVERT(DATE, @StartDate), '1900-01-01'),
-				@BonusHoursToCollect = ISNULL(@BonusHoursToCollect, dbo.GetHoursPerYear()),
+				@BonusHoursToCollect = ISNULL(@BonusHoursToCollect, @HoursPerYear),
 				@FutureDate = dbo.GetFutureDate()
 
 		IF EXISTS (SELECT 1 FROM Person P
