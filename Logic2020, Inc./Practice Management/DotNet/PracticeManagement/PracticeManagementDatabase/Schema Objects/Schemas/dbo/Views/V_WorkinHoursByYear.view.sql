@@ -1,9 +1,9 @@
 ﻿CREATE VIEW [dbo].[V_WorkinHoursByYear]
 AS 
-	SELECT [Year] 
-	,CASE WHEN (([Year] % 4) = 0 AND ([Year] % 100 ) <> 0) OR ([Year] % 400) = 0
-		  THEN 2088 
-		  ELSE 2080 END HoursInYear
-	FROM dbo.Calendar 
-	GROUP BY [Year]
+	SELECT	cal.[Year],
+			CONVERT(INT,cal.[DaysInYear] * Convert(DECIMAL(4,2),s.Value)) AS HoursInYear
+	FROM dbo.Calendar cal
+	INNER JOIN  Settings s ON s.SettingsKey='DefaultHoursPerDay'
+	GROUP BY cal.[Year],cal.[DaysInYear],s.Value
+	
 
