@@ -34,19 +34,18 @@ AS
 				FROM    [dbo].[ConvertStringListIntoTable](@ProjectStatusIds);
 			WITH    ProjectForeCastedHoursUntilToday
 					  AS ( SELECT   M.ProjectId ,
-					                SUM(CASE WHEN PC.Date < @Today
-												 THEN MPE.HoursPerDay
-												 ELSE 0
-											END)  AS ForecastedHoursUntilToday ,
-									SUM(MPE.HoursPerDay) AS ForecastedHours ,									
-									MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue ,
+					                SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay))
+											 ELSE 0
+										END)  AS ForecastedHoursUntilToday,
+									SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay)) AS ForecastedHours,
+									MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue,
 									MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
 						   FROM     dbo.MilestonePersonEntry AS MPE
 									INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 									INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 									INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
 									INNER JOIN dbo.v_PersonCalendar PC ON PC.PersonId = MP.PersonId
-															  AND PC.DayOff = 0
+															  --AND PC.DayOff = 0
 															  AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
 															  AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal															  
 						   GROUP BY M.ProjectId
@@ -64,8 +63,8 @@ AS
 					PS.Name AS ProjectStatusName ,
 					BillableHours ,
 					NonBillableHours ,
-					CAST(ISNULL(pfh.ForecastedHoursUntilToday, 0) AS INT) AS ForecastedHoursUntilToday ,
-					CAST(ISNULL(pfh.ForecastedHours, 0) AS INT) AS ForecastedHours ,
+					ISNULL(pfh.ForecastedHoursUntilToday, 0) AS ForecastedHoursUntilToday ,
+					ISNULL(pfh.ForecastedHours, 0) AS ForecastedHours ,
 					BillableHoursUntilToday ,
 					TimeEntrySectionId ,
 					( CASE WHEN ( pfh.MinimumValue IS NULL ) THEN ''
