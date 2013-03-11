@@ -64,8 +64,15 @@ namespace PraticeManagement
             public const string FormsAuthenticationTimeOutKey = "FormsAuthenticationTimeOutMin";
             public const string NotesRequiredForTimeEntryKey = "NotesRequiredForTimeEntry";
 
+            #endregion
+
+            # region PROJECT
+
+            public const string AttachmentFileSize = "AttachmentFileSize";
+            public const string DefaultHoursPerDayKey = "DefaultHoursPerDay";
 
             #endregion
+
 
         }
 
@@ -245,7 +252,7 @@ namespace PraticeManagement
             public const string ExportLogMessage = @"<Export><NEW_VALUES User = ""{0}"" From=""{1}""></NEW_VALUES><OLD_VALUES /></Export>";
 
             public const int ErrorMessageId = 20;
-            public const int ExportMessageId = 6;
+            public const int TaskPerformedMessageId = 6;
         }
 
         public static class QueryStringParameterNames
