@@ -43,7 +43,7 @@ BEGIN
 	;WITH ProjectForeCastedHoursUntilToday
 	AS (
 		SELECT M.ProjectId
-				, SUM(MPE.HoursPerDay) AS ForecastedHoursUntilToday
+				, SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay)) AS ForecastedHoursUntilToday
 				, MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue
 				, MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
 		FROM
@@ -60,8 +60,7 @@ BEGIN
 						DATEADD(DAY, -1, @Today)
 					ELSE
 						@EndDateLocal
-				END AND ((PC.CompanyDayOff = 0 AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType) OR (PC.CompanyDayOff = 1 AND PC.SubstituteDate IS NOT NULL))
-				AND PC.DayOff = 0
+				END
 		GROUP BY
 			M.ProjectId
 	),
@@ -251,3 +250,4 @@ BEGIN
 	WHERE C.ClientId = @AccountId
 	
 END
+
