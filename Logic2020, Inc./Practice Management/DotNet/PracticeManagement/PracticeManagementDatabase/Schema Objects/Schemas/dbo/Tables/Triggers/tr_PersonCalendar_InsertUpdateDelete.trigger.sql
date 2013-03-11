@@ -18,7 +18,8 @@ BEGIN
    BEGIN
     
     UPDATE PCA
-	SET PCA.DayOff = cal.DayOff
+	SET PCA.DayOff = cal.DayOff,
+		PCA.TimeOffHours = NULL
 	FROM DELETED AS d
 	INNER JOIN dbo.PersonCalendarAuto AS PCA ON d.Date = PCA.Date  and d.PersonId = PCA.PersonId
 	INNER JOIN dbo.Calendar AS cal ON cal.Date = PCA.Date 
@@ -30,18 +31,20 @@ BEGIN
    BEGIN
 
     UPDATE PCA
-	SET PCA.DayOff = cal.DayOff
+	SET PCA.DayOff = cal.DayOff,
+		PCA.TimeOffHours = NULL
 	FROM DELETED AS d
 	INNER JOIN dbo.PersonCalendarAuto AS PCA ON d.Date = PCA.Date  and d.PersonId = PCA.PersonId
 	INNER JOIN dbo.Calendar AS cal ON cal.Date = PCA.Date 
-	WHERE PCA.DayOff <> cal.DayOff
+	WHERE PCA.DayOff <> cal.DayOff OR ISNULL(PCA.TimeOffHours,0) <> ISNULL(d.ActualHours,0)
    
     UPDATE PCA
-	SET PCA.DayOff = i.DayOff
+	SET PCA.DayOff = i.DayOff,
+		PCA.TimeOffHours = i.ActualHours
 	FROM INSERTED AS i
 	INNER JOIN dbo.PersonCalendarAuto AS PCA ON i.Date = PCA.Date  and i.PersonId = PCA.PersonId
 	INNER JOIN dbo.Calendar AS cal ON cal.Date = PCA.Date 
-	WHERE PCA.DayOff <> i.DayOff
+	WHERE PCA.DayOff <> i.DayOff OR ISNULL(PCA.TimeOffHours,0) <> ISNULL(i.ActualHours,0)
 	
    END
 
