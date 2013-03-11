@@ -91,6 +91,12 @@ BEGIN
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.TitleId = d.TitleId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+	  WHERE ISNULL(i.Title, '') <> ISNULL(d.Title, '')
+		  OR ISNULL(i.SortOrder, 0) <> ISNULL(d.SortOrder, 0)
+		  OR ISNULL(i.PTOAccrual, 0) <> ISNULL(d.PTOAccrual, 0)
+		  OR ISNULL(i.MaximumSalary, 0) <> ISNULL(d.MaximumSalary, 0)
+		  OR ISNULL(i.MinimumSalary, 0) <> ISNULL(d.MinimumSalary, 0)
+		  OR ISNULL(i.TitleTypeId, 0) <> ISNULL(d.TitleTypeId, 0)
 
 	 -- End logging session
 	EXEC dbo.SessionLogUnprepare
