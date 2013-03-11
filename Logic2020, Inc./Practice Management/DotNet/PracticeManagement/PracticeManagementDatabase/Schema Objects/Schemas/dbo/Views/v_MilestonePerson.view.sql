@@ -29,16 +29,19 @@ AS
 	       m.MilestoneIsChargeable,
 	       m.ConsultantsCanAdjust,
 	       ISNULL((SELECT COUNT(*) * mpe.HoursPerDay
-	                 FROM dbo.PersonCalendarAuto AS cal
-	                WHERE cal.Date BETWEEN mpe.StartDate AND mpe.EndDate
-	                  AND cal.PersonId = mp.PersonId
-	                  AND cal.DayOff = 0), 0) AS ExpectedHours,
+				FROM dbo.v_PersonCalendar AS pcal
+				WHERE  (
+						(pcal.CompanyDayOff = 0 AND pcal.IsFloatingHoliday = 0) 
+						OR (pcal.CompanyDayOff = 1 AND pcal.DayOff =  0)
+					   )
+					AND pcal.Date BETWEEN mpe.StartDate AND mpe.EndDate
+					AND pcal.PersonId = mp.PersonId), 0) AS ExpectedHoursWithVacationDays,
 	       mpe.Amount,
 	       CASE m.IsHourlyAmount
 	           WHEN 1
 	           THEN mpe.Amount
 	           ELSE
-	              (SELECT CAST(m.Amount / mh.MilestoneHours AS DECIMAL(18,2))
+	              (SELECT CAST(m.Amount /NULLIF( mh.MilestoneHours,0) AS DECIMAL(18,2))
 	                 FROM dbo.v_MilestoneHours AS mh
 	                WHERE mh.MilestoneId = mp.MilestoneId)
 	       END AS MilestoneHourlyRevenue,
@@ -48,7 +51,7 @@ AS
 	       m.ExpectedHours AS MilestoneExpectedHours,
 		   ISNULL((SELECT COUNT(*)
 				FROM dbo.v_PersonCalendar AS pcal
-				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 
+				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 AND pcal.IsFloatingHoliday = 0
 					AND pcal.Date BETWEEN mpe.StartDate AND mpe.EndDate
 					AND pcal.PersonId = mp.PersonId ),0) as VacationDays
 	  FROM dbo.MilestonePerson AS mp
