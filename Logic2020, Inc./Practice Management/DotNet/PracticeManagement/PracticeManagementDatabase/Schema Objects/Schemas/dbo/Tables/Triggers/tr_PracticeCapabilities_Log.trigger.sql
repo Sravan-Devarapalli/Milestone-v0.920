@@ -13,7 +13,8 @@ BEGIN
 		SELECT i.CapabilityId AS [PracticeCapabilityId],
 				P.Name AS [PracticeArea],
 				i.CapabilityName AS [PracticeCapability],
-				i.PracticeId
+				i.PracticeId,
+				CASE WHEN i.IsActive = 1 THEN 'YES' ELSE 'NO' END [IsActive]
 		  FROM inserted AS i
 		  INNER JOIN dbo.Practice P ON P.PracticeId = i.PracticeId
 	),
@@ -23,7 +24,8 @@ BEGIN
 		SELECT d.CapabilityId AS [PracticeCapabilityId],
 				P.Name AS [PracticeArea],
 				d.CapabilityName AS [PracticeCapability],
-				d.PracticeId
+				d.PracticeId,
+				CASE WHEN d.IsActive = 1 THEN 'YES' ELSE 'NO' END [IsActive]
 		  FROM deleted AS d
 		  INNER JOIN dbo.Practice P ON P.PracticeId = d.PracticeId
 	)
@@ -65,10 +67,12 @@ BEGIN
 						,NEW_VALUES.[PracticeArea]
 						,NEW_VALUES.PracticeCapability
 						,NEW_VALUES.PracticeId
+						,NEW_VALUES.IsActive
 						,OLD_VALUES.PracticeCapabilityId 
 						,OLD_VALUES.[PracticeArea]
 						,OLD_VALUES.PracticeCapability
 						,OLD_VALUES.PracticeId
+						,OLD_VALUES.IsActive
 					  FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.[PracticeCapabilityId] = OLD_VALUES.[PracticeCapabilityId]
 			           WHERE NEW_VALUES.[PracticeCapabilityId] = ISNULL(i.CapabilityId, d.CapabilityId) OR OLD_VALUES.[PracticeCapabilityId] = ISNULL(i.CapabilityId, d.CapabilityId)
@@ -81,3 +85,4 @@ BEGIN
 	 -- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
+
