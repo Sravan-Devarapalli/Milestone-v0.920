@@ -54,7 +54,7 @@ AS
 	           ON ps.[PersonId] = p.[Person] AND p.StartDate <= GETDATE() AND p.EndDate > GETDATE()
 	       INNER JOIN dbo.OverheadFixedRateTimescale AS t
 	           ON t.OverheadFixedRateId = r.OverheadFixedRateId AND t.TimescaleId = p.Timescale
-		   INNER JOIN dbo.GetHoursPerYearTable() HPY ON 1=1
+		   INNER JOIN dbo.[BonusHoursPerYearTable]() HPY ON 1=1
 		   INNER JOIN dbo.GetFutureDateTable() FD ON 1=1
 	 WHERE r.[OverheadRateTypeId] = 4
 	   AND r.[Inactive] = 0
@@ -86,7 +86,7 @@ AS
 	           ON ps.[PersonId] = p.[Person] AND p.StartDate <= GETDATE() AND p.EndDate > GETDATE()
 	       INNER JOIN dbo.OverheadFixedRateTimescale AS t
 	           ON t.OverheadFixedRateId = r.OverheadFixedRateId AND t.TimescaleId = p.Timescale
-		   INNER JOIN dbo.GetHoursPerYearTable() HPY ON 1=1
+		   INNER JOIN dbo.[BonusHoursPerYearTable]() HPY ON 1=1
 		   INNER JOIN dbo.GetFutureDateTable() FD ON 1=1
 	 WHERE r.[OverheadRateTypeId] = 2
 	   AND r.[Inactive] = 0
