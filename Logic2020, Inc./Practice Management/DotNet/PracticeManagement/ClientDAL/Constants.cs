@@ -396,6 +396,15 @@
             public const string HourlyRate = "HourlyRate";
             public const string HourlyPayRate = "HourlyPayRate";
             public const string TitleInUse = "TitleInUse";
+            public const string ActualRevenue = "ActualRevenue";
+            public const string ActualGrossMargin = "ActualGrossMargin";
+            public const string CapabilityIsActive = "CapabilityIsActive";
+            public const string IsActiveCapabilitiesExists = "IsActiveCapabilitiesExists";
+            public const string VacationDays = "VacationDays";
+            public const string TotalWorkDaysIncludingVacationDays = "TotalWorkDaysIncludingVacationDays";
+            public const string TotalWorkHoursExcludingVacationHours = "TotalWorkHoursExcludingVacationHours";
+            public const string WorkHours = "WorkHours";
+            public const string WorkDays = "WorkDays";
         }
 
         #endregion
@@ -705,6 +714,10 @@
             public const string ApplicationName = "@ApplicationName";
             public const string UserName = "@UserName";
             public const string LastLockoutDate = "@LastLockoutDate";
+            public const string UseActualsParam = "@UseActuals";
+            public const string IsMonthlyReportParam = "@IsMonthlyReport";
+            public const string IncludeCompanyHolidays = "@IncludeCompanyHolidays";
+            
         }
 
         #endregion
@@ -742,7 +755,7 @@
                 public const string FinancialsGetByMilestonePersonsMonthly = "dbo.FinancialsGetByMilestonePersonsMonthly";
                 public const string FinancialsGetByMilestonePersonsTotal = "dbo.FinancialsGetByMilestonePersonsTotal";
                 public const string CalculateMilestonePersonFinancials = "dbo.CalculateMilestonePersonFinancials";
-
+                public const string GetProjectSummaryCacheValue = "dbo.GetProjectSummaryCacheValue";
             }
 
             #endregion
@@ -817,10 +830,8 @@
                 public const string PersonListBenchExpenseProcedure = "dbo.PersonListBenchExpense";
                 public const string UpdateLastPasswordChangedDateForPersonProcedure = "dbo.UpdateLastPasswordChangedDateForPerson";
                 public const string GetPersonListByPersonIdsAndPayTypeIdsProcedure = "dbo.GetPersonListByPersonIdsAndPayTypeIds";
-                public const string MilestonePersonListOverheadByPersonProcedure = "dbo.MilestonePersonListOverheadByPerson";
                 public const string PersonListSalespersonProcedure = "dbo.PersonListSalesperson";
                 public const string PersonListProjectOwnerProcedure = "dbo.PersonListProjectOwner";
-                public const string PersonWorkDaysNumberProcedure = "dbo.PersonWorkDaysNumber";
                 public const string PersonGetByAliasProcedure = "dbo.PersonGetByAlias";
                 public const string MembershipDeleteProcedure = "dbo.MembershipDelete";
                 public const string aspnetUsersDeleteUserProcedure = "dbo.aspnet_Users_DeleteUser";
@@ -1009,8 +1020,8 @@
                 public const string CalendarUpdateProcedure = "dbo.CalendarUpdate";
                 public const string SaveTimeOffProcedure = "dbo.SaveTimeOff";
                 public const string SaveSubstituteDayProcedure = "dbo.SaveSubstituteDay";
-                public const string WorkDaysCompanyNumberProcedure = "dbo.WorkDaysCompanyNumber";
-                public const string WorkDaysPersonNumberProcedure = "dbo.WorkDaysPersonNumber";
+                public const string GetCompanyWorkHoursAndDaysInGivenPeriodProcedure = "dbo.GetCompanyWorkHoursAndDaysInGivenPeriod";
+                public const string GetPersonWorkingHoursDetailsWithinThePeriodProcedure = "dbo.GetPersonWorkingHoursDetailsWithinThePeriod";
                 public const string GetCompanyHolidaysProcedure = "dbo.GetCompanyHolidays";
                 public const string GetRecurringHolidaysList = "dbo.GetRecurringHolidaysList";
                 public const string SetRecurringHoliday = "dbo.SetRecurringHoliday";
@@ -1020,6 +1031,7 @@
                 public const string GetSubstituteDate = "dbo.GetSubstituteDate";
                 public const string GetSubstituteDayDetails = "dbo.GetSubstituteDayDetails";
                 public const string CalendarGetWithBasicInfo = "dbo.CalendarGetWithBasicInfo";
+                public static string GetWorkingDaysForTheGivenYear = "dbo.GetWorkingDaysForTheGivenYear";
 
             }
             #endregion
@@ -1100,6 +1112,7 @@
                 public const string GetPTOTimeTypeProcedure = "dbo.GetPTOTimeType";
                 public const string IsUserIsProjectOwner = "dbo.IsUserIsProjectOwner";
                 public const string AttachOpportunityToProject = "dbo.AttachOpportunityToProject";
+                public const string IsProjectSummaryCachedToday = "dbo.IsProjectSummaryCachedToday";
 
             }
             #endregion
