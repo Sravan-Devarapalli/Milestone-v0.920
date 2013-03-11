@@ -88,13 +88,13 @@ AS
 	FROM CurrentConsultantsWithRanges CCWR
 	LEFT JOIN dbo.v_PersonCalendar PC ON PC.PersonId = CCWR.PersonId 
 										AND	PC.Date BETWEEN CCWR.StartDate AND CCWR.EndDate 
-										AND PC.DayOff = 1 
+										AND (PC.DayOff = 1 AND PC.CompanyDayOff = 1)
 	GROUP BY CCWR.PersonId,CCWR.StartDate,CCWR.EndDate,CCWR.Timescale
 ),
 CurrentConsultantsWithProjectedHours
 AS
 (
- SELECT  S.PersonId,CONVERT(INT,SUM(S.HoursPerDay)) ProjectedHours,CCWV.StartDate ,CCWV.Timescale
+ SELECT  S.PersonId,CONVERT(DECIMAL(10,2),SUM(S.HoursPerDay)) ProjectedHours,CCWV.StartDate ,CCWV.Timescale
     FROM CurrentConsultantsWithVacationDays CCWV
 	INNER JOIN dbo.v_MilestonePersonSchedule AS S ON CCWV.PersonId = S.PersonId
     WHERE  s.MilestoneId <> (SELECT MilestoneId FROM dbo.DefaultMilestoneSetting)
@@ -110,12 +110,12 @@ CurrentConsultantsWithAvaliableHours
 AS
 (
 --Salary Persons AvaliableHours
-	SELECT PC.PersonId ,(COUNT(*) * 8) AS AvaliableHours ,CCWV.StartDate 
+	SELECT PC.PersonId ,CAST(SUM(8 - ISNULL(PC.ActualHours,0)) AS DECIMAL(10,2)) AS AvaliableHours ,CCWV.StartDate 
 	FROM CurrentConsultantsWithVacationDays CCWV
 	INNER JOIN dbo.v_PersonCalendar PC ON CCWV.PersonId = PC.PersonId 
 										AND CCWV.Timescale = 2 
 										AND PC.Date BETWEEN CCWV.StartDate AND CCWV.EndDate
-										AND PC.DayOff = 0
+										AND (PC.DayOff = 0 OR (PC.DayOff = 1 AND PC.CompanyDayOff = 0))
 	GROUP BY PC.PersonId,CCWV.StartDate 
 	UNION 
 	SELECT CCWP.PersonId,CCWP.ProjectedHours AS AvaliableHours ,CCWP.StartDate FROM  CurrentConsultantsWithProjectedHours CCWP WHERE CCWP.Timescale != 2 -- Non SalaryPerson AvaliableHours
@@ -133,7 +133,7 @@ SELECT	CC.PersonId,
 		CC.EndDate,
 		CC.AvaliableHours,
 		CC.ProjectedHours,
-		CASE	WHEN CC.VacationDays >= @Step
+		CONVERT(INT,CASE	WHEN CC.VacationDays >= @Step
 				THEN -1
 				WHEN (
 					(@Step = 1 AND DATEPART(dw, CC.StartDate)IN(7,1)) 
@@ -142,7 +142,7 @@ SELECT	CC.PersonId,
 					)
 				THEN 0
 				ELSE CEILING(100*CC.ProjectedHours/CC.AvaliableHours) 
-				END AS WeeklyUtlization
+				END) AS WeeklyUtlization
 FROM CurrentConsultantsWithAllHours CC
 
 
