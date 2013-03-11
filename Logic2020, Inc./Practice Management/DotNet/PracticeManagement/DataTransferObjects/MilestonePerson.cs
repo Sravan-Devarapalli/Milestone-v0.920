@@ -123,7 +123,27 @@ namespace DataTransferObjects
                                                                        Milestone.ProjectedDeliveryDate));
 
                     foreach (DatePoint pt in rangePoints)
-                        pt.Value = pt.DayOff ? 0.0 : Convert.ToDouble(entry.HoursPerDay);
+                    {
+                        if (pt.DayOff && pt.CompanyDayOff)
+                        {
+                            pt.Value = 0.0;
+                        }
+                        else
+                        {
+                            var milestoneHoursPerDay = Convert.ToDouble(entry.HoursPerDay);
+                            if (pt.DayOff)
+                            {
+                                var timeOffHours = ((pt.TimeOffHours / 8) * milestoneHoursPerDay);
+
+                                pt.Value = (timeOffHours > milestoneHoursPerDay) ? 0 : (milestoneHoursPerDay - timeOffHours);
+
+                            }
+                            else
+                            {
+                                pt.Value = milestoneHoursPerDay;
+                            }
+                        }
+                    }
                 }
 
                 return points;
@@ -145,3 +165,4 @@ namespace DataTransferObjects
         #endregion
     }
 }
+
