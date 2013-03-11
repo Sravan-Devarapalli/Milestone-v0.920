@@ -27,7 +27,7 @@ namespace PraticeManagement
         private const string MILESTONE_PERSON_ID_ARGUMENT = "milestonePersonId";
         private const int AMOUNT_COLUMN_INDEX = 4;
         private const string MILESTONE_PERSON_KEY = "MilestonePerson";
-        private const string DEFAULT_NUMBER_HOURS_PER_DAY = "8";
+       
         private const string BUTTON_INSERT_ID = "btnInsert";
         private const string DuplPersonName = "The specified person is already assigned on this milestone.";
         private const string lblTargetMargin = "lblTargetMargin";
@@ -48,6 +48,17 @@ namespace PraticeManagement
         #endregion
 
         #region Properties
+
+        public decimal DefaultHoursPerDay
+        {
+            get
+            {
+                string defaultHoursPerDaystring = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, Constants.ResourceKeys.DefaultHoursPerDayKey);
+                decimal defaultHoursPerDay = 0;
+                decimal.TryParse(defaultHoursPerDaystring, out defaultHoursPerDay);
+                return defaultHoursPerDay;
+            }
+        }
 
         private String ExMessage { get; set; }
 
@@ -342,8 +353,8 @@ namespace PraticeManagement
                     dpPersonEnd.DateValue != DateTime.MinValue ? dpPersonEnd.DateValue : Milestone.ProjectedDeliveryDate;
 
                 // Validate overlapping with other entries.
-                int days = GetPersonWorkDaysNumber(startDate, endDate);
-                if (days == 0)
+                PersonWorkingHoursDetailsWithinThePeriod personWorkingHoursDetailsWithinThePeriod = GetPersonWorkingHoursDetailsWithinThePeriod(startDate, endDate);
+                if (personWorkingHoursDetailsWithinThePeriod.TotalWorkHoursExcludingVacationHours == 0)
                 {
                     e.IsValid = false;
                 }
@@ -362,10 +373,10 @@ namespace PraticeManagement
                 {
                     var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
                     var dpPersonEnd = ((Control)source).Parent.FindControl("dpPersonEnd") as DatePicker;
-                    int days = GetPersonWorkDaysNumber(dpPersonStart.DateValue, dpPersonEnd.DateValue);
+                    PersonWorkingHoursDetailsWithinThePeriod personWorkingHoursDetailsWithinThePeriod = GetPersonWorkingHoursDetailsWithinThePeriod(dpPersonStart.DateValue, dpPersonEnd.DateValue);
 
                     // calculate hours per day according to HoursInPerod 
-                    var hoursPerDay = (days != 0) ? decimal.Round(Totalhours / (days), 2) : 0;
+                    var hoursPerDay = (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays != 0) ? decimal.Round(Totalhours / (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays), 2) : 0;
 
                     e.IsValid = hoursPerDay > 0M;
                 }
@@ -582,7 +593,8 @@ namespace PraticeManagement
                     StartDate = entry.StartDate,
                     EndDate = entry.EndDate,
                     MilestonePersonId = entry.MilestonePersonId,
-                    ProjectedWorkload = entry.ProjectedWorkload,
+                    ProjectedWorkloadWithVacation = entry.ProjectedWorkloadWithVacation,
+                    PersonTimeOffList = entry.PersonTimeOffList,
                     VacationDays = entry.VacationDays,
                     HoursPerDay = entry.HoursPerDay
                 };
@@ -760,7 +772,7 @@ namespace PraticeManagement
 
             if (String.IsNullOrEmpty(txtHoursPerDay.Text) && String.IsNullOrEmpty(txtHoursInPeriod.Text))
             {
-                txtHoursPerDay.Text = DEFAULT_NUMBER_HOURS_PER_DAY;
+                txtHoursPerDay.Text = DefaultHoursPerDay.ToString();
             }
 
 
@@ -772,7 +784,7 @@ namespace PraticeManagement
             // Check if need to recalculate Hours per day value
             // Get working days person on Milestone for current person
             DateTime endDate = entry.EndDate.HasValue ? entry.EndDate.Value : Milestone.ProjectedDeliveryDate;
-            int days = GetPersonWorkDaysNumber(entry.StartDate, endDate);
+            PersonWorkingHoursDetailsWithinThePeriod personWorkingHoursDetailsWithinThePeriod = GetPersonWorkingHoursDetailsWithinThePeriod(entry.StartDate, endDate);
             decimal hoursPerDay;
 
             // Update
@@ -782,12 +794,12 @@ namespace PraticeManagement
                 {
                     var newTotalDays = decimal.Parse(txtHoursInPeriod.Text);
                     // Recalculate hours per day according to HoursInPerod 
-                    hoursPerDay = (days != 0) ? decimal.Round(newTotalDays / (days + entry.VacationDays), 2) : 0;
+                    hoursPerDay = (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays != 0) ? decimal.Round(newTotalDays / (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays), 2) : 0;
 
                     // If calculated value more then 24 hours set 24 hours as maximum value for working day
                     entry.HoursPerDay = (hoursPerDay > 24M) ? 24M : hoursPerDay;
                     // Recalculate Hours In Period
-                    entry.ProjectedWorkload = entry.HoursPerDay * days;
+                    entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
                 }
                 else
                 {
@@ -796,7 +808,7 @@ namespace PraticeManagement
                                             ? decimal.Parse(txtHoursPerDay.Text)
                                             : 8M;
                     // Recalculate Hours In Period
-                    entry.ProjectedWorkload = entry.HoursPerDay * days;
+                    entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
                 }
             }
             // Insert
@@ -805,11 +817,11 @@ namespace PraticeManagement
                 if (isHoursInPeriodChanged)
                 {
                     // Recalculate hours per day according to HoursInPerod 
-                    hoursPerDay = (days != 0) ? decimal.Round(decimal.Parse(txtHoursInPeriod.Text) / days, 2) : 0;
+                    hoursPerDay = (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays != 0) ? decimal.Round(decimal.Parse(txtHoursInPeriod.Text) / personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays, 2) : 0;
                     // If calculated value more then 24 hours set 24 hours as maximum value for working day
                     entry.HoursPerDay = (hoursPerDay > 24M) ? 24M : hoursPerDay;
                     // Recalculate Hours In Period
-                    entry.ProjectedWorkload = entry.HoursPerDay * days;
+                    entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
                 }
                 else
                 {
@@ -818,7 +830,7 @@ namespace PraticeManagement
                                             ? decimal.Parse(txtHoursPerDay.Text)
                                             : 8M;
                     // Recalculate Hours In Period
-                    entry.ProjectedWorkload = entry.HoursPerDay * days;
+                    entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
                 }
             }
 
@@ -1224,16 +1236,15 @@ namespace PraticeManagement
             }
         }
 
-        private int GetPersonWorkDaysNumber(DateTime startDate, DateTime endDate)
+        private PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(DateTime startDate, DateTime endDate)
         {
-            int days = -1;
             if (!string.IsNullOrEmpty(ddlPersonName.SelectedValue))
             {
                 using (var serviceClient = new PersonServiceClient())
                 {
                     try
                     {
-                        days = serviceClient.GetPersonWorkDaysNumber(int.Parse(ddlPersonName.SelectedValue), startDate,
+                        return serviceClient.GetPersonWorkingHoursDetailsWithinThePeriod(int.Parse(ddlPersonName.SelectedValue), startDate,
                                                                      endDate);
                     }
                     catch (FaultException<ExceptionDetail> ex)
@@ -1250,7 +1261,7 @@ namespace PraticeManagement
                     }
                 }
             }
-            return days;
+            return null;
         }
 
         protected void btnMoveMilestone_Click(object sender, EventArgs e)
