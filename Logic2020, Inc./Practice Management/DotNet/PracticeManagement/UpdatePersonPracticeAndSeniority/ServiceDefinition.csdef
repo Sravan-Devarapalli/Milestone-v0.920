@@ -12,9 +12,11 @@
       <Setting name="SkillsProfilePagePath"/>
       <Setting name="UpdatedProfilesListEmailReciever" />
       <Setting name="EmailSubjectForProfilesUpdatedList"/>
+      <Setting name="ProjectSummaryCacheScheduleTime"/>
       <Setting name="PayrollDistributionScheduleTime"/>
       <Setting name="PayrollDistributionReportReciever"/>
       <Setting name="EmailBccRecieverList"/>
+      <Setting name="DisableAllMails"/>      
       <Setting name="LoginPagePath"/>
       <Setting name="WelcomeMailScheduleTime"/>
     </ConfigurationSettings>
