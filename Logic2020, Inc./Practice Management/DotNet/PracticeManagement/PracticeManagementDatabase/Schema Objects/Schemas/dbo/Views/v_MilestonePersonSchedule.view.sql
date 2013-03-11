@@ -1,8 +1,13 @@
-﻿CREATE VIEW dbo.v_MilestonePersonSchedule WITH SCHEMABINDING--Entry Level
+﻿CREATE VIEW [dbo].[v_MilestonePersonSchedule] --Entry Level
 AS
 	SELECT m.[MilestoneId],
 	       mp.PersonId,
-	       mpe.HoursPerDay AS HoursPerDay,
+	      -- dbo.PersonProjectedHoursPerDay(cal.DayOff,cal.companydayoff,cal.TimeoffHours,mpe.HoursPerDay) AS HoursPerDay,
+		  --Removed Inline Function for the sake of performance. When ever PersonProjectedHoursPerDay function is updated need to update below case when also.
+			CONVERT(DECIMAL(4,2),CASE WHEN cal.DayOff = 0  THEN mpe.HoursPerDay -- No Time-off and no company holiday
+				WHEN (cal.DayOff = 1 and cal.companydayoff = 1) OR (cal.DayOff = 1 AND cal.companydayoff = 0 AND ISNULL(cal.TimeoffHours,8) = 8) THEN 0 -- only company holiday OR person complete dayoff
+				ELSE mpe.HoursPerDay * (1-(cal.TimeoffHours/8)) --person partial day off
+			END) AS HoursPerDay,
 	       cal.Date,
 	       m.ProjectId,
 	       mpe.Id EntryId,
@@ -15,10 +20,8 @@ AS
 	       m.IsDefault IsDefaultMileStone,
 		   P.ProjectStatusId
 	  FROM dbo.Project P 
-		   INNER JOIN dbo.[Milestone] AS m ON P.ProjectId=m.ProjectId
+		   INNER JOIN dbo.[Milestone] AS m ON P.ProjectId=m.ProjectId AND P.IsAdministrative = 0 AND P.ProjectId != 174 
 		   INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
 	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
-	       INNER JOIN dbo.PersonCalendarAuto AS cal
-	           ON cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId
-	 WHERE cal.DayOff = 0
+	       INNER JOIN dbo.PersonCalendarAuto AS cal ON cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId
 
