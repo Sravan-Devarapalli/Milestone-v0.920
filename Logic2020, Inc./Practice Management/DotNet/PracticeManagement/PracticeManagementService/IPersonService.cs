@@ -156,7 +156,7 @@ namespace PracticeManagementService
         /// <param name="endDate">mileStone end date</param>
         /// <returns>The number of the persons working days in period.</returns>
         [OperationContract]
-        int GetPersonWorkDaysNumber(int personId, DateTime startDate, DateTime endDate);
+        PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(int personId, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Lists all active persons who have recruiter role.
@@ -241,14 +241,6 @@ namespace PracticeManagementService
 
         [OperationContract]
         void PersonValidations(Person person);
-
-        /// <summary>
-        /// Retrieves the list of the overheads for the specified person.
-        /// </summary>
-        /// <param name="personId">An ID of the person to retrive the data for.</param>
-        /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
-        [OperationContract]
-        List<PersonOverhead> GetPersonOverheadByPerson(int personId);
 
         /// <summary>
         /// Retrieves a list of overheads for the specified <see cref="Timescale"/>.
