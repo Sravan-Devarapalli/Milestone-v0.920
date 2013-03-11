@@ -26,7 +26,6 @@ namespace PraticeManagement
         private const string ProjectKey = "Project";
         private const string ProjectAttachmentHandlerUrl = "~/Controls/Projects/ProjectAttachmentHandler.ashx?ProjectId={0}&FileName={1}&AttachmentId={2}";
         private const string AttachSOWMessage = "File should be in PDF, Word format, Excel, PowerPoint, MS Project, Visio, Exchange, OneNote, ZIP or RAR and should be no larger than {0} KB.";
-        private const string AttachmentFileSize = "AttachmentFileSize";
         private const string ProjectAttachmentsKey = "ProjectAttachmentsKey";
         public const string AllTimeTypesKey = "AllTimeTypesKey";
         public const string ProjectTimeTypesKey = "ProjectTimeTypesKey";
@@ -354,7 +353,7 @@ namespace PraticeManagement
                     cellProjectTools.Visible = true;
                 }
 
-                int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, AttachmentFileSize));
+                int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, Constants.ResourceKeys.AttachmentFileSize));
 
                 lblAttachmentMessage.Text = string.Format(AttachSOWMessage, size / 1000);
                 DataHelper.FillAttachemntCategoryList(ddlAttachmentCategory);
@@ -1256,9 +1255,8 @@ namespace PraticeManagement
             string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
             DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
-            var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null));
-            DataHelper.FillListDefault(cblPracticeCapabilities, "All Capabilities", capabilities, false, "CapabilityId", "MergedName");
             DataHelper.FillListDefault(ddlProjectOwner, "-- Select Project Owner --", persons, false, "Id", "PersonLastFirstName");
+
 
             int? id = ProjectId;
             if (id.HasValue)
@@ -1291,6 +1289,9 @@ namespace PraticeManagement
                 PopulateAttachmentControl(Project);
                 ucProjectTimeTypes.ResetSearchTextFilters();
                 ucProjectTimeTypes.PopulateControls();
+
+                var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null)).Where(pc => pc.IsActive);
+                DataHelper.FillListDefault(cblPracticeCapabilities, "All Capabilities", capabilities.ToArray(), false, "CapabilityId", "MergedName");
             }
 
             UpdateSalesCommissionState();
@@ -1516,6 +1517,17 @@ namespace PraticeManagement
             {
                 selectedPractice = ddlPractice.Items.FindByValue(project.Practice.Id.ToString());
             }
+            var projectCapabilityIdList = project.ProjectCapabilityIds.Split(',');
+            var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null));
+            List<PracticeCapability> projectCapability = new List<PracticeCapability>();
+            foreach (PracticeCapability pc in capabilities)
+            {
+                if (pc.IsActive  || projectCapabilityIdList.Any(p => p == pc.CapabilityId.ToString()))
+                {
+                    projectCapability.Add(pc);
+                }
+            }
+            DataHelper.FillListDefault(cblPracticeCapabilities, "All Capabilities", projectCapability.ToArray(), false, "CapabilityId", "MergedName");
 
             // For situation, when disabled practice is assigned to project.
             if (selectedPractice == null)
