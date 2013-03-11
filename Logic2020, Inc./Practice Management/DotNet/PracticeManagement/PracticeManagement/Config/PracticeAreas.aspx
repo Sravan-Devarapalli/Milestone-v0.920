@@ -16,20 +16,92 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">
-        function hideSuccessMessage() {
-            message = document.getElementById("<%=mlInsertStatus.ClientID %>" + "_lblMessage");
-            if (message != null) {
-                message.style.display = "none";
+
+        function doConfirm(msg, yesFn, noFn) {
+            var confirmBox = $("#<%=confirmBoxJavascript.ClientID %>");
+            confirmBox.find(".message").text(msg);
+            confirmBox.find(".yes,.no").unbind().click(function () {
+                var confirmBoxTest_backgroundElement = $("#confirmBoxTest_backgroundElement");
+                confirmBoxTest_backgroundElement.hide();
+                confirmBox.hide();
+            });
+            confirmBox.find(".yes").click(yesFn);
+            confirmBox.find(".no").click(noFn);
+            confirmBox.show();
+            var confirmBoxTest_backgroundElement = $("#confirmBoxTest_backgroundElement");
+            confirmBoxTest_backgroundElement[0].style.width = $(window).width() + 'px';
+            confirmBoxTest_backgroundElement[0].style.height = $(window).height() + 'px';
+            confirmBoxTest_backgroundElement.show();
+        }
+
+        function showcapabilityActivePopup(chbIsActiveEdId, updateBtn, hdCapabilitiesInactivePopUpOperationId, confirmBoxJavascriptId) {
+            var chbIsActiveEd = document.getElementById(chbIsActiveEdId);
+            var hdCapabilitiesInactivePopUpOperation = document.getElementById("<%=hdCapabilitiesInactivePopUpOperation.ClientID %>");
+            var confirmBox = $("#<%=confirmBoxJavascript.ClientID %>");
+            confirmBox[0].attributes['PopupShow'].value
+            if (!chbIsActiveEd.checked && confirmBox[0].attributes['PopupShow'].value == 'false' && hdCapabilitiesInactivePopUpOperation.value != "approved") {
+                doConfirm("You have chosen to deactivate a Practice Area. Any corresponding capabilities will be set to Inactive. Are you sure you want to continue?", function yes() {
+                    try {
+                        confirmBox[0].style.display = false;
+                    } catch (err) {
+                        confirmBox[0].style.display = 'none';
+                    }
+                    confirmBox[0].attributes['PopupShow'].value = 'true';
+                    hdCapabilitiesInactivePopUpOperation.value = "approved";
+                    updateBtn.click();
+                }, function no() {
+                    hdCapabilitiesInactivePopUpOperation.value = "cancel";
+                    try {
+                        confirmBox[0].style.display = false;
+                    } catch (err) {
+                        confirmBox[0].style.display = 'none';
+                    }
+                    confirmBox[0].attributes['PopupShow'].value = 'true';
+                    updateBtn.click();
+                });
+
+                //                if (!confirm('You have chosen to deactivate a Practice Area. Any corresponding capabilities will be set to Inactive. Are you sure you want to continue?')) {
+                //                    hdCapabilitiesInactivePopUpOperation.value = "cancel";
+                //                }
+                return false;
             }
             return true;
         }
+
     </script>
-    </div>
-    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
+    <uc:loadingprogress id="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="updTimeEntries" runat="server">
         <ContentTemplate>
+            <div id="confirmBoxJavascript" style="display: none;" popupshow="false" class="ProjectDetailErrorPanel PanelPerson confirmBoxJavascript "
+                runat="server">
+                <table class="Width100Per">
+                    <tbody>
+                        <tr>
+                            <th class="bgcolorGray TextAlignCenterImp vBottom">
+                                <b class="BtnClose">Attention!</b>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="Padding10Px">
+                                <div class="message">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="Padding10Px TextAlignCenterImp">
+                                <input style="width: 100px;" id="yes" name="yes" value="Yes" type="button" class="yes">
+                                <input style="width: 100px;" id="no" name="no" value="No" type="button" class="no">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="left: 0px; top: 0px; position: fixed; z-index: 10000;" id="confirmBoxTest_backgroundElement"
+                class="modalBackground">
+            </div>
+            <asp:HiddenField ID="hdCapabilitiesInactivePopUpOperation" runat="server" Value="false" />
             <asp:GridView ID="gvPractices" runat="server" AutoGenerateColumns="False" DataSourceID="odsPractices"
-                CssClass="CompPerfTable gvPractices" DataKeyNames="Id" OnRowUpdating="gvPractices_OnRowUpdating"
+                CssClass="CompPerfTable gvPractices" DataKeyNames="Id" OnRowUpdating="gvPractices_OnRowUpdating" OnRowCancelingEdit="gvPractices_RowCancelingEdit"
                 OnRowUpdated="gvPractices_RowUpdated" OnRowDeleted="gvPractices_RowDeleted" OnRowEditing="gvPractices_OnRowEditing"
                 OnRowDataBound="gvPractices_RowDataBound">
                 <AlternatingRowStyle CssClass="alterrow" />
@@ -70,8 +142,7 @@
                                 CssClass="Width95Percent" ValidationGroup="EditPractice" />
                             <asp:RegularExpressionValidator ID="regValAbbreviation" ControlToValidate="tbEditAbbreviation"
                                 Display="Dynamic" Text="*" runat="server" ValidationGroup="EditPractice" ValidationExpression="^[\s\S]{0,100}$"
-                                ToolTip="Abbreviation should not be more than 100 characters."
-                                ErrorMessage="Abbreviation should not be more than 100 characters." />
+                                ToolTip="Abbreviation should not be more than 100 characters." ErrorMessage="Abbreviation should not be more than 100 characters." />
                             <asp:CustomValidator ID="custValEditPracticeAbbreviation" runat="server" ValidationGroup="EditPractice"
                                 Display="Dynamic" Text="*" ErrorMessage="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name."
                                 ToolTip="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name." />
@@ -133,7 +204,7 @@
                             <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
                                 ToolTip="Add Practice Area" Visible="true" />
                             <asp:ImageButton ID="btnInsert" runat="server" ValidationGroup="InsertPractice" ImageUrl="~/Images/icon-check.png"
-                                ToolTip="Confirm" Visible="false" OnClick="btnInsert_Click" OnClientClick="return hideSuccessMessage();" />
+                                ToolTip="Confirm" Visible="false" OnClick="btnInsert_Click" />
                             <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
                                 ToolTip="Cancel" Visible="false" />
                         </td>
@@ -156,8 +227,7 @@
                                 CssClass="Width95Percent" Visible="false" />
                             <asp:RegularExpressionValidator ID="regValAbbreviation" ControlToValidate="tbAbbreviation"
                                 Display="Dynamic" Text="*" runat="server" ValidationGroup="EditPractice" ValidationExpression="^[\s\S]{0,100}$"
-                                ToolTip="Abbreviation should not be more than 100 characters."
-                                ErrorMessage="Abbreviation should not be more than 100 characters." />
+                                ToolTip="Abbreviation should not be more than 100 characters." ErrorMessage="Abbreviation should not be more than 100 characters." />
                             <asp:CustomValidator ID="custValEditPracticeAbbreviation" runat="server" ValidationGroup="EditPractice"
                                 Display="Dynamic" Text="*" ErrorMessage="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name."
                                 ToolTip="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name." />
@@ -198,7 +268,7 @@
                             <asp:ValidationSummary ID="valSummaryEdit" ValidationGroup="EditPractice" runat="server"
                                 DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false"
                                 ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a practice." />
-                            <uc:Label ID="mlInsertStatus" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
+                            <uc:label id="mlInsertStatus" runat="server" errorcolor="Red" infocolor="Green" warningcolor="Orange" />
                         </td>
                     </tr>
                     <tr>
