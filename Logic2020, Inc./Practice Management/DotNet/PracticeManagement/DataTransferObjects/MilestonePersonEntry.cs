@@ -97,7 +97,6 @@ namespace DataTransferObjects
         }
 
 
-        
         [DataMember]
         public int Id
         {
@@ -114,6 +113,46 @@ namespace DataTransferObjects
         {
             get;
             set;
+        }
+
+        private decimal _vacationHours = -1;
+        public decimal VacationHours
+        {
+            get
+            {
+                _vacationHours = 0;
+                if (PersonTimeOffList == null)
+                    PersonTimeOffList = new Dictionary<DateTime, decimal>();
+                foreach (DateTime date in PersonTimeOffList.Keys)
+                {
+                    if (date >= StartDate && (!EndDate.HasValue || (EndDate.HasValue && date <= EndDate.Value)))
+                    {
+                        decimal TimeOffhours = PersonTimeOffList[date];
+                        _vacationHours += TimeOffhours == 8 ? HoursPerDay : (((Decimal)TimeOffhours) / 8) * HoursPerDay;
+                    }
+                }
+                return _vacationHours;
+            }
+        }
+
+        private decimal _TimeOffHours = 0;
+        public decimal TimeOffHours 
+        {
+            get
+            {
+                _TimeOffHours = 0;
+                if (PersonTimeOffList == null)
+                    PersonTimeOffList = new Dictionary<DateTime, decimal>();
+                foreach (DateTime date in PersonTimeOffList.Keys)
+                {
+                    if (date >= StartDate && (!EndDate.HasValue || (EndDate.HasValue && date <= EndDate.Value)))
+                    {
+                        decimal TimeOffhours = PersonTimeOffList[date];
+                        _TimeOffHours += TimeOffhours ;
+                    }
+                }
+                return _TimeOffHours;
+            }
         }
 
         [DataMember]
@@ -136,11 +175,13 @@ namespace DataTransferObjects
         /// <summary>
         /// Gets an expected workload.
         /// </summary>
-        [DataMember]
+        /// [DataMember]
         public decimal ProjectedWorkload
         {
-            get;
-            set;
+            get
+            {
+                return ProjectedWorkloadWithVacation - VacationHours;
+            }
         }
 
         /// <summary>
@@ -157,24 +198,13 @@ namespace DataTransferObjects
         /// <summary>
         /// Gets an expected workload + vacation days.
         /// </summary>
+        [DataMember]
         public decimal ProjectedWorkloadWithVacation
         {
-            get
-            {
-                return ProjectedWorkload + VacationDays * HoursPerDay;
-            }
+            get;            
+            set;
         }
 
-        /// <summary>
-        /// Gets an expected ProjectedWorkload -  (VacationDays * HoursPerDay).
-        /// </summary>
-        public decimal BillableHours
-        {
-            get
-            {
-                return ProjectedWorkloadWithVacation - (VacationDays * HoursPerDay);
-            }
-        }
 
 
         /// <summary>
@@ -182,6 +212,13 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public PersonRole Role
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public Dictionary<DateTime, Decimal> PersonTimeOffList
         {
             get;
             set;
@@ -256,7 +293,7 @@ namespace DataTransferObjects
 
         #endregion
 
-        #region "Members used in Milestone Detail Resources tab." 
+        #region "Members used in Milestone Detail Resources tab."
 
         public bool IsEditMode { get; set; }
 
