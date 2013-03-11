@@ -207,7 +207,7 @@ BEGIN
 		ISNULL(pf.ProjectId,PEM.ProjectId) ProjectId,
 		ISNULL(pf.FinancialDate,PEM.FinancialDate) FinancialDate,
 		ISNULL(pf.MonthEnd,PEM.MonthEnd) MonthEnd,
-		ISNULL(pf.Revenue,0)+ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0) AS 'Revenue',
+		ISNULL(pf.Revenue,0) AS 'Revenue',
 		ISNULL(pf.GrossMargin,0)+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))* (1 - ISNULL(pf.Discount,0)/100)  as 'GrossMargin',
 		ISNULL(PEM.Expense,0) as 'Expense',
 		ISNULL(PEM.Reimbursement,0)  ReimbursedExpense
@@ -217,3 +217,4 @@ BEGIN
 	FULL JOIN ProjectExpensesMonthly PEM ON PEM.ProjectId = pf.ProjectId AND pf.FinancialDate = PEM.FinancialDate  AND Pf.MonthEnd = PEM.MonthEnd
 	
 END
+
