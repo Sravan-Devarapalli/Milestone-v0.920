@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>
-                Client Discount (<asp:Label ID="lblDiscount" runat="server"></asp:Label>%)
+                Account Discount (<asp:Label ID="lblDiscount" runat="server"></asp:Label>%)
             </td>
             <td class="textRightImp">
                 <asp:Label ID="lblDiscountAmount" CssClass="Revenue" runat="server">Unavailable</asp:Label>
