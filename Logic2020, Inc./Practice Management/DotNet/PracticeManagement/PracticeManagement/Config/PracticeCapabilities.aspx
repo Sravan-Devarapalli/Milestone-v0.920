@@ -10,6 +10,22 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="header" runat="server">
     Capabilities
 </asp:Content>
+<asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
+    <script type="text/javascript">
+
+        function pageLoad() {
+            document.onkeypress = enterPressed;
+        }
+
+        function enterPressed(evn) {
+            if (window.event && window.event.keyCode == 13) {
+                    return false;
+            } else if (evn && evn.keyCode == 13) {
+                    return false;
+            }
+        }
+    </script>
+</asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <uc:LoadingProgress ID="loadingProgress" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
@@ -45,8 +61,14 @@
                                 <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                     CssClass="padRight15 floatright" OnClick="imgDelete_OnClick" ToolTip="Delete Capability"
                                     Visible='<%# !(bool)Eval("InUse") %>' InUse='<%# (bool)Eval("InUse") %>' />
-                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgDelete" runat="server" TargetControlID="imgDelete" ConfirmText="Are you sure. Do you want to delete the capability?">
+                                <asp:Label ID="lblDelete" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                                    Visible='<%# (bool)Eval("InUse") %>' CssClass="floatright"></asp:Label>
+                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgDelete" runat="server" TargetControlID="imgDelete"
+                                    ConfirmText="Are you sure. Do you want to delete the capability?">
                                 </AjaxControlToolkit:ConfirmButtonExtender>
+                                <asp:CheckBox ID="chkEditActive" runat="server" Checked='<%# (bool)Eval("IsActive") %>'
+                                    ToolTip="Edit to make capability Active/InActive." PrevValue='<%# ((bool)Eval("IsActive")).ToString() %>'
+                                    Enabled="false" CssClass="padRight15 floatright" />
                             </div>
                         </ItemTemplate>
                         <AlternatingItemTemplate>
@@ -71,8 +93,14 @@
                                 <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                     CssClass="padRight15 floatright" OnClick="imgDelete_OnClick" ToolTip="Delete Capability"
                                     Visible='<%# !(bool)Eval("InUse") %>' InUse='<%# (bool)Eval("InUse") %>' />
-                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgDelete" runat="server" TargetControlID="imgDelete" ConfirmText="Are you sure. Do you want to delete the capability?">
+                                <asp:Label ID="lblDelete" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                                    Visible='<%# (bool)Eval("InUse") %>' CssClass="floatright"></asp:Label>
+                                <AjaxControlToolkit:ConfirmButtonExtender ID="cbeImgDelete" runat="server" TargetControlID="imgDelete"
+                                    ConfirmText="Are you sure. Do you want to delete the capability?">
                                 </AjaxControlToolkit:ConfirmButtonExtender>
+                                <asp:CheckBox ID="chkEditActive" runat="server" Checked='<%# (bool)Eval("IsActive") %>'
+                                    ToolTip="Edit to make capability Active/InActive." PrevValue='<%# ((bool)Eval("IsActive")).ToString() %>'
+                                    Enabled="false" CssClass="padRight15 floatright" />
                             </div>
                         </AlternatingItemTemplate>
                     </asp:Repeater>
@@ -92,6 +120,10 @@
                         <asp:RequiredFieldValidator ID="rvInsertCapability" runat="server" ControlToValidate="tbInsertCapabilityName"
                             Enabled="false" Display="Dynamic" ErrorMessage="Capability Name is required"
                             ToolTip="Capability Name is required" ValidationGroup="InsertCapability">*</asp:RequiredFieldValidator>
+                        <asp:Label ID="lblDelete" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                            CssClass="floatright"></asp:Label>
+                        <asp:CheckBox ID="chkInsertActive" runat="server" Checked="true" ToolTip="Edit to make capability Active/InActive."
+                            Visible="false" CssClass="padRight15 floatright" />
                     </div>
                 </ItemTemplate>
                 <FooterTemplate>
