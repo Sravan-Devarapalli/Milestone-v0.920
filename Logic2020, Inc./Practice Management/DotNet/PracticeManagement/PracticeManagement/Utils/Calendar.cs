@@ -23,17 +23,6 @@ namespace PraticeManagement.Utils
                           );
         }
 
-        public static decimal GetWorkingHoursInCurrentYear(decimal hoursPerWeek)
-        {
-            //int companyHolidays=0;
-            //using (var service = new CalendarServiceClient())
-            //{
-            //    companyHolidays = service.GetCompanyHolidays(DateTime.Now.Year);
-            //}
-            //return (52 * hoursPerWeek) - (companyHolidays * hoursPerWeek / 5);
-            return (52 * hoursPerWeek);
-        }
-
         public static DateTime WeekStartDate(DateTime now)
         {
             return now.AddDays(-(int)now.DayOfWeek);
