@@ -2,12 +2,15 @@
 (
 	@Name NVARCHAR(100),
 	@PracticeId INT,
+	@IsActive BIT,
 	@UserLogin NVARCHAR(MAX)
 )
 AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRAN CapabilityInsert_Tran;
+
+		SELECT @Name = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Name)),' ','<>'),'><',''),'<>',' ')
 
 		DECLARE @Error NVARCHAR(MAX)
 		IF EXISTS(SELECT 1 FROM dbo.[PracticeCapabilities] WHERE CapabilityName = @Name)
@@ -18,10 +21,8 @@ BEGIN
 
 		EXEC SessionLogPrepare @UserLogin = @UserLogin
 
-		SELECT @Name = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Name)),' ','<>'),'><',''),'<>',' ')
-
-		Insert [dbo].[PracticeCapabilities](CapabilityName,PracticeId)
-		VALUES (@Name,@PracticeId)
+		Insert [dbo].[PracticeCapabilities](CapabilityName,IsActive,PracticeId)
+		VALUES (@Name,@IsActive,@PracticeId)
 
 		COMMIT TRAN CapabilityInsert_Tran;
 	END TRY
@@ -39,3 +40,4 @@ BEGIN
 	END CATCH
 	EXEC dbo.SessionLogUnprepare
 END
+
