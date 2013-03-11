@@ -190,8 +190,19 @@ namespace PraticeManagement.Utils
 
         public static DateTime GetNowWithTimeZone()
         {
-            var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
-            var isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
+            string timezone = string.Empty;
+            string isDayLightSavingsTimeEffect = string.Empty;
+            if (HttpContext.Current == null)
+            {
+                var keyValues = SettingsHelper.GetResourceKeyValuePairs(SettingsType.Application);
+                timezone = keyValues[Constants.ResourceKeys.TimeZoneKey];
+                isDayLightSavingsTimeEffect = keyValues[Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey];
+            }
+            else
+            {
+                timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
+                isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
+            }
 
             if (timezone == "-08:00" && isDayLightSavingsTimeEffect.ToLower() == "true")
             {
