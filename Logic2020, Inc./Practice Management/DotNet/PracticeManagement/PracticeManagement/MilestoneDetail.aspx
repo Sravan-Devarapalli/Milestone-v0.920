@@ -231,7 +231,27 @@
             $find('mpeDeleteMileStonePersons').hide();
             return false;
         }
-      
+
+        function ShowPanel(object, displaypnl, lblTimeOffHoursId, lblProjectAffectedHoursId, TimeOffHours, ProjectAffectedHours) {
+            var lblTimeOffHours = document.getElementById(lblTimeOffHoursId);
+            var lblProjectAffectedHours = document.getElementById(lblProjectAffectedHoursId);
+            lblTimeOffHours.innerHTML = TimeOffHours;
+            lblProjectAffectedHours.innerHTML = ProjectAffectedHours;
+            var obj = $("#" + object);
+            var displayPanel = $("#" + displaypnl);
+
+            iptop = obj.offset().top + obj[0].offsetHeight;
+            ipleft = obj.offset().left - 50;
+            displayPanel.offset({ top: iptop, left: ipleft });
+            displayPanel.show();
+            displayPanel.offset({ top: iptop, left: ipleft });
+        }
+
+        function HidePanel(hiddenpnl) {
+
+            var displayPanel = $("#" + hiddenpnl);
+            displayPanel.hide();
+        }   
     </script>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
