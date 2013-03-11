@@ -187,15 +187,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recruiting.
-        /// </summary>
-        internal static string RecruitingOverheadName {
-            get {
-                return ResourceManager.GetString("RecruitingOverheadName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ResetPasswordEmailTemplate.
         /// </summary>
         internal static string ResetPasswordEmailTemplateName {
