@@ -113,14 +113,18 @@ namespace PracticeManagementService
             bool showInactive,
             DateTime periodStart,
             DateTime periodEnd,
-            string userName,
             string salespersonIdsList,
             string projectOwnerIdsList,
             string practiceIdsList,
             string projectGroupIdsList,
             ProjectCalculateRangeType includeCurentYearFinancials,
             bool excludeInternalPractices,
-            string userLogin);
+            string userLogin,
+            bool useActuals,
+            bool getFinancialsFromCache);
+
+        [OperationContract]
+        bool IsProjectSummaryCachedToday();
 
         [OperationContract]
         List<Project> GetProjectListWithFinancials(
@@ -213,7 +217,8 @@ namespace PracticeManagementService
             bool showActive,
             bool showExperimental,
             bool showInternal,
-            bool showInactive);
+            bool showInactive,
+            bool useActuals);
 
         /// <summary>
         /// Retrives the data for the person stats report.
@@ -236,7 +241,8 @@ namespace PracticeManagementService
             bool showActive,
             bool showExperimental,
             bool showInternal,
-            bool showInactive);
+            bool showInactive,
+            bool useActuals);
 
         /// <summary>
         /// Reatrives a projectID with a specified ProjectNumber.
