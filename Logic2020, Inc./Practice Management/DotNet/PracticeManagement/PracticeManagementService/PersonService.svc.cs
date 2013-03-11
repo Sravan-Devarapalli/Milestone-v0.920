@@ -220,9 +220,9 @@ namespace PracticeManagementService
         /// <param name="startDate">mileStone start date </param>
         /// <param name="endDate">mileStone end date</param>
         /// <returns>The number of the persons working days in period.</returns>
-        public int GetPersonWorkDaysNumber(int personId, DateTime startDate, DateTime endDate)
+        public PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(int personId, DateTime startDate, DateTime endDate)
         {
-            return PersonDAL.PersonWorkDaysNumber(personId, startDate, endDate);
+            return CalendarDAL.GetPersonWorkingHoursDetailsWithinThePeriod(personId, startDate, endDate);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace PracticeManagementService
         /// </remarks>
         public Person GetPersonDetail(int personId)
         {
-            Person result = PersonRateCalculator.GetPersonDetail(personId);
+            Person result = PersonDAL.GetById(personId);
             if (result != null)
             {
                 result.PaymentHistory = PayDAL.GetHistoryByPerson(personId);
@@ -624,15 +624,6 @@ namespace PracticeManagementService
             PersonDAL.PersonValidations(person);
         }
 
-        /// <summary>
-        /// Retrives the list of the overheads for the specified person.
-        /// </summary>
-        /// <param name="personId">An ID of the person to retrive the data for.</param>
-        /// <returns>The list of the <see cref="PersonOverhead"/> objects.</returns>
-        public List<PersonOverhead> GetPersonOverheadByPerson(int personId)
-        {
-            return PersonDAL.PersonOverheadListByPerson(personId);
-        }
 
         /// <summary>
         /// Retrives a list of overheads for the specified <see cref="Timescale"/>.
@@ -665,12 +656,12 @@ namespace PracticeManagementService
         {
             PersonRateCalculator calculator = GetCalculatorForProposedFinancials(person, proposedRate, proposedHoursPerWeek, isMarginTestPage, effectiveDate);
 
-            return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount);
+            return calculator.CalculateProposedFinancials(proposedRate, proposedHoursPerWeek, clientDiscount, effectiveDate);
         }
 
         private static PersonRateCalculator GetCalculatorForProposedFinancials(Person person, decimal proposedRate, decimal proposedHoursPerWeek, bool isMarginTestPage, DateTime? effectiveDate)
         {
-            PersonRateCalculator calculator = new PersonRateCalculator(person, false, isMarginTestPage, effectiveDate);
+            PersonRateCalculator calculator = new PersonRateCalculator(person, isMarginTestPage, effectiveDate);
 
             if (person.CurrentPay != null)
             {
@@ -690,7 +681,7 @@ namespace PracticeManagementService
                 if (isHourlyAmount)
                     person.CurrentPay.AmountHourly = person.CurrentPay.Amount;
                 else
-                    person.CurrentPay.AmountHourly = person.CurrentPay.Amount / PersonRateCalculator.WorkingHoursInCurrentYear(proposedHoursPerWeek);
+                    person.CurrentPay.AmountHourly = person.CurrentPay.Amount / PersonRateCalculator.WorkingHoursInYear(calculator.DaysInYear, proposedHoursPerWeek);
 
                 //  Update hourly rate for percent of revenue persons with proposed rate
                 if (person.CurrentPay.Timescale == TimescaleType.PercRevenue)
@@ -711,11 +702,11 @@ namespace PracticeManagementService
                                 overhead.HourlyValue = overhead.Rate * person.CurrentPay.AmountHourly / 100M;
                                 break;
                             case (int)OverheadRateTypes.MonthlyCost:
-                                var defaultHoursPerYear = PersonRateCalculator.WorkingHoursInCurrentYear((int)proposedHoursPerWeek);
-                                overhead.HourlyValue = overhead.Rate * 12 / defaultHoursPerYear;
+                                var hoursPerYear = PersonRateCalculator.WorkingHoursInYear(calculator.DaysInYear, (int)proposedHoursPerWeek);
+                                overhead.HourlyValue = overhead.Rate * 12 / hoursPerYear;
                                 break;
                             default:
-                                overhead.HourlyValue = overhead.HourlyRate;
+                                overhead.HourlyValue = overhead.Rate;
                                 break;
                         }
                     }
