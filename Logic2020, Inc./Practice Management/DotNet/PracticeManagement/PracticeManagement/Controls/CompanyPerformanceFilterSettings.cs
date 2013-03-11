@@ -67,6 +67,12 @@ namespace PraticeManagement.Controls
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool totalOnlySelectedDateWindowValue;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool useActualTimeEntries;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool financialsFromCache;
+
         #endregion
 
         #region Properties
@@ -364,6 +370,18 @@ namespace PraticeManagement.Controls
             set { isGroupByPersonPage = value; }
         }
 
+        public bool UseActualTimeEntries
+        {
+            get { return useActualTimeEntries; }
+            set { useActualTimeEntries = value; }
+        }
+
+        public bool FinancialsFromCache
+        {
+            get { return financialsFromCache; }
+            set { financialsFromCache = value; }
+        }
+
         #endregion
 
         #region Construction
@@ -402,6 +420,8 @@ namespace PraticeManagement.Controls
             PracticeIdsList = null;
             ProjectGroupIdsList = null;
             SalespersonIdsList = null;
+            UseActualTimeEntries = true;
+            FinancialsFromCache = false;
         }
 
         #endregion
@@ -459,9 +479,10 @@ namespace PraticeManagement.Controls
                     ProjectOwnerIdsList == compareObj.ProjectOwnerIdsList &&
                     PracticeIdsList == compareObj.PracticeIdsList &&
                     ProjectGroupIdsList == compareObj.ProjectGroupIdsList &&
+                    UseActualTimeEntries == compareObj.UseActualTimeEntries &&
 
-
-                    IsGroupByPersonPage == compareObj.IsGroupByPersonPage;
+                    IsGroupByPersonPage == compareObj.IsGroupByPersonPage &&
+                    FinancialsFromCache == compareObj.FinancialsFromCache;
             }
 
             return result;
@@ -495,7 +516,11 @@ namespace PraticeManagement.Controls
                 // total range
                    Convert.ToInt32(CalculateRangeSelected) +
                    Convert.ToInt32(TotalOnlySelectedDateWindow) +
-                   Convert.ToInt32(ViewSelected);
+                   Convert.ToInt32(ViewSelected) +
+                // UseActuals
+                    Convert.ToInt32(UseActualTimeEntries) +
+                // FinancialsFromCache
+        Convert.ToInt32(FinancialsFromCache);
         }
 
         /// <summary>
@@ -523,3 +548,4 @@ namespace PraticeManagement.Controls
         #endregion
     }
 }
+
