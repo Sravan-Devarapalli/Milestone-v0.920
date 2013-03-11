@@ -30,16 +30,16 @@ BEGIN
 	(
 	  SELECT M.ProjectId,
 			MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue,
-			MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue,
-			CAST(SUM(CASE WHEN PC.Date < @Today THEN MPE.HoursPerDay
-					 ELSE 0 END) AS INT) AS ProjectedHoursUntilToday ,
-			CAST(SUM(MPE.HoursPerDay) AS INT) AS ProjectedHours
+			MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue,			
+			SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay)) AS ProjectedHours,
+			SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay))
+					ELSE 0
+				END)  AS ProjectedHoursUntilToday
 	  FROM     dbo.MilestonePersonEntry AS MPE
 									INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 									INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 									INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
 									INNER JOIN dbo.v_PersonCalendar PC ON PC.PersonId = MP.PersonId
-															  AND PC.DayOff = 0
 															  AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
 															  AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal
 	  WHERE MP.PersonId = @PersonIdLocal 			
@@ -68,8 +68,8 @@ BEGIN
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
 					 ELSE 0 
 				END),2) AS NonBillableHours,
-			PDBR.ProjectedHours,
-			PDBR.ProjectedHoursUntilToday
+			ROUND(PDBR.ProjectedHours,2) AS ProjectedHours,
+			ROUND(PDBR.ProjectedHoursUntilToday,2) AS ProjectedHoursUntilToday
 	FROM dbo.TimeEntry AS TE 
 	INNER JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
@@ -101,5 +101,4 @@ BEGIN
 			PDBR.ProjectedHoursUntilToday
 	ORDER BY CC.TimeEntrySectionId,PRO.ProjectNumber
 END	
-	
 
