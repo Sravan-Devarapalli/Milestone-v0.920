@@ -134,6 +134,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.CapabilityIdParam, capability.CapabilityId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, capability.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, capability.IsActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 connection.Open();
 
@@ -148,6 +149,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, capability.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, capability.IsActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdParam, capability.PracticeId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 connection.Open();
@@ -259,6 +261,16 @@ namespace DataAccess
             {
                 abbreviationIndex = -1;
             }
+            int isActiveCapabilitiesExistsIndex = -1;
+            try
+            {
+                isActiveCapabilitiesExistsIndex = reader.GetOrdinal(Constants.ColumnNames.IsActiveCapabilitiesExists);
+            }
+            catch
+            {
+                isActiveCapabilitiesExistsIndex = -1;
+            }
+            
 
             while (reader.Read())
             {
@@ -292,6 +304,10 @@ namespace DataAccess
                 {
                     practice.Abbreviation = !reader.IsDBNull(abbreviationIndex) ? reader.GetString(abbreviationIndex) : string.Empty;
                 }
+                if (isActiveCapabilitiesExistsIndex > -1)
+                {
+                    practice.IsActiveCapabilitiesExists = reader.GetBoolean(isActiveCapabilitiesExistsIndex);
+                }
 
                 list.Add(practice);
             }
@@ -308,6 +324,7 @@ namespace DataAccess
             var capabilityIdIndex = reader.GetOrdinal(Constants.ColumnNames.CapabilityId);
             var capabilityNameIndex = reader.GetOrdinal(Constants.ColumnNames.CapabilityName);
             var inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+            var capabilityIsActiveIndex = reader.GetOrdinal(Constants.ColumnNames.CapabilityIsActive);
 
             while (reader.Read())
             {
@@ -339,7 +356,8 @@ namespace DataAccess
                             CapabilityId = reader.GetInt32(capabilityIdIndex),
                             PracticeId = practiceId,
                             InUse = reader.GetBoolean(inUseIndex),
-                            Name = reader.GetString(capabilityNameIndex)
+                            Name = reader.GetString(capabilityNameIndex),
+                            IsActive = reader.GetBoolean(capabilityIsActiveIndex)
                         };
                     practice.PracticeCapabilities.Add(practiceCapability);
                 }
@@ -354,6 +372,7 @@ namespace DataAccess
             var practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
             var nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
             var practiceAbbreviationIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeAbbreviation);
+            var isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
 
             while (reader.Read())
             {
@@ -363,7 +382,8 @@ namespace DataAccess
                         CapabilityId = reader.GetInt32(capabilityIdIndex),
                         PracticeId = reader.GetInt32(practiceIdIndex),
                         Name = reader.GetString(nameIndex),
-                        PracticeAbbreviation = reader.GetString(practiceAbbreviationIndex)
+                        PracticeAbbreviation = reader.GetString(practiceAbbreviationIndex),
+                        IsActive = reader.GetBoolean(isActiveIndex)
                     };
                 list.Add(practiceCapability);
             }
