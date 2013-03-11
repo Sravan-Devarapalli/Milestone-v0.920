@@ -67,7 +67,13 @@ AS
 								) AS PC
 					   WHERE    PC.Date BETWEEN @StartDateLocal
 										AND  @EndDateLocal												
-								AND DATENAME(weekday,PC.Date) != 'Saturday' AND DATENAME(weekday,PC.Date) != 'Sunday'
+								AND ( ( PC.CompanyDayOff = 0
+										AND ISNULL(PC.TimeTypeId, 0) != @HolidayTimeType
+									  )
+									  OR ( PC.CompanyDayOff = 1
+										   AND PC.SubstituteDate IS NOT NULL
+										 )
+									)
 					   GROUP BY PC.PersonId
 					 ),
 				ActivePersonsInSelectedRange
