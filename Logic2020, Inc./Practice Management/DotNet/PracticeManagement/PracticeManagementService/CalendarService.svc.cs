@@ -43,7 +43,6 @@ namespace PracticeManagementService
             CalendarDAL.CalendarUpdate(item, userLogin);
         }
 
-
         public void SaveSubstituteDay(CalendarItem item, string userLogin)
         {
             CalendarDAL.SaveSubstituteDay(item, userLogin);
