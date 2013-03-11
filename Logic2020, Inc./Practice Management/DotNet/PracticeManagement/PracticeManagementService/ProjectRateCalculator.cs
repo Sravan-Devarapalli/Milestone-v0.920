@@ -11,49 +11,8 @@ namespace PracticeManagementService
     /// <summary>
     /// Provides the logic for the calculation of the projects's rate.
     /// </summary>
-    public class ProjectRateCalculator
-    {
-        #region Properties
-
-        /// <summary>
-        /// Gets or internally sets the project the rate be calculated for.
-        /// </summary>
-        public Project Project
-        {
-            get;
-            private set;
-        }
-
-        #endregion
-
-        #region Construction
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="ProjectRateCalculator"/> class.
-        /// </summary>
-        /// <param name="project">The <see cref="Project"/> the rates be calculated for.</param>
-        public ProjectRateCalculator(Project project)
-        {
-            if (project != null)
-            {
-                this.Project = project;
-                this.Project.ComputedFinancials = ComputedFinancialsDAL.FinancialsGetByProject(project.Id.Value);
-            }
-            //CalculateRate();
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="ProjectRateCalculator"/> class.
-        /// </summary>
-        /// <param name="projectId">An ID of the <see cref="Project"/> the rates be calculated for.</param>
-        /// <param name="userName">The user (by email) to retrive the result for.</param>
-        public ProjectRateCalculator(int projectId, string userName)
-            : this(GetProjectDetail(projectId, userName))
-        {
-        }
-
-        #endregion
-
+    public static class ProjectRateCalculator
+    {        
         #region Methods
 
         /// <summary>
@@ -89,7 +48,9 @@ namespace PracticeManagementService
             string projectGroupIdsList,
             ProjectCalculateRangeType includeCurentYearFinancials,
             bool excludeInternalPractices,
-            string userLogin)
+            string userLogin,
+            bool useActuals,
+            bool getFinancialsFromCache)
         {
             List<Project> result =
                 ProjectDAL.ProjectListAllMultiParameters(
@@ -109,39 +70,46 @@ namespace PracticeManagementService
                 excludeInternalPractices,
                 userLogin);
 
-            return CalculateRates(result, periodStart, periodEnd, includeCurentYearFinancials);
+            if (!getFinancialsFromCache)
+            {
+                return CalculateRates(result, periodStart, periodEnd, includeCurentYearFinancials, useActuals);
+            }
+            else
+            {
+                return ProjectRateCalculator.LoadFinancialsAndMilestonePersonInfoFromCache(
+                    result,
+                    periodStart,
+                    periodEnd,
+                    includeCurentYearFinancials);
+            }
         }
 
         private static List<Project> CalculateRates(
             List<Project> result,
             DateTime periodStart,
             DateTime periodEnd,
-            ProjectCalculateRangeType includeCurentYearFinancials)
+            ProjectCalculateRangeType includeCurentYearFinancials,
+            bool useActuals)
         {
-            DateTime currentYearStart = new DateTime(DateTime.Today.Year, 1, 1);
-            DateTime currentYearEnd = new DateTime(currentYearStart.Year, 12, 31);
-
             // Recalculating the interest values
             return LoadFinancialsAndMilestonePersonInfo(
-                currentYearStart,
                 result,
                 periodStart,
                 periodEnd,
                 includeCurentYearFinancials,
-                currentYearEnd);
+                useActuals);
         }
 
         private static List<Project>
             LoadFinancialsAndMilestonePersonInfo(
-                DateTime currentYearStart,
                 List<Project> result,
                 DateTime periodStart,
                 DateTime periodEnd,
                 ProjectCalculateRangeType calculatePeriodType,
-                DateTime currentYearEnd)
+                bool useActuals
+            )
         {
-            ComputedFinancialsDAL.LoadFinancialsPeriodForProjects(
-                result, periodStart, periodEnd);
+            ComputedFinancialsDAL.LoadFinancialsPeriodForProjects(result, periodStart, periodEnd, useActuals);
 
             switch (calculatePeriodType)
             {
@@ -156,14 +124,16 @@ namespace PracticeManagementService
                     ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
                         result,
                         null,
-                        null);
+                        null,
+                        useActuals);
                     break;
                 case ProjectCalculateRangeType.CurrentFiscalYear:
-                    Dictionary<string, DateTime> fyCalendar = GetFiscalYearPeriod(DateTime.Now);
+                    Dictionary<string, DateTime> fyCalendar = GetFiscalYearPeriod(SettingsHelper.GetCurrentPMTime().Date);
                     ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
                         result,
                         fyCalendar["StartMonth"],
-                        fyCalendar["EndMonth"]);
+                        fyCalendar["EndMonth"],
+                        useActuals);
                     break;
 
             } //For getting GrandTotal OR selected period Total or current Fiscal year total.
@@ -171,6 +141,84 @@ namespace PracticeManagementService
             MilestonePersonDAL.LoadMilestonePersonListForProject(result);
 
             return result;
+        }
+
+        private static List<Project>
+           LoadFinancialsAndMilestonePersonInfoFromCache(
+               List<Project> result,
+               DateTime periodStart,
+               DateTime periodEnd,
+               ProjectCalculateRangeType calculatePeriodType
+            // bool useActuals :From cache we renders data always useActuals as true
+           )
+        {
+            ComputedFinancialsDAL.LoadFinancialsPeriodForProjectsFromCache(result, periodStart, periodEnd);
+
+            switch (calculatePeriodType)
+            {
+                case ProjectCalculateRangeType.ProjectValueInRange:
+                    CalculateTotalFinancials(result); //Reducing DB call(Alternative:- Calculating total value by Summing the result values only).
+                    break;
+                case ProjectCalculateRangeType.TotalProjectValue:
+                    ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjectsFromCache(
+                        result,
+                        null,
+                        null);
+                    break;
+                case ProjectCalculateRangeType.CurrentFiscalYear:
+                    Dictionary<string, DateTime> fyCalendar = GetFiscalYearPeriod(SettingsHelper.GetCurrentPMTime().Date);
+                    List<Project> currentYearProjectsList = new List<Project>();
+                    foreach (Project project in result)
+                    {
+                        currentYearProjectsList.Add(new Project() { Id = project.Id });
+                    }
+                    ComputedFinancialsDAL.LoadFinancialsPeriodForProjectsFromCache(currentYearProjectsList, fyCalendar["StartMonth"], fyCalendar["EndMonth"]);
+                    CalculateCurrentFiscalYearTotalFinancials(result, currentYearProjectsList);
+                    break;
+
+            } //For getting GrandTotal OR selected period Total or current Fiscal year total.
+
+            MilestonePersonDAL.LoadMilestonePersonListForProject(result);
+
+            return result;
+        }
+
+        private static void CalculateCurrentFiscalYearTotalFinancials(List<Project> projects, List<Project> currentYearProjects)
+        {
+            foreach (Project project in projects)
+            {
+                if (currentYearProjects.Any(p => p.Id == project.Id))
+                {
+                    Project currentYearProject = currentYearProjects.First(p => p.Id == project.Id);
+
+                    var financials = new ComputedFinancials
+                    {
+                        FinancialDate = currentYearProject.StartDate,
+                    };
+
+                    financials.Revenue = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.Revenue);
+                    financials.RevenueNet = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.RevenueNet);
+                    financials.Cogs = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.Cogs);
+                    financials.GrossMargin = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.GrossMargin);
+                    financials.HoursBilled = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.HoursBilled);
+                    financials.SalesCommission = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.SalesCommission);
+                    financials.PracticeManagementCommission = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.PracticeManagementCommission);
+                    financials.Expenses = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.Expenses);
+                    financials.ReimbursedExpenses = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ReimbursedExpenses);
+                    financials.ActualRevenue = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualRevenue); //.Sum(mf => mf.FinancialDate.HasValue && mf.FinancialDate.Value.Date < currentMonthStartDate.Date ? mf.ActualRevenue : mf.Revenue);
+                    financials.ActualGrossMargin = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualGrossMargin); //.Sum(mf => mf.FinancialDate.HasValue && mf.FinancialDate.Value.Date < currentMonthStartDate.Date ? mf.ActualGrossMargin : mf.GrossMargin);
+
+                    project.ComputedFinancials = financials;
+                }
+                else
+                {
+                    var financials = new ComputedFinancials
+                    {
+                        FinancialDate = project.StartDate,
+                    };
+                    project.ComputedFinancials = financials;
+                }
+            }
         }
 
         private static void CalculateTotalFinancials(List<Project> result)
@@ -181,18 +229,18 @@ namespace PracticeManagementService
                 {
                     FinancialDate = project.StartDate,
                 };
-                foreach (var monthlyFinancial in project.ProjectedFinancialsByMonth.Values)
-                {
-                    financials.Revenue += monthlyFinancial.Revenue;
-                    financials.RevenueNet += monthlyFinancial.RevenueNet;
-                    financials.Cogs += monthlyFinancial.Cogs;
-                    financials.GrossMargin += monthlyFinancial.GrossMargin;
-                    financials.HoursBilled += monthlyFinancial.HoursBilled;
-                    financials.SalesCommission += monthlyFinancial.SalesCommission;
-                    financials.PracticeManagementCommission += monthlyFinancial.PracticeManagementCommission;
-                    financials.Expenses += monthlyFinancial.Expenses;
-                    financials.ReimbursedExpenses += monthlyFinancial.ReimbursedExpenses;
-                }
+                financials.Revenue = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.Revenue);
+                financials.RevenueNet = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.RevenueNet);
+                financials.Cogs = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.Cogs);
+                financials.GrossMargin = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.GrossMargin);
+                financials.HoursBilled = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.HoursBilled);
+                financials.SalesCommission = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.SalesCommission);
+                financials.PracticeManagementCommission = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.PracticeManagementCommission);
+                financials.Expenses = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.Expenses);
+                financials.ReimbursedExpenses = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ReimbursedExpenses);
+
+                financials.ActualRevenue = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualRevenue); //.Sum(mf => mf.FinancialDate.HasValue && mf.FinancialDate.Value.Date < currentMonthStartDate.Date ? mf.ActualRevenue : mf.Revenue);
+                financials.ActualGrossMargin = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualGrossMargin); //.Sum(mf => mf.FinancialDate.HasValue && mf.FinancialDate.Value.Date < currentMonthStartDate.Date ? mf.ActualGrossMargin : mf.GrossMargin);
 
                 project.ComputedFinancials = financials;
             }
@@ -338,8 +386,7 @@ namespace PracticeManagementService
             {
                 // Retrive the list of admins (active only)
                 var admins = PersonDAL.PersonListFiltered(Practice.AdminPractice, false, 0, 0, null, null);
-                var calcs = admins.Select(
-                    admin => new PersonRateCalculator(admin, false)).ToList();
+                var calcs = admins.Select(admin => new PersonRateCalculator(admin)).ToList();
 
                 // Calculate an admin expense
                 allAdmin = new Project
@@ -356,12 +403,11 @@ namespace PracticeManagementService
                     var financials = new ComputedFinancials();
 
                     var currentEnd = currentStart.AddMonths(1).AddDays(-1);
-                    var companyWorkDays = PersonRateCalculator.CompanyWorkDaysNumber(currentStart, currentEnd);
+                    var companyHours = PersonRateCalculator.CompanyWorkHoursNumber(currentStart, currentEnd);
                     foreach (var calc in calcs)
                     {
-                        var personHours = calc.GetPersonWorkDays(currentStart, currentEnd);
-                        var companyHours = companyWorkDays * PersonRateCalculator.DefaultHoursPerDay;
-                        var cogs = calc.CalculateCogsForHours(personHours, companyHours, 0M);
+                        var personHours = calc.GetPersonWorkHours(currentStart, currentEnd);
+                        var cogs = calc.CalculateCogsForHours(personHours, companyHours);
                         financials.Cogs += cogs;
                     }
 
