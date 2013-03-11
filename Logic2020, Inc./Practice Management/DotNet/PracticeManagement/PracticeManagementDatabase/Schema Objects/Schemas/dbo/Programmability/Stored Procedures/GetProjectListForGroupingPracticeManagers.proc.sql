@@ -98,7 +98,8 @@ BEGIN
 	left join dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
 	WHERE	    (c.CommissionType is NULL OR c.CommissionType = 1)
-		    AND ( (p.StartDate <= @EndDate AND p.EndDate <= @EndDate) OR (p.StartDate IS NULL AND p.EndDate IS NULL))
+		    --AND ( (p.StartDate <= @EndDate AND p.EndDate <= @EndDate) OR (p.StartDate IS NULL AND p.EndDate IS NULL))
+			AND ((p.StartDate <= @EndDate AND @StartDate <= p.EndDate ) OR (p.StartDate IS NULL AND p.EndDate IS NULL))
 			AND ( @ClientIds IS NULL OR p.ClientId IN (select Id from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @ProjectOwnerIds IS NULL 
@@ -152,7 +153,7 @@ BEGIN
 			m.IsHourlyAmount,
 			mpe.MilestonePersonId,
 			mpe.Id EntryId,
-			mpe.HoursPerDay AS HoursPerDay,
+			dbo.PersonProjectedHoursPerDay(cal.DayOff,cal.companydayoff,cal.TimeoffHours,mpe.HoursPerDay) AS HoursPerDay,
 			cal.Date,
 			mpe.StartDate AS EntryStartDate,
 			mpe.Amount
@@ -160,7 +161,6 @@ BEGIN
 	   INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
 	   INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId			   
 	   INNER JOIN dbo.PersonCalendarAuto AS cal ON (cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId)
-	   WHERE cal.DayOff = 0 
 	),
 	CTEFinancialsRetroSpective
 	AS
@@ -298,8 +298,7 @@ BEGIN
 												AND p.EndDate > cal.date 
 												AND cal.PersonId = p.Person
 					LEFT JOIN V_WorkinHoursByYear HY1 ON HY1.[Year] = YEAR(cal.Date)
-					WHERE cal.DayOff = 0
-					 AND cal.Date between @StartDate and @EndDate
+					WHERE cal.Date between @StartDate and @EndDate
 				   )AS p ON p.PersonId = m.PersonId AND p.Date = r.Date
 				   LEFT JOIN (
 								SELECT r.Rate,
@@ -348,7 +347,7 @@ BEGIN
 			   temp.MilestonePersonLastName,
 			   temp.MonthStartDate,
 			   temp.MonthEndDate,
-			   temp.Revenue +ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0) AS 'Revenue',
+			   temp.Revenue AS 'Revenue',
 			   temp.GrossMargin+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))* (1 - temp.Discount/100)  as 'GrossMargin' 
 		FROM
 		(
