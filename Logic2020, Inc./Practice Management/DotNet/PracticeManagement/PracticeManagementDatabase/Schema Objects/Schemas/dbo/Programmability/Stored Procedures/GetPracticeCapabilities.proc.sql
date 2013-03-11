@@ -8,7 +8,8 @@ BEGIN
 	SELECT	CapabilityId,
 			PC.[CapabilityName] AS Name,
 			PC.PracticeId,
-			ISNULL(P.Abbreviation,P.Name)  AS PracticeAbbreviation
+			ISNULL(P.Abbreviation,P.Name)  AS PracticeAbbreviation,
+			PC.IsActive
 	FROM dbo.[PracticeCapabilities] PC
 	INNER JOIN dbo.Practice  P ON P.PracticeId = PC.PracticeId 
 	WHERE	( @PracticeId IS NULL OR P.PracticeId = @PracticeId ) 
