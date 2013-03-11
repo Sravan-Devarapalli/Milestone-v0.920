@@ -23,6 +23,9 @@ namespace DataTransferObjects
         [DataMember]
         public bool InUse { get; set; }
 
+        [DataMember]
+        public bool IsActive { get; set; }
+
         public string HtmlEncodedName
         {
             get
