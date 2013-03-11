@@ -19,7 +19,7 @@ AS
 	       p.Amount,
 	       p.Timescale,
 	       CAST(CASE p.Timescale
-	                WHEN 2 THEN p.Amount / HPY.HoursPerYear
+	                WHEN 2 THEN p.Amount / WHY.HoursInYear
 	                ELSE p.Amount
 	            END AS DECIMAL(18,2)) AS AmountHourly,
 	       p.VacationDays,
@@ -33,5 +33,7 @@ AS
 		   p.SLTPTOApproval
 	  FROM dbo.Pay AS p
 		   INNER JOIN dbo.GetFutureDateTable() FT ON 1 = 1
-		   INNER JOIN dbo.GetHoursPerYearTable() HPY ON 1 = 1
+		   INNER JOIN dbo.[BonusHoursPerYearTable]() HPY ON 1 = 1
+		   INNER JOIN  dbo.V_WorkinHoursByYear WHY ON WHY.Year = YEAR(dbo.GettingPMTime(GETUTCDATE()))
 	       INNER JOIN dbo.Timescale AS t ON p.Timescale = t.TimescaleId
+
