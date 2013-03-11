@@ -31,6 +31,24 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.UpdatePanel updTimeEntries;
         
         /// <summary>
+        /// confirmBoxJavascript control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl confirmBoxJavascript;
+        
+        /// <summary>
+        /// hdCapabilitiesInactivePopUpOperation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdCapabilitiesInactivePopUpOperation;
+        
+        /// <summary>
         /// gvPractices control.
         /// </summary>
         /// <remarks>
