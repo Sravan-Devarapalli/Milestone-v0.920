@@ -16,11 +16,14 @@ AS
 	       mp.HoursPerDay,
 	       mp.RoleName,
 		   mp.VacationDays,	
-	       mp.ExpectedHours,
+	       mp.ExpectedHoursWithVacationDays,
 		   mp.Location,
 		   mp.LastName,
 		   mp.FirstName,
 		   mp.EntryId
 	  FROM dbo.v_MilestonePerson AS mp
 	 WHERE mp.MilestonePersonId = @MilestonePersonId
+
+	 SELECT  personid,Date,ActualHours 
+	 FROM dbo.[GetPersonTimeoffValuesByMilestoneId](NULL,NULL,@MilestonePersonId,NULL)
 
