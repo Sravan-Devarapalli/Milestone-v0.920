@@ -71,6 +71,7 @@ namespace PraticeManagement.Controls
                 return hoursPerWeek;
             }
         }
+
         [DefaultValue(false)]
         public bool DisplayDefinedTermsAndCalcs
         {
@@ -163,8 +164,7 @@ namespace PraticeManagement.Controls
                 e.IsValid = decimal.TryParse(m.Groups[1].Captures[0].Value, out value) && value >= 0.0M && value <= 10M;
             }
         }
-
-
+        
         protected void txtBillRateSlider_TextChanged(object sender, EventArgs e)
         {
             Page.Validate(ComputeRate);
@@ -177,9 +177,7 @@ namespace PraticeManagement.Controls
                 ClearContents();
             }
         }
-
-
-
+        
         protected void dtpEffectiveDate_SelectionChanged(object sender, EventArgs e)
         {
             Page.Validate(ComputeRate);
@@ -290,25 +288,25 @@ namespace PraticeManagement.Controls
 
         private void DisplayRate(ComputedFinancialsEx rate)
         {
-            lblMonthlyRevenueWithoutRecruiting.Text = rate.Revenue.ToString();
+            lblMonthlyRevenue.Text = rate.Revenue.ToString();
             if (!HideCalculatedValues)
             {
-                lblMonthlyGrossMarginWithoutRecruiting.Text = rate.MarginWithoutRecruiting.ToString();
-                lblMonthlyCogsWithoutRecruiting.Text = rate.CogsWithoutRecruiting.ToString();
-                lblTargetMarginWithoutRecruiting.Text =
-                    string.Format(Constants.Formatting.PercentageFormat, rate.TargetMarginWithoutRecruiting);
+                lblMonthlyGrossMargin.Text = rate.GrossMargin.ToString();
+                lblMonthlyCogs.Text = rate.Cogs.ToString();
+                lblTargetMargin.Text =
+                    string.Format(Constants.Formatting.PercentageFormat, rate.TargetMargin);
             }
             else
             {
-                lblMonthlyGrossMarginWithoutRecruiting.Text =
-                lblMonthlyCogsWithoutRecruiting.Text =
-                lblTargetMarginWithoutRecruiting.Text =
+                lblMonthlyGrossMargin.Text =
+                lblMonthlyCogs.Text =
+                lblTargetMargin.Text =
                    Resources.Controls.HiddenCellText;
-                lblMonthlyCogsWithoutRecruiting.CssClass = "Cogs";
-                lblMonthlyGrossMarginWithoutRecruiting.CssClass = "Margin";
+                lblMonthlyCogs.CssClass = "Cogs";
+                lblMonthlyGrossMargin.CssClass = "Margin";
             }
 
-            SetBackgroundColorForMargin(rate.TargetMarginWithoutRecruiting, tdTargetMarginWithoutRecruiting);
+            SetBackgroundColorForMargin(rate.TargetMargin, tdTargetMargin);
 
             var overheads = rate.OverheadList;
             var mlf = overheads.Find(oh => oh.Name == MLFText);
@@ -330,13 +328,13 @@ namespace PraticeManagement.Controls
 
         public void ClearContents()
         {
-            lblMonthlyRevenueWithoutRecruiting.Text =
-            lblMonthlyGrossMarginWithoutRecruiting.Text =
-            lblMonthlyCogsWithoutRecruiting.Text =
-            lblTargetMarginWithoutRecruiting.Text =
-            lblMonthlyRevenueWithoutRecruiting.CssClass =
-            lblMonthlyCogsWithoutRecruiting.CssClass =
-            lblMonthlyGrossMarginWithoutRecruiting.CssClass = string.Empty;
+            lblMonthlyRevenue.Text =
+            lblMonthlyGrossMargin.Text =
+            lblMonthlyCogs.Text =
+            lblTargetMargin.Text =
+            lblMonthlyRevenue.CssClass =
+            lblMonthlyCogs.CssClass =
+            lblMonthlyGrossMargin.CssClass = string.Empty;
            
             gvOverheadWhatIf.Visible = false;
             gvOverheadWhatIf.DataBind();
