@@ -6,6 +6,7 @@ using System.Web.Security;
 using DataAccess;
 using DataAccess.Other;
 using DataTransferObjects;
+using DataTransferObjects.Utils;
 
 
 namespace PracticeManagementService
@@ -17,13 +18,8 @@ namespace PracticeManagementService
     {
         #region Constants
 
-        private const string PersonArgument = "person";
-
-        public const int DefaultHoursPerMonth = 160;
         public const int DefaultHoursPerWeek = 40;
-        public const int DefaultHoursPerDay = 8;
         public const decimal MonthPerYear = 12.00M;
-        public const decimal WeeksPerMonth = 4.20M;
 
         #endregion
 
@@ -38,48 +34,67 @@ namespace PracticeManagementService
             private set;
         }
 
+        private int _Year = - 1;
+        private int _DaysInYear = -1;
+
+        public int DaysInYear
+        {
+            get
+            {
+                if (_DaysInYear == -1)
+                {
+                    if (_Year == -1)
+                    {
+                        _Year = SettingsHelper.GetCurrentPMTime().Year;
+                    }
+                    _DaysInYear = CalendarDAL.GetWorkingDaysForTheGivenYear(_Year);
+                }
+                return _DaysInYear;
+            }
+        }
+
+        //public int DefaultHoursPerDay
+        //{
+        //    get
+        //    {
+        //        string defaultHoursPerDaystring = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.DefaultHoursPerDayKey);
+        //        int defaultHoursPerDay = 0;
+        //        int.TryParse(defaultHoursPerDaystring, out defaultHoursPerDay);
+        //        return defaultHoursPerDay;
+        //    }
+        //}
+
+        //public decimal WeeksPerMonth
+        //{
+        //    get
+        //    {
+        //        string weeksPerMonthString = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, Constants.ResourceKeys.WeeksPerMonthKey);
+        //        decimal weeksPerMonth = 0;
+        //        decimal.TryParse(weeksPerMonthString, out weeksPerMonth);
+        //        return weeksPerMonth;
+        //    }
+        //}
+
+        public decimal DefaultHoursPerYear
+        {
+            get
+            {
+                string defaultHoursPerYearstring = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, Constants.ResourceKeys.DefaultHoursPerYearKey);
+                decimal defaultHoursPerYear = 0;
+                decimal.TryParse(defaultHoursPerYearstring, out defaultHoursPerYear);
+                return defaultHoursPerYear;
+            }
+        }
+
         #endregion
 
         #region Construction
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="PersonRateCalculator"/> class.
-        /// </summary>
-        /// <param name="person">The <see cref="Person"/>'s data the rate be calculated on.</param>
-        public PersonRateCalculator(Person person)
-            : this(person, true)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="PersonRateCalculator"/> class.
-        /// </summary>
-        /// <param name="person">The <see cref="Person"/>'s data the rate be calculated on.</param>
-        /// <param name="recalculateOverhead">Whether to recalculate overhead</param>
-        /// <param name="loadAll">Load all comissions</param>
-        public PersonRateCalculator(Person person, bool recalculateOverhead, bool isMarginTest = false, DateTime? effectiveDate = null)
+        public PersonRateCalculator(Person person, bool isMarginTest = false, DateTime? effectiveDate = null)
         {
             Person = person;
-            GetPersonDetail(Person, recalculateOverhead, isMarginTest, effectiveDate);
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="PersonRateCalculator"/> class.
-        /// </summary>
-        /// <param name="personId">An ID of the person the rate be calculated for.</param>
-        public PersonRateCalculator(int personId)
-            : this(personId, false)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="PersonRateCalculator"/> class.
-        /// </summary>
-        /// <param name="personId">An ID of the person the rate be calculated for.</param>
-        /// <param name="recalculateOverhead">Whether to recalculate overhead</param>
-        public PersonRateCalculator(int personId, bool recalculateOverhead)
-            : this(PersonDAL.GetById(personId), recalculateOverhead)
-        {
+            _Year = effectiveDate.HasValue?effectiveDate.Value.Year : SettingsHelper.GetCurrentPMTime().Year;
+            GetPersonDetail(Person,isMarginTest, effectiveDate);
         }
 
         #endregion
@@ -88,20 +103,15 @@ namespace PracticeManagementService
 
         #region Data flow
 
-        public void GetPersonDetail(Person person, bool recalculateOverhead, bool isMarginTest, DateTime? effectiveDate)
+        public void GetPersonDetail(Person person, bool isMarginTest, DateTime? effectiveDate)
         {
             if (person != null && person.Id.HasValue && !isMarginTest)
             {
-               
                 if (effectiveDate == null)
                 {
                     person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
                 }
-
-                person.OverheadList =
-                    recalculateOverhead && person.CurrentPay != null ?
-                    PersonDAL.PersonOverheadListByTimescale(person.CurrentPay.Timescale, effectiveDate) :
-                    PersonDAL.PersonOverheadListByPerson(person.Id.Value, effectiveDate);
+                person.OverheadList = PersonDAL.PersonOverheadListByPerson(person.Id.Value, effectiveDate);
 
                 foreach (PersonOverhead overhead in person.OverheadList)
                 {
@@ -112,7 +122,7 @@ namespace PracticeManagementService
                             overhead.HourlyValue =
                                 overhead.HourlyRate *
                                 (person.CurrentPay.Timescale == TimescaleType.Salary ?
-                                person.CurrentPay.Amount / WorkingHoursInCurrentYear() : person.CurrentPay.Amount) / 100M;
+                                person.CurrentPay.Amount / WorkingHoursInYear(DaysInYear) : person.CurrentPay.Amount) / 100M;
                         }
                         else
                         {
@@ -127,21 +137,6 @@ namespace PracticeManagementService
 
                 person.OverheadList.Add(CalculateVacationOverhead());
             }
-
-            if (recalculateOverhead)
-            {
-                person.OverheadList.Add(CalculateBonusOverhead());
-            }
-        }
-
-        /// <summary>
-        /// Retrives the person details from the database.
-        /// </summary>
-        /// <param name="personId">An ID of the person to retrieve the data for.</param>
-        /// <returns>The <see cref="Person"/> object.</returns>
-        public static Person GetPersonDetail(int personId)
-        {
-            return new PersonRateCalculator(personId).Person;
         }
 
         /// <summary>
@@ -183,11 +178,8 @@ namespace PracticeManagementService
 
             }
 
-
-
             return result;
         }
-
 
         #endregion
 
@@ -200,10 +192,11 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="hourlyRate"></param>
         /// <param name="hoursPerWeek"></param>
+        /// <param name="workingDaysInMonth"></param>
         /// <returns></returns>
-        public static decimal CalculateMonthlyRevenue(decimal hourlyRate, decimal hoursPerWeek)
+        public static decimal CalculateMonthlyRevenue(decimal hourlyRate, decimal hoursPerWeek, decimal workingDaysInMonth)
         {
-            return Math.Round(hourlyRate * hoursPerWeek * WeeksPerMonth);
+            return Math.Round(hourlyRate * (hoursPerWeek / 5) * workingDaysInMonth);
         }
 
         /// <summary>
@@ -212,7 +205,7 @@ namespace PracticeManagementService
         /// <param name="proposedRate">A proposed hourly bill rate.</param>
         /// <param name="proposedHoursPerWeek">A number of the billed hours per week.</param>
         /// <returns>A <see cref="ComputedFinancialsEx"/> object.</returns>
-        public ComputedFinancialsEx CalculateProposedFinancials(decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount)
+        public ComputedFinancialsEx CalculateProposedFinancials(decimal proposedRate, decimal proposedHoursPerWeek, decimal clientDiscount, DateTime? effectiveDate)
         {
             ComputedFinancialsEx financials = new ComputedFinancialsEx();
 
@@ -224,12 +217,11 @@ namespace PracticeManagementService
                     overhead.HourlyValue = proposedRate * overhead.BillRateMultiplier / 100M;
                 }
             }
-
-            financials.Revenue =
-                PersonRateCalculator.CalculateMonthlyRevenue(proposedRate, proposedHoursPerWeek);
-
+            DateTime monthStartdate = Generic.MonthStartDate(effectiveDate.HasValue ? effectiveDate.Value : SettingsHelper.GetCurrentPMTime());
+            DateTime monthEnddate = Generic.MonthEndDate(effectiveDate.HasValue ? effectiveDate.Value : SettingsHelper.GetCurrentPMTime());
+            var workingDaysInMonth = CalendarDAL.GetCompanyWorkHoursAndDaysInGivenPeriod(monthStartdate, monthEnddate, false)["Days"];
+            financials.Revenue = PersonRateCalculator.CalculateMonthlyRevenue(proposedRate, proposedHoursPerWeek, workingDaysInMonth);
             financials.RevenueNet = financials.Revenue * (1 - clientDiscount);
-
             financials.OverheadList = Person.OverheadList;
 
             // Add the Vacation Overhead
@@ -243,11 +235,7 @@ namespace PracticeManagementService
             PersonOverhead rawHourlyRate = new PersonOverhead();
             rawHourlyRate.Name = Resources.Messages.RawHourlyRateTitle;
             rawHourlyRate.HoursToCollect = 1;
-            rawHourlyRate.Rate = rawHourlyRate.HourlyValue =
-                Person.CurrentPay.Timescale == TimescaleType.PercRevenue
-                ?
-                decimal.Multiply(proposedRate, (decimal)0.01) * Person.CurrentPay.Amount : Person.RawHourlyRate;
-
+            rawHourlyRate.Rate = rawHourlyRate.HourlyValue = Person.CurrentPay.Timescale == TimescaleType.PercRevenue ? decimal.Multiply(proposedRate, (decimal)0.01) * Person.CurrentPay.Amount : Person.RawHourlyRate;
 
             decimal overheadSum = 0M;
 
@@ -257,12 +245,7 @@ namespace PracticeManagementService
             }
 
             financials.SemiLoadedHourlyRate = rawHourlyRate.HourlyValue + overheadSum;
-            var RecruitingOverhead = financials.OverheadList.Find(OH => OH.Name == Resources.Messages.RecruitingOverheadName);
-
-            financials.SemiLoadedHourlyRateWithoutRecruiting = financials.SemiLoadedHourlyRate - (RecruitingOverhead != null ? RecruitingOverhead.HourlyValue : 0);
-
-            financials.SemiCOGS = financials.SemiLoadedHourlyRate.Value * proposedHoursPerWeek * WeeksPerMonth;
-            financials.SemiCOGSWithoutRecruiting = financials.SemiLoadedHourlyRateWithoutRecruiting.Value * proposedHoursPerWeek * WeeksPerMonth;
+            financials.SemiCOGS = financials.SemiLoadedHourlyRate.Value * (proposedHoursPerWeek/5) * workingDaysInMonth;
 
             var MLFOverhead = financials.OverheadList.Find(OH => OH.IsMLF);
             if (MLFOverhead != null)
@@ -285,14 +268,9 @@ namespace PracticeManagementService
             {
                 financials.LoadedHourlyRate = financials.SemiLoadedHourlyRate;
             }
-            var loadedHourlyRateWithoutRecruiting = financials.LoadedHourlyRate - (RecruitingOverhead != null ? RecruitingOverhead.HourlyValue : 0);
 
-
-            financials.Cogs = financials.LoadedHourlyRate * proposedHoursPerWeek * WeeksPerMonth;
-            financials.CogsWithoutRecruiting = loadedHourlyRateWithoutRecruiting * proposedHoursPerWeek * WeeksPerMonth;
-
+            financials.Cogs = financials.LoadedHourlyRate * (proposedHoursPerWeek / 5) * workingDaysInMonth;
             financials.GrossMargin = financials.RevenueNet - financials.Cogs;
-            financials.MarginWithoutRecruiting = financials.RevenueNet - financials.CogsWithoutRecruiting;
 
             financials.OverheadList.Insert(0, rawHourlyRate);
 
@@ -304,7 +282,6 @@ namespace PracticeManagementService
         #region Person rate calculations
 
         #region Rate for a Milestone
-
 
         /// <summary>
         /// Performs the calculation of person rate participating on the specific milestone.
@@ -342,7 +319,7 @@ namespace PracticeManagementService
                         foreach (MilestonePersonEntry entry in result.Entries)
                         {
                             entry.ComputedFinancials =
-                                ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(entry.Id,connection,transaction);
+                                ComputedFinancialsDAL.FinancialsGetByMilestonePersonEntry(entry.Id, connection, transaction);
                         }
                     }
                 }
@@ -364,10 +341,7 @@ namespace PracticeManagementService
         /// Computes the COGS for the person.
         /// </summary>
         /// <returns></returns>
-        public PracticeManagementCurrency CalculateCogsForHours(
-            decimal hours,
-            decimal companyHours,
-            decimal salesCommissionOverhead)
+        public PracticeManagementCurrency CalculateCogsForHours(decimal hours,decimal companyHours)
         {
             PracticeManagementCurrency monthAmount;
             PracticeManagementCurrency monthOverhead;
@@ -386,14 +360,14 @@ namespace PracticeManagementService
                     case TimescaleType.Salary:
                         monthAmount = Person.CurrentPay.Amount / MonthPerYear;
                         monthOverhead =
-                            Person != null ? (Person.TotalOverhead + salesCommissionOverhead) * companyHours : new PracticeManagementCurrency();
+                            Person != null ? Person.TotalOverhead * companyHours : new PracticeManagementCurrency();
                         break;
                     case TimescaleType.Hourly:
                     case TimescaleType._1099Ctc:
                     case TimescaleType.PercRevenue:
                         monthAmount = Person.CurrentPay.Amount * hours;
                         monthOverhead =
-                            Person != null ? (Person.TotalOverhead + salesCommissionOverhead) * hours : new PracticeManagementCurrency();
+                            Person != null ? Person.TotalOverhead * hours : new PracticeManagementCurrency();
                         break;
                     default:
                         monthAmount = new PracticeManagementCurrency();
@@ -406,20 +380,19 @@ namespace PracticeManagementService
             return monthAmount + monthOverhead;
         }
 
-        public static int CompanyWorkDaysNumber(DateTime startDate, DateTime endDate)
+        public static decimal CompanyWorkHoursNumber(DateTime startDate, DateTime endDate)
         {
-            return CalendarDAL.WorkDaysCompanyNumber(startDate, endDate);
+            return CalendarDAL.GetCompanyWorkHoursAndDaysInGivenPeriod(startDate, endDate,true)["Hours"];
         }
 
-        public decimal GetPersonWorkDays(DateTime startDate, DateTime endDate)
+        public decimal GetPersonWorkHours(DateTime startDate, DateTime endDate)
         {
-            return GetPersonWorkDays(Person.Id.Value, startDate, endDate);
+            return GetPersonWorkHours(Person.Id.Value, startDate, endDate);
         }
 
-        private decimal GetPersonWorkDays(int personId, DateTime startDate, DateTime endDate)
+        private decimal GetPersonWorkHours(int personId, DateTime startDate, DateTime endDate)
         {
-            return CalendarDAL.WorkDaysPersonNumber(personId, startDate, endDate) *
-                   DefaultHoursPerDay;
+            return CalendarDAL.GetPersonWorkingHoursDetailsWithinThePeriod(personId, startDate, endDate).TotalWorkHoursExcludingVacationHours;
         }
 
         /// <summary>
@@ -438,7 +411,7 @@ namespace PracticeManagementService
                 result.Rate =
                     Math.Round(
                     (Person.CurrentPay.VacationDays.Value * ((hoursPerWeek) / 5) * Person.RawHourlyRate) /
-                    (decimal)WorkingHoursInCurrentYear(hoursPerWeek),
+                    (decimal)WorkingHoursInYear(DaysInYear, hoursPerWeek),
                     2);
                 result.StartDate = Person.HireDate;
                 result.HoursToCollect = 1;
@@ -461,27 +434,16 @@ namespace PracticeManagementService
             {
                 result.HoursToCollect =
                     Person.CurrentPay.IsYearBonus ?
-                    (int)WorkingHoursInCurrentYear(hoursPerWeek) : Person.CurrentPay.BonusHoursToCollect.Value;
+                    (int)DefaultHoursPerYear : Person.CurrentPay.BonusHoursToCollect.Value;
                 result.Rate = Person.CurrentPay.BonusAmount;
                 result.HourlyValue = result.HourlyRate;
             }
             return result;
         }
 
-        public static decimal WorkingHoursInCurrentYear(decimal hoursPerWeek = 40)
+        public static decimal WorkingHoursInYear(int daysInYear, decimal hoursPerWeek = DefaultHoursPerWeek)
         {
-
-            //Working Hours per Year (52 * HPW))
-            //var companyHolidays = CalendarDAL.GetCompanyHolidays(DateTime.Now.Year);
-            var defaultHoursPerYear = (52 * hoursPerWeek);
-            var yeartoCheckIfLeapYear = DateTime.Now.Year;
-            if (yeartoCheckIfLeapYear > 0 && (((yeartoCheckIfLeapYear % 4) == 0) && ((yeartoCheckIfLeapYear % 100) != 0)
-                    || ((yeartoCheckIfLeapYear % 400) == 0)))
-            {
-                defaultHoursPerYear = defaultHoursPerYear + hoursPerWeek / 5;
-            }
-
-            return defaultHoursPerYear;
+            return (daysInYear * ((decimal)hoursPerWeek / 5));
         }
 
         #endregion
