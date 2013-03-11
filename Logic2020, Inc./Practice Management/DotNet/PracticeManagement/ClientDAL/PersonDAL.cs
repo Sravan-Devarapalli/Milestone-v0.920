@@ -1399,31 +1399,6 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Retrieves a number of the work days for the <see cref="Person"/> and the period specified.
-        /// </summary>
-        /// <param name="personId">An ID of the person to retrieve the data for.</param>
-        /// <param name="startDate">A start date of the period.</param>
-        /// <param name="endDate">An end date of the period.</param>
-        /// <returns>A number of work days for the specified person withing the specified period.</returns>
-        public static int PersonWorkDaysNumber(int personId, DateTime startDate, DateTime endDate)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonWorkDaysNumberProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-                command.Parameters.AddWithValue(StartDateParam, startDate);
-                command.Parameters.AddWithValue(EndDateParam, endDate);
-
-                connection.Open();
-
-                return (int)command.ExecuteScalar();
-            }
-        }
-
-        /// <summary>
         /// Retrives the Person by the Alias (email)
         /// </summary>
         /// <param name="alias">A person's email</param>
@@ -1579,36 +1554,6 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(TimescaleIdParam, timescale);
                 command.Parameters.AddWithValue(EffectiveDateParam, (effectiveDate.HasValue) ? (object)effectiveDate.Value : DBNull.Value);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    var result = new List<PersonOverhead>();
-
-                    ReadPersonOverheads(reader, result);
-
-                    return result;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Retrieves a list of an overhead for the person on the milstone grouped by days.
-        /// </summary>
-        /// <param name="personId">An ID of the <see cref="Person"/> to retrive the data for.</param>
-        /// <param name="milestoneId">An ID of the <see cref="Milestone"/> to retrieve the data for.</param>
-        /// <returns>A collection of computed overheads by days.</returns>
-        public static List<PersonOverhead> MilestonePersonListOverheadByPerson(int personId,
-                                                                               int milestoneId)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.MilestonePersonListOverheadByPersonProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(PersonIdParam, personId);
-                command.Parameters.AddWithValue(MilestoneIdParam, milestoneId);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
