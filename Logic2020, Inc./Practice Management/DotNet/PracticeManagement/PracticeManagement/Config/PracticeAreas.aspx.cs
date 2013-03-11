@@ -205,6 +205,9 @@ namespace PraticeManagement.Config
                     ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Confirm";
                     ((ImageButton)e.Row.Cells[0].Controls[2]).ToolTip = "Cancel";
                     e.Row.Cells[DELETE_BUTTON_INDEX].ToolTip = "";
+                    var chbIsActiveEd = e.Row.FindControl("chbIsActiveEd") as CheckBox;
+                    if (item.IsActiveCapabilitiesExists && item.IsActive)
+                        ((ImageButton)e.Row.Cells[0].Controls[0]).OnClientClick = string.Format("return showcapabilityActivePopup(\'{0}\',this);", chbIsActiveEd.ClientID);
                 }
                 catch
                 {
@@ -229,8 +232,15 @@ namespace PraticeManagement.Config
 
         }
 
-        protected void gvPractices_OnRowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
+        protected void gvPractices_OnRowUpdating(object sender, GridViewUpdateEventArgs e)     {
+            if (hdCapabilitiesInactivePopUpOperation.Value == "cancel")
+            {
+                e.Cancel = true;
+                gvPractices.EditIndex = -1;
+                gvPractices.DataBind();
+                hdCapabilitiesInactivePopUpOperation.Value = "none";
+                return;
+            }
             string newPractice = e.NewValues["Name"].ToString().Trim();
             string oldPractice = e.OldValues["Name"].ToString().Trim();
             if (newPractice != oldPractice)
@@ -269,16 +279,24 @@ namespace PraticeManagement.Config
         protected void gvPractices_RowDeleted(object sender, GridViewDeletedEventArgs e)
         {
             mlInsertStatus.ShowInfoMessage(PracticeDeletedSuccessfully);
+            hdCapabilitiesInactivePopUpOperation.Value = "none";
+        }
+
+        protected void gvPractices_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            hdCapabilitiesInactivePopUpOperation.Value = "none";
         }
 
         protected void gvPractices_RowUpdated(object sender, GridViewUpdatedEventArgs e)
         {
             mlInsertStatus.ShowInfoMessage(PracticeUpdatedSuccessfully);
+            hdCapabilitiesInactivePopUpOperation.Value = "none";
         }
 
         protected void gvPractices_OnRowEditing(object sender, GridViewEditEventArgs e)
         {
             plusMakeVisible(true);
+            hdCapabilitiesInactivePopUpOperation.Value = "none";
         }
 
         private bool IsPracticeAlreadyExisting(string newPractice)
@@ -301,3 +319,4 @@ namespace PraticeManagement.Config
         }
     }
 }
+
