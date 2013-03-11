@@ -73,6 +73,7 @@ namespace DataTransferObjects
             public const string PMSupportEmailAddressKey = "PMSupportEmailAddress";
 
             # endregion SMTP
+
             # region Application
 
             public const string TimeZoneKey = "TimeZone";
@@ -85,6 +86,14 @@ namespace DataTransferObjects
             public const string PasswordAttemptWindowKey = "PasswordAttemptWindow";
             public const string IsLockOutPolicyEnabledKey = "IsLockOutPolicyEnabled";
             public const string UnlockUserMinituesKey = "UnlockUserMinitues";
+         
+            #endregion
+
+            # region Application
+
+            public const string DefaultHoursPerDayKey = "DefaultHoursPerDay";
+            public const string WeeksPerMonthKey = "WeeksPerMonth";
+            public const string DefaultHoursPerYearKey = "DefaultHoursPerYear";
 
             #endregion
 
