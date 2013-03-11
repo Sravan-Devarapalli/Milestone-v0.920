@@ -15,6 +15,7 @@ namespace PraticeManagement.Config
 
         private const string HdPracticeId = "hdPracticeId";
         private const string HdCapabilityId = "hdCapabilityId";
+        private const string lblDeleteId = "lblDelete";
         private const string ImgPlus = "imgPlus";
         private const string ImgEdit = "imgEdit";
         private const string ImgUpdate = "imgUpdate";
@@ -22,6 +23,8 @@ namespace PraticeManagement.Config
         private const string ImgDelete = "imgDelete";
         private const string TbInsertCapabilityName = "tbInsertCapabilityName";
         private const string TbEditCapabilityName = "tbEditCapabilityName";
+        private const string chkInsertActive = "chkInsertActive";
+        private const string chkEditActive = "chkEditActive";
         private const string RvInsertCapability = "rvInsertCapability";
         private const string RvEditCapability = "rvEditCapability";
         private const string LbCapabilityName = "lbCapabilityName";
@@ -35,7 +38,7 @@ namespace PraticeManagement.Config
         private const string InUseAttribute = "InUse";
         private const string PracticeNameWithAbbrevationFormat = " <i>{0} - {1}</i> ({2})";
         private const string PracticeNameWithoutAbbrevationFormat = " <i>{0}</i> ({1})";
-
+        private const string PrevValueForCheckBox = "PrevValue";
 
         #endregion
 
@@ -79,6 +82,7 @@ namespace PraticeManagement.Config
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
             if (!IsPostBack)
             {
                 PopulateData();
@@ -168,7 +172,7 @@ namespace PraticeManagement.Config
         protected void imgCancel_OnClick(object sender, EventArgs e)
         {
             var imgCancel = sender as ImageButton;
-            bool isInsert = imgCancel.Attributes[IsInsertAttribute] == "True";
+            bool isInsert = imgCancel.Attributes[IsInsertAttribute] == true.ToString();
             var row = imgCancel.NamingContainer as RepeaterItem;
             if (!isInsert)
             {
@@ -214,8 +218,13 @@ namespace PraticeManagement.Config
             var lbCapabilityName = row.FindControl(LbCapabilityName) as Label;
             var tbCapabilityName = row.FindControl(TbEditCapabilityName) as TextBox;
             var rvEditCapability = row.FindControl(RvEditCapability) as RequiredFieldValidator;
-            ShowDeleteButton(imgDelete, !isEditOperation);
-            imgUpdate.Visible = imgCancel.Visible = tbCapabilityName.Visible = rvEditCapability.Enabled = isEditOperation;
+            var lblDelete = row.FindControl(lblDeleteId) as Label;
+            var chkActive = row.FindControl(chkEditActive) as CheckBox;
+            ShowDeleteButton(imgDelete, !isEditOperation, lblDelete);
+            chkActive.Enabled = imgUpdate.Visible = imgCancel.Visible = tbCapabilityName.Visible = rvEditCapability.Enabled = isEditOperation;
+            bool prevValue = false;
+            Boolean.TryParse(chkActive.Attributes[PrevValueForCheckBox], out prevValue);
+            chkActive.Checked = prevValue;
             imgEdit.Visible = lbCapabilityName.Visible = !isEditOperation;
             tbCapabilityName.Text = lbCapabilityName.Text;
             EditCapabilityId = isEditOperation ? int.Parse(hdCapabilityId.Value) : -1;
@@ -227,9 +236,11 @@ namespace PraticeManagement.Config
             var imgUpdate = row.FindControl(ImgUpdate) as ImageButton;
             var imgCancel = row.FindControl(ImgCancel) as ImageButton;
             var tbCapabilityName = row.FindControl(TbInsertCapabilityName) as TextBox;
+            var chkActive = row.FindControl(chkInsertActive) as CheckBox;
             var hdPracticeId = row.FindControl(HdPracticeId) as HiddenField;
             var rvCapability = row.FindControl(RvInsertCapability) as RequiredFieldValidator;
-            imgUpdate.Visible = imgCancel.Visible = tbCapabilityName.Visible = rvCapability.Enabled = !show;
+            chkActive.Visible= imgUpdate.Visible = imgCancel.Visible = tbCapabilityName.Visible = rvCapability.Enabled = !show;
+            chkActive.Checked = true;
             imgPlus.Visible = show;
             tbCapabilityName.Text = string.Empty;
             InsertPracticeId = !show ? int.Parse(hdPracticeId.Value) : -1;
@@ -289,9 +300,11 @@ namespace PraticeManagement.Config
         {
             PracticeCapability capability = new PracticeCapability();
             var tbCapabilityName = row.FindControl(isInsert ? TbInsertCapabilityName : TbEditCapabilityName) as TextBox;
+            var chkActive = row.FindControl(isInsert ? chkInsertActive : chkEditActive) as CheckBox;
             var hdCapabilityId = row.FindControl(HdCapabilityId) as HiddenField;
             var hdPracticeId = row.FindControl(HdPracticeId) as HiddenField;
             capability.Name = tbCapabilityName.Text.Trim();
+            capability.IsActive = chkActive.Checked;
             capability.CapabilityId = isInsert ? 0 : int.Parse(hdCapabilityId.Value);
             capability.PracticeId = isInsert ? int.Parse(hdPracticeId.Value) : 0;
             return capability;
@@ -304,15 +317,17 @@ namespace PraticeManagement.Config
             repPractices.DataBind();
         }
 
-        private void ShowDeleteButton(ImageButton imgBtn, bool show)
+        private void ShowDeleteButton(ImageButton imgBtn, bool show, Label lblDelete)
         {
             string inUseString = imgBtn.Attributes[InUseAttribute];
             bool inUse = true;
             bool.TryParse(inUseString, out inUse);
             imgBtn.Visible = !inUse && show;
+            lblDelete.Visible = !imgBtn.Visible;
         }
 
         #endregion
 
     }
 }
+
