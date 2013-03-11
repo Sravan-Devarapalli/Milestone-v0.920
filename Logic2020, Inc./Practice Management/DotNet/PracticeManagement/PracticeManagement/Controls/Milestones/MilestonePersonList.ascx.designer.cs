@@ -31,6 +31,33 @@ namespace PraticeManagement.Controls.Milestones {
         protected global::System.Web.UI.WebControls.GridView gvMilestonePersonEntries;
         
         /// <summary>
+        /// pnlTimeOffHoursToolTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlTimeOffHoursToolTip;
+        
+        /// <summary>
+        /// lblTimeOffHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTimeOffHours;
+        
+        /// <summary>
+        /// lblProjectAffectedHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblProjectAffectedHours;
+        
+        /// <summary>
         /// hdMpePopupDeleteMileStonePersons control.
         /// </summary>
         /// <remarks>
