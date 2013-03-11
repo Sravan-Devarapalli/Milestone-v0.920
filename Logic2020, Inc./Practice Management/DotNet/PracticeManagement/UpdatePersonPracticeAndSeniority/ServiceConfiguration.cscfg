@@ -11,9 +11,11 @@
       <Setting name="SkillsProfilePagePath" value="https://practice.logic2020.com/SkillsProfile.aspx"/> <!--https://practice.logic2020.com/SkillsProfile.aspx-->
       <Setting name="UpdatedProfilesListEmailReciever" value="Skills@logic2020.com"/> <!--Skills@logic2020.com-->
       <Setting name="EmailSubjectForProfilesUpdatedList" value="Practice Management: Added/Updated Skill profile's persons list"/>
+      <Setting name="ProjectSummaryCacheScheduleTime" value="02:00:00"/> <!--HH:mm:ss and 24 hour time format-->
       <Setting name="PayrollDistributionScheduleTime" value="07:00:00"/> <!--HH:mm:ss and 24 hour time format-->
       <Setting name="PayrollDistributionReportReciever" value="Finance@logic2020.com"/> <!--Finance@logic2020.com-->
-      <Setting name="EmailBccRecieverList" value="lisaj@logic2020.com,mattr@logic2020.com"/> <!--lisaj@logic2020.com,mattr@logic2020.com-->
+      <Setting name="EmailBccRecieverList" value=""/> <!--lisaj@logic2020.com,mattr@logic2020.com-->
+      <Setting name="DisableAllMails" value="yes"/> <!--yes | no-->
       <Setting name="LoginPagePath" value="https://practice.logic2020.com/login.aspx"/> <!--https://65.52.17.100/login.aspx-->
       <Setting name="WelcomeMailScheduleTime" value="07:00:00"/><!--HH:mm:ss and 24 hour time format-->
     </ConfigurationSettings>
