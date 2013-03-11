@@ -128,21 +128,24 @@ namespace PraticeManagement.Objects
         {
             var persons = new StringBuilder();
             var personList = new List<MilestonePerson>();
-            foreach (var projectPerson in project.ProjectPersons)
+            if (project.ProjectPersons != null)
             {
-                var personExist = false;
-                if (personList != null)
+                foreach (var projectPerson in project.ProjectPersons)
                 {
-                    foreach (var mp in personList)
-                        if (mp.Person.Id == projectPerson.Person.Id)
-                        {
-                            personExist = true;
-                            break;
-                        }
-                }
-                if (!personExist)
-                {
-                    personList.Add(projectPerson);
+                    var personExist = false;
+                    if (personList != null)
+                    {
+                        foreach (var mp in personList)
+                            if (mp.Person.Id == projectPerson.Person.Id)
+                            {
+                                personExist = true;
+                                break;
+                            }
+                    }
+                    if (!personExist)
+                    {
+                        personList.Add(projectPerson);
+                    }
                 }
             }
             for (int i = 0; i < personList.Count; i++)
@@ -171,7 +174,7 @@ namespace PraticeManagement.Objects
             string names = string.Empty;
             foreach (var person in list)
             {
-                names +=  "<br />" + person.Name ;
+                names += "<br />" + person.Name;
             }
 
             return names;
