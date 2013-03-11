@@ -1411,3 +1411,4 @@ table#ctl00_body_login tr td label{float:left}
 .PaddingTop12{padding-top:12px}
 .width850PxImp{width:850px!important}
 .Width450PxImp{width:450px!important}
+.confirmBoxJavascript{width:460px;position:fixed;left:50%;top:50%;margin:-130px 0 0 -230px;border:1px solid rgba(33,33,33,0.6);z-index:10001}
