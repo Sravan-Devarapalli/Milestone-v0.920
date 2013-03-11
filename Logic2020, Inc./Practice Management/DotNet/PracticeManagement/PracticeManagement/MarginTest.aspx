@@ -5,10 +5,9 @@
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/PersonnelCompensation.ascx" TagName="PersonnelCompensation"
     TagPrefix="uc1" %>
-<%--<%@ Register Src="Controls/RecruiterInfo.ascx" TagName="RecruiterInfo" TagPrefix="uc1" %>--%>
 <%@ Register Src="Controls/WhatIf.ascx" TagName="WhatIf" TagPrefix="uc1" %>
-<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="loadingProgress" TagPrefix="uc" %>
-
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="loadingProgress"
+    TagPrefix="uc" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Margin Test | Practice Management</title>
 </asp:Content>
@@ -29,13 +28,14 @@
                                     <table>
                                         <tr>
                                             <td class="padLeft16 PaddingBottom6">
-                                                <asp:RadioButton ID="rbSelectPerson" OnCheckedChanged="rbMarginTest_CheckedChanged" Checked="true"
-                                                    runat="server" Text="Select a Person" GroupName="marginTest" AutoPostBack="true" />
+                                                <asp:RadioButton ID="rbSelectPerson" OnCheckedChanged="rbMarginTest_CheckedChanged"
+                                                    Checked="true" runat="server" Text="Select a Person" GroupName="marginTest" AutoPostBack="true" />
                                                 <asp:Label ID="lblOr" runat="server" Text="OR" CssClass="MarginTestLabel"></asp:Label>
                                             </td>
-                                             <td class="padLeft16 PaddingBottom6">
-                                                <asp:RadioButton ID="rbSelectStrawman" OnCheckedChanged="rbMarginTest_CheckedChanged" Checked="false"
-                                                    runat="server" Text="Select a Strawman" GroupName="marginTest" AutoPostBack="true" />
+                                            <td class="padLeft16 PaddingBottom6">
+                                                <asp:RadioButton ID="rbSelectStrawman" OnCheckedChanged="rbMarginTest_CheckedChanged"
+                                                    Checked="false" runat="server" Text="Select a Strawman" GroupName="marginTest"
+                                                    AutoPostBack="true" />
                                                 <asp:Label ID="lblOr1" runat="server" Text="OR" CssClass="MarginTestLabel"></asp:Label>
                                             </td>
                                             <td class="PaddingBottom6">
@@ -43,13 +43,15 @@
                                                     runat="server" Text="Define Values" GroupName="marginTest" AutoPostBack="true" />
                                             </td>
                                             <td class="PaddingBottom6 padLeft20 textRight">
-                                                <asp:Button ID="btnReset" runat="server" OnClick="Reset_Clicked"
-                                                    Text="Reset Form" CausesValidation="false" />
+                                                <asp:Button ID="btnReset" runat="server" OnClick="Reset_Clicked" Text="Reset Form"
+                                                    CausesValidation="false" />
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td>&nbsp;</td>
+                                <td>
+                                    &nbsp;
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="padLeft16">
@@ -63,8 +65,8 @@
                             </tr>
                             <tr>
                                 <td colspan="3" class="PaddingTop5 padLeft15">
-                                    <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" AutoPostBack="true" IsMarginTestPage="true"
-                                        OnCompensationChanged="compensation_Changed" OnCompensationMethodChanged="compensation_Changed"
+                                    <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" AutoPostBack="true"
+                                        IsMarginTestPage="true" OnCompensationChanged="compensation_Changed" OnCompensationMethodChanged="compensation_Changed"
                                         OnPeriodChanged="compensation_Changed" />
                                 </td>
                             </tr>
@@ -75,10 +77,7 @@
                             </tr>
                             <tr>
                                 <td colspan="3" class="padLeft6">
-                                    <%--<asp:Panel ID="pnlRecruiterInfo" runat="server">
-                                        <uc1:RecruiterInfo ID="recruiterInfo" runat="server" ShowCommissionDetails="False"
-                                            OnInfoChanged="compensation_Changed" />
-                                    </asp:Panel>--%>
+                                    &nbsp;
                                 </td>
                             </tr>
                             <tr>
