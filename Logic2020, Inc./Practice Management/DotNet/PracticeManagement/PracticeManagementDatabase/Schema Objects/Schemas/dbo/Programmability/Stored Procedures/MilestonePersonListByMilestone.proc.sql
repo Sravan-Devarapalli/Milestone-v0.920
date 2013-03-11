@@ -35,7 +35,7 @@ AS
 	       mp.MilestoneName,
 	       mp.MilestoneStartDate,
 	       mp.MilestoneProjectedDeliveryDate,
-	       mp.ExpectedHours,
+	       mp.ExpectedHoursWithVacationDays,
 	       mp.PersonRoleId,
 	       mp.RoleName,
 	       mp.Amount,
@@ -52,4 +52,7 @@ AS
 	  INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	  LEFT JOIN MileStonePersonActiveDates AS MPAD ON MPAD.PersonId = P.PersonId
 	  WHERE mp.MilestoneId = @MilestoneIdLocal
+
+	 SELECT  personid,Date,ActualHours 
+	 FROM dbo.[GetPersonTimeoffValuesByMilestoneId](NULL,@MilestoneIdLocal,NULL,NULL)
 
