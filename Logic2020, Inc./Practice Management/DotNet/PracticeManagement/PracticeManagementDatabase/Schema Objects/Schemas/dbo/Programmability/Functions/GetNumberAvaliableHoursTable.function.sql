@@ -29,17 +29,17 @@ RETURN
    WITH SalaryPersonsAvaliableHours
 	AS
 	(
-		SELECT PC.PersonId ,(COUNT(*) * 8) AS AvaliableHours 
+		SELECT PC.PersonId ,SUM(8 - ISNULL(PC.ActualHours,0)) AS AvaliableHours 
 		FROM dbo.v_PersonCalendar PC
 		INNER JOIN dbo.GetCurrentPayTypeTable() CPT ON CPT.PersonId = PC.PersonId AND CPT.Timescale = 2
 		WHERE PC.Date BETWEEN @StartDate AND @EndDate 
-				AND PC.DayOff = 0
+				AND (PC.DayOff = 0 OR (PC.DayOff = 1 AND PC.CompanyDayOff = 0))
 		GROUP BY PC.PersonId
 	),
 	NonSalaryPersonAvaliableHours
 	AS
 	(
-	SELECT  p.PersonId,CAST (ISNULL(SUM(MPS.HoursPerDay),0) AS INT) AS AvaliableHours 
+	SELECT  p.PersonId,CAST (ISNULL(SUM(MPS.HoursPerDay),0) AS DECIMAL(10,2)) AS AvaliableHours 
     FROM    dbo.Person P 
     INNER JOIN dbo.GetCurrentPayTypeTable() CPT ON CPT.PersonId = P.PersonId AND CPT.Timescale != 2
 	LEFT JOIN dbo.v_MilestonePersonSchedule AS MPS ON P.PersonId = MPS.PersonId 
