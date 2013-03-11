@@ -108,11 +108,11 @@ namespace DataAccess
         /// <param name="startDate">The period start.</param>
         /// <param name="endDate">The period end.</param>
         /// <returns>A number of company work days for the period.</returns>
-        public static int WorkDaysCompanyNumber(DateTime startDate, DateTime endDate)
+        public static Dictionary<string,decimal> GetCompanyWorkHoursAndDaysInGivenPeriod(DateTime startDate, DateTime endDate,bool includeCompanyHolidays)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (
-                var command = new SqlCommand(Constants.ProcedureNames.Calendar.WorkDaysCompanyNumberProcedure,
+                var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetCompanyWorkHoursAndDaysInGivenPeriodProcedure,
                                              connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
@@ -120,6 +120,38 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeCompanyHolidays, includeCompanyHolidays);
+
+                Dictionary<string, decimal> result = new Dictionary<string, decimal>();
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        int workHoursIndex = reader.GetOrdinal(Constants.ColumnNames.WorkHours);
+                        int workDaysIndex = reader.GetOrdinal(Constants.ColumnNames.WorkDays);
+
+                        while (reader.Read())
+                        {
+                            result.Add("Hours",reader.GetDecimal(workHoursIndex));
+                            result.Add("Days", reader.GetDecimal(workDaysIndex));
+                        }
+                    }
+                }
+                
+                return result;
+            }
+        }
+
+        public static int GetWorkingDaysForTheGivenYear(int year)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetWorkingDaysForTheGivenYear,connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.YearParam, year);
 
                 connection.Open();
                 return (int)command.ExecuteScalar();
@@ -133,11 +165,11 @@ namespace DataAccess
         /// <param name="startDate">The period start.</param>
         /// <param name="endDate">The period end.</param>
         /// <returns>A number of person's work days for the period.</returns>
-        public static int WorkDaysPersonNumber(int personId, DateTime startDate, DateTime endDate)
+        public static PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(int personId, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (
-                var command = new SqlCommand(Constants.ProcedureNames.Calendar.WorkDaysPersonNumberProcedure, connection)
+                var command = new SqlCommand(Constants.ProcedureNames.Calendar.GetPersonWorkingHoursDetailsWithinThePeriodProcedure, connection)
                 )
             {
                 command.CommandType = CommandType.StoredProcedure;
@@ -146,9 +178,30 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                PersonWorkingHoursDetailsWithinThePeriod result = new PersonWorkingHoursDetailsWithinThePeriod();
+                result.PersonId = personId;
+                result.StartDate = startDate;
+                result.EndDate = endDate;
 
                 connection.Open();
-                return (int)command.ExecuteScalar();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        int totalWorkHoursExcludingVacationHoursIndex = reader.GetOrdinal(Constants.ColumnNames.TotalWorkHoursExcludingVacationHours);
+                        int totalWorkDaysIncludingVacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.TotalWorkDaysIncludingVacationDays);
+                        int vacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.VacationDays);
+
+                        while (reader.Read())
+                        {
+                            result.TotalWorkHoursExcludingVacationHours = reader.GetDecimal(totalWorkHoursExcludingVacationHoursIndex);
+                            result.TotalWorkDaysIncludingVacationDays = reader.GetInt32(totalWorkDaysIncludingVacationDaysIndex);
+                            result.VacationDays = reader.GetInt32(vacationDaysIndex);
+                        }
+                    }
+                }
+
+                return result;
             }
         }
 
@@ -189,7 +242,7 @@ namespace DataAccess
                     result.Add(ReadSinglePersonCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex, holidayDescriptionIndex, actualHoursIndex, isFloatingHolidayIndex, timeTypeIdIndex, isUnpaidTimeTypeIndex));
             }
         }
-              
+
         public static bool GetCalendarItemIndexes(SqlDataReader reader, out int dateIndex, out int dayOffIndex, out int companyDayOffIndex, out int isRecurringIndex, out int recurringHolidayIdIndex, out int holidayDescriptionIndex, out int recurringHolidayDateIndex)
         {
             try
