@@ -271,6 +271,7 @@
                 <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
                 <asp:Label ID="lblVacationIncludedAsterix" runat="server" Text="*" ForeColor="Red"
                     Visible="false" />
+              <asp:Label ID="lbVacationHoursToolTip" runat="server" Text="!" ForeColor="Red" CssClass="error-message fontSizeLarge"/>
                 <table class="WholeWidth" id="tblHoursInPeriod" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
@@ -312,6 +313,17 @@
         </asp:TemplateField>
     </Columns>
 </asp:GridView>
+<asp:Panel ID="pnlTimeOffHoursToolTip" Style="display: none;" runat="server" CssClass="pnlTotal">
+    <label class="fontBold">
+        Time-Off Hour(s):
+    </label>
+    <asp:Label ID="lblTimeOffHours" runat="server"></asp:Label>
+    <br />
+    <label class="fontBold">
+        Affected Projected Hours:
+    </label>
+    <asp:Label ID="lblProjectAffectedHours" runat="server"></asp:Label>
+</asp:Panel>
 <asp:HiddenField ID="hdMpePopupDeleteMileStonePersons" Value="false" runat="server" />
 <AjaxControlToolkit:ModalPopupExtender ID="mpeDeleteMileStonePersons" runat="server"
     TargetControlID="hdMpePopupDeleteMileStonePersons" CancelControlID="btnCancel"
