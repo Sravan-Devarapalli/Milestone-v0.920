@@ -177,6 +177,39 @@
                 Account Discount Percentage
             </td>
         </tr>
+                <tr>
+            <td>
+                DHPD
+            </td>
+            <td>
+                &nbsp;=&nbsp;
+            </td>
+            <td>
+                Default Hours per day (8 Hours)
+            </td>
+        </tr>
+           <tr>
+            <td>
+                WDY
+            </td>
+            <td>
+                &nbsp;=&nbsp;
+            </td>
+            <td>
+                Working days in Year
+            </td>
+        </tr>
+         <tr>
+            <td>
+                WDM
+            </td>
+            <td>
+                &nbsp;=&nbsp;
+            </td>
+            <td>
+                Working days in Month
+            </td>
+        </tr>
         <tr>
             <th colspan="3">
                 Defined Calculations
@@ -201,7 +234,7 @@
                 &nbsp;=&nbsp;
             </td>
             <td>
-                FLHR * HPW * 4.2
+                FLHR * (HPW / 5) * WDM 
             </td>
         </tr>
         <tr>
@@ -212,7 +245,7 @@
                 &nbsp;=&nbsp;
             </td>
             <td>
-                (52 * HPW)
+                WDY * DHPD
             </td>
         </tr>
         <tr>
@@ -234,7 +267,7 @@
                 &nbsp;=&nbsp;
             </td>
             <td>
-                HBR * HPW * 4.2
+                HBR * (HPW / 5) * WDM 
             </td>
         </tr>
         <tr>
