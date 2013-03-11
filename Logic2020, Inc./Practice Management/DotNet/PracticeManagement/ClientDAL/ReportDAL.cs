@@ -264,7 +264,7 @@ namespace DataAccess
                 int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
                 int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHours);
                 int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
-                int projectedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHoursUntilToday);                
+                int projectedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHoursUntilToday);
 
                 while (reader.Read())
                 {
@@ -297,8 +297,8 @@ namespace DataAccess
                         BillableHours = reader.GetDouble(billableHoursIndex),
                         NonBillableHours = reader.GetDouble(nonBillableHoursIndex),
                         BillableType = reader.GetString(billingTypeIndex),
-                        ProjectedHours = !reader.IsDBNull(projectedHoursIndex) ? reader.GetInt32(projectedHoursIndex) : 0d,
-                        ProjectedHoursUntilToday = !reader.IsDBNull(projectedHoursUntilTodayIndex) ? reader.GetInt32(projectedHoursUntilTodayIndex) : 0d,
+                        ProjectedHours = !reader.IsDBNull(projectedHoursIndex) ? Convert.ToDouble(reader.GetDecimal(projectedHoursIndex)) : 0d,
+                        ProjectedHoursUntilToday = !reader.IsDBNull(projectedHoursUntilTodayIndex) ? Convert.ToDouble(reader.GetDecimal(projectedHoursUntilTodayIndex)) : 0d,
                         BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex)
 
 
@@ -435,28 +435,28 @@ namespace DataAccess
                 {
                     PersonLevelGroupedHours PLGH = new PersonLevelGroupedHours();
                     Person person = new Person
-                                            {
-                                                Id = reader.GetInt32(personIdIndex),
-                                                FirstName = reader.GetString(firstNameIndex),
-                                                LastName = reader.GetString(lastNameIndex),
-                                                IsOffshore = reader.GetBoolean(isOffShoreIndex),
-                                                EmployeeNumber = reader.GetString(employeeNumberIndex),
-                                                Title = new Title
-                                                {
-                                                    TitleId = reader.GetInt32(personTitleIdIndex),
-                                                    TitleName = reader.GetString(personTitleNameIndex)
-                                                },
-                                                CurrentPay = new Pay
-                                                {
-                                                    TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
-                                                },
-                                                Status = new PersonStatus
-                                                {
-                                                    Id = reader.GetInt32(personStatusIdIndex),
-                                                    Name = reader.GetString(personStatusNameIndex)
-                                                },
-                                                BillableUtilizationPercent = !reader.IsDBNull(billableUtilizationPercentIndex) ? reader.GetDouble(billableUtilizationPercentIndex) : 0d
-                                            };
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        IsOffshore = reader.GetBoolean(isOffShoreIndex),
+                        EmployeeNumber = reader.GetString(employeeNumberIndex),
+                        Title = new Title
+                        {
+                            TitleId = reader.GetInt32(personTitleIdIndex),
+                            TitleName = reader.GetString(personTitleNameIndex)
+                        },
+                        CurrentPay = new Pay
+                        {
+                            TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                        },
+                        Status = new PersonStatus
+                        {
+                            Id = reader.GetInt32(personStatusIdIndex),
+                            Name = reader.GetString(personStatusNameIndex)
+                        },
+                        BillableUtilizationPercent = !reader.IsDBNull(billableUtilizationPercentIndex) ? reader.GetDouble(billableUtilizationPercentIndex) : 0d
+                    };
                     if (!reader.IsDBNull(divisionIdIndex))
                     {
                         person.DivisionType = (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), reader.GetInt32(divisionIdIndex).ToString());
@@ -617,12 +617,12 @@ namespace DataAccess
                     plgh.BillableHours = reader.GetDouble(billableHoursIndex);
                     plgh.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
                     plgh.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
-                    plgh.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
+                    plgh.ForecastedHoursUntilToday = Convert.ToDouble(reader.GetDecimal(forecastedHoursUntilTodayIndex));
                     plgh.BillingType = reader.GetString(billingTypeIndex);
 
                     if (forecastedHoursIndex > -1)
                     {
-                        plgh.ForecastedHours = reader.GetInt32(forecastedHoursIndex);
+                        plgh.ForecastedHours = Convert.ToDouble(reader.GetDecimal(forecastedHoursIndex));
                     }
 
 
@@ -849,11 +849,11 @@ namespace DataAccess
                     };
 
                     var businessUnit = new ProjectGroup()
-                        {
-                            Id = businessUnitId,
-                            Name = reader.GetString(businessUnitNameIndex),
-                            IsActive = reader.GetBoolean(isActiveIndex)
-                        };
+                    {
+                        Id = businessUnitId,
+                        Name = reader.GetString(businessUnitNameIndex),
+                        IsActive = reader.GetBoolean(isActiveIndex)
+                    };
 
 
                     GroupByBusinessUnit businessUnitTimeEntries = new GroupByBusinessUnit();
@@ -928,13 +928,13 @@ namespace DataAccess
                     };
 
                     var dt = new TimeEntriesGroupByDate()
-                     {
-                         Date = reader.GetDateTime(chargeCodeDateIndex),
-                         DayTotalHoursList = new List<TimeEntryByWorkType>()
+                    {
+                        Date = reader.GetDateTime(chargeCodeDateIndex),
+                        DayTotalHoursList = new List<TimeEntryByWorkType>()
                                                 {
                                                     dayTotalHoursbyWorkType
                                                 }
-                     };
+                    };
 
 
                     BusinessUnitLevelGroupedHours businessUnitLGH;
@@ -1109,7 +1109,7 @@ namespace DataAccess
                 int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
                 int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
                 int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
-                int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);               
+                int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
                 int EmployeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
 
 
@@ -1135,7 +1135,7 @@ namespace DataAccess
                     PLGH.ForecastedHoursUntilToday = Convert.ToDouble(reader[forecastedHoursUntilTodayIndex]);
                     PLGH.BillingType = reader.GetString(billingTypeIndex);
                     PLGH.Person = person;
-                    PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);                    
+                    PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);
 
                     result.Add(PLGH);
                 }
@@ -1723,10 +1723,10 @@ namespace DataAccess
                         else
                         {
                             personLevelTimeEntriesHistory = new PersonLevelTimeEntriesHistory
-                             {
-                                 Person = persons.First(p => p.Id == personId),
-                                 TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
-                             };
+                            {
+                                Person = persons.First(p => p.Id == personId),
+                                TimeEntryRecords = new List<TimeEntryRecord> { timeEntryRecord }
+                            };
                             projectLevelTimeEntriesHistory.PersonLevelTimeEntries.Add(personLevelTimeEntriesHistory);
                         }
                     }
