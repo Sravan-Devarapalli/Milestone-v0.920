@@ -12,6 +12,12 @@
       <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupId" />
   </wsdl:message>
@@ -143,6 +149,12 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectListAllMultiParameters_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectListAllMultiParametersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsProjectSummaryCachedToday_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsProjectSummaryCachedToday" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsProjectSummaryCachedToday_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsProjectSummaryCachedTodayResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectListWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectListWithFinancials" />
@@ -276,13 +288,11 @@
   <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProjectResponse" />
   </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
-  </wsdl:message>
   <wsdl:portType name="IProjectService">
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetProjectsListByProjectGroupId">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" message="tns:IProjectService_GetProjectsListByProjectGroupId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse" message="tns:IProjectService_GetProjectsListByProjectGroupId_OutputMessage" />
@@ -370,6 +380,10 @@
     <wsdl:operation name="ProjectListAllMultiParameters">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectListAllMultiParameters" message="tns:IProjectService_ProjectListAllMultiParameters_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectListAllMultiParametersResponse" message="tns:IProjectService_ProjectListAllMultiParameters_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsProjectSummaryCachedToday">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsProjectSummaryCachedToday" message="tns:IProjectService_IsProjectSummaryCachedToday_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsProjectSummaryCachedTodayResponse" message="tns:IProjectService_IsProjectSummaryCachedToday_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetProjectListWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListWithFinancials" message="tns:IProjectService_GetProjectListWithFinancials_InputMessage" />
@@ -459,13 +473,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" message="tns:IProjectService_IsUserIsOwnerOfProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse" message="tns:IProjectService_IsUserIsOwnerOfProject_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetProjectsListByProjectGroupId">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" style="document" />
       <wsdl:input>
@@ -664,6 +683,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="IsProjectSummaryCachedToday">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/IsProjectSummaryCachedToday" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetProjectListWithFinancials">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListWithFinancials" style="document" />
       <wsdl:input>
@@ -855,15 +883,6 @@
     </wsdl:operation>
     <wsdl:operation name="IsUserIsOwnerOfProject">
       <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
