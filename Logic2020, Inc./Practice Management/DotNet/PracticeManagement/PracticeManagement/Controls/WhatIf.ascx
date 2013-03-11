@@ -235,7 +235,7 @@
                             Monthly Revenue
                         </td>
                         <td colspan="4" class="WhatIfControlStyle">
-                            <asp:Label ID="lblMonthlyRevenueWithoutRecruiting" runat="server"></asp:Label>
+                            <asp:Label ID="lblMonthlyRevenue" runat="server"></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -243,7 +243,7 @@
                             Monthly COGS
                         </td>
                         <td colspan="4" class="WhatIfControlStyle">
-                            <asp:Label ID="lblMonthlyCogsWithoutRecruiting" runat="server"></asp:Label>
+                            <asp:Label ID="lblMonthlyCogs" runat="server"></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -251,7 +251,7 @@
                             Monthly Contribution Margin
                         </td>
                         <td colspan="4" class="WhatIfControlStyle">
-                            <asp:Label ID="lblMonthlyGrossMarginWithoutRecruiting" runat="server"></asp:Label>
+                            <asp:Label ID="lblMonthlyGrossMargin" runat="server"></asp:Label>
                         </td>
                     </tr>
                     <tr id="trTargetMargin" runat="server" visible="false">
@@ -261,8 +261,8 @@
                         <td colspan="4" class="padRight242" align="right">
                             <table>
                                 <tr>
-                                    <td id="tdTargetMarginWithoutRecruiting" runat="server">
-                                        <asp:Label ID="lblTargetMarginWithoutRecruiting" runat="server"></asp:Label>
+                                    <td id="tdTargetMargin" runat="server">
+                                        <asp:Label ID="lblTargetMargin" runat="server"></asp:Label>
                                     </td>
                                 </tr>
                             </table>
