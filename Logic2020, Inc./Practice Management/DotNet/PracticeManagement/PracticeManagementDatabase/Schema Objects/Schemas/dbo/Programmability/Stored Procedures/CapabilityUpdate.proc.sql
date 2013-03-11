@@ -2,12 +2,15 @@
 (
 	@CapabilityId INT, 
 	@Name NVARCHAR(100),
+	@IsActive BIT,
 	@UserLogin NVARCHAR(MAX)
 )
 AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRAN CapabilityUpdate_Tran;
+
+		SELECT @Name = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Name)),' ','<>'),'><',''),'<>',' ')
 
 		DECLARE @Error NVARCHAR(MAX)
 		IF EXISTS(SELECT 1 FROM dbo.[PracticeCapabilities] WHERE CapabilityName = @Name AND CapabilityId != @CapabilityId )
@@ -18,11 +21,11 @@ BEGIN
 
 		EXEC SessionLogPrepare @UserLogin = @UserLogin
 
-		SELECT @Name = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Name)),' ','<>'),'><',''),'<>',' ')
-
+		
 		UPDATE [dbo].[PracticeCapabilities]
-		SET CapabilityName = @Name
-		WHERE CapabilityId = @CapabilityId AND CapabilityName != @Name
+		SET CapabilityName = @Name,
+			IsActive = @IsActive 
+		WHERE CapabilityId = @CapabilityId AND (CapabilityName != @Name OR IsActive != @IsActive)
 
 		COMMIT TRAN CapabilityUpdate_Tran;
 	END TRY
@@ -40,3 +43,4 @@ BEGIN
 	END CATCH
 	EXEC dbo.SessionLogUnprepare
 END
+
