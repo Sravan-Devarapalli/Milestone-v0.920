@@ -7,18 +7,21 @@
 -- =============================================
 CREATE VIEW [dbo].[v_OverheadFixedRateTimescale]
 AS
-	SELECT o.OverheadFixedRateId,
-	       o.Description,
-	       o.Rate,
-	       o.StartDate,
-	       o.EndDate,
-	       o.Inactive,
-	       o.OverheadRateTypeId,
-	       o.OverheadRateTypeName,
-	       o.IsPercentage,
-	       o.HoursToCollect,
-	       o.IsCogs,
-	       t.TimescaleId
-	  FROM dbo.v_OverheadFixedRate AS o
-	       INNER JOIN dbo.OverheadFixedRateTimescale AS t ON o.OverheadFixedRateId = t.OverheadFixedRateId
+	SELECT ofr.OverheadFixedRateId,
+	    ofr.Description,
+	    ofr.Rate,
+	    ofr.StartDate,
+	    ofr.EndDate,
+	    ofr.Inactive,
+	    ort.OverheadRateTypeId,
+	    ort.Name AS OverheadRateTypeName,
+	    ort.IsPercentage,
+	    ort.HoursToCollect,
+	    ofr.IsCogs,
+	    ortt.TimescaleId
+	FROM dbo.OverheadFixedRate AS ofr
+	    INNER JOIN dbo.OverheadRateType AS ort ON ofr.RateType = ort.OverheadRateTypeId
+		INNER JOIN dbo.OverheadFixedRateTimescale AS ortt ON ofr.OverheadFixedRateId = ortt.OverheadFixedRateId
+	WHERE ofr.IsMinimumLoadFactor = 0 
+
 
