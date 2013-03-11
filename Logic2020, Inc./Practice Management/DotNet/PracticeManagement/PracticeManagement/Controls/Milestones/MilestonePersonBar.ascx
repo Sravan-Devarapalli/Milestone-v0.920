@@ -9,7 +9,7 @@
     </td>
     <td class="Width4Percent">
         <asp:ImageButton ID="btnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
-            ValidationGroup="<%# GetValidationGroup() %>" ToolTip="Save" OnClick="btnInsertPerson_Click" />
+            ToolTip="Save" OnClick="btnInsertPerson_Click" />
         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
             ToolTip="Cancel" />
     </td>
