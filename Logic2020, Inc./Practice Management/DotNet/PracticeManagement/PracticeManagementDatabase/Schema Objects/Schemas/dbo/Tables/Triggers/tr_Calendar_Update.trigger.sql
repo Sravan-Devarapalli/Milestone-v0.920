@@ -13,11 +13,14 @@ BEGIN
 SET NOCOUNT ON;
 
 	UPDATE PCA
-	SET PCA.DayOff = ISNULL(pcal.DayOff, i.DayOff)
+	SET PCA.DayOff = ISNULL(pcal.DayOff, i.DayOff),
+		PCA.CompanyDayOff = i.DayOff,
+		PCA.TimeOffHours = pcal.ActualHours
 	FROM dbo.PersonCalendarAuto AS PCA
 	INNER JOIN INSERTED AS i ON i.Date = PCA.Date
 	INNER JOIN dbo.Person AS p ON  p.PersonId = PCA.PersonId
 	LEFT JOIN dbo.PersonCalendar AS pcal ON pcal.Date = i.Date AND pcal.PersonId = p.PersonId AND PCA.PersonId = pcal.PersonId
-	WHERE PCA.DayOff <> ISNULL(pcal.DayOff, i.DayOff) 
+	WHERE PCA.DayOff <> ISNULL(pcal.DayOff, i.DayOff) OR PCA.CompanyDayOff <> i.DayOff
 
 END
+
