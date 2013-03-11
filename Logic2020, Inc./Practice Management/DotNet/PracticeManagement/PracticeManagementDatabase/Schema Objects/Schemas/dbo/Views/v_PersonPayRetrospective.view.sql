@@ -17,7 +17,8 @@ AS
 		   CAST(CASE p.BonusHoursToCollect WHEN GHY.HoursPerYear THEN 1 ELSE 0 END AS BIT) AS IsYearBonus
 	  FROM dbo.PersonCalendarAuto AS cal
 	       INNER JOIN dbo.Pay AS p 
-	           ON cal.PersonId = p.Person AND cal.DayOff = 0 AND p.StartDate <= cal.Date AND p.EndDate > cal.date  
+	           ON cal.PersonId = p.Person AND p.StartDate <= cal.Date AND p.EndDate > cal.date  
 	       INNER JOIN dbo.Timescale AS t ON p.Timescale = t.TimescaleId
-		   INNER JOIN dbo.GetHoursPerYearTable() GHY ON 1=1--For improving query performance we are using table valued function instead of scalar function.
+		   INNER JOIN dbo.[BonusHoursPerYearTable]() GHY ON 1=1--For improving query performance we are using table valued function instead of scalar function.
 	       INNER JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(cal.Date)
+
