@@ -3,7 +3,7 @@
 -- Create date: 2009-10-29
 -- Description:	Gets number of avaliable hours for the person
 -- =============================================
-CREATE FUNCTION dbo.GetNumberAvaliableHours
+CREATE FUNCTION [dbo].[GetNumberAvaliableHours]
     (
       @PersonId INT,
       @startDate DATETIME,
@@ -20,9 +20,9 @@ AS BEGIN
    IF dbo.GetCurrentPayType(@PersonId) = 2 
    BEGIN	
 
-			SELECT  @res = 8 *(SELECT   COUNT(*)  FROM     dbo.v_PersonCalendar  
+			SELECT  @res = (SELECT   SUM(8 - ISNULL(ActualHours,0))  FROM     dbo.v_PersonCalendar  
 								WHERE    Date BETWEEN @startDate AND @endDate 
-										AND @PersonId = PersonId AND DayOff = 0)
+										AND @PersonId = PersonId AND (DayOff = 0 OR (DayOff = 1 AND CompanyDayOff = 0)))
 	END 
     ELSE
 		SET @res = ISNULL(dbo.GetNumberProjectedHours(@PersonId, @startDate, @endDate, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@InternalProjects), 0)
