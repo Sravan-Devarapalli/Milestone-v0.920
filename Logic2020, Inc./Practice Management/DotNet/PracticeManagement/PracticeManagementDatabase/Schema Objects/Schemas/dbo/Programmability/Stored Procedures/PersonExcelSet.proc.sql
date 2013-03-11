@@ -40,7 +40,7 @@ BEGIN
 			-- if pay type is hourly (here actually, not salary)
 			CASE pay.Timescale
 				WHEN 5 THEN 0.0
-				WHEN 2 THEN pay.Amount / 2080
+				WHEN 2 THEN pay.Amount / HY.HoursInYear
 				ELSE pay.Amount
 			END AS 'Hourly Pay Rate',
 			-- if column stores annual bonus
@@ -70,6 +70,7 @@ BEGIN
 			LEFT OUTER JOIN dbo.Person AS rcd ON rcd.PersonId = pers.RecruiterId
 			LEFT OUTER JOIN dbo.Practice AS prct ON pers.DefaultPractice = prct.PracticeId
 			LEFT JOIN dbo.Person AS manager ON manager.PersonId = pers.ManagerId
+			LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(@Today)
 	ORDER BY pers.PersonId
 END
 
