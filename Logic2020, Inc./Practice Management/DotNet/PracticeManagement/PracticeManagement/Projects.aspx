@@ -14,7 +14,8 @@
     <title>Projects Summary | Practice Management</title>
 </asp:Content>
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
-    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
     Projected Project Profit & Loss
@@ -325,6 +326,15 @@
                                 &nbsp;&nbsp;
                                 <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn"
                                     NavigateUrl="~/ProjectDetail.aspx?from=sub_toolbar&returnTo=Projects.aspx" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td colspan="4" class="buttons-blockCheckBox PaddingTop4Px">
+                                <asp:CheckBox ID="chbUseActuals" runat="server" Checked="true" Text="Use Actual Time Entry data for Previous Month calculations"
+                                    AutoPostBack="true" OnCheckedChanged="cbUseActuals_CheckedChanged" />
                             </td>
                         </tr>
                     </table>
