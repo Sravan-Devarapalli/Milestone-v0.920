@@ -6,7 +6,7 @@ AS
 BEGIN
 
 	DECLARE @HoursPerYear DECIMAL, @FutureDate DATETIME
-	SELECT @HoursPerYear = dbo.GetHoursPerYear(), @FutureDate = dbo.GetFutureDate()
+	SELECT @HoursPerYear = GHY.HoursPerYear ,@FutureDate = dbo.GetFutureDate() FROM dbo.[BonusHoursPerYearTable]() GHY
 
 	SELECT	PersonId,
 			LastName,
@@ -46,3 +46,4 @@ BEGIN
 	WHERE IsStrawman = 1 AND p.personId = @StrawmanId
 
 END
+
