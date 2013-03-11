@@ -33,14 +33,14 @@ BEGIN
 	       r.Name AS RoleName,
 		   ISNULL((SELECT COUNT(*)
 				FROM dbo.v_PersonCalendar AS pcal
-				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 
+				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 AND pcal.IsFloatingHoliday = 0
 					AND pcal.Date BETWEEN mpe.StartDate AND mpe.EndDate
 					AND pcal.PersonId = mp.PersonId ),0) as VacationDays,	
 	       ISNULL((SELECT COUNT(*) * mpe.HoursPerDay
-	                 FROM dbo.PersonCalendarAuto AS cal
-	                WHERE cal.Date BETWEEN mpe.StartDate AND mpe.EndDate
-	                  AND cal.PersonId = mp.PersonId
-	                  AND cal.DayOff = 0), 0) AS ExpectedHours,
+				FROM dbo.v_PersonCalendar AS pcal
+				WHERE pcal.CompanyDayOff = 0 
+					AND pcal.Date BETWEEN mpe.StartDate AND mpe.EndDate
+					AND pcal.PersonId = mp.PersonId), 0) AS ExpectedHoursWithVacationDays,
 		   p.LastName,
 		   p.FirstName,
 		   mpe.Id,
@@ -80,6 +80,10 @@ BEGIN
 
 	  FROM FinancialsRetro AS f
 	  GROUP BY   f.EntryId
+
+	 SELECT  personid,Date,ActualHours 
+	 FROM dbo.[GetPersonTimeoffValuesByMilestoneId](NULL,NULL,NULL,@Id)
+
 
 END
 
