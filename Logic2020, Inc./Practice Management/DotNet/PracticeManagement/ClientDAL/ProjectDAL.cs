@@ -393,8 +393,26 @@ namespace DataAccess
                     ReadProjectsWithMilestones(reader, projectList);
                 }
             }
+          
+            MilestonePersonDAL.LoadMilestonePersonListForProject(projectList);
 
             return projectList;
+        }
+        public static bool IsProjectSummaryCachedToday()
+        {
+            bool result = false;
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.IsProjectSummaryCachedToday, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    connection.Open();
+
+                    result = (bool)command.ExecuteScalar();
+                }
+            }
+            return result;
         }
 
         public static List<Project> GetProjectListWithFinancials(
@@ -737,7 +755,7 @@ namespace DataAccess
 
                         new ComputedFinancials
                         {
-                            FinancialDate = reader.GetDateTime(financialDateIndex),
+                            FinancialDate = reader.IsDBNull(financialDateIndex) ? (DateTime?) null: reader.GetDateTime(financialDateIndex),
                             Revenue = reader.GetDecimal(revenueIndex),
                             GrossMargin = reader.GetDecimal(grossMarginIndex),
                             SalesCommission = 0M,
