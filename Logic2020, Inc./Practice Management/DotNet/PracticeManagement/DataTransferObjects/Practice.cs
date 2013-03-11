@@ -89,6 +89,12 @@ namespace DataTransferObjects
         public bool InUse { get; set; }
 
         /// <summary>
+        /// Is Active Capabilities Exists for the given practice.
+        /// </summary>
+        [DataMember]
+        public bool IsActiveCapabilitiesExists { get; set; }
+
+        /// <summary>
         /// Is the practice in active
         /// </summary>
         [DataMember]
@@ -169,3 +175,4 @@ namespace DataTransferObjects
         }
     }
 }
+
