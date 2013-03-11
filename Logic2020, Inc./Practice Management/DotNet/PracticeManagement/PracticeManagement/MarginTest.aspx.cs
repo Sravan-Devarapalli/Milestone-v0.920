@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Web.UI;
@@ -17,13 +16,14 @@ namespace PraticeManagement
         private Person selectedPersonValue;
 
         public const string DirtyFunctionScript = @" function getDirty() {{ return false; }}";
+
         private const string TblEffectiveDate = "tblEffectiveDate";
 
         private Person SelectedPerson
         {
             get
             {
-                if (selectedPersonValue == null && !string.IsNullOrEmpty(Selectedman))
+                if (selectedPersonValue == null && !string.IsNullOrEmpty(Selectedman) && Selectedman != "-1")
                 {
                     using (PersonServiceClient serviceCLient = new PersonServiceClient())
                     {
@@ -63,13 +63,8 @@ namespace PraticeManagement
             DataHelper.FillOneOffList(ddlPersonName, "-- Select a Person --", DateTime.Today);
             DataHelper.FillStrawManList(ddlStrawmanName, "-- Select a Strawman --");
 
-            //recruiterInfo.Person = new Person();
-                personnelCompensation.CompensationDateVisible =
-                personnelCompensation.TitleAndPracticeVisible = false;
-
-            // Security //Removed as per #2917.     
-            //bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-            //grossMarginComputing.Visible = isAdmin;
+            personnelCompensation.CompensationDateVisible =
+            personnelCompensation.TitleAndPracticeVisible = false;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -113,8 +108,6 @@ namespace PraticeManagement
 
         private void DoCompute(Person selectedPerson)
         {
-            //TextBox txtTargetMargin = (TextBox)whatIf.FindControl("txtTargetMargin");
-            //txtTargetMargin.Text = string.Empty;
             Page.Validate();
             if (Page.IsValid)
             {
@@ -122,43 +115,17 @@ namespace PraticeManagement
 
                 if (selectedPerson != null)
                 {
+                    person.Id = selectedPerson.Id;
                     person.Seniority = selectedPerson.Seniority;
                     person.PaymentHistory = selectedPerson.PaymentHistory;
                     person.TerminationDate = selectedPerson.TerminationDate;
                 }
-
-                // Payment
-                person.CurrentPay = personnelCompensation.Pay;
-                bool isHourlyAmount =
-                    person.CurrentPay.Timescale == TimescaleType._1099Ctc ||
-                    person.CurrentPay.Timescale == TimescaleType.Hourly ||
-                    person.CurrentPay.Timescale == TimescaleType.PercRevenue;
-
-                if (isHourlyAmount)
-                    person.CurrentPay.AmountHourly = person.CurrentPay.Amount;
                 else
-                    person.CurrentPay.AmountHourly = person.CurrentPay.Amount / Utils.Calendar.GetWorkingHoursInCurrentYear(whatIf.SelectedHorsPerWeek);
-               
-
-                using (PersonServiceClient serviceClient = new PersonServiceClient())
                 {
-                    try
-                    {
-                        person.OverheadList =
-                            new List<PersonOverhead>(serviceClient.GetPersonOverheadByTimescale(person.CurrentPay.Timescale, whatIf.EffectiveDate));
-                    }
-                    catch (FaultException<ExceptionDetail>)
-                    {
-                        serviceClient.Abort();
-                        throw;
-                    }
-
-                    if (!string.IsNullOrEmpty(Selectedman) && Selectedman != "-1")
-                    {
-                        person.Id = int.Parse(Selectedman);
-                    }
-                    whatIf.Person = person;
+                    // Payment
+                    person.CurrentPay = personnelCompensation.Pay;
                 }
+                whatIf.Person = person;
             }
             else
             {
@@ -206,7 +173,7 @@ namespace PraticeManagement
                 else
                 {
                     personnelCompensation.Visible = true;
-                }                
+                }
                 DoCompute(person);
             }
         }
