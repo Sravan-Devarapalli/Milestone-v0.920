@@ -147,9 +147,6 @@
   <data name="RawHourlyRateTitle" xml:space="preserve">
     <value>Raw Hourly Rate (RHR)</value>
   </data>
-  <data name="RecruitingOverheadName" xml:space="preserve">
-    <value>Recruiting</value>
-  </data>
   <data name="SalesCommissionTitle" xml:space="preserve">
     <value>Sales Commission Per Hour (SCPH)</value>
   </data>
