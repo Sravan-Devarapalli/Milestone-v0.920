@@ -19,6 +19,7 @@ namespace PraticeManagement.Controls.Configuration
             IsCompanyInternal = practice.IsCompanyInternal;
             InUse = practice.InUse;
             Abbreviation = practice.Abbreviation;
+            IsActiveCapabilitiesExists = practice.IsActiveCapabilitiesExists;
         }
 
         public int PracticeManagerId
@@ -44,7 +45,8 @@ namespace PraticeManagement.Controls.Configuration
                     Abbreviation = Abbreviation,
                     PracticeOwner = PracticeOwner,
                     IsActive = IsActive,
-                    IsCompanyInternal = IsCompanyInternal
+                    IsCompanyInternal = IsCompanyInternal,
+                    IsActiveCapabilitiesExists = IsActiveCapabilitiesExists
                 };
             }
         }
