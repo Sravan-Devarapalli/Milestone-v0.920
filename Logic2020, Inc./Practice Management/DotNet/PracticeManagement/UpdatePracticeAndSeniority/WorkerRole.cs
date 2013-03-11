@@ -32,6 +32,7 @@ namespace UpdatePracticeAndSeniority
 
         //Configuration Keys
         public const string Environment_ConfigKey = "Environment";
+        public const string DisableAllMails_ConfigKey = "DisableAllMails";
         public const string RunSchedularDailyAtTime_ConfigKey = "RunSchedularDailyAtTime";
         public const string UPDATED_PROFILES_LIST_EMAIL_RECIEVER_ConfigKey = "UpdatedProfilesListEmailReciever";
         public const string EmailSubject_For_ProfilesUpdatedList_ConfigKey = "EmailSubjectForProfilesUpdatedList";
@@ -39,6 +40,7 @@ namespace UpdatePracticeAndSeniority
         public const string PAYROLLDISTRIBUTIONREPORT_SCHEDULETIME_ConfigKey = "PayrollDistributionScheduleTime";
         public const string PayRollDistibutionReportReciever_ConfigKey = "PayrollDistributionReportReciever";
         public const string EmailBccRecieverList_ConfigKey = "EmailBccRecieverList";
+        public const string ProjectSummaryCacheScheduleTime_ConfigKey = "ProjectSummaryCacheScheduleTime";
         public const string LoginPagePath_ConfigKey = "LoginPagePath";
         public const string WelcomeMailScheduleTime_ConfigKey = "WelcomeMailScheduleTime";
 
@@ -46,7 +48,6 @@ namespace UpdatePracticeAndSeniority
         public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
         public const string PayRollDistributionReportEmailSubjectFormat = "Payroll Distribution Report for the period {0}.";
         public const string PayRollDistributionReportEmailBodyFormat = "Please find the Payroll Distribution report for the period {0} in the attachments.";
-        public const string AutoUpdateObjectsFailedFormat = "Failed running the procedure dbo.AutoUpdateObjects Details are: {0}";
         public const string PayrollDistributionReportFailedFormat = "Failed to send an email of Payroll Distribution Report due to: {0}";
         public const string DateFormat = "MM/dd/yyyy";
         public const string DateDotFormat = "MM.dd.yyyy";
@@ -63,7 +64,6 @@ namespace UpdatePracticeAndSeniority
 
         //Log Messages
         public const string M_SchedularStarted = "Started Schedular.";
-        public const string M_AutoUpdateObjectsRunSuccessfully = "Successfully completed running the procedure dbo.AutoUpdateObjects.";
         public const string M_PayrollDistributionReportStartedProcess = "Started Process of emailing Payroll Distribution Report.";
         public const string M_PayrollDistributionReportStartedReadingData = "Started reading data Payroll Distribution Report.";
         public const string M_PayrollDistributionReportReadDataSuccess = "Read the Payroll Distribution Report data.";
@@ -73,15 +73,19 @@ namespace UpdatePracticeAndSeniority
         public const string M_FinishedWelcomeEmails = "Finished to send the Welcome Emails.";
         public const string M_StartedActivateDeactivateEmails = "Started to send the Activate and DeActivate Account Emails.";
         public const string M_FinishedActivateDeactivateEmails = "Finished to send the Activate and DeActivate Account Emails.";
+        public const string M_InsertProjectSummaryCacheValueStartedProcess = "Started Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
+        public const string M_InsertProjectSummaryCacheValueFinishedProcess = "Finished Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
 
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
         public const string SP_PersonPasswordInsert = "dbo.PersonPasswordInsert";
         public const string SP_GetPersonsByTodayHireDate = "dbo.GetPersonsByTodayHireDate";
+        public const string SP_InsertProjectSummaryCacheValue = "dbo.InsertProjectSummaryCacheValue";
 
         //Parameters
         public const string NextRun = "@NextRun";
         public const string LastRun = "@LastRun";
+        public const string CurrentDateParam = "@CurrentDate";
 
         //Email Templates
         public const string DeActivateAccountTemplate = "DeActivateAccountTemplate";
@@ -101,6 +105,17 @@ namespace UpdatePracticeAndSeniority
                 return (environment == "UAT");
             }
         }
+
+        public static bool DisableAllMails
+        {
+            get
+            {
+                var disableAllMails = GetConfigValue(DisableAllMails_ConfigKey);
+                return (disableAllMails == "yes");
+            }
+        }
+
+        
 
         public static string UpdatedProfilesListEmailReciever
         {
@@ -175,6 +190,14 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static TimeSpan ProjectSummaryCacheScheduleTime
+        {
+            get
+            {
+                return TimeSpan.Parse(GetConfigValue(ProjectSummaryCacheScheduleTime_ConfigKey));
+            }
+        }
+
         public static TimeSpan FirstSchedularTime
         {
             get
@@ -212,14 +235,16 @@ namespace UpdatePracticeAndSeniority
             {
                 // This is a sample worker implementation. Replace with your logic.
                 DateTime currentDateTimeWithTimeZone, nextRun;
-
                 Thread.Sleep(5 * 60 * 1000);
                 currentDateTimeWithTimeZone = CurrentPMTime;
                 WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, SuccessStatus, M_SchedularStarted, currentDateTimeWithTimeZone);
-                currentDateTimeWithTimeZone = CurrentPMTime;
-                //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                 if (currentDateTimeWithTimeZone.TimeOfDay > FirstSchedularTime)
                 {
+                    currentDateTimeWithTimeZone = CurrentPMTime;
+                    //For the starting of the schedular if we update schedular binaries between 00:01:00 and 02:00:00, then we need to run Project Summary Cache Task.
+                    RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
+                    currentDateTimeWithTimeZone = CurrentPMTime;
+                    //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
@@ -238,6 +263,9 @@ namespace UpdatePracticeAndSeniority
                     currentDateTimeWithTimeZone = currentDateTimeWithTimeZone.Add(sleepTimeSpan);
                     //Runs at 00:01:00 every day.
                     RunTasks(currentDateTimeWithTimeZone);
+
+                    currentDateTimeWithTimeZone = CurrentPMTime;
+                    RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
 
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 07:00:00 on 3rd and 18th of every month.
@@ -345,6 +373,59 @@ namespace UpdatePracticeAndSeniority
                 }
                 WorkerRole.GetTodaysHireDatePersonsAndSenEmails(CurrentPMTime, nextRun);
             }
+        }
+
+         /// <summary>
+        /// Cache Project Summary Values Task as per the time reaches( Every day at 02:00:00).
+        /// </summary>
+        /// <param name="currentDateTimeWithTimeZone"></param>
+        public static void RunProjectSummaryCacheTask(DateTime currentDateTimeWithTimeZone)
+        {
+            if (currentDateTimeWithTimeZone.TimeOfDay < ProjectSummaryCacheScheduleTime)
+            {
+                var sleeptime = ProjectSummaryCacheScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
+                Thread.Sleep(sleeptime);
+                InsertProjectSummaryCacheValue(CurrentPMTime);
+            }
+        }
+
+        /// <summary>
+        /// Cache Project Summary Values
+        /// </summary>
+        public static void InsertProjectSummaryCacheValue(DateTime currentWithTimeZone)
+        {
+            DateTime nextRun = currentWithTimeZone.AddDays(1);
+            WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(M_InsertProjectSummaryCacheValueStartedProcess, CurrentPMTime), nextRun);
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+                if (string.IsNullOrEmpty(connectionString))
+                    return;
+
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand(SP_InsertProjectSummaryCacheValue, connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 1000;
+                SqlParameter currenDateParam = new SqlParameter(CurrentDateParam, currentWithTimeZone);
+                cmd.Parameters.Add(currenDateParam);
+                connection.Open();
+
+                cmd.ExecuteNonQuery();
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_InsertProjectSummaryCacheValue), nextRun);
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FailedRunningProcedureFormat, SP_InsertProjectSummaryCacheValue, ex.Message), nextRun);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(M_InsertProjectSummaryCacheValueFinishedProcess, CurrentPMTime), nextRun);
         }
 
         /// <summary>
@@ -804,43 +885,46 @@ namespace UpdatePracticeAndSeniority
         /// <param name="attachments"></param>
         public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, List<Attachment> attachments,bool isHighPriority = false)
         {
-            var smtpSettings = GetSMTPSettings();
-
-            MailMessage message = new MailMessage();
-            message.Priority = isHighPriority ? MailPriority.High : MailPriority.Normal;
-            var addresses = commaSeperatedToAddresses.Split(',');
-            foreach (var address in addresses)
+            if (!IsUATEnvironment || !DisableAllMails)
             {
-                message.To.Add(new MailAddress(address));
-            }
+                var smtpSettings = GetSMTPSettings();
 
-            if (!string.IsNullOrEmpty(commaSeperatedBccAddresses))
-            {
-                var bccAddresses = commaSeperatedBccAddresses.Split(',');
-                foreach (var address in bccAddresses)
+                MailMessage message = new MailMessage();
+                message.Priority = isHighPriority ? MailPriority.High : MailPriority.Normal;
+                var addresses = commaSeperatedToAddresses.Split(',');
+                foreach (var address in addresses)
                 {
-                    message.Bcc.Add(new MailAddress(address));
+                    message.To.Add(new MailAddress(address));
                 }
-            }
 
-            message.Subject = IsUATEnvironment ? "(UAT) " + subject : subject;
-
-            message.Body = body;
-
-            message.IsBodyHtml = isBodyHtml;
-
-            if (attachments != null && attachments.Count > 0)
-            {
-                foreach (var item in attachments)
+                if (!string.IsNullOrEmpty(commaSeperatedBccAddresses))
                 {
-                    message.Attachments.Add(item);
+                    var bccAddresses = commaSeperatedBccAddresses.Split(',');
+                    foreach (var address in bccAddresses)
+                    {
+                        message.Bcc.Add(new MailAddress(address));
+                    }
                 }
+
+                message.Subject = IsUATEnvironment ? "(UAT) " + subject : subject;
+
+                message.Body = body;
+
+                message.IsBodyHtml = isBodyHtml;
+
+                if (attachments != null && attachments.Count > 0)
+                {
+                    foreach (var item in attachments)
+                    {
+                        message.Attachments.Add(item);
+                    }
+                }
+
+                SmtpClient client = GetSmtpClient(smtpSettings);
+
+                message.From = new MailAddress(smtpSettings.PMSupportEmail);
+                client.Send(message);
             }
-
-            SmtpClient client = GetSmtpClient(smtpSettings);
-
-            message.From = new MailAddress(smtpSettings.PMSupportEmail);
-            client.Send(message);
         }
 
         /// <summary>
@@ -983,7 +1067,8 @@ namespace UpdatePracticeAndSeniority
                 }
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_GetPersonsByTodayHireDate), nextRun);
                 //sending login credentials through email.
-                if (persons.Count > 0)
+                //According to the changes in defect #3121 WelComeEmails should not be sent in UAT.
+                if (persons.Count > 0 && !IsUATEnvironment)
                 {
                     SendWelComeEmails(persons, currentWithTimeZone, nextRun);
                 }
