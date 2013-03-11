@@ -22,17 +22,17 @@ RETURN
 	WITH SalaryPersonsAvaliableHours
 	AS
 	(
-		SELECT PC.PersonId ,(COUNT(*) * 8) AS AvaliableHours 
+		SELECT PC.PersonId ,CAST(SUM(8 - ISNULL(PC.ActualHours,0)) AS DECIMAL(10,2)) AS AvaliableHours 
 		FROM dbo.v_PersonCalendar PC
 		INNER JOIN dbo.GetCurrentPayTypeTable() CPT ON CPT.PersonId = PC.PersonId AND CPT.Timescale = 2
 		WHERE PC.Date BETWEEN @StartDate AND @EndDate 
-				AND PC.DayOff = 0
+				AND (PC.DayOff = 0 OR (PC.DayOff = 1 AND PC.CompanyDayOff = 0))
 		GROUP BY PC.PersonId
 	),
 	SalaryPersonProjectedHours
 	AS
 	(
-	SELECT  p.PersonId,CAST (ISNULL(SUM(MPS.HoursPerDay),0) AS INT) AS ProjectedHours 
+	SELECT  p.PersonId,CAST (ISNULL(SUM(MPS.HoursPerDay),0) AS DECIMAL(10,2)) AS ProjectedHours 
     FROM    dbo.Person P 
     INNER JOIN dbo.GetCurrentPayTypeTable() CPT ON CPT.PersonId = P.PersonId AND CPT.Timescale = 2
 	LEFT JOIN dbo.v_MilestonePersonSchedule AS MPS ON P.PersonId = MPS.PersonId 
@@ -49,9 +49,9 @@ RETURN
 	)
 
 	SELECT SP.PersonId,
-	CASE WHEN ISNULL(SPAH.AvaliableHours ,0) = 0 THEN 0 
+	CONVERT(INT,CASE WHEN ISNULL(SPAH.AvaliableHours ,0) = 0 THEN 0 
 		 ELSE CEILING(100*SP.ProjectedHours/SPAH.AvaliableHours)
-	END AS AvgUtilization,SP.ProjectedHours,SPAH.AvaliableHours
+	END) AS AvgUtilization,SP.ProjectedHours,SPAH.AvaliableHours
 	FROM SalaryPersonProjectedHours SP 
 	LEFT JOIN SalaryPersonsAvaliableHours SPAH ON SP.PersonId = SPAH.PersonId
 
@@ -60,3 +60,4 @@ RETURN
 	FROM dbo.Person P 
 	LEFT JOIN SalaryPersonProjectedHours SP ON P.PersonId = SP.PersonId
 	WHERE SP.PersonId IS NULL -- NON Salary Persons Will always have avg utlization as 100
+
