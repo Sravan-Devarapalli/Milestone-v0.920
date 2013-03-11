@@ -7,6 +7,13 @@
 -- =============================================
 CREATE VIEW dbo.v_MilestoneRevenueRetrospective--Day level Milestone Amount & hours
 AS
+	WITH CTE 
+	AS 
+	(
+		SELECT s.Date, s.MilestoneId, SUM(HoursPerDay) AS HoursPerDay
+		FROM dbo.v_MilestonePersonSchedule AS s
+		GROUP BY s.Date, s.MilestoneId
+	)
 	SELECT -- Milestones with a fixed amount
 		m.MilestoneId,
 		m.ProjectId,
@@ -14,7 +21,7 @@ AS
 		m.IsHourlyAmount,
 		ISNULL((m.Amount/* Milestone fixed amount */ 
 						/ 
-						MTHours.TotalHours
+						NULLIF(MTHours.TotalHours,0)
 							/* Milestone Total  Hours */
 							
 						)* ISNULL(d.HoursPerDay, 0)/* Milestone Total  Hours per day*/,
@@ -28,19 +35,15 @@ AS
 		prac.PracticeManagerId,
 		d.HoursPerDay/* Milestone Total  Hours per day*/
 	FROM dbo.Milestone AS m
-		OUTER APPLY (	SELECT SUM(MPE.HoursPerDay) AS TotalHours
-						FROM   dbo.MilestonePerson AS MP  
-						INNER JOIN dbo.MilestonePersonEntry AS  MPE ON MP.MileStonePersonId = MPE.MileStonePersonId
-						INNER JOIN dbo.PersonCalendarAuto AS pcal 	ON pcal.Date BETWEEN mpe.Startdate AND mpe.EndDate 
-															   AND pcal.DayOff=0 AND pcal.PersonId = mp.PersonId 
-						WHERE  mp.MileStoneId = m.MilestoneId
-						GROUP BY MP.MilestoneId) AS MTHours 
 		INNER JOIN dbo.Calendar AS cal ON cal.Date BETWEEN m.StartDate AND m.ProjectedDeliveryDate
 		INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
 		INNER JOIN dbo.Practice AS prac ON p.PracticeId = prac.PracticeId
-		LEFT JOIN (SELECT s.Date, s.MilestoneId, SUM(HoursPerDay) AS HoursPerDay
-					FROM dbo.v_MilestonePersonSchedule AS s
-					GROUP BY s.Date, s.MilestoneId) d ON d.date = cal.Date and m.MilestoneId = d.MileStoneId
+		INNER JOIN (
+						SELECT s.MilestoneId, SUM(s.HoursPerDay) AS TotalHours
+						FROM CTE AS s 
+						GROUP BY s.MilestoneId
+					) AS MTHours  ON MTHours.MilestoneId  = m.MilestoneId
+		LEFT JOIN CTE AS d ON d.date = cal.Date and m.MilestoneId = d.MileStoneId
 	WHERE m.IsHourlyAmount = 0
 	UNION ALL
 	SELECT -- Milestones with a hourly amount
