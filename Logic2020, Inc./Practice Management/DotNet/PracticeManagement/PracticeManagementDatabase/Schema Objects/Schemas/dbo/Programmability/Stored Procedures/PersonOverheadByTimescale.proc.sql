@@ -16,7 +16,7 @@ AS
 	DECLARE @FutureDate DATETIME
  	SELECT @FutureDate = dbo.GetFutureDate()
 
-    IF @EffectiveDate = null
+    IF @EffectiveDate IS NULL
 	BEGIN
 		SELECT @EffectiveDate = dbo.Today()
 	END
