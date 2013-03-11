@@ -6,6 +6,7 @@ using System.ServiceModel.Activation;
 using System.Text;
 using System.Web;
 using System.Xml;
+using System.Linq;
 using DataAccess;
 using DataAccess.Other;
 using DataTransferObjects;
@@ -260,14 +261,15 @@ namespace PracticeManagementService
             bool showInactive,
             DateTime periodStart,
             DateTime periodEnd,
-            string userName,
             string salespersonIdsList,
             string projectOwnerIdsList,
             string practiceIdsList,
             string projectGroupIdsList,
             ProjectCalculateRangeType includeCurentYearFinancials,
             bool excludeInternalPractices,
-            string userLogin)
+            string userLogin,
+            bool useActuals,
+            bool getFinancialsFromCache)
         {
 
             try
@@ -289,13 +291,15 @@ namespace PracticeManagementService
                    projectGroupIdsList,
                    includeCurentYearFinancials,
                    excludeInternalPractices,
-                   userLogin);
+                   userLogin,
+                   useActuals,
+                   getFinancialsFromCache);
 
                 return result;
             }
             catch (Exception e)
             {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ProjectListAllMultiParameters", "ProjectService.svc", string.Empty,
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, !getFinancialsFromCache ? "ProjectListAllMultiParameters" : "ProjectListAllMultiParametersFromCache", "ProjectService.svc", string.Empty,
                     HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
@@ -303,6 +307,20 @@ namespace PracticeManagementService
 
         }
 
+        public bool IsProjectSummaryCachedToday()
+        {
+            try
+            {
+                return ProjectDAL.IsProjectSummaryCachedToday();
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "IsProjectSummaryCachedToday", "ProjectService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
 
         public List<Project> GetProjectListByDateRange(
                                                     bool showProjected,
@@ -585,7 +603,7 @@ namespace PracticeManagementService
                         project.ManagementCommission.ProjectWithMargin = project;
                         CommissionDAL.CommissionSet(project.ManagementCommission, connection, currentTransaction);
                     }
-                    
+
                     //Save ProjectTimetypes 
                     if (!String.IsNullOrEmpty(project.ProjectWorkTypesList))
                     {
@@ -633,14 +651,15 @@ namespace PracticeManagementService
             bool showActive,
             bool showExperimental,
             bool showInternal,
-            bool showInactive)
+            bool showInactive,
+            bool useActuals)
         {
             try
             {
                 var monthStart = new DateTime(month.Year, month.Month, 1);
                 var monthEnd = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
 
-                var res = PersonStartsReport(monthStart, monthEnd, userName, null, null, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive);
+                var res = PersonStartsReport(monthStart, monthEnd, userName, null, null, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive, useActuals);
 
                 if (res.Count != 1)
                 {
@@ -689,8 +708,8 @@ namespace PracticeManagementService
             bool showActive,
             bool showExperimental,
             bool showInternal,
-            bool showInactive
-            )
+            bool showInactive,
+            bool useActuals)
         {
 
             try
@@ -707,7 +726,8 @@ namespace PracticeManagementService
                         showActive,
                         showExperimental,
                         showInternal,
-                        showInactive);
+                        showInactive,
+                        useActuals);
 
                 for (var i = 1; i < result.Count; i++)
                 {
@@ -948,7 +968,7 @@ namespace PracticeManagementService
             {
                 var projectsList = ProjectDAL.ProjectsAll();
 
-                ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(projectsList, null, null);
+                ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(projectsList, null, null, true);
 
                 MilestonePersonDAL.LoadMilestonePersonListForProject(projectsList);
 
