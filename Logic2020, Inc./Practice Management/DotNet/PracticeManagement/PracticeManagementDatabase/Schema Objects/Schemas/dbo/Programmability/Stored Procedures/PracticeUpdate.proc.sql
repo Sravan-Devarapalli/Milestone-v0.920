@@ -21,13 +21,16 @@ BEGIN
 			   @Abbreviation = REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(@Abbreviation)),' ','<>'),'><',''),'<>',' ')
 
 	DECLARE @PreviousPracticeManager INT,
-			@Today					 DATETIME
+			@Today					 DATETIME,
+			@PreviousIsActive BIT
 
-	SELECT @PreviousPracticeManager = PracticeManagerId
+	SELECT @PreviousPracticeManager = PracticeManagerId,@PreviousIsActive  = IsActive
 	FROM [dbo].[Practice]
 	WHERE PracticeId = @PracticeId
 
 	SELECT @Today = GETDATE()
+
+
 
 	UPDATE [dbo].[Practice]
 	   SET [Name] = @Name,
@@ -68,5 +71,14 @@ BEGIN
 				NULL)
 	END
 
+	if(@IsActive = CONVERT(BIT,0) AND @PreviousIsActive <> @IsActive)
+	BEGIN
+		UPDATE pc
+		   SET pc.IsActive = @IsActive
+		FROM [dbo].[Practice] p
+		INNER JOIN dbo.PracticeCapabilities pc ON p.PracticeId = pc.PracticeId AND p.PracticeId = @PracticeId 
+	END
+
 	EXEC dbo.SessionLogUnprepare
  END
+
