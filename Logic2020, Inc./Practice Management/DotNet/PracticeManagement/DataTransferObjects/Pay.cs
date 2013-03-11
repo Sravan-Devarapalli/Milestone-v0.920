@@ -8,12 +8,7 @@ namespace DataTransferObjects
 	[Serializable]
 	public class Pay : ICloneable
 	{
-		#region Constants
-
-		public const int DefaultHoursPerYear = 2080;
-
-		#endregion
-
+		
 		#region Properties
 
 		/// <summary>
