@@ -16,6 +16,10 @@ AS
 			WHEN EXISTS(SELECT TOP 1 pers.DefaultPractice FROM dbo.Person pers WHERE pers.DefaultPractice = p.PracticeId)
 				THEN CAST(1 AS BIT)
 			WHEN EXISTS(SELECT TOP 1 op.PracticeId FROM dbo.Opportunity op WHERE op.PracticeId = p.PracticeId)
+				THEN CAST(1 AS BIT) 
+			WHEN EXISTS(SELECT TOP 1 pay.PracticeId FROM dbo.Pay pay WHERE pay.PracticeId = p.PracticeId)
+				THEN CAST(1 AS BIT)
+			WHEN EXISTS(SELECT TOP 1 PC.PracticeId FROM dbo.PracticeCapabilities PC WHERE PC.PracticeId = p.PracticeId)
 				THEN CAST(1 AS BIT)
 			ELSE CAST(0 AS BIT)
 		END AS 'InUse',
@@ -29,3 +33,4 @@ AS
 	  INNER JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
 	  WHERE @PracticeId IS NULL OR p.PracticeId = @PracticeId
 	ORDER BY p.Name
+
