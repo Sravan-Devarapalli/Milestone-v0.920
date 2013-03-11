@@ -38,7 +38,7 @@ namespace PraticeManagement.Config
             txtPMSupportEmail.Text = sMTPSettings.PMSupportEmail;
         }
 
-        public void ValidateAndSave()
+        public void ValidateAndSavePage()
         {
             Page.Validate(valSum.ValidationGroup);
 
@@ -63,7 +63,7 @@ namespace PraticeManagement.Config
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            ValidateAndSave();
+            ValidateAndSavePage();
         }
 
         protected void chbEnableSSl_CheckedChanged(object sender, EventArgs e)
