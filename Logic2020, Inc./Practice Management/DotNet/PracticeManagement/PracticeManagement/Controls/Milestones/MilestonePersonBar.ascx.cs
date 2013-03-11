@@ -296,8 +296,8 @@ namespace PraticeManagement.Controls.Milestones
                     dpPersonEnd.DateValue != DateTime.MinValue ? dpPersonEnd.DateValue : HostingPage.Milestone.ProjectedDeliveryDate;
 
                 // Validate overlapping with other entries.
-                int days = GetPersonWorkDaysNumber(startDate, endDate, ddlPersonName);
-                if (days == 0)
+                PersonWorkingHoursDetailsWithinThePeriod personWorkingHoursDetailsWithinThePeriod = GetPersonWorkingHoursDetailsWithinThePeriod(startDate, endDate, ddlPersonName);
+                if (personWorkingHoursDetailsWithinThePeriod.TotalWorkHoursExcludingVacationHours == 0)
                 {
                     e.IsValid = false;
                 }
@@ -324,10 +324,10 @@ namespace PraticeManagement.Controls.Milestones
                     {
                         var dpPersonStart = ((Control)source).Parent.FindControl("dpPersonStart") as DatePicker;
                         var dpPersonEnd = ((Control)source).Parent.FindControl("dpPersonEnd") as DatePicker;
-                        int days = GetPersonWorkDaysNumber(dpPersonStartInsert.DateValue, dpPersonEndInsert.DateValue, ddlPerson);
+                        PersonWorkingHoursDetailsWithinThePeriod personWorkingHoursDetailsWithinThePeriod = GetPersonWorkingHoursDetailsWithinThePeriod(dpPersonStartInsert.DateValue, dpPersonEndInsert.DateValue, ddlPerson);
 
                         // calculate hours per day according to HoursInPerod 
-                        var hoursPerDay = (days != 0) ? decimal.Round(Totalhours / (days), 2) : 0;
+                        var hoursPerDay = (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays != 0) ? decimal.Round(Totalhours / (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays), 2) : 0;
 
                         e.IsValid = hoursPerDay > 0M;
                     }
@@ -337,16 +337,16 @@ namespace PraticeManagement.Controls.Milestones
 
         #endregion
 
-        private int GetPersonWorkDaysNumber(DateTime startDate, DateTime endDate, DropDownList ddlPersonName)
+        private PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(DateTime startDate, DateTime endDate, DropDownList ddlPersonName)
         {
-            int days = -1;
+            
             if (!string.IsNullOrEmpty(ddlPersonName.SelectedValue))
             {
                 using (var serviceClient = new PersonServiceClient())
                 {
                     try
                     {
-                        days = serviceClient.GetPersonWorkDaysNumber(int.Parse(ddlPersonName.SelectedValue), startDate,
+                        return serviceClient.GetPersonWorkingHoursDetailsWithinThePeriod(int.Parse(ddlPersonName.SelectedValue), startDate,
                                                                      endDate);
                     }
                     catch (FaultException<ExceptionDetail> ex)
@@ -363,7 +363,7 @@ namespace PraticeManagement.Controls.Milestones
                     }
                 }
             }
-            return days;
+            return null;
         }
 
         protected void btnInsertPerson_Click(object sender, EventArgs e)
