@@ -5,20 +5,14 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IPersonService_GetPersonListWithRole_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonListWithRole" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonListWithRole_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonListWithRoleResponse" />
-  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonEmploymentHistoryById_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonEmploymentHistoryById" />
   </wsdl:message>
@@ -66,12 +60,6 @@
   </wsdl:message>
   <wsdl:message name="IPersonService_SendAdministratorAddedEmail_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendAdministratorAddedEmailResponse" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonListByStatusList_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonListByStatusList" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonListByStatusList_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonListByStatusListResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonListByPersonIdList_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonListByPersonIdList" />
@@ -283,6 +271,12 @@
   <wsdl:message name="IPersonService_ListAllSeniorityCategories_OutputMessage">
     <wsdl:part name="parameters" element="tns:ListAllSeniorityCategoriesResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonListWithRole_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListWithRole" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonListWithRole_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListWithRoleResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonMilestoneWithFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonMilestoneWithFinancials" />
   </wsdl:message>
@@ -379,11 +373,11 @@
   <wsdl:message name="IPersonService_GetPersonCountByCommaSeperatedIdsList_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonCountByCommaSeperatedIdsListResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonWorkDaysNumber_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonWorkDaysNumber" />
+  <wsdl:message name="IPersonService_GetPersonWorkingHoursDetailsWithinThePeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonWorkingHoursDetailsWithinThePeriod" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonWorkDaysNumber_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonWorkDaysNumberResponse" />
+  <wsdl:message name="IPersonService_GetPersonWorkingHoursDetailsWithinThePeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonWorkingHoursDetailsWithinThePeriodResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetRecruiterList_InputMessage">
     <wsdl:part name="parameters" element="tns:GetRecruiterList" />
@@ -442,12 +436,6 @@
   <wsdl:message name="IPersonService_PersonValidations_OutputMessage">
     <wsdl:part name="parameters" element="tns:PersonValidationsResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonOverheadByPerson_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonOverheadByPerson" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_GetPersonOverheadByPerson_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPersonOverheadByPersonResponse" />
-  </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonOverheadByTimescale_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonOverheadByTimescale" />
   </wsdl:message>
@@ -502,11 +490,13 @@
   <wsdl:message name="IPersonService_ListManagersSubordinates_OutputMessage">
     <wsdl:part name="parameters" element="tns:ListManagersSubordinatesResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonListByStatusList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListByStatusList" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonListByStatusList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonListByStatusListResponse" />
+  </wsdl:message>
   <wsdl:portType name="IPersonService">
-    <wsdl:operation name="GetPersonListWithRole">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithRole" message="tns:IPersonService_GetPersonListWithRole_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse" message="tns:IPersonService_GetPersonListWithRole_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetPersonEmploymentHistoryById">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById" message="tns:IPersonService_GetPersonEmploymentHistoryById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse" message="tns:IPersonService_GetPersonEmploymentHistoryById_OutputMessage" />
@@ -538,10 +528,6 @@
     <wsdl:operation name="SendAdministratorAddedEmail">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SendAdministratorAddedEmail" message="tns:IPersonService_SendAdministratorAddedEmail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SendAdministratorAddedEmailResponse" message="tns:IPersonService_SendAdministratorAddedEmail_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonListByStatusList">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListByStatusList" message="tns:IPersonService_GetPersonListByStatusList_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListByStatusListResponse" message="tns:IPersonService_GetPersonListByStatusList_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonListByPersonIdList">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListByPersonIdList" message="tns:IPersonService_GetPersonListByPersonIdList_InputMessage" />
@@ -683,6 +669,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/ListAllSeniorityCategories" message="tns:IPersonService_ListAllSeniorityCategories_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/ListAllSeniorityCategoriesResponse" message="tns:IPersonService_ListAllSeniorityCategories_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonListWithRole">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithRole" message="tns:IPersonService_GetPersonListWithRole_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse" message="tns:IPersonService_GetPersonListWithRole_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" message="tns:IPersonService_GetPersonMilestoneWithFinancials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse" message="tns:IPersonService_GetPersonMilestoneWithFinancials_OutputMessage" />
@@ -747,9 +737,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsList" message="tns:IPersonService_GetPersonCountByCommaSeperatedIdsList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonCountByCommaSeperatedIdsListResponse" message="tns:IPersonService_GetPersonCountByCommaSeperatedIdsList_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetPersonWorkDaysNumber">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonWorkDaysNumber" message="tns:IPersonService_GetPersonWorkDaysNumber_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonWorkDaysNumberResponse" message="tns:IPersonService_GetPersonWorkDaysNumber_OutputMessage" />
+    <wsdl:operation name="GetPersonWorkingHoursDetailsWithinThePeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonWorkingHoursDetailsWithinThePeriod" message="tns:IPersonService_GetPersonWorkingHoursDetailsWithinThePeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonWorkingHoursDetailsWithinThePeriodResponse" message="tns:IPersonService_GetPersonWorkingHoursDetailsWithinThePeriod_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetRecruiterList">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetRecruiterList" message="tns:IPersonService_GetRecruiterList_InputMessage" />
@@ -788,10 +778,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/PersonValidations" message="tns:IPersonService_PersonValidations_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/PersonValidationsResponse" message="tns:IPersonService_PersonValidations_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetPersonOverheadByPerson">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonOverheadByPerson" message="tns:IPersonService_GetPersonOverheadByPerson_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonOverheadByPersonResponse" message="tns:IPersonService_GetPersonOverheadByPerson_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetPersonOverheadByTimescale">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonOverheadByTimescale" message="tns:IPersonService_GetPersonOverheadByTimescale_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonOverheadByTimescaleResponse" message="tns:IPersonService_GetPersonOverheadByTimescale_OutputMessage" />
@@ -828,18 +814,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/ListManagersSubordinates" message="tns:IPersonService_ListManagersSubordinates_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/ListManagersSubordinatesResponse" message="tns:IPersonService_ListManagersSubordinates_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonListByStatusList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonListByStatusList" message="tns:IPersonService_GetPersonListByStatusList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonListByStatusListResponse" message="tns:IPersonService_GetPersonListByStatusList_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPersonService" type="tns:IPersonService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetPersonListWithRole">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListWithRole" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetPersonEmploymentHistoryById">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById" style="document" />
       <wsdl:input>
@@ -905,15 +886,6 @@
     </wsdl:operation>
     <wsdl:operation name="SendAdministratorAddedEmail">
       <soap:operation soapAction="http://tempuri.org/IPersonService/SendAdministratorAddedEmail" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetPersonListByStatusList">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListByStatusList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1236,6 +1208,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetPersonListWithRole">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListWithRole" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPersonMilestoneWithFinancials">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials" style="document" />
       <wsdl:input>
@@ -1380,8 +1361,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetPersonWorkDaysNumber">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonWorkDaysNumber" style="document" />
+    <wsdl:operation name="GetPersonWorkingHoursDetailsWithinThePeriod">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonWorkingHoursDetailsWithinThePeriod" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1473,15 +1454,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetPersonOverheadByPerson">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonOverheadByPerson" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetPersonOverheadByTimescale">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonOverheadByTimescale" style="document" />
       <wsdl:input>
@@ -1556,6 +1528,15 @@
     </wsdl:operation>
     <wsdl:operation name="ListManagersSubordinates">
       <soap:operation soapAction="http://tempuri.org/IPersonService/ListManagersSubordinates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonListByStatusList">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonListByStatusList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
