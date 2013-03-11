@@ -76,8 +76,8 @@ AS
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE()))),
 		   @CurrentPMTime = dbo.InsertingTime(),
 		   @FutureDate = dbo.GetFutureDate(),
-		   @HoursPerYear = dbo.GetHoursPerYear(),
 		   @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
+	SELECT @HoursPerYear = GHY.HoursPerYear FROM dbo.[BonusHoursPerYearTable]() GHY
 	SELECT @HolidayChargeCodeId = CC.Id FROM dbo.ChargeCode CC WHERE CC.Id = @HolidayTimeTypeId
 	SELECT @W2SalaryId = TimescaleId FROM Timescale WHERE Name = 'W2-Salary'
 	SELECT @W2HourlyId  = TimescaleId FROM Timescale WHERE Name = 'W2-Hourly'
