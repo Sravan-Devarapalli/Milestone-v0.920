@@ -20,7 +20,7 @@ namespace PraticeManagement.Controls.MilestonePersons
         {
             get
             {
-                return Period.Sum(point => point.Value.HasValue && !point.DayOff ? point.Value.Value : 0.0);
+                return Period.Sum(point => point.Value.HasValue && (!point.DayOff || (point.DayOff && !point.CompanyDayOff)) ? point.Value.Value : 0.0);
             }
         }
     }
