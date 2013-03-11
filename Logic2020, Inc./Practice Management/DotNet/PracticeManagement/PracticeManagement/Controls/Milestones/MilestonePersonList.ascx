@@ -314,15 +314,15 @@
     </Columns>
 </asp:GridView>
 <asp:Panel ID="pnlTimeOffHoursToolTip" Style="display: none;" runat="server" CssClass="pnlTotal">
-    <label class="fontBold">
+    <label>
         Time-Off Hour(s):
     </label>
-    <asp:Label ID="lblTimeOffHours" runat="server"></asp:Label>
+    <asp:Label ID="lblTimeOffHours" runat="server" CssClass="fontBold"></asp:Label>
     <br />
-    <label class="fontBold">
+    <label>
         Affected Projected Hours:
     </label>
-    <asp:Label ID="lblProjectAffectedHours" runat="server"></asp:Label>
+    <asp:Label ID="lblProjectAffectedHours" runat="server" CssClass="fontBold"></asp:Label>
 </asp:Panel>
 <asp:HiddenField ID="hdMpePopupDeleteMileStonePersons" Value="false" runat="server" />
 <AjaxControlToolkit:ModalPopupExtender ID="mpeDeleteMileStonePersons" runat="server"
