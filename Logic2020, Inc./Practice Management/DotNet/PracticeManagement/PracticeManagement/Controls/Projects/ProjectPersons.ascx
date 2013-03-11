@@ -68,7 +68,7 @@
                         Assigned Hours</div>
                 </HeaderTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblHoursAssigned" runat="server" Text='<%# Convert.ToInt32(Eval("Entries[0].ProjectedWorkload")) %>'></asp:Label>
+                    <asp:Label ID="lblHoursAssigned" runat="server" Text='<%# (Eval("Entries[0].ProjectedWorkload")) %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField>
