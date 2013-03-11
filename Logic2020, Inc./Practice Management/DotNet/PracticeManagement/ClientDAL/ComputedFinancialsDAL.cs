@@ -27,7 +27,7 @@ namespace DataAccess
         /// <param name="endDate">A period end.</param>
         /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
         public static void LoadFinancialsPeriodForProjects(
-            List<Project> projects, DateTime startDate, DateTime endDate)
+            List<Project> projects, DateTime startDate, DateTime endDate, bool useActuals)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -39,6 +39,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, DataTransferObjects.Utils.Generic.IdsListToString(projects));
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UseActualsParam, useActuals);
 
                 connection.Open();
 
@@ -63,8 +64,7 @@ namespace DataAccess
         /// <param name="startDate">A period start.</param>
         /// <param name="endDate">A period end.</param>
         /// <returns>The <see cref="ComputedFinancials"/> object if found and null otherwise.</returns>
-        public static void LoadTotalFinancialsPeriodForProjects(
-            List<Project> projects, DateTime? startDate, DateTime? endDate)
+        public static void LoadTotalFinancialsPeriodForProjects(List<Project> projects, DateTime? startDate, DateTime? endDate, bool useActuals)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -79,6 +79,77 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                     command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 }
+                command.Parameters.AddWithValue(Constants.ParameterNames.UseActualsParam, useActuals);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadTotalFinancialsForListOfProjects(reader, projects);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Retrives the list of the computed financials for the project and the specified period From Cache table.
+        /// grouped by months.
+        /// </summary>
+        /// <param name="projects">Projects list</param>
+        /// <param name="startDate">A period start.</param>
+        /// <param name="endDate">A period end.</param>
+        /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
+        public static void LoadFinancialsPeriodForProjectsFromCache(List<Project> projects, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(
+                Constants.ProcedureNames.ComputedFinancials.GetProjectSummaryCacheValue, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, DataTransferObjects.Utils.Generic.IdsListToString(projects));
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsMonthlyReportParam, true);
+
+                connection.Open();
+
+                projects.ForEach(delegate(Project project)
+                {
+                    if (project.ProjectedFinancialsByMonth == null)
+                        project.ProjectedFinancialsByMonth =
+                            new Dictionary<DateTime, ComputedFinancials>();
+                });
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadMonthlyFinancialsForListOfProjects(reader, projects);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Retrives the list of the computed financials for the project and the specified period From Cache table.
+        /// </summary>
+        /// <param name="projects">Projects list</param>
+        /// <param name="startDate">A period start.</param>
+        /// <param name="endDate">A period end.</param>
+        /// <returns>The <see cref="ComputedFinancials"/> object if found and null otherwise.</returns>
+        public static void LoadTotalFinancialsPeriodForProjectsFromCache(List<Project> projects, DateTime? startDate, DateTime? endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(
+                Constants.ProcedureNames.ComputedFinancials.GetProjectSummaryCacheValue, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, DataTransferObjects.Utils.Generic.IdsListToString(projects));
+                if (startDate.HasValue && endDate.HasValue)
+                {
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                }
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsMonthlyReportParam, false);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -116,9 +187,7 @@ namespace DataAccess
         /// <param name="milestoneId">An ID of the milestone to retrive the data for.</param>
         /// <param name="milestonePersons">Persons to init financials with</param>
         /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static void FinancialsGetByMilestonePersonsMonthly(
-            int milestoneId,
-            List<MilestonePerson> milestonePersons)
+        public static void FinancialsGetByMilestonePersonsMonthly(int milestoneId,List<MilestonePerson> milestonePersons)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -144,9 +213,7 @@ namespace DataAccess
         /// <param name="milestoneId">An ID of the milestone to retrive the data for.</param>
         /// <param name="milestonePersons">Persons to init financials with</param>
         /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static void FinancialsGetByMilestonePersonsTotal(
-            int milestoneId,
-            List<MilestonePerson> milestonePersons)
+        public static void FinancialsGetByMilestonePersonsTotal(int milestoneId,List<MilestonePerson> milestonePersons)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -289,7 +356,8 @@ namespace DataAccess
             bool showActive,
             bool showExperimental,
             bool showInternal,
-            bool showInactive)
+            bool showInactive,
+            bool useActuals)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -301,10 +369,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdParam,
-                                                salespersonId.HasValue ? (object) salespersonId.Value : DBNull.Value);
+                                                salespersonId.HasValue ? (object)salespersonId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
                                                 practiceManagerId.HasValue
-                                                    ? (object) practiceManagerId.Value
+                                                    ? (object)practiceManagerId.Value
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowProjectedParam, showProjected);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowCompletedParam, showCompleted);
@@ -312,6 +380,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowInternalParam, showInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UseActualsParam, useActuals);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -330,12 +399,12 @@ namespace DataAccess
                 var fin = persFin;
                 var foundPersons = milestonePersons.FindAll(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value
                                                                                 && milestonePerson.Entries[0].Id == fin.Key.Entries[0].Id
-                                                                               
+
                                                                                 );
                 foreach (var found in foundPersons)
                 {
                     if (found.Person.ProjectedFinancialsByMonth == null)
-                            found.Person.ProjectedFinancialsByMonth = new Dictionary<DateTime, ComputedFinancials>();
+                        found.Person.ProjectedFinancialsByMonth = new Dictionary<DateTime, ComputedFinancials>();
 
                     found.Person.ProjectedFinancialsByMonth.Add(fin.Value.FinancialDate.Value, fin.Value);
                 }
@@ -352,10 +421,10 @@ namespace DataAccess
 
                                         )
                     )
-                milestonePersons.Find(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value
-                                                            && milestonePerson.Entries[0].Id == fin.Key.Entries[0].Id
-                                                        
-                                        ).Entries[0].ComputedFinancials = fin.Value;
+                    milestonePersons.Find(milestonePerson => milestonePerson.Person.Id.Value == fin.Key.Person.Id.Value
+                                                                && milestonePerson.Entries[0].Id == fin.Key.Entries[0].Id
+
+                                            ).Entries[0].ComputedFinancials = fin.Value;
             }
         }
 
@@ -373,10 +442,19 @@ namespace DataAccess
                 int practiceManagementCommissionIndex =
                     reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int actualRevenueIndex = -1;
+                int actualGrossMarginIndex = -1;
+
+                try
+                {
+                    actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
+                    actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
+                }
+                catch { }
 
                 while (reader.Read())
                 {
-                    var project = new Project {Id = reader.GetInt32(projectIdIndex)};
+                    var project = new Project { Id = reader.GetInt32(projectIdIndex) };
                     var financials =
                         ReadComputedFinancials(
                           reader,
@@ -389,7 +467,9 @@ namespace DataAccess
                           salesCommissionIndex,
                           practiceManagementCommissionIndex,
                           -1,
-                          -1);
+                          -1,
+                          actualRevenueIndex,
+                          actualGrossMarginIndex);
 
                     var i = projects.IndexOf(project);
                     projects[i].ProjectedFinancialsByMonth.Add(financials.FinancialDate.Value, financials);
@@ -411,6 +491,16 @@ namespace DataAccess
                 int practiceManagementCommissionIndex =
                     reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int actualRevenueIndex = -1;
+                int actualGrossMarginIndex = -1;
+
+                try
+                {
+                    actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
+                    actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
+                }
+                catch { }
+
 
                 while (reader.Read())
                 {
@@ -427,7 +517,9 @@ namespace DataAccess
                           salesCommissionIndex,
                           practiceManagementCommissionIndex,
                           -1,
-                          -1);
+                          -1,
+                          actualRevenueIndex,
+                          actualGrossMarginIndex);
 
                     var i = projects.IndexOf(project);
                     projects[i].ComputedFinancials = financials;
@@ -520,7 +612,7 @@ namespace DataAccess
                                                                                                                EndDate =  reader.GetDateTime(endDateIndex)
                                                                                                             }
                                                                                 }
-                                             },
+                                            },
                         ReadComputedFinancials(
                           reader,
                           financialDateIndex,
@@ -567,7 +659,7 @@ namespace DataAccess
 
                 while (reader.Read())
                 {
-                    yield return 
+                    yield return
                         ReadComputedFinancials(
                           reader,
                           financialDateIndex,
@@ -595,11 +687,13 @@ namespace DataAccess
             int salesCommissionIndex,
             int practiceManagementCommissionIndex,
             int expenseIndex,
-            int expenseReimbIndex)
+            int expenseReimbIndex,
+            int actualRevenueIndex = -1,
+            int actualGrossMarginIndex = -1)
         {
             return new ComputedFinancials
                        {
-                           FinancialDate = reader.GetDateTime(financialDateIndex),
+                           FinancialDate = reader.IsDBNull(financialDateIndex) ? (DateTime?)null : reader.GetDateTime(financialDateIndex),
                            Revenue = reader.GetDecimal(revenueIndex),
                            RevenueNet = reader.GetDecimal(revenueNetIndex),
                            Cogs = reader.GetDecimal(cogsIndex),
@@ -612,7 +706,9 @@ namespace DataAccess
                                                                   reader.GetDecimal(practiceManagementCommissionIndex)
                                                               : 0M,
                            Expenses = expenseIndex < 0 ? 0 : reader.GetDecimal(expenseIndex),
-                           ReimbursedExpenses = expenseReimbIndex < 0 ? 0 : reader.GetDecimal(expenseReimbIndex)
+                           ReimbursedExpenses = expenseReimbIndex < 0 ? 0 : reader.GetDecimal(expenseReimbIndex),
+                           ActualRevenue = actualRevenueIndex > -1 && !reader.IsDBNull(actualRevenueIndex) ? reader.GetDecimal(actualRevenueIndex) : 0M,
+                           ActualGrossMargin = actualGrossMarginIndex > -1 && !reader.IsDBNull(actualGrossMarginIndex) ? reader.GetDecimal(actualGrossMarginIndex) : 0M
                        };
         }
 
@@ -641,8 +737,7 @@ namespace DataAccess
             }
         }
 
-        public static ComputedFinancials FinancialsGetByMilestonePersonEntry(int mpeId,SqlConnection connection = null,
-            SqlTransaction activeTransaction = null)
+        public static ComputedFinancials FinancialsGetByMilestonePersonEntry(int mpeId, SqlConnection connection = null,SqlTransaction activeTransaction = null)
         {
             if (connection == null)
             {
@@ -656,7 +751,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, mpeId);
-               
+
 
                 if (connection.State != ConnectionState.Open)
                 {
@@ -682,8 +777,6 @@ namespace DataAccess
         }
 
         #endregion
-
-      
     }
 }
 
