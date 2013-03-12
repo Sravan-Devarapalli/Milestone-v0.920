@@ -250,8 +250,6 @@
                                     <FooterStyle Width="120px" />
                                     <ItemTemplate>
                                         <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
-                                        <asp:Label ID="lblVacationIncludedAsterix" runat="server" Text="*" ForeColor="Red"
-                                            Visible="false" />
                                     </ItemTemplate>
                                     <EditItemTemplate>
                                         <asp:TextBox ID="txtHoursInPeriod" runat="server" Width="95" Text='<%# Eval("ProjectedWorkloadWithVacation") %>'
