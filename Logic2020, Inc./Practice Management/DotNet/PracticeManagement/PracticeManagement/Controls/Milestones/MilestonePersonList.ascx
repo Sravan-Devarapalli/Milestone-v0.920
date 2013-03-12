@@ -319,7 +319,7 @@
         </asp:TemplateField>
     </Columns>
 </asp:GridView>
-<asp:Panel ID="pnlTimeOffHoursToolTip" Style="display: none;" runat="server" CssClass="pnlTotal">
+<asp:Panel ID="pnlTimeOffHoursToolTip" Style="display: none;" runat="server" CssClass="pnlTotal no-wrap">
     <label>
         Time-Off Hour(s):
     </label>
