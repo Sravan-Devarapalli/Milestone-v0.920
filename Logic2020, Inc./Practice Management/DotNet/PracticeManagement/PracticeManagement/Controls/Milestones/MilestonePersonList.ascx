@@ -268,10 +268,16 @@
             </HeaderTemplate>
             <ItemStyle CssClass="Width9Percent" />
             <ItemTemplate>
-                <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
-                <asp:Label ID="lblVacationIncludedAsterix" runat="server" Text="*" ForeColor="Red"
-                    Visible="false" />
-              <asp:Label ID="lbVacationHoursToolTip" runat="server" Text="!" ForeColor="Red" CssClass="error-message fontSizeLarge"/>
+                <table class="WholeWidth" id="tblHoursInPeriod1" runat="server">
+                    <tr>
+                        <td class="width60P textRightImp">
+                            <asp:Label ID="lblHoursInPeriodDay" runat="server" Text='<%# Eval("ProjectedWorkloadWithVacation")  %>'></asp:Label>
+                        </td>
+                        <td class="textLeft">
+                            <asp:Label ID="lbVacationHoursToolTip" runat="server" Text="!" ForeColor="Red" CssClass="error-message fontSizeLarge" />
+                        </td>
+                    </tr>
+                </table>
                 <table class="WholeWidth" id="tblHoursInPeriod" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
