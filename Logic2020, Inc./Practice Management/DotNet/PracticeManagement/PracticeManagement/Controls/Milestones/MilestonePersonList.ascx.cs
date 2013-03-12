@@ -1132,16 +1132,22 @@ namespace PraticeManagement.Controls.Milestones
                 var lblHoursInPeriodDay = e.Row.FindControl("lblHoursInPeriodDay") as Label;
                 var imgMilestonePersonDelete = e.Row.FindControl("imgMilestonePersonDelete") as ImageButton;
                 var lbVacationHoursToolTip = e.Row.FindControl("lbVacationHoursToolTip") as Label;
+                var tblHoursInPeriod1 = e.Row.FindControl("tblHoursInPeriod1") as HtmlTable;
 
                 imgMilestonePersonEntryEdit.Visible = imgAdditionalAllocationOfResource.Visible = lnkPersonName.Visible =
                 lblRole.Visible = lblStartDate.Visible = lblEndDate.Visible = lblHoursPerDay.Visible =
-                lblAmount.Visible = lableTargetMargin.Visible = lblHoursInPeriodDay.Visible = imgMilestonePersonDelete.Visible = !entry.IsEditMode;
-                lbVacationHoursToolTip.Visible = !entry.IsEditMode && entry.VacationHours > 0;
+                lblAmount.Visible = lableTargetMargin.Visible = lblHoursInPeriodDay.Visible = imgMilestonePersonDelete.Visible = 
+                tblHoursInPeriod1.Visible = lbVacationHoursToolTip.Visible = !entry.IsEditMode;
 
                 if (!entry.IsEditMode && entry.VacationHours > 0)
                 {
                     lbVacationHoursToolTip.Attributes[OnMouseOver] = string.Format(ShowPanel, lbVacationHoursToolTip.ClientID, pnlTimeOffHoursToolTip.ClientID, lblTimeOffHours.ClientID, lblProjectAffectedHours.ClientID, entry.TimeOffHours.ToString("0.00"), entry.VacationHours.ToString("0.00"));
                     lbVacationHoursToolTip.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTimeOffHoursToolTip.ClientID);
+                    lbVacationHoursToolTip.Text = "!";
+                }
+                else
+                {
+                    lbVacationHoursToolTip.Text = "&nbsp;&nbsp;";
                 }
 
                 var imgMilestonePersonEntryUpdate = e.Row.FindControl("imgMilestonePersonEntryUpdate") as ImageButton;
