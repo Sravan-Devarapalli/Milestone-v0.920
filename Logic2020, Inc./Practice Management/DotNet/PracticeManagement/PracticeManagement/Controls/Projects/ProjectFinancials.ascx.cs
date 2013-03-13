@@ -78,8 +78,8 @@ namespace PraticeManagement.Controls.Projects
                     (String.Format(nfi, "{0:c}", Financials.RevenueNet.Value)):
                     Financials.RevenueNet.ToString();
                 lblEstimatedCogs.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.Cogs.Value);
-                lblExpenses.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.Expenses);
-                lblReimbursedExpenses.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.ReimbursedExpenses);
+                lblExpenses.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.Expenses * ((100 - project.Discount) / 100));
+                lblReimbursedExpenses.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.ReimbursedExpenses * ((100- project.Discount)/100) );
                 lblGrossMargin.Text = hide ? ht : String.Format(nfi, "{0:c}", Financials.GrossMargin.Value);
                 lblGrossMargin.CssClass =
                     Financials.GrossMargin.Value < 0 ? BenchCssClass : MarginCssClass;
