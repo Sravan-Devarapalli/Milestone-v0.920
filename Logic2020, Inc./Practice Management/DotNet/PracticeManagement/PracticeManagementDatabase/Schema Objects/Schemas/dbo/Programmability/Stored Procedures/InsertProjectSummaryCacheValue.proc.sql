@@ -33,8 +33,8 @@ BEGIN
 				DELETE [dbo].[ProjectSummaryCache] 
 				WHERE CacheDate = CONVERT(DATE,@InsertingTime - @BackupDays)
 				
-				SET @LogData = 'Delete Sucessfully FROM [InsertProjectSummaryCacheValue]'
-				EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
+				--SET @LogData = 'Delete Sucessfully FROM [InsertProjectSummaryCacheValue]'
+				--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
 
 				COMMIT TRAN  ProjSummaryCacheValue_Tran
 			END TRY
@@ -53,8 +53,8 @@ BEGIN
 						([ProjectId],[MonthStartDate],[MonthEndDate],ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,SalesCommission,PracticeManagementCommission,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
 						EXEC dbo.FinancialsListByProjectPeriod @StartDate=@StartDate ,@EndDate=@EndDate,@UseActuals=1,@ProjectId= @ProjectId
 				
-						SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Month'
-						EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
+						--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Month'
+						--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
 					END	
 
 				COMMIT TRAN  ProjSummaryCacheValue_Tran1
@@ -73,8 +73,8 @@ BEGIN
 							([ProjectId],[MonthStartDate],[MonthEndDate],ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,SalesCommission,PracticeManagementCommission,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
 							EXEC dbo.FinancialsListByProjectPeriodTotal @UseActuals=1,@ProjectId = @ProjectId 
 							
-							SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Total'
-							EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
+							--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Total'
+							--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
 						END	
 				COMMIT TRAN  ProjSummaryCacheValue_Tran2
 			END TRY
