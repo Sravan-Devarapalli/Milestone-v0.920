@@ -4160,10 +4160,19 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPersonWorkingHoursDetailsWithinThePeriod.proc.sql">
       <SubType>Code</SubType>
     </Build>
- <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetPersonTimeoffValuesByMilestoneId.function.sql">
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetPersonTimeoffValuesByMilestoneId.function.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\PersonProjectedHoursPerDay.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_TimeEntryHistory_PersonId_ChargeCodeDate.index.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_TimeEntryHistory_ChargeCodeDate_ModifiedDate.index.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_TimeEntryHistory_ChargeCodeId_ChargeCodeDate_ModifiedDate.index.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
@@ -4215,4 +4224,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
