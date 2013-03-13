@@ -1313,13 +1313,13 @@ namespace PraticeManagement
             //Fill Expenses Cell
             SetFooterLabelWithSeniority(
                 milestone.ComputedFinancials == null ? string.Empty :
-                        ((PracticeManagementCurrency)milestone.ComputedFinancials.Expenses).ToString(),
+                        ((PracticeManagementCurrency)milestone.ComputedFinancials.Expenses * ((100 - Milestone.Project.Discount) / 100)).ToString(),
                 lblExpenses);
 
             //Fill Final Milestone Margin Cell
             SetFooterLabelWithSeniority(
                 milestone.ComputedFinancials == null ? string.Empty :
-                        ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses).ToString(),
+                        ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses * ((100 - Milestone.Project.Discount) / 100)).ToString(),
                 lblReimbursedExpenses);
         }
 
