@@ -91,7 +91,7 @@ AS
 		   (CASE 
 			WHEN p.Timescale = 4
 			THEN p.HourlyRate * 0.01 * m.Amount
-			ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0)*m.HoursPerDay/HY.HoursInYear VacationRate,
+			ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0) * m.HoursPerDay/HY.HoursInYear VacationRate,
 		   0 AS PracticeManagementCommissionOwn,
 	       0 AS PracticeManagementCommissionSub
 	  FROM dbo.v_MilestoneRevenueRetrospective AS r
@@ -103,10 +103,11 @@ AS
 	       LEFT JOIN dbo.v_OverheadFixedRateTimescale AS o ON p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, FD.FutureDate)
 															  AND o.Inactive = 0
 															  AND o.TimescaleId = p.Timescale
-		  INNER JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
+		  INNER JOIN V_WorkinHoursByYear HY ON r.date BETWEEN HY.[YearStartDate] AND HY.[YearEndDate]
 		  LEFT JOIN v_MLFOverheadFixedRateTimescale MLFO ON MLFO.TimescaleId = p.Timescale
 								AND r.Date >= MLFO.StartDate 
 								AND (r.Date <= MLFO.EndDate OR MLFO.EndDate IS NULL)
 	GROUP BY r.ProjectId, r.MilestoneId, r.Date, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
 	         m.Amount, p.BonusAmount,p.IsYearBonus, p.BonusHoursToCollect, p.Timescale, r.HoursPerDay,
 	         r.IsHourlyAmount, m.HoursPerDay, m.PersonId,m.EntryId, m.EntryStartDate, r.PracticeManagerId,MLFO.OverheadRateTypeId,MLFO.Rate
+
