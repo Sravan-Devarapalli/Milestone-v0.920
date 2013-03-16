@@ -11,7 +11,7 @@ AS
 			P.IsHourlyAmount
 	FROM TimeEntry TE
 	JOIN TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
-	JOIN ChargeCode CC on CC.Id = TE.ChargeCodeId
+	JOIN ChargeCode CC on CC.Id = TE.ChargeCodeId AND cc.projectid != 174
 	JOIN (
 			SELECT Pro.ProjectId,CAST(CASE WHEN SUM(CAST(m.IsHourlyAmount as INT)) > 0 THEN 1 ELSE 0 END AS BIT) AS IsHourlyAmount
 			FROM Project Pro 
@@ -44,7 +44,7 @@ AS
 				ELSE mpe.HoursPerDay * (1-(cal.TimeoffHours/8)) --person partial day off
 			END) * mpe.Amount) AS PersonMilestoneDailyAmount--PersonLevel
 			FROM dbo.Project P 
-			INNER JOIN dbo.[Milestone] AS m ON P.ProjectId=m.ProjectId AND p.IsAllowedToShow = 1
+			INNER JOIN dbo.[Milestone] AS m ON P.ProjectId=m.ProjectId AND p.IsAllowedToShow = 1 AND p.projectid != 174
 			INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
 			INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
 			INNER JOIN dbo.PersonCalendarAuto AS cal ON cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId 
@@ -86,7 +86,7 @@ SELECT	pro.ProjectId,
 		   END AS PayRate, 	-- new payrate that takes into account that % unit is used in the Amount instead of $ unit
 	       CASE p.BonusHoursToCollect
 	           WHEN 0 THEN 0
-	           ELSE p.BonusAmount / (CASE WHEN p.IsYearBonus = 1 THEN HY.HoursInYear ELSE p.BonusHoursToCollect END)
+	           ELSE p.BonusAmount / (CASE WHEN p.IsYearBonus = 1 THEN (C.DaysInYear * 8) ELSE p.BonusHoursToCollect END)
 	       END AS BonusRate,
 	        SUM(CASE o.OverheadRateTypeId
 	                       -- Multipliers
@@ -100,7 +100,7 @@ SELECT	pro.ProjectId,
 	                             END) * o.Rate / 100 
 	                       WHEN 4 THEN p.HourlyRate * o.Rate / 100
 	                       -- Fixed
-	                       WHEN 3 THEN (o.Rate * 12 / HY.HoursInYear) 
+	                       WHEN 3 THEN (o.Rate * 12 / (C.DaysInYear * 8)) 
 	                       ELSE o.Rate
 	                   END) AS OverheadRate,
 
@@ -116,14 +116,14 @@ SELECT	pro.ProjectId,
 	                             END) * MLFO.Rate / 100
 	                       WHEN 4 THEN p.HourlyRate * MLFO.Rate / 100
 	                       -- Fixed
-	                       WHEN 3 THEN (MLFO.Rate * 12 / HY.HoursInYear)
+	                       WHEN 3 THEN (MLFO.Rate * 12 / (C.DaysInYear * 8))
 	                       ELSE MLFO.Rate 
 						   END)
 	                   ,0) MLFOverheadRate,
 		      (CASE 
 			WHEN p.Timescale = 4
 			THEN p.HourlyRate * 0.01 * ME.Amount
-			ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0)* ME.HoursPerDay/HY.HoursInYear VacationRate
+			ELSE p.HourlyRate END) * ISNULL(p.VacationDays,0)* ME.HoursPerDay/(C.DaysInYear * 8) VacationRate
 FROM ActualTimeEntries AS AE --ActualEntriesByPerson
 		FULL JOIN MileStoneEntries AS ME ON ME.ProjectId = AE.ProjectId AND AE.PersonId = ME.PersonId AND ME.Date = AE.ChargeCodeDate 
 		INNER JOIN dbo.Person Per ON per.PersonId = ISNULL(ME.PersonId,AE.PersonId)
@@ -133,9 +133,10 @@ FROM ActualTimeEntries AS AE --ActualEntriesByPerson
 		LEFT JOIN dbo.[v_PersonPayRetrospective] AS p ON p.PersonId = per.PersonId AND p.Date = c.Date
 		LEFT JOIN v_MLFOverheadFixedRateTimescale MLFO ON MLFO.TimescaleId = p.Timescale AND c.Date BETWEEN MLFO.StartDate AND ISNULL(MLFO.EndDate,FD.FutureDate)
 		LEFT JOIN dbo.v_OverheadFixedRateTimescale AS o ON p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, FD.FutureDate) AND o.Inactive = 0 AND o.TimescaleId = p.Timescale
-		LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(c.date)
+		--LEFT JOIN V_WorkinHoursByYear HY ON c.date BETWEEN HY.[YearStartDate] AND HY.[YearEndDate]
 		LEFT JOIN dbo.v_MilestoneRevenueRetrospective AS r ON ME.MilestoneId = r.MilestoneId AND c.Date = r.Date
 	--	where pro.projectid = 666 AND per.PersonId = 3963 AND c.Date = '2013-02-04'
 	GROUP BY pro.ProjectId,Per.PersonId,c.Date,AE.BillableHOursPerDay,AE.NonBillableHoursPerDay,ME.IsHourlyAmount,ME.HoursPerDay,ME.PersonMilestoneDailyAmount,
-	p.Timescale,p.HourlyRate,p.BonusHoursToCollect,p.BonusAmount,p.IsYearBonus,HY.HoursInYear,p.VacationDays,
+	p.Timescale,p.HourlyRate,p.BonusHoursToCollect,p.BonusAmount,p.IsYearBonus,p.VacationDays,C.DaysInYear,
 	MLFO.OverheadRateTypeId,r.HoursPerDay,r.MilestoneDailyAmount,r.Discount,MLFO.Rate,ME.Amount,ME.Id,ME.ActualHoursPerDay,AE.IsHourlyAmount
+	
