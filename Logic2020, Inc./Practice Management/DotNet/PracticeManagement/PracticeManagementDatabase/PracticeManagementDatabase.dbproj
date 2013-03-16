@@ -4175,6 +4175,15 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_TimeEntryHistory_ChargeCodeId_ChargeCodeDate_ModifiedDate.index.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\WorkinHoursByYear.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_Calendar_year_daysinyear.index.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_PersonCalendarAuto_PersonId_Date1.index.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
