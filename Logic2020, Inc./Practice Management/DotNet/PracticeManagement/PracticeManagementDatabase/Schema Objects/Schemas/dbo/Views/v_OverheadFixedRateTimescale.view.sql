@@ -20,8 +20,6 @@ AS
 	    ofr.IsCogs,
 	    ortt.TimescaleId
 	FROM dbo.OverheadFixedRate AS ofr
-	    INNER JOIN dbo.OverheadRateType AS ort ON ofr.RateType = ort.OverheadRateTypeId
+	    INNER JOIN dbo.OverheadRateType AS ort ON ofr.RateType = ort.OverheadRateTypeId AND ofr.IsMinimumLoadFactor = 0 
 		INNER JOIN dbo.OverheadFixedRateTimescale AS ortt ON ofr.OverheadFixedRateId = ortt.OverheadFixedRateId
-	WHERE ofr.IsMinimumLoadFactor = 0 
-
 
