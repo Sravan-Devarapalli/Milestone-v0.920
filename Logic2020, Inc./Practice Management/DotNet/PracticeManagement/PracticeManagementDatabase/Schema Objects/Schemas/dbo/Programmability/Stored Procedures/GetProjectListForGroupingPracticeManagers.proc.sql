@@ -297,7 +297,7 @@ BEGIN
 					INNER JOIN dbo.Pay AS p ON p.StartDate <= cal.Date 
 												AND p.EndDate > cal.date 
 												AND cal.PersonId = p.Person
-					LEFT JOIN V_WorkinHoursByYear HY1 ON HY1.[Year] = YEAR(cal.Date)
+					LEFT JOIN V_WorkinHoursByYear HY1 ON cal.date BETWEEN HY1.[YearStartDate] AND HY1.[YearEndDate]
 					WHERE cal.Date between @StartDate and @EndDate
 				   )AS p ON p.PersonId = m.PersonId AND p.Date = r.Date
 				   LEFT JOIN (
@@ -313,7 +313,7 @@ BEGIN
 						   ) AS o ON p.Date BETWEEN o.StartDate AND ISNULL(o.EndDate, @FutureDate)
 									  AND o.Inactive = 0
 									  AND o.TimescaleId = p.Timescale
-				 LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(r.Date)
+				 LEFT JOIN V_WorkinHoursByYear HY ON r.date BETWEEN HY.[YearStartDate] AND HY.[YearEndDate]
 			GROUP BY m.EntryId,r.Date, r.ProjectId, r.MilestoneId, r.MilestoneDailyAmount, r.Discount, p.HourlyRate,p.VacationDays,HY.HoursInYear,
 					 m.Amount, p.BonusAmount, p.BonusHoursToCollect, p.Timescale,p.PracticeId, r.HoursPerDay,
 					 r.IsHourlyAmount, m.HoursPerDay, m.PersonId,m.MilestonePersonId, m.EntryStartDate
@@ -414,4 +414,3 @@ BEGIN
 	ORDER BY Temp.MonthStartDate
 
 END
-
