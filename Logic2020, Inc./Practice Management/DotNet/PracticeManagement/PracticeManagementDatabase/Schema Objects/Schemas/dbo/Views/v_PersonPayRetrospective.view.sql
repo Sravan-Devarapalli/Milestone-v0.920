@@ -20,5 +20,5 @@ AS
 	           ON cal.PersonId = p.Person AND p.StartDate <= cal.Date AND p.EndDate > cal.date  
 	       INNER JOIN dbo.Timescale AS t ON p.Timescale = t.TimescaleId
 		   INNER JOIN dbo.[BonusHoursPerYearTable]() GHY ON 1=1--For improving query performance we are using table valued function instead of scalar function.
-	       INNER JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(cal.Date)
+	       INNER JOIN V_WorkinHoursByYear HY ON cal.Date BETWEEN HY.[YearStartDate] AND HY.[YearEndDate]
 
