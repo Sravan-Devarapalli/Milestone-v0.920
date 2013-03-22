@@ -88,15 +88,15 @@ AS
 							 ),
 					   PersonForeCastedHours
 						  AS ( SELECT   MP.PersonId ,
-										SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay))
+										SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
 											ELSE 0
 										END) AS ForecastedHoursUntilToday,
-										SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay)) AS ForecastedHours
+										SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay)) AS ForecastedHours
 							   FROM     dbo.MilestonePersonEntry AS MPE
 										INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 										INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 										INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
-									    INNER JOIN dbo.v_PersonCalendar PC ON PC.PersonId = MP.PersonId
+									    INNER JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
 															  AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate																																																			
 							   WHERE    M.ProjectId = @ProjectId
 										AND ( @MilestoneIdLocal IS NULL
