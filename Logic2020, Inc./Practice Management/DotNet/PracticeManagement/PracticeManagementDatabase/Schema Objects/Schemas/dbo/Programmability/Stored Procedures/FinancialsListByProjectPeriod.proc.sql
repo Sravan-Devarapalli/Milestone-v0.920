@@ -55,8 +55,6 @@ BEGIN
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
 		   f.PersonId,
 		   f.Discount,
 		   f.IsHourlyAmount,
