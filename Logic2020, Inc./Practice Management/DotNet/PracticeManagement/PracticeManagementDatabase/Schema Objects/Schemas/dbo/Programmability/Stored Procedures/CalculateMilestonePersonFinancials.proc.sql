@@ -22,22 +22,14 @@ BEGIN
 
 	;WITH FinancialsRetro AS 
 	(
-	SELECT f.ProjectId,
-		   f.PersonId,
+	SELECT f.PersonId,
 		   f.MilestoneId,
-		   f.Date, 
-		   f.EntryStartDate,
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
 		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)) SLHR,
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
-		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId,
-		   f.Discount,
-		   f.EntryId
+		   f.PersonHoursPerDay
 	FROM v_FinancialsRetrospective f
 	WHERE f.MilestoneId = @MilestoneId AND f.PersonId = @PersonId     
 	) ,
