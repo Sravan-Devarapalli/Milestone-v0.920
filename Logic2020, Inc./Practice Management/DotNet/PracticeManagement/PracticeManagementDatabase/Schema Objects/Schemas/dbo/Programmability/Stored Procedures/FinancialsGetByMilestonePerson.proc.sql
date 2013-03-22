@@ -28,10 +28,7 @@ AS
 		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)) SLHR,
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
-		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId
+		   f.PersonHoursPerDay
 	FROM v_FinancialsRetrospective f
 	WHERE f.MilestoneId = @MilestoneId AND f.PersonId = @PersonId         
 	),
@@ -57,11 +54,6 @@ AS
 						(CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
 					    *ISNULL(f.PersonHoursPerDay, 0))* (f.ProjectSalesCommisionFraction/100))) SalesCommission,
-
-	       SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-	            (CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END)  * ISNULL(f.PersonHoursPerDay, 0)) *
-	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission,
 	           0.0 AS 'actualhours',
 	           0.0 AS 'forecastedhours'
 	  FROM FinancialsRetro AS f
@@ -76,8 +68,9 @@ AS
 			FRP.Cogs,
 			FRP.Hours,
 			FRP.SalesCommission,
-			FRP.PracticeManagementCommission,
+			0.0 AS PracticeManagementCommission,
 			FRP.actualhours,
 			FRP.forecastedhours
 	  FROM FinancialsRetroByProjectId FRP
 	  INNER JOIN dbo.Calendar C ON C.[Date] = FRP.FinancialDate 
+
