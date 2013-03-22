@@ -2,5 +2,5 @@
 RETURNS TABLE
 AS
 	RETURN 
-	SELECT CONVERT(DECIMAL(10,2),s.Value) AS HoursPerYear FROM Settings s WHERE s.SettingsKey='DefaultHoursPerYear'
+	SELECT 2080 AS HoursPerYear
 GO
