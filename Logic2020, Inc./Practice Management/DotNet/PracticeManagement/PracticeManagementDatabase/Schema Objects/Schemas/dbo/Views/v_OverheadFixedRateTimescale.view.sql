@@ -1,25 +1,10 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 10-16-2008
--- Updated by:	
--- Update date:	
--- Description:	Selects overheads for the timescales.
--- =============================================
-CREATE VIEW [dbo].[v_OverheadFixedRateTimescale]
+﻿CREATE VIEW [dbo].[v_OverheadFixedRateTimescale]
 AS
-	SELECT ofr.OverheadFixedRateId,
-	    ofr.Description,
-	    ofr.Rate,
-	    ofr.StartDate,
-	    ofr.EndDate,
-	    ofr.Inactive,
-	    ort.OverheadRateTypeId,
-	    ort.Name AS OverheadRateTypeName,
-	    ort.IsPercentage,
-	    ort.HoursToCollect,
-	    ofr.IsCogs,
-	    ortt.TimescaleId
+	SELECT	ofr.Rate,
+			ofr.StartDate,
+			ofr.EndDate,
+			ofr.RateType AS OverheadRateTypeId,
+			ortt.TimescaleId
 	FROM dbo.OverheadFixedRate AS ofr
-	    INNER JOIN dbo.OverheadRateType AS ort ON ofr.RateType = ort.OverheadRateTypeId AND ofr.IsMinimumLoadFactor = 0 
-		INNER JOIN dbo.OverheadFixedRateTimescale AS ortt ON ofr.OverheadFixedRateId = ortt.OverheadFixedRateId
+		INNER JOIN dbo.OverheadFixedRateTimescale AS ortt ON ortt.OverheadFixedRateId = ofr.OverheadFixedRateId AND ofr.IsMinimumLoadFactor = 0 AND ofr.Inactive = 0
 
