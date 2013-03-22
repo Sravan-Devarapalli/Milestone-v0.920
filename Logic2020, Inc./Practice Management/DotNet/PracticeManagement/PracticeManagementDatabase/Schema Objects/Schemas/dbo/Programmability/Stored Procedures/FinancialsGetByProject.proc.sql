@@ -26,9 +26,6 @@ AS
 		   ISNULL(f.PayRate, 0) PayRate,
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId,
 		   f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
@@ -53,12 +50,7 @@ AS
 		   
 		   ISNULL(SUM((CASE WHEN f.SLHR >= f.PayRate + f.MLFOverheadRate THEN f.SLHR ELSE f.PayRate + f.MLFOverheadRate END)*ISNULL(f.PersonHoursPerDay, 0)),0) Cogs,
 
-	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours,
-	       
-	       SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-	            (CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) * ISNULL(f.PersonHoursPerDay, 0)) *
-	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission
+	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours
  	  FROM FinancialsRetro AS f
 	 WHERE f.ProjectId = @ProjectIdLocal
 	GROUP BY f.ProjectId
@@ -79,7 +71,7 @@ AS
 							  WHERE c.ProjectId = P.ProjectId 
 									AND c.CommissionType = 1
 								),0) *0.01 SalesCommission,
-		ISNULL(pf.PracticeManagementCommission,0) PracticeManagementCommission,
+		0.0 PracticeManagementCommission,
 		ISNULL(PE.ExpenseSum,0) Expense,
 		ISNULL(PE.ReimbursedExpenseSum,0) ReimbursedExpense
 	FROM  Project p 
