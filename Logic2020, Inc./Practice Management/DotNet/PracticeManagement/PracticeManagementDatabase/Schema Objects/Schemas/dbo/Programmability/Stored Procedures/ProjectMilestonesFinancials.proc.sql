@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Nikita Goncharenko
--- Create date: 2010-06-11
--- Updated By:	Srinivas.M
--- Updated Date: 2012-06-05
--- Description:	Project milestones financials
--- =============================================
-CREATE PROCEDURE dbo.ProjectMilestonesFinancials 
+﻿CREATE PROCEDURE dbo.ProjectMilestonesFinancials 
 	@ProjectId INT
 AS
 BEGIN
@@ -24,9 +17,6 @@ BEGIN
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId,
 		   f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
@@ -48,22 +38,8 @@ BEGIN
 		   
 		   ISNULL(SUM((CASE WHEN f.SLHR >= f.PayRate + f.MLFOverheadRate THEN f.SLHR ELSE  f.PayRate + f.MLFOverheadRate END)*ISNULL(f.PersonHoursPerDay, 0)),0) Cogs,
 
-	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours,
-		   --MAX(f.ProjectSalesCommisionFraction) ProjectSalesCommisionFraction,
-
-	     --  (SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-						--(CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-						--	  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
-					 --   *ISNULL(f.PersonHoursPerDay, 0))* (f.ProjectSalesCommisionFraction/100))) SalesCommission,
-
-	       SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-	            (CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) * ISNULL(f.PersonHoursPerDay, 0)) *
-	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission
-			   --,
-		   --min(case when pe.Expense  is null then 0 else pe.Expense  end) as 'Expense',
-		   --min(case when pe.ReimbursedExpense is null then 0 else pe.ReimbursedExpense  end) as 'ReimbursedExpense',
-		   --min(f.Discount) as Discount
+	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours
+		 
 	  FROM FinancialsRetro AS f
 	  INNER JOIN dbo.Calendar C ON C.Date = f.Date
 	  LEFT JOIN v_MilestoneExpenses as pe on f.ProjectId = pe.ProjectId AND f.MilestoneId = pe.MilestoneId 
@@ -88,7 +64,7 @@ BEGIN
 						*  ISNULL((SELECT SUM(c.FractionOfMargin)  FROM dbo.Commission AS  c   WHERE c.ProjectId = P.ProjectId 
 									AND c.CommissionType = 1
 								),0)*0.01  SalesCommission,
-		ISNULL(fin.PracticeManagementCommission,0),
+		0.0 AS PracticeManagementCommission,
 		ISNULL(me.Expense,0) Expense,
 		ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense,
 		case 
