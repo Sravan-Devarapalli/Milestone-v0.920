@@ -30,9 +30,6 @@ BEGIN
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId,
 		   f.Discount,
 		   f.EntryId
 	FROM v_FinancialsRetrospective f
