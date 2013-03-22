@@ -98,7 +98,6 @@ AS
     FROM CurrentConsultantsWithVacationDays CCWV
 	INNER JOIN dbo.v_MilestonePersonSchedule AS S ON CCWV.PersonId = S.PersonId
     WHERE  s.MilestoneId <> (SELECT MilestoneId FROM dbo.DefaultMilestoneSetting)
-			AND s.IsDefaultMileStone = 0
 			AND s.Date BETWEEN CCWV.startDate AND CCWV.endDate AND 
 			(@ActiveProjects = 1 AND s.ProjectStatusId = 3 OR		--  3 - Active
 			 @ProjectedProjects = 1 AND s.ProjectStatusId = 2 OR	--  2 - Projected
