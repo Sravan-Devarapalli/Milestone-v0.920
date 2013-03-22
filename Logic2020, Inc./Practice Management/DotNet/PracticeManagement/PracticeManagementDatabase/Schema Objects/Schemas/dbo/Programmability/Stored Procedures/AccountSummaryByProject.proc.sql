@@ -43,7 +43,7 @@ BEGIN
 	;WITH ProjectForeCastedHoursUntilToday
 	AS (
 		SELECT M.ProjectId
-				, SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.ActualHours,MPE.HoursPerDay)) AS ForecastedHoursUntilToday
+				, SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay)) AS ForecastedHoursUntilToday
 				, MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue
 				, MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
 		FROM
@@ -54,7 +54,7 @@ BEGIN
 				ON M.MilestoneId = MP.MilestoneId
 			INNER JOIN dbo.person AS P
 				ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
-			INNER JOIN dbo.v_PersonCalendar PC
+			INNER JOIN dbo.PersonCalendarAuto PC
 				ON PC.PersonId = MP.PersonId AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate AND PC.Date BETWEEN @StartDateLocal AND CASE
 					WHEN @EndDateLocal > DATEADD(DAY, -1, @Today) THEN
 						DATEADD(DAY, -1, @Today)
