@@ -40,6 +40,7 @@ AS
 		   p.ProjectOwnerId,
 		   p.SowBudget,
 		   c.IsNoteRequired AS [ClientIsNoteRequired],
+		   p.IsAdministrative,
 		   [dbo].[GetProjectCapabilities](p.ProjectId) AS ProjectCapabilityIds
 	  FROM dbo.Project AS p
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
