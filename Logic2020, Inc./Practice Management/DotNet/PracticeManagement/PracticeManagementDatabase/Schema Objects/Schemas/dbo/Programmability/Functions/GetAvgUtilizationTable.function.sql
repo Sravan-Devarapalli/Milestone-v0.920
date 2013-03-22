@@ -37,7 +37,6 @@ RETURN
     INNER JOIN dbo.GetCurrentPayTypeTable() CPT ON CPT.PersonId = P.PersonId AND CPT.Timescale = 2
 	LEFT JOIN dbo.v_MilestonePersonSchedule AS MPS ON P.PersonId = MPS.PersonId 
 												AND MPS.MilestoneId <> (SELECT MilestoneId FROM dbo.DefaultMilestoneSetting)
-												AND MPS.IsDefaultMileStone = 0
 												AND MPS.Date BETWEEN @StartDate AND @EndDate
 												AND (
 													 @ActiveProjects = 1 AND MPS.ProjectStatusId = 3 OR		--  3 - Active
