@@ -17,11 +17,10 @@ AS
 	       m.IsHourlyAmount,
 	       m.StartDate,
 	       m.ProjectedDeliveryDate,
-	       m.IsDefault IsDefaultMileStone,
 		   P.ProjectStatusId
 	  FROM dbo.Project P 
-		   INNER JOIN dbo.[Milestone] AS m ON P.ProjectId=m.ProjectId AND P.IsAdministrative = 0 AND P.ProjectId != 174 
-		   INNER JOIN dbo.MilestonePerson AS mp ON m.[MilestoneId] = mp.[MilestoneId]
-	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
-	       INNER JOIN dbo.PersonCalendarAuto AS cal ON cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND cal.PersonId = mp.PersonId
+		   INNER JOIN dbo.[Milestone] AS m ON m.ProjectId=P.ProjectId AND P.IsAdministrative = 0 AND P.ProjectId != 174  AND m.IsDefault = 0
+		   INNER JOIN dbo.MilestonePerson AS mp ON mp.[MilestoneId] = m.[MilestoneId]
+	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
+	       INNER JOIN dbo.PersonCalendarAuto AS cal ON cal.Date BETWEEN mpe.Startdate AND mpe.EndDate AND mp.PersonId = cal.PersonId
 
