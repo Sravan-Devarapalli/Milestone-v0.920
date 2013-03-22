@@ -106,16 +106,11 @@ AS
 				   ELSE pay.Amount / HY.HoursInYear
 			   END   * ISNULL(pay.VacationDays,0)*8/HY.HoursInYear,0) VacationRate,
 		   
-			   ISNULL((SELECT 
-							CASE MLFO.[OverheadRateTypeId] 
-							WHEN 2 THEN @DefaultBillRate*MLFO.[Rate]*0.01
-							WHEN 4 THEN MLFO.[Rate]*(CASE
-														 WHEN pay.Timescale IN (1, 3) THEN pay.Amount
-														 WHEN pay.Timescale= 4 THEN pay.Amount*@DefaultBillRate*0.01
-														 ELSE pay.Amount / HY.HoursInYear
-														 END)*0.01
-							WHEN 3 THEN MLFO.[Rate] * 12 / HY.HoursInYear
-							ELSE  MLFO.[Rate]   END
+			   ISNULL((SELECT MLFO.[Rate]*(CASE
+												WHEN pay.Timescale IN (1, 3) THEN pay.Amount
+												WHEN pay.Timescale= 4 THEN pay.Amount*@DefaultBillRate*0.01
+												ELSE pay.Amount / HY.HoursInYear
+												END)*0.01
 						FROM dbo.v_MLFOverheadFixedRateTimescale MLFO 
 						WHERE MLFO.TimescaleId = pay.Timescale
 							AND cal.Date >= MLFO.StartDate 
@@ -133,7 +128,7 @@ AS
 		LEFT JOIN [dbo].V_WorkinHoursByYear HY ON HY.Year = YEAR(cal.Date)
 		LEFT JOIN [dbo].[v_OverheadFixedRateTimescale] OVH
 				ON OVH.TimescaleId = pay.Timescale AND cal.Date BETWEEN OVH.StartDate 
-					AND ISNULL(OVH.EndDate, @FutureDate) AND OVH.Inactive = 0
+					AND ISNULL(OVH.EndDate, @FutureDate)
 		LEFT JOIN TerminationReasons t ON p.TerminationReasonId = t.TerminationReasonId
 		WHERE DATEPART(DW, cal.[Date]) NOT IN(1,7)
 				AND cal.Date BETWEEN @StartDateLocal AND @EndDateLocal
@@ -275,7 +270,7 @@ AS
 				TimeScaleMinDate,
 				MonthMaxDate,
 				MonthMinDate
-	--HAVING (SUM(ISNULL(R.BenchHours,0)) > 0 OR @IncludeZeroCostEmployeesLocal = 1)
+	HAVING (SUM(ISNULL(FLHRD.BenchHours,0)) > 0 OR @IncludeZeroCostEmployeesLocal = 1)
 	
 )
 
