@@ -24,9 +24,6 @@ AS
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
 		   f.PersonHoursPerDay,
-		   f.PracticeManagementCommissionSub,
-		   f.PracticeManagementCommissionOwn ,
-		   f.PracticeManagerId,
 		   f.PersonId,
 		   f.Discount
 	FROM v_FinancialsRetrospective f
@@ -46,16 +43,8 @@ AS
 						(CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
 							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
 					    *ISNULL(f.PersonHoursPerDay, 0)) GrossMargin,
-		   
 		   ISNULL(SUM((CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate THEN f.SLHR ELSE  f.PayRate +f.MLFOverheadRate END)*ISNULL(f.PersonHoursPerDay, 0)),0) Cogs,
-
-	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours, 
-		   
-	       SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-	            (CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) * ISNULL(f.PersonHoursPerDay, 0)) *
-	           (f.PracticeManagementCommissionSub + CASE f.PracticeManagerId WHEN f.PersonId THEN f.PracticeManagementCommissionOwn ELSE 0 END)) / 100 AS PracticeManagementCommission
- 
+	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours
 	  FROM FinancialsRetro AS f
 	  INNER JOIN dbo.Calendar C ON C.Date = f.Date
 	 WHERE f.MilestoneId = @MilestoneIdLocal
@@ -75,7 +64,7 @@ AS
 			*  ISNULL((SELECT SUM(c.FractionOfMargin)  FROM dbo.Commission AS  c   WHERE c.ProjectId = P.ProjectId 
 									AND c.CommissionType = 1
 								),0)  *0.01 SalesCommission,
-		ISNULL(PracticeManagementCommission,0) PracticeManagementCommission,
+		0.0 PracticeManagementCommission,
 		ISNULL(ME.Expense,0) Expense,
 		ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense
 	FROM Milestone M
