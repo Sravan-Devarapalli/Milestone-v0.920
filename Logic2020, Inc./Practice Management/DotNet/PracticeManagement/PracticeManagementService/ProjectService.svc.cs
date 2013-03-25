@@ -86,39 +86,6 @@ namespace PracticeManagementService
 
         }
 
-        /// <summary>
-        /// Enlists the requested projects.
-        /// </summary>
-        /// <returns>The list of the projects.</returns>
-        public List<Project> GetProjectListAll()
-        {
-            try
-            {
-                int? salespersonId = null;
-                int? practiceManagerId = null;
-
-                return ProjectDAL.ProjectListAll(null,
-                    true,
-                    false,
-                    false,
-                    true,
-                    DateTime.MinValue,
-                    DateTime.MaxValue,
-                    salespersonId,
-                    practiceManagerId,
-                    null,
-                    null);
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListAll", "ProjectService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-
-        }
-
         public List<Project> ListProjectsByClient(int? clientId, string viewerUsername)
         {
             try
@@ -488,44 +455,6 @@ namespace PracticeManagementService
             }
         }
 
-        /// <summary>
-        /// Enlists the requested projects.
-        /// </summary>
-        /// <param name="clientId">An ID of the client the projects belong to.</param>
-        /// <param name="userName">The user (by email) to retrive the result for.</param>
-        /// <returns>The list of the projects are belong to the specified client.</returns>
-        public List<Project> GetProjectListByClient(int clientId, string userName)
-        {
-
-            try
-            {
-                int? salespersonId = null;
-                int? practiceManagerId = null;
-
-                // ProjectRateCalculator.VerifyPrivileges(userName, ref salespersonId, ref practiceManagerId);
-                return ProjectDAL.ProjectListAll(clientId,
-                    true,
-                    true,
-                    true,
-                    true,
-                    DateTime.MinValue,
-                    DateTime.MaxValue,
-                    salespersonId,
-                    practiceManagerId,
-                    null,
-                    null,
-                    false);
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "GetProjectListByClient", "ProjectService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-
-
-        }
 
         /// <summary>
         /// Retrives a list of the projects by the specified conditions.
