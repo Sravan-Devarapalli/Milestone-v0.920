@@ -150,6 +150,14 @@
     <Compile Include="Reports\ByAccount\GroupByAccount.cs" />
     <Compile Include="Reports\ByAccount\GroupByBusinessUnit.cs" />
     <Compile Include="Reports\ByAccount\GroupByPerson.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantDemandDetails.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantDemandDetailsByMonth.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantDemandDetailsByMonthBySkill.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantDemandDetailsByMonthByTitle.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantGroupByMonth.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantGroupbySkill.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantGroupbyTitle.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantGroupbyTitleSkill.cs" />
     <Compile Include="Reports\GroupedHours.cs" />
     <Compile Include="Reports\HumanCapital\TerminationPersonsInRange.cs" />
     <Compile Include="Reports\PersonLevelGroupedHours.cs" />
