@@ -2665,9 +2665,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetMinimumLoadFactorOverheadMultipliers.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SaveMinimumLoadFactorOverheadMultipliers.proc.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CompanyLogoDataSave.proc.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4184,6 +4181,12 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Indexes\IX_PersonCalendarAuto_PersonId_Date1.index.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetConsultantDemandForPeriod.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Views\v_ConsultingDemand.view.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4233,3 +4236,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
