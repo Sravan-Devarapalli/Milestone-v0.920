@@ -37,12 +37,6 @@ namespace PracticeManagementService
         [OperationContract]
         int ProjectCountByClient(int clientId);
 
-        /// <summary>
-        /// Enlists the requested projects.
-        /// </summary>
-        [OperationContract]
-        List<Project> GetProjectListAll();
-
         [OperationContract]
         List<Project> GetProjectListByDateRange(bool showProjected,
                                                 bool showCompleted,
@@ -165,15 +159,6 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Project> GetBenchListWithoutBenchTotalAndAdminCosts(BenchReportContext context);
-
-        /// <summary>
-        /// Enlists the requested projects.
-        /// </summary>
-        /// <param name="clientId">An ID of the client the projects belong to.</param>
-        /// <param name="userName">The user (by email) to retrive the result for.</param>
-        /// <returns>The list of the projects are belong to the specified client.</returns>
-        [OperationContract]
-        List<Project> GetProjectListByClient(int clientId, string userName);
 
         /// <summary>
         /// Retrives a list of the projects by the specified conditions.
