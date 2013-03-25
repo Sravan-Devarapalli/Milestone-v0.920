@@ -19,6 +19,15 @@ BEGIN
 				WHERE ISNULL(i.HireDate, '18000101') <> ISNULL(d.HireDate, '18000101') OR ISNULL(i.TerminationDate, '18000101') <> ISNULL(d.TerminationDate, '18000101'))
 	BEGIN
 
+	DECLARE @CurrentYearStartDate DATETIME,
+			@PersonCalendarAutoFutureyears INT = 5,
+			@PersonCalendarAutoFutureDate DATETIME
+
+	SELECT @CurrentYearStartDate = CONVERT(DATETIME,CONVERT(NVARCHAR,YEAR(dbo.GettingPMTime(GETUTCDATE())))+'0101')
+	SELECT @PersonCalendarAutoFutureDate= DATEADD(YY,@PersonCalendarAutoFutureyears,@CurrentYearStartDate)
+		
+
+
 		-- Deleting redundand records
 		DELETE PCA
 		FROM deleted AS d
@@ -33,7 +42,7 @@ BEGIN
 		FROM inserted i
 		INNER JOIN  dbo.v_PersonCalendar AS C ON i.PersonId = c.PersonId
 		LEFT JOIN dbo.PersonCalendarAuto AS PCA ON C.PersonId = PCA.PersonId AND C.Date = PCA.Date
-		WHERE PCA.Date IS NULL AND PCA.PersonId IS NULL
+		WHERE PCA.Date IS NULL AND PCA.PersonId IS NULL AND c.Date < @PersonCalendarAutoFutureDate
 
 	END
 
