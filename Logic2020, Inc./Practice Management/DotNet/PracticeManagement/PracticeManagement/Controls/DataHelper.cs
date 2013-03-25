@@ -1255,27 +1255,6 @@ namespace PraticeManagement.Controls
             FillCheckBoxList(control, firstItemText, selectedValue, persons.ToArray(), "-1");
         }
 
-        /// <summary>
-        /// Fills the list control with the list of projects.
-        /// </summary>
-        /// <param name="control">The control to be filled.</param>
-        /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static IEnumerable<Project> FillProjectsList(ListControl control, string firstItemText)
-        {
-            using (var serviceClient = new ProjectServiceClient())
-            {
-                try
-                {
-                    return serviceClient.GetProjectListCustom(true, true, true, true);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
         private static void FillCheckBoxList<T>(ListControl control, string firstItemText, int? selectedValue, T[] items, string firstItemValue) where T : IIdNameObject
         {
             control.Items.Clear();
