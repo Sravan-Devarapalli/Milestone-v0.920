@@ -497,7 +497,6 @@
     <Content Include="Config\TimeTypes.aspx" />
     <Content Include="Config\TimeZones.aspx" />
     <Content Include="Controls\Opportunities\OpportunityListControl.ascx" />
-    <Content Include="Controls\Opportunities\ProposedResources.ascx" />
     <Content Include="Controls\PersonsFilter.ascx" />
     <Content Include="DiscussionReview2.aspx" />
     <Content Include="GuestPages\ChangePasswordError.aspx" />
@@ -1902,13 +1901,6 @@
     </Compile>
     <Compile Include="Controls\Opportunities\OpportunityPriorityHelper.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls\Opportunities\ProposedResources.ascx.cs">
-      <DependentUpon>ProposedResources.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Opportunities\ProposedResources.ascx.designer.cs">
-      <DependentUpon>ProposedResources.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\PersonsFilter.ascx.cs">
       <DependentUpon>PersonsFilter.ascx</DependentUpon>
