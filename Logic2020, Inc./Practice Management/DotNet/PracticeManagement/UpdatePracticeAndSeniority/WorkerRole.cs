@@ -81,6 +81,7 @@ namespace UpdatePracticeAndSeniority
         public const string SP_PersonPasswordInsert = "dbo.PersonPasswordInsert";
         public const string SP_GetPersonsByTodayHireDate = "dbo.GetPersonsByTodayHireDate";
         public const string SP_InsertProjectSummaryCacheValue = "dbo.InsertProjectSummaryCacheValue";
+        public const string SP_DatabaseCleanUpObjects = "dbo.DatabaseCleanUp";
 
         //Parameters
         public const string NextRun = "@NextRun";
@@ -341,6 +342,7 @@ namespace UpdatePracticeAndSeniority
             var nextRun = GetNextRunDate(currentWithTimeZone, FirstSchedularTime);
             WorkerRole.StartAutomaticUpdation(currentWithTimeZone, nextRun);
             WorkerRole.EmailUpdatedProfilesList(currentWithTimeZone, nextRun);
+            WorkerRole.RunDatabaseCleanUp(currentWithTimeZone);
         }
 
         /// <summary>
@@ -354,6 +356,42 @@ namespace UpdatePracticeAndSeniority
                 var sleeptime = PayrollDistributionReportScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
                 Thread.Sleep(sleeptime);
                 SendPayrollDistributionReport(CurrentPMTime);
+            }
+        }
+
+        public static void RunDatabaseCleanUp(DateTime currentDateTimeWithTimeZone)
+        {
+            if (currentDateTimeWithTimeZone.Day == 1 && currentDateTimeWithTimeZone.Month == 1)
+            {
+                DateTime nextRun = currentDateTimeWithTimeZone.AddYears(1);
+                SqlConnection connection = null;
+                try
+                {
+                    var connectionString = WorkerRole.GetConnectionString();
+
+                    if (string.IsNullOrEmpty(connectionString))
+                        return;
+
+                    connection = new SqlConnection(connectionString);
+                    SqlCommand cmd = new SqlCommand(SP_DatabaseCleanUpObjects, connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+
+                    WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_DatabaseCleanUpObjects), nextRun);
+                }
+                catch (Exception ex)
+                {
+                    WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, FailedStatus, string.Format(FailedRunningProcedureFormat, SP_DatabaseCleanUpObjects, ex.Message), nextRun);
+                }
+                finally
+                {
+                    if (connection != null && connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
             }
         }
 
