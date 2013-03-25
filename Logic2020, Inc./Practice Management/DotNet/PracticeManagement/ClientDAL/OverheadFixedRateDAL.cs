@@ -25,7 +25,6 @@ namespace DataAccess
         private const string OverheadFixedRateInsertProcedure = "dbo.OverheadFixedRateInsert";
         private const string OverheadFixedRateUpdateProcedure = "dbo.OverheadFixedRateUpdate";
         private const string GetMLFMultipliersProcedure = "dbo.GetMinimumLoadFactorMultipliers";
-        private const string SaveMLFMultipliersProcedure = "dbo.SaveMinimumLoadFactorOverheadMultipliers";
         private const string UpdateMinimumLoadFactorHistoryProcedure = "dbo.UpdateMinimumLoadFactorHistory";
         private const string UpdateMinimumLoadFactorStatusProcedure = "dbo.UpdateMinimumLoadFactorStatus";
 
@@ -129,32 +128,6 @@ namespace DataAccess
                 }
             }
             return MLFMultipliers;
-        }
-
-        /// <summary>
-        /// saves the Rate for each time scale type of a Overhead specified by description.
-        /// </summary>
-        /// <param name="OverHeadName"></param>
-        /// <param name="W2HourlyMultiplier"></param>
-        /// <param name="W2SalaryMultiplier"></param>
-        /// <param name="Hourly1099Multiplier"></param>
-        public static void SaveMinimumLoadFactorOverheadMultipliers(string overHeadName, bool inActive, decimal w2HourlyMultiplier,
-                                                                    decimal w2SalaryMultiplier, decimal hourly1099Multiplier)
-        {
-            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command =
-                new SqlCommand(SaveMLFMultipliersProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(InactiveParam, inActive);
-                command.Parameters.AddWithValue(DescriptionParam, overHeadName);
-                command.Parameters.AddWithValue(W2HourlyMultiplierParam, w2HourlyMultiplier);
-                command.Parameters.AddWithValue(W2SalaryMultiplierParam, w2SalaryMultiplier);
-                command.Parameters.AddWithValue(Hourly1099MultiplierParam, hourly1099Multiplier);
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
         }
 
         public static void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate )
