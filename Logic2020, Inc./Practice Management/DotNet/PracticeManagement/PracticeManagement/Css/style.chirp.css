@@ -2091,6 +2091,10 @@ TABLE.Section td
 {
     width: 50%;
 }
+.Width50andhalfPercent
+{
+    width: 50.5%;
+}
 .Width55Percent
 {
     width: 55%;
@@ -7632,4 +7636,141 @@ table#ctl00_body_login tr td label
     border: 1px solid rgba(33, 33, 33, 0.6);
     z-index: 10001;
 }
+.ConsultingDemandDetails, .ConsultingDemandDetailsByMonth
+{
+    width: 100%;
+}
+.ConsultingDemandDetails td, .ConsultingDemandDetails th, .ConsultingDemandDetailsByMonth td, .ConsultingDemandDetailsByMonth th
+{
+    height: 30px;
+}
+.ConsultingDemandDetails .FirstTD
+{
+    padding-left: 70px;
+    text-align: left !important;
+    width: 25%;
+}
+.ConsultingDemandDetails .SecondTD
+{
+    width: 10%;
+    text-align: center;
+}
+.ConsultingDemandDetails .ThirdTD
+{
+    width: 15%;
+    text-align: center;
+}
+.ConsultingDemandDetailsTotal
+{
+    font-weight: bolder;
+    font-size: 15px;
+    width: 10%;
+    text-align: center;
+}
+.ConsultingDemandDetails .headerRow, .ConsultingDemandDetailsByMonth .headerRow
+{
+    background-color: White;
+    background-image: none;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: auto;
+    position: static;
+    border: 1px solid #000000;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 2px;
+    text-align: center;
+    vertical-align: middle;
+}
 
+.ConsultingDemandDetailsByMonth .FirstTD
+{
+    width: 10%;
+    text-align: center;
+    padding-left: 20px;
+}
+
+.ConsultingDemandDetailsByMonth .SecondTD
+{
+    width: 20%;
+    text-align: center;
+}
+.ConsultingDemandDetailsByMonth .ThirdTD
+{
+    width: 10%;
+    text-align: center;
+}
+.ConsultingDemandDetailsByMonth .ForthTD
+{
+    width: 15%;
+    text-align: center;
+}
+
+.consultngDetailPanel {
+    border: 1px solid black;
+}
+.consultngDetailPanel table {
+    width: 100%;
+}
+.trConsultngDetailPanel tr {
+    background-color: white;
+    height: 30px;
+    white-space: nowrap;
+    width: 100%;
+}
+.trConsultngDetailPanel th {
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    width: 13.33%;
+}
+.trConsultngDetailPanel td {
+    text-align: center;
+    white-space: nowrap;
+    width: 13.33%;
+}
+.prjctnamewidth20 {
+    width: 20% !important;
+}
+.trConsultngDetailPanelItem {
+    background-color: #D4D0C9;
+    height: 30px;
+    text-align: center;
+    white-space: nowrap;
+}
+.trConsultngDetailPanelItem th {
+    font-size: 14px;
+    width: 13.33%;
+}
+.alternateTrConsultngDetailPanelItem {
+    background-color: #ECE9D9;
+    height: 30px;
+    text-align: center;
+    white-space: nowrap;
+}
+.alternateTrConsultngDetailPanelItem th {
+    font-size: 14px;
+    width: 13.33%;
+}
+.trConsultngDetailPanelInnerItem {
+    background-color: white;
+    height: 30px;
+    white-space: nowrap;
+    width: 100%;
+}
+.trConsultngDetailPanelInnerItem td {
+    text-align: center;
+    white-space: nowrap;
+    width: 13.33%;
+}
+.alternateTrConsultngDetailPanelInnerItem {
+    background-color: #F9FAFF;
+    height: 30px;
+    white-space: nowrap;
+    width: 100%;
+}
+.alternateTrConsultngDetailPanelInnerItem td {
+    text-align: center;
+    white-space: nowrap;
+    width: 13.33%;
+}
