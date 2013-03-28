@@ -16,8 +16,9 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         private string HidePanel = "HidePanel('{0}');";
         private string OnMouseOver = "onmouseover";
         private string OnMouseOut = "onmouseout";
-        private List<string> monthNames = new List<string>();
         private Dictionary<string, int> monthTotalCounts = new Dictionary<string, int>();
+        private HtmlImage ImgTitleFilter { get; set; }
+        private HtmlImage ImgSkillFilter { get; set; }
 
         private PraticeManagement.Reports.ConsultingDemand_New HostingPage
         {
@@ -32,22 +33,25 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
             }
         }
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            cblSkill.OKButtonId = cblTitle.OKButtonId = btnFilterOK.ClientID;
         }
-        
+
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
+                ImgTitleFilter = e.Item.FindControl("imgTitleFilter") as HtmlImage;
+                ImgSkillFilter = e.Item.FindControl("imgSkillFilter") as HtmlImage;
                 Repeater repMonthHeader = (Repeater)e.Item.FindControl("repMonthHeader");
-                repMonthHeader.DataSource = monthNames;
+                repMonthHeader.DataSource = HostingPage.MonthNames;
                 repMonthHeader.DataBind();
                 var lblTotal = (Label)e.Item.FindControl("lblTotal");
                 var pnlTotal = (Panel)e.Item.FindControl("pnlTotal");
                 var lblTotalForecastedDemand = (Label)e.Item.FindControl("lblTotalForecastedDemand");
-                PopulateHeaderHoverLabels(lblTotal, pnlTotal, lblTotalForecastedDemand, monthTotalCounts.Values.Sum(),50);
+                PopulateHeaderHoverLabels(lblTotal, pnlTotal, lblTotalForecastedDemand, monthTotalCounts.Values.Sum(), 50);
             }
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -70,34 +74,12 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 var lblMonthName = (Label)e.Item.FindControl("lblMonthName");
                 var pnlMonthName = (Panel)e.Item.FindControl("pnlMonthName");
                 var lblForecastedCount = (Label)e.Item.FindControl("lblTotalForecastedDemand");
-                PopulateHeaderHoverLabels(lblMonthName, pnlMonthName, lblForecastedCount, monthTotalCounts[lblMonthName.Text],0);
+                int count = monthTotalCounts.Keys.Any(p => p == lblMonthName.Text) ? monthTotalCounts[lblMonthName.Text] : 0;
+                PopulateHeaderHoverLabels(lblMonthName, pnlMonthName, lblForecastedCount, count, 0);
             }
         }
 
-        public void PopulateHeaderHoverLabels(Label lblMonthName, Panel pnlMonthName, Label lblForecastedCount,int count,int position)
-        {
-            lblMonthName.Attributes[OnMouseOver] = string.Format(ShowPanel, lblMonthName.ClientID, pnlMonthName.ClientID, position);
-            lblMonthName.Attributes[OnMouseOut] = string.Format(HidePanel, pnlMonthName.ClientID);
-            lblForecastedCount.Text = count.ToString();
-        }
-
-        public void PopulateData()
-        {
-            List<ConsultantGroupbyTitleSkill> data;
-            data = ServiceCallers.Custom.Report(r => r.ConsultingDemandSummary(HostingPage.StartDate.Value, HostingPage.EndDate.Value,null)).ToList();
-            btnExportToExcel.Enabled =
-                repResource.Visible = true;
-            if (data.Any())
-            {
-                monthNames = data.First().MonthCount.Keys.ToList();
-                foreach (string month in monthNames)
-                    monthTotalCounts.Add(month,data.Sum(p => p.MonthCount[month]));
-            }
-            repResource.DataSource = data;
-            repResource.DataBind();
-        }
-
-        protected void lnkConsultant_OnClick(object sender,EventArgs e)
+        protected void lnkConsultant_OnClick(object sender, EventArgs e)
         {
             var lnkConsultant = sender as LinkButton;
             ConsultantDetailReport._hdSkill.Value = lnkConsultant.Attributes["Skill"];
@@ -108,8 +90,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             lblTotalCount.Text = ConsultantDetailReport.GrandTotal.ToString();
             ConsultantDetailReport._hdIsSummaryPage.Value = true.ToString();
             mpeConsultantDetailReport.Show();
-            
-            
+
+
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
@@ -122,12 +104,12 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 var ConsultantSummaryReportExportList = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, "", "")).ToList();
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("From Month"); 
-                sb.Append("\t"); 
+                sb.Append("From Month");
+                sb.Append("\t");
                 sb.Append(HostingPage.StartDate.Value.ToString("MMMM yyyy"));
-                sb.Append("\t"); 
-                sb.Append("To Month"); 
-                sb.Append("\t"); 
+                sb.Append("\t");
+                sb.Append("To Month");
+                sb.Append("\t");
                 sb.Append(HostingPage.EndDate.Value.ToString("MMMM yyyy"));
                 sb.Append("\t");
                 sb.AppendLine();
@@ -158,7 +140,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                         sb.Append("\t");
                         sb.Append(item.Skill);
                         sb.Append("\t");
-                        for (int item2 = 0; item2 < item.ConsultantDetails.Count;item2++)
+                        for (int item2 = 0; item2 < item.ConsultantDetails.Count; item2++)
                         {
                             sb.Append(item.ConsultantDetails[item2].OpportunityNumber);
                             sb.Append("\t");
@@ -192,6 +174,87 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
                 GridViewExportUtil.Export(filename, sb);
             }
+        }
+
+        protected void btnFilterOK_OnClick(object sender, EventArgs e)
+        {
+            PopulateData(false);
+        }
+
+        public void PopulateData(bool isPopulateFilters = true)
+        {
+            List<ConsultantGroupbyTitleSkill> data;
+            if (isPopulateFilters)
+            {
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandSummary(HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null)).ToList();
+            }
+            else
+            {
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandSummary(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems)).ToList();
+            }
+            btnExportToExcel.Enabled = repResource.Visible = true;
+            if (data.Any())
+            {
+                foreach (string month in HostingPage.MonthNames)
+                    monthTotalCounts.Add(month, data.Sum(p => p.MonthCount[month]));
+            }
+            DataBindResource(data, isPopulateFilters);
+        }
+
+        private void DataBindResource(List<ConsultantGroupbyTitleSkill> reportData, bool isPopulateFilters)
+        {
+            var reportDataList = reportData.ToList();
+            if (isPopulateFilters)
+            {
+                PopulateFilterPanels(reportDataList);
+            }
+            if (reportDataList.Count > 0 || cblTitle.Items.Count > 1 || cblSkill.Items.Count > 1)
+            {
+                divEmptyMessage.Style["display"] = "none";
+                repResource.DataSource = reportData;
+                repResource.DataBind();
+
+                cblTitle.SaveSelectedIndexesInViewState();
+                cblSkill.SaveSelectedIndexesInViewState();
+
+                ImgTitleFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblTitle.FilterPopupClientID,
+                  cblTitle.SelectedIndexes, cblTitle.CheckBoxListObject.ClientID, cblTitle.WaterMarkTextBoxBehaviorID);
+
+                ImgSkillFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblSkill.FilterPopupClientID,
+                  cblSkill.SelectedIndexes, cblSkill.CheckBoxListObject.ClientID, cblSkill.WaterMarkTextBoxBehaviorID);
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+                repResource.Visible = false;
+            }
+        }
+
+        private void PopulateFilterPanels(List<ConsultantGroupbyTitleSkill> reportData)
+        {
+            PopulatTitleFilter(reportData);
+            PopulatSkillFilter(reportData);
+        }
+
+        private void PopulatTitleFilter(List<ConsultantGroupbyTitleSkill> reportData)
+        {
+            var titleList = reportData.Select(r => new { Name = r.Title }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblTitle.CheckBoxListObject, "All Titles ", titleList.ToArray(), false, "Name", "Name");
+            cblTitle.SelectAllItems(true);
+        }
+
+        private void PopulatSkillFilter(List<ConsultantGroupbyTitleSkill> reportData)
+        {
+            var skillList = reportData.Select(r => new { Name = r.Skill }).Distinct().ToList().OrderBy(s => s.Name);
+            DataHelper.FillListDefault(cblSkill.CheckBoxListObject, "All Skills ", skillList.ToArray(), false, "Name", "Name");
+            cblSkill.SelectAllItems(true);
+        }
+
+        private void PopulateHeaderHoverLabels(Label lblMonthName, Panel pnlMonthName, Label lblForecastedCount, int count, int position)
+        {
+            lblMonthName.Attributes[OnMouseOver] = string.Format(ShowPanel, lblMonthName.ClientID, pnlMonthName.ClientID, position);
+            lblMonthName.Attributes[OnMouseOut] = string.Format(HidePanel, pnlMonthName.ClientID);
+            lblForecastedCount.Text = count.ToString();
         }
     }
 }
