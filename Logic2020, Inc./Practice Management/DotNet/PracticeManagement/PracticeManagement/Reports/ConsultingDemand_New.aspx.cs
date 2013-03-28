@@ -39,26 +39,49 @@ namespace PraticeManagement.Reports
                 int selectedVal = 0;
                 if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
                 {
+                    var now = Utils.Generic.GetNowWithTimeZone();
                     if (selectedVal == 0)
                     {
                         return diRange.ToDate.Value;
                     }
+                    else if (selectedVal == 1)
+                    {
+                        return Utils.Calendar.MonthEndDate(now);
+                    }
+                    else if (selectedVal == 2)
+                    {
+                        return Utils.Calendar.Next2MonthEndDate(now);
+                    }
+                    else if (selectedVal == 3)
+                    {
+                        return Utils.Calendar.Next3MonthEndDate(now);
+                    }
                     else
                     {
-                        var now = Utils.Generic.GetNowWithTimeZone();
                         return Utils.Calendar.Next4MonthEndDate(now);
                     }
                 }
                 return null;
             }
         }
-        
+
+        public List<string> MonthNames
+        {
+            get
+            {
+                if (StartDate.HasValue && EndDate.HasValue)
+                    return Utils.Calendar.GetMonthYearWithInThePeriod(StartDate.Value, EndDate.Value);
+                else
+                    return new List<string>();
+            }
+        }
+
         public string hdnTitlesProp { get { return hdnTitles.Value; } }
 
         public string hdnSkillsProp { get { return hdnSkills.Value; } }
-        
+
         public string titleOrSkill { get { return hdnTitleOrSkill.Value; } }
-    
+
         public PraticeManagement.Controls.Reports.ConsultantDemand.ConsultingDemandSummary SummaryControl
         {
             get
@@ -77,7 +100,7 @@ namespace PraticeManagement.Reports
 
         #endregion
 
-        #region Events 
+        #region Events
 
         #region PageEvents
 
@@ -88,6 +111,11 @@ namespace PraticeManagement.Reports
                 trGtypes.Visible =
                 trTitles.Visible =
                 upnlTabCell.Visible = false;
+                lblTitle.Text = "Title";
+                List<string> titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.LastName).Distinct().ToList();
+                DataHelper.FillListDefault(cblTitles, "All Titles", titles.Select(p => new { title = p }).ToArray(), false, "title", "title");
+                tdSkills.Visible = false;
+                tdTitles.Visible = true;
             }
         }
 
@@ -157,20 +185,20 @@ namespace PraticeManagement.Reports
             if (ddlGraphsTypes.SelectedValue == "1")
             {
                 lblTitle.Text = "Title";
-                List<string> titles = new List<string>();
-                titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.LastName).Distinct().ToList();
+                List<string> titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.LastName).Distinct().ToList();
                 DataHelper.FillListDefault(cblTitles, "All Titles", titles.Select(p => new { title = p }).ToArray(), false, "title", "title");
                 tdSkills.Visible = false;
                 tdTitles.Visible = true;
+                cblTitles.SelectAll();
             }
             else if (ddlGraphsTypes.SelectedValue == "2")
             {
                 lblTitle.Text = "Skill";
-                List<string> skills = new List<string>();
-                skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.FirstName).Distinct().ToList();
+                List<string> skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.FirstName).Distinct().ToList();
                 DataHelper.FillListDefault(cblSkills, "All Skills", skills.Select(p => new { skill = p }).ToArray(), false, "skill", "skill");
                 tdSkills.Visible = true;
                 tdTitles.Visible = false;
+                cblSkills.SelectAll();
             }
             else
             {
@@ -186,6 +214,11 @@ namespace PraticeManagement.Reports
             {
                 mpeCustomDates.Show();
             }
+        }
+
+        protected void cblTitles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            enableDisableResetButtons();
         }
 
         #endregion
@@ -208,20 +241,21 @@ namespace PraticeManagement.Reports
             {
                 if (tdTitles.Visible)
                 {
-                    enableUpdateView = enableUpdateView && cblTitles.SelectedValues != null ? cblTitles.SelectedValues.Count > 0 : false;
-                    enableResetFilter = enableResetFilter || cblTitles.SelectedValues != null ? cblTitles.SelectedValues.Count > 0 : false;
+                    enableUpdateView = enableUpdateView && cblTitles.SelectedValues != null ? cblTitles.isSelected : false;
+                    enableResetFilter = enableResetFilter || cblTitles.SelectedValues != null ? cblTitles.isSelected : false;
 
                 }
                 else
                 {
-                    enableUpdateView = enableUpdateView && cblSkills.SelectedValues != null ? cblSkills.SelectedValues.Count > 0 : false;
-                    enableResetFilter = enableResetFilter || cblSkills.SelectedValues != null ? cblSkills.SelectedValues.Count > 0 : false;
+                    enableUpdateView = enableUpdateView && cblSkills.SelectedValues != null ? cblSkills.isSelected : false;
+                    enableResetFilter = enableResetFilter || cblSkills.SelectedValues != null ? cblSkills.isSelected : false;
                 }
 
             }
 
-            btnUpdateView.Enabled = true;
-            btnResetFilter.Enabled = true;
+            btnUpdateView.Enabled = enableUpdateView;
+            btnResetFilter.Enabled = enableResetFilter;
+
         }
 
         private void ResetFilter()
@@ -252,34 +286,36 @@ namespace PraticeManagement.Reports
             }
             else
             {
-                ddlGraphsTypes.SelectedIndex = 0;
                 trGtypes.Visible = true;
                 trTitles.Visible = ddlGraphsTypes.SelectedIndex != 0;
                 string selectedValues = null;
-                if (ddlGraphsTypes.SelectedValue == "1")
+                if (ddlGraphsTypes.SelectedValue == "1" && ddlPeriod.SelectedValue != "-1")
                 {
                     selectedValues = cblTitles.SelectedItems;
                     hdnTitles.Value = selectedValues;
+                    hdnTitleOrSkill.Value = "Title";
+                    ucGraphs.PopulateGraph(ddlGraphsTypes.SelectedValue, selectedValues);
                 }
-                else if (ddlGraphsTypes.SelectedValue == "2")
+                else if (ddlGraphsTypes.SelectedValue == "2" && ddlPeriod.SelectedValue != "-1")
                 {
                     selectedValues = cblSkills.SelectedItems;
                     hdnSkills.Value = selectedValues;
+                    hdnTitleOrSkill.Value = "Skill";
+                    ucGraphs.PopulateGraph(ddlGraphsTypes.SelectedValue, selectedValues);
                 }
 
-                ucGraphs.PopulateGraph(ddlGraphsTypes.SelectedValue, selectedValues);
             }
+            enableDisableResetButtons();
         }
 
         private void SwitchView(Control control, int viewIndex)
         {
             SelectView(control, viewIndex);
-            if (mvConsultingDemandReport.ActiveViewIndex == 3)
+            if (mvConsultingDemandReport.ActiveViewIndex == 2)
             {
                 ddlGraphsTypes.SelectedValue = "1";
-                cblTitles.SelectedItems = null;
-                cblSkills.SelectedItems = null;
-                ddlPeriod.SelectedIndex = 0;
+                cblTitles.SelectAll();
+                cblSkills.SelectAll();
             }
             enableDisableResetButtons();
             LoadActiveView();
