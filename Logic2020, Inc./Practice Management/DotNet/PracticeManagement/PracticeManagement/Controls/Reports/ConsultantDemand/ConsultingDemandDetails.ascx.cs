@@ -168,8 +168,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
         public void PopulateData()
         {
-            string title = hdTitle.Value;
-            string skill = hdSkill.Value;
+            string title = string.IsNullOrEmpty(hdTitle.Value) ? null : hdTitle.Value;
+            string skill = string.IsNullOrEmpty(hdSkill.Value) ? null : hdSkill.Value;
             string groupby = hdnGroupBy.Value;
             if (groupby == "title")
             {
