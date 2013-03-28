@@ -2,11 +2,13 @@
     Inherits="PraticeManagement.Controls.Reports.ConsultantDemand.ConsultingDemandSummary" %>
 <%@ Register Src="~/Controls/Reports/ConsultantDemand/ConsultingDemandDetails.ascx"
     TagPrefix="uc" TagName="ConsultantDetailReport" %>
-<table class="WholeWidthWithHeight">
+<%@ Register Src="~/Controls/FilteredCheckBoxList.ascx" TagName="FilteredCheckBoxList"
+    TagPrefix="uc" %>
+<table class="WholeWidthWithHeight ">
     <tr>
         <td colspan="4" class="Width95Percent">
         </td>
-        <td class=" Width5Percent padRight5">
+        <td class=" Width5Percent padRight5 PaddingBottom3">
             <table class="WholeWidth">
                 <tr>
                     <td>
@@ -21,14 +23,31 @@
         </td>
     </tr>
 </table>
+<asp:Panel ID="pnlFilterTitle" Style="display: none;" runat="server">
+    <uc:FilteredCheckBoxList ID="cblTitle" runat="server" />
+</asp:Panel>
+<asp:Panel ID="pnlFilterSkill" Style="display: none;" runat="server">
+    <uc:FilteredCheckBoxList ID="cblSkill" runat="server" />
+</asp:Panel>
+<asp:Button ID="btnFilterOK" runat="server" OnClick="btnFilterOK_OnClick" Style="display: none;" />
 <asp:Repeater ID="repResource" runat="server" OnItemDataBound="repResource_ItemDataBound">
     <HeaderTemplate>
-        <div class="minheight250Px">
+        <div class="minheight200Px">
             <table id="tblConsultingDemandSummary" class="tablesorter PersonSummaryReport WholeWidth zebra">
                 <thead>
                     <tr class="TimeperiodSummaryReportTr bgcolorwhite">
                         <th class="ResourceColum padLeft5Imp">
                             Title/SkillSet
+                            <img alt="Filter" src="../../../Images/Terminated.png" runat="server" title="Title"
+                                id="imgTitleFilter" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pceTitleFilter" runat="server" TargetControlID="imgTitleFilter"
+                                BehaviorID="pceTitleFilter" PopupControlID="pnlFilterTitle" Position="Bottom">
+                            </AjaxControlToolkit:PopupControlExtender>
+                             <img alt="Filter" src="../../../Images/Terminated.png" runat="server" title="Skill"
+                                id="imgSkillFilter" />
+                            <AjaxControlToolkit:PopupControlExtender ID="pceSkillFilter" runat="server" TargetControlID="imgSkillFilter"
+                                BehaviorID="pceSkillFilter" PopupControlID="pnlFilterSkill" Position="Bottom">
+                            </AjaxControlToolkit:PopupControlExtender>
                         </th>
                         <asp:Repeater ID="repMonthHeader" runat="server" OnItemDataBound="repMonthHeader_ItemDataBound">
                             <ItemTemplate>
@@ -120,6 +139,9 @@
         </tbody></table></div>
     </FooterTemplate>
 </asp:Repeater>
+  <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
+        There are no strawmens for the selected range.
+    </div>
 <asp:HiddenField ID="hdnTempField" runat="server" />
 <AjaxControlToolkit:ModalPopupExtender ID="mpeConsultantDetailReport" runat="server"
     TargetControlID="hdnTempField" CancelControlID="btnCancelConsultantDetailReport"
