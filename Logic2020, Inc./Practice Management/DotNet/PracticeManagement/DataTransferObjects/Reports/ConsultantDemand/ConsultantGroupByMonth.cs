@@ -14,6 +14,19 @@ namespace DataTransferObjects.Reports.ConsultingDemand
         [DataMember]
         public List<ConsultantDemandDetailsByMonth> ConsultantDetailsByMonth { get; set; }
 
+        public int TotalCount
+        {
+            get
+            {
+                if (ConsultantDetailsByMonth != null)
+                {
+                    return ConsultantDetailsByMonth.Sum(p => p.Count);
+                }
+              
+                return 0;
+            }
+        }
+
     }
 }
 
