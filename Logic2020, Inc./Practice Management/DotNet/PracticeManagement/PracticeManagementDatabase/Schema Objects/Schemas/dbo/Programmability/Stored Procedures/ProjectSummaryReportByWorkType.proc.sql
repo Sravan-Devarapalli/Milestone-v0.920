@@ -60,13 +60,12 @@ AS
 						WHERE   M.MilestoneId = @MilestoneIdLocal 
 					END
 
-				SELECT  @ForecastedHours = SUM(dbo.PersonProjectedHoursPerDay(ISNULL(pcal.DayOff,cal.DayOff),cal.DayOff,pcal.ActualHours,MPE.HoursPerDay)) 
+				SELECT  @ForecastedHours = SUM(dbo.PersonProjectedHoursPerDay(pcal.DayOff,pcal.CompanyDayOff,pcal.TimeOffHours,MPE.HoursPerDay)) 
 				FROM    dbo.MilestonePersonEntry AS MPE
 						INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 						INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 						INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
-						INNER JOIN Calendar AS cal ON cal.Date BETWEEN mpe.StartDate AND mpe.EndDate
-						LEFT JOIN PersonCalendar AS pcal ON cal.Date = pcal.Date AND pcal.PersonId = mp.PersonId
+						INNER JOIN PersonCalendarAuto AS pcal ON pcal.Date BETWEEN mpe.StartDate AND mpe.EndDate AND pcal.PersonId = mp.PersonId
 
 				WHERE   M.ProjectId = @ProjectId
 						AND ( @MilestoneIdLocal IS NULL
