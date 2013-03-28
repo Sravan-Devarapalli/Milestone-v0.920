@@ -108,8 +108,8 @@
                                 <td>
                                     <asp:DropDownList runat="server" ID="ddlGraphsTypes" OnSelectedIndexChanged="ddlGraphsTypes_SelectedIndexChanged"
                                         CssClass="Width50Percent" AutoPostBack="true">
-                                        <asp:ListItem Text="--Please Select--" Value="0" Selected="True"></asp:ListItem>
-                                        <asp:ListItem Text="Resource View By Title" Value="1"></asp:ListItem>
+                                        <asp:ListItem Text="--Please Select--" Value="0"></asp:ListItem>
+                                        <asp:ListItem Text="Resource View By Title" Value="1" Selected="True"></asp:ListItem>
                                         <asp:ListItem Text="Resource View By Skill" Value="2"></asp:ListItem>
                                         <asp:ListItem Text="Resource View By Month" Value="3"></asp:ListItem>
                                     </asp:DropDownList>
@@ -124,28 +124,28 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
                                 <td>
-                                    <table class="WholeWidth" id="tdTitles" runat="server">
+                                    <table class="Width50Percent" id="tdTitles" runat="server">
                                         <tr>
                                             <td>
-                                                <cc2:ScrollingDropDown ID="cblTitles" runat="server" SetDirty="true" AllSelectedReturnType="AllItems"
-                                                    CssClass="ProjectDetailScrollingDropDown Width50andhalfPercent" onclick="scrollingDropdown_onclick('cblTitles','Title','s','Titles',28);"
+                                                <cc2:ScrollingDropDown ID="cblTitles" runat="server" SetDirty="true" AllSelectedReturnType="AllItems" OnSelectedIndexChanged="cblTitles_SelectedIndexChanged"
+                                                    CssClass="ProjectDetailScrollingDropDown1  Width100Per" onclick="scrollingDropdown_onclick('cblTitles','Title','s','Titles',28);" AutoPostBack="true"
                                                     DropDownListType="Tilte" DropDownListTypePluralForm="Titles" PluralForm="s" />
                                                 <ext:ScrollableDropdownExtender ID="sdeTitles" runat="server" TargetControlID="cblTitles"
-                                                    BehaviorID="sdeTitles" MaxNoOfCharacters="28" Width="94%" UseAdvanceFeature="true"
+                                                    BehaviorID="sdeTitles" MaxNoOfCharacters="28" Width="99%" UseAdvanceFeature="true"
                                                     EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hdnTitles" runat="server" />
                                             </td>
                                         </tr>
                                     </table>
-                                    <table class="WholeWidth" id="tdSkills" runat="server">
+                                    <table class="Width50Percent" id="tdSkills" runat="server">
                                         <tr>
                                             <td>
                                                 <cc2:ScrollingDropDown ID="cblSkills" runat="server" SetDirty="true" AllSelectedReturnType="AllItems"
-                                                    CssClass="ProjectDetailScrollingDropDown Width50andhalfPercent" onclick="scrollingDropdown_onclick('cblSkills','Skill','s','Skills',28);"
+                                                    CssClass="ProjectDetailScrollingDropDown1 Width100Per" onclick="scrollingDropdown_onclick('cblSkills','Skill','s','Skills',28);"
                                                     DropDownListType="Skill" DropDownListTypePluralForm="Skills" PluralForm="s" />
                                                 <ext:ScrollableDropdownExtender ID="sdeSkills" runat="server" TargetControlID="cblSkills"
-                                                    BehaviorID="sdeSkills" MaxNoOfCharacters="28" Width="94%" UseAdvanceFeature="true"
+                                                    BehaviorID="sdeSkills" MaxNoOfCharacters="28" Width="99%" UseAdvanceFeature="true"
                                                     EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hdnSkills" runat="server" />
@@ -153,6 +153,7 @@
                                         </tr>
                                     </table>
                                 </td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td style="text-align: right;">
@@ -162,7 +163,10 @@
                                     <asp:DropDownList runat="server" ID="ddlPeriod" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
                                         CssClass="Width50Percent" AutoPostBack="true">
                                         <asp:ListItem Text="Please Select" Value="-1" Selected="True"></asp:ListItem>
-                                        <asp:ListItem Text="Next 4 Months" Value="1"></asp:ListItem>
+                                        <asp:ListItem Text="Current Month" Value="1"></asp:ListItem>
+                                        <asp:ListItem Text="Next 2 Months" Value="2"></asp:ListItem>
+                                        <asp:ListItem Text="Next 3 Months" Value="3"></asp:ListItem>
+                                        <asp:ListItem Text="Next 4 Months" Value="4"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
