@@ -416,6 +416,21 @@ namespace PraticeManagement.Controls
             set;
         }
 
+        public bool isSelected
+        {
+            get
+            {
+                foreach (ListItem item in Items)
+                {
+                    if (item.Selected)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         public string SelectedString
         {
             get
@@ -529,14 +544,14 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Selects all items. Assuming that the first item is always [All]
         /// </summary>
-        private void SelectAll()
+        public void SelectAll()
         {
             if (Items.Count > 1)
                 foreach (ListItem item in Items)
                     item.Selected = true;
         }
 
-        private void UnSelectAll()
+        public void UnSelectAll()
         {
             if (Items.Count > 1)
                 foreach (ListItem item in Items)
