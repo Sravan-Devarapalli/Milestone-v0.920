@@ -22,6 +22,51 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand {
         protected global::System.Web.UI.WebControls.Button btnExportToExcel;
         
         /// <summary>
+        /// pnlFilterTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterTitle;
+        
+        /// <summary>
+        /// cblTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblTitle;
+        
+        /// <summary>
+        /// pnlFilterSkill control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFilterSkill;
+        
+        /// <summary>
+        /// cblSkill control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.FilteredCheckBoxList cblSkill;
+        
+        /// <summary>
+        /// btnFilterOK control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFilterOK;
+        
+        /// <summary>
         /// repResource control.
         /// </summary>
         /// <remarks>
@@ -29,6 +74,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repResource;
+        
+        /// <summary>
+        /// divEmptyMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyMessage;
         
         /// <summary>
         /// hdnTempField control.
