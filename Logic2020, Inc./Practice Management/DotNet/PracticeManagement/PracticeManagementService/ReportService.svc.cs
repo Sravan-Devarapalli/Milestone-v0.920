@@ -137,9 +137,10 @@ namespace PracticeManagementService
             return ReportDAL.TerminationReportGraph(startDate, endDate);
         }
         #region ConsultingDemand
-        public List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string Titles)
+
+        public List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string titles, string skills)
         {
-            return ReportDAL.ConsultingDemandSummary(startDate, endDate,Titles);
+            return ReportDAL.ConsultingDemandSummary(startDate, endDate, titles, skills);
         }
 
         public List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills)
