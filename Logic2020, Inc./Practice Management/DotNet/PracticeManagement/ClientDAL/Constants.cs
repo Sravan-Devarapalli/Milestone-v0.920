@@ -387,6 +387,7 @@
             public const string WeeklyUtlization = "WeeklyUtlization";
             public const string TitleId = "TitleId";
             public const string Title = "Title";
+            public const string Skill = "Skill";
             public const string TitleTypeId = "TitleTypeId";
             public const string TitleType = "TitleType";
             public const string SortOrder = "SortOrder";
@@ -405,6 +406,10 @@
             public const string TotalWorkHoursExcludingVacationHours = "TotalWorkHoursExcludingVacationHours";
             public const string WorkHours = "WorkHours";
             public const string WorkDays = "WorkDays";
+            public const string Count = "COUNT";
+            public const string ResourceStartDate = "ResourceStartDate";
+            public const string AccountName = "AccountName";
+
         }
 
         #endregion
@@ -705,7 +710,9 @@
             public const string Abbreviation = "@Abbreviation";
             public const string TimescaleId = "@TimescaleId";
             public const string TitleId = "@TitleId";
+            public const string Titles = "@Titles";
             public const string Title = "@Title";
+            public const string Skill = "@Skill";
             public const string TitleTypeId = "@TitleTypeId";
             public const string SortOrder = "@SortOrder";
             public const string PTOAccrual = "@PTOAccrual";
@@ -717,7 +724,17 @@
             public const string UseActualsParam = "@UseActuals";
             public const string IsMonthlyReportParam = "@IsMonthlyReport";
             public const string IncludeCompanyHolidays = "@IncludeCompanyHolidays";
-            
+            public const string IsSummary = "@IsSummary";
+            public const string IsDetail = "@IsDetail";
+            public const string IsGraph = "@IsGraph";
+            public const string GroupByMonth = "@GroupByMonth";
+            public const string GroupByTitle = "@GroupByTitle";
+            public const string GroupBySkill = "@GroupBySkill";
+            public const string GroupByTitleSkill = "@GroupByTitleSkill";
+            public const string ViewByTitle = "@ViewByTitle";
+            public const string ViewBySkill = "@ViewBySkill";
+            public const string ViewByTitleSkill = "@ViewByTitleSkill";
+            public const string Skills = "@Skills";
         }
 
         #endregion
@@ -1008,6 +1025,7 @@
                 public const string NewHireReport = "dbo.NewHireReport";
                 public const string TerminationReport = "dbo.TerminationReport";
                 public const string TerminationReportGraph = "dbo.TerminationReportGraph";
+                public const string GetConsultantDemandForPeriod = "dbo.GetConsultantDemandForPeriod";
             }
             #endregion
 
