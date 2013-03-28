@@ -135,6 +135,11 @@ namespace PraticeManagement.Utils
         {
             return MonthStartDate(now.AddMonths(-12));
         }
+        //Current month + next 3 months
+        public static DateTime Next4MonthEndDate(DateTime now)
+        {
+            return MonthStartDate(now.AddMonths(3));
+        }
 
         //return 16th of the last month
         public static DateTime LastMonthSecondHalfStartDate(DateTime now)
