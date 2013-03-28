@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ArrayOfConsultantGroupbyTitleSkill">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupbyTitleSkill" nillable="true" type="tns:ConsultantGroupbyTitleSkill" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantGroupbyTitleSkill" nillable="true" type="tns:ArrayOfConsultantGroupbyTitleSkill" />
+  <xs:complexType name="ConsultantGroupbyTitleSkill">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConsultantDetails" nillable="true" type="tns:ArrayOfConsultantDemandDetails" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="MonthCount" nillable="true" type="q1:ArrayOfKeyValueOfstringint" />
+      <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantGroupbyTitleSkill" nillable="true" type="tns:ConsultantGroupbyTitleSkill" />
+  <xs:complexType name="ArrayOfConsultantDemandDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantDemandDetails" nillable="true" type="tns:ConsultantDemandDetails" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantDemandDetails" nillable="true" type="tns:ArrayOfConsultantDemandDetails" />
+  <xs:complexType name="ConsultantDemandDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountId" type="xs:int" />
+      <xs:element minOccurs="0" name="AccountName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Count" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantDemandDetails" nillable="true" type="tns:ConsultantDemandDetails" />
+  <xs:complexType name="ArrayOfConsultantGroupByMonth">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupByMonth" nillable="true" type="tns:ConsultantGroupByMonth" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantGroupByMonth" nillable="true" type="tns:ArrayOfConsultantGroupByMonth" />
+  <xs:complexType name="ConsultantGroupByMonth">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConsultantDetailsByMonth" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonth" />
+      <xs:element minOccurs="0" name="MonthStartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantGroupByMonth" nillable="true" type="tns:ConsultantGroupByMonth" />
+  <xs:complexType name="ArrayOfConsultantDemandDetailsByMonth">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantDemandDetailsByMonth" nillable="true" type="tns:ConsultantDemandDetailsByMonth" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantDemandDetailsByMonth" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonth" />
+  <xs:complexType name="ConsultantDemandDetailsByMonth">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountId" type="xs:int" />
+      <xs:element minOccurs="0" name="AccountName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Count" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantDemandDetailsByMonth" nillable="true" type="tns:ConsultantDemandDetailsByMonth" />
+  <xs:complexType name="ArrayOfConsultantGroupbyTitle">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupbyTitle" nillable="true" type="tns:ConsultantGroupbyTitle" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantGroupbyTitle" nillable="true" type="tns:ArrayOfConsultantGroupbyTitle" />
+  <xs:complexType name="ConsultantGroupbyTitle">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConsultantDetails" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonthByTitle" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantGroupbyTitle" nillable="true" type="tns:ConsultantGroupbyTitle" />
+  <xs:complexType name="ArrayOfConsultantDemandDetailsByMonthByTitle">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantDemandDetailsByMonthByTitle" nillable="true" type="tns:ConsultantDemandDetailsByMonthByTitle" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantDemandDetailsByMonthByTitle" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonthByTitle" />
+  <xs:complexType name="ConsultantDemandDetailsByMonthByTitle">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountId" type="xs:int" />
+      <xs:element minOccurs="0" name="AccountName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Count" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantDemandDetailsByMonthByTitle" nillable="true" type="tns:ConsultantDemandDetailsByMonthByTitle" />
+  <xs:complexType name="ArrayOfConsultantGroupbySkill">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupbySkill" nillable="true" type="tns:ConsultantGroupbySkill" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantGroupbySkill" nillable="true" type="tns:ArrayOfConsultantGroupbySkill" />
+  <xs:complexType name="ConsultantGroupbySkill">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConsultantDetails" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonthBySkill" />
+      <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantGroupbySkill" nillable="true" type="tns:ConsultantGroupbySkill" />
+  <xs:complexType name="ArrayOfConsultantDemandDetailsByMonthBySkill">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantDemandDetailsByMonthBySkill" nillable="true" type="tns:ConsultantDemandDetailsByMonthBySkill" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantDemandDetailsByMonthBySkill" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonthBySkill" />
+  <xs:complexType name="ConsultantDemandDetailsByMonthBySkill">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountId" type="xs:int" />
+      <xs:element minOccurs="0" name="AccountName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Count" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantDemandDetailsByMonthBySkill" nillable="true" type="tns:ConsultantDemandDetailsByMonthBySkill" />
+</xs:schema>
