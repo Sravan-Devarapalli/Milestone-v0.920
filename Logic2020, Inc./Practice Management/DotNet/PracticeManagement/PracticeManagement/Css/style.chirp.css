@@ -2001,6 +2001,10 @@ TABLE.Section td
 {
     width: 23%;
 }
+.Width23.5PerImp
+{
+    width: 23.5% !important;
+}
 .Width24Percent
 {
     width: 24%;
@@ -2569,6 +2573,10 @@ TABLE.Section td
 .minheight250Px
 {
     min-height: 250px;
+}
+.minheight200Px
+{
+    min-height: 200px;
 }
 .ModalPopUpSideHeading
 {
@@ -3508,6 +3516,18 @@ div.scrollextLabel
 {
     height: 240px;
     width: 17%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 3;
+    display: inline-block;
+    z-index: 20000;
+}
+.ProjectDetailScrollingDropDown1
+{
+    height: 240px;
+    width: 23.5%;
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #000;
@@ -7706,71 +7726,86 @@ table#ctl00_body_login tr td label
     text-align: center;
 }
 
-.consultngDetailPanel {
+.consultngDetailPanel
+{
     border: 1px solid black;
 }
-.consultngDetailPanel table {
+.consultngDetailPanel table
+{
     width: 100%;
 }
-.trConsultngDetailPanel tr {
+.trConsultngDetailPanel tr
+{
     background-color: white;
     height: 30px;
     white-space: nowrap;
     width: 100%;
 }
-.trConsultngDetailPanel th {
+.trConsultngDetailPanel th
+{
     font-size: 14px;
     text-align: center;
     white-space: nowrap;
     width: 13.33%;
 }
-.trConsultngDetailPanel td {
+.trConsultngDetailPanel td
+{
     text-align: center;
     white-space: nowrap;
     width: 13.33%;
 }
-.prjctnamewidth20 {
+.prjctnamewidth20
+{
     width: 20% !important;
 }
-.trConsultngDetailPanelItem {
+.trConsultngDetailPanelItem
+{
     background-color: #D4D0C9;
     height: 30px;
     text-align: center;
     white-space: nowrap;
 }
-.trConsultngDetailPanelItem th {
+.trConsultngDetailPanelItem th
+{
     font-size: 14px;
     width: 13.33%;
 }
-.alternateTrConsultngDetailPanelItem {
+.alternateTrConsultngDetailPanelItem
+{
     background-color: #ECE9D9;
     height: 30px;
     text-align: center;
     white-space: nowrap;
 }
-.alternateTrConsultngDetailPanelItem th {
+.alternateTrConsultngDetailPanelItem th
+{
     font-size: 14px;
     width: 13.33%;
 }
-.trConsultngDetailPanelInnerItem {
+.trConsultngDetailPanelInnerItem
+{
     background-color: white;
     height: 30px;
     white-space: nowrap;
     width: 100%;
 }
-.trConsultngDetailPanelInnerItem td {
+.trConsultngDetailPanelInnerItem td
+{
     text-align: center;
     white-space: nowrap;
     width: 13.33%;
 }
-.alternateTrConsultngDetailPanelInnerItem {
+.alternateTrConsultngDetailPanelInnerItem
+{
     background-color: #F9FAFF;
     height: 30px;
     white-space: nowrap;
     width: 100%;
 }
-.alternateTrConsultngDetailPanelInnerItem td {
+.alternateTrConsultngDetailPanelInnerItem td
+{
     text-align: center;
     white-space: nowrap;
     width: 13.33%;
 }
+
