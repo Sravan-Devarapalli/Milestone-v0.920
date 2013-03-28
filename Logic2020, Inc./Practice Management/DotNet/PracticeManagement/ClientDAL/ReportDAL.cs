@@ -2034,7 +2034,7 @@ namespace DataAccess
 
         #region ConsultingDemand
 
-        public static List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string Titles)
+        public static List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string titles, string skills)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2045,7 +2045,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSummary, true);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, Titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
 
                 List<ConsultantGroupbyTitleSkill> result = new List<ConsultantGroupbyTitleSkill>();
                 connection.Open();
@@ -2103,8 +2104,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDetail, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByTitleSkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitleSkill, true);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, string.IsNullOrEmpty(titles) ? DBNull.Value : (object)titles);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, string.IsNullOrEmpty(skills) ? DBNull.Value : (object)skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
                 List<ConsultantGroupbyTitleSkill> result = new List<ConsultantGroupbyTitleSkill>();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -2176,8 +2177,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDetail, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByMonth, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitleSkill, true);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, string.IsNullOrEmpty(titles) ? DBNull.Value : (object)titles);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, string.IsNullOrEmpty(skills) ? DBNull.Value : (object)skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
                 List<ConsultantGroupByMonth> result = new List<ConsultantGroupByMonth>();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -2249,7 +2250,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsGraph, true);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByMonth, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitle, true);
                 Dictionary<string, int> result = new Dictionary<string, int>();
@@ -2295,7 +2296,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsGraph, true);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByMonth, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewBySkill, true);
                 connection.Open();
@@ -2308,7 +2309,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string Titles)
+        public static List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string titles)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2321,7 +2322,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDetail, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByTitle, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewBySkill, true);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, Titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
                 List<ConsultantGroupbyTitle> result = new List<ConsultantGroupbyTitle>();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -2380,7 +2381,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skills)
+        public static List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string skills)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2393,7 +2394,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDetail, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupBySkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitle, true);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, Skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
                 List<ConsultantGroupbySkill> result = new List<ConsultantGroupbySkill>();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
