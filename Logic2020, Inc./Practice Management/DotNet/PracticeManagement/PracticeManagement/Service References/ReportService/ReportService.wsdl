@@ -11,6 +11,7 @@
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
@@ -145,6 +146,60 @@
   <wsdl:message name="IReportService_TerminationReportGraph_OutputMessage">
     <wsdl:part name="parameters" element="tns:TerminationReportGraphResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandSummary" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByTitleSkill_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByTitleSkill" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByTitleSkill_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByTitleSkillResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByMonth_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByMonth" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByMonth_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByMonthResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsByTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsByTitle" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsByTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsByTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsBySkills_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsBySkills" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsBySkills_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsBySkillsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportByTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportByTitle" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportByTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportByTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportBySkill_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportBySkill" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportBySkill_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportBySkillResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsByTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsByTitle" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsByTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsByTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsBySkill_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsBySkill" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsBySkill_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsBySkillResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
@@ -233,6 +288,42 @@
     <wsdl:operation name="TerminationReportGraph">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TerminationReportGraph" message="tns:IReportService_TerminationReportGraph_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TerminationReportGraphResponse" message="tns:IReportService_TerminationReportGraph_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandSummary" message="tns:IReportService_ConsultingDemandSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandSummaryResponse" message="tns:IReportService_ConsultingDemandSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByTitleSkill">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill" message="tns:IReportService_ConsultingDemandDetailsByTitleSkill_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkillResponse" message="tns:IReportService_ConsultingDemandDetailsByTitleSkill_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByMonth">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonth" message="tns:IReportService_ConsultingDemandDetailsByMonth_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonthResponse" message="tns:IReportService_ConsultingDemandDetailsByMonth_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsByTitle">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitle" message="tns:IReportService_ConsultingDemandGraphsByTitle_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitleResponse" message="tns:IReportService_ConsultingDemandGraphsByTitle_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsBySkills">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkills" message="tns:IReportService_ConsultingDemandGraphsBySkills_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkillsResponse" message="tns:IReportService_ConsultingDemandGraphsBySkills_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportByTitle">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitle" message="tns:IReportService_ConsultingDemandTransactionReportByTitle_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitleResponse" message="tns:IReportService_ConsultingDemandTransactionReportByTitle_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportBySkill">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkill" message="tns:IReportService_ConsultingDemandTransactionReportBySkill_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkillResponse" message="tns:IReportService_ConsultingDemandTransactionReportBySkill_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsByTitle">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitle" message="tns:IReportService_ConsultingDemandGrphsGroupsByTitle_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitleResponse" message="tns:IReportService_ConsultingDemandGrphsGroupsByTitle_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsBySkill">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkill" message="tns:IReportService_ConsultingDemandGrphsGroupsBySkill_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkillResponse" message="tns:IReportService_ConsultingDemandGrphsGroupsBySkill_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -428,6 +519,87 @@
     </wsdl:operation>
     <wsdl:operation name="TerminationReportGraph">
       <soap:operation soapAction="http://tempuri.org/IReportService/TerminationReportGraph" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandSummary">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByTitleSkill">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByMonth">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonth" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsByTitle">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsBySkills">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkills" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportByTitle">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportBySkill">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkill" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsByTitle">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsBySkill">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkill" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
