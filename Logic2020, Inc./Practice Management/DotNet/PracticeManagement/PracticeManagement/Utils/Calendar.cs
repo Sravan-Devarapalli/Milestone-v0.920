@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DataTransferObjects;
 
 namespace PraticeManagement.Utils
@@ -135,22 +136,32 @@ namespace PraticeManagement.Utils
         {
             return MonthStartDate(now.AddMonths(-12));
         }
+        
         //Current month + next 3 months
         public static DateTime Next4MonthEndDate(DateTime now)
         {
             return MonthStartDate(now.AddMonths(3));
         }
-
+        public static DateTime Next3MonthEndDate(DateTime now)
+        {
+            return MonthStartDate(now.AddMonths(2));
+        }
+        public static DateTime Next2MonthEndDate(DateTime now)
+        {
+            return MonthStartDate(now.AddMonths(1));
+        }
         //return 16th of the last month
         public static DateTime LastMonthSecondHalfStartDate(DateTime now)
         {
             return now.AddMonths(-1).AddDays(16 - now.AddMonths(-1).Day);
         }
+
         //return 16th of the Current month
         public static DateTime CurrentMonthSecondHalfStartDate(DateTime now)
         {
             return now.AddDays(16 - now.AddMonths(-1).Day);
         }
+        
         //returns 15th of the current month
         public static DateTime CurrentMonthFirstHalfEndDate(DateTime now)
         {
@@ -191,6 +202,7 @@ namespace PraticeManagement.Utils
                 return new DateTime(now.Year, 10, 1);
             }
         }
+        
         public static DateTime QuarterEndDate(DateTime now, int quater)
         {
             if (quater == 1)
@@ -209,6 +221,23 @@ namespace PraticeManagement.Utils
             {
                 return YearEndDate(now);
             }
+        }
+
+        public static List<string> GetMonthYearWithInThePeriod(DateTime startDate,DateTime endDate)
+        {
+            startDate =MonthStartDate(startDate).Date;
+            endDate =MonthStartDate(endDate).Date;
+
+            List<string> result = new List<string>();
+            if(startDate <= endDate)
+            {
+                while (startDate <= endDate)
+                { 
+                    result.Add(startDate.ToString("MMMM-yyyy"));
+                    startDate = startDate.AddMonths(1);
+                }
+            }
+            return result;
         }
     }
 }
