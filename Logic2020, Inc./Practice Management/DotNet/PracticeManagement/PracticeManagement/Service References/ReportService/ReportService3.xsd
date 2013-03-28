@@ -392,7 +392,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
-        <xs:element minOccurs="0" name="Titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
