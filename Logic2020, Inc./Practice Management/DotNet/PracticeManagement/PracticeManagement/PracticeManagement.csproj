@@ -389,6 +389,10 @@
     <Content Include="Controls\Reports\ByAccount\GroupByPerson.ascx" />
     <Content Include="Controls\Reports\ByPerson\GroupByProject.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
+    <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandDetails.ascx" />
+    <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandGraphs.ascx" />
+    <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandSummary.ascx" />
+    <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandTReportByTitle.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx" />
     <Content Include="Controls\Reports\HumanCapital\NewHireReportGraphView.ascx" />
@@ -523,6 +527,7 @@
     <Content Include="Reports\Audit.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
+    <Content Include="Reports\ConsultingDemand_New.aspx" />
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="Reports\HumanCapital.aspx" />
     <Content Include="Reports\NewHireReport.aspx" />
@@ -543,6 +548,10 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbySkill.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitle.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck.datasource" />
@@ -797,6 +806,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService9.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
@@ -1494,6 +1506,34 @@
     <Compile Include="Controls\Reports\ByworkType.ascx.designer.cs">
       <DependentUpon>ByworkType.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandDetails.ascx.cs">
+      <DependentUpon>ConsultingDemandDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandDetails.ascx.designer.cs">
+      <DependentUpon>ConsultingDemandDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandGraphs.ascx.cs">
+      <DependentUpon>ConsultingDemandGraphs.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandGraphs.ascx.designer.cs">
+      <DependentUpon>ConsultingDemandGraphs.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandSummary.ascx.cs">
+      <DependentUpon>ConsultingDemandSummary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandSummary.ascx.designer.cs">
+      <DependentUpon>ConsultingDemandSummary.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandTReportByTitle.ascx.cs">
+      <DependentUpon>ConsultingDemandTReportByTitle.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandTReportByTitle.ascx.designer.cs">
+      <DependentUpon>ConsultingDemandTReportByTitle.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\ConsultingDemand.ascx.cs">
       <DependentUpon>ConsultingDemand.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1959,6 +1999,13 @@
     </Compile>
     <Compile Include="Reports\ConsultingDemand.aspx.designer.cs">
       <DependentUpon>ConsultingDemand.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ConsultingDemand_New.aspx.cs">
+      <DependentUpon>ConsultingDemand_New.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ConsultingDemand_New.aspx.designer.cs">
+      <DependentUpon>ConsultingDemand_New.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Expenses.aspx.cs">
       <DependentUpon>Expenses.aspx</DependentUpon>
