@@ -80,7 +80,7 @@ namespace PracticeManagementService
         List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string Titles);
+        List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string titles, string skills);
 
         [OperationContract]
         List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills);
