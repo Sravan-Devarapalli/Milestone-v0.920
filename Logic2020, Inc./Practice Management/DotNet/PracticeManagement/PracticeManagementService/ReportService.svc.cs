@@ -5,6 +5,7 @@ using DataAccess;
 using DataTransferObjects;
 using DataTransferObjects.Reports;
 using DataTransferObjects.Reports.ByAccount;
+using DataTransferObjects.Reports.ConsultingDemand;
 using DataTransferObjects.Reports.HumanCapital;
 
 namespace PracticeManagementService
@@ -101,7 +102,6 @@ namespace PracticeManagementService
             return ReportDAL.TimeEntryAuditReportByProject(startDate, endDate);
         }
 
-
         public GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             return ReportDAL.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
@@ -116,7 +116,6 @@ namespace PracticeManagementService
         {
             return ReportDAL.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
         }
-
 
         public List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
@@ -137,6 +136,53 @@ namespace PracticeManagementService
         {
             return ReportDAL.TerminationReportGraph(startDate, endDate);
         }
+        #region ConsultingDemand
+        public List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string Titles)
+        {
+            return ReportDAL.ConsultingDemandSummary(startDate, endDate,Titles);
+        }
+
+        public List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills)
+        {
+            return ReportDAL.ConsultingDemandDetailsByTitleSkill(startDate, endDate, titles, skills);
+        }
+
+        public List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills)
+        {
+            return ReportDAL.ConsultingDemandDetailsByMonth(startDate, endDate, titles, skills);
+        }
+
+        public  Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string Title)
+        {
+            return ReportDAL.ConsultingDemandGraphsByTitle(startDate, endDate,Title);
+        }
+
+        public Dictionary<string, int> ConsultingDemandGraphsBySkills(DateTime startDate, DateTime endDate, string Skill)
+        {
+            return ReportDAL.ConsultingDemandGraphsBySkills(startDate, endDate, Skill);
+        }
+
+        public List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string Title)
+        {
+            return ReportDAL.ConsultingDemandTransactionReportByTitle(startDate, endDate, Title);
+        }
+
+        public List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill)
+        {
+            return ReportDAL.ConsultingDemandTransactionReportBySkill(startDate, endDate, Skill);
+        }
+
+        public Dictionary<string,int> ConsultingDemandGrphsGroupsByTitle(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.ConsultingDemandGrphsGroupsByTitle(startDate, endDate);
+        }
+
+        public  Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.ConsultingDemandGrphsGroupsBySkill(startDate, endDate);
+        }
+
+        #endregion
 
     }
 }
