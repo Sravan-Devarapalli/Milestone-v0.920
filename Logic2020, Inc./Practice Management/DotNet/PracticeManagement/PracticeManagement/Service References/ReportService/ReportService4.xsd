@@ -210,6 +210,7 @@
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActiveCapabilitiesExists" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsCompanyInternal" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsNotesRequiredForTimeEnry" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
@@ -223,6 +224,8 @@
   <xs:element name="Practice" nillable="true" type="tns:Practice" />
   <xs:complexType name="ComputedFinancials">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ActualGrossMargin" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="ActualRevenue" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="BillRateMinusDiscount" nillable="true" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="Cogs" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
@@ -250,6 +253,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="CapabilityId" type="xs:int" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PracticeAbbreviation" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PracticeId" type="xs:int" />
@@ -603,7 +607,8 @@
       <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MilestonePersonId" type="xs:int" />
       <xs:element minOccurs="0" name="ParentMilestone" nillable="true" type="tns:Milestone" />
-      <xs:element minOccurs="0" name="ProjectedWorkload" type="xs:decimal" />
+      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PersonTimeOffList" nillable="true" type="q13:ArrayOfKeyValueOfdateTimedecimal" />
+      <xs:element minOccurs="0" name="ProjectedWorkloadWithVacation" type="xs:decimal" />
       <xs:element minOccurs="0" name="Role" nillable="true" type="tns:PersonRole" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ThisPerson" nillable="true" type="tns:Person" />
