@@ -82,7 +82,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange[] TerminationReportGraph(System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandSummary", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandSummaryResponse")]
-        DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandSummary(System.DateTime startDate, System.DateTime endDate, string Titles);
+        DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandSummary(System.DateTime startDate, System.DateTime endDate, string titles, string skills);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkillResponse")]
         DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandDetailsByTitleSkill(System.DateTime startDate, System.DateTime endDate, string titles, string skills);
@@ -119,7 +119,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-      
+    
         
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -225,8 +225,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.TerminationReportGraph(startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandSummary(System.DateTime startDate, System.DateTime endDate, string Titles) {
-            return base.Channel.ConsultingDemandSummary(startDate, endDate, Titles);
+        public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandSummary(System.DateTime startDate, System.DateTime endDate, string titles, string skills) {
+            return base.Channel.ConsultingDemandSummary(startDate, endDate, titles, skills);
         }
         
         public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandDetailsByTitleSkill(System.DateTime startDate, System.DateTime endDate, string titles, string skills) {
