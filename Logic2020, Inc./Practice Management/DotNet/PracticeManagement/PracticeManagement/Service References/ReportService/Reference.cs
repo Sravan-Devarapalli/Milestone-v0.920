@@ -80,6 +80,35 @@ namespace PraticeManagement.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/TerminationReportGraph", ReplyAction="http://tempuri.org/IReportService/TerminationReportGraphResponse")]
         DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange[] TerminationReportGraph(System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandSummary", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandSummaryResponse")]
+        DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandSummary(System.DateTime startDate, System.DateTime endDate, string Titles);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkillResponse")]
+        DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandDetailsByTitleSkill(System.DateTime startDate, System.DateTime endDate, string titles, string skills);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonth", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonthResponse")]
+        DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth[] ConsultingDemandDetailsByMonth(System.DateTime startDate, System.DateTime endDate, string titles, string skills);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitle", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitleResponse")]
+        System.Collections.Generic.Dictionary<string, int> ConsultingDemandGraphsByTitle(System.DateTime startDate, System.DateTime endDate, string Title);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkills", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkillsResponse")]
+        System.Collections.Generic.Dictionary<string, int> ConsultingDemandGraphsBySkills(System.DateTime startDate, System.DateTime endDate, string Skill);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitle", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitleRespons" +
+            "e")]
+        DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitle[] ConsultingDemandTransactionReportByTitle(System.DateTime startDate, System.DateTime endDate, string Title);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkill", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkillRespons" +
+            "e")]
+        DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbySkill[] ConsultingDemandTransactionReportBySkill(System.DateTime startDate, System.DateTime endDate, string Skill);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitle", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitleResponse")]
+        System.Collections.Generic.Dictionary<string, int> ConsultingDemandGrphsGroupsByTitle(System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkill", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkillResponse")]
+        System.Collections.Generic.Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(System.DateTime startDate, System.DateTime endDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -90,7 +119,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-       
+      
         
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -194,6 +223,42 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange[] TerminationReportGraph(System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.TerminationReportGraph(startDate, endDate);
+        }
+        
+        public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandSummary(System.DateTime startDate, System.DateTime endDate, string Titles) {
+            return base.Channel.ConsultingDemandSummary(startDate, endDate, Titles);
+        }
+        
+        public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill[] ConsultingDemandDetailsByTitleSkill(System.DateTime startDate, System.DateTime endDate, string titles, string skills) {
+            return base.Channel.ConsultingDemandDetailsByTitleSkill(startDate, endDate, titles, skills);
+        }
+        
+        public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth[] ConsultingDemandDetailsByMonth(System.DateTime startDate, System.DateTime endDate, string titles, string skills) {
+            return base.Channel.ConsultingDemandDetailsByMonth(startDate, endDate, titles, skills);
+        }
+        
+        public System.Collections.Generic.Dictionary<string, int> ConsultingDemandGraphsByTitle(System.DateTime startDate, System.DateTime endDate, string Title) {
+            return base.Channel.ConsultingDemandGraphsByTitle(startDate, endDate, Title);
+        }
+        
+        public System.Collections.Generic.Dictionary<string, int> ConsultingDemandGraphsBySkills(System.DateTime startDate, System.DateTime endDate, string Skill) {
+            return base.Channel.ConsultingDemandGraphsBySkills(startDate, endDate, Skill);
+        }
+        
+        public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitle[] ConsultingDemandTransactionReportByTitle(System.DateTime startDate, System.DateTime endDate, string Title) {
+            return base.Channel.ConsultingDemandTransactionReportByTitle(startDate, endDate, Title);
+        }
+        
+        public DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbySkill[] ConsultingDemandTransactionReportBySkill(System.DateTime startDate, System.DateTime endDate, string Skill) {
+            return base.Channel.ConsultingDemandTransactionReportBySkill(startDate, endDate, Skill);
+        }
+        
+        public System.Collections.Generic.Dictionary<string, int> ConsultingDemandGrphsGroupsByTitle(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.ConsultingDemandGrphsGroupsByTitle(startDate, endDate);
+        }
+        
+        public System.Collections.Generic.Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.ConsultingDemandGrphsGroupsBySkill(startDate, endDate);
         }
     }
 }
