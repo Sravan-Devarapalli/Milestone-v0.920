@@ -35,11 +35,14 @@ CREATE PROCEDURE dbo.GetConsultantDemandForPeriod
 AS
 BEGIN
 
+	SELECT @StartDate = CONVERT(DATE,@StartDate),@EndDate = CONVERT(DATE,@EndDate)
+	SELECT @StartDate = DATEADD(D,-DAY(@StartDate)+1,@StartDate)
+
 	DECLARE @Query NVARCHAR(4000) = ' FROM [dbo].[v_ConsultingDemand] CD ',
 			@GroupBy NVARCHAR(500) = ' GROUP BY ',
 			@OrderBy NVARCHAR(500) = ' ORDER BY ',
 			@Select NVARCHAR(500) = 'SELECT ',
-			@Where  NVARCHAR(500) = ' WHERE CD.MonthStartDate BETWEEN DATEADD(D,-DAY(@StartDate)+1,@StartDate) AND @EndDate'+
+			@Where  NVARCHAR(500) = ' WHERE CD.MonthStartDate BETWEEN @StartDate AND @EndDate'+
 									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(@Titles,',',''',''') + ''')'  ELSE '' END +
 									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(@Skills,',',''',''') + ''')' ELSE '' END ,
 			@Columns NVARCHAR(500) = ''
@@ -48,9 +51,23 @@ BEGIN
 	IF @IsSummary=1
 	BEGIN
 
+		SELECT @Query = 'FROM 
+								(SELECT C.MonthStartDate,D.Title,D.Skill
+								FROM 
+								(SELECT C.MonthStartDate FROM dbo.Calendar C WHERE C.Date BETWEEN @StartDate AND @EndDate GROUP BY C.MonthStartDate) C
+								CROSS JOIN
+								(
+									SELECT B.Title,B.Skill
+									FROM [dbo].[v_ConsultingDemand] B  
+									WHERE B.MonthStartDate BETWEEN @StartDate AND @EndDate 
+									GROUP BY B.Title,B.Skill
+								) D 
+								)CD
+								LEFT JOIN [dbo].[v_ConsultingDemand] A  ON A.MonthStartDate = CD.MonthStartDate AND A.Title = CD.Title AND A.Skill = CD.Skill'
+
 		SELECT @GroupBy = @GroupBy + 'CD.MonthStartDate,CD.Title,CD.Skill',
 				@OrderBy = @OrderBy + 'CD.MonthStartDate,CD.Title,CD.Skill',
-				@Select = @Select+ 'CD.MonthStartDate,CD.Title,CD.Skill,SUM(COUNT) AS [COUNT]'
+				@Select = @Select+ 'CD.MonthStartDate,CD.Title,CD.Skill,ISNULL(SUM(COUNT),0) AS [COUNT]'
 
 	END
 	--2.Details View 
