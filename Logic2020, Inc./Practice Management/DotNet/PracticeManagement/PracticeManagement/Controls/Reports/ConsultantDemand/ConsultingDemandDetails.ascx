@@ -4,7 +4,7 @@
 <asp:HiddenField ID="hdnCollapsed" runat="server" Value="true" />
 <table class="WholeWidthWithHeight">
     <tr>
-        <td colspan="4" class="Width90Percent">
+        <td colspan="4" class="Width90Percent PaddingBottom3">
             <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
                 CssClass="Width100Px" ToolTip="Collapse All" />
             &nbsp;&nbsp;
