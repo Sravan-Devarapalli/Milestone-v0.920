@@ -4,6 +4,7 @@ using System.ServiceModel;
 using DataTransferObjects;
 using DataTransferObjects.Reports;
 using DataTransferObjects.Reports.ByAccount;
+using DataTransferObjects.Reports.ConsultingDemand;
 using DataTransferObjects.Reports.HumanCapital;
 
 namespace PracticeManagementService
@@ -78,6 +79,32 @@ namespace PracticeManagementService
         [OperationContract]
         List<TerminationPersonsInRange> TerminationReportGraph(DateTime startDate, DateTime endDate);
 
+        [OperationContract]
+        List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string Titles);
+
+        [OperationContract]
+        List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills);
+
+        [OperationContract]
+        List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills);
+
+        [OperationContract]
+        Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string Title);
+
+        [OperationContract]
+        Dictionary<string, int> ConsultingDemandGraphsBySkills(DateTime startDate, DateTime endDate, string Skill);
+
+        [OperationContract]
+        List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string Title);
+
+        [OperationContract]
+        List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill);
+
+        [OperationContract]
+        Dictionary<string, int> ConsultingDemandGrphsGroupsByTitle(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(DateTime startDate, DateTime endDate);
     }
 }
 
