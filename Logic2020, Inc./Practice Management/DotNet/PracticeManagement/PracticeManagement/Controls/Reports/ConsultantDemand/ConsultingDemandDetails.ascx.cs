@@ -107,7 +107,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 var hostingPage = (PraticeManagement.Reports.ConsultingDemand_New)Page;
                 hostingPage.SummaryControl.ConsultantDetailPopup.Show();
             }
-
         }
 
         protected void repByTitleSkill_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -151,11 +150,23 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 Repeater repDetails = (Repeater)e.Item.FindControl("repDetails");
                 ConsultantGroupByMonth dataitem = (ConsultantGroupByMonth)e.Item.DataItem;
                 var result = dataitem.ConsultantDetailsByMonth;
-                repDetails.DataSource = result;
                 var cpeDetails = e.Item.FindControl("cpeDetails") as CollapsiblePanelExtender;
-                cpeDetails.BehaviorID = Guid.NewGuid().ToString();
-                CollapsiblePanelDateExtenderClientIds.Add(cpeDetails.BehaviorID);
-                repDetails.DataBind();
+                if (result.Count > 0)
+                {
+                    repDetails.DataSource = result;
+                    cpeDetails.BehaviorID = Guid.NewGuid().ToString();
+                    CollapsiblePanelDateExtenderClientIds.Add(cpeDetails.BehaviorID);
+                    repDetails.DataBind();
+                }
+                else
+                {
+                    var imgDetails = e.Item.FindControl("imgDetails") as Image;
+                    var lbMonth = e.Item.FindControl("lbMonth") as Label;
+                    imgDetails.Visible = false;
+                    lbMonth.Style.Remove("display");
+                    lbMonth.Text = "&nbsp;&nbsp;&nbsp;";
+                    cpeDetails.Enabled = false;
+                }
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -165,6 +176,24 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
                 hdnCollapsed.Value = "true";
             }
+        }
+
+        protected string GetOpportunityDetailsLink(int? opportunityId)
+        {
+            if (opportunityId.HasValue)
+                return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat,Constants.ApplicationPages.OpportunityDetail,opportunityId.Value),
+                                                            Constants.ApplicationPages.ConsultingDemand_New);
+            else
+                return string.Empty;
+        }
+
+        protected string GetProjectDetailsLink(int? projectId)
+        {
+            if (projectId.HasValue)
+                return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.ProjectDetail, projectId.Value),
+                                                            Constants.ApplicationPages.ConsultingDemand_New);
+            else
+                return string.Empty;
         }
 
         public void PopulateData()
