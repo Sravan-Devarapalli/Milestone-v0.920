@@ -57,7 +57,7 @@
                         CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDetails"
                         ExpandControlID="imgDetails" TextLabelID="lbTitleSkill" />
                     <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Title/Skill Details" />
-                    <asp:Label ID="lbTitleSkill" Style="display: none;" runat="server"></asp:Label>
+                    <asp:Label ID="lbTitleSkill" CssClass="displayNone" runat="server"></asp:Label>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).Title %>,
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).Skill%>
@@ -77,10 +77,14 @@
                             <td class="FirstTD">
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).AccountName%>
@@ -103,10 +107,14 @@
                             <td class="FirstTD">
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).AccountName%>
@@ -138,7 +146,7 @@
                         CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDetails"
                         ExpandControlID="imgDetails" TextLabelID="lbTitleSkill" />
                     <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Title/Skill Details" />
-                    <asp:Label ID="lbTitleSkill" Style="display: none;" runat="server"></asp:Label>
+                    <asp:Label ID="lbTitleSkill" CssClass="displayNone" runat="server"></asp:Label>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).Title %>,
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).Skill%>
@@ -158,10 +166,14 @@
                             <td class="FirstTD">
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).AccountName%>
@@ -184,10 +196,14 @@
                             <td class="FirstTD">
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).AccountName%>
@@ -276,10 +292,14 @@
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ForthTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
@@ -306,10 +326,14 @@
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ForthTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
@@ -360,10 +384,14 @@
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ForthTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
@@ -390,10 +418,14 @@
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ThirdTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                                </asp:HyperLink>
                             </td>
                             <td class="ForthTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
