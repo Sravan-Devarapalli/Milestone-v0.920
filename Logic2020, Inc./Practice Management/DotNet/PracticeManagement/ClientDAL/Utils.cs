@@ -112,6 +112,33 @@ namespace DataAccess
             return ReviewStatus.Pending;
         }
 
+        public static DateTime MonthEndDate(DateTime now)
+        {
+            return now.AddMonths(1).AddDays(-now.AddMonths(1).Day);
+        }
+
+        public static DateTime MonthStartDate(DateTime now)
+        {
+            return now.AddDays(1 - now.Day);
+        }
+
+        public static List<DateTime> GetMonthYearWithInThePeriod(DateTime startDate, DateTime endDate)
+        {
+            startDate = MonthStartDate(startDate).Date;
+            endDate = MonthStartDate(endDate).Date;
+
+            List<DateTime> result = new List<DateTime>();
+            if (startDate <= endDate)
+            {
+                while (startDate <= endDate)
+                {
+                    result.Add(startDate);
+                    startDate = startDate.AddMonths(1);
+                }
+            }
+            return result;
+        }
+
         #endregion
     }
 }
