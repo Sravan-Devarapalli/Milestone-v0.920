@@ -16,7 +16,7 @@ namespace PraticeManagement.Reports
             get
             {
                 int selectedVal = 0;
-                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
+                if (int.TryParse(hdnPeriodValue.Value, out selectedVal))
                 {
                     if (selectedVal == 0)
                     {
@@ -37,7 +37,7 @@ namespace PraticeManagement.Reports
             get
             {
                 int selectedVal = 0;
-                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal))
+                if (int.TryParse(hdnPeriodValue.Value, out selectedVal))
                 {
                     var now = Utils.Generic.GetNowWithTimeZone();
                     if (selectedVal == 0)
@@ -76,11 +76,46 @@ namespace PraticeManagement.Reports
             }
         }
 
+        public bool isSelectAllTitles { get { return cblTitles.areAllSelected; } }
+
+        public bool isSelectAllSkills { get { return cblSkills.areAllSelected; } }
+
         public string hdnTitlesProp { get { return hdnTitles.Value; } }
 
         public string hdnSkillsProp { get { return hdnSkills.Value; } }
 
-        public string titleOrSkill { get { return hdnTitleOrSkill.Value; } }
+        public int CountOnPopup { get; set; }
+
+        public string GraphType
+        {
+            get
+            {
+                if (hdnGraphType.Value == "0")
+                {
+                    return string.Empty;
+                }
+                else if (hdnGraphType.Value == "PipeLine")
+                {
+                    return hdnPipelineTitleOrSkill.Value;
+                }
+                else
+                {
+                    return hdnGraphType.Value;
+                }
+            }
+            set
+            {
+                if (value == "PipeLineTitle" || value == "PipeLineSkill")
+                {
+                    hdnPipelineTitleOrSkill.Value = value;
+                    hdnGraphType.Value = "PipeLine";
+                }
+                else
+                {
+                    hdnGraphType.Value = value;
+                }
+            }
+        }
 
         public PraticeManagement.Controls.Reports.ConsultantDemand.ConsultingDemandSummary SummaryControl
         {
@@ -121,8 +156,9 @@ namespace PraticeManagement.Reports
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            diRange.FromDate = StartDate;
-            diRange.ToDate = EndDate;
+            var now = Utils.Generic.GetNowWithTimeZone();
+            diRange.FromDate = StartDate.HasValue ? StartDate.Value : now;
+            diRange.ToDate = EndDate.HasValue ? EndDate.Value : Utils.Calendar.Next4MonthEndDate(now);
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
@@ -137,6 +173,10 @@ namespace PraticeManagement.Reports
                 lblCustomDateRange.Attributes.Add("class", "displayNone");
                 imgCalender.Attributes.Add("class", "displayNone");
             }
+            var tbFrom = diRange.FindControl("tbFrom") as TextBox;
+            var tbTo = diRange.FindControl("tbTo") as TextBox;
+            hdnStartDateTxtBoxId.Value = tbFrom.ClientID;
+            hdnEndDateTxtBoxId.Value = tbTo.ClientID;
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
         }
@@ -150,6 +190,8 @@ namespace PraticeManagement.Reports
 
         protected void btnUpdateView_OnClick(object sender, EventArgs e)
         {
+            hdnGraphType.Value = ddlGraphsTypes.SelectedValue;
+            hdnPeriodValue.Value = ddlPeriod.SelectedValue;
             LoadActiveView();
         }
 
@@ -182,7 +224,7 @@ namespace PraticeManagement.Reports
         protected void ddlGraphsTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
             trTitles.Visible = true;
-            if (ddlGraphsTypes.SelectedValue == "1")
+            if (ddlGraphsTypes.SelectedValue == "TransactionTitle")
             {
                 lblTitle.Text = "Title";
                 List<string> titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.LastName).Distinct().ToList();
@@ -191,7 +233,7 @@ namespace PraticeManagement.Reports
                 tdTitles.Visible = true;
                 cblTitles.SelectAll();
             }
-            else if (ddlGraphsTypes.SelectedValue == "2")
+            else if (ddlGraphsTypes.SelectedValue == "TransactionSkill")
             {
                 lblTitle.Text = "Skill";
                 List<string> skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.FirstName).Distinct().ToList();
@@ -287,23 +329,23 @@ namespace PraticeManagement.Reports
             else
             {
                 trGtypes.Visible = true;
-                trTitles.Visible = ddlGraphsTypes.SelectedIndex != 0;
+                trTitles.Visible = ddlGraphsTypes.SelectedIndex != 0 && ddlGraphsTypes.SelectedValue != "PipeLine";
                 string selectedValues = null;
-                if (ddlGraphsTypes.SelectedValue == "1" && ddlPeriod.SelectedValue != "-1")
+                if (ddlGraphsTypes.SelectedValue == "TransactionTitle")
                 {
                     selectedValues = cblTitles.SelectedItems;
                     hdnTitles.Value = selectedValues;
-                    hdnTitleOrSkill.Value = "Title";
-                    ucGraphs.PopulateGraph(ddlGraphsTypes.SelectedValue, selectedValues);
                 }
-                else if (ddlGraphsTypes.SelectedValue == "2" && ddlPeriod.SelectedValue != "-1")
+                else if (ddlGraphsTypes.SelectedValue == "TransactionSkill")
                 {
                     selectedValues = cblSkills.SelectedItems;
                     hdnSkills.Value = selectedValues;
-                    hdnTitleOrSkill.Value = "Skill";
-                    ucGraphs.PopulateGraph(ddlGraphsTypes.SelectedValue, selectedValues);
                 }
-
+                else if (ddlGraphsTypes.SelectedValue == "PipeLine")
+                {
+                    GraphType = "PipeLineTitle";
+                }
+                ucGraphs.PopulateGraph();
             }
             enableDisableResetButtons();
         }
@@ -313,11 +355,12 @@ namespace PraticeManagement.Reports
             SelectView(control, viewIndex);
             if (mvConsultingDemandReport.ActiveViewIndex == 2)
             {
-                ddlGraphsTypes.SelectedValue = "1";
+                ddlGraphsTypes.SelectedValue = "TransactionTitle";
                 cblTitles.SelectAll();
                 cblSkills.SelectAll();
             }
             enableDisableResetButtons();
+            ddlPeriod.SelectedValue = hdnPeriodValue.Value;
             LoadActiveView();
         }
 
