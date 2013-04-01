@@ -59,7 +59,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 {
                     btnGroupBy.ToolTip = btnGroupBy.Text = "Group By Month";
                 }
-                
+
             }
         }
 
@@ -99,6 +99,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             {
                 hdnGroupBy.Value = "month";
             }
+            groupBy = hdnGroupBy.Value;
             PopulateData();
 
             if (!string.IsNullOrEmpty(_hdIsSummaryPage.Value) && _hdIsSummaryPage.Value == true.ToString())
@@ -192,3 +193,4 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         }
     }
 }
+
