@@ -5499,9 +5499,15 @@ BenchCosts.ascx*/
 {
     text-align: left;
 }
+
 .Width194px
 {
     width: 194px;
+}
+
+.Width1200px
+{
+    width: 1200px;
 }
 
 .WidthHeight25
@@ -7809,5 +7815,9 @@ table#ctl00_body_login tr td label
     white-space: nowrap;
     width: 13.33%;
     text-align:center;
+}
+.consultingReportTd
+{
+font-weight: bolder; width: 10%; text-align: right;
 }
 
