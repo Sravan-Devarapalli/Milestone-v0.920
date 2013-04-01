@@ -140,16 +140,21 @@ namespace PraticeManagement.Utils
         //Current month + next 3 months
         public static DateTime Next4MonthEndDate(DateTime now)
         {
-            return MonthStartDate(now.AddMonths(3));
+            return MonthEndDate(now.AddMonths(3));
         }
+
+        //Current month + next 2 months
         public static DateTime Next3MonthEndDate(DateTime now)
         {
-            return MonthStartDate(now.AddMonths(2));
+            return MonthEndDate(now.AddMonths(2));
         }
+
+        //Current month + next 1 months
         public static DateTime Next2MonthEndDate(DateTime now)
         {
-            return MonthStartDate(now.AddMonths(1));
+            return MonthEndDate(now.AddMonths(1));
         }
+
         //return 16th of the last month
         public static DateTime LastMonthSecondHalfStartDate(DateTime now)
         {
