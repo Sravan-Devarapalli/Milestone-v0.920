@@ -1037,6 +1037,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .MarginGoalsDescription{background-color:White;padding:10px}
 .TextAlignLeft{text-align:left}
 .Width194px{width:194px}
+.Width1200px{width:1200px}
 .WidthHeight25{width:25%;height:25px}
 .Width8Height25{width:8%;height:25px}
 .Width42Height25{width:42%;height:25px}
@@ -1442,3 +1443,4 @@ table#ctl00_body_login tr td label{float:left}
 .trConsultngDetailPanelInnerItem td{white-space:nowrap;width:13.33%;text-align:center}
 .alternateTrConsultngDetailPanelInnerItem{background-color:#F9FAFF;height:30px;white-space:nowrap;width:100%}
 .alternateTrConsultngDetailPanelInnerItem td{white-space:nowrap;width:13.33%;text-align:center}
+.consultingReportTd{font-weight:bolder;width:10%;text-align:right}
