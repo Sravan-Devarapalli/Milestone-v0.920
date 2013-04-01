@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
 using System.Web.UI.WebControls;
+using PraticeManagement.Reports;
 
 
 namespace PraticeManagement.Controls.Reports.ConsultantDemand
@@ -38,11 +39,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
             if (hlnkGraph.Text == PipeLineSkill)
             {
-                HostingPage.GraphType = "PipeLineTitle";
+                HostingPage.GraphType = ConsultingDemand_New.PipelineTitle;
             }
             else
             {
-                HostingPage.GraphType = "PipeLineSkill";
+                HostingPage.GraphType = ConsultingDemand_New.PipelineSkill;
             }
             lblMonth.Text = ctrDetails.BtnExportPipeLineSelectedValue;
             lblCount.Text = string.Empty;
@@ -56,9 +57,9 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
             ctrDetails.BtnExportSelectedStartDate = Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString();
             ctrDetails.BtnExportSelectedEndDate = Utils.Calendar.MonthEndDate(Convert.ToDateTime(postBackDetails[0])).ToString();
-            lblMonth.Text = "Month :" + "" + Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString("MMMM yyyy");
+            lblMonth.Text = "Month :" + "" + Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString(Constants.Formatting.FullMonthYearFormat);
             ctrDetails.PopulateData();
-            lblCount.Text = HostingPage.CountOnPopup.ToString();
+            lblCount.Text = HostingPage.RolesCount.ToString();
             if (lblCount.Text != "1")
             {
                 lblCount.Text += " Roles";
@@ -73,7 +74,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         public void PopulateGraph()
         {
             Dictionary<string, int> data = new Dictionary<string, int>();
-            if (HostingPage.GraphType == "TransactionTitle")
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
             {
                 chartConsultnDemandPipeline.Visible = false;
                 chartConsultngDemand.Visible = true;
@@ -83,7 +84,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultngDemand.DataBind();
                 InitChart(data.Count);
             }
-            else if (HostingPage.GraphType == "TransactionSkill")
+            else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
                 chartConsultnDemandPipeline.Visible = false;
                 chartConsultngDemand.Visible = true;
@@ -98,11 +99,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultnDemandPipeline.Visible = true;
                 chartConsultngDemand.Visible = false;
                 hlnkGraph.Visible = true;
-                if (HostingPage.GraphType == "PipeLineTitle")
+                if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
                 {
                     data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGrphsGroupsByTitle(HostingPage.StartDate.Value, HostingPage.EndDate.Value));
                 }
-                else if (HostingPage.GraphType == "PipeLineSkill")
+                else if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
                 {
                     data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGrphsGroupsBySkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value));
                 }
@@ -114,7 +115,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
         private void InitChart(int count)
         {
-            if (HostingPage.GraphType == "TransactionTitle" || HostingPage.GraphType == "TransactionSkill")
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle || HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
                 chartConsultngDemand.Width = ((count < 5) ? 5 : count) * 70;
                 chartConsultngDemand.Height = 500;
@@ -126,7 +127,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultnDemandPipeline.Width = ((count < 5) ? 5 : count) * 120;
                 chartConsultnDemandPipeline.Height = 500;
                 InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisY, "Quantity", false, 0);
-                if (HostingPage.GraphType == "PipeLineTitle")
+                if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
                 {
                     InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisX, "Title", true);
                 }
@@ -147,7 +148,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             int multipleSelected;
             chartConsultngDemand.Titles.Clear();
             chartConsultnDemandPipeline.Titles.Clear();
-            if (HostingPage.GraphType == "TransactionTitle")
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
             {
                 multipleSelected = HostingPage.hdnTitlesProp.Where(t => t == ',').Count();
                 chartConsultngDemand.Titles.Add("Resource Demand By Titles");
@@ -158,7 +159,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultngDemand.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultngDemand.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
-            else if (HostingPage.GraphType == "TransactionSkill")
+            else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
                 multipleSelected = HostingPage.hdnSkillsProp.Where(s => s == ',').Count();
                 chartConsultngDemand.Titles.Add("Resource Demand By Skills");
@@ -169,17 +170,17 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultngDemand.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultngDemand.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
-            else if (HostingPage.GraphType == "PipeLineTitle")
+            else if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
             {
                 chartConsultnDemandPipeline.Titles.Add("PipeLine Title Demand by Month");
-                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.ToString("MMMM yyyy") + "-" + HostingPage.EndDate.Value.ToString("MMMM yyyy"));
+                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + "-" + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
             else
             {
                 chartConsultnDemandPipeline.Titles.Add("PipeLine SkillSet Demand by Month");
-                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.ToString("MMMM yyyy") + "-" + HostingPage.EndDate.Value.ToString("MMMM yyyy"));
+                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + "-" + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
@@ -206,12 +207,12 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             if (hlnkGraph.Text == PipeLineTitle)
             {
                 hlnkGraph.Text = PipeLineSkill;
-                HostingPage.GraphType = "PipeLineTitle";
+                HostingPage.GraphType = ConsultingDemand_New.PipelineTitle;
             }
             else
             {
                 hlnkGraph.Text = PipeLineTitle;
-                HostingPage.GraphType = "PipeLineSkill";
+                HostingPage.GraphType = ConsultingDemand_New.PipelineSkill;
             }
             PopulateGraph();
         }
