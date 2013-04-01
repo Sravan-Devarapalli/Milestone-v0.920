@@ -9,36 +9,41 @@
                 <asp:LinkButton runat="server" Text="Pipeline SkillSet Demand By Month" ID="hlnkGraph"
                     EnableViewState="true" Visible="false" OnClick="hlnkGraph_Click"></asp:LinkButton>
             </div>
-            <asp:Chart ID="chartConsultngDemand" runat="server" OnClick="chartConsultngDemand_Click"
-                EnableViewState="true">
-                <Series>
-                    <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
-                        YValueType="Int32" PostBackValue="#VALX,#VALY,False">
-                    </asp:Series>
-                    <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Point" XValueType="String"
-                        YValueType="Double" XValueMember="month" YValueMembers="count">
-                    </asp:Series>
-                    <asp:Series Name="chartSeries2" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                        YValueType="Double" XValueMember="month" YValueMembers="count" >
-                    </asp:Series>
-                </Series>
-                <ChartAreas>
-                    <asp:ChartArea Name="MainArea">
-                    </asp:ChartArea>
-                </ChartAreas>
-            </asp:Chart>
-            <asp:Chart ID="chartConsultnDemandPipeline" runat="server" EnableViewState="true"
-                OnClick="chartConsultnDemandPipeline_Click">
-                <Series>
-                    <asp:Series Name="seriesPipeline" ChartArea="PipelineArea" ChartType="Bar" XValueType="String"
-                        YValueType="Int32" PostBackValue="#VALX,#VALY,False">
-                    </asp:Series>
-                </Series>
-                <ChartAreas>
-                    <asp:ChartArea Name="PipelineArea">
-                    </asp:ChartArea>
-                </ChartAreas>
-            </asp:Chart>
+            <div class="ConsultingDemandchartDiv">
+                <asp:Chart ID="chartConsultngDemand" runat="server" OnClick="chartConsultngDemand_Click"
+                    EnableViewState="true">
+                    <Series>
+                        <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Column" XValueType="String"
+                            XAxisType="Primary" YAxisType="Primary" YValueType="Int32" PostBackValue="#VALX,#VALY,False"
+                            ToolTip="#VALY Resources" XValueMember="month" YValueMembers="count">
+                        </asp:Series>
+                        <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Point" XValueType="String"
+                            XAxisType="Primary" YAxisType="Primary" YValueType="Double" XValueMember="month"
+                            YValueMembers="count" ToolTip="#VALY Resources">
+                        </asp:Series>
+                        <asp:Series Name="chartSeries2" ChartArea="MainArea" ChartType="Line" XValueType="String"
+                            XAxisType="Primary" YAxisType="Primary" YValueType="Double" XValueMember="month"
+                            YValueMembers="count" ToolTip="#VALY Resources">
+                        </asp:Series>
+                    </Series>
+                    <ChartAreas>
+                        <asp:ChartArea Name="MainArea">
+                        </asp:ChartArea>
+                    </ChartAreas>
+                </asp:Chart>
+                <asp:Chart ID="chartConsultnDemandPipeline" runat="server" EnableViewState="true"
+                    OnClick="chartConsultnDemandPipeline_Click">
+                    <Series>
+                        <asp:Series Name="seriesPipeline" ChartArea="PipelineArea" ChartType="Bar" XValueType="String"
+                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" XValueMember="title" YValueMembers="count">
+                        </asp:Series>
+                    </Series>
+                    <ChartAreas>
+                        <asp:ChartArea Name="PipelineArea">
+                        </asp:ChartArea>
+                    </ChartAreas>
+                </asp:Chart>
+            </div>
         </ContentTemplate>
         <Triggers>
         </Triggers>
