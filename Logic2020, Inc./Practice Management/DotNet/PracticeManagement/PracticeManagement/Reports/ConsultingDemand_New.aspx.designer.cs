@@ -31,15 +31,6 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.UpdatePanel upnlHeader;
         
         /// <summary>
-        /// btnResetFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnResetFilter;
-        
-        /// <summary>
         /// btnUpdateView control.
         /// </summary>
         /// <remarks>
@@ -47,6 +38,15 @@ namespace PraticeManagement.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnUpdateView;
+        
+        /// <summary>
+        /// btnResetFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetFilter;
         
         /// <summary>
         /// trGtypes control.
@@ -67,6 +67,15 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.DropDownList ddlGraphsTypes;
         
         /// <summary>
+        /// hdnGraphType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnGraphType;
+        
+        /// <summary>
         /// trTitles control.
         /// </summary>
         /// <remarks>
@@ -85,13 +94,13 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Label lblTitle;
         
         /// <summary>
-        /// hdnTitleOrSkill control.
+        /// hdnPipelineTitleOrSkill control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnTitleOrSkill;
+        protected global::System.Web.UI.WebControls.HiddenField hdnPipelineTitleOrSkill;
         
         /// <summary>
         /// tdTitles control.
@@ -175,6 +184,15 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
         
         /// <summary>
+        /// hdnPeriodValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPeriodValue;
+        
+        /// <summary>
         /// hdnStartDate control.
         /// </summary>
         /// <remarks>
@@ -191,6 +209,24 @@ namespace PraticeManagement.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnEndDate;
+        
+        /// <summary>
+        /// hdnStartDateTxtBoxId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnStartDateTxtBoxId;
+        
+        /// <summary>
+        /// hdnEndDateTxtBoxId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnEndDateTxtBoxId;
         
         /// <summary>
         /// lblCustomDateRange control.
@@ -236,6 +272,15 @@ namespace PraticeManagement.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.Filtering.DateInterval1 diRange;
+        
+        /// <summary>
+        /// cstvalPeriodRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cstvalPeriodRange;
         
         /// <summary>
         /// valSumDateRange control.
