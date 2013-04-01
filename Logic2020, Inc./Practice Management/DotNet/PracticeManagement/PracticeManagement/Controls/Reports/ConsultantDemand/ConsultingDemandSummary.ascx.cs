@@ -107,11 +107,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 StringBuilder sb = new StringBuilder();
                 sb.Append("From Month");
                 sb.Append("\t");
-                sb.Append(HostingPage.StartDate.Value.ToString("MMMM yyyy"));
+                sb.Append(HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 sb.Append("\t");
                 sb.Append("To Month");
                 sb.Append("\t");
-                sb.Append(HostingPage.EndDate.Value.ToString("MMMM yyyy"));
+                sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 sb.Append("\t");
                 sb.AppendLine();
                 if (ConsultantSummaryReportExportList.Count > 0)
@@ -172,7 +172,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 }
                 //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  cblTitle
                 //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
-                var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString(Constants.Formatting.ReportDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.ReportDateFormat));
                 GridViewExportUtil.Export(filename, sb);
             }
         }
