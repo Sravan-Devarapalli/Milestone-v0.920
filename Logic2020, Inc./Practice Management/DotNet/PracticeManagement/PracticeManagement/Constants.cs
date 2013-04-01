@@ -166,6 +166,7 @@ namespace PraticeManagement
             public const string SkillsEntryPage = "~/SkillsEntry.aspx";
             public const string PersonPictureHandlerFormat = "~/Controls/PersonPicture.ashx?PersonId={0}";
             public const string PersonsPage = "~/Config/Persons.aspx";
+            public const string ConsultingDemand_New = "~/Reports/ConsultingDemand_new.aspx";
 
         }
 
@@ -214,6 +215,7 @@ namespace PraticeManagement
         /// </summary>
         public static class Formatting
         {
+            public const string FullMonthYearFormat= "MMMM yyyy";
             public const string IntegerNumberFormat = "{0:##############0}";
             public const string CurrencyZero = "$0.00";
             public const string MonthYearFormat = "MMM yyyy";
