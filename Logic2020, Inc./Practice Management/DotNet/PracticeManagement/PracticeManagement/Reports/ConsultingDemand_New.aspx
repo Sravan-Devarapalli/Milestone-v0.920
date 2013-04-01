@@ -184,14 +184,14 @@
             <div class="filter-section-color Height102px">
                 <asp:UpdatePanel ID="upnlHeader" runat="server">
                     <ContentTemplate>
-                        <table style="width: 100%;">
+                        <table class="Width100Per">
                             <tr>
-                                <td style="font-weight: bolder; width: 10%; text-align: right;">
+                                <td class="consultingReportTd" >
                                     Select report parameters:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
-                                <td style="width: 50%;">
+                                <td class="Width50Percent">
                                 </td>
-                                <td style="text-align: right;">
+                                <td class="textRight">
                                     <asp:Button ID="btnUpdateView" Text="Run Report" runat="server" OnClick="btnUpdateView_OnClick"
                                         Enabled="false" CssClass="textCenter Width110Px" />
                                     <asp:Button ID="btnResetFilter" Text="Reset Filter" runat="server" Enabled="false"
@@ -199,7 +199,7 @@
                                 </td>
                             </tr>
                             <tr id="trGtypes" runat="server" class="PaddingBottom5Imp">
-                                <td style="text-align: right;">
+                                <td class="textRight">
                                     Graph Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
                                 <td class="PaddingBottom3Imp">
@@ -216,7 +216,7 @@
                                 </td>
                             </tr>
                             <tr id="trTitles" runat="server">
-                                <td style="text-align: right;">
+                                <td class="textRight">
                                     <asp:Label ID="lblTitle" runat="server"></asp:Label>
                                     <asp:HiddenField ID="hdnPipelineTitleOrSkill" runat="server" />
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -256,7 +256,7 @@
                                 </td>
                             </tr>
                             <tr class="PaddingBottom5Imp">
-                                <td style="text-align: right;">
+                                <td class="textRight">
                                     Period&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
                                 <td class="PaddingBottom3Imp">
