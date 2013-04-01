@@ -43,7 +43,7 @@
                             <AjaxControlToolkit:PopupControlExtender ID="pceTitleFilter" runat="server" TargetControlID="imgTitleFilter"
                                 BehaviorID="pceTitleFilter" PopupControlID="pnlFilterTitle" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
-                             <img alt="Filter" src="../../../Images/Terminated.png" runat="server" title="Skill"
+                            <img alt="Filter" src="../../../Images/Terminated.png" runat="server" title="Skill"
                                 id="imgSkillFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceSkillFilter" runat="server" TargetControlID="imgSkillFilter"
                                 BehaviorID="pceSkillFilter" PopupControlID="pnlFilterSkill" Position="Bottom">
@@ -139,9 +139,9 @@
         </tbody></table></div>
     </FooterTemplate>
 </asp:Repeater>
-  <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
-        There are no strawmens for the selected range.
-    </div>
+<div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
+    There are no strawmens for the selected range.
+</div>
 <asp:HiddenField ID="hdnTempField" runat="server" />
 <AjaxControlToolkit:ModalPopupExtender ID="mpeConsultantDetailReport" runat="server"
     TargetControlID="hdnTempField" CancelControlID="btnCancelConsultantDetailReport"
