@@ -30,17 +30,19 @@ CREATE PROCEDURE dbo.GetConsultantDemandForPeriod
 	--View By
 	@ViewByTitle BIT = 0,
 	@ViewBySkill BIT = 0,
-	@ViewByTitleSkill BIT = 0
+	@ViewByTitleSkill BIT = 0,
+	--Order By
+	@OrderByCerteria VARCHAR(MAX) = 'MonthStartDate'
 )
 AS
 BEGIN
 
 	SELECT @StartDate = CONVERT(DATE,@StartDate),@EndDate = CONVERT(DATE,@EndDate)
 	SELECT @StartDate = DATEADD(D,-DAY(@StartDate)+1,@StartDate)
+	SELECT @OrderByCerteria  = ' ORDER BY ' + @OrderByCerteria 
 
 	DECLARE @Query NVARCHAR(4000) = ' FROM [dbo].[v_ConsultingDemand] CD ',
 			@GroupBy NVARCHAR(500) = ' GROUP BY ',
-			@OrderBy NVARCHAR(500) = ' ORDER BY ',
 			@Select NVARCHAR(500) = 'SELECT ',
 			@Where  NVARCHAR(500) = ' WHERE CD.MonthStartDate BETWEEN @StartDate AND @EndDate'+
 									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(@Titles,',',''',''') + ''')'  ELSE '' END +
@@ -66,7 +68,6 @@ BEGIN
 								LEFT JOIN [dbo].[v_ConsultingDemand] A  ON A.MonthStartDate = CD.MonthStartDate AND A.Title = CD.Title AND A.Skill = CD.Skill'
 
 		SELECT @GroupBy = @GroupBy + 'CD.MonthStartDate,CD.Title,CD.Skill',
-				@OrderBy = @OrderBy + 'CD.MonthStartDate,CD.Title,CD.Skill',
 				@Select = @Select+ 'CD.MonthStartDate,CD.Title,CD.Skill,ISNULL(SUM(COUNT),0) AS [COUNT]'
 
 	END
@@ -87,9 +88,8 @@ BEGIN
 				WHEN @GroupByTitleSkill = 0 AND @GroupByTitle = 0 AND @ViewByTitle = 1 THEN ',CD.Title'
 				WHEN @GroupByTitleSkill = 0 AND @GroupBySkill = 0 AND @ViewBySkill = 1 THEN ',CD.Skill'
 				ELSE ''
-			END,
-			@OrderBy = @OrderBy + ' 1 '
-			SELECT	@Select = @Select + @Columns + ',SUM(COUNT) AS [COUNT]',
+			END
+			SELECT	@Select = @Select + @Columns + ',ISNULL(SUM(COUNT),0) AS [COUNT]',
 					@GroupBy = @GroupBy + @Columns
 
 	END
@@ -110,15 +110,14 @@ BEGIN
 				WHEN @GroupByTitleSkill = 0 AND @GroupByTitle = 0 AND @ViewByTitle = 1 THEN ',CD.Title'
 				WHEN @GroupByTitleSkill = 0 AND @GroupBySkill = 0 AND @ViewBySkill = 1 THEN ',CD.Skill'
 				ELSE ''
-			END,
-			@OrderBy = @OrderBy + ' 1 '
+			END
 
-			SELECT	@Select = @Select + @Columns + ',SUM(COUNT) AS [COUNT]',
+			SELECT	@Select = @Select + @Columns + ',ISNULL(SUM(COUNT),0) AS [COUNT]',
 					@GroupBy = @GroupBy + @Columns
 
 	END
 	
-	SELECT @Query = @Select + @Query + @Where + @GroupBy + @OrderBy
+	SELECT @Query = @Select + @Query + @Where + @GroupBy + @OrderByCerteria
 
 	--Print @Query
 	EXEC sp_executeSql  @Query,N'@StartDate DATETIME,@EndDate DATETIME',@StartDate=@StartDate,@EndDate=@EndDate
