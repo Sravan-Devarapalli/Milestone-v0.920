@@ -431,6 +431,21 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public bool areAllSelected
+        {
+            get
+            {
+                foreach (ListItem item in Items)
+                {
+                    if (!item.Selected)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
         public string SelectedString
         {
             get
