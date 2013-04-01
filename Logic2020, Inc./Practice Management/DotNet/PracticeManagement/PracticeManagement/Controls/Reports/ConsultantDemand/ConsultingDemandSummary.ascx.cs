@@ -101,7 +101,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             // mso-number-format:"0\.00"
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var ConsultantSummaryReportExportList = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, "", "")).ToList();
+
+                var ConsultantSummaryReportExportList = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems)).ToList();
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("From Month");
@@ -169,7 +170,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 {
                     sb.Append("No Consultants are there for the selected period.");
                 }
-                //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  
+                //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  cblTitle
                 //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
                 var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
                 GridViewExportUtil.Export(filename, sb);
@@ -258,3 +259,4 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         }
     }
 }
+
