@@ -9,6 +9,20 @@ namespace PraticeManagement.Reports
 {
     public partial class ConsultingDemand_New : System.Web.UI.Page
     {
+        #region Constants
+
+        public const string PipelineTitle = "PipeLineTitle";
+
+        public const string PipelineSkill = "PipeLineSkill";
+
+        public const string TransactionTitle = "TransactionTitle";
+
+        public const string TransactionSkill = "TransactionSkill";
+
+        public const string PipeLine = "PipeLine";
+
+        #endregion
+
         #region Properties
 
         public DateTime? StartDate
@@ -84,7 +98,7 @@ namespace PraticeManagement.Reports
 
         public string hdnSkillsProp { get { return hdnSkills.Value; } }
 
-        public int CountOnPopup { get; set; }
+        public int RolesCount { get; set; }
 
         public string GraphType
         {
@@ -105,7 +119,7 @@ namespace PraticeManagement.Reports
             }
             set
             {
-                if (value == "PipeLineTitle" || value == "PipeLineSkill")
+                if (value == PipelineTitle || value == PipelineTitle)
                 {
                     hdnPipelineTitleOrSkill.Value = value;
                     hdnGraphType.Value = "PipeLine";
@@ -224,7 +238,7 @@ namespace PraticeManagement.Reports
         protected void ddlGraphsTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
             trTitles.Visible = true;
-            if (ddlGraphsTypes.SelectedValue == "TransactionTitle")
+            if (ddlGraphsTypes.SelectedValue == TransactionTitle)
             {
                 lblTitle.Text = "Title";
                 List<string> titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.LastName).Distinct().ToList();
@@ -233,7 +247,7 @@ namespace PraticeManagement.Reports
                 tdTitles.Visible = true;
                 cblTitles.SelectAll();
             }
-            else if (ddlGraphsTypes.SelectedValue == "TransactionSkill")
+            else if (ddlGraphsTypes.SelectedValue == TransactionSkill)
             {
                 lblTitle.Text = "Skill";
                 List<string> skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.FirstName).Distinct().ToList();
@@ -331,19 +345,19 @@ namespace PraticeManagement.Reports
                 trGtypes.Visible = true;
                 trTitles.Visible = ddlGraphsTypes.SelectedIndex != 0 && ddlGraphsTypes.SelectedValue != "PipeLine";
                 string selectedValues = null;
-                if (ddlGraphsTypes.SelectedValue == "TransactionTitle")
+                if (ddlGraphsTypes.SelectedValue == TransactionTitle)
                 {
                     selectedValues = cblTitles.SelectedItems;
                     hdnTitles.Value = selectedValues;
                 }
-                else if (ddlGraphsTypes.SelectedValue == "TransactionSkill")
+                else if (ddlGraphsTypes.SelectedValue == TransactionSkill)
                 {
                     selectedValues = cblSkills.SelectedItems;
                     hdnSkills.Value = selectedValues;
                 }
                 else if (ddlGraphsTypes.SelectedValue == "PipeLine")
                 {
-                    GraphType = "PipeLineTitle";
+                    GraphType = PipelineTitle;
                 }
                 ucGraphs.PopulateGraph();
             }
@@ -355,7 +369,7 @@ namespace PraticeManagement.Reports
             SelectView(control, viewIndex);
             if (mvConsultingDemandReport.ActiveViewIndex == 2)
             {
-                ddlGraphsTypes.SelectedValue = "TransactionTitle";
+                ddlGraphsTypes.SelectedValue = TransactionTitle;
                 cblTitles.SelectAll();
                 cblSkills.SelectAll();
             }
