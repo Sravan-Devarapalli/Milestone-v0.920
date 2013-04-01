@@ -5802,6 +5802,10 @@ BenchCosts.ascx*/
     width: 55%;
     height: 120px;
 }
+.Height102px
+{
+    height:102px;
+    }
 .Height100Percent
 {
     height: 100%;
@@ -7762,7 +7766,6 @@ table#ctl00_body_login tr td label
 {
     background-color: #D4D0C9;
     height: 30px;
-    text-align: center;
     white-space: nowrap;
 }
 .trConsultngDetailPanelItem th
@@ -7774,7 +7777,6 @@ table#ctl00_body_login tr td label
 {
     background-color: #ECE9D9;
     height: 30px;
-    text-align: center;
     white-space: nowrap;
 }
 .alternateTrConsultngDetailPanelItem th
@@ -7791,9 +7793,9 @@ table#ctl00_body_login tr td label
 }
 .trConsultngDetailPanelInnerItem td
 {
-    text-align: center;
     white-space: nowrap;
     width: 13.33%;
+    text-align:center;
 }
 .alternateTrConsultngDetailPanelInnerItem
 {
@@ -7804,8 +7806,8 @@ table#ctl00_body_login tr td label
 }
 .alternateTrConsultngDetailPanelInnerItem td
 {
-    text-align: center;
     white-space: nowrap;
     width: 13.33%;
+    text-align:center;
 }
 
