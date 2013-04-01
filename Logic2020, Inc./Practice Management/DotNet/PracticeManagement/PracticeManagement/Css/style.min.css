@@ -1090,6 +1090,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .TdValidators{width:10%;vertical-align:middle;padding-left:2px}
 .LableProjectManager{width:30%;vertical-align:top;line-height:20px}
 .TdProjectNotes{width:55%;height:120px}
+.Height102px{height:102px}
 .Height100Percent{height:100%}
 .InnerTdProjectNotes{height:20px;font-size:15px;font-style:italic;vertical-align:bottom;padding-bottom:5px}
 .TextBoxProjectNotes{overflow-y:auto;resize:none;font-size:12px;font-family:Arial,Helvetica,sans-serif;width:98%;height:80px}
@@ -1433,11 +1434,11 @@ table#ctl00_body_login tr td label{float:left}
 .trConsultngDetailPanel th{font-size:14px;text-align:center;white-space:nowrap;width:13.33%}
 .trConsultngDetailPanel td{text-align:center;white-space:nowrap;width:13.33%}
 .prjctnamewidth20{width:20%!important}
-.trConsultngDetailPanelItem{background-color:#D4D0C9;height:30px;text-align:center;white-space:nowrap}
+.trConsultngDetailPanelItem{background-color:#D4D0C9;height:30px;white-space:nowrap}
 .trConsultngDetailPanelItem th{font-size:14px;width:13.33%}
-.alternateTrConsultngDetailPanelItem{background-color:#ECE9D9;height:30px;text-align:center;white-space:nowrap}
+.alternateTrConsultngDetailPanelItem{background-color:#ECE9D9;height:30px;white-space:nowrap}
 .alternateTrConsultngDetailPanelItem th{font-size:14px;width:13.33%}
 .trConsultngDetailPanelInnerItem{background-color:white;height:30px;white-space:nowrap;width:100%}
-.trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:13.33%}
+.trConsultngDetailPanelInnerItem td{white-space:nowrap;width:13.33%;text-align:center}
 .alternateTrConsultngDetailPanelInnerItem{background-color:#F9FAFF;height:30px;white-space:nowrap;width:100%}
-.alternateTrConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:13.33%}
+.alternateTrConsultngDetailPanelInnerItem td{white-space:nowrap;width:13.33%;text-align:center}
