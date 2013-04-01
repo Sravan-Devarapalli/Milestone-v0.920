@@ -37,6 +37,103 @@
             displayPanel.show();
             displayPanel.offset({ top: iptop, left: ipleft });
         }
+        function ValidatePeriod(sender, args) {
+            args.IsValid = PeriodValidate();
+        }
+
+        function ValidAll() {
+            //var validators = Page_Validators;
+            return Page_IsValid && PeriodValidate();
+        }
+
+        function CheckIfDatesValid() {
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+        && startDate <= endDate) {
+                var startYear = parseInt(startDate.format('yyyy'));
+                var endYear = parseInt(endDate.format('yyyy'));
+                var startMonth = 0;
+                var endMonth = 0;
+                if (startDate.format('MM')[0] == '0') {
+                    startMonth = parseInt(startDate.format('MM')[1]);
+                }
+                else {
+                    startMonth = parseInt(startDate.format('MM'));
+                }
+                if (endDate.format('MM')[0] == '0') {
+                    endMonth = parseInt(endDate.format('MM')[1]);
+                }
+                else {
+                    endMonth = parseInt(endDate.format('MM'));
+                }
+                if ((startYear == endYear && ((endMonth - startMonth + 1) <= 4))
+        || (((((endYear - startYear) * 4 + endMonth) - startMonth + 1)) <= 4)
+        || ((endDate - startDate) / (1000 * 60 * 60 * 24)) < 360
+        ) {
+                    ClearValidations();
+                    var btnCustDatesClose = document.getElementById('<%= btnCustDatesCancel.ClientID %>');
+                    hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
+                    hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
+                    lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
+                    var startDate = new Date(txtStartDate.value);
+                    var endDate = new Date(txtEndDate.value);
+                    var startDateStr = startDate.format("MM/dd/yyyy");
+                    var endDateStr = endDate.format("MM/dd/yyyy");
+                    hdnStartDate.value = startDateStr;
+                    hdnEndDate.value = endDateStr;
+                    lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+                    btnCustDatesClose.click();
+                }
+            }
+        }
+
+        function PeriodValidate() {
+            hdnStartDateTxtBoxId = document.getElementById('<%= hdnStartDateTxtBoxId.ClientID %>');
+            hdnEndDateTxtBoxId = document.getElementById('<%= hdnEndDateTxtBoxId.ClientID %>');
+            txtStartDate = document.getElementById(hdnStartDateTxtBoxId.value);
+            txtEndDate = document.getElementById(hdnEndDateTxtBoxId.value);
+            ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
+            var startDate = new Date(txtStartDate.value);
+            var endDate = new Date(txtEndDate.value);
+            if (txtStartDate.value != '' && txtEndDate.value != ''
+        && startDate <= endDate && ddlPeriod.value == '0') {
+                var startYear = parseInt(startDate.format('yyyy'));
+                var endYear = parseInt(endDate.format('yyyy'));
+                var startMonth = 0;
+                var endMonth = 0;
+                if (startDate.format('MM')[0] == '0') {
+                    startMonth = parseInt(startDate.format('MM')[1]);
+                }
+                else {
+                    startMonth = parseInt(startDate.format('MM'));
+                }
+                if (endDate.format('MM')[0] == '0') {
+                    endMonth = parseInt(endDate.format('MM')[1]);
+                }
+                else {
+                    endMonth = parseInt(endDate.format('MM'));
+                }
+                if (startYear == endYear) {
+                    return ((endMonth - startMonth + 1) <= 4);
+                }
+                else {
+                    return (((((endYear - startYear) * 4 + endMonth) - startMonth + 1)) <= 4);
+                }
+                if (((endDate - startDate) / (1000 * 60 * 60 * 24)) < 360) {
+                    return true; //args.IsValid = true;
+                }
+            }
+            else {
+                return true;  //args.IsValid = true;
+            }
+
+            return false;
+        }
 
         function HidePanel(hiddenpnl) {
 
@@ -84,7 +181,7 @@
     </script>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <div class="buttons-block">
+            <div class="filter-section-color Height102px">
                 <asp:UpdatePanel ID="upnlHeader" runat="server">
                     <ContentTemplate>
                         <table style="width: 100%;">
@@ -95,24 +192,25 @@
                                 <td style="width: 50%;">
                                 </td>
                                 <td style="text-align: right;">
-                                    <asp:Button ID="btnResetFilter" Text="Reset Filter" runat="server" Enabled="false"
-                                        OnClick="btnResetFilter_OnClick" />
                                     <asp:Button ID="btnUpdateView" Text="Run Report" runat="server" OnClick="btnUpdateView_OnClick"
-                                        Enabled="false" />
+                                        Enabled="false" CssClass="textCenter Width110Px" />
+                                    <asp:Button ID="btnResetFilter" Text="Reset Filter" runat="server" Enabled="false"
+                                        OnClick="btnResetFilter_OnClick" CssClass="textCenter Width110Px" />
                                 </td>
                             </tr>
-                            <tr id="trGtypes" runat="server">
+                            <tr id="trGtypes" runat="server" class="PaddingBottom5Imp">
                                 <td style="text-align: right;">
                                     Graph Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
-                                <td>
+                                <td class="PaddingBottom3Imp">
                                     <asp:DropDownList runat="server" ID="ddlGraphsTypes" OnSelectedIndexChanged="ddlGraphsTypes_SelectedIndexChanged"
                                         CssClass="Width50Percent" AutoPostBack="true">
                                         <asp:ListItem Text="--Please Select--" Value="0"></asp:ListItem>
-                                        <asp:ListItem Text="Resource View By Title" Value="1" Selected="True"></asp:ListItem>
-                                        <asp:ListItem Text="Resource View By Skill" Value="2"></asp:ListItem>
-                                        <asp:ListItem Text="Resource View By Month" Value="3"></asp:ListItem>
+                                        <asp:ListItem Text="Resource View By Title" Value="TransactionTitle" Selected="True"></asp:ListItem>
+                                        <asp:ListItem Text="Resource View By Skill" Value="TransactionSkill"></asp:ListItem>
+                                        <asp:ListItem Text="Resource View By Month" Value="PipeLine"></asp:ListItem>
                                     </asp:DropDownList>
+                                    <asp:HiddenField ID="hdnGraphType" runat="server" />
                                 </td>
                                 <td>
                                 </td>
@@ -120,15 +218,16 @@
                             <tr id="trTitles" runat="server">
                                 <td style="text-align: right;">
                                     <asp:Label ID="lblTitle" runat="server"></asp:Label>
-                                    <asp:HiddenField ID="hdnTitleOrSkill" runat="server" />
+                                    <asp:HiddenField ID="hdnPipelineTitleOrSkill" runat="server" />
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
-                                <td>
+                                <td class="PaddingBottom3Imp">
                                     <table class="Width50Percent" id="tdTitles" runat="server">
                                         <tr>
                                             <td>
-                                                <cc2:ScrollingDropDown ID="cblTitles" runat="server" SetDirty="true" AllSelectedReturnType="AllItems" OnSelectedIndexChanged="cblTitles_SelectedIndexChanged"
-                                                    CssClass="ProjectDetailScrollingDropDown1  Width100Per" onclick="scrollingDropdown_onclick('cblTitles','Title','s','Titles',28);" AutoPostBack="true"
+                                                <cc2:ScrollingDropDown ID="cblTitles" runat="server" SetDirty="true" AllSelectedReturnType="AllItems"
+                                                    OnSelectedIndexChanged="cblTitles_SelectedIndexChanged" CssClass="ProjectDetailScrollingDropDown1  Width100Per"
+                                                    onclick="scrollingDropdown_onclick('cblTitles','Title','s','Titles',28);" AutoPostBack="true"
                                                     DropDownListType="Tilte" DropDownListTypePluralForm="Titles" PluralForm="s" />
                                                 <ext:ScrollableDropdownExtender ID="sdeTitles" runat="server" TargetControlID="cblTitles"
                                                     BehaviorID="sdeTitles" MaxNoOfCharacters="28" Width="99%" UseAdvanceFeature="true"
@@ -153,13 +252,14 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td></td>
+                                <td>
+                                </td>
                             </tr>
-                            <tr>
+                            <tr class="PaddingBottom5Imp">
                                 <td style="text-align: right;">
                                     Period&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
-                                <td>
+                                <td class="PaddingBottom3Imp">
                                     <asp:DropDownList runat="server" ID="ddlPeriod" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
                                         CssClass="Width50Percent" AutoPostBack="true">
                                         <asp:ListItem Text="Please Select" Value="-1" Selected="True"></asp:ListItem>
@@ -169,6 +269,7 @@
                                         <asp:ListItem Text="Next 4 Months" Value="4"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                     </asp:DropDownList>
+                                    <asp:HiddenField ID="hdnPeriodValue" runat="server" />
                                 </td>
                                 <td>
                                 </td>
@@ -179,6 +280,8 @@
                                 <td>
                                     <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                                     <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnStartDateTxtBoxId" runat="server" Value="" />
+                                    <asp:HiddenField ID="hdnEndDateTxtBoxId" runat="server" Value="" />
                                     <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                     <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                                     <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
@@ -200,6 +303,11 @@
                                                     <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
                                                         FromToDateFieldCssClass="Width70Px" />
                                                 </td>
+                                                <td>
+                                                    <asp:CustomValidator ID="cstvalPeriodRange" runat="server" ClientValidationFunction="ValidatePeriod"
+                                                        Text="*" EnableClientScript="true" ValidationGroup="<%# ClientID %>" ToolTip="Period should not be more than 4 months"
+                                                        ErrorMessage="Period should not be more than 4 months." Display="Dynamic"></asp:CustomValidator>
+                                                </td>
                                             </tr>
                                         </table>
                                     </td>
@@ -211,11 +319,11 @@
                                 </tr>
                                 <tr>
                                     <td class="custBtns">
-                                        <asp:Button ID="btnCustDatesOK" runat="server" OnClick="btnCustDatesOK_Click" Text="OK"
-                                            CausesValidation="true" />
+                                        <asp:Button ID="btnCustDatesOK" runat="server" OnClientClick="CheckIfDatesValid(); if(ValidAll()) return false;"
+                                            Text="OK" CausesValidation="true" />
                                         &nbsp; &nbsp;
                                         <asp:Button ID="btnCustDatesCancel" CausesValidation="false" runat="server" Text="Cancel"
-                                            OnClick="btnCustDatesCancel_OnClick" />
+                                            OnClientClick="return false;" />
                                     </td>
                                 </tr>
                             </table>
@@ -280,6 +388,7 @@
                 <Triggers>
                     <asp:PostBackTrigger ControlID="btnUpdateView" />
                     <asp:PostBackTrigger ControlID="ucSummary$btnExportToExcel" />
+                    <asp:PostBackTrigger ControlID="ucGraphs$ctrDetails$btnExportToExcel" />
                 </Triggers>
             </asp:UpdatePanel>
         </ContentTemplate>
