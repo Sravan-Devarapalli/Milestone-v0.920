@@ -13,8 +13,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
     {
         private string ConsultantDetailReportExport = "Consultant Detail Report Export";
 
-        public Button BtnExportToExcelButton { get { return btnExportToExcel; } }
-
         private PraticeManagement.Reports.ConsultingDemand_New HostingPage
         {
             get { return ((PraticeManagement.Reports.ConsultingDemand_New)Page); }
@@ -45,18 +43,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             {
                 return btnExportToExcel.Attributes["selectedValue"];
             }
-        }
-
-        public List<ConsultantGroupbyTitle> PopUpFilteredTitle { get; set; }
-
-        public List<ConsultantGroupbySkill> PopUpFilteredSkill { get; set; }
-
-        public List<ConsultantGroupByMonth> PopUpFilteredByMonth { get; set; }
-
-        private List<KeyValuePair<string, string>> CollapsiblePanelExtenderClientIds
-        {
-            get;
-            set;
         }
 
         public string HeaderTitle
@@ -105,6 +91,9 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            List<ConsultantGroupbySkill> PopUpFilteredSkill = null;
+            List<ConsultantGroupbyTitle> PopUpFilteredTitle = null;
+            List<ConsultantGroupByMonth> PopUpFilteredByMonth = null;
 
             DataHelper.InsertExportActivityLogMessage(ConsultantDetailReportExport);
 
@@ -261,7 +250,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             }
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-
                 Label lblHeader1 = (Label)e.Item.FindControl("lblHeader");
                 if (HostingPage.GraphType == "TransactionTitle")
                 {
@@ -298,8 +286,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 Label lblTitleSkillItem = (Label)e.Item.FindControl("lblTitleSkillItem");
-                Label lblOpportunityNumber = (Label)e.Item.FindControl("lblOpportunityNumber");
-                Label lblProjectNumber = (Label)e.Item.FindControl("lblProjectNumber");
+                HyperLink hlOpportunityNumber = (HyperLink)e.Item.FindControl("hlOpportunityNumber");
+                HyperLink hlProjectNumber = (HyperLink)e.Item.FindControl("hlProjectNumber");
                 Label lblAccountName = (Label)e.Item.FindControl("lblAccountName");
                 Label lblProjectName = (Label)e.Item.FindControl("lblProjectName");
                 Label lblRsrcStartDate = (Label)e.Item.FindControl("lblRsrcStartDate");
@@ -307,8 +295,10 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 if (e.Item.DataItem.GetType() == typeof(ConsultantDemandDetailsByMonthByTitle))
                 {
                     ConsultantDemandDetailsByMonthByTitle consDetails = (ConsultantDemandDetailsByMonthByTitle)e.Item.DataItem;
-                    lblOpportunityNumber.Text = consDetails.OpportunityNumber;
-                    lblProjectNumber.Text = consDetails.ProjectNumber;
+                    hlOpportunityNumber.Text = consDetails.OpportunityNumber;
+                    hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.ProjectId));
+                    hlProjectNumber.Text = consDetails.ProjectNumber;
+                    hlProjectNumber.NavigateUrl = GetProjectDetailsLink((int?)(consDetails.ProjectId));
                     lblProjectName.Text = consDetails.ProjectName;
                     lblAccountName.Text = consDetails.AccountName;
                     lblRsrcStartDate.Text = consDetails.ResourceStartDate.ToString("MM/dd/yyyy");
@@ -317,53 +307,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 else if (e.Item.DataItem.GetType() == typeof(ConsultantDemandDetailsByMonthBySkill))
                 {
                     ConsultantDemandDetailsByMonthBySkill consDetails = (ConsultantDemandDetailsByMonthBySkill)e.Item.DataItem;
-                    lblOpportunityNumber.Text = consDetails.OpportunityNumber;
-                    lblProjectNumber.Text = consDetails.ProjectNumber;
+                    hlOpportunityNumber.Text = consDetails.OpportunityNumber;
+                    hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.ProjectId));
+                    hlProjectNumber.Text = consDetails.ProjectNumber;
+                    hlProjectNumber.NavigateUrl = GetProjectDetailsLink((int?)(consDetails.ProjectId));
                     lblProjectName.Text = consDetails.ProjectName;
                     lblAccountName.Text = consDetails.AccountName;
                     lblRsrcStartDate.Text = consDetails.ResourceStartDate.ToString("MM/dd/yyyy");
                     lblTitleSkillItem.Text = consDetails.Title;
                 }
-            }
-        }
-
-        public void PopulateData()
-        {
-            if (HostingPage.GraphType == "TransactionTitle")
-            {
-                List<ConsultantGroupbyTitle> data;
-                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportByTitle(StartDate, EndDate, HostingPage.hdnTitlesProp)).ToList();
-                repTitles.Visible = true;
-                repByMonth.Visible = false;
-                repTitles.DataSource = data;
-                HostingPage.CountOnPopup = data.Count;
-                repTitles.DataBind();
-            }
-            else if (HostingPage.GraphType == "TransactionSkill")
-            {
-                List<ConsultantGroupbySkill> data;
-                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportBySkill(StartDate, EndDate, HostingPage.hdnSkillsProp)).ToList();
-                repTitles.Visible = true;
-                repByMonth.Visible = false;
-                repTitles.DataSource = data;
-                HostingPage.CountOnPopup = data.Count;
-                repTitles.DataBind();
-            }
-            if (HostingPage.GraphType == "PipeLineTitle" || HostingPage.GraphType == "PipeLineSkill")
-            {
-                List<ConsultantGroupByMonth> data;
-                if (HostingPage.GraphType == "PipeLineTitle")
-                {
-                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null)).ToList();
-                }
-                else
-                {
-                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue)).ToList();
-                }
-                repByMonth.Visible = true;
-                repTitles.Visible = false;
-                repByMonth.DataSource = data;
-                repByMonth.DataBind();
             }
         }
 
@@ -380,12 +332,26 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             {
                 Repeater repDetails = (Repeater)e.Item.FindControl("repByMonthDetails");
                 ConsultantGroupByMonth dataitem = (ConsultantGroupByMonth)e.Item.DataItem;
-                var result = dataitem.ConsultantDetailsByMonth;
-                repDetails.DataSource = result;
                 var cpeDetails = e.Item.FindControl("cpeDetails") as CollapsiblePanelExtender;
-                cpeDetails.BehaviorID = Guid.NewGuid().ToString();
-                CollapsiblePanelDateExtenderClientIds.Add(cpeDetails.BehaviorID);
-                repDetails.DataBind();
+                var result = dataitem.ConsultantDetailsByMonth;
+                if (result.Count > 0)
+                {
+                    repDetails.DataSource = result;
+
+                    cpeDetails.BehaviorID = Guid.NewGuid().ToString();
+                    CollapsiblePanelDateExtenderClientIds.Add(cpeDetails.BehaviorID);
+                    repDetails.DataBind();
+                }
+                else
+                {
+                    var imgDetails = e.Item.FindControl("imgDetails") as Image;
+                    var lbMonth = e.Item.FindControl("lbMonth") as Label;
+                    imgDetails.Visible = false;
+                    lbMonth.Style.Remove("display");
+                    lbMonth.Text = "&nbsp;&nbsp;&nbsp;";
+                    cpeDetails.Enabled = false;
+                }
+
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -406,6 +372,65 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 lblitem.Text = HostingPage.GraphType == "PipeLineTitle" ? item.Skill : item.Title;
             }
         }
+
+        protected string GetOpportunityDetailsLink(int? opportunityId)
+        {
+            if (opportunityId.HasValue)
+                return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.OpportunityDetail, opportunityId.Value),
+                                                            Constants.ApplicationPages.ConsultingDemand_New);
+            else
+                return string.Empty;
+        }
+
+        protected string GetProjectDetailsLink(int? projectId)
+        {
+            if (projectId.HasValue)
+                return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.ProjectDetail, projectId.Value),
+                                                            Constants.ApplicationPages.ConsultingDemand_New);
+            else
+                return string.Empty;
+        }
+
+        public void PopulateData()
+        {
+            if (HostingPage.GraphType == "TransactionTitle")
+            {
+                List<ConsultantGroupbyTitle> data;
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportByTitle(StartDate, EndDate, HostingPage.hdnTitlesProp)).ToList();
+                repTitles.Visible = true;
+                repByMonth.Visible = false;
+                repTitles.DataSource = data;
+                HostingPage.RolesCount = data.Count;
+                repTitles.DataBind();
+            }
+            else if (HostingPage.GraphType == "TransactionSkill")
+            {
+                List<ConsultantGroupbySkill> data;
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportBySkill(StartDate, EndDate, HostingPage.hdnSkillsProp)).ToList();
+                repTitles.Visible = true;
+                repByMonth.Visible = false;
+                repTitles.DataSource = data;
+                HostingPage.RolesCount = data.Count;
+                repTitles.DataBind();
+            }
+            if (HostingPage.GraphType == "PipeLineTitle" || HostingPage.GraphType == "PipeLineSkill")
+            {
+                List<ConsultantGroupByMonth> data;
+                if (HostingPage.GraphType == "PipeLineTitle")
+                {
+                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null)).ToList();
+                }
+                else
+                {
+                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue)).ToList();
+                }
+                repByMonth.Visible = true;
+                repTitles.Visible = false;
+                repByMonth.DataSource = data;
+                repByMonth.DataBind();
+            }
+        }
+
     }
 }
 
