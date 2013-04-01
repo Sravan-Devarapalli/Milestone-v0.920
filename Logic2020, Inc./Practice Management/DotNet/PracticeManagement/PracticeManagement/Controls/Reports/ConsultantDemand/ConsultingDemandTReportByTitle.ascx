@@ -30,9 +30,10 @@
             <table class="trConsultngDetailPanel">
                 <tr>
                     <th>
+                        <asp:Label ID="lblTitleSkillFr" runat="server"></asp:Label>
                     </th>
                     <th>
-                        <asp:Label ID="lblTitleSkill" runat="server"></asp:Label>
+                        <asp:Label ID="lblTitleSkillSc" runat="server"></asp:Label>
                     </th>
                     <th>
                         Opportunity Number
@@ -54,8 +55,8 @@
     </HeaderTemplate>
     <ItemTemplate>
         <table class="trConsultngDetailPanelItem">
-            <tr>
-                <th class="padLeft20Imp">
+            <tr class="textLeft">
+                <th class="padLeft10Imp">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -64,7 +65,19 @@
                     <asp:Image ID="imgDate" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Date Details" />
                     <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                     <asp:Label ID="lblHeader" runat="server"></asp:Label>
-                </th><th></th><th></th><th></th><th></th><th></th><th></th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
             </tr>
         </table>
         <asp:Panel ID="pnlTitleDetails" runat="server">
@@ -124,10 +137,10 @@
             </asp:Repeater>
         </asp:Panel>
     </ItemTemplate>
-     <AlternatingItemTemplate>
-      <table class="alternateTrConsultngDetailPanelItem">
-            <tr>
-                <th class="padLeft20Imp">
+    <AlternatingItemTemplate>
+        <table class="alternateTrConsultngDetailPanelItem">
+            <tr class="textLeft">
+                <th class="padLeft10Imp">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -136,7 +149,19 @@
                     <asp:Image ID="imgDate" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Date Details" />
                     <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                     <asp:Label ID="lblHeader" runat="server"></asp:Label>
-                </th><th></th><th></th><th></th><th></th><th></th><th></th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
             </tr>
         </table>
         <asp:Panel ID="pnlTitleDetails" runat="server">
@@ -198,6 +223,185 @@
     </AlternatingItemTemplate>
     <FooterTemplate>
         </div>
+    </FooterTemplate>
+</asp:Repeater>
+<asp:Repeater ID="repByMonth" runat="server" OnItemDataBound="repByMonth_ItemDataBound">
+    <HeaderTemplate>
+        <table class="ConsultingDemandDetailsByMonth">
+            <thead>
+                <tr class="headerRow">
+                    <th class="SecondTD">
+                        Month Year
+                    </th>
+                    <th class="FirstTD">
+                        <asp:Label ID="lblTilteOrSkillHeader" runat="server"></asp:Label>
+                    </th>
+                    <th class="ForthTD">
+                        Opportunity Number
+                    </th>
+                    <th class="ForthTD">
+                        Project Number
+                    </th>
+                    <th class="ForthTD">
+                        Account Name
+                    </th>
+                    <th class="ForthTD">
+                        Project Name
+                    </th>
+                    <th class="FirstTD">
+                        Resource Start Date
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </HeaderTemplate>
+    <ItemTemplate>
+        <table class="ConsultingDemandDetailsByMonth">
+            <tr class="bgColorD4D0C9 textLeft">
+                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap">
+                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
+                        ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
+                        Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
+                        CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDetails"
+                        ExpandControlID="imgDetails" TextLabelID="lbMonth" />
+                    <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Month Details" />
+                    <asp:Label ID="lbMonth" Style="display: none;" runat="server"></asp:Label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
+                </td>
+            </tr>
+        </table>
+        <asp:Panel ID="pnlMonthDetails" runat="server">
+            <asp:Repeater ID="repByMonthDetails" runat="server" OnItemDataBound="repByMonthDetails_ItemDataBound">
+                <ItemTemplate>
+                    <table class="ConsultingDemandDetailsByMonth">
+                        <tr class="bgcolorwhite">
+                            <td class="SecondTD">
+                            </td>
+                            <td class="FirstTD">
+                                <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                            </td>
+                            <td class="FirstTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
+                            </td>
+                        </tr>
+                    </table>
+                </ItemTemplate>
+                <AlternatingItemTemplate>
+                    <table class="ConsultingDemandDetailsByMonth">
+                        <tr class="bgcolorwhite">
+                            <td class="SecondTD">
+                            </td>
+                            <td class="FirstTD">
+                                <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                            </td>
+                            <td class="FirstTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
+                            </td>
+                        </tr>
+                    </table>
+                </AlternatingItemTemplate>
+            </asp:Repeater>
+        </asp:Panel>
+    </ItemTemplate>
+    <AlternatingItemTemplate>
+        <table class="ConsultingDemandDetailsByMonth">
+            <tr class="bgcolor_ECE9D9 textLeft">
+                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap">
+                    <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
+                        ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
+                        Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
+                        CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDetails"
+                        ExpandControlID="imgDetails" TextLabelID="lbMonth" />
+                    <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Month Details" />
+                    <asp:Label ID="lbMonth" Style="display: none;" runat="server"></asp:Label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
+                </td>
+            </tr>
+        </table>
+        <asp:Panel ID="pnlMonthDetails" runat="server">
+            <asp:Repeater ID="repByMonthDetails" runat="server" OnItemDataBound="repByMonthDetails_ItemDataBound">
+                <ItemTemplate>
+                    <table class="ConsultingDemandDetailsByMonth">
+                        <tr class="bgcolorwhite">
+                            <td class="SecondTD">
+                            </td>
+                            <td class="FirstTD">
+                                <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                            </td>
+                            <td class="FirstTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
+                            </td>
+                        </tr>
+                    </table>
+                </ItemTemplate>
+                <AlternatingItemTemplate>
+                    <table class="ConsultingDemandDetailsByMonth">
+                        <tr class="bgcolorwhite">
+                            <td class="SecondTD">
+                            </td>
+                            <td class="FirstTD">
+                                <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                            </td>
+                            <td class="ForthTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                            </td>
+                            <td class="FirstTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
+                            </td>
+                        </tr>
+                    </table>
+                </AlternatingItemTemplate>
+            </asp:Repeater>
+        </asp:Panel>
+    </AlternatingItemTemplate>
+    <FooterTemplate>
     </FooterTemplate>
 </asp:Repeater>
 
