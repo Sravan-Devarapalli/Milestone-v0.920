@@ -2,10 +2,10 @@
     Inherits="PraticeManagement.Controls.Reports.ConsultantDemand.ConsultingDemandGraphs" %>
 <%@ Register Src="~/Controls/Reports/ConsultantDemand/ConsultingDemandTReportByTitle.ascx"
     TagName="ConsultngTReport" TagPrefix="uc" %>
-<div style="background-color: White !important;">
+<div class="BackGroundWhiteImp">
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <div style="text-align: left; padding: 15px;">
+            <div class="TextAlignLeft Padding15Px">
                 <asp:LinkButton runat="server" Text="Pipeline SkillSet Demand By Month" ID="hlnkGraph"
                     EnableViewState="true" Visible="false" OnClick="hlnkGraph_Click"></asp:LinkButton>
             </div>
@@ -53,7 +53,7 @@
 <AjaxControlToolkit:ModalPopupExtender ID="mpeDetailView" runat="server" TargetControlID="hndDetailView"
     BackgroundCssClass="modalBackground" PopupControlID="pnlDetailView" BehaviorID="mpeDetailView"
     CancelControlID="btnClose" DropShadow="false" />
-<asp:Panel ID="pnlDetailView" runat="server" class="tab-pane" Style="width: 1200px;">
+<asp:Panel ID="pnlDetailView" runat="server" class="tab-pane Width1200px">
     <table class="WholeWidth Padding5">
         <tbody>
             <tr class="bgGroupByProjectHeader">
