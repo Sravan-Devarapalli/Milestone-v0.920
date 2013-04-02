@@ -1,19 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.ServiceModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Configuration;
+using PraticeManagement.PracticeService;
+
 namespace PraticeManagement.Config
 {
     public partial class PracticeAreas : PracticeManagementPageBase
     {
-        private const int DELETE_BUTTON_INDEX = 7;
-        private const int PRACTICE_OWNER_INDEX = 6;
         private string PracticeUpdatedSuccessfully = "Practice updated successfully.";
         private string PracticeDeletedSuccessfully = "Practice deleted successfully.";
+        private const string PracticeArea_KEY = "PracticeAreaList";
+
+        public List<Practice> Practices
+        {
+            get
+            {
+                if (ViewState[PracticeArea_KEY] == null)
+                {
+                    ViewState[PracticeArea_KEY] = DataHelper.GetPractices(null).ToList();
+                }
+
+                return (List<Practice>)ViewState[PracticeArea_KEY];
+            }
+            set { ViewState[PracticeArea_KEY] = value; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -34,7 +50,6 @@ namespace PraticeManagement.Config
             if (!IsPageValid || mlInsertStatus.IsMessageExists)
             {
                 PopulateErrorPanel();
-                UpdateDeleteButton();
             }
         }
 
@@ -46,12 +61,15 @@ namespace PraticeManagement.Config
 
         protected override void Display()
         {
+            gvPractices.DataSource = Practices;
+            gvPractices.DataBind();
         }
 
         protected void btnPlus_Click(object sender, EventArgs e)
         {
             plusMakeVisible(false);
             gvPractices.EditIndex = -1;
+            gvPractices.DataSource = Practices;
             gvPractices.DataBind();
         }
 
@@ -102,9 +120,9 @@ namespace PraticeManagement.Config
                     PracticesHelper.InsertPractice(tbPracticeName.Text, ddlPracticeManagers.SelectedValue,
                                                    chbPracticeActive.Checked, chbIsInternalPractice.Checked, tbAbbreviation.Text);
                     mlInsertStatus.ShowInfoMessage(Resources.Controls.PracticeAddedSuccessfully);
+                    Practices = null;
+                    gvPractices.DataSource = Practices;
                     gvPractices.DataBind();
-
-
                     plusMakeVisible(true);
                 }
 
@@ -125,96 +143,32 @@ namespace PraticeManagement.Config
 
         }
 
-        private void UpdateDeleteButton()
-        {
-            foreach (GridViewRow row in gvPractices.Rows)
-            {
-
-                if (row.RowType == DataControlRowType.DataRow)
-                {
-                    var item = row.DataItem as PracticeExtended;
-                    if (item != null && item.InUse)
-                    {
-                        var cell = row.Cells[DELETE_BUTTON_INDEX];
-                        cell.Enabled = false;
-                        if (cell.Controls.Count > 0)
-                        {
-                            var deleteButton = cell.Controls[0] as ImageButton;
-                            bool isVisible = true;
-                            Boolean.TryParse(deleteButton.Attributes["InUse"], out isVisible);
-                            deleteButton.Visible = isVisible;
-                        }
-                    }
-                }
-            }
-        }
-
         protected void gvPractices_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-
             if (e.Row.RowType != DataControlRowType.DataRow) return;
 
-            var item = e.Row.DataItem as PracticeExtended;
-            if (item != null && item.InUse)
-            {
-                var cell = e.Row.Cells[DELETE_BUTTON_INDEX];
-                cell.Enabled = false;
-                if (cell.Controls.Count > 0)
-                {
-                    var deleteButton = cell.Controls[0] as ImageButton;
-                    deleteButton.Visible = false;
-                    deleteButton.Attributes["InUse"] = false.ToString();
-                }
-            }
+            var item = e.Row.DataItem as Practice;
             if (item != null)
             {
-                try
+                var imgDelete = e.Row.FindControl("imgDelete") as ImageButton;
+                if (imgDelete != null)
                 {
-                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Practice Area";
+                    imgDelete.Visible = !item.InUse;
                 }
-                catch
-                {
-                    e.Row.Cells[0].ToolTip = "Edit Practice Area";
-                }
-
-                if (!item.InUse)
-                {
-                    try
-                    {
-                        ((ImageButton)e.Row.Cells[DELETE_BUTTON_INDEX].Controls[0]).ToolTip = "Delete Practice Area";
-                    }
-                    catch
-                    {
-                        e.Row.Cells[DELETE_BUTTON_INDEX].ToolTip = "Delete Practice Area";
-                    }
-
-                }
-            }
-
-
-            if (item == null)
-            {
-                return;
             }
 
             // Edit mode.
             if ((e.Row.RowState & DataControlRowState.Edit) != 0)
             {
-                try
+                var chbIsActiveEd = e.Row.FindControl("chbIsActiveEd") as CheckBox;
+                if (item.IsActiveCapabilitiesExists && item.IsActive)
                 {
-                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Confirm";
-                    ((ImageButton)e.Row.Cells[0].Controls[2]).ToolTip = "Cancel";
-                    e.Row.Cells[DELETE_BUTTON_INDEX].ToolTip = "";
-                    var chbIsActiveEd = e.Row.FindControl("chbIsActiveEd") as CheckBox;
-                    if (item.IsActiveCapabilitiesExists && item.IsActive)
-                        ((ImageButton)e.Row.Cells[0].Controls[0]).OnClientClick = string.Format("return showcapabilityActivePopup(\'{0}\',this);", chbIsActiveEd.ClientID);
-                }
-                catch
-                {
-                    e.Row.Cells[0].ToolTip = "";
+                    var imgUpdate = e.Row.FindControl("imgUpdate") as ImageButton;
+                    imgUpdate.OnClientClick = string.Format("return showcapabilityActivePopup(\'{0}\',this);", chbIsActiveEd.ClientID);
                 }
 
-                DropDownList ddl = e.Row.Cells[PRACTICE_OWNER_INDEX].FindControl("ddlActivePersons") as DropDownList;
+
+                DropDownList ddl = e.Row.FindControl("ddlActivePersons") as DropDownList;
                 if (ddl != null)
                 {
                     string id = item.PracticeManagerId.ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -232,71 +186,125 @@ namespace PraticeManagement.Config
 
         }
 
-        protected void gvPractices_OnRowUpdating(object sender, GridViewUpdateEventArgs e)     {
+        protected void imgUpdate_OnClick(object sender, EventArgs e)
+        {
+            var imgEdit = sender as ImageButton;
+            var row = imgEdit.NamingContainer as GridViewRow;
+
             if (hdCapabilitiesInactivePopUpOperation.Value == "cancel")
             {
-                e.Cancel = true;
                 gvPractices.EditIndex = -1;
+                gvPractices.DataSource = Practices;
                 gvPractices.DataBind();
                 hdCapabilitiesInactivePopUpOperation.Value = "none";
                 return;
             }
-            string newPractice = e.NewValues["Name"].ToString().Trim();
-            string oldPractice = e.OldValues["Name"].ToString().Trim();
+            Practice practice = new Practice();
+            int PracticeId = int.Parse(((HiddenField)row.FindControl("hdPracticeId")).Value);
+            var tbEditPractice = row.FindControl("tbEditPractice") as TextBox;
+            var tbEditAbbreviation = row.FindControl("tbEditAbbreviation") as TextBox;
+            var chbIsActiveEd = row.FindControl("chbIsActiveEd") as CheckBox;
+            var chbInternal = row.FindControl("chbInternal") as CheckBox;
+            var ddlActivePersons = row.FindControl("ddlActivePersons") as DropDownList;
+            practice.Id = PracticeId;
+            practice.Name = tbEditPractice.Text;
+            practice.Abbreviation = string.IsNullOrEmpty(tbEditAbbreviation.Text) ? null : tbEditAbbreviation.Text;
+            practice.IsActive = chbIsActiveEd.Checked;
+            practice.IsCompanyInternal = chbInternal.Checked;
+            practice.PracticeOwner = new Person() { Id = int.Parse(ddlActivePersons.SelectedValue) };
+            var oldPracticeObject = Practices.First(p => p.Id == practice.Id);
+
+            bool isPageValid = true;
+
+            string newPractice = practice.Name;
+            string oldPractice = oldPracticeObject.Name.Trim();
             if (newPractice != oldPractice)
             {
                 if (IsPracticeAlreadyExisting(newPractice))
                 {
-                    CustomValidator custValEditPractice = gvPractices.Rows[e.RowIndex].FindControl("custValEditPractice") as CustomValidator;
+                    CustomValidator custValEditPractice = row.FindControl("custValEditPractice") as CustomValidator;
                     custValEditPractice.IsValid = false;
-                    e.Cancel = true;
+                    isPageValid = false;
                 }
             }
 
-            string newPracticeAbbrivation = e.NewValues["Abbreviation"] != null ? e.NewValues["Abbreviation"].ToString().Trim() : string.Empty;
-            string oldPracticeAbbrivation = e.OldValues["Abbreviation"] != null ? e.OldValues["Abbreviation"].ToString().Trim() : string.Empty;
+            string newPracticeAbbrivation = practice.Abbreviation != null ? practice.Abbreviation.Trim() : string.Empty;
+            string oldPracticeAbbrivation = oldPracticeObject.Abbreviation != null ? oldPracticeObject.Abbreviation.Trim() : string.Empty;
 
             if (!string.IsNullOrEmpty(newPracticeAbbrivation) && newPracticeAbbrivation != oldPracticeAbbrivation)
             {
                 if (IsPracticeAbbrivationAlreadyExisting(newPracticeAbbrivation))
                 {
-                    CustomValidator custValEditPracticeAbbreviation = gvPractices.Rows[e.RowIndex].FindControl("custValEditPracticeAbbreviation") as CustomValidator;
+                    CustomValidator custValEditPracticeAbbreviation = row.FindControl("custValEditPracticeAbbreviation") as CustomValidator;
                     custValEditPracticeAbbreviation.IsValid = false;
-                    e.Cancel = true;
+                    isPageValid = false;
                 }
             }
 
-            DropDownList ddl = gvPractices.Rows[e.RowIndex].Cells[PRACTICE_OWNER_INDEX].FindControl("ddlActivePersons") as DropDownList;
-            if (ddl != null)
+            if (!isPageValid)
+                return;
+
+            using (var serviceClient = new PracticeServiceClient())
             {
-                if (ddl.SelectedValue != null)
+                try
                 {
-                    e.NewValues["PracticeManagerId"] = ddl.SelectedValue;
+                    serviceClient.UpdatePractice(practice, DataHelper.CurrentPerson.Alias);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
                 }
             }
-        }
-
-        protected void gvPractices_RowDeleted(object sender, GridViewDeletedEventArgs e)
-        {
-            mlInsertStatus.ShowInfoMessage(PracticeDeletedSuccessfully);
-            hdCapabilitiesInactivePopUpOperation.Value = "none";
-        }
-
-        protected void gvPractices_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-        {
-            hdCapabilitiesInactivePopUpOperation.Value = "none";
-        }
-
-        protected void gvPractices_RowUpdated(object sender, GridViewUpdatedEventArgs e)
-        {
+            Practices = null;
+            gvPractices.EditIndex = -1;
+            gvPractices.DataSource = Practices;
+            gvPractices.DataBind();
             mlInsertStatus.ShowInfoMessage(PracticeUpdatedSuccessfully);
             hdCapabilitiesInactivePopUpOperation.Value = "none";
         }
 
-        protected void gvPractices_OnRowEditing(object sender, GridViewEditEventArgs e)
+        protected void imgDelete_OnClick(object sender, EventArgs e)
+        {
+            var imgDelete = sender as ImageButton;
+            var row = imgDelete.NamingContainer as GridViewRow;
+            int PracticeId = int.Parse(((HiddenField)row.FindControl("hdPracticeId")).Value);
+            using (var serviceClient = new PracticeServiceClient())
+            {
+                try
+                {
+                    serviceClient.RemovePractice(new Practice() { Id = PracticeId }, DataHelper.CurrentPerson.Alias);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+            Practices = null;
+            gvPractices.DataSource = Practices;
+            gvPractices.DataBind();
+            mlInsertStatus.ShowInfoMessage(PracticeDeletedSuccessfully);
+            hdCapabilitiesInactivePopUpOperation.Value = "none";
+        }
+
+        protected void imgCancel_OnClick(object sender, EventArgs e)
+        {
+            hdCapabilitiesInactivePopUpOperation.Value = "none";
+            gvPractices.EditIndex = -1;
+            gvPractices.DataSource = Practices;
+            gvPractices.DataBind();
+        }
+
+        protected void imgEdit_OnClick(object sender, EventArgs e)
         {
             plusMakeVisible(true);
             hdCapabilitiesInactivePopUpOperation.Value = "none";
+            var imgEdit = sender as ImageButton;
+            var gvPracticeItem = imgEdit.NamingContainer as GridViewRow;
+            gvPractices.EditIndex = gvPracticeItem.DataItemIndex;
+            gvPractices.DataSource = Practices;
+            gvPractices.DataBind();
         }
 
         private bool IsPracticeAlreadyExisting(string newPractice)
