@@ -6,13 +6,12 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.ProjectGroupService;
-using System.Text;
 
 namespace PraticeManagement.Controls.Clients
 {
     public partial class ClientGroups : UserControl
     {
-        private const string CLIENT_GROUPS_KEY = "ClientGroupsList";       
+        private const string CLIENT_GROUPS_KEY = "ClientGroupsList";
 
         #region ProjectGroupsProperties
 
@@ -83,21 +82,25 @@ namespace PraticeManagement.Controls.Clients
             e.IsValid = ValidateBusinessGroupName(e.Value);
         }
 
-        protected void gvGroups_RowEditing(object sender, GridViewEditEventArgs e)
+        protected void imgEdit_OnClick(object sender, EventArgs e)
         {
-            gvGroups.EditIndex = e.NewEditIndex;
-            e.Cancel = true;
+            var imgEdit = sender as ImageButton;
+            var gvGroupsItem = imgEdit.NamingContainer as GridViewRow;
+            gvGroups.EditIndex = gvGroupsItem.DataItemIndex;
             gvGroups.DataSource = ClientGroupsList;
             gvGroups.DataBind();
         }
 
-        protected void gvGroups_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        protected void imgUpdate_OnClick(object sender, EventArgs e)
         {
-            CustomValidator custGroupName = (CustomValidator)gvGroups.Rows[e.RowIndex].FindControl("custNewGroupName");
+            var imgEdit = sender as ImageButton;
+            var row = imgEdit.NamingContainer as GridViewRow;
+
+            CustomValidator custGroupName = (CustomValidator)row.FindControl("custNewGroupName");
             Dictionary<int, ProjectGroup> tmp = ClientGroupsList;
-            int groupId = int.Parse(((HiddenField)gvGroups.Rows[e.RowIndex].FindControl("hidKey")).Value);
+            int groupId = int.Parse(((HiddenField)row.FindControl("hidKey")).Value);
             string oldGroupName = tmp[groupId].Name;
-            string groupName = ((TextBox)gvGroups.Rows[e.RowIndex].FindControl("txtGroupName")).Text;
+            string groupName = ((TextBox)row.FindControl("txtGroupName")).Text;
             Page.Validate("UpdateGroup");
 
             if (oldGroupName.ToLowerInvariant() != groupName.ToLowerInvariant())
@@ -108,7 +111,7 @@ namespace PraticeManagement.Controls.Clients
 
             if (Page.IsValid)
             {
-                bool isActive = ((CheckBox)gvGroups.Rows[e.RowIndex].FindControl("chbIsActiveEd")).Checked;
+                bool isActive = ((CheckBox)row.FindControl("chbIsActiveEd")).Checked;
                 UpDateProductGroup(groupId, groupName, isActive);
                 tmp[groupId].Name = groupName;
                 tmp[groupId].IsActive = isActive;
@@ -117,14 +120,16 @@ namespace PraticeManagement.Controls.Clients
                 gvGroups.EditIndex = -1;
                 gvGroups.DataSource = ClientGroupsList;
                 gvGroups.DataBind();
-                e.Cancel = true;
             }
         }
 
-        protected void gvGroups_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        protected void imgDelete_OnClick(object sender, EventArgs e)
         {
+            var imgDelete = sender as ImageButton;
+            var row = imgDelete.NamingContainer as GridViewRow;
+
             Dictionary<int, ProjectGroup> tmp = ClientGroupsList;
-            int key = int.Parse(((HiddenField)gvGroups.Rows[e.RowIndex].FindControl("hidKey")).Value);
+            int key = int.Parse(((HiddenField)row.FindControl("hidKey")).Value);
 
             if (tmp.ContainsKey(key))
                 if (!tmp[key].InUse)
@@ -147,68 +152,24 @@ namespace PraticeManagement.Controls.Clients
             ClientGroupsList = tmp;
             gvGroups.DataSource = ClientGroupsList;
             gvGroups.DataBind();
-            e.Cancel = true;
         }
 
-        protected void gvGroups_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        protected void imgCancel_OnClick(object sender, EventArgs e)
         {
             gvGroups.EditIndex = -1;
             gvGroups.DataSource = ClientGroupsList;
             gvGroups.DataBind();
-            e.Cancel = true;
         }
 
         protected void gvGroups_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                if (((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value")).Code == ProjectGroup.DefaultGroupCode)
+                var imgDelete = e.Row.FindControl("imgDelete") as ImageButton;
+                if (imgDelete != null)
                 {
-                    e.Row.Cells[gvGroups.Columns.Count - 1].Visible = false;
-                }
-                else
-                {
-                    bool inUse = ((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value")).InUse;
-                    e.Row.Cells[gvGroups.Columns.Count - 1].Visible = !inUse;
-                    if (!inUse)
-                    {
-                        try
-                        {
-                            ((ImageButton)e.Row.Cells[gvGroups.Columns.Count - 1].Controls[0]).ToolTip = "Delete Business Unit";
-
-                        }
-                        catch
-                        {
-                            e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "Delete Business Unit";
-                        }
-
-                    }
-                }
-
-                try
-                {
-                    ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Edit Business Unit";
-
-                }
-                catch
-                {
-                    e.Row.Cells[0].ToolTip = "Edit Business Unit";
-                }
-
-
-                if ((e.Row.RowState & DataControlRowState.Edit) != 0)
-                {
-                    try
-                    {
-                        ((ImageButton)e.Row.Cells[0].Controls[0]).ToolTip = "Confirm";
-                        ((ImageButton)e.Row.Cells[0].Controls[2]).ToolTip = "Cancel";
-                        e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "";
-                    }
-                    catch
-                    {
-                        e.Row.Cells[0].ToolTip = "";
-                        e.Row.Cells[gvGroups.Columns.Count - 1].ToolTip = "";
-                    }
+                    var projectgroup = ((ProjectGroup)DataBinder.Eval(e.Row.DataItem, "Value"));
+                    imgDelete.Visible = projectgroup.Code != ProjectGroup.DefaultGroupCode && !projectgroup.InUse;
                 }
             }
         }
