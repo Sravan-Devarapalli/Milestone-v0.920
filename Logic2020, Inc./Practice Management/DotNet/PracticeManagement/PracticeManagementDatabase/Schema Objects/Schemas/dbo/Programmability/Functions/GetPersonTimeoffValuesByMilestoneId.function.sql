@@ -9,11 +9,11 @@ RETURNS TABLE
 AS
 	RETURN
 
-		SELECT distinct mp.personid,pcal.Date,CONVERT(DECIMAL(10,2),pcal.ActualHours) AS ActualHours
+		SELECT distinct mp.personid,pcal.Date,CONVERT(DECIMAL(10,2),ISNULL(pcal.ActualHours,0)) AS ActualHours
 		FROM  dbo.Milestone AS m
 			  INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestoneId = m.MilestoneId 
 													AND (@ProjectId IS NULL OR m.ProjectId = @ProjectId)
-													AND ( @MilestoneId IS NULL OR m.MilestoneId = @MilestoneId )--2603
+													AND ( @MilestoneId IS NULL OR m.MilestoneId = @MilestoneId )
 			  INNER JOIN dbo.MilestonePersonEntry AS mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
 														AND (@MilestonePersonId IS NULL OR @MilestonePersonId = mp.MilestonePersonId)
 														AND (@MilestonePersonEntryId IS NULL OR @MilestonePersonEntryId = mpe.Id)
