@@ -69,7 +69,7 @@
         }
 
     </script>
-    <uc:loadingprogress id="LoadingProgress1" runat="server" />
+    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="updTimeEntries" runat="server">
         <ContentTemplate>
             <div id="confirmBoxJavascript" style="display: none;" popupshow="false" class="ProjectDetailErrorPanel PanelPerson confirmBoxJavascript "
@@ -100,16 +100,30 @@
                 class="modalBackground">
             </div>
             <asp:HiddenField ID="hdCapabilitiesInactivePopUpOperation" runat="server" Value="false" />
-            <asp:GridView ID="gvPractices" runat="server" AutoGenerateColumns="False" DataSourceID="odsPractices"
-                CssClass="CompPerfTable gvPractices" DataKeyNames="Id" OnRowUpdating="gvPractices_OnRowUpdating" OnRowCancelingEdit="gvPractices_RowCancelingEdit"
-                OnRowUpdated="gvPractices_RowUpdated" OnRowDeleted="gvPractices_RowDeleted" OnRowEditing="gvPractices_OnRowEditing"
+            <asp:GridView ID="gvPractices" runat="server" AutoGenerateColumns="False" CssClass="CompPerfTable gvPractices"
                 OnRowDataBound="gvPractices_RowDataBound">
                 <AlternatingRowStyle CssClass="alterrow" />
                 <Columns>
-                    <asp:CommandField ShowEditButton="True" ValidationGroup="EditPractice" ButtonType="Image"
-                        HeaderStyle-CssClass="Width7Percent" EditImageUrl="~/Images/icon-edit.png" EditText="Edit Practice Area"
-                        UpdateText="Confirm" UpdateImageUrl="~/Images/icon-check.png" CancelImageUrl="~/Images/no.png"
-                        CancelText="Cancel" />
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                &nbsp;
+                            </div>
+                        </HeaderTemplate>
+                        <HeaderStyle CssClass="Width7Percent" />
+                        <ItemTemplate>
+                            <asp:ImageButton ID="imgEdit" runat="server" ImageUrl="~/Images/icon-edit.png" OnClick="imgEdit_OnClick"
+                                ToolTip="Edit Practice Area" />
+                            <asp:HiddenField ID="hdPracticeId" runat="server" Value='<%#Bind("Id")%>' />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:HiddenField ID="hdPracticeId" runat="server" Value='<%#Bind("id")%>' />
+                            <asp:ImageButton ID="imgUpdate" runat="server" ImageUrl="~/Images/icon-check.png"
+                                OnClick="imgUpdate_OnClick" ToolTip="Confirm" />
+                            <asp:ImageButton ID="imgCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="imgCancel_OnClick"
+                                ToolTip="Cancel" />
+                        </EditItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="Practice Area Name" SortExpression="Name">
                         <HeaderStyle CssClass="Width28Percent padRight10" />
                         <ItemStyle CssClass="Left no-wrap padRight10" />
@@ -151,29 +165,19 @@
                     <asp:TemplateField HeaderText="Active">
                         <HeaderStyle CssClass="Width7Percent" />
                         <ItemTemplate>
-                            <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# ((PracticeExtended)Container.DataItem).IsActive %>' />
+                            <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# ((Practice)Container.DataItem).IsActive %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
                             <asp:CheckBox ID="chbIsActiveEd" runat="server" Checked='<%# Bind("IsActive") %>' />
                         </EditItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Used" Visible="false">
-                        <HeaderStyle CssClass="Width0Percent" />
-                        <ItemTemplate>
-                            <%# ((PracticeExtended) Container.DataItem).InUse ? "Yes" : "No" %>
-                        </ItemTemplate>
-                        <EditItemTemplate>
-                            <%# ((PracticeExtended) Container.DataItem).InUse ? "Yes" : "No"%>
-                        </EditItemTemplate>
-                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="Internal">
                         <HeaderStyle CssClass="Width7Percent" />
                         <ItemTemplate>
-                            <asp:CheckBox ID="chbIsCompanyInternal" runat="server" Enabled="false" Checked='<%# ((PracticeExtended) Container.DataItem).IsCompanyInternal %>' />
+                            <asp:CheckBox ID="chbIsCompanyInternal" runat="server" Enabled="false" Checked='<%# ((Practice) Container.DataItem).IsCompanyInternal %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
                             <asp:CheckBox ID="chbInternal" runat="server" Checked='<%# Bind("IsCompanyInternal") %>' />
-                            <%--Enabled='<%# _userIsAdmin %>'--%>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -193,8 +197,20 @@
                             <asp:HiddenField ID="hfPracticeOwner" runat="server" Value='<%#Bind("PracticeManagerId")%>' />
                         </EditItemTemplate>
                     </asp:TemplateField>
-                    <asp:CommandField ShowDeleteButton="True" ButtonType="Image" HeaderStyle-CssClass="Width4Percent"
-                        DeleteImageUrl="~/Images/icon-delete.png" />
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                &nbsp;
+                            </div>
+                        </HeaderTemplate>
+                        <HeaderStyle CssClass="Width4Percent" />
+                        <ItemTemplate>
+                            <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
+                                OnClick="imgDelete_OnClick" ToolTip="Delete Practice Area" />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
             <asp:Panel ID="pnlInsertPractice" runat="server" Wrap="False">
@@ -226,9 +242,9 @@
                             <asp:TextBox ID="tbAbbreviation" ValidationGroup="InsertPractice" runat="server"
                                 CssClass="Width95Percent" Visible="false" />
                             <asp:RegularExpressionValidator ID="regValAbbreviation" ControlToValidate="tbAbbreviation"
-                                Display="Dynamic" Text="*" runat="server" ValidationGroup="EditPractice" ValidationExpression="^[\s\S]{0,100}$"
+                                Display="Dynamic" Text="*" runat="server" ValidationGroup="InsertPractice" ValidationExpression="^[\s\S]{0,100}$"
                                 ToolTip="Abbreviation should not be more than 100 characters." ErrorMessage="Abbreviation should not be more than 100 characters." />
-                            <asp:CustomValidator ID="custValEditPracticeAbbreviation" runat="server" ValidationGroup="EditPractice"
+                            <asp:CustomValidator ID="custValEditPracticeAbbreviation" runat="server" ValidationGroup="InsertPractice"
                                 Display="Dynamic" Text="*" ErrorMessage="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name."
                                 ToolTip="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name." />
                         </td>
@@ -268,7 +284,7 @@
                             <asp:ValidationSummary ID="valSummaryEdit" ValidationGroup="EditPractice" runat="server"
                                 DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false"
                                 ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a practice." />
-                            <uc:label id="mlInsertStatus" runat="server" errorcolor="Red" infocolor="Green" warningcolor="Orange" />
+                            <uc:Label ID="mlInsertStatus" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                         </td>
                     </tr>
                     <tr>
@@ -278,9 +294,9 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:ObjectDataSource ID="odsPractices" runat="server" SelectMethod="GetAllPractices"
-                TypeName="PraticeManagement.Controls.Configuration.PracticesHelper" DataObjectTypeName="PraticeManagement.Controls.Configuration.PracticeExtended"
-                DeleteMethod="RemovePracticeEx" UpdateMethod="UpdatePracticeEx"></asp:ObjectDataSource>
+            <%--  <asp:ObjectDataSource ID="odsPractices" runat="server" SelectMethod="GetAllPractices"
+                TypeName="PraticeManagement.Controls.Configuration.PracticesHelper" DataObjectTypeName="PraticeManagement.Controls.Configuration.Practice"
+                DeleteMethod="RemovePracticeEx" ></asp:ObjectDataSource>--%>
             <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListShortByRoleAndStatus"
                 TypeName="PraticeManagement.PersonService.PersonServiceClient">
                 <SelectParameters>
