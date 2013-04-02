@@ -148,6 +148,11 @@ namespace DataTransferObjects
             set;
         }
 
+        public int PracticeManagerId
+        {
+            get { return PracticeOwner.Id.HasValue ? PracticeOwner.Id.Value : -1; }
+        }
+
 
         #endregion
 
