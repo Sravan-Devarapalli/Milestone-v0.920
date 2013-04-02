@@ -5,16 +5,28 @@
     <tr>
         <td>
             <asp:GridView ID="gvGroups" runat="server" EmptyDataText="There is nothing to be displayed here"
-                AutoGenerateColumns="False" DataKeyNames="Key" OnRowUpdating="gvGroups_RowUpdating"
-                OnRowDeleting="gvGroups_RowDeleting" OnRowEditing="gvGroups_RowEditing" OnRowCancelingEdit="gvGroups_RowCancelingEdit"
-                OnRowDataBound="gvGroups_RowDataBound" CssClass="CompPerfTable Width40P BackGroundColorWhite"
-                GridLines="None">
+                AutoGenerateColumns="False" DataKeyNames="Key" OnRowDataBound="gvGroups_RowDataBound"
+                CssClass="CompPerfTable Width40P BackGroundColorWhite" GridLines="None">
                 <AlternatingRowStyle CssClass="alterrow" />
                 <Columns>
-                    <asp:CommandField ShowEditButton="True" ValidationGroup="EditPractice" ButtonType="Image"
-                        EditImageUrl="~/Images/icon-edit.png" EditText="Edit Practice Area" UpdateText="Confirm"
-                        UpdateImageUrl="~/Images/icon-check.png" CancelImageUrl="~/Images/no.png" CancelText="Cancel"
-                        ItemStyle-CssClass="Width15PercentImp TextAlignCenterImp" />
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                &nbsp;
+                            </div>
+                        </HeaderTemplate>
+                        <ItemStyle CssClass="Width15PercentImp TextAlignCenterImp" />
+                        <ItemTemplate>
+                            <asp:ImageButton ID="imgEdit" runat="server" ImageUrl="~/Images/icon-edit.png" OnClick="imgEdit_OnClick"
+                                ToolTip="Edit Business Unit" />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:ImageButton ID="imgUpdate" runat="server" ImageUrl="~/Images/icon-check.png"
+                                OnClick="imgUpdate_OnClick" ToolTip="Confirm" />
+                            <asp:ImageButton ID="imgCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="imgCancel_OnClick"
+                                ToolTip="Cancel" />
+                        </EditItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemStyle CssClass="width60P no-wrap" />
                         <HeaderTemplate>
@@ -57,8 +69,20 @@
                             <asp:CheckBox ID="chbIsActiveEd" runat="server" Checked='<%# ((ProjectGroup)Eval("Value")).IsActive %>' />
                         </EditItemTemplate>
                     </asp:TemplateField>
-                    <asp:CommandField ShowDeleteButton="True" ButtonType="Image" DeleteImageUrl="~/Images/icon-delete.png"
-                        ItemStyle-CssClass="Width10Per TextAlignCenterImp" />
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                &nbsp;
+                            </div>
+                        </HeaderTemplate>
+                        <ItemStyle CssClass="Width10Per TextAlignCenterImp" />
+                        <ItemTemplate>
+                            <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
+                                OnClick="imgDelete_OnClick" ToolTip="Delete Business Unit" />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
             <table class="CompPerfTable gvCommissionsAndRates Width40P Border0">
