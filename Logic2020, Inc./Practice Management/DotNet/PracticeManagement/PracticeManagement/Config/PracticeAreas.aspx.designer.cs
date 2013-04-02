@@ -265,15 +265,6 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.Button btnOKErrorPanel;
         
         /// <summary>
-        /// odsPractices control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsPractices;
-        
-        /// <summary>
         /// odsActivePersons control.
         /// </summary>
         /// <remarks>
