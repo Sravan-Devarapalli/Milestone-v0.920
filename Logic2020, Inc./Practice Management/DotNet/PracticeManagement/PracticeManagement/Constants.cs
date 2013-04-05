@@ -216,6 +216,7 @@ namespace PraticeManagement
         public static class Formatting
         {
             public const string FullMonthYearFormat= "MMMM yyyy";
+            public const string DateFormatWithoutDelimiter = "MMddyyyy";
             public const string IntegerNumberFormat = "{0:##############0}";
             public const string CurrencyZero = "$0.00";
             public const string MonthYearFormat = "MMM yyyy";
@@ -330,6 +331,20 @@ namespace PraticeManagement
             public const int PriorityIdOfPO = 5;
             public const int PriorityIdOfA = 1;
             public const int PriorityIdOfB = 2;
+        }
+
+        public static class ConsultingDemandSortColumnNames
+        {
+            public const string Title = "Title";
+            public const string Skill = "Skill";
+            public const string OpportunityNumber = "OpportunityNumber";
+            public const string ProjectNumber = "ProjectNumber";
+            public const string AccountName = "AccountName";
+            public const string ProjectName = "ProjectName";
+            public const string ResourceStartDate = "ResourceStartDate";
+            public const string SortDescendingOrder = "Desc";
+            public const string MonthStartDate = "MonthStartDate";
+            public const string Count = "Count";
         }
     }
 }
