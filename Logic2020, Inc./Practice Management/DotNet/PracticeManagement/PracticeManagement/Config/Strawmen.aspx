@@ -136,10 +136,10 @@
                                 <asp:Label ID="lblStrawmen" CssClass="Ws-Normal padLeft25" runat="server" Text='<%# Eval("HtmlEncodedName")%>'></asp:Label>
                             </ItemTemplate>
                             <EditItemTemplate>
-                                <asp:LinkButton ID="lnkEditStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Click to edit Strawmen Role/Skill"
+                                <asp:LinkButton ID="lnkEditStrawman" strawmanId='<%# Eval("Id") %>' ToolTip="Click to edit Strawmen Title/Skill"
                                     CssClass="padLeft25" runat="server" OnClick="lnkEditStrawman_OnClick" Text='<%# Eval("HtmlEncodedName")%>' />
-                                <asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another strawman with the same skill and role."
-                                    ToolTip="There is another strawmen with the same skill and role." ValidationGroup="StrawmanGroup"
+                                <asp:CustomValidator ID="cvDupliacteName" runat="server" Text="*" ErrorMessage="There is another strawman with the same Skill and Title."
+                                    ToolTip="There is another strawmen with the same Skill and Title." ValidationGroup="StrawmanGroup"
                                     SetFocusOnError="true" OnServerValidate="cvDupliacteName_ServerValidate"></asp:CustomValidator>
                                 <asp:HiddenField ID="hdnLastName" runat="server" Value='<%# Eval("LastName")%>' />
                                 <asp:HiddenField ID="hdnFirstName" runat="server" Value='<%# Eval("FirstName")%>' />
@@ -264,12 +264,12 @@
                     </tr>
                     <tr>
                         <td class="padRight10 PaddingTop10 textRight">
-                            <asp:Label ID="lblastName" runat="server" Text="Role"></asp:Label>
+                            <asp:Label ID="lblastName" runat="server" Text="Title"></asp:Label>
                         </td>
                         <td class="PaddingTop10">
                             <asp:TextBox ID="tbLastName" MaxLength="50" runat="server" CssClass="Width180Px"></asp:TextBox>
-                            <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Role is required."
-                                ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true"
+                            <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Title is required."
+                                ControlToValidate="tbLastName" ToolTip="Title is required." SetFocusOnError="true"
                                 ValidationGroup="StrawmanNameGroup"></asp:RequiredFieldValidator>
                         </td>
                     </tr>
