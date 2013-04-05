@@ -143,14 +143,14 @@ namespace PracticeManagementService
             return ReportDAL.ConsultingDemandSummary(startDate, endDate, titles, skills);
         }
 
-        public List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills)
+        public List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills,string sortColumns)
         {
-            return ReportDAL.ConsultingDemandDetailsByTitleSkill(startDate, endDate, titles, skills);
+            return ReportDAL.ConsultingDemandDetailsByTitleSkill(startDate, endDate, titles, skills, sortColumns);
         }
 
-        public List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills)
+        public List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns,bool isFromPipeLinePopUp)
         {
-            return ReportDAL.ConsultingDemandDetailsByMonth(startDate, endDate, titles, skills);
+            return ReportDAL.ConsultingDemandDetailsByMonth(startDate, endDate, titles, skills, sortColumns, isFromPipeLinePopUp);
         }
 
         public  Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string Title)
@@ -163,14 +163,14 @@ namespace PracticeManagementService
             return ReportDAL.ConsultingDemandGraphsBySkills(startDate, endDate, Skill);
         }
 
-        public List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string Title)
+        public List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string Title,string sortColumns)
         {
-            return ReportDAL.ConsultingDemandTransactionReportByTitle(startDate, endDate, Title);
+            return ReportDAL.ConsultingDemandTransactionReportByTitle(startDate, endDate, Title, sortColumns);
         }
 
-        public List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill)
+        public List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill,string sortColumns)
         {
-            return ReportDAL.ConsultingDemandTransactionReportBySkill(startDate, endDate, Skill);
+            return ReportDAL.ConsultingDemandTransactionReportBySkill(startDate, endDate, Skill,sortColumns);
         }
 
         public Dictionary<string,int> ConsultingDemandGrphsGroupsByTitle(DateTime startDate, DateTime endDate)
