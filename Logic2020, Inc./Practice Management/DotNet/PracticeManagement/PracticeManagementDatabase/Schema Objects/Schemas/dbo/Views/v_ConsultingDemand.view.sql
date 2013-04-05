@@ -6,6 +6,7 @@
 			P.ProjectId,
 			P.ProjectNumber,
 			P.Name AS ProjectName,
+			P.Description AS ProjectDescription,
 			O.OpportunityId,
 			O.OpportunityNumber,
 			Per.Personid,
@@ -17,7 +18,7 @@
 	INNER JOIN dbo.MilestonePerson MP ON MP.PersonId =Per.PersonId 
 									AND Per.IsStrawman=1
 	INNER JOIN dbo.Milestone M ON MP.MilestoneId=M.MilestoneId
-	INNER JOIN Project P ON M.ProjectId = P.ProjectId 
+	INNER JOIN Project P ON M.ProjectId = P.ProjectId AND (P.ProjectStatusId=3 OR P.ProjectStatusId=2)
 	INNER JOIN Client C ON P.ClientId=C.ClientId
 	INNER JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId=MP.MilestonePersonId 
 	INNER JOIN dbo.Calendar CAL ON MPE.StartDate<=cal.MonthEndDate 
@@ -28,6 +29,7 @@
 			 C.Name,
 			 P.ProjectId,
 			 P.Name,
+			 P.Description,
 			 P.ProjectNumber,
 			 O.OpportunityId,
 			 O.OpportunityNumber,
@@ -35,13 +37,14 @@
 			 Per.FirstName,
 			 Per.LastName,
 			 MPE.StartDate
-	UNION 
+	UNION ALL 
 	SELECT CAL.MonthStartDate,
 		   C.ClientId,
 		   C.Name AS AccountName,
 		   -1 AS ProjectId,
 		   '' AS ProjectNumber,
 		   O.Name AS ProjectName,
+		   O.Description As ProjectDescription,
 		   O.OpportunityId,
 		   O.OpportunityNumber,
 		   Per.PersonId,
@@ -50,7 +53,7 @@
 		   CASE WHEN OP.NeedBy<cal.MonthStartDate THEN cal.MonthStartDate ELSE OP.NeedBy END ResourceStartDate,
 		   SUM(OP.Quantity)/MAX(CAl.DaysInMonth) as [Count]
 	FROM dbo.Opportunity O 
-	INNER JOIN Client C ON O.ClientId=C.ClientId
+	INNER JOIN Client C ON O.ClientId=C.ClientId AND (O.Priority='A' OR O.Priority='B')
 							AND O.ProjectId IS NULL 
 	INNER JOIN dbo.OpportunityPersons OP ON OP.RelationTypeId = 2 
 										AND OP.OpportunityId=O.OpportunityId 
@@ -62,6 +65,7 @@
 			 O.OpportunityId,
 			 O.OpportunityNumber,
 			 O.Name,
+			 O.Description,
 			 Per.PersonId,
 			 Per.FirstName,
 			 Per.LastName,
