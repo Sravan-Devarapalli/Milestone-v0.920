@@ -24,7 +24,7 @@
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
         <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consulting Utilization"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consulting Utilization"  description="Consulting Utilization" ShowURL="true" />
         <siteMapNode url="~/Reports/ConsultingCapacity.aspx" title="Consulting Capacity"  VirtualPath="~/Reports/ConsultingCapacity.aspx" QuickLinkTitle="Consulting Capacity"  description="Consulting Capacity" ShowURL="true" />
-        <siteMapNode url="~/Reports/ConsultingDemand.aspx" title="Consulting Demand"  VirtualPath="~/Reports/ConsultingDemand.aspx" QuickLinkTitle="Consulting Demand"  description="Consulting Demand" ShowURL="true" />
+        <siteMapNode url="~/Reports/ConsultingDemand_new.aspx" title="Consulting Demand"  VirtualPath="~/Reports/ConsultingDemand_new.aspx" QuickLinkTitle="Consulting Demand"  description="Consulting Demand" ShowURL="true" />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
         <siteMapNode url="~/Reports/TimeEntryReport_new.aspx" title="Reports"  VirtualPath="~/Reports/TimeEntryReport_new.aspx" QuickLinkTitle="Reports"  description="Reports" ShowURL="true"/>
