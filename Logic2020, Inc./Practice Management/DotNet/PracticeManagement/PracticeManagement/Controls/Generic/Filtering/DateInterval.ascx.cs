@@ -10,11 +10,28 @@ namespace PraticeManagement.Controls.Generic.Filtering
         public bool IsFromDateRequired { get; set; }
         public bool IsToDateRequired { get; set; }
 
-        public string OnClientChange 
+        public string OnClientChange
         {
-            set 
+            set
             {
                 this.clFromDate.OnClientDateSelectionChanged = this.clToDate.OnClientDateSelectionChanged = value;
+            }
+        }
+
+        public string ValidationGroup
+        {
+            get { return tbFrom.ValidationGroup; }
+            set
+            {
+                tbFrom.ValidationGroup =
+                reqValFrom.ValidationGroup =
+                valFrom.ValidationGroup =
+                rangeValFrom.ValidationGroup =
+                tbTo.ValidationGroup =
+                reqValTo.ValidationGroup =
+                valTo.ValidationGroup =
+                rangeValTo.ValidationGroup =
+                compToDate.ValidationGroup = value;
             }
         }
 
@@ -48,7 +65,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
                 return tbFrom.Enabled;
             }
             set
-            {              
+            {
                 tbFrom.Enabled = value;
                 tbTo.Enabled = value;
                 clFromDate.Enabled = value;
@@ -106,3 +123,4 @@ namespace PraticeManagement.Controls.Generic.Filtering
 
     }
 }
+
