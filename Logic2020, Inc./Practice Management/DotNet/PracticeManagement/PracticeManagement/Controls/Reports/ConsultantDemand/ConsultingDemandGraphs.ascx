@@ -35,7 +35,8 @@
                     OnClick="chartConsultnDemandPipeline_Click">
                     <Series>
                         <asp:Series Name="seriesPipeline" ChartArea="PipelineArea" ChartType="Bar" XValueType="String"
-                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" XValueMember="title" YValueMembers="count">
+                            YValueType="Int32" PostBackValue="#VALX,#VALY,False" XValueMember="title" YValueMembers="count"
+                            ToolTip="#VALY Resources">
                         </asp:Series>
                     </Series>
                     <ChartAreas>
@@ -77,7 +78,7 @@
             <tr>
                 <td class="Width1Percent">
                 </td>
-                <td class="Width99Percent">
+                <td class="Width99Percent paddingBottom5px">
                     <div class="NewHireREportGraphDiv">
                         <uc:ConsultngTReport ID="ctrDetails" runat="server"></uc:ConsultngTReport>
                     </div>
