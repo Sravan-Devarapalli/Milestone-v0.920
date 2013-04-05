@@ -49,6 +49,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand {
         protected global::System.Web.UI.WebControls.Button btnExportToExcel;
         
         /// <summary>
+        /// hdIsGraphPage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdIsGraphPage;
+        
+        /// <summary>
         /// repTitles control.
         /// </summary>
         /// <remarks>
@@ -58,13 +67,13 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand {
         protected global::System.Web.UI.WebControls.Repeater repTitles;
         
         /// <summary>
-        /// repByMonth  control.
+        /// repByMonth control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repByMonth ;
+        protected global::System.Web.UI.WebControls.Repeater repByMonth;
     }
 }
 
