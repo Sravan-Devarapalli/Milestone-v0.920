@@ -17,6 +17,8 @@ namespace DataTransferObjects.Reports.ConsultingDemand
         [DataMember]
         public string ProjectNumber { get; set; }
         [DataMember]
+        public string ProjectDescription { get; set; }
+        [DataMember]
         public int? OpportunityId { get; set; }
         [DataMember]
         public int? ProjectId { get; set; }
