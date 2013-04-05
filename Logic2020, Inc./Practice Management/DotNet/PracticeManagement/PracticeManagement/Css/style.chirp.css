@@ -1027,6 +1027,11 @@ table.time-entry-person-projects tr
 {
     background-color: #F9FAFF;
 }
+
+.bgcolorF9FAFFImp
+{
+    background-color: #F9FAFF !important;
+}
 .pnlTimeEntryCss
 {
     background: #444;
@@ -1985,6 +1990,10 @@ TABLE.Section td
 {
     width: 20%;
 }
+.Width20PerImp
+{
+    width: 20% !important;
+}
 .Width78Percent
 {
     width: 78%;
@@ -2655,6 +2664,7 @@ TABLE.Section td
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
+
 .vTop
 {
     vertical-align: top;
@@ -2666,6 +2676,11 @@ TABLE.Section td
 .vMiddle
 {
     vertical-align: middle;
+}
+
+.vMiddleImp
+{
+    vertical-align: middle !important;
 }
 .vBottom
 {
@@ -2875,7 +2890,7 @@ TABLE.PaddingTenPx td
     width: 8%;
     padding: 0px !important;
 }
-.ReportHeaderBandNBGraph table
+.ReportHeaderBandNBGraph table, consultngDetailPanel table
 {
     width: 100%;
 }
@@ -3210,7 +3225,7 @@ h1, h2, h3, h4, h5, h6, .container, .marginLineManager
 {
     white-space: nowrap;
 }
-.WholeWidth, .WholeWidthForAllColumns td, .tem-person-timeNew, .calendarPopup, .width100P, .WholeWidthWithHeight, TABLE.TimeEntruReportHeader, .Width100Per
+.WholeWidth, .WholeWidthForAllColumns td, .tem-person-timeNew, .calendarPopup, .width100P, .WholeWidthWithHeight, TABLE.TimeEntruReportHeader, .Width100Per, .consultngDetailPanel table
 {
     width: 100%;
 }
@@ -4160,7 +4175,7 @@ div.scrollextLabel
     padding: 6px 6px 2px 2px;
     text-align: center;
 }
-.border1Px
+.border1Px, .consultngDetailPanel
 {
     border: 1px solid black;
 }
@@ -4868,6 +4883,7 @@ BenchCosts.ascx*/
 {
     background-color: #D4D0C9;
 }
+
 .WorkTypeTable .FirstTr
 {
     text-align: left;
@@ -4948,6 +4964,13 @@ BenchCosts.ascx*/
     color: Black;
     text-decoration: none;
 }
+
+HyplinkConsultantDetailReport
+{
+    color: Black !important;
+    text-decoration: none !important;
+}
+
 .TimePeriodByProject_ProjectDetailReport
 {
     background-color: #E2EBFF;
@@ -5810,8 +5833,8 @@ BenchCosts.ascx*/
 }
 .Height102px
 {
-    height:102px;
-    }
+    height: 102px;
+}
 .Height100Percent
 {
     height: 100%;
@@ -7695,7 +7718,8 @@ table#ctl00_body_login tr td label
     font-weight: bolder;
     font-size: 15px;
     width: 10%;
-    text-align: center;
+    text-align: right;
+    padding-right: 45px;
 }
 .ConsultingDemandDetails .headerRow, .ConsultingDemandDetailsByMonth .headerRow
 {
@@ -7705,7 +7729,7 @@ table#ctl00_body_login tr td label
     cursor: pointer;
     height: auto;
     position: static;
-    border: 1px solid #000000;
+    border-bottom: 1px solid #000000;
     font-size: 14px;
     font-weight: 700;
     padding: 2px;
@@ -7717,7 +7741,6 @@ table#ctl00_body_login tr td label
 {
     width: 10%;
     text-align: center;
-    padding-left: 20px;
 }
 
 .ConsultingDemandDetailsByMonth .SecondTD
@@ -7736,15 +7759,7 @@ table#ctl00_body_login tr td label
     text-align: center;
 }
 
-.consultngDetailPanel
-{
-    border: 1px solid black;
-}
-.consultngDetailPanel table
-{
-    width: 100%;
-}
-.trConsultngDetailPanel tr
+.trConsultngDetailPanel tr, .trConsultngDetailPanelInnerItem
 {
     background-color: white;
     height: 30px;
@@ -7758,16 +7773,13 @@ table#ctl00_body_login tr td label
     white-space: nowrap;
     width: 13.33%;
 }
-.trConsultngDetailPanel td
+.trConsultngDetailPanel td, .trConsultngDetailPanelInnerItem td
 {
     text-align: center;
     white-space: nowrap;
     width: 13.33%;
 }
-.prjctnamewidth20
-{
-    width: 20% !important;
-}
+
 .trConsultngDetailPanelItem
 {
     background-color: #D4D0C9;
@@ -7779,45 +7791,11 @@ table#ctl00_body_login tr td label
     font-size: 14px;
     width: 13.33%;
 }
-.alternateTrConsultngDetailPanelItem
-{
-    background-color: #ECE9D9;
-    height: 30px;
-    white-space: nowrap;
-}
-.alternateTrConsultngDetailPanelItem th
-{
-    font-size: 14px;
-    width: 13.33%;
-}
-.trConsultngDetailPanelInnerItem
-{
-    background-color: white;
-    height: 30px;
-    white-space: nowrap;
-    width: 100%;
-}
-.trConsultngDetailPanelInnerItem td
-{
-    white-space: nowrap;
-    width: 13.33%;
-    text-align:center;
-}
-.alternateTrConsultngDetailPanelInnerItem
-{
-    background-color: #F9FAFF;
-    height: 30px;
-    white-space: nowrap;
-    width: 100%;
-}
-.alternateTrConsultngDetailPanelInnerItem td
-{
-    white-space: nowrap;
-    width: 13.33%;
-    text-align:center;
-}
+
 .consultingReportTd
 {
-font-weight: bolder; width: 10%; text-align: right;
+    font-weight: bolder;
+    width: 10%;
+    text-align: right;
 }
 
