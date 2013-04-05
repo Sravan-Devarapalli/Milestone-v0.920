@@ -168,6 +168,7 @@ table.time-entry-person-projects th{border-bottom:1px solid gray;border-top:1px 
 table.time-entry-person-projects td{vertical-align:middle;border-bottom:1px solid lightgray;border-top:1px solid lightgray;padding-left:5px;text-align:right;padding-right:5px;padding-top:3px;padding-bottom:3px;white-space:nowrap}
 table.time-entry-person-projects tr{border-bottom:1px solid lightgray;border-top:1px solid lightgray;padding:1px;vertical-align:middle}
 .alterrow{background-color:#F9FAFF}
+.bgcolorF9FAFFImp{background-color:#F9FAFF!important}
 .pnlTimeEntryCss{background:#444;box-shadow:5px 5px 15px #444;-webkit-box-shadow:5px 5px 15px #444;-moz-box-shadow:5px 5px 15px #444;padding:10px;width:375px}
 td.te-modal-header{color:#FFF;font-weight:700;padding-bottom:5px}
 .modal-close{display:block;float:right;width:7px;height:7px;background-repeat:no-repeat;background-position:0 0;background-image:url(../images/modal-close.png);margin-top:3px}
@@ -368,6 +369,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width17Percent,.Width17Per{width:17%}
 .Width18Percent{width:18%}
 .Width20Percent{width:20%}
+.Width20PerImp{width:20%!important}
 .Width78Percent{width:78%}
 .Width21Percent{width:21%}
 .Width22Per{width:22%}
@@ -532,6 +534,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .vTop{vertical-align:top}
 .vTopImp{vertical-align:top!important}
 .vMiddle{vertical-align:middle}
+.vMiddleImp{vertical-align:middle!important}
 .vBottom{vertical-align:bottom}
 .textLeft{text-align:left!important}
 .White{background-color:#FFF;border-bottom:1px solid Gray}
@@ -575,7 +578,7 @@ TABLE.PaddingTenPx td{padding:0 5px}
 .ReportHeaderBillAndNonBillTable td{text-align:center}
 .ReportHeaderBillAndNonBillTable .billingHours{padding-bottom:5px!important}
 .ReportHeaderBandNBGraph{vertical-align:bottom;width:8%;padding:0!important}
-.ReportHeaderBandNBGraph table{width:100%}
+.ReportHeaderBandNBGraph table,consultngDetailPanel table{width:100%}
 .ReportHeaderBandNBGraph td{padding:0!important;text-align:center}
 .ReportHeaderBandNBGraph .billingGraph{background-color:#7FD13B;border:1px solid Gray}
 .ReportHeaderBandNBGraph .nonBillingGraph{background-color:#BEBEBE;border:1px solid Gray}
@@ -628,7 +631,7 @@ li.l1 a{display:block;width:130px;height:34px;line-height:30px;text-align:center
 #navItems{height:40px;display:inline-block}
 h1,h2,h3,h4,h5,h6,.container,.marginLineManager{margin-top:10px}
 .no-wrap,TABLE.CompPerfTable td .cell-pad table td,.tem-grid-date-cell,.WhiteSpaceNoWrap,.lblOverheadsBenchCost{white-space:nowrap}
-.WholeWidth,.WholeWidthForAllColumns td,.tem-person-timeNew,.calendarPopup,.width100P,.WholeWidthWithHeight,TABLE.TimeEntruReportHeader,.Width100Per{width:100%}
+.WholeWidth,.WholeWidthForAllColumns td,.tem-person-timeNew,.calendarPopup,.width100P,.WholeWidthWithHeight,TABLE.TimeEntruReportHeader,.Width100Per,.consultngDetailPanel table{width:100%}
 .WholeWidthImp{width:100%!important}
 .hidden,.ie-only-visible,.displayNone,.tab-invisible{display:none}
 .bg-white,.ReportItemTemplate{background-color:#FFF}
@@ -799,7 +802,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .gvOpportunityPriorities .Left{text-align:left!important}
 .OpportunityPrioritiesPopUp{min-width:450px!important;min-height:60px!important;max-width:700px!important}
 .OpportunityPrioritiesPopUpTd{padding:6px 6px 2px 2px;text-align:center}
-.border1Px{border:1px solid black}
+.border1Px,.consultngDetailPanel{border:1px solid black}
 .borderRightImp{border-right:1px solid black!important}
 .borderLeft{border-left:1px solid black}
 .ClientAlphabeticAll{padding-left:10px;padding-top:10px;padding-bottom:10px;text-align:center}
@@ -942,6 +945,7 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .PeronSummaryReport .SecondTd{font-weight:bold;padding-bottom:5px;padding-left:2px;text-align:left}
 .PeronSummaryReport .ThirdTd{padding-left:3px;vertical-align:middle}
 .PeronSummaryReport .SecondTd a{color:Black;text-decoration:none}
+HyplinkConsultantDetailReport{color:Black!important;text-decoration:none!important}
 .TimePeriodByProject_ProjectDetailReport{background-color:#E2EBFF;border-color:Black;border-style:solid;border-width:2px;position:fixed;width:85%;z-index:100001}
 .bgColor_F5FAFF{background-color:#F5FAFF}
 .TimePeriodByProject_ProjectName{width:90%;font-weight:bold;font-size:15px;padding:3px!important;padding-left:10px!important}
@@ -1423,24 +1427,15 @@ table#ctl00_body_login tr td label{float:left}
 .ConsultingDemandDetails .FirstTD{padding-left:70px;text-align:left!important;width:25%}
 .ConsultingDemandDetails .SecondTD{width:10%;text-align:center}
 .ConsultingDemandDetails .ThirdTD{width:15%;text-align:center}
-.ConsultingDemandDetailsTotal{font-weight:bolder;font-size:15px;width:10%;text-align:center}
-.ConsultingDemandDetails .headerRow,.ConsultingDemandDetailsByMonth .headerRow{background-color:White;background-image:none;background-repeat:no-repeat;cursor:pointer;height:auto;position:static;border:1px solid #000;font-size:14px;font-weight:700;padding:2px;text-align:center;vertical-align:middle}
-.ConsultingDemandDetailsByMonth .FirstTD{width:10%;text-align:center;padding-left:20px}
+.ConsultingDemandDetailsTotal{font-weight:bolder;font-size:15px;width:10%;text-align:right;padding-right:45px}
+.ConsultingDemandDetails .headerRow,.ConsultingDemandDetailsByMonth .headerRow{background-color:White;background-image:none;background-repeat:no-repeat;cursor:pointer;height:auto;position:static;border-bottom:1px solid #000;font-size:14px;font-weight:700;padding:2px;text-align:center;vertical-align:middle}
+.ConsultingDemandDetailsByMonth .FirstTD{width:10%;text-align:center}
 .ConsultingDemandDetailsByMonth .SecondTD{width:20%;text-align:center}
 .ConsultingDemandDetailsByMonth .ThirdTD{width:10%;text-align:center}
 .ConsultingDemandDetailsByMonth .ForthTD{width:15%;text-align:center}
-.consultngDetailPanel{border:1px solid black}
-.consultngDetailPanel table{width:100%}
-.trConsultngDetailPanel tr{background-color:white;height:30px;white-space:nowrap;width:100%}
+.trConsultngDetailPanel tr,.trConsultngDetailPanelInnerItem{background-color:white;height:30px;white-space:nowrap;width:100%}
 .trConsultngDetailPanel th{font-size:14px;text-align:center;white-space:nowrap;width:13.33%}
-.trConsultngDetailPanel td{text-align:center;white-space:nowrap;width:13.33%}
-.prjctnamewidth20{width:20%!important}
+.trConsultngDetailPanel td,.trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:13.33%}
 .trConsultngDetailPanelItem{background-color:#D4D0C9;height:30px;white-space:nowrap}
 .trConsultngDetailPanelItem th{font-size:14px;width:13.33%}
-.alternateTrConsultngDetailPanelItem{background-color:#ECE9D9;height:30px;white-space:nowrap}
-.alternateTrConsultngDetailPanelItem th{font-size:14px;width:13.33%}
-.trConsultngDetailPanelInnerItem{background-color:white;height:30px;white-space:nowrap;width:100%}
-.trConsultngDetailPanelInnerItem td{white-space:nowrap;width:13.33%;text-align:center}
-.alternateTrConsultngDetailPanelInnerItem{background-color:#F9FAFF;height:30px;white-space:nowrap;width:100%}
-.alternateTrConsultngDetailPanelInnerItem td{white-space:nowrap;width:13.33%;text-align:center}
 .consultingReportTd{font-weight:bolder;width:10%;text-align:right}
