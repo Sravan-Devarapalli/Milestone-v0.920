@@ -75,7 +75,7 @@ BEGIN
 	ELSE IF @IsDetail=1 
 	BEGIN
 		
-		SELECT @Columns = 'CD.ClientId,CD.AccountName,CD.ProjectId,CD.ProjectNumber,CD.ProjectName,CD.OpportunityId,CD.OpportunityNumber,CD.ResourceStartDate' + 
+		SELECT @Columns = 'CD.ClientId,CD.AccountName,CD.ProjectId,CD.ProjectNumber,CD.ProjectName,CD.ProjectDescription,CD.OpportunityId,CD.OpportunityNumber,CD.ResourceStartDate' + 
 			CASE 
 				WHEN @GroupByMonth = 1 THEN ',CD.MonthStartDate'
 				WHEN @GroupByTitleSkill = 1 THEN ',CD.Title,CD.Skill'
