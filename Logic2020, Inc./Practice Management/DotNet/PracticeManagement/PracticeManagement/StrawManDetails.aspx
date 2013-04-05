@@ -19,15 +19,15 @@
             <table class="WholeWidth">
                 <tr>
                     <td style="padding-left: 4px; padding-top: 5px;">
-                        Role
+                        Title
                     </td>
                     <td style="padding-top: 5px;">
                         <asp:TextBox ID="tbLastName" runat="server" onchange="setDirty();"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Role is required."
-                            ControlToValidate="tbLastName" ToolTip="Role is required." SetFocusOnError="true" EnableClientScript="false"
+                        <asp:RequiredFieldValidator ID="rqfvLastName" runat="server" Text="*" ErrorMessage="Title is required."
+                            ControlToValidate="tbLastName" ToolTip="Title is required." SetFocusOnError="true" EnableClientScript="false"
                             ValidationGroup="StrawmanGroup"></asp:RequiredFieldValidator>
-                        <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Role character length must be lessthan or equal to 50."
-                            ToolTip="Role character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup" EnableClientScript="false"
+                        <asp:CustomValidator ID="cvLengthLastName" runat="server" Text="*" ErrorMessage="Title character length must be lessthan or equal to 50."
+                            ToolTip="Title character length must be lessthan or equal to 50." ValidationGroup="StrawmanGroup" EnableClientScript="false"
                             SetFocusOnError="true" OnServerValidate="cvNameLength_ServerValidate"></asp:CustomValidator>
                     </td>
                     <td>
