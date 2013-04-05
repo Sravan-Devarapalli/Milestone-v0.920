@@ -85,10 +85,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             ConsultantDetailReport._hdSkill.Value = lnkConsultant.Attributes["Skill"];
             ConsultantDetailReport._hdTitle.Value = lnkConsultant.Attributes["Title"];
             ConsultantDetailReport.groupBy = "month";
-            ConsultantDetailReport.PopulateData();
+            ConsultantDetailReport._hdIsSummaryPage.Value = true.ToString();
+            ConsultantDetailReport.PopulateData(false);
             lblConsultant.Text = ConsultantDetailReport._hdTitle.Value + "," + ConsultantDetailReport._hdSkill.Value;
             lblTotalCount.Text = ConsultantDetailReport.GrandTotal.ToString();
-            ConsultantDetailReport._hdIsSummaryPage.Value = true.ToString();
+
             mpeConsultantDetailReport.Show();
 
 
@@ -102,17 +103,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
 
-                var ConsultantSummaryReportExportList = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems)).ToList();
+                var ConsultantSummaryReportExportList = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems, "")).ToList();
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("From Month");
+                sb.Append("Period: ");
+                sb.Append(HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                sb.Append(" To ");
+                sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
                 sb.Append("\t");
-                sb.Append(HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
-                sb.Append("\t");
-                sb.Append("To Month");
-                sb.Append("\t");
-                sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
-                sb.Append("\t");
+                sb.AppendLine();
                 sb.AppendLine();
                 if (ConsultantSummaryReportExportList.Count > 0)
                 {
@@ -151,7 +150,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.Append(item.ConsultantDetails[item2].ProjectName);
                             sb.Append("\t");
-                            sb.Append(item.ConsultantDetails[item2].ResourceStartDate);
+                            sb.Append(item.ConsultantDetails[item2].ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
                             sb.Append("\t");
                             sb.AppendLine();
                             if (item.ConsultantDetails.Count - 1 != item2)
@@ -172,7 +171,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 }
                 //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  cblTitle
                 //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
-                var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString(Constants.Formatting.ReportDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.ReportDateFormat));
+                var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
                 GridViewExportUtil.Export(filename, sb);
             }
         }
