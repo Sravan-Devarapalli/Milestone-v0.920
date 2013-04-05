@@ -173,7 +173,7 @@
                 <div class="GroupByProjectDiv">
                     <table class="WholeWidth">
                         <tr>
-                            <td class="Width99Percent">
+                            <td class="Width99Percent paddingBottom5px">
                                 <uc:ConsultantDetailReport ID="ConsultantDetailReport" runat="server" />
                             </td>
                             <td class="Width1Percent">
