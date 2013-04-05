@@ -21,6 +21,7 @@ namespace PraticeManagement.Reports
 
         public const string PipeLine = "PipeLine";
 
+
         #endregion
 
         #region Properties
@@ -30,19 +31,27 @@ namespace PraticeManagement.Reports
             get
             {
                 int selectedVal = 0;
-                if (int.TryParse(hdnPeriodValue.Value, out selectedVal))
+                if (hdnCustomOk.Value == "true")
                 {
-                    if (selectedVal == 0)
-                    {
-                        return diRange.FromDate.Value;
-                    }
-                    else
-                    {
-                        var now = Utils.Generic.GetNowWithTimeZone();
-                        return Utils.Calendar.MonthStartDate(now);
-                    }
+                    return Convert.ToDateTime(hdnStartDate.Value);
                 }
-                return null;
+                else
+                {
+                    if (int.TryParse(hdnPeriodValue.Value, out selectedVal))
+                    {
+                        if (selectedVal == 0)
+                        {
+                            return Convert.ToDateTime(hdnStartDate.Value);
+                        }
+                        else
+                        {
+                            var now = Utils.Generic.GetNowWithTimeZone();
+                            return Utils.Calendar.MonthStartDate(now);
+
+                        }
+                    }
+                    return null;
+                }
             }
         }
 
@@ -51,31 +60,38 @@ namespace PraticeManagement.Reports
             get
             {
                 int selectedVal = 0;
-                if (int.TryParse(hdnPeriodValue.Value, out selectedVal))
+                if (hdnCustomOk.Value == "true")
                 {
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    if (selectedVal == 0)
-                    {
-                        return diRange.ToDate.Value;
-                    }
-                    else if (selectedVal == 1)
-                    {
-                        return Utils.Calendar.MonthEndDate(now);
-                    }
-                    else if (selectedVal == 2)
-                    {
-                        return Utils.Calendar.Next2MonthEndDate(now);
-                    }
-                    else if (selectedVal == 3)
-                    {
-                        return Utils.Calendar.Next3MonthEndDate(now);
-                    }
-                    else
-                    {
-                        return Utils.Calendar.Next4MonthEndDate(now);
-                    }
+                    return Convert.ToDateTime(hdnEndDate.Value);
                 }
-                return null;
+                else
+                {
+                    if (int.TryParse(hdnPeriodValue.Value, out selectedVal))
+                    {
+                        var now = Utils.Generic.GetNowWithTimeZone();
+                        if (selectedVal == 0)
+                        {
+                            return Convert.ToDateTime(hdnEndDate.Value);
+                        }
+                        else if (selectedVal == 1)
+                        {
+                            return Utils.Calendar.MonthEndDate(now);
+                        }
+                        else if (selectedVal == 2)
+                        {
+                            return Utils.Calendar.Next2MonthEndDate(now);
+                        }
+                        else if (selectedVal == 3)
+                        {
+                            return Utils.Calendar.Next3MonthEndDate(now);
+                        }
+                        else
+                        {
+                            return Utils.Calendar.Next4MonthEndDate(now);
+                        }
+                    }
+                    return null;
+                }
             }
         }
 
@@ -157,6 +173,8 @@ namespace PraticeManagement.Reports
         {
             if (!IsPostBack)
             {
+                hdnCustomOk.Value = "false";
+                hdnPeriodValue.Value = "-1";
                 trGtypes.Visible =
                 trTitles.Visible =
                 upnlTabCell.Visible = false;
@@ -170,13 +188,10 @@ namespace PraticeManagement.Reports
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            var now = Utils.Generic.GetNowWithTimeZone();
-            diRange.FromDate = StartDate.HasValue ? StartDate.Value : now;
-            diRange.ToDate = EndDate.HasValue ? EndDate.Value : Utils.Calendar.Next4MonthEndDate(now);
-            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
-                    diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
-                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
-                    );
+            if (!IsPostBack)
+            {
+                SetCustomDatesTextboxes();
+            }
             if (ddlPeriod.SelectedValue == "0")
             {
                 lblCustomDateRange.Attributes.Add("class", "fontBold");
@@ -187,12 +202,7 @@ namespace PraticeManagement.Reports
                 lblCustomDateRange.Attributes.Add("class", "displayNone");
                 imgCalender.Attributes.Add("class", "displayNone");
             }
-            var tbFrom = diRange.FindControl("tbFrom") as TextBox;
-            var tbTo = diRange.FindControl("tbTo") as TextBox;
-            hdnStartDateTxtBoxId.Value = tbFrom.ClientID;
-            hdnEndDateTxtBoxId.Value = tbTo.ClientID;
-            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
-            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+
         }
 
         #endregion
@@ -206,16 +216,29 @@ namespace PraticeManagement.Reports
         {
             hdnGraphType.Value = ddlGraphsTypes.SelectedValue;
             hdnPeriodValue.Value = ddlPeriod.SelectedValue;
+            if (hdnPeriodValue.Value == "0")
+            {
+                hdnCustomOk.Value = "false";
+            }
             LoadActiveView();
         }
 
         protected void btnCustDatesOK_Click(object sender, EventArgs e)
         {
-            Page.Validate(valSumDateRange.ValidationGroup);
+            Page.Validate(valSum.ValidationGroup);
+
             if (Page.IsValid)
             {
-                hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
-                hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
+                enableDisableResetButtons();
+                DateTime? startDate = diRange.FromDate;
+                DateTime? endDate = diRange.ToDate;
+                if (startDate.HasValue && endDate.HasValue)
+                {
+                    hdnStartDate.Value = startDate.Value.Date.ToShortDateString();
+                    hdnEndDate.Value = endDate.Value.Date.ToShortDateString();
+                    hdnCustomOk.Value = "true";
+                    SetCustomDatesTextboxes();
+                }
             }
             else
             {
@@ -223,10 +246,28 @@ namespace PraticeManagement.Reports
             }
         }
 
+        protected void cstvalPeriodRange_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            CustomValidator cvCustomDates = source as CustomValidator;
+            DateTime? startDate = diRange.FromDate;
+            DateTime? endDate = diRange.ToDate;
+            if (startDate.HasValue && endDate.HasValue && startDate != DateTime.MinValue && endDate != DateTime.MinValue)
+            {
+                args.IsValid = startDate.Value.AddMonths(4) > endDate.Value;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
         protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
         {
-            diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
-            diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
+            if (hdnCustomOk.Value == "false")
+            {
+                ddlPeriod.SelectedValue = hdnPeriodValue.Value;
+            }
+            enableDisableResetButtons();
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -268,6 +309,8 @@ namespace PraticeManagement.Reports
             enableDisableResetButtons();
             if (ddlPeriod.SelectedValue == "0")
             {
+                diRange.FromDate = StartDate.Value;
+                diRange.ToDate = EndDate.Value;
                 mpeCustomDates.Show();
             }
         }
@@ -288,30 +331,35 @@ namespace PraticeManagement.Reports
 
             enableUpdateView = ddlPeriod.SelectedValue != "-1";
 
+            enableUpdateView = enableUpdateView && hdnPeriodValue.Value != ddlPeriod.SelectedValue;
+
             if (trGtypes.Visible)
             {
-                enableUpdateView = enableUpdateView && ddlGraphsTypes.SelectedIndex != 0;
+                enableUpdateView = enableUpdateView || (ddlGraphsTypes.SelectedIndex != 0 && hdnGraphType.Value != ddlGraphsTypes.SelectedValue);
                 enableResetFilter = enableResetFilter || ddlGraphsTypes.SelectedIndex != 0;
             }
             if (trTitles.Visible)
             {
                 if (tdTitles.Visible)
                 {
-                    enableUpdateView = enableUpdateView && cblTitles.SelectedValues != null ? cblTitles.isSelected : false;
-                    enableResetFilter = enableResetFilter || cblTitles.SelectedValues != null ? cblTitles.isSelected : false;
+                    enableUpdateView = enableUpdateView || (cblTitles.SelectedItems != hdnTitlesProp) ? cblTitles.isSelected : false;
+                    enableResetFilter = enableResetFilter || (cblTitles.SelectedItems != hdnTitlesProp);
 
                 }
                 else
                 {
-                    enableUpdateView = enableUpdateView && cblSkills.SelectedValues != null ? cblSkills.isSelected : false;
-                    enableResetFilter = enableResetFilter || cblSkills.SelectedValues != null ? cblSkills.isSelected : false;
+                    enableUpdateView = enableUpdateView && (cblSkills.SelectedItems != hdnSkillsProp) ? cblSkills.isSelected : false;
+                    enableResetFilter = enableResetFilter || (cblSkills.SelectedItems != hdnSkillsProp);
                 }
 
             }
-
+            if (lblCustomDateRange.Attributes["class"] == "fontBold")
+            {
+                enableUpdateView = enableUpdateView || (StartDate.Value.Date != diRange.FromDate.Value.Date || EndDate.Value.Date != diRange.ToDate.Value.Date);
+            }
             btnUpdateView.Enabled = enableUpdateView;
             btnResetFilter.Enabled = enableResetFilter;
-
+            upnlHeader.Update();
         }
 
         private void ResetFilter()
@@ -338,7 +386,7 @@ namespace PraticeManagement.Reports
             {
                 trGtypes.Visible = false;
                 trTitles.Visible = false;
-                ucDetails.PopulateData();
+                ucDetails.PopulateData(true, "");
             }
             else
             {
@@ -370,7 +418,11 @@ namespace PraticeManagement.Reports
             if (mvConsultingDemandReport.ActiveViewIndex == 2)
             {
                 ddlGraphsTypes.SelectedValue = TransactionTitle;
+                hdnGraphType.Value = ddlGraphsTypes.SelectedValue;
                 cblTitles.SelectAll();
+                lblTitle.Text = "Title";
+                tdSkills.Visible = false;
+                tdTitles.Visible = true;
                 cblSkills.SelectAll();
             }
             enableDisableResetButtons();
@@ -393,6 +445,19 @@ namespace PraticeManagement.Reports
             {
                 cell.CssClass = string.Empty;
             }
+        }
+
+        private void SetCustomDatesTextboxes()
+        {
+            var now = Utils.Generic.GetNowWithTimeZone();
+            diRange.FromDate = StartDate.HasValue ? StartDate.Value : now;
+            diRange.ToDate = EndDate.HasValue ? EndDate.Value : Utils.Calendar.Next4MonthEndDate(now);
+            lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
+                    diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
+                    diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
+                    );
+            hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+            hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
         }
 
         #endregion
