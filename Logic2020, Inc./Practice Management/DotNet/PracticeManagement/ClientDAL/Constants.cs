@@ -429,6 +429,8 @@
         /// </summary>
         public class ParameterNames
         {
+
+            public const string DescendingOrder = "Desc";
             public const string GroupIdColumn = "GroupId";
             public const string AttachmentFileName = "@FileName";
             public const string AttachmentData = "@AttachmentData";
