@@ -19,33 +19,61 @@
 </table>
 <asp:Repeater ID="repByTitleSkill" runat="server" OnItemDataBound="repByTitleSkill_ItemDataBound">
     <HeaderTemplate>
-        <table class="ConsultingDemandDetails">
-            <thead>
-                <tr class="headerRow">
-                    <th class="FirstTD">
+        <div class="border_black">
+            <table class="ConsultingDemandDetails">
+                <thead>
+                    <tr class="headerRow">
+                        <th class="FirstTD">
+                            <asp:LinkButton ID="btnTitleSkill" runat="server" CausesValidation="false" CommandArgument="TitleSkill"
+                                Style="text-decoration: none; color: Black; width: 100%;" OnCommand="btnTitleSkill_Command">
                         Title/Skill Set
-                    </th>
-                    <th class="SecondTD">
-                        Opportunity Number
-                    </th>
-                    <th class="SecondTD">
-                        Project Number
-                    </th>
-                    <th class="ThirdTD">
-                        Account Name
-                    </th>
-                    <th class="ThirdTD">
-                        Project Name
-                    </th>
-                    <th class="ThirdTD">
-                        Resource Start Date
-                    </th>
-                    <th class="SecondTD">
-                        Total
-                    </th>
-                </tr>
-            </thead>
-        </table>
+                            </asp:LinkButton>
+                        </th>
+                        <th class="SecondTD">
+                            <asp:LinkButton ID="btnOpportunityNumber" runat="server" CausesValidation="false"
+                                CommandArgument="OpportunityNumber" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnOpportunityNumber_Command">
+                            Opportunity Number</asp:LinkButton>
+                        </th>
+                        <th class="SecondTD">
+                            <asp:LinkButton ID="btnProjectNumber" runat="server" CausesValidation="false" CommandArgument="ProjectNumber"
+                                Style="text-decoration: none; color: Black;" OnCommand="btnProjectNumber_Command">
+                            Project Number
+                            </asp:LinkButton>
+                        </th>
+                        <th class="ThirdTD">
+                            <asp:LinkButton ID="btnAccountName" runat="server" CausesValidation="false" CommandArgument="AccountName"
+                                Style="text-decoration: none; color: Black;" OnCommand="btnAccountName_Command">
+                            Account Name
+                            </asp:LinkButton>
+                        </th>
+                        <th class="ThirdTD">
+                            <asp:LinkButton ID="btnProjectName" runat="server" CausesValidation="false" CommandArgument="ProjectName"
+                                Style="text-decoration: none; color: Black;" OnCommand="btnProjectName_Command">
+                            Project Name
+                            </asp:LinkButton>
+                        </th>
+                        <th class="ThirdTD">
+                            <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
+                                CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnResourceStartDate_Command">
+                            Resource Start Date
+                            </asp:LinkButton>
+                        </th>
+                        <th class="SecondTD">
+                            <asp:LinkButton ID="btnTotal" runat="server" CausesValidation="false" CommandArgument="Total"
+                                Style="text-decoration: none; color: Black;" OnCommand="btnTotal_Command">
+                                <asp:Label ID="lblTotal" runat="server" Text='Total'></asp:Label></asp:LinkButton>
+                            <asp:Panel ID="pnlTotal" Style="display: none;" runat="server" CssClass="pnlTotal">
+                                <label class="fontBold">
+                                    Total Forecasted Demand:
+                                </label>
+                                <asp:Label ID="lblTotalForecastedDemand" runat="server"></asp:Label>
+                            </asp:Panel>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
     </HeaderTemplate>
     <ItemTemplate>
         <table class="ConsultingDemandDetails">
@@ -68,7 +96,7 @@
             </tr>
         </table>
         <asp:Panel ID="pnlTitleSkillDetails" runat="server">
-            <asp:Repeater ID="repDetails" runat="server">
+            <asp:Repeater ID="repTitlesDetails" runat="server" OnItemDataBound="repTitlesDetails_ItemDataBound">
                 <HeaderTemplate>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -157,7 +185,7 @@
             </tr>
         </table>
         <asp:Panel ID="pnlTitleSkillDetails" runat="server">
-            <asp:Repeater ID="repDetails" runat="server">
+            <asp:Repeater ID="repTitlesDetails" runat="server" OnItemDataBound="repTitlesDetails_ItemDataBound">
                 <HeaderTemplate>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -226,40 +254,71 @@
         </asp:Panel>
     </AlternatingItemTemplate>
     <FooterTemplate>
+        </div>
     </FooterTemplate>
 </asp:Repeater>
 <asp:Repeater ID="repByMonth" runat="server" OnItemDataBound="repByMonth_ItemDataBound">
     <HeaderTemplate>
-        <table class="ConsultingDemandDetailsByMonth">
-            <thead>
-                <tr class="headerRow">
-                    <th class="FirstTD">
-                        Month Year
-                    </th>
-                    <th class="SecondTD">
-                        Title/Skill Set
-                    </th>
-                    <th class="ThirdTD">
-                        Opportunity Number
-                    </th>
-                    <th class="ThirdTD">
-                        Project Number
-                    </th>
-                    <th class="ForthTD">
-                        Account Name
-                    </th>
-                    <th class="ForthTD">
-                        Project Name
-                    </th>
-                    <th class="ThirdTD">
-                        Resource Start Date
-                    </th>
-                    <th class="ThirdTD">
-                        Total
-                    </th>
-                </tr>
-            </thead>
-        </table>
+        <div class="border_black">
+            <table class="ConsultingDemandDetailsByMonth">
+                <thead>
+                    <tr class="headerRow">
+                        <th class="FirstTD">
+                            <asp:LinkButton ID="btnMonthYear" runat="server" CausesValidation="false" CommandArgument="MonthYear"
+                                Style="text-decoration: none; color: Black;" OnCommand="btnMonthYear_Command">
+                            Month-Year
+                            </asp:LinkButton>
+                        </th>
+                        <th class="SecondTD" id="thTitleSkill" runat="server">
+                            <asp:LinkButton ID="btnMonthTitleSkill" runat="server" CausesValidation="false" CommandArgument="MonthTitleSkill"
+                                Style="text-decoration: none; color: Black;" OnCommand="btnMonthTitleSkill_Command">
+                            Title/Skill Set</asp:LinkButton>
+                        </th>
+                        <th class="ThirdTD">
+                            <asp:LinkButton ID="btnMonthOpportunityNumber" runat="server" CausesValidation="false"
+                                CommandArgument="MonthOpportunityNumber" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnMonthOpportunityNumber_Command">
+                            Opportunity Number
+                            </asp:LinkButton>
+                        </th>
+                        <th class="ThirdTD">
+                            <asp:LinkButton ID="btnMonthProjectNumber" runat="server" CausesValidation="false"
+                                CommandArgument="MonthProjectNumber" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnMonthProjectNumber_Command">
+                            Project Number</asp:LinkButton>
+                        </th>
+                        <th class="ForthTD">
+                            <asp:LinkButton ID="btnMonthAccountName" runat="server" CausesValidation="false"
+                                CommandArgument="MonthAccountName" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnMonthAccountName_Command">
+                            Account Name</asp:LinkButton>
+                        </th>
+                        <th class="ForthTD">
+                            <asp:LinkButton ID="btnMonthProjectName" runat="server" CausesValidation="false"
+                                CommandArgument="MonthProjectName" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnMonthProjectName_Command">
+                            Project Name</asp:LinkButton>
+                        </th>
+                        <th class="ThirdTD">
+                            <asp:LinkButton ID="btnMonthResourceStartDate" runat="server" CausesValidation="false"
+                                CommandArgument="MonthResourceStartDate" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnMonthResourceStartDate_Command">
+                            Resource Start Date</asp:LinkButton>
+                        </th>
+                        <th class="ThirdTD">
+                            <asp:LinkButton ID="btnMonthTotal" runat="server" CausesValidation="false" CommandArgument="MonthTotal"
+                                Style="text-decoration: none; color: Black;" OnCommand="btnMonthTotal_Command">
+                                <asp:Label ID="lblTotal" runat="server" Text='Total'></asp:Label></asp:LinkButton>
+                            <asp:Panel ID="pnlTotal" Style="display: none;" runat="server" CssClass="pnlTotal">
+                                <label class="fontBold">
+                                    Total Forecasted Demand:
+                                </label>
+                                <asp:Label ID="lblTotalForecastedDemand" runat="server"></asp:Label>
+                            </asp:Panel>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
     </HeaderTemplate>
     <ItemTemplate>
         <table class="ConsultingDemandDetailsByMonth">
@@ -275,19 +334,21 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
                 </td>
+                <td class="ThirdTD" id="tdTitleSkill" runat="server">
+                </td>
                 <td class="ConsultingDemandDetailsTotal">
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).TotalCount%>
                 </td>
             </tr>
         </table>
         <asp:Panel ID="pnlMonthDetails" runat="server">
-            <asp:Repeater ID="repDetails" runat="server">
+            <asp:Repeater ID="repDetails" runat="server" OnItemDataBound="repDetails_ItemDataBound">
                 <ItemTemplate>
                     <table class="ConsultingDemandDetailsByMonth">
                         <tr class="bgcolorwhite">
                             <td class="FirstTD">
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTD" id="tdTitleSkill" runat="server">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Title%>,
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
@@ -321,7 +382,7 @@
                         <tr class="alterrow">
                             <td class="FirstTD">
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTD" id="tdTitleSkill" runat="server">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Title%>,
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
@@ -367,19 +428,21 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
                 </td>
+                <td class="ThirdTD" id="tdTitleSkill" runat="server">
+                </td>
                 <td class="ConsultingDemandDetailsTotal">
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).TotalCount%>
                 </td>
             </tr>
         </table>
         <asp:Panel ID="pnlMonthDetails" runat="server">
-            <asp:Repeater ID="repDetails" runat="server">
+            <asp:Repeater ID="repDetails" runat="server" OnItemDataBound="repDetails_ItemDataBound">
                 <ItemTemplate>
                     <table class="ConsultingDemandDetailsByMonth">
                         <tr class="bgcolorwhite">
                             <td class="FirstTD">
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTD" id="tdTitleSkill" runat="server">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Title%>,
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
@@ -413,7 +476,7 @@
                         <tr class="alterrow">
                             <td class="FirstTD">
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTD" id="tdTitleSkill" runat="server">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Title%>,
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Skill%>
                             </td>
@@ -446,6 +509,7 @@
         </asp:Panel>
     </AlternatingItemTemplate>
     <FooterTemplate>
+        </div>
     </FooterTemplate>
 </asp:Repeater>
 
