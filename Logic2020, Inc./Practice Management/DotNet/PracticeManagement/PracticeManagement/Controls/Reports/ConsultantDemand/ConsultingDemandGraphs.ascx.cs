@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Web.UI.DataVisualization.Charting;
 using System.Web.UI.WebControls;
+using AjaxControlToolkit;
 using PraticeManagement.Reports;
 
 
@@ -18,6 +19,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         public string PipeLineSkill = "Pipeline SkillSet Demand By Month";
 
         public LinkButton hlinkGraphs { get { return hlnkGraph; } }
+
+        public ModalPopupExtender ConsultantDetailPopup
+        {
+            get
+            {
+                return mpeDetailView;
+
+            }
+        }
 
         private PraticeManagement.Reports.ConsultingDemand_New HostingPage
         {
@@ -35,6 +45,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         protected void chartConsultnDemandPipeline_Click(object sender, ImageMapEventArgs e)
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
+
             ctrDetails.BtnExportPipeLineSelectedValue = postBackDetails[0].ToString();
 
             if (hlnkGraph.Text == PipeLineSkill)
@@ -46,27 +57,36 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 HostingPage.GraphType = ConsultingDemand_New.PipelineSkill;
             }
             lblMonth.Text = ctrDetails.BtnExportPipeLineSelectedValue;
-            lblCount.Text = string.Empty;
-            ctrDetails.PopulateData();
+            ctrDetails._hdIsGraphPage.Value = true.ToString();
+            ctrDetails.PopulateData(true);
+            lblCount.Text = HostingPage.RolesCount.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                lblCount.Text += lblCount.Text != "1" ? " Skills" : " Skill";
+            }
+            else if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
+            {
+                lblCount.Text += lblCount.Text != "1" ? " Titles " : " Title";
+            }
             mpeDetailView.Show();
         }
 
         protected void chartConsultngDemand_Click(object sender, ImageMapEventArgs e)
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
-
+            ctrDetails._hdIsGraphPage.Value = true.ToString();
             ctrDetails.BtnExportSelectedStartDate = Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString();
             ctrDetails.BtnExportSelectedEndDate = Utils.Calendar.MonthEndDate(Convert.ToDateTime(postBackDetails[0])).ToString();
-            lblMonth.Text = "Month :" + "" + Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString(Constants.Formatting.FullMonthYearFormat);
-            ctrDetails.PopulateData();
+            lblMonth.Text = "Month: " + "" + Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString(Constants.Formatting.FullMonthYearFormat);
+            ctrDetails.PopulateData(true);
             lblCount.Text = HostingPage.RolesCount.ToString();
-            if (lblCount.Text != "1")
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
             {
-                lblCount.Text += " Roles";
+                lblCount.Text += lblCount.Text != "1" ? " Titles" : " Title";
             }
-            else
+            else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
-                lblCount.Text += " Role";
+                lblCount.Text += lblCount.Text != "1" ? " Skills" : " Skill";
             }
             mpeDetailView.Show();
         }
@@ -101,6 +121,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 hlnkGraph.Visible = true;
                 if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
                 {
+                    hlnkGraph.Text = PipeLineSkill;
                     data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGrphsGroupsByTitle(HostingPage.StartDate.Value, HostingPage.EndDate.Value));
                 }
                 else if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
@@ -173,14 +194,14 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             else if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
             {
                 chartConsultnDemandPipeline.Titles.Add("PipeLine Title Demand by Month");
-                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + "-" + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
+                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.Month == HostingPage.EndDate.Value.Month ? HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) : HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + " - " + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
             else
             {
                 chartConsultnDemandPipeline.Titles.Add("PipeLine SkillSet Demand by Month");
-                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + "-" + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
+                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.Month == HostingPage.EndDate.Value.Month ? HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) : HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + " - " + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
