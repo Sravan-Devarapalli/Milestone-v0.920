@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using DataTransferObjects.Reports.ConsultingDemand;
+using PraticeManagement.Reports;
 
 namespace PraticeManagement.Controls.Reports.ConsultantDemand
 {
@@ -16,6 +16,56 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         private PraticeManagement.Reports.ConsultingDemand_New HostingPage
         {
             get { return ((PraticeManagement.Reports.ConsultingDemand_New)Page); }
+        }
+
+        private List<CollapsiblePanelExtender> CollapsiblePanelDateExtenderList
+        {
+            get;
+            set;
+        }
+
+        public HiddenField _hdIsGraphPage
+        {
+            get
+            {
+                return hdIsGraphPage;
+            }
+        }
+
+        private string sortColumn_Key = "sortColumn_Key";
+
+        private string sortOrder_Key = "sortOrder_Key";
+
+        public bool sortAscend
+        {
+            get
+            {
+                if (ViewState[sortOrder_Key] == null)
+                {
+                    ViewState[sortOrder_Key] = true;
+                }
+                return (bool)ViewState[sortOrder_Key];
+            }
+            set
+            {
+                ViewState[sortOrder_Key] = value;
+            }
+        }
+
+        public string sortColumn
+        {
+            get
+            {
+                if (ViewState[sortColumn_Key] == null)
+                {
+                    ViewState[sortColumn_Key] = "";
+                }
+                return (string)ViewState[sortColumn_Key];
+            }
+            set
+            {
+                ViewState[sortColumn_Key] = value;
+            }
         }
 
         public string BtnExportSelectedStartDate
@@ -45,11 +95,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             }
         }
 
-        public string HeaderTitle
-        {
-            get;
-            set;
-        }
 
         public DateTime StartDate
         {
@@ -89,46 +134,263 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
         }
 
+
+
+
+        private void showPopUP()
+        {
+            if (!string.IsNullOrEmpty(_hdIsGraphPage.Value) && _hdIsGraphPage.Value == true.ToString())
+            {
+                var hostingPage = (PraticeManagement.Reports.ConsultingDemand_New)Page;
+                hostingPage.GraphControl.ConsultantDetailPopup.Show();
+            }
+        }
+
+        protected void btnTitleOrSkill1_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
+            {
+                PopulateData(false, sortAscend ? Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            else
+            {
+                PopulateData(false, sortAscend ? Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            sortAscend = !sortAscend;
+
+        }
+
+        protected void btnTitleOrSkill2_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title : Constants.ConsultingDemandSortColumnNames.Skill + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill : Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnOpportunityNumber_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.OpportunityNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.OpportunityNumber + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.OpportunityNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Skill + "," + Constants.ConsultingDemandSortColumnNames.OpportunityNumber + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnProjectNumber_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectNumber + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectNumber + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnAccountName_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.AccountName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.AccountName + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.AccountName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.AccountName + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnProjectName_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectName + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectName + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnResourceStartDate_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ResourceStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ResourceStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ResourceStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ResourceStartDate + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnMonth_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnTitleSkill_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Skill + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnMonthOpportunityNumber_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.OpportunityNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.OpportunityNumber + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.OpportunityNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.OpportunityNumber + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnMonthProjectNumber_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectNumber + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectNumber + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnMonthAccountName_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.AccountName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.AccountName + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.AccountName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.AccountName + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnMonthProjectName_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectName + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectName + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnMonthResourceStartDate_Command(object sender, CommandEventArgs e)
+        {
+            showPopUP();
+            sortColumn = e.CommandArgument.ToString();
+            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ResourceStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ResourceStartDate + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            }
+            else
+            {
+                PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ResourceStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ResourceStartDate + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title);
+            }
+            sortAscend = !sortAscend;
+        }
+
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             List<ConsultantGroupbySkill> PopUpFilteredSkill = null;
             List<ConsultantGroupbyTitle> PopUpFilteredTitle = null;
             List<ConsultantGroupByMonth> PopUpFilteredByMonth = null;
-
             DataHelper.InsertExportActivityLogMessage(ConsultantDetailReportExport);
-
             StringBuilder sb = new StringBuilder();
-
-            sb.Append("Month: ");
+            sb.Append("Period: ");
+            sb.Append(HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+            sb.Append(" To ");
+            sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
             sb.Append("\t");
-            sb.Append(StartDate.ToString("MMMM yyyy"));
-            sb.Append("to ");
-            sb.Append("\t");
-            sb.Append(EndDate.ToString("MMMM yyyy"));
             sb.AppendLine();
             sb.AppendLine();
-            if (HostingPage.GraphType == "TransactionTitle")
+            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
             {
                 string titles = HostingPage.hdnTitlesProp;
-                PopUpFilteredTitle = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportByTitle(StartDate, EndDate, titles)).ToList();
+                PopUpFilteredTitle = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportByTitle(StartDate, EndDate, titles, "")).ToList();
             }
-            else if (HostingPage.GraphType == "TransactionSkill")
+            else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
                 string skills = HostingPage.hdnSkillsProp;
-                PopUpFilteredSkill = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportBySkill(StartDate, EndDate, skills)).ToList();
+                PopUpFilteredSkill = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportBySkill(StartDate, EndDate, skills, "")).ToList();
             }
-            else if (HostingPage.GraphType == "PipeLineTitle")
+            else if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
             {
-                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null)).ToList();
+                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null, "", true)).ToList();
             }
-            else if (HostingPage.GraphType == "PipeLineSkill")
+            else if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
             {
-                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue)).ToList();
+                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue, "", true)).ToList();
             }
-
             if ((PopUpFilteredTitle != null && PopUpFilteredTitle.Count > 0) || (PopUpFilteredSkill != null && PopUpFilteredSkill.Count > 0) || (PopUpFilteredByMonth != null && PopUpFilteredByMonth.Count > 0))
             {
-
                 sb.Append("Title ");
                 sb.Append("\t");
                 sb.Append("SkillSet ");
@@ -146,7 +408,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 sb.AppendLine();
 
                 //Data
-                if (HostingPage.GraphType == "TransactionTitle")
+                if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
                 {
                     foreach (var gbytitle in PopUpFilteredTitle)
                     {
@@ -164,13 +426,14 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.Append(detailsbyTitle.ProjectName);
                             sb.Append("\t");
-                            sb.Append(detailsbyTitle.ResourceStartDate);
+                            sb.Append(detailsbyTitle.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
                             sb.Append("\t");
                             sb.AppendLine();
                         }
+                        sb.AppendLine();
                     }
                 }
-                else if (HostingPage.GraphType == "TransactionSkill")
+                else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
                 {
                     foreach (var gbyskill in PopUpFilteredSkill)
                     {
@@ -188,10 +451,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.Append(detailsbySkill.ProjectName);
                             sb.Append("\t");
-                            sb.Append(detailsbySkill.ResourceStartDate);
+                            sb.Append(detailsbySkill.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
                             sb.Append("\t");
                             sb.AppendLine();
                         }
+                        sb.AppendLine();
                     }
                 }
                 else
@@ -212,10 +476,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.Append(pipeLineDet.ProjectName);
                             sb.Append("\t");
-                            sb.Append(pipeLineDet.ResourceStartDate);
+                            sb.Append(pipeLineDet.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
                             sb.Append("\t");
                             sb.AppendLine();
                         }
+                        sb.AppendLine();
                     }
                 }
             }
@@ -223,10 +488,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             {
                 sb.Append("This consultant does not have demand for the selected period.");
             }
-            var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantDemandDetail", StartDate.ToString("MM.dd.yyyy"), EndDate.ToString("MM.dd.yyyy"));
+            var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantDemandDetail", StartDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter), EndDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
             GridViewExportUtil.Export(filename, sb);
-
-
         }
 
         protected void repTitles_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -234,6 +497,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             if (e.Item.ItemType == ListItemType.Header)
             {
                 CollapsiblePanelDateExtenderClientIds = new List<string>();
+                CollapsiblePanelDateExtenderList = new List<CollapsiblePanelExtender>();
                 Label lblTitleSkill1 = (Label)e.Item.FindControl("lblTitleSkillFr");
                 Label lblTitleSkill2 = (Label)e.Item.FindControl("lblTitleSkillSc");
                 if (HostingPage.GraphType == "TransactionTitle")
@@ -243,6 +507,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 }
                 else if (HostingPage.GraphType == "TransactionSkill")
                 {
+
                     lblTitleSkill1.Text = "Skill Set";
                     lblTitleSkill2.Text = "Title";
                 }
@@ -270,14 +535,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 var cpeDate = e.Item.FindControl("cpeDetail") as CollapsiblePanelExtender;
                 cpeDate.BehaviorID = Guid.NewGuid().ToString();
                 CollapsiblePanelDateExtenderClientIds.Add(cpeDate.BehaviorID);
+                CollapsiblePanelDateExtenderList.Add(cpeDate);
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
                 hdncpeExtendersIds.Value = output;
-                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
-                hdnCollapsed.Value = "true";
+                //btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+                //hdnCollapsed.Value = "true";
             }
         }
 
@@ -324,6 +590,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             if (e.Item.ItemType == ListItemType.Header)
             {
                 CollapsiblePanelDateExtenderClientIds = new List<string>();
+                CollapsiblePanelDateExtenderList = new List<CollapsiblePanelExtender>();
                 Label lblheader = (Label)e.Item.FindControl("lblTilteOrSkillHeader");
                 lblheader.Text = HostingPage.GraphType == "PipeLineTitle" ? "Skill" : "Title";
             }
@@ -340,6 +607,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
                     cpeDetails.BehaviorID = Guid.NewGuid().ToString();
                     CollapsiblePanelDateExtenderClientIds.Add(cpeDetails.BehaviorID);
+                    CollapsiblePanelDateExtenderList.Add(cpeDetails);
                     repDetails.DataBind();
                 }
                 else
@@ -358,8 +626,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
                 hdncpeExtendersIds.Value = output;
-                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
-                hdnCollapsed.Value = "true";
             }
         }
 
@@ -391,26 +657,30 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 return string.Empty;
         }
 
-        public void PopulateData()
+        public void PopulateData(bool isFromGraph, string sortColumns = "")
         {
             if (HostingPage.GraphType == "TransactionTitle")
             {
                 List<ConsultantGroupbyTitle> data;
-                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportByTitle(StartDate, EndDate, HostingPage.hdnTitlesProp)).ToList();
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportByTitle(StartDate, EndDate, HostingPage.hdnTitlesProp, sortColumns)).ToList();
                 repTitles.Visible = true;
                 repByMonth.Visible = false;
                 repTitles.DataSource = data;
                 HostingPage.RolesCount = data.Count;
                 repTitles.DataBind();
+                sortColumn = isFromGraph ? "Title" : sortColumn;
+                sortAscend = isFromGraph ? true : sortAscend;
             }
             else if (HostingPage.GraphType == "TransactionSkill")
             {
                 List<ConsultantGroupbySkill> data;
-                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportBySkill(StartDate, EndDate, HostingPage.hdnSkillsProp)).ToList();
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandTransactionReportBySkill(StartDate, EndDate, HostingPage.hdnSkillsProp, sortColumns)).ToList();
                 repTitles.Visible = true;
                 repByMonth.Visible = false;
                 repTitles.DataSource = data;
                 HostingPage.RolesCount = data.Count;
+                sortColumn = isFromGraph ? "Skill" : sortColumn;
+                sortAscend = isFromGraph ? true : sortAscend;
                 repTitles.DataBind();
             }
             if (HostingPage.GraphType == "PipeLineTitle" || HostingPage.GraphType == "PipeLineSkill")
@@ -418,16 +688,31 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 List<ConsultantGroupByMonth> data;
                 if (HostingPage.GraphType == "PipeLineTitle")
                 {
-                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null)).ToList();
+                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null, sortColumns, true)).ToList();
                 }
                 else
                 {
-                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue)).ToList();
+                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue, sortColumns, true)).ToList();
                 }
+                sortColumn = isFromGraph ? "Month" : sortColumn;
+                sortAscend = isFromGraph ? true : sortAscend;
+                HostingPage.RolesCount = data.Count;
                 repByMonth.Visible = true;
                 repTitles.Visible = false;
                 repByMonth.DataSource = data;
                 repByMonth.DataBind();
+            }
+            if (!isFromGraph && hdnCollapsed.Value.ToLower() != "true")
+            {
+                foreach (var cpe in CollapsiblePanelDateExtenderList)
+                {
+                    cpe.Collapsed = false;
+                }
+            }
+            else if (isFromGraph)
+            {
+                hdnCollapsed.Value = "true";
+                btnExpandOrCollapseAll.Text = "Expand All";
             }
         }
 
