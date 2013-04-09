@@ -40,13 +40,13 @@ BEGIN
 	DECLARE @MonthStartDate DATETIME = DATEADD(D,-DAY(@StartDate)+1,@StartDate)
 	SELECT @OrderByCerteria  = ' ORDER BY ' + @OrderByCerteria 
 
-	DECLARE @Query NVARCHAR(4000) = ' FROM [dbo].[v_ConsultingDemand] CD ',
-			@GroupBy NVARCHAR(500) = ' GROUP BY ',
-			@Select NVARCHAR(500) = 'SELECT ',
-			@Where  NVARCHAR(500) = ' WHERE CD.ResourceStartDate BETWEEN @StartDate AND @EndDate'+
+	DECLARE @Query NVARCHAR(MAX) = ' FROM [dbo].[v_ConsultingDemand] CD ',
+			@GroupBy NVARCHAR(MAX) = ' GROUP BY ',
+			@Select NVARCHAR(MAX) = 'SELECT ',
+			@Where  NVARCHAR(MAX) = ' WHERE CD.ResourceStartDate BETWEEN @StartDate AND @EndDate'+
 									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(@Titles,',',''',''') + ''')'  ELSE '' END +
 									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(@Skills,',',''',''') + ''')' ELSE '' END ,
-			@Columns NVARCHAR(500) = ''
+			@Columns NVARCHAR(MAX) = ''
 
 	--1.Summary View
 	IF @IsSummary=1
