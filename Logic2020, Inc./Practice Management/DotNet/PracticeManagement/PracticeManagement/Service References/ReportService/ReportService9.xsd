@@ -29,6 +29,7 @@
       <xs:element minOccurs="0" name="Count" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectDescription" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
@@ -62,6 +63,7 @@
       <xs:element minOccurs="0" name="Count" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectDescription" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
@@ -97,6 +99,7 @@
       <xs:element minOccurs="0" name="Count" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectDescription" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
@@ -131,6 +134,7 @@
       <xs:element minOccurs="0" name="Count" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProjectDescription" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
