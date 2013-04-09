@@ -44,7 +44,7 @@ BEGIN
 	DECLARE @Query NVARCHAR(4000) = ' FROM [dbo].[v_ConsultingDemand] CD ',
 			@GroupBy NVARCHAR(500) = ' GROUP BY ',
 			@Select NVARCHAR(500) = 'SELECT ',
-			@Where  NVARCHAR(500) = ' WHERE CD.MonthStartDate BETWEEN @StartDate AND @EndDate'+
+			@Where  NVARCHAR(500) = ' WHERE CD.ResourceStartDate BETWEEN @StartDate AND @EndDate'+
 									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(@Titles,',',''',''') + ''')'  ELSE '' END +
 									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(@Skills,',',''',''') + ''')' ELSE '' END ,
 			@Columns NVARCHAR(500) = ''
@@ -65,10 +65,13 @@ BEGIN
 									GROUP BY B.Title,B.Skill
 								) D 
 								)CD
-								LEFT JOIN [dbo].[v_ConsultingDemand] A  ON A.MonthStartDate = CD.MonthStartDate AND A.Title = CD.Title AND A.Skill = CD.Skill'
+								LEFT JOIN [dbo].[v_ConsultingDemand] A  ON A.MonthStartDate = CD.MonthStartDate AND A.Title = CD.Title AND A.Skill = CD.Skill AND A.ResourceStartDate BETWEEN @StartDate AND @EndDate'
 
 		SELECT @GroupBy = @GroupBy + 'CD.MonthStartDate,CD.Title,CD.Skill',
-				@Select = @Select+ 'CD.MonthStartDate,CD.Title,CD.Skill,ISNULL(SUM(COUNT),0) AS [COUNT]'
+				@Select = @Select+ 'CD.MonthStartDate,CD.Title,CD.Skill,ISNULL(SUM(COUNT),0) AS [COUNT]',
+				@Where  = ' WHERE 1=1 '+
+									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(@Titles,',',''',''') + ''')'  ELSE '' END +
+									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(@Skills,',',''',''') + ''')' ELSE '' END 
 
 	END
 	--2.Details View 
