@@ -366,9 +366,9 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             DataHelper.InsertExportActivityLogMessage(ConsultantDetailReportExport);
             StringBuilder sb = new StringBuilder();
             sb.Append("Period: ");
-            sb.Append(HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+            sb.Append(StartDate.ToString(Constants.Formatting.EntryDateFormat));
             sb.Append(" To ");
-            sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+            sb.Append(EndDate.ToString(Constants.Formatting.EntryDateFormat));
             sb.Append("\t");
             sb.AppendLine();
             sb.AppendLine();
