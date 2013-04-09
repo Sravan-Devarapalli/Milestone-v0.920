@@ -96,7 +96,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             }
         }
 
-
         public DateTime StartDate
         {
             get
@@ -134,9 +133,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
             btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
         }
-
-
-
 
         private void showPopUP()
         {
@@ -564,7 +560,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                     ConsultantDemandDetailsByMonthByTitle consDetails = (ConsultantDemandDetailsByMonthByTitle)e.Item.DataItem;
                     hlOpportunityNumber.ToolTip = consDetails.ProjectDescription;
                     hlOpportunityNumber.Text = consDetails.OpportunityNumber;
-                    hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.ProjectId));
+                    hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.OpportunityId));
                     hlProjectNumber.Text = consDetails.ProjectNumber;
                     hlProjectNumber.ToolTip = consDetails.ProjectDescription;
                     hlProjectNumber.NavigateUrl = GetProjectDetailsLink((int?)(consDetails.ProjectId));
@@ -578,7 +574,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                     ConsultantDemandDetailsByMonthBySkill consDetails = (ConsultantDemandDetailsByMonthBySkill)e.Item.DataItem;
                     hlOpportunityNumber.ToolTip = consDetails.ProjectDescription;
                     hlOpportunityNumber.Text = consDetails.OpportunityNumber;
-                    hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.ProjectId));
+                    hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.OpportunityId));
                     hlProjectNumber.Text = consDetails.ProjectNumber;
                     hlProjectNumber.NavigateUrl = GetProjectDetailsLink((int?)(consDetails.ProjectId));
                     lblProjectName.Text = consDetails.ProjectName;
