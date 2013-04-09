@@ -43,7 +43,7 @@
                             <AjaxControlToolkit:PopupControlExtender ID="pceTitleFilter" runat="server" TargetControlID="imgTitleFilter"
                                 BehaviorID="pceTitleFilter" PopupControlID="pnlFilterTitle" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
-                            <img alt="Filter" src="../../../Images/Skill_2.png" runat="server" title="Skill"
+                            <img alt="Filter" src="../../../Images/Skill_2.png" runat="server" title="SkillSet"
                                 id="imgSkillFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceSkillFilter" runat="server" TargetControlID="imgSkillFilter"
                                 BehaviorID="pceSkillFilter" PopupControlID="pnlFilterSkill" Position="Bottom">
