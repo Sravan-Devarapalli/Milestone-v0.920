@@ -411,6 +411,7 @@
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -428,6 +429,8 @@
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isFromPipeLinePopUp" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -476,6 +479,7 @@
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -492,6 +496,7 @@
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
