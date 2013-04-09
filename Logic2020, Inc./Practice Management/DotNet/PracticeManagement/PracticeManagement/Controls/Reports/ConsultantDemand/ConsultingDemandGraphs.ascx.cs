@@ -140,20 +140,23 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             {
                 chartConsultngDemand.Width = ((count < 5) ? 5 : count) * 70;
                 chartConsultngDemand.Height = 500;
+                chartConsultnDemandPipeline.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
                 InitAxis(chartConsultngDemand.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
                 InitAxis(chartConsultngDemand.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Resources", true);
             }
             else
             {
+                chartConsultnDemandPipeline.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
                 chartConsultnDemandPipeline.Width = ((count < 5) ? 5 : count) * 120;
-                chartConsultnDemandPipeline.Height = 500;
                 InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisY, "Quantity", false, 0);
                 if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
                 {
+                    chartConsultnDemandPipeline.Height = count * 50 >= 500 ? count * 50 : 500;
                     InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisX, "Title", true);
                 }
                 else
                 {
+                    chartConsultnDemandPipeline.Height = count * 50 >= 500 ? count * 50 : 500;
                     InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisX, "Skill Set", true);
                 }
             }
