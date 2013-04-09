@@ -73,8 +73,8 @@
     </HeaderTemplate>
     <ItemTemplate>
         <table class="trConsultngDetailPanelItem">
-            <tr class="textLeft">
-                <th class="ProjectAccountName padLeft20Imp no-wrap">
+            <tr>
+                <th class="textLeft ProjectAccountName padLeft10Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -151,8 +151,8 @@
     </ItemTemplate>
     <AlternatingItemTemplate>
         <table class="trConsultngDetailPanelItem bgcolor_ECE9D9">
-            <tr class="textLeft">
-                <th class="ProjectAccountName padLeft10Imp no-wrap">
+            <tr>
+                <th class="textLeft ProjectAccountName padLeft10Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
