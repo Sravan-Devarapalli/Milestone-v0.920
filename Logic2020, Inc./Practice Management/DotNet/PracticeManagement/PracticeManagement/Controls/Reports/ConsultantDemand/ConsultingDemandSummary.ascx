@@ -38,12 +38,12 @@
                     <tr class="TimeperiodSummaryReportTr bgcolorwhite">
                         <th class="ResourceColum padLeft5Imp">
                             Title/SkillSet
-                            <img alt="Filter" src="../../../Images/Terminated.png" runat="server" title="Title"
+                            <img alt="Filter" src="../../../Images/Title.png" runat="server" title="Title"
                                 id="imgTitleFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceTitleFilter" runat="server" TargetControlID="imgTitleFilter"
                                 BehaviorID="pceTitleFilter" PopupControlID="pnlFilterTitle" Position="Bottom">
                             </AjaxControlToolkit:PopupControlExtender>
-                            <img alt="Filter" src="../../../Images/Terminated.png" runat="server" title="Skill"
+                            <img alt="Filter" src="../../../Images/Skill_2.png" runat="server" title="Skill"
                                 id="imgSkillFilter" />
                             <AjaxControlToolkit:PopupControlExtender ID="pceSkillFilter" runat="server" TargetControlID="imgSkillFilter"
                                 BehaviorID="pceSkillFilter" PopupControlID="pnlFilterSkill" Position="Bottom">
