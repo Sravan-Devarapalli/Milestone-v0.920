@@ -74,7 +74,7 @@
     <ItemTemplate>
         <table class="trConsultngDetailPanelItem">
             <tr class="textLeft">
-                <th class="padLeft10Imp">
+                <th class="ProjectAccountName padLeft20Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -83,16 +83,6 @@
                     <asp:Image ID="imgDate" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Date Details" />
                     <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                     <asp:Label ID="lblHeader" runat="server"></asp:Label>
-                </th>
-                <th>
-                </th>
-                <th>
-                </th>
-                <th>
-                </th>
-                <th>
-                </th>
-                <th>
                 </th>
                 <th>
                 </th>
@@ -162,7 +152,7 @@
     <AlternatingItemTemplate>
         <table class="trConsultngDetailPanelItem bgcolor_ECE9D9">
             <tr class="textLeft">
-                <th class="padLeft10Imp">
+                <th class="ProjectAccountName padLeft10Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -171,16 +161,6 @@
                     <asp:Image ID="imgDate" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Date Details" />
                     <asp:Label ID="lbDate" Style="display: none;" runat="server"></asp:Label>
                     <asp:Label ID="lblHeader" runat="server"></asp:Label>
-                </th>
-                <th>
-                </th>
-                <th>
-                </th>
-                <th>
-                </th>
-                <th>
-                </th>
-                <th>
                 </th>
                 <th>
                 </th>
@@ -336,12 +316,14 @@
                             </td>
                             <td class="ForthTD">
                                 <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
                                 </asp:HyperLink>
                             </td>
                             <td class="ForthTD">
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
                                 </asp:HyperLink>
                             </td>
                             <td class="FirstTD">
