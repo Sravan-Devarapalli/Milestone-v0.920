@@ -2113,6 +2113,10 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     ReadConsultantDemandDetailsByTitle(reader, result);
+                    if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count"))
+                    {
+                        result = sortColumns.ToLower().Contains("count desc") ? result.OrderByDescending(p => p.TotalCount).ToList() : result.OrderBy(p => p.TotalCount).ToList();
+                    }
                     return result;
                 }
             }
@@ -2545,6 +2549,9 @@ namespace DataAccess
                     result.Add(title, count);
                 }
             }
+            else {
+                result.Add(" ", 0);
+            }
         }
 
         public static Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(DateTime startDate, DateTime endDate)
@@ -2583,6 +2590,10 @@ namespace DataAccess
                     int count = reader.GetInt32(countIndex);
                     result.Add(skill, count);
                 }
+            }
+            else
+            {
+                result.Add(" ", 0);
             }
         }
 
