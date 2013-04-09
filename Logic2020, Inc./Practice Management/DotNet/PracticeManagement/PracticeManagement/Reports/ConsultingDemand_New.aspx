@@ -22,6 +22,10 @@
         type="text/javascript"></script>
     <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
         type="text/css" />
+         <script src="<%# Generic.GetClientUrl("~/Scripts/FilterTable.min.js", this) %>"
+        type="text/javascript"></script>
+    <script src='<%# Generic.GetClientUrl("~/Scripts/FilteredCheckBoxList.min.js", this) %>'
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
