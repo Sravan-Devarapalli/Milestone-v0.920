@@ -53,8 +53,8 @@
 		   CASE WHEN OP.NeedBy<cal.MonthStartDate THEN cal.MonthStartDate ELSE OP.NeedBy END ResourceStartDate,
 		   SUM(OP.Quantity)/MAX(CAl.DaysInMonth) as [Count]
 	FROM dbo.Opportunity O 
-	INNER JOIN Client C ON O.ClientId=C.ClientId AND (O.Priority='A' OR O.Priority='B')
-							AND O.ProjectId IS NULL 
+	INNER JOIN Client C ON O.ClientId=C.ClientId AND O.ProjectId IS NULL 
+	INNER JOIN dbo.OpportunityPriorities OPro ON OPro.Id = O.PriorityId AND (OPro.Priority='A' OR OPro.Priority='B')
 	INNER JOIN dbo.OpportunityPersons OP ON OP.RelationTypeId = 2 
 										AND OP.OpportunityId=O.OpportunityId 
 	INNER JOIN dbo.Person Per ON OP.PersonId=Per.PersonId
