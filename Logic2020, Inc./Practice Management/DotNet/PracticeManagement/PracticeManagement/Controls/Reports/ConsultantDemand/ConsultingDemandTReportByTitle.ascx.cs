@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using DataTransferObjects.Reports.ConsultingDemand;
 using PraticeManagement.Reports;
+using System.Linq;
 
 namespace PraticeManagement.Controls.Reports.ConsultantDemand
 {
@@ -561,9 +562,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 if (e.Item.DataItem.GetType() == typeof(ConsultantDemandDetailsByMonthByTitle))
                 {
                     ConsultantDemandDetailsByMonthByTitle consDetails = (ConsultantDemandDetailsByMonthByTitle)e.Item.DataItem;
+                    hlOpportunityNumber.ToolTip = consDetails.ProjectDescription;
                     hlOpportunityNumber.Text = consDetails.OpportunityNumber;
                     hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.ProjectId));
                     hlProjectNumber.Text = consDetails.ProjectNumber;
+                    hlProjectNumber.ToolTip = consDetails.ProjectDescription;
                     hlProjectNumber.NavigateUrl = GetProjectDetailsLink((int?)(consDetails.ProjectId));
                     lblProjectName.Text = consDetails.ProjectName;
                     lblAccountName.Text = consDetails.AccountName;
@@ -573,11 +576,13 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 else if (e.Item.DataItem.GetType() == typeof(ConsultantDemandDetailsByMonthBySkill))
                 {
                     ConsultantDemandDetailsByMonthBySkill consDetails = (ConsultantDemandDetailsByMonthBySkill)e.Item.DataItem;
+                    hlOpportunityNumber.ToolTip = consDetails.ProjectDescription;
                     hlOpportunityNumber.Text = consDetails.OpportunityNumber;
                     hlOpportunityNumber.NavigateUrl = GetOpportunityDetailsLink((int?)(consDetails.ProjectId));
                     hlProjectNumber.Text = consDetails.ProjectNumber;
                     hlProjectNumber.NavigateUrl = GetProjectDetailsLink((int?)(consDetails.ProjectId));
                     lblProjectName.Text = consDetails.ProjectName;
+                    hlProjectNumber.ToolTip = consDetails.ProjectDescription;
                     lblAccountName.Text = consDetails.AccountName;
                     lblRsrcStartDate.Text = consDetails.ResourceStartDate.ToString("MM/dd/yyyy");
                     lblTitleSkillItem.Text = consDetails.Title;
