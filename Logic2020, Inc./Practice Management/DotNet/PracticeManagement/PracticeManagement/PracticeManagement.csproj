@@ -466,10 +466,12 @@
     <Content Include="Images\search_24.png" />
     <Content Include="Images\search_filter.png" />
     <Content Include="Images\Sigma-9x10.png" />
+    <Content Include="Images\Skill_2.png" />
     <Content Include="Images\Strawman.png" />
     <Content Include="Images\StrawMan_Large.png" />
     <Content Include="Images\Team_Icon.jpg" />
     <Content Include="Images\Terminated.png" />
+    <Content Include="Images\Title.png" />
     <Content Include="Images\Zoom-In-icon.png" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="OpportunitySearch.aspx" />
