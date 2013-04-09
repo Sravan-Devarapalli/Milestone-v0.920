@@ -282,7 +282,7 @@ namespace PraticeManagement.Reports
             if (ddlGraphsTypes.SelectedValue == TransactionTitle)
             {
                 lblTitle.Text = "Title";
-                List<string> titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.LastName).Distinct().ToList();
+                List<string> titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).OrderBy(p => p.LastName).Select(p => p.LastName).Distinct().ToList();
                 DataHelper.FillListDefault(cblTitles, "All Titles", titles.Select(p => new { title = p }).ToArray(), false, "title", "title");
                 tdSkills.Visible = false;
                 tdTitles.Visible = true;
@@ -291,7 +291,7 @@ namespace PraticeManagement.Reports
             else if (ddlGraphsTypes.SelectedValue == TransactionSkill)
             {
                 lblTitle.Text = "Skill";
-                List<string> skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.FirstName).Distinct().ToList();
+                List<string> skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).OrderBy(p=>p.FirstName).Select(p => p.FirstName).Distinct().ToList();
                 DataHelper.FillListDefault(cblSkills, "All Skills", skills.Select(p => new { skill = p }).ToArray(), false, "skill", "skill");
                 tdSkills.Visible = true;
                 tdTitles.Visible = false;
