@@ -23,7 +23,8 @@ BEGIN
 		SELECT	@StartDate = ISNULL(CONVERT(DATE, @StartDate), '1900-01-01'),
 				@BonusHoursToCollect = ISNULL(@BonusHoursToCollect, @HoursPerYear),
 				@FutureDate = dbo.GetFutureDate()
-
+		SELECT @FirstName = LTRIM(RTRIM(@FirstName)),@LastName = LTRIM(RTRIM(@LastName))
+		
 		IF EXISTS (SELECT 1 FROM Person P
 					WHERE (
 							P.PersonId != @PersonId --edit strawman 
