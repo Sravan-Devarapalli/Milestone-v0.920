@@ -123,7 +123,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).Count%>
                             </td>
                         </tr>
@@ -153,7 +153,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).Count%>
                             </td>
                         </tr>
@@ -212,7 +212,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).Count%>
                             </td>
                         </tr>
@@ -242,7 +242,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="SecondTD">
+                            <td class="SecondTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetails)Container.DataItem).Count%>
                             </td>
                         </tr>
@@ -323,7 +323,7 @@
     <ItemTemplate>
         <table class="ConsultingDemandDetailsByMonth">
             <tr class="bgColorD4D0C9 textLeft">
-                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap">
+                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap Width70Per">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
                         ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
@@ -334,7 +334,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
                 </td>
-                <td class="ThirdTD" id="tdTitleSkill" runat="server">
+                <td class="SecondTD" id="tdTitleSkill" runat="server">
                 </td>
                 <td class="ConsultingDemandDetailsTotal">
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).TotalCount%>
@@ -371,7 +371,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="ThirdTD">
+                            <td class="ThirdTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Count%>
                             </td>
                         </tr>
@@ -405,7 +405,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="ThirdTD">
+                            <td class="ThirdTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Count%>
                             </td>
                         </tr>
@@ -417,7 +417,7 @@
     <AlternatingItemTemplate>
         <table class="ConsultingDemandDetailsByMonth">
             <tr class="bgcolor_ECE9D9 textLeft">
-                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap">
+                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap Width70Per">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
                         ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
@@ -428,7 +428,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
                 </td>
-                <td class="ThirdTD" id="tdTitleSkill" runat="server">
+                <td class="SecondTD" id="tdTitleSkill" runat="server">
                 </td>
                 <td class="ConsultingDemandDetailsTotal">
                     <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).TotalCount%>
@@ -465,7 +465,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="ThirdTD">
+                            <td class="ThirdTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Count%>
                             </td>
                         </tr>
@@ -499,7 +499,7 @@
                             <td class="ThirdTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
-                            <td class="ThirdTD">
+                            <td class="ThirdTDTotals">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).Count%>
                             </td>
                         </tr>
