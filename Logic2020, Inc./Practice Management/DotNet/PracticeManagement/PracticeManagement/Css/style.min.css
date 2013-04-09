@@ -1427,11 +1427,13 @@ table#ctl00_body_login tr td label{float:left}
 .ConsultingDemandDetails .FirstTD{padding-left:70px;text-align:left!important;width:25%}
 .ConsultingDemandDetails .SecondTD{width:10%;text-align:center}
 .ConsultingDemandDetails .ThirdTD{width:15%;text-align:center}
-.ConsultingDemandDetailsTotal{font-weight:bolder;font-size:15px;width:10%;text-align:right;padding-right:45px}
+.ConsultingDemandDetails .SecondTDTotals{width:15%;text-align:left;padding-left:45px}
+.ConsultingDemandDetailsTotal{font-weight:bolder;font-size:15px;width:10%;text-align:center}
 .ConsultingDemandDetails .headerRow,.ConsultingDemandDetailsByMonth .headerRow{background-color:White;background-image:none;background-repeat:no-repeat;cursor:pointer;height:auto;position:static;border-bottom:1px solid #000;font-size:14px;font-weight:700;padding:2px;text-align:center;vertical-align:middle}
 .ConsultingDemandDetailsByMonth .FirstTD{width:10%;text-align:center}
 .ConsultingDemandDetailsByMonth .SecondTD{width:20%;text-align:center}
 .ConsultingDemandDetailsByMonth .ThirdTD{width:10%;text-align:center}
+.ConsultingDemandDetailsByMonth .ThirdTDTotals{width:10%;text-align:left;padding-left:50px}
 .ConsultingDemandDetailsByMonth .ForthTD{width:15%;text-align:center}
 .trConsultngDetailPanel tr,.trConsultngDetailPanelInnerItem{background-color:white;height:30px;white-space:nowrap;width:100%}
 .trConsultngDetailPanel th{font-size:14px;text-align:center;white-space:nowrap;width:13.33%}
