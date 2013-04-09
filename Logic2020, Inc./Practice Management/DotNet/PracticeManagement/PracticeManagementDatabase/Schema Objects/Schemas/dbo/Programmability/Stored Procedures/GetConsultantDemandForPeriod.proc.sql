@@ -36,9 +36,8 @@ CREATE PROCEDURE dbo.GetConsultantDemandForPeriod
 )
 AS
 BEGIN
-
+	DECLARE @MonthStartDate DATETIME = DATEADD(D,-DAY(@StartDate)+1,@StartDate)
 	SELECT @StartDate = CONVERT(DATE,@StartDate),@EndDate = CONVERT(DATE,@EndDate)
-	SELECT @StartDate = DATEADD(D,-DAY(@StartDate)+1,@StartDate)
 	SELECT @OrderByCerteria  = ' ORDER BY ' + @OrderByCerteria 
 
 	DECLARE @Query NVARCHAR(4000) = ' FROM [dbo].[v_ConsultingDemand] CD ',
@@ -52,16 +51,15 @@ BEGIN
 	--1.Summary View
 	IF @IsSummary=1
 	BEGIN
-
 		SELECT @Query = 'FROM 
 								(SELECT C.MonthStartDate,D.Title,D.Skill
 								FROM 
-								(SELECT C.MonthStartDate FROM dbo.Calendar C WHERE C.Date BETWEEN @StartDate AND @EndDate GROUP BY C.MonthStartDate) C
+								(SELECT C.MonthStartDate FROM dbo.Calendar C WHERE C.Date BETWEEN @MonthStartDate AND @EndDate GROUP BY C.MonthStartDate) C
 								CROSS JOIN
 								(
 									SELECT B.Title,B.Skill
 									FROM [dbo].[v_ConsultingDemand] B  
-									WHERE B.MonthStartDate BETWEEN @StartDate AND @EndDate 
+									WHERE B.MonthStartDate BETWEEN @MonthStartDate AND @EndDate  AND B.ResourceStartDate BETWEEN @StartDate AND @EndDate
 									GROUP BY B.Title,B.Skill
 								) D 
 								)CD
@@ -123,7 +121,7 @@ BEGIN
 	SELECT @Query = @Select + @Query + @Where + @GroupBy + @OrderByCerteria
 
 	--Print @Query
-	EXEC sp_executeSql  @Query,N'@StartDate DATETIME,@EndDate DATETIME',@StartDate=@StartDate,@EndDate=@EndDate
+	EXEC sp_executeSql  @Query,N'@StartDate DATETIME,@EndDate DATETIME,@MonthStartDate DATETIME',@StartDate=@StartDate,@EndDate=@EndDate,@MonthStartDate = @MonthStartDate
 
 END
 
