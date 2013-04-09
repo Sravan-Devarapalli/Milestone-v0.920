@@ -36,8 +36,8 @@ CREATE PROCEDURE dbo.GetConsultantDemandForPeriod
 )
 AS
 BEGIN
-	DECLARE @MonthStartDate DATETIME = DATEADD(D,-DAY(@StartDate)+1,@StartDate)
 	SELECT @StartDate = CONVERT(DATE,@StartDate),@EndDate = CONVERT(DATE,@EndDate)
+	DECLARE @MonthStartDate DATETIME = DATEADD(D,-DAY(@StartDate)+1,@StartDate)
 	SELECT @OrderByCerteria  = ' ORDER BY ' + @OrderByCerteria 
 
 	DECLARE @Query NVARCHAR(4000) = ' FROM [dbo].[v_ConsultingDemand] CD ',
