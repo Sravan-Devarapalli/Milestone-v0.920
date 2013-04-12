@@ -237,8 +237,8 @@ namespace PraticeManagement.Utils
             if(startDate <= endDate)
             {
                 while (startDate <= endDate)
-                { 
-                    result.Add(startDate.ToString("MMMM-yyyy"));
+                {
+                    result.Add(startDate.ToString(Constants.Formatting.FullMonthYearFormat));
                     startDate = startDate.AddMonths(1);
                 }
             }
