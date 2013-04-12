@@ -74,7 +74,7 @@
     <ItemTemplate>
         <table class="trConsultngDetailPanelItem">
             <tr>
-                <th class="textLeft ProjectAccountName padLeft10Imp no-wrap">
+                <th class="textLeft padLeft10Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -152,7 +152,7 @@
     <AlternatingItemTemplate>
         <table class="trConsultngDetailPanelItem bgcolor_ECE9D9">
             <tr>
-                <th class="textLeft ProjectAccountName padLeft10Imp no-wrap">
+                <th class="textLeft padLeft10Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetail" runat="Server" CollapsedText="Expand Title Details"
                         ExpandedText="Collapse Title Details" EnableViewState="true" BehaviorID="cpeDetail"
                         Collapsed="true" TargetControlID="pnlTitleDetails" ImageControlID="imgDate" CollapsedImage="~/Images/expand.jpg"
@@ -240,7 +240,7 @@
                         <th class="ForthTD">
                             <asp:LinkButton ID="btnMonth" runat="server" CausesValidation="false" CommandArgument="Month"
                                 Style="text-decoration: none; color: Black;" OnCommand="btnMonth_Command">
-                        Month-Year
+                        Month Year
                             </asp:LinkButton>
                         </th>
                         <th class="FirstTD">
@@ -291,7 +291,7 @@
     <ItemTemplate>
         <table class="ConsultingDemandDetailsByMonth">
             <tr class="bgColorD4D0C9 textLeft">
-                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap">
+                <td colspan="7" class="padLeft20Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
                         ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
@@ -300,7 +300,7 @@
                     <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Month Details" />
                     <asp:Label ID="lbMonth" Style="display: none;" runat="server"></asp:Label>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
+                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString(PraticeManagement.Constants.Formatting.FullMonthYearFormat)%>
                 </td>
             </tr>
         </table>
@@ -374,7 +374,7 @@
     <AlternatingItemTemplate>
         <table class="ConsultingDemandDetailsByMonth">
             <tr class="bgcolor_ECE9D9 textLeft">
-                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap">
+                <td colspan="7" class="padLeft20Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
                         ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
@@ -383,7 +383,7 @@
                     <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Month Details" />
                     <asp:Label ID="lbMonth" Style="display: none;" runat="server"></asp:Label>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
+                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString(PraticeManagement.Constants.Formatting.FullMonthYearFormat)%>
                 </td>
             </tr>
         </table>
