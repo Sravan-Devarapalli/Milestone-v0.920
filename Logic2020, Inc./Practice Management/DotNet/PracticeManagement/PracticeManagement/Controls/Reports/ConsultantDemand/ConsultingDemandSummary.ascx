@@ -78,7 +78,7 @@
     <ItemTemplate>
         <tr class="bgcolorwhite">
             <td>
-                <table class="TdLevelNoBorder ResourceColumTable">
+                <table class="TdLevelNoBorder StrawmanColumTable">
                     <tr>
                         <td>
                             <asp:LinkButton runat="server" ID="lnkConsultant" Text='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).TitleSkill %>'
@@ -88,7 +88,7 @@
                                 OnClick="lnkConsultant_OnClick"></asp:LinkButton>
                         </td>
                         <td>
-                            <img id="imgZoomIn" runat="server" src="~/Images/Zoom-In-icon.png" style="visibility: hidden;" />
+                          
                         </td>
                     </tr>
                 </table>
@@ -108,7 +108,7 @@
     <AlternatingItemTemplate>
         <tr class="alterrow">
             <td>
-                <table class="TdLevelNoBorder ResourceColumTable">
+                <table class="TdLevelNoBorder StrawmanColumTable">
                     <tr>
                         <td>
                             <asp:LinkButton runat="server" ID="lnkConsultant" Text='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).TitleSkill %>'
@@ -118,7 +118,7 @@
                                 OnClick="lnkConsultant_OnClick"></asp:LinkButton>
                         </td>
                         <td>
-                            <img id="imgZoomIn" runat="server" src="~/Images/Zoom-In-icon.png" style="visibility: hidden;" />
+                           
                         </td>
                     </tr>
                 </table>
@@ -156,7 +156,7 @@
             <td class="Width99Percent">
                 <table class="WholeWidthWithHeight GroupByProjectHeaderTable">
                     <tr class="textleft">
-                        <td class="ProjectAccountName FirstTd">
+                        <td class="ProjectAccountName FirstTd width77PImp">
                             <asp:Label ID="lblConsultant" runat="server"></asp:Label>
                         </td>
                         <td class="SecondTd">
