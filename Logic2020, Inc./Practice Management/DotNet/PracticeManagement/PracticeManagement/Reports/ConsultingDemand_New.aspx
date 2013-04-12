@@ -22,8 +22,7 @@
         type="text/javascript"></script>
     <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
         type="text/css" />
-         <script src="<%# Generic.GetClientUrl("~/Scripts/FilterTable.min.js", this) %>"
-        type="text/javascript"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/FilterTable.min.js", this) %>" type="text/javascript"></script>
     <script src='<%# Generic.GetClientUrl("~/Scripts/FilteredCheckBoxList.min.js", this) %>'
         type="text/javascript"></script>
 </asp:Content>
@@ -229,8 +228,8 @@
                                                 </td>
                                                 <td>
                                                     <asp:CustomValidator ID="cstvalPeriodRange" runat="server" OnServerValidate="cstvalPeriodRange_ServerValidate"
-                                                        ValidationGroup="valCustom" Text="*" EnableClientScript="true" ToolTip="Period should not be more than 4 months"
-                                                        ErrorMessage="Period should not be more than 4 months." Display="Dynamic"></asp:CustomValidator>
+                                                        ValidationGroup="valCustom" Text="*" EnableClientScript="true" ToolTip="The time period selected cannot be greater than 4 months."
+                                                        ErrorMessage="The time period selected cannot be greater than 4 months." Display="Dynamic"></asp:CustomValidator>
                                                 </td>
                                             </tr>
                                         </table>
@@ -238,9 +237,8 @@
                                 </tr>
                                 <tr>
                                     <td class="textCenter">
-                                        <asp:ValidationSummary ID="valSum" runat="server" DisplayMode="BulletList" ValidationGroup="valCustom"
-                                            CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false" ShowSummary="true"
-                                            EnableClientScript="false" />
+                                        <asp:ValidationSummary ID="valSum" runat="server" ValidationGroup="valCustom" ShowMessageBox="false"
+                                            ShowSummary="true" EnableClientScript="false" />
                                     </td>
                                 </tr>
                                 <tr>
