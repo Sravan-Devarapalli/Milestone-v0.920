@@ -6,7 +6,7 @@
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <div class="TextAlignLeft Padding15Px">
-                <asp:LinkButton runat="server" Text="Pipeline SkillSet Demand By Month" ID="hlnkGraph"
+                <asp:LinkButton runat="server" Text="Skill Set Demand By Month" ID="hlnkGraph"
                     EnableViewState="true" Visible="false" OnClick="hlnkGraph_Click"></asp:LinkButton>
             </div>
             <div class="ConsultingDemandchartDiv">
