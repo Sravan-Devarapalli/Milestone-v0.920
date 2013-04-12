@@ -1275,6 +1275,12 @@
         }
 
         #endregion
+
+        public static class Formatting
+        {
+            public const string FullMonthYearFormat = "MMMM yyyy";
+            public const string MonthYearFormat = "MMM yy";
+        }
     }
 }
 
