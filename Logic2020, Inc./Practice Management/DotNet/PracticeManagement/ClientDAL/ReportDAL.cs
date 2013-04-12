@@ -2085,7 +2085,7 @@ namespace DataAccess
                         consultant.MonthCount = new Dictionary<string, int>();
                         result.Add(consultant);
                     }
-                    string month = reader.GetDateTime(monthStartDateIndex).ToString("MMMM-yyyy");
+                    string month = reader.GetDateTime(monthStartDateIndex).ToString(Constants.Formatting.FullMonthYearFormat);
                     consultant.MonthCount[month] = reader.GetInt32(countIndex);
 
                 }
@@ -2113,7 +2113,7 @@ namespace DataAccess
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     ReadConsultantDemandDetailsByTitle(reader, result);
-                    if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count"))
+                    if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count") && !sortColumns.ToLower().Contains("account"))
                     {
                         result = sortColumns.ToLower().Contains("count desc") ? result.OrderByDescending(p => p.TotalCount).ToList() : result.OrderBy(p => p.TotalCount).ToList();
                     }
@@ -2172,7 +2172,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns,bool isFromPipelinePopUp)
+        public static List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns, bool isFromPipelinePopUp)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2200,11 +2200,12 @@ namespace DataAccess
                         {
                             ConsultantGroupByMonth res = new ConsultantGroupByMonth();
                             res.MonthStartDate = month;
-                            res.ConsultantDetailsByMonth = new List<ConsultantDemandDetailsByMonth>(); 
+                            res.ConsultantDetailsByMonth = new List<ConsultantDemandDetailsByMonth>();
                             result.Add(res);
                         }
                     }
-                    if (!string.IsNullOrEmpty(sortColumns)&&sortColumns.ToLower().Contains("count"))
+                    result = !string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("desc") ? result.OrderByDescending(r => r.MonthStartDate).ToList() : result.OrderBy(r => r.MonthStartDate).ToList();
+                    if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count") && !sortColumns.ToLower().Contains("account"))
                     {
                         result = sortColumns.ToLower().Contains("count desc") ? result.OrderByDescending(p => p.TotalCount).ToList() : result.OrderBy(p => p.TotalCount).ToList();
                     }
@@ -2213,7 +2214,7 @@ namespace DataAccess
             }
         }
 
-        private static void ReadConsultantDemandDetailsByMonth(SqlDataReader reader, List<ConsultantGroupByMonth> result,bool isFromPipelinePopUp)
+        private static void ReadConsultantDemandDetailsByMonth(SqlDataReader reader, List<ConsultantGroupByMonth> result, bool isFromPipelinePopUp)
         {
             if (reader.HasRows)
             {
@@ -2294,7 +2295,7 @@ namespace DataAccess
                 List<DateTime> months = Utils.GetMonthYearWithInThePeriod(startDate, endDate);
                 foreach (DateTime monthStartDate in months)
                 {
-                    result.Add(monthStartDate.ToString("MMMM-yyyy"), 0);
+                    result.Add(monthStartDate.ToString(Constants.Formatting.MonthYearFormat), 0);
                 }
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -2313,7 +2314,7 @@ namespace DataAccess
                 int countIndex = reader.GetOrdinal(Constants.ColumnNames.Count);
                 while (reader.Read())
                 {
-                    string month = reader.GetDateTime(monthStartDateIndex).ToString("MMMM-yyyy");
+                    string month = reader.GetDateTime(monthStartDateIndex).ToString(Constants.Formatting.MonthYearFormat);
                     int count = reader.GetInt32(countIndex);
                     if (result.ContainsKey(month))
                     {
@@ -2347,7 +2348,7 @@ namespace DataAccess
                 List<DateTime> months = Utils.GetMonthYearWithInThePeriod(startDate, endDate);
                 foreach (DateTime monthStartDate in months)
                 {
-                    result.Add(monthStartDate.ToString("MMMM-yyyy"), 0);
+                    result.Add(monthStartDate.ToString(Constants.Formatting.MonthYearFormat), 0);
                 }
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -2549,7 +2550,8 @@ namespace DataAccess
                     result.Add(title, count);
                 }
             }
-            else {
+            else
+            {
                 result.Add(" ", 0);
             }
         }
