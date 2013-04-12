@@ -59,11 +59,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 ConsultantGroupbyTitleSkill dataItem = (ConsultantGroupbyTitleSkill)e.Item.DataItem;
                 repMonthDemandCounts.DataSource = dataItem.MonthCount.Values.ToList();
                 repMonthDemandCounts.DataBind();
-
-                var lnkConsultant = e.Item.FindControl("lnkConsultant") as LinkButton;
-                var imgZoomIn = e.Item.FindControl("imgZoomIn") as HtmlImage;
-                lnkConsultant.Attributes["onmouseover"] = string.Format("document.getElementById(\'{0}\').style.visibility='visible';", imgZoomIn.ClientID);
-                lnkConsultant.Attributes["onmouseout"] = string.Format("document.getElementById(\'{0}\').style.visibility='hidden';", imgZoomIn.ClientID);
             }
         }
 
@@ -86,13 +81,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             ConsultantDetailReport._hdTitle.Value = lnkConsultant.Attributes["Title"];
             ConsultantDetailReport.groupBy = "month";
             ConsultantDetailReport._hdIsSummaryPage.Value = true.ToString();
+            ConsultantDetailReport.Collapsed = true.ToString();
             ConsultantDetailReport.PopulateData(false);
             lblConsultant.Text = ConsultantDetailReport._hdTitle.Value + "," + ConsultantDetailReport._hdSkill.Value;
-            lblTotalCount.Text = ConsultantDetailReport.GrandTotal.ToString();
-
+            lblTotalCount.Text = "Total: "+ConsultantDetailReport.GrandTotal.ToString();
             mpeConsultantDetailReport.Show();
-
-
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
@@ -142,17 +135,20 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                         sb.Append("\t");
                         for (int item2 = 0; item2 < item.ConsultantDetails.Count; item2++)
                         {
-                            sb.Append(item.ConsultantDetails[item2].OpportunityNumber);
-                            sb.Append("\t");
-                            sb.Append(item.ConsultantDetails[item2].ProjectNumber);
-                            sb.Append("\t");
-                            sb.Append(item.ConsultantDetails[item2].AccountName);
-                            sb.Append("\t");
-                            sb.Append(item.ConsultantDetails[item2].ProjectName);
-                            sb.Append("\t");
-                            sb.Append(item.ConsultantDetails[item2].ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
-                            sb.Append("\t");
-                            sb.AppendLine();
+                            for (int i = 0; i < item.ConsultantDetails[item2].Count; i++)
+                            {
+                                sb.Append(item.ConsultantDetails[item2].OpportunityNumber);
+                                sb.Append("\t");
+                                sb.Append(item.ConsultantDetails[item2].ProjectNumber);
+                                sb.Append("\t");
+                                sb.Append(item.ConsultantDetails[item2].AccountName);
+                                sb.Append("\t");
+                                sb.Append(item.ConsultantDetails[item2].ProjectName);
+                                sb.Append("\t");
+                                sb.Append(item.ConsultantDetails[item2].ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
+                                sb.Append("\t");
+                                sb.AppendLine();
+                            }
                             if (item.ConsultantDetails.Count - 1 != item2)
                             {
                                 sb.Append(item.Title);
@@ -161,7 +157,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                                 sb.Append("\t");
                             }
                         }
-                        sb.AppendLine();
                     }
 
                 }
