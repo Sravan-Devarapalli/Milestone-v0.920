@@ -2204,7 +2204,10 @@ namespace DataAccess
                             result.Add(res);
                         }
                     }
-                    result = !string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("desc") ? result.OrderByDescending(r => r.MonthStartDate).ToList() : result.OrderBy(r => r.MonthStartDate).ToList();
+                    if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().IndexOf(Constants.ColumnNames.MonthStartDate.ToLower()) == 0)
+                    {
+                        result = sortColumns.ToLower().Contains("desc") ? result.OrderByDescending(r => r.MonthStartDate).ToList() : result.OrderBy(r => r.MonthStartDate).ToList();
+                    }
                     if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count") && !sortColumns.ToLower().Contains("account"))
                     {
                         result = sortColumns.ToLower().Contains("count desc") ? result.OrderByDescending(p => p.TotalCount).ToList() : result.OrderBy(p => p.TotalCount).ToList();
