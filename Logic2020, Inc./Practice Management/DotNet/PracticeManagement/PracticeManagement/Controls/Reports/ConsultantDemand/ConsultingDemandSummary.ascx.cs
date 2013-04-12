@@ -111,7 +111,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                     //Header
                     sb.Append("Title");
                     sb.Append("\t");
-                    sb.Append("SkillSet");
+                    sb.Append("Skill Set");
                     sb.Append("\t");
                     sb.Append("Opportunity Number");
                     sb.Append("\t");
@@ -129,14 +129,14 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                     //Data
                     foreach (var item in ConsultantSummaryReportExportList)
                     {
-                        sb.Append(item.Title);
-                        sb.Append("\t");
-                        sb.Append(item.Skill);
-                        sb.Append("\t");
                         for (int item2 = 0; item2 < item.ConsultantDetails.Count; item2++)
                         {
                             for (int i = 0; i < item.ConsultantDetails[item2].Count; i++)
                             {
+                                sb.Append(item.Title);
+                                sb.Append("\t");
+                                sb.Append(item.Skill);
+                                sb.Append("\t");
                                 sb.Append(item.ConsultantDetails[item2].OpportunityNumber);
                                 sb.Append("\t");
                                 sb.Append(item.ConsultantDetails[item2].ProjectNumber);
@@ -148,13 +148,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                                 sb.Append(item.ConsultantDetails[item2].ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
                                 sb.Append("\t");
                                 sb.AppendLine();
-                            }
-                            if (item.ConsultantDetails.Count - 1 != item2)
-                            {
-                                sb.Append(item.Title);
-                                sb.Append("\t");
-                                sb.Append(item.Skill);
-                                sb.Append("\t");
                             }
                         }
                     }
