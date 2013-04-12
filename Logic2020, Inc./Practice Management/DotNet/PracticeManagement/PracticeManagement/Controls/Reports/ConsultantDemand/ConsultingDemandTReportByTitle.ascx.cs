@@ -427,7 +427,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.AppendLine();
                         }
-                        sb.AppendLine();
                     }
                 }
                 else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
@@ -452,7 +451,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.AppendLine();
                         }
-                        sb.AppendLine();
                     }
                 }
                 else
@@ -477,7 +475,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.AppendLine();
                         }
-                        sb.AppendLine();
                     }
                 }
             }
@@ -667,7 +664,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 repTitles.Visible = true;
                 repByMonth.Visible = false;
                 repTitles.DataSource = data;
-                HostingPage.RolesCount = data.Count;
+                HostingPage.RolesCount = data.Sum(p=>p.ConsultantDetails.Count);
                 repTitles.DataBind();
                 sortColumn = isFromGraph ? "Title" : sortColumn;
                 sortAscend = isFromGraph ? true : sortAscend;
@@ -679,7 +676,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 repTitles.Visible = true;
                 repByMonth.Visible = false;
                 repTitles.DataSource = data;
-                HostingPage.RolesCount = data.Count;
+                HostingPage.RolesCount = data.Sum(p => p.ConsultantDetails.Count);
                 sortColumn = isFromGraph ? "Skill" : sortColumn;
                 sortAscend = isFromGraph ? true : sortAscend;
                 repTitles.DataBind();
@@ -697,7 +694,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 }
                 sortColumn = isFromGraph ? "Month" : sortColumn;
                 sortAscend = isFromGraph ? true : sortAscend;
-                HostingPage.RolesCount = data.Count;
+                HostingPage.RolesCount = data.Sum(p => p.ConsultantDetailsByMonth.Count);
                 repByMonth.Visible = true;
                 repTitles.Visible = false;
                 repByMonth.DataSource = data;
