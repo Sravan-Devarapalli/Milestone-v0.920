@@ -14,9 +14,9 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
     {
         private const string MAIN_CHART_AREA_NAME = "MainArea";
 
-        public string PipeLineTitle = "Pipeline Title Demand By Month";
+        public string PipeLineTitle = "Title Demand By Month";
 
-        public string PipeLineSkill = "Pipeline SkillSet Demand By Month";
+        public string PipeLineSkill = "Skill Set Demand By Month";
 
         public LinkButton hlinkGraphs { get { return hlnkGraph; } }
 
@@ -60,14 +60,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             ctrDetails._hdIsGraphPage.Value = true.ToString();
             ctrDetails.PopulateData(true);
             lblCount.Text = HostingPage.RolesCount.ToString();
-            if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
-            {
-                lblCount.Text += lblCount.Text != "1" ? " Skills" : " Skill";
-            }
-            else if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
-            {
-                lblCount.Text += lblCount.Text != "1" ? " Titles " : " Title";
-            }
+            lblCount.Text += lblCount.Text != "1" ? " Roles" : " Role";
             mpeDetailView.Show();
         }
 
@@ -82,14 +75,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             lblMonth.Text = "Month: " + "" + Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString(Constants.Formatting.FullMonthYearFormat);
             ctrDetails.PopulateData(true);
             lblCount.Text = HostingPage.RolesCount.ToString();
-            if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
-            {
-                lblCount.Text += lblCount.Text != "1" ? " Titles" : " Title";
-            }
-            else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
-            {
-                lblCount.Text += lblCount.Text != "1" ? " Skills" : " Skill";
-            }
+            lblCount.Text += lblCount.Text != "1" ? " Roles" : " Role";
             mpeDetailView.Show();
         }
 
@@ -177,7 +163,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
             {
                 multipleSelected = HostingPage.hdnTitlesProp.Where(t => t == ',').Count();
-                chartConsultngDemand.Titles.Add("Resource Demand By Titles");
+                chartConsultngDemand.Titles.Add("Resource Demand By Title");
                 Title title = new Title();
                 title.Text = HostingPage.isSelectAllTitles ? "All Titles" : (multipleSelected > 1 ? "Multiple Titles Selected" : HostingPage.hdnTitlesProp.TrimEnd(','));
                 title.ToolTip = HostingPage.isSelectAllTitles ? "All Titles" : HostingPage.hdnTitlesProp.TrimEnd(',');
@@ -188,7 +174,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
                 multipleSelected = HostingPage.hdnSkillsProp.Where(s => s == ',').Count();
-                chartConsultngDemand.Titles.Add("Resource Demand By Skills");
+                chartConsultngDemand.Titles.Add("Resource Demand By Skill");
                 Title title = new Title();
                 title.Text = HostingPage.isSelectAllSkills ? "All Skills" : (multipleSelected > 1 ? "Multiple Skills Selected" : HostingPage.hdnSkillsProp.TrimEnd(','));
                 title.ToolTip = HostingPage.isSelectAllSkills ? "All Skills" : HostingPage.hdnSkillsProp.TrimEnd(',');
@@ -196,16 +182,9 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultngDemand.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultngDemand.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
-            else if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
-            {
-                chartConsultnDemandPipeline.Titles.Add("PipeLine Title Demand by Month");
-                chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.Month == HostingPage.EndDate.Value.Month ? HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) : HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + " - " + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
-                chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
-                chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
-            }
             else
             {
-                chartConsultnDemandPipeline.Titles.Add("PipeLine SkillSet Demand by Month");
+                chartConsultnDemandPipeline.Titles.Add("PipeLine Demand by Month");
                 chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.Month == HostingPage.EndDate.Value.Month ? HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) : HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + " - " + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
@@ -221,7 +200,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             if (!isVertical)
                 horizAxis.Interval = 1;
             horizAxis.TextOrientation = isVertical ? TextOrientation.Rotated270 : TextOrientation.Horizontal;
-            horizAxis.LabelStyle.Angle = labelAngle != -1 ? labelAngle : isVertical ? 0 : 45;
+            //  horizAxis.LabelStyle.Angle = labelAngle != -1 ? labelAngle : isVertical ? 0 : 45;
+		horizAxis.LabelStyle.Font = new Font("Arial", 10f);
             horizAxis.TitleFont = new System.Drawing.Font("Arial", 14, FontStyle.Bold);
             horizAxis.ArrowStyle = AxisArrowStyle.None;
             horizAxis.MajorGrid.Enabled = false;
