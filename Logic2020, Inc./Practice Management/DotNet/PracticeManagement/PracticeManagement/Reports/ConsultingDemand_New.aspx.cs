@@ -135,7 +135,7 @@ namespace PraticeManagement.Reports
             }
             set
             {
-                if (value == PipelineTitle || value == PipelineTitle)
+                if (value == PipelineTitle || value == PipelineSkill)
                 {
                     hdnPipelineTitleOrSkill.Value = value;
                     hdnGraphType.Value = "PipeLine";
@@ -326,12 +326,10 @@ namespace PraticeManagement.Reports
 
         private void enableDisableResetButtons()
         {
-            bool enableUpdateView = true;
+            bool enableUpdateView = false;
             bool enableResetFilter = true;
 
-            enableUpdateView = ddlPeriod.SelectedValue != "-1";
-
-            enableUpdateView = enableUpdateView && hdnPeriodValue.Value != ddlPeriod.SelectedValue;
+            enableUpdateView = enableUpdateView ||( ddlPeriod.SelectedValue != "-1" && hdnPeriodValue.Value != ddlPeriod.SelectedValue);
 
             if (trGtypes.Visible)
             {
@@ -348,7 +346,7 @@ namespace PraticeManagement.Reports
                 }
                 else
                 {
-                    enableUpdateView = enableUpdateView && (cblSkills.SelectedItems != hdnSkillsProp) ? cblSkills.isSelected : false;
+                    enableUpdateView = enableUpdateView || (cblSkills.SelectedItems != hdnSkillsProp) ? cblSkills.isSelected : false;
                     enableResetFilter = enableResetFilter || (cblSkills.SelectedItems != hdnSkillsProp);
                 }
 
