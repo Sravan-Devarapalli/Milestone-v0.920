@@ -115,6 +115,21 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             set;
         }
 
+        public string Collapsed
+        {
+            get
+            {
+                return hdnCollapsed.Value;
+            }
+
+            set
+            {
+                hdnCollapsed.Value = value;
+                btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (value.ToLower() == "true") ? "Expand All" : "Collapse All";
+            }
+        }
+        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
@@ -337,7 +352,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                     var lbMonth = e.Item.FindControl("lbMonth") as Label;
                     imgDetails.Visible = false;
                     lbMonth.Style.Remove("display");
-                    lbMonth.Text = "&nbsp;&nbsp;&nbsp;";
+                    lbMonth.Text = "&nbsp;&nbsp;&nbsp;&nbsp;";
                     cpeDetails.Enabled = false;
                 }
 
