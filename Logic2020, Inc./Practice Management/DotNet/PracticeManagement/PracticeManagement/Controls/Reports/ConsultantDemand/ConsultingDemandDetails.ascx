@@ -78,7 +78,7 @@
     <ItemTemplate>
         <table class="ConsultingDemandDetails">
             <tr class="bgColorD4D0C9 textLeft">
-                <td colspan="6" class="ProjectAccountName padLeft20Imp no-wrap">
+                <td colspan="6" class="padLeft20Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Title/Skill Details"
                         ExpandedText="Collapse Title/Skill Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlTitleSkillDetails" ImageControlID="imgDetails"
@@ -167,7 +167,7 @@
     <AlternatingItemTemplate>
         <table class="ConsultingDemandDetails">
             <tr class="bgcolor_ECE9D9 textLeft">
-                <td colspan="6" class="ProjectAccountName padLeft20Imp no-wrap">
+                <td colspan="6" class="padLeft20Imp no-wrap">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Title/Skill Details"
                         ExpandedText="Collapse Title/Skill Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlTitleSkillDetails" ImageControlID="imgDetails"
@@ -266,7 +266,7 @@
                         <th class="FirstTD">
                             <asp:LinkButton ID="btnMonthYear" runat="server" CausesValidation="false" CommandArgument="MonthYear"
                                 Style="text-decoration: none; color: Black;" OnCommand="btnMonthYear_Command">
-                            Month-Year
+                            Month Year
                             </asp:LinkButton>
                         </th>
                         <th class="SecondTD" id="thTitleSkill" runat="server">
@@ -323,7 +323,7 @@
     <ItemTemplate>
         <table class="ConsultingDemandDetailsByMonth">
             <tr class="bgColorD4D0C9 textLeft">
-                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap Width70Per">
+                <td colspan="7" class="padLeft20Imp no-wrap Width70Per">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
                         ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
@@ -332,7 +332,7 @@
                     <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Month Details" />
                     <asp:Label ID="lbMonth" Style="display: none;" runat="server"></asp:Label>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
+                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString(PraticeManagement.Constants.Formatting.FullMonthYearFormat)%>
                 </td>
                 <td class="SecondTD" id="tdTitleSkill" runat="server">
                 </td>
@@ -417,7 +417,7 @@
     <AlternatingItemTemplate>
         <table class="ConsultingDemandDetailsByMonth">
             <tr class="bgcolor_ECE9D9 textLeft">
-                <td colspan="7" class="ProjectAccountName padLeft20Imp no-wrap Width70Per">
+                <td colspan="7" class="padLeft20Imp no-wrap Width70Per">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Month Details"
                         ExpandedText="Collapse Month Details" EnableViewState="true" BehaviorID="cpeDetails"
                         Collapsed="true" TargetControlID="pnlMonthDetails" ImageControlID="imgDetails"
@@ -426,7 +426,7 @@
                     <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Month Details" />
                     <asp:Label ID="lbMonth" Style="display: none;" runat="server"></asp:Label>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString("MMMM-yyyy")%>
+                    <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth)Container.DataItem).MonthStartDate.ToString(PraticeManagement.Constants.Formatting.FullMonthYearFormat)%>
                 </td>
                 <td class="SecondTD" id="tdTitleSkill" runat="server">
                 </td>
