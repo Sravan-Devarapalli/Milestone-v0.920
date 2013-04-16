@@ -14,7 +14,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
     {
         private const string MAIN_CHART_AREA_NAME = "MainArea";
 
-        public string PipeLineTitle = "Title Demand By Month";
+        public string PipeLineTitle = "Pipeline Demand By Month";
 
         public string PipeLineSkill = "Skill Set Demand By Month";
 
@@ -184,7 +184,14 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             }
             else
             {
-                chartConsultnDemandPipeline.Titles.Add("PipeLine Demand by Month");
+                if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
+                {
+                    chartConsultnDemandPipeline.Titles.Add(PipeLineSkill);
+                }
+                else
+                {
+                    chartConsultnDemandPipeline.Titles.Add(PipeLineTitle);
+                }
                 chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.Month == HostingPage.EndDate.Value.Month ? HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) : HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + " - " + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
                 chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
@@ -201,7 +208,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 horizAxis.Interval = 1;
             horizAxis.TextOrientation = isVertical ? TextOrientation.Rotated270 : TextOrientation.Horizontal;
             //  horizAxis.LabelStyle.Angle = labelAngle != -1 ? labelAngle : isVertical ? 0 : 45;
-		horizAxis.LabelStyle.Font = new Font("Arial", 10f);
+            horizAxis.LabelStyle.Font = new Font("Arial", 10f);
             horizAxis.TitleFont = new System.Drawing.Font("Arial", 14, FontStyle.Bold);
             horizAxis.ArrowStyle = AxisArrowStyle.None;
             horizAxis.MajorGrid.Enabled = false;
