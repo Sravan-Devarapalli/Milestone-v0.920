@@ -54,7 +54,7 @@
 <AjaxControlToolkit:ModalPopupExtender ID="mpeDetailView" runat="server" TargetControlID="hndDetailView"
     BackgroundCssClass="modalBackground" PopupControlID="pnlDetailView" BehaviorID="mpeDetailView"
     CancelControlID="btnClose" DropShadow="false" />
-<asp:Panel ID="pnlDetailView" runat="server" class="tab-pane Width1200px">
+<asp:Panel ID="pnlDetailView" runat="server" class="tab-pane Width85Percent">
     <table class="WholeWidth Padding5">
         <tbody>
             <tr class="bgGroupByProjectHeader">
