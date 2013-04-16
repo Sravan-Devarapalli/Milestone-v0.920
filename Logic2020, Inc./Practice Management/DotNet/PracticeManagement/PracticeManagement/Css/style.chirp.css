@@ -1986,6 +1986,10 @@ TABLE.Section td
 {
     width: 18%;
 }
+.Width19Percent
+{
+    width: 19%;
+}
 .Width20Percent
 {
     width: 20%;
@@ -5527,12 +5531,6 @@ HyplinkConsultantDetailReport
 {
     width: 194px;
 }
-
-.Width1200px
-{
-    width: 1200px;
-}
-
 .WidthHeight25
 {
     width: 25%;
@@ -7741,7 +7739,6 @@ table#ctl00_body_login tr td label
     position: static;
     border-bottom: 1px solid #000000;
     font-size: 14px;
-    font-weight: 700;
     padding: 2px;
     text-align: center;
     vertical-align: middle;
