@@ -7693,9 +7693,14 @@ table#ctl00_body_login tr td label
 {
     width: 100%;
 }
-.ConsultingDemandDetails td, .ConsultingDemandDetails th, .ConsultingDemandDetailsByMonth td, .ConsultingDemandDetailsByMonth th
+.ConsultingDemandDetails td, .ConsultingDemandDetailsByMonth td
 {
     height: 30px;
+}
+.ConsultingDemandDetails th, .ConsultingDemandDetailsByMonth th
+{
+    height: 19px;
+    padding: 2px;
 }
 .ConsultingDemandDetails .FirstTD
 {
@@ -7769,7 +7774,7 @@ table#ctl00_body_login tr td label
     width: 15%;
     text-align: center;
 }
-.trConsultngDetailPanel tr, .trConsultngDetailPanelInnerItem
+.trConsultngDetailPanelInnerItem
 {
     background-color: white;
     height: 30px;
@@ -7778,12 +7783,15 @@ table#ctl00_body_login tr td label
 }
 .trConsultngDetailPanel th
 {
+    background-color: white;
     font-size: 14px;
     text-align: center;
     white-space: nowrap;
     width: 13.33%;
+    height: 19px;
+    padding: 2px;
 }
-.trConsultngDetailPanel td, .trConsultngDetailPanelInnerItem td
+.trConsultngDetailPanelInnerItem td
 {
     text-align: center;
     white-space: nowrap;
