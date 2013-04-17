@@ -334,6 +334,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .padLeft15{padding-left:15px}
 .paddingLeft15Imp{padding-left:15px!important}
 .padLeft16{padding-left:16px}
+.padLeft18{padding-left:18px}
 .padLeft20{padding-left:20px}
 .padLeft20Imp{padding-left:20px!important}
 .padLeft23{padding-left:23px}
@@ -679,7 +680,8 @@ li.l1 a:hover,.l2 dd div.flyout a:hover{color:#2a4753}
 .BorderNone{border:0}
 .xScrollAuto{overflow-x:auto}
 .xScrollOnly{overflow-x:scroll}
-div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;padding-left:2px;font-family:MS Shell Dlg;font-size:13.3333px}
+div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;font-family:MS Shell Dlg;font-size:13.3333px}
+div.scrollextLabel Label{padding-left:2px}
 .DefaultDropDownFont{font-family:MS Shell Dlg;font-size:13.3333px}
 .ExportAndExportAll ul,.ExportAndExportAll li{margin:0;padding:0}
 .ExportAndExportAll ul.pmenu{position:absolute;margin:0;padding:1px;list-style:none;width:88px;border:1px solid #ccc;background:white;display:none;z-index:10}
