@@ -90,7 +90,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGraphsByTitle(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllTitles ? null : HostingPage.hdnTitlesProp));
                 chartConsultngDemand.DataSource = data.Select(p => new { month = p.Key, count = p.Value }).ToList();
                 chartConsultngDemand.DataBind();
-                InitChart(data.Count);
+                InitChart(data.Count, data.Max(p => p.Value));
             }
             else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
@@ -100,7 +100,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGraphsBySkills(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllSkills ? null : HostingPage.hdnSkillsProp));
                 chartConsultngDemand.DataSource = data.Select(p => new { month = p.Key, count = p.Value }).ToList();
                 chartConsultngDemand.DataBind();
-                InitChart(data.Count);
+                InitChart(data.Count, data.Max(p => p.Value));
             }
             else
             {
@@ -118,25 +118,28 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 }
                 chartConsultnDemandPipeline.DataSource = data.Select(p => new { title = p.Key, count = p.Value }).ToList();
                 chartConsultnDemandPipeline.DataBind();
-                InitChart(data.Count);
+                InitChart(data.Count, data.Max(p => p.Value));
             }
         }
 
-        private void InitChart(int count)
+        private void InitChart(int count, int maxValue)
         {
             if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle || HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
                 chartConsultngDemand.Width = ((count < 5) ? 5 : count) * 70;
                 chartConsultngDemand.Height = 500;
-                chartConsultnDemandPipeline.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
+                //chartConsultngDemand.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
                 InitAxis(chartConsultngDemand.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
                 InitAxis(chartConsultngDemand.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Resources", true);
             }
             else
             {
                 chartConsultnDemandPipeline.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
-                chartConsultnDemandPipeline.Width = ((count < 5) ? 5 : count) * 120;
+                int width = ((maxValue < 10) ? 10 : maxValue) * 50;
+                width = width < 800 ? width : 800;
+                chartConsultnDemandPipeline.Width = width;
                 InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisY, "Quantity", false, 0);
+                chartConsultnDemandPipeline.ChartAreas[0].AxisY.Interval = (double)(maxValue / 10);
                 if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
                 {
                     chartConsultnDemandPipeline.Height = count * 50 >= 500 ? count * 50 : 500;
@@ -204,8 +207,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         private void InitAxis(Axis horizAxis, string title, bool isVertical, int labelAngle = -1)
         {
             horizAxis.IsStartedFromZero = true;
-            if (!isVertical)
-                horizAxis.Interval = 1;
             horizAxis.TextOrientation = isVertical ? TextOrientation.Rotated270 : TextOrientation.Horizontal;
             //  horizAxis.LabelStyle.Angle = labelAngle != -1 ? labelAngle : isVertical ? 0 : 45;
             horizAxis.LabelStyle.Font = new Font("Arial", 10f);
