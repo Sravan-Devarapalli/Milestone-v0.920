@@ -680,9 +680,9 @@ li.l1 a:hover,.l2 dd div.flyout a:hover{color:#2a4753}
 .BorderNone{border:0}
 .xScrollAuto{overflow-x:auto}
 .xScrollOnly{overflow-x:scroll}
-div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;font-family:MS Shell Dlg;font-size:13.3333px}
+div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;font-family:MS Shell Dlg;font-size:13.3333px;color:#000}
 div.scrollextLabel Label{padding-left:2px}
-.DefaultDropDownFont{font-family:MS Shell Dlg;font-size:13.3333px}
+.DefaultDropDownFont{font-family:MS Shell Dlg;font-size:13.3333px;color:#000}
 .ExportAndExportAll ul,.ExportAndExportAll li{margin:0;padding:0}
 .ExportAndExportAll ul.pmenu{position:absolute;margin:0;padding:1px;list-style:none;width:88px;border:1px solid #ccc;background:white;display:none;z-index:10}
 .ExportAndExportAll ul.pmenu li{position:relative}
