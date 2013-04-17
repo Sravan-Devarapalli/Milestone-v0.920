@@ -84,7 +84,7 @@
                             onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')" AutoPostBack="true"
                             DropDownListType="Business Unit" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
-                            UseAdvanceFeature="true" Width="217px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td>
