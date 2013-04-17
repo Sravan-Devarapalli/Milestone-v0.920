@@ -1850,6 +1850,10 @@ TABLE.Section td
 {
     padding-left: 16px;
 }
+.padLeft18
+{
+    padding-left: 18px;
+}
 .padLeft20
 {
     padding-left: 20px;
@@ -3447,9 +3451,12 @@ div.scrollextLabel
     vertical-align: middle;
     height: 18px;
     line-height: 18px;
-    padding-left: 2px;
     font-family: MS Shell Dlg;
     font-size: 13.3333px;
+}
+div.scrollextLabel Label
+{
+   padding-left: 2px;
 }
 .DefaultDropDownFont
 {
