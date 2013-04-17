@@ -679,7 +679,8 @@ li.l1 a:hover,.l2 dd div.flyout a:hover{color:#2a4753}
 .BorderNone{border:0}
 .xScrollAuto{overflow-x:auto}
 .xScrollOnly{overflow-x:scroll}
-div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;padding-left:2px}
+div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;padding-left:2px;font-family:MS Shell Dlg;font-size:13.3333px}
+.DefaultDropDownFont{font-family:MS Shell Dlg;font-size:13.3333px}
 .ExportAndExportAll ul,.ExportAndExportAll li{margin:0;padding:0}
 .ExportAndExportAll ul.pmenu{position:absolute;margin:0;padding:1px;list-style:none;width:88px;border:1px solid #ccc;background:white;display:none;z-index:10}
 .ExportAndExportAll ul.pmenu li{position:relative}
@@ -923,9 +924,9 @@ div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-bl
 .CloseButtonTable{width:100%;padding:5px}
 .CloseButtonTable tr,.bgGroupByProjectHeader{background-color:#f5faff}
 .CloseButtonTable td{width:100%;text-align:right;padding:3px}
-.GroupByProjectHeaderTable .FirstTd{width:95%;white-space:nowrap}
+.GroupByProjectHeaderTable .FirstTd{width:90%;white-space:nowrap}
 .GroupByProjectHeaderTable .FirstTd span{font-weight:bold;font-size:16px!important}
-.GroupByProjectHeaderTable .SecondTd{width:5%;font-weight:bolder;font-size:16px;text-align:right;padding-right:20px}
+.GroupByProjectHeaderTable .SecondTd{width:10%;font-weight:bolder;font-size:16px;text-align:right;padding-right:20px}
 .GroupByProjectHeaderTable .SecondTd span{font-weight:bold}
 .GroupByProjectDiv{max-height:500px;overflow-y:auto;width:100%}
 .PersonDetailTotal{width:5%;font-weight:bolder;font-size:15px;text-align:right;padding-right:10px}
@@ -1441,4 +1442,4 @@ table#ctl00_body_login tr td label{float:left}
 .trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:13.33%}
 .trConsultngDetailPanelItem{background-color:#D4D0C9;height:30px;white-space:nowrap}
 .trConsultngDetailPanelItem th{font-size:14px;width:13.33%}
-.consultingReportTd{font-weight:bolder;width:10%;text-align:right}
+.consultingReportTd{font-weight:bolder;width:14%;text-align:right}
