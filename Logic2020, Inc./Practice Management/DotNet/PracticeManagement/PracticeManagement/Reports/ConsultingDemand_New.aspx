@@ -154,7 +154,7 @@
                                                     CssClass="ProjectDetailScrollingDropDown1  Width100Per vMiddleImp" onclick="scrollingDropdown_onclick('cblTitles','Title','s','Titles',28);enableDisableResetButtons('cblTitles');"
                                                     DropDownListType="Tilte" DropDownListTypePluralForm="Titles" PluralForm="s" />
                                                 <ext:ScrollableDropdownExtender ID="sdeTitles" runat="server" TargetControlID="cblTitles"
-                                                    BehaviorID="sdeTitles" MaxNoOfCharacters="28" Width="99%" UseAdvanceFeature="true"
+                                                    BehaviorID="sdeTitles" MaxNoOfCharacters="28" Width="99.5%" UseAdvanceFeature="true"
                                                     EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hdnTitles" runat="server" />
@@ -168,7 +168,7 @@
                                                     CssClass="ProjectDetailScrollingDropDown1 Width100Per" onclick="scrollingDropdown_onclick('cblSkills','Skill','s','Skills',28);enableDisableResetButtons('cblSkills');"
                                                     DropDownListType="Skill" DropDownListTypePluralForm="Skills" PluralForm="s" />
                                                 <ext:ScrollableDropdownExtender ID="sdeSkills" runat="server" TargetControlID="cblSkills"
-                                                    BehaviorID="sdeSkills" MaxNoOfCharacters="28" Width="99%" UseAdvanceFeature="true"
+                                                    BehaviorID="sdeSkills" MaxNoOfCharacters="28" Width="99.5%" UseAdvanceFeature="true"
                                                     EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hdnSkills" runat="server" />
