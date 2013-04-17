@@ -3453,6 +3453,7 @@ div.scrollextLabel
     line-height: 18px;
     font-family: MS Shell Dlg;
     font-size: 13.3333px;
+    color:#000;
 }
 div.scrollextLabel Label
 {
@@ -3462,6 +3463,7 @@ div.scrollextLabel Label
 {
     font-family: MS Shell Dlg;
     font-size: 13.3333px;
+    color : #000;
 }
 /* Export to Excel Buttons in Project Summary Page*/
 .ExportAndExportAll ul, .ExportAndExportAll li
