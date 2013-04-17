@@ -708,7 +708,7 @@
                                                     AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
                                                     DropDownListType="Manager" />
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
-                                                    Width="94%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
+                                                    Width="94.5%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
@@ -739,7 +739,7 @@
                                                     onclick="scrollingDropdown_onclick('cblPracticeCapabilities','Capability','ies','Capabilities',28);"
                                                     DropDownListType="Capability" DropDownListTypePluralForm="Capabilities" PluralForm="ies" />
                                                 <ext:ScrollableDropdownExtender ID="sdePracticeCapabilities" runat="server" TargetControlID="cblPracticeCapabilities"
-                                                    BehaviorID="sdePracticeCapabilities" MaxNoOfCharacters="28" Width="94%" UseAdvanceFeature="true"
+                                                    BehaviorID="sdePracticeCapabilities" MaxNoOfCharacters="28" Width="94.5%" UseAdvanceFeature="true"
                                                     EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                             </td>
