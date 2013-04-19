@@ -25,6 +25,8 @@ AS
 		   o.LastUpdated as 'LastUpdate',
 		   o.GroupId,
 		   o.CloseDate,
+		   o.PricingListId,
+		   o.BusinessTypeId,
 		   g.[Name] as 'GroupName',
 	       c.Name AS ClientName,
 	       c.DefaultDiscount AS Discount,
@@ -37,7 +39,6 @@ AS
 		   own.PersonId AS 'OwnerId',
 		   prowner.PersonId AS 'PracticeManagerId',
 		   own.PersonStatusId AS 'OwnerStatusId'
-		   --,o.OutSideResources
 	  FROM dbo.Opportunity AS o
 	       INNER JOIN dbo.Client AS c ON o.ClientId = c.ClientId
 		   INNER JOIN dbo.OpportunityPriorities OP ON OP.Id = O.PriorityId
@@ -45,6 +46,6 @@ AS
 		   LEFT JOIN dbo.Person AS own ON o.OwnerID = own.PersonId
 	       INNER JOIN dbo.OpportunityStatus AS s ON o.OpportunityStatusId = s.OpportunityStatusId
 	       INNER JOIN dbo.Practice AS r ON o.PracticeId = r.PracticeId	
-		   Left Join dbo.ProjectGroup as g on o.GroupId = g.GroupId
-		   Left join dbo.Person as prowner on prowner.PersonId = r.PracticeManagerId
+		   LEFT JOIN dbo.ProjectGroup as g on o.GroupId = g.GroupId
+		   LEFT JOIN dbo.Person as prowner on prowner.PersonId = r.PracticeManagerId
 
