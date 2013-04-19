@@ -2,11 +2,11 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.logic2020.com" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.logic2020.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://www.logic2020.com/Imports">
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd0" namespace="http://www.logic2020.com" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd0" namespace="http://www.logic2020.com" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IClientService_SaveClientDetail_InputMessage">
@@ -99,6 +99,30 @@
   <wsdl:message name="IClientService_ClientIsNoteRequiredUpdate_OutputMessage">
     <wsdl:part name="parameters" element="tns:ClientIsNoteRequiredUpdateResponse" />
   </wsdl:message>
+  <wsdl:message name="IClientService_PricingListInsert_InputMessage">
+    <wsdl:part name="parameters" element="tns:PricingListInsert" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_PricingListInsert_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PricingListInsertResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_PricingListDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:PricingListDelete" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_PricingListDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PricingListDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_PricingListUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:PricingListUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_PricingListUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PricingListUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetPricingLists_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingLists" />
+  </wsdl:message>
+  <wsdl:message name="IClientService_GetPricingLists_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingListsResponse" />
+  </wsdl:message>
   <wsdl:portType name="IClientService">
     <wsdl:operation name="SaveClientDetail">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/SaveClientDetail" message="tns:IClientService_SaveClientDetail_InputMessage" />
@@ -159,6 +183,22 @@
     <wsdl:operation name="ClientIsNoteRequiredUpdate">
       <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/ClientIsNoteRequiredUpdate" message="tns:IClientService_ClientIsNoteRequiredUpdate_InputMessage" />
       <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/ClientIsNoteRequiredUpdateResponse" message="tns:IClientService_ClientIsNoteRequiredUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PricingListInsert">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/PricingListInsert" message="tns:IClientService_PricingListInsert_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/PricingListInsertResponse" message="tns:IClientService_PricingListInsert_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PricingListDelete">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/PricingListDelete" message="tns:IClientService_PricingListDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/PricingListDeleteResponse" message="tns:IClientService_PricingListDelete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PricingListUpdate">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/PricingListUpdate" message="tns:IClientService_PricingListUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/PricingListUpdateResponse" message="tns:IClientService_PricingListUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingLists">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IClientService/GetPricingLists" message="tns:IClientService_GetPricingLists_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IClientService/GetPricingListsResponse" message="tns:IClientService_GetPricingLists_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
