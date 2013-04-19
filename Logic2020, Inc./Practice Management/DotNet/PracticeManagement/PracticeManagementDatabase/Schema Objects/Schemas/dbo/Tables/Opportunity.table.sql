@@ -24,7 +24,9 @@
 	[EstimatedRevenue]    DECIMAL(18, 2) NULL,
 	[OutSideResources]	  NVARCHAR(4000) NULL,
 	PriorityId			  INT NOT NULL,
-	[CloseDate]			  DATETIME       NULL
+	[CloseDate]			  DATETIME       NULL,
+	[PricingListId]       INT			 NULL,
+	[BusinessTypeId]	  INT	    	 NULL
 );
  
 
