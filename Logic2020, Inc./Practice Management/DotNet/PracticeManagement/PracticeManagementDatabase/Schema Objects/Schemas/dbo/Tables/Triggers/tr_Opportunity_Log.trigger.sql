@@ -92,6 +92,10 @@ BEGIN
 			   ,i.[GroupId]
 			   ,g.Name 'GroupName'
 			   ,i.[LastUpdated]
+			   ,i.BusinessTypeId
+			   ,bt.Name AS [BusinessType]
+			   ,i.PricingListId
+			   ,pt.Name AS [PricingList]
 		  FROM inserted AS i
 		       --INNER JOIN v_Opportunity as opp ON i.OpportunityId = opp.OpportunityId
 		       INNER JOIN OpportunityPriorities OP ON i.PriorityId = Op.Id
@@ -102,6 +106,8 @@ BEGIN
 		       INNER JOIN Person p ON i.OwnerId = p.PersonId
 		       LEFT JOIN Project proj ON i.ProjectId = proj.ProjectId
 		       LEFT JOIN ProjectGroup g ON i.GroupId = g.GroupId
+				LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = i.BusinessTypeId
+				LEFT JOIN dbo.PricingList pt ON pt.PricingListId = i.PricingListId
 	),
 
 	OLD_VALUES AS
@@ -137,6 +143,10 @@ BEGIN
 			   ,d.[GroupId]
 			   ,g.Name 'GroupName'
 			   ,d.[LastUpdated]
+			   ,d.BusinessTypeId
+			   ,bt.Name AS [BusinessType]
+			   ,d.PricingListId
+			   ,pt.Name AS [PricingList]
 		  FROM deleted AS d
 		       --INNER JOIN v_Opportunity as opp ON d.OpportunityId = opp.OpportunityId
 		       INNER JOIN OpportunityPriorities OP ON d.PriorityId = Op.Id
@@ -147,6 +157,8 @@ BEGIN
 		       INNER JOIN Person p ON d.OwnerId = p.PersonId
 		       LEFT JOIN Project proj ON d.ProjectId = proj.ProjectId
 		       LEFT JOIN ProjectGroup g ON d.GroupId = g.GroupId
+			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = d.BusinessTypeId
+				LEFT JOIN dbo.PricingList pt ON pt.PricingListId = d.PricingListId
 	)
 
 	-- Log an activity
