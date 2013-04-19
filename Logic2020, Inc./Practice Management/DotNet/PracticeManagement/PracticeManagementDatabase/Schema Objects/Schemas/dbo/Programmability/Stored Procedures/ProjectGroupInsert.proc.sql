@@ -2,7 +2,9 @@
 	@GroupId	INT OUT,
 	@ClientId	INT,
 	@Name		NVARCHAR(100),
-	@IsActive   BIT 
+	@IsActive   BIT,
+	@UserLogin          NVARCHAR(255),
+	@BusinessGroupId INT 
 AS
 	SET NOCOUNT ON
 	IF NOT EXISTS(SELECT 1 FROM Client WHERE ClientId=@ClientId)
@@ -14,6 +16,8 @@ AS
 	BEGIN
 		
 		BEGIN TRY
+		-- Start logging session
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 		DECLARE @IsInternal BIT,
 				@ProjectGroupCode NVARCHAR (5)
 				
@@ -21,10 +25,13 @@ AS
 
 		EXEC [GenerateNewProjectGroupCode] @IsInternal, @ProjectGroupCode OUTPUT
 
-		INSERT ProjectGroup(ClientId, Name,Active,Code) 
-		VALUES (@ClientId, @Name,@IsActive,@ProjectGroupCode)
+		INSERT ProjectGroup(ClientId, Name,Active,Code,BusinessGroupId) 
+		VALUES (@ClientId, @Name,@IsActive,@ProjectGroupCode,@BusinessGroupId)
 
 		SET @GroupId = SCOPE_IDENTITY()
+
+		-- End logging session
+		EXEC dbo.SessionLogUnprepare
 
 		END TRY
 		BEGIN CATCH
