@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 6-05-2008
--- Updated By:	Srinivas.M
--- Updated Date: 2012-06-05
--- Description:	List projects with their details
--- =============================================
-CREATE VIEW dbo.v_Project
+﻿CREATE VIEW dbo.v_Project
 AS
 	SELECT p.ClientId,
 		   c.IsMarginColorInfoEnabled,
@@ -26,6 +19,8 @@ AS
 		   p.BuyerName,
 		   p.OpportunityId,
 		   p.GroupId,
+		   p.PricingListId,
+		   p.BusinessTypeId,
 		   p.IsChargeable AS 'ProjectIsChargeable',
 		   dbo.GetProjectManagerList(p.ProjectId) AS ProjectManagersIdFirstNameLastName,
 		   p.DirectorId,
