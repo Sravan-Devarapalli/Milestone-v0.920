@@ -43,6 +43,10 @@ BEGIN
 				i.ProjectOwnerId,
 				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
 				, i.SowBudget
+				,i.BusinessTypeId
+				,bt.Name AS [BusinessType]
+				,i.PricingListId
+				,pt.Name AS [PricingList]
 		  FROM inserted AS i
 		       INNER JOIN dbo.Client AS c ON i.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON i.PracticeId = p.PracticeId
@@ -51,6 +55,8 @@ BEGIN
 			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectOwnerId
 			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = i.GroupId
 			   LEFT  JOIN dbo.Person AS Dir ON Dir.PersonId = i.DirectorId
+			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = i.BusinessTypeId
+			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = i.PricingListId
 	),
 
 	OLD_VALUES AS
@@ -79,7 +85,11 @@ BEGIN
 						ELSE 'No' END AS 'IsChargeable',
 						d.ProjectOwnerId,
 				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
-				, d.SowBudget
+				,d.SowBudget
+				,d.BusinessTypeId
+				,bt.Name AS [BusinessType]
+				,d.PricingListId
+				,pt.Name AS [PricingList]
 		  FROM deleted AS d
 		       INNER JOIN dbo.Client AS c ON d.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON d.PracticeId = p.PracticeId
@@ -88,6 +98,8 @@ BEGIN
 			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = d.ProjectOwnerId
 			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = d.GroupId
 			   LEFT JOIN dbo.Person AS Dir ON Dir.PersonId = d.DirectorId
+			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = d.BusinessTypeId
+			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = d.PricingListId
 	)
 
 	-- Log an activity
