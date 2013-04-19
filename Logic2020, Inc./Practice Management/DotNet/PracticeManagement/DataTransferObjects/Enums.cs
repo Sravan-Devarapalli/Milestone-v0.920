@@ -161,5 +161,21 @@ namespace DataTransferObjects
         [Description("Project Estimate")]
         ProjectEstimate = 5 
     }
+
+    [DataContract]
+    public enum BusinessType
+    {
+        [EnumMember]
+        [Description("- - Select BusinessType - -")]
+        Undefined = 0,
+
+        [EnumMember]
+        [Description("New Business")]
+        NewBusiness = 1,
+
+        [EnumMember]
+        [Description("Extension")]
+        Extension = 2
+    }
 }
 
