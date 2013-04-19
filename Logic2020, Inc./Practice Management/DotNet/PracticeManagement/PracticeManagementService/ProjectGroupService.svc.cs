@@ -37,7 +37,7 @@ namespace PracticeManagementService
         /// <param name="oldGroupName">Original name of the group</param>
         /// <param name="newGroupName">Name that will be assign to the group</param>
         /// <returns>True for successfully renaming</returns>
-        public  bool ProjectGroupUpdate(int clientId,ProjectGroup projectGroup,string userLogin)
+        public  bool ProjectGroupUpdate(ProjectGroup projectGroup,string userLogin)
         {
             return ProjectGroupDAL.ProjectGroupUpdate(projectGroup, userLogin);
         }
@@ -48,7 +48,7 @@ namespace PracticeManagementService
         /// <param name="clientId">An ID of the client to create group</param>
         /// <param name="groupName">Name of new group</param>
         /// <returns>Unique Id created group in DB</returns>
-        public int ProjectGroupInsert(int clientId, ProjectGroup projectGroup, string userLogin)
+        public int ProjectGroupInsert(ProjectGroup projectGroup, string userLogin)
         {
            return ProjectGroupDAL.ProjectGroupInsert(projectGroup, userLogin);
         }
