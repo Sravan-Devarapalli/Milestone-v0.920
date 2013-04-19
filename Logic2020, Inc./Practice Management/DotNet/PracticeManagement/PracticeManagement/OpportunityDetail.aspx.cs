@@ -16,6 +16,8 @@ using PraticeManagement.Controls.Opportunities;
 using AjaxControlToolkit;
 using System.Web.UI.HtmlControls;
 using System.Web;
+using DataTransferObjects;
+using PraticeManagement.ProjectGroupService;
 
 namespace PraticeManagement
 {
@@ -413,6 +415,9 @@ namespace PraticeManagement
 
                 AddAttrbuteToddlProjects(projects);
 
+                var pricingLists = ServiceCallers.Custom.Client(client => client.GetPricingLists(Opportunity.Client.Id));
+                DataHelper.FillPricingLists(ddlPricingList,pricingLists.OrderBy(p=>p.Name).ToArray());
+
                 if (ddlProjects.Items.Count == 1)
                 {
                     ddlProjects.Items[0].Enabled = true;
@@ -746,7 +751,7 @@ namespace PraticeManagement
         {
             ddlClientGroup.Items.Clear();
             ddlProjects.Items.Clear();
-
+            lblBusinessGroup.Text = "";
             if (!(ddlClient.SelectedIndex == 0))
             {
                 int clientId;
@@ -764,6 +769,8 @@ namespace PraticeManagement
                     {
                         ddlProjects.Items[0].Enabled = true;
                     }
+                    var pricingLists = ServiceCallers.Custom.Client(client => client.GetPricingLists(clientId));
+                    DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p=>p.Name).ToArray());
                 }
                 else if (ddlProjects.Items != null && ddlProjects.Items.Count == 0)
                 {
@@ -862,6 +869,7 @@ namespace PraticeManagement
             ddlClient.SelectedIndex = 0;
             ddlClientGroup.SelectedIndex = 0;
             ddlPractice.SelectedIndex = 0;
+            ddlBusinessOptions.SelectedIndex = 0;
             ddlPriority.SelectedIndex = 0;
             ddlSalesperson.SelectedIndex = 0;
             ddlStatus.SelectedIndex = 0;
@@ -958,7 +966,7 @@ namespace PraticeManagement
                     {
                         OpportunityId = id;
                     }
-
+                    
                     result = true;
                     ClearDirty();
 
@@ -975,6 +983,36 @@ namespace PraticeManagement
                 }
             }
             return result;
+        }
+
+        public void SetBusinessGroupLabel()
+        {
+            using (var serviceClient = new ProjectGroupServiceClient())
+            {
+                try
+                {
+                    if (ddlClientGroup.SelectedValue != "")
+                    {
+                        BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(null, Convert.ToInt32(ddlClientGroup.SelectedValue));
+                        lblBusinessGroup.Text = (businessGroupList.First().Name.Length > 32) ? businessGroupList.First().Name.Substring(0,35) + "...." : businessGroupList.First().Name;
+                        lblBusinessGroup.ToolTip = businessGroupList.First().Name;
+                    }
+                    else
+                    {
+                        lblBusinessGroup.Text = string.Empty;
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        protected void ddlClientGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetBusinessGroupLabel();
         }
 
         private bool ValidateStrawMansNeedByDates()
@@ -1058,6 +1096,7 @@ namespace PraticeManagement
 
         protected override void Display()
         {
+            DataHelper.FillBusinessTypes(ddlBusinessOptions);
             FillControls();
         }
 
@@ -1102,6 +1141,7 @@ namespace PraticeManagement
 
             ddlClient.Enabled =
                 ddlPriority.Enabled =
+                ddlBusinessOptions.Enabled =
                 ddlSalesperson.Enabled =
                 ddlPractice.Enabled =
                 btnSave.Enabled =
@@ -1151,6 +1191,7 @@ namespace PraticeManagement
             txtOpportunityName.Text = opportunity.Name;
             lblOpportunityName.Text = opportunity.HtmlEncodedName;
             lblOpportunityNumber.Text = opportunity.OpportunityNumber;
+           
             if (opportunity.Project != null)
             {
                 hpProject.Visible = true;
@@ -1324,7 +1365,26 @@ namespace PraticeManagement
                 }
 
                 ddlClientGroup.SelectedValue = selectedGroup.Value;
+                SetBusinessGroupLabel();
             }
+            if (Opportunity.PricingList != null && Opportunity.PricingList.PricingListId.HasValue)
+            {
+                ListItem selectedGroup = ddlPricingList.Items.FindByValue(Opportunity.PricingList.PricingListId.ToString());
+                if (selectedGroup == null)
+                {
+                    selectedGroup = new ListItem(Opportunity.PricingList.Name, Opportunity.PricingList.PricingListId.ToString());
+                    ddlPricingList.Items.Add(selectedGroup);
+                    ddlPricingList.SortByText();
+                }
+
+                ddlPricingList.SelectedValue = selectedGroup.Value;
+            }
+            else
+            {
+                ddlPricingList.SelectedIndex = 0;
+            }
+                ListItem selectedBusinessTypes = ddlBusinessOptions.Items.FindByValue(((int)Opportunity.BusinessType).ToString()=="0"?"":((int)Opportunity.BusinessType).ToString());
+                ddlBusinessOptions.SelectedValue = selectedBusinessTypes.Value;
         }
 
         private void PopulateData(Opportunity opportunity)
@@ -1350,8 +1410,9 @@ namespace PraticeManagement
             }
 
             opportunity.Description = txtDescription.Text;
-            opportunity.BuyerName = txtBuyerName.Text;
 
+            opportunity.BuyerName = txtBuyerName.Text;
+         
             opportunity.Status =
                 new OpportunityStatus { Id = int.Parse(ddlStatus.SelectedValue) };
             opportunity.Client =
@@ -1361,6 +1422,11 @@ namespace PraticeManagement
                 opportunity.Group = new ProjectGroup { Id = Convert.ToInt32(ddlClientGroup.SelectedValue) };
             else
                 opportunity.Group = null;
+
+            if (ddlPricingList.Items.Count > 0 && ddlPricingList.SelectedValue != string.Empty)
+                opportunity.PricingList= new PricingList { PricingListId = Convert.ToInt32(ddlPricingList.SelectedValue) };
+            else
+                opportunity.PricingList = null;
 
             opportunity.Salesperson =
                 !string.IsNullOrEmpty(ddlSalesperson.SelectedValue)
@@ -1389,6 +1455,8 @@ namespace PraticeManagement
             opportunity.Owner = string.IsNullOrEmpty(selectedValue) ?
                 null :
                 new Person(Convert.ToInt32(selectedValue));
+
+            opportunity.BusinessType = (BusinessType)Enum.Parse(typeof(BusinessType), ddlBusinessOptions.SelectedValue==""?"0":ddlBusinessOptions.SelectedValue);
 
             opportunity.ProposedPersonIdList = hdnProposedResourceIdsWithTypes.Value;
             opportunity.StrawManList = hdnTeamStructure.Value;
