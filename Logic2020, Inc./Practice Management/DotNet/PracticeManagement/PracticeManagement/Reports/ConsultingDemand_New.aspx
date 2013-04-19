@@ -1,4 +1,4 @@
-﻿<%@ Page Title="ConsultingDemand New" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="ConsultingDemand" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="ConsultingDemand_New.aspx.cs" Inherits="PraticeManagement.Reports.ConsultingDemand_New" %>
 
 <%@ Import Namespace="PraticeManagement.Utils" %>
