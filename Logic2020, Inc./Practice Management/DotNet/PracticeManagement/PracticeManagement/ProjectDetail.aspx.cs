@@ -14,6 +14,7 @@ using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
+using PraticeManagement.ProjectGroupService;
 
 namespace PraticeManagement
 {
@@ -827,6 +828,7 @@ namespace PraticeManagement
                         ddlDirector.SelectedIndex = 0;
                     }
 
+
                     if (client.IsNoteRequired)
                     {
                         ddlNotes.SelectedValue = "1";
@@ -843,6 +845,9 @@ namespace PraticeManagement
                         bool userIsDirector = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);// #2817: DirectorRoleName is added as per the requirement.
                         ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
                     }
+
+                    var pricingLists = ServiceCallers.Custom.Client(clients => clients.GetPricingLists(client.Id));
+                    DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p=>p.Name).ToArray());
                 }
 
                 DataHelper.FillProjectGroupList(ddlProjectGroup, clientId, null);
@@ -854,6 +859,7 @@ namespace PraticeManagement
                     if (listItem != null)
                         ddlProjectGroup.SelectedIndex = ddlProjectGroup.Items.IndexOf(listItem);
                 }
+                lblBusinessGroup.Text = string.Empty;
             }
             catch (FaultException<ExceptionDetail>)
             {
@@ -881,8 +887,42 @@ namespace PraticeManagement
             }
         }
 
+        public void SetBusinessGroupLabel()
+        {
+            using (var serviceClient = new ProjectGroupServiceClient())
+            {
+                try
+                {
+                    if (ddlProjectGroup.SelectedValue != "")
+                    {
+                        BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(null, Convert.ToInt32(ddlProjectGroup.SelectedValue));
+                           if(businessGroupList.First().Name.Length > 37)
+                           {
+                               string dummyBusinessName = businessGroupList.First().Name.Substring(0, 12) + " " + businessGroupList.First().Name.Substring(13);
+                               lblBusinessGroup.Text = dummyBusinessName.Substring(0, 36) + "....";
+                           }
+                           else
+                           {
+                               lblBusinessGroup.Text = businessGroupList.First().Name;
+                           }
+                        lblBusinessGroup.ToolTip = businessGroupList.First().Name;
+                    }
+                    else
+                    {
+                        lblBusinessGroup.Text = string.Empty;
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         protected void ddlProjectGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SetBusinessGroupLabel();
         }
 
         protected void DropDown_SelectedIndexChanged(object sender, EventArgs e)
@@ -956,7 +996,12 @@ namespace PraticeManagement
         {
             try
             {
-                var result = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, Project.OpportunityId.Value, User.Identity.Name, false));
+                int? pricingListId = null;
+                if (Project.PricingList != null)
+                {
+                    pricingListId = Project.PricingList.PricingListId.Value;
+                }
+                var result = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, Project.OpportunityId.Value, User.Identity.Name, pricingListId ,false));
 
                 Project.OpportunityId = null;
                 Project.OpportunityNumber = null;
@@ -975,7 +1020,12 @@ namespace PraticeManagement
                 try
                 {
                     int opportunityId = Convert.ToInt32(ddlOpportunities.SelectedValue);
-                    var opportunityNumber = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, opportunityId, User.Identity.Name, true));
+                    int? pricingListId=null;
+                    if(Project.PricingList != null)
+                    {
+                        pricingListId=Project.PricingList.PricingListId.Value;
+                    }
+                    var opportunityNumber = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, opportunityId, User.Identity.Name, pricingListId, true));
 
                     Project.OpportunityId = opportunityId;
                     Project.OpportunityNumber = opportunityNumber;
@@ -990,7 +1040,7 @@ namespace PraticeManagement
             }
         }
 
-       
+
         protected void chbReceivesSalesCommission_CheckedChanged(object sender, EventArgs e)
         {
             UpdateSalesCommissionState();
@@ -1077,7 +1127,7 @@ namespace PraticeManagement
 
         protected void cvGroup_ServerValidate(object sender, ServerValidateEventArgs args)
         {
-            if (Project != null && Project.Id.HasValue && Project.Group.Id.HasValue && Project.Group.Id.Value != Convert.ToInt32(ddlProjectGroup.SelectedValue) && Project.HasTimeEntries)
+            if (Project != null && Project.Id.HasValue && Project.Group.Id.HasValue && Project.Group.Id.Value != Convert.ToInt32(ddlProjectGroup.SelectedValue == "" ? "0" : ddlProjectGroup.SelectedValue) && Project.HasTimeEntries)
             {
                 args.IsValid = false;
             }
@@ -1251,6 +1301,7 @@ namespace PraticeManagement
             Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
+            DataHelper.FillBusinessTypes(ddlBusinessOptions);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
             string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
@@ -1507,7 +1558,6 @@ namespace PraticeManagement
                 ddlProjectStatus.Items.IndexOf(
                 ddlProjectStatus.Items.FindByValue(
                 project.Status != null ? project.Status.Id.ToString() : string.Empty));
-
         }
 
         private void PopulatePracticeDropDown(Project project)
@@ -1522,7 +1572,7 @@ namespace PraticeManagement
             List<PracticeCapability> projectCapability = new List<PracticeCapability>();
             foreach (PracticeCapability pc in capabilities)
             {
-                if (pc.IsActive  || projectCapabilityIdList.Any(p => p == pc.CapabilityId.ToString()))
+                if (pc.IsActive || projectCapabilityIdList.Any(p => p == pc.CapabilityId.ToString()))
                 {
                     projectCapability.Add(pc);
                 }
@@ -1564,6 +1614,12 @@ namespace PraticeManagement
             if (project.Client != null && project.Client.Id.HasValue)
             {
                 DataHelper.FillProjectGroupList(ddlProjectGroup, project.Client.Id.Value, null);
+
+                var pricingLists = ServiceCallers.Custom.Client(client => client.GetPricingLists(project.Client.Id.Value));
+                ddlPricingList.Items.Add("");
+                DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p=>p.Name).ToArray());
+
+
                 PopulateProjectGroupDropDown(project);
             }
         }
@@ -1587,13 +1643,30 @@ namespace PraticeManagement
             if (project != null && project.Group != null)
             {
                 ListItem selectedProjectGroup = ddlProjectGroup.Items.FindByValue(project.Group.Id.ToString());
+                
+                ListItem selectedBusinessTypes = ddlBusinessOptions.Items.FindByValue(((int)project.BusinessType).ToString() == "0" ? "" : ((int)project.BusinessType).ToString());
                 if (selectedProjectGroup == null)
                 {
                     selectedProjectGroup = new ListItem(project.Group.Name, project.Group.Id.ToString());
                     ddlProjectGroup.Items.Add(selectedProjectGroup);
                 }
-
+                if (project.PricingList != null)
+                {
+                    ListItem selectedPricingList = ddlPricingList.Items.FindByValue(project.PricingList.PricingListId.ToString());
+                    if (selectedPricingList == null)
+                    {
+                        selectedPricingList = new ListItem(project.PricingList.Name, project.PricingList.PricingListId.ToString());
+                        ddlPricingList.Items.Add(selectedPricingList);
+                    }
+                    ddlPricingList.SelectedValue = selectedPricingList.Value;
+                }
+                else
+                {
+                    ddlPricingList.SelectedIndex = 0;
+                }
+                ddlBusinessOptions.SelectedValue = selectedBusinessTypes.Value;
                 ddlProjectGroup.SelectedValue = selectedProjectGroup.Value;
+                SetBusinessGroupLabel();
             }
         }
 
@@ -1614,8 +1687,9 @@ namespace PraticeManagement
             //date: Sat, Mar 17, 2012 at 1:53 AM
             //subject: RE: Time Entry conversion - deployment step
 
-
+            project.BusinessType = (BusinessType)Enum.Parse(typeof(BusinessType), ddlBusinessOptions.SelectedValue == "" ? "0" : ddlBusinessOptions.SelectedValue);
             project.CanCreateCustomWorkTypes = true;
+
             PopulateProjectGroup(project);
             PopulateSalesCommission(project);
             PopulatePracticeManagementCommission(project);
@@ -1624,7 +1698,7 @@ namespace PraticeManagement
 
             project.ProjectOwner = new Person() { Id = Convert.ToInt32(ddlProjectOwner.SelectedValue) };
 
-
+            PopulatePricingList(project);
             project.IsNoteRequired = ddlNotes.SelectedValue == "1";
 
             if (ddlDirector.SelectedIndex > 0)
@@ -1632,6 +1706,11 @@ namespace PraticeManagement
 
             project.ProjectWorkTypesList = ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue;
 
+        }
+
+        private void PopulatePricingList(Project project)
+        {
+            project.PricingList =ddlPricingList.SelectedValue==""?null:new PricingList { PricingListId = int.Parse(ddlPricingList.SelectedValue)};
         }
 
         private void PopulatePracticeManagementCommission(Project project)
@@ -1679,6 +1758,8 @@ namespace PraticeManagement
         {
             project.Group = new ProjectGroup { Id = int.Parse(ddlProjectGroup.SelectedValue) };
         }
+
+
 
         private static string GetProjectIdArgument(bool useAmpersand, int projectId)
         {
