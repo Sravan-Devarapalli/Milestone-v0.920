@@ -40,35 +40,13 @@ namespace DataAccess
 
         #endregion
 
-        /// <summary>
-        /// List all active clients in the system
-        /// </summary>
-        /// <returns>A <see cref="List{T}"/> of active <see cref="Client"/>s in the system</returns>
-        /// <remarks>
-        /// The list of clients will probably not be large.  Locality of Reference suggests
-        /// that if we want one client we are going to want another.  Might as well get them
-        /// all at once.  A client can find a particular client by scanning the list.
-        /// 
-        /// If it should prove the case that the client list is large then a <see cref="List{T}"/>
-        /// is not the best structure to support finding a specific <see cref="Client"/>.
-        /// </remarks>
+        #region BusinessUnit Methods
+
         public static List<ProjectGroup> GroupListAll(int? clientId, int? projectId)
         {
             return GroupListAll(clientId, projectId, null);
         }
 
-        /// <summary>
-        /// List all active clients in the system
-        /// </summary>
-        /// <returns>A <see cref="List{T}"/> of active <see cref="Client"/>s in the system</returns>
-        /// <remarks>
-        /// The list of clients will probably not be large.  Locality of Reference suggests
-        /// that if we want one client we are going to want another.  Might as well get them
-        /// all at once.  A client can find a particular client by scanning the list.
-        /// 
-        /// If it should prove the case that the client list is large then a <see cref="List{T}"/>
-        /// is not the best structure to support finding a specific <see cref="Client"/>.
-        /// </remarks>
         public static List<ProjectGroup> GroupListAll(int? clientId, int? projectId, int? personId)
         {
             List<ProjectGroup> groupList = new List<ProjectGroup>();
@@ -128,7 +106,6 @@ namespace DataAccess
             return groupList;
         }
 
-
         public static Dictionary<int, List<ProjectGroup>> ClientGroupListAll(string commaSeperatedClientList, int? projectId, int? personId)
         {
             Dictionary<int, List<ProjectGroup>> clientGroups = new Dictionary<int, List<ProjectGroup>>();
@@ -180,21 +157,21 @@ namespace DataAccess
 
         }
 
-
-
-        public static bool UpDateProductGroup(int clientId, int groupId, string groupName, bool isActive)
+        public static bool ProjectGroupUpdate(ProjectGroup projectGroup, string userLogin)
         {
             bool result = false;
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.ProjectGroupRenameByClient, connection))
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.ProjectGroupUpdate, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
-                    command.Parameters.AddWithValue(ClientIdParam, clientId);
-                    command.Parameters.AddWithValue(GroupIdParam, groupId);
-                    command.Parameters.AddWithValue(GroupNameParam, groupName);
-                    command.Parameters.AddWithValue(isActiveParam, isActive);
+                    command.Parameters.AddWithValue(ClientIdParam, projectGroup.ClientId);
+                    command.Parameters.AddWithValue(GroupIdParam, projectGroup.Id);
+                    command.Parameters.AddWithValue(GroupNameParam, projectGroup.Name);
+                    command.Parameters.AddWithValue(isActiveParam, projectGroup.IsActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BusinessGroupIdParam, projectGroup.BusinessGroupId);
                     connection.Open();
                     result = command.ExecuteScalar().ToString() == "0";
                 }
@@ -202,7 +179,7 @@ namespace DataAccess
             return result;
         }
 
-        public static int ProjectGroupInsert(int clientId, string groupName, bool isActive)
+        public static int ProjectGroupInsert(ProjectGroup projectGroup, string userLogin)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -211,9 +188,11 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
                     command.Parameters.AddWithValue(GroupIdParam, DbType.Int32).Direction = ParameterDirection.Output;
-                    command.Parameters.AddWithValue(ClientIdParam, clientId);
-                    command.Parameters.AddWithValue(NameParam, groupName);
-                    command.Parameters.AddWithValue(isActiveParam, isActive);
+                    command.Parameters.AddWithValue(ClientIdParam, projectGroup.ClientId);
+                    command.Parameters.AddWithValue(NameParam, projectGroup.Name);
+                    command.Parameters.AddWithValue(isActiveParam, projectGroup.IsActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BusinessGroupIdParam, projectGroup.BusinessGroupId);
                     connection.Open();
                     command.ExecuteNonQuery();
                     return (int)command.Parameters[GroupIdParam].Value;
@@ -221,7 +200,7 @@ namespace DataAccess
             }
         }
 
-        public static bool ProjectGroupDelete(int groupId)
+        public static bool ProjectGroupDelete(int groupId, string userLogin)
         {
             bool result = false;
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -231,6 +210,7 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
                     command.Parameters.AddWithValue(GroupIdParam, groupId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                     connection.Open();
                     result = command.ExecuteScalar().ToString() == "0";
                 }
@@ -263,7 +243,8 @@ namespace DataAccess
                            Name = (string)reader[groupNameColumn],
                            IsActive = (bool)reader[IsActiveColumn],
                            InUse = (int)reader[InUseColumn] == 1,
-                           Code = (string)reader[CodeColumn]
+                           Code = (string)reader[CodeColumn],
+                           BusinessGroupId = (int)reader[Constants.ColumnNames.BusinessGroupIdColumn]
                        };
         }
 
@@ -303,6 +284,115 @@ namespace DataAccess
             return groupList;
         
         }
+
+        #endregion
+
+        #region Business Group Methods
+
+        public static void BusinessGroupUpdate(BusinessGroup businessGroup,string userLogin)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.BusinessGroupUpdate, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BusinessGroupIdParam, businessGroup.Id);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Name, businessGroup.Name);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, businessGroup.IsActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static int BusinessGroupInsert(BusinessGroup businessGroup, string userLogin)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.BusinessGroupInsert, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BusinessGroupIdParam, DbType.Int32).Direction = ParameterDirection.Output;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdParam, businessGroup.ClientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Name, businessGroup.Name);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, businessGroup.IsActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    return (int)command.Parameters[Constants.ParameterNames.BusinessGroupIdParam].Value;
+                }
+            }
+        }
+
+        public static void BusinessGroupDelete(int businessGroupId, string userLogin)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.BusinessGroupDelete, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BusinessGroupIdParam, businessGroupId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<BusinessGroup> GetBusinessGroupList(int? clientId, int? businessUnitId)
+        {
+            List<BusinessGroup> BusinessGroupList = new List<BusinessGroup>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.ProjectGroup.GetBusinessGroupList, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdParam,
+                        clientId.HasValue ? (object)clientId.Value : DBNull.Value);
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdParam,
+                        businessUnitId.HasValue ? (object)businessUnitId.Value : DBNull.Value);
+                    
+                    connection.Open();
+                    ReadBusinessGroups(command, BusinessGroupList);
+                }
+            }
+            return BusinessGroupList;
+        }
+
+        private static void ReadBusinessGroups(SqlCommand command, ICollection<BusinessGroup> businessGroupList)
+        {
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader != null)
+                {
+                    while (reader.Read())
+                    {
+                        businessGroupList.Add(ReadBusinessGroup(reader));
+                    }
+                }
+            }
+        }
+
+        private static BusinessGroup ReadBusinessGroup(SqlDataReader reader)
+        {
+            return new BusinessGroup
+            {
+                Id = (int)reader[Constants.ColumnNames.BusinessGroupIdColumn],
+                Name = (string)reader[Constants.ColumnNames.Name],
+                IsActive = (bool)reader[Constants.ColumnNames.Active],
+                InUse = (bool)reader[Constants.ColumnNames.InUse],
+                Code = (string)reader[Constants.ColumnNames.CodeColumn],
+                ClientId = (int)reader[Constants.ColumnNames.ClientId]
+            };
+        }
+
+        #endregion
     }
 }
 
