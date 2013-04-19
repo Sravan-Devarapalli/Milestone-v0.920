@@ -15,12 +15,6 @@ namespace PraticeManagement.ProjectService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProjectService.IProjectService")]
     public interface IProjectService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner", ReplyAction="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse")]
-        bool IsUserIsProjectOwner(string user, int id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId", ReplyAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse")]
-        DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject", ReplyAction="http://tempuri.org/IProjectService/GetBusinessDevelopmentProjectResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -49,7 +43,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.TimeEntry.TimeTypeRecord[] GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/AttachOpportunityToProject", ReplyAction="http://tempuri.org/IProjectService/AttachOpportunityToProjectResponse")]
-        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link);
+        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, System.Nullable<int> pricingListId, bool link);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
@@ -64,9 +58,6 @@ namespace PraticeManagement.ProjectService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectCountByClient", ReplyAction="http://tempuri.org/IProjectService/ProjectCountByClientResponse")]
         int ProjectCountByClient(int clientId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListAll", ReplyAction="http://tempuri.org/IProjectService/GetProjectListAllResponse")]
-        DataTransferObjects.Project[] GetProjectListAll();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListByDateRange", ReplyAction="http://tempuri.org/IProjectService/GetProjectListByDateRangeResponse")]
         DataTransferObjects.Project[] GetProjectListByDateRange(bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd);
@@ -128,9 +119,6 @@ namespace PraticeManagement.ProjectService {
             "onse")]
         DataTransferObjects.Project[] GetBenchListWithoutBenchTotalAndAdminCosts(DataTransferObjects.ContextObjects.BenchReportContext context);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListByClient", ReplyAction="http://tempuri.org/IProjectService/GetProjectListByClientResponse")]
-        DataTransferObjects.Project[] GetProjectListByClient(int clientId, string userName);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectSearchText", ReplyAction="http://tempuri.org/IProjectService/ProjectSearchTextResponse")]
         DataTransferObjects.Project[] ProjectSearchText(string looked, int personId);
         
@@ -188,6 +176,12 @@ namespace PraticeManagement.ProjectService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject", ReplyAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse")]
         bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner", ReplyAction="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse")]
+        bool IsUserIsProjectOwner(string user, int id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId", ReplyAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse")]
+        DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -197,7 +191,8 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
-  
+        
+     
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -213,14 +208,6 @@ namespace PraticeManagement.ProjectService {
         
         public ProjectServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
-        }
-        
-        public bool IsUserIsProjectOwner(string user, int id) {
-            return base.Channel.IsUserIsProjectOwner(user, id);
-        }
-        
-        public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
         
         public DataTransferObjects.Project GetBusinessDevelopmentProject() {
@@ -251,8 +238,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
         }
         
-        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link) {
-            return base.Channel.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
+        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, System.Nullable<int> pricingListId, bool link) {
+            return base.Channel.AttachOpportunityToProject(projectId, opportunityId, userLogin, pricingListId, link);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
@@ -269,10 +256,6 @@ namespace PraticeManagement.ProjectService {
         
         public int ProjectCountByClient(int clientId) {
             return base.Channel.ProjectCountByClient(clientId);
-        }
-        
-        public DataTransferObjects.Project[] GetProjectListAll() {
-            return base.Channel.GetProjectListAll();
         }
         
         public DataTransferObjects.Project[] GetProjectListByDateRange(bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd) {
@@ -345,10 +328,6 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetBenchListWithoutBenchTotalAndAdminCosts(context);
         }
         
-        public DataTransferObjects.Project[] GetProjectListByClient(int clientId, string userName) {
-            return base.Channel.GetProjectListByClient(clientId, userName);
-        }
-        
         public DataTransferObjects.Project[] ProjectSearchText(string looked, int personId) {
             return base.Channel.ProjectSearchText(looked, personId);
         }
@@ -415,6 +394,14 @@ namespace PraticeManagement.ProjectService {
         
         public bool IsUserIsOwnerOfProject(string user, int id, bool isProjectId) {
             return base.Channel.IsUserIsOwnerOfProject(user, id, isProjectId);
+        }
+        
+        public bool IsUserIsProjectOwner(string user, int id) {
+            return base.Channel.IsUserIsProjectOwner(user, id);
+        }
+        
+        public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
     }
 }
