@@ -996,9 +996,9 @@ namespace PracticeManagementService
             return ProjectDAL.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
         }
 
-        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
+        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId,bool link)
         {
-            return ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin, link);
+            return ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin,pricingListId, link);
         }
 
         #endregion
