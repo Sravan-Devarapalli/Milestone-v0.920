@@ -25,7 +25,7 @@ namespace PracticeManagementService
         /// <param name="newGroupName">Name that will be assign to the group</param>
         /// <returns>true for successfull renaming</returns>
         [OperationContract]
-        bool ProjectGroupUpdate(int clientId, ProjectGroup projectGroup, string userLogin);
+        bool ProjectGroupUpdate(ProjectGroup projectGroup, string userLogin);
 
         /// <summary>
         /// Add group
@@ -34,7 +34,7 @@ namespace PracticeManagementService
         /// <param name="groupName">Name of new group</param>
         /// <returns>Uniq Id created group in DB</returns>
         [OperationContract]
-        int ProjectGroupInsert(int clientId, ProjectGroup projectGroup, string userLogin);
+        int ProjectGroupInsert(ProjectGroup projectGroup, string userLogin);
 
         /// <summary>
         /// Delete project group
