@@ -1,7 +1,10 @@
 ﻿CREATE PROCEDURE ProjectGroupDelete
-	@GroupId		INT
+(
+	@GroupId		INT,
+	@UserLogin          NVARCHAR(255)
+)
 AS
-
+BEGIN
 	SET NOCOUNT ON;
 	DECLARE @Result INT,
 			@Result_Success INT, @Result_GroupWasNotFound INT, @Result_GroupInUse INT
@@ -23,6 +26,8 @@ AS
 	BEGIN TRY
 		
 		BEGIN TRAN TranProjectGroup
+		-- Start logging session
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 		DELETE CTH
 		FROM  dbo.ChargeCodeTurnOffHistory CTH
@@ -40,12 +45,18 @@ AS
 		DELETE dbo.ProjectGroup 
 		WHERE GroupId = @GroupId
 
+		-- End logging session
+		EXEC dbo.SessionLogUnprepare
+
         COMMIT TRAN TranProjectGroup
 
     END TRY
 	BEGIN CATCH
 	    
 		ROLLBACK TRAN TranProjectGroup
+
+		-- End logging session
+		EXEC dbo.SessionLogUnprepare
 
 		DECLARE @Error NVARCHAR(2000)
 		SET @Error = ERROR_MESSAGE()
@@ -56,4 +67,4 @@ AS
     END
 
 	SELECT @Result Result
-
+END
