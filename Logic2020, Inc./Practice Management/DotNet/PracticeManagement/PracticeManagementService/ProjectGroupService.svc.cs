@@ -36,11 +36,10 @@ namespace PracticeManagementService
         /// <param name="clientId">An ID of the client to retrive group</param>
         /// <param name="oldGroupName">Original name of the group</param>
         /// <param name="newGroupName">Name that will be assign to the group</param>
-        /// <returns>True for successfull renaming</returns>
-        public  bool UpDateProductGroup(int clientId,int groupId, string groupName, bool isActive)
+        /// <returns>True for successfully renaming</returns>
+        public  bool ProjectGroupUpdate(int clientId,ProjectGroup projectGroup,string userLogin)
         {
-            var result = ProjectGroupDAL.UpDateProductGroup(clientId,groupId, groupName, isActive);
-            return result;
+            return ProjectGroupDAL.ProjectGroupUpdate(projectGroup, userLogin);
         }
 
         /// <summary>
@@ -48,27 +47,45 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="clientId">An ID of the client to create group</param>
         /// <param name="groupName">Name of new group</param>
-        /// <returns>Uniq Id created group in DB</returns>
-        public int ProjectGroupInsert(int clientId, string groupName, bool isActive)
+        /// <returns>Unique Id created group in DB</returns>
+        public int ProjectGroupInsert(int clientId, ProjectGroup projectGroup, string userLogin)
         {
-            var result = ProjectGroupDAL.ProjectGroupInsert(clientId, groupName, isActive);
-            return result;
+           return ProjectGroupDAL.ProjectGroupInsert(projectGroup, userLogin);
         }
 
         /// <summary>
         /// Delete project group
         /// </summary>
         /// <param name="groupId">An ID of the group to delete</param>
-        /// <returns>True for successfull renaming</returns>
-        public bool ProjectGroupDelete(int groupId)
+        /// <returns>True for successfully renaming</returns>
+        public bool ProjectGroupDelete(int groupId, string userLogin)
         {
-            var result = ProjectGroupDAL.ProjectGroupDelete(groupId);
-            return result;
+            return ProjectGroupDAL.ProjectGroupDelete(groupId, userLogin);
         }
 
         public List<ProjectGroup> GetInternalBusinessUnits()
         {
             return ProjectGroupDAL.GetInternalBusinessUnits();
+        }
+
+        public void BusinessGroupUpdate(BusinessGroup businessGroup, string userLogin)
+        {
+            ProjectGroupDAL.BusinessGroupUpdate(businessGroup, userLogin);
+        }
+
+        public int BusinessGroupInsert(BusinessGroup businessGroup, string userLogin)
+        {
+           return  ProjectGroupDAL.BusinessGroupInsert(businessGroup, userLogin);
+        }
+
+        public void BusinessGroupDelete(int businessGroupId, string userLogin)
+        {
+            ProjectGroupDAL.BusinessGroupDelete(businessGroupId, userLogin);
+        }
+
+        public List<BusinessGroup> GetBusinessGroupList(int? clientId, int? businessUnitId)
+        {
+            return ProjectGroupDAL.GetBusinessGroupList(clientId, businessUnitId);
         }
 
         #endregion
