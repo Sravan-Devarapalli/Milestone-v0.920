@@ -177,6 +177,25 @@ namespace PracticeManagementService
             }
         }
 
+        public int PricingListInsert(PricingList pricingList, string userLogin)
+        {
+            return ClientDAL.PricingListInsert(pricingList, userLogin);
+        }
+
+        public void PricingListDelete(int pricingListId, string userLogin)
+        {
+            ClientDAL.PricingListDelete(pricingListId, userLogin);
+        }
+
+        public void PricingListUpdate(PricingList pricingList, string userLogin)
+        {
+            ClientDAL.PricingListUpdate(pricingList, userLogin);
+        }
+
+        public List<PricingList> GetPricingLists(int? clientId)
+        {
+            return ClientDAL.GetPricingLists(clientId);
+        }
 
         #endregion
     }
