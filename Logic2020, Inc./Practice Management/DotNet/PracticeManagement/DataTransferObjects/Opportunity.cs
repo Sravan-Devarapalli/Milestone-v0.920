@@ -318,6 +318,17 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public PricingList PricingList
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public BusinessType BusinessType { get; set; }
+
         #endregion
 
         #region Formatting
