@@ -532,8 +532,7 @@
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 &nbsp;&nbsp;
-                                                <asp:DropDownList ID="ddlSalesperson" runat="server" CssClass="Width95Per"
-                                                    onchange="setDirty();">
+                                                <asp:DropDownList ID="ddlSalesperson" runat="server" CssClass="Width95Per" onchange="setDirty();">
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                             </td>
@@ -577,21 +576,29 @@
                                             <td class="width30P">
                                                 Business Unit
                                             </td>
-                                            <td class="width60P">
+                                            <td class="Width27Percent">
                                                 <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
                                                     AutoPostBack="true" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td class="Width10Percent">
+                                            <td class="width30P">
+                                                Business Group:
+                                                <asp:Label ID="lblBusinessGroup" runat="server" Text=""></asp:Label>
+                                            </td>
+                                            <td class="Width13Percent">
+                                            <asp:RequiredFieldValidator ID="reqBusinessUnit" runat="server" ControlToValidate="ddlProjectGroup"
+                                                    EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Business Unit is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Business Unit is required."></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
                                                     ToolTip="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
+                                                
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td class="Width2Percent">
+                                <td>
                                 </td>
                                 <td class="TdProjectDetailFeild">
                                     <table class="WholeWidth">
@@ -708,7 +715,7 @@
                                                     AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
                                                     DropDownListType="Manager" />
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
-                                                    Width="94.5%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
+                                                    Width="94%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
@@ -739,7 +746,7 @@
                                                     onclick="scrollingDropdown_onclick('cblPracticeCapabilities','Capability','ies','Capabilities',28);"
                                                     DropDownListType="Capability" DropDownListTypePluralForm="Capabilities" PluralForm="ies" />
                                                 <ext:ScrollableDropdownExtender ID="sdePracticeCapabilities" runat="server" TargetControlID="cblPracticeCapabilities"
-                                                    BehaviorID="sdePracticeCapabilities" MaxNoOfCharacters="28" Width="94.5%" UseAdvanceFeature="true"
+                                                    BehaviorID="sdePracticeCapabilities" MaxNoOfCharacters="28" Width="94%" UseAdvanceFeature="true"
                                                     EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                             </td>
@@ -752,7 +759,44 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td colspan="4">
+                                <td class="Width2Percent">
+                                </td>
+                                <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                New Business/Extension
+                                                
+                                            </td>
+                                            <td class="width60PImp WhiteSpaceNoWrap">
+                                            &nbsp;&nbsp;
+                                            <asp:Label ID="lblBusiness" runat="server" Text="$" Visible="false"></asp:Label>
+                                                <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width95Per" runat="server">
+                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td class="TdValidators">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="Width2Percent">
+                                </td>
+                                <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                Pricing List
+                                            </td>
+                                            <td class="width60P WhiteSpaceNoWrap">
+                                                <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width945Per">
+                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td class="TdValidators">
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                         </table>
@@ -761,7 +805,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="2">
                         &nbsp;
                     </td>
                 </tr>
@@ -906,7 +950,8 @@
                                 <asp:Panel ID="pnlAttachments" runat="server" CssClass="tab-pane">
                                     <div class="PaddingBottom35Px">
                                         <asp:ShadowedTextButton ID="stbAttachSOW" runat="server" CausesValidation="false"
-                                            OnClick="stbAttachSOW_Click" OnClientClick="if(!ConfirmSaveOrExit()) return false;" CssClass="add-btn" Text="Add Attachment" />
+                                            OnClick="stbAttachSOW_Click" OnClientClick="if(!ConfirmSaveOrExit()) return false;"
+                                            CssClass="add-btn" Text="Add Attachment" />
                                         <asp:HiddenField ID="hdnOpenAttachmentPopUp" runat="server" />
                                         <AjaxControlToolkit:ModalPopupExtender ID="mpeAttachSOW" runat="server" TargetControlID="hdnOpenAttachmentPopUp"
                                             BackgroundCssClass="modalBackground" PopupControlID="pnlAttachSOW" DropShadow="false" />
