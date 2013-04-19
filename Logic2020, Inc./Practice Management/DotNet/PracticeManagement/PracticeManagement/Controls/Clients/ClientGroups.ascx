@@ -5,8 +5,8 @@
     <tr>
         <td>
             <asp:GridView ID="gvGroups" runat="server" EmptyDataText="There is nothing to be displayed here"
-                AutoGenerateColumns="False" DataKeyNames="Key" OnRowDataBound="gvGroups_RowDataBound"
-                CssClass="CompPerfTable Width40P BackGroundColorWhite" GridLines="None">
+                AutoGenerateColumns="False" OnRowDataBound="gvGroups_RowDataBound" CssClass="CompPerfTable Width50Percent BackGroundColorWhite"
+                GridLines="None">
                 <AlternatingRowStyle CssClass="alterrow" />
                 <Columns>
                     <asp:TemplateField>
@@ -15,7 +15,8 @@
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
-                        <ItemStyle CssClass="Width15PercentImp TextAlignCenterImp" />
+                        <HeaderStyle CssClass="Width15PercentImp" />
+                        <ItemStyle CssClass="TextAlignCenterImp" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgEdit" runat="server" ImageUrl="~/Images/icon-edit.png" OnClick="imgEdit_OnClick"
                                 ToolTip="Edit Business Unit" />
@@ -28,19 +29,21 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <ItemStyle CssClass="width60P no-wrap" />
+                        <HeaderStyle CssClass="Width35Percent" />
+                        <ItemStyle CssClass="no-wrap" />
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Name</div>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <asp:Label ID="lblGroupName" CssClass="WS-Normal" runat="server" Text='<%# ((ProjectGroup)Eval("Value")).HtmlEncodedName %>'></asp:Label>
-                            <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Key") %>' />
+                            <asp:Label ID="lblGroupName" CssClass="WS-Normal" runat="server" Text='<%# Eval("HtmlEncodedName") %>'
+                                ToolTip='<%# Eval("HtmlEncodedName") %>'></asp:Label>
+                            <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Id") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="txtGroupName" runat="server" Text='<%# ((ProjectGroup)Eval("Value")).Name %>'
-                                ValidationGroup="UpdateGroup" CssClass="Width96Per"></asp:TextBox>
-                            <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Key") %>' />
+                            <asp:TextBox ID="txtGroupName" runat="server" Text='<%# Eval("Name")%>' ValidationGroup="UpdateGroup"
+                                CssClass="Width96Per"></asp:TextBox>
+                            <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Id") %>' />
                             <asp:RequiredFieldValidator ID="reqGropuName" runat="server" ControlToValidate="txtGroupName"
                                 ErrorMessage="The name of Business Unit is required." ToolTip="The name of Business Unit is required."
                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="UpdateGroup">*</asp:RequiredFieldValidator>
@@ -50,23 +53,41 @@
                                 ValidationGroup="UpdateGroup">*</asp:CustomValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField>
+                        <HeaderStyle CssClass="width30P" />
+                        <ItemStyle CssClass="no-wrap" />
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                Business Group</div>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="lblBusinessGroup" runat="server"></asp:Label>
+                            <asp:HiddenField ID="hdnBusinessUnitId1" runat="server" Value='<%# Eval("Id") %>' />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:DropDownList ID="ddlBusinessGroup" CssClass="Width96Per" runat="server" >
+                            </asp:DropDownList>
+                            <asp:HiddenField ID="hdnBusinessUnitId2" runat="server" Value='<%# Eval("Id") %>' />
+                        </EditItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField Visible="false">
-                        <ItemStyle CssClass="Width0Percent TextAlignCenterImp" />
+                        <ItemStyle CssClass="Width0Percent" />
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 In use</div>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <asp:Label ID="lblGroupInuse" runat="server" Text='<%# ((ProjectGroup)Eval("Value")).InUse ? "Yes" : "No" %>'></asp:Label>
+                            <asp:Label ID="lblGroupInuse" runat="server" Text='<%# (bool)Eval("InUse") ? "Yes" : "No" %>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Active">
-                        <ItemStyle CssClass="Width15Percent TextAlignCenterImp" />
+                    <asp:TemplateField HeaderStyle-HorizontalAlign="Center" HeaderText="Active">
+                        <HeaderStyle CssClass="Width15PercentImp" />
+                        <ItemStyle CssClass="TextAlignCenterImp" />
                         <ItemTemplate>
-                            <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# ((ProjectGroup)Eval("Value")).IsActive %>' />
+                            <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# (bool)Eval("IsActive") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:CheckBox ID="chbIsActiveEd" runat="server" Checked='<%# ((ProjectGroup)Eval("Value")).IsActive %>' />
+                            <asp:CheckBox ID="chbIsActiveEd" runat="server" Checked='<%# (bool)Eval("IsActive") %>' />
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -75,7 +96,8 @@
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
-                        <ItemStyle CssClass="Width10Per TextAlignCenterImp" />
+                        <HeaderStyle CssClass="Width5PercentImp" />
+                        <ItemStyle CssClass="TextAlignCenterImp" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Business Unit" />
@@ -85,9 +107,9 @@
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
-            <table class="CompPerfTable gvCommissionsAndRates Width40P Border0">
+            <table class="CompPerfTable gvCommissionsAndRates Width50Percent Border0">
                 <tr class="alterrow">
-                    <td class="Width15Percent PaddingTop10Px TextAlignCenter">
+                    <td class="Width15PercentImp PaddingTop10Px TextAlignCenter">
                         <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
                             ToolTip="Add Business Unit" />
                         <asp:ImageButton ID="btnAddGroup" runat="server" ValidationGroup="NewGroup" ImageUrl="~/Images/icon-check.png"
@@ -95,7 +117,7 @@
                         <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_Click"
                             ToolTip="Cancel" Visible="false" />
                     </td>
-                    <td class="width60P no-wrap">
+                    <td class="Width35Percent no-wrap">
                         <asp:Label ID="lblNewGroupName" runat="server" AssociatedControlID="txtNewGroupName" />
                         <asp:TextBox ID="txtNewGroupName" runat="server" ValidationGroup="NewGroup" CssClass="Width96Per"
                             Visible="false" />
@@ -109,12 +131,14 @@
                             ErrorMessage="There is already a Business Unit with the same name." ToolTip="There is already a Business Unit with the same name."
                             ValidationGroup="NewGroup" OnServerValidate="custNewGroupName_ServerValidate">*</asp:CustomValidator>
                     </td>
-                    <td class="Width0Percent">
+                    <td class="width30P">
+                        <asp:DropDownList ID="ddlAddBusinessGroup" CssClass="Width96Per" runat="server" Visible="false">
+                        </asp:DropDownList>
                     </td>
-                    <td class="Width15Percent TextAlignCenter">
+                    <td class="Width15PercentImp TextAlignCenter">
                         <asp:CheckBox ID="chbGroupActive" runat="server" Checked="true" Visible="false" />
                     </td>
-                    <td class="Width10Percent">
+                    <td class="Width5PercentImp">
                     </td>
                 </tr>
             </table>
