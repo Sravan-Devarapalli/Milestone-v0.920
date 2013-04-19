@@ -12,18 +12,6 @@
       <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupId" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupIdResponse" />
-  </wsdl:message>
   <wsdl:message name="IProjectService_GetBusinessDevelopmentProject_InputMessage">
     <wsdl:part name="parameters" element="tns:GetBusinessDevelopmentProject" />
   </wsdl:message>
@@ -95,12 +83,6 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectCountByClient_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectCountByClientResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectListAll_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectListAll" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectListAll_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectListAllResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectListByDateRange_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectListByDateRange" />
@@ -179,12 +161,6 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_GetBenchListWithoutBenchTotalAndAdminCosts_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetBenchListWithoutBenchTotalAndAdminCostsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectListByClient_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectListByClient" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectListByClient_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectListByClientResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectSearchText_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectSearchText" />
@@ -288,15 +264,19 @@
   <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProjectResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupId" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupIdResponse" />
+  </wsdl:message>
   <wsdl:portType name="IProjectService">
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectsListByProjectGroupId">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" message="tns:IProjectService_GetProjectsListByProjectGroupId_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse" message="tns:IProjectService_GetProjectsListByProjectGroupId_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetBusinessDevelopmentProject">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject" message="tns:IProjectService_GetBusinessDevelopmentProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProjectResponse" message="tns:IProjectService_GetBusinessDevelopmentProject_OutputMessage" />
@@ -344,10 +324,6 @@
     <wsdl:operation name="ProjectCountByClient">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectCountByClient" message="tns:IProjectService_ProjectCountByClient_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectCountByClientResponse" message="tns:IProjectService_ProjectCountByClient_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectListAll">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListAll" message="tns:IProjectService_GetProjectListAll_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListAllResponse" message="tns:IProjectService_GetProjectListAll_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetProjectListByDateRange">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListByDateRange" message="tns:IProjectService_GetProjectListByDateRange_InputMessage" />
@@ -400,10 +376,6 @@
     <wsdl:operation name="GetBenchListWithoutBenchTotalAndAdminCosts">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetBenchListWithoutBenchTotalAndAdminCosts" message="tns:IProjectService_GetBenchListWithoutBenchTotalAndAdminCosts_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetBenchListWithoutBenchTotalAndAdminCostsResponse" message="tns:IProjectService_GetBenchListWithoutBenchTotalAndAdminCosts_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectListByClient">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectListByClient" message="tns:IProjectService_GetProjectListByClient_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectListByClientResponse" message="tns:IProjectService_GetProjectListByClient_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectSearchText">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectSearchText" message="tns:IProjectService_ProjectSearchText_InputMessage" />
@@ -473,27 +445,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" message="tns:IProjectService_IsUserIsOwnerOfProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse" message="tns:IProjectService_IsUserIsOwnerOfProject_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsListByProjectGroupId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" message="tns:IProjectService_GetProjectsListByProjectGroupId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse" message="tns:IProjectService_GetProjectsListByProjectGroupId_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectsListByProjectGroupId">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetBusinessDevelopmentProject">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject" style="document" />
       <wsdl:input>
@@ -595,15 +557,6 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectCountByClient">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectCountByClient" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectListAll">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListAll" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -721,15 +674,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetBenchListWithoutBenchTotalAndAdminCosts">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetBenchListWithoutBenchTotalAndAdminCosts" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectListByClient">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectListByClient" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -883,6 +827,24 @@
     </wsdl:operation>
     <wsdl:operation name="IsUserIsOwnerOfProject">
       <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsListByProjectGroupId">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
