@@ -766,6 +766,105 @@ namespace DataAccess
                 }
             }
         }
+
+        public static int PricingListInsert(PricingList pricingList,string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Client.PricingListInsert, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId, DbType.Int32).Direction = ParameterDirection.Output;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, pricingList.ClientId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Name, pricingList.Name);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    return (int)command.Parameters[Constants.ParameterNames.PricingListId].Value;
+                }
+            }
+        }
+
+        public static void PricingListDelete(int pricingListId, string userLogin)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Client.PricingListDelete, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId, pricingListId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void PricingListUpdate(PricingList pricingList, string userLogin)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Client.PricingListUpdate, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId, pricingList.PricingListId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Name, pricingList.Name);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<PricingList> GetPricingLists(int? clientId)
+        {
+            List<PricingList> result = new List<PricingList>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Client.GetPricingList, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(ClientIdParam, clientId);
+                    connection.Open();
+              
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        ReadPricingLists(reader, result);
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static void ReadPricingLists(SqlDataReader reader, List<PricingList> result)
+        {
+            if (reader.HasRows)
+            {
+                   int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                   int pricingListIdIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListId);
+                   int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                   int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+                   int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+                
+                while (reader.Read())
+                {
+                    PricingList pricinglist = new PricingList();
+                    pricinglist.ClientId = !reader.IsDBNull(clientIdIndex) ? reader.GetInt32(clientIdIndex) : -1;
+                    pricinglist.Name = !reader.IsDBNull(nameIndex) ? reader.GetString(nameIndex) : string.Empty;
+                    pricinglist.PricingListId = !reader.IsDBNull(pricingListIdIndex) ? reader.GetInt32(pricingListIdIndex) : -1;
+                    pricinglist.InUse = !reader.IsDBNull(inUseIndex) ? reader.GetBoolean(inUseIndex) :false;
+                    pricinglist.IsDefault = !reader.IsDBNull(isDefaultIndex) ? reader.GetBoolean(isDefaultIndex) : false;
+                    
+                    result.Add(pricinglist);
+                }
+            }
+        }
+
     }
 }
 
