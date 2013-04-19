@@ -22,7 +22,9 @@
 	@GroupId	           INT,
 	@EstimatedRevenue      DECIMAL(18,2) ,
 	@PersonIdList          NVARCHAR(MAX) = NULL,
-	@StrawManList          NVARCHAR(MAX) = NULL
+	@StrawManList          NVARCHAR(MAX) = NULL,
+	@PricingListId         INT = NULL,
+	@BusinessTypeId		   INT = NULL
 )
 AS
 BEGIN
@@ -59,10 +61,10 @@ BEGIN
 		INSERT INTO dbo.Opportunity
 					(Name, ClientId, SalespersonId, OpportunityStatusId, PriorityId,
 					 ProjectedStartDate, ProjectedEndDate, OpportunityNumber, Description, PracticeId, BuyerName,
-					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue,CloseDate)
+					 Pipeline, Proposed, SendOut, OpportunityIndex,  ProjectId, OwnerId, GroupId ,EstimatedRevenue,CloseDate,PricingListId,BusinessTypeId)
 			 VALUES (@Name, @ClientId, @SalespersonId, @OpportunityStatusId, @PriorityId,
 					 @ProjectedStartDate, @ProjectedEndDate, @OpportunityNumber, @Description, @PracticeId, @BuyerName,
-					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue,@CloseDate)
+					 @Pipeline, @Proposed, @SendOut, @OpportunityIndex, @ProjectId, @OwnerId, @GroupId ,@EstimatedRevenue,@CloseDate,@PricingListId,@BusinessTypeId)
 
 		IF(@ProjectId IS NOT NULL)
 		BEGIN
