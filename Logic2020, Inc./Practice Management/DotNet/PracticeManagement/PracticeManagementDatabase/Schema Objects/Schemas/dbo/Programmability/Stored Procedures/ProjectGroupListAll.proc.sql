@@ -28,7 +28,8 @@ AS
 				, pg.Code
 				, pg.Name
 				, 1 InUse
-				,pg.Active
+				,pg.Active,
+				pg.BusinessGroupId
 			FROM ProjectGroup pg
 				INNER JOIN Project p ON pg.GroupId = p.GroupId				
 			WHERE p.ProjectId = @ProjectId 
@@ -42,6 +43,7 @@ AS
 				, Name
 				,dbo.IsProjectGroupInUse(ProjectGroup.GroupId) AS InUse
 				,Active
+				,BusinessGroupId
 			FROM ProjectGroup
 			WHERE ((ClientId = @ClientId))
 					AND (@PersonId IS NULL 
@@ -66,6 +68,7 @@ AS
 				, pg.[Name]
 				, dbo.IsProjectGroupInUse(pg.GroupId) AS InUse
 				,pg.Active
+				,pg.BusinessGroupId
 			FROM ProjectGroup AS pg
 			INNER JOIN dbo.Client AS cl ON pg.ClientId = cl.ClientId
 			WHERE(@PersonId IS NULL OR pg.GroupId IN (SELECT * FROM @GroupPermissions))
