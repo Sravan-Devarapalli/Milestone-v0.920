@@ -1,67 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="http://www.logic2020.com" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProjectGroupService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://www.logic2020.com" location="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc?wsdl=wsdl0" />
-  <wsdl:types />
-  <wsdl:binding name="BasicHttpBinding_IProjectGroupService" type="i0:IProjectGroupService">
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.logic2020.com" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.logic2020.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.logic2020.com/Imports">
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd0" namespace="http://www.logic2020.com" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectGroupService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IProjectGroupService_GroupListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GroupListAll" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_GroupListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GroupListAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ProjectGroupUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGroupUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ProjectGroupUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGroupUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ProjectGroupInsert_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGroupInsert" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ProjectGroupInsert_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGroupInsertResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ProjectGroupDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGroupDelete" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ProjectGroupDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGroupDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_GetInternalBusinessUnits_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetInternalBusinessUnits" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_GetInternalBusinessUnits_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetInternalBusinessUnitsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ListGroupByClientAndPersonInPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListGroupByClientAndPersonInPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_ListGroupByClientAndPersonInPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListGroupByClientAndPersonInPeriodResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_BusinessGroupUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessGroupUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_BusinessGroupUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessGroupUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_BusinessGroupInsert_InputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessGroupInsert" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_BusinessGroupInsert_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessGroupInsertResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_BusinessGroupDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessGroupDelete" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_BusinessGroupDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BusinessGroupDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_GetBusinessGroupList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBusinessGroupList" />
+  </wsdl:message>
+  <wsdl:message name="IProjectGroupService_GetBusinessGroupList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBusinessGroupListResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IProjectGroupService">
     <wsdl:operation name="GroupListAll">
-      <soap:operation soapAction="http://www.logic2020.com/IProjectGroupService/GroupListAll" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/GroupListAll" message="tns:IProjectGroupService_GroupListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/GroupListAllResponse" message="tns:IProjectGroupService_GroupListAll_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpDateProductGroup">
-      <soap:operation soapAction="http://www.logic2020.com/IProjectGroupService/UpDateProductGroup" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+    <wsdl:operation name="ProjectGroupUpdate">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/ProjectGroupUpdate" message="tns:IProjectGroupService_ProjectGroupUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/ProjectGroupUpdateResponse" message="tns:IProjectGroupService_ProjectGroupUpdate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectGroupInsert">
-      <soap:operation soapAction="http://www.logic2020.com/IProjectGroupService/ProjectGroupInsert" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/ProjectGroupInsert" message="tns:IProjectGroupService_ProjectGroupInsert_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/ProjectGroupInsertResponse" message="tns:IProjectGroupService_ProjectGroupInsert_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectGroupDelete">
-      <soap:operation soapAction="http://www.logic2020.com/IProjectGroupService/ProjectGroupDelete" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/ProjectGroupDelete" message="tns:IProjectGroupService_ProjectGroupDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/ProjectGroupDeleteResponse" message="tns:IProjectGroupService_ProjectGroupDelete_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetInternalBusinessUnits">
-      <soap:operation soapAction="http://www.logic2020.com/IProjectGroupService/GetInternalBusinessUnits" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/GetInternalBusinessUnits" message="tns:IProjectGroupService_GetInternalBusinessUnits_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/GetInternalBusinessUnitsResponse" message="tns:IProjectGroupService_GetInternalBusinessUnits_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ListGroupByClientAndPersonInPeriod">
-      <soap:operation soapAction="http://www.logic2020.com/IProjectGroupService/ListGroupByClientAndPersonInPeriod" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/ListGroupByClientAndPersonInPeriod" message="tns:IProjectGroupService_ListGroupByClientAndPersonInPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/ListGroupByClientAndPersonInPeriodResponse" message="tns:IProjectGroupService_ListGroupByClientAndPersonInPeriod_OutputMessage" />
     </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="ProjectGroupService">
-    <wsdl:port name="BasicHttpBinding_IProjectGroupService" binding="tns:BasicHttpBinding_IProjectGroupService">
-      <soap:address location="http://system44.ggk.com/PracticeManagementService/ProjectGroupService.svc" />
-    </wsdl:port>
-  </wsdl:service>
+    <wsdl:operation name="BusinessGroupUpdate">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/BusinessGroupUpdate" message="tns:IProjectGroupService_BusinessGroupUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/BusinessGroupUpdateResponse" message="tns:IProjectGroupService_BusinessGroupUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BusinessGroupInsert">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/BusinessGroupInsert" message="tns:IProjectGroupService_BusinessGroupInsert_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/BusinessGroupInsertResponse" message="tns:IProjectGroupService_BusinessGroupInsert_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BusinessGroupDelete">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/BusinessGroupDelete" message="tns:IProjectGroupService_BusinessGroupDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/BusinessGroupDeleteResponse" message="tns:IProjectGroupService_BusinessGroupDelete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBusinessGroupList">
+      <wsdl:input wsaw:Action="http://www.logic2020.com/IProjectGroupService/GetBusinessGroupList" message="tns:IProjectGroupService_GetBusinessGroupList_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.logic2020.com/IProjectGroupService/GetBusinessGroupListResponse" message="tns:IProjectGroupService_GetBusinessGroupList_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
 </wsdl:definitions>
