@@ -32,6 +32,8 @@ AS
 	       p.OpportunityId,
 		   O.OpportunityNumber,
 	       p.GroupId,
+		   p.PricingListId,
+		   p.BusinessTypeId,
 	       p.ProjectIsChargeable,
 	       p.ClientIsChargeable,
 		   p.ProjectManagersIdFirstNameLastName,
