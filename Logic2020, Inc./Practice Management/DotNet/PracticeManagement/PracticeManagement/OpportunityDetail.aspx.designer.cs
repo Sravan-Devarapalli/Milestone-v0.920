@@ -157,6 +157,15 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.DatePicker dpEndDate;
         
         /// <summary>
+        /// ddlBusinessOptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessOptions;
+        
+        /// <summary>
         /// reqEndDate control.
         /// </summary>
         /// <remarks>
@@ -328,6 +337,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlClientGroup;
         
         /// <summary>
+        /// lblBusinessGroup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblBusinessGroup;
+        
+        /// <summary>
         /// txtEstRevenue control.
         /// </summary>
         /// <remarks>
@@ -470,6 +488,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPractice;
+        
+        /// <summary>
+        /// ddlPricingList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlPricingList;
         
         /// <summary>
         /// animHide control.
