@@ -10,6 +10,7 @@ CREATE PROCEDURE [dbo].[AttachOpportunityToProject]
 	@ProjectId			INT,
 	@OpportunityId      INT,
 	@UserLogin          NVARCHAR(255),
+	@PricingListId      INT=NULL,
 	@Link				BIT
 )
 AS
@@ -36,6 +37,7 @@ BEGIN
 
 		UPDATE O
 			SET O.ProjectId = @ProjectId,
+			    O.PricingListId=@PricingListId,
 				@OpportunityNumber = O.OpportunityNumber
 		FROM dbo.Opportunity O
 		WHERE O.OpportunityId = @OpportunityId
@@ -61,3 +63,4 @@ BEGIN
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
+
