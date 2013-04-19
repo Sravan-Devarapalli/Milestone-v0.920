@@ -1,210 +1,418 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://www.logic2020.com" elementFormDefault="qualified" targetNamespace="http://www.logic2020.com" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://system68.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-  <xs:element name="SaveClientDetail">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="client" nillable="true" type="q1:Client" />
-        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SaveClientDetailResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="SaveClientDetailResult" nillable="true" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetClientDetail">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="clientId" type="xs:int" />
-        <xs:element minOccurs="0" name="viewerUsername" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetClientDetailResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetClientDetailResult" nillable="true" type="q2:Client" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetClientDetailsShort">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="clientId" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetClientDetailsShortResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetClientDetailsShortResult" nillable="true" type="q3:Client" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpdateStatusForClient">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="clientId" type="xs:int" />
-        <xs:element minOccurs="0" name="inActive" type="xs:boolean" />
-        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpdateStatusForClientResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpdateIsChargableForClient">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="clientId" nillable="true" type="xs:int" />
-        <xs:element minOccurs="0" name="isChargable" type="xs:boolean" />
-        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpdateIsChargableForClientResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAll">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllResult" nillable="true" type="q4:ArrayOfClient" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllSecure">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q5:Person" />
-        <xs:element minOccurs="0" name="inactives" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllSecureResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllSecureResult" nillable="true" type="q6:ArrayOfClient" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllSecureByNewRule">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="person" nillable="true" type="q7:Person" />
-        <xs:element minOccurs="0" name="inactives" type="xs:boolean" />
-        <xs:element minOccurs="0" name="applyNewRule" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllSecureByNewRuleResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllSecureByNewRuleResult" nillable="true" type="q8:ArrayOfClient" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllWithInactive">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllWithInactiveResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllWithInactiveResult" nillable="true" type="q9:ArrayOfClient" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllForProject">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="projectId" nillable="true" type="xs:int" />
-        <xs:element minOccurs="0" name="loggedInPersonId" nillable="true" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllForProjectResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllForProjectResult" nillable="true" type="q10:ArrayOfClient" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllColorsForMargin">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllColorsForMarginResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllColorsForMarginResult" nillable="true" type="q11:ArrayOfColorInformation" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetClientMarginColorInfo">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="clientId" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetClientMarginColorInfoResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetClientMarginColorInfoResult" nillable="true" type="q12:ArrayOfClientMarginColorInfo" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllWithoutPermissions">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientListAllWithoutPermissionsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ClientListAllWithoutPermissionsResult" nillable="true" type="q13:ArrayOfClient" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetInternalAccount">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetInternalAccountResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetInternalAccountResult" nillable="true" type="q14:Client" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientIsNoteRequiredUpdate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="clientId" type="xs:int" />
-        <xs:element minOccurs="0" name="isNoteRequired" type="xs:boolean" />
-        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClientIsNoteRequiredUpdateResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="Client">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DefaultDirectorId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DefaultDiscount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DefaultSalespersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="DefaultTerms" type="xs:int" />
+      <xs:element minOccurs="0" name="Groups" nillable="true" type="tns:ArrayOfProjectGroup" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Client" nillable="true" type="tns:Client" />
+  <xs:complexType name="ArrayOfClientMarginColorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfClientMarginColorInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
+  <xs:complexType name="ClientMarginColorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ColorInfo" nillable="true" type="tns:ColorInformation" />
+      <xs:element minOccurs="0" name="EndRange" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="StartRange" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
+  <xs:complexType name="ColorInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ColorDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ColorId" type="xs:int" />
+      <xs:element minOccurs="0" name="ColorValue" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ColorInformation" nillable="true" type="tns:ColorInformation" />
+  <xs:complexType name="ArrayOfProjectGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectGroup" nillable="true" type="tns:ArrayOfProjectGroup" />
+  <xs:complexType name="ProjectGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BusinessGroupId" type="xs:int" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
+  <xs:complexType name="ArrayOfClient">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Client" nillable="true" type="tns:Client" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfClient" nillable="true" type="tns:ArrayOfClient" />
+  <xs:complexType name="Person">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillableUtilizationPercent" type="xs:double" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="ContactInfoList" nillable="true" type="q1:ArrayOfPersonContactInfo" />
+      <xs:element minOccurs="0" name="CurrentPay" nillable="true" type="tns:Pay" />
+      <xs:element minOccurs="0" name="DefaultPractice" nillable="true" type="tns:Practice" />
+      <xs:element minOccurs="0" name="DivisionType" type="tns:PersonDivisionType" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q2:ArrayOfPersonDocument" />
+      <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
+      <xs:element minOccurs="0" name="EmploymentHistory" nillable="true" type="tns:ArrayOfEmployment" />
+      <xs:element minOccurs="0" name="FirstHireDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HasPicture" type="xs:boolean" />
+      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ImageUrl" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q4:ArrayOfPersonIndustry" />
+      <xs:element minOccurs="0" name="IsAdmin" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsHighlighted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsOffshore" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsStrawMan" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsTerminatedDueToPay" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsWelcomeEmailSent" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastTerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LockedOut" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Manager" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="ModifiedDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OverheadList" nillable="true" type="tns:ArrayOfPersonOverhead" />
+      <xs:element minOccurs="0" name="PaychexID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PaymentHistory" nillable="true" type="tns:ArrayOfPay" />
+      <xs:element minOccurs="0" name="PictureData" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="PracticesOwned" nillable="true" type="tns:ArrayOfPractice" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Profiles" nillable="true" type="q5:ArrayOfProfile" />
+      <xs:element minOccurs="0" name="ProjectRoleName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q6:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Qualifications" nillable="true" type="q7:ArrayOfPersonQualification" />
+      <xs:element minOccurs="0" name="RecruiterFirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecruiterId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="RecruiterLastName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RoleNames" nillable="true" type="q8:ArrayOfstring" />
+      <xs:element minOccurs="0" name="SLTApproval" type="xs:boolean" />
+      <xs:element minOccurs="0" name="SLTPTOApproval" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Seniority" nillable="true" type="tns:Seniority" />
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Skills" nillable="true" type="q9:ArrayOfPersonSkill" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
+      <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TerminationReasonid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="tns:Title" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q10:ArrayOfPersonTraining" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Person" nillable="true" type="tns:Person" />
+  <xs:complexType name="Pay">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="AmountHourly" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="BonusAmount" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="BonusHoursToCollect" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="IsYearBonus" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OldEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OldStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="PracticeId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PracticeName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SLTApproval" type="xs:boolean" />
+      <xs:element minOccurs="0" name="SLTPTOApproval" type="xs:boolean" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Timescale" type="tns:TimescaleType" />
+      <xs:element minOccurs="0" name="TimescaleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TitleId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="VacationDays" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Pay" nillable="true" type="tns:Pay" />
+  <xs:complexType name="PracticeManagementCurrency">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FormatStyle" type="tns:NumberFormatStyle" />
+      <xs:element minOccurs="0" name="Value" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PracticeManagementCurrency" nillable="true" type="tns:PracticeManagementCurrency" />
+  <xs:simpleType name="NumberFormatStyle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="General" />
+      <xs:enumeration value="Negative" />
+      <xs:enumeration value="Revenue" />
+      <xs:enumeration value="Cogs">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Margin">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Total">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">16</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Percent">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">32</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NumberFormatStyle" nillable="true" type="tns:NumberFormatStyle" />
+  <xs:simpleType name="TimescaleType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Hourly" />
+      <xs:enumeration value="Salary" />
+      <xs:enumeration value="_1099Ctc" />
+      <xs:enumeration value="PercRevenue" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TimescaleType" nillable="true" type="tns:TimescaleType" />
+  <xs:complexType name="Practice">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Abbreviation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActiveCapabilitiesExists" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsCompanyInternal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNotesRequiredForTimeEnry" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PracticeCapabilities" nillable="true" type="tns:ArrayOfPracticeCapability" />
+      <xs:element minOccurs="0" name="PracticeManagers" nillable="true" type="tns:ArrayOfPracticeManagerHistory" />
+      <xs:element minOccurs="0" name="PracticeOwner" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="PracticeOwnerName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q11:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Practice" nillable="true" type="tns:Practice" />
+  <xs:complexType name="ComputedFinancials">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActualGrossMargin" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="ActualRevenue" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="BillRateMinusDiscount" nillable="true" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="Cogs" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Expenses" type="xs:decimal" />
+      <xs:element minOccurs="0" name="FinancialDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="GrossMargin" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PracticeManagementCommission" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="ReimbursedExpenses" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Revenue" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="RevenueNet" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="SalesCommission" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="Timescale" type="tns:TimescaleType" />
+      <xs:element minOccurs="0" name="TimescaleChangeStatus" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
+  <xs:complexType name="ArrayOfPracticeCapability">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PracticeCapability" nillable="true" type="tns:PracticeCapability" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPracticeCapability" nillable="true" type="tns:ArrayOfPracticeCapability" />
+  <xs:complexType name="PracticeCapability">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CapabilityId" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PracticeAbbreviation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PracticeId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PracticeCapability" nillable="true" type="tns:PracticeCapability" />
+  <xs:complexType name="ArrayOfPracticeManagerHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PracticeManagerHistory" nillable="true" type="tns:PracticeManagerHistory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPracticeManagerHistory" nillable="true" type="tns:ArrayOfPracticeManagerHistory" />
+  <xs:complexType name="PracticeManagerHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PracticeId" type="xs:int" />
+      <xs:element minOccurs="0" name="PracticeManagerFirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PracticeManagerId" type="xs:int" />
+      <xs:element minOccurs="0" name="PracticeManagerLastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PracticeManagerHistory" nillable="true" type="tns:PracticeManagerHistory" />
+  <xs:simpleType name="PersonDivisionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="BusinessDevelopment" />
+      <xs:enumeration value="Consulting" />
+      <xs:enumeration value="Operations" />
+      <xs:enumeration value="Recruiting" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PersonDivisionType" nillable="true" type="tns:PersonDivisionType" />
+  <xs:complexType name="ArrayOfEmployment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Employment" nillable="true" type="tns:Employment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmployment" nillable="true" type="tns:ArrayOfEmployment" />
+  <xs:complexType name="Employment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReasonId" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Employment" nillable="true" type="tns:Employment" />
+  <xs:complexType name="ArrayOfPersonOverhead">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonOverhead" nillable="true" type="tns:PersonOverhead" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPersonOverhead" nillable="true" type="tns:ArrayOfPersonOverhead" />
+  <xs:complexType name="PersonOverhead">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BillRateMultiplier" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="HourlyValue" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="HoursToCollect" type="xs:int" />
+      <xs:element minOccurs="0" name="IsPercentage" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Rate" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="RateType" nillable="true" type="tns:OverheadRateType" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonOverhead" nillable="true" type="tns:PersonOverhead" />
+  <xs:complexType name="OverheadRateType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HoursToCollect" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsPercentage" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OverheadRateType" nillable="true" type="tns:OverheadRateType" />
+  <xs:complexType name="ArrayOfPay">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Pay" nillable="true" type="tns:Pay" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPay" nillable="true" type="tns:ArrayOfPay" />
+  <xs:complexType name="ArrayOfPractice">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Practice" nillable="true" type="tns:Practice" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPractice" nillable="true" type="tns:ArrayOfPractice" />
+  <xs:complexType name="Seniority">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
+      <xs:element minOccurs="0" name="SeniorityValue" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Seniority" nillable="true" type="tns:Seniority" />
+  <xs:complexType name="SeniorityCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
+  <xs:complexType name="PersonStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
+  <xs:complexType name="Title">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MaximumSalary" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="MinimumSalary" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PTOAccrual" type="xs:int" />
+      <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
+      <xs:element minOccurs="0" name="TitleId" type="xs:int" />
+      <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TitleType" nillable="true" type="tns:TitleType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Title" nillable="true" type="tns:Title" />
+  <xs:complexType name="TitleType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="TitleTypeId" type="xs:int" />
+      <xs:element minOccurs="0" name="TitleTypeName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TitleType" nillable="true" type="tns:TitleType" />
+  <xs:complexType name="ArrayOfColorInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ColorInformation" nillable="true" type="tns:ColorInformation" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfColorInformation" nillable="true" type="tns:ArrayOfColorInformation" />
+  <xs:complexType name="PricingList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClientId" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PricingListId" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PricingList" nillable="true" type="tns:PricingList" />
+  <xs:complexType name="ArrayOfPricingList">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PricingList" nillable="true" type="tns:PricingList" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPricingList" nillable="true" type="tns:ArrayOfPricingList" />
 </xs:schema>
