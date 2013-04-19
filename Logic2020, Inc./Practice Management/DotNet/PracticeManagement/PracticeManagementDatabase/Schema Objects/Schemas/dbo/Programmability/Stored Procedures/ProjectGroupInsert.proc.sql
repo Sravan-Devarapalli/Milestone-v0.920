@@ -35,6 +35,9 @@ AS
 
 		END TRY
 		BEGIN CATCH
+			-- End logging session
+			EXEC dbo.SessionLogUnprepare
+
 			DECLARE @ErrorMessage NVARCHAR(2048)
 			SELECT @ErrorMessage = ERROR_MESSAGE()
 			
