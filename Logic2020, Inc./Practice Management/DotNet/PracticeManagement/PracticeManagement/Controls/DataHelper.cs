@@ -1505,6 +1505,47 @@ namespace PraticeManagement.Controls
             }
         }
 
+
+        public static void FillPricingLists(ListControl control, PricingList[] pricingList, string firstItemText =null , bool noFirstItem = false, string valueField = "PricingListId", string NameField = "Name")
+        { 
+                    FillListDefault(control, string.Empty, pricingList, noFirstItem, valueField, NameField);    
+        }
+
+        public static void FillBusinessTypes(ListControl control)
+        {
+            using (var serviceClient = new ClientServiceClient())
+            {
+                try
+                {
+                    var businessTypes = Enum.GetValues(typeof(BusinessType));
+
+                    control.AppendDataBoundItems = true;
+                    control.Items.Clear();
+
+                    control.DataTextField = "Key";
+                    control.DataValueField = "Value";
+
+                    Dictionary<string, string> list = new Dictionary<string, string>();
+
+                    foreach (BusinessType item in businessTypes)
+                    {
+                        string key = GetDescription(item);
+                        string value = ((int)item).ToString();
+                        if (value == "0") value = "";
+                        list.Add(key, value);
+                    }
+
+                    control.DataSource = list;
+                    control.DataBind();
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         public static void FillProjectGroupList(ListControl control, int? clientId, int? projectId, string firstItemText = null, bool noFirstItem = true)
         {
             using (var serviceClient = new ProjectGroupServiceClient())
