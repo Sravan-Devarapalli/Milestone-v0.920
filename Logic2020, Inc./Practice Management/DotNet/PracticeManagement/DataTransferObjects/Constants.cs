@@ -32,11 +32,14 @@ namespace DataTransferObjects
         public class GroupNames
         {
             public const string DefaultGroupName = "Default Group";
+            public const string DefaultBusinessGroupName = "Default";
+            public const string DefaultPricingListName = "Default";
         }
 
         public class GroupCodes
         {
             public const string DefaultGroupCode = "B0001";
+            public const string DefaultBusinessGroupCode = "BG0001";
         }
 
         public static class ResourceKeys
