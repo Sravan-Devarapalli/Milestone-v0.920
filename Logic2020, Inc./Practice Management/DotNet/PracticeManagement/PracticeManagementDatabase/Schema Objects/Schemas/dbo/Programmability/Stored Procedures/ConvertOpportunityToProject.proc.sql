@@ -18,6 +18,7 @@ BEGIN
 	DECLARE @ProjectedEndDate DATETIME
 	DECLARE @MilestoneId INT
 	DECLARE @GroupId INT
+	DECLARE @PricingListId INT
 	DECLARE @SalespersonId INT
 	DECLARE @OpportunityStatusId INT
 	DECLARE @BuyerName NVARCHAR(100)
@@ -39,6 +40,7 @@ BEGIN
 	       @OpportunityStatusId = o.OpportunityStatusId,
 	       @BuyerName = o.BuyerName,
 	       @GroupId = ISNULL(o.GroupId, (SELECT PG.GroupId FROM dbo.ProjectGroup PG WHERE PG.ClientId = o.ClientId and PG.Code = 'B0001')),
+		   @PricingListId=o.PricingListId,
 	       @IsChargeable = 1,
 	       @ProjectManagerId = CONVERT(NVARCHAR(255),ISNULL(o.OwnerId, pr.PracticeManagerId)),
 		   @Description =Description
@@ -61,6 +63,7 @@ BEGIN
 		@BuyerName = @BuyerName,
 		@UserLogin = @UserLogin,
 		@GroupId = @GroupId,
+		@PricingListId=@PricingListId,
 		@ProjectManagerIdsList = @ProjectManagerId,
 	    @ProjectId = @ProjectId OUTPUT,
 		@OpportunityId = @OpportunityId,
