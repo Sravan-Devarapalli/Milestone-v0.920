@@ -22,5 +22,8 @@
 	[IsNoteRequired]            BIT    NOT NULL CONSTRAINT DF_Project_IsNoteRequired DEFAULT (1),
 	[ProjectOwnerId]            INT NULL,
 	[SowBudget]					DECIMAL(18,2) NULL,
+	[PricingListId]				INT NULL,
+	[BusinessTypeId]			    INT NULL,
     FOREIGN KEY ([GroupId]) REFERENCES [dbo].[ProjectGroup] ([GroupId]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
