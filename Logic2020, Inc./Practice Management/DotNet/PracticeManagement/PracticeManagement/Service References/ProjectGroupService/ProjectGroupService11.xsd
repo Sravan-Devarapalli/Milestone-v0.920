@@ -8,6 +8,8 @@
   <xs:element name="ArrayOfProjectGroup" nillable="true" type="tns:ArrayOfProjectGroup" />
   <xs:complexType name="ProjectGroup">
     <xs:sequence>
+      <xs:element minOccurs="0" name="BusinessGroupId" type="xs:int" />
+      <xs:element minOccurs="0" name="ClientId" type="xs:int" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
@@ -16,4 +18,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
+  <xs:complexType name="BusinessGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClientId" type="xs:int" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BusinessGroup" nillable="true" type="tns:BusinessGroup" />
+  <xs:complexType name="ArrayOfBusinessGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BusinessGroup" nillable="true" type="tns:BusinessGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBusinessGroup" nillable="true" type="tns:ArrayOfBusinessGroup" />
 </xs:schema>
