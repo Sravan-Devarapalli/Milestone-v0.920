@@ -36,7 +36,7 @@ namespace PraticeManagement
         {
             get
             {
-                return projects;
+                return ucProjects;
             }
         }
 
@@ -210,7 +210,7 @@ namespace PraticeManagement
 
             if (!userIsAdministrator && !userIsClientDirector && !userIsSeniorLeadership)
             {
-                tpMarginGoals.Visible = false;
+                vwMarginGoals.Visible = false;
             }
 
         }
@@ -584,7 +584,7 @@ namespace PraticeManagement
 
         private Client GetClient(int? clientId)
         {
-            return ServiceCallers.Custom.Client(c => c.GetClientDetail(clientId.Value, DataHelper.CurrentPerson.Alias));
+            return ServiceCallers.Custom.Client(c => c.GetClientDetail(clientId.Value, Page.User.Identity.Name));
         }
 
         private void InitActionControls(string clientId)
@@ -611,7 +611,7 @@ namespace PraticeManagement
         private int? SaveData()
         {
             var client = new Client();
-
+            int businessGroupId = 0;
             PopulateData(client);
             using (var serviceClient = new ClientServiceClient())
             {
@@ -620,21 +620,78 @@ namespace PraticeManagement
                     var id = serviceClient.SaveClientDetail(client, User.Identity.Name);
                     if (!ClientId.HasValue)
                     {
-                        foreach (var g in groups.ClientGroupsList.Values.ToList())
+                        foreach (var g in ucProjectGoups.ClientGroupsList)
                         {
                             using (var serviceGroups = new PraticeManagement.ProjectGroupService.ProjectGroupServiceClient())
                             {
                                 if (g.Code != ProjectGroup.DefaultGroupCode)
                                 {
-                                    int result = serviceGroups.ProjectGroupInsert(id.Value, g.Name, g.IsActive); 
+                                    ProjectGroup projectGroup = new ProjectGroup();
+                                    projectGroup.Name = g.Name;
+                                    projectGroup.IsActive = g.IsActive;
+                                    projectGroup.BusinessGroupId = businessGroupId;
+                                    projectGroup.ClientId = id.Value;
+                                    int result = serviceGroups.ProjectGroupInsert(projectGroup, Page.User.Identity.Name);
                                 }
-                                else if (g.Code == ProjectGroup.DefaultGroupCode && g.Name != ProjectGroup.DefaultGroupName)
+                                else if (g.Code == ProjectGroup.DefaultGroupCode)
                                 {
                                     int groupId = ServiceCallers.Custom.Group(s => s.GroupListAll(id.Value, null).ToList()).First(s => s.Code == ProjectGroup.DefaultGroupCode).Id.Value;
-                                    serviceGroups.UpDateProductGroup(id.Value, groupId, g.Name, g.IsActive);
-                                }                                
+                                    ProjectGroup projectGroup = new ProjectGroup();
+                                    projectGroup.Name = g.Name;
+                                    projectGroup.Id = groupId;
+                                    projectGroup.IsActive = g.IsActive;
+                                    projectGroup.ClientId = id.Value;
+                                    BusinessGroup[] businessGroupList = serviceGroups.GetBusinessGroupList(null, groupId);
+                                    projectGroup.BusinessGroupId = businessGroupList.First().Id.Value;
+                                    businessGroupId = projectGroup.BusinessGroupId;
+                                    serviceGroups.ProjectGroupUpdate(projectGroup, Page.User.Identity.Name);
+                                }
                             }
-
+                        }
+                        foreach (var g in ucPricingList.ClientPricingLists)
+                        {
+                            using (var serviceGroups = new PraticeManagement.ClientService.ClientServiceClient())
+                            {
+                                if (!g.IsDefault)
+                                {
+                                    PricingList pricingList = new PricingList();
+                                    pricingList.ClientId = id.Value;
+                                    pricingList.Name = g.Name;
+                                    int result = serviceGroups.PricingListInsert(pricingList, User.Identity.Name);
+                                }
+                                else if (g.IsDefault && g.Name != PricingList.DefaultPricingListName)
+                                {
+                                    int pricingListId = ServiceCallers.Custom.Client(s => s.GetPricingLists(id.Value).ToList()).First(s => s.IsDefault == true).PricingListId.Value;
+                                    PricingList pricingList = new PricingList();
+                                    pricingList.ClientId = id.Value;
+                                    pricingList.Name = g.Name;
+                                    pricingList.PricingListId = pricingListId;
+                                    serviceGroups.PricingListUpdate(pricingList, User.Identity.Name);
+                                }
+                            }
+                        }
+                        foreach (var g in ucBusinessGroups.ClientGroupsList)
+                        {
+                            using (var serviceGroups = new PraticeManagement.ProjectGroupService.ProjectGroupServiceClient())
+                            {
+                                if (g.Code != BusinessGroup.DefaultBusinessGroupCode)
+                                {
+                                    BusinessGroup businessGroup = new BusinessGroup();
+                                    businessGroup.Name = g.Name;
+                                    businessGroup.IsActive = g.IsActive;
+                                    businessGroup.ClientId = id.Value;
+                                    int result = serviceGroups.BusinessGroupInsert(businessGroup, User.Identity.Name);
+                                }
+                                else if (g.Code == BusinessGroup.DefaultBusinessGroupCode && g.Name != BusinessGroup.DefaultBusinessGroupName)
+                                {
+                                    int groupId = ServiceCallers.Custom.Group(s => s.GetBusinessGroupList(id.Value, null).ToList()).First(s => s.Code == BusinessGroup.DefaultBusinessGroupCode).Id.Value;
+                                    BusinessGroup businessGroup = new BusinessGroup();
+                                    businessGroup.Name = g.Name;
+                                    businessGroup.Id = groupId;
+                                    businessGroup.IsActive = g.IsActive;
+                                    serviceGroups.BusinessGroupUpdate(businessGroup, User.Identity.Name);
+                                }
+                            }
                         }
                     }
                     return id;
@@ -753,6 +810,91 @@ namespace PraticeManagement
             client.ClientMarginInfo = ClientMarginColorInfoList;
         }
 
+        private void LoadActiveView(bool isBasicMultiView)
+        {
+            if (isBasicMultiView)
+            {
+                //switch (mvBasicClientDetails.ActiveViewIndex)
+                //{
+                //    case 0:
+                //        ucProjectGoups.DisplayGroups(null);
+                //        break;
+                //    case 1:
+                //        ucBusinessGroups.DisplayGroups(null);
+                //        break;
+                //}
+
+            }
+            else
+            {
+                switch (mvClientDetails.ActiveViewIndex)
+                {
+                    case 1:
+                        ucProjectGoups.DisplayGroups(null,true);
+                        break;
+                    case 2:
+                        ucBusinessGroups.DisplayGroups(null,true);
+                        break;
+                    case 3:
+                        ucPricingList.DisplayPricingList(null,true);
+                        break;
+                }
+            }
+
+
+        }
+
+        protected void btnBasicView_Command(object sender, CommandEventArgs e)
+        {
+            int viewIndex = int.Parse((string)e.CommandArgument);
+            SwitchView((Control)sender, viewIndex,true);
+        }
+
+        protected void btnView_Command(object sender, CommandEventArgs e)
+        {
+            int viewIndex = int.Parse((string)e.CommandArgument);
+            SwitchView((Control)sender, viewIndex,false);
+        }
+
+        private void SwitchView(Control control, int viewIndex,bool isBasicMultiView)
+        {
+            SelectView(control, viewIndex, isBasicMultiView);
+            LoadActiveView(isBasicMultiView);
+        }
+
+        private void SetCssClassEmpty(bool isBasicMultiView)
+        {
+            System.Web.UI.WebControls.Table tbl = null;
+            if (isBasicMultiView)
+            {
+                tbl = tblClientMainViewSwitch;
+            }
+            else
+            {
+                tbl = tblClientViewSwitch;
+            }
+            foreach (TableCell cell in tbl.Rows[0].Cells)
+            {
+                cell.CssClass = string.Empty;
+            }
+        }
+
+        private void SelectView(Control sender, int viewIndex,bool isBasicMultiView)
+        {
+            if (isBasicMultiView)
+            {
+                mvBasicClientDetails.ActiveViewIndex = viewIndex;
+            }
+            else
+            {
+                mvClientDetails.ActiveViewIndex = viewIndex;
+            }
+
+            SetCssClassEmpty(isBasicMultiView);
+
+            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
+        }
+
         #region Projects
 
         protected void btnProjectName_Command(object sender, CommandEventArgs e)
@@ -776,8 +918,8 @@ namespace PraticeManagement
                 if (clientId.HasValue)
                 {
                     var query = Request.QueryString.ToString();
-                    string backUrl = string.Format( Constants.ApplicationPages.ClientDetailsWithoutClientIdFormat,
-                                                    Constants.ApplicationPages.ClientDetails,query);
+                    string backUrl = string.Format(Constants.ApplicationPages.ClientDetailsWithoutClientIdFormat,
+                                                    Constants.ApplicationPages.ClientDetails, query);
                     backUrl = GetBackUrlWithId(backUrl, clientId.Value.ToString());
 
                     var id = -1;
