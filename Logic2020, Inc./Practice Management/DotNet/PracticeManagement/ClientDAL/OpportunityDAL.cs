@@ -264,9 +264,14 @@ namespace DataAccess
                     Constants.ParameterNames.OwnerId,
                     opportunity.Owner == null ? (object)DBNull.Value : opportunity.Owner.Id);
 
-                command.Parameters.AddWithValue(
-                    Constants.ParameterNames.GroupIdParam,
-                    opportunity.Group == null ? (object)DBNull.Value : opportunity.Group.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
+                            opportunity.PricingList != null && opportunity.PricingList.PricingListId.HasValue ?
+                            (object)opportunity.PricingList.PricingListId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId,
+                        ((int)opportunity.BusinessType) != 0 ? (object)((int)opportunity.BusinessType) : DBNull.Value);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.GroupIdParam,
+                opportunity.Group == null ? (object)DBNull.Value : opportunity.Group.Id);
 
                 command.Parameters.AddWithValue(
                    Constants.ParameterNames.PersonIdListParam,
@@ -394,6 +399,11 @@ namespace DataAccess
                     Constants.ParameterNames.GroupIdParam,
                     opportunity.Group == null ? (object)DBNull.Value : opportunity.Group.Id);
 
+                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
+                     opportunity.PricingList != null && opportunity.PricingList.PricingListId.HasValue ?
+                     (object)opportunity.PricingList.PricingListId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId,
+                        ((int)opportunity.BusinessType) != 0 ? (object)((int)opportunity.BusinessType) : DBNull.Value);
                 command.Parameters.AddWithValue(
                     Constants.ParameterNames.PersonIdListParam,
                     opportunity.ProposedPersonIdList == null ? (object)DBNull.Value : opportunity.ProposedPersonIdList);
@@ -462,9 +472,18 @@ namespace DataAccess
                 var priorityDisplaynameIndex = -1;
 
                 int priorityIdIndex = -1;
+                int pricingListIdIndex = -1;
                 var prioritySortOrderIndex = -1;
                 int EstimatedRevenueiIndex = -1;
                 int OutSideResourcesIndex = -1;
+                int opportunityBusinessTypesIndex = -1;
+                try
+                {
+                    opportunityBusinessTypesIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessTypeId);
+                }
+                catch
+                { }
+
                 try
                 {
                     priorityDisplaynameIndex = reader.GetOrdinal(Constants.ColumnNames.DisplayNameColumn);
@@ -518,7 +537,14 @@ namespace DataAccess
                 {
                     prioritySortOrderIndex = -1;
                 }
-
+                try
+                {
+                    pricingListIdIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListId);
+                }
+                catch
+                {
+                    pricingListIdIndex = -1;
+                }
                 while (reader.Read())
                 {
                     // Reading the item
@@ -609,6 +635,11 @@ namespace DataAccess
                                         : null
                         };
 
+                    if (opportunityBusinessTypesIndex > -1)
+                    {
+                        opportunity.BusinessType = reader.IsDBNull(opportunityBusinessTypesIndex) ? (BusinessType)Enum.Parse(typeof(BusinessType), "0") : (BusinessType)Enum.Parse(typeof(BusinessType), reader.GetInt32(opportunityBusinessTypesIndex).ToString());
+                    }
+
                     if (closeDateIndex > -1)
                     {
                         if (!reader.IsDBNull(closeDateIndex))
@@ -618,6 +649,17 @@ namespace DataAccess
                                     : null;
 
                         }
+                    }
+
+                    if (pricingListIdIndex > -1)
+                    {
+
+                        opportunity.PricingList = !reader.IsDBNull(pricingListIdIndex) ?
+                                   new PricingList
+                                    {
+                                        PricingListId = reader.GetInt32(pricingListIdIndex),
+                                    }
+                                    : null;
                     }
 
                     if (EstimatedRevenueiIndex > -1)
@@ -834,7 +876,6 @@ namespace DataAccess
             }
         }
 
-
         public static int ConvertOpportunityToProject(int opportunityId, string userName, bool hasPersons)
         {
             int res;
@@ -905,6 +946,7 @@ namespace DataAccess
                 }
             }
         }
+
         public static void OpportunityPersonDelete(int opportunityId, string personIdList)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
