@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="ActivityEventSource.cs" />
     <Compile Include="ActivityLogItem.cs" />
+    <Compile Include="BusinessGroup.cs" />
     <Compile Include="CalendarItem.cs" />
     <Compile Include="CategoryItemBudget.cs" />
     <Compile Include="Client.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="PersonPassword.cs" />
     <Compile Include="PersonWorkingHoursDetailsWithinThePeriod.cs" />
     <Compile Include="PracticeCapability.cs" />
+    <Compile Include="PricingList.cs" />
     <Compile Include="Reports\ByPerson\GroupByDateByPerson.cs" />
     <Compile Include="Reports\ByPerson\GroupByPersonByWorktype.cs" />
     <Compile Include="Reports\ByAccount\BusinessUnitLevelGroupedHours.cs" />
