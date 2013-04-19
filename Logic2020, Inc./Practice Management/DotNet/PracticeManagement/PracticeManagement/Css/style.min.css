@@ -402,6 +402,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width50andhalfPercent{width:50.5%}
 .Width55Percent{width:55%}
 .Width58Percent{width:58%;padding:1px}
+.width60PImp{width:60%!important}
 .width60P{width:60%}
 .Width63Percent{width:63%}
 .Width65Percent{width:65%}
@@ -417,6 +418,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width92Per{width:92%}
 .Width93Per{width:93%}
 .Width94Per{width:94%}
+.Width945Per{width:94.5%}
 .Width95Percent,.Width95Per{width:95%}
 .Width96Per{width:96%}
 .Width97Percent,.Width97Per{width:97%}
@@ -449,6 +451,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width83Px{width:83px}
 .Width90Px{width:90px}
 .Width90PxImp{width:90px!important}
+.Width98PxImp{width:98px!important}
 .Width95Px{width:95px}
 .Width100Px{width:100px}
 .Width100PxImp{width:100px!important}
