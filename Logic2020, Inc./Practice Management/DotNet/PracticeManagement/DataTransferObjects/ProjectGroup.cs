@@ -80,6 +80,12 @@ namespace DataTransferObjects
         [DataMember]
         public string Code { get; set; }
 
+        [DataMember]
+        public int BusinessGroupId { get; set; }
+
+        [DataMember]
+        public int ClientId { get; set; }
+
         #endregion
     }
 }
