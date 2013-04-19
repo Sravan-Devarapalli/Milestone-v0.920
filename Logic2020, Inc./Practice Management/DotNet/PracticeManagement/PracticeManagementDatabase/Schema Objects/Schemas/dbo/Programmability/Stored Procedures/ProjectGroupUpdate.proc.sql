@@ -27,6 +27,9 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN ProjectGroupUpdate_tran
+
+		-- End logging session
+		EXEC dbo.SessionLogUnprepare
 		
 		DECLARE @ErrorMessage NVARCHAR(MAX)
 		SET @ErrorMessage = ERROR_MESSAGE()
