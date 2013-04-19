@@ -2125,6 +2125,10 @@ TABLE.Section td
     width: 58%;
     padding: 1px;
 }
+.width60PImp
+{
+   width: 60% !important;
+}
 .width60P
 {
     width: 60%;
@@ -2185,6 +2189,10 @@ TABLE.Section td
 {
     width: 94%;
 }
+.Width945Per
+{
+    width: 94.5%;
+}
 .Width95Percent, .Width95Per
 {
     width: 95%;
@@ -2204,6 +2212,10 @@ TABLE.Section td
 .Width99Percent
 {
     width: 99%;
+}
+Width99PercentImp
+{
+     width: 99% !important;
 }
 .Width5Px, .BenchCostCustomValidator
 {
@@ -2313,6 +2325,10 @@ TABLE.Section td
 .Width90PxImp
 {
     width: 90px !important;
+}
+.Width98PxImp
+{
+    width: 98px !important;
 }
 .Width95Px
 {
