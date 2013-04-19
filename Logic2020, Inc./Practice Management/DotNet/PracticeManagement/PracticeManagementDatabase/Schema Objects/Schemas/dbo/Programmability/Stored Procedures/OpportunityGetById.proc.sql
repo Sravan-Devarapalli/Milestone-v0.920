@@ -35,6 +35,8 @@ AS
 		   o.OwnerId,		   
 		   o.LastUpdate,
 		   o.GroupId,
+		   o.PricingListId,
+		   o.BusinessTypeId,
 		   o.GroupName,
 		   o.PracticeManagerId,
 		   p.LastName as 'OwnerLastName',
@@ -42,7 +44,6 @@ AS
 		   os.Name AS 'OwnerStatus',
 		   o.EstimatedRevenue ,
 		   o.CloseDate
-		   --,o.OutSideResources
 		   
 	 FROM dbo.v_Opportunity AS o
 	 LEFT JOIN dbo.Person p ON o.OwnerId = p.PersonId
@@ -50,3 +51,4 @@ AS
 	 LEFT JOIN dbo.PersonStatus os ON os.PersonStatusId = o.OwnerStatusId
 	 LEFT JOIN dbo.Project proj ON proj.ProjectId = o.ProjectId
 	 WHERE o.OpportunityId = @OpportunityId
+
