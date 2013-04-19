@@ -375,6 +375,8 @@
     <EmbeddedResource Include="Controls\Generic\DirtyStateExtender\DirtyStateExtender.js" />
     <EmbeddedResource Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.js" />
     <EmbeddedResource Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.js" />
+    <Content Include="Controls\Clients\ClientBusinessGroups.ascx" />
+    <Content Include="Controls\Clients\ClientPricingList.ascx" />
     <Content Include="Controls\FilteredCheckBoxList.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\PersonCalendar.ascx" />
@@ -543,10 +545,12 @@
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\PersonPicture.ashx" />
     <Content Include="Controls\Projects\AttachmentUpload.ashx" />
+    <None Include="Properties\DataSources\DataTransferObjects.BusinessGroup.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PricingList.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
@@ -605,6 +609,23 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\CalendarService\CalendarService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService2.wsdl" />
+    <None Include="Service References\ClientService\ClientService3.wsdl" />
+    <None Include="Service References\ClientService\ClientService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ClientService\ClientService7.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
@@ -751,12 +772,11 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService8.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ProjectGroupService\ProjectGroupService1.disco" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService2.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService9.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ProjectGroupService\ProjectGroupService1.disco" />
-    <None Include="Service References\ProjectGroupService\ProjectGroupService2.disco" />
-    <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <None Include="Service References\ProjectService\ProjectService1.wsdl" />
     <None Include="Service References\ProjectService\ProjectService1.xsd">
       <SubType>Designer</SubType>
@@ -932,6 +952,8 @@
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\ClientService\ClientService1.disco" />
+    <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\NPOI.dll" />
     <Content Include="TimEntry_New.xml">
@@ -1035,24 +1057,7 @@
     <None Include="Service References\ClientService\ClientService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ClientService\ClientService2.wsdl" />
     <None Include="Service References\ClientService\ClientService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService3.wsdl" />
-    <None Include="Service References\ClientService\ClientService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService6.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ClientService\ClientService7.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ExpenseCategoryService\ExpenseCategoryService1.wsdl" />
@@ -1258,7 +1263,6 @@
     <None Include="Service References\ProjectStatusService\ProjectStatusService1.disco" />
     <None Include="Service References\RoleService\RoleService1.disco" />
     <Content Include="Service References\ClientService\ClientService.disco" />
-    <None Include="Service References\ClientService\ClientService1.disco" />
     <Content Include="Service References\MembershipService\MembershipService.disco" />
     <None Include="Service References\TimeEntryService\configuration91.svcinfo" />
     <None Include="Service References\TimeEntryService\configuration.svcinfo" />
@@ -1386,6 +1390,20 @@
     </Compile>
     <Compile Include="Controls\Calendar.ascx.designer.cs">
       <DependentUpon>Calendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientBusinessGroups.ascx.cs">
+      <DependentUpon>ClientBusinessGroups.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientBusinessGroups.ascx.designer.cs">
+      <DependentUpon>ClientBusinessGroups.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientPricingList.ascx.cs">
+      <DependentUpon>ClientPricingList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Clients\ClientPricingList.ascx.designer.cs">
+      <DependentUpon>ClientPricingList.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\FilteredCheckBoxList.ascx.cs">
       <DependentUpon>FilteredCheckBoxList.ascx</DependentUpon>
