@@ -5,7 +5,7 @@
 )
 AS
 BEGIN
-	SELECT bg.BusinessGroupId,
+	SELECT DISTINCT bg.BusinessGroupId,
 			bg.ClientId,
 			bg.Name ,
 			bg.Code,
