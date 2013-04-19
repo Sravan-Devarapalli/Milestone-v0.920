@@ -320,7 +320,7 @@ namespace PracticeManagementService
         List<TimeTypeRecord> GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds);
 
         [OperationContract]
-        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link);
+        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId,bool link);
     }
 }
 
