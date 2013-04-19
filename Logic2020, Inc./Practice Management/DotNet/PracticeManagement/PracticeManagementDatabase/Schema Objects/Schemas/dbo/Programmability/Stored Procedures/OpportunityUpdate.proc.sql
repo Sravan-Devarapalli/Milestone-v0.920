@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[OpportunityUpdate]
+﻿CREATE PROCEDURE [dbo].[OpportunityUpdate]
 (
 	@Name                  NVARCHAR(50),
 	@ClientId              INT,
@@ -23,7 +22,9 @@ CREATE PROCEDURE [dbo].[OpportunityUpdate]
 	@GroupId			   INT,
 	@EstimatedRevenue	   DECIMAL(18,2),
 	@PersonIdList          NVARCHAR(MAX) = NULL,
-	@StrawManList          NVARCHAR(MAX) = NULL
+	@StrawManList          NVARCHAR(MAX) = NULL,
+	@PricingListId		   INT =NULL,
+	@BusinessTypeId		   INT =NULL
 )
 AS
 BEGIN
@@ -75,7 +76,9 @@ BEGIN
 			   OwnerId = @OwnerId,
 			   GroupId = @GroupId,
 			   EstimatedRevenue = @EstimatedRevenue
-			   ,LastUpdated = GETDATE()
+			   ,LastUpdated = GETDATE(),
+			   PricingListId=@PricingListId,
+			   BusinessTypeId=@BusinessTypeId
 		 WHERE OpportunityId = @OpportunityId
 
 		IF(@ProjectId IS NOT NULL)
