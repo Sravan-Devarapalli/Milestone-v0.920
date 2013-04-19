@@ -21,7 +21,9 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@IsNoteRequired     BIT = 1  ,
 	@ProjectOwner       INT,
 	@SowBudget			DECIMAL(18,2),
-	@ProjectCapabilityIds NVARCHAR(MAX)
+	@ProjectCapabilityIds NVARCHAR(MAX),
+	@PricingListId      INT = NULL,
+	@BusinessTypeId     INT= NULL
 )
 AS
 BEGIN
@@ -107,7 +109,9 @@ BEGIN
 				IsNoteRequired  = @IsNoteRequired,
 				ProjectOwnerId  = @ProjectOwner,
 				SowBudget		= @SowBudget,
-				Discount		= C.DefaultDiscount
+				Discount		= C.DefaultDiscount,
+				PricingListId   =@PricingListId,
+				BusinessTypeId   =@BusinessTypeId
 		FROM dbo.Project P
 		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
 		WHERE ProjectId = @ProjectId
