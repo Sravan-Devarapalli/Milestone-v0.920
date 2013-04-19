@@ -91,6 +91,17 @@ namespace PracticeManagementService
         [OperationContract]
         void ClientIsNoteRequiredUpdate(int clientId, bool isNoteRequired, string userLogin);
 
+        [OperationContract]
+        int PricingListInsert(PricingList pricingList, string userLogin);
+
+        [OperationContract]
+        void PricingListDelete(int pricingListId, string userLogin);
+
+        [OperationContract]
+        void PricingListUpdate(PricingList pricingList, string userLogin);
+
+        [OperationContract]
+        List<PricingList> GetPricingLists(int? clientId);
     }
 }
 
