@@ -41,6 +41,10 @@ BEGIN
 				i.ProjectOwnerId,
 				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
 				, i.SowBudget
+				,i.BusinessTypeId
+				,bt.Name AS [BusinessType]
+				,i.PricingListId
+				,pt.Name AS [PricingList]
 		FROM inserted AS i
 		INNER JOIN dbo.Client AS C ON C.ClientId = i.ClientId
 		INNER JOIN dbo.Practice AS prac ON prac.PracticeId = i.PracticeId
@@ -48,6 +52,8 @@ BEGIN
 		INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = i.GroupId
 		LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectOwnerId -- While Converting opportunity to Project ProjectOwnerId will not be there.So here Left join is used instead of INNER JOIN.
 		LEFT JOIN dbo.Person AS D ON D.PersonId = i.DirectorId
+		LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = i.BusinessTypeId
+		LEFT JOIN dbo.PricingList pt ON pt.PricingListId = i.PricingListId
 	)
 	
 	-- Log an activity
