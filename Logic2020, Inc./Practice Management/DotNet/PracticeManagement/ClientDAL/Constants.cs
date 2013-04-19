@@ -409,7 +409,11 @@
             public const string Count = "COUNT";
             public const string ResourceStartDate = "ResourceStartDate";
             public const string AccountName = "AccountName";
-
+            public const string BusinessGroupIdColumn = "BusinessGroupId";
+            public const string CodeColumn = "Code";
+            public const string PricingListId = "PricingListId";
+            public const string BusinessTypeId = "BusinessTypeId";
+            public const string PricingListNameColumn = "PricingListName";
         }
 
         #endregion
@@ -737,6 +741,11 @@
             public const string ViewBySkill = "@ViewBySkill";
             public const string ViewByTitleSkill = "@ViewByTitleSkill";
             public const string Skills = "@Skills";
+            public const string PricingListId = "@PricingListId";
+            public const string BusinessUnitIdParam = "@BusinessUnitId";
+            public const string BusinessGroupIdParam = "@BusinessGroupId";
+            public const string BusinessTypeId = "@BusinessTypeId";
+
         }
 
         #endregion
@@ -980,9 +989,9 @@
             {
                 public const string GetAllTitles = "dbo.GetAllTitles";
                 public const string GetTitleById = "dbo.GetTitleById";
-                public const string TitleInset= "dbo.TitleInset";
-                public const string TitleUpdate= "dbo.TitleUpdate";
-                public const string TitleDelete= "dbo.TitleDelete";
+                public const string TitleInset = "dbo.TitleInset";
+                public const string TitleUpdate = "dbo.TitleUpdate";
+                public const string TitleDelete = "dbo.TitleDelete";
                 public const string GetTitleTypes = "dbo.GetTitleTypes";
             }
 
@@ -1061,12 +1070,16 @@
             public class ProjectGroup
             {
                 public const string ProjectGroupListAll = "dbo.ProjectGroupListAll";
-                public const string ProjectGroupRenameByClient = "dbo.ProjectGroupRenameByClient";
+                public const string ProjectGroupUpdate = "dbo.ProjectGroupUpdate";
                 public const string ProjectGroupInsert = "dbo.ProjectGroupInsert";
                 public const string ProjectGroupDelete = "dbo.ProjectGroupDelete";
                 public const string GetInternalBusinessUnits = "dbo.GetInternalBusinessUnits";
                 public const string ListGroupByClientAndPersonInPeriod = "dbo.ListGroupByClientAndPersonInPeriod";
                 public const string GetClientsGroups = "dbo.GetClientsGroups";
+                public static string BusinessGroupUpdate = "dbo.BusinessGroupUpdate";
+                public static string BusinessGroupInsert = "dbo.BusinessGroupInsert";
+                public static string BusinessGroupDelete = "dbo.BusinessGroupDelete";
+                public static string GetBusinessGroupList = "dbo.GetBusinessGroupList";
 
             }
             #endregion
@@ -1227,6 +1240,7 @@
 
             public class Client
             {
+
                 public const string ClientInsertProcedure = "dbo.ClientInsert";
                 public const string ClientUpdateProcedure = "dbo.ClientUpdate";
                 public const string ClientListAllProcedure = "dbo.ClientListAll";
@@ -1240,6 +1254,12 @@
                 public const string GetInternalAccountProcedure = "dbo.GetInternalAccount";
                 public const string UpdateStatusForClient = "dbo.UpdateStatusForClient";
                 public const string ClientIsNoteRequired = "dbo.ClientIsNoteRequiredUpdate";
+                public const string PricingListInsert = "dbo.PricingListInsert";
+                public const string PricingListDelete = "dbo.PricingListDelete";
+                public const string PricingListUpdate = "dbo.PricingListUpdate";
+                public const string GetPricingList = "dbo.GetPricingList";
+                public const string GetBusinessTypes = "dbo.GetBusinessTypes";
+
             }
 
             #endregion
