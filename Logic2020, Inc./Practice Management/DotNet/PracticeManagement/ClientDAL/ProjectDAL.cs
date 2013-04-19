@@ -393,7 +393,7 @@ namespace DataAccess
                     ReadProjectsWithMilestones(reader, projectList);
                 }
             }
-          
+
             MilestonePersonDAL.LoadMilestonePersonListForProject(projectList);
 
             return projectList;
@@ -755,7 +755,7 @@ namespace DataAccess
 
                         new ComputedFinancials
                         {
-                            FinancialDate = reader.IsDBNull(financialDateIndex) ? (DateTime?) null: reader.GetDateTime(financialDateIndex),
+                            FinancialDate = reader.IsDBNull(financialDateIndex) ? (DateTime?)null : reader.GetDateTime(financialDateIndex),
                             Revenue = reader.GetDecimal(revenueIndex),
                             GrossMargin = reader.GetDecimal(grossMarginIndex),
                             SalesCommission = 0M,
@@ -873,8 +873,12 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds: string.Empty );
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
+                    project.PricingList != null && project.PricingList.PricingListId.HasValue ?
+                    (object)project.PricingList.PricingListId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId,
+                        ((int)project.BusinessType) != 0 ? (object)((int)project.BusinessType) : DBNull.Value);
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
 
@@ -912,6 +916,14 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupIdParam,
                     project.Group != null && project.Group.Id.HasValue ?
                     (object)project.Group.Id.Value : DBNull.Value);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
+                   project.PricingList != null && project.PricingList.PricingListId.HasValue ?
+                   (object)project.PricingList.PricingListId.Value : DBNull.Value);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId,
+                ((int)project.BusinessType) != 0 ? (object)((int)project.BusinessType) : DBNull.Value);
+
                 command.Parameters.AddWithValue(Constants.ParameterNames.TermsParam, project.Terms);
                 command.Parameters.AddWithValue(Constants.ParameterNames.NameParam, project.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIdsList, project.ProjectManagerIdsList);
@@ -1042,8 +1054,9 @@ namespace DataAccess
                     int ClientIsInternalIndex = -1;
                     int hasTimeEntriesIndex = -1;
                     int isNoteRequiredIndex = -1;
-
+                    int projectBusinessTypesIndex = -1;
                     int projectOwnerIdIndex = -1;
+                    int pricingListIdIndex = -1;
                     int opportunityNumberIndex = -1;
                     int sowBudgetIndex = -1;
                     int clientIsNoteRequiredIndex = -1;
@@ -1053,6 +1066,13 @@ namespace DataAccess
                     try
                     {
                         projectCapabilityIdsIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectCapabilityIds);
+                    }
+                    catch
+                    { }
+
+                    try
+                    {
+                        projectBusinessTypesIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessTypeId);
                     }
                     catch
                     { }
@@ -1112,6 +1132,14 @@ namespace DataAccess
                     catch
                     {
                         hasAttachmentsIndex = -1;
+                    }
+                    try
+                    {
+                        pricingListIdIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListId);
+                    }
+                    catch
+                    {
+                        pricingListIdIndex = -1;
                     }
                     try
                     {
@@ -1208,7 +1236,7 @@ namespace DataAccess
                             ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
                         };
 
-                        if(projectCapabilityIdsIndex > -1)
+                        if (projectCapabilityIdsIndex > -1)
                         {
                             project.ProjectCapabilityIds = reader.GetString(projectCapabilityIdsIndex);
                         }
@@ -1267,7 +1295,15 @@ namespace DataAccess
                                 project.SalesPersonName = string.Empty;
                             }
                         }
-
+                        if (pricingListIdIndex > -1)
+                        {
+                            project.PricingList = !reader.IsDBNull(pricingListIdIndex) ?
+                                       new PricingList
+                                       {
+                                           PricingListId = reader.GetInt32(pricingListIdIndex),
+                                       }
+                                        : null;
+                        }
                         project.Client = new Client
                         {
                             Id = reader.GetInt32(clientIdIndex),
@@ -1308,6 +1344,11 @@ namespace DataAccess
                             Id = reader.GetInt32(projectStatusIdIndex),
                             Name = reader.GetString(projectStatusNameIndex)
                         };
+
+                        if (projectBusinessTypesIndex > -1)
+                        {
+                            project.BusinessType = reader.IsDBNull(projectBusinessTypesIndex) ? (BusinessType)Enum.Parse(typeof(BusinessType), "0") : (BusinessType)Enum.Parse(typeof(BusinessType), reader.GetInt32(projectBusinessTypesIndex).ToString());
+                        }
 
                         project.OpportunityId =
                         !reader.IsDBNull(opportunityId) ? (int?)reader.GetInt32(opportunityId) : null;
@@ -2881,7 +2922,7 @@ namespace DataAccess
             }
         }
 
-        public static string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, bool link)
+        public static string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId, bool link)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.AttachOpportunityToProject, connection))
@@ -2891,6 +2932,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId, pricingListId.HasValue ? (object)pricingListId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.LinkParam, link);
                 connection.Open();
 
