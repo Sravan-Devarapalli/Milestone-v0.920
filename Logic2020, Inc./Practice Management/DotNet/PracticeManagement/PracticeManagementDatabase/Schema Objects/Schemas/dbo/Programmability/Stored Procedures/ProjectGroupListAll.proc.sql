@@ -41,7 +41,7 @@ AS
 				, ClientId
 				, Code
 				, Name
-				,dbo.IsProjectGroupInUse(ProjectGroup.GroupId) AS InUse
+				,dbo.IsProjectGroupInUse(ProjectGroup.GroupId,ProjectGroup.Code) AS InUse
 				,Active
 				,BusinessGroupId
 			FROM ProjectGroup
@@ -66,7 +66,7 @@ AS
 				, pg.GroupId
 				,pg.Code
 				, pg.[Name]
-				, dbo.IsProjectGroupInUse(pg.GroupId) AS InUse
+				, dbo.IsProjectGroupInUse(pg.GroupId,pg.Code) AS InUse
 				,pg.Active
 				,pg.BusinessGroupId
 			FROM ProjectGroup AS pg
