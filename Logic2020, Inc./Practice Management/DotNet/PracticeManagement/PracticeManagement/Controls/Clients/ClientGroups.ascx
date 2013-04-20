@@ -62,12 +62,12 @@
                         </HeaderTemplate>
                         <ItemTemplate>
                             <asp:Label ID="lblBusinessGroup" runat="server"></asp:Label>
-                            <asp:HiddenField ID="hdnBusinessUnitId1" runat="server" Value='<%# Eval("Id") %>' />
+                            <asp:HiddenField ID="hdnBusinessGroupId" runat="server" Value='<%# Eval("BusinessGroupId") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
                             <asp:DropDownList ID="ddlBusinessGroup" CssClass="Width96Per" runat="server" >
                             </asp:DropDownList>
-                            <asp:HiddenField ID="hdnBusinessUnitId2" runat="server" Value='<%# Eval("Id") %>' />
+                            <asp:HiddenField ID="hdnBusinessGroupId" runat="server" Value='<%# Eval("BusinessGroupId") %>' />
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField Visible="false">
@@ -99,7 +99,7 @@
                         <HeaderStyle CssClass="Width5PercentImp" />
                         <ItemStyle CssClass="TextAlignCenterImp" />
                         <ItemTemplate>
-                            <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
+                            <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png" Visible='<%# !(bool)Eval("InUse") %>'
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Business Unit" />
                         </ItemTemplate>
                         <EditItemTemplate>
