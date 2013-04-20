@@ -11,7 +11,7 @@
                 <Columns>
                     <asp:TemplateField>
                         <HeaderTemplate>
-                            <div class="ie-bg Width98PxImp">
+                            <div class="ie-bg">
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
