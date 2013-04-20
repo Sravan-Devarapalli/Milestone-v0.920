@@ -94,6 +94,15 @@ namespace PraticeManagement.Controls.Clients {
         protected global::System.Web.UI.WebControls.CustomValidator custNewPricingListName;
         
         /// <summary>
+        /// regGroupName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator regGroupName;
+        
+        /// <summary>
         /// valSumGroups control.
         /// </summary>
         /// <remarks>
