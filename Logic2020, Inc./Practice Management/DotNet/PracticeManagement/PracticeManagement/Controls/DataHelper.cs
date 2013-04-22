@@ -1508,7 +1508,7 @@ namespace PraticeManagement.Controls
 
         public static void FillPricingLists(ListControl control, PricingList[] pricingList, string firstItemText =null , bool noFirstItem = false, string valueField = "PricingListId", string NameField = "Name")
         { 
-                    FillListDefault(control, string.Empty, pricingList, noFirstItem, valueField, NameField);    
+                    FillListDefault(control, "--Select Pricing List--", pricingList, noFirstItem, valueField, NameField);    
         }
 
         public static void FillBusinessTypes(ListControl control)
