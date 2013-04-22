@@ -790,7 +790,7 @@
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width945Per">
-                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
+                                                    <asp:ListItem Text="--Select Pricing List--" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="TdValidators">
