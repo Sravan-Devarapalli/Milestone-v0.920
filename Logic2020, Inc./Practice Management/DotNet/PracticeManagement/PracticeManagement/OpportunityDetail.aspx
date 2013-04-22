@@ -796,7 +796,7 @@
                                             <td>
                                             <b>New Business/Extn</b>
                                             </td>
-                                            <td class="WholeWidth">
+                                            <td>
                                             <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width92Per" runat="server" onchange="EnableSaveButton();setDirty();">
                                                     <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
