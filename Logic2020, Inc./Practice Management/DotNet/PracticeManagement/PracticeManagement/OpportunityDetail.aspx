@@ -750,7 +750,7 @@
                                     <asp:Label ID="lblLastUpdate" runat="server" />) &nbsp;&nbsp;
                                     <asp:HyperLink ID="hpProject" runat="server"></asp:HyperLink>
                                 </td>
-                                <td colspan="2" class="Width45Percent no-wrap">
+                                <td colspan="2" class="Width45Percent">
                                     <table cellpadding="4px;" class="WholeWidth">
                                         <tr>
                                             <td class="LblEndDate">
