@@ -39,8 +39,8 @@
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Id") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="txtGroupName" runat="server" Text='<%# Eval("Name")%>' ValidationGroup="UpdateBusinessGroup" MaxLength="50"
-                                CssClass="Width96Per"></asp:TextBox>
+                            <asp:TextBox ID="txtGroupName" runat="server" Text='<%# Eval("Name")%>' ValidationGroup="UpdateBusinessGroup"
+                                MaxLength="50" CssClass="Width96Per"></asp:TextBox>
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Id") %>' />
                             <asp:RequiredFieldValidator ID="reqGroupName" runat="server" ControlToValidate="txtGroupName"
                                 ErrorMessage="The name of Business Group is required." ToolTip="The name of Business Group is required."
@@ -62,6 +62,14 @@
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Active">
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                Active
+                                <asp:CustomValidator ID="custBusinessGroupActive" runat="server" Text="*" EnableClientScript="false"
+                                    SetFocusOnError="true" Display="Dynamic" ErrorMessage="Atleast one business group must be active."
+                                    ToolTip="Atleast one business group must be active." ValidationGroup="UpdateBusinessGroup">*</asp:CustomValidator>
+                            </div>
+                        </HeaderTemplate>
                         <ItemStyle CssClass="Width15Percent TextAlignCenterImp" />
                         <ItemTemplate>
                             <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# (bool)Eval("IsActive") %>' />
