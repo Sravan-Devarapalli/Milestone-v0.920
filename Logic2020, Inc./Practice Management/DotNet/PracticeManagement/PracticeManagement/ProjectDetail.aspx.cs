@@ -1614,12 +1614,8 @@ namespace PraticeManagement
             if (project.Client != null && project.Client.Id.HasValue)
             {
                 DataHelper.FillProjectGroupList(ddlProjectGroup, project.Client.Id.Value, null);
-
                 var pricingLists = ServiceCallers.Custom.Client(client => client.GetPricingLists(project.Client.Id.Value));
-                ddlPricingList.Items.Add("");
                 DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p=>p.Name).ToArray());
-
-
                 PopulateProjectGroupDropDown(project);
             }
         }
