@@ -127,7 +127,9 @@ BEGIN
 		BEGIN
 	  
 		  UPDATE dbo.Opportunity 
-		  SET Description = @Description
+		  SET Description = @Description,
+		  BusinessTypeId = @BusinessTypeId,
+		  PricingListId = @PricingListId
 		  WHERE OpportunityId = @OpportunityId 
 	 
 		END
