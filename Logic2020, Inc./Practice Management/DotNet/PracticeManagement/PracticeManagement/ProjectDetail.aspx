@@ -608,7 +608,7 @@
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 &nbsp;&nbsp;
-                                                <asp:TextBox ID="txtBuyerName" runat="server" onchange="setDirty();" CssClass="Width92Per"
+                                                <asp:TextBox ID="txtBuyerName" runat="server" onchange="setDirty();" CssClass="Width94Per"
                                                     MaxLength="100"></asp:TextBox>
                                             </td>
                                             <td class="TdValidators">
@@ -684,11 +684,11 @@
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 $
-                                                <asp:TextBox ID="txtSowBudget" CssClass="Width92PerImp" runat="server" onchange="setDirty();"
+                                                <asp:TextBox ID="txtSowBudget" CssClass="Width94Per" runat="server" onchange="setDirty();"
                                                     MaxLength="100"></asp:TextBox>
                                                 <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarkSowBudget" runat="server"
                                                     TargetControlID="txtSowBudget" WatermarkText="Ex: 15000" EnableViewState="false"
-                                                    WatermarkCssClass="watermarkedtext Width92PerImp" />
+                                                    WatermarkCssClass="watermarkedtext Width94Per" />
                                                 <AjaxControlToolkit:FilteredTextBoxExtender ID="fteSowBudget" TargetControlID="txtSowBudget"
                                                     FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server" ValidChars=".," />
                                             </td>
