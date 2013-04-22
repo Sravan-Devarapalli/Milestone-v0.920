@@ -38,7 +38,7 @@
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("PricingListId") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="txtPricingListName" runat="server" Text='<%# Eval("Name") %>'
+                            <asp:TextBox ID="txtPricingListName" runat="server" Text='<%# Eval("Name") %>' MaxLength="50"
                                 ValidationGroup="UpdatePricingList" CssClass="Width96Per"></asp:TextBox>
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("PricingListId") %>' />
                             <asp:RequiredFieldValidator ID="reqPricingListName" runat="server" ControlToValidate="txtPricingListName"
