@@ -85,7 +85,9 @@ BEGIN
 		BEGIN
 		  UPDATE dbo.Project
 		  SET Description   = @Description,
-			  OpportunityId = @OpportunityId
+			  OpportunityId = @OpportunityId,
+			  BusinessTypeId = @BusinessTypeId,
+			  PricingListId = @PricingListId
 		  WHERE ProjectId = @ProjectId
 		END
 		ELSE
