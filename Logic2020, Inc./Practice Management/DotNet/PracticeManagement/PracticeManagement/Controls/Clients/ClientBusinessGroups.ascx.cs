@@ -99,23 +99,27 @@ namespace PraticeManagement.Controls.Clients
         {
             var imgEdit = sender as ImageButton;
             var row = imgEdit.NamingContainer as GridViewRow;
-
+            var custBusinessGroupActive = gvBusinessGroups.HeaderRow.FindControl("custBusinessGroupActive") as CustomValidator;
             CustomValidator custGroupName = (CustomValidator)row.FindControl("custUpdateGroupName");
             List<BusinessGroup> tmp = ClientGroupsList;
             int groupId = int.Parse(((HiddenField)row.FindControl("hidKey")).Value);
             BusinessGroup oldBusinessGroup = tmp.Any(g => g.Id == groupId) ? tmp.First(g => g.Id == groupId) : null;
             string oldGroupName = oldBusinessGroup != null ? oldBusinessGroup.Name : string.Empty;
             string groupName = ((TextBox)row.FindControl("txtGroupName")).Text;
+            bool isActive = ((CheckBox)row.FindControl("chbIsActiveEd")).Checked;
             Page.Validate("UpdateBusinessGroup");
 
             if (oldGroupName.ToLowerInvariant() != groupName.ToLowerInvariant())
             {
                 custGroupName.IsValid = ValidateBusinessGroupName(groupName, groupId);
             }
+            if (!isActive && oldBusinessGroup.IsActive != isActive && !tmp.Any(b => b.IsActive && b.Id != groupId))
+            {
+                custBusinessGroupActive.IsValid = false;
+            }
 
             if (Page.IsValid)
             {
-                bool isActive = ((CheckBox)row.FindControl("chbIsActiveEd")).Checked;
                 UpdateBusinessGroup(groupId, groupName, isActive);
                 
                 if (oldBusinessGroup != null)
