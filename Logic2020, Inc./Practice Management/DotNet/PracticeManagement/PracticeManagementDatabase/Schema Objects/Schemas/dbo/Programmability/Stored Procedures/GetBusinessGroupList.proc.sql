@@ -13,6 +13,8 @@ BEGIN
 			bg.Active
 	FROM dbo.BusinessGroup  bg
 	LEFT JOIN dbo.ProjectGroup pg ON pg.BusinessGroupId = bg.BusinessGroupId
-	WHERE  (@ClientId IS NULL OR bg.ClientId = @ClientId) AND (@BusinessUnitId IS NULL OR pg.GroupId = @BusinessUnitId)
+	WHERE  (@ClientId IS NULL OR bg.ClientId = @ClientId) 
+		AND (@BusinessUnitId IS NULL OR pg.GroupId = @BusinessUnitId) 
+	ORDER BY bg.Name
 END
 
