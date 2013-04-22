@@ -34,6 +34,7 @@ AS
 				INNER JOIN Project p ON pg.GroupId = p.GroupId				
 			WHERE p.ProjectId = @ProjectId 
 					AND (@PersonId IS NULL OR pg.GroupId IN (SELECT * FROM @GroupPermissions))
+			ORDER BY pg.Name
 	ELSE
 	IF @ClientId IS NOT NULL 
 			SELECT
@@ -58,6 +59,7 @@ AS
 										JOIN Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
 										WHERE C.PersonId = @PersonId)
 						 )
+			ORDER BY Name
 
 	ELSE 
 			SELECT
@@ -72,7 +74,7 @@ AS
 			FROM ProjectGroup AS pg
 			INNER JOIN dbo.Client AS cl ON pg.ClientId = cl.ClientId
 			WHERE(@PersonId IS NULL OR pg.GroupId IN (SELECT * FROM @GroupPermissions))
-			ORDER BY cl.ClientId, pg.GroupId
+			ORDER BY ClientName,pg.[Name]
 			
 
 
