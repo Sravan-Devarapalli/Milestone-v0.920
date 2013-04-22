@@ -39,7 +39,7 @@
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Id") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="txtGroupName" runat="server" Text='<%# Eval("Name")%>' ValidationGroup="UpdateBusinessGroup"
+                            <asp:TextBox ID="txtGroupName" runat="server" Text='<%# Eval("Name")%>' ValidationGroup="UpdateBusinessGroup" MaxLength="50"
                                 CssClass="Width96Per"></asp:TextBox>
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("Id") %>' />
                             <asp:RequiredFieldValidator ID="reqGroupName" runat="server" ControlToValidate="txtGroupName"
