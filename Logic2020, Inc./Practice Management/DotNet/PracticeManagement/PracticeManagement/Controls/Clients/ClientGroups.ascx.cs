@@ -83,7 +83,7 @@ namespace PraticeManagement.Controls.Clients
                     {
                         businessGroupList = ServiceCallers.Custom.Group(g => g.GetBusinessGroupList(ClientId, null)).ToList();
                     }
-                    ViewState[BUSINESS_GROUPS_KEY] = businessGroupList.OrderBy(g => g.Name).ToList();
+                    ViewState[BUSINESS_GROUPS_KEY] = businessGroupList.ToList();
                 }
 
                 return ((IEnumerable<BusinessGroup>)ViewState[BUSINESS_GROUPS_KEY]).ToList();
@@ -205,7 +205,8 @@ namespace PraticeManagement.Controls.Clients
                 {
                     DropDownList ddlBusinessGroup = (DropDownList)e.Row.FindControl("ddlBusinessGroup");
                     BusinessGroupList = null;
-                    DataHelper.FillListDefault(ddlBusinessGroup, null, BusinessGroupList.ToArray(), true);
+                    var activeBusinessGroupList = BusinessGroupList.Where(b => b.IsActive || int.Parse(hdnBusinessGroupId.Value) == b.Id).ToArray();
+                    DataHelper.FillListDefault(ddlBusinessGroup, null, activeBusinessGroupList.ToArray(), true);
                     ddlBusinessGroup.SelectedValue = hdnBusinessGroupId.Value;
                 }
                 else
@@ -309,7 +310,8 @@ namespace PraticeManagement.Controls.Clients
         protected void btnPlus_Click(object sender, EventArgs e)
         {
             BusinessGroupList = null;
-            DataHelper.FillListDefault(ddlAddBusinessGroup, null, BusinessGroupList.ToArray(), true);
+            var activeBusinessGroupList = BusinessGroupList.Where(b => b.IsActive).ToArray();
+            DataHelper.FillListDefault(ddlAddBusinessGroup, null, activeBusinessGroupList, true);
             plusMakeVisible(false);
         }
 
