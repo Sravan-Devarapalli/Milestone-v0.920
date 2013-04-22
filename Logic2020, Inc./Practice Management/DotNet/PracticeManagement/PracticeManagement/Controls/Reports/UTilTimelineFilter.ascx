@@ -473,7 +473,7 @@
                                     onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')" CellPadding="3"
                                     NoItemsType="All" SetDirty="False" DropDownListType="Pay Type" CssClass="UTilTimeLineFilterCblTimeScales" />
                                 <ext:ScrollableDropdownExtender ID="sdeTimeScales" runat="server" TargetControlID="cblTimeScales"
-                                    UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="200px">
+                                    UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="210px">
                                 </ext:ScrollableDropdownExtender>
                             </td>
                             <td>
