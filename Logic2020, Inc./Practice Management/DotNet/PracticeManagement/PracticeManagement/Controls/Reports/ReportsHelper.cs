@@ -51,27 +51,6 @@ namespace PraticeManagement.Controls.Reports
             return ServiceCallers.Custom.Project(c => c.GetBenchListWithoutBenchTotalAndAdminCosts(context));
         }
 
-
-        public static DataSet GetConsultantsTableReport(DateTime start, DateTime end, bool activePersons,
-                                                        bool projectedPersons, bool activeProjects,
-                                                        bool projectedProjects, bool internalProjects, bool experimentalProjects)
-        {
-            var context = new ConsultantTableReportContext
-                              {
-                                  Start = start,
-                                  End = end,
-                                  ProjectedPersons = projectedPersons,
-                                  ProjectedProjects = projectedProjects,
-                                  ActivePersons = activePersons,
-                                  ActiveProjects = activeProjects,
-                                  InternalProjects = internalProjects,
-                                  ExperimentalProjects = experimentalProjects
-                              };
-
-            return ServiceCallers.Custom.Person(
-                client => client.GetConsultantUtilizationReport(context));
-        }
-
         public static List<Quadruple<DataTransferObjects.Person, int[], int,int>> GetConsultantsTimelineReport(
             DateTime start, int granularity, int period,
             bool activePersons, bool projectedPersons, bool activeProjects,
