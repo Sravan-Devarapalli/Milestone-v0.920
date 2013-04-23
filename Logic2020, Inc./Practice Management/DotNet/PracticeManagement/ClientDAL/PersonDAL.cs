@@ -256,37 +256,6 @@ namespace DataAccess
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public static DataSet GetConsultantUtilizationReport(ConsultantTableReportContext context)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationReportProcedure, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.ActivePersons, context.ActivePersons);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ActiveProjects, context.ActiveProjects);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedPersons, context.ProjectedPersons);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
-                command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
-                command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
-                command.Parameters.AddWithValue(Constants.ParameterNames.End, context.End);
-
-                connection.Open();
-
-                var adapter = new SqlDataAdapter(command);
-                var dataset = new DataSet();
-                adapter.Fill(dataset, "consultantsReport");
-
-                return dataset;
-            }
-        }
-
-        /// <summary>
-        /// Retrives consultans report
-        /// </summary>
-        /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
         public static DataSet GetPersonMilestoneWithFinancials(int personId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
