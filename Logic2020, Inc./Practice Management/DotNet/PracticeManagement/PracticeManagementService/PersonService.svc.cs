@@ -54,16 +54,7 @@ namespace PracticeManagementService
         {
             PersonDAL.SetNewManager(oldManager, newManager);
         }
-
-        /// <summary>
-        /// Retrives consultans report
-        /// </summary>
-        /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public DataSet GetConsultantUtilizationReport(ConsultantTableReportContext context)
-        {
-            return PersonDAL.GetConsultantUtilizationReport(context);
-        }
-
+        
         /// <summary>
         /// Retrives consultans report
         /// </summary>
