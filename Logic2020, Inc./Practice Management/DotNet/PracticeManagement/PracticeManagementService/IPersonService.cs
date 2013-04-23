@@ -35,13 +35,6 @@ namespace PracticeManagementService
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
         [OperationContract]
-        DataSet GetConsultantUtilizationReport(ConsultantTableReportContext context);
-
-        /// <summary>
-        /// Retrieves consultants report
-        /// </summary>
-        /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        [OperationContract]
         List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context);
 
         /// <summary>
