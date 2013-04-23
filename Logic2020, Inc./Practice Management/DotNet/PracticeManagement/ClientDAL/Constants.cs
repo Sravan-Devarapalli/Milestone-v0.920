@@ -838,7 +838,6 @@
                 public const string PersonFirstLastNameByIdProcedure = "dbo.PersonFirstLastNameById";
                 public const string GetPersonDetailsShortByGivenIdsProcedure = "dbo.GetPersonDetailsShortByGivenIds";
                 public const string GetConsultantDemandProcedure = "dbo.GetConsultantDemand";
-                public const string ConsultantUtilizationReportProcedure = "dbo.ConsultantUtilizationReport";
                 public const string ConsultantUtilizationWeeklyProcedure = "dbo.ConsultantUtilizationWeekly";
                 public const string ConsultantUtilizationDailyByPersonProcedure = "dbo.ConsultantUtilizationDailyByPerson";
                 public const string PersonInsertProcedure = "dbo.PersonInsert";
