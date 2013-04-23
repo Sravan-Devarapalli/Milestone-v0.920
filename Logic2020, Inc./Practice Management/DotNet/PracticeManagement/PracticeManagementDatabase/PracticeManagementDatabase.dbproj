@@ -1128,11 +1128,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ConsultantUtilizationReport.proc.sql">
-      <SubType>Code</SubType>
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\aspnet_PersonalizationAdministration_DeleteAllState.proc.sql">
       <SubType>Code</SubType>
       <AnsiNulls>On</AnsiNulls>
@@ -4306,3 +4301,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
