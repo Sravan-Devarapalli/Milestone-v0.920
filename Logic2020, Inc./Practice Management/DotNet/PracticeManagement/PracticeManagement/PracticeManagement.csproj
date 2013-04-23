@@ -2548,13 +2548,6 @@
     <Compile Include="Controls\Reports\ConsultantMilestones.ascx.designer.cs">
       <DependentUpon>ConsultantMilestones.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ConsultantsReport.ascx.cs">
-      <DependentUpon>ConsultantsReport.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Reports\ConsultantsReport.ascx.designer.cs">
-      <DependentUpon>ConsultantsReport.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Reports\ConsultantsReportFilter.ascx.cs">
       <DependentUpon>ConsultantsReportFilter.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2859,13 +2852,6 @@
     <Compile Include="Reports\PersonStats.aspx.designer.cs">
       <DependentUpon>PersonStats.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reports\UtilizationTable.aspx.cs">
-      <DependentUpon>UtilizationTable.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reports\UtilizationTable.aspx.designer.cs">
-      <DependentUpon>UtilizationTable.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reports\UtilizationTimeline.aspx.cs">
       <DependentUpon>UtilizationTimeline.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3092,7 +3078,6 @@
     <Content Include="Controls\Reports\BenchReport.ascx" />
     <Content Include="Controls\Reports\CommissionsAndRates.ascx" />
     <Content Include="Controls\Reports\ConsultantMilestones.ascx" />
-    <Content Include="Controls\Reports\ConsultantsReport.ascx" />
     <Content Include="Controls\Reports\ConsultantsReportFilter.ascx" />
     <Content Include="Controls\Reports\ConsultantsWeeklyReport.ascx" />
     <Content Include="Controls\Reports\PersonStats.ascx" />
@@ -3200,7 +3185,6 @@
     <Content Include="Reports\BenchCosts.aspx" />
     <Content Include="Reports\CommissionsAndRates.aspx" />
     <Content Include="Reports\PersonStats.aspx" />
-    <Content Include="Reports\UtilizationTable.aspx" />
     <Content Include="Reports\UtilizationTimeline.aspx" />
     <Content Include="Reports\Xslt\ActivityLogChanges.xslt" />
     <Content Include="Reports\Xslt\ActivityLogItem.xslt" />
