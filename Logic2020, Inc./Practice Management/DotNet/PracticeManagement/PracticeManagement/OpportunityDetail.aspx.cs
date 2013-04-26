@@ -842,20 +842,10 @@ namespace PraticeManagement
             {
                 ReturnToPreviousPage();
             }
-            else if (IsDirty)
+            else 
             {
-                ViewState.Remove(NOTE_LIST_KEY);
-                ViewState.Remove(NEWLY_ADDED_NOTES_LIST);
-
-                if (OpportunityId.HasValue)
-                {
-                    LoadOpportunityDetails();
-                }
-                else
-                {
-                    ResetControls();
-                }
                 ClearDirty();
+                Response.Redirect("~/DiscussionReview2.aspx");
             }
         }
 
