@@ -965,7 +965,6 @@ namespace PracticeManagementService
             return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
 
-
         public Project GetBusinessDevelopmentProject()
         {
             return ProjectDAL.GetBusinessDevelopmentProject();
@@ -1000,6 +999,32 @@ namespace PracticeManagementService
         {
             return ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin,pricingListId, link);
         }
+
+        public void CSATInsert(ProjectCSAT projectCSAT, string userLogin)
+        {
+            ProjectCSATDAL.CSATInsert(projectCSAT, userLogin);
+        }
+
+        public void CSATDelete(int projectCSATId, string userLogin)
+        {
+            ProjectCSATDAL.CSATDelete(projectCSATId, userLogin);
+        }
+
+        public void CSATUpdate(ProjectCSAT projectCSAT, string userLogin)
+        {
+            ProjectCSATDAL.CSATUpdate(projectCSAT, userLogin);
+        }
+
+        public void CSATCopyFromExistingCSAT(ProjectCSAT projectCSAT, int copyProjectCSATId, string userLogin)
+        {
+            ProjectCSATDAL.CSATCopyFromExistingCSAT(projectCSAT,copyProjectCSATId, userLogin);
+        }
+
+        public List<ProjectCSAT> CSATList(int? projectId)
+        {
+            return ProjectCSATDAL.CSATList(projectId);
+        }
+
 
         #endregion
     }
