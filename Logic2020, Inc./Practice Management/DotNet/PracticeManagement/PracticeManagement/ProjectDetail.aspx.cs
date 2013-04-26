@@ -215,6 +215,7 @@ namespace PraticeManagement
         #endregion
 
         private bool IsErrorPanelDisplay;
+        private bool IsOtherPanelDisplay;
         private bool FromSaveButtonClick;
 
         #region Methods
@@ -860,6 +861,7 @@ namespace PraticeManagement
                         ddlProjectGroup.SelectedIndex = ddlProjectGroup.Items.IndexOf(listItem);
                 }
                 lblBusinessGroup.Text = string.Empty;
+                SetBusinessGroupLabel();
             }
             catch (FaultException<ExceptionDetail>)
             {
@@ -896,15 +898,8 @@ namespace PraticeManagement
                     if (ddlProjectGroup.SelectedValue != "")
                     {
                         BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(null, Convert.ToInt32(ddlProjectGroup.SelectedValue));
-                           if(businessGroupList.First().Name.Length > 37)
-                           {
-                               string dummyBusinessName = businessGroupList.First().Name.Substring(0, 12) + " " + businessGroupList.First().Name.Substring(13);
-                               lblBusinessGroup.Text = dummyBusinessName.Substring(0, 36) + "....";
-                           }
-                           else
-                           {
-                               lblBusinessGroup.Text = businessGroupList.First().Name;
-                           }
+
+                        lblBusinessGroup.Text = businessGroupList.First().Name;
                         lblBusinessGroup.ToolTip = businessGroupList.First().Name;
                     }
                     else
@@ -1001,7 +996,7 @@ namespace PraticeManagement
                 {
                     pricingListId = Project.PricingList.PricingListId.Value;
                 }
-                var result = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, Project.OpportunityId.Value, User.Identity.Name, pricingListId ,false));
+                var result = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, Project.OpportunityId.Value, User.Identity.Name, pricingListId, false));
 
                 Project.OpportunityId = null;
                 Project.OpportunityNumber = null;
@@ -1017,6 +1012,7 @@ namespace PraticeManagement
             Page.Validate(valSumLinkOpportunity.ValidationGroup);
             if (Page.IsValid)
             {
+
                 try
                 {
                     int opportunityId = Convert.ToInt32(ddlOpportunities.SelectedValue);
@@ -1297,12 +1293,14 @@ namespace PraticeManagement
         protected override void Display()
         {
             DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
+            
             DataHelper.FillClientListForProject(ddlClientName, "-- Select Account --", ProjectId);
             Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillBusinessTypes(ddlBusinessOptions);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
+            DataHelper.FillSeniorManagerList(ddlSeniorManager, "--Select Senior Manager--");
             string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
             DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
@@ -1415,6 +1413,19 @@ namespace PraticeManagement
                     }
 
                     ddlDirector.SelectedValue = selectedDirector.Value;
+                }
+
+                if (project.SeniorManagerId != 0)
+                {
+                    ListItem selectedManager = ddlSeniorManager.Items.FindByValue(project.SeniorManagerId.ToString());
+                    if (selectedManager == null)
+                    {
+                        selectedManager = new ListItem(project.SeniorManagerName, project.SeniorManagerId.ToString());
+                        ddlSeniorManager.Items.Add(selectedManager);
+                        ddlSeniorManager.SortByText();
+                    }
+
+                    ddlSeniorManager.SelectedValue = selectedManager.Value;
                 }
 
                 if (project.ProjectOwner != null)
@@ -1639,7 +1650,7 @@ namespace PraticeManagement
             if (project != null && project.Group != null)
             {
                 ListItem selectedProjectGroup = ddlProjectGroup.Items.FindByValue(project.Group.Id.ToString());
-                
+
                 ListItem selectedBusinessTypes = ddlBusinessOptions.Items.FindByValue(((int)project.BusinessType).ToString() == "0" ? "" : ((int)project.BusinessType).ToString());
                 if (selectedProjectGroup == null)
                 {
@@ -1700,13 +1711,15 @@ namespace PraticeManagement
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
 
+            project.SeniorManagerId = int.Parse(ddlSeniorManager.SelectedValue);
+
             project.ProjectWorkTypesList = ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue;
 
         }
 
         private void PopulatePricingList(Project project)
         {
-            project.PricingList =ddlPricingList.SelectedValue==""?null:new PricingList { PricingListId = int.Parse(ddlPricingList.SelectedValue)};
+            project.PricingList = ddlPricingList.SelectedValue == "" ? null : new PricingList { PricingListId = int.Parse(ddlPricingList.SelectedValue) };
         }
 
         private void PopulatePracticeManagementCommission(Project project)
