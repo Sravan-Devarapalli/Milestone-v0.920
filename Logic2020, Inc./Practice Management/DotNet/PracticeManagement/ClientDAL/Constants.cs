@@ -422,6 +422,8 @@
             public const string ReviewerName = "ReviewerName";
             public static string ReviewStartDate = "ReviewStartDate";
             public static string ReviewEndDate = "ReviewEndDate";
+            public static string SeniorManagerId = "SeniorManagerId";
+            public static string SeniorManagerName = "SeniorManagerName";
         }
 
         #endregion
@@ -862,6 +864,7 @@
                 public const string PersonListAllShortProcedure = "dbo.PersonListAllShort";
                 public const string OwnerListAllShortProcedure = "dbo.OwnerListAllShort";
                 public const string PersonListShortByRoleAndStatusProcedure = "dbo.PersonListShortByRoleAndStatus";
+                public const string PersonListShortByTitleAndStatusProcedure = "dbo.PersonListShortByTitleAndStatus";
                 public const string PersonListByStatusListProcedure = "dbo.PersonListAllByStatusList";
                 public const string GetPersonListByPersonIdListProcedure = "dbo.GetPersonListByPersonIds";
                 public const string PersonListAllForMilestoneProcedure = "dbo.PersonListAllForMilestone";
