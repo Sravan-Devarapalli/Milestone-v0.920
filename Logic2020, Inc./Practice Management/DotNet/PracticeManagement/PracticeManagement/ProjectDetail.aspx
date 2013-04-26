@@ -576,24 +576,15 @@
                                             <td class="width30P">
                                                 Business Unit
                                             </td>
-                                            <td class="Width27Percent">
+                                            <td class="width60P">
                                                 <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
                                                     AutoPostBack="true" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td class="width30P">
-                                                Business Group:
-                                                <asp:Label ID="lblBusinessGroup" runat="server" Text=""></asp:Label>
-                                            </td>
-                                            <td class="Width13Percent">
-                                            <asp:RequiredFieldValidator ID="reqBusinessUnit" runat="server" ControlToValidate="ddlProjectGroup"
+                                            <td class="TdValidators">
+                                                <asp:RequiredFieldValidator ID="reqBusinessUnit" runat="server" ControlToValidate="ddlProjectGroup"
                                                     EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Business Unit is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Business Unit is required."></asp:RequiredFieldValidator>
-                                                <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
-                                                    ToolTip="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
-                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
-                                                
                                             </td>
                                         </tr>
                                     </table>
@@ -659,17 +650,12 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
-                                                Practice Area
+                                                Business Group
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="Width95Per"
-                                                    AutoPostBack="True" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
-                                                </asp:DropDownList>
+                                                <asp:Label ID="lblBusinessGroup" runat="server" Text=""></asp:Label>
                                             </td>
                                             <td class="Width10Percent">
-                                                <asp:RequiredFieldValidator ID="reqPractice" runat="server" ControlToValidate="ddlPractice"
-                                                    EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Practice Area is required."
-                                                    SetFocusOnError="true" Text="*" ToolTip="The Practice Area is required."></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -698,6 +684,71 @@
                                                     ErrorMessage="A number with 2 decimal digits is allowed for the SOW Budget."
                                                     EnableClientScript="false" SetFocusOnError="true" OnServerValidate="custSowBudget_ServerValidate"
                                                     Display="Dynamic" ValidationGroup="Project"></asp:CustomValidator>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="Width2Percent">
+                                </td>
+                                <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                Senior Manager
+                                            </td>
+                                            <td class="width60P WhiteSpaceNoWrap">
+                                                <asp:DropDownList ID="ddlSeniorManager" runat="server" CssClass="Width945Per">
+                                                    <asp:ListItem Text="--Select Senior Manager--" Value="" Selected="True"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td class="TdValidators">
+                                                <asp:RequiredFieldValidator ID="req" runat="server" ControlToValidate="ddlSeniorManager"
+                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Senior Manager is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Senior Manager is required."></asp:RequiredFieldValidator>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                Practice Area
+                                            </td>
+                                            <td class="width60P">
+                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="Width95Per"
+                                                    AutoPostBack="True" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td class="Width10Percent">
+                                                <asp:RequiredFieldValidator ID="reqPractice" runat="server" ControlToValidate="ddlPractice"
+                                                    EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Practice Area is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Practice Area is required."></asp:RequiredFieldValidator>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="Width2Percent">
+                                </td>
+                                <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                New/Extension
+                                            </td>
+                                            <td class="width60PImp WhiteSpaceNoWrap">
+                                                &nbsp;&nbsp;
+                                                <asp:Label ID="lblBusiness" runat="server" Text="$" Visible="false"></asp:Label>
+                                                <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width95Per" runat="server">
+                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td class="TdValidators">
+                                                <asp:RequiredFieldValidator ID="reqBusinessTypes" runat="server" ControlToValidate="ddlBusinessOptions"
+                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The New/Extension is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The New/Extension is required."></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -762,20 +813,22 @@
                                 <td class="Width2Percent">
                                 </td>
                                 <td class="TdProjectDetailFeild">
-                                    <table class="WholeWidth">
+                                  <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
-                                                New Business/Extension
-                                                
+                                                Pricing List
                                             </td>
-                                            <td class="width60PImp WhiteSpaceNoWrap">
-                                            &nbsp;&nbsp;
-                                            <asp:Label ID="lblBusiness" runat="server" Text="$" Visible="false"></asp:Label>
-                                                <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width95Per" runat="server">
-                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
+                                            <td class="width60P WhiteSpaceNoWrap">
+                                                &nbsp;&nbsp;
+                                                <asp:Label ID="Label1" runat="server" Text="$" Visible="false"></asp:Label>
+                                                <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width945Per">
+                                                    <asp:ListItem Text="--Select Pricing List--" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="TdValidators">
+                                                <asp:RequiredFieldValidator ID="reqPricingList" runat="server" ControlToValidate="ddlPricingList"
+                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Pricing List is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Pricing List is required."></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -783,20 +836,7 @@
                                 <td class="Width2Percent">
                                 </td>
                                 <td class="TdProjectDetailFeild">
-                                    <table class="WholeWidth">
-                                        <tr>
-                                            <td class="width30P">
-                                                Pricing List
-                                            </td>
-                                            <td class="width60P WhiteSpaceNoWrap">
-                                                <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width945Per">
-                                                    <asp:ListItem Text="--Select Pricing List--" Value="" Selected="True"></asp:ListItem>
-                                                </asp:DropDownList>
-                                            </td>
-                                            <td class="TdValidators">
-                                            </td>
-                                        </tr>
-                                    </table>
+                                  
                                 </td>
                             </tr>
                         </table>
