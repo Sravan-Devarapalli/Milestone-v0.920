@@ -5,8 +5,8 @@
     <tr>
         <td>
             <asp:GridView ID="gvPricingList" runat="server" EmptyDataText="There is nothing to be displayed here"
-                AutoGenerateColumns="False" OnRowDataBound="gvPricingList_RowDataBound"
-                CssClass="CompPerfTable Width40P BackGroundColorWhite" GridLines="None">
+                AutoGenerateColumns="False" OnRowDataBound="gvPricingList_RowDataBound" CssClass="CompPerfTable Width40P BackGroundColorWhite"
+                GridLines="None">
                 <AlternatingRowStyle CssClass="alterrow" />
                 <Columns>
                     <asp:TemplateField>
@@ -34,7 +34,8 @@
                                 Name</div>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <asp:Label ID="lblPricingList" CssClass="WS-Normal" runat="server" Text='<%# Eval("HtmlEncodedName") %>' ToolTip='<%# Eval("HtmlEncodedName") %>'></asp:Label>
+                            <asp:Label ID="lblPricingList" CssClass="WS-Normal" runat="server" Text='<%# Eval("HtmlEncodedName") %>'
+                                ToolTip='<%# Eval("HtmlEncodedName") %>'></asp:Label>
                             <asp:HiddenField ID="hidKey" runat="server" Value='<%# Eval("PricingListId") %>' />
                         </ItemTemplate>
                         <EditItemTemplate>
@@ -48,6 +49,10 @@
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 ErrorMessage="The name of Pricing List must be unique." ToolTip="The name of Pricing List  must be unique."
                                 ValidationGroup="UpdatePricingList">*</asp:CustomValidator>
+                            <asp:RegularExpressionValidator ID="regGroupName" runat="server" ControlToValidate="txtPricingListName"
+                                ErrorMessage="Pricing List Name limited to 1-50 characters in length" ToolTip="Pricing List Name limited to 1-50 characters in length"
+                                ValidationGroup="UpdatePricingList" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                Display="Dynamic" ValidationExpression="^[\w\s]{1,50}$"></asp:RegularExpressionValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField Visible="false">
@@ -60,7 +65,7 @@
                             <asp:Label ID="lblGroupInuse" runat="server" Text='<%# (bool)Eval("InUse") ? "Yes" : "No" %>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-                      <asp:TemplateField HeaderText="Active">
+                    <asp:TemplateField HeaderText="Active">
                         <HeaderTemplate>
                             <div class="ie-bg">
                                 Active
@@ -87,9 +92,9 @@
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Pricing List" />
-                                 <asp:CustomValidator ID="custPricingListDelete" runat="server" Text="*" EnableClientScript="false"
-                                    SetFocusOnError="true" Display="Dynamic" ErrorMessage="An Account must have atleast one Pricing List added to it."
-                                    ToolTip="An Account must have atleast one Pricing List added to it." ValidationGroup="PricingListDelete">*</asp:CustomValidator>
+                            <asp:CustomValidator ID="custPricingListDelete" runat="server" Text="*" EnableClientScript="false"
+                                SetFocusOnError="true" Display="Dynamic" ErrorMessage="An Account must have atleast one Pricing List added to it."
+                                ToolTip="An Account must have atleast one Pricing List added to it." ValidationGroup="PricingListDelete">*</asp:CustomValidator>
                         </ItemTemplate>
                         <EditItemTemplate>
                         </EditItemTemplate>
@@ -120,9 +125,9 @@
                             ErrorMessage="There is already a Pricing List with the same name." ToolTip="There is already a Pricing List with the same name."
                             ValidationGroup="NewPricingList" OnServerValidate="custNewPricingListName_ServerValidate">*</asp:CustomValidator>
                         <asp:RegularExpressionValidator ID="regGroupName" runat="server" ControlToValidate="txtNewPricingListName"
-                            ErrorMessage="PricingList Name limited to 1-50 characters in length" ToolTip="PricingList Name limited to 1-50 characters in length"
+                            ErrorMessage="Pricing List Name limited to 1-50 characters in length" ToolTip="Pricing List Name limited to 1-50 characters in length"
                             ValidationGroup="NewPricingList" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                            Display="Dynamic" ValidationExpression="^[\w]{1,50}$"></asp:RegularExpressionValidator>
+                            Display="Dynamic" ValidationExpression="^[\w\s]{1,50}$"></asp:RegularExpressionValidator>
                     </td>
                     <td class="Width0Percent">
                     </td>
@@ -138,5 +143,5 @@
 </table>
 <asp:ValidationSummary ID="valSumGroups" runat="server" ValidationGroup="NewPricingList" />
 <asp:ValidationSummary ID="valSumUpdation" runat="server" ValidationGroup="UpdatePricingList" />
-<asp:ValidationSummary ID="valSumDelete" runat="server" ValidationGroup="PricingListDelete"/>
+<asp:ValidationSummary ID="valSumDelete" runat="server" ValidationGroup="PricingListDelete" />
 
