@@ -1041,6 +1041,7 @@ namespace DataAccess
                     int projectIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIsChargeable);
                     int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
                     int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
+                    
                     int descriptionIndex = -1;
                     int salesPersonNameIndex = -1;
                     int practiceOwnerNameIndex = -1;
@@ -1061,6 +1062,35 @@ namespace DataAccess
                     int sowBudgetIndex = -1;
                     int clientIsNoteRequiredIndex = -1;
 
+                    int seniorManagerIdIndex = -1;
+                    try
+                    {
+                        seniorManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerId);
+                    }
+                    catch
+                    { }
+
+                    int seniorManagerNameIndex = -1;
+                    try
+                    {
+                        seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
+                    }
+                    catch
+                    { }
+                    int reviewerIdIndex = -1;
+                    try
+                    {
+                        reviewerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewerId);
+                    }
+                    catch
+                    { }
+                    int reviewerNameIndex = -1;
+                    try
+                    {
+                        reviewerNameIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewerName);
+                    }
+                    catch
+                    { }
 
                     int projectCapabilityIdsIndex = -1;
                     try
@@ -1394,6 +1424,32 @@ namespace DataAccess
                         catch
                         {
                         }
+
+                        if (seniorManagerIdIndex >= 0)
+                        {
+                            try
+                            {
+                                project.SeniorManagerId = reader.GetInt32(seniorManagerIdIndex);
+                                project.SeniorManagerName = reader.GetString(seniorManagerNameIndex);
+                            }
+                            catch
+                            {
+                            }
+                        }
+
+                        if (reviewerIdIndex >= 0)
+                        {
+                            try
+                            {
+                                project.CSATOwnerId = reader.GetInt32(reviewerIdIndex);
+                                project.CSATOwnerName = reader.GetString(reviewerNameIndex);
+                            }
+                            catch
+                            {
+                            }
+                        }
+
+
                         resultList.Add(project);
                     }
                 }
