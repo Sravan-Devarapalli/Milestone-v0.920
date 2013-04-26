@@ -157,15 +157,6 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.DatePicker dpEndDate;
         
         /// <summary>
-        /// ddlBusinessOptions control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessOptions;
-        
-        /// <summary>
         /// reqEndDate control.
         /// </summary>
         /// <remarks>
@@ -497,6 +488,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlPricingList;
+        
+        /// <summary>
+        /// ddlBusinessOptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessOptions;
+        
+        /// <summary>
+        /// reqBusinessTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBusinessTypes;
         
         /// <summary>
         /// animHide control.
