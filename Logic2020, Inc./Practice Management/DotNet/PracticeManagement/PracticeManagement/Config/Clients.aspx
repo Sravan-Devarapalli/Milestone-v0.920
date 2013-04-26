@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="Clients.aspx.cs" Inherits="PraticeManagement.Config.Clients" %>
-
+<%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
+    TagPrefix="uc" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
@@ -10,6 +11,7 @@
     Accounts
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+<uc:LoadingProgress ID="lpOpportunityDetails" runat="server" DisplayText="Please Wait..." />
     <asp:UpdatePanel ID="pnlBody" runat="server">
         <ContentTemplate>
             <div class="buttons-block clientsPage">
@@ -235,4 +237,5 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
+    
 
