@@ -25,7 +25,9 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@SowBudget			DECIMAL(18,2),
 	@ProjectCapabilityIds NVARCHAR(MAX) = NULL,
 	@PricingListId      INT = NULL,
-	@BusinessTypeId		INT = NULL
+	@BusinessTypeId		INT = NULL,
+	@SeniorManagerId			INT = NULL,
+	@CSATOwnerId			INT = NULL
 )
 AS
 BEGIN
@@ -50,9 +52,9 @@ BEGIN
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, DirectorId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectOwnerId, SowBudget, Discount,PricingListId,BusinessTypeId)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, DirectorId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectOwnerId, SowBudget, Discount,PricingListId,BusinessTypeId,SeniorManagerId,ReviewerId)
 	     VALUES (@ClientId, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget, @Discount,@PricingListId,@BusinessTypeId)
+	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget, @Discount,@PricingListId,@BusinessTypeId,@SeniorManagerId,@CSATOwnerId)
 	
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
