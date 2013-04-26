@@ -374,7 +374,7 @@ namespace PraticeManagement
                 dataNumberDateCellStyle.DataFormat = "_($#,##0.00_);[Red]($#,##0.00)";
 
 
-                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
+                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
 
                 if (renderMonthColumns)
@@ -388,6 +388,9 @@ namespace PraticeManagement
                 dataCellStyleList.Add(dataNumberDateCellStyle);
                 dataCellStyleList.Add(wrapdataCellStyle);
                 dataCellStyleList.Add(dataCellStyle);
+                dataCellStyleList.Add(dataCellStyle);
+                dataCellStyleList.Add(dataCellStyle);
+                //CAST OWNER dataCellStyleList.Add(dataCellStyle);
 
                 RowStyles datarowStyle = new RowStyles(dataCellStyleList.ToArray());
 
@@ -444,7 +447,7 @@ namespace PraticeManagement
                 {
                     lnkAddProject.Visible = false;//as per #2941 .
                 }
-             }
+            }
 
             // Client side validator is not applicable here.
             reqSearchText.IsValid = true;
@@ -1586,9 +1589,11 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                    BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
@@ -1596,7 +1601,10 @@ namespace PraticeManagement
                                     Type = Revenue,
                                     ProjectManagers = string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                    SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty
+                                    // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
 
 
@@ -1607,9 +1615,11 @@ namespace PraticeManagement
                                               ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                               ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                               Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                               Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                               ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                              BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType) : string.Empty,
                                               Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                               StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                               EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
@@ -1617,7 +1627,10 @@ namespace PraticeManagement
                                               Type = Margin,
                                               ProjectManagers = string.Empty,
                                               Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                              Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                              Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                              SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty
+                                              // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
                                           }).ToList();
 
             projectsData.AddRange(projectsDataWithMargin);
@@ -1675,9 +1688,11 @@ namespace PraticeManagement
 
             data.Columns.Add("Project Number");
             data.Columns.Add("Account");
+            data.Columns.Add("Business Group");
             data.Columns.Add("Business Unit");
             data.Columns.Add("Buyer");
             data.Columns.Add("Project Name");
+            data.Columns.Add("New/Extension");
             data.Columns.Add("Status");
             data.Columns.Add("Start Date");
             data.Columns.Add("End Date");
@@ -1695,7 +1710,9 @@ namespace PraticeManagement
             data.Columns.Add("Project Manager(s)");
             data.Columns.Add("Salesperson");
             data.Columns.Add("Director");
-
+            data.Columns.Add("Pricing List");
+            data.Columns.Add("Senior Manager");
+            //	  data.Columns.Add("CSAT OWNER");
             foreach (var propertyBag in propertyBags)
             {
                 var objects = new object[data.Columns.Count];
@@ -1788,9 +1805,11 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                    BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
@@ -1798,7 +1817,10 @@ namespace PraticeManagement
                                     Type = Revenue,
                                     ProjectManagers = string.Empty,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                    SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty
+                                    // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
                                 }).ToList();//Note:- Change insertPosition Of Total cell in RowDataBound if any modifications in projectsData.
 
             var projectsDataWithMargin = (from pro in projectsList
@@ -1808,9 +1830,11 @@ namespace PraticeManagement
                                               ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                               ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                               Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                               Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                               ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                              BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
                                               Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                               StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                               EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
@@ -1818,7 +1842,11 @@ namespace PraticeManagement
                                               Type = Margin,
                                               ProjectManagers = string.Empty,
                                               Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                              Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty
+                                              Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                              SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty
+                                              // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
+
                                           }).ToList();
 
             projectsData.AddRange(projectsDataWithMargin);
