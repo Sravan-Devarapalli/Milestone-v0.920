@@ -101,6 +101,9 @@
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png" Visible='<%# !(bool)Eval("InUse") %>'
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Business Unit" />
+                                   <asp:CustomValidator ID="custBusinessUnitDelete" runat="server" Text="*" EnableClientScript="false"
+                                    SetFocusOnError="true" Display="Dynamic" ErrorMessage="An Account must have atleast one Business Unit added to it."
+                                    ToolTip="An Account must have atleast one Business Unit added to it." ValidationGroup="BusinessUnitDelete">*</asp:CustomValidator>
                         </ItemTemplate>
                         <EditItemTemplate>
                         </EditItemTemplate>
@@ -147,4 +150,5 @@
 </table>
 <asp:ValidationSummary ID="valSumGroups" runat="server" ValidationGroup="NewGroup" />
 <asp:ValidationSummary ID="valSumUpdation" runat="server" ValidationGroup="UpdateGroup" />
+<asp:ValidationSummary ID="valSumDelete" runat="server" ValidationGroup="BusinessUnitDelete" />
 
