@@ -60,6 +60,36 @@
   <wsdl:message name="IProjectService_AttachOpportunityToProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:AttachOpportunityToProjectResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_CSATInsert_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSATInsert" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATInsert_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSATInsertResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSATDelete" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSATDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSATUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSATUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATCopyFromExistingCSAT_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSATCopyFromExistingCSAT" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATCopyFromExistingCSAT_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSATCopyFromExistingCSATResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATList_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSATList" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSATListResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
   </wsdl:message>
@@ -309,6 +339,26 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/AttachOpportunityToProject" message="tns:IProjectService_AttachOpportunityToProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/AttachOpportunityToProjectResponse" message="tns:IProjectService_AttachOpportunityToProject_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="CSATInsert">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATInsert" message="tns:IProjectService_CSATInsert_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATInsertResponse" message="tns:IProjectService_CSATInsert_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSATDelete">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATDelete" message="tns:IProjectService_CSATDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATDeleteResponse" message="tns:IProjectService_CSATDelete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSATUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATUpdate" message="tns:IProjectService_CSATUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATUpdateResponse" message="tns:IProjectService_CSATUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSATCopyFromExistingCSAT">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATCopyFromExistingCSAT" message="tns:IProjectService_CSATCopyFromExistingCSAT_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATCopyFromExistingCSATResponse" message="tns:IProjectService_CSATCopyFromExistingCSAT_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSATList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATList" message="tns:IProjectService_CSATList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATListResponse" message="tns:IProjectService_CSATList_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetByIdResponse" message="tns:IProjectService_ProjectGetById_OutputMessage" />
@@ -521,6 +571,51 @@
     </wsdl:operation>
     <wsdl:operation name="AttachOpportunityToProject">
       <soap:operation soapAction="http://tempuri.org/IProjectService/AttachOpportunityToProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSATInsert">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATInsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSATDelete">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATDelete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSATUpdate">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATUpdate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSATCopyFromExistingCSAT">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATCopyFromExistingCSAT" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSATList">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
