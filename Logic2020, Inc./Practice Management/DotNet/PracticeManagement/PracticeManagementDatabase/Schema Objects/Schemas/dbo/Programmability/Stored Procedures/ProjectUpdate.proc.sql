@@ -23,7 +23,9 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@SowBudget			DECIMAL(18,2),
 	@ProjectCapabilityIds NVARCHAR(MAX),
 	@PricingListId      INT = NULL,
-	@BusinessTypeId     INT= NULL
+	@BusinessTypeId     INT= NULL,
+	@SeniorManagerId			INT = NULL,
+	@CSATOwnerId			INT = NULL
 )
 AS
 BEGIN
@@ -111,7 +113,9 @@ BEGIN
 				SowBudget		= @SowBudget,
 				Discount		= C.DefaultDiscount,
 				PricingListId   =@PricingListId,
-				BusinessTypeId   =@BusinessTypeId
+				BusinessTypeId   =@BusinessTypeId,
+				SeniorManagerId = @SeniorManagerId,
+				ReviewerId = @CSATOwnerId
 		FROM dbo.Project P
 		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
 		WHERE ProjectId = @ProjectId
