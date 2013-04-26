@@ -424,6 +424,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width97Percent,.Width97Per{width:97%}
 .Width98Percent{width:98%}
 .Width99Percent{width:99%}
+Width99PercentImp{width:99%!important}
 .Width5Px,.BenchCostCustomValidator{width:5px}
 .Width10Px{width:10px}
 .Width10PxImp{width:10px!important}
@@ -1207,11 +1208,14 @@ image:hover:after{content:attr(title)}
 .TextAlignJustifyImp{text-align:center!important}
 .Width500PxImp{width:500px!important}
 .PanelPerson{background-color:White;border:2px solid Black!important}
+.PanelCSAT{background-color:#E2EBFF;border:2px solid Black!important;width:700px}
+.PanelCSAT tr{padding-left:5px}
 .HolidayAndSubstituteDay{min-height:100px;width:280px;max-height:205px}
 .GroupBySddPractice{border:1px solid #AAA;background-color:white;height:250px!important;width:260px!important;z-index:20000;position:fixed;overflow-y:auto;overflow-x:hidden}
 .AdvancedTabUc{width:170px!important;height:100px!important;background-color:White!important;overflow-y:auto;overflow-x:hidden;border:1px solid #AAA!important}
 .Width480Px{width:480px!important}
 .Width465Px{width:465px!important}
+.Width700Px{width:700px!important}
 .Width380px{width:380px!important}
 .FileUpload{background-color:White;width:435px!important}
 .Height50pxImp{height:50px!important}
