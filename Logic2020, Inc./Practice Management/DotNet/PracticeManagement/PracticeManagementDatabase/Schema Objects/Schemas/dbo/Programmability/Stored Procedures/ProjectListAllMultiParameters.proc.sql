@@ -92,6 +92,11 @@ AS
 			P.BuyerName,
 			P.OpportunityId,
 			P.GroupId,
+			p.BusinessTypeId,
+			p.PricingListId,
+			PL.Name AS PricingListName,
+			BG.BusinessGroupId,
+			BG.Name AS BusinessGroupName,
 			PG.Name AS GroupName,
 			Clnt.IsChargeable AS [ClientIsChargeable],
 	        P.IsChargeable AS [ProjectIsChargeable],
@@ -118,6 +123,8 @@ AS
 	LEFT JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
 	LEFT JOIN dbo.Commission AS c on c.ProjectId = P.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = P.GroupId
+	LEFT JOIN dbo.BusinessGroup AS BG ON PG.BusinessGroupId=BG.BusinessGroupId
+	LEFT JOIN dbo.PricingList AS PL ON P.PricingListId=PL.PricingListId 
 	LEFT JOIN dbo.Person AS sperson ON sperson.PersonId = c.PersonId
 	LEFT JOIN dbo.Person AS Powner ON Powner.PersonId = P.ProjectOwnerId
 	OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = P.ProjectId) A
