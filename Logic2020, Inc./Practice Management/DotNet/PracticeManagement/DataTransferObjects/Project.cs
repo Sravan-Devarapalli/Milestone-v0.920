@@ -411,6 +411,12 @@ namespace DataTransferObjects
         [DataMember]
         public BusinessType BusinessType { get; set; }
 
+        [DataMember]
+        public List<ProjectCSAT> CSATList { get; set; }
+
+        [DataMember]
+        public Person CSATOwner { get; set; }
+
         #endregion
 
         #region Formatting
