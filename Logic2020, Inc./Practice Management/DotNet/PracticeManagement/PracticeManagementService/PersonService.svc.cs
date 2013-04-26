@@ -147,6 +147,14 @@ namespace PracticeManagementService
                 .ToList();
         }
 
+        public List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleName)
+        {
+            return PersonDAL
+                .PersonListShortByTitleAndStatus(statusIds, titleName)
+                .OrderBy(p => p.LastName + p.FirstName)
+                .ToList();
+        }
+
         /// <summary>
         /// Retrives a short info on persons.
         /// </summary>
