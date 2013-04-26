@@ -60,6 +60,23 @@
                             <asp:Label ID="lblGroupInuse" runat="server" Text='<%# (bool)Eval("InUse") ? "Yes" : "No" %>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
+                      <asp:TemplateField HeaderText="Active">
+                        <HeaderTemplate>
+                            <div class="ie-bg">
+                                Active
+                                <asp:CustomValidator ID="custPricingListActive" runat="server" Text="*" EnableClientScript="false"
+                                    SetFocusOnError="true" Display="Dynamic" ErrorMessage="Atleast one pricing list must be active."
+                                    ToolTip="Atleast one pricing list must be active." ValidationGroup="UpdatePricingList">*</asp:CustomValidator>
+                            </div>
+                        </HeaderTemplate>
+                        <ItemStyle CssClass="Width15Percent TextAlignCenterImp" />
+                        <ItemTemplate>
+                            <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# (bool)Eval("IsActive") %>' />
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <asp:CheckBox ID="chbIsActiveEd" runat="server" Checked='<%# (bool)Eval("IsActive") %>' />
+                        </EditItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField>
                         <HeaderTemplate>
                             <div class="ie-bg">
@@ -70,6 +87,9 @@
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Pricing List" />
+                                 <asp:CustomValidator ID="custPricingListDelete" runat="server" Text="*" EnableClientScript="false"
+                                    SetFocusOnError="true" Display="Dynamic" ErrorMessage="An Account must have atleast one Pricing List added to it."
+                                    ToolTip="An Account must have atleast one Pricing List added to it." ValidationGroup="PricingListDelete">*</asp:CustomValidator>
                         </ItemTemplate>
                         <EditItemTemplate>
                         </EditItemTemplate>
@@ -104,6 +124,11 @@
                             ValidationGroup="NewPricingList" Text="*" EnableClientScript="false" SetFocusOnError="true"
                             Display="Dynamic" ValidationExpression="^[\w]{1,50}$"></asp:RegularExpressionValidator>
                     </td>
+                    <td class="Width0Percent">
+                    </td>
+                    <td class="Width15Percent TextAlignCenter">
+                        <asp:CheckBox ID="chbPricingListActive" runat="server" Checked="true" Visible="false" />
+                    </td>
                     <td class="Width10Percent">
                     </td>
                 </tr>
@@ -113,4 +138,5 @@
 </table>
 <asp:ValidationSummary ID="valSumGroups" runat="server" ValidationGroup="NewPricingList" />
 <asp:ValidationSummary ID="valSumUpdation" runat="server" ValidationGroup="UpdatePricingList" />
+<asp:ValidationSummary ID="valSumDelete" runat="server" ValidationGroup="PricingListDelete"/>
 
