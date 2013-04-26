@@ -103,6 +103,15 @@ namespace PraticeManagement.Controls.Clients {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regGroupName;
         
         /// <summary>
+        /// chbPricingListActive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbPricingListActive;
+        
+        /// <summary>
         /// valSumGroups control.
         /// </summary>
         /// <remarks>
@@ -119,6 +128,15 @@ namespace PraticeManagement.Controls.Clients {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary valSumUpdation;
+        
+        /// <summary>
+        /// valSumDelete control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumDelete;
     }
 }
 
