@@ -3,6 +3,7 @@
     @PricingListId	INT OUT,
 	@ClientId    	INT,
 	@Name		    NVARCHAR(200),
+	@IsActive	    	    BIT,
 	@UserLogin          NVARCHAR(255)
 )
 AS
@@ -10,8 +11,8 @@ BEGIN
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-	INSERT PricingList(ClientId, Name) 
-	VALUES (@ClientId, @Name)
+	INSERT PricingList(ClientId, Name,IsActive) 
+	VALUES (@ClientId, @Name,@IsActive)
 
 	SET @PricingListId = SCOPE_IDENTITY()
 
