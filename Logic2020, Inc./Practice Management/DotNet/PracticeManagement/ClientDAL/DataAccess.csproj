@@ -102,6 +102,7 @@
     <Compile Include="ComputedFinancialsDAL.cs" />
     <Compile Include="ConfigurationDAL.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ProjectCSATDAL.cs" />
     <Compile Include="ReportDAL.cs" />
     <Compile Include="TimeTypeDAL.cs" />
     <Compile Include="DataAccessException.cs" />
