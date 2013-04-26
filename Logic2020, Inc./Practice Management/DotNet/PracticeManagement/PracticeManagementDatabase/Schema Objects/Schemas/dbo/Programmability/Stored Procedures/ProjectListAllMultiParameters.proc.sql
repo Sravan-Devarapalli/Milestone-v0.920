@@ -114,19 +114,25 @@ AS
 		   Powner.LastName AS [ProjectOwnerLastName],
 		   Powner.FirstName AS [ProjectOwnerFirstName],
 		   dbo.GetProjectManagerList(P.ProjectId) AS ProjectManagersIdFirstNameLastName,
-		   P.SowBudget
+		   P.SowBudget,
+			sm.PersonId AS 'SeniorManagerId',
+			sm.LastName+' , ' +sm.FirstName AS 'SeniorManagerName',
+			re.PersonId AS 'ReviewerId',
+			re.LastName+' , ' +re.FirstName AS 'ReviewerName'
 	FROM	dbo.Project AS P
 	INNER JOIN dbo.Practice pr ON pr.PracticeId = P.PracticeId
 	INNER JOIN dbo.Client AS Clnt ON P.ClientId = Clnt.ClientId
 	INNER JOIN dbo.ProjectStatus AS s ON P.ProjectStatusId = s.ProjectStatusId
-	LEFT JOIN dbo.Person as d on d.PersonId = P.DirectorId
 	LEFT JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
 	LEFT JOIN dbo.Commission AS c on c.ProjectId = P.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = P.GroupId
 	LEFT JOIN dbo.BusinessGroup AS BG ON PG.BusinessGroupId=BG.BusinessGroupId
 	LEFT JOIN dbo.PricingList AS PL ON P.PricingListId=PL.PricingListId 
+	LEFT JOIN dbo.Person as d on d.PersonId = P.DirectorId
 	LEFT JOIN dbo.Person AS sperson ON sperson.PersonId = c.PersonId
 	LEFT JOIN dbo.Person AS Powner ON Powner.PersonId = P.ProjectOwnerId
+	LEFT JOIN dbo.Person as sm on sm.PersonId = p.SeniorManagerId
+	LEFT JOIN dbo.Person as re on re.PersonId = p.ReviewerId
 	OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = P.ProjectId) A
 	WHERE	    (c.CommissionType IS NULL OR c.CommissionType = 1)
 		    AND ( (P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))
