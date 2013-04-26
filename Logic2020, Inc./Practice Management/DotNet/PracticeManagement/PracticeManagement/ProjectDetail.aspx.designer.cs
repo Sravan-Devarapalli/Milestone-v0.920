@@ -247,15 +247,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlProjectGroup;
         
         /// <summary>
-        /// lblBusinessGroup  control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblBusinessGroup ;
-        
-        /// <summary>
         /// reqBusinessUnit control.
         /// </summary>
         /// <remarks>
@@ -263,15 +254,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBusinessUnit;
-        
-        /// <summary>
-        /// cvGroup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvGroup;
         
         /// <summary>
         /// txtBuyerName control.
@@ -337,22 +319,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ImageButton imgMailToProjectOwner;
         
         /// <summary>
-        /// ddlPractice control.
+        /// lblBusinessGroup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPractice;
-        
-        /// <summary>
-        /// reqPractice control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPractice;
+        protected global::System.Web.UI.WebControls.Label lblBusinessGroup;
         
         /// <summary>
         /// txtSowBudget control.
@@ -389,6 +362,69 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custSowBudget;
+        
+        /// <summary>
+        /// ddlSeniorManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlSeniorManager;
+        
+        /// <summary>
+        /// req control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator req;
+        
+        /// <summary>
+        /// ddlPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlPractice;
+        
+        /// <summary>
+        /// reqPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPractice;
+        
+        /// <summary>
+        /// lblBusiness control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblBusiness;
+        
+        /// <summary>
+        /// ddlBusinessOptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessOptions;
+        
+        /// <summary>
+        /// reqBusinessTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBusinessTypes;
         
         /// <summary>
         /// cblProjectManagers control.
@@ -463,22 +499,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvCapabilities;
         
         /// <summary>
-        /// lblBusiness control.
+        /// Label1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblBusiness;
-        
-        /// <summary>
-        /// ddlBusinessOptions control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessOptions;
+        protected global::System.Web.UI.WebControls.Label Label1;
         
         /// <summary>
         /// ddlPricingList control.
@@ -488,6 +515,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlPricingList;
+        
+        /// <summary>
+        /// reqPricingList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPricingList;
         
         /// <summary>
         /// custProjectDesciption control.
