@@ -878,7 +878,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId );
                 if (project.CSATOwnerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.CSATOwnerId, project.CSATOwnerId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
                     project.PricingList != null && project.PricingList.PricingListId.HasValue ?
                     (object)project.PricingList.PricingListId.Value : DBNull.Value);
