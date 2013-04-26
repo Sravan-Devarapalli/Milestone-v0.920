@@ -1249,6 +1249,18 @@ namespace DataAccess
                     {
                         hasTimeEntriesIndex = -1;
                     }
+                    int businessGroupIdIndex = -1;
+                    int businessGroupNameIndex = -1;
+                    try
+                    {
+                        businessGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupIdColumn);
+                        businessGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupName);
+                    }
+                    catch
+                    {
+                        businessGroupIdIndex = -1;
+                        businessGroupNameIndex = -1;
+                    }
 
                     while (reader.Read())
                     {
@@ -1321,6 +1333,22 @@ namespace DataAccess
                             }
                         }
 
+                        if (businessGroupIdIndex >= 0)
+                        {
+                            try
+                            {
+                                var businessGroup = new BusinessGroup
+                                {
+                                    Id = (int)reader[businessGroupIdIndex],
+                                    Name = (string)reader[businessGroupNameIndex],
+                                };
+
+                                project.BusinessGroup = businessGroup;
+                            }
+                            catch
+                            {
+                            }
+                        }
                         if (salesPersonNameIndex >= 0)
                         {
                             try
