@@ -36,11 +36,11 @@ AS
 		   p.SowBudget,
 		   c.IsNoteRequired AS [ClientIsNoteRequired],
 		   p.IsAdministrative,
-		   [dbo].[GetProjectCapabilities](p.ProjectId) AS ProjectCapabilityIds
+		   [dbo].[GetProjectCapabilities](p.ProjectId) AS ProjectCapabilityIds,
+			p.ReviewerId,
+			p.SeniorManagerId
 	  FROM dbo.Project AS p
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
 		   INNER JOIN dbo.ProjectStatus AS s ON p.ProjectStatusId = s.ProjectStatusId
 		   LEFT JOIN Person as d on d.PersonId = p.DirectorId
-
-
