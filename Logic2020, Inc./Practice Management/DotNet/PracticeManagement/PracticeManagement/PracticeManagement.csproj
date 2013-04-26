@@ -381,6 +381,7 @@
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\PersonCalendar.ascx" />
     <Content Include="Controls\PersonMonthCalendar.ascx" />
+    <Content Include="Controls\Projects\ProjectCSAT.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
@@ -551,6 +552,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PricingList.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectCSAT.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
@@ -1455,6 +1457,13 @@
     </Compile>
     <Compile Include="Controls\Projects\AttachmentUpload.ashx.cs">
       <DependentUpon>AttachmentUpload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectCSAT.ascx.cs">
+      <DependentUpon>ProjectCSAT.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectCSAT.ascx.designer.cs">
+      <DependentUpon>ProjectCSAT.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Projects\ProjectTimeTypes.ascx.cs">
       <DependentUpon>ProjectTimeTypes.ascx</DependentUpon>
