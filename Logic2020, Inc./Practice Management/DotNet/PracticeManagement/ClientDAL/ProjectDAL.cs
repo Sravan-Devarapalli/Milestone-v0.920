@@ -1442,9 +1442,44 @@ namespace DataAccess
                     int projectGroupIdIndex = -1;
                     int projectGroupNameIndex = -1;
 
-
+                    int businessTypeIdIndex = -1;
+                    int pricingListIdIndex = -1;
+                    int pricingListNameIndex = -1;
+                    int businessGroupIdIndex = -1;
+                    int businessGroupNameIndex = -1;
 
                     int hasAttachments = -1;
+
+
+                    try
+                    {
+                        businessTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessTypeId);
+                    }
+                    catch
+                    {
+                        businessTypeIdIndex = -1;
+                    }
+                    try
+                    {
+                        pricingListIdIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListId);
+                        pricingListNameIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListNameColumn);
+                    }
+                    catch
+                    {
+                        pricingListIdIndex = -1;
+                        pricingListNameIndex=-1;
+                    }
+                    try
+                    {
+                        businessGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupIdColumn);
+                        businessGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupName);
+                    }
+                    catch
+                    {
+                        businessGroupIdIndex = -1;
+                        businessGroupNameIndex = -1;
+                    }
+                   
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -1457,6 +1492,7 @@ namespace DataAccess
                         projectGroupNameIndex = -1;
 
                     }
+
                     try
                     {
                         practiceOwnerNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeOwnerName);
@@ -1535,6 +1571,51 @@ namespace DataAccess
                                 }
                             }
 
+                            if (pricingListIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    var pricingList = new PricingList
+                                    {
+                                        PricingListId = (int)reader[pricingListIdIndex],
+                                        Name = (string)reader[pricingListNameIndex],
+                                    };
+
+                                    project.PricingList = pricingList;
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            if (businessGroupIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    var businessGroup = new BusinessGroup
+                                    {
+                                        Id= (int)reader[businessGroupIdIndex],
+                                        Name = (string)reader[businessGroupNameIndex],
+                                    };
+
+                                    project.BusinessGroup = businessGroup;
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            if (businessTypeIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    BusinessType businessType = (BusinessType)(int)reader[businessTypeIdIndex];
+                                    project.BusinessType = businessType;
+                                }
+                                catch
+                                {
+                                }
+                            }
                             if (practiceOwnerNameIndex >= 0)
                             {
                                 try
