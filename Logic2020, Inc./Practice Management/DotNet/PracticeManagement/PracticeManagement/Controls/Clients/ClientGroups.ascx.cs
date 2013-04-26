@@ -162,31 +162,37 @@ namespace PraticeManagement.Controls.Clients
         {
             var imgDelete = sender as ImageButton;
             var row = imgDelete.NamingContainer as GridViewRow;
-
+            var custBusinessUnitDelete = row.FindControl("custBusinessUnitDelete") as CustomValidator;
             List<ProjectGroup> tmp = ClientGroupsList;
             int key = int.Parse(((HiddenField)row.FindControl("hidKey")).Value);
-
-            if (tmp.Any(g => g.Id == key))
-                if (!tmp.First(g => g.Id == key).InUse)
-                {
-                    using (var serviceClient = new ProjectGroupServiceClient())
+            if (tmp.Count <= 1)
+            {
+                custBusinessUnitDelete.IsValid = false;
+            }
+            if (custBusinessUnitDelete.IsValid)
+            {
+                if (tmp.Any(g => g.Id == key))
+                    if (!tmp.First(g => g.Id == key).InUse)
                     {
-                        try
+                        using (var serviceClient = new ProjectGroupServiceClient())
                         {
-                            serviceClient.ProjectGroupDelete(key, HostingPage.User.Identity.Name);
+                            try
+                            {
+                                serviceClient.ProjectGroupDelete(key, HostingPage.User.Identity.Name);
+                            }
+                            catch (FaultException<ExceptionDetail>)
+                            {
+                                serviceClient.Abort();
+                                throw;
+                            }
                         }
-                        catch (FaultException<ExceptionDetail>)
-                        {
-                            serviceClient.Abort();
-                            throw;
-                        }
+                        tmp.Remove(tmp.First(g => g.Id == key));
                     }
-                    tmp.Remove(tmp.First(g => g.Id == key));
-                }
 
-            ClientGroupsList = tmp;
-            gvGroups.DataSource = ClientGroupsList;
-            gvGroups.DataBind();
+                ClientGroupsList = tmp;
+                gvGroups.DataSource = ClientGroupsList;
+                gvGroups.DataBind();
+            }
         }
 
         protected void imgCancel_OnClick(object sender, EventArgs e)
