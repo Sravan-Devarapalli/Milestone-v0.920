@@ -271,7 +271,7 @@ namespace DataTransferObjects
             get;
             set;
         }
-            
+
         [DataMember]
         public string ProjectManagerIdsList
         {
@@ -357,7 +357,7 @@ namespace DataTransferObjects
             get;
             set;
         }
-       
+
         [DataMember]
         public bool CanCreateCustomWorkTypes { get; set; }
 
@@ -417,6 +417,9 @@ namespace DataTransferObjects
         [DataMember]
         public Person CSATOwner { get; set; }
 
+        [DataMember]
+        public BusinessGroup BusinessGroup { get; set; }
+
         #endregion
 
         #region Formatting
@@ -472,7 +475,7 @@ namespace DataTransferObjects
 
         #endregion
 
-       
+
     }
 }
 
