@@ -867,7 +867,8 @@ namespace PraticeManagement
             txtOpportunityName.Text = string.Empty;
             lblOpportunityName.Text = string.Empty;
             ddlClient.SelectedIndex = 0;
-            ddlClientGroup.SelectedIndex = 0;
+            ddlClientGroup.Items.Clear();
+            lblBusinessGroup.Text = "";
             ddlPractice.SelectedIndex = 0;
             ddlBusinessOptions.SelectedIndex = 0;
             ddlPriority.SelectedIndex = 0;
