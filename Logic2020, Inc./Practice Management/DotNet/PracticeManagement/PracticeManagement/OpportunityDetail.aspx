@@ -744,14 +744,14 @@
                                 <td class="Width12Per">
                                     Opportunity Number
                                 </td>
-                                <td class="Width43Percent" style="width:35%">
+                                <td class="Width43Percent" style="width: 35%">
                                     <asp:Label ID="lblOpportunityNumber" runat="server" />
                                     &nbsp;(last updated:
                                     <asp:Label ID="lblLastUpdate" runat="server" />) &nbsp;&nbsp;
                                     <asp:HyperLink ID="hpProject" runat="server"></asp:HyperLink>
                                 </td>
-                                <td colspan="2" class="Width45Percent">
-                                    <table cellpadding="4px;" class="WholeWidth">
+                                <td colspan="2" class="Width45Percent no-wrap">
+                                    <table cellpadding="4px;">
                                         <tr>
                                             <td class="LblEndDate">
                                                 <asp:Label ID="lblCloseDate" CssClass="fontBold" runat="server" Text="Close Date"></asp:Label>
@@ -793,15 +793,7 @@
                                                 <uc1:DatePicker ID="dpEndDate" ValidationGroup="Opportunity" AutoPostBack="false"
                                                     OnClientChange="EnableSaveButton();setDirty();" TextBoxWidth="62px" runat="server" />
                                             </td>
-                                            <td>
-                                            <b>New Business/Extn</b>
-                                            </td>
-                                            <td>
-                                            <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width92Per" runat="server" onchange="EnableSaveButton();setDirty();">
-                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
-                                                </asp:DropDownList>
-                                            </td>
-                                            <td class="padRight2">
+                                            <td class="padRight7Imp">
                                                 <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpEndDate"
                                                     ErrorMessage="The Project End Date is required" ToolTip="The Project End Date is required."
                                                     ValidationGroup="Opportunity" Display="Dynamic" Text="*" EnableClientScript="false"></asp:RequiredFieldValidator>
@@ -966,16 +958,14 @@
                                     <table class="Width100Per">
                                         <tr>
                                             <td class="Width50Percent">
-                                                <asp:DropDownList ID="ddlClientGroup" runat="server" onchange="EnableSaveButton();setDirty();" OnSelectedIndexChanged="ddlClientGroup_SelectedIndexChanged"
-                                                    DataTextField="Name" DataValueField="Id" CssClass="WholeWidth Width97PercentImp" AutoPostBack="true">
+                                                <asp:DropDownList ID="ddlClientGroup" runat="server" onchange="EnableSaveButton();setDirty();"
+                                                    OnSelectedIndexChanged="ddlClientGroup_SelectedIndexChanged" DataTextField="Name"
+                                                    DataValueField="Id" CssClass="WholeWidth Width97PercentImp" AutoPostBack="true">
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width50Percent">
-                                                
-                                                    <b>Business Group</b>
-                                               
-                                                    <asp:Label ID="lblBusinessGroup" runat="server" Text=""></asp:Label>
-                                          
+                                                <b>Business Group</b>
+                                                <asp:Label ID="lblBusinessGroup" runat="server" Text=""></asp:Label>
                                             </td>
                                         </tr>
                                     </table>
@@ -996,7 +986,7 @@
                                     <table class="Width100Per">
                                         <tr>
                                             <td class="Width97Percent">
-                                                <asp:TextBox ID="txtEstRevenue" CssClass="alignRight" Style="Width:99%" runat="server"
+                                                <asp:TextBox ID="txtEstRevenue" CssClass="alignRight" Style="width: 99%" runat="server"
                                                     onchange="EnableSaveButton();setDirty();"></asp:TextBox>
                                                 <AjaxControlToolkit:TextBoxWatermarkExtender ID="watermarkEstRevenue" runat="server"
                                                     TargetControlID="txtEstRevenue" WatermarkText="Ex: 15000, minimum 1000" EnableViewState="false"
@@ -1111,18 +1101,38 @@
                                 </td>
                             </tr>
                             <tr>
-                             <td class="fontBold Width12Per">
+                                <td class="fontBold Width12Per">
                                     Pricing List
                                 </td>
                                 <td class="Width38Per">
                                     <table class="Width100Per">
                                         <tr>
-                                          <td class="Width97Per WhiteSpaceNoWrap">
+                                            <td class="Width97Per WhiteSpaceNoWrap">
                                                 <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="WholeWidth" onchange="EnableSaveButton();setDirty();">
                                                     <asp:ListItem Text="--Select Pricing List--" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width3Per">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="fontBold Width12Per">
+                                    New/Extension
+                                </td>
+                                <td class="Width38Per">
+                                    <table class="Width100Per">
+                                        <tr>
+                                            <td class="Width97Per">
+                                                <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width100Per" runat="server" onchange="EnableSaveButton();setDirty();">
+                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td class="Width3Per">
+                                                <asp:RequiredFieldValidator ID="reqBusinessTypes" runat="server" ControlToValidate="ddlBusinessOptions"
+                                                    ToolTip="The New/Extension is required." Width="100%" Text="*" EnableClientScript="false"
+                                                    ErrorMessage="The New/Extension is required." SetFocusOnError="true" Display="Dynamic"
+                                                    ValidationGroup="Opportunity" CssClass="Width100Per"></asp:RequiredFieldValidator>
                                             </td>
                                         </tr>
                                     </table>
