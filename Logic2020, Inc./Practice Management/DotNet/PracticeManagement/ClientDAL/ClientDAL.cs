@@ -778,6 +778,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId, DbType.Int32).Direction = ParameterDirection.Output;
                     command.Parameters.AddWithValue(Constants.ParameterNames.ClientId, pricingList.ClientId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Name, pricingList.Name);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, pricingList.IsActive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
                     connection.Open();
@@ -813,6 +814,7 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
                     command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId, pricingList.PricingListId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Name, pricingList.Name);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsActive, pricingList.IsActive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                     connection.Open();
                     command.ExecuteNonQuery();
@@ -850,6 +852,7 @@ namespace DataAccess
                    int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
                    int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
                    int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+                   int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
                 
                 while (reader.Read())
                 {
@@ -859,7 +862,8 @@ namespace DataAccess
                     pricinglist.PricingListId = !reader.IsDBNull(pricingListIdIndex) ? reader.GetInt32(pricingListIdIndex) : -1;
                     pricinglist.InUse = !reader.IsDBNull(inUseIndex) ? reader.GetBoolean(inUseIndex) :false;
                     pricinglist.IsDefault = !reader.IsDBNull(isDefaultIndex) ? reader.GetBoolean(isDefaultIndex) : false;
-                    
+                    pricinglist.IsActive = !reader.IsDBNull(isActiveIndex) ? reader.GetBoolean(isActiveIndex) : false;
+
                     result.Add(pricinglist);
                 }
             }
