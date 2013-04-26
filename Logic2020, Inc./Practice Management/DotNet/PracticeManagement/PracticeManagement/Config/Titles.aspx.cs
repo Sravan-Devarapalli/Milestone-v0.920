@@ -290,6 +290,17 @@ namespace PraticeManagement.Config
 
                 ddl.Attributes["SelectedValue"] = ddl.SelectedValue;
             }
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if (e.Row.RowIndex == gvTitles.EditIndex)
+                {
+                    TextBox txtTitle = (TextBox)e.Row.FindControl("tbEditTitleName");
+                    if (txtTitle.Text == "Senior Manager")
+                    {
+                        txtTitle.Enabled = false;
+                    }
+                }
+            }
 
         }
 
