@@ -6432,6 +6432,16 @@ image:hover:after
     background-color: White;
     border: 2px solid Black !important;
 }
+.PanelCSAT
+{
+    background-color: #E2EBFF;
+    border: 2px solid Black !important;
+    width:700px;
+}
+.PanelCSAT tr
+{
+padding-left : 5px;
+}
 .HolidayAndSubstituteDay
 {
     min-height: 100px;
@@ -6465,6 +6475,10 @@ image:hover:after
 .Width465Px
 {
     width: 465px !important;
+}
+.Width700Px
+{
+    width: 700px !important;
 }
 .Width380px
 {
