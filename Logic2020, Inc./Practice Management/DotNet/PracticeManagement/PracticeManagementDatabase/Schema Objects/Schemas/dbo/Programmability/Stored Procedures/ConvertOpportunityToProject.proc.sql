@@ -27,6 +27,7 @@ BEGIN
 	DECLARE @OpportunityPerson NVARCHAR(100)
 	DECLARE @MilestonePersonId INT
 	DECLARE @Description NVARCHAR(MAX)
+	DECLARE @BusinessTypeId INT
 
 	SELECT TOP 1
 		   @ClientId = o.ClientId,
@@ -41,6 +42,7 @@ BEGIN
 	       @BuyerName = o.BuyerName,
 	       @GroupId = ISNULL(o.GroupId, (SELECT PG.GroupId FROM dbo.ProjectGroup PG WHERE PG.ClientId = o.ClientId and PG.Code = 'B0001')),
 		   @PricingListId=o.PricingListId,
+		   @BusinessTypeId=O.BusinessTypeId,
 	       @IsChargeable = 1,
 	       @ProjectManagerId = CONVERT(NVARCHAR(255),ISNULL(o.OwnerId, pr.PracticeManagerId)),
 		   @Description =Description
@@ -70,7 +72,8 @@ BEGIN
 		@Description   = @Description,
 		@CanCreateCustomWorkTypes = 0,
 		@IsInternal = 0,
-		@SowBudget = NULL
+		@SowBudget = NULL,
+		@BusinessTypeId=@BusinessTypeId
 
 	-- Add a sales commission
 	INSERT INTO dbo.Commission
