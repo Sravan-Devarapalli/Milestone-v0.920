@@ -20,6 +20,11 @@ namespace DataTransferObjects
             public const string SeniorLeadershipRoleName = "Senior Leadership";
         }
 
+        public static class TitleNames
+        {
+            public const string SeniorManagerTitleName = "Senior Manager";
+        }
+
         public class Formatting
         {
             public const string EntryDateFormat = "MM/dd/yyyy";
