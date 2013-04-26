@@ -874,6 +874,11 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
+                if(project.SeniorManagerId > 0)
+                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId );
+                if (project.CSATOwnerId > 0)
+                    command.Parameters.AddWithValue(Constants.ParameterNames.CSATOwnerId, project.CSATOwnerId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
                     project.PricingList != null && project.PricingList.PricingListId.HasValue ?
                     (object)project.PricingList.PricingListId.Value : DBNull.Value);
@@ -943,7 +948,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
-
+                if (project.SeniorManagerId > 0)
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
+                if (project.CSATOwnerId > 0)
+                    command.Parameters.AddWithValue(Constants.ParameterNames.CSATOwnerId, project.CSATOwnerId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
                    project.Director != null && project.Director.Id.HasValue ? (object)project.Director.Id.Value : DBNull.Value);
 
@@ -1430,18 +1438,36 @@ namespace DataAccess
                             try
                             {
                                 project.SeniorManagerId = reader.GetInt32(seniorManagerIdIndex);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        if (seniorManagerNameIndex >= 0)
+                        {
+                            try
+                            {
                                 project.SeniorManagerName = reader.GetString(seniorManagerNameIndex);
                             }
                             catch
                             {
                             }
                         }
-
                         if (reviewerIdIndex >= 0)
                         {
                             try
                             {
                                 project.CSATOwnerId = reader.GetInt32(reviewerIdIndex);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        if (reviewerNameIndex >= 0)
+                        {
+                            try
+                            {
+                              
                                 project.CSATOwnerName = reader.GetString(reviewerNameIndex);
                             }
                             catch
