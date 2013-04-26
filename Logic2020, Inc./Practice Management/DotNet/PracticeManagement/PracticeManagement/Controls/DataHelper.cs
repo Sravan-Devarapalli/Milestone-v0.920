@@ -887,6 +887,45 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillCASTReviewerList(ListControl control, string firstItemText, List<int> excludedPersons)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
+                    Person[] persons = serviceClient.PersonListShortByRoleAndStatus(statusids, DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
+                    persons = persons.Where(p => !excludedPersons.Any(g => g == p.Id)).ToArray();
+                    FillPersonList(control, firstItemText, persons, String.Empty);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static void FillSeniorManagerList(ListControl control, string firstItemText)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
+                    Person[] persons = serviceClient.PersonListShortByTitleAndStatus(statusids, DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName);
+                    FillPersonList(control, firstItemText, persons, String.Empty);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        
+
         public static void FillSalespersonListOnlyActive(ListControl control, string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
@@ -1546,7 +1585,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillProjectGroupList(ListControl control, int? clientId, int? projectId, string firstItemText = null, bool noFirstItem = true)
+        public static void FillProjectGroupList(ListControl control, int? clientId, int? projectId, string firstItemText = "--Select Business Unit--", bool noFirstItem = false)
         {
             using (var serviceClient = new ProjectGroupServiceClient())
             {
