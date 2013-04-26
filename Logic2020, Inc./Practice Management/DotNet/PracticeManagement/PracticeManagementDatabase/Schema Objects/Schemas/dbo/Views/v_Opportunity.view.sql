@@ -26,7 +26,11 @@ AS
 		   o.GroupId,
 		   o.CloseDate,
 		   o.PricingListId,
+		   PL.Name AS PricingListName,
 		   o.BusinessTypeId,
+		   BT.Name AS BusinessTypeName,
+		   bg.BusinessGroupId,
+		   bg.Name AS BusinessGroupName,
 		   g.[Name] as 'GroupName',
 	       c.Name AS ClientName,
 	       c.DefaultDiscount AS Discount,
@@ -47,5 +51,8 @@ AS
 	       INNER JOIN dbo.OpportunityStatus AS s ON o.OpportunityStatusId = s.OpportunityStatusId
 	       INNER JOIN dbo.Practice AS r ON o.PracticeId = r.PracticeId	
 		   LEFT JOIN dbo.ProjectGroup as g on o.GroupId = g.GroupId
+		   LEFT JOIN dbo.BusinessGroup as bg on g.BusinessGroupId=bg.BusinessGroupId
+		   LEFT JOIN dbo.PricingList AS PL ON o.PricingListId=PL.PricingListId
 		   LEFT JOIN dbo.Person as prowner on prowner.PersonId = r.PracticeManagerId
+		   LEFT JOIN dbo.BusinessType AS BT ON o.BusinessTypeId=BT.BusinessTypeId
 
