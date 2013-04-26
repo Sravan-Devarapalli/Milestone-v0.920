@@ -9,7 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
-
+            public const string BusinessGroupName = "BusinessGroupName";
             public const string IsNotesRequired = "IsNotesRequired";
             public const string UploadedDate = "UploadedDate";
             public const string AttachmentSize = "AttachmentSize";
@@ -414,6 +414,14 @@
             public const string PricingListId = "PricingListId";
             public const string BusinessTypeId = "BusinessTypeId";
             public const string PricingListNameColumn = "PricingListName";
+            public const string CSATId = "CSATId";
+            public const string CompletionDate = "CompletionDate";
+            public const string ReviewerId = "ReviewerId";
+            public const string ReferralScore = "ReferralScore";
+            public const string Comments = "Comments";
+            public const string ReviewerName = "ReviewerName";
+            public static string ReviewStartDate = "ReviewStartDate";
+            public static string ReviewEndDate = "ReviewEndDate";
         }
 
         #endregion
@@ -745,7 +753,15 @@
             public const string BusinessUnitIdParam = "@BusinessUnitId";
             public const string BusinessGroupIdParam = "@BusinessGroupId";
             public const string BusinessTypeId = "@BusinessTypeId";
-
+            public const string ProjectCSATId = "@ProjectCSATId";
+            public const string ProjectEndDate = "@ProjectEndDate";
+            public const string CompletionDate = "@CompletionDate";
+            public const string ReviewerId = "@ReviewerId";
+            public const string ReferralScore = "@ReferralScore";
+            public const string Comments = "@Comments";
+            public const string CopyProjectCSATId = "@CopyProjectCSATId";
+            public const string ReviewStartDate = "@ReviewStartDate";
+            public const string ReviewEndDate = "@ReviewEndDate";
         }
 
         #endregion
@@ -1145,6 +1161,11 @@
                 public const string IsUserIsProjectOwner = "dbo.IsUserIsProjectOwner";
                 public const string AttachOpportunityToProject = "dbo.AttachOpportunityToProject";
                 public const string IsProjectSummaryCachedToday = "dbo.IsProjectSummaryCachedToday";
+                public const string CSATInsert = "dbo.CSATInsert";
+                public const string CSATUpdate = "dbo.CSATUpdate";
+                public const string CSATCopyFromExistingCSAT = "dbo.[CSATCopyFromExistingCSAT]";
+                public const string CSATDelete = "dbo.CSATDelete";
+                public const string CSATList = "dbo.CSATList";
 
             }
             #endregion
