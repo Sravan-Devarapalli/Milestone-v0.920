@@ -49,6 +49,10 @@
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 ErrorMessage="The name of Business Group must be unique." ToolTip="The name of Business Group  must be unique."
                                 ValidationGroup="UpdateBusinessGroup">*</asp:CustomValidator>
+                            <asp:RegularExpressionValidator ID="regGroupName" runat="server" ControlToValidate="txtGroupName"
+                                ErrorMessage="Business Group Name limited to 1-50 characters in length" ToolTip="Business Group Name limited to 1-50 characters in length"
+                                ValidationGroup="UpdateBusinessGroup" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                Display="Dynamic" ValidationExpression="^[\w\s]{1,50}$"></asp:RegularExpressionValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField Visible="false">
