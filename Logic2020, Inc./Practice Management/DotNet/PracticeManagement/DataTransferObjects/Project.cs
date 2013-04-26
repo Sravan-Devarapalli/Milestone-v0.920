@@ -415,7 +415,16 @@ namespace DataTransferObjects
         public List<ProjectCSAT> CSATList { get; set; }
 
         [DataMember]
-        public Person CSATOwner { get; set; }
+        public int CSATOwnerId { get; set; }
+
+        [DataMember]
+        public string CSATOwnerName { get; set; }
+
+        [DataMember]
+        public int SeniorManagerId { get; set; }
+
+        [DataMember]
+        public string SeniorManagerName { get; set; }
 
         [DataMember]
         public BusinessGroup BusinessGroup { get; set; }
