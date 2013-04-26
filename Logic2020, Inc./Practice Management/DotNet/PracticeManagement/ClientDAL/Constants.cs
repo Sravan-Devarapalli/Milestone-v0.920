@@ -764,6 +764,8 @@
             public const string CopyProjectCSATId = "@CopyProjectCSATId";
             public const string ReviewStartDate = "@ReviewStartDate";
             public const string ReviewEndDate = "@ReviewEndDate";
+            public static string SeniorManagerId = "@SeniorManagerId";
+            public static string CSATOwnerId = "@CSATOwnerId";
         }
 
         #endregion
