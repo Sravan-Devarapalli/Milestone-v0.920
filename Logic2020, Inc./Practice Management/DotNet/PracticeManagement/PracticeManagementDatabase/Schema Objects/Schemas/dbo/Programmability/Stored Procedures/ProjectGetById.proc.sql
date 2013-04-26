@@ -57,7 +57,9 @@ AS
 			p.IsNoteRequired,
 			p.SowBudget,
 			p.ClientIsNoteRequired,
-			p.ProjectCapabilityIds
+			p.ProjectCapabilityIds,
+			p.SeniorManagerId,
+			p.ReviewerId
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
