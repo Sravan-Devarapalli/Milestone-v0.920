@@ -13,7 +13,8 @@ BEGIN
 		SELECT i.PricingListId ,
 				i.Name AS PricingList,
 				i.ClientId AS AccountId,
-				c.Name AS [Account]
+				c.Name AS [Account],
+				CASE WHEN i.[IsActive] = 1 THEN 'YES' ELSE 'NO' END [IsActive]
 		  FROM inserted AS i
 		  INNER JOIN dbo.Client C ON C.ClientId = i.ClientId
 	),
@@ -23,7 +24,8 @@ BEGIN
 		SELECT d.PricingListId ,
 				d.Name AS PricingList,
 				d.ClientId AS AccountId,
-				c.Name AS [Account]
+				c.Name AS [Account],
+				CASE WHEN d.[IsActive] = 1 THEN 'YES' ELSE 'NO' END [IsActive]
 		  FROM deleted AS d
 		  INNER JOIN dbo.Client C ON C.ClientId = d.ClientId
 	)
@@ -65,10 +67,12 @@ BEGIN
 						,NEW_VALUES.PricingList
 						,NEW_VALUES.AccountId
 						,NEW_VALUES.Account
+						,NEW_VALUES.IsActive
 						,OLD_VALUES.PricingListId
 						,OLD_VALUES.PricingList
 						,OLD_VALUES.AccountId
 						,OLD_VALUES.Account
+						,OLD_VALUES.IsActive
 					  FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.PricingListId = OLD_VALUES.PricingListId
 			           WHERE NEW_VALUES.PricingListId = ISNULL(i.PricingListId, d.PricingListId) OR OLD_VALUES.PricingListId = ISNULL(i.PricingListId, d.PricingListId)
