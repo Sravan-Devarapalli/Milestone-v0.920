@@ -18,7 +18,7 @@ namespace PracticeManagementService
         /// <returns></returns>
         [OperationContract]
         Project ProjectGetById(int projectId);
-       
+
         /// <summary>
         /// Projects Computed Financials 
         /// </summary>
@@ -320,7 +320,22 @@ namespace PracticeManagementService
         List<TimeTypeRecord> GetTimeTypesInUseDetailsByProject(int projectId, string timeTypeIds);
 
         [OperationContract]
-        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId,bool link);
+        string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId, bool link);
+
+        [OperationContract]
+        void CSATInsert(ProjectCSAT projectCSAT, string userLogin);
+
+        [OperationContract]
+        void CSATDelete(int projectCSATId, string userLogin);
+
+        [OperationContract]
+        void CSATUpdate(ProjectCSAT projectCSAT, string userLogin);
+
+        [OperationContract]
+        void CSATCopyFromExistingCSAT(ProjectCSAT projectCSAT, int copyProjectCSATId, string userLogin);
+
+        [OperationContract]
+        List<ProjectCSAT> CSATList(int? projectId);
     }
 }
 
