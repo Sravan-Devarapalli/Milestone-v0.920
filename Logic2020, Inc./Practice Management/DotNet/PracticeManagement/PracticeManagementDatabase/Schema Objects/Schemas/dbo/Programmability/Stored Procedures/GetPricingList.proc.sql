@@ -8,7 +8,8 @@ BEGIN
 			ClientId,
 			Name,
 			dbo.IsPricingListInUse(pl.PricingListId,pl.IsDefault) AS InUse,
-			IsDefault
+			IsDefault,
+			IsActive
 	FROM dbo.PricingList pl
 	WHERE  @ClientId IS NULL OR pl.ClientId = @ClientId
 END
