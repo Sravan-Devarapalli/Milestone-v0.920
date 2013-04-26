@@ -47,6 +47,10 @@ BEGIN
 				,bt.Name AS [BusinessType]
 				,i.PricingListId
 				,pt.Name AS [PricingList]
+				,i.SeniorManagerId
+				,SenManager.LastName + ', ' + SenManager.FirstName AS SeniorManager
+				,i.[ReviewerId]
+				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 		  FROM inserted AS i
 		       INNER JOIN dbo.Client AS c ON i.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON i.PracticeId = p.PracticeId
@@ -57,6 +61,9 @@ BEGIN
 			   LEFT  JOIN dbo.Person AS Dir ON Dir.PersonId = i.DirectorId
 			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = i.BusinessTypeId
 			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = i.PricingListId
+			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = i.SeniorManagerId
+			   LEFT JOIN dbo.Person AS Rev ON Rev.PersonId = i.[ReviewerId]
+		
 	),
 
 	OLD_VALUES AS
@@ -90,6 +97,10 @@ BEGIN
 				,bt.Name AS [BusinessType]
 				,d.PricingListId
 				,pt.Name AS [PricingList]
+				,d.SeniorManagerId
+				,SenManager.LastName + ', ' + SenManager.FirstName AS SeniorManager
+				,d.[ReviewerId]
+				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 		  FROM deleted AS d
 		       INNER JOIN dbo.Client AS c ON d.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON d.PracticeId = p.PracticeId
@@ -100,6 +111,8 @@ BEGIN
 			   LEFT JOIN dbo.Person AS Dir ON Dir.PersonId = d.DirectorId
 			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = d.BusinessTypeId
 			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = d.PricingListId
+			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = d.SeniorManagerId
+			   LEFT JOIN dbo.Person AS Rev ON Rev.PersonId = d.[ReviewerId]
 	)
 
 	-- Log an activity
@@ -173,6 +186,8 @@ BEGIN
 	    OR ISNULL(i.EndDate, '2029-10-31') <> ISNULL(d.EndDate, '2029-10-31')
 	    OR i.IsChargeable <> d.IsChargeable
 		OR i.ProjectOwnerId <> d.ProjectOwnerId
+		OR ISNULL(i.[ReviewerId], 0) <> ISNULL(d.[ReviewerId], 0)
+		OR ISNULL(i.SeniorManagerId, 0) <> ISNULL(d.SeniorManagerId, 0)
 	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
 	    OR ISNULL(i.SowBudget, 0) <> ISNULL(d.SowBudget, 0)
 	-- End logging session
