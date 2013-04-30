@@ -482,7 +482,7 @@ namespace PraticeManagement.Controls
                     if (counter == 0)
                     {
                         this.PluralForm = string.IsNullOrEmpty(this.PluralForm) ? "s" : this.PluralForm;
-                        text = "Please Choose " + this.DropDownListType + "(" + this.PluralForm + ")";
+                        text = "-- Select " + this.DropDownListType + "(" + this.PluralForm + ") --";
                     }
                 }
                 return text;
