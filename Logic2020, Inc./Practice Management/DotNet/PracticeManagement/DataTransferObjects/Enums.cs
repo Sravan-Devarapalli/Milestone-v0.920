@@ -166,7 +166,7 @@ namespace DataTransferObjects
     public enum BusinessType
     {
         [EnumMember]
-        [Description("- - Select BusinessType - -")]
+        [Description("-- Select Business Type --")]
         Undefined = 0,
 
         [EnumMember]
