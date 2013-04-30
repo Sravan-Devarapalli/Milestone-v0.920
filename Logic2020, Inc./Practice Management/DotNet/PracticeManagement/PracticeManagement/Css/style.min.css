@@ -367,6 +367,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width14Percent{width:14%}
 .Width14PercentImp{width:14%!important}
 .Width15Percent,.Width15Per{width:15%}
+.Width16point5PercentImp{width:16.5%!important}
 .Width17Percent,.Width17Per{width:17%}
 .Width18Percent{width:18%}
 .Width19Percent{width:19%}
@@ -416,6 +417,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width85Percent{width:85%}
 .Width90Percent{width:90%}
 .Width92Per{width:92%}
+.Width925Per{width:92.5%}
 .Width93Per{width:93%}
 .Width94Per{width:94%}
 .Width945Per{width:94.5%}
