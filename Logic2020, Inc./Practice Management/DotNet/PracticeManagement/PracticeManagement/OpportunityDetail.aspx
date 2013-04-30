@@ -1109,7 +1109,6 @@
                                         <tr>
                                             <td class="Width97Per WhiteSpaceNoWrap">
                                                 <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="WholeWidth" onchange="EnableSaveButton();setDirty();">
-                                                    <asp:ListItem Text="--Select Pricing List--" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width3Per">
@@ -1125,7 +1124,6 @@
                                         <tr>
                                             <td class="Width97Per">
                                                 <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width100Per" runat="server" onchange="EnableSaveButton();setDirty();">
-                                                    <asp:ListItem Text="" Value="0" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width3Per">
