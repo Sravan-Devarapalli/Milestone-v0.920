@@ -590,6 +590,7 @@
                                             <td class="width60P">
                                                 <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
                                                     AutoPostBack="true" onchange="setDirty();">
+                                                     <asp:ListItem Text="-- Select Business Unit --" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="TdValidators">
@@ -637,7 +638,7 @@
                                                 Senior Manager
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
-                                                <asp:DropDownList ID="ddlSeniorManager" runat="server" CssClass="Width945Per">
+                                                <asp:DropDownList ID="ddlSeniorManager" runat="server" CssClass="Width945Per" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width2Percent WhiteSpaceNoWrap">
@@ -679,7 +680,7 @@
                                             <td class="width60PImp WhiteSpaceNoWrap">
                                                 &nbsp;&nbsp;
                                                 <asp:Label ID="lblBusiness" runat="server" Text="$" Visible="false"></asp:Label>
-                                                <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width95Per" runat="server">
+                                                <asp:DropDownList ID="ddlBusinessOptions" CssClass="Width95Per" runat="server" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="TdValidators">
@@ -749,9 +750,8 @@
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 &nbsp;&nbsp;
-                                                <asp:Label ID="Label1" runat="server" Text="$" Visible="false"></asp:Label>
-                                                <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width945Per">
-                                                    <asp:ListItem Text="--Select Pricing List--" Value="" Selected="True"></asp:ListItem>
+                                                <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width945Per" onchange="setDirty();">
+                                                    <asp:ListItem Text="-- Select Pricing List --" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="TdValidators">
