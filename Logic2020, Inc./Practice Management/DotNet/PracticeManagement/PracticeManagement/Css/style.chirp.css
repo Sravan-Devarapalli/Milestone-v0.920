@@ -3481,7 +3481,7 @@ div.scrollextLabel
 }
 div.scrollextLabel Label
 {
-   padding-left: 2px;
+   padding-left: 4px;
 }
 .DefaultDropDownFont
 {
@@ -6213,6 +6213,10 @@ table.ProjectDetail-ProjectInfo-Table td
 .Width110Px
 {
     width: 110px;
+}
+.Width115PxImp
+{
+    width: 115px !important;
 }
 .yScrollAuto
 {
