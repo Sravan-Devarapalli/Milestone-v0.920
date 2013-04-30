@@ -373,6 +373,7 @@ namespace PraticeManagement
             PopulateOpportunityLink();
             txtProjectNameFirstTime.Visible = !(ProjectId.HasValue && Project != null);
             imgEditProjectName.Visible =
+            imgMailToSeniorManager.Visible =
             imgMailToProjectOwner.Visible =
             imgMailToClientDirector.Visible =
             imgMailToSalesperson.Visible = !txtProjectNameFirstTime.Visible;
@@ -421,6 +422,7 @@ namespace PraticeManagement
             txtManagementCommission.ReadOnly = !userIsSalesPerson && !userIsAdministrator;
             chbReceivesSalesCommission.Enabled = userIsAdministrator;
             ddlSalesperson.Enabled = ddlProjectGroup.Enabled = !string.IsNullOrEmpty(ddlClientName.SelectedValue) && !isReadOnly;
+            ddlPricingList.Enabled = !string.IsNullOrEmpty(ddlClientName.SelectedValue);
             if ((userIsPracticeManager || userIsBusinessUnitManager || userIsProjectLead) && !cblProjectManagers.Enabled && !ProjectId.HasValue)
             {
                 try
@@ -1250,7 +1252,7 @@ namespace PraticeManagement
 
         protected override void Display()
         {
-            DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
+            DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
             DataHelper.FillClientListForProject(ddlClientName, "-- Select Account --", ProjectId);
             Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
