@@ -1065,6 +1065,7 @@ namespace DataAccess
                     int projectBusinessTypesIndex = -1;
                     int projectOwnerIdIndex = -1;
                     int pricingListIdIndex = -1;
+                    int pricingListNameIndex = -1;
                     int opportunityNumberIndex = -1;
                     int sowBudgetIndex = -1;
                     int clientIsNoteRequiredIndex = -1;
@@ -1178,6 +1179,17 @@ namespace DataAccess
                     {
                         pricingListIdIndex = -1;
                     }
+
+                        try
+                    {
+                        pricingListNameIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListNameColumn);
+                    }
+                    catch
+                    {
+                        pricingListNameIndex = -1;
+                    }
+
+                    
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -1366,6 +1378,7 @@ namespace DataAccess
                                        new PricingList
                                        {
                                            PricingListId = reader.GetInt32(pricingListIdIndex),
+                                           Name = pricingListNameIndex > -1 ? reader.GetString(pricingListNameIndex) : string.Empty
                                        }
                                         : null;
                         }
@@ -1556,10 +1569,24 @@ namespace DataAccess
                     int pricingListNameIndex = -1;
                     int businessGroupIdIndex = -1;
                     int businessGroupNameIndex = -1;
-
                     int hasAttachments = -1;
+                    int seniorManagerNameIndex = -1;
+                    int seniorManagerIdIndex = -1;
 
+                    try
+                    {
+                        seniorManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerId);
+                    }
+                    catch
+                    { }
 
+                    
+                    try
+                    {
+                        seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
+                    }
+                    catch
+                    { }
                     try
                     {
                         businessTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessTypeId);
@@ -1725,6 +1752,27 @@ namespace DataAccess
                                 {
                                 }
                             }
+                            if (seniorManagerIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.SeniorManagerId = reader.GetInt32(seniorManagerIdIndex);
+                                }
+                                catch
+                                {
+                                }
+                            }
+                            if (seniorManagerNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.SeniorManagerName = reader.GetString(seniorManagerNameIndex);
+                                }
+                                catch
+                                {
+                                }
+                            }
+
                             if (practiceOwnerNameIndex >= 0)
                             {
                                 try
