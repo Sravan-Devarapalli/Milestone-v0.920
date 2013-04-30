@@ -687,7 +687,7 @@ li.l1 a:hover,.l2 dd div.flyout a:hover{color:#2a4753}
 .xScrollAuto{overflow-x:auto}
 .xScrollOnly{overflow-x:scroll}
 div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;font-family:MS Shell Dlg;font-size:13.3333px;color:#000}
-div.scrollextLabel Label{padding-left:2px}
+div.scrollextLabel Label{padding-left:4px}
 .DefaultDropDownFont{font-family:MS Shell Dlg;font-size:13.3333px;color:#000}
 .ExportAndExportAll ul,.ExportAndExportAll li{margin:0;padding:0}
 .ExportAndExportAll ul.pmenu{position:absolute;margin:0;padding:1px;list-style:none;width:88px;border:1px solid #ccc;background:white;display:none;z-index:10}
@@ -1165,6 +1165,7 @@ table.ProjectDetail-ProjectInfo-Table td{padding-left:4px}
 .TdProjectType{width:330px!important;border-bottom:1px solid black;vertical-align:top!important}
 .TdPracticeArea{width:256px!important;border-bottom:1px solid black}
 .Width110Px{width:110px}
+.Width115PxImp{width:115px!important}
 .yScrollAuto{overflow-y:auto}
 .Width170PxImp{width:170px!important}
 .Width180PxImp{width:180px!important}
