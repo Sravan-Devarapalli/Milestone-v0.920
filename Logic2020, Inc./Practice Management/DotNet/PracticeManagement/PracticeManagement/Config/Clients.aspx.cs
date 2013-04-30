@@ -293,7 +293,7 @@ namespace PraticeManagement.Config
 
                 HtmlTableCell tc1 = new HtmlTableCell();
                 tc1.ID = "td1" + alphabet;
-                tc.Attributes.Add("class", "ClientAlphabetic");
+                tc1.Attributes.Add("class", "ClientAlphabetic");
 
                 Alphabet1.Text = alphabet.ToString();
                 Alphabet1.Click += new EventHandler(Alphabet_Clicked);
