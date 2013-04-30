@@ -339,15 +339,6 @@ namespace PraticeManagement
                 ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
 
                 txtProjectName.Focus();
-                // txtSowBudget.Enabled = (userIsAdministrator || userIsSalesPerson);
-
-                //int clientId = -1;
-                //if (int.TryParse(Page.Request.QueryString["clientId"], out clientId))
-                //{
-                //    ddlClientName.SelectedValue = clientId.ToString();
-                //    SetClientDefaultValues(clientId);
-                //    DataHelper.FillProjectGroupList(ddlProjectGroup, clientId, null);
-                //}
 
                 if (ProjectId.HasValue)
                 {
@@ -418,34 +409,18 @@ namespace PraticeManagement
 
             //isReadOnly  variable can be removed as only this roles can access the page.
             bool isReadOnly = !userIsAdministrator && !userIsSalesPerson && !userIsPracticeManager && !userIsBusinessUnitManager && !userIsDirector && !userIsSeniorLeadership && !userIsProjectLead;// #2817: userIsDirector is added as per the requirement.
-
             bool userIsProjectManagerOfTheProject = false;
-
             if (Project != null && ProjectId.HasValue && Project.ProjectManagers.Count > 0)
             {
                 userIsProjectManagerOfTheProject = Project.ProjectManagers.Any(p => p.Id == DataHelper.CurrentPerson.Id);
             }
-
-            txtProjectName.ReadOnly =
-                //txtClientDiscount.ReadOnly = 
-                isReadOnly;
+            txtProjectName.ReadOnly = isReadOnly;
             txtSalesCommission.ReadOnly = !userIsAdministrator;
-
             ddlClientName.Enabled = ddlPractice.Enabled = !isReadOnly;
-
-            chbReceiveManagementCommission.Enabled = rlstManagementCommission.Enabled =
-                userIsSalesPerson || userIsAdministrator;
+            chbReceiveManagementCommission.Enabled = rlstManagementCommission.Enabled = userIsSalesPerson || userIsAdministrator;
             txtManagementCommission.ReadOnly = !userIsSalesPerson && !userIsAdministrator;
-
             chbReceivesSalesCommission.Enabled = userIsAdministrator;
-
             ddlSalesperson.Enabled = ddlProjectGroup.Enabled = !string.IsNullOrEmpty(ddlClientName.SelectedValue) && !isReadOnly;
-
-            //      ddlSalesperson.Enabled = (userIsAdministrator || userIsDirector) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
-            //   cblProjectManagers.Enabled = ddlDirector.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson) && !string.IsNullOrEmpty(ddlClientName.SelectedValue);
-            //    cblProjectManagers.Enabled = (userIsAdministrator || userIsDirector || userIsSeniorLeadership || userIsSalesPerson || userIsProjectManagerOfTheProject);
-
-
             if ((userIsPracticeManager || userIsBusinessUnitManager || userIsProjectLead) && !cblProjectManagers.Enabled && !ProjectId.HasValue)
             {
                 try
@@ -457,7 +432,6 @@ namespace PraticeManagement
                     cblProjectManagers.SelectedValue = string.Empty;
                 }
             }
-
             ddlProjectStatus.Enabled =
                 // add new project mode
                 !ProjectId.HasValue ||
@@ -744,25 +718,9 @@ namespace PraticeManagement
 
         private void SetDefaultsToClientDependancyControls()
         {
-            //txtClientDiscount.Text = string.Empty;
-            //ddlSalesperson.SelectedIndex = 0;
             ddlDirector.SelectedIndex = 0;
-
-            //if (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName)
-            //    && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
-            //    && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName)
-            //    && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
-            //      && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)
-            //    && !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName))
-            //{
-            //    AddListItemIfNotExists(ddlSalesperson, DataHelper.CurrentPerson.Id.Value.ToString(), DataHelper.CurrentPerson);
-            //    ddlSalesperson.SelectedValue = DataHelper.CurrentPerson.Id.Value.ToString();
-            //}
-
             if (ddlProjectGroup.Items.Count > 0)
                 ddlProjectGroup.SelectedIndex = 0;
-
-            //  ddlProjectGroup.Enabled = ddlDirector.Enabled = ddlSalesperson.Enabled = false;
         }
 
         private void AddListItemIfNotExists(DropDownList ddl, string value, Person person)
@@ -848,7 +806,7 @@ namespace PraticeManagement
                     }
 
                     var pricingLists = ServiceCallers.Custom.Client(clients => clients.GetPricingLists(client.Id));
-                    DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p=>p.Name).ToArray());
+                    DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p => p.Name).ToArray());
                 }
 
                 DataHelper.FillProjectGroupList(ddlProjectGroup, clientId, null);
@@ -1016,10 +974,10 @@ namespace PraticeManagement
                 try
                 {
                     int opportunityId = Convert.ToInt32(ddlOpportunities.SelectedValue);
-                    int? pricingListId=null;
-                    if(Project.PricingList != null)
+                    int? pricingListId = null;
+                    if (Project.PricingList != null)
                     {
-                        pricingListId=Project.PricingList.PricingListId.Value;
+                        pricingListId = Project.PricingList.PricingListId.Value;
                     }
                     var opportunityNumber = ServiceCallers.Custom.Project(p => p.AttachOpportunityToProject(Project.Id.Value, opportunityId, User.Identity.Name, pricingListId, true));
 
@@ -1293,14 +1251,13 @@ namespace PraticeManagement
         protected override void Display()
         {
             DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
-            
             DataHelper.FillClientListForProject(ddlClientName, "-- Select Account --", ProjectId);
             Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillBusinessTypes(ddlBusinessOptions);
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
-            DataHelper.FillSeniorManagerList(ddlSeniorManager, "--Select Senior Manager--");
+            DataHelper.FillSeniorManagerList(ddlSeniorManager, "-- Select Senior Manager --");
             string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
             DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
@@ -1626,7 +1583,7 @@ namespace PraticeManagement
             {
                 DataHelper.FillProjectGroupList(ddlProjectGroup, project.Client.Id.Value, null);
                 var pricingLists = ServiceCallers.Custom.Client(client => client.GetPricingLists(project.Client.Id.Value));
-                DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p=>p.Name).ToArray());
+                DataHelper.FillPricingLists(ddlPricingList, pricingLists.OrderBy(p => p.Name).ToArray());
                 PopulateProjectGroupDropDown(project);
             }
         }
@@ -1907,6 +1864,13 @@ namespace PraticeManagement
             int ownerId = 0;
             int.TryParse(ddlProjectOwner.SelectedValue, out ownerId);
             MailTo(ownerId, (ImageButton)sender);
+        }
+
+        protected void imgMailToSeniorManager_OnClick(object sender, EventArgs e)
+        {
+            int managerId = 0;
+            int.TryParse(ddlSeniorManager.SelectedValue, out managerId);
+            MailTo(managerId, (ImageButton)sender);
         }
 
         protected void imgMailToClientDirector_OnClick(object sender, EventArgs e)
