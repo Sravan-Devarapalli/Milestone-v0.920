@@ -465,7 +465,7 @@
                                             </td>
                                             <td class="TdValidators">
                                                 <asp:RequiredFieldValidator ID="reqProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
-                                                    ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Project"
+                                                    ErrorMessage="The Project Status is required." ToolTip="The Project Status is required." ValidationGroup="Project"
                                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="custProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
                                                     ErrorMessage="Only administrators can make projects Active or Completed." ToolTip="Only administrators can make projects Active or Completed."
@@ -566,7 +566,7 @@
                                                 </ext:ScrollableDropdownExtender>
                                                 <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
-                                            <td class="Width10Percent PaddingLeft2px">
+                                            <td class="Width10Percent">
                                                 <asp:CustomValidator ID="cvProjectManager" runat="server" EnableClientScript="false"
                                                     ValidationGroup="Project" ErrorMessage="The Project Manager(s) is required."
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectManager_OnServerValidate"
@@ -593,7 +593,7 @@
                                                      <asp:ListItem Text="-- Select Business Unit --" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
-                                            <td class="TdValidators">
+                                            <td class="Width10Percent">
                                                 <asp:RequiredFieldValidator ID="reqBusinessUnit" runat="server" ControlToValidate="ddlProjectGroup"
                                                     EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Business Unit is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Business Unit is required."></asp:RequiredFieldValidator>
@@ -750,7 +750,7 @@
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 &nbsp;&nbsp;
-                                                <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width945Per" onchange="setDirty();">
+                                                <asp:DropDownList ID="ddlPricingList" runat="server" CssClass="Width95Percent" onchange="setDirty();">
                                                     <asp:ListItem Text="-- Select Pricing List --" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
@@ -1221,9 +1221,9 @@
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Project" OnClick="btnDelete_Click"
                             ToolTip="Delete Project" OnClientClick="ConfirmToDeleteProject();" Enabled="false"
                             Visible="false" />&nbsp;
-                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click"
+                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click" CssClass="Width115PxImp"
                             ValidationGroup="Project" />&nbsp;
-                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
+                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server"  CssClass="Width115PxImp"/>
                     </td>
                 </tr>
             </table>
