@@ -1547,7 +1547,7 @@ namespace PraticeManagement.Controls
 
         public static void FillPricingLists(ListControl control, PricingList[] pricingList, string firstItemText =null , bool noFirstItem = false, string valueField = "PricingListId", string NameField = "Name")
         { 
-                    FillListDefault(control, "--Select Pricing List--", pricingList, noFirstItem, valueField, NameField);    
+                    FillListDefault(control, "-- Select Pricing List --", pricingList, noFirstItem, valueField, NameField);    
         }
 
         public static void FillBusinessTypes(ListControl control)
@@ -1585,7 +1585,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillProjectGroupList(ListControl control, int? clientId, int? projectId, string firstItemText = "--Select Business Unit--", bool noFirstItem = false)
+        public static void FillProjectGroupList(ListControl control, int? clientId, int? projectId, string firstItemText = "-- Select Business Unit --", bool noFirstItem = false)
         {
             using (var serviceClient = new ProjectGroupServiceClient())
             {
