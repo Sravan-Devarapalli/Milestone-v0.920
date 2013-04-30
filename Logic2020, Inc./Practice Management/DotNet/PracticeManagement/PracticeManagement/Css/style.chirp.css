@@ -1982,6 +1982,10 @@ TABLE.Section td
 {
     width: 15%;
 }
+.Width16point5PercentImp
+{
+    width: 16.5% !important;
+}
 .Width17Percent, .Width17Per
 {
     width: 17%;
@@ -2180,6 +2184,10 @@ TABLE.Section td
 .Width92Per
 {
     width: 92%;
+}
+.Width925Per
+{
+    width: 92.5%;
 }
 .Width93Per
 {
