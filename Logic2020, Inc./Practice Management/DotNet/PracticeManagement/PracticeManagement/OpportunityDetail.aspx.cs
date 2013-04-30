@@ -249,11 +249,11 @@ namespace PraticeManagement
 
             if (!IsPostBack)
             {
-                DataHelper.FillClientList(ddlClient, string.Empty);
-                DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, string.Empty);
-                DataHelper.FillOpportunityStatusList(ddlStatus, string.Empty);
-                DataHelper.FillPracticeListOnlyActive(ddlPractice, string.Empty);
-                DataHelper.FillOpportunityPrioritiesList(ddlPriority, string.Empty);
+                DataHelper.FillClientList(ddlClient, "-- Select Account --");
+                DataHelper.FillSalespersonListOnlyActive(ddlSalesperson, "-- Select Salesperson --");
+                DataHelper.FillOpportunityStatusList(ddlStatus, "-- Select Status --");
+                DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice --");
+                DataHelper.FillOpportunityPrioritiesList(ddlPriority, "-- Select Sales Stage --");
                 DataHelper.FillOwnersList(ddlOpportunityOwner, "-- Select Owner --");
 
                 FillPotentialResources();
@@ -265,7 +265,7 @@ namespace PraticeManagement
 
                 ddlStrawmen.DataSource = Strawmen;
                 ddlStrawmen.DataBind();
-                ddlStrawmen.Items.Insert(0, new ListItem { Text = "-Select Strawman-", Value = "0" });
+                ddlStrawmen.Items.Insert(0, new ListItem { Text = "-- Select Strawman --", Value = "0" });
                 ddlQuantity.DataSource = Quantities;
                 ddlQuantity.DataBind();
 
@@ -358,7 +358,7 @@ namespace PraticeManagement
             StringBuilder strawmanListInDropdown = new StringBuilder();
             string rowSpliter = hdnRowSpliter.Value;
             string coloumSpliter = hdnColoumSpliter.Value;
-            strawmanListInDropdown.Append("-Select Strawman-" + coloumSpliter + "0" + rowSpliter);
+            strawmanListInDropdown.Append("-- Select Strawman --" + coloumSpliter + "0" + rowSpliter);
             for (int i = 0; i < strawMans.Length; i++)
             {
                 Person strawMan = strawMans[i];
@@ -411,7 +411,7 @@ namespace PraticeManagement
                 DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
 
                 var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(Opportunity.Client.Id, true, false, false));
-                DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
+                DataHelper.FillListDefault(ddlProjects, "-- Select Project --", projects, false, "Id", "DetailedProjectTitle");
 
                 AddAttrbuteToddlProjects(projects);
 
@@ -763,7 +763,7 @@ namespace PraticeManagement
                     DataHelper.FillListDefault(ddlClientGroup, string.Empty, groups, false);
 
                     var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientShort(clientId, true, false, false));
-                    DataHelper.FillListDefault(ddlProjects, "Select Project ...", projects, false, "Id", "DetailedProjectTitle");
+                    DataHelper.FillListDefault(ddlProjects, "-- Select Project --", projects, false, "Id", "DetailedProjectTitle");
                     AddAttrbuteToddlProjects(projects);
                     if (ddlProjects.Items.Count == 1)
                     {
@@ -774,7 +774,7 @@ namespace PraticeManagement
                 }
                 else if (ddlProjects.Items != null && ddlProjects.Items.Count == 0)
                 {
-                    ddlProjects.Items.Add(new ListItem() { Text = "Select Project ...", Value = "" });
+                    ddlProjects.Items.Add(new ListItem() { Text = "-- Select Project --", Value = "" });
                 }
             }
             upOpportunityDetail.Update();
