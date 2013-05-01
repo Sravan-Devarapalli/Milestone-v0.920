@@ -86,7 +86,6 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.CompletionDate, projectCSAT.CompletionDate);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ReviewerId, projectCSAT.ReviewerId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ReferralScore, projectCSAT.ReferralScore);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.Comments, projectCSAT.Comments);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                     connection.Open();
                     command.ExecuteNonQuery();
