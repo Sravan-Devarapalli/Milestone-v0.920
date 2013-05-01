@@ -1,15 +1,9 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 5-22-2008
--- Updated by:	Anatoliy Lokshin
--- Update date:	8-26-2008
--- Description:	Gets a Milestone
--- =============================================
-CREATE PROCEDURE dbo.MilestoneGetById
+﻿CREATE PROCEDURE dbo.MilestoneGetById
 (
 	@MilestoneId   INT
 )
 AS
+BEGIN
 	SET NOCOUNT ON
 
 	SELECT m.ClientId,
@@ -18,6 +12,8 @@ AS
 	       m.Description,
 	       m.Amount,
 	       m.StartDate,
+		   m.ProjectStatusId,
+		   m.ProjectStatusName,
 	       m.ProjectedDeliveryDate,
 	       m.IsHourlyAmount,
 	       m.ProjectName,
@@ -36,4 +32,5 @@ AS
 		   m.IsMarginColorInfoEnabled
 	  FROM dbo.v_Milestone AS m
 	 WHERE m.MilestoneId = @MilestoneId
+END
 
