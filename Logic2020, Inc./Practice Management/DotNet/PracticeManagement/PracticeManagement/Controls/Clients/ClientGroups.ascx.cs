@@ -259,7 +259,10 @@ namespace PraticeManagement.Controls.Clients
                 BusinessGroupList = null;
             }
             if (!(ClientId == 0 && groups == null))
+            {
                 ClientGroupsList = groups;
+                BusinessGroupList = null;
+            }
             gvGroups.DataSource = ClientGroupsList;
             gvGroups.DataBind();
         }
