@@ -121,6 +121,15 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.CompareValidator compEndDate;
         
         /// <summary>
+        /// compEndDateGreater control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compEndDateGreater;
+        
+        /// <summary>
         /// dpCompletionDate control.
         /// </summary>
         /// <remarks>
@@ -146,6 +155,15 @@ namespace PraticeManagement.Controls.Projects {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator CompareValidator1;
+        
+        /// <summary>
+        /// custCSATCompletionDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custCSATCompletionDate;
         
         /// <summary>
         /// ddlReviewer control.
@@ -220,6 +238,15 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.Button btnCancelPopUp;
         
         /// <summary>
+        /// valSumAddCSAT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumAddCSAT;
+        
+        /// <summary>
         /// hdnCopyCSAT control.
         /// </summary>
         /// <remarks>
@@ -229,6 +256,24 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.HiddenField hdnCopyCSAT;
         
         /// <summary>
+        /// hdnPopupAddOrUpdate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnPopupAddOrUpdate;
+        
+        /// <summary>
+        /// hdnSelectedCSATId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSelectedCSATId;
+        
+        /// <summary>
         /// gvCSAT control.
         /// </summary>
         /// <remarks>
@@ -236,6 +281,15 @@ namespace PraticeManagement.Controls.Projects {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvCSAT;
+        
+        /// <summary>
+        /// valSumCSATUpdate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary valSumCSATUpdate;
     }
 }
 
