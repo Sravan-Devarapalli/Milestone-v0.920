@@ -116,9 +116,9 @@ AS
 		   dbo.GetProjectManagerList(P.ProjectId) AS ProjectManagersIdFirstNameLastName,
 		   P.SowBudget,
 			sm.PersonId AS 'SeniorManagerId',
-			sm.LastName+' , ' +sm.FirstName AS 'SeniorManagerName',
+			sm.LastName+', ' +sm.FirstName AS 'SeniorManagerName',
 			re.PersonId AS 'ReviewerId',
-			re.LastName+' , ' +re.FirstName AS 'ReviewerName'
+			re.LastName+', ' +re.FirstName AS 'ReviewerName'
 	FROM	dbo.Project AS P
 	INNER JOIN dbo.Practice pr ON pr.PracticeId = P.PracticeId
 	INNER JOIN dbo.Client AS Clnt ON P.ClientId = Clnt.ClientId
