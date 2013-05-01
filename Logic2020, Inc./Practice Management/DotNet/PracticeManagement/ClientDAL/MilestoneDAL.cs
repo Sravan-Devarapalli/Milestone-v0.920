@@ -51,6 +51,7 @@ namespace DataAccess
         private const string MilestoneMoveProcedure = "dbo.MilestoneMove";
         private const string MilestoneMoveEndProcedure = "dbo.MilestoneMoveEnd";
         private const string MilestoneCloneProcedure = "dbo.MilestoneClone";
+        private const string GetMilestoneAndCSATCountsByProjectProcedure = "GetMilestoneAndCSATCountsByProject";
         private const string DefaultMileStoneInsertProcedure = "dbo.DefaultMilestoneSettingInsert";
         private const string DefaultMileStoneGetProcedure = "dbo.GetDefaultMilestoneSetting";
         public const string GetPersonMilestonesAfterTerminationDateProcedure = "dbo.GetPersonMilestonesAfterTerminationDate";
@@ -61,6 +62,8 @@ namespace DataAccess
 
         #region Columns
 
+        private const string MilestoneCountColumn = "MilestoneCount";
+        private const string CSATCountColumn = "CSATCount";
         private const string ProjectStartDateColumn = "ProjectStartDate";
         private const string ProjectEndDateColumn = "ProjectEndDate";
         private const string IsHourlyAmountColumn = "IsHourlyAmount";
@@ -210,7 +213,7 @@ namespace DataAccess
                 int descriptionIndex = reader.GetOrdinal("MilestoneName");
                 int projectNameIndex = reader.GetOrdinal("ProjectName");
                 int projectNumberIndex = reader.GetOrdinal("ProjectNumber");
-                
+
 
                 while (reader.Read())
                 {
@@ -354,7 +357,7 @@ namespace DataAccess
                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 connection.Open();
-                
+
                 command.ExecuteNonQuery();
             }
         }
@@ -474,6 +477,35 @@ namespace DataAccess
             }
         }
 
+        public static List<int> GetMilestoneAndCSATCountsByProject(int projectId)
+        {
+            List<int> result = new List<int>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(GetMilestoneAndCSATCountsByProjectProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(ProjectIdParam, projectId);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
+                {
+                    int milestoneCountIndex = reader.GetOrdinal(MilestoneCountColumn);
+                    int csatCountIndex = reader.GetOrdinal(CSATCountColumn);
+                    while (reader.Read())
+                    {
+                        
+                        result.Add(reader.GetInt32(milestoneCountIndex));
+                        result.Add(reader.GetInt32(csatCountIndex));
+                    }
+
+          
+                }
+            }
+            return result;
+        }
+
         public static bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, DateTime? startDate, DateTime? EndDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -520,6 +552,9 @@ namespace DataAccess
             {
                 int clientIdIndex = reader.GetOrdinal("ClientId");
                 int projectIdIndex = reader.GetOrdinal("ProjectId");
+                int projectStatusIdIndex = -1;
+                int projectStatusNameIndex = -1;
+                 
                 int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
                 int descriptionIndex = reader.GetOrdinal("Description");
                 int amountIndex = reader.GetOrdinal("Amount");
@@ -538,6 +573,18 @@ namespace DataAccess
                 int milestoneIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneIsChargeable);
                 int consultantsCanAdjustIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantsCanAdjust);
                 int isMarginColorInfoEnabledIndex = -1;
+
+                try
+                {
+                    projectStatusIdIndex = reader.GetOrdinal("ProjectStatusId");
+                    projectStatusNameIndex = reader.GetOrdinal("ProjectStatusName");
+                }
+                catch
+                {
+                     projectStatusIdIndex = -1;
+                     projectStatusNameIndex = -1;
+                }
+
                 try
                 {
                     isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
@@ -570,10 +617,18 @@ namespace DataAccess
                     milestone.Project.Discount = reader.GetDecimal(discountIndex);
                     milestone.Project.StartDate = reader.GetDateTime(projectStartDateIndex);
                     milestone.Project.EndDate = reader.GetDateTime(projectEndDateIndex);
+                   
 
                     milestone.Project.Client = new Client();
                     milestone.Project.Client.Id = reader.GetInt32(clientIdIndex);
                     milestone.Project.Client.Name = reader.GetString(clientNameIndex);
+
+                    if (projectStatusIdIndex >= 0 && projectStatusNameIndex >= 0)
+                    {
+                        milestone.Project.Status = new ProjectStatus();
+                        milestone.Project.Status.Id = reader.GetInt32(projectStatusIdIndex);
+                        milestone.Project.Status.Name = reader.GetString(projectStatusNameIndex);
+                    }
 
                     if (isMarginColorInfoEnabledIndex >= 0)
                     {
