@@ -59,9 +59,9 @@ AS
 			p.ClientIsNoteRequired,
 			p.ProjectCapabilityIds,
 		  sm.PersonId AS 'SeniorManagerId',
-		   sm.LastName+' , ' +sm.FirstName AS 'SeniorManagerName',
+		   sm.LastName+', ' +sm.FirstName AS 'SeniorManagerName',
 		   re.PersonId AS 'ReviewerId',
-		   re.LastName+' , ' +re.FirstName AS 'ReviewerName'
+		   re.LastName+', ' +re.FirstName AS 'ReviewerName'
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
