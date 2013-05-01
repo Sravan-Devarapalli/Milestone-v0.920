@@ -22,94 +22,31 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.LoadingProgress LoadingProgress1;
         
         /// <summary>
-        /// upnlBody control.
+        /// upClientPage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upnlBody;
+        protected global::System.Web.UI.UpdatePanel upClientPage;
         
         /// <summary>
-        /// tblClientMainViewSwitch control.
+        /// TabContainer1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblClientMainViewSwitch;
+        protected global::AjaxControlToolkit.TabContainer TabContainer1;
         
         /// <summary>
-        /// rowSwitcher1 control.
+        /// tpMainFilters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableRow rowSwitcher1;
-        
-        /// <summary>
-        /// cellBasicFilters control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellBasicFilters;
-        
-        /// <summary>
-        /// lnkbtnFilters control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnFilters;
-        
-        /// <summary>
-        /// cellMarginGoals control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellMarginGoals;
-        
-        /// <summary>
-        /// lnkbtnMarginGoals control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnMarginGoals;
-        
-        /// <summary>
-        /// mvBasicClientDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.MultiView mvBasicClientDetails;
-        
-        /// <summary>
-        /// vwBasicDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwBasicDetails;
-        
-        /// <summary>
-        /// pnlBasicDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlBasicDetails;
+        protected global::AjaxControlToolkit.TabPanel tpMainFilters;
         
         /// <summary>
         /// chbActive control.
@@ -274,22 +211,22 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.MessageLabel mlConfirmation;
         
         /// <summary>
-        /// vwMarginGoals control.
+        /// tpMarginGoals control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwMarginGoals;
+        protected global::AjaxControlToolkit.TabPanel tpMarginGoals;
         
         /// <summary>
-        /// pnlMarginGoals control.
+        /// upnlClientThrsholds control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlMarginGoals;
+        protected global::System.Web.UI.UpdatePanel upnlClientThrsholds;
         
         /// <summary>
         /// chbMarginThresholds control.
@@ -409,121 +346,31 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ImageButton btnAddProject;
         
         /// <summary>
-        /// tblClientViewSwitch control.
+        /// tcFilters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblClientViewSwitch;
+        protected global::AjaxControlToolkit.TabContainer tcFilters;
         
         /// <summary>
-        /// rowSwitcher control.
+        /// tpProjects control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableRow rowSwitcher;
+        protected global::AjaxControlToolkit.TabPanel tpProjects;
         
         /// <summary>
-        /// cellProject control.
+        /// UpdatePanel1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellProject;
-        
-        /// <summary>
-        /// lnkbtnProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnProject;
-        
-        /// <summary>
-        /// cellProjectGroup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellProjectGroup;
-        
-        /// <summary>
-        /// lnkbtnProjectGroup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnProjectGroup;
-        
-        /// <summary>
-        /// cellBusinessGroup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellBusinessGroup;
-        
-        /// <summary>
-        /// lnkbtnBusinessGroup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnBusinessGroup;
-        
-        /// <summary>
-        /// cellPricingList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellPricingList;
-        
-        /// <summary>
-        /// lnkbtnPricingList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnPricingList;
-        
-        /// <summary>
-        /// mvClientDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.MultiView mvClientDetails;
-        
-        /// <summary>
-        /// vwProjects control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwProjects;
-        
-        /// <summary>
-        /// pnlResourceReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlResourceReport;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
         /// ucProjects control.
@@ -535,22 +382,31 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Clients.ClientProjects ucProjects;
         
         /// <summary>
-        /// vwProjectGroup control.
+        /// tpGroups control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwProjectGroup;
+        protected global::AjaxControlToolkit.TabPanel tpGroups;
         
         /// <summary>
-        /// pnlProjectGroup control.
+        /// lnkBusinessUnit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlProjectGroup;
+        protected global::System.Web.UI.WebControls.LinkButton lnkBusinessUnit;
+        
+        /// <summary>
+        /// updGroups control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updGroups;
         
         /// <summary>
         /// ucProjectGoups control.
@@ -562,22 +418,31 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Clients.ClientGroups ucProjectGoups;
         
         /// <summary>
-        /// vwBusinessGroup control.
+        /// tpBusinessGroup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwBusinessGroup;
+        protected global::AjaxControlToolkit.TabPanel tpBusinessGroup;
         
         /// <summary>
-        /// pnlBusinessGroup control.
+        /// lnkBusinessGroup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlBusinessGroup;
+        protected global::System.Web.UI.WebControls.LinkButton lnkBusinessGroup;
+        
+        /// <summary>
+        /// UpdatePanel2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel2;
         
         /// <summary>
         /// ucBusinessGroups control.
@@ -589,22 +454,31 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Clients.ClientBusinessGroups ucBusinessGroups;
         
         /// <summary>
-        /// vwPricingList control.
+        /// tpPricingList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwPricingList;
+        protected global::AjaxControlToolkit.TabPanel tpPricingList;
         
         /// <summary>
-        /// pnlPricingList control.
+        /// lnkPricingList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlPricingList;
+        protected global::System.Web.UI.WebControls.LinkButton lnkPricingList;
+        
+        /// <summary>
+        /// UpdatePanel3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel3;
         
         /// <summary>
         /// ucPricingList control.
