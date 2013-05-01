@@ -1119,6 +1119,7 @@
 
             public class Project
             {
+                public const string GetProjectLastChangeDateFortheGivenStatus = "dbo.GetProjectLastChangeDateFortheGivenStatus";
                 public const string GetProjectsByClientId = "dbo.GetProjectsByClientId";
                 public const string GetProjectListByDateRange = "dbo.GetProjectListByDateRange";
                 public const string ProjectListAll = "dbo.ProjectListAll";
