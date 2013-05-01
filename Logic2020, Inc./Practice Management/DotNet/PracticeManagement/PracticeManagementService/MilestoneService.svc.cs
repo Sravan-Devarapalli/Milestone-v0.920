@@ -289,6 +289,10 @@ namespace PracticeManagementService
             MilestoneDAL.MilestoneUpdateShortDetails(milestone, userName);
         }
 
+        public List<int> GetMilestoneAndCSATCountsByProject(int projectId)
+        {
+            return MilestoneDAL.GetMilestoneAndCSATCountsByProject(projectId);
+        }
 
         #endregion
     }
