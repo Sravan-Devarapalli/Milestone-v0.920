@@ -3,6 +3,7 @@
     MasterPageFile="~/PracticeManagementMain.Master" %>
 
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="cc" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
 <%@ Register Src="~/Controls/Clients/ClientProjects.ascx" TagName="ClientProjects"
@@ -72,29 +73,17 @@
 
         window.onload = SetBackGroundColorForDdls;
     </script>
-    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
-    <asp:UpdatePanel ID="upnlBody" runat="server">
+  <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
+    <asp:UpdatePanel ID="upClientPage" runat="server">
         <ContentTemplate>
-            <asp:Table ID="tblClientMainViewSwitch" runat="server" CssClass="CommonCustomTabStyle PersonDetailReportCustomTabStyle">
-                <asp:TableRow ID="rowSwitcher1" runat="server">
-                    <asp:TableCell ID="cellBasicFilters" CssClass="SelectedSwitch" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnFilters" runat="server" Text="Filters" CausesValidation="false"
-                                OnCommand="btnBasicView_Command" CommandArgument="0" ToolTip="Filters"></asp:LinkButton></span>
-                        </span>
-                    </asp:TableCell>
-                    <asp:TableCell ID="cellMarginGoals" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnMarginGoals" runat="server" Text=" Contribution Margin Goals"
-                                CausesValidation="false" OnCommand="btnBasicView_Command" CommandArgument="1"
-                                ToolTip=" Contribution Margin Goals"></asp:LinkButton></span> </span>
-                    </asp:TableCell>
-                </asp:TableRow>
-            </asp:Table>
-            <div class="tab-pane">
-                <asp:MultiView ID="mvBasicClientDetails" runat="server" ActiveViewIndex="0">
-                    <asp:View ID="vwBasicDetails" runat="server">
-                        <asp:Panel ID="pnlBasicDetails" runat="server" CssClass="project-filter">
+            <div class="filters">
+                <AjaxControlToolkit:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0"
+                    CssClass="CustomTabStyle">
+                    <ajaxToolkit:TabPanel runat="server" ID="tpMainFilters">
+                        <HeaderTemplate>
+                            <span class="bg"><a href="#"><span>Filters</span></a> </span>
+                        </HeaderTemplate>
+                        <ContentTemplate>
                             <table>
                                 <tr>
                                     <td>
@@ -225,111 +214,118 @@
                             <div class="PaddingTop10Px">
                                 <uc:Label ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                             </div>
-                        </asp:Panel>
-                    </asp:View>
-                    <asp:View ID="vwMarginGoals" runat="server">
-                        <asp:Panel ID="pnlMarginGoals" runat="server" CssClass="project-filter">
-                            <table class="Width100Per">
-                                <tr>
-                                    <td class="Width50Percent vTop">
-                                        <table class="Width99Percent">
-                                            <tr>
-                                                <td colspan="3" class="PaddingBottomTop15Px">
-                                                    <asp:CheckBox ID="chbMarginThresholds" AutoPostBack="true" OnCheckedChanged="cbMarginThresholds_OnCheckedChanged"
-                                                        runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
-                                                    Contribution Margin thresholds
-                                                </td>
-                                                <td class="PaddingBottomTop15Px TextAlignRight">
-                                                    <asp:Button ID="btnAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
-                                                        OnClientClick="setDirty();" OnClick="btnAddThreshold_OnClick" />
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <asp:GridView ID="gvClientThrsholds" Enabled="false" runat="server" OnRowDataBound="gvClientThrsholds_RowDataBound"
-                                            AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable Width99Percent"
-                                            GridLines="None">
-                                            <Columns>
-                                                <asp:TemplateField>
-                                                    <ItemStyle HorizontalAlign="Center" CssClass="WidthHeight25" />
-                                                    <HeaderTemplate>
-                                                        <div class="ie-bg">
-                                                            Start</div>
-                                                    </HeaderTemplate>
-                                                    <ItemTemplate>
-                                                        <asp:DropDownList ID="gvddlStartRange" onchange="setDirty();" runat="server">
-                                                        </asp:DropDownList>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField>
-                                                    <ItemStyle HorizontalAlign="Center" CssClass="WidthHeight25" />
-                                                    <HeaderTemplate>
-                                                        <div class="ie-bg">
-                                                            End</div>
-                                                    </HeaderTemplate>
-                                                    <ItemTemplate>
-                                                        <asp:DropDownList ID="gvddlEndRange" onchange="setDirty();" runat="server">
-                                                        </asp:DropDownList>
-                                                        <asp:CustomValidator ID="cvgvRange" runat="server" ToolTip="The End must be greater than or equals to Start."
-                                                            Text="*" EnableClientScript="false" OnServerValidate="cvgvRange_OnServerValidate"
-                                                            SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                                        <asp:CustomValidator ID="cvgvOverLapRange" runat="server" ToolTip="The specified Threshold Percentage range overlaps with another Threshold Percentage range."
-                                                            OnServerValidate="cvgvOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
-                                                            SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField>
-                                                    <ItemStyle HorizontalAlign="Center" CssClass="Width42Height25" />
-                                                    <HeaderTemplate>
-                                                        <div class="ie-bg">
-                                                            Color</div>
-                                                    </HeaderTemplate>
-                                                    <ItemTemplate>
-                                                        <cc2:CustomDropDown ID="gvddlColor" CssClass="Width85Percent" onclick="applyColor(this);"
-                                                            onchange="applyColor(this);setDirty();" runat="server">
-                                                        </cc2:CustomDropDown>
-                                                        <asp:CustomValidator ID="cvgvddlColor" runat="server" OnServerValidate="cvgvddlColor_ServerValidate"
-                                                            ToolTip="Please Select a Color." Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                            Display="Static" ValidationGroup="Client" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField>
-                                                    <ItemStyle HorizontalAlign="Center" CssClass="Width8Height25" />
-                                                    <HeaderTemplate>
-                                                        <div class="ie-bg">
-                                                        </div>
-                                                    </HeaderTemplate>
-                                                    <ItemTemplate>
-                                                        <asp:ImageButton ID="btnDeleteRow" runat="server" ImageUrl="~/Images/cross_icon.png"
-                                                            ToolTip="Delete" OnClientClick="setDirty();" OnClick="btnDeleteRow_OnClick" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                            </Columns>
-                                        </asp:GridView>
-                                    </td>
-                                    <td class="Width3Percent">
-                                    </td>
-                                    <td class="Width44Percent vTop">
-                                        <div class="MarginGoalsDescription">
-                                            <p>
-                                                Enabling this feature and configuring color-coded ranges will allow persons without
-                                                unrestricted access to Project and Milestone Contribution Margin calculations a
-                                                visual indication of how Projects and Milestones are tracking with regard to the
-                                                Contribution Margin goals defined by the company.<br />
-                                                <br />
-                                            </p>
-                                            <p>
-                                                Contribution Margin goals must add up to at least 100%.<br />
-                                                <br />
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td class="Width3Percent">
-                                    </td>
-                                </tr>
-                            </table>
-                        </asp:Panel>
-                    </asp:View>
-                </asp:MultiView>
+                        </ContentTemplate>
+                    </ajaxToolkit:TabPanel>
+                    <ajaxToolkit:TabPanel runat="server" ID="tpMarginGoals">
+                        <HeaderTemplate>
+                            <span class="bg"><a href="#"><span>Contribution Margin Goals</span></a> </span>
+                        </HeaderTemplate>
+                        <ContentTemplate>
+                            <asp:UpdatePanel ID="upnlClientThrsholds" runat="server">
+                                <ContentTemplate>
+                                    <table class="Width100Per">
+                                        <tr>
+                                            <td class="Width50Percent vTop">
+                                                <table class="Width99Percent">
+                                                    <tr>
+                                                        <td colspan="3" class="PaddingBottomTop15Px">
+                                                            <asp:CheckBox ID="chbMarginThresholds" AutoPostBack="true" OnCheckedChanged="cbMarginThresholds_OnCheckedChanged"
+                                                                runat="server" Checked="false" onclick="setDirty();" />&nbsp;&nbsp; Use Color-coded
+                                                            Contribution Margin thresholds
+                                                        </td>
+                                                        <td class="PaddingBottomTop15Px TextAlignRight">
+                                                            <asp:Button ID="btnAddThreshold" Enabled="false" runat="server" Text="Add Threshold"
+                                                                OnClientClick="setDirty();" OnClick="btnAddThreshold_OnClick" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <asp:GridView ID="gvClientThrsholds" Enabled="false" runat="server" OnRowDataBound="gvClientThrsholds_RowDataBound"
+                                                    AutoGenerateColumns="False" EmptyDataText="" DataKeyNames="Id" CssClass="CompPerfTable Width99Percent"
+                                                    GridLines="None">
+                                                    <Columns>
+                                                        <asp:TemplateField>
+                                                            <ItemStyle HorizontalAlign="Center" CssClass="WidthHeight25" />
+                                                            <HeaderTemplate>
+                                                                <div class="ie-bg">
+                                                                    Start</div>
+                                                            </HeaderTemplate>
+                                                            <ItemTemplate>
+                                                                <asp:DropDownList ID="gvddlStartRange" onchange="setDirty();" runat="server">
+                                                                </asp:DropDownList>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField>
+                                                            <ItemStyle HorizontalAlign="Center" CssClass="WidthHeight25" />
+                                                            <HeaderTemplate>
+                                                                <div class="ie-bg">
+                                                                    End</div>
+                                                            </HeaderTemplate>
+                                                            <ItemTemplate>
+                                                                <asp:DropDownList ID="gvddlEndRange" onchange="setDirty();" runat="server">
+                                                                </asp:DropDownList>
+                                                                <asp:CustomValidator ID="cvgvRange" runat="server" ToolTip="The End must be greater than or equals to Start."
+                                                                    Text="*" EnableClientScript="false" OnServerValidate="cvgvRange_OnServerValidate"
+                                                                    SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
+                                                                <asp:CustomValidator ID="cvgvOverLapRange" runat="server" ToolTip="The specified Threshold Percentage range overlaps with another Threshold Percentage range."
+                                                                    OnServerValidate="cvgvOverLapRange_OnServerValidate" Text="*" EnableClientScript="false"
+                                                                    SetFocusOnError="true" Display="Static" ValidationGroup="Client" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField>
+                                                            <ItemStyle HorizontalAlign="Center" CssClass="Width42Height25" />
+                                                            <HeaderTemplate>
+                                                                <div class="ie-bg">
+                                                                    Color</div>
+                                                            </HeaderTemplate>
+                                                            <ItemTemplate>
+                                                                <cc2:CustomDropDown ID="gvddlColor" CssClass="Width85Percent" onclick="applyColor(this);"
+                                                                    onchange="applyColor(this);setDirty();" runat="server">
+                                                                </cc2:CustomDropDown>
+                                                                <asp:CustomValidator ID="cvgvddlColor" runat="server" OnServerValidate="cvgvddlColor_ServerValidate"
+                                                                    ToolTip="Please Select a Color." Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                                    Display="Static" ValidationGroup="Client" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField>
+                                                            <ItemStyle HorizontalAlign="Center" CssClass="Width8Height25" />
+                                                            <HeaderTemplate>
+                                                                <div class="ie-bg">
+                                                                </div>
+                                                            </HeaderTemplate>
+                                                            <ItemTemplate>
+                                                                <asp:ImageButton ID="btnDeleteRow" runat="server" ImageUrl="~/Images/cross_icon.png"
+                                                                    ToolTip="Delete" OnClientClick="setDirty();" OnClick="btnDeleteRow_OnClick" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                    </Columns>
+                                                </asp:GridView>
+                                            </td>
+                                            <td class="Width3Percent">
+                                            </td>
+                                            <td class="Width44Percent vTop">
+                                                <div class="MarginGoalsDescription">
+                                                    <p>
+                                                        Enabling this feature and configuring color-coded ranges will allow persons without
+                                                        unrestricted access to Project and Milestone Contribution Margin calculations a
+                                                        visual indication of how Projects and Milestones are tracking with regard to the
+                                                        Contribution Margin goals defined by the company.<br />
+                                                        <br />
+                                                    </p>
+                                                    <p>
+                                                        Contribution Margin goals must add up to at least 100%.<br />
+                                                        <br />
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td class="Width3Percent">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </ContentTemplate>
+                    </ajaxToolkit:TabPanel>
+                </AjaxControlToolkit:TabContainer>
                 <asp:CustomValidator ID="cvClientThresholds" runat="server" OnServerValidate="cvClientThresholds_ServerValidate"
                     ErrorMessage="Thresholds must be added up to  100% or more and must be continuous."
                     ToolTip="Thresholds must be added up to  100% or more and must be continuous."
@@ -356,58 +352,67 @@
             </div>
             <asp:ImageButton ImageUrl="~/Images/add-project.png" runat="server" ID="btnAddProject"
                 ValidationGroup="Client" CssClass="add-btn-project" OnClick="btnAddProject_Click" />
-            <asp:Table ID="tblClientViewSwitch" runat="server" CssClass="CommonCustomTabStyle PersonDetailReportCustomTabStyle">
-                <asp:TableRow ID="rowSwitcher" runat="server">
-                    <asp:TableCell ID="cellProject" CssClass="SelectedSwitch" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnProject" runat="server" Text="Projects" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="0" ToolTip="Projects"></asp:LinkButton></span>
+            <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
+                CssClass="CustomTabStyle">
+                <ajaxToolkit:TabPanel runat="server" ID="tpProjects">
+                    <HeaderTemplate>
+                        <span class="bg"><a href="#"><span>Projects</span></a> </span>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <div class="project-filter">
+                            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                <ContentTemplate>
+                                    <uc:ClientProjects ID="ucProjects" runat="server" />
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </ContentTemplate>
+                </ajaxToolkit:TabPanel>
+                <ajaxToolkit:TabPanel runat="server" ID="tpGroups">
+                    <HeaderTemplate>
+                        <span class="bg">
+                            <asp:LinkButton ID="lnkBusinessUnit" Text="Business Units" runat="server" OnClick="lnkBusinessUnit_Click"></asp:LinkButton>
                         </span>
-                    </asp:TableCell>
-                    <asp:TableCell ID="cellProjectGroup" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnProjectGroup" runat="server" Text="Business Units" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="1" ToolTip="Business Units"></asp:LinkButton></span>
-                        </span>
-                    </asp:TableCell>
-                    <asp:TableCell ID="cellBusinessGroup" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnBusinessGroup" runat="server" Text="Business Groups" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="2" ToolTip="Business Groups"></asp:LinkButton></span>
-                        </span>
-                    </asp:TableCell>
-                    <asp:TableCell ID="cellPricingList" runat="server">
-                        <span class="bg"><span>
-                            <asp:LinkButton ID="lnkbtnPricingList" runat="server" Text="Pricing List" CausesValidation="false"
-                                OnCommand="btnView_Command" CommandArgument="3" ToolTip="Pricing List"></asp:LinkButton></span>
-                        </span>
-                    </asp:TableCell>
-                </asp:TableRow>
-            </asp:Table>
-            <div class="tab-pane">
-                <asp:MultiView ID="mvClientDetails" runat="server" ActiveViewIndex="0">
-                    <asp:View ID="vwProjects" runat="server">
-                        <asp:Panel ID="pnlResourceReport" runat="server" CssClass="project-filter">
-                            <uc:ClientProjects ID="ucProjects" runat="server" />
-                        </asp:Panel>
-                    </asp:View>
-                    <asp:View ID="vwProjectGroup" runat="server">
-                        <asp:Panel ID="pnlProjectGroup" runat="server" CssClass="project-filter">
-                            <uc:ClientGroups ID="ucProjectGoups" runat="server" />
-                        </asp:Panel>
-                    </asp:View>
-                    <asp:View ID="vwBusinessGroup" runat="server">
-                        <asp:Panel ID="pnlBusinessGroup" runat="server" CssClass="project-filter">
-                            <uc:ClientBusinessGroups ID="ucBusinessGroups" runat="server" />
-                        </asp:Panel>
-                    </asp:View>
-                    <asp:View ID="vwPricingList" runat="server">
-                        <asp:Panel ID="pnlPricingList" runat="server" CssClass="project-filter">
-                            <uc:ClientPricingList ID="ucPricingList" runat="server" />
-                        </asp:Panel>
-                    </asp:View>
-                </asp:MultiView>
-            </div>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <div class="project-filter">
+                            <asp:UpdatePanel ID="updGroups" runat="server">
+                                <ContentTemplate>
+                                    <uc:ClientGroups ID="ucProjectGoups" runat="server" />
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </ContentTemplate>
+                </ajaxToolkit:TabPanel>
+                <ajaxToolkit:TabPanel runat="server" ID="tpBusinessGroup">
+                    <HeaderTemplate>
+                        <span class="bg"><asp:LinkButton ID="lnkBusinessGroup" Text="Business Group" runat="server" OnClick="lnkBusinessGroup_Click"></asp:LinkButton> </span>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <div class="project-filter">
+                            <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                                <ContentTemplate>
+                                    <uc:ClientBusinessGroups ID="ucBusinessGroups" runat="server" />
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </ContentTemplate>
+                </ajaxToolkit:TabPanel>
+                <ajaxToolkit:TabPanel runat="server" ID="tpPricingList">
+                    <HeaderTemplate>
+                        <span class="bg"><asp:LinkButton ID="lnkPricingList" Text="Pricing List" runat="server" OnClick="lnkPricingList_Click"> </asp:LinkButton></span>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <div class="project-filter">
+                            <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+                                <ContentTemplate>
+                                    <uc:ClientPricingList ID="ucPricingList" runat="server" />
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </ContentTemplate>
+                </ajaxToolkit:TabPanel>
+            </AjaxControlToolkit:TabContainer>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
