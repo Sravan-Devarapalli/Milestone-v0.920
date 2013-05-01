@@ -120,6 +120,10 @@ BEGIN
 		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
 		WHERE ProjectId = @ProjectId
 
+		EXEC dbo.ProjectStatusHistoryUpdate
+			@ProjectId = @ProjectId,
+			@ProjectStatusId = @ProjectStatusId
+
 		DECLARE @OpportunityId INT = NULL
 		
 		SELECT @OpportunityId = OpportunityId 
