@@ -31,16 +31,16 @@ AS
 		   pg.Name AS GroupName,
 		   1 AS InUse,
 		   c.PersonId AS 'SalespersonId',
-		   cp.LastName+' , ' +cp.FirstName AS 'SalespersonName',
+		   cp.LastName+', ' +cp.FirstName AS 'SalespersonName',
 		   	p.BusinessTypeId,
 			p.PricingListId,
 			PL.Name AS PricingListName,
 			BG.BusinessGroupId,
 			BG.Name AS BusinessGroupName,
 		   sm.PersonId AS 'SeniorManagerId',
-		   sm.LastName+' , ' +sm.FirstName AS 'SeniorManagerName',
+		   sm.LastName+', ' +sm.FirstName AS 'SeniorManagerName',
 		   re.PersonId AS 'ReviewerId',
-		   re.LastName+' , ' +re.FirstName AS 'ReviewerName'
+		   re.LastName+', ' +re.FirstName AS 'ReviewerName'
 	FROM v_Project p
 	LEFT JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	LEFT JOIN dbo.Commission c ON c.ProjectId = p.ProjectId AND c.CommissionType = 1
