@@ -32,7 +32,7 @@
                 text = "-- Select " + type.toString() + "("+pluralform +") --";
             }
         }
-        fulltext = text;
+        var fulltext = text;
         text = DecodeString(text);
         var isLengthExceded = (text.length > maxNoOfCharacters);
         scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue = isLengthExceded ? text.substr(0, maxNoOfCharacters-2) + ".." : text;
