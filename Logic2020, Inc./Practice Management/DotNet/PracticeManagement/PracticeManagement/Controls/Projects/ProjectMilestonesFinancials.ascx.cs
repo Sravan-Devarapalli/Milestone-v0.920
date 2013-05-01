@@ -39,6 +39,11 @@ namespace PraticeManagement.Controls.Projects
 
         #region Properties
 
+        private PraticeManagement.ProjectDetail HostingPage
+        {
+            get { return ((PraticeManagement.ProjectDetail)Page); }
+        }
+
         protected int? ProjectId
         {
             get
@@ -129,6 +134,7 @@ namespace PraticeManagement.Controls.Projects
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
+                HostingPage.noMileStones = false;
                 var milestoneId = Int32.Parse(((System.Data.DataRowView)(e.Row.DataItem)).Row.ItemArray[0].ToString());
                 var milestone = new Milestone { Id = milestoneId };
                 if (milestonesSeniorityAnalyzer.OneWithGreaterSeniorityExists(
@@ -138,7 +144,10 @@ namespace PraticeManagement.Controls.Projects
                     HideCell(e, MARGIN_PERCENT_CELL_INDEX);
                 }
             }
-
+            if (e.Row.RowType == DataControlRowType.EmptyDataRow)
+            {
+                HostingPage.noMileStones = true;
+            }
             if (e.Row.RowType == DataControlRowType.Header)
             {
                 GridViewRow row = e.Row;
