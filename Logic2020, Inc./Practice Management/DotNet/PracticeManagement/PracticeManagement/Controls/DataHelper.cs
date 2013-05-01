@@ -868,7 +868,7 @@ namespace PraticeManagement.Controls
         /// <param name="control"></param>
         /// <param name="firstItemText"></param>
 
-        public static void FillDirectorsList(ListControl control, string firstItemText)
+        public static void FillDirectorsList(ListControl control, string firstItemText, List<int> excludedPersons = null)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -876,7 +876,7 @@ namespace PraticeManagement.Controls
                 {
                     string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
                     Person[] persons = serviceClient.PersonListShortByRoleAndStatus(statusids, DataTransferObjects.Constants.RoleNames.DirectorRoleName);
-
+                    persons = excludedPersons != null ? persons.Where(p => !excludedPersons.Any(g => g == p.Id)).ToArray() : persons;
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
                 catch (CommunicationException)
@@ -887,7 +887,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillCASTReviewerList(ListControl control, string firstItemText, List<int> excludedPersons)
+        public static void FillCSATReviewerList(ListControl control, string firstItemText, List<int> excludedPersons)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -1227,14 +1227,14 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static void FillProjectStatusList(ListControl control, string firstItemText)
+        public static void FillProjectStatusList(ListControl control, string firstItemText, List<int> excludedStatus = null)
         {
             using (var serviceClient = new ProjectStatusServiceClient())
             {
                 try
                 {
                     ProjectStatus[] statuses = serviceClient.GetProjectStatuses();
-
+                    statuses = excludedStatus != null ?statuses.Where(p => !excludedStatus.Any(g => g == p.Id)).ToArray() : statuses;
                     FillListDefault(control, firstItemText, statuses, false);
                 }
                 catch (CommunicationException)
