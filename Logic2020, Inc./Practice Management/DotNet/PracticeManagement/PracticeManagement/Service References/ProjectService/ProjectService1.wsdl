@@ -12,6 +12,12 @@
       <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupId" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupIdResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_GetBusinessDevelopmentProject_InputMessage">
     <wsdl:part name="parameters" element="tns:GetBusinessDevelopmentProject" />
   </wsdl:message>
@@ -95,6 +101,12 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectLastChangeDateFortheGivenStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectLastChangeDateFortheGivenStatus" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectLastChangeDateFortheGivenStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectLastChangeDateFortheGivenStatusResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectsComputedFinancials_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectsComputedFinancials" />
@@ -300,13 +312,11 @@
   <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
   </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupId" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupIdResponse" />
-  </wsdl:message>
   <wsdl:portType name="IProjectService">
+    <wsdl:operation name="GetProjectsListByProjectGroupId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" message="tns:IProjectService_GetProjectsListByProjectGroupId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse" message="tns:IProjectService_GetProjectsListByProjectGroupId_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetBusinessDevelopmentProject">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject" message="tns:IProjectService_GetBusinessDevelopmentProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProjectResponse" message="tns:IProjectService_GetBusinessDevelopmentProject_OutputMessage" />
@@ -362,6 +372,10 @@
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetByIdResponse" message="tns:IProjectService_ProjectGetById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectLastChangeDateFortheGivenStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectLastChangeDateFortheGivenStatus" message="tns:IProjectService_GetProjectLastChangeDateFortheGivenStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectLastChangeDateFortheGivenStatusResponse" message="tns:IProjectService_GetProjectLastChangeDateFortheGivenStatus_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetProjectsComputedFinancials">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsComputedFinancials" message="tns:IProjectService_GetProjectsComputedFinancials_InputMessage" />
@@ -499,13 +513,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetProjectsListByProjectGroupId">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" message="tns:IProjectService_GetProjectsListByProjectGroupId_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse" message="tns:IProjectService_GetProjectsListByProjectGroupId_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetProjectsListByProjectGroupId">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetBusinessDevelopmentProject">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject" style="document" />
       <wsdl:input>
@@ -625,6 +644,15 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectGetById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectLastChangeDateFortheGivenStatus">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectLastChangeDateFortheGivenStatus" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -931,15 +959,6 @@
     </wsdl:operation>
     <wsdl:operation name="IsUserIsProjectOwner">
       <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetProjectsListByProjectGroupId">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
