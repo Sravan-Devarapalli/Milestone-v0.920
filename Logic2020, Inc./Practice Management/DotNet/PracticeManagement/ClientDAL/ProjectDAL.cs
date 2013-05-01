@@ -48,6 +48,45 @@ namespace DataAccess
         /// <param name="clientId">An ID of the client.</param>
         /// <param name="viewerUsername"></param>
         /// <returns>The list of the <see cref="Project"/> objects.</returns>
+        /// 
+
+        public static DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId)
+        {
+            DateTime dateTime = DateTime.MinValue;
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectLastChangeDateFortheGivenStatus, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                    command.Parameters.AddWithValue(
+                        Constants.ParameterNames.ProjectStatusId, projectStatusId);
+
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    try
+                    {
+                        if (reader.HasRows)
+                        {
+                            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                            while (reader.Read())
+                            {
+                                dateTime = reader.GetDateTime(startDateIndex);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+            return dateTime;
+        }
+
         public static List<Project> ProjectListByClient(int clientId, string viewerUsername)
         {
             var projectList = new List<Project>();
@@ -874,8 +913,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
-                if(project.SeniorManagerId > 0)
-                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId );
+                if (project.SeniorManagerId > 0)
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
                 if (project.CSATOwnerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.CSATOwnerId, project.CSATOwnerId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
@@ -1048,7 +1087,7 @@ namespace DataAccess
                     int projectIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIsChargeable);
                     int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
                     int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
-                    
+
                     int descriptionIndex = -1;
                     int salesPersonNameIndex = -1;
                     int practiceOwnerNameIndex = -1;
@@ -1180,7 +1219,7 @@ namespace DataAccess
                         pricingListIdIndex = -1;
                     }
 
-                        try
+                    try
                     {
                         pricingListNameIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListNameColumn);
                     }
@@ -1189,7 +1228,7 @@ namespace DataAccess
                         pricingListNameIndex = -1;
                     }
 
-                    
+
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -1507,7 +1546,7 @@ namespace DataAccess
                         {
                             try
                             {
-                              
+
                                 project.CSATOwnerName = reader.GetString(reviewerNameIndex);
                             }
                             catch
@@ -1580,7 +1619,7 @@ namespace DataAccess
                     catch
                     { }
 
-                    
+
                     try
                     {
                         seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
@@ -1603,7 +1642,7 @@ namespace DataAccess
                     catch
                     {
                         pricingListIdIndex = -1;
-                        pricingListNameIndex=-1;
+                        pricingListNameIndex = -1;
                     }
                     try
                     {
@@ -1615,7 +1654,7 @@ namespace DataAccess
                         businessGroupIdIndex = -1;
                         businessGroupNameIndex = -1;
                     }
-                   
+
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
@@ -1730,7 +1769,7 @@ namespace DataAccess
                                 {
                                     var businessGroup = new BusinessGroup
                                     {
-                                        Id= (int)reader[businessGroupIdIndex],
+                                        Id = (int)reader[businessGroupIdIndex],
                                         Name = (string)reader[businessGroupNameIndex],
                                     };
 
