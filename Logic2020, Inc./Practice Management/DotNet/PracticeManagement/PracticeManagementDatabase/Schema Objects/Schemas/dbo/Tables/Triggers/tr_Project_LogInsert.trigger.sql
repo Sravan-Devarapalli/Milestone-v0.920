@@ -97,6 +97,14 @@ BEGIN
 	  FROM inserted AS i
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 	  
+	  INSERT INTO [dbo].[ProjectStatusHistory]
+			   ([ProjectId]
+			   ,[ProjectStatusId]
+			   ,[StartDate]
+			   )
+     SELECT i.ProjectId,i.ProjectStatusId,@CurrentPMTime
+	 FROM inserted AS i
+
 	  -- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
