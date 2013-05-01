@@ -719,6 +719,10 @@ namespace PracticeManagementService
 
         }
 
+        public DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId)
+        {
+            return ProjectDAL.GetProjectLastChangeDateFortheGivenStatus(projectId, projectStatusId);
+        }
 
         public List<ProjectsGroupedByPerson> PersonBudgetListByYear(int year, BudgetCategoryType categoryType)
         {
