@@ -15,6 +15,9 @@ namespace PraticeManagement.ProjectService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProjectService.IProjectService")]
     public interface IProjectService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId", ReplyAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse")]
+        DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject", ReplyAction="http://tempuri.org/IProjectService/GetBusinessDevelopmentProjectResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -64,6 +67,10 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
         DataTransferObjects.Project ProjectGetById(int projectId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectLastChangeDateFortheGivenStatus", ReplyAction="http://tempuri.org/IProjectService/GetProjectLastChangeDateFortheGivenStatusRespo" +
+            "nse")]
+        System.DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsComputedFinancials", ReplyAction="http://tempuri.org/IProjectService/GetProjectsComputedFinancialsResponse")]
         DataTransferObjects.ComputedFinancials GetProjectsComputedFinancials(int projectId);
@@ -194,9 +201,6 @@ namespace PraticeManagement.ProjectService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner", ReplyAction="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse")]
         bool IsUserIsProjectOwner(string user, int id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId", ReplyAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse")]
-        DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -223,6 +227,10 @@ namespace PraticeManagement.ProjectService {
         
         public ProjectServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
         
         public DataTransferObjects.Project GetBusinessDevelopmentProject() {
@@ -279,6 +287,10 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
             return base.Channel.ProjectGetById(projectId);
+        }
+        
+        public System.DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId) {
+            return base.Channel.GetProjectLastChangeDateFortheGivenStatus(projectId, projectStatusId);
         }
         
         public DataTransferObjects.ComputedFinancials GetProjectsComputedFinancials(int projectId) {
@@ -433,10 +445,6 @@ namespace PraticeManagement.ProjectService {
         
         public bool IsUserIsProjectOwner(string user, int id) {
             return base.Channel.IsUserIsProjectOwner(user, id);
-        }
-        
-        public DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
     }
 }
