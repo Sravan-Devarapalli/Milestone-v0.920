@@ -11,9 +11,9 @@ BEGIN
 	;WITH NEW_VALUES AS
 	(
 		SELECT i.CSATId ,
-				i.ReviewStartDate ,
-				i.ReviewEndDate,
-				i.CompletionDate ,
+				CONVERT(NVARCHAR(10), i.ReviewStartDate, 101) AS [ReviewStartDate],
+				CONVERT(NVARCHAR(10), i.ReviewEndDate, 101) AS [ReviewEndDate],	
+				CONVERT(NVARCHAR(10), i.CompletionDate, 101) AS [CompletionDate],
 				i.ProjectId,
 				p.Name AS [Project] ,
 				i.Comments,
@@ -28,9 +28,9 @@ BEGIN
 	OLD_VALUES AS
 	(
 		SELECT	d.CSATId ,
-				d.ReviewStartDate ,
-				d.ReviewEndDate,
-				d.CompletionDate ,
+				CONVERT(NVARCHAR(10), d.ReviewStartDate, 101) AS [ReviewStartDate],
+				CONVERT(NVARCHAR(10), d.ReviewEndDate, 101) AS [ReviewEndDate],	
+				CONVERT(NVARCHAR(10), d.CompletionDate, 101) AS [CompletionDate],
 				d.ProjectId,
 				p.Name AS [Project] ,
 				d.Comments,
