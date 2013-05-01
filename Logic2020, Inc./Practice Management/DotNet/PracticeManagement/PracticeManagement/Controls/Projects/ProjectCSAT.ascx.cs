@@ -67,7 +67,7 @@ namespace PraticeManagement.Controls.Projects
             DatePicker dpCompletionDate = (DatePicker)row.FindControl("dpCompletionDate");
             if (HostingPage.Project.Status.StatusType == ProjectStatusType.Completed)
             {
-                DateTime lastCompletedDate = ServiceCallers.Custom.Project(p => p.GetProjectLastCompletedStatusDate(HostingPage.Project.Id.Value, HostingPage.Project.Status.Id));
+                DateTime lastCompletedDate = ServiceCallers.Custom.Project(p => p.GetProjectLastChangeDateFortheGivenStatus(HostingPage.Project.Id.Value, HostingPage.Project.Status.Id));
                 e.IsValid = dpCompletionDate.DateValue.Date <= lastCompletedDate.Date;
             }
         }
