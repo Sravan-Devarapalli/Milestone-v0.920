@@ -176,6 +176,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         void MilestoneUpdateShortDetails(Milestone milestone, string userName);
+
+        [OperationContract]
+        List<int> GetMilestoneAndCSATCountsByProject(int projectId);
     }
 }
 
