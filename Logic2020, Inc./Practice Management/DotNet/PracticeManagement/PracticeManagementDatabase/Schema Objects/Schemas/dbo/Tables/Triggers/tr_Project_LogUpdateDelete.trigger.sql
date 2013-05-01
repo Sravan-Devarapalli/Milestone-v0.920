@@ -190,6 +190,15 @@ BEGIN
 		OR ISNULL(i.SeniorManagerId, 0) <> ISNULL(d.SeniorManagerId, 0)
 	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
 	    OR ISNULL(i.SowBudget, 0) <> ISNULL(d.SowBudget, 0)
+	 
+	 IF NOT EXISTS (SELECT 1 FROM inserted)
+	 BEGIN
+	    DELETE psh
+		FROM dbo.ProjectStatusHistory psh
+		INNER JOIN deleted AS d ON  psh.ProjectId = d.ProjectId
+	 END
+	  
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
+
