@@ -62,6 +62,11 @@
                                         ToolTip="The Review End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                         Operator="DataTypeCheck" Type="Date"></asp:CompareValidator>
+                                    <asp:CompareValidator ID="compEndDateGreater" runat="server" ControlToValidate="dpReviewEndDate"
+                                        ControlToCompare="dpReviewStartDate" ErrorMessage="Review Period End Date must be greater or equal to Review Period Start Date."
+                                        ToolTip="Review Period End Date must be greater or equal to Review Period Start Date."
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                        Operator="GreaterThanEqual" Type="Date" ValidationGroup="CSATPopup"></asp:CompareValidator>
                                 </span>
                             </td>
                         </tr>
@@ -85,6 +90,11 @@
                             ToolTip="The Completion Date has an incorrect format. It must be 'MM/dd/yyyy'."
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                             Operator="DataTypeCheck" Type="Date"></asp:CompareValidator>
+                        <asp:CustomValidator ID="custCSATCompletionDate" runat="server" ControlToValidate="dpCompletionDate"
+                            ErrorMessage="The Completion Date Should not be greater than the last project status 'COMPLETED' Date."
+                            ToolTip="The Completion Date Should not be greater than the last project status 'COMPLETED' Date."
+                            ValidationGroup="CSATPopup" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                            Display="Dynamic" OnServerValidate="custCSATCompletionDate_ServerValidate"></asp:CustomValidator>
                     </span>
                 </td>
             </tr>
@@ -126,13 +136,17 @@
             </tr>
             <tr>
                 <td class="PaddingTop5" colspan="2" align="center">
-                    <asp:Button ID="btnSavePopUp" runat="server" Text="Save" OnClick="btnSavePopUp_Click" Width="100px" />
-                    <asp:Button ID="btnCancelPopUp" runat="server" Text="Cancel" OnClick="btnCancelPopUp_Click" Width="100px"  />
+                    <asp:Button ID="btnSavePopUp" runat="server" Text="Save" OnClick="btnSavePopUp_Click"
+                        Width="100px" />
+                    <asp:Button ID="btnCancelPopUp" runat="server" Text="Cancel" OnClick="btnCancelPopUp_Click"
+                        Width="100px" />
                 </td>
             </tr>
         </table>
+        <asp:ValidationSummary ID="valSumAddCSAT" runat="server" ValidationGroup="CSATPopup" />
     </asp:Panel>
     <asp:HiddenField ID="hdnCopyCSAT" runat="server" Value="-1" />
+    <asp:HiddenField ID="hdnSelectedCSATId" runat="server" Value="-1" />
     <asp:GridView ID="gvCSAT" runat="server" EmptyDataText="There is nothing to be displayed here"
         AutoGenerateColumns="False" OnRowDataBound="gvCSAT_RowDataBound" CssClass="CompPerfTable gvStrawmen tablesorter">
         <AlternatingRowStyle CssClass="alterrow" />
@@ -147,10 +161,10 @@
                 <ItemTemplate>
                     <asp:HiddenField ID="hdCSATId" runat="server" Value='<%# Eval("Id") %>' />
                     <asp:ImageButton ID="imgCopyCSAT" ToolTip="Copy CSAT" runat="server" OnClick="imgCopyCSAT_OnClick"
-                        ImageUrl="~/Images/copy.png" />
+                        OnClientClick="if(!ConfirmSaveOrExit()) return false;" ImageUrl="~/Images/copy.png" />
                     &nbsp;&nbsp;&nbsp;
                     <asp:ImageButton ID="imgEditCSAT" ToolTip="Edit CSAT" runat="server" OnClick="imgEditCSAT_OnClick"
-                        ImageUrl="~/Images/icon-edit.png" />
+                        OnClientClick="if(!ConfirmSaveOrExit()) return false;" ImageUrl="~/Images/icon-edit.png" />
                 </ItemTemplate>
                 <EditItemTemplate>
                     <asp:HiddenField ID="hdCSATId" runat="server" Value='<%# Eval("Id") %>' />
@@ -168,7 +182,8 @@
                 <HeaderStyle CssClass="Width15Percent" />
                 <ItemTemplate>
                     <asp:LinkButton ID="btnReviewStartDate" runat="server" Text='<%# ((DateTime)Eval("ReviewStartDate")).ToString("MM/dd/yyyy") %>'
-                        CommandArgument='<%# Eval("Id") %>' OnCommand="btnReviewStartDate_Command"></asp:LinkButton>
+                        OnClientClick="if(!ConfirmSaveOrExit()) return false;" CommandArgument='<%# Eval("Id") %>'
+                        OnCommand="btnReviewStartDate_Command"></asp:LinkButton>
                 </ItemTemplate>
                 <EditItemTemplate>
                     <span class="fl-left Width85Percent">
@@ -210,6 +225,11 @@
                             ToolTip="The Review End Date has an incorrect format. It must be 'MM/dd/yyyy'."
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                             Operator="DataTypeCheck" Type="Date"></asp:CompareValidator>
+                        <asp:CompareValidator ID="compEndDateGreater" runat="server" ControlToValidate="dpReviewEndDate"
+                            ControlToCompare="dpReviewStartDate" ErrorMessage="Review Period End Date must be greater or equal to Review Period Start Date."
+                            ToolTip="Review Period End Date must be greater or equal to Review Period Start Date."
+                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                            Operator="GreaterThanEqual" Type="Date" ValidationGroup="CSATUpdate"></asp:CompareValidator>
                     </span>
                 </EditItemTemplate>
             </asp:TemplateField>
@@ -227,15 +247,20 @@
                         <uc2:DatePicker ID="dpCompletionDate" ValidationGroup="CSATUpdate" runat="server"
                             TextBoxWidth="90%" AutoPostBack="false" />
                     </span><span class="Width15Percent vMiddle">
-                        <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpCompletionDate"
+                        <asp:RequiredFieldValidator ID="reqCompletionDate" runat="server" ControlToValidate="dpCompletionDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Completion Date is required."
                             ToolTip="The Completion Date is required." Text="*" EnableClientScript="false"
                             SetFocusOnError="true" Display="Static"></asp:RequiredFieldValidator>
-                        <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpCompletionDate"
+                        <asp:CompareValidator ID="compCompletionDate" runat="server" ControlToValidate="dpCompletionDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Completion Date has an incorrect format. It must be 'MM/dd/yyyy'."
                             ToolTip="The Completion Date has an incorrect format. It must be 'MM/dd/yyyy'."
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                             Operator="DataTypeCheck" Type="Date"></asp:CompareValidator>
+                        <asp:CustomValidator ID="custCSATCompletionDateInGridView" runat="server" ControlToValidate="dpCompletionDate"
+                            ErrorMessage="The Completion Date Should not be greater than the last project status 'COMPLETED' Date."
+                            ToolTip="The Completion Date Should not be greater than the last project status 'COMPLETED' Date."
+                            ValidationGroup="CSATUpdate" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                            Display="Dynamic" OnServerValidate="custCSATCompletionDateInGridView_ServerValidate"></asp:CustomValidator>
                     </span>
                 </EditItemTemplate>
             </asp:TemplateField>
@@ -298,4 +323,5 @@
         </Columns>
     </asp:GridView>
 </asp:Panel>
+<asp:ValidationSummary ID="valSumCSATUpdate" runat="server" ValidationGroup="CSATUpdate" />
 
