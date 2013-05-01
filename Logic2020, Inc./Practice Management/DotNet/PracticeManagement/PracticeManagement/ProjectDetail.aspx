@@ -465,8 +465,9 @@
                                             </td>
                                             <td class="TdValidators">
                                                 <asp:RequiredFieldValidator ID="reqProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
-                                                    ErrorMessage="The Project Status is required." ToolTip="The Project Status is required." ValidationGroup="Project"
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                    ErrorMessage="The Project Status is required." ToolTip="The Project Status is required."
+                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="custProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
                                                     ErrorMessage="Only administrators can make projects Active or Completed." ToolTip="Only administrators can make projects Active or Completed."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -554,27 +555,22 @@
                                 <td class="TdProjectDetailFeild">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td class="LableProjectManager">
-                                                Project Manager(s)
+                                            <td class="width30P">
+                                                Salesperson
                                             </td>
                                             <td class="width60P">
-                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="ProjectDetailScrollingDropDown Width16point5PercentImp"
-                                                    AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
-                                                    DropDownListType="Manager" />
-                                                <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
-                                                    Width="94%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
-                                                </ext:ScrollableDropdownExtender>
-                                                <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
+                                                <asp:DropDownList ID="ddlSalesperson" runat="server" CssClass="Width95Per" onchange="setDirty();">
+                                                </asp:DropDownList>
+                                                <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                             </td>
-                                            <td class="Width10Percent">
-                                                <asp:CustomValidator ID="cvProjectManager" runat="server" EnableClientScript="false"
-                                                    ValidationGroup="Project" ErrorMessage="The Project Manager(s) is required."
-                                                    ValidateEmptyText="true" OnServerValidate="cvProjectManager_OnServerValidate"
-                                                    SetFocusOnError="true" Text="*" ToolTip="The Project Manager(s) is required."></asp:CustomValidator>
-                                                <asp:CustomValidator ID="cvProjectManagerStatus" runat="server" EnableClientScript="false"
-                                                    ValidationGroup="Project" ErrorMessage="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."
-                                                    ValidateEmptyText="true" OnServerValidate="cvProjectManagerStatus_OnServerValidate"
-                                                    SetFocusOnError="true" Text="*" ToolTip="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."></asp:CustomValidator>
+                                            <td class="Width2Percent WhiteSpaceNoWrap">
+                                                <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
+                                                    EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Salesperson is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Salesperson is required."></asp:RequiredFieldValidator>
+                                            </td>
+                                            <td class="Width8Percent">
+                                                <asp:ImageButton ID="imgMailToSalesperson" runat="server" OnClick="imgMailToSalesperson_OnClick"
+                                                    ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
                                             </td>
                                         </tr>
                                     </table>
@@ -590,7 +586,7 @@
                                             <td class="width60P">
                                                 <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
                                                     AutoPostBack="true" onchange="setDirty();">
-                                                     <asp:ListItem Text="-- Select Business Unit --" Value="" Selected="True"></asp:ListItem>
+                                                    <asp:ListItem Text="-- Select Business Unit --" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width10Percent">
@@ -635,19 +631,17 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
-                                                Senior Manager
+                                                Client Director
                                             </td>
-                                            <td class="width60P WhiteSpaceNoWrap">
-                                                <asp:DropDownList ID="ddlSeniorManager" runat="server" CssClass="Width945Per" onchange="setDirty();">
+                                            <td class="width60P">
+                                                <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width95Per" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td class="Width2Percent WhiteSpaceNoWrap">
-                                                <asp:RequiredFieldValidator ID="req" runat="server" ControlToValidate="ddlSeniorManager"
-                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Senior Manager is required."
-                                                    SetFocusOnError="true" Text="*" ToolTip="The Senior Manager is required."></asp:RequiredFieldValidator>
+                                            <td class="Width2Percent">
+                                                &nbsp;
                                             </td>
                                             <td class="Width8Percent">
-                                                <asp:ImageButton ID="imgMailToSeniorManager" runat="server" OnClick="imgMailToSeniorManager_OnClick"
+                                                <asp:ImageButton ID="imgMailToClientDirector" runat="server" OnClick="imgMailToClientDirector_OnClick"
                                                     ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
                                             </td>
                                         </tr>
@@ -768,17 +762,19 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
-                                                Client Director
+                                                Senior Manager
                                             </td>
-                                            <td class="width60P">
-                                                <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width95Per" onchange="setDirty();">
+                                            <td class="width60P WhiteSpaceNoWrap">
+                                                <asp:DropDownList ID="ddlSeniorManager" runat="server" CssClass="Width945Per" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
-                                            <td class="Width2Percent">
-                                                &nbsp;
+                                            <td class="Width2Percent WhiteSpaceNoWrap">
+                                                <asp:RequiredFieldValidator ID="req" runat="server" ControlToValidate="ddlSeniorManager"
+                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Senior Manager is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Senior Manager is required."></asp:RequiredFieldValidator>
                                             </td>
                                             <td class="Width8Percent">
-                                                <asp:ImageButton ID="imgMailToClientDirector" runat="server" OnClick="imgMailToClientDirector_OnClick"
+                                                <asp:ImageButton ID="imgMailToSeniorManager" runat="server" OnClick="imgMailToSeniorManager_OnClick"
                                                     ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
                                             </td>
                                         </tr>
@@ -820,22 +816,27 @@
                                 <td class="TdProjectDetailFeild">
                                     <table class="WholeWidth">
                                         <tr>
-                                            <td class="width30P">
-                                                Salesperson
+                                            <td class="LableProjectManager">
+                                                Project Manager(s)
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlSalesperson" runat="server" CssClass="Width95Per" onchange="setDirty();">
-                                                </asp:DropDownList>
-                                                <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
+                                                <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="ProjectDetailScrollingDropDown Width16point5PercentImp"
+                                                    AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
+                                                    DropDownListType="Manager" />
+                                                <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
+                                                    Width="94%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
+                                                </ext:ScrollableDropdownExtender>
+                                                <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
-                                            <td class="Width2Percent WhiteSpaceNoWrap">
-                                                <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
-                                                    EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Salesperson is required."
-                                                    SetFocusOnError="true" Text="*" ToolTip="The Salesperson is required."></asp:RequiredFieldValidator>
-                                            </td>
-                                            <td class="Width8Percent">
-                                                <asp:ImageButton ID="imgMailToSalesperson" runat="server" OnClick="imgMailToSalesperson_OnClick"
-                                                    ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
+                                            <td class="Width10Percent">
+                                                <asp:CustomValidator ID="cvProjectManager" runat="server" EnableClientScript="false"
+                                                    ValidationGroup="Project" ErrorMessage="The Project Manager(s) is required."
+                                                    ValidateEmptyText="true" OnServerValidate="cvProjectManager_OnServerValidate"
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Project Manager(s) is required."></asp:CustomValidator>
+                                                <asp:CustomValidator ID="cvProjectManagerStatus" runat="server" EnableClientScript="false"
+                                                    ValidationGroup="Project" ErrorMessage="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."
+                                                    ValidateEmptyText="true" OnServerValidate="cvProjectManagerStatus_OnServerValidate"
+                                                    SetFocusOnError="true" Text="*" ToolTip="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -1221,9 +1222,9 @@
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Project" OnClick="btnDelete_Click"
                             ToolTip="Delete Project" OnClientClick="ConfirmToDeleteProject();" Enabled="false"
                             Visible="false" />&nbsp;
-                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click" CssClass="Width115PxImp"
-                            ValidationGroup="Project" />&nbsp;
-                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server"  CssClass="Width115PxImp"/>
+                        <asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save" OnClick="btnSave_Click"
+                            CssClass="Width115PxImp" ValidationGroup="Project" />&nbsp;
+                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" CssClass="Width115PxImp" />
                     </td>
                 </tr>
             </table>
