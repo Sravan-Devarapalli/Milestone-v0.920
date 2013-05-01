@@ -138,6 +138,21 @@ namespace PraticeManagement
             }
         }
 
+        public int SelectedStatus
+        {
+            get
+            {
+                if (ddlProjectStatus.SelectedValue == "")
+                {
+                    return -1;
+                }
+                else
+                {
+                    return Convert.ToInt32(ddlProjectStatus.SelectedValue);
+                }
+            }
+        }
+
         //return true if the user is "project manager" or "project owner" of the project
         private bool? IsUserisOwnerOfProject
         {
@@ -212,9 +227,37 @@ namespace PraticeManagement
             }
         }
 
+        public PraticeManagement.Controls.MessageLabel mlConfirmationControl { get { return mlConfirmation; } }
+
+        public bool CSATTabEditPermission
+        {
+            get
+            {
+
+                return Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
+            }
+        }
+
+        public bool noMileStones
+        {
+            get
+            {
+                if (ViewState["noMileStones_Key"] == null)
+                {
+                    ViewState["noMileStones_Key"] = false;
+                }
+                return (bool)ViewState["noMileStones_Key"];
+            }
+            set
+            {
+                ViewState["noMileStones_Key"] = value;
+            }
+        }
+
         #endregion
 
-        private bool IsErrorPanelDisplay;
+        public bool IsErrorPanelDisplay;
+
         private bool IsOtherPanelDisplay;
         private bool FromSaveButtonClick;
 
@@ -474,7 +517,7 @@ namespace PraticeManagement
 
             #endregion
 
-            if (IsErrorPanelDisplay)
+            if (IsErrorPanelDisplay && !IsOtherPanelDisplay)
             {
                 PopulateErrorPanel();
             }
@@ -1156,6 +1199,11 @@ namespace PraticeManagement
                 IsErrorPanelDisplay = true;
             }
             return result;
+        }
+
+        public bool ValidateAndSaveFromOtherChildControls()
+        {
+            return (!IsDirty || ValidateAndSave());
         }
 
         private void UpdateSalesCommissionState()
