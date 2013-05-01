@@ -211,49 +211,40 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator valregBuyerName;
         
         /// <summary>
-        /// cblProjectManagers control.
+        /// ddlSalesperson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ScrollingDropDown cblProjectManagers;
+        protected global::System.Web.UI.WebControls.DropDownList ddlSalesperson;
         
         /// <summary>
-        /// sdeProjectManagers control.
+        /// hidSalesCommissionId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectManagers;
+        protected global::System.Web.UI.WebControls.HiddenField hidSalesCommissionId;
         
         /// <summary>
-        /// hidPracticeManagementCommissionId control.
+        /// reqSalesperson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidPracticeManagementCommissionId;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSalesperson;
         
         /// <summary>
-        /// cvProjectManager control.
+        /// imgMailToSalesperson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvProjectManager;
-        
-        /// <summary>
-        /// cvProjectManagerStatus control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvProjectManagerStatus;
+        protected global::System.Web.UI.WebControls.ImageButton imgMailToSalesperson;
         
         /// <summary>
         /// ddlProjectGroup control.
@@ -310,31 +301,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custSowBudget;
         
         /// <summary>
-        /// ddlSeniorManager control.
+        /// ddlDirector control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSeniorManager;
+        protected global::System.Web.UI.WebControls.DropDownList ddlDirector;
         
         /// <summary>
-        /// req control.
+        /// imgMailToClientDirector control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator req;
-        
-        /// <summary>
-        /// imgMailToSeniorManager control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgMailToSeniorManager;
+        protected global::System.Web.UI.WebControls.ImageButton imgMailToClientDirector;
         
         /// <summary>
         /// lblBusinessGroup control.
@@ -445,22 +427,31 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPricingList;
         
         /// <summary>
-        /// ddlDirector control.
+        /// ddlSeniorManager control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlDirector;
+        protected global::System.Web.UI.WebControls.DropDownList ddlSeniorManager;
         
         /// <summary>
-        /// imgMailToClientDirector control.
+        /// req control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgMailToClientDirector;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator req;
+        
+        /// <summary>
+        /// imgMailToSeniorManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgMailToSeniorManager;
         
         /// <summary>
         /// cblPracticeCapabilities control.
@@ -490,40 +481,49 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvCapabilities;
         
         /// <summary>
-        /// ddlSalesperson control.
+        /// cblProjectManagers control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlSalesperson;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblProjectManagers;
         
         /// <summary>
-        /// hidSalesCommissionId control.
+        /// sdeProjectManagers control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidSalesCommissionId;
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectManagers;
         
         /// <summary>
-        /// reqSalesperson control.
+        /// hidPracticeManagementCommissionId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSalesperson;
+        protected global::System.Web.UI.WebControls.HiddenField hidPracticeManagementCommissionId;
         
         /// <summary>
-        /// imgMailToSalesperson control.
+        /// cvProjectManager control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgMailToSalesperson;
+        protected global::System.Web.UI.WebControls.CustomValidator cvProjectManager;
+        
+        /// <summary>
+        /// cvProjectManagerStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvProjectManagerStatus;
         
         /// <summary>
         /// custProjectDesciption control.
