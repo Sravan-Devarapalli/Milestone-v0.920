@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="FilteredCheckBoxList.ascx.cs"
     Inherits="PraticeManagement.Controls.FilteredCheckBoxList" %>
-<script src="~/Scripts/FilterTable.min.js" type="text/javascript"></script>
-<script src="~/Scripts/FilteredCheckBoxList.min.js" type="text/javascript"></script>
+<script src="../Scripts/FilterTable.min.js" type="text/javascript"></script>
+<script src="../Scripts/FilteredCheckBoxList.min.js" type="text/javascript"></script>
 <div id='divFilterPopUp' runat="server" class="FilteredCheckBoxListdivFilterPopUp">
     <table class="WholeWidth" align="center">
         <tr>
