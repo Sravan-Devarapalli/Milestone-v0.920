@@ -183,7 +183,7 @@ namespace PraticeManagement
             if (!IsPostBack)
             {
                 // Salespersons
-                DataHelper.FillSalespersonListOnlyActive(ddlDefaultSalesperson, string.Empty);
+                DataHelper.FillSalespersonListOnlyActive(ddlDefaultSalesperson, "-- Select Salesperson --");
 
                 //Directors
                 DataHelper.FillDirectorsList(ddlDefaultDirector, "-- Select Client Director --");
@@ -210,7 +210,7 @@ namespace PraticeManagement
 
             if (!userIsAdministrator && !userIsClientDirector && !userIsSeniorLeadership)
             {
-                vwMarginGoals.Visible = false;
+                tpMarginGoals.Visible = false;
             }
 
         }
@@ -580,6 +580,7 @@ namespace PraticeManagement
             var marginInfo = ClientMarginColorInfoList;
             IntialClientMarginColorInfoList = marginInfo;
             DataBindClientThresholds(marginInfo);
+            LoadAllView();
         }
 
         private Client GetClient(int? clientId)
@@ -810,89 +811,11 @@ namespace PraticeManagement
             client.ClientMarginInfo = ClientMarginColorInfoList;
         }
 
-        private void LoadActiveView(bool isBasicMultiView)
+        private void LoadAllView()
         {
-            if (isBasicMultiView)
-            {
-                //switch (mvBasicClientDetails.ActiveViewIndex)
-                //{
-                //    case 0:
-                //        ucProjectGoups.DisplayGroups(null);
-                //        break;
-                //    case 1:
-                //        ucBusinessGroups.DisplayGroups(null);
-                //        break;
-                //}
-
-            }
-            else
-            {
-                switch (mvClientDetails.ActiveViewIndex)
-                {
-                    case 1:
-                        ucProjectGoups.DisplayGroups(null,true);
-                        break;
-                    case 2:
-                        ucBusinessGroups.DisplayGroups(null,true);
-                        break;
-                    case 3:
-                        ucPricingList.DisplayPricingList(null,true);
-                        break;
-                }
-            }
-
-
-        }
-
-        protected void btnBasicView_Command(object sender, CommandEventArgs e)
-        {
-            int viewIndex = int.Parse((string)e.CommandArgument);
-            SwitchView((Control)sender, viewIndex,true);
-        }
-
-        protected void btnView_Command(object sender, CommandEventArgs e)
-        {
-            int viewIndex = int.Parse((string)e.CommandArgument);
-            SwitchView((Control)sender, viewIndex,false);
-        }
-
-        private void SwitchView(Control control, int viewIndex,bool isBasicMultiView)
-        {
-            SelectView(control, viewIndex, isBasicMultiView);
-            LoadActiveView(isBasicMultiView);
-        }
-
-        private void SetCssClassEmpty(bool isBasicMultiView)
-        {
-            System.Web.UI.WebControls.Table tbl = null;
-            if (isBasicMultiView)
-            {
-                tbl = tblClientMainViewSwitch;
-            }
-            else
-            {
-                tbl = tblClientViewSwitch;
-            }
-            foreach (TableCell cell in tbl.Rows[0].Cells)
-            {
-                cell.CssClass = string.Empty;
-            }
-        }
-
-        private void SelectView(Control sender, int viewIndex,bool isBasicMultiView)
-        {
-            if (isBasicMultiView)
-            {
-                mvBasicClientDetails.ActiveViewIndex = viewIndex;
-            }
-            else
-            {
-                mvClientDetails.ActiveViewIndex = viewIndex;
-            }
-
-            SetCssClassEmpty(isBasicMultiView);
-
-            ((WebControl)sender.Parent).CssClass = "SelectedSwitch";
+            ucProjectGoups.DisplayGroups(null, true);
+            ucBusinessGroups.DisplayGroups(null, true);
+            ucPricingList.DisplayPricingList(null, true);
         }
 
         #region Projects
@@ -902,9 +825,35 @@ namespace PraticeManagement
             Redirect(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
                                    Constants.ApplicationPages.ProjectDetail,
                                    e.CommandArgument));
+
+
         }
 
+        protected void lnkBusinessUnit_Click(object sender, EventArgs e)
+        {
+            LoadAllView();
+            tcFilters.ActiveTabIndex = 1;
+        }
+
+        protected void lnkBusinessGroup_Click(object sender, EventArgs e)
+        {
+            LoadAllView();
+            tcFilters.ActiveTabIndex = 2;
+        }
+
+        protected void lnkPricingList_Click(object sender, EventArgs e)
+        {
+            LoadAllView();
+            tcFilters.ActiveTabIndex = 3;
+        }
+
+
+
+
         #endregion
+
+
+
 
         #region IPostBackEventHandler Members
 
