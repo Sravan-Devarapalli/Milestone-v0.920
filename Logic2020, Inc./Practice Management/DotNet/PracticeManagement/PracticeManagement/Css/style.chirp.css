@@ -3301,7 +3301,7 @@ ul.AspNet-Menu li.AspNet-Menu-Selected a span, ul.main-sub-menu li.selected a
 {
     text-decoration: none;
 }
-.filer-header ul li a span, .CustomTabStyle .ajax__tab_tab a span
+.filer-header ul li a span, .CustomTabStyle .ajax__tab_tab a span, .CustomTabStyle .ajax__tab_tab a
 {
     border-bottom: 1px dashed #0898e6;
 }
