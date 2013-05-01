@@ -19,6 +19,9 @@ namespace PracticeManagementService
         [OperationContract]
         Project ProjectGetById(int projectId);
 
+        [OperationContract]
+        DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId);
+
         /// <summary>
         /// Projects Computed Financials 
         /// </summary>
