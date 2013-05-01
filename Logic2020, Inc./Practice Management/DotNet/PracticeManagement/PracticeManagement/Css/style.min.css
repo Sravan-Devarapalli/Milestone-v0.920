@@ -649,7 +649,7 @@ a.main-logo,img.main-logo{display:block;position:absolute;top:20px;left:10px}
 ul.AspNet-Menu li.AspNet-Menu-Selected a span,ul.main-sub-menu li.selected a{color:#000;cursor:default}
 .filer-header ul,.CustomTabStyle .ajax__tab_header,.height30P,.WidthWithHeightAndBorders td{height:30px}
 .filer-header ul li a,.CustomTabStyle .ajax__tab_tab a,.calendarNextPrev a{text-decoration:none}
-.filer-header ul li a span,.CustomTabStyle .ajax__tab_tab a span{border-bottom:1px dashed #0898e6}
+.filer-header ul li a span,.CustomTabStyle .ajax__tab_tab a span,.CustomTabStyle .ajax__tab_tab a{border-bottom:1px dashed #0898e6}
 .filer-header ul li a:hover span,.CustomTabStyle .ajax__tab_tab a:hover span{border-bottom:1px dashed #069}
 .filer-header ul li a.collapse,.CustomTabStyle .ajax__tab_tab a.collapse{display:none;position:absolute}
 .filer-header ul li.active a.collapse,.CustomTabStyle .ajax__tab_active a.collapse{display:block;right:5px;top:10px}
