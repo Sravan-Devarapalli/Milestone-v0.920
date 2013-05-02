@@ -49,10 +49,6 @@
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 ErrorMessage="The name of Pricing List must be unique." ToolTip="The name of Pricing List  must be unique."
                                 ValidationGroup="UpdatePricingList">*</asp:CustomValidator>
-                            <asp:RegularExpressionValidator ID="regGroupName" runat="server" ControlToValidate="txtPricingListName"
-                                ErrorMessage="Pricing List Name limited to 1-50 characters in length" ToolTip="Pricing List Name limited to 1-50 characters in length"
-                                ValidationGroup="UpdatePricingList" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                Display="Dynamic" ValidationExpression="^[\w\s]{1,50}$"></asp:RegularExpressionValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField Visible="false">
@@ -113,7 +109,7 @@
                     </td>
                     <td class="width60P no-wrap">
                         <asp:Label ID="lblNewPricingListName" runat="server" AssociatedControlID="txtNewPricingListName" />
-                        <asp:TextBox ID="txtNewPricingListName" runat="server" ValidationGroup="NewPricingList"
+                        <asp:TextBox ID="txtNewPricingListName" runat="server" ValidationGroup="NewPricingList" MaxLength="50"
                             CssClass="Width96Per" Visible="false" />
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarker" runat="server" TargetControlID="txtNewPricingListName"
                             WatermarkText="New Pricing List" WatermarkCssClass="watermarked Width96Per" />
@@ -124,10 +120,6 @@
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                             ErrorMessage="There is already a Pricing List with the same name." ToolTip="There is already a Pricing List with the same name."
                             ValidationGroup="NewPricingList" OnServerValidate="custNewPricingListName_ServerValidate">*</asp:CustomValidator>
-                        <asp:RegularExpressionValidator ID="regGroupName" runat="server" ControlToValidate="txtNewPricingListName"
-                            ErrorMessage="Pricing List Name limited to 1-50 characters in length" ToolTip="Pricing List Name limited to 1-50 characters in length"
-                            ValidationGroup="NewPricingList" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                            Display="Dynamic" ValidationExpression="^[\w\s]{1,50}$"></asp:RegularExpressionValidator>
                     </td>
                     <td class="Width0Percent">
                     </td>
