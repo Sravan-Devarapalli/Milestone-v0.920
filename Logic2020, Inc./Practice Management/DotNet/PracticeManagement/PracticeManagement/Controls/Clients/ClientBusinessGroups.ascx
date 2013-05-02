@@ -49,10 +49,6 @@
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 ErrorMessage="The name of Business Group must be unique." ToolTip="The name of Business Group  must be unique."
                                 ValidationGroup="UpdateBusinessGroup">*</asp:CustomValidator>
-                            <asp:RegularExpressionValidator ID="regGroupName" runat="server" ControlToValidate="txtGroupName"
-                                ErrorMessage="Business Group Name limited to 1-50 characters in length" ToolTip="Business Group Name limited to 1-50 characters in length"
-                                ValidationGroup="UpdateBusinessGroup" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                Display="Dynamic" ValidationExpression="^[\w\s]{1,50}$"></asp:RegularExpressionValidator>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField Visible="false">
@@ -110,7 +106,7 @@
                     </td>
                     <td class="width60P no-wrap">
                         <asp:Label ID="lblNewGroupName" runat="server" AssociatedControlID="txtNewGroupName" />
-                        <asp:TextBox ID="txtNewGroupName" runat="server" ValidationGroup="NewBusinessGroup"
+                        <asp:TextBox ID="txtNewGroupName" runat="server" ValidationGroup="NewBusinessGroup" MaxLength="50"
                             CssClass="Width96Per" Visible="false" />
                         <AjaxControlToolkit:TextBoxWatermarkExtender ID="waterMarker" runat="server" TargetControlID="txtNewGroupName"
                             WatermarkText="New Business Group" WatermarkCssClass="watermarked Width96Per" />
@@ -121,10 +117,6 @@
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                             ErrorMessage="There is already a Business Group with the same name." ToolTip="There is already a Business Group with the same name."
                             ValidationGroup="NewBusinessGroup" OnServerValidate="custNewGroupName_ServerValidate">*</asp:CustomValidator>
-                        <asp:RegularExpressionValidator ID="regGroupName" runat="server" ControlToValidate="txtNewGroupName"
-                            ErrorMessage="Business Group Name limited to 1-50 characters in length" ToolTip="Business Group Name limited to 1-50 characters in length"
-                            ValidationGroup="NewBusinessGroup" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                            Display="Dynamic" ValidationExpression="^[\w\s]{1,50}$"></asp:RegularExpressionValidator>
                     </td>
                     <td class="Width0Percent">
                     </td>
