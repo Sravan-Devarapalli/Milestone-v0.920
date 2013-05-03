@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 11-27-2008
--- Updated By:	Srinivas.M
--- Updated Date: 2012-06-05
--- Description:	Logs the updating and deletring from the dbo.Project table.
--- =============================================
-CREATE TRIGGER [dbo].[tr_Project_LogUpdateDelete]
+﻿CREATE TRIGGER [dbo].[tr_Project_LogUpdateDelete]
 ON [dbo].[Project]
 AFTER UPDATE, DELETE
 AS
@@ -191,12 +184,7 @@ BEGIN
 	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
 	    OR ISNULL(i.SowBudget, 0) <> ISNULL(d.SowBudget, 0)
 	 
-	 IF NOT EXISTS (SELECT 1 FROM inserted)
-	 BEGIN
-	    DELETE psh
-		FROM dbo.ProjectStatusHistory psh
-		INNER JOIN deleted AS d ON  psh.ProjectId = d.ProjectId
-	 END
+
 	  
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
