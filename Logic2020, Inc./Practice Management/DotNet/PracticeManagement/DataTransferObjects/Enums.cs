@@ -159,7 +159,10 @@ namespace DataTransferObjects
         Proposal = 4,
         [EnumMember]
         [Description("Project Estimate")]
-        ProjectEstimate = 5 
+        ProjectEstimate = 5, 
+        [EnumMember]
+        [Description("Purchase Order")]
+        PurchaseOrder = 6 
     }
 
     [DataContract]
