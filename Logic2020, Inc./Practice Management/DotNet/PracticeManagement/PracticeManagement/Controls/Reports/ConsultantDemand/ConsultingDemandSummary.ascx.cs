@@ -214,7 +214,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             else
             {
                 divEmptyMessage.Style["display"] = "";
-                repResource.Visible = false;
+                btnExportToExcel.Enabled = repResource.Visible = false;
+
             }
         }
 
