@@ -127,6 +127,12 @@ BEGIN
 				WHERE ProjectId = @ProjectID
 			END
 
+			IF EXISTS (SELECT ProjectId FROM dbo.[ProjectStatusHistory] WHERE ProjectId = @ProjectID)
+			BEGIN
+				DELETE dbo.ProjectStatusHistory
+				WHERE ProjectId = @ProjectID	
+			END
+
 			IF EXISTS (SELECT ProjectId FROM dbo.Project WHERE ProjectId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
