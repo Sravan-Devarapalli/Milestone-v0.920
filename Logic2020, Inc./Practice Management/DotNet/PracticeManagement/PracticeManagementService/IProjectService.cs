@@ -335,9 +335,6 @@ namespace PracticeManagementService
         void CSATUpdate(ProjectCSAT projectCSAT, string userLogin);
 
         [OperationContract]
-        void CSATCopyFromExistingCSAT(ProjectCSAT projectCSAT, int copyProjectCSATId, string userLogin);
-
-        [OperationContract]
         List<ProjectCSAT> CSATList(int? projectId);
     }
 }
