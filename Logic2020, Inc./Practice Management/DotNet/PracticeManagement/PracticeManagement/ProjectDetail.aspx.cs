@@ -138,6 +138,21 @@ namespace PraticeManagement
             }
         }
 
+        public int SelectedDirector
+        {
+            get
+            {
+                if (ddlDirector.SelectedValue == "")
+                {
+                    return -1;
+                }
+                else
+                {
+                    return Convert.ToInt32(ddlDirector.SelectedValue);
+                }
+            }
+        }
+
         public int SelectedStatus
         {
             get
@@ -276,6 +291,11 @@ namespace PraticeManagement
             }
         }
 
+        public void ClearDirtyForChildControls()
+        {
+            ClearDirty();
+        }
+
         protected void cvOpportunityRequired_Validate(object sender, ServerValidateEventArgs args)
         {
             args.IsValid = ddlOpportunities.SelectedIndex != 0;
@@ -383,11 +403,7 @@ namespace PraticeManagement
 
                 txtProjectName.Focus();
 
-                if (ProjectId.HasValue)
-                {
-                    TableCellHistoryg.Visible = true;
-                    cellProjectTools.Visible = true;
-                }
+                ShowTabs();
 
                 int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, Constants.ResourceKeys.AttachmentFileSize));
 
@@ -398,6 +414,16 @@ namespace PraticeManagement
 
             btnUpload.Attributes["onclick"] = "startUpload(); return false;";
 
+        }
+
+        public void ShowTabs()
+        {
+            if (ProjectId.HasValue)
+            {
+                TableCellHistoryg.Visible = true;
+                cellProjectTools.Visible = true;
+               // cellProjectCSAT.Visible = true;
+            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -923,6 +949,9 @@ namespace PraticeManagement
             SetBusinessGroupLabel();
         }
 
+	  public void PopulateDirectorsList(List<ProjectCSAT> cSATList = null)
+        {}
+
         protected void DropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Only set an input focus
@@ -1185,7 +1214,7 @@ namespace PraticeManagement
                 if (id.HasValue)
                 {
                     this.ProjectId = id;
-
+                    ClearDirty();
                     projectExpenses.BindExpenses();
                 }
                 result = true;
