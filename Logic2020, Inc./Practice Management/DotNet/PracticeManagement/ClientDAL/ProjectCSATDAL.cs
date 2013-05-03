@@ -72,27 +72,6 @@ namespace DataAccess
             }
         }
 
-        public static void CSATCopyFromExistingCSAT(ProjectCSAT projectCSAT, int copyProjectCSATId, string userLogin)
-        {
-            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.CSATCopyFromExistingCSAT, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-                    command.Parameters.AddWithValue(Constants.ParameterNames.CopyProjectCSATId, copyProjectCSATId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ReviewStartDate, projectCSAT.ReviewStartDate);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ReviewEndDate, projectCSAT.ReviewEndDate);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.CompletionDate, projectCSAT.CompletionDate);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ReviewerId, projectCSAT.ReviewerId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ReferralScore, projectCSAT.ReferralScore);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
         public static List<ProjectCSAT> CSATList(int? projectId)
         {
             List<ProjectCSAT> result = new List<ProjectCSAT>();
