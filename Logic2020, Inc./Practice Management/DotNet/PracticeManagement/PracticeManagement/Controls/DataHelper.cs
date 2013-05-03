@@ -924,7 +924,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        
+
 
         public static void FillSalespersonListOnlyActive(ListControl control, string firstItemText)
         {
@@ -1234,7 +1234,7 @@ namespace PraticeManagement.Controls
                 try
                 {
                     ProjectStatus[] statuses = serviceClient.GetProjectStatuses();
-                    statuses = excludedStatus != null ?statuses.Where(p => !excludedStatus.Any(g => g == p.Id)).ToArray() : statuses;
+                    statuses = excludedStatus != null ? statuses.Where(p => !excludedStatus.Any(g => g == p.Id)).ToArray() : statuses;
                     FillListDefault(control, firstItemText, statuses, false);
                 }
                 catch (CommunicationException)
@@ -1545,9 +1545,10 @@ namespace PraticeManagement.Controls
         }
 
 
-        public static void FillPricingLists(ListControl control, PricingList[] pricingList, string firstItemText =null , bool noFirstItem = false, string valueField = "PricingListId", string NameField = "Name")
-        { 
-                    FillListDefault(control, "-- Select Pricing List --", pricingList, noFirstItem, valueField, NameField);    
+        public static void FillPricingLists(ListControl control, PricingList[] pricingList, string firstItemText = null, bool noFirstItem = false, string valueField = "PricingListId", string NameField = "Name")
+        {
+            pricingList = pricingList.Where(p => p.IsActive).ToArray();
+            FillListDefault(control, "-- Select Pricing List --", pricingList, noFirstItem, valueField, NameField);
         }
 
         public static void FillBusinessTypes(ListControl control)
