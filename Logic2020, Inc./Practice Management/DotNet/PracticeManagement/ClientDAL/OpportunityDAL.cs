@@ -473,6 +473,7 @@ namespace DataAccess
 
                 int priorityIdIndex = -1;
                 int pricingListIdIndex = -1;
+                int pricingListNameIndex = -1;
                 var prioritySortOrderIndex = -1;
                 int EstimatedRevenueiIndex = -1;
                 int OutSideResourcesIndex = -1;
@@ -545,6 +546,16 @@ namespace DataAccess
                 {
                     pricingListIdIndex = -1;
                 }
+                
+                try
+                {
+                    pricingListNameIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListNameColumn);
+                }
+                catch
+                {
+                    pricingListNameIndex = -1;
+                }
+                
                 while (reader.Read())
                 {
                     // Reading the item
@@ -658,6 +669,7 @@ namespace DataAccess
                                    new PricingList
                                     {
                                         PricingListId = reader.GetInt32(pricingListIdIndex),
+                                        Name = pricingListNameIndex > -1 ? reader.GetString(pricingListNameIndex) : string.Empty
                                     }
                                     : null;
                     }
