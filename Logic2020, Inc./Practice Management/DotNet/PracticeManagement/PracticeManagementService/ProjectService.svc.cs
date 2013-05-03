@@ -1019,11 +1019,6 @@ namespace PracticeManagementService
             ProjectCSATDAL.CSATUpdate(projectCSAT, userLogin);
         }
 
-        public void CSATCopyFromExistingCSAT(ProjectCSAT projectCSAT, int copyProjectCSATId, string userLogin)
-        {
-            ProjectCSATDAL.CSATCopyFromExistingCSAT(projectCSAT,copyProjectCSATId, userLogin);
-        }
-
         public List<ProjectCSAT> CSATList(int? projectId)
         {
             return ProjectCSATDAL.CSATList(projectId);
