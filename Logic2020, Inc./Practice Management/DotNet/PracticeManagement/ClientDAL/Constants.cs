@@ -1169,7 +1169,6 @@
                 public const string IsProjectSummaryCachedToday = "dbo.IsProjectSummaryCachedToday";
                 public const string CSATInsert = "dbo.CSATInsert";
                 public const string CSATUpdate = "dbo.CSATUpdate";
-                public const string CSATCopyFromExistingCSAT = "dbo.[CSATCopyFromExistingCSAT]";
                 public const string CSATDelete = "dbo.CSATDelete";
                 public const string CSATList = "dbo.CSATList";
 
