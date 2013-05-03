@@ -19,6 +19,9 @@ BEGIN
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 	IF @Link = 1
 	BEGIN
+		DECLARE @BusinessType INT
+		SELECT @BusinessType = BusinessTypeId FROM dbo.Project WHERE ProjectId = @ProjectId
+
 		UPDATE O
 			SET O.ProjectId = NULL
 		FROM dbo.Opportunity O
@@ -38,7 +41,8 @@ BEGIN
 		UPDATE O
 			SET O.ProjectId = @ProjectId,
 			    O.PricingListId=@PricingListId,
-				@OpportunityNumber = O.OpportunityNumber
+				@OpportunityNumber = O.OpportunityNumber,
+				O.BusinessTypeId = @BusinessType
 		FROM dbo.Opportunity O
 		WHERE O.OpportunityId = @OpportunityId
 
