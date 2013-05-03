@@ -36,6 +36,7 @@ AS
 		   o.LastUpdate,
 		   o.GroupId,
 		   o.PricingListId,
+		   pl.Name AS PricingListName,
 		   o.BusinessTypeId,
 		   o.GroupName,
 		   o.PracticeManagerId,
@@ -50,5 +51,6 @@ AS
 	 LEFT JOIN dbo.PersonStatus ps ON ps.PersonStatusId = o.SalespersonStatusId 	
 	 LEFT JOIN dbo.PersonStatus os ON os.PersonStatusId = o.OwnerStatusId
 	 LEFT JOIN dbo.Project proj ON proj.ProjectId = o.ProjectId
+	 LEFT JOIN dbo.PricingList pl ON pl.PricingListId = o.PricingListId
 	 WHERE o.OpportunityId = @OpportunityId
 
