@@ -214,7 +214,7 @@
     <xsl:choose>
       <xsl:when test="$needHyperlink = 'true'">
         <xsl:choose>
-          <xsl:when test="(($rootName = 'Project' or $rootName = 'TimeEntry') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName') 
+          <xsl:when test="(($rootName = 'Project' or $rootName = 'TimeEntry' or $rootName = 'ProjectCSAT') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName' or name() = 'Project') 
                     and //DefaultProjectId = ./../@ProjectId) 
                     or ($rootName = 'Milestone' and (name() = 'MilestoneId' or name() = 'Name')
                         and //DefaultMileStoneId = ./../@MilestoneId)
@@ -243,7 +243,7 @@
                     <xsl:value-of select="./../@ClientId"/>
                     <xsl:value-of select="$redirectUrl"/>
                   </xsl:when>
-                  <xsl:when test="($rootName = 'Person' or $rootName = 'TimeEntry' or $rootName = 'Note' or $rootName = 'Roles' or $rootName = 'Practice' ) and (name() = 'PersonId' or name() = 'Name' or name() = 'ModifiedBy' or name() = 'ObjectName' or name() = 'ModifiedByName' or name() = 'ObjectPersonId' or name() = 'By' or name() = 'PracticeManagerId' or name() = 'PracticeManager')">
+                  <xsl:when test="($rootName = 'Person' or $rootName = 'TimeEntry' or $rootName = 'Note' or $rootName = 'Roles' or $rootName = 'Practice'  or $rootName = 'ProjectCSAT' ) and (name() = 'PersonId' or name() = 'Name' or name() = 'ModifiedBy' or name() = 'ObjectName' or name() = 'ModifiedByName' or name() = 'ObjectPersonId' or name() = 'By' or name() = 'PracticeManagerId' or name() = 'PracticeManager' or name() = 'ReviewerId' or name() = 'Reviewer')">
                     <xsl:text>PersonDetail.aspx?id=</xsl:text>
                     <xsl:choose>
                       <xsl:when test="name() = 'ModifiedBy' or name() = 'ModifiedByName'">
@@ -255,13 +255,16 @@
                       <xsl:when test="name() = 'PracticeManagerId' or name() = 'PracticeManager'">
                         <xsl:value-of select="./../@PracticeManagerId"/>
                       </xsl:when>
+                      <xsl:when test="name() = 'ReviewerId' or name() = 'Reviewer'">
+                        <xsl:value-of select="./../@ReviewerId"/>
+                      </xsl:when>
                       <xsl:otherwise>
                         <xsl:value-of select="./../@PersonId"/>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:value-of select="$redirectUrl"/>
                   </xsl:when>
-                  <xsl:when test="($rootName = 'Project' or $rootName = 'TimeEntry') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName')">
+                  <xsl:when test="($rootName = 'Project' or $rootName = 'TimeEntry' or $rootName = 'ProjectCSAT' ) and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName' or name() = 'Project')">
                     <xsl:text>ProjectDetail.aspx?id=</xsl:text>
                     <xsl:value-of select="./../@ProjectId"/>
                     <xsl:value-of select="$redirectUrl"/>
@@ -339,7 +342,7 @@
     <xsl:choose>
       <xsl:when test="name() = 'ClientId' or name() = 'OpportunityId' or name() = 'ClientName' or name() = 'ModifiedByName' or name() = 'ModifiedBy' 
                 or name() = 'ObjectName' or name() = 'ObjectPersonId' or name() = 'Description' or name() = 'PersonId' or name() = 'Name' or name() = 'ProjectId' 
-                or name() = 'MilestoneId' or name() = 'ProjectName' or name() = 'MilestoneProjectId' or name() = 'MilestonePersonId' or name() = 'By' or name() = 'PracticeManagerId' or name() = 'PracticeManager'">
+                or name() = 'MilestoneId' or name() = 'ProjectName' or name() = 'Project' or name() = 'MilestoneProjectId' or name() = 'MilestonePersonId' or name() = 'By' or name() = 'PracticeManagerId' or name() = 'PracticeManager' or name() = 'ReviewerId' or name() = 'Reviewer'">
         <xsl:value-of select="true()"/>
       </xsl:when>
       <xsl:otherwise>
