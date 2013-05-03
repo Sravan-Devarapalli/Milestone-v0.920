@@ -33,6 +33,7 @@ AS
 		   O.OpportunityNumber,
 	       p.GroupId,
 		   p.PricingListId,
+		   pl.Name AS PricingListName,
 		   p.BusinessTypeId,
 	       p.ProjectIsChargeable,
 	       p.ClientIsChargeable,
@@ -58,16 +59,17 @@ AS
 			p.SowBudget,
 			p.ClientIsNoteRequired,
 			p.ProjectCapabilityIds,
-		  sm.PersonId AS 'SeniorManagerId',
-		   sm.LastName+', ' +sm.FirstName AS 'SeniorManagerName',
-		   re.PersonId AS 'ReviewerId',
-		   re.LastName+', ' +re.FirstName AS 'ReviewerName'
+			sm.PersonId AS 'SeniorManagerId',
+			sm.LastName+', ' +sm.FirstName AS 'SeniorManagerName',
+			re.PersonId AS 'ReviewerId',
+			re.LastName+', ' +re.FirstName AS 'ReviewerName'
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
 	  INNER JOIN dbo.Person AS person ON p.PracticeManagerId = person.PersonId
 	  LEFT JOIN dbo.Person AS sm ON p.SeniorManagerId = sm.PersonId
 	  LEFT JOIN dbo.Person AS re ON p.ReviewerId = re.PersonId
+	  LEFT JOIN dbo.PricingList AS pl ON pl.PricingListId = p.PricingListId
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	  WHERE p.ProjectId = @ProjectId
        AND (   (@SalespersonId IS NULL AND @PracticeManagerId IS NULL)
