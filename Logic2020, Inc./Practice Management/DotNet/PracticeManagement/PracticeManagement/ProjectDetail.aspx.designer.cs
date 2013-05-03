@@ -589,13 +589,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlNotes;
         
         /// <summary>
-        /// tblProjectDetailTabViewSwitch control.
+        /// tblProjectDetailTabViewSwitch  control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblProjectDetailTabViewSwitch;
+        protected global::System.Web.UI.WebControls.Table tblProjectDetailTabViewSwitch ;
         
         /// <summary>
         /// rowSwitcher control.
