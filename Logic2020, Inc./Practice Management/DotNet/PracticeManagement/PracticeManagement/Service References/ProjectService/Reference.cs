@@ -49,16 +49,13 @@ namespace PraticeManagement.ProjectService {
         string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, System.Nullable<int> pricingListId, bool link);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATInsert", ReplyAction="http://tempuri.org/IProjectService/CSATInsertResponse")]
-        void CSATInsert(DataTransferObjects.ProjectCSAT projectCSAT, string userLogin);
+        int CSATInsert(DataTransferObjects.ProjectCSAT projectCSAT, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATDelete", ReplyAction="http://tempuri.org/IProjectService/CSATDeleteResponse")]
         void CSATDelete(int projectCSATId, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATUpdate", ReplyAction="http://tempuri.org/IProjectService/CSATUpdateResponse")]
         void CSATUpdate(DataTransferObjects.ProjectCSAT projectCSAT, string userLogin);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATCopyFromExistingCSAT", ReplyAction="http://tempuri.org/IProjectService/CSATCopyFromExistingCSATResponse")]
-        void CSATCopyFromExistingCSAT(DataTransferObjects.ProjectCSAT projectCSAT, int copyProjectCSATId, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATList", ReplyAction="http://tempuri.org/IProjectService/CSATListResponse")]
         DataTransferObjects.ProjectCSAT[] CSATList(System.Nullable<int> projectId);
@@ -211,7 +208,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
-      
+       
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -265,8 +262,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.AttachOpportunityToProject(projectId, opportunityId, userLogin, pricingListId, link);
         }
         
-        public void CSATInsert(DataTransferObjects.ProjectCSAT projectCSAT, string userLogin) {
-            base.Channel.CSATInsert(projectCSAT, userLogin);
+        public int CSATInsert(DataTransferObjects.ProjectCSAT projectCSAT, string userLogin) {
+            return base.Channel.CSATInsert(projectCSAT, userLogin);
         }
         
         public void CSATDelete(int projectCSATId, string userLogin) {
@@ -275,10 +272,6 @@ namespace PraticeManagement.ProjectService {
         
         public void CSATUpdate(DataTransferObjects.ProjectCSAT projectCSAT, string userLogin) {
             base.Channel.CSATUpdate(projectCSAT, userLogin);
-        }
-        
-        public void CSATCopyFromExistingCSAT(DataTransferObjects.ProjectCSAT projectCSAT, int copyProjectCSATId, string userLogin) {
-            base.Channel.CSATCopyFromExistingCSAT(projectCSAT, copyProjectCSATId, userLogin);
         }
         
         public DataTransferObjects.ProjectCSAT[] CSATList(System.Nullable<int> projectId) {
