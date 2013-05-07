@@ -11,7 +11,7 @@ namespace DataAccess
 {
     public static class ProjectCSATDAL
     {
-        public static void CSATInsert(ProjectCSAT projectCSAT, string userLogin)
+        public static int CSATInsert(ProjectCSAT projectCSAT, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -28,8 +28,13 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.Comments, projectCSAT.Comments);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
+                    SqlParameter ProjectCSATIdParam = new SqlParameter(Constants.ParameterNames.ProjectCSATId, SqlDbType.Int);
+                    ProjectCSATIdParam.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(ProjectCSATIdParam);
+
                     connection.Open();
                     command.ExecuteNonQuery();
+                    return (int)ProjectCSATIdParam.Value;
                 }
             }
         }
