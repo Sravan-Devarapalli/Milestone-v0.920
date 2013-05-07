@@ -183,9 +183,10 @@ BEGIN
 		OR ISNULL(i.SeniorManagerId, 0) <> ISNULL(d.SeniorManagerId, 0)
 	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
 	    OR ISNULL(i.SowBudget, 0) <> ISNULL(d.SowBudget, 0)
-	 
-
-	  
+		OR ISNULL(i.BusinessTypeId, 0) <> ISNULL(d.BusinessTypeId, 0)
+		OR ISNULL(i.PricingListId, 0) <> ISNULL(d.PricingListId, 0)
+		OR ISNULL(i.SeniorManagerId, 0) <> ISNULL(d.SeniorManagerId, 0)
+		OR ISNULL(i.[ReviewerId], 0) <> ISNULL(d.[ReviewerId], 0)
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
