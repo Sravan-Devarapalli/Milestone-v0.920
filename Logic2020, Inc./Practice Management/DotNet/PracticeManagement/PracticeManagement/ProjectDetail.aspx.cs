@@ -109,6 +109,14 @@ namespace PraticeManagement
             }
         }
 
+        public string CSAT
+        {
+            get
+            {
+                return Request.QueryString["CSAT"];
+            }
+        }
+
         private List<AttachmentService.ProjectAttachment> AttachmentsForNewProject
         {
             get
@@ -269,10 +277,26 @@ namespace PraticeManagement
             }
         }
 
+        public bool CompletedStatus
+        {
+            get {
+                if (ViewState["CompletedStatus_Key"] == null)
+                {
+                    ViewState["CompletedStatus_Key"] = false;
+                }
+                return (bool)ViewState["CompletedStatus_Key"];
+            }
+            set
+            {
+                ViewState["CompletedStatus_Key"] = value;
+            }
+        }
+
+
+
         #endregion
 
         public bool IsErrorPanelDisplay;
-
         private bool IsOtherPanelDisplay;
         private bool FromSaveButtonClick;
 
@@ -928,8 +952,8 @@ namespace PraticeManagement
                     {
                         BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(null, Convert.ToInt32(ddlProjectGroup.SelectedValue));
 
-                        lblBusinessGroup.Text = businessGroupList.First().Name;
-                        lblBusinessGroup.ToolTip = businessGroupList.First().Name;
+                        lblBusinessGroup.Text = businessGroupList.Any() ? businessGroupList.First().HtmlEncodedName : string.Empty;
+                        lblBusinessGroup.ToolTip =businessGroupList.Any() ?  businessGroupList.First().Name : string.Empty;
                     }
                     else
                     {
@@ -1067,7 +1091,6 @@ namespace PraticeManagement
                 mpeLinkOpportunityPopup.Show();
             }
         }
-
 
         protected void chbReceivesSalesCommission_CheckedChanged(object sender, EventArgs e)
         {
@@ -1804,9 +1827,7 @@ namespace PraticeManagement
             project.Group = new ProjectGroup { Id = int.Parse(ddlProjectGroup.SelectedValue) };
         }
 
-
-
-        private static string GetProjectIdArgument(bool useAmpersand, int projectId)
+        public static string GetProjectIdArgument(bool useAmpersand, int projectId)
         {
             return (useAmpersand ? "&" : "?") + string.Format(ProjectIdFormat, projectId);
         }
@@ -1880,7 +1901,6 @@ namespace PraticeManagement
                 }
             }
         }
-
 
         protected void btnCancel_OnClick(object sender, EventArgs e)
         {
