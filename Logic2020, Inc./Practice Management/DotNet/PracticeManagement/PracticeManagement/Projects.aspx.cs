@@ -356,11 +356,30 @@ namespace PraticeManagement
         {
             get
             {
-                CellStyles cellStyle = new CellStyles();
-                cellStyle.IsBold = true;
-                cellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                CellStyles[] cellStylearray = { cellStyle };
-                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+
+                CellStyles monthNameHeaderCellStyle = new CellStyles();
+                monthNameHeaderCellStyle.DataFormat = "mmm yy";
+                monthNameHeaderCellStyle.IsBold = true;
+                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                for (int i = 0; i < 12; i++)//there are 12 columns before month columns.
+                    headerCellStyleList.Add(headerCellStyle);
+
+                if (renderMonthColumns)
+                {
+                    var monthsInPeriod = GetPeriodLength();
+                    for (int i = 0; i < monthsInPeriod; i++)
+                    {
+                        headerCellStyleList.Add(monthNameHeaderCellStyle);
+                    }
+                }
+                headerCellStyleList.Add(headerCellStyle);
+
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
                 CellStyles dataCellStyle = new CellStyles();
 
@@ -1629,7 +1648,7 @@ namespace PraticeManagement
                                               ProjectManagers = string.Empty,
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
-                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty                                              
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
                                               // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
                                           }).ToList();
 
@@ -1703,7 +1722,7 @@ namespace PraticeManagement
             {
                 for (int i = 0; i < monthsInPeriod; i++)
                 {
-                    data.Columns.Add(periodStart.AddMonths(i).ToString(Constants.Formatting.CompPerfMonthYearFormat));
+                    data.Columns.Add(periodStart.AddMonths(i).ToString(Constants.Formatting.EntryDateFormat));
                 }
             }
             data.Columns.Add("Total");
