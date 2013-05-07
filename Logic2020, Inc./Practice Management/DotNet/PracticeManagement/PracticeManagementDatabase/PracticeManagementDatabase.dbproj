@@ -4273,9 +4273,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CSATDelete.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CSATCopyFromExistingCSAT.proc.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_ProjectCSAT_Log.trigger.sql">
       <SubType>Code</SubType>
     </Build>
