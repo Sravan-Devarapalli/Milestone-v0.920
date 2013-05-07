@@ -11,6 +11,8 @@ namespace PraticeManagement.Controls.Projects
 {
     public partial class ProjectCSAT : System.Web.UI.UserControl
     {
+        public const string ProjectCSAT_TARGET = "ProjectCsat";
+
         private PraticeManagement.ProjectDetail HostingPage
         {
             get { return ((PraticeManagement.ProjectDetail)Page); }
@@ -26,6 +28,10 @@ namespace PraticeManagement.Controls.Projects
                     {
                         var list = ServiceCallers.Custom.Project(p => p.CSATList(HostingPage.ProjectId.Value));
                         ViewState["ProjectCSATList_Key"] = list;
+                    }
+                    else
+                    {
+                        return null;
                     }
                 }
                 return ((IEnumerable<DataTransferObjects.ProjectCSAT>)ViewState["ProjectCSATList_Key"]).ToList();
@@ -47,8 +53,6 @@ namespace PraticeManagement.Controls.Projects
         public void ShowCSATButtons()
         {
             stbCSAT.Visible =
-            btnSavePopUp.Visible =
-            btnCancelPopUp.Visible =
             HostingPage.CSATTabEditPermission && (HostingPage.SelectedStatus == (int)ProjectStatusType.Active || (HostingPage.SelectedStatus == (int)ProjectStatusType.Completed && HostingPage.Project.Milestones.Count > 0));
         }
 
@@ -73,19 +77,6 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        protected void custCSATEndDate_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = true;
-            if (HostingPage.Project.Status.StatusType == ProjectStatusType.Completed)
-            {
-                DateTime lastCompletedDate = ServiceCallers.Custom.Project(p => p.GetProjectLastChangeDateFortheGivenStatus(HostingPage.Project.Id.Value, HostingPage.Project.Status.Id));
-                if (dpReviewEndDate.DateValue.Date > lastCompletedDate.Date)
-                {
-                    e.IsValid = false;
-                }
-            }
-        }
-
         protected void custCSATCompleteDateInGridView_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             CustomValidator custCSATCompleteDateInGridView = (CustomValidator)sender;
@@ -94,86 +85,11 @@ namespace PraticeManagement.Controls.Projects
             e.IsValid = dpCompletionDate.DateValue.Date <= DateTime.Today.Date ? true : false;
         }
 
-        protected void custCSATCompleteDate_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid = dpCompletionDate.DateValue.Date <= DateTime.Today.Date ? true : false;
-        }
-
-        public void PopulatePopUp(DataTransferObjects.ProjectCSAT csat)
-        {
-            BindScoreDropDown(ddlScore);
-            List<int> excludedPerson = new List<int>();
-            if (HostingPage.Project.Director != null)
-            {
-                excludedPerson.Add(HostingPage.Project.Director.Id.Value);
-            }
-            DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Reviewer --", excludedPerson);
-            if (csat != null)
-            {
-                ddlScore.SelectedValue = csat.ReferralScore.ToString();
-                dpReviewStartDate.DateValue = csat.ReviewStartDate;
-                dpReviewEndDate.DateValue = csat.ReviewEndDate;
-                dpCompletionDate.DateValue = csat.CompletionDate;
-                ddlReviewer.SelectedValue = csat.ReviewerId.ToString();
-                taComments.Value = csat.Comments;
-                hdnSelectedCSATId.Value = csat.Id.ToString();
-            }
-            else
-            {
-                ddlScore.SelectedValue = "";
-                dpReviewStartDate.DateValue = HostingPage.Project.StartDate.Value;
-                dpReviewEndDate.DateValue = HostingPage.Project.EndDate.Value;
-                dpCompletionDate.DateValue = DateTime.Now.Date;
-                ddlReviewer.SelectedIndex = 0;
-                taComments.Value = "";
-            }
-        }
-
-        protected void btnCancelPopUp_Click(object sender, EventArgs e)
-        {
-            mpeCSAT.Hide();
-        }
-
-        protected void btnSavePopUp_Click(object sender, EventArgs e)
-        {
-            Page.Validate("CSATPopup");
-            if (Page.IsValid)
-            {
-                DataTransferObjects.ProjectCSAT pCSAT = new DataTransferObjects.ProjectCSAT();
-                pCSAT.ProjectId = HostingPage.ProjectId.Value;
-                pCSAT.ReferralScore = int.Parse(ddlScore.SelectedValue);
-                pCSAT.ReviewStartDate = dpReviewStartDate.DateValue;
-                pCSAT.ReviewEndDate = dpReviewEndDate.DateValue;
-                pCSAT.CompletionDate = dpCompletionDate.DateValue;
-                pCSAT.ReviewerId = int.Parse(ddlReviewer.SelectedValue);
-                pCSAT.Comments = taComments.Value;
-                if (hdnPopupAddOrUpdate.Value == "Add")
-                {
-                    ServiceCallers.Custom.Project(p => p.CSATInsert(pCSAT, DataHelper.CurrentPerson.Alias));
-                    HostingPage.mlConfirmationControl.ShowInfoMessage("CSAT successfully added.");
-                }
-                else if (hdnPopupAddOrUpdate.Value == "Update")
-                {
-                    pCSAT.Id = Convert.ToInt32(hdnSelectedCSATId.Value);
-                    ServiceCallers.Custom.Project(p => p.CSATUpdate(pCSAT, DataHelper.CurrentPerson.Alias));
-                    HostingPage.mlConfirmationControl.ShowInfoMessage("CSAT successfully updated.");
-                    hdnPopupAddOrUpdate.Value = "Add";
-                }
-                PopulateData(null);
-                HostingPage.IsErrorPanelDisplay = true;
-            }
-            else
-            {
-                mpeCSAT.Show();
-            }
-        }
-
         protected void stbCSAT_Click(object sender, EventArgs e)
         {
             if (HostingPage.ProjectId.HasValue && HostingPage.ValidateAndSaveFromOtherChildControls())
             {
-                PopulatePopUp(null);
-                mpeCSAT.Show();
+                HostingPage.Redirect(Constants.ApplicationPages.ProjectCSATDetails + ProjectDetail.GetProjectIdArgument(false, HostingPage.ProjectId.Value));
             }
         }
 
@@ -199,31 +115,67 @@ namespace PraticeManagement.Controls.Projects
                     {
                         excludedPerson.Add(HostingPage.Project.Director.Id.Value);
                     }
-                    DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Client Director --", excludedPerson);
+                    DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select CSAT Reviewer --", excludedPerson);
                     ddlReviewer.SelectedValue = dataItem.ReviewerId.ToString();
                 }
                 else
                 {
                     ImageButton imgDeleteCSAT = (ImageButton)e.Row.FindControl("imgDeleteCSAT");
-                    LinkButton btnReviewStartDate = (LinkButton)e.Row.FindControl("btnReviewStartDate");
+                    HyperLink hlReviewStartDate = (HyperLink)e.Row.FindControl("hlReviewStartDate");
                     Label lblReviewStartDate = (Label)e.Row.FindControl("lblReviewStartDate");
                     imgDeleteCSAT.Visible = userIsAdministrator;
                     ImageButton imgEditCSAT = (ImageButton)e.Row.FindControl("imgEditCSAT");
-                    imgEditCSAT.Visible = btnReviewStartDate.Visible = HostingPage.CSATTabEditPermission && (HostingPage.SelectedStatus == (int)ProjectStatusType.Active || HostingPage.SelectedStatus == (int)ProjectStatusType.Completed);
+                    imgEditCSAT.Visible = hlReviewStartDate.Visible = HostingPage.CSATTabEditPermission && (HostingPage.SelectedStatus == (int)ProjectStatusType.Active || HostingPage.SelectedStatus == (int)ProjectStatusType.Completed);
                     lblReviewStartDate.Visible = !imgEditCSAT.Visible;
                 }
             }
+        }
+
+        //When client director is changed reviewer drop down repopulates.
+        public void RePopulateReviewerDropdown()
+        {
+            if (gvCSAT.EditIndex > -1)
+            {
+                DropDownList ddlReviewer = (DropDownList)gvCSAT.Rows[gvCSAT.EditIndex].FindControl("ddlReviewer");
+                string selectedReviewer = ddlReviewer.SelectedValue;
+                DataTransferObjects.ProjectCSAT dataItem = ProjectCSATList[gvCSAT.Rows[gvCSAT.EditIndex].DataItemIndex] as DataTransferObjects.ProjectCSAT;
+                List<int> excludedPerson = new List<int>();
+                if (HostingPage.SelectedDirector != -1 && dataItem.ReviewerId != HostingPage.SelectedDirector)
+                {
+                    excludedPerson.Add(HostingPage.SelectedDirector);
+                }
+                DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Reviewer --", excludedPerson);
+                ddlReviewer.SelectedValue = selectedReviewer;
+
+            }
+
+        }
+
+        protected void ddlReviewer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var ddlReviewer = sender as DropDownList;
+            var gvCSATItem = ddlReviewer.NamingContainer as GridViewRow;
+            HiddenField hdCSATId = (HiddenField)gvCSATItem.FindControl("hdCSATId");
+            int csatId = int.Parse(hdCSATId.Value);
+            var temp = ProjectCSATList;
+            var selectedCSAT = temp.Any(p => p.Id == csatId) ? temp.First(p => p.Id == csatId) : null;
+            if (selectedCSAT != null)
+                selectedCSAT.ReviewerId = !string.IsNullOrEmpty(ddlReviewer.SelectedValue) ? int.Parse(ddlReviewer.SelectedValue) : -1;
+            HostingPage.PopulateDirectorsList(temp);
         }
 
         protected void btnReviewStartDate_Command(object sender, CommandEventArgs e)
         {
             if (HostingPage.ValidateAndSaveFromOtherChildControls())
             {
-                var selectedCSAT = ProjectCSATList.First(p => p.Id == Convert.ToInt32(e.CommandArgument));
-                hdnPopupAddOrUpdate.Value = "Update";
-                PopulatePopUp(selectedCSAT);
-                mpeCSAT.Show();
+                var selectedCSATId = Convert.ToInt32(e.CommandArgument);
             }
+        }
+
+        protected string GetProjectCSATDetailRedirectUrl(int cSATId)
+        {
+            string projectCSATPageurl = string.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.ProjectCSATDetails, cSATId) + ProjectDetail.GetProjectIdArgument(true, HostingPage.ProjectId.Value);
+            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(projectCSATPageurl, string.Format(Constants.ApplicationPages.DetailRedirectWithReturnFormat, Constants.ApplicationPages.ProjectDetail, HostingPage.ProjectId.Value + "&CSAT=true", Constants.ApplicationPages.Projects));
         }
 
         protected void imgEditCSAT_OnClick(object sender, EventArgs e)
@@ -242,6 +194,7 @@ namespace PraticeManagement.Controls.Projects
             gvCSAT.EditIndex = -1;
             ProjectCSATList = null;
             PopulateData(ProjectCSATList);
+            HostingPage.PopulateDirectorsList(ProjectCSATList);
         }
 
         protected void imgUpdateCSAT_OnClick(object sender, EventArgs e)
@@ -295,6 +248,7 @@ namespace PraticeManagement.Controls.Projects
             PopulateData(tmp);
             HostingPage.mlConfirmationControl.ShowInfoMessage("CSAT successfully deleted.");
             HostingPage.IsErrorPanelDisplay = true;
+            HostingPage.PopulateDirectorsList(ProjectCSATList);
         }
 
         private void BindScoreDropDown(DropDownList ddlScore)
