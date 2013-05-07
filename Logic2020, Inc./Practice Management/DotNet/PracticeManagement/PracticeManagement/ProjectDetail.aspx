@@ -32,390 +32,389 @@
         type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-    <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
-    <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.uploadify.min.js?Id=20" type="text/javascript"></script>
-    <script type="text/javascript">
+    <uc:LoadingProgress ID="loadingProgress" runat="server" />
+    <asp:UpdatePanel ID="upnlBody" runat="server">
+        <ContentTemplate>
+            <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+            <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
+            <script src="Scripts/jquery.uploadify.min.js?Id=20" type="text/javascript"></script>
+            <script type="text/javascript">
 
-        var fileError = 0;
-        function pageLoad() {
+                var fileError = 0;
+                function pageLoad() {
 
-            document.onkeypress = enterPressed;
-            $("#<%=fuAttachmentsUpload.ClientID%>").fileUpload({
-                'uploader': 'Scripts/uploaderRemovedFolder.swf',
-                'cancelImg': 'Images/close_16.png',
-                'buttonText': 'Browse File(s)',
-                'script': 'Controls/Projects/AttachmentUpload.ashx',
-                'fileExt': '*.xls;*.xlsx;*.xlw;*.doc;*.docx;*.pdf;*.ppt;*.pptx;*.mpp;*.vsd;*.msg;*.ZIP;*.RAR;*.sig;*.one*',
-                'fileDesc': 'Excel;Word doc;PDF;PowerPoint;MS Project;Visio;Exchange;ZIP;RAR;OneNote',
-                'multi': true,
-                'auto': false,
-                'sizeLimit': 4294656, //4194kb - 4294656bytes
-                onComplete: function (event, queueID, fileObj, reponse, data) {
-                    var div = document.getElementById('<%= uploadedFiles.ClientID%>');
-                    var lblUplodedFilesMsg = document.getElementById('<%= lblUplodedFilesMsg.ClientID%>');
-                    if (lblUplodedFilesMsg.getAttribute("class") == "displayNone") {
-                        lblUplodedFilesMsg.setAttribute("class", "fontBold");
-                        div.appendChild(document.createElement("br"));
-                    }
-                    div.appendChild(document.createTextNode("- " + fileObj.name));
-                    div.appendChild(document.createElement("br"));
-
-                    var queueItem = document.getElementById('<%= fuAttachmentsUpload.ClientID %>' + queueID);
-                    queueItem.outerHTML = '';
-                },
-                onAllComplete: function (event, queueID, fileObj, response, data) {
-                    var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
-                    uploadButton.disabled = "disabled";
-                    var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
-                    progressBar.setAttribute('style', 'display:none;');
-                    if (fileError == 0) {
-                        var btnCancel = document.getElementById('<%= btnCancel.ClientID %>');
-                        btnCancel.click();
-                    }
-                },
-                onError: function (event, queueID, fileObj, errorObj) {
-                    fileError++;
-                    var elementId = '<%= fuAttachmentsUpload.ClientID %>' + queueID;
-                    var queueItem = document.getElementById(elementId);
-                    var imgElement = queueItem.firstChild.firstChild;
-                    imgElement.setAttribute("onclick", "javascript:(document.getElementById('" + elementId + "')).outerHTML= ''; fileError--; EnableUploadButton();");
-                },
-                onSelectOnce: function () {
-                    EnableUploadButton(true);
-                },
-                onCancelComplete: function () {
-                    EnableUploadButton();
-                },
-                onErrorComplete: function () {
-                    if (!IsQueueContainValidFiles()) {
-                        var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
-                        progressBar.setAttribute('style', 'display:none;');
-                    }
-
-                    EnableUploadButton();
-                }
-            });
-        }
-
-        function ChangeCancelDivInnerHTML() {
-            var cancelDiv = $('.fileUploadQueueItem .cancel');
-            for (i = 0; i < cancelDiv.length; i++) {
-                var anchorTags = cancelDiv[i].firstChild;
-                var queueItemId = cancelDiv[i].parentElement.id;
-
-                var imgElement = document.createElement('Img');
-                imgElement.setAttribute("src", "Images/close_16.png");
-                imgElement.setAttribute("class", "CursorPointer");
-                cancelDiv[i].innerHTML = "";
-                cancelDiv[i].appendChild(imgElement);
-
-            }
-        }
-
-        function ClearVariables() {
-            fileError = 0;
-        }
-
-        function startUpload() {
-            var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
-            progressBar.setAttribute('style', '');
-            ChangeCancelDivInnerHTML();
-            var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
-            var selectedValue = ddlAttachmentCategory.value;
-            var hdnProjectId = document.getElementById('<%= hdnProjectId.ClientID %>');
-
-            $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadSettings('scriptData', 'ProjectId=' + hdnProjectId.value + '&categoryId=' + selectedValue + '&LoggedInUser=<%= User.Identity.Name %>');
-            $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadStart();
-        }
-
-        function EnableUploadButton(selected) {
-            var categorySelected = IsAttachmentCategorySelected();
-            var fileSelected = (selected == true ? true : false);
-            if (categorySelected && !fileSelected) {
-                fileSelected = IsQueueContainValidFiles();
-            }
-
-            var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
-            uploadButton.disabled = categorySelected && fileSelected ? "" : "disabled";
-        }
-
-        function IsQueueContainValidFiles() {
-            var fileUploadQueue = $('.fileUploadQueueItem');
-            if (fileUploadQueue.length > 0) {
-                return true;
-            }
-            return false;
-        }
-
-        function DownloadUnsavedFile(linkButton) {
-            if (linkButton != null) {
-                var lnkbutton = $('#' + linkButton.id)[0];
-                var attachmentId = lnkbutton.getAttribute('attachmentid');
-                var btn = document.getElementById('<%= btnDownloadButton.ClientID %>');
-                var hdn = document.getElementById('<%= hdnDownloadAttachmentId.ClientID %>');
-                hdn.value = attachmentId;
-                btn.click();
-            }
-        }
-
-        function enterPressed(evn) {
-            if (window.event && window.event.keyCode == 13) {
-                if (window.event.srcElement.tagName != "TEXTAREA") {
-                    return false;
-                }
-            } else if (evn && evn.keyCode == 13) {
-                if (evn.originalTarget.type != "textarea") {
-                    return false;
-                }
-            }
-        }
-
-        function checkDirty(target, entityId) {
-            if (showDialod()) {
-                __doPostBack('__Page', target + ':' + entityId);
-                return true;
-            }
-
-            return false;
-        }
-
-        function ConfirmUnlink() {
-
-            if (confirm("Are you sure you want to unlink the existing Opportunity?")) {
-                return true;
-            }
-
-            return false;
-        }
-
-        function ConfirmSaveOrExit() {
-            var hdnProjectId = document.getElementById('<%= hdnProjectId.ClientID %>');
-            if (getDirty() || hdnProjectId.value == "") {
-                return confirm("Some data isn't saved. Click Ok to Save the data or Cancel to exit.");
-            }
-            return true;
-        }
-
-        function RedirectToOpportunity() {
-            var imgRedirectLink = document.getElementById('<%= imgNavigateToOpp.ClientID %>');
-            var url = imgRedirectLink.getAttribute("NavigateUrl");
-
-            window.open(url);
-        }
-
-        function cvProjectAttachment_ClientValidationFunction(obj, args) {
-            args.IsValid = IsValidProjectAttachMent();
-        }
-
-        function cvAttachmentCategory_ClientValidationFunction(obj, args) {
-            args.IsValid = IsAttachmentCategorySelected();
-        }
-
-        function IsAttachmentCategorySelected() {
-            var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
-            var categoryValue = ddlAttachmentCategory.value;
-            if (categoryValue != "0") {
-                return true; // Valid 
-            }
-            else {
-                return false; // Not valid 
-            }
-        }
-
-        function CanShowPrompt() {
-            return true;
-        }
-
-        function ConfirmToDeleteProject() {
-            var hdnProject = document.getElementById('<%= hdnProjectDelete.ClientID %>');
-            var result = confirm("Do you really want to delete the project?");
-            hdnProject.value = result ? 1 : 0;
-        }
-
-        function SetTooltipsForallDropDowns() {
-            var optionList = document.getElementsByTagName('option');
-
-            for (var i = 0; i < optionList.length; ++i) {
-
-                optionList[i].title = optionList[i].innerHTML;
-            }
-
-        }
-
-        function SetWrapText(str) {
-            for (var i = 30; i < str.length; i = i + 10) {
-                str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
-            }
-            return str;
-        }
-
-        function GetWrappedText(childObj) {
-            if (childObj != null) {
-
-                for (var i = 0; i < childObj.children.length; i++) {
-                    if (childObj.children[i] != null) {
-                        if (childObj.children[i].children.length == 0) {
-                            if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
-                                childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                    document.onkeypress = enterPressed;
+                    $("#<%=fuAttachmentsUpload.ClientID%>").fileUpload({
+                        'uploader': 'Scripts/uploaderRemovedFolder.swf',
+                        'cancelImg': 'Images/close_16.png',
+                        'buttonText': 'Browse File(s)',
+                        'script': 'Controls/Projects/AttachmentUpload.ashx',
+                        'fileExt': '*.xls;*.xlsx;*.xlw;*.doc;*.docx;*.pdf;*.ppt;*.pptx;*.mpp;*.vsd;*.msg;*.ZIP;*.RAR;*.sig;*.one*',
+                        'fileDesc': 'Excel;Word doc;PDF;PowerPoint;MS Project;Visio;Exchange;ZIP;RAR;OneNote',
+                        'multi': true,
+                        'auto': false,
+                        'sizeLimit': 4294656, //4194kb - 4294656bytes
+                        onComplete: function (event, queueID, fileObj, reponse, data) {
+                            var div = document.getElementById('<%= uploadedFiles.ClientID%>');
+                            var lblUplodedFilesMsg = document.getElementById('<%= lblUplodedFilesMsg.ClientID%>');
+                            if (lblUplodedFilesMsg.getAttribute("class") == "displayNone") {
+                                lblUplodedFilesMsg.setAttribute("class", "fontBold");
+                                div.appendChild(document.createElement("br"));
                             }
+                            div.appendChild(document.createTextNode("- " + fileObj.name));
+                            div.appendChild(document.createElement("br"));
+
+                            var queueItem = document.getElementById('<%= fuAttachmentsUpload.ClientID %>' + queueID);
+                            queueItem.outerHTML = '';
+                        },
+                        onAllComplete: function (event, queueID, fileObj, response, data) {
+                            var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
+                            uploadButton.disabled = "disabled";
+                            var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
+                            progressBar.setAttribute('style', 'display:none;');
+                            if (fileError == 0) {
+                                var btnCancel = document.getElementById('<%= btnCancel.ClientID %>');
+                                btnCancel.click();
+                            }
+                        },
+                        onError: function (event, queueID, fileObj, errorObj) {
+                            fileError++;
+                            var elementId = '<%= fuAttachmentsUpload.ClientID %>' + queueID;
+                            var queueItem = document.getElementById(elementId);
+                            var imgElement = queueItem.firstChild.firstChild;
+                            imgElement.setAttribute("onclick", "javascript:(document.getElementById('" + elementId + "')).outerHTML= ''; fileError--; EnableUploadButton();");
+                        },
+                        onSelectOnce: function () {
+                            EnableUploadButton(true);
+                        },
+                        onCancelComplete: function () {
+                            EnableUploadButton();
+                        },
+                        onErrorComplete: function () {
+                            if (!IsQueueContainValidFiles()) {
+                                var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
+                                progressBar.setAttribute('style', 'display:none;');
+                            }
+
+                            EnableUploadButton();
+                        }
+                    });
+                }
+
+                function ChangeCancelDivInnerHTML() {
+                    var cancelDiv = $('.fileUploadQueueItem .cancel');
+                    for (i = 0; i < cancelDiv.length; i++) {
+                        var anchorTags = cancelDiv[i].firstChild;
+                        var queueItemId = cancelDiv[i].parentElement.id;
+
+                        var imgElement = document.createElement('Img');
+                        imgElement.setAttribute("src", "Images/close_16.png");
+                        imgElement.setAttribute("class", "CursorPointer");
+                        cancelDiv[i].innerHTML = "";
+                        cancelDiv[i].appendChild(imgElement);
+
+                    }
+                }
+
+                function ClearVariables() {
+                    fileError = 0;
+                }
+
+                function startUpload() {
+                    var progressBar = document.getElementById('<%= loadingProgress.ClientID %>_upTimeEntries');
+                    progressBar.setAttribute('style', '');
+                    ChangeCancelDivInnerHTML();
+                    var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
+                    var selectedValue = ddlAttachmentCategory.value;
+                    var hdnProjectId = document.getElementById('<%= hdnProjectId.ClientID %>');
+
+                    $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadSettings('scriptData', 'ProjectId=' + hdnProjectId.value + '&categoryId=' + selectedValue + '&LoggedInUser=<%= User.Identity.Name %>');
+                    $("#<%=fuAttachmentsUpload.ClientID%>").fileUploadStart();
+                }
+
+                function EnableUploadButton(selected) {
+                    var categorySelected = IsAttachmentCategorySelected();
+                    var fileSelected = (selected == true ? true : false);
+                    if (categorySelected && !fileSelected) {
+                        fileSelected = IsQueueContainValidFiles();
+                    }
+
+                    var uploadButton = document.getElementById('<%= btnUpload.ClientID %>');
+                    uploadButton.disabled = categorySelected && fileSelected ? "" : "disabled";
+                }
+
+                function IsQueueContainValidFiles() {
+                    var fileUploadQueue = $('.fileUploadQueueItem');
+                    if (fileUploadQueue.length > 0) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                function DownloadUnsavedFile(linkButton) {
+                    if (linkButton != null) {
+                        var lnkbutton = $('#' + linkButton.id)[0];
+                        var attachmentId = lnkbutton.getAttribute('attachmentid');
+                        var btn = document.getElementById('<%= btnDownloadButton.ClientID %>');
+                        var hdn = document.getElementById('<%= hdnDownloadAttachmentId.ClientID %>');
+                        hdn.value = attachmentId;
+                        btn.click();
+                    }
+                }
+
+                function enterPressed(evn) {
+                    if (window.event && window.event.keyCode == 13) {
+                        if (window.event.srcElement.tagName != "TEXTAREA") {
+                            return false;
+                        }
+                    } else if (evn && evn.keyCode == 13) {
+                        if (evn.originalTarget.type != "textarea") {
+                            return false;
+                        }
+                    }
+                }
+
+                function checkDirty(target, entityId) {
+                    if (showDialod()) {
+                        __doPostBack('__Page', target + ':' + entityId);
+                        return false;
+                    }
+                    return true;
+                }
+
+                function ConfirmUnlink() {
+
+                    if (confirm("Are you sure you want to unlink the existing Opportunity?")) {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                function ConfirmSaveOrExit() {
+                    var hdnProjectId = document.getElementById('<%= hdnProjectId.ClientID %>');
+                    if (getDirty() || hdnProjectId.value == "") {
+                        return confirm("Some data isn't saved. Click Ok to Save the data or Cancel to exit.");
+                    }
+                    return true;
+                }
+
+                function RedirectToOpportunity() {
+                    var imgRedirectLink = document.getElementById('<%= imgNavigateToOpp.ClientID %>');
+                    var url = imgRedirectLink.getAttribute("NavigateUrl");
+
+                    window.open(url);
+                }
+
+                function cvProjectAttachment_ClientValidationFunction(obj, args) {
+                    args.IsValid = IsValidProjectAttachMent();
+                }
+
+                function cvAttachmentCategory_ClientValidationFunction(obj, args) {
+                    args.IsValid = IsAttachmentCategorySelected();
+                }
+
+                function IsAttachmentCategorySelected() {
+                    var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
+                    var categoryValue = ddlAttachmentCategory.value;
+                    if (categoryValue != "0") {
+                        return true; // Valid 
+                    }
+                    else {
+                        return false; // Not valid 
+                    }
+                }
+
+                function CanShowPrompt() {
+                    return true;
+                }
+
+                function ConfirmToDeleteProject() {
+                    var hdnProject = document.getElementById('<%= hdnProjectDelete.ClientID %>');
+                    var result = confirm("Do you really want to delete the project?");
+                    hdnProject.value = result ? 1 : 0;
+                }
+
+                function SetTooltipsForallDropDowns() {
+                    var optionList = document.getElementsByTagName('option');
+
+                    for (var i = 0; i < optionList.length; ++i) {
+
+                        optionList[i].title = optionList[i].innerHTML;
+                    }
+
+                }
+
+                function SetWrapText(str) {
+                    for (var i = 30; i < str.length; i = i + 10) {
+                        str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
+                    }
+                    return str;
+                }
+
+                function GetWrappedText(childObj) {
+                    if (childObj != null) {
+
+                        for (var i = 0; i < childObj.children.length; i++) {
+                            if (childObj.children[i] != null) {
+                                if (childObj.children[i].children.length == 0) {
+                                    if (childObj.children[i].innerHTML != null && childObj.children[i].innerHTML != "undefined" && childObj.children[i].innerHTML.length > 70) {
+                                        childObj.children[i].innerHTML = SetWrapText(childObj.children[i].innerHTML);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                function ModifyInnerTextToWrapText() {
+                    if (navigator.userAgent.indexOf(" Firefox/") > -1) {
+                        var tbl = $("table[id*='gvActivities']");
+                        if (tbl != null && tbl.length > 0) {
+                            var gvActivitiesclientId = tbl[0].id;
+                            var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
+
+                            for (var i = 0; i < lastTds.length; i++) {
+                                GetWrappedText(lastTds[i]);
+                            }
+                        }
+                    }
+                }
+
+                function CheckIfDatesValid() {
+                    txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
+                    txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
+                    var startDate = new Date(txtStartDate.value);
+                    var endDate = new Date(txtEndDate.value);
+                    if (txtStartDate.value != '' && txtEndDate.value != ''
+            && startDate <= endDate) {
+                        var btnCustDatesClose = document.getElementById('<%= activityLog.ClientID %>_btnCustDatesClose');
+                        hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
+                        hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
+                        lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+                        var startDate = new Date(txtStartDate.value);
+                        var endDate = new Date(txtEndDate.value);
+                        var startDateStr = startDate.format("MM/dd/yyyy");
+                        var endDateStr = endDate.format("MM/dd/yyyy");
+                        hdnStartDate.value = startDateStr;
+                        hdnEndDate.value = endDateStr;
+                        lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
+                        btnCustDatesClose.click();
+
+                    }
+                    return false;
+                }
+
+                function CheckAndShowCustomDatesPoup(ddlPeriod) {
+                    imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
+                    lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+                    if (ddlPeriod.value == '0') {
+                        imgCalender.attributes["class"].value = "";
+                        lblCustomDateRange.attributes["class"].value = "fontBold";
+                        if (imgCalender.fireEvent) {
+                            imgCalender.style.display = "";
+                            lblCustomDateRange.style.display = "";
+                            imgCalender.click();
+                        }
+                        if (document.createEvent) {
+                            var event = document.createEvent('HTMLEvents');
+                            event.initEvent('click', true, true);
+                            imgCalender.dispatchEvent(event);
+                        }
+                    }
+                    else {
+                        imgCalender.attributes["class"].value = "displayNone";
+                        lblCustomDateRange.attributes["class"].value = "displayNone";
+                        if (imgCalender.fireEvent) {
+                            imgCalender.style.display = "none";
+                            lblCustomDateRange.style.display = "none";
+                        }
+                    }
+                }
+
+                function ReAssignStartDateEndDates() {
+                    hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
+                    hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
+                    txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
+                    txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
+                    hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnStartDateCalExtenderBehaviourId');
+                    hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnEndDateCalExtenderBehaviourId');
+
+                    var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
+                    var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
+                    if (startDateCalExtender != null) {
+                        startDateCalExtender.set_selectedDate(hdnStartDate.value);
+                    }
+                    if (endDateCalExtender != null) {
+                        endDateCalExtender.set_selectedDate(hdnEndDate.value);
+                    }
+                    CheckIfDatesValid();
+                }
+
+                Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+
+                function endRequestHandle(sender, Args) {
+                    SetTooltipsForallDropDowns();
+                    $("#tblProjectAttachments").tablesorter(
+                {
+                    sortList: [[0, 0]]
+                }
+                );
+                    var activityLog = document.getElementById('<%= activityLog.ClientID%>');
+                    if (activityLog != null) {
+                        imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
+                        lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
+                        ddlPeriod = document.getElementById('<%=  activityLog.ClientID %>_ddlPeriod');
+                        if (imgCalender.fireEvent && ddlPeriod.value != '0') {
+                            imgCalender.style.display = "none";
+                            lblCustomDateRange.style.display = "none";
                         }
                     }
 
                 }
-            }
-        }
 
-        function ModifyInnerTextToWrapText() {
-            if (navigator.userAgent.indexOf(" Firefox/") > -1) {
-                var tbl = $("table[id*='gvActivities']");
-                if (tbl != null && tbl.length > 0) {
-                    var gvActivitiesclientId = tbl[0].id;
-                    var lastTds = $('#' + gvActivitiesclientId + ' tr td:nth-child(3)');
+                //region project time types script
 
-                    for (var i = 0; i < lastTds.length; i++) {
-                        GetWrappedText(lastTds[i]);
+                function btnClose_OnClientClick() {
+                    $find("mpeTimetypeAlertMessage").hide();
+                    return false;
+                }
+
+                function DeleteWorkType(timetypeid) {
+
+                    if (confirm("Are you sure you want to delete this Work Type?")) {
+                        var btnDeleteWorkType = document.getElementById('<%= btnDeleteWorkType.ClientID%>');
+                        var hdnWorkTypeId = document.getElementById('<%= hdnWorkTypeId.ClientID%>');
+                        hdnWorkTypeId.value = timetypeid;
+                        btnDeleteWorkType.click();
                     }
+
+                    return false;
                 }
-            }
-        }
 
-        function CheckIfDatesValid() {
-            txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
-            txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
-            var startDate = new Date(txtStartDate.value);
-            var endDate = new Date(txtEndDate.value);
-            if (txtStartDate.value != '' && txtEndDate.value != ''
-            && startDate <= endDate) {
-                var btnCustDatesClose = document.getElementById('<%= activityLog.ClientID %>_btnCustDatesClose');
-                hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
-                hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
-                lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
-                var startDate = new Date(txtStartDate.value);
-                var endDate = new Date(txtEndDate.value);
-                var startDateStr = startDate.format("MM/dd/yyyy");
-                var endDateStr = endDate.format("MM/dd/yyyy");
-                hdnStartDate.value = startDateStr;
-                hdnEndDate.value = endDateStr;
-                lblCustomDateRange.innerHTML = '(' + startDateStr + '&nbsp;-&nbsp;' + endDateStr + ')';
-                btnCustDatesClose.click();
+                // End Region projecttimetypes script
 
-            }
-            return false;
-        }
-
-        function CheckAndShowCustomDatesPoup(ddlPeriod) {
-            imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
-            lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
-            if (ddlPeriod.value == '0') {
-                imgCalender.attributes["class"].value = "";
-                lblCustomDateRange.attributes["class"].value = "fontBold";
-                if (imgCalender.fireEvent) {
-                    imgCalender.style.display = "";
-                    lblCustomDateRange.style.display = "";
-                    imgCalender.click();
-                }
-                if (document.createEvent) {
-                    var event = document.createEvent('HTMLEvents');
-                    event.initEvent('click', true, true);
-                    imgCalender.dispatchEvent(event);
-                }
-            }
-            else {
-                imgCalender.attributes["class"].value = "displayNone";
-                lblCustomDateRange.attributes["class"].value = "displayNone";
-                if (imgCalender.fireEvent) {
-                    imgCalender.style.display = "none";
-                    lblCustomDateRange.style.display = "none";
-                }
-            }
-        }
-
-        function ReAssignStartDateEndDates() {
-            hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
-            hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
-            txtStartDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbFrom');
-            txtEndDate = document.getElementById('<%= activityLog.ClientID %>_diRange_tbTo');
-            hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnStartDateCalExtenderBehaviourId');
-            hdnEndDateCalExtenderBehaviourId = document.getElementById('<%= activityLog.ClientID %>_hdnEndDateCalExtenderBehaviourId');
-
-            var endDateCalExtender = $find(hdnEndDateCalExtenderBehaviourId.value);
-            var startDateCalExtender = $find(hdnStartDateCalExtenderBehaviourId.value);
-            if (startDateCalExtender != null) {
-                startDateCalExtender.set_selectedDate(hdnStartDate.value);
-            }
-            if (endDateCalExtender != null) {
-                endDateCalExtender.set_selectedDate(hdnEndDate.value);
-            }
-            CheckIfDatesValid();
-        }
-
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
-
-        function endRequestHandle(sender, Args) {
-            SetTooltipsForallDropDowns();
-            $("#tblProjectAttachments").tablesorter(
+                $(document).ready(function () {
+                    SetTooltipsForallDropDowns();
+                    $('script #tableSorterScript').load(function () {
+                        $("#tblProjectAttachments").tablesorter(
                 {
                     sortList: [[0, 0]]
                 }
                 );
-            var activityLog = document.getElementById('<%= activityLog.ClientID%>');
-            if (activityLog != null) {
-                imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
-                lblCustomDateRange = document.getElementById('<%= activityLog.ClientID %>_lblCustomDateRange');
-                ddlPeriod = document.getElementById('<%=  activityLog.ClientID %>_ddlPeriod');
-                if (imgCalender.fireEvent && ddlPeriod.value != '0') {
-                    imgCalender.style.display = "none";
-                    lblCustomDateRange.style.display = "none";
+                    });
+                });
+
+                function mailTo(url) {
+
+                    var mailtoHiddenLink = document.getElementById('mailtoHiddenLink');
+                    mailtoHiddenLink.href = url;
+                    mailtoHiddenLink.click();
+                    return false;
                 }
-            }
 
-        }
-
-        //region project time types script
-
-        function btnClose_OnClientClick() {
-            $find("mpeTimetypeAlertMessage").hide();
-            return false;
-        }
-
-        function DeleteWorkType(timetypeid) {
-
-            if (confirm("Are you sure you want to delete this Work Type?")) {
-                var btnDeleteWorkType = document.getElementById('<%= btnDeleteWorkType.ClientID%>');
-                var hdnWorkTypeId = document.getElementById('<%= hdnWorkTypeId.ClientID%>');
-                hdnWorkTypeId.value = timetypeid;
-                btnDeleteWorkType.click();
-            }
-
-            return false;
-        }
-
-        // End Region projecttimetypes script
-
-        $(document).ready(function () {
-            SetTooltipsForallDropDowns();
-            $('script #tableSorterScript').load(function () {
-                $("#tblProjectAttachments").tablesorter(
-                {
-                    sortList: [[0, 0]]
-                }
-                );
-            });
-        });
-
-        function mailTo(url) {
-
-            var mailtoHiddenLink = document.getElementById('mailtoHiddenLink');
-            mailtoHiddenLink.href = url;
-            mailtoHiddenLink.click();
-            return false;
-        }
-
-    </script>
-    <uc:LoadingProgress ID="loadingProgress" runat="server" />
-    <asp:UpdatePanel ID="upnlBody" runat="server">
-        <ContentTemplate>
+            </script>
             <table class="WholeWidth">
                 <tr>
                     <td class="Width2Percent">
