@@ -212,15 +212,16 @@ namespace PraticeManagement.Controls.Clients
                     DropDownList ddlBusinessGroup = (DropDownList)e.Row.FindControl("ddlBusinessGroup");
                     BusinessGroupList = null;
                     var activeBusinessGroupList = BusinessGroupList.Where(b => b.IsActive || int.Parse(hdnBusinessGroupId.Value) == b.Id).ToArray();
-                    DataHelper.FillListDefault(ddlBusinessGroup, null, activeBusinessGroupList.ToArray(), true);
+                    DataHelper.FillListDefault(ddlBusinessGroup, null, activeBusinessGroupList.ToArray(), true, "Id", "Name");
                     ddlBusinessGroup.SelectedValue = hdnBusinessGroupId.Value;
                 }
                 else
                 {
                     Label lblBusinessGroup = (Label)e.Row.FindControl("lblBusinessGroup");
-                    string name = BusinessGroupList.Any(g => g.Id == Convert.ToInt32(hdnBusinessGroupId.Value)) ? BusinessGroupList.First(g => g.Id == Convert.ToInt32(hdnBusinessGroupId.Value)).Name : "Default";
+                    BusinessGroup businessGroup = BusinessGroupList.Any(g => g.Id == Convert.ToInt32(hdnBusinessGroupId.Value)) ? BusinessGroupList.First(g => g.Id == Convert.ToInt32(hdnBusinessGroupId.Value)) : null;
+                    string name = businessGroup != null ? businessGroup.HtmlEncodedName : BusinessGroup.DefaultBusinessGroupName;
                     lblBusinessGroup.Text = name.Length > 36 ? name.Substring(0, 34) + "...." : name;
-                    lblBusinessGroup.ToolTip = name;
+                    lblBusinessGroup.ToolTip = businessGroup.Name;
                 }
             }
         }
