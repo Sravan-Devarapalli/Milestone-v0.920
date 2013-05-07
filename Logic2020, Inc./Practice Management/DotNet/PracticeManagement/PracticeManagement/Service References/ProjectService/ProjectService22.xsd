@@ -111,6 +111,7 @@
       <xs:enumeration value="ChangeRequest" />
       <xs:enumeration value="Proposal" />
       <xs:enumeration value="ProjectEstimate" />
+      <xs:enumeration value="PurchaseOrder" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ProjectAttachmentCategory" nillable="true" type="tns:ProjectAttachmentCategory" />
