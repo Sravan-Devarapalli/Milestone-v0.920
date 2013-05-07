@@ -89,7 +89,9 @@ namespace PraticeManagement.Controls.Projects
         {
             if (HostingPage.ProjectId.HasValue && HostingPage.ValidateAndSaveFromOtherChildControls())
             {
-                HostingPage.Redirect(Constants.ApplicationPages.ProjectCSATDetails + ProjectDetail.GetProjectIdArgument(false, HostingPage.ProjectId.Value));
+                string projectCSATPageurl = Constants.ApplicationPages.ProjectCSATDetails + ProjectDetail.GetProjectIdArgument(false, HostingPage.ProjectId.Value);
+                string projectDetailPageUrl = string.Format(Constants.ApplicationPages.DetailRedirectWithReturnFormat, Constants.ApplicationPages.ProjectDetail, HostingPage.ProjectId.Value + "&CSAT=true", Constants.ApplicationPages.Projects);
+                Response.Redirect(PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(projectCSATPageurl, projectDetailPageUrl));
             }
         }
 
