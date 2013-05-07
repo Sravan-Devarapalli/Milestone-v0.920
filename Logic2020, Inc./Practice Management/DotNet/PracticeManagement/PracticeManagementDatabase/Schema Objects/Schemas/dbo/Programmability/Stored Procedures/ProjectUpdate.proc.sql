@@ -55,9 +55,9 @@ BEGIN
 			WHERE ptt.ProjectId = @ProjectId 
 		END	
 
-		DECLARE @PreviousClientId INT, @PreviousGroupId INT
+		DECLARE @PreviousClientId INT, @PreviousGroupId INT,@PreviousProjectStatusId INT,@CurrentPMTime DATETIME
 
-		SELECT @PreviousClientId = ClientId, @PreviousGroupId = GroupId
+		SELECT @PreviousClientId = ClientId, @PreviousGroupId = GroupId,@PreviousProjectStatusId=ProjectStatusId,@CurrentPMTime = CONVERT(DATE,dbo.[GettingPMTime](GETUTCDATE()))
 		FROM Project
 		WHERE ProjectId = @ProjectId
 
@@ -123,6 +123,16 @@ BEGIN
 		EXEC dbo.ProjectStatusHistoryUpdate
 			@ProjectId = @ProjectId,
 			@ProjectStatusId = @ProjectStatusId
+
+		--if Review enddate is greater than current time when the project is set to completed.
+		UPDATE CSAT
+		SET CSAT.ReviewEndDate = @CurrentPMTime,
+			CSAT.ReviewStartDate = CASE WHEN CSAT.ReviewStartDate > @CurrentPMTime THEN @CurrentPMTime ELSE CSAT.ReviewStartDate END
+		FROM dbo.ProjectCSAT CSAT
+		WHERE CSAT.ProjectId = @ProjectId 
+				AND @ProjectStatusId != @PreviousProjectStatusId 
+				AND @ProjectStatusId = 4 --completed Status
+				AND CSAT.ReviewEndDate > @CurrentPMTime
 
 		DECLARE @OpportunityId INT = NULL
 		
