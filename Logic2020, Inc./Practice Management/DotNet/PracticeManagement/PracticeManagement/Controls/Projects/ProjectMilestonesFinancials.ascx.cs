@@ -30,7 +30,7 @@ namespace PraticeManagement.Controls.Projects
         private const string ViewSortDirection = "SortDirection";
 
         private const string CssArrowClass = "arrow";
-        
+
         private const string WordBreak = "<wbr />";
 
         #endregion
@@ -58,7 +58,7 @@ namespace PraticeManagement.Controls.Projects
                 }
             }
         }
-        
+
         private string PreviousSortExpression
         {
             get
@@ -101,19 +101,29 @@ namespace PraticeManagement.Controls.Projects
         {
             ImageButton imgEdit = sender as ImageButton;
             GridViewRow row = imgEdit.NamingContainer as GridViewRow;
-
             var tbMilesonename = row.FindControl("tbMilestoneName") as TextBox;
+            var rfvMilestoneName = row.FindControl("rfvMilestoneName") as RequiredFieldValidator;
+            rfvMilestoneName.Validate();
+            if(rfvMilestoneName.IsValid)
+            {
             var milestone = new Milestone{ Id = Convert.ToInt32(tbMilesonename.Attributes["MilestoneId"]),
                                             Description = tbMilesonename.Text};
 
             //Save Milestone Name.
             ServiceCallers.Custom.Milestone(m => m.MilestoneUpdateShortDetails(milestone, HttpContext.Current.User.Identity.Name));
             gvRevenueMilestones.EditIndex = -1;
+            }
+        }
+
+        protected void imgbtnCancel_OnClick(object sender, EventArgs e)
+        {
+            gvRevenueMilestones.EditIndex = -1;
+            gvRevenueMilestones.DataBind();
         }
 
         protected string GetMilestoneRedirectUrl(object milestoneId)
         {
-            return Urls.GetMilestoneRedirectUrl(milestoneId, Request.Url.AbsoluteUri, ProjectId.Value);
+            return Urls.GetMilestoneRedirectUrl(milestoneId, Request.Url.AbsoluteUri.Replace("&CSAT=true", ""), ProjectId.Value);
         }
 
         private static void HideCell(GridViewRowEventArgs e, int cellIndex)
