@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[CSATInsert]
 (
+	@ProjectCSATId			INT OUTPUT,
 	@ProjectId		INT, 
 	@ReviewStartDate DATETIME,
 	@ReviewEndDate DATETIME,
@@ -17,7 +18,11 @@ BEGIN
 	INSERT INTO ProjectCSAT(ProjectId,ReviewStartDate,ReviewEndDate,CompletionDate,ReferralScore,ReviewerId,Comments)
 	VALUES (@ProjectId,@ReviewStartDate,@ReviewEndDate,@CompletionDate,@ReferralScore,@ReviewerId,@Comments)
 
+	
+	SET @ProjectCSATId = SCOPE_IDENTITY()
+
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
+
 
 END
