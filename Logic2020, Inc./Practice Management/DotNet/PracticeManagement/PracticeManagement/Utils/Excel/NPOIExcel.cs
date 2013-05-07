@@ -74,7 +74,18 @@ namespace PraticeManagement.Utils
                                             row = sheet.GetRow(i);
                                         ICell cell = row.CreateCell(j);
                                         cell.CellStyle = coloumnHeader;
-                                        cell.SetCellValue(dc.ColumnName);
+                                        var value = dc.ColumnName;
+                                        bool boolvalue = false;
+                                        double doubleValue;
+                                        DateTime dateTimeValue;
+                                        if (Boolean.TryParse(value, out boolvalue))
+                                            cell.SetCellValue(boolvalue);
+                                        else if (double.TryParse(value, out doubleValue))
+                                            cell.SetCellValue(doubleValue);
+                                        else if (DateTime.TryParse(value, out dateTimeValue))
+                                            cell.SetCellValue(dateTimeValue);
+                                        else
+                                            cell.SetCellValue(value);
                                     }
                                     else
                                     {
