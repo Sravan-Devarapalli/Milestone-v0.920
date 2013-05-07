@@ -528,6 +528,7 @@
     <Content Include="Images\People_icon.png" />
     <Content Include="Images\right_icon.png" />
     <Content Include="Images\trash-icon-Large.png" />
+    <Content Include="ProjectCSATDetails.aspx" />
     <Content Include="Reports\AccountSummaryReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
@@ -1414,6 +1415,7 @@
     <Compile Include="Controls\FilteredCheckBoxList.ascx.designer.cs">
       <DependentUpon>FilteredCheckBoxList.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Generic\AjaxValidationSummary.cs" />
     <Compile Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.cs" />
     <Compile Include="Controls\Generic\BorderlessImage.cs" />
     <Compile Include="Controls\Generic\BorderlessImageButton.cs" />
@@ -1996,6 +1998,13 @@
       <DependentUpon>ChangePasswordError.aspx</DependentUpon>
     </Compile>
     <Compile Include="Objects\DetailedProjectReportItem.cs" />
+    <Compile Include="ProjectCSATDetails.aspx.cs">
+      <DependentUpon>ProjectCSATDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProjectCSATDetails.aspx.designer.cs">
+      <DependentUpon>ProjectCSATDetails.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
