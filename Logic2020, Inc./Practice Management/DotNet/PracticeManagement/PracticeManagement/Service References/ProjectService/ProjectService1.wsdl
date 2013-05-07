@@ -84,12 +84,6 @@
   <wsdl:message name="IProjectService_CSATUpdate_OutputMessage">
     <wsdl:part name="parameters" element="tns:CSATUpdateResponse" />
   </wsdl:message>
-  <wsdl:message name="IProjectService_CSATCopyFromExistingCSAT_InputMessage">
-    <wsdl:part name="parameters" element="tns:CSATCopyFromExistingCSAT" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_CSATCopyFromExistingCSAT_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CSATCopyFromExistingCSATResponse" />
-  </wsdl:message>
   <wsdl:message name="IProjectService_CSATList_InputMessage">
     <wsdl:part name="parameters" element="tns:CSATList" />
   </wsdl:message>
@@ -361,10 +355,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATUpdate" message="tns:IProjectService_CSATUpdate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATUpdateResponse" message="tns:IProjectService_CSATUpdate_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CSATCopyFromExistingCSAT">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATCopyFromExistingCSAT" message="tns:IProjectService_CSATCopyFromExistingCSAT_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATCopyFromExistingCSATResponse" message="tns:IProjectService_CSATCopyFromExistingCSAT_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="CSATList">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATList" message="tns:IProjectService_CSATList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATListResponse" message="tns:IProjectService_CSATList_OutputMessage" />
@@ -617,15 +607,6 @@
     </wsdl:operation>
     <wsdl:operation name="CSATUpdate">
       <soap:operation soapAction="http://tempuri.org/IProjectService/CSATUpdate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CSATCopyFromExistingCSAT">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATCopyFromExistingCSAT" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
