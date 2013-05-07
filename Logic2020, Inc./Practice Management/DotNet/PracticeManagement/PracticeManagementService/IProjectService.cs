@@ -326,7 +326,7 @@ namespace PracticeManagementService
         string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId, bool link);
 
         [OperationContract]
-        void CSATInsert(ProjectCSAT projectCSAT, string userLogin);
+        int CSATInsert(ProjectCSAT projectCSAT, string userLogin);
 
         [OperationContract]
         void CSATDelete(int projectCSATId, string userLogin);
