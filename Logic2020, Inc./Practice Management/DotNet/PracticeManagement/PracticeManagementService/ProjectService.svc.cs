@@ -1004,9 +1004,9 @@ namespace PracticeManagementService
             return ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin,pricingListId, link);
         }
 
-        public void CSATInsert(ProjectCSAT projectCSAT, string userLogin)
+        public int CSATInsert(ProjectCSAT projectCSAT, string userLogin)
         {
-            ProjectCSATDAL.CSATInsert(projectCSAT, userLogin);
+           return  ProjectCSATDAL.CSATInsert(projectCSAT, userLogin);
         }
 
         public void CSATDelete(int projectCSATId, string userLogin)
