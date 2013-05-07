@@ -40,7 +40,7 @@
             </HeaderTemplate>
             <ItemTemplate>
                 <asp:HyperLink ID="hlProject" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("ProjectName")) %>'
-                    NavigateUrl='<%# GetProjectRedirectUrl(Eval("ProjectId")) %>' onclick='<%# "javascript:checkDirty(\"" + PROJECT_TARGET + "\", " + Eval("ProjectId") + ")" %>' />
+                    NavigateUrl='<%# GetProjectRedirectUrl(Eval("ProjectId")) %>' onclick='<%# "return checkDirty(\"" + PROJECT_TARGET + "\", " + Eval("ProjectId") + ")" %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField>
@@ -51,7 +51,7 @@
             <ItemTemplate>
                 <asp:HyperLink ID="hlMilestone" runat="server" Text='<%# HttpUtility.HtmlEncode((string)Eval("MilestoneName")) %>'
                     NavigateUrl='<%# GetMilestoneRedirectUrl(Eval("MilestoneId"), Eval("ProjectId")) %>'
-                    onclick='<%# "javascript:checkDirty(\"" + MILESTONE_TARGET + "\", " + string.Format("\"{0}:{1}\"", Eval("MilestoneId"), Eval("ProjectId")) + ")" %>' />
+                    onclick='<%# "return checkDirty(\"" + MILESTONE_TARGET + "\", " + string.Format("\"{0}:{1}\"", Eval("MilestoneId"), Eval("ProjectId")) + ")" %>' />
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField>
