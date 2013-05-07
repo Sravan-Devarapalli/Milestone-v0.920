@@ -985,8 +985,9 @@ namespace PraticeManagement
                     if (ddlClientGroup.SelectedValue != "")
                     {
                         BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(null, Convert.ToInt32(ddlClientGroup.SelectedValue));
-                        lblBusinessGroup.Text = (businessGroupList.First().Name.Length > 32) ? businessGroupList.First().Name.Substring(0, 35) + "...." : businessGroupList.First().Name;
-                        lblBusinessGroup.ToolTip = businessGroupList.First().Name;
+                        BusinessGroup bg = businessGroupList.Any() ? businessGroupList.First() : null;
+                        lblBusinessGroup.Text = HttpUtility.HtmlEncode(bg.Name.Length > 32 ? bg.Name.Substring(0, 35) + "...." : bg.Name);
+                        lblBusinessGroup.ToolTip = bg != null ? bg .Name : string.Empty;
                     }
                     else
                     {
