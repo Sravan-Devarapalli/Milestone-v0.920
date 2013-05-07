@@ -16,7 +16,7 @@
             <EditItemTemplate>
                 <asp:ImageButton ID="imgbtnUpdate" runat="server" ToolTip="Save" OnClick="imgbtnUpdate_OnClick"
                     ImageUrl="~/Images/icon-check.png" />
-                <asp:ImageButton ID="imgbtnCancel" CommandName="cancel" runat="server" ToolTip="Cancel"
+                <asp:ImageButton ID="imgbtnCancel"  runat="server" ToolTip="Cancel" OnClick="imgbtnCancel_OnClick"
                     ImageUrl="~/Images/no.png" />
             </EditItemTemplate>
         </asp:TemplateField>
@@ -36,7 +36,7 @@
             <EditItemTemplate>
                 <asp:TextBox ID="tbMilestoneName" runat="server" MilestoneId='<%# Eval("MilestoneId") %>'
                     Text='<%# Bind("MilestoneName") %>'></asp:TextBox>
-                <asp:RequiredFieldValidator ID="rfvMilestoneName" runat="server" ControlToValidate="tbMilestoneName"
+                <asp:RequiredFieldValidator ID="rfvMilestoneName" runat="server" ControlToValidate="tbMilestoneName" EnableClientScript="false" ValidationGroup="MilestoneTab"
                     Text="*" ErrorMessage="Milestone Name Required" ToolTip="Milestone Name Required"></asp:RequiredFieldValidator>
             </EditItemTemplate>
         </asp:TemplateField>
