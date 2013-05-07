@@ -116,6 +116,7 @@ namespace PraticeManagement
             public const string Calendar = "~/Calendar.aspx";
             public const string Projects = "~/Projects.aspx";
             public const string CompensationDetail = "~/CompensationDetail.aspx";
+            public const string ProjectCSATDetails = "~/ProjectCSATDetails.aspx";
             public const string ExpenseDetail = "~/ExpenseDetail.aspx";
             public const string ExpenseCategoryList = "~/ExpenseCategoryList.aspx";
             public const string OpportunityDetail = "~/OpportunityDetail.aspx";
@@ -133,6 +134,7 @@ namespace PraticeManagement
             public const string RedirectMilestonePersonIdFormat = "{0}?id={1}&milestonePersonId={2}";
             public const string RedirectMilestonePersonIdFormatWithReturn = "{0}?id={1}&milestonePersonId={2}&returnTo={3}";
             public const string RedirectStartDateFormat = "{0}?id={1}&startDate={2}";
+            public const string RedirectProjectIdFormat = "{0}?id={1}&projectId={2}";
             public const string RedirectStartDateAndStrawmanFormat = "{0}?id={1}&startDate={2}&Isstrawman={3}";
             public const string MilestonePrevNextRedirectFormat = "{0}?id={1}&projectId={2}"; // &returnTo={3}";
             public const string MilestoneWithReturnFormat = "{0}?id={1}&projectId={2}&returnTo={3}";
