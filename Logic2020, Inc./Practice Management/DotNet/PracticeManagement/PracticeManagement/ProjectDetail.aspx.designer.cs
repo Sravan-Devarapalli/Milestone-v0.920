@@ -148,6 +148,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvIsInternal;
         
         /// <summary>
+        /// custActiveStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custActiveStatus;
+        
+        /// <summary>
         /// ddlClientName control.
         /// </summary>
         /// <remarks>
@@ -526,6 +535,33 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvProjectManagerStatus;
         
         /// <summary>
+        /// ddlCSATOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCSATOwner;
+        
+        /// <summary>
+        /// custCSATOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custCSATOwner;
+        
+        /// <summary>
+        /// imgMailToCSATOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgMailToCSATOwner;
+        
+        /// <summary>
         /// custProjectDesciption control.
         /// </summary>
         /// <remarks>
@@ -589,13 +625,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlNotes;
         
         /// <summary>
-        /// tblProjectDetailTabViewSwitch  control.
+        /// tblProjectDetailTabViewSwitch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblProjectDetailTabViewSwitch ;
+        protected global::System.Web.UI.WebControls.Table tblProjectDetailTabViewSwitch;
         
         /// <summary>
         /// rowSwitcher control.
@@ -749,6 +785,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnProjectTools;
+        
+        /// <summary>
+        /// cellProjectCSAT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellProjectCSAT;
+        
+        /// <summary>
+        /// btnProjectCSAT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnProjectCSAT;
         
         /// <summary>
         /// mvProjectDetailTab control.
@@ -1111,6 +1165,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ObjectDataSource odsProjectStatus;
         
         /// <summary>
+        /// vwCSAT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwCSAT;
+        
+        /// <summary>
+        /// ucCSAT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Projects.ProjectCSAT ucCSAT;
+        
+        /// <summary>
         /// tcProjectDetails control.
         /// </summary>
         /// <remarks>
@@ -1235,6 +1307,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnCanShowPopup;
+        
+        /// <summary>
+        /// hdnCompletedStatusPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnCompletedStatusPopup;
         
         /// <summary>
         /// pnlProjectName control.
@@ -1426,6 +1507,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary vsumProjectAttachment;
         
         /// <summary>
+        /// vsumCSAT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumCSAT;
+        
+        /// <summary>
         /// btnOKErrorPanel control.
         /// </summary>
         /// <remarks>
@@ -1541,6 +1631,60 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnOk;
+        
+        /// <summary>
+        /// mpeCompletedStatusPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeCompletedStatusPopUp;
+        
+        /// <summary>
+        /// pnlCompletedStatusPopUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlCompletedStatusPopUp;
+        
+        /// <summary>
+        /// cvCompletedStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvCompletedStatus;
+        
+        /// <summary>
+        /// lblCompletedStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCompletedStatus;
+        
+        /// <summary>
+        /// btnOkCompletedStatusPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOkCompletedStatusPopup;
+        
+        /// <summary>
+        /// btnCancelCompletedStatusPopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelCompletedStatusPopup;
         
         /// <summary>
         /// btnDownloadButton control.
