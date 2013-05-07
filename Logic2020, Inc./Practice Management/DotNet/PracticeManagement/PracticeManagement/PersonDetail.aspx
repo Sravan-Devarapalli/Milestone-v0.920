@@ -245,11 +245,11 @@
         function checkDirty(target, entityId) {
             if (showDialod()) {
                 __doPostBack('ctl00$body$personProjects', target + ':' + entityId);
-                return true;
+                return false;
             }
-
-            return false;
+            return true;
         }
+
         function setHintPosition(img, displayPnl) {
             var image = $("#" + img);
             var displayPanel = $("#" + displayPnl);
