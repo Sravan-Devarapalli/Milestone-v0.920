@@ -15,14 +15,17 @@ BEGIN
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-	INSERT INTO ProjectCSAT(ProjectId,ReviewStartDate,ReviewEndDate,CompletionDate,ReferralScore,ReviewerId,Comments)
-	VALUES (@ProjectId,@ReviewStartDate,@ReviewEndDate,@CompletionDate,@ReferralScore,@ReviewerId,@Comments)
+	DECLARE @InsertingTime DATETIME,
+	        @ModifiedBy    INT
+	SELECT @InsertingTime=dbo.InsertingTime(),@ModifiedBy=PersonId FROM Person WHERE Alias=@UserLogin;
 
-	
+	INSERT INTO ProjectCSAT(ProjectId,ReviewStartDate,ReviewEndDate,CompletionDate,ReferralScore,ReviewerId,Comments,CreatedDate,ModifiedDate,ModifiedBy)
+	VALUES (@ProjectId,@ReviewStartDate,@ReviewEndDate,@CompletionDate,@ReferralScore,@ReviewerId,@Comments,@InsertingTime,@InsertingTime,@ModifiedBy)
+
 	SET @ProjectCSATId = SCOPE_IDENTITY()
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
-
 END
+
