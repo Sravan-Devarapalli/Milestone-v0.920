@@ -90,6 +90,18 @@
   <wsdl:message name="IProjectService_CSATList_OutputMessage">
     <wsdl:part name="parameters" element="tns:CSATListResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_CSATSummaryReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSATSummaryReport" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATSummaryReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSATSummaryReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATReportHeader_InputMessage">
+    <wsdl:part name="parameters" element="tns:CSATReportHeader" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CSATReportHeader_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CSATReportHeaderResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
   </wsdl:message>
@@ -359,6 +371,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATList" message="tns:IProjectService_CSATList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATListResponse" message="tns:IProjectService_CSATList_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="CSATSummaryReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATSummaryReport" message="tns:IProjectService_CSATSummaryReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATSummaryReportResponse" message="tns:IProjectService_CSATSummaryReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CSATReportHeader">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CSATReportHeader" message="tns:IProjectService_CSATReportHeader_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CSATReportHeaderResponse" message="tns:IProjectService_CSATReportHeader_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetByIdResponse" message="tns:IProjectService_ProjectGetById_OutputMessage" />
@@ -616,6 +636,24 @@
     </wsdl:operation>
     <wsdl:operation name="CSATList">
       <soap:operation soapAction="http://tempuri.org/IProjectService/CSATList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSATSummaryReport">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATSummaryReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CSATReportHeader">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CSATReportHeader" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
