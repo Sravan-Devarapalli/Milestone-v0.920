@@ -19,10 +19,15 @@ BEGIN
 				i.Comments,
 				i.ReferralScore,
 				i.ReviewerId,
-				per.LastName +', '+ per.FirstName AS Reviewer
+				per.LastName +', '+ per.FirstName AS Reviewer,
+				CONVERT(NVARCHAR(10), i.CreatedDate, 101) AS [CreatedDate],
+				CONVERT(NVARCHAR(10), i.ModifiedDate, 101) AS [ModifiedDate],
+				i.ModifiedBy,
+				md.LastName +', '+ md.FirstName AS ModifiedByName
 		  FROM inserted AS i
 		  INNER JOIN dbo.Project p ON p.ProjectId = i.ProjectId
 		  INNER JOIN dbo.Person per ON per.PersonId = i.ReviewerId
+		    INNER JOIN dbo.Person md ON md.PersonId = i.ModifiedBy
 	),
 
 	OLD_VALUES AS
@@ -36,10 +41,15 @@ BEGIN
 				d.Comments,
 				d.ReferralScore,
 				d.ReviewerId,
-				per.LastName +', '+ per.FirstName AS Reviewer
+				per.LastName +', '+ per.FirstName AS Reviewer,
+				CONVERT(NVARCHAR(10), d.CreatedDate, 101) AS [CreatedDate],
+				CONVERT(NVARCHAR(10), d.ModifiedDate, 101) AS [ModifiedDate],
+				d.ModifiedBy,
+				md.LastName +', '+ md.FirstName AS ModifiedByName
 		  FROM deleted AS d
 		  INNER JOIN dbo.Project p ON p.ProjectId = d.ProjectId
 		  INNER JOIN dbo.Person per ON per.PersonId = d.ReviewerId
+		  INNER JOIN dbo.Person md ON md.PersonId = d.ModifiedBy
 	)
 
 	-- Log an activity
