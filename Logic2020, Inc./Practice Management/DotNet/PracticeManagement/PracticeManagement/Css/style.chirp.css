@@ -1942,6 +1942,10 @@ TABLE.Section td
 {
     width: 7%;
 }
+.Width7point5Percent
+{
+    width: 7.5%;
+}
 .Width8Percent, .Width8Per
 {
     width: 8%;
@@ -1981,6 +1985,10 @@ TABLE.Section td
 .Width15Percent, .Width15Per
 {
     width: 15%;
+}
+.Width15point3PercentImp
+{
+    width: 15.3% !important;
 }
 .Width16point5PercentImp
 {
@@ -2131,7 +2139,7 @@ TABLE.Section td
 }
 .width60PImp
 {
-   width: 60% !important;
+    width: 60% !important;
 }
 .width60P
 {
@@ -2223,7 +2231,7 @@ TABLE.Section td
 }
 Width99PercentImp
 {
-     width: 99% !important;
+    width: 99% !important;
 }
 .Width5Px, .BenchCostCustomValidator
 {
@@ -2531,6 +2539,10 @@ Width99PercentImp
 {
     width: 400px;
 }
+.Width400PxImp
+{
+    width: 400px !important;
+}
 .Width430Px, .ProjectSearch
 {
     width: 430px;
@@ -2761,6 +2773,10 @@ Width99PercentImp
 {
     font-size: 14px;
 }
+.font14PxImp
+{
+    font-size: 14px !important;
+}
 .FontSize15PX
 {
     font-size: 15px;
@@ -2817,6 +2833,20 @@ Width99PercentImp
     padding-top: 4px;
     padding-bottom: 4px;
 }
+.ReportItemTemplateCSAT
+{
+    background-color: White;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+.ReportItemTemplateCSAT td
+{
+    white-space: normal;
+    text-align: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #000;
+}
 TABLE.PaddingTenPx td
 {
     padding: 0 5px;
@@ -2832,7 +2862,7 @@ TABLE.PaddingTenPx td
     font-weight: bold;
     padding-bottom: 10px;
 }
-.PersonDetailReportHeader TD.PersonTotals
+.PersonDetailReportHeader TD.PersonTotals, CSATHeader
 {
     text-align: right;
     width: 600px;
@@ -2949,7 +2979,7 @@ TABLE.PersonSummaryReport TD, TABLE.TerminationReport TD
     vertical-align: middle;
     padding: 2px;
 }
-TABLE.PersonSummaryReport TH, TABLE.TerminationReport TH
+TABLE.PersonSummaryReport TH, TABLE.TerminationReport TH, CSATReportHeader
 {
     border-bottom: 1px solid #000;
     border-top: 1px solid #000;
@@ -3459,6 +3489,10 @@ li.l1 a:hover, .l2 dd div.flyout a:hover
 {
     border: none;
 }
+.BorderNoneImp
+{
+    border: none !important;
+}
 .xScrollAuto
 {
     overflow-x: auto;
@@ -3477,17 +3511,17 @@ div.scrollextLabel
     line-height: 18px;
     font-family: MS Shell Dlg;
     font-size: 13.3333px;
-    color:#000;
+    color: #000;
 }
 div.scrollextLabel Label
 {
-   padding-left: 4px;
+    padding-left: 4px;
 }
 .DefaultDropDownFont
 {
     font-family: MS Shell Dlg;
     font-size: 13.3333px;
-    color : #000;
+    color: #000;
 }
 /* Export to Excel Buttons in Project Summary Page*/
 .ExportAndExportAll ul, .ExportAndExportAll li
@@ -3595,6 +3629,7 @@ div.scrollextLabel Label
     display: inline-block;
     z-index: 20000;
 }
+
 
 .PersonPayTypeScrollingDropDown
 {
@@ -5566,6 +5601,10 @@ HyplinkConsultantDetailReport
 {
     text-align: left;
 }
+.TextAlignLeftImp
+{
+    text-align: left !important;
+}
 
 .Width194px
 {
@@ -5801,7 +5840,10 @@ HyplinkConsultantDetailReport
     vertical-align: middle;
     min-height: 10px;
 }
-
+.height120px
+{
+    height: 120px !important;
+}
 .PnlDeleteSubstitutionDate
 {
     min-width: 250px;
@@ -5876,6 +5918,10 @@ HyplinkConsultantDetailReport
 .Height100Percent
 {
     height: 100%;
+}
+.Height100PerImp
+{
+    height: 100% !important;
 }
 .InnerTdProjectNotes
 {
@@ -6448,11 +6494,11 @@ image:hover:after
 {
     background-color: #E2EBFF;
     border: 2px solid Black !important;
-    width:700px;
+    width: 700px;
 }
 .PanelCSAT tr
 {
-padding-left : 5px;
+    padding-left: 5px;
 }
 .HolidayAndSubstituteDay
 {
@@ -6857,6 +6903,10 @@ padding-left : 5px;
 .MarginGoalsHeaderTable
 {
     width: 99%;
+}
+.PaddingBottom10Px
+{
+    padding-bottom: 10px;
 }
 .MarginGoalsHeaderTable td
 {
@@ -7870,5 +7920,46 @@ table#ctl00_body_login tr td label
     font-weight: bolder;
     width: 14%;
     text-align: right;
+}
+.trCSATSummaryHeader
+{
+    white-space: nowrap;
+    width: 100%;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+.trCSATSummaryHeader th
+{
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+    background-color: #FFF;
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+    height: 24px;
+    vertical-align: middle;
+    padding: 2px;
+}
+.trNetPromoterScorePanel b
+{
+    font-size: 14px;
+    text-align: center !important;
+}
+
+.tableNetPromoterScorePanel
+{
+    width: 100%;
+}
+
+.tableNetPromoterScorePanel td
+{
+    padding-top: 5px;
+    width: 90%;
+}
+.tblPanelNetCSATScore td
+{
+    width: 30%;
+    white-space: normal;
+    text-align: center;
 }
 
