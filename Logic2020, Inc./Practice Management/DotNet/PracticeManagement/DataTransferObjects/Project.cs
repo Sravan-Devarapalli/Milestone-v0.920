@@ -171,6 +171,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public DateTime? RecentCompletedStatusDate
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets a project's End Date.
         /// </summary>
@@ -288,6 +295,13 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public String ProjectManagerNames
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public string ProjectCapabilityIds
         {
             get;
@@ -343,6 +357,10 @@ namespace DataTransferObjects
         public bool IsChargeable { get; set; }
 
         [DataMember]
+        public bool IsCSATEligible { get; set; }
+
+
+        [DataMember]
         public bool HasAttachments { get; set; }
 
         [DataMember]
@@ -357,6 +375,10 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public bool HasMultipleCSATs { get; set; }
+
 
         [DataMember]
         public bool CanCreateCustomWorkTypes { get; set; }
