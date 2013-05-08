@@ -1024,6 +1024,15 @@ namespace PracticeManagementService
             return ProjectCSATDAL.CSATList(projectId);
         }
 
+        public List<Project> CSATSummaryReport(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, bool isExport)
+        {
+            return ProjectCSATDAL.CSATSummaryReport(startDate, endDate, practiceIds, accountIds, isExport);
+        }
+
+        public List<int> CSATReportHeader(DateTime startDate, DateTime endDate, string practiceIds, string accountIds)
+        {
+            return ProjectCSATDAL.CSATReportHeader(startDate, endDate, practiceIds, accountIds);
+        }
 
         #endregion
     }
