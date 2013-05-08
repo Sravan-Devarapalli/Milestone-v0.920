@@ -336,6 +336,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ProjectCSAT> CSATList(int? projectId);
+
+        [OperationContract]
+        List<Project> CSATSummaryReport(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, bool isExport = false);
+
+        [OperationContract]
+        List<int> CSATReportHeader(DateTime startDate, DateTime endDate, string practiceIds, string accountIds);
     }
 }
 
