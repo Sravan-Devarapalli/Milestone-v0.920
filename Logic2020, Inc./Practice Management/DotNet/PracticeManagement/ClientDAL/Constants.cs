@@ -9,6 +9,21 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string CSATReviewer = "CSATReviewer";
+            public const string CSATOwnerName = "CSATOwnerName";
+            public const string ProjectManagers = "ProjectManagers";
+            public const string SalesPerson = "SalesPerson";
+            public const string CompletedStatusDate = "CompletedStatusDate";
+            public const string CSATEligible = "CSATEligible";
+            public const string HasMultipleCSATs = "HasMultipleCSATs";
+            public const string PromotersWithoutFilter = "PromotersWithoutFilter";
+            public const string PassivesWithoutFilter = "PassivesWithoutFilter";
+            public const string DetractorsWithoutFilter = "DetractorsWithoutFilter";
+            public const string PromotersWithFilter = "PromotersWithFilter";
+            public const string PassivesWithFilter = "PassivesWithFilter";
+            public const string DetractorsWithFilter = "DetractorsWithFilter";
+            public const string PracticeAreaName = "PracticeAreaName";
+            public const string Account = "Account";
             public const string BusinessGroupName = "BusinessGroupName";
             public const string IsNotesRequired = "IsNotesRequired";
             public const string UploadedDate = "UploadedDate";
@@ -443,7 +458,7 @@
         /// </summary>
         public class ParameterNames
         {
-
+            public const string IsExport = "@IsExport";
             public const string DescendingOrder = "Desc";
             public const string GroupIdColumn = "GroupId";
             public const string AttachmentFileName = "@FileName";
@@ -705,6 +720,7 @@
             public const string PersonDivisionIdsParam = "@PersonDivisionIds";
             public const string ProjectStatusIdsParam = "@ProjectStatusIds";
             public const string AccountIdParam = "@AccountId";
+            public const string AccountIdsParam = "@AccountIds";
             public const string BusinessUnitIdsParam = "@BusinessUnitIds";
             public const string ProjectBillingTypesParam = "@ProjectBillingTypes";
             public const string IncludeUnpaidParam = "@IncludeUnpaid";
@@ -1057,6 +1073,8 @@
                 public const string TerminationReport = "dbo.TerminationReport";
                 public const string TerminationReportGraph = "dbo.TerminationReportGraph";
                 public const string GetConsultantDemandForPeriod = "dbo.GetConsultantDemandForPeriod";
+                public const string CSATSummaryReport = "dbo.CSATSummaryReport";
+                public const string CSATReportHeader = "dbo.CSATReportHeader";
             }
             #endregion
 
