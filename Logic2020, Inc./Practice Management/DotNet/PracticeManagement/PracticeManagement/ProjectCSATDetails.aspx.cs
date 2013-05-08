@@ -9,10 +9,11 @@ using DataTransferObjects;
 
 namespace PraticeManagement
 {
-    public partial class ProjectCSATDetails : PracticeManagementPageBase
+    public partial class ProjectCSATDetails : PracticeManagementPageBase ,IPostBackEventHandler
     {
 
         private bool IsErrorPanelDisplay;
+        private bool IsFromRaisePostEventHandler;
 
         public int? ProjectId
         {
@@ -156,7 +157,9 @@ namespace PraticeManagement
                     ServiceCallers.Custom.Project(p => p.CSATUpdate(pCSAT, DataHelper.CurrentPerson.Alias));
                     mlConfirmation.ShowInfoMessage("CSAT successfully updated.");
                 }
-                ReturnToPreviousPage();
+                if(!IsFromRaisePostEventHandler)
+                    ReturnToPreviousPage();
+                ClearDirty();
             }
             IsErrorPanelDisplay = true;
         }
@@ -201,5 +204,21 @@ namespace PraticeManagement
             lblProjectName.Text = Project.Name;
         }
 
+        #region IPostBackEventHandler Members
+
+        public void RaisePostBackEvent(string eventArgument)
+        {
+            if (IsDirty)
+            {
+                IsFromRaisePostEventHandler = true;
+                btnSave_Click(btnSave, new EventArgs());
+                RedirectWithOutReturnTo(eventArgument);
+            }
+            else
+            {
+                RedirectWithOutReturnTo(eventArgument);
+            }
+        }
+        #endregion
     }
 }
