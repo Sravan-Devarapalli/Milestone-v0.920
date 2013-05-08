@@ -397,6 +397,7 @@
     <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandSummary.ascx" />
     <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandTReportByTitle.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
+    <Content Include="Controls\Reports\CSAT\CSATSummaryReport.ascx" />
     <Content Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx" />
     <Content Include="Controls\Reports\HumanCapital\NewHireReportGraphView.ascx" />
     <Content Include="Controls\Reports\HumanCapital\NewHireReportSummaryView.ascx" />
@@ -448,6 +449,7 @@
     <Content Include="Images\close_24.png" />
     <Content Include="Images\close_inactive16.png" />
     <Content Include="Images\copy.png" />
+    <Content Include="Images\CSATCalculation.png" />
     <Content Include="Images\desc.gif" />
     <Content Include="Images\divisions_16x16.png" />
     <Content Include="Images\email_envelope.png" />
@@ -534,6 +536,7 @@
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\ConsultingDemand_New.aspx" />
+    <Content Include="Reports\CSATReport.aspx" />
     <Content Include="Reports\Expenses.aspx" />
     <Content Include="Reports\HumanCapital.aspx" />
     <Content Include="Reports\NewHireReport.aspx" />
@@ -1572,6 +1575,12 @@
     <Compile Include="Controls\Reports\ConsultingDemand.ascx.designer.cs">
       <DependentUpon>ConsultingDemand.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\CSAT\CSATSummaryReport.ascx.cs">
+      <DependentUpon>CSATSummaryReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\CSAT\CSATSummaryReport.ascx.designer.cs">
+      <DependentUpon>CSATSummaryReport.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx.cs">
       <DependentUpon>HumanCapitalReportsHeader.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2044,6 +2053,12 @@
     </Compile>
     <Compile Include="Reports\ConsultingDemand_New.aspx.designer.cs">
       <DependentUpon>ConsultingDemand_New.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\CSATReport.aspx.cs">
+      <DependentUpon>CSATReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\CSATReport.aspx.designer.cs">
+      <DependentUpon>CSATReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Expenses.aspx.cs">
       <DependentUpon>Expenses.aspx</DependentUpon>
