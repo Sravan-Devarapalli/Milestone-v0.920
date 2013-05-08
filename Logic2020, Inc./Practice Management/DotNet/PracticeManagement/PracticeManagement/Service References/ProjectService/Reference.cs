@@ -60,6 +60,12 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATList", ReplyAction="http://tempuri.org/IProjectService/CSATListResponse")]
         DataTransferObjects.ProjectCSAT[] CSATList(System.Nullable<int> projectId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATSummaryReport", ReplyAction="http://tempuri.org/IProjectService/CSATSummaryReportResponse")]
+        DataTransferObjects.Project[] CSATSummaryReport(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, bool isExport);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CSATReportHeader", ReplyAction="http://tempuri.org/IProjectService/CSATReportHeaderResponse")]
+        int[] CSATReportHeader(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -208,7 +214,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
-       
+     
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -276,6 +282,14 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.ProjectCSAT[] CSATList(System.Nullable<int> projectId) {
             return base.Channel.CSATList(projectId);
+        }
+        
+        public DataTransferObjects.Project[] CSATSummaryReport(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, bool isExport) {
+            return base.Channel.CSATSummaryReport(startDate, endDate, practiceIds, accountIds, isExport);
+        }
+        
+        public int[] CSATReportHeader(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds) {
+            return base.Channel.CSATReportHeader(startDate, endDate, practiceIds, accountIds);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
