@@ -20,6 +20,7 @@
         <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="Administrator" />
         <siteMapNode url="~/Reports/Expenses.aspx" title="Expenses"  VirtualPath="~/Reports/Expenses.aspx" QuickLinkTitle="Expense Report"  description="Expenses"/>
         <siteMapNode url="~/Reports/PersonStats.aspx?from=Financial"  VirtualPath="~/Reports/PersonStats.aspx" QuickLinkTitle="Person Stats"  title="Person Stats" roles="Administrator"  />
+        <siteMapNode url="~/Reports/AttainmentReport.aspx" title="Attainment"  VirtualPath="~/Reports/AttainmentReport.aspx" QuickLinkTitle="Attainment"  description="Attainment"/>
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
         <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consulting Utilization"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consulting Utilization"  description="Consulting Utilization" ShowURL="true" />
@@ -34,6 +35,7 @@
       </siteMapNode>
       <siteMapNode url="~/Reports/AccountSummaryReport.aspx" title="Account"  VirtualPath="~/Reports/AccountSummaryReport.aspx" QuickLinkTitle="Account"  description="Account" ShowURL="true"/>
       <siteMapNode url="~/Reports/HumanCapital.aspx" title="Human Capital"  VirtualPath="~/Reports/HumanCapital.aspx" QuickLinkTitle="Human Capital"  description="Human Capital" ShowURL="true"/>
+      <!--<siteMapNode url="~/Reports/CSATReport.aspx" title="CSAT"  VirtualPath="~/Reports/CSATReport.aspx" QuickLinkTitle="CSAT"  description="CSAT Report" ShowURL="true"/>-->
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
