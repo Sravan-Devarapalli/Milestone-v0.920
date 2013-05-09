@@ -532,6 +532,7 @@
     <Content Include="Images\trash-icon-Large.png" />
     <Content Include="ProjectCSATDetails.aspx" />
     <Content Include="Reports\AccountSummaryReport.aspx" />
+    <Content Include="Reports\AttainmentReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
@@ -2025,6 +2026,13 @@
     </Compile>
     <Compile Include="Reports\AccountSummaryReport.aspx.designer.cs">
       <DependentUpon>AccountSummaryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\AttainmentReport.aspx.cs">
+      <DependentUpon>AttainmentReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\AttainmentReport.aspx.designer.cs">
+      <DependentUpon>AttainmentReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Audit.aspx.cs">
       <DependentUpon>Audit.aspx</DependentUpon>
