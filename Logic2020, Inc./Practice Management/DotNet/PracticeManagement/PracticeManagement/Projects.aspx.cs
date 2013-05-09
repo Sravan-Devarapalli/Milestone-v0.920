@@ -361,7 +361,7 @@ namespace PraticeManagement
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
                 CellStyles monthNameHeaderCellStyle = new CellStyles();
-                monthNameHeaderCellStyle.DataFormat = "mmm yy";
+                monthNameHeaderCellStyle.DataFormat = "[$-409]mmmm-yy;@";
                 monthNameHeaderCellStyle.IsBold = true;
                 monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
