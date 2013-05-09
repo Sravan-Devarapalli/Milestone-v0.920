@@ -234,8 +234,15 @@ namespace PraticeManagement.Reports
 
         protected void Filters_Changed(object sender, EventArgs e)
         {
-            ddlPeriod.SelectedValue = "-1";
-            divReport.Visible = false;
+            if (cblAccount.SelectedItems == "" || cblPractices.SelectedItems == "")
+            {
+                ddlPeriod.SelectedValue = "-1";
+                divReport.Visible = false;
+            }
+            else
+            {
+                LoadActiveView();
+            }
         }
 
         private void LoadActiveView()
@@ -244,7 +251,7 @@ namespace PraticeManagement.Reports
             int activeView = mvCSATReport.ActiveViewIndex;
             if (activeView == 0)
             {
-                if (SelectedAccounts != string.Empty && SelectedPractices != string.Empty)
+                if (SelectedAccounts != string.Empty && SelectedPractices != string.Empty && ddlPeriod.SelectedValue !="-1")
                 {
                     divReport.Visible = true;
                     hdnPeriod.Value = ddlPeriod.SelectedValue;
@@ -345,3 +352,4 @@ namespace PraticeManagement.Reports
     }
 
 }
+
