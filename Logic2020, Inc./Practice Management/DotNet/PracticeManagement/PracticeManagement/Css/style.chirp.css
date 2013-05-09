@@ -2302,6 +2302,10 @@ Width99PercentImp
 {
     width: 60px;
 }
+.Width60PxImp
+{
+    width: 60px !important;
+}
 .Width60PerImp
 {
     width: 60% !important;
