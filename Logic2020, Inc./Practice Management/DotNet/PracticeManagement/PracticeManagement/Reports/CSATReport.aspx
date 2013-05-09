@@ -108,7 +108,7 @@
                     <td class="ReportFilterLabels">
                         Show Report For:
                     </td>
-                    <td class="textLeft">
+                    <td class="textLeft PaddingLeft3Px">
                         <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" CssClass="Width50Percent"
                             OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                             <asp:ListItem Text="Please Select" Value="-1"></asp:ListItem>
@@ -140,7 +140,7 @@
                     <td class="ReportFilterLabels">
                         Practices:
                     </td>
-                    <td class="textLeft">
+                    <td class="textLeft PaddingLeft3Px">
                         <pmc:ScrollingDropDown ID="cblPractices" runat="server" AllSelectedReturnType="Null"
                             CssClass="ProjectDetailScrollingDropDown1 Width15point3PercentImp vMiddleImp"
                             OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPractices','Practice Area')"
@@ -154,7 +154,7 @@
                     <td class="ReportFilterLabels">
                         Account:
                     </td>
-                    <td class="textLeft">
+                    <td class="textLeft PaddingLeft3Px">
                         <pmc:ScrollingDropDown ID="cblAccount" runat="server" AllSelectedReturnType="Null"
                             CssClass="ProjectDetailScrollingDropDown1 Width15point3PercentImp vMiddleImp"
                             OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblAccount','Account')"
