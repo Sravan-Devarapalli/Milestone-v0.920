@@ -115,8 +115,8 @@ AS
 		   Powner.FirstName AS [ProjectOwnerFirstName],
 		   dbo.GetProjectManagerList(P.ProjectId) AS ProjectManagersIdFirstNameLastName,
 		   P.SowBudget,
-			sm.PersonId AS 'SeniorManagerId',
-			sm.LastName+', ' +sm.FirstName AS 'SeniorManagerName',
+			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN -1 ELSE  sm.PersonId  END AS 'SeniorManagerId',
+			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE  sm.LastName+', ' +sm.FirstName END AS 'SeniorManagerName',
 			re.PersonId AS 'ReviewerId',
 			re.LastName+', ' +re.FirstName AS 'ReviewerName'
 	FROM	dbo.Project AS P
