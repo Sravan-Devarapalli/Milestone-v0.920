@@ -1481,7 +1481,7 @@ namespace PraticeManagement
                     {
                         selectedManager = new ListItem(project.SeniorManagerName, project.SeniorManagerId.ToString());
                         ddlSeniorManager.Items.Add(selectedManager);
-                        ddlSeniorManager.SortByText();
+                      //  ddlSeniorManager.SortByText();
                     }
 
                     ddlSeniorManager.SelectedValue = selectedManager.Value;
@@ -1769,8 +1769,9 @@ namespace PraticeManagement
 
             if (ddlDirector.SelectedIndex > 0)
                 project.Director = new Person { Id = int.Parse(ddlDirector.SelectedValue) };
-
-            project.SeniorManagerId = int.Parse(ddlSeniorManager.SelectedValue);
+            int selectedSeniorManagerId = int.Parse(ddlSeniorManager.SelectedValue);
+            project.SeniorManagerId = selectedSeniorManagerId;
+            project.IsSeniorManagerUnassigned = selectedSeniorManagerId == -1;
 
             project.ProjectWorkTypesList = ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue;
 
