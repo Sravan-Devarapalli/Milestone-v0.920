@@ -451,6 +451,9 @@ namespace DataTransferObjects
         [DataMember]
         public BusinessGroup BusinessGroup { get; set; }
 
+        [DataMember]
+        public bool IsSeniorManagerUnassigned { get; set; }
+
         #endregion
 
         #region Formatting
@@ -505,8 +508,6 @@ namespace DataTransferObjects
         }
 
         #endregion
-
-
     }
 }
 
