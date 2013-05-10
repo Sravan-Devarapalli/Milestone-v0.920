@@ -913,8 +913,15 @@ namespace PraticeManagement.Controls
                 try
                 {
                     string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
-                    Person[] persons = serviceClient.PersonListShortByTitleAndStatus(statusids, DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName);
-                    FillPersonList(control, firstItemText, persons, String.Empty);
+                    var persons = serviceClient.PersonListShortByTitleAndStatus(statusids, DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName);
+                    persons = persons.Any() ? persons.OrderBy(p => p.PersonLastFirstName).ToArray() : persons;
+                    List<Person> personlist = new List<Person>();
+                    personlist.Add(new Person() { Id = -1, LastName = "Unassigned" });
+                    personlist.AddRange(persons);
+                    FillListDefault(control, firstItemText, personlist.ToArray(), false, "Id", "PersonLastFirstName");
+                    ListItem unasigned = control.Items.FindByValue("-1");
+                    unasigned.Text = "Unassigned";
+                    unasigned.Attributes["style"] = "font-style: italic";
                 }
                 catch (CommunicationException)
                 {
