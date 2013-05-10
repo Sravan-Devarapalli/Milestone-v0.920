@@ -46,7 +46,7 @@ BEGIN
 				,i.PricingListId
 				,pt.Name AS [PricingList]
 				,i.SeniorManagerId
-				,SenManager.LastName + ', ' + SenManager.FirstName AS SeniorManager
+				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
 				,i.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 		FROM inserted AS i
