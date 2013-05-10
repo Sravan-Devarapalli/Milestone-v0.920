@@ -439,6 +439,7 @@
             public static string ReviewEndDate = "ReviewEndDate";
             public static string SeniorManagerId = "SeniorManagerId";
             public static string SeniorManagerName = "SeniorManagerName";
+            public static string IsSeniorManagerUnassigned = "IsSeniorManagerUnassigned";
         }
 
         #endregion
@@ -782,6 +783,7 @@
             public const string ReviewEndDate = "@ReviewEndDate";
             public static string SeniorManagerId = "@SeniorManagerId";
             public static string CSATOwnerId = "@CSATOwnerId";
+            public static string IsSeniorManagerUnassigned = "@IsSeniorManagerUnassigned";
         }
 
         #endregion
