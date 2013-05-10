@@ -915,13 +915,11 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 if (project.SeniorManagerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsSeniorManagerUnassigned, project.IsSeniorManagerUnassigned);
                 if (project.CSATOwnerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.CSATOwnerId, project.CSATOwnerId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,
-                    project.PricingList != null && project.PricingList.PricingListId.HasValue ?
-                    (object)project.PricingList.PricingListId.Value : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId,
-                        ((int)project.BusinessType) != 0 ? (object)((int)project.BusinessType) : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,project.PricingList != null && project.PricingList.PricingListId.HasValue ? (object)project.PricingList.PricingListId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId,((int)project.BusinessType) != 0 ? (object)((int)project.BusinessType) : DBNull.Value);
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
 
@@ -988,6 +986,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 if (project.SeniorManagerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsSeniorManagerUnassigned, project.IsSeniorManagerUnassigned);
                 if (project.CSATOwnerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.CSATOwnerId, project.CSATOwnerId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam,
@@ -1117,6 +1116,13 @@ namespace DataAccess
                     catch
                     { }
 
+                    int isSeniorManagerUnassignedIndex = -1;
+                    try
+                    {
+                        isSeniorManagerUnassignedIndex = reader.GetOrdinal(Constants.ColumnNames.IsSeniorManagerUnassigned);
+                    }
+                    catch
+                    { }
                     int seniorManagerNameIndex = -1;
                     try
                     {
@@ -1532,6 +1538,17 @@ namespace DataAccess
                             {
                             }
                         }
+                        if (isSeniorManagerUnassignedIndex >= 0)
+                        {
+                            try
+                            {
+                                project.IsSeniorManagerUnassigned = reader.GetBoolean(isSeniorManagerUnassignedIndex);
+                            }
+                            catch
+                            {
+                            }
+                        }
+
                         if (reviewerIdIndex >= 0)
                         {
                             try
