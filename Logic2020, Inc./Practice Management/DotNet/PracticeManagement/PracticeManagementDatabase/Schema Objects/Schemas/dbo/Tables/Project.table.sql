@@ -26,6 +26,7 @@
 	[BusinessTypeId]			INT NULL,
 	[ReviewerId]				INT NULL,
 	SeniorManagerId				INT NULL,
+	IsSeniorManagerUnassigned	BIT NOT NULL CONSTRAINT DF_Project_IsSeniorManagerUnassigned DEFAULT 0,
     FOREIGN KEY ([GroupId]) REFERENCES [dbo].[ProjectGroup] ([GroupId]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
