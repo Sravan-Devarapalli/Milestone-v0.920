@@ -38,7 +38,8 @@ AS
 		   p.IsAdministrative,
 		   [dbo].[GetProjectCapabilities](p.ProjectId) AS ProjectCapabilityIds,
 			p.ReviewerId,
-			p.SeniorManagerId
+			p.SeniorManagerId,
+			p.IsSeniorManagerUnassigned
 	  FROM dbo.Project AS p
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
