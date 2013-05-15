@@ -44,6 +44,7 @@ BEGIN
 				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
 				,i.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
+				,i.PONumber
 		  FROM inserted AS i
 		       INNER JOIN dbo.Client AS c ON i.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON i.PracticeId = p.PracticeId
@@ -94,6 +95,7 @@ BEGIN
 				,CASE WHEN d.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
 				,d.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
+				,d.PONumber
 		  FROM deleted AS d
 		       INNER JOIN dbo.Client AS c ON d.ClientId = c.ClientId
 		       INNER JOIN dbo.Practice AS p ON d.PracticeId = p.PracticeId
@@ -187,6 +189,7 @@ BEGIN
 		OR ISNULL(i.PricingListId, 0) <> ISNULL(d.PricingListId, 0)
 		OR ISNULL(i.SeniorManagerId, 0) <> ISNULL(d.SeniorManagerId, 0)
 		OR ISNULL(i.[ReviewerId], 0) <> ISNULL(d.[ReviewerId], 0)
+		OR ISNULL(i.[PONumber], '') <> ISNULL(d.[PONumber], '')
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare
 END
