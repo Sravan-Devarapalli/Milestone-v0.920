@@ -1057,6 +1057,33 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.ValidationSummary vsumPopup;
         
         /// <summary>
+        /// custExpenseValidate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custExpenseValidate;
+        
+        /// <summary>
+        /// custProjectStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custProjectStatus;
+        
+        /// <summary>
+        /// custCSATValidate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custCSATValidate;
+        
+        /// <summary>
         /// vsumShiftDays control.
         /// </summary>
         /// <remarks>
@@ -1354,13 +1381,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.HtmlControls.HtmlTableRow trShowSaveandCancel;
         
         /// <summary>
-        /// btnSavePopup control.
+        /// btnSavePopup  control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSavePopup;
+        protected global::System.Web.UI.WebControls.Button btnSavePopup ;
         
         /// <summary>
         /// btnCancelSaving control.
